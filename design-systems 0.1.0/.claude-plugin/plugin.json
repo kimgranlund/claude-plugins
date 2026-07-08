@@ -2,6 +2,7 @@
   "name": "design-systems",
   "version": "0.1.0",
   "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch, plus the Material Design token grammar they can extend.",
+  "license": "MIT",
   "author": {
     "name": "Agentic Harness"
   }

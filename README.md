@@ -9,6 +9,8 @@ Directory names carry a version suffix (`forge 1.14.0`, `scribe 0.1.0`, ...) —
 contains a space. See `CLAUDE.md` for the workspace's own operating rules if you're working *on*
 these plugins rather than just installing them.
 
+[MIT licensed](LICENSE).
+
 ## Plugins
 
 | Plugin | What it does |
