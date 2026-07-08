@@ -1,0 +1,16 @@
+{
+  "note": "design-md-author is user-invocable only (disable-model-invocation: true) — trigger evals skipped per skill-forge Phase 2. Behavioral assertions live in assertions.md; run them via fresh-session baseline comparison in Claude Code.",
+  "trigger_evals": "skipped: user-only command",
+  "no_trigger_reciprocals": [
+    {
+      "query": "what does the components block in a DESIGN.md frontmatter mean?",
+      "should_trigger": false,
+      "routes_to": "design-md-format"
+    },
+    {
+      "query": "use our design system to build the settings screen",
+      "should_trigger": false,
+      "routes_to": "the brand's own design skill (e.g. adia-design)"
+    }
+  ]
+}

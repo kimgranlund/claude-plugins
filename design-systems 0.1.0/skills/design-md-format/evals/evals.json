@@ -1,0 +1,24 @@
+{
+  "evals": [
+    { "query": "what is a DESIGN.md file?", "should_trigger": true },
+    { "query": "explain the frontmatter schema for a claude design DESIGN.md", "should_trigger": true },
+    { "query": "why does every color need a -dark sibling in DESIGN.md?", "should_trigger": true },
+    { "query": "what does --md-sys-color-primary-on-primary mean?", "should_trigger": true },
+    { "query": "how do I name tokens in the {prefix}-{family}-{slot} grammar?", "should_trigger": true },
+    { "query": "what sections should the prose spine of a design spec have?", "should_trigger": true },
+    { "query": "what is the pairing law for on-colors?", "should_trigger": true },
+    { "query": "how open-ended can a DESIGN.md be? can I add a motion section?", "should_trigger": true },
+    { "query": "what is root brand architecture in a design spec?", "should_trigger": true },
+    { "query": "how do @dsCard preview cards work?", "should_trigger": true },
+    { "query": "validate this DESIGN.md I wrote for my brand", "should_trigger": true },
+    { "query": "add a data-viz palette section to our DESIGN.md", "should_trigger": true },
+    { "query": "based on these css files create a design system for use in claude design and claude code", "should_trigger": true, "note": "flagship of design-md-author; this skill loads as its knowledge substrate — in Claude Code the /design-md-author command runs the workflow" },
+    { "query": "what's light-dark() and why does color-scheme matter?", "should_trigger": true },
+    { "query": "how should a design spec handle contrast failures the brand accepts?", "should_trigger": true },
+    { "query": "write a design tokens file in W3C DTCG format", "should_trigger": false, "note": "different format; DTCG is not DESIGN.md" },
+    { "query": "make me a React component library from these tokens", "should_trigger": false, "note": "framework build request — also outside both skills' fences" },
+    { "query": "use the adia design system to mock a settings screen", "should_trigger": false, "note": "consuming a finished system — the brand's own skill owns this" },
+    { "query": "audit my site for WCAG compliance", "should_trigger": false, "note": "accessibility enforcement is explicitly fenced out" },
+    { "query": "design a logo for my startup", "should_trigger": false }
+  ]
+}
