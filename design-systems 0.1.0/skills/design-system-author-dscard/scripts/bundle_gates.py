@@ -10,9 +10,15 @@ Usage:
     python3 bundle_gates.py --selftest       # (alias, kept for back-compat)
 
 Gates (details: ../references/gates.md):
-  G1 contrast          every derivable fill/on pair >= 4.5:1, BOTH schemes (WCAG AA
-                       normal-text bar applied to all pairs; -disabled and alpha<1
-                       tokens excluded and reported as SKIP)
+  G1 contrast          every derivable fill/on pair MEASURED against 4.5:1, BOTH
+                       schemes (WCAG AA normal-text bar; -disabled and alpha<1
+                       tokens excluded and reported as SKIP). KIT FIDELITY: when
+                       the bundle's README.md carries the onColorMode disclosure
+                       ("N derivable fill/on-pair(s) below 4.5:1 ... ADR-003"),
+                       sub-4.5 pairs report as DISCLOSED (not FAIL) and the
+                       disclosed count must be COUNT-EXACT vs the measurement
+                       (a wrong count IS a FAIL). Without the disclosure, any
+                       sub-4.5 pair FAILs as before.
   G2 scheme parity     identical role inventory: frontmatter light <-> -dark siblings;
                        tokens.json colors <-> colorsDark
   G3 carrier equality  frontmatter OKLCH == tokens.json hex, notation-aware:
@@ -204,7 +210,7 @@ def derive_pairs(keys):
 
 class Report:
     def __init__(self):
-        self.lines, self.fails, self.warns = [], 0, 0
+        self.lines, self.fails, self.warns, self.disclosed = [], 0, 0, 0
 
     def emit(self, level, msg):
         self.lines.append(f"[{level}] {msg}")
@@ -212,6 +218,8 @@ class Report:
             self.fails += 1
         elif level == "WARN":
             self.warns += 1
+        elif level == "DISCLOSED":
+            self.disclosed += 1
 
     def ok(self, cond, gate, ok_msg, fail_msg):
         self.emit("PASS" if cond else "FAIL", f"{gate} {ok_msg if cond else fail_msg}")
@@ -229,6 +237,26 @@ EXTRAS = ["responsive behavior", "agent prompt guide"]
 def _norm(h):
     h = h.replace("’", "'").replace("&", "and")
     return re.sub(r"\s+", " ", h).strip().lower()
+
+
+# KIT FIDELITY (nonoun-color-tokens PR #229): `onColorMode` is a USER SETTING — "fixed" ships
+# uniform brand labels whose sub-4.5:1 pairs are an accepted brand override (ADR-003), disclosed
+# in the bundle's README receipt; "contrast" re-points labels inside the role table. The gate
+# stays the MEASUREMENT; the receipt is the DISCLOSURE. read_disclosure returns (count, mode)
+# when the receipt carries a count-bearing contrast disclosure with the ADR-003 citation.
+_DISCLOSURE_RE = re.compile(
+    r"(\d+) derivable fill/on-pair\(s\) below 4\.5:1 under the kit's `onColorMode: (\w+)`")
+
+
+def read_disclosure(root):
+    readme = Path(root) / "README.md"
+    if not readme.is_file():
+        return None
+    text = readme.read_text(encoding="utf-8")
+    m = _DISCLOSURE_RE.search(text)
+    if m and "ADR-003" in text:
+        return int(m.group(1)), m.group(2)
+    return None
 
 
 def check_bundle(root, rep):
@@ -294,7 +322,11 @@ def check_bundle(root, rep):
                f"carrier equality within +-1/255 (max dev {maxdev})",
                "carrier values diverge beyond 1/255: " + ", ".join(bad))
 
-    # G1 contrast — all derivable pairs, both schemes -------------------------
+    # G1 contrast — all derivable pairs, both schemes. A sub-4.5 pair is a FAIL unless the
+    # bundle receipt DISCLOSES the kit-fidelity contrast measurement (then it reports as
+    # DISCLOSED and the disclosed count must match the measurement exactly).
+    disclosure = read_disclosure(root)
+    measured_misses = 0
     for scheme, S in (("light", L8), ("dark", D8)):
         pairs, unfillable = derive_pairs(S.keys())
         for k in unfillable:
@@ -319,11 +351,24 @@ def check_bundle(root, rep):
             if ratio < worst[0]:
                 worst = (ratio, f"{on_k} / {fill_k}")
             if ratio < AA:
-                fails += 1
-                rep.emit("FAIL", f"G1 {scheme}: {on_k} / {fill_k} = {ratio:.2f}:1 < {AA}:1")
+                measured_misses += 1
+                if disclosure:
+                    rep.emit("DISCLOSED",
+                             f"G1 {scheme}: {on_k} / {fill_k} = {ratio:.2f}:1 < {AA}:1 "
+                             f"(onColorMode: {disclosure[1]}, ADR-003 — disclosed in README.md)")
+                else:
+                    fails += 1
+                    rep.emit("FAIL", f"G1 {scheme}: {on_k} / {fill_k} = {ratio:.2f}:1 < {AA}:1")
         if not fails:
             rep.emit("PASS", f"G1 {scheme}: {len(pairs) - skips} pairs >= {AA}:1 "
-                             f"(worst {worst[0]:.2f}:1 {worst[1]})")
+                             f"(worst {worst[0]:.2f}:1 {worst[1]})" if not (disclosure and measured_misses)
+                     else f"G1 {scheme}: measured (worst {worst[0]:.2f}:1 {worst[1]}); misses disclosed")
+    if disclosure:
+        rep.ok(measured_misses == disclosure[0], "G1",
+               f"disclosure count-exact: receipt discloses {disclosure[0]} pair(s), gate measured "
+               f"{measured_misses} (onColorMode: {disclosure[1]}, ADR-003)",
+               f"receipt discloses {disclosure[0]} pair(s) but the gate measured {measured_misses} "
+               f"— the disclosure must be COUNT-EXACT (stale receipt or wrong measurement)")
 
     # G7 required roles ------------------------------------------------------
     fam_bases = {k for k in L8 if family_of(k) == k}
@@ -519,6 +564,29 @@ def selftest():
         assert rep2.fails >= 3, text
         for gate in ("G1 dark", "G2", "G3"):
             assert f"[FAIL] {gate}" in text, f"{gate} did not fire:\n{text}"
+    # … kit-fidelity disclosure: a README disclosure flips sub-4.5 pairs to DISCLOSED, but the
+    # count must be EXACT — a stale/wrong count is itself a FAIL (negative control below).
+    with tempfile.TemporaryDirectory() as td:
+        disc = Path(td) / "disclosed"
+        shutil.copytree(mini, disc)
+        (disc / "README.md").write_text(
+            "- \U0001F7E1 Contrast measured: 5 derivable fill/on-pair(s) below 4.5:1 under the "
+            "kit's `onColorMode: fixed` \u2014 accepted brand override (ADR-003).\n",
+            encoding="utf-8")
+        rep3 = Report()
+        check_bundle(disc, rep3)
+        text3 = "\n".join(rep3.lines)
+        # the mini fixture measures 0 misses; disclosing 5 must FAIL count-exactness
+        assert "[FAIL] G1 receipt discloses 5" in text3, text3
+        # correct the count to the measurement (0) -> green again, count-exact PASS cited
+        (disc / "README.md").write_text(
+            "- \U0001F7E1 Contrast measured: 0 derivable fill/on-pair(s) below 4.5:1 under the "
+            "kit's `onColorMode: fixed` \u2014 accepted brand override (ADR-003).\n",
+            encoding="utf-8")
+        rep4 = Report()
+        check_bundle(disc, rep4)
+        assert rep4.fails == 0, [ln for ln in rep4.lines if ln.startswith("[FAIL]")]
+        assert any("disclosure count-exact" in ln for ln in rep4.lines), rep4.lines
     # … and a px-leading copy must trip G8 in every carrier (negative control:
     # frontmatter lineHeight px; tokens.json lineHeight 24 — a px length, not a
     # factor; preview inline line-height px).
@@ -575,7 +643,7 @@ def main(argv):
     print(f"== bundle_gates: {argv[1]} ==")
     for line in rep.lines:
         print(line)
-    print(f"-- {rep.fails} FAIL, {rep.warns} WARN --")
+    print(f"-- {rep.fails} FAIL, {rep.warns} WARN, {rep.disclosed} DISCLOSED --")
     return 0 if rep.fails == 0 else 1
 
 

@@ -8,6 +8,12 @@ Usage:
   python3 prelint.py classify lint.json     # classify `npx @google/design.md lint` JSON output
                                             # (either arg may be '-' for stdin)
 
+Classify accepts an optional bundle README receipt as a third argument:
+    python3 prelint.py classify <lint.json> [<bundle-README.md>]
+When the receipt carries the kit-fidelity contrast disclosure ("N derivable
+fill/on-pair(s) below 4.5:1 ... ADR-003", per onColorMode: fixed — PR #229),
+contrast findings classify as EXPECTED (a disclosed measurement), not ACTION.
+
 Exit codes: 0 clean · 1 error-level findings (check) / errors or ACTION findings (classify)
           · 2 unreadable/unparseable input.
 
@@ -20,6 +26,7 @@ import difflib
 import json
 import re
 import sys
+from pathlib import Path
 
 KNOWN_TOP = {"version", "name", "description", "colors", "typography", "rounded", "spacing", "components"}
 CANONICAL = [  # (canonical name, aliases) — spec section order
@@ -205,7 +212,7 @@ def check(path):
 
 
 # ------------------------------------------------------------- classify mode
-def classify_finding(sev, path, message, rule=""):
+def classify_finding(sev, path, message, rule="", disclosed=None):
     msg = message.lower()
     rule = (rule or "").lower()
     if "passes" in msg:
@@ -222,7 +229,14 @@ def classify_finding(sev, path, message, rule=""):
     if rule == "missing-primary" or ("primary" in msg and ("auto-generate" in msg or "no" in msg)):
         return "ACTION", "add the documented `primary` compat alias of the brand base fill"
     if rule == "contrast-ratio" or "contrast" in msg:
-        return "ACTION", "pair below WCAG AA 4.5:1 — fix the on-color; never expected, never waived"
+        # KIT FIDELITY (nonoun-color-tokens PR #229): `onColorMode` is a user setting; "fixed"
+        # ships uniform brand labels whose sub-4.5 pairs are an accepted brand override
+        # (ADR-003), DISCLOSED in the bundle README. With that receipt passed as the second
+        # classify argument, contrast findings are the disclosed measurement — not an ACTION.
+        if disclosed:
+            return "EXPECTED", (f"pair below WCAG AA 4.5:1 under `onColorMode: {disclosed[1]}` — the disclosed "
+                                f"brand override (ADR-003; receipt discloses {disclosed[0]} pair(s)); verify it is recorded, never silently fix")
+        return "ACTION", "pair below WCAG AA 4.5:1 — fix the on-color; never expected, never waived (no receipt disclosure was supplied)"
     if rule == "section-order" or "order" in msg:
         return "ACTION", "reorder to the canonical sequence"
     if rule == "missing-typography" or ("typography" in msg and "default" in msg):
@@ -232,15 +246,26 @@ def classify_finding(sev, path, message, rule=""):
     return "REVIEW", "unrecognized warning — read the message and classify it in the receipt"
 
 
-def classify(path):
+def classify(path, readme=None):
     try:
         report = json.loads(read_input(path))
     except json.JSONDecodeError as e:
         print(f"[FATAL] not valid lint JSON: {e}")
         return 2
+    disclosed = None
+    if readme:
+        try:
+            _t = Path(readme).read_text(encoding="utf-8")
+            _m = re.search(r"(\d+) derivable fill/on-pair\(s\) below 4\.5:1 under the kit's `onColorMode: (\w+)`", _t)
+            if _m and "ADR-003" in _t:
+                disclosed = (int(_m.group(1)), _m.group(2))
+            else:
+                print("[NOTE] receipt supplied but carries no ADR-003 contrast disclosure — contrast stays ACTION")
+        except OSError as e:
+            print(f"[NOTE] receipt unreadable ({e}) — contrast stays ACTION")
     counts = {}
     for f in report.get("findings", []):
-        cls, why = classify_finding(f.get("severity", ""), f.get("path", ""), f.get("message", ""), f.get("rule", ""))
+        cls, why = classify_finding(f.get("severity", ""), f.get("path", ""), f.get("message", ""), f.get("rule", ""), disclosed)
         counts[cls] = counts.get(cls, 0) + 1
         print(f"[{cls}] {f.get('path', '?')}: {f.get('message', '')}\n         -> {why}")
     s = report.get("summary", {})
@@ -253,10 +278,12 @@ def classify(path):
 
 
 def main():
-    if len(sys.argv) != 3 or sys.argv[1] not in {"check", "classify"}:
+    if len(sys.argv) not in (3, 4) or sys.argv[1] not in {"check", "classify"} or (len(sys.argv) == 4 and sys.argv[1] != "classify"):
         print(__doc__)
         return 2
-    return check(sys.argv[2]) if sys.argv[1] == "check" else classify(sys.argv[2])
+    if sys.argv[1] == "check":
+        return check(sys.argv[2])
+    return classify(sys.argv[2], sys.argv[3] if len(sys.argv) == 4 else None)
 
 
 if __name__ == "__main__":

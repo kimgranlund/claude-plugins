@@ -39,7 +39,7 @@ npx -p @google/design.md designmd lint DESIGN.md             # Windows-safe alia
 | Duplicate `##` heading / invalid color value (e.g. `light-dark()`) | **ACTION** | File is rejected at parse. Fix before anything else is meaningful. |
 | `orphaned-tokens` on a `-dark`-suffixed token | **EXPECTED** | The documented inherent cost of scheme siblings: the alpha schema has no scheme axis, so components can only reference the light end. Count them, name the cause in the receipt, ship. |
 | `orphaned-tokens` on a non-dark token | **REVIEW** | Legitimate when the token is prose-bound with no component property slot to reference it (e.g. `background`, `outline-variant` — no component property exists for page background or border color). Verify the prose actually uses it, record in the receipt. A token in *neither* prose nor components is a real orphan — cut it. |
-| `contrast-ratio` below 4.5:1 | **ACTION** | Fix the pair (usually a wrong or constant on-color). Never expected, never waived. |
+| `contrast-ratio` below 4.5:1 | **ACTION**, or **EXPECTED** with the receipt | Without a disclosure: fix the pair — never waived. With the bundle README passed to classify (`prelint.py classify <lint.json> <README.md>`) carrying the `onColorMode: fixed` ADR-003 disclosure (kit fidelity, PR #229): the disclosed measurement — verify it is recorded, never silently fix. |
 | `contrast-ratio` "passes WCAG AA" | **OK** | Informational pass despite the warning label. |
 | `missing-primary` | **ACTION** | Add the documented `primary` compat alias of the brand's base fill — otherwise Stitch's agent auto-generates key colors. |
 | `missing-typography` | **ACTION** | Ship the type scale — otherwise agents fall back to default fonts. |

@@ -58,7 +58,7 @@ Run: `python3 scripts/bundle_gates.py <bundle-dir>` (stdlib-only; exit 0 iff no 
 
 | Gate | Check | Enforced by |
 |---|---|---|
-| G1 Contrast | every derivable fill/on pair ≥ 4.5:1, BOTH schemes — normal-text bar on all pairs, the 3:1 large-text concession unused; pairs derived from the grammar's pairing law; `-disabled` and alpha<1 tokens excluded (reported SKIP) | script |
+| G1 Contrast | every derivable fill/on pair MEASURED against 4.5:1, BOTH schemes — normal-text bar on all pairs, the 3:1 large-text concession unused; pairs derived from the grammar's pairing law; `-disabled` and alpha<1 tokens excluded (reported SKIP). KIT FIDELITY (PR #229): when the bundle README discloses the `onColorMode: fixed` misses (ADR-003), sub-4.5 pairs report DISCLOSED, and the disclosed count must equal the measurement — count drift IS a FAIL | script |
 | G2 Scheme parity | identical role inventory: frontmatter light↔`-dark`, tokens.json `colors`↔`colorsDark` | script |
 | G3 Carrier equality | frontmatter OKLCH ≡ tokens.json hex, notation-aware ±1/255 incl. alpha; inventories match | script |
 | G4 Preview self-containment | `@dsCard` first line with group/title; no external fetches (`src=`/`href=`//`url(http`/`@import`); `color-scheme` present wherever `light-dark()` is used | script |

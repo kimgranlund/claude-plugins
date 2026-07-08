@@ -9,7 +9,7 @@ like. Gate mechanics below; scoring anchors in `rubric.md` (same dimension ids).
 | Dim | Gate | Check | Failure it catches |
 |---|---|---|---|
 | D1 | Routing integrity | `Guidelines.md` exists at the root (exact name); every routed `*.md` resolves (relative to the citing file, else the folder root); every leaf reachable from `Guidelines.md` transitively | a dangling route Make follows into nothing; an unrouted leaf Make never finds |
-| D2 | Contrast, all pairs | every 4-color token row (fill L/D + foreground L/D) ≥ 4.5:1 in BOTH schemes; plus every `-on-surface*` text token × every surface/background token, both schemes | the classic silent reduction bug: constant `#FFFFFF` foregrounds, dark fills landing 3.1–3.7:1 |
+| D2 | Contrast, all pairs | every 4-color token row (fill L/D + foreground L/D) MEASURED against 4.5:1 in BOTH schemes; plus every `-on-surface*` text token × every surface/background token, both schemes. Misses under the kit's `onColorMode: fixed` (disclosed in the bundle README, ADR-003) report as measured-and-disclosed, not FAIL — kit fidelity, PR #229 | the constant-`#FFFFFF` trap now routes to the KIT (`onColorMode: contrast`), never a projection-side re-point |
 | D3 | Scheme parity | every token table row carries a light AND a dark value | a role present in one scheme only — a build error, not a style choice |
 | D4 | Runtime block + trap | ≥1 paste-ready `light-dark()` block; every file using `light-dark(` also declares `color-scheme: light dark` | the dark end silently never firing |
 | D5 | States as values | every `components/*.md` leaf (overview excluded) names `hover` with literal or state-token values | adjective states ("brightens slightly") → per-generation drift |

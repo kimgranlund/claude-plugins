@@ -104,7 +104,7 @@ failure it prevents:
 
 | # | Rule | Failure it prevents |
 |---|---|---|
-| R1 | Every on-color is selected by measurement, per fill, **per scheme** | **F1**: all foregrounds collapsed to constant `#FFFFFF`; every dark-scheme fill landed 3.1–3.7:1 — below AA. The classic silent reduction bug |
+| R1 | Every on-color is the KIT's resolved role value, verbatim, under the kit's `onColorMode` setting — the reduction NEVER re-measures or re-points a label (kit fidelity, nonoun PR #229). `fixed` = uniform brand labels whose sub-4.5 pairs are an accepted brand override (ADR-003), MEASURED and DISCLOSED count-exact in the receipt; `contrast` = the role table re-points per fill/state itself | **F1** taught the original lesson (constant `#FFFFFF` foregrounds landing 3.1–3.7:1) — but the fix belongs in the KIT (`onColorMode: contrast`), never in a reduction that silently overrides the user's setting |
 | R2 | Signature colors survive the cut — roles allocated to what the prose sells | **F2**: the story promised hot pink, cyan, silver; the reduction dropped all three, while the spine forbade hardcoding |
 | R3 | States ship as values (variant tokens) rather than prose adjectives | "hover brightens slightly" → every screen invents its own "slightly" |
 | R4 | The reduction is re-verified, not trusted — dropping, collapsing, and re-pairing invalidate upstream proofs | F1 again: the upstream model was contrast-correct; the reduction broke it *after* the last check |
@@ -116,9 +116,12 @@ failure it prevents:
   Design, Figma Make — and Stitch's linter reads only component pairs on the light end,
   leaving the dark scheme, all-pairs contrast, and the prose unchecked), the generator's
   run is the gate of record. The shared gate
-  set: contrast ≥ 4.5:1 on every declared fill/on pair in **both** schemes · scheme
-  parity · reference resolution · section/routing grammar · prose–token accord ·
-  carrier equality · preview self-containment · required roles.
+  set: contrast MEASURED on every declared fill/on pair in **both** schemes (≥ 4.5:1
+  is the bar; sub-4.5 pairs under the kit's `onColorMode: fixed` are DISCLOSED
+  count-exact in the receipt per ADR-003 — a disclosure, not a waiver, and a wrong
+  count is itself a FAIL) · scheme parity · reference resolution · section/routing
+  grammar · prose–token accord · carrier equality · preview self-containment ·
+  required roles.
 - **Receipts record measured results, dated, regenerated per build.** An unrun check is
   recorded **UNMEASURED** — never laundered into a pass. A receipt predating the last
   edit to any carrier is stale.
