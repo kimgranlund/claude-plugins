@@ -1,0 +1,40 @@
+{
+  "skill": "typography-lettering",
+  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: i18n-verify, color-science-accessibility, color-science-spaces, component-author, token-builder agent, knowledge-author, ui-patterns.",
+  "neighbors": [
+    "i18n-verify",
+    "color-science-accessibility",
+    "color-science-spaces",
+    "component-author",
+    "token-builder(agent)",
+    "knowledge-author",
+    "ui-patterns"
+  ],
+  "positives": [
+    "pair a serif with this sans for my editorial site",
+    "pick a fallback stack that matches Inter's metrics",
+    "classify Optima \u2014 humanist or geometric, which Vox bucket",
+    "is Helvetica a grotesque or a neo-grotesque",
+    "my headings jump when the webfont swaps in",
+    "Arabic letters aren't connecting in my UI text",
+    "why does text-wrap balance not work in my browser",
+    "how many characters per line for comfortable reading",
+    "what does the opsz variable-font axis actually do",
+    "explain oldstyle versus lining figures and when tabular matters",
+    "does OpenDyslexic actually help dyslexic readers",
+    "what x-height makes small text readable at 12px"
+  ],
+  "negatives": [
+    "format this date for the German locale with Intl",
+    "check my app for RTL support and icon mirroring",
+    "is this text contrast APCA-compliant on that background",
+    "convert this sRGB color to OKLCH",
+    "build a select component with a custom caret",
+    "add a font-size token ladder to the project token layer",
+    "generate a modular type scale as CSS custom properties",
+    "emit a token sheet of font-size custom properties",
+    "what pattern is this settings screen using",
+    "empty state best practice for a data table",
+    "build an expert knowledge pack on animation easing"
+  ]
+}

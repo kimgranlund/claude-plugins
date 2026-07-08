@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Floyd-Steinberg dithering · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Floyd-Steinberg dithering</h1>
+    <p>
+      Drop an image, quantize it to a small palette via k-means in OKLab,
+      and see two versions side-by-side: nearest-neighbor mapping (no
+      dithering — banding visible) and Floyd-Steinberg error diffusion
+      (banding broken up into stippling). The dithered image uses the same
+      palette but distributes quantization error to neighboring pixels.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Inputs</h3>
+    <div class="row">
+      <input type="file" id="file" accept="image/*">
+      <label>k =
+        <select id="k">
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="8" selected>8</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <dither-compare id="dc" k="8"></dither-compare>
+  </section>
+
+  <section>
+    <h2>How error diffusion works</h2>
+    <p>
+      When the nearest palette color isn't perfect, FS pushes the
+      <em>quantization error</em> (source - palette) into neighboring
+      pixels — 7/16 to the right, 3/16 down-left, 5/16 down, 1/16
+      down-right. The errors accumulate and eventually trigger
+      compensating palette picks. The visual result averages out to
+      the original tone, but with characteristic stippling.
+    </p>
+    <p>
+      In this implementation the nearest-neighbor metric is Euclidean
+      <strong>OKLab</strong>, not Euclidean RGB. That means
+      "closest to the eye" rather than "closest in 8-bit byte values"
+      — produces noticeably better palettes on natural images, especially
+      in low-k regimes.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var file = document.getElementById('file');
+  var kSel = document.getElementById('k');
+  var dc = document.getElementById('dc');
+
+  function loadFile(f) {
+    var img = new Image();
+    var url = URL.createObjectURL(f);
+    img.src = url;
+    img.decode().then(function () { dc.setImage(img); URL.revokeObjectURL(url); });
+  }
+  file.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(document.querySelector('.card'), loadFile);
+  kSel.addEventListener('change', function () { dc.setAttribute('k', kSel.value); });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "skill": "typography-tokens",
+  "_note": "Positives across imperative / diagnostic / symptom / indirect phrasings, all on the default --type-* grammar. Negatives are adversarial, drawn one-for-one from each NOT-for fence in the description: material-design-typography-tokens (the Material --md-sys-typescale-* twin), typography-lettering (answers-only, no token output), component-author (building/placing a component), i18n-verify (locale number/date/currency + RTL), plus wider neighborhood negatives (palette-design, color-verify, material-design-geometry-tokens) that share adjacent 'design system' vocabulary but are not this skill's job.",
+  "siblings_in_repo": ["material-design-typography-tokens", "typography-lettering", "component-author", "i18n-verify"],
+  "global_peers": ["palette-design", "color-verify", "material-design-geometry-tokens"],
+  "positives": [
+    "what type token should this heading use",
+    "which voice and step should this button label use",
+    "size this h2 heading with the type scale",
+    "why is this button label the wrong size",
+    "make our type scale responsive across breakpoints",
+    "wire the fonts for this project's --type-* tokens",
+    "bind the --type-* export in this repo",
+    "what font should the display voice use",
+    "this figure caption looks like it's using the wrong voice",
+    "how do I get single-line leading on this button label",
+    "our headings and sub-headings look identical, what step fixes it",
+    "which font pairs well with our body typeface for a distinctive marketing hero",
+    "our kicker overline is wrapping onto two lines, fix the type token",
+    "should this table cell text be the ui voice or the code voice"
+  ],
+  "negatives": [
+    "bind our --md-sys-typescale-* export and pick the right voice for this heading",
+    "this project extends Material 3's type scale, what voice/level should this label use",
+    "what's the difference between a grotesque and a neo-grotesque typeface",
+    "does OpenDyslexic actually help readers with dyslexia",
+    "build a web component for a date picker",
+    "author a custom element for a toggle switch",
+    "format this date and currency for the user's locale",
+    "check our RTL support and Arabic line-height",
+    "design the color ramp for our accent palette",
+    "what padding and radius should this button use",
+    "verify this palette passes WCAG contrast",
+    "explain x-height and cap-height in type anatomy",
+    "translate this UI copy into Japanese",
+    "choose a metric-compatible fallback stack for this webfont"
+  ]
+}

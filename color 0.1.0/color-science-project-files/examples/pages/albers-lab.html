@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Albers color lab · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .lab-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--s-4);
+    align-items: start;
+  }
+  .lab-canvas-wrap {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .lab-controls {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--s-4);
+  }
+  .lab-controls h4 {
+    margin: 0 0 var(--s-2) 0;
+    font-size: var(--text-sm);
+  }
+  .lab-layer-block {
+    margin-bottom: var(--s-4);
+  }
+  .lab-layer-block .row {
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .lab-out {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    width: 4ch;
+    text-align: right;
+  }
+  @media (max-width: 720px) {
+    .lab-layout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Albers color lab</h1>
+    <p>
+      A configurable Homage canvas with OKLCh sliders for each nested square.
+      Run any of the Albers exercises here: vary one square's chroma and watch
+      its neighbours shift in apparent value; tune two squares to make them
+      read as transparent overlap; or just compose. Copy the resulting CSS
+      with one click.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="lab-layout">
+      <div class="lab-canvas-wrap">
+        <homage-canvas id="canvas"
+          outer="oklch(0.30 0.10 264)"
+          mid1="oklch(0.50 0.15 264)"
+          mid2="oklch(0.70 0.13 264)"
+          inner="oklch(0.90 0.06 264)"
+          squares="4"></homage-canvas>
+      </div>
+      <div class="lab-controls">
+        <h4>Squares (outer → inner)</h4>
+
+        <div class="lab-layer-block" data-layer="outer">
+          <div class="row" style="margin-bottom: 4px;"><strong>outer</strong><span class="lab-out" data-hex>—</span></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">L</span><input type="range" min="0" max="1" step="0.005" data-axis="L" data-default="0.30"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">C</span><input type="range" min="0" max="0.35" step="0.005" data-axis="C" data-default="0.10"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">h</span><input type="range" min="0" max="360" step="1" data-axis="h" data-default="264"></div>
+        </div>
+
+        <div class="lab-layer-block" data-layer="mid1">
+          <div class="row" style="margin-bottom: 4px;"><strong>mid 1</strong><span class="lab-out" data-hex>—</span></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">L</span><input type="range" min="0" max="1" step="0.005" data-axis="L" data-default="0.50"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">C</span><input type="range" min="0" max="0.35" step="0.005" data-axis="C" data-default="0.15"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">h</span><input type="range" min="0" max="360" step="1" data-axis="h" data-default="264"></div>
+        </div>
+
+        <div class="lab-layer-block" data-layer="mid2">
+          <div class="row" style="margin-bottom: 4px;"><strong>mid 2</strong><span class="lab-out" data-hex>—</span></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">L</span><input type="range" min="0" max="1" step="0.005" data-axis="L" data-default="0.70"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">C</span><input type="range" min="0" max="0.35" step="0.005" data-axis="C" data-default="0.13"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">h</span><input type="range" min="0" max="360" step="1" data-axis="h" data-default="264"></div>
+        </div>
+
+        <div class="lab-layer-block" data-layer="inner">
+          <div class="row" style="margin-bottom: 4px;"><strong>inner</strong><span class="lab-out" data-hex>—</span></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">L</span><input type="range" min="0" max="1" step="0.005" data-axis="L" data-default="0.90"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">C</span><input type="range" min="0" max="0.35" step="0.005" data-axis="C" data-default="0.06"></div>
+          <div class="row"><span style="width:1.4ch;font-family:var(--font-mono)">h</span><input type="range" min="0" max="360" step="1" data-axis="h" data-default="264"></div>
+        </div>
+
+        <div class="row" style="margin-top: var(--s-3);">
+          <button id="randomize">randomize</button>
+          <button id="reset">reset</button>
+        </div>
+        <div class="row" style="margin-top: var(--s-2);">
+          <button id="copy-css" style="width:100%;">copy CSS</button>
+        </div>
+        <div id="copy-status" style="font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--s-2); height: 16px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Exercises to try</h2>
+    <ul>
+      <li><strong>Simultaneous contrast.</strong> Set all squares to the same lightness (L ≈ 0.6). Now drop the inner square's chroma to 0; raise the outer square's chroma. Watch how the inner gray takes on a slight color cast opposing the outer.</li>
+      <li><strong>One-as-two.</strong> Use only 3 squares (toggle <code>squares="3"</code> if you build it that way). Set outer dark and inner pale, then put mid1 between them. The mid1 reads dramatically differently against each.</li>
+      <li><strong>Transparency.</strong> Pick outer = blue (h ≈ 264) and mid2 = orange (h ≈ 50) at matched lightness. Try to find an L for mid1 that makes the composition feel layered.</li>
+      <li><strong>Bottom-heavy weight.</strong> Set outer = light, inner = dark. The composition feels grounded. Swap them — outer dark, inner light — and the composition feels lifted.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var srgb = RC.srgb, oklch = RC.oklch, srgbTransfer = RC.srgbTransfer;
+  var mapping = RC.mapping, utils = RC.utils;
+
+  var canvas = document.getElementById('canvas');
+  var LAYERS = ['outer', 'mid1', 'mid2', 'inner'];
+
+  function lchTo(layer) {
+    var block = document.querySelector('[data-layer="' + layer + '"]');
+    var L = parseFloat(block.querySelector('[data-axis="L"]').value);
+    var C = parseFloat(block.querySelector('[data-axis="C"]').value);
+    var h = parseFloat(block.querySelector('[data-axis="h"]').value);
+    return [L, C, h];
+  }
+
+  function lchToHex(lch) {
+    var mapped = mapping.mapToSRGB(lch);
+    return utils.toHex(srgbTransfer.encode(mapped));
+  }
+
+  function update() {
+    LAYERS.forEach(function (layer) {
+      var lch = lchTo(layer);
+      var css = 'oklch(' + lch[0].toFixed(3) + ' ' + lch[1].toFixed(3) + ' ' + lch[2].toFixed(1) + ')';
+      canvas.setAttribute(layer, css);
+      var hex = lchToHex(lch);
+      document.querySelector('[data-layer="' + layer + '"] [data-hex]').textContent = hex;
+    });
+  }
+
+  document.querySelectorAll('input[type="range"][data-axis]').forEach(function (input) {
+    input.value = input.dataset.default;
+    input.addEventListener('input', update);
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    document.querySelectorAll('input[type="range"][data-axis]').forEach(function (input) {
+      input.value = input.dataset.default;
+    });
+    update();
+  });
+
+  document.getElementById('randomize').addEventListener('click', function () {
+    var baseHue = Math.random() * 360;
+    var huesOffset = [0, 10, 20, 30].map(function (d) { return (baseHue + (Math.random() - 0.5) * d * 2) % 360; });
+    var Ls = [
+      0.15 + Math.random() * 0.20,
+      0.40 + Math.random() * 0.20,
+      0.62 + Math.random() * 0.15,
+      0.82 + Math.random() * 0.12,
+    ];
+    var Cs = [
+      0.04 + Math.random() * 0.12,
+      0.08 + Math.random() * 0.15,
+      0.06 + Math.random() * 0.15,
+      0.02 + Math.random() * 0.10,
+    ];
+    LAYERS.forEach(function (layer, i) {
+      var block = document.querySelector('[data-layer="' + layer + '"]');
+      block.querySelector('[data-axis="L"]').value = Ls[i];
+      block.querySelector('[data-axis="C"]').value = Cs[i];
+      block.querySelector('[data-axis="h"]').value = huesOffset[i];
+    });
+    update();
+  });
+
+  document.getElementById('copy-css').addEventListener('click', function () {
+    var lines = LAYERS.map(function (layer) {
+      var lch = lchTo(layer);
+      return '  --albers-' + layer + ': oklch(' + lch[0].toFixed(3) + ' ' + lch[1].toFixed(3) + ' ' + lch[2].toFixed(1) + ');';
+    });
+    var css = ':root {\n' + lines.join('\n') + '\n}';
+    navigator.clipboard.writeText(css).then(function () {
+      document.getElementById('copy-status').textContent = 'CSS copied.';
+      setTimeout(function () { document.getElementById('copy-status').textContent = ''; }, 1400);
+    });
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>

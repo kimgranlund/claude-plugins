@@ -1,0 +1,59 @@
+{
+  "$schema": "focus-ring/v1",
+  "description": "Three canonical focus-ring recipes. Every recipe satisfies WCAG 2.2 SC 1.4.11 (Non-text Contrast — the 3:1 ring floor) and SC 2.4.13 (Focus Appearance — thickness). SC 2.4.11 (Focus Not Obscured) is a property of the layout around the focused element; no recipe can satisfy it.",
+  "recipes": {
+    "outer": {
+      "description": "Default. 2px solid outline offset outward from element.",
+      "cssTemplate": "outline: 2px solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset);",
+      "use": "Buttons, inputs, chips, cards, most interactive surfaces.",
+      "minWidthPx": 2,
+      "constraints": {
+        "contrastRatio": 3.0,
+        "contrastAgainst": ["element-background", "adjacent-surface"]
+      }
+    },
+    "inner-outer": {
+      "description": "2px inner ring (element-matching) + 2px outer ring (accent). Used when the element sits on a surface that could match the default ring color.",
+      "cssTemplate": "outline: 2px solid var(--focus-ring-color); outline-offset: 0; box-shadow: 0 0 0 4px var(--focus-ring-color-outer);",
+      "use": "Buttons on colored banners, chips in toolbar with contrasting edges, menu items.",
+      "minTotalWidthPx": 4
+    },
+    "inset": {
+      "description": "Inset outline for elements that cannot paint outside their bounds.",
+      "cssTemplate": "outline: 2px solid var(--focus-ring-color); outline-offset: -2px;",
+      "use": "Full-width list items, iframes, elements with parent overflow:hidden.",
+      "note": "Prefer outer; use inset only when outer paint would be clipped."
+    }
+  },
+  "coloring": {
+    "default": {
+      "light": "var(--color-accent-600)",
+      "dark":  "var(--color-accent-400)"
+    },
+    "onTintedSurface": {
+      "light": "var(--color-neutral-1000)",
+      "dark":  "var(--color-neutral-0)",
+      "note": "Swap to high-contrast neutral when surface tint may collide with accent."
+    },
+    "prefersContrast": {
+      "light": "CanvasText",
+      "dark":  "CanvasText",
+      "widthPx": 3,
+      "note": "Escalate ring thickness and use system color under prefers-contrast: more."
+    },
+    "forcedColors": {
+      "rule": "Rely on `outline: 2px solid CanvasText`. All custom ring colors are ignored by Forced Colors mode — do not fight the UA."
+    }
+  },
+  "selector": {
+    "use": ":focus-visible",
+    "reason": "Avoids showing focus ring on pointer click for elements that don't need it (buttons). Keyboard users still see it."
+  },
+  "refusedPatterns": [
+    "outline: none without replacement — strips the visible indicator (SC 2.4.7 Focus Visible).",
+    "box-shadow alone — clipped by parent overflow; paint-order issues.",
+    "color-only focus (e.g., background-color change) — fails on tinted surfaces.",
+    "Dotted 1px outline — antialiasing noise, fails 2px minimum.",
+    "Animating outline-width — layout jitter."
+  ]
+}

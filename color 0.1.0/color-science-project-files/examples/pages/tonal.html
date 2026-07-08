@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material 3 tonal palette · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Material 3 tonal palette generator</h1>
+    <p>
+      From a single source color, generate the five Material Design 3
+      <strong>tonal palettes</strong> — primary, secondary, tertiary, neutral,
+      and neutral-variant. Each is rendered at 13 tones (CIELAB L*).
+      The chroma is reduced at each tone if needed to stay in the sRGB gamut.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Source</h3>
+    <div class="row">
+      <label>Color <input type="color" id="src" value="#3b82f6"></label>
+      <button data-preset="#1976d2">M3 default blue</button>
+      <button data-preset="#9c27b0">purple</button>
+      <button data-preset="#f57c00">orange</button>
+      <button data-preset="#388e3c">green</button>
+      <button data-preset="#d32f2f">red</button>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <tonal-palette id="tp" source="#3b82f6"></tonal-palette>
+  </section>
+
+  <section>
+    <h2>Why HCT instead of OKLCh?</h2>
+    <p>
+      Material 3 uses HCT (Hue + Chroma + Tone) for tonal palette generation.
+      The key difference vs OKLCh: <strong>HCT's Tone is CIELAB L*</strong>,
+      not OKLab L. The reasoning is anchor-compatibility — Material 3 wants
+      "Tone 50" to mean the same perceptual lightness it did in CIELAB-based
+      Material 2, even if a newer space is used for hue & chroma.
+    </p>
+    <p>
+      In practice the differences between HCT and OKLCh ramps are subtle.
+      Tailwind v4 picked OKLCh (cleaner math, native CSS support); Material 3
+      picked HCT (back-compat with their existing systems and Munsell-friendly
+      Tone axis). Both are perceptually much better than HSL-based ramps.
+    </p>
+    <p>
+      Try the <strong>red</strong> preset and look at the primary palette:
+      the high-tone slots (90, 95) show <strong>chroma reduction</strong> —
+      the requested chroma at L*=90 isn't reachable in sRGB at red's hue, so
+      the algorithm reduces C until in-gamut. Same thing happens at low tones.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var src = document.getElementById('src');
+  var tp = document.getElementById('tp');
+
+  function update() { tp.setAttribute('source', src.value); }
+  src.addEventListener('input', update);
+
+  document.querySelectorAll('[data-preset]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      src.value = b.dataset.preset; update();
+    });
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>

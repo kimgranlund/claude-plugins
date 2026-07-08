@@ -1,0 +1,116 @@
+{
+  "skill": "layout-decompose",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "decompose this UI screenshot into regions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "name these regions in the mockup",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "is this layout right",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "what shell is this app using",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "critique this dashboard layout",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "design an app shell for a code review tool",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "wireframe a marketing landing page",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "wireframe a mobile app with bottom tabs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "the screen looks clean but none of the panels actually do anything",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "every action works but the page is one giant stacked column",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "which archetype fits this admin tool",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "map the checkout flow",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "where does the signup journey dead-end",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "audit this whole app's UX before launch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "how consistent is this UI across all screens",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "build a tooltip web component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "design this component's API and anatomy",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "what's the common layout for a settings page",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "when is a modal wrong",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "decompose this technical architecture into parts",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "break down this project plan",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "pick an accessible color palette for the dashboard",
+      "expect": "no-trigger"
+    }
+  ]
+}

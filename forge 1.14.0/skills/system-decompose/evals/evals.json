@@ -1,0 +1,61 @@
+{
+  "skill": "system-decompose",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Break this feature down into parts",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Decompose this architecture",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "This breakdown feels lopsided — structure with no behavior",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "My acceptance criteria don't map to any task",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Decompose the goal into milestones and checks",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Write the spec document from this breakdown",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "What does the user actually want here?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Forge a skill from this decomposition",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "should this huge knowledge pack split into a family of skills",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "merge these overlapping knowledge skills into one pack",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "push this analysis to higher-order reasoning about the rules themselves",
+      "expect": "no-trigger"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "safety-friction-recipes/v1",
+  "recipes": {
+    "silent-plus-undo": {
+      "steps": ["Execute immediately", "Render undo toast ≥ 6s", "Toast region aria-live=polite, undo CTA focusable"],
+      "copySlot": "toast-success + inline undo action"
+    },
+    "undo-toast": {
+      "steps": ["Execute immediately", "Render undo toast ≥ 6s (12–30s for bulk-destructive)"],
+      "copySlot": "toast-success",
+      "notes": "Canon for the undo-toast durations (SKILL.md cites this file). ≥ 6s is the single-item floor. Bulk-destructive gets 12–30s, not a vague 'extended': a bulk mistake is noticed while scanning the result set, not at click time — the window must survive that scan plus touch/screen-reader latency, and a wrong bulk action is exactly where undo is worth the longer toast."
+    },
+    "recall-window": {
+      "steps": ["Execute immediately", "Render persistent countdown banner until window elapses", "Cancel requires no re-confirmation"],
+      "copySlot": "inline-error-banner (with neutral tone) or custom recall slot"
+    },
+    "confirm-named-consequence": {
+      "steps": ["Render destructive-confirmation dialog", "Title names subject + action ('Delete 5 items')", "Body names reversibility + who else is affected", "Cancel is default-focused", "Destructive CTA uses danger tokens + non-color cue"],
+      "copySlot": "destructive-confirmation-{title,body,cta}"
+    },
+    "confirm-plus-audit": {
+      "steps": ["Run confirm-named-consequence", "Emit audit event visible in user-facing audit log"],
+      "copySlot": "destructive-confirmation-* + audit event"
+    },
+    "type-to-confirm-plus-reauth-plus-audit": {
+      "steps": [
+        "Render destructive-confirmation dialog with name-echo input",
+        "User types resource name exactly; destructive CTA disabled until exact match",
+        "On submit, re-auth (password / WebAuthn / SSO re-prompt) within 15-minute window",
+        "Emit audit event"
+      ],
+      "copySlot": "destructive-confirmation-* + re-auth form + audit event"
+    },
+    "type-to-confirm-plus-reauth-plus-two-person-approval-plus-audit": {
+      "steps": [
+        "Initiator proposes action via type-to-confirm + re-auth",
+        "Approval request routed to a second eligible approver (not the initiator)",
+        "Approver completes type-to-confirm + re-auth",
+        "Action executes; audit event records both actors"
+      ],
+      "copySlot": "destructive-confirmation-* + approval-request flow + audit event"
+    }
+  },
+  "common": {
+    "defaultFocus": "Cancel — never the destructive CTA.",
+    "escape": "Always closes without executing.",
+    "enter": "Does not submit unless destructive CTA is explicitly focused.",
+    "styling": "Destructive CTA uses semantic danger tokens + a non-color cue (weight, icon, or fill treatment)."
+  }
+}

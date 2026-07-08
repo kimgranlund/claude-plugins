@@ -1,0 +1,8 @@
+{
+  "name": "color",
+  "version": "0.1.0",
+  "description": "Explain color science (accessibility, materials, perception, spaces, theory), build an OKLCH palette, and verify its contrast and CVD-safety.",
+  "author": {
+    "name": "Agentic Harness"
+  }
+}

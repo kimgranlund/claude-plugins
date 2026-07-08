@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "lib/dist",
+    "rootDir": "../src",
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noImplicitAny": true,
+    "declaration": false,
+    "sourceMap": false,
+    "removeComments": false,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["../src/**/*.ts"],
+  "exclude": ["../src/test/**/*"]
+}

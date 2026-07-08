@@ -1,0 +1,39 @@
+# color — color science, palette design, and verification
+
+Explains color science, designs OKLCH palettes, and verifies them before they ship. Ported from
+the personal skill corpus (`~/.claude/skills` + `~/.claude/agents/design/token-builder.md`) as one
+of the plugins produced by a `plugin-decompose` partition of that corpus. Designed by the
+plugin-forge method; shipped through the forge release gate.
+
+| Artifact | Type | Invocation | What it carries |
+|---|---|---|---|
+| `skills/color-science-accessibility` | Declarative skill (knowledge) | model-only | APCA vs WCAG 2.2, contrast ratios and relative luminance, low-vision/readable color choices, CVD simulation (Brettel/Viénot/Machado) and CVD-safe pairs |
+| `skills/color-science-materials` | Declarative skill (knowledge) | model-only | Pigment mixing (Kubelka-Munk, Spectral.js, Mixbox), print-vs-screen and ICC/rendering intents, iridescence, Pointer's gamut, and color-naming standards (ISCC-NBS, Munsell, Ridgway) |
+| `skills/color-science-perception` | Declarative skill (knowledge) | model-only | Vision and appearance science — chroma/saturation, lightness/brightness, opponent process, metamerism, CIECAM02/MacAdam ellipses; carries the full David Briggs huevaluechroma + colorandcontrast.com textbook layer |
+| `skills/color-science-spaces` | Declarative skill (knowledge) | model-only | The computational layer — space conversions (OKLCH, CIELAB, CAM16/HCT), gamut mapping, HDR/tone mapping, CSS color syntax, image-palette extraction/quantization, and the Culori/Color.js library catalog |
+| `skills/color-theory` | Declarative skill (knowledge) | model-only | Harmony, meaning, and history — color-wheel schemes, 60-30-10 proportion, palette mood/symbolism, and designers' colour programmes (Gerstner, Reilly) |
+| `skills/palette-design` | Procedural skill | both (`/palette-design`) | Builds OKLCH ramps and semantic role mappings from brand anchors — ramp skeletons, lightness spacing, chroma arcs, hue stability, dark-scheme derivation; every ramp routes to `color-verify` before finalize |
+| `skills/color-verify` | Procedural skill | both (`/color-verify`) | Verifies a candidate palette or semantic mapping — contrast (WCAG/APCA), hue stability, perceptual evenness, CVD-safety — card-gated, emits a ColorProof |
+| `color-science-project-files` | Supporting library (not a skill — no SKILL.md, lives at plugin root, not under `skills/`) | n/a | The TypeScript color-math library + demo site that `color-science-spaces`'s technique files pair with (`src/{spaces,gamut,adaptation,cvd,dithering,...}`); travels alongside its consumer, ported as-is |
+| `agents/token-builder` | Agent | dispatched | The design-token seat — role-named token ladders, interaction-state roles, the focus-ring, density/motion constants; preloads `color-verify` (same plugin); soft cross-plugin mentions of `handoff-compose` (owned by `forge`) and `focus-verify` (owned by `ui`), each with an inline fallback when that plugin isn't installed |
+
+`color-science-project-files` lives at the plugin root rather than under `skills/` — this
+workspace's release gate (G2) requires every directory directly under `skills/` to carry a
+SKILL.md, and this is deliberately not a skill (no frontmatter was added to force it into that
+shape, per the port's own instruction). Several of `color-science-spaces`'s technique files point
+their "Implementation" section at its `src/` tree by relative path
+(`../../../color-science-project-files/src/...`); every such relative reference across the ported
+packs was shifted one level to match this plugin-root placement (the pre-migration
+`~/.claude/skills/` layout had it as a `skills/`-level sibling instead). A handful of the knowledge
+packs' `references/INDEX.md` files cite files owned by a sibling pack (e.g. `color-theory` citing
+`color-science-perception`'s Albers chapter) or, in one case, a pack outside this plugin entirely
+(`color-science-accessibility` citing `typography-lettering`'s low-vision reference) — these are
+named in prose rather than linked by relative path, since this workspace's `corpus_check.py` only
+reconciles a pack's own file tree.
+
+`agents/token-builder`'s frontmatter preload list is `[color-verify]` only — `handoff-compose` and
+`focus-verify` were dropped from the hard preload because they now live in different plugins
+(`forge` and `ui`, respectively) and a `skills:` preload cannot cross a plugin boundary. Both are
+still referenced in the agent's body prose as soft, degrade-gracefully mentions.
+
+v0.1.0 · assembled 2026-07-07 · initial: ported from ~/.claude/skills + ~/.claude/agents/design/token-builder as part of a plugin-decompose partition

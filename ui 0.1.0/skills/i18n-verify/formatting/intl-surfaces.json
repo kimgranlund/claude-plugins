@@ -1,0 +1,22 @@
+{
+  "$schema": "i18n-intl-surfaces/v1",
+  "surfaces": [
+    { "id": "number",        "intl": "NumberFormat",        "mustRouteVia": "Intl.NumberFormat",        "notes": "Grouping separator and decimal differ by locale." },
+    { "id": "percent",       "intl": "NumberFormat",        "mustRouteVia": "Intl.NumberFormat({ style: 'percent' })" },
+    { "id": "currency",      "intl": "NumberFormat",        "mustRouteVia": "Intl.NumberFormat({ style: 'currency', currency })", "notes": "Token carries {amount, currency}, never a pre-formatted string." },
+    { "id": "unit",          "intl": "NumberFormat",        "mustRouteVia": "Intl.NumberFormat({ style: 'unit', unit })" },
+    { "id": "date",          "intl": "DateTimeFormat",      "mustRouteVia": "Intl.DateTimeFormat" },
+    { "id": "time",          "intl": "DateTimeFormat",      "mustRouteVia": "Intl.DateTimeFormat", "notes": "12/24-hour is locale-driven; respect user override." },
+    { "id": "relative-time", "intl": "RelativeTimeFormat",  "mustRouteVia": "Intl.RelativeTimeFormat" },
+    { "id": "list",          "intl": "ListFormat",          "mustRouteVia": "Intl.ListFormat", "notes": "Oxford-comma rules are locale-sensitive." },
+    { "id": "plural",        "intl": "PluralRules",         "mustRouteVia": "Intl.PluralRules", "notes": "Arabic/Polish/Russian have > 2 plural categories." },
+    { "id": "collation",     "intl": "Collator",            "mustRouteVia": "Intl.Collator({ sensitivity, numeric })" },
+    { "id": "segmentation",  "intl": "Segmenter",           "mustRouteVia": "Intl.Segmenter", "notes": "Required for grapheme/word boundaries in CJK/Thai." },
+    { "id": "display-name",  "intl": "DisplayNames",        "mustRouteVia": "Intl.DisplayNames", "notes": "For localizing language, region, currency names." }
+  ],
+  "refusal": [
+    "String concatenation of pre-formatted parts",
+    "toLocaleString without explicit locale argument (relies on runtime default)",
+    "Client-side formatting of server-pre-formatted values (double formatting)"
+  ]
+}

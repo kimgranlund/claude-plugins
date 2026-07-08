@@ -1,0 +1,38 @@
+{
+  "note": "Canonical hue ranges for intent colors. These are culturally load-bearing — a 'success' color outside the green-cyan band will read as wrong in Western contexts. Each family can shift ±tolerance to fit brand voice but must remain within its band.",
+  "intents": {
+    "danger": {
+      "hueRange": [10, 35],
+      "center": 22,
+      "tolerance": 15,
+      "chromaFloor": 0.14,
+      "rationale": "Red-orange band. Pure red (0°) can feel aggressive; a slight orange shift (15°–30°) reads as 'urgent' without hostility.",
+      "avoid": ["below 0° wrapping into magenta", "above 40° (reads as warning)"]
+    },
+    "warning": {
+      "hueRange": [60, 90],
+      "center": 75,
+      "tolerance": 10,
+      "chromaFloor": 0.15,
+      "rationale": "Yellow-amber band. Pure yellow (90°) has very low contrast on light surfaces; anchor toward amber (70°–80°) for legibility.",
+      "avoid": ["below 55° (overlaps danger)", "above 100° (reads as success)"]
+    },
+    "success": {
+      "hueRange": [135, 165],
+      "center": 150,
+      "tolerance": 15,
+      "chromaFloor": 0.12,
+      "rationale": "Green band. 150° is perceptually balanced (between emerald and lime). Below 135° reads yellow-green (ambiguous); above 165° reads teal.",
+      "avoid": ["below 125°", "above 180° (reads as info/cyan)"]
+    },
+    "info": {
+      "hueRange": [230, 265],
+      "center": 245,
+      "tolerance": 15,
+      "chromaFloor": 0.12,
+      "rationale": "Blue band. Avoid the brand accent's hue by at least 20° if the brand is blue — otherwise info reads as 'brand' and loses its semantic distinctness.",
+      "avoid": ["below 210° (cyan — ambiguous with success/accent)", "above 280° (purple — reads as brand/neutral)"]
+    }
+  },
+  "collisionRule": "No two intent colors may share a hue within ±20°. No intent may share a hue within ±20° of the brand accent (success/info are the most likely collisions)."
+}

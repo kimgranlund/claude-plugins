@@ -1,0 +1,38 @@
+{
+ "skill": "research-methods",
+ "_note": "Routing corpus for the research-methods description. Positives span the six question-classes (optimize / debug-regression / contribution / tune / stress-test) in imperative, symptom, and named-technique phrasings. Negatives are the fenced neighbors: bare web/literature lookup (no system, no scorer), artifact review (the *-reviewer agents), authoring/building (the *-author skills / system-builder), and the nearest IMPROVE-FAMILY siblings whose 'make X better' overlaps but is owned elsewhere (linguistic-techniques improves prompt language, rubric-author tightens anchors, loop-design owns stopping predicates) — these three run no measured scorer loop, so they are researcher's neighbors, not its work.",
+ "positives": [
+  "improve the score on this skill's routing",
+  "figure out why this suddenly got slower",
+  "find the root cause of this regression",
+  "which of these config options actually matter",
+  "what's the best timeout value for this request",
+  "what breaks this parser — find the edge cases",
+  "tune these hyperparameters for the best accuracy",
+  "run an ablation on the scoring checks to see what's dead weight",
+  "bisect this regression down to the change that caused it",
+  "hill-climb this prompt to the strongest variant",
+  "sweep the retry count to find the optimum",
+  "stress-test this API before we ship",
+  "it used to work but now it doesn't — what changed",
+  "adversarially probe this generator for failure modes",
+  "which parts of this pipeline pull their weight"
+ ],
+ "negatives": [
+  "what's the latest version of React",
+  "look up the OWASP top ten for me",
+  "review this diff before I merge",
+  "score this PRD against its rubric",
+  "review this skill and tell me if it's any good",
+  "write the LLD for this feature",
+  "build this feature to the approved LLD",
+  "author a new skill for summarizing changelogs",
+  "design an accessible color palette for the dashboard",
+  "review this component's API and anatomy",
+  "summarize what changed in this repo this week",
+  "decompose this UI screen into regions",
+  "make this prompt or agent more effective",
+  "tighten these rubric anchors",
+  "design the stopping predicate for this loop"
+ ]
+}

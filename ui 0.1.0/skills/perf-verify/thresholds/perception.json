@@ -1,0 +1,16 @@
+{
+  "$schema": "perf-perception-thresholds/v1",
+  "thresholds": [
+    { "p50Ms": [0, 100],     "recipe": "instant",             "notes": "No explicit feedback — the state change is the feedback." },
+    { "p50Ms": [100, 300],   "recipe": "busy",                "notes": "Button enters `busy`; no skeleton yet." },
+    { "p50Ms": [300, 1000],  "recipe": "skeleton-or-spinner", "notes": "Skeleton if layout-bearing; spinner if unknown-shape." },
+    { "p50Ms": [1000, 3000], "recipe": "skeleton+subtle-continuous", "notes": "Show cached data in parallel where possible." },
+    { "p50Ms": [3000, 10000],"recipe": "progress+eta+cancel", "notes": "Progress indicator; cancel mandatory." },
+    { "p50Ms": [10000, null],"recipe": "progress+eta+cancel+explain", "notes": "Proactive explanation naming typical duration." }
+  ],
+  "guidance": [
+    "Pick the recipe by p50, not by p95.",
+    "If p95 crosses a threshold boundary, upgrade the recipe; never downgrade based on p50.",
+    "Network-variable operations (cold-cache) should pick the slower recipe by default."
+  ]
+}

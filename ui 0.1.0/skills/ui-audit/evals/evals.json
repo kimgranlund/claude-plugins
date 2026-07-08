@@ -1,0 +1,136 @@
+{
+  "skill": "ui-audit",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (excellence campaign batch 4). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood trigger vocab: layout-decompose, flow-decompose, the five verifiers, ui-patterns, ui-genres, component seats.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "audit this UI",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "review the whole app's UX",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "sweep this product for accessibility issues before we ship",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "run a full pre-launch UI review across every screen",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "how consistent is this UI across screens",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "the same data table paginates on one page and infinite-scrolls on another",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "every screen passes review on its own but the product feels incoherent",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "we redesigned the app \u2014 check the whole product for regressions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "find the cross-cutting UX problems no single screen review catches",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "sweep this product for i18n and latency issues",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "which patterns drift across our screens",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "do a systemic pass over all our screens, flows, and shared modules",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "decompose this UI layout into regions and groups",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "is this one screen's layout right",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "walk this checkout flow and find where it dead-ends",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "map the signup flow as a state machine",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "verify this palette passes WCAG AA contrast",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "the focus ring is invisible in dark mode",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "check RTL support and text-expansion headroom on this form",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "the page feels slow even though the API is fast",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "does this delete action need type-to-confirm",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "what pattern is this screen \u2014 master-detail or list-detail",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "what do users expect in a dashboard app",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "build a confirm-dialog component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "design an app shell and wireframe a dashboard",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "fix the contrast failures the audit found",
+      "expect": "no-trigger"
+    }
+  ]
+}

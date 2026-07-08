@@ -1,0 +1,56 @@
+{
+  "skill": "skill-review",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Review this skill",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Audit this SKILL.md and tell me what's wrong",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Critique the skill I just wrote",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Score this skill against the standards",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "This skill misfires constantly — review it",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Write me a new skill for migrations",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "How should skill descriptions be written?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Review this agent file",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "Review my pull request",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "decide whether this sprawling skill should split into several",
+      "expect": "no-trigger"
+    }
+  ]
+}

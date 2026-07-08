@@ -1,0 +1,121 @@
+{
+  "skill": "loop-design",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus (excellence campaign batch 2): positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn from neighbors' trigger vocabulary: orchestration-design (compose/wiring/frontmatter), handoff-compose (handback/report, now in forge), the orchestration-coordinator agent (seat coordination), plus running-vs-designing boundary probes for the bundled /goal + /loop machinery.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "write a /goal for this migration",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "design a Stop hook that keeps the agent working until lint is clean",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "set up an autonomous loop that keeps working until tests pass",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "review my goal condition before I launch the run",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "should I use /goal or /loop for this",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "is this goal condition verifiable enough for the evaluator to judge",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "my goal loop never stops",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "my agent keeps spinning and burning turns without progress",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "my /loop keeps re-running work that is already finished",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "make it keep working until the build is clean",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "how do I bound an autonomous run so it cannot go forever",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "the same check fails every cycle and it just retries flatly",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "should this be a subagent or a team",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "how do my skills and agents connect",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "review my agent frontmatter wiring",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "design how capabilities compose across my agent system",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "how do I hand this work back to the coordinator",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "write the handoff block for my finished task",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "is this handoff verifiable and routable",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "coordinate this multi-step feature across the planning and execution seats",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "roll up the seat reports into one handback to the host",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "dispatch a sealed subagent with enumerated inputs and a budget",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "the goal text is already written - just run it and watch it finish",
+      "expect": "no-trigger"
+    }
+  ]
+}

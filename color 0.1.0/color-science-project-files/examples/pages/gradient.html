@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gradient comparison · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Gradient comparison</h1>
+    <p>
+      The same two-color gradient rendered by linear interpolation in 5 color
+      spaces. Compare the mid-tones — note the muddy gray in encoded sRGB, the
+      perceptually uniform progression in OKLab, the hue drift in CIELAB.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Input colors</h3>
+    <div class="row">
+      <label>From <input type="color" id="from" value="#0066ff"></label>
+      <label>To <input type="color" id="to" value="#ffcc00"></label>
+      <label>Hue path
+        <select id="hue-path">
+          <option value="shorter">shorter (CSS default)</option>
+          <option value="longer">longer</option>
+          <option value="increasing">increasing</option>
+          <option value="decreasing">decreasing</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <div class="col" id="strips-host"></div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Native CSS Color 4 equivalent</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Modern browsers can render perceptual gradients natively. Copy any line below.
+    </p>
+    <div id="css-host" class="grad-css-host"></div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Perceptual uniformity, in numbers</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      A gradient is "perceptually uniform" iff ΔE_ok between consecutive stops
+      is roughly constant. Lower variance = smoother visually-equal steps.
+    </p>
+    <table id="de-table" class="grad-de-table"></table>
+  </section>
+
+  <section>
+    <h2>Why this matters</h2>
+    <p>
+      Linear interpolation in encoded sRGB produces noticeably darker mid-tones
+      — the classic "muddy gradient" bug. The encoded values aren't physically
+      additive: averaging encoded 0.5 + 0.5 gives 0.5, but that's only ~0.21
+      in linear light. The eye sees the encoded mid-tone as much darker than
+      either endpoint.
+    </p>
+    <p>
+      <strong>Interpolating in OKLab</strong> is the modern default (CSS Color 4's
+      <code>color-mix(in oklab, ...)</code>). It's perceptually uniform — equal
+      <code>t</code> steps look like equal perceived steps.
+    </p>
+    <p>
+      <strong>OKLCh interpolation</strong> additionally lets you control the
+      hue path. Try changing the "Hue path" dropdown above and watch the OKLCh
+      strip change while the others stay fixed.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function() {
+  var RC = window.RefColor;
+  var oklab = RC.oklab, srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var deltaE = RC.deltaE, utils = RC.utils;
+
+  var SPACES = ['encoded-srgb', 'linear-srgb', 'cielab', 'oklab', 'oklch'];
+  var CSS_NAMES = {
+    'encoded-srgb': 'srgb',
+    'linear-srgb': 'srgb-linear',
+    'cielab': 'lab',
+    'oklab': 'oklab',
+    'oklch': 'oklch',
+  };
+
+  var fromInput = document.getElementById('from');
+  var toInput = document.getElementById('to');
+  var hueSelect = document.getElementById('hue-path');
+  var host = document.getElementById('strips-host');
+  var cssHost = document.getElementById('css-host');
+  var deTable = document.getElementById('de-table');
+
+  function hexToOklab(hex) {
+    var enc = utils.fromHex(hex);
+    var lin = srgbTransfer.decode(enc);
+    return oklab.fromXYZ(srgb.toXYZ(lin));
+  }
+
+  function build() {
+    var fromHex = fromInput.value;
+    var toHex = toInput.value;
+    var huePath = hueSelect.value;
+
+    host.innerHTML = SPACES.map(function (space) {
+      return '<gradient-strip from="' + fromHex + '" to="' + toHex + '" space="' + space + '" hue-path="' + huePath + '"></gradient-strip>';
+    }).join('');
+
+    // Native CSS code output per space.
+    cssHost.innerHTML = SPACES.map(function (space) {
+      var cssSpace = CSS_NAMES[space];
+      var hueClause = (space === 'oklch') ? ' ' + huePath + ' hue' : '';
+      var code = 'background: linear-gradient(to right in ' + cssSpace + hueClause + ', ' + fromHex + ', ' + toHex + ');';
+      return '<div class="grad-css-row">'
+        + '<div class="grad-css-swatch" style="background: linear-gradient(to right in ' + cssSpace + hueClause + ', ' + fromHex + ', ' + toHex + ')"></div>'
+        + '<code class="grad-css-code">' + code + '</code>'
+        + '</div>';
+    }).join('');
+
+    // ΔE_ok between adjacent stops per space.
+    var STOPS = 7;
+    var html = '<thead><tr><th>Space</th>';
+    for (var i = 0; i < STOPS - 1; i++) html += '<th>Δ' + (i+1) + '→' + (i+2) + '</th>';
+    html += '<th>mean</th><th>stdev</th></tr></thead><tbody>';
+    SPACES.forEach(function (space) {
+      // Sample mid-points by querying the gradient-strip render output? Simpler:
+      // recompute the same interpolation here, then ΔE_ok between adjacent stops.
+      var path = pathFor(fromHex, toHex, space, huePath, STOPS);
+      var ds = [];
+      for (var i = 0; i + 1 < path.length; i++) {
+        ds.push(deltaE.deltaEOK(path[i], path[i + 1]));
+      }
+      var mean = ds.reduce(function (a, b) { return a + b; }, 0) / ds.length;
+      var variance = ds.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0) / ds.length;
+      var stdev = Math.sqrt(variance);
+      html += '<tr><th>' + space + '</th>';
+      ds.forEach(function (d) {
+        html += '<td>' + utils.fmt(d, 3) + '</td>';
+      });
+      html += '<td><strong>' + utils.fmt(mean, 3) + '</strong></td>';
+      html += '<td>' + utils.fmt(stdev, 3) + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    deTable.innerHTML = html;
+  }
+
+  function pathFor(fromHex, toHex, space, huePath, N) {
+    // Sample N OKLab points along the interpolation, then compute ΔE_ok between
+    // adjacent ones. We can't introspect gradient-strip's exact path, but for
+    // each space we know how to compute it.
+    var fromEnc = utils.fromHex(fromHex), toEnc = utils.fromHex(toHex);
+    var fromLin = srgbTransfer.decode(fromEnc), toLin = srgbTransfer.decode(toEnc);
+    var fromXyz = srgb.toXYZ(fromLin), toXyz = srgb.toXYZ(toLin);
+    var path = [];
+    for (var i = 0; i < N; i++) {
+      var t = i / (N - 1);
+      var oklabAtT;
+      if (space === 'encoded-srgb') {
+        var enc = [fromEnc[0] + (toEnc[0] - fromEnc[0]) * t,
+                   fromEnc[1] + (toEnc[1] - fromEnc[1]) * t,
+                   fromEnc[2] + (toEnc[2] - fromEnc[2]) * t];
+        oklabAtT = oklab.fromXYZ(srgb.toXYZ(srgbTransfer.decode(enc)));
+      } else if (space === 'linear-srgb') {
+        var lin = [fromLin[0] + (toLin[0] - fromLin[0]) * t,
+                   fromLin[1] + (toLin[1] - fromLin[1]) * t,
+                   fromLin[2] + (toLin[2] - fromLin[2]) * t];
+        oklabAtT = oklab.fromXYZ(srgb.toXYZ(lin));
+      } else if (space === 'cielab') {
+        var fromLab = RC.cielab.fromXYZ(fromXyz);
+        var toLab = RC.cielab.fromXYZ(toXyz);
+        var labAtT = [fromLab[0] + (toLab[0] - fromLab[0]) * t,
+                      fromLab[1] + (toLab[1] - fromLab[1]) * t,
+                      fromLab[2] + (toLab[2] - fromLab[2]) * t];
+        oklabAtT = oklab.fromXYZ(RC.cielab.toXYZ(labAtT));
+      } else if (space === 'oklab') {
+        var fromOk = oklab.fromXYZ(fromXyz), toOk = oklab.fromXYZ(toXyz);
+        oklabAtT = [fromOk[0] + (toOk[0] - fromOk[0]) * t,
+                    fromOk[1] + (toOk[1] - fromOk[1]) * t,
+                    fromOk[2] + (toOk[2] - fromOk[2]) * t];
+      } else {
+        // oklch with hue path
+        var fromLch = RC.oklch.fromXYZ(fromXyz), toLch = RC.oklch.fromXYZ(toXyz);
+        var dh = toLch[2] - fromLch[2];
+        if (huePath === 'shorter') {
+          if (dh > 180) dh -= 360; else if (dh < -180) dh += 360;
+        } else if (huePath === 'longer') {
+          if (dh > 0 && dh < 180) dh -= 360;
+          else if (dh <= 0 && dh > -180) dh += 360;
+        } else if (huePath === 'increasing') {
+          if (dh < 0) dh += 360;
+        } else if (huePath === 'decreasing') {
+          if (dh > 0) dh -= 360;
+        }
+        var lchAtT = [fromLch[0] + (toLch[0] - fromLch[0]) * t,
+                      fromLch[1] + (toLch[1] - fromLch[1]) * t,
+                      fromLch[2] + dh * t];
+        oklabAtT = RC.oklch.toOKLab(lchAtT);
+      }
+      path.push(oklabAtT);
+    }
+    return path;
+  }
+
+  [fromInput, toInput, hueSelect].forEach(function (el) {
+    el.addEventListener('input', build);
+  });
+  build();
+
+  window.addEventListener('resize', function () {
+    host.querySelectorAll('gradient-strip').forEach(function (s) {
+      if (s.render) s.render();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gamut mapping playground · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Gamut mapping playground</h1>
+    <p>
+      Pick an OKLCh color that exceeds sRGB; see how four different mapping
+      strategies bring it back inside the cube. The same input, four
+      different visual outcomes — that's why the choice of strategy matters.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>OKLCh source</h3>
+    <div class="controls">
+      <label for="L">Lightness</label>
+      <input type="range" id="L" min="0" max="1" step="0.001" value="0.65">
+      <output id="L-val">0.650</output>
+
+      <label for="C">Chroma</label>
+      <input type="range" id="C" min="0" max="0.4" step="0.001" value="0.32">
+      <output id="C-val">0.320</output>
+
+      <label for="h">Hue (deg)</label>
+      <input type="range" id="h" min="0" max="360" step="0.5" value="29">
+      <output id="h-val">29.0</output>
+    </div>
+    <div class="row" style="margin-top: var(--s-4);">
+      <button data-preset="vivid-red">vivid red</button>
+      <button data-preset="vivid-green">vivid green</button>
+      <button data-preset="hdr-cyan">HDR cyan</button>
+      <button data-preset="deep-purple">deep purple</button>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <gamut-strip id="strip" oklch="0.65,0.32,29"></gamut-strip>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Apply to an image</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Drop a wide-gamut-style image (saturated photo works best). Each pixel's
+      chroma is multiplied by 2× (synthetic "out of gamut" boost), then mapped
+      back through each strategy. Stronger differences appear in vivid regions.
+    </p>
+    <div class="row">
+      <input type="file" id="img-file" accept="image/*">
+      <label>Chroma boost
+        <input type="range" id="boost" min="1" max="3" step="0.1" value="2.0" style="width: 120px;">
+        <output id="boost-val">2.0×</output>
+      </label>
+    </div>
+    <div id="img-results" class="mapping-image-grid"></div>
+    <p id="img-status" style="color: var(--text-muted); font-size: var(--text-sm); margin-top: var(--s-3);"></p>
+  </section>
+
+  <section>
+    <h2>Why each strategy looks the way it does</h2>
+    <p>
+      <strong>Naive clip</strong> just clamps each linear-RGB channel to
+      [0, 1]. Cheap and wrong — the hue shifts (a vivid red becomes orange).
+      Engines that "just do <code>min(1, max(0, x))</code>" are doing this.
+    </p>
+    <p>
+      <strong>CSS Color 4</strong> reduces chroma in OKLCh, keeping the L axis
+      and hue exactly. It's the W3C-normative algorithm and what
+      <code>color-mix()</code> + display-p3 fallbacks use under the hood.
+      Hue stable, lightness stable, chroma reduced as little as needed.
+    </p>
+    <p>
+      <strong>Min-ΔE blend</strong> reduces chroma <em>and</em> nudges L
+      toward the gamut cusp's lightness — useful when the source is so vivid
+      that pure chroma reduction would land on a depressing pastel. The
+      lightness shift trades a tiny perceptual error for visibly more
+      saturation.
+    </p>
+    <p>
+      <strong>Cusp projection</strong> takes the straight line from source
+      to cusp and walks it inward until it hits the gamut boundary. This is
+      Ottosson's "hue-dependent single-point projection." Hue stays exact;
+      L and C both shift; pretty good results for very out-of-gamut inputs.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var L = document.getElementById('L'), C = document.getElementById('C'), h = document.getElementById('h');
+  var Lv = document.getElementById('L-val'), Cv = document.getElementById('C-val'), hv = document.getElementById('h-val');
+  var strip = document.getElementById('strip');
+
+  function update() {
+    Lv.textContent = parseFloat(L.value).toFixed(3);
+    Cv.textContent = parseFloat(C.value).toFixed(3);
+    hv.textContent = parseFloat(h.value).toFixed(1);
+    strip.setAttribute('oklch', [L.value, C.value, h.value].join(','));
+  }
+
+  [L, C, h].forEach(function (el) { el.addEventListener('input', update); });
+
+  var PRESETS = {
+    'vivid-red':   [0.65, 0.32,  29],
+    'vivid-green': [0.78, 0.30, 142],
+    'hdr-cyan':    [0.85, 0.20, 195],
+    'deep-purple': [0.45, 0.30, 295],
+  };
+  document.querySelectorAll('[data-preset]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var p = PRESETS[b.dataset.preset];
+      L.value = p[0]; C.value = p[1]; h.value = p[2];
+      update();
+    });
+  });
+
+  // ─── Image mapping ────────────────────────────────────────────────
+  var RC = window.RefColor;
+  var srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var oklch = RC.oklch, oklab = RC.oklab;
+  var mapping = RC.mapping;
+  var cuspMod = RC.cusp || RC.cuspMod || null; // findCuspSRGBFromHueDeg
+  var peakC = RC.oklchPeak.peakC, M_XYZ_TO_SRGB = RC.oklchPeak.M_XYZ_TO_SRGB;
+
+  var imgFile = document.getElementById('img-file');
+  var boost = document.getElementById('boost'), boostVal = document.getElementById('boost-val');
+  var resultsHost = document.getElementById('img-results');
+  var imgStatus = document.getElementById('img-status');
+  var lastImage = null;
+
+  boost.addEventListener('input', function () {
+    boostVal.textContent = parseFloat(boost.value).toFixed(1) + '×';
+    if (lastImage) processImage();
+  });
+
+  function loadFile(f) {
+    var img = new Image();
+    var url = URL.createObjectURL(f);
+    img.src = url;
+    img.decode().then(function () { lastImage = img; processImage(); URL.revokeObjectURL(url); });
+  }
+  imgFile.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(imgFile.closest('section') || imgFile.parentElement, loadFile);
+
+  function findCuspL(hDeg) {
+    if (cuspMod && cuspMod.findCuspSRGBFromHueDeg) return cuspMod.findCuspSRGBFromHueDeg(hDeg);
+    // Fallback: scan
+    var best = [0, 0];
+    for (var L = 0.02; L <= 0.98; L += 0.02) {
+      var c = peakC(L, hDeg, M_XYZ_TO_SRGB, 16, 0.4);
+      if (c > best[1]) best = [L, c];
+    }
+    return best;
+  }
+
+  function applyStrategy(lch, strategy) {
+    var L = lch[0], C = lch[1], h = lch[2];
+    if (strategy === 'clip') {
+      var xyz = oklch.toXYZ(lch);
+      var lin = srgb.fromXYZ(xyz);
+      return [Math.max(0, Math.min(1, lin[0])), Math.max(0, Math.min(1, lin[1])), Math.max(0, Math.min(1, lin[2]))];
+    } else if (strategy === 'css4') {
+      var mapped = mapping.mapToGamutOklch(lch, M_XYZ_TO_SRGB, mapping.inGamutSRGB);
+      var xyz2 = oklch.toXYZ(mapped);
+      var lin2 = srgb.fromXYZ(xyz2);
+      return [Math.max(0, Math.min(1, lin2[0])), Math.max(0, Math.min(1, lin2[1])), Math.max(0, Math.min(1, lin2[2]))];
+    } else if (strategy === 'minde') {
+      var cusp = findCuspL(h);
+      var targetC = Math.min(cusp[1], peakC(L, h, M_XYZ_TO_SRGB, 16, 0.4));
+      var reduction = C > 0 ? (C - targetC) / C : 0;
+      var blend = Math.min(0.4, Math.max(0, reduction));
+      var newL = L * (1 - blend) + cusp[0] * blend;
+      var finalC = peakC(newL, h, M_XYZ_TO_SRGB, 16, 0.4);
+      var out = [newL, Math.min(targetC, finalC), h];
+      var xyz3 = oklch.toXYZ(out);
+      var lin3 = srgb.fromXYZ(xyz3);
+      return [Math.max(0, Math.min(1, lin3[0])), Math.max(0, Math.min(1, lin3[1])), Math.max(0, Math.min(1, lin3[2]))];
+    } else if (strategy === 'cusp') {
+      var cusp2 = findCuspL(h);
+      var lo = 0, hi = 1;
+      for (var i = 0; i < 24; i++) {
+        var t = (lo + hi) / 2;
+        var Lt = L + (cusp2[0] - L) * t;
+        var Ct = C + (cusp2[1] - C) * t;
+        if (mapping.inGamutSRGB([Lt, Ct, h])) hi = t; else lo = t;
+      }
+      var Lf = L + (cusp2[0] - L) * hi;
+      var Cf = C + (cusp2[1] - C) * hi;
+      var xyz4 = oklch.toXYZ([Lf, Cf, h]);
+      var lin4 = srgb.fromXYZ(xyz4);
+      return [Math.max(0, Math.min(1, lin4[0])), Math.max(0, Math.min(1, lin4[1])), Math.max(0, Math.min(1, lin4[2]))];
+    }
+    return [0, 0, 0];
+  }
+
+  function processImage() {
+    if (!lastImage) return;
+    imgStatus.textContent = 'Mapping…';
+    var STRATEGIES = [
+      { id: 'clip',  label: 'naive clip' },
+      { id: 'css4',  label: 'CSS Color 4' },
+      { id: 'minde', label: 'min-ΔE blend' },
+      { id: 'cusp',  label: 'cusp projection' },
+    ];
+    var scale = Math.min(1, 280 / Math.max(lastImage.naturalWidth, lastImage.naturalHeight));
+    var W = Math.round(lastImage.naturalWidth * scale);
+    var H = Math.round(lastImage.naturalHeight * scale);
+    var tmp = document.createElement('canvas');
+    tmp.width = W; tmp.height = H;
+    tmp.getContext('2d').drawImage(lastImage, 0, 0, W, H);
+    var src = tmp.getContext('2d').getImageData(0, 0, W, H);
+
+    var boostFactor = parseFloat(boost.value);
+    var html = '';
+    requestAnimationFrame(function () {
+      var t0 = performance.now();
+      STRATEGIES.forEach(function (s) {
+        var out = new ImageData(W, H);
+        for (var i = 0; i < src.data.length; i += 4) {
+          var r = src.data[i] / 255, g = src.data[i + 1] / 255, b = src.data[i + 2] / 255;
+          var lin = srgbTransfer.decode([r, g, b]);
+          var xyz = srgb.toXYZ(lin);
+          var lch = oklch.fromXYZ(xyz);
+          // Boost chroma synthetically to drive pixels out of gamut.
+          var boosted = [lch[0], lch[1] * boostFactor, lch[2]];
+          var mappedLin = applyStrategy(boosted, s.id);
+          var enc = srgbTransfer.encode(mappedLin);
+          out.data[i]     = Math.round(enc[0] * 255);
+          out.data[i + 1] = Math.round(enc[1] * 255);
+          out.data[i + 2] = Math.round(enc[2] * 255);
+          out.data[i + 3] = 255;
+        }
+        var c = document.createElement('canvas');
+        c.width = W; c.height = H;
+        c.getContext('2d').putImageData(out, 0, 0);
+        html += '<div class="mapping-image-cell"><h4>' + s.label + '</h4><img src="' + c.toDataURL() + '" style="width:100%;height:auto;border-radius:var(--r-sm);border:1px solid var(--border);"></div>';
+      });
+      var elapsed = (performance.now() - t0).toFixed(0);
+      resultsHost.innerHTML = html;
+      imgStatus.textContent = '4 strategies × ' + W + '×' + H + ' = ' + (W*H*4).toLocaleString() + ' pixels mapped in ' + elapsed + 'ms';
+    });
+  }
+
+  update();
+})();
+</script>
+
+</body>
+</html>

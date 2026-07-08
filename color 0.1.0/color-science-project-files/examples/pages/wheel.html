@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perceptual hue wheel · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Perceptual hue wheel</h1>
+    <p>
+      Three concentric hue rings at the same lightness, plotted in OKLCh
+      (outer), HCT (middle), and HSL (inner). Look at any fixed angle:
+      OKLCh shows uniform perceptual lightness around the wheel; HSL has
+      visibly brighter greens and dimmer blues; HCT lands in between. The
+      stripe of darkness across HSL's blue region is the canonical reason
+      OKLCh became the default in CSS Color 4.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Controls</h3>
+    <div class="controls">
+      <label for="l">Lightness</label>
+      <input type="range" id="l" min="0.1" max="0.95" step="0.01" value="0.65">
+      <output id="l-val">0.65</output>
+
+      <label for="c">OKLCh chroma</label>
+      <input type="range" id="c" min="0.02" max="0.30" step="0.005" value="0.15">
+      <output id="c-val">0.15</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8); display:flex; justify-content:center;">
+    <div style="max-width: 600px; width: 100%;">
+      <hue-wheel id="wheel" l="0.65" c="0.15"></hue-wheel>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to look for</h2>
+    <ul>
+      <li>Pick any fixed angle (say 240°, blue territory). Compare the
+          three rings at that angle. OKLCh's blue should feel the same
+          "brightness" as its red or its green. HSL's blue will look
+          markedly darker.</li>
+      <li>Sweep the lightness slider toward extremes. At L=0.9, OKLCh's
+          ring stays as a fully-vivid pastel — HSL's collapses near white
+          for almost every hue.</li>
+      <li>Increase the OKLCh chroma slider until the OKLCh ring shows
+          "spike-outs" — those are hues where the gamut runs out before
+          your requested chroma. The ring is being soft-clipped to sRGB.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var l = document.getElementById('l'), c = document.getElementById('c');
+  var lv = document.getElementById('l-val'), cv = document.getElementById('c-val');
+  var wheel = document.getElementById('wheel');
+
+  function update() {
+    lv.textContent = parseFloat(l.value).toFixed(2);
+    cv.textContent = parseFloat(c.value).toFixed(2);
+    wheel.setAttribute('l', l.value);
+    wheel.setAttribute('c', c.value);
+  }
+  l.addEventListener('input', update);
+  c.addEventListener('input', update);
+  window.addEventListener('resize', function () { if (wheel.render) wheel.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>

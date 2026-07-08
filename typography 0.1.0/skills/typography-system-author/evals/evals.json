@@ -1,0 +1,166 @@
+{
+  "skill": "typography-system-author",
+  "note": "Converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the typography plugin-decompose port. M2 corpus of record, built fresh at authoring time (no prior routing corpus existed). Positives span imperative/diagnostic/symptom/indirect phrasings for DESIGNING a typography system from a brief. Negatives are drawn ADVERSARIALLY from the description's own NOT-for fence: typography-tokens (realization/token vocabulary), typography-lettering (no-token history/metrics questions), material-design-typography-tokens, component-author, and design-system-author -- plus the color-domain analogs (palette-design, color-verify) as extra precision against the nearest cross-domain sibling shape (a generator->verifier creative-decision skill).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "design our typography system from this brand brief",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "choose fonts for our brand across all voices",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "help me decide which typeface fills each of our eleven type voices",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "turn 'modern and clean' into an actual font decision",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what font should our display and heading voices use for a 1970s ski poster brand feel",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "design the type system for a Kinfolk-editorial quiet-luxury brand",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "pick a body and display font pairing for our marketing site with real justification",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "our type choices feel like a grab-bag -- help make them read as one voice",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "is Inter and Fraunces a compatible metric pairing for our heading over body",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "make the distinctive-vs-neutral call for our kicker and caption voices",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "interpret this creative brief into concrete typeface decisions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "design a font pairing with real contrast and impact for our editorial brand",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "verify the x-height compatibility of the fonts we picked for heading and body before we ship",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "our typography feels generic -- help us commit to an actual point of view",
+      "expect": "trigger"
+    },
+    {
+      "id": "t15",
+      "prompt": "what typeface should carry our brand's display voice",
+      "expect": "trigger"
+    },
+    {
+      "id": "t16",
+      "prompt": "design the type personality for our dev-tool product",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "what type token should I use for this heading",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "bind this button label to --type-ui-sm",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "size this caption with the token scale",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "which voice and step for this kicker text",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "why does Helvetica read as neutral",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "what's the design history of Garamond",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "explain x-height vs cap-height",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "what makes a typeface read as distinctive",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "bind this headline to Material's type scale",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "what M3 typescale token for this label",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "build a select component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "author a custom checkbox element",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "write the DESIGN.md spine for our brand",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "export our design system for Claude Design",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "design our color ramp from this brand anchor",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "verify this palette's contrast ratios",
+      "expect": "no-trigger"
+    }
+  ]
+}

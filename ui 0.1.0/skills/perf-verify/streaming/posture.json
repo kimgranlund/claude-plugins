@@ -1,0 +1,26 @@
+{
+  "$schema": "perf-streaming-posture/v1",
+  "rule": "Streamed responses render progressively. The streaming view IS the final view.",
+  "invariants": [
+    "No flash or re-layout between stream-end and final rendered state.",
+    "Stream into a container with monotonically growing min-block-size to avoid jitter.",
+    "Token-by-token animation is decorative and respects prefers-reduced-motion.",
+    "Aria-live announcements are chunked to sentence or paragraph boundaries, not per-token.",
+    "Markdown / code block rendering handles mid-stream partial syntax gracefully (no angry-red errors during stream)."
+  ],
+  "chunking": {
+    "liveRegionBy": "sentence",
+    "visualBy":     "token",
+    "rationale":    "Humans read word-by-word; assistive tech cannot keep up with per-token updates."
+  },
+  "cancellation": {
+    "required": true,
+    "restore":  "Keep already-streamed content visible; mark response as 'canceled' rather than blank."
+  },
+  "refusal": [
+    "Buffer-to-completion server-side streaming that renders as one chunk.",
+    "Per-token aria-live announcements.",
+    "Typewriter animation that ignores prefers-reduced-motion.",
+    "Clearing the response area between stream-end and final render (causes flash)."
+  ]
+}

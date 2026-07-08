@@ -1,0 +1,21 @@
+{
+  "$schema": "safety-permission-error-ux/v1",
+  "rule": "Permission failures are explained, not silenced.",
+  "structure": {
+    "subject":    "What action was attempted (e.g., 'Can't delete this workspace').",
+    "diagnosis":  "Why it failed — name the missing role or scope.",
+    "remedy":     "How to obtain access — name the role that holds it.",
+    "recoveryAction": "Button or link to request access where the product supports it."
+  },
+  "appearance": {
+    "inContext":     "Prefer inline explanation at the denied affordance over a dialog.",
+    "disabledControls": "If an affordance must be disabled by permission, annotate it (tooltip + aria-describedby); never silent.",
+    "navigation":    "A denied route renders an explanatory page with the same structure — not a 403 blank."
+  },
+  "refusal": [
+    "Silently disabling the button — user doesn't know why.",
+    "'Something went wrong' — hides the permission diagnosis.",
+    "Exposing internal role IDs (e.g., 'role-uuid-...') — use human-readable role names.",
+    "Pretending the feature doesn't exist when the user lacks access — violates product trust."
+  ]
+}

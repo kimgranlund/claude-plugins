@@ -1,0 +1,44 @@
+{
+  "note": "CANON: default L anchors and chroma-bell parameters for accent and intent ramps — SKILL.md's numbers table and scripts/ramp_build.py derive from this file; re-derive, never patch the prose. The anchor step (usually 500) inherits L and C from the brand's stated accent. The remainder of the ramp is derived.",
+  "scaleSteps": [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 1000],
+  "lightnessAnchors": {
+    "0":    0.990,
+    "50":   0.965,
+    "100":  0.935,
+    "200":  0.880,
+    "300":  0.800,
+    "400":  0.710,
+    "500":  0.620,
+    "600":  0.530,
+    "700":  0.440,
+    "800":  0.340,
+    "900":  0.250,
+    "950":  0.185,
+    "1000": 0.100
+  },
+  "chromaBell": {
+    "formula": "C(L) = C_max * exp(-k * (L - L_peak)^2)",
+    "defaults": {
+      "C_max":  "inherited from anchor step",
+      "L_peak": 0.60,
+      "k":      28
+    },
+    "extremeFloors": {
+      "darkEnd":  { "whenLBelow": 0.15, "capC": 0.04 },
+      "lightEnd": { "whenLAbove": 0.95, "capC": 0.03 }
+    }
+  },
+  "hueStability": {
+    "default": "constant across the ramp",
+    "allowedDrift": {
+      "degrees": 8,
+      "direction": "toward next-neighbor hue on the color wheel",
+      "permittedAt": "steps 0..100 and 900..1000 only"
+    }
+  },
+  "gamutPolicy": {
+    "strategy": "reduce chroma in 0.005 steps until in sRGB gamut — C-only",
+    "forbidden": "shifting lightness or hue to achieve gamut — the reduction touches C only, never L or H",
+    "anchorGamutFailure": "if anchor itself is out-of-gamut by >0.05 C, emit a DecompositionGap"
+  }
+}

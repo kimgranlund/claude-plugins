@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OKHSL picker · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>OKHSL picker — perceptual HSL</h1>
+    <p>
+      OKHSL is <strong>Björn Ottosson's perceptual replacement for HSL</strong>
+      (2021). Same cylindrical (h, s, l) interface, but built on OKLab with
+      gamut-aware saturation. Compare the slices below at the same hue: in
+      OKHSL the horizontal "lightness axis" feels uniformly bright across
+      all saturations; in HSL the saturated row is markedly darker than the
+      desaturated row.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Hue</h3>
+    <div class="controls">
+      <label for="h">OKHSL / HSL hue</label>
+      <input type="range" id="h" min="0" max="360" step="0.5" value="264">
+      <output id="h-val">264.0°</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <okhsl-picker id="op" hue="264"></okhsl-picker>
+  </section>
+
+  <section>
+    <h2>What makes OKHSL different</h2>
+    <p>
+      A naïve "perceptual HSL" fails because the sRGB gamut isn't a cylinder
+      in OKLab — at fixed hue, peak chroma varies dramatically by lightness
+      (peaks roughly at the cusp). OKHSL solves this by parameterizing
+      <em>saturation</em> as a normalized fraction of the cusp-shaped gamut
+      triangle: s = 0 is gray, s = 1 is the boundary, and 0–1 is the
+      perceptually-uniform interior. Lightness similarly maps the L axis
+      relative to the cusp.
+    </p>
+    <p>
+      Practical implication: you can ship an HSL-style picker that designers
+      already understand, but every (h, s, l) combination is visually
+      meaningful — no "dark zone" at high saturations in the blue/purple
+      hue range.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var h = document.getElementById('h');
+  var hV = document.getElementById('h-val');
+  var op = document.getElementById('op');
+
+  function update() {
+    hV.textContent = parseFloat(h.value).toFixed(1) + '°';
+    op.setAttribute('hue', h.value);
+  }
+  h.addEventListener('input', update);
+  window.addEventListener('resize', function () { if (op.render) op.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>

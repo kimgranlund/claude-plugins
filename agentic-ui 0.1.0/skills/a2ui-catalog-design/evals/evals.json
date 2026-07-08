@@ -1,0 +1,151 @@
+{
+  "skill": "a2ui-catalog-design",
+  "note": "Routing corpus of record (minted 2026-07-07). Positives span imperative / diagnostic / symptom / indirect phrasings of the six catalog-DESIGN axes (definition contract, factory+resolution, two-tier extensibility, naming law, coverage policy, security/conformance). Negatives drawn adversarially from the dangerous near-neighbors: a2ui-protocol (the WIRE shape, the closest \u2014 it owns 'why did a payload fail validation / what does a binding look like on the wire'), the a2ui-composer / a2ui-builder / a2ui-reviewer agents (compose / build / grade \u2014 MAKING, this pack only answers), a2ui-training-corpus + a2ui-conversational-agent (sibling packs), and the authoring neighborhood (knowledge-author / reference-author / component-author).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "how do I add a new component to the default A2UI catalog",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "why is ui-tooltip uncatalogued",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "what is our A2UI catalog coverage policy",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "how does the renderer resolve a component type to a widget factory",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "should this bindable prop be named value or checked",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what does one catalog row declare",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "how does a project register its own catalog without editing the package",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "why is the coverage gate derived from the descriptor glob instead of a hand-written list",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "when do I need a bespoke factory instead of accessorFactory",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "what makes the catalog a security allowlist",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "extend vs replace the default catalog \u2014 which do I get",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "why does Checkbox bind checked and not value like Basic",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "what is the mapsTo field for and why is a non-identity mapping load-bearing",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "can a project catalog loosen a clientOnly function to server-invocable",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "why did this payload fail validation on the wire",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "what does a {path} binding or a check look like in the message",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "how do dynamic lists render with a positional template",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "action versus function call on the wire",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "compose the A2UI payload for a settings surface",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "author the message stream for this generative UI",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "the renderer won't paint this payload, debug it",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "implement the catalog.json row and factory for this control",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "add the catalog entry source code and wire the factory",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "grade this catalog row against its rubric",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "what format is a corpus training record and how is it admitted",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "how does the live demo's session and turn model work",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "mint a new knowledge pack for animation principles",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "write a reference doc on OAuth flows",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "build a combobox web component from scratch",
+      "expect": "no-trigger"
+    }
+  ]
+}

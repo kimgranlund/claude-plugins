@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One color appearing as two · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>One color appearing as two</h1>
+    <p>
+      Albers' most famous exercise. A single mid-tone chip placed on two
+      appropriately chosen grounds reads as two visibly different colors.
+      The art is in the choice of grounds; the chip is the constant.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Inputs</h3>
+      <div class="row">
+        <label>The single chip <input type="color" id="chip" value="#a08c5e"></label>
+        <label>Ground A <input type="color" id="ga" value="#3c2d1a"></label>
+        <label>Ground B <input type="color" id="gb" value="#dbcfa6"></label>
+      </div>
+      <div class="row" style="margin-top: var(--s-3);">
+        <button id="preset-1">tan vs brown / pale ochre</button>
+        <button id="preset-2">teal vs warm / cool</button>
+        <button id="preset-3">pink vs slate / rose</button>
+        <label style="margin-left: auto;"><input type="checkbox" id="reveal"> reveal hex equality</label>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <chip-composer id="cc" chip-a="#a08c5e" chip-b="#a08c5e" ground-a="#3c2d1a" ground-b="#dbcfa6" label-a="against deep" label-b="against pale"></chip-composer>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>How to choose two grounds that work</h2>
+    <p>
+      For the trick to land, the two grounds need to push the chip in
+      <em>opposite</em> directions along the same perceptual axis. If both
+      grounds are darker than the chip, both halves will read "lighter" — and
+      the effect is mild. But if one ground is darker and one is lighter (or
+      one is warmer and one cooler) at similar distance from the chip, the
+      eye amplifies that gap and the chip "becomes" two colors.
+    </p>
+    <p>
+      Lightness is the easiest axis to exploit. Hue temperature (warm/cool)
+      is more nuanced and produces subtler but often more elegant results.
+      Saturation contrast is the hardest — but most beautiful when it works.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> do this exercise a hundred times before you trust any color in isolation.</li>
+      <li><strong>Designers:</strong> a "neutral" gray reads warm next to blue and cool next to red — not a bug, a fact of vision.</li>
+      <li><strong>UI engineers:</strong> the same disabled-state color reads different on every card; test in context.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var chip = document.getElementById('chip');
+  var ga = document.getElementById('ga');
+  var gb = document.getElementById('gb');
+  var rev = document.getElementById('reveal');
+  var cc = document.getElementById('cc');
+  function update() {
+    cc.setAttribute('chip-a', chip.value);
+    cc.setAttribute('chip-b', chip.value);
+    cc.setAttribute('ground-a', ga.value);
+    cc.setAttribute('ground-b', gb.value);
+    cc.setAttribute('reveal', rev.checked ? 'true' : 'false');
+  }
+  [chip, ga, gb, rev].forEach(function (el) {
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+  });
+  var PRESETS = {
+    'preset-1': ['#a08c5e', '#3c2d1a', '#dbcfa6'],
+    'preset-2': ['#5e8c8c', '#3c1a1a', '#1a3c3c'],
+    'preset-3': ['#c89bb0', '#4a4f60', '#f5dde3'],
+  };
+  Object.keys(PRESETS).forEach(function (id) {
+    document.getElementById(id).addEventListener('click', function () {
+      var p = PRESETS[id];
+      chip.value = p[0]; ga.value = p[1]; gb.value = p[2];
+      update();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

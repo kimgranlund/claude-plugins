@@ -1,0 +1,22 @@
+{
+  "$schema": "perf-cls-budget/v1",
+  "rule": "Cumulative Layout Shift per interaction ≤ 0.1. Every async insertion reserves its space.",
+  "reservationPatterns": {
+    "images":      "Declare width + height OR aspect-ratio; use loading='lazy' + decoding='async' where appropriate.",
+    "media":       "aspect-ratio on video / iframe; poster images for video.",
+    "fonts":       "size-adjust, ascent-override, descent-override, line-gap-override to match fallback; font-display: swap; optional font-display: optional for tight budgets.",
+    "async-lists": "Skeleton array matched to expected count; min-block-size reserved.",
+    "async-cards": "Skeleton matches final shape; CSS aspect-ratio on images.",
+    "ad-slots":    "Explicit slot size; refuse dynamic-height ad units in primary reading flow.",
+    "banner":      "Reserve banner slot height from first render; do not inject above viewport start."
+  },
+  "measurement": {
+    "tool":        "web-vitals library or Chrome UX Report",
+    "perRoute":    "Collect CLS per route; alert when any route exceeds 0.1 at p75"
+  },
+  "refusal": [
+    "display:none → display:block for async content that belongs in reading flow.",
+    "Late-injected banners that push content down.",
+    "Fonts that swap with significantly different metrics (produces visible reflow)."
+  ]
+}

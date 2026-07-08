@@ -1,0 +1,36 @@
+{
+  "note": "The authoritative list of semantic pairs a candidate card must cover for its palette to verify against WCAG 2.2. A pair below its target is a violation in the ColorProof — the verdict blocks until it passes or routes to palette-design. Focus-ring pairs are deliberately ABSENT: focus-ring contrast is owned by focus-verify (both skills' NOT clauses name that boundary) — route --focus-ring pairs there; never re-add them here.",
+  "mapping": "A repo may ship its own role→pair manifest mapping these semantic roles onto its concrete token names (e.g. --a-fg-muted → --on-surface-muted). This file is the default role set, not a token spelling; the card's fgToken/bgToken fields carry the repo-side provenance.",
+  "version": "wcag-2.2",
+  "targets": {
+    "AA":  { "normalText": 4.5, "largeText": 3.0, "uiComponent": 3.0 },
+    "AAA": { "normalText": 7.0, "largeText": 4.5 }
+  },
+  "pairs": [
+    { "fg": "--on-surface",              "bg": "--surface",              "kind": "normalText" },
+    { "fg": "--on-surface-muted",        "bg": "--surface",              "kind": "normalText" },
+    { "fg": "--on-surface",              "bg": "--surface-raised",       "kind": "normalText" },
+    { "fg": "--on-surface",              "bg": "--surface-sunken",       "kind": "normalText" },
+    { "fg": "--on-accent",               "bg": "--accent",               "kind": "normalText" },
+    { "fg": "--on-intent-danger",        "bg": "--intent-danger",        "kind": "normalText" },
+    { "fg": "--on-intent-warning",       "bg": "--intent-warning",       "kind": "normalText" },
+    { "fg": "--on-intent-success",       "bg": "--intent-success",       "kind": "normalText" },
+    { "fg": "--on-intent-info",          "bg": "--intent-info",          "kind": "normalText" },
+
+    { "fg": "--intent-danger",           "bg": "--surface",              "kind": "normalText", "class": "intent-as-text-ink", "note": "any intent color bound as TEXT INK (inline error copy, danger links, validation messages) is normalText 4.5 — the shakedown's live miss: danger bound as text ink while typed only uiComponent 3.0" },
+    { "fg": "--intent-warning",          "bg": "--surface",              "kind": "normalText", "class": "intent-as-text-ink" },
+    { "fg": "--intent-success",          "bg": "--surface",              "kind": "normalText", "class": "intent-as-text-ink" },
+    { "fg": "--intent-info",             "bg": "--surface",              "kind": "normalText", "class": "intent-as-text-ink" },
+    { "fg": "--accent",                  "bg": "--surface",              "kind": "normalText", "class": "intent-as-text-ink", "note": "accent bound as link/text ink" },
+
+    { "fg": "--border",                  "bg": "--surface",              "kind": "uiComponent", "note": "borders bounding interactive elements must clear 3:1" },
+    { "fg": "--border-strong",           "bg": "--surface",              "kind": "uiComponent" },
+
+    { "fg": "--accent",                  "bg": "--surface",              "kind": "uiComponent", "note": "accent as NON-TEXT indication — chip fill, icon, selected-state tint (as text ink it is the 4.5 pair above)" },
+    { "fg": "--intent-danger",           "bg": "--surface",              "kind": "uiComponent", "note": "intent as non-text indication (icon, badge fill)" },
+    { "fg": "--intent-success",          "bg": "--surface",              "kind": "uiComponent" }
+  ],
+  "escalation": {
+    "rule": "a pair below its target is a violation; the DecompositionGap it emits carries this prescription for palette-design to execute, in order: (1) step the FG one ramp step further from the BG's luminance, (2) step the BG one ramp step further, (3) redesign the ramp — a failing pair is never silently shipped"
+  }
+}

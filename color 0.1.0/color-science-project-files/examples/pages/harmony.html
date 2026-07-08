@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color harmony generator · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color harmony generator</h1>
+    <p>
+      Classical schemes — complementary, analogous, triadic, tetradic,
+      split-complementary — built on <strong>perceptually uniform OKLCh
+      hue rotation</strong>. Same lightness and chroma per swatch, only the
+      hue moves. Compare against the HSL version next to it — HSL's
+      "180° complement" can shift apparent lightness by 30%+ because its
+      hue axis isn't perceptually uniform.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Base color</h3>
+    <div class="row">
+      <label>Base <input type="color" id="base" value="#3b82f6"></label>
+      <label>Scheme
+        <select id="scheme">
+          <option value="complementary">Complementary (2)</option>
+          <option value="analogous" selected>Analogous (3)</option>
+          <option value="triadic">Triadic (3)</option>
+          <option value="tetradic">Tetradic / square (4)</option>
+          <option value="split">Split-complementary (3)</option>
+          <option value="monochromatic">Monochromatic (5 L stops)</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <div class="card">
+      <h3>OKLCh (perceptual hue)</h3>
+      <div id="ok-row" class="harmony-row"></div>
+    </div>
+    <div class="card" style="margin-top: var(--s-4);">
+      <h3>HSL (RGB-cylindrical hue) — for comparison</h3>
+      <div id="hsl-row" class="harmony-row"></div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Applied to a UI mockup</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">The same OKLCh scheme rendered onto a card + button + body text — see how the harmony actually feels in a UI.</p>
+    <div id="ui-mockup" class="harmony-mockup-host"></div>
+  </section>
+
+  <section>
+    <h2>Why two rows?</h2>
+    <p>
+      Both rows use the same hue angles. In OKLCh they're <em>perceptual</em>
+      angles — 180° actually means visually opposite. In HSL the angles live
+      on a deformed cylinder: "120°" is yellow-green-on-blue territory,
+      "180°" can produce a complement that looks dimmer or brighter than the
+      base. Designers often ship HSL harmonies and then hand-correct each
+      swatch's lightness. OKLCh removes that step.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var srgb = RC.srgb, oklch = RC.oklch, hsl = RC.hsl;
+  var srgbTransfer = RC.srgbTransfer, mapping = RC.mapping;
+  var utils = RC.utils;
+
+  var baseInput = document.getElementById('base');
+  var schemeSel = document.getElementById('scheme');
+  var okRow = document.getElementById('ok-row');
+  var hslRow = document.getElementById('hsl-row');
+
+  function hexToOklch(hex) {
+    var enc = utils.fromHex(hex);
+    var lin = srgbTransfer.decode(enc);
+    var xyz = srgb.toXYZ(lin);
+    return oklch.fromXYZ(xyz);
+  }
+
+  function hexToHsl(hex) {
+    var enc = utils.fromHex(hex);
+    var lin = srgbTransfer.decode(enc);
+    var xyz = srgb.toXYZ(lin);
+    return hsl.fromXYZ(xyz);
+  }
+
+  function oklchToHex(lch) {
+    var mapped = mapping.mapToSRGB(lch);
+    return utils.toHex(srgbTransfer.encode(mapped));
+  }
+
+  function hslToHex(hslVal) {
+    var xyz = hsl.toXYZ(hslVal);
+    var lin = srgb.fromXYZ(xyz);
+    var clamped = [
+      Math.max(0, Math.min(1, lin[0])),
+      Math.max(0, Math.min(1, lin[1])),
+      Math.max(0, Math.min(1, lin[2])),
+    ];
+    return utils.toHex(srgbTransfer.encode(clamped));
+  }
+
+  var SCHEMES = {
+    complementary:  [0, 180],
+    analogous:      [-30, 0, 30],
+    triadic:        [0, 120, 240],
+    tetradic:       [0, 90, 180, 270],
+    split:          [0, 150, 210],
+    monochromatic:  null, // special case: vary L
+  };
+
+  function buildSwatch(hex, sublabel) {
+    return '<div class="harmony-swatch" style="background:' + hex + '"><div class="harmony-meta"><div>' + hex + '</div>' + (sublabel ? '<div style="opacity:0.7">' + sublabel + '</div>' : '') + '</div></div>';
+  }
+
+  function update() {
+    var base = baseInput.value;
+    var scheme = schemeSel.value;
+    var baseLch = hexToOklch(base);
+    var baseHsl = hexToHsl(base);
+
+    if (scheme === 'monochromatic') {
+      var Lstops = [0.85, 0.70, 0.55, 0.40, 0.25];
+      okRow.innerHTML = Lstops.map(function (L) {
+        var lch = [L, baseLch[1], baseLch[2]];
+        return buildSwatch(oklchToHex(lch), 'L=' + L.toFixed(2));
+      }).join('');
+      hslRow.innerHTML = Lstops.map(function (L) {
+        var hv = [baseHsl[0], baseHsl[1], L];
+        return buildSwatch(hslToHex(hv), 'l=' + L.toFixed(2));
+      }).join('');
+      return;
+    }
+
+    var offsets = SCHEMES[scheme];
+    okRow.innerHTML = offsets.map(function (off) {
+      var lch = [baseLch[0], baseLch[1], (baseLch[2] + off + 360) % 360];
+      return buildSwatch(oklchToHex(lch), '+' + off + '°');
+    }).join('');
+    hslRow.innerHTML = offsets.map(function (off) {
+      var hv = [(baseHsl[0] + off + 360) % 360, baseHsl[1], baseHsl[2]];
+      return buildSwatch(hslToHex(hv), '+' + off + '°');
+    }).join('');
+
+    // ─── UI mockup ────────────────────────────────────────────────────
+    var hexes = offsets.map(function (off) {
+      return oklchToHex([baseLch[0], baseLch[1], (baseLch[2] + off + 360) % 360]);
+    });
+    // Derive bg (very light from primary), surface (slightly tinted white), text (very dark primary), accent (secondary or complement).
+    var primary = hexes[0];
+    var accent = hexes[hexes.length > 1 ? 1 : 0];
+    var bg     = oklchToHex([0.985, baseLch[1] * 0.05, baseLch[2]]);
+    var surface = oklchToHex([0.95,  baseLch[1] * 0.10, baseLch[2]]);
+    var text    = oklchToHex([0.20,  baseLch[1] * 0.30, baseLch[2]]);
+    var muted   = oklchToHex([0.50,  baseLch[1] * 0.15, baseLch[2]]);
+    document.getElementById('ui-mockup').innerHTML =
+      '<div class="ui-mock-shell" style="background:' + bg + ';color:' + text + ';">'
+      + '<div class="ui-mock-nav"><div class="ui-mock-brand" style="color:' + primary + ';">● Brand</div><div class="ui-mock-link" style="color:' + muted + ';">Home</div><div class="ui-mock-link" style="color:' + muted + ';">Docs</div><div class="ui-mock-link" style="color:' + muted + ';">Pricing</div></div>'
+      + '<div class="ui-mock-card" style="background:' + surface + ';">'
+        + '<h3 class="ui-mock-h" style="color:' + primary + ';">Featured Item</h3>'
+        + '<p class="ui-mock-body">A short paragraph that uses the body text color from the scheme. The hue family stays cohesive across the surface, text, and accent roles.</p>'
+        + '<button class="ui-mock-btn" style="background:' + primary + ';color:' + bg + ';">Primary action</button>'
+        + '<button class="ui-mock-btn ui-mock-btn-ghost" style="background:transparent;color:' + accent + ';border-color:' + accent + ';">Secondary</button>'
+      + '</div>'
+      + '<div class="ui-mock-stat-row">'
+        + (hexes.slice(0, 5).map(function (h, i) {
+            return '<div class="ui-mock-stat" style="background:' + (i === 0 ? primary : surface) + ';color:' + (i === 0 ? bg : text) + ';">' +
+              '<div class="ui-mock-stat-label">Step ' + (i + 1) + '</div><div class="ui-mock-stat-value">' + ((i + 1) * 24) + 'k</div>' +
+              '</div>';
+          }).join(''))
+      + '</div>'
+      + '</div>';
+  }
+
+  baseInput.addEventListener('input', update);
+  schemeSel.addEventListener('change', update);
+  update();
+})();
+</script>
+
+</body>
+</html>

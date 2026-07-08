@@ -1,0 +1,126 @@
+{
+  "skill": "rubric-author",
+  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings from the charter (rubric, eval criteria, quality checklist, /goal completion condition, anchors, reviewer convergence). Negatives drawn adversarially from neighbors' trigger vocabulary: skill-author, agent-author, skills-audit, loop-design, linguistic-techniques, reference-author, spec-author, knowledge-author, entry-file-author. Corpus of record per M2, checked into the bundle at scripts/routing-corpus.json.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "write a rubric for grading model outputs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "is this rubric any good",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "my reviewers score the same artifact differently",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "tighten these anchors so two readers converge",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "turn this checklist into eval criteria",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "the level-3 descriptors are vague adjectives — fix the anchors",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "define scoring criteria for judging generated summaries",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "our quality checklist gives inconsistent verdicts",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "score this scoring rubric before we adopt it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "re-anchor this rubric — the artifact standard changed",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "which dimensions should gate promotion and at what threshold",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "write the completion condition for this goal so it is checkable",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write a skill for deploying to staging",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "review this skill against the standard",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "why isn't my skill triggering",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "write a subagent for code review",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "audit the skill corpus for naming coherence",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "write a /goal that keeps working until tests are clean",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "my goal loop never stops spinning",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "make this prompt more effective so the model obeys it",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "write a reference doc for the project knowledge base",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "write a spec with acceptance requirements",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "build an expert pack on color science",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "review my CLAUDE.md — it is being ignored",
+      "expect": "no-trigger"
+    }
+  ]
+}

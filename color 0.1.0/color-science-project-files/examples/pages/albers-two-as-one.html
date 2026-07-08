@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two colors appearing as one · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Two colors appearing as one</h1>
+    <p>
+      The inverse exercise — harder than one-as-two, and more revealing.
+      Two physically different chips can be made to look identical by
+      placing each on a ground that pushes its appearance toward the other's.
+      The eye merges what measurement keeps distinct.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Inputs</h3>
+      <div class="row">
+        <label>Chip A <input type="color" id="chipa" value="#7a8b62"></label>
+        <label>Chip B <input type="color" id="chipb" value="#8d9466"></label>
+      </div>
+      <div class="row">
+        <label>Ground A <input type="color" id="ga" value="#1a1a1a"></label>
+        <label>Ground B <input type="color" id="gb" value="#dadada"></label>
+      </div>
+      <div class="row" style="margin-top: var(--s-3);">
+        <label><input type="checkbox" id="reveal"> reveal hex equality</label>
+        <span id="dE-readout" style="margin-left: auto; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-muted);">ΔE_ok between chips: —</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <chip-composer id="cc" chip-a="#7a8b62" chip-b="#8d9466" ground-a="#1a1a1a" ground-b="#dadada" label-a="darker chip on dark" label-b="lighter chip on light"></chip-composer>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>The trick: opposing surrounds pull the chips together</h2>
+    <p>
+      If chip A is slightly darker than chip B, place A on a dark ground (which
+      makes it appear lighter via simultaneous contrast) and B on a light ground
+      (which makes it appear darker). At the right distances, both chips read as
+      the same middle value. The two are physically different — the ΔE_ok stays
+      non-zero — but the eye refuses to see the difference.
+    </p>
+    <p>
+      This is harder than the one-as-two exercise because you're fighting
+      two physical differences at once: the chips and the grounds both need to
+      align. When it works, it's the most persuasive demonstration that "color"
+      and "measured value" are not the same thing.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> color is forgiving — the wrong pigment can be made right by context.</li>
+      <li><strong>Designers:</strong> two different brand tokens can look identical in different roles; sometimes that's the goal.</li>
+      <li><strong>UI engineers:</strong> legacy palettes can converge perceptually without code changes — adjust surrounding tokens, not the brand color.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var oklab = RC.oklab, srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var deltaE = RC.deltaE, utils = RC.utils;
+
+  var chipa = document.getElementById('chipa');
+  var chipb = document.getElementById('chipb');
+  var ga = document.getElementById('ga');
+  var gb = document.getElementById('gb');
+  var rev = document.getElementById('reveal');
+  var cc = document.getElementById('cc');
+  var dERead = document.getElementById('dE-readout');
+
+  function update() {
+    cc.setAttribute('chip-a', chipa.value);
+    cc.setAttribute('chip-b', chipb.value);
+    cc.setAttribute('ground-a', ga.value);
+    cc.setAttribute('ground-b', gb.value);
+    cc.setAttribute('reveal', rev.checked ? 'true' : 'false');
+    var aLab = oklab.fromXYZ(srgb.toXYZ(srgbTransfer.decode(utils.fromHex(chipa.value))));
+    var bLab = oklab.fromXYZ(srgb.toXYZ(srgbTransfer.decode(utils.fromHex(chipb.value))));
+    var d = deltaE.deltaEOK(aLab, bLab);
+    dERead.innerHTML = 'ΔE<sub>ok</sub> between chips: <strong>' + d.toFixed(4) + '</strong>';
+  }
+  [chipa, chipb, ga, gb, rev].forEach(function (el) {
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>

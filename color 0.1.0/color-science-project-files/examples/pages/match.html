@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color matching game · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color matching game</h1>
+    <p>
+      A random target color appears. Adjust the OKLCh sliders to match it.
+      Distance is measured in <strong>ΔE_ok</strong> — Euclidean distance in
+      OKLab. JND (just-noticeable difference) is around 0.02, so anything
+      under 0.05 is effectively a perfect match.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Target vs your match</h3>
+    <div class="match-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); height: 200px;">
+      <div id="target-sw" style="border-radius: var(--r-md); border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.8); font-family:var(--font-mono); text-shadow:0 1px 3px rgba(0,0,0,0.5)">target</div>
+      <div id="match-sw" style="border-radius: var(--r-md); border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.8); font-family:var(--font-mono); text-shadow:0 1px 3px rgba(0,0,0,0.5)">your match</div>
+    </div>
+    <div class="row" style="margin-top: var(--s-4); justify-content: space-between;">
+      <div id="score" style="font-family: var(--font-mono); font-size: var(--text-lg);">ΔE_ok = —</div>
+      <button id="new-target">new target</button>
+      <button id="reveal">reveal target</button>
+    </div>
+    <div class="row" style="margin-top: var(--s-2); font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted);">
+      <div id="target-info">target: hidden</div>
+      <div id="match-info">match: —</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: var(--s-4);">
+    <h3>Adjust OKLCh</h3>
+    <div class="controls">
+      <label for="L">Lightness</label>
+      <input type="range" id="L" min="0" max="1" step="0.001" value="0.55">
+      <output id="L-val">0.550</output>
+
+      <label for="C">Chroma</label>
+      <input type="range" id="C" min="0" max="0.35" step="0.001" value="0.10">
+      <output id="C-val">0.100</output>
+
+      <label for="h">Hue</label>
+      <input type="range" id="h" min="0" max="360" step="0.5" value="180">
+      <output id="h-val">180.0°</output>
+    </div>
+  </div>
+
+  <section>
+    <h2>Scoring tiers</h2>
+    <ul>
+      <li><strong>ΔE_ok &lt; 0.02</strong> — perfect match (below JND)</li>
+      <li><strong>0.02 – 0.05</strong> — excellent (close enough that you'd
+        need side-by-side to notice)</li>
+      <li><strong>0.05 – 0.10</strong> — good (a careful observer would see
+        the difference)</li>
+      <li><strong>0.10 – 0.20</strong> — visible mismatch</li>
+      <li><strong>&gt; 0.20</strong> — obviously different colors</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var oklab = RC.oklab, oklch = RC.oklch, srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var mapping = RC.mapping, utils = RC.utils, deltaE = RC.deltaE;
+
+  var L = document.getElementById('L'), C = document.getElementById('C'), h = document.getElementById('h');
+  var LV = document.getElementById('L-val'), CV = document.getElementById('C-val'), hV = document.getElementById('h-val');
+  var targetSw = document.getElementById('target-sw'), matchSw = document.getElementById('match-sw');
+  var score = document.getElementById('score');
+  var targetInfo = document.getElementById('target-info'), matchInfo = document.getElementById('match-info');
+
+  var target = null;
+  var revealed = false;
+
+  function newTarget() {
+    var Lt = 0.30 + Math.random() * 0.55;
+    var Ct = 0.04 + Math.random() * 0.18;
+    var ht = Math.random() * 360;
+    target = [Lt, Ct, ht];
+    revealed = false;
+    var hex = utils.toHex(srgbTransfer.encode(mapping.mapToSRGB(target)));
+    targetSw.style.background = hex;
+    targetInfo.textContent = 'target: hidden (click reveal to show)';
+    update();
+  }
+
+  function lchToHex(l, c, hh) {
+    return utils.toHex(srgbTransfer.encode(mapping.mapToSRGB([l, c, hh])));
+  }
+
+  function update() {
+    var Lv = parseFloat(L.value), Cv = parseFloat(C.value), hv = parseFloat(h.value);
+    LV.textContent = Lv.toFixed(3);
+    CV.textContent = Cv.toFixed(3);
+    hV.textContent = hv.toFixed(1) + '°';
+    var hex = lchToHex(Lv, Cv, hv);
+    matchSw.style.background = hex;
+    matchInfo.textContent = 'match: ' + hex + ' · oklch(' + Lv.toFixed(3) + ' ' + Cv.toFixed(3) + ' ' + hv.toFixed(1) + ')';
+    if (target) {
+      var labT = oklch.toOKLab(target);
+      var labM = oklch.toOKLab([Lv, Cv, hv]);
+      var d = deltaE.deltaEOK(labT, labM);
+      var tier;
+      if (d < 0.02) tier = ' (perfect — below JND!)';
+      else if (d < 0.05) tier = ' (excellent)';
+      else if (d < 0.10) tier = ' (good)';
+      else if (d < 0.20) tier = ' (visible)';
+      else tier = ' (different)';
+      score.innerHTML = 'ΔE<sub>ok</sub> = <strong>' + d.toFixed(4) + '</strong>' + tier;
+    }
+  }
+
+  [L, C, h].forEach(function (el) { el.addEventListener('input', update); });
+  document.getElementById('new-target').addEventListener('click', newTarget);
+  document.getElementById('reveal').addEventListener('click', function () {
+    if (!target) return;
+    revealed = true;
+    var hex = utils.toHex(srgbTransfer.encode(mapping.mapToSRGB(target)));
+    targetInfo.textContent = 'target: ' + hex + ' · oklch(' + target[0].toFixed(3) + ' ' + target[1].toFixed(3) + ' ' + target[2].toFixed(1) + ')';
+  });
+
+  newTarget();
+})();
+</script>
+
+</body>
+</html>

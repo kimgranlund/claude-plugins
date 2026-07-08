@@ -1,0 +1,141 @@
+{
+  "skill": "color-science-perception",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Re-derived 2026-07-06 extraction from color-science (T3). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's four axes (terminology, vision mechanics, appearance science, textbook layer). Negatives drawn adversarially from the live neighbors: color-science-spaces (space-conversion math, gamut, gradients, CSS), color-science-accessibility (contrast standards, CVD), color-science-materials (pigment, print, naming), color-theory (harmony/meaning/history vs. mechanism -- the big seam), color-verify (pass/fail verification of a candidate palette).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "explain the difference between chroma, saturation, and colorfulness in plain terms",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "walk me through how cones and the opponent process turn light into the sensation of color",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "why does a color at 100% hsl saturation not look as vivid as the same hue does in oklch",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "why does jpeg throw away so much color information before anyone notices",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "my teammate keeps saying blue and purple are both cool colors and I don't think that's actually true scientifically",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "two paint swatches read as basically the same color to me under one light but not under another, what's going on",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "what's actually happening physiologically when you stare at a bright color and then look away and see the opposite color",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "is there a real vision-science reason design nerds insist on 'chroma' and 'lightness' instead of just saying saturation and brightness",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "what does Fairchild's color appearance model actually account for that flat CIELAB coordinates don't",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "explain macadam ellipses and why they mattered for building uniform color spaces",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "what is metamerism and why do two things match under one light source but not another",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "give me the David Briggs explanation of what a color actually is, not the marketing version",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "why do some people apparently have four types of cone cells instead of three",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "is olo a real newly discovered color or just clickbait about a laser experiment on someone's retina",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "convert this oklch color to srgb hex for me",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "why does my css gradient go muddy gray in the middle, should I use oklch or lab interpolation",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "what's the css color-mix syntax for blending two colors in oklab",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "what's the conversion formula from hsl to rgb",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "does this button text pass wcag aa contrast against the background",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "simulate deuteranopia on this palette and tell me which pairs become indistinguishable",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "is apca or wcag 2.2 the right contrast standard to cite in our design system docs",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "why does mixing blue and yellow paint make green instead of the gray you get from averaging rgb values",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "name this hex color the way a vintage field guide like ridgway would",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "why does my printed brochure look duller and warmer than the screen mockup",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "why do complementary colors look good together on a poster",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "what mood does a pale muted palette communicate to users",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "verify this palette end to end and give me a colorproof pass/fail report",
+      "expect": "no-trigger"
+    }
+  ]
+}

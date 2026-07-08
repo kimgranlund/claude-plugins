@@ -1,0 +1,156 @@
+{
+  "skill": "research-methods",
+  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Routing corpus for the research-methods description. Positives span the six question-classes (optimize / debug-regression / contribution / tune / stress-test) in imperative, symptom, and named-technique phrasings. Negatives are the fenced neighbors: bare web/literature lookup (no system, no scorer), artifact review (the *-reviewer agents), authoring/building (the *-author skills / system-builder), and the nearest IMPROVE-FAMILY siblings whose 'make X better' overlaps but is owned elsewhere (linguistic-techniques improves prompt language, rubric-author tightens anchors, loop-design owns stopping predicates) — these three run no measured scorer loop, so they are researcher's neighbors, not its work.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "improve the score on this skill's routing",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "figure out why this suddenly got slower",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "find the root cause of this regression",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "which of these config options actually matter",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what's the best timeout value for this request",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what breaks this parser — find the edge cases",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "tune these hyperparameters for the best accuracy",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "run an ablation on the scoring checks to see what's dead weight",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "bisect this regression down to the change that caused it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "hill-climb this prompt to the strongest variant",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "sweep the retry count to find the optimum",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "stress-test this API before we ship",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "it used to work but now it doesn't — what changed",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "adversarially probe this generator for failure modes",
+      "expect": "trigger"
+    },
+    {
+      "id": "t15",
+      "prompt": "which parts of this pipeline pull their weight",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "what's the latest version of React",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "look up the OWASP top ten for me",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "review this diff before I merge",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "score this PRD against its rubric",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "review this skill and tell me if it's any good",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "write the LLD for this feature",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "build this feature to the approved LLD",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "author a new skill for summarizing changelogs",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "design an accessible color palette for the dashboard",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "review this component's API and anatomy",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "summarize what changed in this repo this week",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "decompose this UI screen into regions",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "make this prompt or agent more effective",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "tighten these rubric anchors",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "design the stopping predicate for this loop",
+      "expect": "no-trigger"
+    }
+  ]
+}

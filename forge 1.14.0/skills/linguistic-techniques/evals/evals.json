@@ -1,0 +1,56 @@
+{
+  "skill": "linguistic-techniques",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "The model keeps ignoring this instruction — fix the wording",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Make this prompt more effective",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Audit the language of this agent prompt",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Why doesn't it follow the constraint I wrote?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Rewrite this so it actually works",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Harden this tool description",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Why isn't this skill triggering?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "Restructure this SKILL.md's frontmatter",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Decompose this feature into parts",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "what order of reasoning does this decision need",
+      "expect": "no-trigger"
+    }
+  ]
+}

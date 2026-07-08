@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Albers vs. scientific color models · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Albers vs. the scientific color models</h1>
+    <p>
+      Albers (1963) explicitly rejected the prescriptive color science of his
+      day. Yet CIELAB (1976), CIECAM02 (2002), and OKLab (2020) eventually
+      quantified the very phenomena he was teaching by hand. The fields
+      converged — perception-first practice and math-first models now agree
+      about what's actually happening.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>An Albers illusion seen through three models</h3>
+      <p style="color: var(--text-muted); font-size: var(--text-sm);">Both center chips below are <code>#7f8b6e</code>. RGB, CIELAB, and OKLab all confirm they're physically identical. The eye reports a difference — because the eye reports <em>appearance</em>, not measurement.</p>
+      <chip-composer chip-a="#7f8b6e" chip-b="#7f8b6e" ground-a="#2a2620" ground-b="#e6e9da" label-a="warm dark" label-b="cool light" reveal="true"></chip-composer>
+      <div class="row" style="margin-top: var(--s-4); font-family: var(--font-mono); font-size: var(--text-sm);">
+        <div class="model-tile">
+          <strong>RGB</strong><br>
+          left: <code>(127, 139, 110)</code><br>
+          right: <code>(127, 139, 110)</code><br>
+          <span class="pill pass">identical</span>
+        </div>
+        <div class="model-tile">
+          <strong>CIELAB</strong><br>
+          left: <code>L*=55.7 a*=−8.4 b*=15.4</code><br>
+          right: <code>L*=55.7 a*=−8.4 b*=15.4</code><br>
+          <span class="pill pass">identical</span>
+        </div>
+        <div class="model-tile">
+          <strong>OKLab</strong><br>
+          left: <code>L=0.587 a=−0.023 b=0.039</code><br>
+          right: <code>L=0.587 a=−0.023 b=0.039</code><br>
+          <span class="pill pass">identical</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Albers said the eye lies. Math says: the eye reports something different than what's there.</h2>
+    <p>
+      Both statements are correct — and they're saying the same thing. A
+      color's <em>measured</em> values (in any colorimetric space) describe its
+      physical reflectance or emission. Its <em>perceived</em> values depend
+      on adaptation, context, and the spatial arrangement of neighboring
+      colors. Colorimetric models predict the physical side. Perception models
+      like CIECAM and CAM16-UCS predict the appearance side. Modern OKLab and
+      OKLCh are colorimetric models whose <em>axes</em> are calibrated to
+      perceptual uniformity — they're the closest thing to "Albers in math
+      form" we have.
+    </p>
+    <p>
+      OKLCh's hue-uniformity (a hue rotation produces no perceived lightness
+      change) is essentially Albers' "stable hue under variation" complaint,
+      solved. His exercise of finding a chip's apparent appearance against
+      varied surrounds is now reproducible numerically — feed the surround
+      into CIECAM16's viewing-conditions model and you get a quantitative
+      appearance prediction.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> the science finally caught up — and confirmed what your eye was telling you.</li>
+      <li><strong>Designers:</strong> modern color spaces (especially OKLCh) deliver Albers' lessons mathematically.</li>
+      <li><strong>UI engineers:</strong> use OKLCh because it predicts perception; use Albers exercises to verify the prediction holds in your UI.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<style>
+.model-tile {
+  flex: 1;
+  padding: var(--s-3);
+  background: var(--bg-elevated);
+  border-radius: var(--r-md);
+  line-height: 1.7;
+}
+</style>
+
+</body>
+</html>

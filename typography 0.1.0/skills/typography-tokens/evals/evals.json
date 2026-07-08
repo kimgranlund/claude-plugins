@@ -1,0 +1,146 @@
+{
+  "skill": "typography-tokens",
+  "note": "Converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the typography plugin-decompose port. Positives across imperative / diagnostic / symptom / indirect phrasings, all on the default --type-* grammar. Negatives are adversarial, drawn one-for-one from each NOT-for fence in the description: material-design-typography-tokens (the Material --md-sys-typescale-* twin), typography-lettering (answers-only, no token output), component-author (building/placing a component), i18n-verify (locale number/date/currency + RTL), plus wider neighborhood negatives (palette-design, color-verify, material-design-geometry-tokens) that share adjacent 'design system' vocabulary but are not this skill's job.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "what type token should this heading use",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "which voice and step should this button label use",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "size this h2 heading with the type scale",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "why is this button label the wrong size",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "make our type scale responsive across breakpoints",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "wire the fonts for this project's --type-* tokens",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "bind the --type-* export in this repo",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what font should the display voice use",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "this figure caption looks like it's using the wrong voice",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "how do I get single-line leading on this button label",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "our headings and sub-headings look identical, what step fixes it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "which font pairs well with our body typeface for a distinctive marketing hero",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "our kicker overline is wrapping onto two lines, fix the type token",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "should this table cell text be the ui voice or the code voice",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "bind our --md-sys-typescale-* export and pick the right voice for this heading",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "this project extends Material 3's type scale, what voice/level should this label use",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "what's the difference between a grotesque and a neo-grotesque typeface",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "does OpenDyslexic actually help readers with dyslexia",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "build a web component for a date picker",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "author a custom element for a toggle switch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "format this date and currency for the user's locale",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "check our RTL support and Arabic line-height",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "design the color ramp for our accent palette",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "what padding and radius should this button use",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "verify this palette passes WCAG contrast",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "explain x-height and cap-height in type anatomy",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "translate this UI copy into Japanese",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "choose a metric-compatible fallback stack for this webfont",
+      "expect": "no-trigger"
+    }
+  ]
+}

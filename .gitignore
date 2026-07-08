@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Gate output — regenerate with `release_gate.py <plugin> --package`, never hand-edit or commit
+dist/
+
+# Personal/local Claude Code settings — not shared
+.claude/settings.local.json

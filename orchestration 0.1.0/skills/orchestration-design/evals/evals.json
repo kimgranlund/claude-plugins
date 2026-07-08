@@ -1,0 +1,111 @@
+{
+  "skill": "orchestration-design",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review M2 corpus (excellence campaign batch 2, 2026-07-03): positives across imperative / diagnostic / symptom / indirect families incl. the stem token 'orchestration'. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: loop-design, agent-author, skills-audit, agents-audit, handoff-compose, system-decompose (the last three now live in forge, a sibling plugin).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "should this be a subagent or a team",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "how do my skills and agents connect",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "review my frontmatter",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "design how my agents and skills compose",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "review my orchestration",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "audit how this agent system integrates",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "should I preload skills on this subagent or let discovery route them",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "is a team fan-out worth the cost here or would one subagent do",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "wire up this new capability - skill, subagent, or team",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "my subagent never gets selected - is the wiring between capabilities wrong",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write a /goal",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "my goal loop never stops",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "write a subagent for code review",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "review this agent definition",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "is this tools list safe",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "review all my skills",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "are my skill names consistent",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "audit the agent team for duplicates",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "do my agents leverage the right skills",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "write the handback block for my results",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "decompose this system into parts",
+      "expect": "no-trigger"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-dither comparison · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Multi-dither comparison</h1>
+    <p>
+      Quantize an image to k colors via k-means in OKLab, then apply
+      <strong>four different dithering algorithms</strong> with the same
+      palette. Compare the characteristic textures: Floyd-Steinberg's
+      fine grain, Atkinson's punchier high-frequency look, Bayer's
+      regular cross-hatch, Jarvis-Judice-Ninke's smoother but coarser
+      result.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Inputs</h3>
+    <div class="row">
+      <input type="file" id="file" accept="image/*">
+      <label>k =
+        <select id="k">
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="8" selected>8</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <multi-dither id="md" k="8"></multi-dither>
+  </section>
+
+  <section>
+    <h2>How each algorithm differs</h2>
+    <ul>
+      <li><strong>Floyd-Steinberg (1976)</strong> — diffuses error to 4
+        neighbors with weights 7/16, 3/16, 5/16, 1/16. The most popular
+        algorithm. Produces fine-grain stippling.</li>
+      <li><strong>Atkinson (1980s, Bill Atkinson at Apple)</strong> —
+        diffuses 1/8 of error to 6 neighbors, propagating only 3/4 of the
+        total error. Faster than FS; brighter / punchier output but can
+        blow out very dark or very bright areas.</li>
+      <li><strong>Bayer 4×4 ordered (1973)</strong> — adds a fixed 16-level
+        pattern matrix to each pixel before nearest-neighbor assignment.
+        No error propagation; pixels are independent. Characteristic
+        cross-hatch. Good for animation (neighboring frames don't shimmer).</li>
+      <li><strong>Jarvis-Judice-Ninke (1976)</strong> — diffuses to 12
+        neighbors with /48 weights. The biggest kernel; smoother textures
+        but more visible "staircase" artifacts on hard edges.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var file = document.getElementById('file');
+  var kSel = document.getElementById('k');
+  var md = document.getElementById('md');
+  function loadFile(f) {
+    var img = new Image();
+    var url = URL.createObjectURL(f);
+    img.src = url;
+    img.decode().then(function () { md.setImage(img); URL.revokeObjectURL(url); });
+  }
+  file.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(document.querySelector('.card'), loadFile);
+  kSel.addEventListener('change', function () { md.setAttribute('k', kSel.value); });
+})();
+</script>
+
+</body>
+</html>

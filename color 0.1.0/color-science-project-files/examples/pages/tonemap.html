@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HDR tone mapping · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>HDR tone mapping</h1>
+    <p>
+      Light in the real world (and HDR captures) has unbounded intensity, but
+      sRGB display values must fit in [0, 1]. <strong>Tone-mapping
+      operators</strong> are functions that map [0, ∞) → [0, 1] smoothly.
+      Each takes a different position on the trade-off between simplicity,
+      highlight preservation, and saturation. The strips below show the same
+      synthetic HDR gradient through five operators.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Controls</h3>
+    <div class="controls">
+      <label for="exp">Exposure</label>
+      <input type="range" id="exp" min="0.1" max="3.0" step="0.05" value="1.0">
+      <output id="exp-val">1.00×</output>
+
+      <label for="wp">White point (Reinhard W)</label>
+      <input type="range" id="wp" min="1" max="16" step="0.1" value="4">
+      <output id="wp-val">4.0</output>
+
+      <label for="ms">Max input (gradient range)</label>
+      <input type="range" id="ms" min="1" max="16" step="0.5" value="8">
+      <output id="ms-val">8.0</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <tonemap-strip id="strip" exposure="1.0" white-point="4.0" max-stop="8.0"></tonemap-strip>
+  </section>
+
+  <section>
+    <h2>What each operator preserves</h2>
+    <ul>
+      <li><strong>Naive clip</strong> — everything &gt; 1 becomes 1. Blown
+        highlights. The HDR information is lost.</li>
+      <li><strong>Reinhard simple</strong> — <code>x / (1 + x)</code>.
+        Cheap, monotonic, never reaches 1.0 (asymptotic). Slight
+        wash-out at SDR white.</li>
+      <li><strong>Reinhard extended</strong> — maps your chosen white-point
+        <em>W</em> exactly to 1.0. Better highlight definition.</li>
+      <li><strong>Reinhard luminance-preserving</strong> — compress
+        luminance only; scale RGB by the gain. Preserves hue (channels
+        keep their ratios) but the result is more saturated.</li>
+      <li><strong>ACES Narkowicz</strong> — the cinema/games industry
+        default. Filmic toe (gentle shadow lift) + smooth highlight
+        roll-off. Slightly desaturates shadows.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var exp = document.getElementById('exp'), wp = document.getElementById('wp'), ms = document.getElementById('ms');
+  var expV = document.getElementById('exp-val'), wpV = document.getElementById('wp-val'), msV = document.getElementById('ms-val');
+  var strip = document.getElementById('strip');
+
+  function update() {
+    expV.textContent = parseFloat(exp.value).toFixed(2) + '×';
+    wpV.textContent = parseFloat(wp.value).toFixed(1);
+    msV.textContent = parseFloat(ms.value).toFixed(1);
+    strip.setAttribute('exposure', exp.value);
+    strip.setAttribute('white-point', wp.value);
+    strip.setAttribute('max-stop', ms.value);
+  }
+  [exp, wp, ms].forEach(function (el) { el.addEventListener('input', update); });
+  window.addEventListener('resize', function () { if (strip.render) strip.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>

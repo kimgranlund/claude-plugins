@@ -1,0 +1,42 @@
+{
+  "skill": "handoff-compose",
+  "_note": "Review-time corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of composing, rolling up, and judging a handback. Negatives drawn from the trigger vocabulary of the graph neighborhood: orchestration-design, loop-design, adr-author, skill-author/skill-reviewer, lld-author, rubric-author, plus report-adjacent near-misses (PR description, changelog). Bundle has NO scripts/routing-corpus.json of record — adopting this file is the M2 fix.",
+  "neighbors": [
+    "orchestration-design",
+    "loop-design",
+    "adr-author",
+    "skill-author",
+    "lld-author",
+    "rubric-author",
+    "skills-refactor",
+    "linguistic-techniques"
+  ],
+  "positives": [
+    "how do I hand this back to the coordinator",
+    "report my results",
+    "write the handback for the work I just finished",
+    "compose the handoff block for this subagent",
+    "is this handoff complete",
+    "is this report verifiable and routable",
+    "review the handoff block this agent returned",
+    "roll several team reports up into one handback",
+    "my subagent's report just says tests pass with no evidence",
+    "the coordinator can't route on this status report",
+    "what fields go in a subagent's return block",
+    "the worker finished — what shape does its return take"
+  ],
+  "negatives": [
+    "should this be a subagent or a team",
+    "how do my skills and agents connect",
+    "review my frontmatter wiring",
+    "write a /goal that keeps working until clean",
+    "my goal loop never stops",
+    "write an ADR to ratify this decision",
+    "review this skill and score the SKILL.md",
+    "author the LLD for this feature",
+    "write a rubric with 1-5 anchors for grading layouts",
+    "write the PR description for this change",
+    "summarize the changes for the changelog",
+    "design how planning and execution seats compose"
+  ]
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVD-safe palette · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>CVD-safe palette designer</h1>
+    <p>
+      Generate an N-color qualitative palette that maintains visible
+      separation under <strong>protanopia, deuteranopia, and tritanopia</strong>
+      — not just normal vision. Greedy hue optimization maximizes the
+      worst-case ΔE_ok across all 4 viewing conditions. The colors below
+      are all at the same lightness, so the only thing distinguishing them
+      is hue (which is what CVD compresses).
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Inputs</h3>
+    <div class="controls">
+      <label for="n">N (palette size)</label>
+      <input type="range" id="n" min="2" max="8" step="1" value="5">
+      <output id="n-val">5</output>
+
+      <label for="hue">Base hue offset</label>
+      <input type="range" id="hue" min="0" max="360" step="1" value="0">
+      <output id="hue-val">0°</output>
+
+      <label for="L">Lightness</label>
+      <input type="range" id="L" min="0.4" max="0.85" step="0.01" value="0.62">
+      <output id="L-val">0.62</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <cvd-safe-palette id="cvdp" n="5" hue="0" lightness="0.62"></cvd-safe-palette>
+  </section>
+
+  <section>
+    <h2>Why "worst case across CVD types"?</h2>
+    <p>
+      A palette can look fine under normal vision and totally collapse under
+      deuteranopia — the most common CVD (about 6% of men). If you optimize
+      only for normal-vision contrast, you're leaving the largest
+      accessibility population behind.
+    </p>
+    <p>
+      The reverse trap: optimizing only for protan/deutan can collapse
+      separation on tritanopia (rare but real). The right objective is
+      <em>"worst-case across all viewing conditions"</em> — guarantee a
+      minimum separation under the union.
+    </p>
+    <p>
+      This demo uses Machado-2009 simulation at full severity (severity 1.0
+      = full dichromacy). The optimization is greedy coordinate-descent on
+      hue angles. Better results would use:
+    </p>
+    <ul>
+      <li>Multiple severity levels (0.5, 1.0) for anomalous trichromacy</li>
+      <li>Pair-wise lightness adjustment, not just hue</li>
+      <li>A non-greedy global optimizer (simulated annealing, etc.)</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var n = document.getElementById('n'), hue = document.getElementById('hue'), L = document.getElementById('L');
+  var nV = document.getElementById('n-val'), hueV = document.getElementById('hue-val'), LV = document.getElementById('L-val');
+  var cvdp = document.getElementById('cvdp');
+
+  function update() {
+    nV.textContent = n.value;
+    hueV.textContent = hue.value + '°';
+    LV.textContent = parseFloat(L.value).toFixed(2);
+    cvdp.setAttribute('n', n.value);
+    cvdp.setAttribute('hue', hue.value);
+    cvdp.setAttribute('lightness', L.value);
+  }
+  [n, hue, L].forEach(function (el) { el.addEventListener('input', update); });
+  update();
+})();
+</script>
+
+</body>
+</html>

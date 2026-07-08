@@ -1,0 +1,30 @@
+{
+  "skill": "llms-txt-author",
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from graph neighbors: reference-author, knowledge-author, entry-file-author, html-to-markdown, and the repo-local docs-author (agent-ui). Not yet checked into the bundle — M2 requires scripts/routing-corpus.json.",
+  "neighbors": ["reference-author", "knowledge-author", "entry-file-author", "html-to-markdown", "docs-author (repo-local, agent-ui)"],
+  "positives": [
+    "generate an llms.txt for our docs",
+    "review our llms.txt",
+    "make our docs agent-readable",
+    "our AI-facing docs index is out of date",
+    "write the llms-full.txt with the whole corpus",
+    "does our llms.txt follow the standard shape",
+    "our llms.txt is just a list of concepts with no links",
+    "create the index file that AI crawlers fetch from the site root",
+    "agents can't discover where our authoritative documentation lives",
+    "add an llms.txt so coding agents can navigate our documentation"
+  ],
+  "negatives": [
+    "write a reference doc for the API",
+    "structure my project knowledge",
+    "audit our docs for drift",
+    "is this reference doc retrievable",
+    "build an expert pack on color theory",
+    "turn this research into a knowledge skill",
+    "write my CLAUDE.md",
+    "review this CLAUDE.md as standing context",
+    "convert this HTML to markdown",
+    "document ui-text-field on the docs site",
+    "add an API page to the site"
+  ]
+}

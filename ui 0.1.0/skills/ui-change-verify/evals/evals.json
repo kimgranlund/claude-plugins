@@ -1,0 +1,22 @@
+{
+  "skill": "ui-change-verify",
+  "note": "Trigger-routing suite. Positives are the moment right before a UI change would be reported done — the exact moment this skill must fire instead of a bare description-read. Negatives are near-misses owned by the abstract-property verify skills (focus-verify, i18n-verify, perf-verify, safety-verify), which reason about a property without a live artifact to drive, and by ui-audit, which sweeps a whole product rather than one change.",
+  "cases": [
+    { "id": "t01", "prompt": "is this button working now", "expect": "trigger" },
+    { "id": "t02", "prompt": "did that fix the layout issue", "expect": "trigger" },
+    { "id": "t03", "prompt": "verify this UI change before we call it done", "expect": "trigger" },
+    { "id": "t04", "prompt": "check that the new toggle actually works", "expect": "trigger" },
+    { "id": "t05", "prompt": "confirm the modal opens and closes correctly", "expect": "trigger" },
+    { "id": "t06", "prompt": "I just edited the form — is it done", "expect": "trigger" },
+    { "id": "t07", "prompt": "make sure this style change didn't break anything", "expect": "trigger" },
+    { "id": "t08", "prompt": "take a screenshot and confirm the new state shows up", "expect": "trigger" },
+    { "id": "t09", "prompt": "the type-check passed, but does the page actually work", "expect": "trigger" },
+    { "id": "t10", "prompt": "check the console for errors after this change", "expect": "trigger" },
+    { "id": "n01", "prompt": "what focus-ring recipe should this button use", "expect": "no-trigger" },
+    { "id": "n02", "prompt": "audit this UI for RTL and locale formatting issues", "expect": "no-trigger" },
+    { "id": "n03", "prompt": "what's our Core Web Vitals budget for this page", "expect": "no-trigger" },
+    { "id": "n04", "prompt": "review the blast radius of this delete action", "expect": "no-trigger" },
+    { "id": "n05", "prompt": "sweep the whole product for UI inconsistencies before launch", "expect": "no-trigger" },
+    { "id": "n06", "prompt": "what pattern is this dashboard using", "expect": "no-trigger" }
+  ]
+}

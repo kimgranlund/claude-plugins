@@ -1,0 +1,71 @@
+{
+  "skill": "skill-authoring-standards",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "How should I write the description for this skill?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Why does my skill never trigger even though it's installed?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "What's the right length for a SKILL.md body?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "What belongs in the description vs the body vs references/?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "How do disable-model-invocation and user-invocable interact?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "My skill stopped influencing behavior mid-session — why?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "Should this be a knowledge skill or a command?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Review this skill and give me a findings report",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "Forge me a new deploy skill",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Why won't my agent auto-delegate?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "Make this prompt actually change the model's behavior",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "should we consolidate these three thin skills into one",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "how should the reference corpus and INDEX behind this skill be structured",
+      "expect": "no-trigger"
+    }
+  ]
+}

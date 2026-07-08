@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chromatic adaptation · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Chromatic adaptation (Bradford CAT)</h1>
+    <p>
+      Drop an image and see how it would look <strong>under a different
+      illuminant</strong> — the Bradford chromatic adaptation transform takes
+      an image's XYZ values and re-renders them assuming a different light
+      source. Tungsten goes orange-brown; cool fluorescent goes
+      slightly-blue-gray.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Inputs</h3>
+    <div class="row">
+      <input type="file" id="file" accept="image/*">
+      <label>From
+        <select id="src">
+          <option value="D65" selected>D65 (daylight ~6500K)</option>
+          <option value="D50">D50 (warm daylight ~5000K)</option>
+          <option value="A">A (tungsten ~2856K)</option>
+          <option value="F2">F2 (cool fluorescent)</option>
+        </select>
+      </label>
+      <label>To
+        <select id="dst">
+          <option value="A" selected>A (tungsten ~2856K)</option>
+          <option value="D50">D50</option>
+          <option value="D65">D65</option>
+          <option value="F2">F2 (cool fluorescent)</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="split" checked> split view</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <adaptation-viewer id="viewer" src-white="D65" dst-white="A" mode="split"></adaptation-viewer>
+  </section>
+
+  <section>
+    <h2>What the Bradford CAT is doing</h2>
+    <p>
+      Bradford transforms XYZ from a source white point to a destination
+      white point via "Bradford cone response" — a 3 × 3 matrix
+      approximation of human cone sensitivities. The classic chain:
+      <code>M_Br &middot; X<sub>src</sub></code> &nbsp;→&nbsp;
+      scale by white-point ratio &nbsp;→&nbsp;
+      <code>M_Br<sup>−1</sup> &middot; result</code>.
+    </p>
+    <p>
+      This is the standard for ICC profile work and CSS Color 4. When you
+      see a "P3 → sRGB fallback" that crosses white points
+      (P3 is D65, ICC PCS is D50), Bradford is what's actually moving
+      the chromaticities.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var file = document.getElementById('file');
+  var src = document.getElementById('src'), dst = document.getElementById('dst');
+  var split = document.getElementById('split');
+  var viewer = document.getElementById('viewer');
+
+  function apply() {
+    viewer.setAttribute('src-white', src.value);
+    viewer.setAttribute('dst-white', dst.value);
+    viewer.setAttribute('mode', split.checked ? 'split' : 'single');
+  }
+  function loadFile(f) {
+    var img = new Image();
+    var url = URL.createObjectURL(f);
+    img.src = url;
+    img.decode().then(function () { viewer.setImage(img); URL.revokeObjectURL(url); });
+  }
+  file.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(document.querySelector('.card'), loadFile);
+  src.addEventListener('change', apply);
+  dst.addEventListener('change', apply);
+  split.addEventListener('change', apply);
+  apply();
+})();
+</script>
+
+</body>
+</html>

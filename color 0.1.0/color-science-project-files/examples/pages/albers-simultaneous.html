@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simultaneous contrast · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Simultaneous contrast</h1>
+    <p>
+      The most fundamental Albers phenomenon. A chip on a dark ground appears
+      lighter; on a light ground, darker. Against a saturated ground, it appears
+      duller; against a neutral ground, more saturated. The eye amplifies
+      <em>difference</em>.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Pick a chip and two grounds</h3>
+      <div class="row">
+        <label>Chip <input type="color" id="chip" value="#888888"></label>
+        <label>Ground A <input type="color" id="ga" value="#1a1a1a"></label>
+        <label>Ground B <input type="color" id="gb" value="#eaeaea"></label>
+        <label><input type="checkbox" id="reveal"> reveal hex equality</label>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <chip-composer id="cc" chip-a="#888888" chip-b="#888888" ground-a="#1a1a1a" ground-b="#eaeaea" label-a="on dark" label-b="on light"></chip-composer>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>One variable, big effect</h2>
+    <p>
+      Set the chip to a neutral mid-gray and the two grounds to the extremes
+      (one near black, one near white). The same chip will read as a noticeably
+      lighter swatch on the dark side and a darker swatch on the light side —
+      while its hex value never changes. Try different chip colors. Try matching
+      hues. The amplification effect persists across the entire color space.
+    </p>
+    <p>
+      The strength of the illusion depends on the lightness gap between the
+      grounds and the proximity of the chip's value to either extreme.
+      Mid-tones placed between two roughly-equal contrasts produce the largest
+      perceptual swing.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> every color you mix gets re-mixed by what surrounds it.</li>
+      <li><strong>Designers:</strong> pick brand color last, after the surface system is locked.</li>
+      <li><strong>UI engineers:</strong> a "safe" primary on light surface isn't safe on a colored card — verify each pairing.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var chip = document.getElementById('chip');
+  var ga = document.getElementById('ga');
+  var gb = document.getElementById('gb');
+  var rev = document.getElementById('reveal');
+  var cc = document.getElementById('cc');
+  function update() {
+    cc.setAttribute('chip-a', chip.value);
+    cc.setAttribute('chip-b', chip.value);
+    cc.setAttribute('ground-a', ga.value);
+    cc.setAttribute('ground-b', gb.value);
+    cc.setAttribute('reveal', rev.checked ? 'true' : 'false');
+  }
+  [chip, ga, gb, rev].forEach(function (el) { el.addEventListener('input', update); el.addEventListener('change', update); });
+})();
+</script>
+
+</body>
+</html>

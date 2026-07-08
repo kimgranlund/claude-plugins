@@ -1,0 +1,51 @@
+{
+  "id": "one-time-pay",
+  "task": "pay the amount owed now (adia-pay patient experience: statement -> pay wizard -> receipt)",
+  "entry": ["statement"],
+  "states": [
+    {"id": "statement", "screen": "statement"},
+    {"id": "pay-amount", "screen": "pay"},
+    {"id": "pay-method", "screen": "pay"},
+    {"id": "pay-card", "screen": "pay"},
+    {"id": "pay-review", "screen": "pay"},
+    {"id": "pay-processing", "screen": "pay"},
+    {"id": "receipt", "screen": "receipt"}
+  ],
+  "transitions": [
+    {"from": "statement", "to": "pay-amount", "verb": "pay"},
+    {"from": "pay-amount", "to": "pay-method", "verb": "continue"},
+    {"from": "pay-method", "to": "pay-card", "verb": "continue"},
+    {"from": "pay-card", "to": "pay-review", "verb": "continue"},
+    {"from": "pay-review", "to": "pay-processing", "verb": "submit", "fallible": true, "destructive": true},
+    {"from": "pay-processing", "to": "receipt", "verb": "succeed"},
+    {"from": "pay-amount", "to": "statement", "verb": "back"},
+    {"from": "pay-method", "to": "pay-amount", "verb": "back"},
+    {"from": "pay-card", "to": "pay-method", "verb": "back"},
+    {"from": "pay-review", "to": "pay-card", "verb": "back"}
+  ],
+  "exits": [
+    {
+      "state": "receipt",
+      "kind": "success",
+      "asserts": [
+        "youOweNowCents reflects the payment",
+        "receipt shows applied amounts"
+      ]
+    },
+    {
+      "state": "statement",
+      "kind": "abandon",
+      "asserts": [
+        "nothing has been charged",
+        "youOweNowCents unchanged"
+      ]
+    }
+  ],
+  "recovery": [
+    {"from": "pay-processing", "to": "pay-card", "preserves_input": true}
+  ],
+  "persistence": {
+    "resumable": true,
+    "across": "session timeout / re-auth mid-flow — wizard step and entered amount restored (adia-pay timeout-resume, Tier-2 #9)"
+  }
+}

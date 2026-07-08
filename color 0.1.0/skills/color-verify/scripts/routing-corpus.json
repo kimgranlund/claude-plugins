@@ -1,0 +1,34 @@
+{
+  "skill": "color-verify",
+  "_note": "M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: palette-design, color-science-accessibility, color-science-spaces, color-theory, focus-verify, i18n-verify, perf-verify, safety-verify, ui-audit, component-author, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
+  "positives": [
+    "verify this palette",
+    "does this palette pass WCAG AA",
+    "check the contrast ratio of this text on this background",
+    "is this color scheme safe for color-blind users",
+    "the muted gray text looks too faint - does it meet the accessibility contrast floor",
+    "run a contrast check on every pair across the light and dark schemes",
+    "emit a ColorProof for this candidate palette",
+    "our danger red on white looks borderline - which pairs fail AA",
+    "check this semantic color mapping against WCAG and APCA pass-fail",
+    "verify CVD safety - can deuteranopes tell success from danger in this palette",
+    "does this translucent outline still clear 3:1 once composited over the surface",
+    "the hue drifts across the ramp - check hue stability and evenness"
+  ],
+  "negatives": [
+    "build a ramp from this brand anchor",
+    "derive the dark scheme from our light palette",
+    "map the semantic roles for surface, border, and accent",
+    "the focus ring is invisible in dark mode",
+    "check focus order and keyboard navigation in this modal",
+    "convert this color from HSL to OKLCH",
+    "why do these two colors clash - suggest a harmonious scheme",
+    "what mood does a pale muted palette communicate",
+    "check RTL support and text-expansion headroom across locales",
+    "the skeleton loader causes layout shift - check our CLS budget",
+    "add type-to-confirm to this destructive delete action",
+    "audit the whole app UI before launch",
+    "build a color-picker web component",
+    "realize the verified palette as token layers in the repo"
+  ]
+}

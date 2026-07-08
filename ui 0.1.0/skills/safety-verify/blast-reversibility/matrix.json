@@ -1,0 +1,39 @@
+{
+  "$schema": "safety-blast-reversibility/v1",
+  "axes": {
+    "blastRadius": {
+      "low":      "self, 1–few entities",
+      "medium":   "shared with team, 10–100 entities",
+      "high":     "org-wide, 100–10k entities",
+      "critical": "public / regulatory / irrecoverable business state"
+    },
+    "reversibility": {
+      "instant":      "Reversed with immediate undo.",
+      "session":      "Reversible during current session.",
+      "minutes":      "Reversible within minutes (recall window).",
+      "days":         "Reversible within days (trash, archive).",
+      "irreversible": "No automated reversal path."
+    },
+    "reversibilitySpecies": {
+      "user-reversible-in-app": "Undo is genuinely available to the user inside the product. The undo > confirm rule and the treatment column below apply as written.",
+      "ops-reversible":         "Reversal exists only as an operational/support process (refunds, chargebacks, account restores). Review-then-commit is the domain norm; NO_UNDO is not a defect here. Payments live in this species."
+    }
+  },
+  "notes": {
+    "species": "The treatment column assumes user-reversible-in-app. For ops-reversible actions, replace undo affordances with review-then-commit (confirm with named consequence); safety-check.py downgrades NO_UNDO to an advisory note when a card declares ops_reversible: true.",
+    "sparsity": "The matrix is deliberately sparse — it enumerates the load-bearing rows, and the `default` rule below covers the rest; an uncovered coordinate is resolved, never a silent gap."
+  },
+  "default": "Uncovered (blast × reversibility) coordinates take the nearest higher-friction neighbor's treatment: step reversibility toward irreversible, then blast upward, until an enumerated row matches — never resolve downward to lighter friction. E.g. high × instant → high × days → confirm-plus-audit; medium × session → medium × minutes → recall-window.",
+  "matrix": [
+    { "blast": "low",      "reversibility": "instant",      "treatment": "silent-plus-undo" },
+    { "blast": "low",      "reversibility": "session",      "treatment": "silent-plus-undo" },
+    { "blast": "low",      "reversibility": "irreversible", "treatment": "confirm-named-consequence" },
+    { "blast": "medium",   "reversibility": "instant",      "treatment": "undo-toast" },
+    { "blast": "medium",   "reversibility": "minutes",      "treatment": "recall-window" },
+    { "blast": "medium",   "reversibility": "days",         "treatment": "undo-toast" },
+    { "blast": "medium",   "reversibility": "irreversible", "treatment": "confirm-named-consequence" },
+    { "blast": "high",     "reversibility": "days",         "treatment": "confirm-plus-audit" },
+    { "blast": "high",     "reversibility": "irreversible", "treatment": "type-to-confirm-plus-reauth-plus-audit" },
+    { "blast": "critical", "reversibility": "any",          "treatment": "type-to-confirm-plus-reauth-plus-two-person-approval-plus-audit" }
+  ]
+}

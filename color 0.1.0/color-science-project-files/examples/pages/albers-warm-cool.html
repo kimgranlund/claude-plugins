@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color temperature is contextual · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .quiz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--s-4);
+  }
+  .quiz-pair {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--s-3);
+    background: var(--bg-card);
+  }
+  .quiz-pair h4 { margin: 0 0 var(--s-2) 0; font-size: var(--text-sm); }
+  .quiz-pair .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    height: 80px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+  }
+  .quiz-pair button {
+    width: 100%;
+    margin-top: var(--s-2);
+  }
+  .quiz-answer {
+    margin-top: var(--s-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    display: none;
+  }
+  .quiz-pair.revealed .quiz-answer { display: block; }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color temperature is contextual</h1>
+    <p>
+      "Warm" and "cool" are not properties of a color. They're <em>judgments
+      made in comparison</em>. A blue can read warm against a colder blue. A
+      red can read cool against an orange-red. Below, the <strong>same chip</strong>
+      appears in four pairings — and is sometimes "the warm one", sometimes
+      "the cool one".
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Which is the warmer color in each pair?</h2>
+    <div class="quiz-grid">
+      <div class="quiz-pair" data-pair>
+        <h4>Pair 1</h4>
+        <div class="pair">
+          <div style="background: #6a8eb5;"></div>
+          <div style="background: #8eaad2;"></div>
+        </div>
+        <button>reveal answer</button>
+        <div class="quiz-answer">Right (<code>#8eaad2</code>) is the warmer one — it's the chip we're tracking.</div>
+      </div>
+      <div class="quiz-pair" data-pair>
+        <h4>Pair 2</h4>
+        <div class="pair">
+          <div style="background: #8eaad2;"></div>
+          <div style="background: #b8c8e0;"></div>
+        </div>
+        <button>reveal answer</button>
+        <div class="quiz-answer">Left (<code>#8eaad2</code>) is the warmer one — same chip as in pair 1.</div>
+      </div>
+      <div class="quiz-pair" data-pair>
+        <h4>Pair 3</h4>
+        <div class="pair">
+          <div style="background: #d2a86a;"></div>
+          <div style="background: #8eaad2;"></div>
+        </div>
+        <button>reveal answer</button>
+        <div class="quiz-answer">Left (<code>#d2a86a</code>) is the warmer one — <code>#8eaad2</code> now reads as the cool one.</div>
+      </div>
+      <div class="quiz-pair" data-pair>
+        <h4>Pair 4</h4>
+        <div class="pair">
+          <div style="background: #4e64a8;"></div>
+          <div style="background: #8eaad2;"></div>
+        </div>
+        <button>reveal answer</button>
+        <div class="quiz-answer">Right (<code>#8eaad2</code>) is the warmer one again — by a wider gap this time.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>The chip is the constant</h2>
+    <p>
+      Across all four pairs, the chip <code>#8eaad2</code> appears at least once. Its hex
+      value never changes. But your verdict on "is it warm or cool" depends
+      entirely on the other chip it's paired with. Against a yellower yellow,
+      our blue feels cool; against a deeper blue, the same chip feels warm.
+    </p>
+    <p>
+      This is why design conversations about "make it warmer" without a frame
+      of reference go in circles. Warmer than <em>what</em>? Against
+      <em>which</em> surface? Temperature is meaningful only relative to a
+      neighbour.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> don't ship a "warm palette" — ship colors that are warm in their context.</li>
+      <li><strong>Designers:</strong> "warmer accent" is a relational request; ask warmer-than-what.</li>
+      <li><strong>UI engineers:</strong> avoid <code>--color-warm</code> / <code>--color-cool</code> tokens; encode hue angle instead.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  document.querySelectorAll('[data-pair] button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.closest('[data-pair]').classList.add('revealed');
+      btn.disabled = true;
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

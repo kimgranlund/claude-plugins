@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Afterimage and optical memory · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Afterimage and optical memory</h1>
+    <p>
+      Stare at a saturated red square for 20 seconds, then look at a white
+      field. You'll see a green-cyan ghost where the red was. Albers used
+      this exercise to demonstrate that direct color perception is
+      <em>unstable</em> — the eye chases adaptation, the brain fills in
+      opponents, and what you see at second 1 is not what you see at second 20.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Choose a color to stare at</h3>
+      <div class="row">
+        <label>Stare color <input type="color" id="stare" value="#cc0033"></label>
+        <button data-c="#cc0033">red</button>
+        <button data-c="#00aa66">green</button>
+        <button data-c="#1144cc">blue</button>
+        <button data-c="#ddaa00">yellow</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <afterimage-trial id="trial" color="#cc0033" duration="20"></afterimage-trial>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>The opponent process</h2>
+    <p>
+      Sustained exposure to a color fatigues the corresponding cone receptors.
+      When you then look at white (which contains all wavelengths in roughly
+      equal proportion), the fatigued receptors fire less and the unfatigued
+      ones dominate — producing the perceived opponent: red→green, blue→yellow,
+      magenta→green-cyan, etc. This is Hering's <em>opponent-process theory</em>
+      (1892), still the standard model for explaining afterimages.
+    </p>
+    <p>
+      Albers used the exercise as a humility lesson: don't trust your first
+      reading of a color, because your eye is already adapting to it. Look
+      away, take a breath, come back — and recheck.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> your eye is a moving target — adjust work over time, not in one sitting.</li>
+      <li><strong>Designers:</strong> the tenth time a user sees the screen, it doesn't look like the first; design for the adapted eye.</li>
+      <li><strong>UI engineers:</strong> saturated backgrounds over long sessions induce adaptation — measure usability after fatigue, not at first contact.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var stare = document.getElementById('stare');
+  var trial = document.getElementById('trial');
+  function apply() { trial.setAttribute('color', stare.value); trial.reset && trial.reset(); }
+  stare.addEventListener('input', apply);
+  document.querySelectorAll('[data-c]').forEach(function (b) {
+    b.addEventListener('click', function () { stare.value = b.dataset.c; apply(); });
+  });
+})();
+</script>
+
+</body>
+</html>

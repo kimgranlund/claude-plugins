@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Homage to the Square system · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .homage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--s-4);
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>The Homage to the Square system</h1>
+    <p>
+      Between 1949 and his death in 1976, Albers painted over a thousand
+      Homages to the Square. The composition <em>never changed</em>: three or
+      four nested squares, centered horizontally, offset toward the bottom.
+      The variable was color. Each painting was an experiment with controlled
+      geometry.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Six Homages, identical composition</h2>
+    <div class="homage-grid">
+      <homage-canvas outer="oklch(0.30 0.15 30)"  mid1="oklch(0.50 0.20 50)" mid2="oklch(0.70 0.18 75)" inner="oklch(0.92 0.10 90)"   squares="4"></homage-canvas>
+      <homage-canvas outer="oklch(0.85 0.05 90)"  mid1="oklch(0.70 0.12 90)" mid2="oklch(0.55 0.15 60)" inner="oklch(0.42 0.18 30)"   squares="4"></homage-canvas>
+      <homage-canvas outer="oklch(0.25 0.08 264)" mid1="oklch(0.40 0.15 260)" mid2="oklch(0.62 0.18 200)" inner="oklch(0.85 0.12 195)"  squares="4"></homage-canvas>
+      <homage-canvas outer="oklch(0.92 0.04 100)" mid1="oklch(0.75 0.12 142)" mid2="oklch(0.55 0.17 150)" inner="oklch(0.35 0.15 158)"  squares="4"></homage-canvas>
+      <homage-canvas outer="oklch(0.50 0.08 320)" mid1="oklch(0.65 0.14 340)" mid2="oklch(0.80 0.10 30)"  inner="oklch(0.92 0.05 60)"   squares="4"></homage-canvas>
+      <homage-canvas outer="oklch(0.18 0.05 264)" mid1="oklch(0.36 0.12 264)" mid2="oklch(0.65 0.18 264)" inner="oklch(0.92 0.04 264)"  squares="4"></homage-canvas>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>One composition, infinite color</h2>
+    <p>
+      The proportions Albers used are remarkably consistent: an outer square,
+      then a square at roughly 78% width offset slightly down, then ~56%
+      offset more, then ~32% offset most. The bottom margin shrinks toward
+      the inner square so the whole composition feels weighted at the lower
+      edge. That weighting is the only "gesture" the painting contains.
+    </p>
+    <p>
+      Everything else — every visual difference between any two Homages —
+      is purely a color story. By locking the composition, Albers made
+      color the <em>only</em> variable. It's the experimental method
+      transplanted into painting: hold all conditions constant except one,
+      then observe.
+    </p>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Albers painted directly onto Masonite panels with a palette knife — no
+      mixing on the panel, no overpainting. Each color came straight from the
+      tube. The Josef Albers Foundation has documented his materials and
+      proportions across the series.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> constraint isolates the variable that actually matters.</li>
+      <li><strong>Designers:</strong> your design tokens are a Homage system — same component, different palette per theme.</li>
+      <li><strong>UI engineers:</strong> this is why component libraries work — lock the geometry, vary the color.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+
+</body>
+</html>

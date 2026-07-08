@@ -1,0 +1,21 @@
+{
+  "$schema": "i18n-bidi-isolation/v1",
+  "rule": "Any runtime-interpolated string whose script or direction is not controlled by the surrounding chrome must be bidi-isolated.",
+  "mechanism": {
+    "html": "<bdi>{value}</bdi>",
+    "css":  "unicode-bidi: isolate; /* applied to the span that holds the variable */"
+  },
+  "points": [
+    { "id": "user.displayName",      "example": "Welcome, {name}" },
+    { "id": "user.handle",           "example": "@{handle}" },
+    { "id": "search.query-echo",     "example": "Results for \"{query}\"" },
+    { "id": "filename",              "example": "Uploaded {filename}" },
+    { "id": "tag.label",             "example": "#{tag}" },
+    { "id": "breadcrumb.segment",    "example": "Projects / {project} / {file}" },
+    { "id": "notification.preview",  "example": "{sender}: {preview}" },
+    { "id": "form.user-entered",     "example": "Any input field reflecting submitted UGC back into chrome" },
+    { "id": "url.visible-segment",   "example": "Showing path segment in UI" },
+    { "id": "table.cell-free-text",  "example": "Free-text columns embedded in otherwise-LTR chrome" }
+  ],
+  "anti-pattern": "Relying on the browser's default bidi algorithm to handle mixed-direction runtime strings — produces directional smearing across punctuation boundaries."
+}

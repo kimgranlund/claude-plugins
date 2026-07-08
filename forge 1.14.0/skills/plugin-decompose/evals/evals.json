@@ -1,0 +1,81 @@
+{
+  "skill": "plugin-decompose",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Contested boundaries: skill-decompose (content vs distribution partitioning), plugin-forge (inventory vs greenfield).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "which plugins should these skills be split into",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "partition our .claude folder into plugins",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "should this mega plugin be several smaller ones",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "can these skills agents and hooks be divided into portable composable domains",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "analyze this folder of skills and propose 1-5 plugins",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "group this grab-bag of skills into installable units",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "our three plugins overlap, should they be one or two",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what is missing from our plugin corpus",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "run a gap analysis on this plugin family",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "should this huge knowledge pack split into a family of packs",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "create a plugin with all the skills related to UI design",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "release the plugin to dist",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "why does my plugin fail to load",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "merge these thin knowledge packs into one",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "audit my whole harness surface",
+      "expect": "no-trigger"
+    }
+  ]
+}

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ref-color · examples</title>
+<link rel="stylesheet" href="./lib/css/shell.css">
+<link rel="stylesheet" href="./lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Live demos of <code>ref-color</code></h1>
+    <p>
+      Thirty-eight self-contained interactive pages dogfooding the compiled
+      TypeScript modules — color spaces, gamut math, interpolation, contrast
+      metrics, palette extraction, CVD simulation + accessibility, design-
+      token systems (Tailwind v4 OKLCh + Material 3 HCT), HDR tone mapping,
+      spectral illuminants, color appearance models, the CSS Color 5/6
+      toolkit, color temperature, pigment mixing, procedural palette
+      generation, the underlying CMF + LMS cone math, plus foundational
+      visualizations (MacAdam ellipses, color illusions, gamut volume, 3D
+      color space), classic dither variants, and a color-matching game.
+      No frameworks, no build step at view time.
+    </p>
+  </section>
+
+  <section>
+    <h2>Core color science</h2>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/picker.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.55 0.18 264), oklch(0.62 0.18 150));"></div>
+        <h3 class="demo-card__title">OKLCh picker</h3>
+        <p class="demo-card__desc">Live multi-format readout for an OKLCh color. Hex, sRGB, OKLab, OKLCh, CIELAB, P3 — all simultaneously, all derived from one source.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/gradient.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.55 0.18 29), oklch(0.55 0.18 264));"></div>
+        <h3 class="demo-card__title">Gradient comparison</h3>
+        <p class="demo-card__desc">The same two colors interpolated in 5 color spaces side-by-side. Why encoded sRGB produces muddy mid-tones, and why OKLab is the modern default.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/transfer.html">
+        <div class="demo-card__preview" id="curve-preview" style="padding:8px;"></div>
+        <h3 class="demo-card__title">Transfer curves</h3>
+        <p class="demo-card__desc">Six gamma transfer functions plotted side-by-side. sRGB piecewise, Rec.2020, PQ, HLG, Adobe RGB γ=2.2, ProPhoto γ=1.8.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/chromaticity.html">
+        <div class="demo-card__preview" style="background: radial-gradient(circle at 35% 60%, oklch(0.7 0.20 142), oklch(0.5 0.22 264) 60%, oklch(0.3 0.10 30) 100%);"></div>
+        <h3 class="demo-card__title">CIE xy chromaticity</h3>
+        <p class="demo-card__desc">The horseshoe locus + RGB gamut triangles for sRGB, P3, Rec.2020, Adobe RGB, ProPhoto. White points + click-to-pick.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/illuminants.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.78 0.13 65), oklch(0.85 0.06 90), oklch(0.92 0.02 264), oklch(0.78 0.10 220));"></div>
+        <h3 class="demo-card__title">Spectral illuminants</h3>
+        <p class="demo-card__desc">SPD curves for D65, D50, A, F2, E + a sample grid showing how 8 colored surfaces render under each. The light source matters.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/okhsl.html">
+        <div class="demo-card__preview" style="background: linear-gradient(to right, oklch(0.55 0 0), oklch(0.55 0.18 264));"></div>
+        <h3 class="demo-card__title">OKHSL picker</h3>
+        <p class="demo-card__desc">Ottosson's perceptual HSL replacement. Side-by-side OKHSL vs HSL slice at the same hue — the visible "dark zone" in HSL goes away.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/blendwhite.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.45 0.22 264), oklch(0.65 0.10 290), oklch(0.97 0.005 264));"></div>
+        <h3 class="demo-card__title">Blend through white</h3>
+        <p class="demo-card__desc">Ottosson's canonical OKLab demo — same blue→white blend in 5 color spaces. Encoded sRGB famously shifts hue toward purple.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/wavelength.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.4 0.22 280), oklch(0.55 0.18 260), oklch(0.7 0.18 150), oklch(0.85 0.20 90), oklch(0.65 0.22 30));"></div>
+        <h3 class="demo-card__title">Wavelength → color</h3>
+        <p class="demo-card__desc">Slide a wavelength from 380 to 700 nm. See the spectral color, its (x, y) chromaticity, and whether it's reachable in sRGB.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/cmf.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.45 0.18 30), oklch(0.62 0.18 142) 50%, oklch(0.50 0.20 264));"></div>
+        <h3 class="demo-card__title">Cone fundamentals</h3>
+        <p class="demo-card__desc">CIE 1931 color matching functions plus the LMS cone curves. The math behind every color space.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Gamut & mapping</h2>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/gamut.html">
+        <div class="demo-card__preview" style="background: linear-gradient(to top right, oklch(0.13 0.05 264), oklch(0.55 0.18 264), oklch(0.97 0.01 264));"></div>
+        <h3 class="demo-card__title">Gamut envelope</h3>
+        <p class="demo-card__desc">L×C envelope at any hue for sRGB / P3 / Rec.2020. See how much wider P3 is, where the gamut cusp sits, and click to pick a color.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/mapping.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.65 0.32 29), oklch(0.65 0.20 29) 50%, oklch(0.55 0.16 29));"></div>
+        <h3 class="demo-card__title">Gamut mapping playground</h3>
+        <p class="demo-card__desc">Out-of-gamut OKLCh color rendered via 4 strategies: naive clip, CSS Color 4 chroma compression, MINDE blend, cusp projection.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/wheel.html">
+        <div class="demo-card__preview" style="background: conic-gradient(from 0deg, oklch(0.65 0.18 0), oklch(0.65 0.18 60), oklch(0.65 0.18 120), oklch(0.65 0.18 180), oklch(0.65 0.18 240), oklch(0.65 0.18 300), oklch(0.65 0.18 360));"></div>
+        <h3 class="demo-card__title">Perceptual hue wheel</h3>
+        <p class="demo-card__desc">OKLCh vs HSL vs HCT as concentric rings at constant lightness. See why HSL's blues look dimmer than its greens.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/ramp.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns: repeat(11, 1fr); height:100%;">
+          <div style="background: oklch(0.985 0.005 264);"></div>
+          <div style="background: oklch(0.967 0.013 264);"></div>
+          <div style="background: oklch(0.922 0.043 264);"></div>
+          <div style="background: oklch(0.870 0.082 264);"></div>
+          <div style="background: oklch(0.708 0.158 264);"></div>
+          <div style="background: oklch(0.554 0.180 264);"></div>
+          <div style="background: oklch(0.446 0.165 264);"></div>
+          <div style="background: oklch(0.371 0.143 264);"></div>
+          <div style="background: oklch(0.269 0.108 264);"></div>
+          <div style="background: oklch(0.205 0.082 264);"></div>
+          <div style="background: oklch(0.130 0.052 264);"></div>
+        </div>
+        <h3 class="demo-card__title">Token ramp generator</h3>
+        <p class="demo-card__desc">Pick a hue + lightness curve → get an 11-stop OKLCh design-token ramp bounded by peakC for the target gamut.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/tonemap.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.1 0 0), oklch(0.55 0 0) 60%, oklch(0.95 0 0));"></div>
+        <h3 class="demo-card__title">HDR tone mapping</h3>
+        <p class="demo-card__desc">Naive clip, Reinhard simple, Reinhard extended, luminance-preserving, ACES Narkowicz — five operators on a synthetic HDR gradient.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/kelvin.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.55 0.22 30), oklch(0.78 0.16 70), oklch(0.92 0.06 90), oklch(0.95 0.01 264), oklch(0.80 0.10 240));"></div>
+        <h3 class="demo-card__title">Color temperature (Kelvin)</h3>
+        <p class="demo-card__desc">Blackbody color from 1500 K to 15000 K with the Planckian locus traced on a mini xy diagram.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Accessibility & perception</h2>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/contrast.html">
+        <div class="demo-card__preview" style="background: oklch(0.205 0.082 264); color: oklch(0.985 0.005 264); display:flex; align-items:center; justify-content:center; font-size: 1.5rem; font-weight: 600;">
+          Aa
+        </div>
+        <h3 class="demo-card__title">Contrast (WCAG + APCA)</h3>
+        <p class="demo-card__desc">Live WCAG 2.2 contrast ratio + APCA L<sup>c</sup> for any text/background pair. Pass tiers, readability bands, polarity-sensitive metrics.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/cvd.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.65 0.18 50) 0%, oklch(0.55 0.14 80) 50%, oklch(0.50 0.10 110) 100%); display:flex; align-items:center; justify-content:center; color:white; font-family: monospace; font-size: 1.5rem;">CVD</div>
+        <h3 class="demo-card__title">Color-blindness simulator</h3>
+        <p class="demo-card__desc">Drop an image, simulate protan/deutan/tritan deficiency at any severity. Uses Machado 2009 matrices — same as Chrome DevTools.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/deltae.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.55 0.18 264) 50%, oklch(0.55 0.18 280) 50%);"></div>
+        <h3 class="demo-card__title">ΔE metric comparator</h3>
+        <p class="demo-card__desc">Five color-difference metrics for any two colors: ΔE76, ΔE94, ΔE2000, ΔE_ok, HyAB. Educational on which to use when.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/harmony.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns: repeat(4, 1fr); height: 100%;">
+          <div style="background: oklch(0.65 0.18 30);"></div>
+          <div style="background: oklch(0.65 0.18 120);"></div>
+          <div style="background: oklch(0.65 0.18 210);"></div>
+          <div style="background: oklch(0.65 0.18 300);"></div>
+        </div>
+        <h3 class="demo-card__title">Color harmony generator</h3>
+        <p class="demo-card__desc">Complementary, analogous, triadic, tetradic schemes — in OKLCh (uniform hue) and HSL (distorted hue) side by side.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/ciecam16.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.4 0.08 264), oklch(0.7 0.18 264));"></div>
+        <h3 class="demo-card__title">CIECAM16 viewing conditions</h3>
+        <p class="demo-card__desc">See how a color's appearance (J / M / h) shifts under different adapting luminance and surround. The model behind Material's HCT.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/adapt.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.55 0.10 60) 50%, oklch(0.55 0.05 270) 50%);"></div>
+        <h3 class="demo-card__title">Chromatic adaptation (Bradford)</h3>
+        <p class="demo-card__desc">View an image under different illuminants — D65 → A makes everything orange, D65 → F2 makes everything cool. Bradford CAT in action.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/cvdsafe.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns: repeat(5, 1fr); height: 100%;">
+          <div style="background: oklch(0.62 0.18 30);"></div>
+          <div style="background: oklch(0.62 0.18 100);"></div>
+          <div style="background: oklch(0.62 0.18 175);"></div>
+          <div style="background: oklch(0.62 0.18 240);"></div>
+          <div style="background: oklch(0.62 0.18 320);"></div>
+        </div>
+        <h3 class="demo-card__title">CVD-safe palette</h3>
+        <p class="demo-card__desc">Generate qualitative palettes that maintain separation under protan, deutan, and tritan vision. Worst-case ΔE_ok across CVD types is the objective.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Image analysis</h2>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/palette.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns: repeat(5, 1fr); height:100%;">
+          <div style="background: oklch(0.205 0.082 264);"></div>
+          <div style="background: oklch(0.554 0.18 264);"></div>
+          <div style="background: oklch(0.7 0.18 150);"></div>
+          <div style="background: oklch(0.7 0.18 50);"></div>
+          <div style="background: oklch(0.985 0.005 264);"></div>
+        </div>
+        <h3 class="demo-card__title">Palette extraction</h3>
+        <p class="demo-card__desc">Drop an image, extract a 5/8/12-color palette via k-means clustering in OKLab. The right perceptual space for "nearest" assignment.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/imagestats.html">
+        <div class="demo-card__preview" style="background: radial-gradient(circle at center, oklch(0.55 0.18 30), oklch(0.45 0.15 60), oklch(0.55 0.18 264) 70%, oklch(0.30 0.10 264));"></div>
+        <h3 class="demo-card__title">Image color analysis</h3>
+        <p class="demo-card__desc">Hue × chroma ring histogram, lightness distribution, and 5-color auto palette — see an image's color signature at a glance.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/dither.html">
+        <div class="demo-card__preview" style="background-image: repeating-conic-gradient(oklch(0.85 0.05 60) 0deg 45deg, oklch(0.5 0.16 250) 45deg 90deg); background-size: 12px 12px;"></div>
+        <h3 class="demo-card__title">Floyd-Steinberg dithering</h3>
+        <p class="demo-card__desc">Quantize an image to k colors via k-means in OKLab, then compare nearest-neighbor vs error-diffused output. Classic 1976 algorithm.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Pigments & palettes</h2>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/pigment.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.35 0.22 264) 0%, oklch(0.62 0.13 142) 50%, oklch(0.78 0.18 90) 100%);"></div>
+        <h3 class="demo-card__title">Kubelka-Munk paint mixer</h3>
+        <p class="demo-card__desc">Mix two pigments via single-constant K-M — blue + yellow really makes green. Side-by-side comparison with naive RGB midpoint.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/procedural.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.15 0 0), oklch(0.45 0.18 320), oklch(0.55 0.18 30), oklch(0.7 0.18 80), oklch(0.85 0.10 150), oklch(0.97 0.005 264));"></div>
+        <h3 class="demo-card__title">Procedural palettes</h3>
+        <p class="demo-card__desc">Cubehelix (Green 2011) + iq cosine (Quilez) generators with sliders, sampled palette, and a relative-luminance plot for ordering analysis.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/namer.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.62 0.15 264), oklch(0.55 0.18 280)); display:flex; align-items:center; justify-content:center; color:white; font-family: monospace; font-size: 1.05rem;">cornflowerblue</div>
+        <h3 class="demo-card__title">Color namer</h3>
+        <p class="demo-card__desc">Find the closest CSS named color to any hex, ranked by ΔE_ok vs RGB Euclidean. See where the two metrics disagree.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/tonal.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns: repeat(13, 1fr); height: 100%;">
+          <div style="background: oklch(0 0 264);"></div>
+          <div style="background: oklch(0.10 0.07 264);"></div>
+          <div style="background: oklch(0.20 0.13 264);"></div>
+          <div style="background: oklch(0.30 0.17 264);"></div>
+          <div style="background: oklch(0.40 0.19 264);"></div>
+          <div style="background: oklch(0.50 0.19 264);"></div>
+          <div style="background: oklch(0.60 0.17 264);"></div>
+          <div style="background: oklch(0.70 0.15 264);"></div>
+          <div style="background: oklch(0.80 0.12 264);"></div>
+          <div style="background: oklch(0.90 0.08 264);"></div>
+          <div style="background: oklch(0.95 0.05 264);"></div>
+          <div style="background: oklch(0.99 0.01 264);"></div>
+          <div style="background: oklch(1.0 0 264);"></div>
+        </div>
+        <h3 class="demo-card__title">Material 3 tonal palette</h3>
+        <p class="demo-card__desc">Generate primary/secondary/tertiary/neutral tonal palettes at 13 tones each, with gamut-aware chroma reduction.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/csscolor5.html">
+        <div class="demo-card__preview" style="background: linear-gradient(135deg, oklch(0.55 0.18 264), oklch(0.7 0.18 80)); display:flex; align-items:center; justify-content:center; color:white; font-family: monospace; font-size: 0.95rem;">color-mix()</div>
+        <h3 class="demo-card__title">CSS Color 5/6 playground</h3>
+        <p class="demo-card__desc">Live testers for color-mix(), relative color syntax, light-dark(), and contrast-color() — the modern CSS toolbox.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Foundations & illusions</h2>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/macadam.html">
+        <div class="demo-card__preview" style="background: radial-gradient(ellipse 80% 30% at 40% 45%, oklch(0.7 0.18 142), transparent 60%), radial-gradient(ellipse 30% 60% at 75% 60%, oklch(0.55 0.22 30), transparent 60%), radial-gradient(ellipse 20% 30% at 30% 75%, oklch(0.45 0.22 264), transparent 60%), oklch(0.95 0.005 264);"></div>
+        <h3 class="demo-card__title">MacAdam ellipses</h3>
+        <p class="demo-card__desc">The 1942 just-noticeable-difference ellipses on the CIE xy diagram. Iconic proof that CIE xy is wildly non-uniform.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/illusions.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns:1fr 1fr; height:100%;">
+          <div style="background:#111; display:flex; align-items:center; justify-content:center;"><div style="width:35%; height:50%; background:#888;"></div></div>
+          <div style="background:#eee; display:flex; align-items:center; justify-content:center;"><div style="width:35%; height:50%; background:#888;"></div></div>
+        </div>
+        <h3 class="demo-card__title">Color illusions</h3>
+        <p class="demo-card__desc">Simultaneous contrast, White's illusion, Helmholtz-Kohlrausch — identical hex values that look different. Perception ≠ measurement.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/volume.html">
+        <div class="demo-card__preview" style="background: linear-gradient(to right, oklch(0.55 0.18 264) 18%, oklch(0.62 0.18 150) 26%, oklch(0.55 0.18 300) 33%, oklch(0.70 0.18 50) 50%, oklch(0.62 0.18 200) 80%); display:flex; align-items:center; padding-left:8px; color:white; font-family:monospace; font-size:0.7rem;">1.0× → 1.9×</div>
+        <h3 class="demo-card__title">Color volume comparison</h3>
+        <p class="demo-card__desc">Monte Carlo OKLab volumes for sRGB, P3, Adobe RGB, Rec.2020, ProPhoto. The quantitative answer to "how much wider is P3?"</p>
+      </a>
+
+      <a class="demo-card" href="./pages/cube3d.html">
+        <div class="demo-card__preview" style="background: radial-gradient(circle at 35% 35%, oklch(0.7 0.18 30), oklch(0.55 0.20 264) 40%, oklch(0.15 0.05 264) 95%);"></div>
+        <h3 class="demo-card__title">3D sRGB cube in OKLab</h3>
+        <p class="demo-card__desc">Rotate the sRGB unit cube embedded in OKLab — see how perceptual nonlinearity distorts the corners.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/match.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:8px; height: 100%; box-sizing:border-box;">
+          <div style="background: oklch(0.62 0.15 30); border-radius:4px;"></div>
+          <div style="background: oklch(0.65 0.16 35); border-radius:4px;"></div>
+        </div>
+        <h3 class="demo-card__title">Color matching game</h3>
+        <p class="demo-card__desc">Random target color; match it with OKLCh sliders. Scored by ΔE_ok. Below 0.02 is a perfect match.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/apcatable.html">
+        <div class="demo-card__preview" style="background: oklch(0.985 0.005 264); color: oklch(0.205 0.082 264); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; font-family:monospace; font-size:0.75rem;">
+          <div style="font-size:1.5rem;">Aa</div>
+          <div>L<sup>c</sup> 84.5</div>
+        </div>
+        <h3 class="demo-card__title">APCA reading table</h3>
+        <p class="demo-card__desc">Live PASS/FAIL grid of font sizes × weights for any fg/bg pair, per the Bronze Simple Mode L<sup>c</sup> thresholds.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/multidither.html">
+        <div class="demo-card__preview" style="background-image: repeating-conic-gradient(oklch(0.85 0.05 60) 0deg 90deg, oklch(0.5 0.16 250) 90deg 180deg); background-size: 8px 8px;"></div>
+        <h3 class="demo-card__title">Multi-dither comparison</h3>
+        <p class="demo-card__desc">Same image + palette through Floyd-Steinberg, Atkinson, Bayer 4×4, and Jarvis-Judice-Ninke. Compare textures.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/scatter.html">
+        <div class="demo-card__preview" style="background: radial-gradient(circle at 35% 60%, oklch(0.65 0.18 30), transparent 30%), radial-gradient(circle at 60% 30%, oklch(0.65 0.16 264), transparent 30%), oklch(0.95 0.005 264);"></div>
+        <h3 class="demo-card__title">Image chromaticity scatter</h3>
+        <p class="demo-card__desc">Drop an image, see every pixel plotted on the xy diagram. Photographers' "gamut analysis" view.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Josef Albers — color is relational</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm); max-width: 720px;">
+      A 16-page teaching arc on Albers' perceptual color method — from <em>Interaction of Color</em> (1963)
+      through the Homage to the Square experiments to modern OKLCh-based design systems.
+      Read in order from page 01 or jump in via the lab on page 16.
+    </p>
+    <div class="card-grid">
+
+      <a class="demo-card" href="./pages/albers-who.html">
+        <div class="demo-card__preview" style="background: oklch(0.42 0.10 264); position: relative;">
+          <div style="position:absolute;left:50%;top:8%;width:78%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.56 0.13 264);"></div>
+          <div style="position:absolute;left:50%;top:20%;width:56%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.72 0.13 264);"></div>
+          <div style="position:absolute;left:50%;top:32%;width:32%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.88 0.05 264);"></div>
+        </div>
+        <h3 class="demo-card__title">01 · Who was Josef Albers?</h3>
+        <p class="demo-card__desc">Bauhaus, Black Mountain College, Yale — the teaching method that produced Rauschenberg and shaped modern design education.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-relational.html">
+        <div class="demo-card__preview" style="display:grid;grid-template-columns:1fr 1fr;height:100%;">
+          <div style="background:#2a2620;display:flex;align-items:center;justify-content:center;"><div style="width:50%;height:50%;background:#7f8b6e;"></div></div>
+          <div style="background:#e6e9da;display:flex;align-items:center;justify-content:center;"><div style="width:50%;height:50%;background:#7f8b6e;"></div></div>
+        </div>
+        <h3 class="demo-card__title">02 · Color is relational</h3>
+        <p class="demo-card__desc">A color seen in isolation is not the same color seen against another. The thesis everything else follows from.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-book.html">
+        <div class="demo-card__preview" style="background: oklch(0.95 0.005 60); display:flex; align-items:center; justify-content:center; font-family: serif; font-style: italic; color: oklch(0.2 0.05 60); font-size: 1.5rem;">IoC</div>
+        <h3 class="demo-card__title">03 · The book as a learning system</h3>
+        <p class="demo-card__desc">Interaction of Color (1963) is a boxed lab manual, not a textbook. 150 cut-paper exercises that teach by doing.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-deception.html">
+        <div class="demo-card__preview" style="background: repeating-linear-gradient(45deg, oklch(0.55 0.18 30) 0 12px, oklch(0.55 0.18 220) 12px 24px);"></div>
+        <h3 class="demo-card__title">04 · Color deception</h3>
+        <p class="demo-card__desc">Five families of perceptual effects — contrast, adjacency, illumination, memory, expectation.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-simultaneous.html">
+        <div class="demo-card__preview" style="display:grid;grid-template-columns:1fr 1fr;height:100%;">
+          <div style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;"><div style="width:40%;height:40%;background:#888;"></div></div>
+          <div style="background:#eaeaea;display:flex;align-items:center;justify-content:center;"><div style="width:40%;height:40%;background:#888;"></div></div>
+        </div>
+        <h3 class="demo-card__title">05 · Simultaneous contrast</h3>
+        <p class="demo-card__desc">The most fundamental Albers phenomenon. Same chip, two grounds, two readings.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-one-as-two.html">
+        <div class="demo-card__preview" style="display:grid;grid-template-columns:1fr 1fr;height:100%;">
+          <div style="background:#3c2d1a;display:flex;align-items:center;justify-content:center;"><div style="width:50%;height:50%;background:#a08c5e;"></div></div>
+          <div style="background:#dbcfa6;display:flex;align-items:center;justify-content:center;"><div style="width:50%;height:50%;background:#a08c5e;"></div></div>
+        </div>
+        <h3 class="demo-card__title">06 · One color appearing as two</h3>
+        <p class="demo-card__desc">The classic Albers exercise. One chip placed on two well-chosen grounds reads as two colors.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-two-as-one.html">
+        <div class="demo-card__preview" style="display:grid;grid-template-columns:1fr 1fr;height:100%;">
+          <div style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;"><div style="width:50%;height:50%;background:#7a8b62;"></div></div>
+          <div style="background:#dadada;display:flex;align-items:center;justify-content:center;"><div style="width:50%;height:50%;background:#8d9466;"></div></div>
+        </div>
+        <h3 class="demo-card__title">07 · Two colors appearing as one</h3>
+        <p class="demo-card__desc">The inverse exercise. Two different chips made to read identical by opposing surrounds.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-homage.html">
+        <div class="demo-card__preview" style="background: oklch(0.30 0.15 30); position: relative;">
+          <div style="position:absolute;left:50%;top:12%;width:78%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.50 0.20 50);"></div>
+          <div style="position:absolute;left:50%;top:26%;width:56%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.70 0.18 75);"></div>
+          <div style="position:absolute;left:50%;top:44%;width:32%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.92 0.10 90);"></div>
+        </div>
+        <h3 class="demo-card__title">08 · Homage to the Square</h3>
+        <p class="demo-card__desc">1,127 paintings, 25 years, one composition. The experimental control that made color the only variable.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-square.html">
+        <div class="demo-card__preview" style="background: oklch(0.42 0.10 264); display:grid; grid-template-columns:repeat(3, 1fr);">
+          <div style="background: oklch(0.72 0.13 264);"></div>
+          <div style="background: oklch(0.72 0.13 264); border-radius: 50%;"></div>
+          <div style="background: oklch(0.72 0.13 264); border-radius: 60% 40% 60% 40%;"></div>
+        </div>
+        <h3 class="demo-card__title">09 · Why the square?</h3>
+        <p class="demo-card__desc">The square is the absence of metaphor. Other shapes drag in associations that contaminate color observation.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-proportion.html">
+        <div class="demo-card__preview" style="background: oklch(0.92 0.005 264); display:flex; align-items:center; justify-content:center;"><div style="width:30%; aspect-ratio:1/1; background: oklch(0.62 0.22 30);"></div></div>
+        <h3 class="demo-card__title">10 · Proportion & color weight</h3>
+        <p class="demo-card__desc">Area changes perception. A 5% accent reads differently than the same color at 50%.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-warm-cool.html">
+        <div class="demo-card__preview" style="display:grid; grid-template-columns: 1fr 1fr; height: 100%;">
+          <div style="background:#6a8eb5;"></div>
+          <div style="background:#8eaad2;"></div>
+        </div>
+        <h3 class="demo-card__title">11 · Temperature is contextual</h3>
+        <p class="demo-card__desc">"Warm" and "cool" are not properties of a color — they're judgments made in comparison.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-transparency.html">
+        <div class="demo-card__preview" style="background: var(--bg-elevated); position: relative;">
+          <div style="position:absolute; left:22%; top:25%; width:30%; height:50%; background:#3a6abf;"></div>
+          <div style="position:absolute; left:46%; top:25%; width:30%; height:50%; background:#bf6a3a;"></div>
+          <div style="position:absolute; left:46%; top:25%; width:6%; height:50%; background:#8b6868;"></div>
+        </div>
+        <h3 class="demo-card__title">12 · Transparency illusions</h3>
+        <p class="demo-card__desc">Opaque shapes appear transparent when the intersection color is the OKLab midpoint. The eye knows the right midpoint.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-afterimage.html">
+        <div class="demo-card__preview" style="background:#cc0033; display:flex; align-items:center; justify-content:center; color: white; font-size: 2rem;">+</div>
+        <h3 class="demo-card__title">13 · Afterimage & optical memory</h3>
+        <p class="demo-card__desc">Stare for 20 seconds, see the opponent. Albers' lesson on the instability of direct perception.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-vs-science.html">
+        <div class="demo-card__preview" style="background: linear-gradient(90deg, oklch(0.55 0.18 264) 50%, oklch(0.55 0.18 30) 50%); display:flex; align-items:center; justify-content:center; color:white; font-family: monospace;">ΔE = 0</div>
+        <h3 class="demo-card__title">14 · Albers vs. scientific models</h3>
+        <p class="demo-card__desc">Albers rejected color theory; OKLab and CIECAM eventually proved he was right. The fields converged.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-digital.html">
+        <div class="demo-card__preview" style="display:grid;grid-template-columns:repeat(3, 1fr); height:100%;">
+          <div style="background:#fafbfd; display:flex; align-items:center; justify-content:center;"><div style="width:40%; aspect-ratio:1/1; background:#4f46e5;"></div></div>
+          <div style="background:#1a1a2e; display:flex; align-items:center; justify-content:center;"><div style="width:40%; aspect-ratio:1/1; background:#4f46e5;"></div></div>
+          <div style="background:#fee2e2; display:flex; align-items:center; justify-content:center;"><div style="width:40%; aspect-ratio:1/1; background:#4f46e5;"></div></div>
+        </div>
+        <h3 class="demo-card__title">15 · Albers for digital design</h3>
+        <p class="demo-card__desc">Tokens, surfaces, dark mode, semantic roles — every design system problem is an Albers problem.</p>
+      </a>
+
+      <a class="demo-card" href="./pages/albers-lab.html">
+        <div class="demo-card__preview" style="background: oklch(0.30 0.10 264); position: relative;">
+          <div style="position:absolute;left:50%;top:12%;width:78%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.50 0.15 264);"></div>
+          <div style="position:absolute;left:50%;top:26%;width:56%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.70 0.13 264);"></div>
+          <div style="position:absolute;left:50%;top:44%;width:32%;aspect-ratio:1/1;transform:translateX(-50%);background:oklch(0.90 0.06 264);"></div>
+        </div>
+        <h3 class="demo-card__title">16 · Color lab</h3>
+        <p class="demo-card__desc">Capstone playground — OKLCh sliders on a configurable Homage canvas. Run any Albers exercise, copy the CSS.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>What's inside</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Single bundled script</h3>
+        <p>All TypeScript modules + 29 custom-element components + utility helpers compiled and bundled into one <code>refcolor.bundle.js</code> (~250 KB). Loaded by each page as a classic <code>&lt;script&gt;</code> — works directly over <code>file://</code>, no CORS issues, no dev server.</p>
+        <p>To rebuild after source changes: <code>./build.sh</code></p>
+      </div>
+      <div class="card">
+        <h3>29 custom-element components</h3>
+        <p>Each is a single <code>HTMLElement</code> subclass — no framework, no shadow DOM, just standard web platform. The 29 components: 6 originals (<code>color-chip</code>, <code>gradient-strip</code>, <code>gamut-envelope</code>, <code>transfer-curve</code>, <code>contrast-readout</code>, <code>palette-display</code>) plus 23 added across waves 2-5 covering CVD simulation, design tokens, gamut math, spectral analysis, illusions, dithering, image analysis, and 3D color visualization.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="./lib/dist/refcolor.bundle.js"></script>
+<script>
+  // Inject a transfer-curve preview on the home page
+  var curveHost = document.getElementById('curve-preview');
+  if (curveHost) {
+    curveHost.innerHTML = '<transfer-curve curves="srgb,rec2020,pq" style="display:block; height: 100%;"></transfer-curve>';
+    requestAnimationFrame(function () {
+      var el = curveHost.querySelector('transfer-curve');
+      if (el && el.render) el.render();
+    });
+  }
+</script>
+
+</body>
+</html>

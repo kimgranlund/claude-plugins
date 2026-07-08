@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why the square? · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .shape-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--s-4);
+  }
+  .shape-frame {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    background: oklch(0.42 0.10 264);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .shape-frame > * {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    aspect-ratio: 1 / 1;
+  }
+  .shape-frame.circles > * { border-radius: 50%; }
+  .shape-frame.petals > * {
+    border-radius: 60% 40% 60% 40% / 50% 60% 40% 50%;
+  }
+  .shape-caption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-top: var(--s-2);
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Why the square?</h1>
+    <p>
+      The square has no direction, no story, no figure. It removes representation,
+      gesture, narrative. What's left is pure color behavior — exactly what Albers
+      wanted his students to observe. Compare the same colors arranged as squares,
+      circles, and petals: the first reads as color; the others start to mean
+      something else.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Same colors, three shape grammars</h2>
+    <div class="shape-grid">
+      <div>
+        <div class="shape-frame">
+          <div style="background: oklch(0.56 0.13 264); width: 78%; top: 12%;"></div>
+          <div style="background: oklch(0.72 0.13 264); width: 56%; top: 26%;"></div>
+          <div style="background: oklch(0.88 0.05 264); width: 32%; top: 44%;"></div>
+        </div>
+        <div class="shape-caption">squares — pure color behavior</div>
+      </div>
+      <div>
+        <div class="shape-frame circles">
+          <div style="background: oklch(0.56 0.13 264); width: 78%; top: 12%;"></div>
+          <div style="background: oklch(0.72 0.13 264); width: 56%; top: 26%;"></div>
+          <div style="background: oklch(0.88 0.05 264); width: 32%; top: 44%;"></div>
+        </div>
+        <div class="shape-caption">circles — reads as a target / portal</div>
+      </div>
+      <div>
+        <div class="shape-frame petals">
+          <div style="background: oklch(0.56 0.13 264); width: 78%; top: 12%;"></div>
+          <div style="background: oklch(0.72 0.13 264); width: 56%; top: 26%;"></div>
+          <div style="background: oklch(0.88 0.05 264); width: 32%; top: 44%;"></div>
+        </div>
+        <div class="shape-caption">petals — reads as a flower / face</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>The square is the absence of metaphor</h2>
+    <p>
+      Squares share four equal sides at 90° — no horizontal or vertical
+      preference, no "up", no implied motion. When you nest squares inside
+      squares, the eye has nothing to interpret <em>except</em> the colors.
+      That's what Albers wanted. The square is invisibility for the form,
+      so the color becomes visible.
+    </p>
+    <p>
+      Circles introduce associations (the sun, the eye, a target). Irregular
+      shapes invite figurative reading (a flower, a face, a creature). Even
+      rectangles bring directional bias — landscape vs. portrait, horizon vs.
+      tower. The square alone is mute.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> strip narrative; isolate the phenomenon you're studying.</li>
+      <li><strong>Designers:</strong> prototype with neutral primitives before stylizing — the color system tells the truth without the story.</li>
+      <li><strong>UI engineers:</strong> token playgrounds should use square chips; rounded "production" components hide color failures.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+
+</body>
+</html>

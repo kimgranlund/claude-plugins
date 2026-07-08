@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Palette extraction · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Palette extraction</h1>
+    <p>
+      Drop an image to extract a representative palette via <strong>k-means
+      clustering in OKLab</strong>. OKLab is perceptually uniform, so the
+      "nearest centroid" assignment matches "looks most similar to the eye."
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Source</h3>
+    <div class="row">
+      <input type="file" id="file" accept="image/*">
+      <label>k =
+        <select id="k">
+          <option value="3">3</option>
+          <option value="5" selected>5</option>
+          <option value="8">8</option>
+          <option value="12">12</option>
+        </select>
+      </label>
+      <button id="extract">Re-extract</button>
+    </div>
+    <div style="margin-top: var(--s-4);">
+      <canvas id="preview" style="max-width: 100%; max-height: 300px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-elevated);"></canvas>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Extracted palette</h2>
+    <palette-display id="palette"></palette-display>
+    <p id="status" style="color: var(--text-muted); font-size: var(--text-sm); margin-top: var(--s-3);">Drop an image to start.</p>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Compare k values</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">Same image, three k values stacked. Useful when sizing for a token system.</p>
+    <div id="multi-k" class="palette-multi-k"></div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Export</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">Copy the extracted palette as design-token output.</p>
+    <div class="row">
+      <button id="copy-css">Copy as CSS variables</button>
+      <button id="copy-tw">Copy as Tailwind config</button>
+      <button id="copy-json">Copy as JSON</button>
+      <span id="copy-status" style="color: var(--text-muted); font-size: var(--text-xs);"></span>
+    </div>
+    <pre id="export-preview" style="margin-top: var(--s-3); background: var(--bg-elevated); padding: var(--s-3); border-radius: var(--r-md); font-size: var(--text-xs); color: var(--text-muted); overflow-x: auto; max-height: 200px;"></pre>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <pre><code>// For each pixel: encoded sRGB → linear sRGB → XYZ → OKLab
+const oklabPixels = imagePixels.map(p =&gt;
+  oklab.fromXYZ(srgb.toXYZ(srgbTransfer.decode(p)))
+);
+
+// k-means with k-means++ initialization
+const { palette } = quantize(oklabPixels, { k: 5, seed: 42 });
+// palette is OKLab[] — convert back for display
+</code></pre>
+    <p>
+      Using OKLab as the clustering space matters: in RGB, two perceptually-
+      similar yellows might be Euclidean-distant, while two perceptually-
+      different greens might be close. OKLab's perceptual uniformity makes
+      k-means find the right clusters.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function() {
+  var RC = window.RefColor;
+  var oklab = RC.oklab;
+  var srgb = RC.srgb;
+  var srgbTransfer = RC.srgbTransfer;
+  var quantize = RC.kmeans.quantize;
+  var toHex = RC.utils.toHex;
+
+  var fileInput = document.getElementById('file');
+  var kSelect = document.getElementById('k');
+  var reBtn = document.getElementById('extract');
+  var previewCanvas = document.getElementById('preview');
+  var paletteEl = document.getElementById('palette');
+  var status = document.getElementById('status');
+
+  var lastImage = null;
+
+  function imageToOklabPixels(canvas, sampleStep) {
+    sampleStep = sampleStep || 4;
+    var ctx = canvas.getContext('2d');
+    var data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    var pixels = [];
+    for (var i = 0; i < data.length; i += 4 * sampleStep) {
+      var r = data[i] / 255, g = data[i+1] / 255, b = data[i+2] / 255;
+      var lin = srgbTransfer.decode([r, g, b]);
+      var xyz = srgb.toXYZ(lin);
+      pixels.push(oklab.fromXYZ(xyz));
+    }
+    return pixels;
+  }
+
+  function oklabToHex(lab) {
+    var xyz = oklab.toXYZ(lab);
+    var lin = srgb.fromXYZ(xyz);
+    var clamped = [
+      Math.max(0, Math.min(1, lin[0])),
+      Math.max(0, Math.min(1, lin[1])),
+      Math.max(0, Math.min(1, lin[2])),
+    ];
+    var encoded = srgbTransfer.encode(clamped);
+    return toHex(encoded);
+  }
+
+  function loadFile(file) {
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.src = url;
+    img.decode().then(function () {
+      var scale = Math.min(1, 600 / Math.max(img.width, img.height));
+      previewCanvas.width = img.width * scale;
+      previewCanvas.height = img.height * scale;
+      var ctx = previewCanvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, previewCanvas.width, previewCanvas.height);
+      lastImage = previewCanvas;
+      extract();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  function extract() {
+    if (!lastImage) {
+      status.textContent = 'Drop an image to start.';
+      return;
+    }
+    status.textContent = 'Extracting...';
+    requestAnimationFrame(function () {
+      try {
+        var pixels = imageToOklabPixels(lastImage);
+        var k = parseInt(kSelect.value, 10);
+        var start = performance.now();
+        var result = quantize(pixels, { k: k, seed: 42 });
+        var palette = result.palette;
+        var iterations = result.iterations;
+        var elapsed = (performance.now() - start).toFixed(0);
+
+        var sorted = palette.slice().sort(function (a, b) { return a[0] - b[0]; });
+
+        paletteEl.colors = sorted.map(function (lab) {
+          var hex = oklabToHex(lab);
+          var r = parseInt(hex.slice(1, 3), 16) / 255;
+          var g = parseInt(hex.slice(3, 5), 16) / 255;
+          var b = parseInt(hex.slice(5, 7), 16) / 255;
+          return [r, g, b];
+        });
+
+        status.textContent = k + ' colors extracted from ' + pixels.length + ' sampled pixels in ' + elapsed + 'ms (' + iterations + ' k-means iterations)';
+      } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+      }
+    });
+  }
+
+  fileInput.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(document.querySelector('.card'), loadFile);
+  kSelect.addEventListener('change', extract);
+  reBtn.addEventListener('click', extract);
+
+  // ─── Multi-k comparison ────────────────────────────────────────────
+  function buildMultiK() {
+    if (!lastImage) return;
+    var pixels = imageToOklabPixels(lastImage);
+    var ks = [3, 5, 8];
+    var host = document.getElementById('multi-k');
+    host.innerHTML = '';
+    ks.forEach(function (k) {
+      var result = quantize(pixels, { k: k, seed: 42 });
+      var sorted = result.palette.slice().sort(function (a, b) { return a[0] - b[0]; });
+      var hexes = sorted.map(oklabToHex);
+      var row = '<div class="palette-row"><div class="palette-row-label">k = ' + k + '</div>'
+        + '<div class="palette-row-strip">'
+        + hexes.map(function (hex) { return '<div class="palette-row-swatch" style="background:' + hex + '" title="' + hex + '"></div>'; }).join('')
+        + '</div></div>';
+      host.innerHTML += row;
+    });
+  }
+
+  // ─── Export buttons ────────────────────────────────────────────────
+  function currentPaletteHexes() {
+    if (!lastImage) return [];
+    var pixels = imageToOklabPixels(lastImage);
+    var k = parseInt(kSelect.value, 10);
+    var result = quantize(pixels, { k: k, seed: 42 });
+    var sorted = result.palette.slice().sort(function (a, b) { return a[0] - b[0]; });
+    return sorted.map(oklabToHex);
+  }
+  function showCopy(msg) {
+    document.getElementById('copy-status').textContent = msg;
+    setTimeout(function () { document.getElementById('copy-status').textContent = ''; }, 1400);
+  }
+  function setPreview(text) { document.getElementById('export-preview').textContent = text; }
+  document.getElementById('copy-css').addEventListener('click', function () {
+    var hexes = currentPaletteHexes();
+    var css = ':root {\n' + hexes.map(function (hex, i) {
+      return '  --palette-' + ((i + 1) * 100) + ': ' + hex + ';';
+    }).join('\n') + '\n}';
+    navigator.clipboard.writeText(css).then(function () { showCopy('CSS variables copied'); });
+    setPreview(css);
+  });
+  document.getElementById('copy-tw').addEventListener('click', function () {
+    var hexes = currentPaletteHexes();
+    var tw = 'theme: {\n  extend: {\n    colors: {\n      brand: {\n' +
+      hexes.map(function (hex, i) {
+        return '        ' + ((i + 1) * 100) + ': \'' + hex + '\',';
+      }).join('\n') + '\n      },\n    },\n  },\n},';
+    navigator.clipboard.writeText(tw).then(function () { showCopy('Tailwind config copied'); });
+    setPreview(tw);
+  });
+  document.getElementById('copy-json').addEventListener('click', function () {
+    var hexes = currentPaletteHexes();
+    var obj = {};
+    hexes.forEach(function (hex, i) { obj[(i + 1) * 100] = hex; });
+    var json = JSON.stringify({ palette: obj }, null, 2);
+    navigator.clipboard.writeText(json).then(function () { showCopy('JSON copied'); });
+    setPreview(json);
+  });
+
+  // After each extract, also rebuild multi-k.
+  var origExtract = extract;
+  extract = function () {
+    origExtract();
+    setTimeout(buildMultiK, 50);
+  };
+  // Hook the file change to rebuild.
+  fileInput.addEventListener('change', function () { setTimeout(buildMultiK, 200); });
+  kSelect.addEventListener('change', buildMultiK);
+})();
+</script>
+
+</body>
+</html>

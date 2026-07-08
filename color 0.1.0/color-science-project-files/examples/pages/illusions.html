@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color illusions · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .illusion {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--s-4);
+    margin-bottom: var(--s-6);
+    background: var(--bg-card);
+  }
+  .illusion h3 {
+    margin-top: 0;
+  }
+  .illusion-stage {
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    margin: var(--s-3) 0;
+  }
+  .ill-row {
+    display: flex;
+    gap: 0;
+    height: 140px;
+  }
+  .ill-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ill-square {
+    width: 70px;
+    height: 70px;
+    border-radius: 2px;
+  }
+  .ill-proof {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+  .white-illusion {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    height: 200px;
+  }
+  .white-half {
+    position: relative;
+    overflow: hidden;
+  }
+  .white-stripes {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  }
+  .white-bar {
+    position: absolute;
+    width: 60%;
+    height: 20px;
+    left: 20%;
+    top: calc(50% - 10px);
+    background: #888;
+  }
+  .hk-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-2);
+    height: 140px;
+  }
+  .hk-cell {
+    border-radius: var(--r-sm);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--s-2);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color illusions — where measurement disagrees with perception</h1>
+    <p>
+      Three classic illusions, each one showing that <strong>identical RGB
+      values can look completely different</strong> depending on context. The
+      proof is in the hex readouts under each image — those numbers really
+      are the same.
+    </p>
+  </section>
+
+  <div class="illusion">
+    <h3>1. Simultaneous contrast</h3>
+    <p style="color: var(--text-muted);">Two identical gray squares
+    on two different backgrounds. The square on the dark background looks
+    lighter than the square on the light background — but the squares are
+    pixel-identical.</p>
+    <div class="illusion-stage">
+      <div class="ill-row">
+        <div class="ill-half" style="background: #111;">
+          <div class="ill-square" style="background: #888888;"></div>
+        </div>
+        <div class="ill-half" style="background: #eeeeee;">
+          <div class="ill-square" style="background: #888888;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ill-proof">Both squares: <strong>#888888</strong></div>
+  </div>
+
+  <div class="illusion">
+    <h3>2. White's illusion</h3>
+    <p style="color: var(--text-muted);">Gray bars overlaid on black-and-white
+    stripes. The bar on the dark-striped side appears lighter than the bar
+    on the light-striped side — even though both are identical gray.</p>
+    <div class="illusion-stage white-illusion">
+      <div class="white-half">
+        <div class="white-stripes" style="background:
+          repeating-linear-gradient(to right, #111 0 25%, #fff 25% 50%);"></div>
+        <div class="white-bar"></div>
+      </div>
+      <div class="white-half">
+        <div class="white-stripes" style="background:
+          repeating-linear-gradient(to right, #fff 0 25%, #111 25% 50%);"></div>
+        <div class="white-bar"></div>
+      </div>
+    </div>
+    <div class="ill-proof">Both bars: <strong>#888888</strong></div>
+  </div>
+
+  <div class="illusion">
+    <h3>3. Helmholtz-Kohlrausch effect</h3>
+    <p style="color: var(--text-muted);">All four cells below have the same
+    luminance (Y) — pure 50% gray and saturated yellow / red / blue all at
+    L*=53. But the colored cells look <em>brighter</em> than the gray, because
+    chromatic content boosts perceived brightness independent of luminance.
+    This is why OKLCh and HCT distinguish "lightness" (perceptual) from
+    "luminance" (radiometric).</p>
+    <div class="illusion-stage hk-grid">
+      <div class="hk-cell" style="background: oklch(0.6 0 0); color:#000; text-shadow:none;">L*=53 gray</div>
+      <div class="hk-cell" style="background: oklch(0.6 0.20 90);">L*=53 yellow</div>
+      <div class="hk-cell" style="background: oklch(0.6 0.22 29);">L*=53 red</div>
+      <div class="hk-cell" style="background: oklch(0.6 0.16 264);">L*=53 blue</div>
+    </div>
+    <div class="ill-proof">All four: OKLab L = 0.6 → CIELAB L* ≈ 53</div>
+  </div>
+
+  <section>
+    <h2>What these illusions teach you about color systems</h2>
+    <p>
+      Color science distinguishes <strong>colorimetry</strong> (what's
+      physically there) from <strong>color appearance</strong> (what your
+      brain reports). The illusions above are violations of colorimetric
+      identity — physically identical pixels look different.
+    </p>
+    <p>
+      Practical implication: <strong>contrast ratios computed from RGB
+      values can mislead</strong>. APCA, the modern accessibility metric,
+      accounts for spatial-frequency context and polarity — partial
+      acknowledgment that perception isn't just measurement.
+      <a href="./contrast.html">Try APCA vs WCAG side by side.</a>
+    </p>
+    <p>
+      For the deepest dive on simultaneous contrast in design, see
+      Josef Albers's <em>Interaction of Color</em> (1963) — the canonical
+      illustrated book on how context changes color.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+
+</body>
+</html>

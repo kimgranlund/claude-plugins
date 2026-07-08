@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "safety-audit-event/v1",
+  "title": "User-visible audit event",
+  "type": "object",
+  "required": ["id", "actor", "verb", "target", "at", "recoverable"],
+  "properties": {
+    "id":     { "type": "string" },
+    "actor":  {
+      "type": "object",
+      "required": ["id", "displayName"],
+      "properties": { "id": { "type": "string" }, "displayName": { "type": "string" } }
+    },
+    "verb":   { "type": "string", "description": "e.g., created, updated, deleted, invited, revoked, published" },
+    "target": {
+      "type": "object",
+      "required": ["type", "id", "displayName"],
+      "properties": {
+        "type":        { "type": "string" },
+        "id":          { "type": "string" },
+        "displayName": { "type": "string" }
+      }
+    },
+    "at":               { "type": "string", "format": "date-time" },
+    "before":           {},
+    "after":            {},
+    "recoverable":      { "type": "boolean" },
+    "recoveryDeadline": { "type": ["string", "null"], "format": "date-time" }
+  },
+  "userFacingRequirements": [
+    "Surfaced in a user-accessible Activity / Audit log",
+    "Filterable by actor, target-type, verb, and date range",
+    "Exportable to csv / json",
+    "Retained ≥ 90 days (product-specific; longer for regulated domains)",
+    "Sensitive payloads (passwords, secrets) are redacted"
+  ]
+}

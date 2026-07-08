@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transparency illusions · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Transparency and overlap illusions</h1>
+    <p>
+      Two opaque shapes overlap. The intersection region is given a third color.
+      If C is the right perceptual midpoint of A and B, the eye reads the
+      shapes as <em>transparent</em>, layered over each other. If C is the
+      wrong value, the shapes read as flat and disconnected. Albers obsessed
+      over finding the exact midpoint that triggers the illusion.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Pick A, B, and C</h3>
+      <div class="row">
+        <label>A <input type="color" id="a" value="#3a6abf"></label>
+        <label>B <input type="color" id="b" value="#bf6a3a"></label>
+        <label>C (intersection) <input type="color" id="c" value="#888888"></label>
+      </div>
+      <div class="row" style="margin-top: var(--s-3);">
+        <button id="snap-rgb">snap C to RGB midpoint</button>
+        <button id="snap-oklab">snap C to OKLab midpoint</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <transparency-composer id="tc" color-a="#3a6abf" color-b="#bf6a3a" color-c="#888888"></transparency-composer>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>RGB midpoint vs OKLab midpoint</h2>
+    <p>
+      In RGB, the midpoint of two colors is simply <code>((a + b) / 2)</code>
+      per channel. This is what naive "average two colors" buttons produce.
+      In perceptual color spaces like OKLab, the midpoint is computed after
+      a nonlinear transform that aligns lightness with what the eye sees.
+      The two midpoints can differ noticeably — and the eye prefers the OKLab
+      one for transparency.
+    </p>
+    <p>
+      Click <em>snap C to OKLab midpoint</em> — the shapes start to read as
+      transparent layers. Click <em>snap C to RGB midpoint</em> — the shapes
+      flatten again. The exact same A and B; only C changes.
+    </p>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      This is why <code>color-mix(in oklab, ...)</code> produces blends that feel
+      transparent. <code>mix-blend-mode: multiply</code> rarely does — it's
+      doing the wrong math for human perception.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> there's exactly one right midpoint, and the eye knows it.</li>
+      <li><strong>Designers:</strong> layered surfaces (drawer over content, overlay over photo) need OKLab-midpoint blending to feel transparent.</li>
+      <li><strong>UI engineers:</strong> use <code>color-mix(in oklab, A, B)</code> for layered token combinations — not <code>multiply</code>, not raw averages.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var a = document.getElementById('a');
+  var b = document.getElementById('b');
+  var c = document.getElementById('c');
+  var tc = document.getElementById('tc');
+  function update() {
+    tc.setAttribute('color-a', a.value);
+    tc.setAttribute('color-b', b.value);
+    tc.setAttribute('color-c', c.value);
+    tc.setAttribute('auto-mode', 'none');
+  }
+  [a, b, c].forEach(function (el) { el.addEventListener('input', update); });
+
+  document.getElementById('snap-oklab').addEventListener('click', function () {
+    tc.setAttribute('auto-mode', 'oklab');
+  });
+  document.getElementById('snap-rgb').addEventListener('click', function () {
+    tc.setAttribute('auto-mode', 'rgb');
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>

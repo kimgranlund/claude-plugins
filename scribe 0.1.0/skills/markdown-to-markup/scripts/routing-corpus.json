@@ -1,0 +1,28 @@
+{
+ "skill": "markdown-to-markup",
+ "_note": "Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), reference-author, llms-txt-author, knowledge-author, linguistic-techniques, rubric-author.",
+ "positives": [
+  "render this markdown",
+  "render the docs prose markdown onto the page",
+  "add bold and links and italics to the doc renderer",
+  "extend the markdown renderer with a new inline form",
+  "the backticks show up literally on the docs page",
+  "why do the stars render as literal characters instead of bold",
+  "our fenced code blocks display as raw backtick fences",
+  "italics in the changelog display as literal underscores",
+  "is this markdown rendering safe from injection, it uses innerHTML",
+  "turn markdown source into DOM elements safely"
+ ],
+ "negatives": [
+  "convert this HTML to markdown",
+  "turn this page into markdown source",
+  "transcribe this rendered fragment back into markdown",
+  "bring this HTML content into the markdown corpus",
+  "escape the markdown special characters in this converted text",
+  "write a reference doc for the knowledge folder",
+  "audit the docs for drift",
+  "build an llms.txt index for our docs",
+  "make a knowledge pack from this research",
+  "harden this prompt's language so it drives behavior"
+ ]
+}

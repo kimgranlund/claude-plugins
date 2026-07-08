@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color is relational · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>The central claim: color is relational</h1>
+    <p>
+      A color seen in isolation is <em>not</em> the same color as that color seen
+      next to another. The eye reports context-dependent <strong>appearance</strong>,
+      never raw reflectance. Everything else in Albers' teaching follows from this.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>One chip, four contexts</h3>
+      <p style="color: var(--text-muted); font-size: var(--text-sm);">All four center chips below are <em>physically identical</em>. Watch how each reads against its surround. Toggle the reveal to confirm.</p>
+      <div class="row" style="margin: var(--s-3) 0;">
+        <label><input type="checkbox" id="reveal-toggle"> reveal hex equality</label>
+      </div>
+      <div class="relational-grid">
+        <chip-composer id="cc1" chip-a="#7f8b6e" chip-b="#7f8b6e" ground-a="#2a2620" ground-b="#e6e9da" label-a="warm dark" label-b="cool light"></chip-composer>
+        <chip-composer id="cc2" chip-a="#7f8b6e" chip-b="#7f8b6e" ground-a="#5d3a2c" ground-b="#2c4e6e" label-a="warm" label-b="cool"></chip-composer>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Why this is the whole game</h2>
+    <p>
+      If a color's appearance depends on its surround, then specifying a color by
+      its hex value alone is half a specification. The other half is everything
+      around it — and that "everything else" includes the next color over,
+      lighting, screen calibration, your visual adaptation, even your memory of
+      what color you expected to see.
+    </p>
+    <p>
+      Albers' entire teaching method follows from accepting this: stop measuring
+      colors in isolation, and start practicing perception in composition.
+      Every exercise that follows in his book is a controlled experiment in that
+      direction.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> never trust a chip outside its final composition.</li>
+      <li><strong>Designers:</strong> a token's hex is half its color; the other half is context.</li>
+      <li><strong>UI engineers:</strong> pick color on the actual UI surface, never in a default canvas.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var t = document.getElementById('reveal-toggle');
+  function update() {
+    var v = t.checked ? 'true' : 'false';
+    document.getElementById('cc1').setAttribute('reveal', v);
+    document.getElementById('cc2').setAttribute('reveal', v);
+  }
+  t.addEventListener('change', update);
+})();
+</script>
+
+</body>
+</html>

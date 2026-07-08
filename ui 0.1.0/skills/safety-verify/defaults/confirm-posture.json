@@ -1,0 +1,26 @@
+{
+  "$schema": "safety-confirm-posture/v1",
+  "defaults": {
+    "initialFocus":   "Cancel",
+    "tabOrder":       ["Cancel", "Destructive CTA"],
+    "escape":         "Close dialog without executing",
+    "enter":          "Does not submit unless destructive CTA is explicitly focused",
+    "destructiveStyling": {
+      "color":     "semantic danger token (--color-danger-*)",
+      "nonColorCue": "REQUIRED — weight, icon, or fill treatment; never color alone",
+      "labelShape": "verb-first imperative ('Delete 5 items' — names the count/subject)"
+    },
+    "title":          "Names subject + action",
+    "body":           "Names reversibility and affected observers"
+  },
+  "keyboard": {
+    "focusTrap":      "REQUIRED while open",
+    "focusReturn":    "On close, restore focus to the triggering control"
+  },
+  "refusal": [
+    "Default-focused destructive CTA.",
+    "Destructive color as sole cue (fails CVD).",
+    "Generic 'Delete' label without subject/count.",
+    "Dialog without focus trap — keyboard users tab behind the modal."
+  ]
+}

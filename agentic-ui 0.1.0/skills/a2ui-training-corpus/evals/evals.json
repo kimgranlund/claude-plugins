@@ -1,0 +1,186 @@
+{
+  "skill": "a2ui-training-corpus",
+  "note": "Net-new mint 2026-07-07 (the 4-pack A2UI split \u2014 sibling of a2ui-protocol / a2ui-catalog-design / a2ui-conversational-agent). Positives span imperative / diagnostic / symptom / indirect phrasing across the pack's six axes (record schema, exemplar/eval split, canonicalization+dedup, admission+healing, judge/verdict adapter, retrieval+repair). Negatives drawn adversarially from the live neighbors: a2ui-protocol (the wire shape a record's output conforms to), a2ui-catalog-design (catalog rows + coverage the tier-1 check validates against), a2ui-conversational-agent (the live demo that CALLS retrieve()), a2ui-corpus-curate (the DOING of curation, not the world-model), the a2ui-builder / a2ui-reviewer agents (build source / judge a record).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "why was this corpus record quarantined and can it ever come back",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what does admission raise for a candidate that references a component not in the pinned catalog",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "our judge grades records against target and some score garbage, is that a corpus bug",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "why is qualityScore the minimum across dimensions instead of an average",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what exactly does the healer fix and what is it forbidden from touching",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "explain the difference between the exemplar and eval sub-corpora and the no-leak invariant",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "why does admission reject every eval record right now",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "how does the corpus decide two exemplars are duplicates",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "what fields must a corpus record carry and which are optional",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "walk me through the admission pipeline stages in order",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "how does retrieval pick the top-k exemplars for a prompt",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "what happens to stored records when the catalog or protocol version changes",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "why is description required but target optional in a corpus record",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "what does status repaired mean versus valid versus quarantined",
+      "expect": "trigger"
+    },
+    {
+      "id": "t15",
+      "prompt": "why can't the judge just run inside the admit function",
+      "expect": "trigger"
+    },
+    {
+      "id": "t16",
+      "prompt": "what is the verdicts file and why must its rubricVersion match the rubric doc",
+      "expect": "trigger"
+    },
+    {
+      "id": "t17",
+      "prompt": "why did admission reject this exemplar with E_PIN instead of E_SCHEMA",
+      "expect": "trigger"
+    },
+    {
+      "id": "t18",
+      "prompt": "how do I get a below-bar record back into the corpus after it was quarantined",
+      "expect": "trigger"
+    },
+    {
+      "id": "t19",
+      "prompt": "is a multi-surface a2uiOutput allowed in a corpus exemplar",
+      "expect": "trigger"
+    },
+    {
+      "id": "t20",
+      "prompt": "why does canonicalization renumber ids but never rewrite json-pointer paths",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "why did this A2UI payload fail validation at the renderer",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "what does a data binding or action look like on the A2UI wire",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "how do dynamic list templates render positionally",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "how do I add a new component type to the default catalog",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "what is our catalog coverage policy, whole-fleet or subset",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "why did this payload fail CATALOG at render time",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "how does the live demo swap from the recorded transport to a real LLM",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "how does a UI click become an agent chat turn",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "wire a new LLM provider into the live agent and add its model",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "where does the live agent's API key live and is it safe",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "admit this authored seed into the corpus for me",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "back-score the phase-1 records and quarantine the ones below bar",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "fix the bug in admit.ts where dedup registers too early",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "judge this corpus record against the a2ui-corpus rubric and emit its verdict",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "compose an A2UI payload that renders a settings form",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "what should this bindable prop be named in the catalog row",
+      "expect": "no-trigger"
+    }
+  ]
+}

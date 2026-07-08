@@ -1,0 +1,66 @@
+{
+  "skill": "pack-authoring-standards",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-07. The contested boundary is corpus-vs-surface (skill-authoring-standards owns SKILL.md/description; this owns references/INDEX/waves).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "how should I structure a reference corpus for a knowledge skill",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what goes in the INDEX file of a pack",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "how many axes should a knowledge pack have",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "how do I cite and ground claims in reference files",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "how do I run a research wave to fill this corpus",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "retrieval from this pack feels muddy, files answer overlapping questions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "how do we keep our corpus snapshots from going stale",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "why does my skill never trigger",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "what belongs in the description vs the body",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "should this huge pack split into a family",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "run the research wave and write the files for the naming axis",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "merge these thin packs into one",
+      "expect": "no-trigger"
+    }
+  ]
+}

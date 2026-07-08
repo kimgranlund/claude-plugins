@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIECAM16 viewing conditions · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>CIECAM16 viewing conditions</h1>
+    <p>
+      Lightness (J), colorfulness (M), and hue (h) predicted by the
+      <strong>CIE Color Appearance Model 2016</strong> — what a color
+      <em>appears</em> to be, accounting for the lighting and surrounding
+      environment. The same XYZ stimulus looks lighter on a dark surround,
+      more colorful at higher adapting luminance, etc.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Color</h3>
+    <div class="row">
+      <label>Sample color <input type="color" id="color" value="#1f6feb"></label>
+      <div id="swatch" style="flex:1; height:60px; border:1px solid var(--border); border-radius: var(--r-md);"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Viewing conditions</h3>
+    <div class="controls">
+      <label for="la">Adapting luminance (cd/m²)</label>
+      <input type="range" id="la" min="1" max="500" step="1" value="64">
+      <output id="la-val">64</output>
+
+      <label for="yb">Background lightness (L*)</label>
+      <input type="range" id="yb" min="0" max="100" step="1" value="50">
+      <output id="yb-val">50</output>
+
+      <label for="sur">Surround</label>
+      <select id="sur">
+        <option value="2" selected>Average (Yb / Yw &gt; 0.2)</option>
+        <option value="1">Dim (Yb / Yw &lt; 0.2)</option>
+        <option value="0">Dark (Yb / Yw ≈ 0)</option>
+      </select>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <div class="grid-2">
+      <div class="card">
+        <h3>Appearance attributes (JMh)</h3>
+        <dl class="kv">
+          <dt>J — lightness</dt><dd id="r-J">—</dd>
+          <dt>M — colorfulness</dt><dd id="r-M">—</dd>
+          <dt>h — hue (deg)</dt><dd id="r-h">—</dd>
+          <dt>Source XYZ</dt><dd id="r-xyz">—</dd>
+          <dt>Source OKLCh (D65)</dt><dd id="r-oklch">—</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>Comparison to defaults</h3>
+        <p style="color: var(--text-muted); font-size: var(--text-sm);">
+          The display-default condition is <strong>La ≈ 64, Yb at L*=50,
+          average surround</strong> — the row-1 numbers above match HCT.
+          As you change the controls, the J/M/h values drift relative to
+          that baseline. Try setting surround to <em>Dark</em>: J drops
+          (the eye adjusts), M shifts — chromatic content appears
+          differently in cinema-style viewing.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Caveat: this is an appearance model, not a reproduction model</h2>
+    <p>
+      J/M/h answer the question "what does this stimulus look like under
+      these conditions?" not "what color do I display to make it look
+      like this?" For the reproduction side, you'd want CAM16-UCS (a
+      perceptually-uniform Cartesian rearrangement of CIECAM16) or
+      Material's HCT (which fixes h to be a perceptual angle).
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var ciecam16 = RC.ciecam16, oklch = RC.oklch;
+  var utils = RC.utils;
+
+  var colorInput = document.getElementById('color');
+  var la = document.getElementById('la'), yb = document.getElementById('yb'), sur = document.getElementById('sur');
+  var laV = document.getElementById('la-val'), ybV = document.getElementById('yb-val');
+  var swatch = document.getElementById('swatch');
+
+  function update() {
+    swatch.style.background = colorInput.value;
+    laV.textContent = la.value;
+    ybV.textContent = yb.value;
+    var enc = utils.fromHex(colorInput.value);
+    var lin = srgbTransfer.decode(enc);
+    var xyz = srgb.toXYZ(lin);
+
+    document.getElementById('r-xyz').textContent = utils.fmtTuple(xyz, 4);
+    document.getElementById('r-oklch').textContent = utils.toCssOklch(oklch.fromXYZ(xyz));
+
+    var vc = {
+      whitePointXYZ: [95.04559270516716, 100.0, 108.90577507598784],
+      adaptingLuminance: parseFloat(la.value),
+      backgroundLstar: parseFloat(yb.value),
+      surround: parseInt(sur.value, 10),
+      discountingIlluminant: false,
+    };
+    var jmh;
+    try {
+      jmh = ciecam16.fromXYZ([xyz[0] * 100, xyz[1] * 100, xyz[2] * 100], vc);
+    } catch (e) {
+      jmh = [NaN, NaN, NaN];
+    }
+    document.getElementById('r-J').textContent = utils.fmt(jmh[0], 2);
+    document.getElementById('r-M').textContent = utils.fmt(jmh[1], 2);
+    document.getElementById('r-h').textContent = utils.fmt(jmh[2], 1) + '°';
+  }
+  [colorInput, la, yb, sur].forEach(function (el) {
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>

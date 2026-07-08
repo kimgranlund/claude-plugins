@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OKLCh picker · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .picker-slice {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--r-md);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    cursor: crosshair;
+    touch-action: none;
+    user-select: none;
+  }
+  .picker-contrast {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-2);
+    margin-top: var(--s-3);
+  }
+  .picker-contrast > div {
+    height: 50px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+  .picker-copy-row {
+    display: flex;
+    gap: var(--s-2);
+    margin-top: var(--s-2);
+  }
+  .picker-copy-row button {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>OKLCh picker</h1>
+    <p>
+      One OKLCh source value → live readout in every space and notation,
+      with a click-to-pick L × C slice at the current hue, contrast against
+      white and black inline, and one-click copy for every format.
+    </p>
+  </section>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <h3>Source — OKLCh</h3>
+      <div class="controls">
+        <label for="L">Lightness</label>
+        <input type="range" id="L" min="0" max="1" step="0.001" value="0.55">
+        <output id="L-val">0.550</output>
+
+        <label for="C">Chroma</label>
+        <input type="range" id="C" min="0" max="0.4" step="0.001" value="0.18">
+        <output id="C-val">0.180</output>
+
+        <label for="h">Hue (deg)</label>
+        <input type="range" id="h" min="0" max="360" step="0.1" value="264">
+        <output id="h-val">264.0</output>
+      </div>
+
+      <div style="margin-top: var(--s-4);">
+        <div id="big-swatch" style="height: 100px; border-radius: var(--r-md); border: 1px solid var(--border);"></div>
+      </div>
+
+      <div class="picker-contrast">
+        <div id="con-light" style="background: #ffffff;">Aa on white</div>
+        <div id="con-dark"  style="background: #111111;">Aa on black</div>
+      </div>
+
+      <div class="picker-copy-row">
+        <button data-copy="hex" id="copy-hex">copy hex</button>
+        <button data-copy="oklch" id="copy-oklch">copy oklch()</button>
+        <button data-copy="rgb" id="copy-rgb">copy rgb()</button>
+      </div>
+      <div id="copy-status" style="font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--s-2); height: 16px;"></div>
+    </div>
+
+    <div class="card">
+      <h3>Pick from L × C slice (at current hue)</h3>
+      <p style="color: var(--text-muted); font-size: var(--text-sm);">Click anywhere on the slice to set L and C; the hue stays as-is.</p>
+      <canvas id="slice" class="picker-slice"></canvas>
+      <p style="color: var(--text-muted); font-size: var(--text-xs); margin-top: var(--s-2);">
+        x = chroma (0 → 0.4) · y = lightness (1 → 0) · dot marks current pick · grayed-out region is out-of-sRGB.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top: var(--s-4);">
+    <h3>Multi-format readout</h3>
+    <dl class="kv">
+      <dt>OKLCh</dt><dd id="r-oklch">—</dd>
+      <dt>OKLab</dt><dd id="r-oklab">—</dd>
+      <dt>CIELAB (D65)</dt><dd id="r-cielab">—</dd>
+      <dt>XYZ (D65)</dt><dd id="r-xyz">—</dd>
+      <dt>Linear sRGB</dt><dd id="r-srgb-lin">—</dd>
+      <dt>sRGB hex</dt><dd id="r-hex">—</dd>
+      <dt>Linear P3</dt><dd id="r-p3-lin">—</dd>
+      <dt>HSL</dt><dd id="r-hsl">—</dd>
+      <dt>HCT</dt><dd id="r-hct">—</dd>
+      <dt>In sRGB gamut?</dt><dd id="r-ingamut">—</dd>
+      <dt>APCA Lc on white</dt><dd id="r-apca-w">—</dd>
+      <dt>APCA Lc on black</dt><dd id="r-apca-k">—</dd>
+    </dl>
+  </div>
+
+  <section style="margin-top: var(--s-10);">
+    <h2>The math</h2>
+    <p>All values above come from the same source OKLCh triple. The composition pipeline:</p>
+    <pre><code>// Single source of truth
+const src = oklch(L, C, h);
+
+// One conversion per target — every space module exports `toXYZ` and `fromXYZ`
+const xyz   = oklchSpace.toXYZ(src);
+const lab   = oklab.fromXYZ(xyz);
+const cielabVal = cielab.fromXYZ(xyz);
+const linRGB = srgb.fromXYZ(xyz);
+const encoded = srgbTransfer.encode(linRGB);
+const hexStr  = toHex(encoded);</code></pre>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function() {
+  const RC = window.RefColor;
+  const { oklch, oklab, cielab, srgb, p3, hsl, hct, srgbTransfer, mapping, apca, utils } = RC;
+  const { fmt, fmtTuple, toHex, toCssOklch, raf } = utils;
+
+  const $ = (id) => document.getElementById(id);
+  const Lel = $('L'), Cel = $('C'), hel = $('h');
+  const sliceCanvas = $('slice');
+
+  // ─── L × C slice rendering ──────────────────────────────────────────
+  // The slice only depends on the current hue, so we cache the high-res
+  // sample grid in an offscreen canvas and only rebuild on hue change.
+  // L/C movement just redraws the cached slice + marker — cheap.
+  //
+  // Source resolution: canvas-buffer-size × 2 for supersampling AA on the
+  // gamut boundary. 3× DPR is overkill for interactive content.
+  let sliceCache = null;
+  let cachedHue = NaN;
+  let cachedRES = 0;
+
+  function buildSliceCache(bufferSize) {
+    const hueDeg = parseFloat(hel.value);
+    const RES = Math.min(bufferSize, 800); // 1× DPR, capped
+    if (sliceCache && cachedHue === hueDeg && cachedRES === RES) return;
+    sliceCache = document.createElement('canvas');
+    sliceCache.width = RES;
+    sliceCache.height = RES;
+    const tmpCtx = sliceCache.getContext('2d');
+    const imgData = tmpCtx.createImageData(RES, RES);
+    const data = imgData.data;
+    for (let py = 0; py < RES; py++) {
+      for (let px = 0; px < RES; px++) {
+        const L = 1 - py / (RES - 1);
+        const C = (px / (RES - 1)) * 0.4;
+        const xyz = oklch.toXYZ([L, C, hueDeg]);
+        const lin = srgb.fromXYZ(xyz);
+        const ig = lin[0] >= 0 && lin[0] <= 1 && lin[1] >= 0 && lin[1] <= 1 && lin[2] >= 0 && lin[2] <= 1;
+        const cs = [Math.max(0, Math.min(1, lin[0])), Math.max(0, Math.min(1, lin[1])), Math.max(0, Math.min(1, lin[2]))];
+        const enc = srgbTransfer.encode(cs);
+        const i = (py * RES + px) * 4;
+        const dim = ig ? 1.0 : 0.4;
+        data[i]     = Math.round(enc[0] * 255 * dim);
+        data[i + 1] = Math.round(enc[1] * 255 * dim);
+        data[i + 2] = Math.round(enc[2] * 255 * dim);
+        data[i + 3] = 255;
+      }
+    }
+    tmpCtx.putImageData(imgData, 0, 0);
+    cachedHue = hueDeg;
+    cachedRES = RES;
+  }
+
+  function renderSlice() {
+    const wCss = Math.min(sliceCanvas.offsetWidth || 320, 360);
+    const dpr = window.devicePixelRatio || 1;
+    const bufferSize = Math.round(wCss * dpr);
+    sliceCanvas.width = bufferSize;
+    sliceCanvas.height = bufferSize;
+    sliceCanvas.style.width = wCss + 'px';
+    sliceCanvas.style.height = wCss + 'px';
+    buildSliceCache(bufferSize);
+    const ctx = sliceCanvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(sliceCache, 0, 0, bufferSize, bufferSize);
+    // Marker
+    const Lv = parseFloat(Lel.value), Cv = parseFloat(Cel.value);
+    const mx = (Cv / 0.4) * bufferSize;
+    const my = (1 - Lv) * bufferSize;
+    ctx.beginPath();
+    ctx.arc(mx, my, 8 * dpr, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3 * dpr; ctx.stroke();
+    ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5 * dpr; ctx.stroke();
+  }
+  // Pointer-based drag (click is a degenerate case). Pointer capture keeps
+  // updates flowing even if the cursor leaves the canvas mid-drag.
+  let dragging = false;
+  function setFromPointer(e) {
+    const rect = sliceCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    Cel.value = Math.max(0, Math.min(0.4, x * 0.4));
+    Lel.value = Math.max(0, Math.min(1, 1 - y));
+    update();
+  }
+  sliceCanvas.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    dragging = true;
+    try { sliceCanvas.setPointerCapture(e.pointerId); } catch {}
+    setFromPointer(e);
+  });
+  sliceCanvas.addEventListener('pointermove', (e) => {
+    if (dragging) setFromPointer(e);
+  });
+  function endDrag(e) {
+    dragging = false;
+    try { sliceCanvas.releasePointerCapture(e.pointerId); } catch {}
+  }
+  sliceCanvas.addEventListener('pointerup', endDrag);
+  sliceCanvas.addEventListener('pointercancel', endDrag);
+
+  // ─── Copy buttons ──────────────────────────────────────────────────
+  let copyStatus = $('copy-status');
+  function showCopyStatus(msg) {
+    copyStatus.textContent = msg;
+    setTimeout(() => { copyStatus.textContent = ''; }, 1400);
+  }
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const fmt = btn.dataset.copy;
+      const v = fmt === 'hex' ? $('r-hex').dataset.value :
+                fmt === 'oklch' ? $('r-oklch').textContent :
+                fmt === 'rgb' ? $('r-srgb-lin').dataset.rgb : '';
+      navigator.clipboard.writeText(v).then(() => showCopyStatus('copied: ' + v));
+    });
+  });
+
+  const update = raf(function () {
+    const Lv = +Lel.value, Cv = +Cel.value, hv = +hel.value;
+    $('L-val').textContent = fmt(Lv, 3);
+    $('C-val').textContent = fmt(Cv, 3);
+    $('h-val').textContent = fmt(hv, 1);
+
+    const src = [Lv, Cv, hv];
+    const xyzVal = oklch.toXYZ(src);
+    const labVal = oklab.fromXYZ(xyzVal);
+    const cieVal = cielab.fromXYZ(xyzVal);
+    const linRGB = srgb.fromXYZ(xyzVal);
+    const encoded = srgbTransfer.encode(linRGB);
+    const linP3 = p3.fromXYZ(xyzVal);
+    const hslVal = hsl.fromXYZ(xyzVal);
+    const hctVal = hct.fromXYZ(xyzVal);
+
+    const ig = mapping.inGamutSRGB(src);
+    const mapped = ig ? linRGB : mapping.mapToSRGB(src);
+    const hex = toHex(srgbTransfer.encode(mapped));
+
+    // Big swatch — use OKLCh natively
+    $('big-swatch').style.background = toCssOklch(src);
+
+    // Contrast previews (white background, black background)
+    $('con-light').style.background = '#ffffff';
+    $('con-light').style.color = hex;
+    $('con-dark').style.background = '#111111';
+    $('con-dark').style.color = hex;
+
+    // Readouts
+    $('r-oklch').textContent = toCssOklch(src);
+    $('r-oklab').textContent = fmtTuple(labVal, 4);
+    $('r-cielab').textContent = 'L*=' + fmt(cieVal[0],2) + ' a*=' + fmt(cieVal[1],2) + ' b*=' + fmt(cieVal[2],2);
+    $('r-xyz').textContent = fmtTuple(xyzVal, 4);
+    $('r-srgb-lin').textContent = fmtTuple(linRGB, 4);
+    $('r-hex').textContent = hex + (ig ? '' : ' (mapped)');
+    $('r-hex').dataset.value = hex;
+    $('r-p3-lin').textContent = fmtTuple(linP3, 4);
+    $('r-hsl').textContent = 'h=' + fmt(hslVal[0],1) + '° s=' + fmt(hslVal[1]*100,1) + '% l=' + fmt(hslVal[2]*100,1) + '%';
+    $('r-hct').textContent = 'H=' + fmt(hctVal[0],1) + ' C=' + fmt(hctVal[1],2) + ' T=' + fmt(hctVal[2],2);
+    $('r-srgb-lin').dataset.rgb = 'rgb(' + Math.round(mapped[0]*255) + ' ' + Math.round(mapped[1]*255) + ' ' + Math.round(mapped[2]*255) + ')';
+
+    $('r-ingamut').innerHTML = ig
+      ? '<span class="pill pass">in sRGB</span>'
+      : '<span class="pill warn">out of sRGB (mapped for display)</span>';
+
+    // APCA against white and black
+    const fgEnc = srgbTransfer.encode(mapped);
+    const lcW = apca.apcaContrast(fgEnc, [1, 1, 1]);
+    const lcK = apca.apcaContrast(fgEnc, [0, 0, 0]);
+    $('r-apca-w').innerHTML = '<strong>' + fmt(lcW, 1) + '</strong> Lc' + (Math.abs(lcW) >= 75 ? ' <span class="pill pass">body text</span>' : Math.abs(lcW) >= 45 ? ' <span class="pill warn">headings</span>' : ' <span class="pill warn">low</span>');
+    $('r-apca-k').innerHTML = '<strong>' + fmt(lcK, 1) + '</strong> Lc' + (Math.abs(lcK) >= 75 ? ' <span class="pill pass">body text</span>' : Math.abs(lcK) >= 45 ? ' <span class="pill warn">headings</span>' : ' <span class="pill warn">low</span>');
+
+    renderSlice();
+  });
+
+  [Lel, Cel, hel].forEach(function (input) {
+    input.addEventListener('input', update);
+  });
+  window.addEventListener('resize', renderSlice);
+  update();
+})();
+</script>
+
+</body>
+</html>

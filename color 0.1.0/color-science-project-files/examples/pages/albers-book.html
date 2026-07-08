@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The book as a learning system · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1><em>Interaction of Color</em> — the book as a learning system</h1>
+    <p>
+      Albers' famous 1963 book is not a color theory text. It's a lab manual.
+      Originally a boxed set of ~150 cut-paper exercises with a slim
+      explanatory pamphlet, it teaches color by making the student <em>do</em> the
+      observations rather than read about them.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Plate IV-1 — one color, two appearances</h3>
+      <p style="color: var(--text-muted); font-size: var(--text-sm);">
+        The book's classic opening exercise: take one small chip and find two
+        backgrounds that make it look like two different colors. Below is an
+        interactive recreation.
+      </p>
+      <chip-composer chip-a="#a08c5e" chip-b="#a08c5e" ground-a="#3c2d1a" ground-b="#dbcfa6" label-a="against deep brown" label-b="against pale ochre"></chip-composer>
+      <div style="margin-top: var(--s-3);">
+        <label><input type="checkbox" id="reveal-cc"> reveal hex equality</label>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Why the book is a lab manual, not a textbook</h2>
+    <p>
+      Open <em>Interaction of Color</em> and you find very little reading.
+      What you find instead is a carefully sequenced series of paper-cutting
+      exercises, each isolating a single perceptual phenomenon. The student
+      is asked to <em>discover</em> the effect with their hands and eyes — only
+      after that does the explanation arrive.
+    </p>
+    <p>
+      This is the same structure as a physics lab manual: predict, perform,
+      measure, then theorize. Albers' insight was that color perception
+      cannot be taught from words, only from practice. The book has been in
+      print continuously since 1963 because that structure still works.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> trust the eye, verify with paper (or pixels), document what you see.</li>
+      <li><strong>Designers:</strong> prototype before specifying — nothing teaches a color system like building one.</li>
+      <li><strong>UI engineers:</strong> build a sandbox; the team that can recolor in 5 minutes ships better systems.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var t = document.getElementById('reveal-cc');
+  t.addEventListener('change', function () {
+    var cc = document.querySelector('chip-composer');
+    cc.setAttribute('reveal', t.checked ? 'true' : 'false');
+  });
+})();
+</script>
+
+</body>
+</html>

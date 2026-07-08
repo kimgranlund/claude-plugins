@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color volume comparison · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color volume comparison</h1>
+    <p>
+      How much bigger is Display P3 than sRGB? Adobe RGB? Rec.2020? The CIE
+      xy chromaticity diagram shows triangle area — but that's only two
+      dimensions. The actual gamut is a 3D solid (chromaticity × lightness),
+      and "color volume" is the perceptually-meaningful measure.
+    </p>
+    <p>
+      Computed via Monte Carlo integration in <strong>OKLab</strong> — a
+      perceptually-uniform space, so equal volume there really does
+      correspond to equal perceived range. Result is normalized so
+      sRGB = 1.0×.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <volume-bars id="vb"></volume-bars>
+  </section>
+
+  <section>
+    <h2>Some intuitions to confirm</h2>
+    <ul>
+      <li><strong>P3 / sRGB ≈ 1.3×</strong> — P3 is about 25-35% wider than
+        sRGB in perceptual volume. Mostly extra reds and greens, with
+        marginal blue gain.</li>
+      <li><strong>Adobe RGB / sRGB ≈ 1.3-1.4×</strong> — similar total
+        volume to P3, but the extra space is concentrated in greens (which
+        is why Adobe RGB is favored for print/landscape work).</li>
+      <li><strong>Rec.2020 / sRGB ≈ 1.7×</strong> — substantially wider in
+        all three primary directions.</li>
+      <li><strong>ProPhoto / sRGB &gt; 1.9×</strong> — but most of the extra
+        is "imaginary" colors (outside the spectral locus) that no display
+        can reproduce. Useful as a working space, not a display space.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Why Monte Carlo?</h2>
+    <p>
+      Each gamut is the image of the linear-RGB unit cube under a 3×3 matrix
+      transform — a parallelepiped in XYZ. Then the OKLab map is a nonlinear
+      transform (cube root) on top of that, so the gamut becomes a curved
+      3D region. Computing its exact volume requires integrating the
+      Jacobian determinant of the OKLab map over the cube, which is
+      analytically painful.
+    </p>
+    <p>
+      Monte Carlo trades exactness for code simplicity: sample N points
+      uniformly in an OKLab bounding box, test each for cube membership
+      via the gamut's XYZ→linear-RGB matrix, multiply the in-gamut
+      fraction by the box volume. With 30k samples the standard error is
+      well under 1%.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+
+</body>
+</html>

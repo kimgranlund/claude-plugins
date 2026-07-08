@@ -1,0 +1,51 @@
+{
+  "skill": "intent-extract",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What am I really asking for here?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Figure out what they actually want from this ticket",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Clarify this request before we build it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Improve this prompt brief",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "This spec is vague — extract the real intent",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Write the PRD for this feature",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "Interview me for a new skill's requirements",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Break this system down into components",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "is this refactor actually improving things or just reorganizing them",
+      "expect": "no-trigger"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cone fundamentals (CMF + LMS) · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Cone fundamentals — CMF + LMS</h1>
+    <p>
+      The <strong>color matching functions</strong> x̄(λ), ȳ(λ), z̄(λ) and the
+      <strong>LMS cone-response curves</strong> for the human visual system.
+      Slide the wavelength selector to see how cone signals (L, M, S) shift
+      across the spectrum. The spectral colors below the chart are clipped
+      to sRGB so they look more muted than real monochromatic light.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Selected wavelength</h3>
+    <div class="controls">
+      <label for="nm">λ</label>
+      <input type="range" id="nm" min="380" max="730" step="1" value="555">
+      <output id="nm-val">555 nm</output>
+    </div>
+    <div class="row" style="margin-top: var(--s-3);">
+      <label><input type="checkbox" id="show-lms" checked> show LMS curves</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <cmf-chart id="cmf" wavelength="555" show-lms="true"></cmf-chart>
+  </section>
+
+  <section>
+    <h2>What CMF and LMS represent</h2>
+    <p>
+      The <strong>CMF (color matching functions)</strong> are tabulated
+      from the CIE 1931 experiment: a panel of observers mixed three
+      primary lights to match a test monochromatic light at each
+      wavelength. The amount of each primary needed becomes the x̄, ȳ, z̄
+      values. They're a mathematical description of color matching, not
+      directly tied to cones.
+    </p>
+    <p>
+      The <strong>LMS cone fundamentals</strong> are the actual spectral
+      sensitivities of the human L (long, red), M (medium, green), and
+      S (short, blue) cones — derived from physiological data. They peak
+      near 564, 534, and 420 nm respectively. Note that L and M overlap
+      heavily (~30nm apart) which is why CVDs that lose one are so
+      common.
+    </p>
+    <p>
+      The relationship is a linear transformation. The <strong>Ottosson
+      M1 matrix</strong> shown here is one choice of LMS basis (used in
+      OKLab). The <strong>CAT16 matrix</strong> in CIECAM16 is another.
+      <strong>Smith-Pokorny</strong> and <strong>Stockman-Sharpe</strong>
+      are yet others — each derived from a slightly different observer
+      population.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var nm = document.getElementById('nm'), nmV = document.getElementById('nm-val');
+  var showLms = document.getElementById('show-lms');
+  var c = document.getElementById('cmf');
+  function update() {
+    nmV.textContent = nm.value + ' nm';
+    c.setAttribute('wavelength', nm.value);
+    c.setAttribute('show-lms', showLms.checked ? 'true' : 'false');
+  }
+  nm.addEventListener('input', update);
+  showLms.addEventListener('change', update);
+  window.addEventListener('resize', function () { if (c.render) c.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>

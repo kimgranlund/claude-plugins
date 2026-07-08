@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Albers for digital product design · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .ui-tour {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--s-4);
+  }
+  .ui-cell {
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .ui-cell-label {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+  .ui-cell-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ui-brand-dot {
+    width: 32px;
+    height: 32px;
+    background: #4f46e5;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Albers for digital product design</h1>
+    <p>
+      Tokens, surface systems, dark mode, contrast pairs, theming — every
+      modern design-system problem is an Albers problem. The same brand-500
+      reads differently on the page background / on a card / next to an
+      accent / in dark mode. Systems that ignore this ship colors that "look
+      wrong everywhere except the spec."
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Brand-500 (<code>#4f46e5</code>) in the wild</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Same hex value, six contexts. The dot's physical color is constant.
+      Its perceived "brand-ness" is not.
+    </p>
+    <div class="ui-tour">
+      <div class="ui-cell" style="background: #fafbfd;">
+        <div class="ui-cell-label">on app bg (light)</div>
+        <div class="ui-cell-content"><div class="ui-brand-dot"></div></div>
+      </div>
+      <div class="ui-cell" style="background: #1a1a2e;">
+        <div class="ui-cell-label">on app bg (dark)</div>
+        <div class="ui-cell-content"><div class="ui-brand-dot"></div></div>
+      </div>
+      <div class="ui-cell" style="background: #f0f4ff;">
+        <div class="ui-cell-label">on tinted surface</div>
+        <div class="ui-cell-content"><div class="ui-brand-dot"></div></div>
+      </div>
+      <div class="ui-cell" style="background: #4f46e5;">
+        <div class="ui-cell-label">on brand bg</div>
+        <div class="ui-cell-content"><div class="ui-brand-dot"></div></div>
+      </div>
+      <div class="ui-cell" style="background: #fee2e2;">
+        <div class="ui-cell-label">on error surface</div>
+        <div class="ui-cell-content"><div class="ui-brand-dot"></div></div>
+      </div>
+      <div class="ui-cell" style="background: #fef3c7;">
+        <div class="ui-cell-label">on warning surface</div>
+        <div class="ui-cell-content"><div class="ui-brand-dot"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>What the tour shows</h2>
+    <p>
+      The brand-on-brand cell is the cautionary tale: the dot disappears
+      because it's identical to its surround. The brand-on-error and
+      brand-on-warning cells show how a competing hue dominates the perception.
+      Even between the two "neutral" backgrounds — pure white vs. tinted
+      lavender — the same dot reads with subtly different temperature.
+    </p>
+    <p>
+      The fix isn't more color tokens — it's <em>contextual</em> tokens.
+      Modern design systems define brand-500 as the canonical value, then
+      define semantic roles (action / on-action / surface-action / etc.)
+      that may resolve to different hex values depending on what they sit
+      against. Material 3 calls these "tonal palettes" and pairs every role
+      with its readable counterpart. Tailwind v4 leans into OKLCh so the
+      palette stops are perceptually even regardless of hue.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>What to bring back to your team</h2>
+    <ol>
+      <li>Pick brand colors <em>last</em> — after the surface system is locked.</li>
+      <li>Test tokens on real screens, not isolated chips. (Build a "compose any token on any surface" sandbox.)</li>
+      <li>Define semantic roles, not just brand-100 through brand-900. The hex value of "action color" depends on "what surface is action sitting on?"</li>
+      <li>Audit dark mode with the same exercises. A token that passes in light mode often fails in dark — same Albers problem, different surround.</li>
+      <li>Use OKLCh and <code>color-mix(in oklab, ...)</code> for derivations. Both produce results closer to what the eye expects.</li>
+    </ol>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> your skills with paper translate directly to product work.</li>
+      <li><strong>Designers:</strong> stop testing tokens on isolated chips; test on real layouts.</li>
+      <li><strong>UI engineers:</strong> build a "compose any token on any surface" review tool — the only way to catch context drift before ship.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+
+</body>
+</html>

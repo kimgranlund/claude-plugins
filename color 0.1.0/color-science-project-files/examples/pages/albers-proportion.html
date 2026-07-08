@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proportion, area, and color weight · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .prop-stage {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: oklch(0.92 0.005 264);
+  }
+  .prop-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    aspect-ratio: 1 / 1;
+    background: oklch(0.62 0.22 30);
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Proportion, area, and color weight</h1>
+    <p>
+      Same hue, different area, different reading. A small accent of saturated
+      orange in a neutral field reads <em>more orange</em> than that same orange
+      dominating the field. Area amplifies some attributes and damps others —
+      a fact Albers exploited constantly in the Homage proportions.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="card">
+      <h3>Scale the colored block</h3>
+      <div class="controls">
+        <label for="size">Block area (% of canvas)</label>
+        <input type="range" id="size" min="5" max="90" step="1" value="20">
+        <output id="size-val">20%</output>
+      </div>
+      <p style="color: var(--text-muted); font-size: var(--text-sm); margin-top: var(--s-2);">
+        Block color stays fixed at <code>oklch(0.62 0.22 30)</code>. Only its area changes.
+      </p>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="prop-stage">
+      <div class="prop-block" id="block" style="width: 20%;"></div>
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>How area changes perception</h2>
+    <p>
+      At small areas (5-15%), a saturated color reads <em>as itself</em>, even
+      more intensely — a "pop" of accent. The eye treats it as a punctuation.
+      As the area grows past ~30%, the eye starts to <em>adapt</em> to it: the
+      same orange becomes less remarkable, less saturated-feeling, more
+      "background." At 80%+, the color dominates and what felt like an accent
+      becomes the dominant key of the composition.
+    </p>
+    <p>
+      Designers exploit this constantly. A primary button at 4% of viewport
+      area is the brightest thing on the screen; that same color filling a
+      hero banner is mood, not accent. Albers' Homage proportions are
+      calibrated to keep each square's role distinct: the smallest inner square
+      acts as accent precisely because it's small.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> composition is half color — area sets the role each hue plays.</li>
+      <li><strong>Designers:</strong> brand color in a hero is not the same brand color in a tiny CTA — calibrate by use.</li>
+      <li><strong>UI engineers:</strong> avoid "color X = always <code>#ABC</code>". The same hex should sometimes be a 200, sometimes a 600 in a tonal ramp depending on size.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var size = document.getElementById('size');
+  var sizeV = document.getElementById('size-val');
+  var block = document.getElementById('block');
+  function update() {
+    var v = parseInt(size.value, 10);
+    sizeV.textContent = v + '%';
+    // Convert area % to side % (sqrt of fraction).
+    var side = Math.sqrt(v / 100) * 100;
+    block.style.width = side + '%';
+  }
+  size.addEventListener('input', update);
+  update();
+})();
+</script>
+
+</body>
+</html>

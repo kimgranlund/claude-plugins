@@ -1,0 +1,24 @@
+{
+  "$schema": "safety-recall-windows/v1",
+  "rule": "Actions that produce external effects declare a recall window. Countdowns are visible and cancelable.",
+  "windowsSeconds": {
+    "send-message":        10,
+    "send-email":          30,
+    "publish-public-post": 60,
+    "invite-user":         60,
+    "revoke-access":       30,
+    "archive":             0,
+    "delete-reversible":   0,
+    "delete-irreversible": null
+  },
+  "ux": {
+    "countdownPlacement": "toast or banner — non-blocking",
+    "cancelAffordance":   "single-click cancel; no re-confirmation",
+    "announcement":       "aria-live=polite at start; no re-announce on every tick"
+  },
+  "refusal": [
+    "Recall without a visible countdown — users don't know the window exists.",
+    "Recall requiring navigation to a separate 'Undo' screen — undermines the affordance.",
+    "Recall window > 5 minutes for actions with external observers (stale window misleads initiator)."
+  ]
+}

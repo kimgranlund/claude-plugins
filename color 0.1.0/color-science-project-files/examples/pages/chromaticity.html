@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIE xy chromaticity · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>CIE 1931 xy chromaticity</h1>
+    <p>
+      The horseshoe is the spectral locus — every monochromatic wavelength
+      between 380 and 700 nm plotted in (x, y). Inside is every color a
+      human can see. The triangles are RGB gamuts: each is the convex hull
+      of three primaries. The wider the triangle, the more saturated the
+      colors that gamut can encode.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Gamuts to show</h3>
+    <div class="row">
+      <label><input type="checkbox" name="g" value="srgb" checked> sRGB</label>
+      <label><input type="checkbox" name="g" value="p3" checked> Display P3</label>
+      <label><input type="checkbox" name="g" value="rec2020" checked> Rec.2020</label>
+      <label><input type="checkbox" name="g" value="adobergb"> Adobe RGB</label>
+      <label><input type="checkbox" name="g" value="prophoto"> ProPhoto</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <div class="grid-2">
+      <div>
+        <chromaticity-diagram id="cd" show="srgb,p3,rec2020"></chromaticity-diagram>
+      </div>
+      <div class="card">
+        <h3>Pick</h3>
+        <p style="color: var(--text-muted); font-size: var(--text-sm);">Click anywhere on the diagram.</p>
+        <dl class="kv">
+          <dt>x</dt><dd id="r-x">—</dd>
+          <dt>y</dt><dd id="r-y">—</dd>
+          <dt>XYZ (Y=1)</dt><dd id="r-xyz">—</dd>
+          <dt>OKLCh</dt><dd id="r-oklch">—</dd>
+          <dt>sRGB hex</dt><dd id="r-hex">—</dd>
+          <dt>In sRGB?</dt><dd id="r-ingamut">—</dd>
+        </dl>
+        <div id="swatch" style="margin-top: var(--s-4); height: 90px; border: 1px solid var(--border); border-radius: var(--r-md);"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Notes</h2>
+    <p>
+      The diagram is intentionally <em>not</em> perceptually uniform — equal
+      visual differences are not equal distances. MacAdam's 1942 ellipses
+      sketched this distortion (a deep-blue ellipse is hundreds of times
+      smaller than a green ellipse at the same scale). Use OKLab or CAM16-UCS
+      when uniformity matters.
+    </p>
+    <p>
+      White points: <strong>D65</strong> is the canonical web/sRGB white,
+      <strong>D50</strong> is the ICC profile-connection-space white,
+      <strong>D55</strong> is photographic daylight, <strong>A</strong> is
+      tungsten incandescent.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var oklch = RC.oklch;
+  var srgb = RC.srgb;
+  var srgbTransfer = RC.srgbTransfer;
+  var mapping = RC.mapping;
+  var fmt = RC.utils.fmt, toHex = RC.utils.toHex, fmtTuple = RC.utils.fmtTuple, toCssOklch = RC.utils.toCssOklch;
+
+  var checks = document.querySelectorAll('input[name="g"]');
+  var cd = document.getElementById('cd');
+
+  function updateShow() {
+    var list = Array.prototype.filter.call(checks, function (c) { return c.checked; })
+      .map(function (c) { return c.value; });
+    cd.setAttribute('show', list.join(','));
+  }
+
+  Array.prototype.forEach.call(checks, function (c) {
+    c.addEventListener('input', updateShow);
+  });
+
+  cd.addEventListener('pick', function (e) {
+    var d = e.detail;
+    document.getElementById('r-x').textContent = fmt(d.x, 4);
+    document.getElementById('r-y').textContent = fmt(d.y, 4);
+    document.getElementById('r-xyz').textContent = fmtTuple(d.xyz, 4);
+    var oklchVal = oklch.fromXYZ(d.xyz);
+    document.getElementById('r-oklch').textContent = toCssOklch(oklchVal);
+    var mapped = mapping.mapToSRGB(oklchVal);
+    var enc = srgbTransfer.encode(mapped);
+    var hex = toHex(enc);
+    document.getElementById('r-hex').textContent = hex;
+    document.getElementById('swatch').style.background = hex;
+    var ig = mapping.inGamutSRGB(oklchVal);
+    document.getElementById('r-ingamut').innerHTML = ig
+      ? '<span class="pill pass">yes</span>'
+      : '<span class="pill warn">no (mapped)</span>';
+    cd.setAttribute('pick', d.x + ',' + d.y);
+  });
+})();
+</script>
+
+</body>
+</html>

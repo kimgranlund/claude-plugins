@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transfer curves · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Transfer curves</h1>
+    <p>
+      The non-linearities that map linear light (radiometrically additive) to
+      display-encoded signal (perceptually distributed). Linear input on X,
+      encoded output on Y. The dashed diagonal is the identity reference.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Curves to compare</h3>
+    <div class="row">
+      <label><input type="checkbox" name="curve" value="srgb" checked> sRGB / Display P3</label>
+      <label><input type="checkbox" name="curve" value="rec2020" checked> Rec.2020 / Rec.709</label>
+      <label><input type="checkbox" name="curve" value="adobergb"> Adobe RGB γ=2.2</label>
+      <label><input type="checkbox" name="curve" value="prophoto"> ProPhoto γ=1.8</label>
+      <label><input type="checkbox" name="curve" value="pq"> PQ (HDR)</label>
+      <label><input type="checkbox" name="curve" value="hlg"> HLG (HDR)</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <transfer-curve id="curve" curves="srgb,rec2020"></transfer-curve>
+  </section>
+
+  <section>
+    <h2>Why this matters</h2>
+    <p>
+      Every gamut-specific RGB space pairs a set of primaries with a transfer
+      function. Mixing them up — applying encoded values where linear is
+      expected (or vice versa) — produces wrong colors that are surprisingly
+      hard to debug.
+    </p>
+    <p>
+      sRGB and Display P3 share the IEC 61966-2-1 piecewise transfer (linear
+      segment near zero, then 1.055 · x<sup>1/2.4</sup> − 0.055). Rec.709 and
+      Rec.2020 share the BT.2020 OETF. Adobe RGB uses pure 2.2 gamma. ProPhoto
+      uses a piecewise 1.8 (slope 16 near zero, then x<sup>1/1.8</sup>). PQ and
+      HLG are the two BT.2100 HDR transfers.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function() {
+  var checks = document.querySelectorAll('input[name="curve"]');
+  var curveEl = document.getElementById('curve');
+
+  function update() {
+    var list = Array.prototype.filter.call(checks, function (c) { return c.checked; })
+      .map(function (c) { return c.value; });
+    curveEl.setAttribute('curves', list.join(','));
+  }
+
+  Array.prototype.forEach.call(checks, function (c) {
+    c.addEventListener('input', update);
+  });
+  update();
+  window.addEventListener('resize', function () {
+    if (curveEl.render) curveEl.render();
+  });
+})();
+</script>
+
+</body>
+</html>

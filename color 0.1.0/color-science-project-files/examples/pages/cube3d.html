@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D sRGB cube in OKLab · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>3D sRGB cube in perceptual space</h1>
+    <p>
+      The sRGB color cube is a perfect [0, 1]³ cube — black at one corner,
+      white at the opposite, primaries at the other six. But when you embed
+      it into a perceptual color space like OKLab or CIELAB, the cube
+      <strong>distorts</strong>. The corners stretch, the faces curl,
+      because the eye doesn't see linear RGB linearly. Drag the cube to
+      rotate.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Target space</h3>
+    <div class="row">
+      <label>Embed sRGB cube in
+        <select id="space">
+          <option value="srgb">Linear sRGB (no transform — true cube)</option>
+          <option value="oklab" selected>OKLab</option>
+          <option value="cielab">CIELAB</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8); display: flex; justify-content: center;">
+    <div style="max-width: 560px; width: 100%;">
+      <color-cube-3d id="cube" space="oklab"></color-cube-3d>
+    </div>
+  </section>
+
+  <section>
+    <h2>What the distortion shows</h2>
+    <p>
+      In the OKLab view, the black corner is at the bottom, white at the
+      top, and the six primaries spread around the equator at varying
+      "altitudes" (L values). Look at where pure blue (#0000ff) lands —
+      it's at L ≈ 0.45, well below the equator. Pure yellow (#ffff00) is
+      near L ≈ 0.97, almost at white-level. Yet both have RGB byte sum =
+      255, so they're "equally bright" by RGB byte measures.
+    </p>
+    <p>
+      This is the canonical reason linear-RGB averaging produces wrong
+      mid-tones — the cube embedded in perceptual space isn't straight,
+      so a linear interpolation between any two corners curves through
+      perceptually-wrong territory. Mixing in OKLab follows the straight
+      line in OKLab, which is the curved (correct) line in sRGB.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var space = document.getElementById('space');
+  var cube = document.getElementById('cube');
+  space.addEventListener('change', function () {
+    cube.setAttribute('space', space.value);
+  });
+  window.addEventListener('resize', function () { if (cube.render) cube.render(); });
+})();
+</script>
+
+</body>
+</html>

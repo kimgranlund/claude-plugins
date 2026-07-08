@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MacAdam ellipses · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>MacAdam ellipses</h1>
+    <p>
+      The single most important visualization for understanding why CIE xy is
+      not a perceptual color space. David MacAdam's 1942 experiment found
+      that the "just-noticeable difference" (JND) regions around 25 reference
+      colors are <strong>massively non-uniform</strong> — green ellipses
+      are roughly 10× larger than blue ellipses in (x, y) units, meaning
+      green chromaticities need much bigger numerical differences to be
+      perceptually distinguishable.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Ellipse scale</h3>
+    <div class="controls">
+      <label for="scale">Scale factor</label>
+      <input type="range" id="scale" min="1" max="50" step="1" value="10">
+      <output id="scale-val">10× (canonical)</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <macadam-ellipses id="me" scale="10"></macadam-ellipses>
+  </section>
+
+  <section>
+    <h2>The big idea</h2>
+    <p>
+      The ellipses are tiny at scale 1× — invisible to the eye on a printed
+      chart. The canonical visualization scales them up 10× so you can see
+      their shapes and sizes. At 10×, the disparity between blue ellipses
+      (cramped near the bottom of the locus) and green ellipses (large in
+      the upper middle) is unmistakable.
+    </p>
+    <p>
+      <strong>Why this matters:</strong> Euclidean distance in CIE xy doesn't
+      correspond to perceptual difference. A change of (Δx=0.01, Δy=0) feels
+      like a tiny shift in blue but a giant shift in green. CIELAB (1976) and
+      OKLab (2020) exist specifically to fix this — they're designed so that
+      the JND ellipses become circles of roughly uniform size.
+    </p>
+    <p>
+      Open the <a href="./deltae.html">ΔE comparator</a> for an alternate
+      angle on the same problem: each ΔE metric is essentially a rule for
+      "how far is far" in some color space; the metrics differ in how
+      they correct for non-uniformity.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var scale = document.getElementById('scale');
+  var scaleV = document.getElementById('scale-val');
+  var me = document.getElementById('me');
+  function update() {
+    var v = parseInt(scale.value, 10);
+    scaleV.textContent = v + '×' + (v === 10 ? ' (canonical)' : v === 1 ? ' (actual size)' : '');
+    me.setAttribute('scale', v);
+  }
+  scale.addEventListener('input', update);
+  window.addEventListener('resize', function () { if (me.render) me.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>

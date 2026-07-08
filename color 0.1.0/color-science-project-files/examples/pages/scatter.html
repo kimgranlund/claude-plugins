@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image chromaticity scatter · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Image chromaticity scatter</h1>
+    <p>
+      The "gamut analysis" technique photographers use to read an image.
+      Drop an image and every pixel becomes a dot on the CIE 1931 xy
+      chromaticity diagram, rendered in its actual color. The resulting
+      cloud reveals the image's <strong>color signature</strong>: tightly
+      clustered = narrow palette; spread toward the locus = saturated
+      colors; centered = neutral/muted; one-sided = warm or cool bias.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Source</h3>
+    <div class="row">
+      <input type="file" id="file" accept="image/*">
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <image-scatter id="sc"></image-scatter>
+  </section>
+
+  <section>
+    <h2>What the cloud shape tells you</h2>
+    <ul>
+      <li><strong>Tight cluster around D65 (0.31, 0.33)</strong> — mostly
+        neutral / desaturated image; not using much of the gamut.</li>
+      <li><strong>Cloud extending toward the spectral locus</strong> — the
+        image contains saturated colors close to the edge of human vision
+        (and beyond sRGB).</li>
+      <li><strong>Linear streak through a hue direction</strong> — strong
+        single-hue dominance (sunsets, monochrome scenes, etc.).</li>
+      <li><strong>L-shape or fork</strong> — two dominant hue families with
+        a connecting neutral.</li>
+    </ul>
+    <p>
+      Combined with the <a href="./imagestats.html">hue + lightness
+      histogram</a>, scatter is one of the most informative ways to
+      "read" an image's color from a math angle.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var file = document.getElementById('file');
+  var sc = document.getElementById('sc');
+  function loadFile(f) {
+    var img = new Image();
+    var url = URL.createObjectURL(f);
+    img.src = url;
+    img.decode().then(function () { sc.setImage(img); URL.revokeObjectURL(url); });
+  }
+  file.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(document.querySelector('.card'), loadFile);
+})();
+</script>
+
+</body>
+</html>

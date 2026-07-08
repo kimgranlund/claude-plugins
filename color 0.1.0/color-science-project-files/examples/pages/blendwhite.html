@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blend through white · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Blend through white</h1>
+    <p>
+      The canonical OKLab demo from Ottosson's 2020 article. Pick a vivid
+      blue and watch what happens when you blend it toward white in five
+      different color spaces. Encoded sRGB and HSL famously shift the hue
+      toward purple — the "Photoshop blue → purple" bug. OKLab keeps the
+      hue stable; CIELAB gets close but still drifts on saturated blues.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Source color</h3>
+    <div class="row">
+      <label>Color <input type="color" id="color" value="#0066ff"></label>
+      <button data-color="#0066ff">vivid blue</button>
+      <button data-color="#00cc66">vivid green</button>
+      <button data-color="#ff3344">vivid red</button>
+      <button data-color="#cc00ff">violet</button>
+      <button data-color="#ff9900">orange</button>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <blend-through-white id="btw" color="#0066ff"></blend-through-white>
+  </section>
+
+  <section>
+    <h2>What you're seeing</h2>
+    <p>
+      <strong>Encoded sRGB:</strong> linear interpolation of byte values.
+      The mid-tones are way too dark because encoded values aren't
+      physically additive — averaging encoded 0.5 + 0.5 gives 0.5, but
+      that's only ~0.21 in linear light. The vivid blue → white gradient
+      has muddy purple in the middle.
+    </p>
+    <p>
+      <strong>Linear sRGB:</strong> decoded values are interpolated. Mid-
+      tones are correct in luminance, but the path through RGB space
+      doesn't follow the perceptual hue arc — blue → white drifts through
+      cyan-ish or purple-ish territory.
+    </p>
+    <p>
+      <strong>OKLab:</strong> equal t-steps look like equal perceived
+      steps. The hue stays put. This is why CSS Color 4's <code>color-mix(in
+      oklab, ...)</code> picked OKLab as the default mixing space.
+    </p>
+    <p>
+      <strong>CIELAB:</strong> the predecessor; mostly fine but blues show
+      a slight hue shift toward purple, which is the original motivation
+      for OKLab.
+    </p>
+    <p>
+      <strong>HSL:</strong> mixing in cylindrical-RGB collapses chroma to
+      0 at the lightness midpoint (hue is undefined for the white anchor),
+      producing the well-known "gray middle" gradient artifact.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var c = document.getElementById('color');
+  var btw = document.getElementById('btw');
+  function update() { btw.setAttribute('color', c.value); }
+  c.addEventListener('input', update);
+  document.querySelectorAll('[data-color]').forEach(function (b) {
+    b.addEventListener('click', function () { c.value = b.dataset.color; update(); });
+  });
+  window.addEventListener('resize', function () { if (btw.render) btw.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>

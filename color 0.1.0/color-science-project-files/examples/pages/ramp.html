@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token ramp generator · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Token ramp generator</h1>
+    <p>
+      Pick a hue and a lightness curve; get an 11-stop OKLCh ramp ready to
+      paste into a design-token system. Chroma at each stop is bounded by
+      <code>peakC(L, h)</code> for the target gamut — every step is guaranteed
+      reachable.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Inputs</h3>
+    <div class="controls">
+      <label for="hue">Hue</label>
+      <input type="range" id="hue" min="0" max="360" step="0.5" value="264">
+      <output id="hue-val">264.0°</output>
+    </div>
+    <div class="row" style="margin-top: var(--s-3);">
+      <label>Curve
+        <select id="curve">
+          <option value="tailwind" selected>Tailwind v4 (irregular)</option>
+          <option value="linear">Linear</option>
+          <option value="smoothstep">Smoothstep</option>
+          <option value="gamma-1.5">Gamma 1.5 (toward light)</option>
+          <option value="gamma-0.7">Gamma 0.7 (toward dark)</option>
+        </select>
+      </label>
+      <label>Target gamut
+        <select id="target">
+          <option value="srgb" selected>sRGB</option>
+          <option value="p3">Display P3</option>
+          <option value="rec2020">Rec.2020</option>
+        </select>
+      </label>
+      <label>Chroma
+        <select id="chroma">
+          <option value="auto" selected>auto (peakC at each L)</option>
+          <option value="0.06">low 0.06</option>
+          <option value="0.12">medium 0.12</option>
+          <option value="0.18">high 0.18</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <token-ramp id="ramp" hue="264" curve="tailwind" chroma="auto" target="srgb"></token-ramp>
+  </section>
+
+  <section>
+    <h2>Why <code>peakC</code> matters</h2>
+    <p>
+      The shape of the sRGB gamut at fixed hue isn't a rectangle in (L, C)
+      space — it's a teardrop with peak chroma near the cusp. A naive
+      "give me 11 colors at hue X and chroma 0.18" request will produce stops
+      that float outside the gamut at the bright and dark ends.
+    </p>
+    <p>
+      Bounding by <code>peakC(L, hue, gamut)</code> — Ottosson's binary search
+      against the linear-RGB cube — guarantees each stop is reachable, while
+      maximizing chroma at each lightness for the most vivid possible ramp.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var hueInput = document.getElementById('hue');
+  var hueVal = document.getElementById('hue-val');
+  var curveSel = document.getElementById('curve');
+  var targetSel = document.getElementById('target');
+  var chromaSel = document.getElementById('chroma');
+  var ramp = document.getElementById('ramp');
+
+  function update() {
+    var h = parseFloat(hueInput.value);
+    hueVal.textContent = h.toFixed(1) + '°';
+    ramp.setAttribute('hue', h);
+    ramp.setAttribute('curve', curveSel.value);
+    ramp.setAttribute('target', targetSel.value);
+    ramp.setAttribute('chroma', chromaSel.value);
+  }
+
+  [hueInput, curveSel, targetSel, chromaSel].forEach(function (el) {
+    el.addEventListener('input', update);
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>

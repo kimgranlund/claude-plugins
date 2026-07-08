@@ -1,0 +1,31 @@
+{
+  "skill": "focus-verify",
+  "positives": [
+    "check the focus order of this view",
+    "verify the tab sequence on the settings page",
+    "is keyboard navigation trapped inside this dialog",
+    "our modal loses focus when it closes",
+    "the focus ring is invisible on the dark theme",
+    "does this focus ring clear 3:1 against every surface",
+    "these icon buttons are too small to tap",
+    "check that the hit targets meet the 24px minimum",
+    "where should focus go after a route change",
+    "tab order jumps around the page unexpectedly",
+    "derive focus-ring tokens for our buttons and inputs",
+    "what keys should a menu widget respond to"
+  ],
+  "negatives": [
+    "verify this palette passes WCAG contrast",
+    "check the color-blind safety of these ramps",
+    "check RTL support and icon mirroring across locales",
+    "verify text-expansion headroom for German translations",
+    "should this loading state use a skeleton or a spinner",
+    "our CLS budget is blown by late-loading images",
+    "add type-to-confirm for this irreversible delete",
+    "verify the undo window for destructive bulk actions",
+    "convert this sRGB color to OKLCH",
+    "build a tab-list component with roving tabindex",
+    "audit the whole app's UX before launch",
+    "author a custom element for a dropdown menu"
+  ]
+}

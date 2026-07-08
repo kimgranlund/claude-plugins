@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Color 5/6 playground · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>CSS Color 5/6 playground</h1>
+    <p>
+      The four modern CSS color features designers actually use in 2026:
+      <code>color-mix()</code>, <strong>relative color syntax</strong>,
+      <code>light-dark()</code>, and <code>contrast-color()</code>. Each demo
+      renders the result natively (your browser's CSS engine) alongside the
+      generated CSS — copy and paste.
+    </p>
+  </section>
+
+  <section class="card">
+    <h3>1. <code>color-mix()</code> in any space</h3>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Same two endpoints, mixed in different color spaces. Pick the space and
+      ratio; see the rendered mid-tones and copy the CSS.
+    </p>
+    <div class="row">
+      <label>A <input type="color" id="mxa" value="#0066ff"></label>
+      <label>B <input type="color" id="mxb" value="#ffcc00"></label>
+      <label>Mix %
+        <input type="range" id="mxr" min="0" max="100" step="1" value="50" style="width: 120px;">
+        <output id="mxr-val">50%</output>
+      </label>
+    </div>
+    <div class="mix-grid" id="mix-grid"></div>
+  </section>
+
+  <section class="card" style="margin-top: var(--s-4);">
+    <h3>2. Relative color syntax</h3>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Derive variants from a base color via <code>oklch(from base ...)</code>.
+      Common patterns: darken by lightness, desaturate, shift hue.
+    </p>
+    <div class="row">
+      <label>Base <input type="color" id="rcs-base" value="#3b82f6"></label>
+    </div>
+    <div id="rcs-grid" class="rcs-grid"></div>
+  </section>
+
+  <section class="card" style="margin-top: var(--s-4);">
+    <h3>3. <code>light-dark()</code></h3>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Switch values based on the user's color-scheme preference. The
+      preview below respects your system theme.
+    </p>
+    <div class="ld-preview" style="background: light-dark(#fafbfd, #1a1a2e); color: light-dark(#1a1a2e, #fafbfd); padding: var(--s-6); border-radius: var(--r-md); border: 1px solid var(--border); margin-top: var(--s-3);">
+      <div style="font-size: var(--text-2xl); margin-bottom: var(--s-2);">Aa</div>
+      <code>background: light-dark(#fafbfd, #1a1a2e);</code><br>
+      <code>color: light-dark(#1a1a2e, #fafbfd);</code>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top: var(--s-4);">
+    <h3>4. <code>contrast-color()</code></h3>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Let the engine pick black or white text based on the background for
+      WCAG-passing contrast. Pick a background and let the browser decide.
+    </p>
+    <div class="row" style="margin-top: var(--s-3);">
+      <label>Background <input type="color" id="cc-bg" value="#5f6bcc"></label>
+    </div>
+    <div id="cc-preview" style="padding: var(--s-6); border-radius: var(--r-md); margin-top: var(--s-3); border: 1px solid var(--border); font-size: var(--text-xl);">
+      Text using contrast-color() — should auto-pick light or dark.
+    </div>
+    <p style="color: var(--text-muted); font-size: var(--text-xs); margin-top: var(--s-2);">
+      Note: <code>contrast-color()</code> is CSS Color L6. Browser support
+      lags <code>color-mix</code> and relative syntax — if the text below
+      doesn't change, your browser hasn't shipped it yet.
+    </p>
+  </section>
+
+  <section>
+    <h2>Why each feature changes how design tokens work</h2>
+    <ul>
+      <li><strong><code>color-mix()</code></strong> lets a token system stay
+        small. Instead of authoring 11 stops × 12 hues, author 12 hues plus a
+        "tint with white in oklab at N%" mix rule.</li>
+      <li><strong>Relative color syntax</strong> turns "derived" tokens
+        (hover, disabled, focus) into pure CSS expressions of a base — no
+        Sass / Style Dictionary preprocessing.</li>
+      <li><strong><code>light-dark()</code></strong> halves the number of
+        token declarations needed for dark mode.</li>
+      <li><strong><code>contrast-color()</code></strong> means the token
+        author never has to ship a paired text color — the browser computes
+        it from the background at use-site.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var mxa = document.getElementById('mxa'), mxb = document.getElementById('mxb');
+  var mxr = document.getElementById('mxr'), mxrV = document.getElementById('mxr-val');
+  var mixGrid = document.getElementById('mix-grid');
+
+  var SPACES = ['srgb', 'oklab', 'oklch', 'hsl', 'lch', 'lab'];
+
+  function renderMix() {
+    var pct = parseInt(mxr.value, 10);
+    mxrV.textContent = pct + '%';
+    mixGrid.innerHTML = SPACES.map(function (sp) {
+      var css = 'color-mix(in ' + sp + ', ' + mxa.value + ' ' + (100 - pct) + '%, ' + mxb.value + ' ' + pct + '%)';
+      return '<div class="mix-cell">' +
+        '<div class="mix-swatch" style="background:' + css + '"></div>' +
+        '<div class="mix-label"><strong>in ' + sp + '</strong></div>' +
+        '<code class="mix-css">' + css + '</code>' +
+      '</div>';
+    }).join('');
+  }
+  [mxa, mxb, mxr].forEach(function (el) { el.addEventListener('input', renderMix); });
+
+  // Relative color syntax demos.
+  var rcsBase = document.getElementById('rcs-base');
+  var rcsGrid = document.getElementById('rcs-grid');
+
+  var RCS = [
+    { label: 'darken 20%',      css: 'oklch(from BASE calc(l * 0.8) c h)' },
+    { label: 'lighten 15%',     css: 'oklch(from BASE calc(l + 0.15) c h)' },
+    { label: 'desaturate 50%',  css: 'oklch(from BASE l calc(c * 0.5) h)' },
+    { label: 'fully desaturate',css: 'oklch(from BASE l 0 h)' },
+    { label: 'complement',      css: 'oklch(from BASE l c calc(h + 180))' },
+    { label: 'analogous +30°',  css: 'oklch(from BASE l c calc(h + 30))' },
+    { label: 'half alpha',      css: 'oklch(from BASE l c h / 0.5)' },
+    { label: 'brand on white',  css: 'color-mix(in oklab, BASE 30%, white)' },
+  ];
+
+  function renderRcs() {
+    var base = rcsBase.value;
+    rcsGrid.innerHTML = RCS.map(function (d) {
+      var css = d.css.replace(/BASE/g, base);
+      return '<div class="rcs-cell">' +
+        '<div class="rcs-swatch" style="background:' + css + '"></div>' +
+        '<div class="rcs-label"><strong>' + d.label + '</strong></div>' +
+        '<code class="rcs-css">' + css + '</code>' +
+      '</div>';
+    }).join('');
+  }
+  rcsBase.addEventListener('input', renderRcs);
+
+  // contrast-color()
+  var ccBg = document.getElementById('cc-bg');
+  var ccPreview = document.getElementById('cc-preview');
+  function renderCc() {
+    ccPreview.style.background = ccBg.value;
+    ccPreview.style.color = 'contrast-color(' + ccBg.value + ')';
+  }
+  ccBg.addEventListener('input', renderCc);
+
+  renderMix();
+  renderRcs();
+  renderCc();
+})();
+</script>
+
+</body>
+</html>

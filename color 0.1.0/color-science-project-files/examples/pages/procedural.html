@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procedural palettes · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Procedural palettes</h1>
+    <p>
+      Two classic procedural color formulas: <strong>Cubehelix</strong>
+      (D.&nbsp;A.&nbsp;Green 2011 — perceptually monotonic in luminance,
+      designed for science visualization) and <strong>iq cosine</strong>
+      (Inigo Quilez — <code>a + b · cos(2π · (c · t + d))</code> per
+      channel, the workhorse of generative art).
+    </p>
+  </section>
+
+  <div class="card">
+    <div class="row">
+      <label>Algorithm
+        <select id="algo">
+          <option value="cubehelix" selected>Cubehelix (Green 2011)</option>
+          <option value="iq">iq cosine (Quilez)</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="card" id="cube-controls" style="margin-top: var(--s-4);">
+    <h3>Cubehelix params</h3>
+    <div class="controls">
+      <label for="ch-start">start (deg)</label>
+      <input type="range" id="ch-start" min="0" max="360" step="1" value="180">
+      <output id="ch-start-val">180</output>
+
+      <label for="ch-rot">rotations</label>
+      <input type="range" id="ch-rot" min="-3" max="3" step="0.1" value="-1.5">
+      <output id="ch-rot-val">-1.5</output>
+
+      <label for="ch-hue">hue intensity</label>
+      <input type="range" id="ch-hue" min="0" max="2" step="0.05" value="1.0">
+      <output id="ch-hue-val">1.0</output>
+
+      <label for="ch-gamma">gamma</label>
+      <input type="range" id="ch-gamma" min="0.4" max="2.0" step="0.05" value="1.0">
+      <output id="ch-gamma-val">1.0</output>
+    </div>
+  </div>
+
+  <div class="card" id="iq-controls" style="margin-top: var(--s-4); display:none;">
+    <h3>iq cosine params (per RGB channel)</h3>
+    <div class="iq-grid">
+      <div>
+        <h4>a — offset</h4>
+        <label>R <input type="range" id="iq-ar" min="0" max="1" step="0.01" value="0.5"></label>
+        <label>G <input type="range" id="iq-ag" min="0" max="1" step="0.01" value="0.5"></label>
+        <label>B <input type="range" id="iq-ab" min="0" max="1" step="0.01" value="0.5"></label>
+      </div>
+      <div>
+        <h4>b — amplitude</h4>
+        <label>R <input type="range" id="iq-br" min="0" max="1" step="0.01" value="0.5"></label>
+        <label>G <input type="range" id="iq-bg" min="0" max="1" step="0.01" value="0.5"></label>
+        <label>B <input type="range" id="iq-bb" min="0" max="1" step="0.01" value="0.5"></label>
+      </div>
+      <div>
+        <h4>c — frequency</h4>
+        <label>R <input type="range" id="iq-cr" min="0" max="3" step="0.05" value="1"></label>
+        <label>G <input type="range" id="iq-cg" min="0" max="3" step="0.05" value="1"></label>
+        <label>B <input type="range" id="iq-cb" min="0" max="3" step="0.05" value="1"></label>
+      </div>
+      <div>
+        <h4>d — phase</h4>
+        <label>R <input type="range" id="iq-dr" min="0" max="1" step="0.01" value="0.00"></label>
+        <label>G <input type="range" id="iq-dg" min="0" max="1" step="0.01" value="0.33"></label>
+        <label>B <input type="range" id="iq-db" min="0" max="1" step="0.01" value="0.67"></label>
+      </div>
+    </div>
+    <div class="row" style="margin-top: var(--s-3);">
+      <button data-preset="rainbow">rainbow</button>
+      <button data-preset="sunset">sunset</button>
+      <button data-preset="oceanic">oceanic</button>
+      <button data-preset="ember">ember</button>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <procedural-palette id="pp" algorithm="cubehelix"></procedural-palette>
+  </section>
+
+  <section>
+    <h2>Why luminance plot?</h2>
+    <p>
+      A good colormap for data has monotonically increasing perceived
+      luminance — so that grayscale fallback preserves ordering and
+      colorblind viewers can still read it. Cubehelix is designed
+      specifically for this; iq cosine palettes typically aren't.
+      Watch the Y curve while you slide.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var algoSel = document.getElementById('algo');
+  var cubeC = document.getElementById('cube-controls');
+  var iqC = document.getElementById('iq-controls');
+  var pp = document.getElementById('pp');
+
+  var cubeIds = ['start', 'rot', 'hue', 'gamma'];
+  var cubeInputs = {};
+  var cubeVals = {};
+  cubeIds.forEach(function (id) {
+    cubeInputs[id] = document.getElementById('ch-' + id);
+    cubeVals[id]   = document.getElementById('ch-' + id + '-val');
+  });
+
+  var iqIds = ['ar','ag','ab','br','bg','bb','cr','cg','cb','dr','dg','db'];
+  var iqInputs = {};
+  iqIds.forEach(function (id) { iqInputs[id] = document.getElementById('iq-' + id); });
+
+  function readCube() {
+    return {
+      start: parseFloat(cubeInputs.start.value),
+      rotations: parseFloat(cubeInputs.rot.value),
+      hue: parseFloat(cubeInputs.hue.value),
+      gamma: parseFloat(cubeInputs.gamma.value),
+    };
+  }
+  function readIq() {
+    return {
+      a: [parseFloat(iqInputs.ar.value), parseFloat(iqInputs.ag.value), parseFloat(iqInputs.ab.value)],
+      b: [parseFloat(iqInputs.br.value), parseFloat(iqInputs.bg.value), parseFloat(iqInputs.bb.value)],
+      c: [parseFloat(iqInputs.cr.value), parseFloat(iqInputs.cg.value), parseFloat(iqInputs.cb.value)],
+      d: [parseFloat(iqInputs.dr.value), parseFloat(iqInputs.dg.value), parseFloat(iqInputs.db.value)],
+    };
+  }
+
+  function update() {
+    var algo = algoSel.value;
+    pp.setAttribute('algorithm', algo);
+    if (algo === 'cubehelix') {
+      cubeC.style.display = '';
+      iqC.style.display = 'none';
+      cubeIds.forEach(function (id) { cubeVals[id].textContent = cubeInputs[id].value; });
+      pp.params = readCube();
+    } else {
+      cubeC.style.display = 'none';
+      iqC.style.display = '';
+      pp.iqParams = readIq();
+    }
+  }
+  algoSel.addEventListener('change', update);
+  cubeIds.forEach(function (id) { cubeInputs[id].addEventListener('input', update); });
+  iqIds.forEach(function (id) { iqInputs[id].addEventListener('input', update); });
+
+  var PRESETS = {
+    rainbow: { a:[0.5,0.5,0.5], b:[0.5,0.5,0.5], c:[1,1,1], d:[0,0.33,0.67] },
+    sunset:  { a:[0.5,0.5,0.5], b:[0.5,0.5,0.5], c:[1,1,0.5], d:[0.8,0.9,0.3] },
+    oceanic: { a:[0.0,0.5,0.5], b:[0.5,0.5,0.5], c:[1,1,2.0], d:[0,0.10,0.20] },
+    ember:   { a:[0.8,0.5,0.4], b:[0.2,0.4,0.2], c:[2.0,1.0,1.0], d:[0,0.25,0.25] },
+  };
+  document.querySelectorAll('[data-preset]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var p = PRESETS[b.dataset.preset];
+      iqInputs.ar.value = p.a[0]; iqInputs.ag.value = p.a[1]; iqInputs.ab.value = p.a[2];
+      iqInputs.br.value = p.b[0]; iqInputs.bg.value = p.b[1]; iqInputs.bb.value = p.b[2];
+      iqInputs.cr.value = p.c[0]; iqInputs.cg.value = p.c[1]; iqInputs.cb.value = p.c[2];
+      iqInputs.dr.value = p.d[0]; iqInputs.dg.value = p.d[1]; iqInputs.db.value = p.d[2];
+      update();
+    });
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>

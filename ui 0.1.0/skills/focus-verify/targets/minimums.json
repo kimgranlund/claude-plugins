@@ -1,0 +1,49 @@
+{
+  "$schema": "hit-targets/v1",
+  "description": "Minimum interactive target sizes per WCAG 2.2 SC 2.5.8 and common platform conventions.",
+  "wcag22": {
+    "sc": "2.5.8 Target Size (Minimum)",
+    "minCssPx": 24,
+    "appliesTo": "All pointer targets (touch + mouse).",
+    "exceptions": [
+      {
+        "id": "inline-text",
+        "description": "Targets inline with body text (text links, inline buttons in a paragraph).",
+        "rule": "Exempt — inline text links do not need 24px hit area."
+      },
+      {
+        "id": "spacing",
+        "description": "Targets with ≥24px center-to-center spacing between adjacent interactive elements.",
+        "rule": "Smaller targets permitted if every adjacent interactive center is ≥24px away."
+      },
+      {
+        "id": "user-agent-control",
+        "description": "Native form controls styled by the UA.",
+        "rule": "UA defaults exempt; custom-styled controls fall back under the rule."
+      },
+      {
+        "id": "essential",
+        "description": "Targets where larger size would essentially change the presentation (e.g., interactive maps).",
+        "rule": "Document the essential rationale explicitly."
+      }
+    ]
+  },
+  "platformFloors": {
+    "apple-hig": { "minPt": 44, "minCssPx": 44, "note": "Apple Human Interface Guidelines. Stricter than WCAG 2.2. Prefer this on iOS/macOS." },
+    "material":  { "minDp": 48, "minCssPx": 48, "note": "Material Design. Stricter. Prefer this on Android." },
+    "web-default": { "minCssPx": 24, "note": "WCAG 2.2 floor. Raise to 44 for touch-primary UIs." }
+  },
+  "expansionStrategies": {
+    "padding": {
+      "rule": "Add padding inside the interactive element to reach 24×24. Works for buttons where the background is the hit area.",
+      "example": "button { padding: 4px; min-width: 24px; min-height: 24px; }"
+    },
+    "pseudo-element": {
+      "rule": "Use ::before with absolute positioning and negative inset to expand hit area without affecting visual layout.",
+      "example": "a::before { content: ''; position: absolute; inset: -8px; }"
+    },
+    "rejected": {
+      "margin": "Margin does not count as hit area — it is space BETWEEN elements, not part of the target."
+    }
+  }
+}

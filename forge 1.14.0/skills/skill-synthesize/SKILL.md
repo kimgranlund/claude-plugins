@@ -1,0 +1,166 @@
+---
+name: skill-synthesize
+description: >-
+  Decide whether several already-separate, thin, overlapping, or porous knowledge skills should
+  consolidate into one comprehensive, context-efficient pack. Use when: "these skills all overlap,
+  combine them", "we're loading too many packs for one kind of question, merge them", "we have three
+  thin packs that should really be a single skill", "this corpus is porous, gaps across the
+  siblings". The formal inverse of skill-decompose: runs the inverse test battery
+  (redundancy/overlap, shared vocabulary, thin-corpus detection, a quantified efficiency delta),
+  produces a consolidation manifest and a referrer repair map; or a keep-separate verdict when the
+  candidates don't earn a merge. NOT for authoring a single skill or growing one reference file
+  (skill-forge); NOT for executing an already-decided merge (skill-refactor executes; this skill decides and designs);
+  NOT splitting one corpus into a family (skill-decompose); NOT the corpus-wide sweep surfacing
+  merge candidates (harness-audit).
+disable-model-invocation: false
+user-invocable: true
+argument-hint: "[candidate-skill-paths]"
+---
+
+# skill-synthesize — consolidate, but earn it
+
+The decision layer of a knowledge-skill merge: this skill tests whether consolidation is earned and,
+if so, designs the merged pack — it never executes the move itself. Execution is downstream:
+authoring the merged pack and any flagged research wave is `/pack-forge`'s (`/skill-forge` covers
+the SKILL.md surface), and the
+merge mechanics — fence transfers, referrer rewire — are a manual refactor until an executor sibling
+ships; note that a merge, unlike a rename, is **not** git-reversible. This skill is the formal
+inverse of `skill-decompose` and shares its evidence lineage, run backwards, plus one test specific
+to merging: porosity (are the candidates individually too thin to sustain a pack, but a real pack
+together?).
+
+## The inverse tests, in order
+
+1. **Redundancy / overlap** — do the candidate skills answer overlapping ask classes? Check whether
+   their `evals/evals.json` suites (or legacy routing corpora) share trigger prompts, or whether a
+   user/model would have to guess which sibling to consult for the same question. High overlap is
+   evidence *for* merging — read `../skill-decompose/references/foundations.md`'s
+   vocabulary-separability test in reverse: a shared token field that skill-decompose treats as a
+   kill reason for splitting is, read backwards, the positive signal for synthesis (if the router
+   already can't reliably tell two skills apart, they were never separable — `/eval-run`'s *stolen*
+   and *leaked* shapes appearing between two siblings are this test, already measured).
+2. **Shared-audience vocabulary** — do the candidates' descriptions already compete for the same
+   trigger words? The same signature that makes two candidate *children* fail a split (test 3 of
+   skill-decompose) is the signature that makes two *existing* skills a merge candidate.
+3. **Thin / porous corpus** — is any candidate below the healthy floor (a 2–3 file axis, a gap its
+   own maker has already flagged, a corpus a `skill-decompose` run would itself reject as too small
+   to earn its own pack)? A candidate that is thin *alone* may be exactly right *combined* with a
+   sibling covering an adjacent question.
+4. **Context-efficiency delta** — quantify, don't assert: sum today's cost (N descriptions × their
+   char counts, N eval suites, N CHANGELOGs, N SKILL.md bodies) against the ONE projected
+   consolidated surface. State the number. "More efficient" with no arithmetic behind it fails this
+   test by default.
+
+**The asymmetry that makes this more than skill-decompose in reverse:** passing 1–4 is necessary but
+not sufficient. Before finalizing, run the *proposed merged pack* through skill-decompose's own four
+tests (procedure step 4) — a synthesis that immediately re-qualifies for a future split has not
+solved anything; it has relabeled a monolith as an efficiency win. A good synthesis produces a pack
+that a fresh `skill-decompose` run would not flag.
+
+`../skill-decompose/references/foundations.md` derives the shared mechanics (why the router routes
+on descriptions, why ask co-occurrence is the empirical proof); `references/best-practices.md`
+(this pack) walks the reverse-reading worked example in full.
+
+## Procedure
+
+1. **Survey every candidate.** File/axis counts, current descriptions with char counts, eval suites
+   if present, and every external referrer to *each* candidate handle — the merge's blast radius is
+   the union of all candidates' referrer sets, not just the survivor's.
+2. **Run the four inverse tests.** Where eval suites exist, build the same query → axes-engaged
+   table `skill-decompose` uses, but read it for *overlap*: shared axis hits across two candidate
+   suites are merge evidence, not a routing bug to fix in place.
+3. **If tests clear, design the ONE consolidated pack** per the axis-decomposition discipline
+   (3–7 axes, ask-shaped, never literature-shaped) — fold the candidates' existing axes together,
+   de-duplicate files that cover the same claim (keep the better-cited or more current version;
+   note the discarded one in the manifest as `superseded_by`, never silently drop it), and flag any
+   real gap for a `/pack-forge` research wave to fill (the fill is pack-forge's job, not this
+   skill's). Draft the ONE description (≤1024 chars, the open-standard cap) and decide its
+   invocation posture — both dials, explicitly.
+4. **Self-check against skill-decompose before finalizing.** Run the proposed merged pack's own file
+   list and axis table through `../skill-decompose/scripts/manifest_check.py`'s sizing logic (or a
+   direct read of its four tests) — if the merged pack would itself qualify as a `split` candidate,
+   the axes are still too heterogeneous; iterate the design rather than ship a monolith wearing an
+   efficiency label.
+5. **Validate mechanically:**
+   `python3 scripts/consolidation_check.py <manifest.json>` — every source file from every candidate
+   accounted for (moved / cited-as-superseded-duplicate / flagged-as-gap), no orphans, the new
+   description ≤1024 chars, and the context-efficiency delta computed and printed. Fix and re-run
+   until clean.
+6. **State the verdict** — `consolidate` (name the one new pack) or `keep-separate` — with the full
+   ledger. Hand off the manifest + repair map to `/pack-forge` and the executing refactor
+   (`/skill-refactor` executes it from the validated manifest; it attics rather than deletes because a merge is not git-reversible).
+   For high-stakes merges, the `skill-auditor` agent scores the manifest against
+   `references/rubric.md` before the host ratifies (generator ≠ critic).
+
+## Worked precedent (read in reverse)
+
+The source corpus's own `color-theory` no-split verdict (archival:
+`~/.claude/docs/color-theory-partition-assessment.md`, external to this plugin) is the clearest
+available worked example, read backwards. Its four axes — Harmony, Wheel/history, Programmes,
+Meaning — were never actually shipped as separate skills, but the exact reasoning that kept them one
+pack (entangled shared vocabulary, a cross-axis majority of real asks, a 3-file Meaning axis too
+thin to stand alone) is precisely the *positive* signal this skill looks for. Had someone mistakenly
+shipped those four as separate thin packs, `skill-synthesize`'s inverse tests would catch the
+identical signal from the other direction and recommend re-merging them into one `color-theory`
+pack — which is exactly the pack that already exists today. `references/best-practices.md` walks
+this reverse reading in full, plus a second, hypothetical worked case.
+
+## Manifest schema
+
+```jsonc
+{
+  "source_candidates": [
+    { "name": "old-skill-a", "path": "skills/old-skill-a", "files": ["ref1.md", "ref2.md"],
+      "description_chars": 640 },
+    { "name": "old-skill-b", "path": "skills/old-skill-b", "files": ["ref3.md"],
+      "description_chars": 510 }
+  ],
+  "verdict": "consolidate",                              // "consolidate" | "keep-separate"
+  "target_pack": {
+    "name": "new-consolidated-pack",
+    "axes": ["axis-one", "axis-two", "axis-three"],
+    "file_map": [
+      { "file": "ref1.md", "from": "old-skill-a", "axis": "axis-one" },
+      { "file": "ref2.md", "from": "old-skill-a", "superseded_by": "ref3.md", "reason": "ref3 covers the same claim, more current" }
+    ],
+    "flagged_gaps": ["axis-two has no file backing 'X' — route to a pack-authoring research wave"],
+    "description": "...", "invocation_posture": "default"
+  },
+  "context_efficiency_delta": { "before_chars_total": 1150, "after_chars_total": 700, "packs_before": 2, "packs_after": 1 },
+  "referrer_repair_map": [
+    { "file": "skills/some-sibling/SKILL.md", "line": 12, "old": "old-skill-a", "new": "new-consolidated-pack" }
+  ]
+}
+```
+
+## Boundaries
+
+- **This skill decides and designs; it never executes the merge.** Authoring the merged pack's
+  references/INDEX (and any research wave filling a flagged gap) is `/pack-forge`'s; executing the merge — fence transfers, referrer rewire, proving the sweep — is a
+  refactor executed by `/skill-refactor` from the validated manifest.
+- **Not a candidate-finder.** Surfacing that a corpus-wide duplicate/drift problem exists in the
+  first place is `harness-audit`'s job; this skill takes named candidates and designs a specific
+  merge, it does not sweep the whole corpus looking for them.
+- **Not its own inverse.** Splitting one corpus into a family is `skill-decompose`.
+
+## Routing
+
+| Peer | For |
+|---|---|
+| `skill-decompose` | the inverse operation; also the self-check this skill runs before finalizing |
+| `harness-audit` | finding merge candidates across the whole corpus before this skill is dispatched |
+| `pack-forge` | authoring the merged pack's corpus; running flagged research waves |
+| `skill-refactor` | executing this skill's manifest — moves, rewires, sweep proof |
+| `skill-forge` | authoring the merged pack's SKILL.md surface |
+| `skill-review` | scoring the merged pack once authored |
+| `eval-run` | the measured overlap evidence (stolen/leaked shapes between candidate siblings) |
+
+## Done / NOT done
+
+**Done** = all four inverse tests run with cited evidence, the proposed merged pack self-checked
+against skill-decompose's tests (and passes — would not itself qualify for a future split), the
+consolidation manifest reconciles (`consolidation_check.py` clean) with every source file accounted
+for, the context-efficiency delta stated as a number, and the handoff names both downstream steps.
+**NOT done** = a merge proposed without checking overlap against real eval data, a discarded
+duplicate file dropped without a `superseded_by` note, an efficiency claim with no computed delta,
+or a merged pack that skipped the skill-decompose self-check and shipped a disguised monolith.

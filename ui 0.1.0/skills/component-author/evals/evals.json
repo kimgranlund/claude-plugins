@@ -1,0 +1,116 @@
+{
+  "skill": "component-author",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (excellence campaign batch 3, 2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives drawn from neighbors' trigger vocabulary: layout-decompose, ui-patterns, system-decompose, ui-audit, palette-design, component-reviewer agent, agent-ui component-builder agent.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "build a web component for a date picker",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "author a custom element toolbar with overflow",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "make a checkbox component without a framework",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "design this component's API and anatomy",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "add an overflow seam to this toolbar module",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "should this select wrap a native select or be form-associated",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "is this thing a component or a module \u2014 the tiers feel mis-cut",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "my custom element renders empty after the list re-renders",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "the icon-only button isn't square \u2014 what padding should it have",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "what icon and caret size does an XL control take on the ramp",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "turn this pile of buttons into a proper toolbar component",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "upgrade this jQuery dropdown into a zero-dependency custom element",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "decompose this UI screenshot and name the regions",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "design an app shell for a saas dashboard",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "what pattern is this screen \u2014 master-detail or list-detail",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "when is a modal the wrong pattern",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "grade this component someone else built and score both axes",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "add a ui-button to agent-ui",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "fix ui-select to standard in @agent-ui/components",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "build a color ramp from our brand anchor",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "break down this feature architecture into parts before planning",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "sweep the whole product UI for conformance",
+      "expect": "no-trigger"
+    }
+  ]
+}

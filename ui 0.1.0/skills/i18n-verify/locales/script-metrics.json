@@ -1,0 +1,17 @@
+{
+  "$schema": "i18n-script-metrics/v1",
+  "scripts": {
+    "Latn": { "lineHeightBand": [1.4, 1.7], "minBodyPx": 14, "capToX": 0.72, "notes": "Western baseline reference." },
+    "Grek": { "lineHeightBand": [1.4, 1.7], "minBodyPx": 14, "capToX": 0.70 },
+    "Cyrl": { "lineHeightBand": [1.4, 1.7], "minBodyPx": 14, "capToX": 0.72 },
+    "Arab": { "lineHeightBand": [1.6, 2.0], "minBodyPx": 15, "capToX": null, "notes": "Tall ascenders + diacritics; needs extra leading. No cap-height; use em-height." },
+    "Hebr": { "lineHeightBand": [1.5, 1.8], "minBodyPx": 15, "capToX": null, "notes": "Shorter than Arabic but niqqud demands headroom." },
+    "Hans": { "lineHeightBand": [1.55, 1.8], "minBodyPx": 15, "capToX": null, "notes": "Ideographic em-box. Leading-trim recommended." },
+    "Hant": { "lineHeightBand": [1.55, 1.8], "minBodyPx": 15, "capToX": null },
+    "Jpan": { "lineHeightBand": [1.55, 1.85], "minBodyPx": 15, "capToX": null, "notes": "Mixed Kanji+Kana+Latin; half-width punctuation handling required." },
+    "Kore": { "lineHeightBand": [1.55, 1.8], "minBodyPx": 15, "capToX": null },
+    "Deva": { "lineHeightBand": [1.5, 1.8], "minBodyPx": 15, "capToX": null, "notes": "Shirorekha (head-line) clipping risk at tight leading." },
+    "Thai": { "lineHeightBand": [1.5, 1.8], "minBodyPx": 15, "capToX": null, "notes": "Stacked tone marks require headroom." },
+    "Taml": { "lineHeightBand": [1.5, 1.8], "minBodyPx": 15, "capToX": null }
+  }
+}

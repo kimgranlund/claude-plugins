@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrast (WCAG + APCA) · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Contrast (WCAG + APCA)</h1>
+    <p>
+      Live WCAG 2.2 contrast ratio and APCA L<sup>c</sup> for any text/background
+      pair. WCAG is the legal compliance floor; APCA is the modern design standard
+      — polarity-sensitive, spatial-frequency aware, calibrated against real
+      readability research.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Pair</h3>
+    <div class="row">
+      <label>Text <input type="color" id="text-color" value="#1a1a2e"></label>
+      <label>Background <input type="color" id="bg-color" value="#fafbfd"></label>
+      <button id="swap">⇄ swap</button>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <contrast-readout id="readout" text="#1a1a2e" bg="#fafbfd"></contrast-readout>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <h2>Live text preview at multiple sizes</h2>
+    <div id="text-preview" class="contrast-text-preview"></div>
+  </section>
+
+  <section style="margin-top: var(--s-6);" id="suggest-section">
+    <h2>Suggested fixes</h2>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);" id="suggest-status">Calculating…</p>
+    <div id="suggest-grid" class="contrast-suggest-grid"></div>
+  </section>
+
+  <section>
+    <h2>Why APCA over WCAG 2.x</h2>
+    <p>
+      WCAG 2.x has documented limitations: it's <strong>polarity-blind</strong>
+      (white-on-black and black-on-white score identically, but the eye sees them
+      differently), <strong>spatial-frequency-blind</strong> (no font-size or
+      stroke-weight awareness), and produces <strong>mid-range distortion</strong>
+      (it passes pairs that look poor, rejects pairs that look fine).
+    </p>
+    <p>
+      APCA fixes all three by using polarity-sensitive lightness contrast and a
+      calibrated readability scale. Pass WCAG 2.2 AA for legal compliance; design
+      to APCA for actual readability.
+    </p>
+    <h3>APCA tiers (Bronze Simple Mode)</h3>
+    <ul>
+      <li><code>|L<sup>c</sup>| ≥ 90</code> — Optimal: sustained body reading</li>
+      <li><code>75–89</code> — Fluent body (recommended baseline)</li>
+      <li><code>60–74</code> — Body minimum readable</li>
+      <li><code>45–59</code> — Headings ≥24pt or large body ≥18pt bold</li>
+      <li><code>30–44</code> — Large headings ≥36pt</li>
+      <li><code>15–29</code> — Non-text only (icons, decorative)</li>
+      <li><code>&lt;15</code> — Insufficient</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function() {
+  var RC = window.RefColor;
+  var apca = RC.apca, srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var oklch = RC.oklch, oklab = RC.oklab, mapping = RC.mapping, utils = RC.utils;
+
+  var textInput = document.getElementById('text-color');
+  var bgInput = document.getElementById('bg-color');
+  var readout = document.getElementById('readout');
+  var swap = document.getElementById('swap');
+  var textPreview = document.getElementById('text-preview');
+  var suggestGrid = document.getElementById('suggest-grid');
+  var suggestStatus = document.getElementById('suggest-status');
+
+  var SIZES = [
+    { px: 12, weight: 400, label: 'body 12px / 400' },
+    { px: 14, weight: 400, label: 'body 14px / 400' },
+    { px: 16, weight: 400, label: 'body 16px / 400 (default)' },
+    { px: 18, weight: 600, label: 'subhead 18px / 600' },
+    { px: 24, weight: 600, label: 'heading 24px / 600' },
+    { px: 36, weight: 700, label: 'display 36px / 700' },
+  ];
+
+  function update() {
+    readout.setAttribute('text', textInput.value);
+    readout.setAttribute('bg', bgInput.value);
+
+    textPreview.innerHTML = SIZES.map(function (s) {
+      return '<div class="contrast-text-row" style="color:' + textInput.value +
+        ';background:' + bgInput.value + ';font-size:' + s.px + 'px;font-weight:' + s.weight + ';">' +
+        '<span class="contrast-text-meta">' + s.label + '</span> The quick brown fox jumps over the lazy dog.' +
+        '</div>';
+    }).join('');
+
+    // Suggestions: if the pair fails APCA 75, find 3 alternative fg colors that pass.
+    var fgEnc = utils.fromHex(textInput.value);
+    var bgEnc = utils.fromHex(bgInput.value);
+    var lc = apca.apcaContrast(fgEnc, bgEnc);
+    var lcAbs = Math.abs(lc);
+    if (lcAbs >= 75) {
+      suggestStatus.innerHTML = '<span class="pill pass">passes APCA 75 (body text)</span> — no fix needed.';
+      suggestGrid.innerHTML = '';
+      return;
+    }
+    suggestStatus.innerHTML = 'Current pair Lc = <strong>' + lc.toFixed(1) +
+      '</strong>, below 75 (fluent body). Suggestions:';
+
+    // Pick the background's hue, and try darker/lighter variants of the foreground hue
+    // until we cross |Lc| ≥ 75. Try 3 strategies.
+    var fgLin = srgbTransfer.decode(fgEnc);
+    var fgXyz = srgb.toXYZ(fgLin);
+    var fgLch = oklch.fromXYZ(fgXyz);
+    var bgLin = srgbTransfer.decode(bgEnc);
+    var bgXyz = srgb.toXYZ(bgLin);
+    var bgLch = oklch.fromXYZ(bgXyz);
+    var goDarker = bgLch[0] > 0.5; // dark text on light bg
+
+    function tryLcRange(L, C, hDeg) {
+      var lch = [L, C, hDeg];
+      var mapped = mapping.mapToSRGB(lch);
+      return { hex: utils.toHex(srgbTransfer.encode(mapped)), oklch: lch };
+    }
+
+    function findFor(strategyHue, startL, label) {
+      var stepL = goDarker ? -0.02 : 0.02;
+      for (var i = 0; i < 50; i++) {
+        var L = startL + stepL * i;
+        if (L < 0 || L > 1) break;
+        var candidate = tryLcRange(L, fgLch[1], strategyHue);
+        var cEnc = utils.fromHex(candidate.hex);
+        var clc = apca.apcaContrast(cEnc, bgEnc);
+        if (Math.abs(clc) >= 75) {
+          return { hex: candidate.hex, lc: clc, label: label };
+        }
+      }
+      return null;
+    }
+
+    var suggestions = [
+      findFor(fgLch[2], fgLch[0], 'keep hue · adjust L'),
+      findFor(fgLch[2], goDarker ? 0.20 : 0.95, 'keep hue · ' + (goDarker ? 'darker' : 'lighter')),
+      findFor((fgLch[2] + 180) % 360, fgLch[0], 'complement · adjust L'),
+    ].filter(Boolean);
+
+    suggestGrid.innerHTML = suggestions.map(function (s) {
+      return '<div class="contrast-suggest-cell">' +
+        '<div class="contrast-suggest-swatch" style="color:' + s.hex + ';background:' + bgInput.value + ';">Aa</div>' +
+        '<div class="contrast-suggest-meta"><strong>' + s.label + '</strong><br>' +
+        '<code>' + s.hex + '</code> · Lc <strong>' + s.lc.toFixed(1) + '</strong></div>' +
+        '<button class="contrast-suggest-apply" data-hex="' + s.hex + '">apply</button>' +
+      '</div>';
+    }).join('');
+    suggestGrid.querySelectorAll('[data-hex]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        textInput.value = btn.dataset.hex;
+        update();
+      });
+    });
+  }
+
+  textInput.addEventListener('input', update);
+  bgInput.addEventListener('input', update);
+  swap.addEventListener('click', function () {
+    var t = textInput.value;
+    textInput.value = bgInput.value;
+    bgInput.value = t;
+    update();
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>

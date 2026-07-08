@@ -1,0 +1,28 @@
+<!-- @dsCard group="Components" title="Primary button" subtitle="resting · hover · focus · on-pair · chip" -->
+<style>
+:root{color-scheme:light dark;
+--c-neutral-background:light-dark(oklch(0.97 0 0),oklch(0.22 0 0));
+--c-neutral-surface:light-dark(oklch(0.94 0 0),oklch(0.25 0 0));
+--c-neutral-on-surface:light-dark(oklch(0.18 0 0),oklch(0.99 0 0));
+--c-neutral-on-surface-variant:light-dark(oklch(0.45 0 0),oklch(0.8 0 0));
+--c-neutral-outline-variant:light-dark(oklch(0.6 0 0 / 30%),oklch(0.6 0 0 / 30%));
+--c-primary:light-dark(oklch(0.45 0.16 260),oklch(0.7 0.14 260));
+--c-primary-hover:light-dark(oklch(0.38 0.14 262),oklch(0.78 0.12 261));
+--c-primary-on-primary:light-dark(oklch(1 0 0),oklch(0.18 0 0));}
+*{box-sizing:border-box}
+.bp{font-family:'Inter',system-ui,sans-serif;background:var(--c-neutral-background);color:var(--c-neutral-on-surface);padding:24px;line-height:1.5}
+.bp h3{font-family:'Inter Tight',system-ui,sans-serif;margin:0 0 12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--c-neutral-on-surface-variant)}
+.bp .row{display:flex;gap:12px;align-items:center;background:var(--c-neutral-surface);border:1px solid var(--c-neutral-outline-variant);border-radius:12px;padding:16px}
+.bp button{border:0;border-radius:12px;padding:12px;font:inherit;font-weight:600;background:var(--c-primary);color:var(--c-primary-on-primary);cursor:pointer}
+.bp button:hover,.bp .is-hover{background:var(--c-primary-hover)}
+.bp button:focus-visible{outline:2px solid var(--c-primary);outline-offset:2px}
+.bp .cap{font-size:13px;color:var(--c-neutral-on-surface-variant)}
+.bp .chip{display:inline-flex;align-items:center;border-radius:9999px;padding:2px 8px;background:var(--c-neutral-surface);color:var(--c-neutral-on-surface-variant);font-size:12px;font-weight:550;border:1px solid var(--c-neutral-outline-variant)}
+</style>
+<div class="bp"><h3>Button · states</h3>
+<div class="row">
+  <button>Resting</button>
+  <button class="is-hover">Hover</button>
+  <span class="chip">TAG</span>
+  <span class="cap">chip padding <code>2px 8px</code> — sanctioned scale exception, one value everywhere</span>
+</div></div>

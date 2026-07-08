@@ -1,0 +1,48 @@
+{
+  "skill": "a2ui-catalog-design",
+  "_note": "Routing corpus of record (minted 2026-07-07). Positives span imperative / diagnostic / symptom / indirect phrasings of the six catalog-DESIGN axes (definition contract, factory+resolution, two-tier extensibility, naming law, coverage policy, security/conformance). Negatives drawn adversarially from the dangerous near-neighbors: a2ui-protocol (the WIRE shape, the closest — it owns 'why did a payload fail validation / what does a binding look like on the wire'), the a2ui-composer / a2ui-builder / a2ui-reviewer agents (compose / build / grade — MAKING, this pack only answers), a2ui-training-corpus + a2ui-conversational-agent (sibling packs), and the authoring neighborhood (knowledge-author / reference-author / component-author).",
+  "neighbors": [
+    "a2ui-protocol",
+    "a2ui-composer",
+    "a2ui-builder",
+    "a2ui-reviewer",
+    "a2ui-training-corpus",
+    "a2ui-conversational-agent",
+    "knowledge-author",
+    "reference-author",
+    "component-author"
+  ],
+  "positives": [
+    "how do I add a new component to the default A2UI catalog",
+    "why is ui-tooltip uncatalogued",
+    "what is our A2UI catalog coverage policy",
+    "how does the renderer resolve a component type to a widget factory",
+    "should this bindable prop be named value or checked",
+    "what does one catalog row declare",
+    "how does a project register its own catalog without editing the package",
+    "why is the coverage gate derived from the descriptor glob instead of a hand-written list",
+    "when do I need a bespoke factory instead of accessorFactory",
+    "what makes the catalog a security allowlist",
+    "extend vs replace the default catalog — which do I get",
+    "why does Checkbox bind checked and not value like Basic",
+    "what is the mapsTo field for and why is a non-identity mapping load-bearing",
+    "can a project catalog loosen a clientOnly function to server-invocable"
+  ],
+  "negatives": [
+    "why did this payload fail validation on the wire",
+    "what does a {path} binding or a check look like in the message",
+    "how do dynamic lists render with a positional template",
+    "action versus function call on the wire",
+    "compose the A2UI payload for a settings surface",
+    "author the message stream for this generative UI",
+    "the renderer won't paint this payload, debug it",
+    "implement the catalog.json row and factory for this control",
+    "add the catalog entry source code and wire the factory",
+    "grade this catalog row against its rubric",
+    "what format is a corpus training record and how is it admitted",
+    "how does the live demo's session and turn model work",
+    "mint a new knowledge pack for animation principles",
+    "write a reference doc on OAuth flows",
+    "build a combobox web component from scratch"
+  ]
+}

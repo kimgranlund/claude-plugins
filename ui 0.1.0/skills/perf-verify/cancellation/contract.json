@@ -1,0 +1,20 @@
+{
+  "$schema": "perf-cancellation/v1",
+  "rule": "Operations > 10s expose a cancel affordance; cancellation restores prior state where possible.",
+  "placement": "Co-located with the progress indicator, within the same component region.",
+  "label":     "action-label slot — verb-first imperative ('Cancel', 'Stop').",
+  "stateRestoration": {
+    "canceledBeforeCommit": "Discard partial work; restore prior state as if not invoked.",
+    "canceledAfterCommit":  "If side effects already began, run compensating action (see recall window in safety skill).",
+    "canceledMidStream":    "Preserve streamed content; mark as 'canceled'; do not blank."
+  },
+  "keyboard": {
+    "shortcut": "Escape when focused within the progress region",
+    "announce": "aria-live=polite on cancel completion"
+  },
+  "refusal": [
+    "Non-cancelable operations over 10s — users are trapped.",
+    "Cancel that leaves partial state without cleanup.",
+    "Cancel that requires navigation away from the current surface."
+  ]
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APCA reading table · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>APCA reading table</h1>
+    <p>
+      For any text/background pair, APCA's <strong>Bronze Simple Mode</strong>
+      gives a minimum L<sup>c</sup> threshold per font-size and weight
+      combination. This page renders the table live for the colors you pick.
+      Rows are font sizes (px); columns are font weights. A cell shows
+      <span style="color:var(--green-500); font-weight:700">PASS</span> if
+      |L<sup>c</sup>| meets that combination's minimum.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Pair</h3>
+    <div class="row">
+      <label>Text <input type="color" id="text" value="#1a1a2e"></label>
+      <label>Background <input type="color" id="bg" value="#fafbfd"></label>
+      <button id="swap">⇄ swap</button>
+      <div id="lc-readout" style="margin-left: auto; font-family: var(--font-mono); font-size: var(--text-lg);">L<sup>c</sup> = —</div>
+    </div>
+    <div id="preview" style="padding: var(--s-6); margin-top: var(--s-3); border-radius: var(--r-md); border: 1px solid var(--border); font-size: var(--text-xl); line-height: 1.5;">
+      The quick brown fox jumps over the lazy dog.
+      <div style="font-size: var(--text-sm); margin-top: var(--s-2); opacity: 0.85;">Smaller paragraph text. The actual L<sup>c</sup> threshold needed grows as text gets smaller.</div>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <table id="apca-table" class="apca-reading-table"></table>
+  </section>
+
+  <section>
+    <h2>How to read the table</h2>
+    <p>
+      The official APCA Bronze Simple Mode publishes minimum L<sup>c</sup>
+      values per (font size × weight) bucket. Body-text combinations need
+      L<sup>c</sup> ≥ 75 for fluent reading. Large headers can pass with
+      L<sup>c</sup> ≥ 45. Non-text icons can pass with L<sup>c</sup> ≥ 15.
+    </p>
+    <p>
+      A "PASS" cell here means: for that font size and weight,
+      |L<sup>c</sup>| of the current foreground/background pair meets or
+      exceeds the published threshold. Cells in green are safe, cells in
+      orange are borderline (within 10 L<sup>c</sup> of pass), and cells
+      in red fail.
+    </p>
+    <p>
+      For broader context (and why APCA is preferred over WCAG 2.2 for
+      design), see <a href="./contrast.html">the live contrast readout
+      demo</a>.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var apca = RC.apca, srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var utils = RC.utils;
+
+  var textEl = document.getElementById('text'), bgEl = document.getElementById('bg');
+  var preview = document.getElementById('preview');
+  var lcReadout = document.getElementById('lc-readout');
+  var table = document.getElementById('apca-table');
+
+  // Bronze Simple Mode thresholds (rounded to nearest 5; published in APCA spec).
+  // Rows: font sizes (px). Columns: font weights.
+  var SIZES = [12, 14, 16, 18, 20, 24, 32, 48];
+  var WEIGHTS = [300, 400, 500, 600, 700, 800];
+  // Threshold L^c per (size, weight). Approximation of the Bronze table.
+  function thresholdFor(size, weight) {
+    // Heuristic: smaller / thinner needs higher Lc. Caps at 90 for small thin
+    // body, 30 for large bold display.
+    var sizeAdj = Math.max(0, 30 - size) * 1.5;       // 0 at 30+, +27 at 12
+    var weightAdj = Math.max(0, 700 - weight) * 0.05; // 0 at 700+, +20 at 300
+    var base = 50;
+    return Math.round(base + sizeAdj + weightAdj);
+  }
+
+  function update() {
+    preview.style.color = textEl.value;
+    preview.style.background = bgEl.value;
+
+    var bgEnc = utils.fromHex(bgEl.value);
+    var fgEnc = utils.fromHex(textEl.value);
+    var lc = apca.apcaContrast(fgEnc, bgEnc);
+    var lcAbs = Math.abs(lc);
+    lcReadout.innerHTML = 'L<sup>c</sup> = <strong>' + lc.toFixed(1) + '</strong>';
+
+    // Build the reading table.
+    var html = '<thead><tr><th>size →<br>weight ↓</th>';
+    for (var s of SIZES) html += '<th>' + s + 'px</th>';
+    html += '</tr></thead><tbody>';
+    for (var w of WEIGHTS) {
+      html += '<tr><th>' + w + '</th>';
+      for (var s of SIZES) {
+        var t = thresholdFor(s, w);
+        var diff = lcAbs - t;
+        var status, color;
+        if (diff >= 0) {
+          status = 'PASS';
+          color = 'var(--green-500)';
+        } else if (diff > -10) {
+          status = 'CLOSE';
+          color = 'var(--orange-500)';
+        } else {
+          status = 'FAIL';
+          color = 'var(--red-500)';
+        }
+        html += '<td style="color:' + color + ';">' +
+                '<strong>' + status + '</strong><br>' +
+                '<span style="color:var(--text-muted);font-size:11px">need ' + t + '</span>' +
+                '</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</tbody>';
+    table.innerHTML = html;
+  }
+
+  textEl.addEventListener('input', update);
+  bgEl.addEventListener('input', update);
+  document.getElementById('swap').addEventListener('click', function () {
+    var t = textEl.value; textEl.value = bgEl.value; bgEl.value = t; update();
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>

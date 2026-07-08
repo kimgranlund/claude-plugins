@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spectral illuminants · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Spectral illuminants</h1>
+    <p>
+      Every light source has a <strong>spectral power distribution</strong> —
+      how much power it emits at each visible wavelength. Each illuminant has
+      a characteristic SPD shape that, integrated against the CIE 1931 color
+      matching functions, gives its XYZ chromaticity. The grid below renders
+      the same 8 reflectance spectra under each illuminant — same physical
+      surface, different reflected color.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Illuminants to compare</h3>
+    <div class="row">
+      <label><input type="checkbox" name="ill" value="D65" checked> D65 (daylight ~6500K)</label>
+      <label><input type="checkbox" name="ill" value="D50" checked> D50 (~5000K)</label>
+      <label><input type="checkbox" name="ill" value="A" checked> A (tungsten ~2856K)</label>
+      <label><input type="checkbox" name="ill" value="F2" checked> F2 (cool fluorescent)</label>
+      <label><input type="checkbox" name="ill" value="E"> E (equal-energy)</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <spd-chart id="chart" show="D65,D50,A,F2"></spd-chart>
+  </section>
+
+  <section>
+    <h2>Why D65 is the web's default</h2>
+    <p>
+      <strong>D65</strong> approximates noon daylight (~6500K) and is the
+      reference for sRGB, Display P3, Rec.709, Rec.2020 — every display-
+      facing RGB space the web uses. Its SPD is smoothly continuous, with
+      a slight blue bias compared to D50.
+    </p>
+    <p>
+      <strong>D50</strong> is warmer daylight (~5000K) — the ICC Profile
+      Connection Space white, used in print workflows. Adobe RGB and
+      ProPhoto are also D50-native.
+    </p>
+    <p>
+      <strong>A</strong> is incandescent tungsten — a roughly black-body
+      Planckian source. Its SPD slopes heavily toward red, which is why
+      photos shot under tungsten look orange without white-balancing.
+    </p>
+    <p>
+      <strong>F2</strong> (and the F-series in general) are fluorescent
+      lamps — their SPDs have visible <em>spikes</em> at mercury vapor
+      emission lines. The bumps are why fluorescent-lit photos often look
+      slightly green and have poor color rendering for skin tones.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var checks = document.querySelectorAll('input[name="ill"]');
+  var chart = document.getElementById('chart');
+  function update() {
+    var list = Array.prototype.filter.call(checks, function (c) { return c.checked; })
+      .map(function (c) { return c.value; });
+    chart.setAttribute('show', list.join(','));
+  }
+  Array.prototype.forEach.call(checks, function (c) { c.addEventListener('input', update); });
+  update();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "skill": "i18n-verify",
+  "_note": "Deep-review corpus (excellence campaign batch 3; sibling re-aimed 2026-07-06 for the color-science-* split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-science-spaces, not accessibility). Positives span imperative / diagnostic / symptom / indirect phrasings over the charter: RTL-bidi, dir-lang, Intl formatting, expansion, mirroring, script metrics. Negatives drawn adversarially from verifier siblings (color-verify, focus-verify, perf-verify, safety-verify), typography-lettering (world-scripts overlap), component-author, ui-audit, flow-decompose.",
+  "siblings": [
+    "color-verify",
+    "focus-verify",
+    "perf-verify",
+    "safety-verify",
+    "typography-lettering",
+    "ui-audit",
+    "component-author",
+    "flow-decompose",
+    "color-science-spaces"
+  ],
+  "positives": [
+    "verify this UI's internationalization",
+    "check RTL support in this app",
+    "audit dir and lang attributes on my text surfaces",
+    "are dates and currency going through Intl formatting here",
+    "the layout breaks when I switch to Arabic",
+    "German translations overflow the buttons",
+    "which icons should mirror in right-to-left mode",
+    "our line-height looks cramped in Japanese and Arabic",
+    "usernames render garbled next to punctuation in mixed-direction text",
+    "check translation expansion headroom across locales",
+    "we hardcoded English strings all over the markup \u2014 check it",
+    "does this design survive localization into other scripts and locales"
+  ],
+  "negatives": [
+    "verify this palette's contrast ratios and color-blind safety",
+    "check focus order and keyboard navigation on this dialog",
+    "the focus ring is invisible in dark mode",
+    "audit our loading skeletons and CLS budget",
+    "this screen feels slow despite acceptable wire latency",
+    "verify undo and type-to-confirm on our delete flows",
+    "which serif pairs well with this geometric sans",
+    "explain Arabic contextual forms and Devanagari conjuncts",
+    "build a date-picker component with a language switcher",
+    "sweep the whole product UI before launch",
+    "map the checkout flow and find its dead ends",
+    "convert this palette to OKLCH and gamut-map it"
+  ]
+}

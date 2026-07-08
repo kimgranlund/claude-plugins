@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kubelka-Munk paint mixer · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Kubelka-Munk paint mixer</h1>
+    <p>
+      Real paint doesn't mix by averaging RGB values — it mixes by
+      <strong>physical absorption and scattering</strong>. Blue paint plus
+      yellow paint really makes green, not a muddy gray. Kubelka-Munk
+      single-constant mixing is the standard model: each pigment is a
+      reflectance spectrum, mixing is linear in K/S space, and the result
+      converts back to a believable color.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Pigments</h3>
+    <div class="row">
+      <label>Paint A
+        <select id="pa">
+          <option value="ultramarine" selected>Ultramarine blue</option>
+          <option value="cobaltblue">Cobalt blue</option>
+          <option value="cadyellow">Cadmium yellow</option>
+          <option value="cadred">Cadmium red</option>
+          <option value="alizarin">Alizarin crimson</option>
+          <option value="viridian">Viridian green</option>
+          <option value="yellowochre">Yellow ochre</option>
+          <option value="burntsienna">Burnt sienna</option>
+          <option value="white">Titanium white</option>
+          <option value="black">Mars black</option>
+        </select>
+      </label>
+      <label>Paint B
+        <select id="pb">
+          <option value="cadyellow" selected>Cadmium yellow</option>
+          <option value="ultramarine">Ultramarine blue</option>
+          <option value="cobaltblue">Cobalt blue</option>
+          <option value="cadred">Cadmium red</option>
+          <option value="alizarin">Alizarin crimson</option>
+          <option value="viridian">Viridian green</option>
+          <option value="yellowochre">Yellow ochre</option>
+          <option value="burntsienna">Burnt sienna</option>
+          <option value="white">Titanium white</option>
+          <option value="black">Mars black</option>
+        </select>
+      </label>
+    </div>
+    <div class="controls" style="margin-top: var(--s-3);">
+      <label for="ratio">A / B ratio</label>
+      <input type="range" id="ratio" min="0" max="1" step="0.01" value="0.5">
+      <output id="ratio-val">50% / 50%</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <pigment-mixer id="mixer" pigment-a="ultramarine" pigment-b="cadyellow" ratio="0.5"></pigment-mixer>
+  </section>
+
+  <section>
+    <h2>Why pigment mixing isn't averaging</h2>
+    <p>
+      Light-source mixing (your monitor) is <strong>additive</strong> — emitted
+      photons sum. Paint mixing is <strong>subtractive</strong> — each pigment
+      absorbs some wavelengths and reflects others, and the mix absorbs both.
+      Blue paint absorbs everything except blue; yellow paint absorbs
+      everything except yellow-green-red; together they absorb almost
+      everything except green — which is what your eye sees as the mixed
+      paint.
+    </p>
+    <p>
+      Try mixing <strong>White + black</strong> at 50/50. The Kubelka-Munk
+      mid-gray is very dark (R ≈ 0.07) — not the 50% gray that RGB averaging
+      gives (R ≈ 0.5). This is the key K-M property: the mixed reflectance
+      is much closer to the darker pigment because the absorption ratios
+      blend nonlinearly.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var pa = document.getElementById('pa'), pb = document.getElementById('pb');
+  var ratio = document.getElementById('ratio'), ratioVal = document.getElementById('ratio-val');
+  var mixer = document.getElementById('mixer');
+
+  function update() {
+    mixer.setAttribute('pigment-a', pa.value);
+    mixer.setAttribute('pigment-b', pb.value);
+    mixer.setAttribute('ratio', ratio.value);
+    var r = Math.round(parseFloat(ratio.value) * 100);
+    ratioVal.textContent = r + '% / ' + (100 - r) + '%';
+  }
+  pa.addEventListener('change', update);
+  pb.addEventListener('change', update);
+  ratio.addEventListener('input', update);
+  update();
+})();
+</script>
+
+</body>
+</html>

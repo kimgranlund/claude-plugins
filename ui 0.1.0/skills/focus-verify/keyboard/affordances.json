@@ -1,0 +1,98 @@
+{
+  "$schema": "keyboard-affordances/v1",
+  "description": "Per-role keyboard affordances, aligned with WAI-ARIA Authoring Practices (APG).",
+  "roles": {
+    "button": {
+      "tabbable": true,
+      "activationKeys": ["Enter", "Space"],
+      "escapeBehavior": null
+    },
+    "icon-button": {
+      "tabbable": true,
+      "activationKeys": ["Enter", "Space"],
+      "escapeBehavior": null,
+      "requires": "aria-label"
+    },
+    "link": {
+      "tabbable": true,
+      "activationKeys": ["Enter"],
+      "note": "Space does NOT activate links. Space scrolls the page."
+    },
+    "checkbox": {
+      "tabbable": true,
+      "activationKeys": ["Space"],
+      "state": "aria-checked"
+    },
+    "radio-group": {
+      "tabbable": "roving",
+      "arrowKeys": ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"],
+      "activationKeys": ["Space"],
+      "state": "aria-checked on selected item"
+    },
+    "switch": {
+      "tabbable": true,
+      "activationKeys": ["Space", "Enter"],
+      "state": "aria-checked"
+    },
+    "tabs": {
+      "tabbable": "roving",
+      "arrowKeys": ["ArrowLeft", "ArrowRight"],
+      "homeEnd": true,
+      "activationKeys": ["Enter", "Space"],
+      "state": "aria-selected on active tab; tabindex=-1 on inactive tabs"
+    },
+    "menu": {
+      "tabbable": "roving (menuitem)",
+      "arrowKeys": ["ArrowUp", "ArrowDown"],
+      "homeEnd": true,
+      "activationKeys": ["Enter"],
+      "escapeBehavior": "close menu, restore focus to trigger"
+    },
+    "listbox": {
+      "tabbable": "container tabbable, items not",
+      "arrowKeys": ["ArrowUp", "ArrowDown"],
+      "homeEnd": true,
+      "typeAhead": true,
+      "state": "aria-selected on selected option, aria-activedescendant or roving tabindex"
+    },
+    "dialog": {
+      "tabbable": "focus trapped",
+      "activationKeys": null,
+      "escapeBehavior": "close dialog, restore focus to trigger",
+      "initialFocus": "first focusable inside dialog (or dialog container if none)"
+    },
+    "popover": {
+      "tabbable": "focus NOT trapped",
+      "escapeBehavior": "close, restore focus to trigger"
+    },
+    "accordion-trigger": {
+      "tabbable": true,
+      "activationKeys": ["Enter", "Space"],
+      "state": "aria-expanded"
+    },
+    "disclosure-trigger": {
+      "tabbable": true,
+      "activationKeys": ["Enter", "Space"],
+      "state": "aria-expanded"
+    }
+  },
+  "pageLevelRequirements": {
+    "skipLink": {
+      "required": true,
+      "position": "first focusable element on the page",
+      "behavior": "visible on focus, invisible otherwise; skips to <main> or primary content",
+      "example": "<a class=\"skip-link\" href=\"#main\">Skip to content</a>"
+    },
+    "landmarks": {
+      "required": true,
+      "roles": ["banner", "navigation", "main", "complementary", "contentinfo"],
+      "note": "Screen-reader users navigate by landmark; keyboard users navigate by tab. Both need structured regions."
+    }
+  },
+  "refusedPatterns": [
+    "Positive tabindex values (tabindex=\"5\") — breaks default keyboard order.",
+    "Click handlers on non-button elements without role=button + tabindex=0 + Enter/Space handling.",
+    "Dialogs without focus trap and restoration.",
+    "Menus that trap tab — menus should not trap; Escape closes and Tab advances past trigger."
+  ]
+}

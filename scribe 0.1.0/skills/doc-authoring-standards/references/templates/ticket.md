@@ -1,0 +1,17 @@
+---
+doc-type: ticket
+id: tkt-0000
+status: open            # open | doing | done | wontfix
+date: YYYY-MM-DD
+owner: 
+---
+# TKT-0000 — <one shippable unit>
+
+## Summary
+<!-- What ships and why now, two sentences, head-first. -->
+
+## Acceptance
+<!-- Checkable, referencing spec IDs (REQ-###) where they exist. -->
+
+## Links
+<!-- spec / plan step / ADRs this traces to. A ticket tracing to nothing is scope creep. -->

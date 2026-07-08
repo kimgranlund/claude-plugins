@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVD simulator · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color-blindness simulator</h1>
+    <p>
+      Drop an image to see how it looks under each type of color vision
+      deficiency. Severity is continuously adjustable — slide from full
+      dichromacy (no cone signal) down to mild anomalous trichromacy.
+      Simulation uses <strong>Machado 2009</strong> matrices on linear sRGB
+      (the same algorithm Chrome DevTools uses).
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Source + controls</h3>
+    <div class="row">
+      <input type="file" id="file" accept="image/*">
+      <label>Type
+        <select id="type">
+          <option value="protanopia">Protanopia (L-cone)</option>
+          <option value="deuteranopia" selected>Deuteranopia (M-cone)</option>
+          <option value="tritanopia">Tritanopia (S-cone)</option>
+        </select>
+      </label>
+      <label>Severity
+        <input type="range" id="severity" min="0" max="1" step="0.01" value="1.0" style="width:160px;">
+        <output id="severity-val">100%</output>
+      </label>
+      <label><input type="checkbox" id="split" checked> split view</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <cvd-simulator id="sim" type="deuteranopia" severity="1" mode="split"></cvd-simulator>
+  </section>
+
+  <section>
+    <h2>Why this matters</h2>
+    <p>
+      About <strong>8% of men and 0.4% of women</strong> have some form of
+      red-green color vision deficiency. Protanopia and deuteranopia are by far
+      the most common; tritanopia is rare (under 1 in 10,000). Designs that rely
+      on red/green to convey state (the classic "green = good, red = bad")
+      look identical to a deuteranope — they need a second cue.
+    </p>
+    <p>
+      The Machado matrices are physiologically grounded — derived from cone
+      spectral sensitivity data — and parameterized by severity. At severity
+      0 they're the identity (no transform); at 1.0 they're full dichromacy.
+      Intermediate values approximate anomalous trichromacy.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var fileInput = document.getElementById('file');
+  var typeSel = document.getElementById('type');
+  var sevInput = document.getElementById('severity');
+  var sevVal = document.getElementById('severity-val');
+  var splitChk = document.getElementById('split');
+  var sim = document.getElementById('sim');
+
+  function applyControls() {
+    sim.setAttribute('type', typeSel.value);
+    sim.setAttribute('severity', sevInput.value);
+    sim.setAttribute('mode', splitChk.checked ? 'split' : 'single');
+    sevVal.textContent = Math.round(parseFloat(sevInput.value) * 100) + '%';
+  }
+
+  function loadFile(file) {
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.src = url;
+    img.decode().then(function () {
+      sim.setImage(img);
+      URL.revokeObjectURL(url);
+    });
+  }
+  fileInput.addEventListener('change', function (e) {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  window.RefColor.utils.wireFileDrop(document.querySelector('.card'), loadFile);
+
+  typeSel.addEventListener('change', applyControls);
+  sevInput.addEventListener('input', applyControls);
+  splitChk.addEventListener('change', applyControls);
+
+  applyControls();
+})();
+</script>
+
+</body>
+</html>

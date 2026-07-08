@@ -1,0 +1,51 @@
+{
+  "skill": "agent-authoring-standards",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "How do I write a subagent file?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Why is my agent so fat and drifting from its skill?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "How does the skills: preload field work?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Do subagents inherit my conversation history?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Should this be an agent or context: fork on the skill?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "My agent file fails to load with a YAML error",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "How do I write a skill description?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "Forge me a reviewer agent",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Which lifecycle event should my hook use?",
+      "expect": "no-trigger"
+    }
+  ]
+}

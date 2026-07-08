@@ -1,0 +1,21 @@
+{
+  "$schema": "focus-ring-offsets/v1",
+  "description": "Ring offset and ring radius derived from element radius. Offset grows slightly with radius to maintain optical separation.",
+  "table": [
+    { "elementRadius": "radius-none", "elementRadiusPx": 0,  "offsetPx": 2, "ringRadiusPx": 2   },
+    { "elementRadius": "radius-xs",   "elementRadiusPx": 2,  "offsetPx": 2, "ringRadiusPx": 4   },
+    { "elementRadius": "radius-sm",   "elementRadiusPx": 4,  "offsetPx": 2, "ringRadiusPx": 6   },
+    { "elementRadius": "radius-md",   "elementRadiusPx": 8,  "offsetPx": 2, "ringRadiusPx": 10  },
+    { "elementRadius": "radius-lg",   "elementRadiusPx": 12, "offsetPx": 3, "ringRadiusPx": 15  },
+    { "elementRadius": "radius-xl",   "elementRadiusPx": 16, "offsetPx": 4, "ringRadiusPx": 20  },
+    { "elementRadius": "radius-2xl",  "elementRadiusPx": 24, "offsetPx": 4, "ringRadiusPx": 28  },
+    { "elementRadius": "radius-pill", "elementRadiusPx": null, "offsetPx": 2, "ringRadiusPx": "pill (always fits)" },
+    { "elementRadius": "radius-circle","elementRadiusPx": null,"offsetPx": 2, "ringRadiusPx": "circle" }
+  ],
+  "formula": "ringRadiusPx = elementRadiusPx + offsetPx",
+  "rationale": "Square-cornered ring on a round button reads as broken. Ring radius matches element shape plus offset.",
+  "overrides": {
+    "inset": "When using inset recipe (Step 3), ringRadiusPx = elementRadiusPx − offsetPx (ring is inside the element).",
+    "full-width-row": "Inset rings on full-width rows use offsetPx = -2 and ringRadiusPx = 0."
+  }
+}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ΔE metric comparator · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>ΔE metric comparator</h1>
+    <p>
+      Pick two colors and see <strong>five color-difference metrics</strong>
+      side by side. They're calibrated differently — a "1.0" in ΔE2000 is not
+      a "1.0" in ΔE_ok. Each row's bar shows how the value compares within
+      that metric's typical perceptual scale.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Pair</h3>
+    <div class="row">
+      <label>Color A <input type="color" id="ca" value="#1f6feb"></label>
+      <label>Color B <input type="color" id="cb" value="#3b82f6"></label>
+      <button id="randomize">randomize</button>
+    </div>
+    <div class="row" style="margin-top: var(--s-3); height: 90px;">
+      <div id="swa" style="flex:1; border-radius: var(--r-md); border: 1px solid var(--border);"></div>
+      <div id="swb" style="flex:1; border-radius: var(--r-md); border: 1px solid var(--border);"></div>
+    </div>
+    <div class="controls" style="margin-top: var(--s-3);">
+      <label for="drift">Drift B away from A</label>
+      <input type="range" id="drift" min="0" max="1" step="0.01" value="0">
+      <output id="drift-val">0.00 (B = original)</output>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <table class="deltae-table" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="text-align:left; color: var(--text-muted); font-size: var(--text-sm); border-bottom: 1px solid var(--border);">
+          <th style="padding: var(--s-3) var(--s-4); width: 14ch;">Metric</th>
+          <th style="padding: var(--s-3) var(--s-4); width: 10ch;">Value</th>
+          <th style="padding: var(--s-3) var(--s-4); width: 28ch;">JND</th>
+          <th style="padding: var(--s-3) var(--s-4);">Use when</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Choosing a metric</h2>
+    <ul>
+      <li><strong>ΔE_ok</strong> — modern default for design-token work, palette
+          differentiation, theming. OKLab-based; perceptually uniform; near-zero
+          hue distortion.</li>
+      <li><strong>ΔE2000</strong> — gold standard for color-science / print /
+          textile compliance. Includes rotational hue-rotation term. Use when
+          publishing or auditing reference results.</li>
+      <li><strong>ΔE76</strong> — Euclidean in CIELAB. Ubiquitous, fast, but
+          perceptually uneven (the blue region is over-weighted). Use for
+          back-compat only.</li>
+      <li><strong>HyAB</strong> — hybrid metric robust against very large color
+          differences where Euclidean ΔE76 collapses. Niche but useful.</li>
+      <li><strong>ΔE94</strong> — legacy graphic-arts default; ΔE2000 superseded
+          it in 2001.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var RC = window.RefColor;
+  var srgb = RC.srgb, srgbTransfer = RC.srgbTransfer;
+  var oklab = RC.oklab, cielab = RC.cielab;
+  var deltaE = RC.deltaE;
+  var utils = RC.utils;
+
+  var ca = document.getElementById('ca'), cb = document.getElementById('cb');
+  var swa = document.getElementById('swa'), swb = document.getElementById('swb');
+  var rows = document.getElementById('rows');
+
+  function hexToOklabCielab(hex) {
+    var enc = utils.fromHex(hex);
+    var lin = srgbTransfer.decode(enc);
+    var xyz = srgb.toXYZ(lin);
+    return { ok: oklab.fromXYZ(xyz), lab: cielab.fromXYZ(xyz) };
+  }
+
+  var METRICS = [
+    { name: 'ΔE76',    full: 'Euclidean CIELAB',          jnd: 'JND ≈ 2.3', scale: 25, use: 'Legacy; superseded by ΔE2000.' },
+    { name: 'ΔE94',    full: 'CIE94 weighted CIELAB',     jnd: 'JND ≈ 1.5', scale: 15, use: 'Graphic arts (1994 standard).' },
+    { name: 'ΔE2000',  full: 'CIEDE2000 (current CIE)',   jnd: 'JND ≈ 1.0', scale: 10, use: 'Color-science gold standard.' },
+    { name: 'ΔE_ok',   full: 'Euclidean OKLab',           jnd: 'JND ≈ 0.02', scale: 0.3, use: 'Modern design-token default.' },
+    { name: 'HyAB',    full: 'Hybrid Lab',                jnd: 'Use for large ΔE', scale: 100, use: 'Very large color differences.' },
+  ];
+
+  var driftInput = document.getElementById('drift');
+  var driftVal = document.getElementById('drift-val');
+
+  function driftHex(baseHex, otherHex, t) {
+    if (t === 0) return otherHex;
+    var oklch = RC.oklch, oklab = RC.oklab;
+    var aLab = oklab.fromXYZ(srgb.toXYZ(srgbTransfer.decode(utils.fromHex(baseHex))));
+    var bLab = oklab.fromXYZ(srgb.toXYZ(srgbTransfer.decode(utils.fromHex(otherHex))));
+    // Find direction from A to B in OKLab, extend by factor (1 + t*4) — drifts up to 5× original distance.
+    var factor = 1 + t * 4;
+    var driftedLab = [
+      aLab[0] + (bLab[0] - aLab[0]) * factor,
+      aLab[1] + (bLab[1] - aLab[1]) * factor,
+      aLab[2] + (bLab[2] - aLab[2]) * factor,
+    ];
+    var driftedLch = oklch.fromOKLab ? oklch.fromOKLab(driftedLab) : (function() {
+      var L = driftedLab[0], a = driftedLab[1], b = driftedLab[2];
+      var C = Math.sqrt(a * a + b * b);
+      var h = Math.atan2(b, a) * 180 / Math.PI;
+      if (h < 0) h += 360;
+      return [L, C, h];
+    })();
+    var mapped = RC.mapping.mapToSRGB(driftedLch);
+    return utils.toHex(srgbTransfer.encode(mapped));
+  }
+
+  function update() {
+    swa.style.background = ca.value;
+    var drift = parseFloat(driftInput.value);
+    var bShown = drift === 0 ? cb.value : driftHex(ca.value, cb.value, drift);
+    swb.style.background = bShown;
+    driftVal.textContent = drift.toFixed(2) + (drift === 0 ? ' (B = original)' : ' (B at ' + (1 + drift * 4).toFixed(1) + '× original ΔE from A)');
+
+    var A = hexToOklabCielab(ca.value);
+    var B = hexToOklabCielab(bShown);
+    var values = [
+      deltaE.deltaE76(A.lab, B.lab),
+      deltaE.deltaE94(A.lab, B.lab),
+      deltaE.deltaE2000(A.lab, B.lab),
+      deltaE.deltaEOK(A.ok, B.ok),
+      deltaE.hyAB(A.lab, B.lab),
+    ];
+    rows.innerHTML = METRICS.map(function (m, i) {
+      var v = values[i];
+      var pct = Math.min(100, Math.max(2, (v / m.scale) * 100));
+      var color = pct > 80 ? 'var(--red-500)' : (pct > 40 ? 'var(--orange-500)' : 'var(--green-500)');
+      return '<tr style="border-bottom: 1px solid var(--border);">' +
+        '<td style="padding: var(--s-3) var(--s-4); font-family: var(--font-mono);"><strong>' + m.name + '</strong><br><span style="color: var(--text-muted); font-size: var(--text-xs);">' + m.full + '</span></td>' +
+        '<td style="padding: var(--s-3) var(--s-4); font-family: var(--font-mono);">' +
+          '<span style="font-size: var(--text-lg);"><strong>' + utils.fmt(v, m.scale < 1 ? 4 : 2) + '</strong></span>' +
+          '<div style="background: var(--bg-elevated); height: 6px; border-radius: 3px; margin-top: 4px; overflow:hidden;">' +
+          '<div style="width:' + pct.toFixed(0) + '%; height:100%; background:' + color + ';"></div></div>' +
+        '</td>' +
+        '<td style="padding: var(--s-3) var(--s-4); color: var(--text-muted); font-size: var(--text-sm);">' + m.jnd + '</td>' +
+        '<td style="padding: var(--s-3) var(--s-4); color: var(--text-muted); font-size: var(--text-sm);">' + m.use + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  ca.addEventListener('input', update);
+  cb.addEventListener('input', update);
+  driftInput.addEventListener('input', update);
+  document.getElementById('randomize').addEventListener('click', function () {
+    function rh() { return '#' + Math.floor(Math.random()*0xffffff).toString(16).padStart(6, '0'); }
+    ca.value = rh(); cb.value = rh();
+    update();
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>

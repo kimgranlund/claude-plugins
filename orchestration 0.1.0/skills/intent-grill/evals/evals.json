@@ -1,0 +1,91 @@
+{
+  "skill": "intent-grill",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus, excellence campaign batch 4 (2026-07-03): positives imperative / diagnostic / symptom / indirect. Negatives adversarial from the neighborhood: intent-extract, system-decompose (forge), and scribe's PRD/SPEC/LLD authoring surface (doc-forge, governed by doc-authoring-standards) \u2014 the pre-migration corpus named the now-retired prd-author/lld-author skills scribe has since consolidated.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "grill me on the design",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "plan this new feature - nothing is decided yet",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "interrogate the design space for this component family",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "design this family from scratch with me",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what do we need to decide here before we can build",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "which design decisions are load-bearing for this greenfield service",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "we want to decompose but most decisions are still unmade",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "before I write the PRD, help me settle the open design questions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "walk me through the choices for this brand-new system round by round",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "clarify this vague request before acting",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "what's the actual intent behind this ask",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "improve this prompt so it's sharper",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "the wording and the goal diverge - figure out what they really want",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "decompose the system into a node tree and action set",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "this breakdown has structure with no behavior - verify the planes cover each other",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "write a PRD for the payments product",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "author the LLD for the already-settled design",
+      "expect": "no-trigger"
+    }
+  ]
+}

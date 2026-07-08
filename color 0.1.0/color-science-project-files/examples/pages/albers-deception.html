@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color deception · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+<style>
+  .deception-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--s-4);
+  }
+  .deception-cell {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--s-4);
+  }
+  .deception-cell h4 {
+    margin: 0 0 var(--s-2) 0;
+    font-size: var(--text-sm);
+  }
+  .deception-stage {
+    height: 120px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    margin-bottom: var(--s-2);
+  }
+  .deception-hex {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    display: none;
+  }
+  .deception-cell.revealed .deception-hex { display: block; }
+</style>
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color deception — the five families</h1>
+    <p>
+      Albers built his teaching on the fact that color "deceives" the eye
+      through five recurring families of effects: <strong>contrast</strong>,
+      <strong>adjacency</strong>, <strong>illumination</strong>,
+      <strong>memory</strong>, and <strong>expectation</strong>. Each is a
+      mismatch between physical measurement and perceived appearance.
+    </p>
+    <p style="color: var(--text-muted); font-size: var(--text-sm);">
+      Tap any cell to reveal the hex equality. The squares marked "identical"
+      really are identical RGB values.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--s-6);">
+    <div class="deception-grid">
+
+      <div class="deception-cell" data-reveal>
+        <h4>1. Simultaneous contrast</h4>
+        <div class="deception-stage" style="display:grid; grid-template-columns:1fr 1fr;">
+          <div style="background:#1a1a1a; display:flex; align-items:center; justify-content:center;"><div style="width:42px; height:42px; background:#888;"></div></div>
+          <div style="background:#eee; display:flex; align-items:center; justify-content:center;"><div style="width:42px; height:42px; background:#888;"></div></div>
+        </div>
+        <div class="deception-hex">Both inner squares: <strong>#888888</strong></div>
+        <p style="margin: 0; font-size: var(--text-xs); color: var(--text-muted);">The eye amplifies the difference between a color and its surround.</p>
+      </div>
+
+      <div class="deception-cell" data-reveal>
+        <h4>2. Adjacency (White's illusion)</h4>
+        <div class="deception-stage" style="display:grid; grid-template-columns:1fr 1fr;">
+          <div style="position:relative; background: repeating-linear-gradient(to right, #111 0 25%, #fff 25% 50%);">
+            <div style="position:absolute; left:20%; right:20%; top:40%; height:18px; background:#888;"></div>
+          </div>
+          <div style="position:relative; background: repeating-linear-gradient(to right, #fff 0 25%, #111 25% 50%);">
+            <div style="position:absolute; left:20%; right:20%; top:40%; height:18px; background:#888;"></div>
+          </div>
+        </div>
+        <div class="deception-hex">Both gray bars: <strong>#888888</strong></div>
+        <p style="margin: 0; font-size: var(--text-xs); color: var(--text-muted);">Stripes above and below the bar shift its apparent value.</p>
+      </div>
+
+      <div class="deception-cell" data-reveal>
+        <h4>3. Illumination shift</h4>
+        <div class="deception-stage" style="display:grid; grid-template-columns:1fr 1fr;">
+          <div style="background:#f7f3e6; display:flex; align-items:center; justify-content:center; color:#aaa; font-family: monospace; font-size: 11px;">tungsten</div>
+          <div style="background:#e6efff; display:flex; align-items:center; justify-content:center; color:#666; font-family: monospace; font-size: 11px;">noon daylight</div>
+        </div>
+        <div class="deception-hex">Same white paper rendered under A (warm) and D65 (cool) illuminants.</div>
+        <p style="margin: 0; font-size: var(--text-xs); color: var(--text-muted);">Chromatic adaptation lets us call both surfaces "white" despite their physical difference.</p>
+      </div>
+
+      <div class="deception-cell" data-reveal>
+        <h4>4. Memory amplification</h4>
+        <div class="deception-stage" style="display:grid; grid-template-columns:1fr 1fr;">
+          <div style="background:#c8a484; display:flex; align-items:center; justify-content:center; color:white; font-size: 11px; font-family: monospace;">actual leaf</div>
+          <div style="background:#5d7c3a; display:flex; align-items:center; justify-content:center; color:white; font-size: 11px; font-family: monospace;">remembered leaf</div>
+        </div>
+        <div class="deception-hex">Memory pulls toward the canonical, saturated version.</div>
+        <p style="margin: 0; font-size: var(--text-xs); color: var(--text-muted);">When asked to recall a color, we over-saturate. Why "the dress" stays viral.</p>
+      </div>
+
+      <div class="deception-cell" data-reveal>
+        <h4>5. Expectation (Mach bands)</h4>
+        <div class="deception-stage" style="background: linear-gradient(to right, #333 0%, #333 25%, #888 25%, #888 75%, #ddd 75%);"></div>
+        <div class="deception-hex">Each band is a constant gray. Edges appear darker / lighter than they are.</div>
+        <p style="margin: 0; font-size: var(--text-xs); color: var(--text-muted);">Lateral inhibition in the retina manufactures contrast at boundaries.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top: var(--s-8);">
+    <h2>Five families, one principle</h2>
+    <p>
+      Each family pushes the same underlying lesson: <em>what you see is not
+      what's there</em>. The retina, the optic nerve, and the visual cortex
+      collaborate to construct color appearance from physical light + adaptive
+      state + cognitive expectation. Albers wasn't proving the eye was wrong —
+      he was proving that "the color" is never reducible to a measurement.
+    </p>
+  </section>
+
+  <section class="albers-takeaway">
+    <h2>Takeaway</h2>
+    <ul>
+      <li><strong>Artists:</strong> deception isn't error — it's the substrate of seeing.</li>
+      <li><strong>Designers:</strong> spec sheets that pass colorimetrically can still ship broken.</li>
+      <li><strong>UI engineers:</strong> your CI screenshot diff is colorimetry; your designer is doing appearance — both are right.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  document.querySelectorAll('[data-reveal]').forEach(function (cell) {
+    cell.addEventListener('click', function () {
+      cell.classList.toggle('revealed');
+    });
+    cell.style.cursor = 'pointer';
+  });
+})();
+</script>
+
+</body>
+</html>

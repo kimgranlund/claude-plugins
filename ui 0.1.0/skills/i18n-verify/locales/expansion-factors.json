@@ -1,0 +1,57 @@
+{
+  "$schema": "i18n-expansion/v2",
+  "canon": "THE canonical expansion/contraction numbers for this bundle — SKILL.md's expansion-budget row and i18n-check.py's NO_EXPANSION_ROOM advisory are both derived from this file. Edit here first, then re-derive both consumers.",
+  "regimes": {
+    "shortString": "UI microcopy — English source ≤ ~10 chars (labels, buttons, menu items, column headers). Expansion commonly +100–200% (factor ×2.0–×3.0); the shorter the source, the larger the factor.",
+    "runningText": "Sentences and paragraphs — English source over ~70 chars. Expansion ~+30–50% for European languages (factor ×1.3–×1.5); CJK contracts.",
+    "note": "One number cannot serve both regimes: a label budgeted with the running-text factor truncates its German translation, and a paragraph budgeted with the label factor wastes half the page. A card surface may declare `string_regime`; i18n-check.py defaults to runningText."
+  },
+  "length_bands": {
+    "comment": "IBM's additional-space table for translation out of U.S. English (sources[1]); the W3C article (sources[0]) reproduces the same data as % of original.",
+    "en_chars_to_additional_space": {
+      "1-10": "+100–200%",
+      "11-20": "+80–100%",
+      "21-30": "+60–80%",
+      "31-50": "+40–60%",
+      "51-70": "+31–40%",
+      ">70": "+30%"
+    }
+  },
+  "sources": [
+    {
+      "name": "W3C Internationalization — 'Text size in translation' (Richard Ishida)",
+      "url": "https://www.w3.org/International/articles/article-text-size",
+      "grounds": "length-band table as % of original (≤10 en chars → 200–300% of source); measured per-language ratios for the 5-char string 'views' (it ×3.0, de ×2.8, pt ×2.6, fr ×2.6, zh ×1.2, ko ×0.8); 'the smaller the source message, the higher the likely translation length'; CJK glyphs need ~2× Latin width; German compound nouns resist wrapping."
+    },
+    {
+      "name": "IBM i Globalization — 'Text translation design for user interfaces'",
+      "url": "https://www.ibm.com/docs/en/i/7.4?topic=applications-text-translation-design",
+      "grounds": "the additional-space-required table for text translated out of U.S. English: ≤10 chars +100–200% · 11–20 +80–100% · 21–30 +60–80% · 31–50 +40–60% · 51–70 +31–40% · >70 +30%."
+    }
+  ],
+  "default": {
+    "shortString": { "expansionFactor": 2.5, "contractionFactor": 0.6 },
+    "runningText": { "expansionFactor": 1.4, "contractionFactor": 0.7 },
+    "notes": "Use when the locale is not enumerated — mid-band of the cited tables."
+  },
+  "locales": {
+    "en-US": { "shortString": { "expansionFactor": 1.0, "contractionFactor": 1.0 }, "runningText": { "expansionFactor": 1.0, "contractionFactor": 1.0 } },
+    "en-GB": { "shortString": { "expansionFactor": 1.1, "contractionFactor": 0.95 }, "runningText": { "expansionFactor": 1.05, "contractionFactor": 0.95 } },
+    "de-DE": { "shortString": { "expansionFactor": 3.0, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.4, "contractionFactor": 0.9 }, "notes": "W3C 'views' ×2.8. Compound nouns yield single long unwrappable words — min-content width matters as much as the factor." },
+    "fi-FI": { "shortString": { "expansionFactor": 3.0, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.4, "contractionFactor": 0.9 }, "notes": "Agglutinative like German — long single words. Band-derived (no per-language citation)." },
+    "fr-FR": { "shortString": { "expansionFactor": 2.6, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.35, "contractionFactor": 0.9 }, "notes": "W3C 'views' ×2.6 ('consultations')." },
+    "es-ES": { "shortString": { "expansionFactor": 2.5, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.3, "contractionFactor": 0.9 }, "notes": "Band-derived." },
+    "pt-BR": { "shortString": { "expansionFactor": 2.6, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.3, "contractionFactor": 0.9 }, "notes": "W3C 'views' ×2.6 ('visualizações')." },
+    "it-IT": { "shortString": { "expansionFactor": 3.0, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.3, "contractionFactor": 0.9 }, "notes": "W3C 'views' ×3.0 ('visualizzazioni')." },
+    "ru-RU": { "shortString": { "expansionFactor": 2.5, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.4, "contractionFactor": 0.9 }, "notes": "Same shape as German: sub-10-char strings commonly double or more ('Save' → 'Сохранить' ×2.25); running text ~+30–50%. The v1 single number ×1.2 was the running-text regime misread as the only regime." },
+    "pl-PL": { "shortString": { "expansionFactor": 2.5, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.3, "contractionFactor": 0.9 }, "notes": "Band-derived." },
+    "ja-JP": { "shortString": { "expansionFactor": 1.2, "contractionFactor": 0.5 }, "runningText": { "expansionFactor": 0.7, "contractionFactor": 0.5 }, "notes": "Character COUNT contracts but each glyph needs ~2× Latin width (W3C) — budget width, not characters; short strings can still exceed the English width." },
+    "zh-CN": { "shortString": { "expansionFactor": 1.2, "contractionFactor": 0.5 }, "runningText": { "expansionFactor": 0.7, "contractionFactor": 0.5 }, "notes": "W3C 'views' ×1.2 width-adjusted ('次檢視'); running text contracts." },
+    "zh-TW": { "shortString": { "expansionFactor": 1.2, "contractionFactor": 0.5 }, "runningText": { "expansionFactor": 0.7, "contractionFactor": 0.5 } },
+    "ko-KR": { "shortString": { "expansionFactor": 1.0, "contractionFactor": 0.55 }, "runningText": { "expansionFactor": 0.8, "contractionFactor": 0.55 }, "notes": "W3C 'views' ×0.8 ('조회') — Korean can contract even on short strings; the ×1.0 short-string budget covers the labels that don't." },
+    "ar-EG": { "direction": "rtl", "shortString": { "expansionFactor": 2.0, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.25, "contractionFactor": 0.85 }, "notes": "Running text ~+20–25%; short strings spike like European locales. Band-derived." },
+    "he-IL": { "direction": "rtl", "shortString": { "expansionFactor": 1.6, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.1, "contractionFactor": 0.85 }, "notes": "Often near parity or shorter in running text; band-derived short-string headroom." },
+    "th-TH": { "shortString": { "expansionFactor": 2.0, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.2, "contractionFactor": 0.9 }, "notes": "Band-derived; Thai stacks tone marks vertically — line-height, not just width (script-metrics.json)." },
+    "hi-IN": { "shortString": { "expansionFactor": 2.0, "contractionFactor": 0.8 }, "runningText": { "expansionFactor": 1.2, "contractionFactor": 0.9 }, "notes": "Band-derived; Devanagari conjuncts and matras raise vertical needs (script-metrics.json)." }
+  }
+}

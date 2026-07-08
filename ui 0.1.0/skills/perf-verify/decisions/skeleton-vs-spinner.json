@@ -1,0 +1,27 @@
+{
+  "$schema": "perf-skeleton-vs-spinner/v1",
+  "decisionTree": [
+    { "if": "duration < 300ms", "use": "nothing (busy state on trigger only)" },
+    { "if": "layout-bearing AND shape known AND duration 300ms–3s", "use": "skeleton that matches final layout" },
+    { "if": "shape unknown AND single replacement AND duration 300ms–1s", "use": "spinner in place" },
+    { "if": "list/grid of similar items AND duration 300ms–3s", "use": "skeleton array sized to expected count" },
+    { "if": "duration > 3s AND progress knowable", "use": "progress bar or percentage (real, not simulated)" },
+    { "if": "duration > 3s AND progress unknowable", "use": "indeterminate progress + typical-duration copy + cancel" },
+    { "if": "revalidating cached data", "use": "render cached + stale marker; no spinner" }
+  ],
+  "skeletonRules": [
+    "Skeleton blocks reserve the same space the final content will occupy.",
+    "Skeleton shimmer uses `continuous` motion role; respects prefers-reduced-motion (static placeholder).",
+    "Skeleton does not show counterfeit text or icons — only shape."
+  ],
+  "spinnerRules": [
+    "Spinner overlays the target region, not the whole screen, unless the whole screen is loading.",
+    "Spinner is accompanied by copy (loading-state slot) for screen-reader context.",
+    "Spinner respects prefers-reduced-motion — static alternative or very slow rotation."
+  ],
+  "refusal": [
+    "Spinner + skeleton simultaneously on the same region.",
+    "Skeleton that looks like real content and lies about the outcome (counterfeit).",
+    "Full-screen spinner for partial updates."
+  ]
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gamut envelope · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Gamut envelope</h1>
+    <p>
+      At a fixed OKLCh hue, the gamut of each RGB space is a 2D region in (L, C).
+      The wider the gamut, the higher the achievable chroma. Each region's
+      <strong>cusp</strong> — its widest point — is computed via Ottosson's
+      closed-form solver. Click anywhere on the chart to read out an OKLCh value.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Hue</h3>
+    <div class="controls">
+      <label for="hue">OKLCh hue</label>
+      <input type="range" id="hue" min="0" max="360" step="0.5" value="29">
+      <output id="hue-val">29.0°</output>
+    </div>
+    <div class="row" style="margin-top: var(--s-3);">
+      <label><input type="checkbox" id="show-srgb" checked> sRGB</label>
+      <label><input type="checkbox" id="show-p3" checked> Display P3</label>
+      <label><input type="checkbox" id="show-rec2020" checked> Rec.2020</label>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <div class="grid-2">
+      <div>
+        <gamut-envelope id="envelope" hue="29" show="srgb,p3,rec2020"></gamut-envelope>
+      </div>
+      <div class="card">
+        <h3>Pick value</h3>
+        <p style="color: var(--text-muted); font-size: var(--text-sm);">Click on the chart to set this.</p>
+        <dl class="kv">
+          <dt>L</dt><dd id="pick-L">—</dd>
+          <dt>C</dt><dd id="pick-C">—</dd>
+          <dt>h</dt><dd id="pick-h">—</dd>
+          <dt>OKLCh</dt><dd id="pick-oklch">—</dd>
+          <dt>Hex</dt><dd id="pick-hex">—</dd>
+        </dl>
+        <div id="pick-swatch" style="margin-top: var(--s-4); height: 80px; border-radius: var(--r-md); border: 1px solid var(--border); background: transparent;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What's plotted</h2>
+    <p>
+      The X axis is OKLCh chroma (0 to 0.4). The Y axis is OKLCh lightness (0 to 1).
+      For each (L, C) at the current hue, we check whether the resulting color
+      lies within each gamut's [0, 1]³ linear-RGB cube. The widest-supported
+      gamut "wins" in the rendering, so you see sRGB as the inner region and
+      Rec.2020 as the outermost.
+    </p>
+    <p>
+      The black dot marks the <strong>sRGB cusp</strong> — the maximum-chroma
+      point at this hue, computed via Ottosson's three-face polynomial + Halley
+      refinement (closed-form, ~6 floating-point operations per call).
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function() {
+  var RC = window.RefColor;
+  var mapping = RC.mapping;
+  var srgbTransfer = RC.srgbTransfer;
+  var utils = RC.utils;
+  var fmt = utils.fmt, toHex = utils.toHex, toCssOklch = utils.toCssOklch;
+
+  var hueInput = document.getElementById('hue');
+  var hueVal = document.getElementById('hue-val');
+  var showSrgb = document.getElementById('show-srgb');
+  var showP3 = document.getElementById('show-p3');
+  var showRec = document.getElementById('show-rec2020');
+  var envelope = document.getElementById('envelope');
+
+  function updateHue() {
+    var h = parseFloat(hueInput.value);
+    hueVal.textContent = fmt(h, 1) + '°';
+    envelope.setAttribute('hue', h);
+  }
+
+  function updateShow() {
+    var list = [];
+    if (showSrgb.checked) list.push('srgb');
+    if (showP3.checked) list.push('p3');
+    if (showRec.checked) list.push('rec2020');
+    envelope.setAttribute('show', list.join(','));
+  }
+
+  hueInput.addEventListener('input', updateHue);
+  [showSrgb, showP3, showRec].forEach(function (c) {
+    c.addEventListener('input', updateShow);
+  });
+
+  envelope.addEventListener('pick', function (e) {
+    var L = e.detail.L, C = e.detail.C, hDeg = e.detail.hDeg, lch = e.detail.oklch;
+    document.getElementById('pick-L').textContent = fmt(L, 3);
+    document.getElementById('pick-C').textContent = fmt(C, 3);
+    document.getElementById('pick-h').textContent = fmt(hDeg, 1) + '°';
+    document.getElementById('pick-oklch').textContent = toCssOklch(lch);
+    var mapped = mapping.mapToSRGB(lch);
+    var encoded = srgbTransfer.encode(mapped);
+    var hex = toHex(encoded);
+    document.getElementById('pick-hex').textContent = hex;
+    document.getElementById('pick-swatch').style.background = hex;
+    envelope.setAttribute('pick', L + ',' + C);
+  });
+
+  updateHue();
+  window.addEventListener('resize', function () {
+    if (envelope.render) envelope.render();
+  });
+})();
+</script>
+
+</body>
+</html>

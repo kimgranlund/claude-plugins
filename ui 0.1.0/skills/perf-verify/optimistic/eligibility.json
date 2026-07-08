@@ -1,0 +1,20 @@
+{
+  "$schema": "perf-optimistic-eligibility/v1",
+  "rule": "Optimistic UI applies only when ALL criteria are met; otherwise use non-optimistic.",
+  "criteria": [
+    { "id": "almost-always-success", "check": "success rate ≥ 99% in production (measured, not assumed)" },
+    { "id": "idempotent",            "check": "repeating the operation produces the same result" },
+    { "id": "reversible",            "check": "reversible via a declared rollback target — the exact prior state the UI restores on failure" },
+    { "id": "low-blast-radius",      "check": "blastRadius.scope ∈ {self, workspace} AND count ≤ 1; critical/high refused" },
+    { "id": "fast-feedback",         "check": "server response p95 ≤ 3s; beyond this, optimistic obscures true status" }
+  ],
+  "examples": {
+    "eligible": ["toggle like", "rename own item", "mark as read", "reorder within a list", "drag-to-reorder"],
+    "ineligible": ["send payment", "delete shared resource", "invite user to org", "publish publicly", "cross-user state changes"]
+  },
+  "refusal": [
+    "Optimistic UI without rollback contract — silent failure on error.",
+    "Optimistic UI on operations whose true success depends on server-side validation (e.g., unique-username check).",
+    "Optimistic UI where the user needs to *see* the server's response (e.g., payment confirmation number)."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "i18n-mirroring/v1",
+  "policy": "explicit-per-icon",
+  "default": "never",
+  "categories": {
+    "always": {
+      "description": "Flip with writing direction.",
+      "examples": ["arrow-left", "arrow-right", "chevron-left", "chevron-right", "undo", "redo", "indent", "outdent", "reply", "forward", "list-bullet", "breadcrumb-separator", "pagination-prev", "pagination-next", "back", "next"]
+    },
+    "never": {
+      "description": "Keep absolute orientation regardless of direction.",
+      "examples": ["logo", "check", "checkmark", "close", "search", "settings", "user", "home", "bookmark", "heart", "star", "bell", "clock", "calendar", "phone", "mail", "camera", "video", "image", "document", "folder", "download", "upload", "media-play", "media-pause", "media-stop", "volume"]
+    },
+    "ltr-only": {
+      "description": "Shown only in LTR contexts.",
+      "examples": []
+    },
+    "rtl-only": {
+      "description": "Shown only in RTL contexts.",
+      "examples": []
+    }
+  },
+  "notes": [
+    "media-play is 'never' by long-standing cross-direction convention; if your product deviates, declare it.",
+    "Numerical progress bars flip when direction flips — handled via logical-axis CSS, not icon mirroring."
+  ]
+}

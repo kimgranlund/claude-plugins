@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color temperature · ref-color</title>
+<link rel="stylesheet" href="../lib/css/shell.css">
+<link rel="stylesheet" href="../lib/css/components.css">
+</head>
+<body>
+
+<header class="app-header"></header>
+
+<main class="app-main">
+
+  <section class="page-hero">
+    <h1>Color temperature (Planckian locus)</h1>
+    <p>
+      A blackbody at temperature T emits a unique spectrum, which integrates
+      to a specific point on the CIE xy chromaticity diagram. As T sweeps
+      from cool (1500 K, deep red) to hot (15000 K, blue-white), the
+      chromaticity traces a curve called the <strong>Planckian locus</strong>.
+      The "color temperature" of a white light source is the temperature
+      of the blackbody whose chromaticity is closest.
+    </p>
+  </section>
+
+  <div class="card">
+    <h3>Temperature</h3>
+    <div class="controls">
+      <label for="t">Kelvin</label>
+      <input type="range" id="t" min="1500" max="15000" step="50" value="6500">
+      <output id="t-val">6500 K</output>
+    </div>
+    <div class="row" style="margin-top: var(--s-3);">
+      <button data-temp="1850">candle 1850 K</button>
+      <button data-temp="2856">tungsten 2856 K</button>
+      <button data-temp="3200">photo 3200 K</button>
+      <button data-temp="5003">D50 5003 K</button>
+      <button data-temp="6504">D65 6504 K</button>
+      <button data-temp="9300">cool white 9300 K</button>
+    </div>
+  </div>
+
+  <section style="margin-top: var(--s-8);">
+    <kelvin-picker id="kp" temp="6500"></kelvin-picker>
+  </section>
+
+  <section>
+    <h2>About the math</h2>
+    <p>
+      This page uses <strong>Kim et al. (2002) polynomial fits</strong> to
+      the Planckian locus on CIE xy. The full physical derivation would
+      integrate Planck's blackbody law
+      <em>B(λ, T) = 2hc² / λ⁵ · 1 / (exp(hc/λkT) − 1)</em>
+      against the CIE 1931 2° CMFs at 1nm steps. The Kim polynomial is
+      accurate to within ~10⁻⁴ in (x, y) over 1667–25000 K — well below the
+      MacAdam JND ellipses.
+    </p>
+    <p>
+      The reference dots show CIE standard illuminants A, D50, D55, D65,
+      D75. They aren't <em>exactly</em> on the Planckian locus — daylight
+      illuminants (the D series) are slightly off because actual daylight
+      isn't a pure blackbody (atmospheric scattering, etc.). The distance
+      from the locus is called <code>Duv</code>.
+    </p>
+  </section>
+
+</main>
+
+<footer class="app-footer"></footer>
+
+<script src="../lib/dist/refcolor.bundle.js"></script>
+<script>
+(function () {
+  var t = document.getElementById('t');
+  var tV = document.getElementById('t-val');
+  var kp = document.getElementById('kp');
+
+  function update() {
+    var v = parseFloat(t.value);
+    tV.textContent = v.toFixed(0) + ' K';
+    kp.setAttribute('temp', v);
+  }
+  t.addEventListener('input', update);
+  document.querySelectorAll('[data-temp]').forEach(function (b) {
+    b.addEventListener('click', function () { t.value = b.dataset.temp; update(); });
+  });
+  window.addEventListener('resize', function () { if (kp.render) kp.render(); });
+  update();
+})();
+</script>
+
+</body>
+</html>
