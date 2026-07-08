@@ -115,5 +115,8 @@ When the upstream or implicit token system has already made a design decision �
 an on-color deliberately constant across schemes (mirror-silver keeping a near-black
 label in both), or a compat alias — the gate run reports it as a `DIVERGENCE`/`INFO`
 line and the receipt records it verbatim. **Never "fix" an authorial decision
-silently**; contrast still gates it (a constant on-color that fails AA is F1, not a
-divergence), but a passing divergence is the author's call to keep or revisit.
+silently.** Contrast follows the same posture (G1's kit-fidelity row): a sub-4.5:1
+pair is F1 only while *undisclosed* — with the receipt's count-exact disclosure it
+ships DISCLOSED, and the gate enforces the disclosure's honesty (count drift IS a
+FAIL), never the brand's values. A passing divergence is the author's call to keep
+or revisit.

@@ -1,6 +1,6 @@
 {
   "skill": "material-design-color-tokens",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-color consumption queries. Negatives drawn adversarially from the two sibling md-sys skills (type/geometry \u2014 incl. the control-text-size boundary), the ultimate-tokens --c-* twin, and the design/verify/science peers.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-color consumption queries. Negatives drawn adversarially from the two sibling md-sys skills (type/geometry — incl. the control-text-size boundary), the ultimate-tokens --c-* twin, and the design/verify/science peers. Reciprocal added 2026-07-08: generic {prefix}-{family}-{slot} grammar questions belong to design-md-format (which reciprocally no-triggers on --md-sys-* role semantics, owned here).",
   "cases": [
     {
       "id": "t01",
@@ -95,6 +95,11 @@
     {
       "id": "n09",
       "prompt": "our tokens are plain --c-primary not md-sys",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "how do I name tokens in the {prefix}-{family}-{slot} grammar?",
       "expect": "no-trigger"
     }
   ]

@@ -19,3 +19,19 @@ Forged via skill-forge (adapted run inside Claude Design; see design-md-author/i
 - P3 draft: PASS — corpus authored (4 reference files), not an empty shell (skill-forge knowledge-species note satisfied without a pack-forge round: the ground truth was supplied in-conversation via uploads/DESIGN.md, tokens.json, README.md). 2026-07-08
 - P4 language: PASS — manual instantiation pass. 2026-07-08
 - P5 validate: PASS-with-note — no lint script (accepted); fence closure reciprocated in design-md-author/evals/evals.json. 2026-07-08
+
+## Post-merge note (2026-07-08, synthesis verdict)
+
+design-md-author — this skill's original sibling command — merged into
+`design-system-author-dscard` the day after both arrived: the pair collided head-on with dscard
+(same platform, same triggers, two methods), and the workspace's synthesis tests returned a merge
+verdict. What moved where: the census/architecture/round-trip phases became dscard method steps
+1–2 and 7; the behavioral assertions live on as `design-system-author-dscard/evals/assertions.md`;
+the as-received originals are preserved at git commit 7ca2d96. This skill survives as the family's
+format-knowledge seat — its authoring fence now points at design-system-author-dscard, and two
+eval routings were corrected in the schema conversion (--md-sys-* semantics → material-design-
+color-tokens; the corpus-authoring flagship → design-system-author-dscard). Doctrine rulings
+ratified at the merge: accessibility is disclose-not-enforce with the gate enforcing count-exact
+disclosure honesty (already implemented in bundle_gates.py via nonoun-color-tokens PR #229);
+DESIGN.md teaches the system (grammar + consumption roles) while the exhaustive token inventory
+stays in the companion carrier (anatomy.md updated).

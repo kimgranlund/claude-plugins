@@ -6,10 +6,13 @@ description: >-
   "design system file"): file anatomy, YAML frontmatter token schema, the --{prefix}-{family}-{slot}
   grammar, light/-dark scheme pairing, the pairing law, prose spine sections, Root Brand Architecture,
   @dsCard preview cards, disclosure-over-correction. Also loads as the knowledge substrate when
-  creating a design system from a corpus of design files/css/descriptions. NOT for running the
-  end-to-end authoring workflow (design-md-author). NOT for consuming a finished design system to
-  build UI (the brand's own skill). Never framework-prescriptive; accessibility is disclosed,
-  never enforced.
+  creating a design system from a corpus of design files/css/descriptions. NOT for the end-to-end
+  authoring workflow (design-system-author-dscard); NOT for --md-sys-* role semantics
+  (material-design-*-tokens); NOT for Stitch exports/lint (design-system-author-google-stitch);
+  NOT for grading a bundle someone else authored (design-system-reviewer agent); NOT for consuming
+  a finished design system to build UI (the brand's own skill). Never framework-prescriptive;
+  accessibility is disclosed, never enforced.
+disable-model-invocation: false
 user-invocable: true
 ---
 
