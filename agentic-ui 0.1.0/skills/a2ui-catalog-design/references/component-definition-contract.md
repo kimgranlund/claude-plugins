@@ -77,3 +77,23 @@ Claim: `Field` wraps exactly one control and reflects two bindable strings 1:1. 
 this row avoids: giving `Field` a `ChildList` would let an agent stuff multiple controls into one
 labelled field — the `child` model makes that a structural-validation failure, not a silent
 mis-render.
+
+---
+
+## UPDATE 2026-07-08 — two prop idioms the chart/Text waves minted (ADR-0106/0109/0107)
+
+- **Non-bindable presentation intent** (`Text.truncate`, `Text.emphasis`): per-instance INTENT that
+  is not data state takes a boolean prop with **`bindable` ABSENT by key-omission** (never
+  `"bindable": false`) — the fleet convention for "the model sets it, the data model never drives
+  it". Rides the factory's generic `default:`→`setAttr` arm; NO factory code per prop.
+- **Array-typed bindable props** (`Sparkline.values: number[]`, `BarChart.data: {label,value}[]` —
+  the catalog's FIRST): declare the full item schema in the row; the shared validator accepts
+  literal arrays at top-level type depth (deeper per-item checking permitted, not required — the
+  component's own hardened codec is the safety net; `from(null) = []`, malformed JSON never
+  throws). A `{path}` bind resolves to the same typed array and re-renders on `updateDataModel`.
+- **The intake test for "should this become a catalog prop":** route through ADR-0102's
+  CSS-less-consumer chooser — Lane B (a prop) only when the concern is per-instance intent over a
+  safe default; component-owned defaults (Lane A) and taught idioms (Lane C) come first.
+- **The §5.2 usage-guidance pattern** (ADR-0087 Fork-A style): a row that competes with existing
+  vocabulary lands WITH a when-to-use note (the chart four-way: tile for a latest value ·
+  Sparkline for a series' shape · BarChart for comparing magnitudes · List table for exact values).

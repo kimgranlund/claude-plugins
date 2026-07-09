@@ -92,3 +92,15 @@ well-formed path is legal (SPEC-R4 AC2). Two rules:
 The `{call}` evaluator, `@index`, DynamicString `${…}` interpolation, and `checks`
 (functions-and-checks) · dynamic-list templates and the relative-path rewrite mechanics
 (dynamic-lists) · how a bound value flows back on user input (actions-and-two-way-input).
+
+---
+
+## UPDATE 2026-07-08 — the root alias (ADR-0099, accepted + built)
+
+`updateDataModel` with `path: "/"` is the protocol's **root alias**: it whole-model-REPLACES,
+exactly like an absent or empty path — upstream emits it, and a live agent reproduced it (the
+forcing bug: a `"/"` write was silently treated as a keyed child write). Honored at **all three
+apply-sites** — the renderer (`renderer.ts`), corpus canonicalization (`corpus/canonical.ts`), and
+admission (`corpus/admit.ts` now accepts `undefined | '' | '/'`). The JSON-Pointer engine itself
+(`setPointer`) stays RFC-6901-pure — `"/"` means `{"": …}` there; the aliasing is resolved BEFORE
+the pointer layer, never inside it. A regression pair pins both readings. `[estate, ADR-0099]`

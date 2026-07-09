@@ -1,22 +1,30 @@
-# agentic-ui — A2UI protocol, catalog, agent, and corpus knowledge
+# agentic-ui — A2UI + A2A protocol, catalog, agent, and corpus knowledge
 
-Four knowledge packs that answer how `@agent-ui/a2ui` works, cited from the repo corpus — they
-explain, they do not build. Named `agentic-ui` rather than `a2ui` on purpose: this plugin is scoped
-to host both the existing A2UI (agent-to-UI protocol) content below and any future A2A (Agent2Agent
-protocol) material, even though no A2A skill content exists yet anywhere in the source corpus.
+Two skill families over the agentic-UI estate, cited from the repo corpus. The **A2UI four** answer
+how `@agent-ui/a2ui` (agent-to-UI) works; the **A2A four** cover the Agent2Agent layer
+(`@agent-ui/a2a`, spec pin v0.3.0) — one knowledge pack, two verb-named procedures, one corpus
+pack. The plugin was named `agentic-ui` rather than `a2ui` precisely to host both.
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
 | `skills/a2ui-protocol` | Knowledge pack | model-only | The wire protocol + zero-dependency renderer: message lifecycle, the Binding union, dynamic lists, two-way input, checks, the function-call vs `callFunction` RPC split, the two-code error taxonomy, version pinning |
 | `skills/a2ui-catalog-design` | Knowledge pack | model-only | How a catalog is designed and extended: the definition contract, the factory/resolution pattern, the naming law, two-tier extensibility, the security allowlist + conformance, and coverage policy |
-| `skills/a2ui-conversational-agent` | Knowledge pack | model-only | The live-agent system: the AgentTransport isolation seam, the Turn/Session/TurnInput model, the produce() generate-heal-validate-self-correct loop, the multi-provider seam and trust boundary, the in-chat switcher, and the open ADR-0088 gap |
+| `skills/a2ui-conversational-agent` | Knowledge pack | model-only | The live-agent system: the AgentTransport isolation seam, the Turn/Session/TurnInput model, the produce() generate-heal-validate-self-correct loop, the multi-provider seam and trust boundary, the in-chat switcher, and the conversational channel + asks (the ADR-0088 family, shipped 2026-07-08) |
 | `skills/a2ui-training-corpus` | Knowledge pack | model-only | The curated training-corpus subsystem: record schema, the two-tier admission gate + healer, the judge/verdict adapter, canonicalization + dedup, retrieval, and the version-change repair loop |
+| `skills/a2a-protocol` | Knowledge pack | model-only | The A2A wire model (spec pin v0.3.0): AgentCard discovery, Message/Task/Artifact lifecycle + TaskState machine, Parts + media types, JSON-RPC/SSE transport, the extension mechanism (the A2UI-over-A2A bridge as the worked exemplar), and why version drift is wire-breaking (the 1.0.x PascalCase rename). Four narrow spec-fetch gaps bannered in-file |
+| `skills/a2a-agent-design` | Procedure | user + model | Design/build an A2A-conformant agent, both directions: card-first outside-in × state-machine inside-out, reconciled; pure RPC core behind a thin socket shell; conformance as a gate; the estate reference-implementation tour |
+| `skills/a2a-isolation-verify` | Procedure | user + model | The arena-minted no-cross-contamination proof kit: deterministic per-seat canaries, the wire-origin + context-provenance audits, closed schemas, byte-complete recording — each instrument proven to BITE via committed negative controls |
+| `skills/a2a-training-corpus` | Knowledge pack | model-only | The A2A concept/demo teaching corpus: record anatomy, HV-row citations, admission + quarantine, the derived concepts page + drift gates, line-order-as-teaching-order |
 
-All four are `disable-model-invocation: false` / `user-invocable: false` — model-only knowledge
-packs the router picks up from their descriptions, not slash commands. Each carries a
-`scripts/routing-corpus.json` (the original routing corpus, kept as-is) alongside an
-`evals/evals.json` (this workspace's `eval_check.py` schema, converted 1:1 from the same
-positives/negatives) so both the legacy and the forge-native tooling can regress the same cases.
+The knowledge packs are `user-invocable: false` — model-only, routed by description; the two A2A
+procedures are user-invocable. The A2UI four each carry a `scripts/routing-corpus.json` (the
+original routing corpus, kept as-is) alongside an `evals/evals.json` (this workspace's
+`eval_check.py` schema, converted 1:1 from the same positives/negatives) so both the legacy and the
+forge-native tooling can regress the same cases. **The A2A four were distilled 2026-07-08** from
+the HV ledger (character-verified A2A v0.3.0 quotes) + the shipped `@agent-ui/a2a` sources, then
+citation-verified by an independent pass (~70 citations opened, zero fabrications). Honest
+residue: four narrow spec-fetch gaps bannered inside `a2a-protocol`'s references, and **routing
+evals are still pending** for all four (the one pre-ship gate left).
 
 ## Cross-plugin seam
 

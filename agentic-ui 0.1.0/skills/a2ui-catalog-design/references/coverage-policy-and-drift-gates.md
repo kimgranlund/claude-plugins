@@ -89,3 +89,15 @@ Route the question by the gate: (1) does a `controls/{x}/*.md` descriptor exist?
 shipped, so it's out of scope (like `Image`/`Video`). (2) If yes and it's uncatalogued → the gate
 should be RED; either it's on `EXCLUSION_ALLOWLIST` with a reason, or it's a live SPEC-N2 violation
 to fix by adding the row (a job for the `a2ui-builder` agent — see the SKILL boundary).
+
+---
+
+## UPDATE 2026-07-08 — the residue guard (the seed-and-drain hardening, chart wave M1-d)
+
+Seed-and-drain gained its missing negative half: the exclusion allowlist now carries a standing
+**residue assertion** — every allowlisted type must be ABSENT from the catalog keys — driven
+through an extracted predicate (`allowlistResidue`) that a synthetic negative control proves BITES.
+Without it, a drained-but-not-removed seed stays silently green forever (the type is
+catalog-covered, so the coverage checks pass; the stale entry sits inert). Lesson: a stopgap set
+needs BOTH directions gated — "nothing missing" AND "no residue" — and the standing gate must call
+the same predicate the negative control proves, never a parallel assertion form (two forms drift).

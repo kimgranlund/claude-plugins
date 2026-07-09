@@ -1,128 +1,143 @@
-# The conversational-reasoning & click-routing gap — the CURRENT gap + the PROPOSED design
+# The conversational channel & asks — SHIPPED
 
-> Axis: why the live-agent demo cannot yet explain "why X not Y", why every click forces a turn,
-> and the PROPOSED (unbuilt) design that would close both. Grounded in the shipped source
-> (`site/pages/a2ui-live.ts`, `packages/agent-ui/a2ui/tools/agent/{agent-transport,produce}.ts`,
-> `packages/agent-ui/a2ui/src/renderer/{action,dispatch,renderer}.ts`,
-> `packages/agent-ui/a2ui/src/examples/canvas-button.ts`) and in the design record
-> **ADR-0088** (`.claude/docs/adr/0088-a2ui-live-conversational-channel.md`).
+> Axis: how the live agent talks BESIDE the A2UI stream (the note channel), when it ASKS instead of
+> guessing (clarify + catalog-boundary negotiation, feed-embedded asks), how a deployment scales the
+> disposition (the mode axis), how idiom knowledge composes without context bloat (the mini-skill
+> registry), and how `wantResponse` routes clicks. All SHIPPED and gated. Design records: ADR-0088 ·
+> 0089 · 0090 · 0091 · 0097 (`.claude/docs/adr/`). Status cells: 0088/0089/0090/0097 = `accepted`;
+> **ADR-0091's cell still reads `proposed`** (`0091:7`) even though its build is shipped and gated —
+> cite the code for mini-skill claims. Paths below are relative to `packages/agent-ui/a2ui/` except
+> `site/…` (repo root) and the `src/live-agent/*.test.ts` gates.
 
-> ⚠ **STATUS — ADR-0088 is `proposed` (2026-07-07), NOT built and NOT ratified.** Parts 1–3 below
-> are a design record, not shipped behavior. The proposed→accepted flip is Kim's alone (a hook
-> enforces it — the author cannot self-ratify). When answering from this axis, say plainly which
-> claims are SHIPPED (the two gaps) and which are PROPOSED (the three-part design). Do not
-> attribute authority to something that does not exist yet. Authoring/revising this ADR routes to
-> [[system-planner]] (via [[adr-author]]), never to this pack.
+## 1. The note channel — prose rides BESIDE the A2UI stream, never inside it
 
-## Gap 1 (SHIPPED reality) — there is no natural-language channel
+**Claim — every turn opens with a reserved, versionless meta-line carrying the model's own prose.**
+The GRAMMAR instructs "Note line (ALWAYS first)" — one JSON object
+`{"a2uiMeta":{"note":"…"}}` before any A2UI JSONL, on EVERY turn (`tools/agent/system-prompt.ts:62-68`).
+`readMetaLine` rejects any line carrying `version` (`tools/agent/meta-line.ts:85`) — the meta-line is
+provably NOT an `A2uiServerMessage`, a demo-transport framing convention, not protocol
+(`meta-line.ts:1-11`). The envelope is `{ note?, ask?, trace? }` (`meta-line.ts:62-68`).
+- `produce()` peels the FIRST non-empty line before heal/validate (`tools/agent/produce.ts:180-187`,
+  called at `:297`) — a blank-line-tolerant refinement over ADR-0088's literal "leading line" — and
+  yields the re-composed meta-line FIRST, then the validated A2UI lines (`produce.ts:336-340`).
+- **A note-only turn is a clean success, not a halt** (empty ≠ invalid): zero remaining A2UI lines
+  returns after yielding the meta-line alone (`produce.ts:303-311`; ADR-0088 Consequences).
+- The page filters the meta-line before `host.ingest`/`allLines`/the JSON tab
+  (`site/pages/a2ui-live.ts:294-304`) and shows the model's prose verbatim —
+  `addMessage('agent', note ?? summarize(turnLines))` (`a2ui-live.ts:367`); `summarize()` is only the
+  fallback for note-less turns (the recorded backbone).
+- **The decision trace grounds "why".** `produce()` assembles a `TurnTrace` (`turnIndex`, retrieval
+  query, `exemplarIds`, `rounds`, `healed`, `failureCodes`, `model` — `meta-line.ts:31-43`,
+  `produce.ts:270-280`) onto the same meta-line; the browser holds `traces[]` parallel to the session,
+  and `traceDigest()` prepends the last 5 (plus retained notes) to the NEXT intent turn's `text`
+  (`a2ui-live.ts:387-402`, `:420`) — shipped as a text-prepend on the existing `TurnInput.text`, not a
+  new context block; the chat still shows the user's bare text. Caveat: `turnIndex` is a
+  Messages-array index advancing by 2, never a dense ordinal (`produce.ts:266-270`).
 
-**Claim — `Turn.content` is A2UI-JSONL-only; no field, on the wire or in the session, carries
-prose.** For an `assistant` turn `content` is defined as "the A2UI JSONL the agent emitted"
-(`agent-transport.ts:30-31`). `produce()` yields ONLY validated A2UI —
-`for (const msg of output) yield JSON.stringify(msg)` (`produce.ts:136`). The chat's "Agent: …"
-line is **synthesized client-side** by `summarize()`, which lists message KINDS
-("Emitted 3 A2UI message(s): createSurface, …"), never a sentence the model produced
-(`a2ui-live.ts:187-193`). **Failure mode:** ask "why did you choose a Card over a Table" today and
-there is nowhere for the answer to live — and nothing recorded to ground it in (see the trace,
-below).
+## 2. The ASK grammar — clarify, negotiate the catalog wall, and feed-embedded asks
 
-## Gap 2 (SHIPPED reality) — clicks route indiscriminately, though `wantResponse` is wired
+**Clarify-before-acting** (ADR-0089 §1): an underdetermined turn ("make it better") gets a note-only
+turn asking ONE qualifying question; a request actionable with a sensible default still builds
+(`system-prompt.ts:82-88`). **Catalog-boundary negotiation** (ADR-0089 §2): at the wall the agent
+names the limit, proposes an approximation from EXISTING catalog types, and waits for yes
+(`system-prompt.ts:90-98`) — the SPEC-R9 allowlist is never widened; "improvise" =
+approximate-within-catalog + disclose.
 
-**Claim — `handleClientMessage` turns EVERY client message into a full visible turn, with no
-condition** (`a2ui-live.ts:224-229`). Meanwhile **`wantResponse` is wired end-to-end but unused
-for routing:** the agent authors it on a `Button.action` (ADR-0011), the renderer reads it
-(`renderer.ts:348`) and stamps it onto the emitted `A2uiAction` (`action.ts:87-96`,
-`protocol.ts:174`). Its only live use is renderer RPC-correlation (register an `actionResponse`
-slot when `wantResponse` is set — `action.ts:100-106`); the "should this click talk back" signal
-is unread by the page. **Blocking discovery:** the committed backbone seed sets **no**
-`wantResponse` — `action: { action: 'submit' }` (`canvas-button.ts:27`), as do most corpus action
-buttons. So any rule of "absent ⇒ silent" would kill the shipped demo's turn-2 and regress every
-existing action button — which is why the proposed default is opt-out, below.
+**Feed-embedded asks** (ADR-0097): for closed-set/typed answers the ask becomes clickable UI in the
+chat feed.
+- **The `ask` routing field** rides the same meta-line: `{"a2uiMeta":{"note":"…","ask":{"surfaceId":
+  "ask-1"}}}` (`system-prompt.ts:70-80`, `meta-line.ts:50-52`); the ask's UI is ordinary validated
+  A2UI on the same stream. A malformed `ask` drops only itself, never the envelope
+  (`meta-line.ts:94-101`).
+- **The 23-IN/13-OUT TOTAL partition** — `tools/agent/feed-catalog.ts`: `FEED_SURFACE_TYPES` (23,
+  `:29-53`) and `FEED_EXCLUDED` with a recorded reason per entry (13, `:71-112`) — including the
+  chart-family entries `Sparkline` (`:94-97`) and `BarChart` (`:98-102`), added per ADR-0107 /
+  ADR-0097's 2026-07-08 Amendment ("report content, not an ask affordance").
+  The gate (`src/live-agent/feed-catalog.test.ts:23,26-35`) asserts IN ∪ OUT = the catalog's
+  component set exactly and disjointly — an undispositioned future type turns CI red.
+- **Three enforcement points, one source** (`feed-catalog.ts:7-13`): (a) prompt-build — the GRAMMAR's
+  feed-allowed list is composed from `FEED_SURFACE_TYPES` (`system-prompt.ts:80`); (b) producer — the
+  `FEED_SCOPE` gate runs AFTER the shared validator, feeding a produce-layer-only `'FEED_SCOPE'`
+  failure back as a self-correct round, never a stream (`produce.ts:246-256`, `:322-327`); (c) page —
+  fail-closed: every type on the buffered ask lines must pass `isFeedSurfaceType` or the WHOLE ask
+  drops to the note (`a2ui-live.ts:335-352`, `site/lib/ask-registry.ts:50-67`).
+- **Ask integrity is a silent degrade, not a retry**: an `ask` no payload line creates, or colliding
+  with a session-known surface, is dropped from the outgoing meta-line — the note stands
+  (`produce.ts:231-235`, `:331`). A note-less ask never ships at all — the meta-line is only yielded
+  when `note !== undefined` (`produce.ts:336-339`, post-ship review finding 4).
+- **Lifecycle**: one fresh renderer host per ask in its own bubble; `pending → frozen(answered |
+  bypassed)` via bubble `inert` + `data-state`, never disposed — history stays visible
+  (`ask-registry.ts:84-94`, `:124-131`). **Freeze fires on turn COMPLETION, not dispatch** — the
+  ADR's "freeze on dispatch" wording was corrected by its own Erratum; a halted turn leaves the ask
+  pending (`a2ui-live.ts:326-329`). Line routing uses `has()` — ANY registry-known surface except
+  this turn's own fresh ask is dropped (`a2ui-live.ts:305-313`, closing the one-turn `isFrozen` gap).
+  Reset disposes all ask hosts (`a2ui-live.ts:445`, `ask-registry.ts:134-137`).
 
-## The PROPOSED design (ADR-0088, three coupled parts on ONE new wire mechanism)
+## 3. The mode axis — `specific` ↔ `blue-sky`; what scales and what never does
 
-Bundled deliberately (part 2 rides part 1's channel; part 3 is the routing half of the same "which
-interactions are conversational" question). Ratify all three knowingly.
+`GenUiMode = 'default' | 'specific' | 'blue-sky'` (`tools/agent/gen-ui-mode.ts:20-25`); Structural is
+deliberately NOT a member — it is the shipped recorded transport, a different layer (Kim's resolved
+fork, ADR-0090 §3). `grammarFor` composes the invariant spine + the mode's scaled block; absent or
+`'default'` returns the literal `GRAMMAR` constant unchanged — byte-identity by construction
+(`system-prompt.ts:258-270`; gated at `src/live-agent/system-prompt-grammar.test.ts:480`).
+- **What scales**: clarify threshold and negotiation appetite — dialed DOWN in `specific`
+  (decline-and-redirect, `system-prompt.ts:178-188`), dialed UP in `blue-sky` (multi-round clarify,
+  narrated reasoning, the top-down/bottom-up/reconcile composition discipline + ★ calibration
+  examples, `:190-221`) — plus the feed-ask disposition (`:231-250`).
+- **What never scales**: the honesty floor — never invent a type/prop, never silently substitute —
+  identical in every mode (`system-prompt.ts:170-173`; ADR-0090 §2); no mode widens SPEC-R9 or the
+  feed set. The mode threads `ProduceOptions.mode → buildSystemPrompt` (`produce.ts:73-75`, `:263`) —
+  the proven `model` path; nothing else in the loop branches on it.
 
-**1. The `note` channel — a reserved leading meta-line on the SAME `AsyncIterable<string>`
-stream.** Each turn's output splits into a short natural-language `note` + optional A2UI JSONL
-(only when the UI changes). The note rides as a meta-line emitted FIRST — a JSON object with a
-reserved wrapper key and **no `version` field**, e.g.
-`{"a2uiMeta":{"note":"I used a Card because you asked for a summary with one action."}}`.
-- **Claim (PROPOSED, ADR-0088 pt 1) — the meta-line would be provably NOT an `A2uiServerMessage`.**
-  Every server message carries `version` + one fixed envelope key (`dispatch.ts:36-43`); a
-  versionless line routes to `VERSION_UNSUPPORTED`, *returned not thrown* (`dispatch.ts:76-78`) — so
-  even a leaked meta-line would be fault-isolated.
-- **Claim (PROPOSED, ADR-0088 pt 1) — `AgentTransport.turn`'s signature would stay byte-identical**
-  (`agent-transport.ts:67-69`);
-  the meta-line is a demo-transport framing convention, NOT part of the A2UI protocol. This is the
-  wire-purity constraint (SPEC-N3 / ADR-0070 clause 3): prose must ride *beside* the validated A2UI
-  stream, never inside it (smuggling it into a server message would fail the shared validator or
-  pollute the judged corpus). `produce()` would peel the meta-line BEFORE heal/validate and yield
-  it first; the page filters it before `host.ingest`, then
-  `addMessage('agent', note ?? summarize(...))` — so `summarize()` demotes to a fallback and the
-  recorded backbone (which emits no note) renders exactly as today.
+## 4. The mini-skill registry — SIX modules, TF-IDF selection, cap 3, degrade-to-empty
 
-**2. The decision-trace — a light, browser-held, per-turn record that grounds "why".** A compact
-`TurnTrace` per turn — `{ turnIndex, query{intent,k}, exemplarIds[], rounds, healed,
-failureCodes[], model }` — carried back on the same meta-line.
-- **Claim (PROPOSED, ADR-0088 pt 2) — it would live browser-side, PARALLEL to `session.turns`, not
-  inside it.** `session.turns` is
-  the Messages-API payload the model consumes; polluting it changes what the model sees (see
-  turn-session-and-input-intent). It is also not on the A2UI wire. The proxy is stateless
-  (ADR-0072 clause 4), so the browser holds it as it holds the session.
-- **Claim (PROPOSED, ADR-0088 pt 2) — an explain-turn would be a normal `intent` turn, no new
-  `TurnInput` kind.** The page would
-  inject a digest of recent `TurnTrace`s (plus retained prior `note`s — the model's own
-  at-the-time rationale) as extra context, so the answer cites REAL retrieved exemplars and real
-  correction history. **Why the trace at all:** the retrieve/heal/validate material that drove the
-  choice is consumed inside `produce()` and discarded; without recording it, an explain-turn would
-  confabulate a retroactive justification (the exact gap this closes). The material to ground a
-  "why" is retrieval over the judged shard — this pack is a CALLER of that; retrieval internals are
-  [[a2ui-training-corpus]].
+`tools/agent/mini-skills.ts` hosts SIX `MiniSkill` modules (`{id, triggers, body}` — `:36-43`):
+`card-game-sheet` · `settings-screen` · `dashboard-kpi-grid` · `login-form` · `master-detail-split`
+(`:59-101`) plus `form-rhythm` (`:104-114`, the ADR-0103 cl.4 Lane-C module — FormProvider declares
+zero layout, so `FormProvider › Column gap='md' › Field per control` is taught, not defaulted).
+- **Selection**: `selectMiniSkills` ranks `triggers` against the turn's intent by TF-IDF cosine
+  (`topKByCosine`, the same math `retrieve()` uses — `mini-skills.ts:127-129`), once per turn beside
+  `retrieve()` (`produce.ts:262`); it degrades to `[]` on zero vocabulary overlap and — unlike
+  `retrieve()` — never pads with zero-score entries (`floor: 0`, `mini-skills.ts:122-126`).
+- **The anti-bloat budget**: `PER_MODULE_TOKEN_BUDGET = 200` (`:48`), `DEFAULT_MINI_SKILL_CAP = 3`
+  (`:52`), both gated (`src/live-agent/mini-skills.test.ts:23-27`); `miniSkillsBlock` is a `fewShot`
+  twin returning `''` on empty (`system-prompt.ts:303-307`) — the prompt grows by at most cap×budget
+  regardless of registry size (ADR-0091 §3).
+- **The ★-inline mechanism** (post-ship independent-review fix, not in ADR-0091's design):
+  `NEGOTIATE_BLUE_SKY`'s three ★ calibration bullets are COMPOSED from `MINI_SKILLS[id].body` via
+  `calibrationExampleBullet` (`system-prompt.ts:200-206`, rendered at `:220-221`) — the registry is
+  the single source — and `miniSkillsFor` filters those three ids out of a `'blue-sky'` selection so
+  the same paragraph is never injected twice (`system-prompt.ts:317-322`); `specific`/`default` carry
+  no inline idioms, so selection injects all six normally there. A module-load marker guard hardens
+  the GRAMMAR slicing (`assertMarkersHold`, `system-prompt.ts:149-164`).
 
-**3. `wantResponse`-routed click→turn — the agent's per-action talk-back choice, back-compat by
-default.** `handleClientMessage` would route on the `action` arm's `wantResponse`:
-- `action.wantResponse === false` → **silent apply** (no chat entry, no `runTurn`, no LLM round-trip).
-- `wantResponse === true` OR **absent** → today's full visible turn.
-- `functionResponse` and `error` arms **always** run a turn (inherently agent-directed).
-- **Claim (PROPOSED, ADR-0088 pt 3) — the default would be deliberately opt-out, not opt-in:**
-  absent `wantResponse` keeps current
-  behavior, so the committed seed (`canvas-button.ts:27`) and every existing corpus action button
-  still trigger turns and the shipped backbone is untouched. Which clicks talk back becomes the
-  AGENT's authoring decision (it already sets `wantResponse` per action, ADR-0011) — no hardcoded
-  client rule. **Caveat — `wantResponse` would carry two layer-local meanings** (renderer:
-  RPC-correlation slot; page: routing hint) — documented and non-colliding today because no
-  `actionResponse` RPC is wired for actions in this demo.
+## 5. `wantResponse` click routing — AS SHIPPED
 
-## The ONE open fork (Kim's call) vs the two build-time re-verify points
-
-- **Fork — the routing default (part 3).** Ship the back-compat **opt-out** (recommended: absent
-  keeps today's behavior; no re-seed) vs the RPC-aligned **opt-in** (cleaner semantics but breaks
-  the demo's turn-2 and forces re-seeding transcript + corpus + prompt). A values trade-off with no
-  empirical answer — hence Kim's, not the builder's.
-- **NOT forks — decided-with-caveat, settled empirically at build:** (a) is the light objective
-  `TurnTrace` enough for a grounded "why", or must the prompt teach the model to CITE it
-  (answered by running a real explain-turn); (b) *when* to upgrade the meta-line to a typed
-  transport frame (a future "if meta kinds proliferate" trigger, not a choice now).
-
-## Alternatives ADR-0088 considered and rejected (each citable)
-
-- **A typed transport frame** (`turn(): AsyncIterable<{kind; …}>`) — cleaner (no in-band sniffing)
-  but changes the SPEC-R1 typed contract + every transport signature; rejected as the v1 shape,
-  recorded as the natural upgrade if meta kinds proliferate.
-- **Smuggle the note into an `A2uiServerMessage`** — rejected: fails the shared validator or
-  pollutes the judged corpus (wire purity).
-- **Rely on the model to justify retroactively (no trace)** — rejected: confabulation, since the
-  driving context is gone by explain-time.
-- **Record the trace proxy-side** — rejected: the proxy is stateless (ADR-0072 clause 4); the
-  browser holds it.
+**The routing predicate lives in the pure reducer layer, not the page** — a shipped refinement over
+ADR-0088 §3's "handleClientMessage routes" sketch: `shouldRunTurn(message)` in
+`tools/agent/session.ts:68-71` answers `action.wantResponse !== false` for the `action` arm and
+`true` for `functionResponse`/`error` (inherently agent-directed). The page calls it FIRST, so a
+`TurnInput` can never be constructed for a message that should stay silent (`session.ts:9-13`):
+`handleClientMessage` returns before any chat entry or `runTurn` on an explicit `false`
+(`site/pages/a2ui-live.ts:404-413`). The default is the back-compat OPT-OUT Kim ratified (ADR-0088
+Open fork, resolved 2026-07-07): absent or `true` ⇒ today's full visible turn — the committed seed
+(`canvas-button.ts:27`, no `wantResponse`) keeps turning. The renderer's RPC-correlation reading of
+the same flag is untouched — two documented, non-colliding layer-local meanings
+(`session.ts:59-66`; ADR-0088 Consequences).
 
 ## What this file does NOT cover
 
-The shipped transport the meta-line would ride (agent-transport-seam) · the shipped turn/session
-model an explain-turn reuses (turn-session-and-input-intent) · the shipped loop that would peel +
-emit the meta-line (produce-loop) · the wire shape of `wantResponse` / `action` / the error
-taxonomy ([[a2ui-protocol]]) · building the note channel / routing in SOURCE (the
-[[a2ui-builder]] agent) · composing a payload that sets `wantResponse` (the [[a2ui-composer]]
-agent) · authoring or ratifying ADR-0088 ([[system-planner]] / [[adr-author]]).
+The transport the meta-line rides (agent-transport-seam) · the turn/session model (turn-session-and-
+input-intent) · the produce() loop mechanics beyond the peel/gates above (produce-loop) · the wire
+shape of `wantResponse`/`action` ([[a2ui-protocol]]) · building any of this in SOURCE
+([[a2ui-builder]]) · composing a payload that sets `wantResponse` ([[a2ui-composer]]) · authoring or
+ratifying the ADRs ([[system-planner]] / [[adr-author]]).
+
+## History
+
+This file was born (2026-07-07) as the OPEN-GAP record for this axis: it documented the two shipped
+gaps — no natural-language channel anywhere in the turn model, and clicks routing indiscriminately
+while `wantResponse` sat wired-but-unread — plus ADR-0088's then-`proposed` three-part design and its
+one open fork (the routing default, Kim's call). The family was ratified and built 2026-07-08
+(ADR-0088/0089/0090/0097 accepted; 0091 built with its Status cell still `proposed`), and this
+rewrite replaced the pre-ship framing with the shipped-system documentation above.

@@ -10,8 +10,9 @@ description: >-
   zero-edit swap), the Turn/Session/TurnInput model + the pure reducer (intent vs client turns),
   the bounded generate→heal→validate→self-correct produce() loop + the catalog-derived drift-gated
   prompt, the multi-provider seam (AgentProvider, providers.json, the dev-proxy trust boundary, the
-  PAIR-allowlist, the VITE_ footgun), the in-chat switcher, and the OPEN gap (ADR-0088, proposed):
-  no natural-language note channel yet, wantResponse wired but unused for click routing. ANSWERS
+  PAIR-allowlist, the VITE_ footgun), the in-chat switcher, and the conversational channel + asks
+  (ADR-0088..0091/0097, SHIPPED 2026-07-08: note channel, ask grammar + mode axis, mini-skills,
+  feed asks + wantResponse routing). ANSWERS
   from a cited repo corpus; it does not build. NOT for the A2UI wire shape / renderer mechanics
   (a2ui-protocol); NOT for catalog design or coverage (a2ui-catalog-design); NOT for corpus records
   / retrieve() internals (a2ui-training-corpus — this layer CALLS it); NOT for composing a payload
@@ -28,6 +29,10 @@ Answers how `@agent-ui/a2ui`'s live-agent demo works: a real LLM prompted → a 
 documents THIS repo's shipped implementation (as of 2026-07-07), not a generic tutorial — every
 claim cites its source file:line or an ADR/SPEC clause.
 
+> **UPDATE 2026-07-08.** The ADR-0088 family (0088/0089/0090/0091/0097 — note channel, asks, mode
+> axis, mini-skills, feed asks) shipped, and the gap axis was rewritten as shipped-system
+> documentation (`references/conversational-reasoning-and-click-routing-gap.md`).
+
 | Ask | Load |
 |---|---|
 | Transport swap — "how does recorded↔live work?", "the zero-edit seam", "what does CI run?" | `references/agent-transport-seam.md` |
@@ -35,7 +40,7 @@ claim cites its source file:line or an ADR/SPEC clause.
 | The runtime loop — "the produce() self-correct loop", "validate-then-stream", "how is the prompt built?", "halt-and-report" | `references/produce-loop.md` |
 | Providers & keys — "wire a new provider", "add a model", "where's the key?", "is it safe?", "the trust boundary", "the VITE_ footgun" | `references/provider-model-seam-and-trust-boundary.md` |
 | The switcher & overlay — "the in-chat provider/model picker", "how the live overlay is wired dev-only" | `references/switcher-and-live-overlay.md` |
-| The open gap — "why can't the agent explain itself?", "why did every click talk back?", "the note channel / wantResponse routing (ADR-0088)" | `references/conversational-reasoning-and-click-routing-gap.md` |
+| The conversational channel & asks — "the note beside the stream", "clarify/boundary asks", "the mode axis", "mini-skills", "wantResponse routing" (ADR-0088..0091/0097) | `references/conversational-reasoning-and-click-routing-gap.md` |
 | Provenance — where a claim comes from | `references/sources.md` |
 
 ## Consult procedure
@@ -44,18 +49,14 @@ claim cites its source file:line or an ADR/SPEC clause.
    (`wantResponse`, `resolvePair`, `produce`, `AgentTransport`, …) and Read that section — the
    files are cited catalogs, not linear reads.
 2. Answer on the **answer contract**: the **claim + its cited source (file:line or ADR/SPEC clause)
-   + the failure mode or caveat**. A live-agent claim without its caveat is half an answer. Worked
-   shape:
-   > *"Can I make a slider drag not spam the agent with turns?"* → open-gap ask →
-   > **Claim (PROPOSED, ADR-0088 part 3):** route `handleClientMessage` on the action's
-   > `wantResponse` — `false` → silent apply, `true`/absent → a turn. **Cited:** shipped today every
-   > client message turns unconditionally (`a2ui-live.ts:224-229`); the routing is `Status: proposed`,
-   > not built. **Caveat:** the default must be opt-out because the committed seed sets no
-   > `wantResponse` (`canvas-button.ts:27`), so "absent ⇒ silent" would regress the demo — and this
-   > is the one fork awaiting Kim's ruling.
-3. **Distinguish SHIPPED from PROPOSED.** The transport/turn/loop/provider/switcher axes document
-   accepted, built behavior. The open-gap axis is ADR-0088 (`proposed`, unbuilt, unratified) — flag
-   it as a design record; never grant it authority it does not have.
+   + the failure mode or caveat**. A live-agent claim without its caveat is half an answer.
+   *(The pre-2026-07-08 worked example here — the wantResponse fork "awaiting Kim's ruling" — is
+   retired: ADR-0088 was ratified and built; re-derive the current routing from `a2ui-live.ts` +
+   the accepted ADR before answering.)*
+3. **Distinguish SHIPPED from PROPOSED — and check the Status cell, don't trust this pack's
+   snapshot.** All seven axes document accepted, built behavior; when an ADR's Status cell and an
+   axis body disagree, the shipped sources outrank both (e.g. ADR-0091 is built and gated while its
+   cell still reads `proposed`).
 4. Route output work at the boundary (see below) — this pack answers; it does not build.
 
 **Done when** the answer carries the claim + its cited `file:line`/ADR/SPEC clause + the caveat,
