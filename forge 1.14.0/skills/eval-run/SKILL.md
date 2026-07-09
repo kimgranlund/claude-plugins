@@ -26,7 +26,9 @@ Build the router's world: every model-invocable skill's `name` + `description`, 
 
 One `eval-judge` agent per suite, ≤5 concurrent (the harness-audit ceiling) — the declared agent's empty tool allowlist is the blindness guarantee: a judge that cannot Read cannot peek. Each dispatch carries the menu, that suite's prompts **stripped of their `expect` fields and shuffled**, and this contract:
 
-> For each prompt, answer with exactly one menu entry — the skill whose description you would invoke, or `none`. Output only `id → choice`, one per line. Do not explain, do not hedge with two names, do not infer a theme from the prompt set.
+> For each prompt, answer with exactly one menu entry — the skill whose description you would invoke, or `none`. There are exactly N prompts; return exactly N answers, one per id, no id skipped — count your answers before returning. Output only `id → choice`, one per line. Do not explain, do not hedge with two names, do not infer a theme from the prompt set.
+
+(The answer-count clause is metabolized incident 2026-07-09: without it, judges skipped ~1.2% of ids, and every skipped id reads as a false routing failure.)
 
 The judge never sees expectations (an answer key in context is a leading question), and never sees which skill's suite it is scoring — the suite's own no-trigger cases must be free to route to their true owners.
 

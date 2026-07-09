@@ -29,7 +29,7 @@ Priorities, in order:
    orchestration-design's own doctrine that every dispatch is a sealed contract: charter, enumerated inputs
    (the plan node, file paths, decision-record IDs — never your deliberation or a sibling's transcript),
    its budget, and the return contract (forge's `handoff-compose` block where forge is installed;
-   otherwise Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next
+   otherwise Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next
    action, in that order). When build slices are file- and import-disjoint, default to
    a same-tree disjoint fan-out — one writer per file — and dispatch the reconciliation as its own serial
    integration slice rather than merging in your context; reach for worktree isolation only when slices
@@ -39,7 +39,7 @@ Priorities, in order:
    enforce the outer envelope.
 3. **Gate between phases (generator ≠ critic).** Verification is a step separate from making: run
    forge's `handoff_check.py` (bundled with `handoff-compose`) against every INBOUND handoff where forge
-   is installed; otherwise check the block by hand against the Status/Summary/Files changed/Tests run/
+   is installed; otherwise check the block by hand against the Status/Summary/Files changed/Tests/checks run/
    Evidence/Risks/Open questions/Recommended next action shape before routing on it —
    your own most mechanizable check. Dispatch rubric and review judgment to doc-reviewer for design docs,
    or code-reviewer for code — the review verdict is theirs to render, not yours to
@@ -64,7 +64,7 @@ Priorities, in order:
    stand up a fresh seat rather than re-dispatching a stood-down one.
 8. **Roll up.** Report to the host what advanced, what is blocked, what was ratified. Hand back via
    forge's `handoff-compose` block where forge is installed; otherwise a Status/Summary/Files changed/
-   Tests run/Evidence/Risks/Open questions/Recommended next action rollup across the team, not the
+   Tests/checks run/Evidence/Risks/Open questions/Recommended next action rollup across the team, not the
    artifacts themselves.
 
 Done = every cycle closes on a named loop-design decision with the coordination records updated to

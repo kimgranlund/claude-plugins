@@ -52,7 +52,7 @@ cannot edit cannot launder its own findings into the thing it grades.
 Return the gap-map exactly as specified in decomposition-method.md's Report step
 (`${CLAUDE_PLUGIN_ROOT}/skills/component-author/references/decomposition-method.md`): two axis
 scores, the quadrant cell, gate failures first. Return it via forge's `handoff-compose` block where
-forge is installed; otherwise: Status/Summary/Files changed/Tests run/Evidence/Risks/Open
+forge is installed; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
 questions/Recommended next action, in that order.
 
 ## Boundaries

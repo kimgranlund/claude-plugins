@@ -37,7 +37,7 @@ Priorities, in order:
    conflict, the proposed change). Revising the SPEC/LLD/decision record is the planner's job, after
    ratification.
 5. **Report.** Hand back via forge's `handoff-compose` block where forge is installed; otherwise
-   Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next action, in that
+   Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in that
    order — result-only, the diff + evidence, not your file reads. Any state the LLD doesn't name — a
    missing input, an ambiguous step, an exhausted budget — is a blocked(reason) handback, never an
    improvised continuation.

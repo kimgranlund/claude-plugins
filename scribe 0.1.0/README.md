@@ -28,7 +28,7 @@ Folded in from the personal skill corpus per a `plugin-decompose` partition deci
 html-to-markdown), and `knowledge-docs` (reference-author, knowledge-author, llms-txt-author,
 vision-memo-author) — all small enough to fold into scribe rather than ship as standalone plugins.
 Both ported agents soft-mention forge's `handoff-compose` in body prose (not a preload — forge is a
-sibling plugin) and fall back to a plain Status/Summary/Files changed/Tests run/Evidence/Risks/Open
+sibling plugin) and fall back to a plain Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
 questions/Recommended next action block where forge isn't installed.
 
 Rejected members (the design ledger): per-type skills x8 (cross-type asks are the majority — the
@@ -41,4 +41,4 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.4.0 · assembled 2026-07-07 · 0.4.0: bug-report's dispatch phase runs under orchestration's loop-design /goal recipe where installed (a dated Findings entry as the verifiable end-state, 5-try cap) instead of an open-ended fork · 0.3.0: measure (research-methods, rubric-author, researcher agent), markdown-render (markdown-to-markup, html-to-markdown), and knowledge-docs (reference-author, knowledge-author, llms-txt-author, vision-memo-author) folded in per a plugin-decompose partition; doc-reviewer agent closes scribe's generator≠critic gap (doc-review had no fresh-context agent pairing, unlike forge's skill-review/skill-auditor) · 0.2.0: bug-report orchestrator + TICKET `kind: bug` convention (Repro/Expected-vs-actual/Classification/Severity/Findings) — closes the /fork bug-loss gap · 0.1.0: initial: standards + forge + review + doc_lint + 8 templates + write hook
+v0.4.1 · assembled 2026-07-09 · 0.4.1: agent fallback blocks 'Tests run'→'Tests/checks run' (harness-audit finding: the inline fallback failed forge handoff_check's H1 gate as written) · assembled 2026-07-07 · 0.4.0: bug-report's dispatch phase runs under orchestration's loop-design /goal recipe where installed (a dated Findings entry as the verifiable end-state, 5-try cap) instead of an open-ended fork · 0.3.0: measure (research-methods, rubric-author, researcher agent), markdown-render (markdown-to-markup, html-to-markdown), and knowledge-docs (reference-author, knowledge-author, llms-txt-author, vision-memo-author) folded in per a plugin-decompose partition; doc-reviewer agent closes scribe's generator≠critic gap (doc-review had no fresh-context agent pairing, unlike forge's skill-review/skill-auditor) · 0.2.0: bug-report orchestrator + TICKET `kind: bug` convention (Repro/Expected-vs-actual/Classification/Severity/Findings) — closes the /fork bug-loss gap · 0.1.0: initial: standards + forge + review + doc_lint + 8 templates + write hook

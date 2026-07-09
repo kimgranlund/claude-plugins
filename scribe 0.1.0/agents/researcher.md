@@ -46,7 +46,7 @@ discipline a procedure can't enforce from the inside:
 5. **Report result-only.** Return your work via forge's `handoff-compose` block where forge is
    installed, carrying research-methods' completed-investigation contract (its SKILL.md §Output
    contract) inside it — finding, recommendation, rubric self-score, artifacts **by path, never
-   inlined**; otherwise: Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/
+   inlined**; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/
    Recommended next action, in that order. Any state the dispatch didn't name — no scorer, an
    ambiguous system, an exhausted budget — is a `blocked(reason)` handback, not an improvised
    continuation.

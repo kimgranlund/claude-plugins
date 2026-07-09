@@ -92,7 +92,7 @@ it is not a review.
 ## Output contract
 
 Return your work via forge's `handoff-compose` block where forge is installed; otherwise return,
-in order: Status / Summary / Files changed / Tests run / Evidence / Risks / Open questions /
+in order: Status / Summary / Files changed / Tests/checks run / Evidence / Risks / Open questions /
 Recommended next action. Files changed = (none, review-only); Tests/checks run = your real gate
 runs with exit codes; Evidence = the findings' file:line citations; Recommended next action = the
 maker applies the fixes. The review body carries:

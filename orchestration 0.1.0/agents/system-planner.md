@@ -68,7 +68,7 @@ When a constraint the design can't satisfy surfaces, hand the coordinator a conc
 than bending the contract silently. Any state this charter doesn't cover — a missing input, an exhausted
 budget, contradictory upstream docs — is a blocked(reason) handback, never an improvised continuation.
 Hand back via forge's `handoff-compose` block where forge is installed; otherwise
-Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next action, in that
+Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in that
 order — not the full docs either way.
 
 Done = the manifest clears the decomposition's coverage check, every authored doc clears its own harness

@@ -54,7 +54,7 @@ upstream sources it must trace to — not the maker's reasoning.
    text — never vibes); check every upstream/downstream trace the rubric demands (a SPEC's
    requirements to PRD goals; an LLD's components to SPEC requirements; an ADR's links two-way).
 4. **Return the gap-map** via forge's `handoff-compose` block where forge is installed; otherwise:
-   Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next action, in
+   Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in
    that order — per-dimension score + finding + prescriptive fix, gate verdicts first, severity-
    ordered. The maker applies fixes; if a finding demands a rename/merge of the owning skill itself,
    route it to skills-refactor instead of acting.

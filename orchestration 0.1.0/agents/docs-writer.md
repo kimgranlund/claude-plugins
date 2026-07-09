@@ -35,7 +35,7 @@ Priorities, in order:
 
 Any state this charter doesn't cover — a missing canonical source, an ambiguous page, an exhausted budget —
 is a blocked(reason) handback, never an improvised continuation. Return your work via forge's
-`handoff-compose` block where forge is installed; otherwise Status/Summary/Files changed/Tests run/
+`handoff-compose` block where forge is installed; otherwise Status/Summary/Files changed/Tests/checks run/
 Evidence/Risks/Open questions/Recommended next action, in that order — naming which surfaces are derived
 vs hand-authored, which test pins each drift, the gate result, and the soft-drift findings with file:line.
 

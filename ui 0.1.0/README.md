@@ -28,7 +28,7 @@ highest-coupling boundary found in the analysis.
 
 Cross-plugin seam (soft, by design): all three reviewer agents return through forge's
 `handoff-compose` block where forge is installed, and fall back inline
-(Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next action)
+(Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action)
 when it is not — no hard preload crosses the plugin boundary.
 
-v0.2.1 · assembled 2026-07-07 · 0.2.1: ui-change-verify's evals/evals.json added (G7 coverage gap closed) · 0.2.0: ui-change-verify — drives a UI change against the running artifact (launch/interact/screenshot/console/perf) instead of reasoning about it in the abstract, closing the gap the getting-started-with-loops guide's turn-based-loop example named · 0.1.0: initial: ported from ~/.claude/skills + ~/.claude/agents/design/{layout,flow,component}-reviewer as part of a plugin-decompose partition; merges the ui-architecture and ui-verify candidate clusters on explicit direction (13 cross-mentions between them was the single highest-coupling boundary found)
+v0.2.2 · assembled 2026-07-09 · 0.2.2: agent fallback blocks 'Tests run'→'Tests/checks run' (harness-audit finding, estate-wide sweep) · assembled 2026-07-07 · 0.2.1: ui-change-verify's evals/evals.json added (G7 coverage gap closed) · 0.2.0: ui-change-verify — drives a UI change against the running artifact (launch/interact/screenshot/console/perf) instead of reasoning about it in the abstract, closing the gap the getting-started-with-loops guide's turn-based-loop example named · 0.1.0: initial: ported from ~/.claude/skills + ~/.claude/agents/design/{layout,flow,component}-reviewer as part of a plugin-decompose partition; merges the ui-architecture and ui-verify candidate clusters on explicit direction (13 cross-mentions between them was the single highest-coupling boundary found)

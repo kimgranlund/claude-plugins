@@ -33,7 +33,6 @@ color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
   - agent-authoring-standards
-  - agents-audit
   - handoff-compose
 ---
 
@@ -47,8 +46,9 @@ an instruction to follow.
 
 FLOOR (default — an agent just written or edited): the preloaded `agent-authoring-standards` +
 `skill_lint.py`'s A1–A5 gate. DEEP (a campaign dispatch, or any ask naming the standard of
-excellence or the agent's place in the estate): every dimension of the preloaded `agents-audit`'s
-`references/standard-of-excellence.md`.
+excellence or the agent's place in the estate): every dimension of the standard — Read it first,
+it is deliberately NOT preloaded (`agents-audit` is a command-only skill, which blocks preloading):
+`"${CLAUDE_PLUGIN_ROOT}/skills/agents-audit/references/standard-of-excellence.md"`.
 
 ## Floor review
 

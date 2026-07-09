@@ -42,7 +42,7 @@ Return the layout-decompose report shape (`${CLAUDE_PLUGIN_ROOT}/skills/layout-d
 gate failures first, then Axis A (space) and Axis B (behavior) scored separately with cited findings,
 the named defect quadrant and matched archetype, and every below-bar row paired with the one fix it
 implies. Return it via forge's `handoff-compose` block where forge is installed; otherwise:
-Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next action, in
+Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in
 that order.
 
 ## Boundaries

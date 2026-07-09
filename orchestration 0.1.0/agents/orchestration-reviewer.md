@@ -34,7 +34,7 @@ budget, self-terminate against it and mark what went unscored.
 
 Return the gap-map in orchestration-design's Review output contract
 (`${CLAUDE_PLUGIN_ROOT}/skills/orchestration-design/SKILL.md`) via forge's `handoff-compose` block
-where forge is installed; otherwise: Status/Summary/Files changed/Tests run/Evidence/Risks/Open
+where forge is installed; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
 questions/Recommended next action, in that order. Either shape: Files changed = (none,
 review-only); Evidence = the per-dimension score table's cited rows; Recommended next action =
 designer applies the fix. Include both gate verdicts (D2, D4) and the top issues each paired with

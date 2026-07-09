@@ -17,7 +17,7 @@ properties, and grounded in a cited lettering/type-anatomy corpus. Built from a
 
 Cross-plugin seam (soft, by design): the reviewer agent returns through forge's
 `handoff-compose` block where forge is installed, and falls back inline
-(Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next action)
+(Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action)
 when it is not — no hard preload crosses the plugin boundary.
 
-v0.1.0 · assembled 2026-07-07 · initial: ported from ~/.claude/skills + ~/.claude/agents/design/typography-system-reviewer as part of a plugin-decompose partition
+v0.1.1 · assembled 2026-07-09 · 0.1.1: typography-system-reviewer fallback 'Tests run'→'Tests/checks run' (harness-audit finding, estate-wide sweep) · assembled 2026-07-07 · initial: ported from ~/.claude/skills + ~/.claude/agents/design/typography-system-reviewer as part of a plugin-decompose partition

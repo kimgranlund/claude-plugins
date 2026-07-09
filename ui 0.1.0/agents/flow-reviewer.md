@@ -38,7 +38,7 @@ and the method — not the maker's reasoning.
 Return flow-decompose's report shape exactly as specified in its Output contract
 (`${CLAUDE_PLUGIN_ROOT}/skills/flow-decompose/SKILL.md`); a skipped section is reported as skipped,
 never folded into pass. Return it via forge's `handoff-compose` block where forge is installed;
-otherwise: Status/Summary/Files changed/Tests run/Evidence/Risks/Open questions/Recommended next
+otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next
 action, in that order.
 
 ## Boundaries

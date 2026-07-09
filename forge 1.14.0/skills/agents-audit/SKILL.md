@@ -138,6 +138,16 @@ Portfolio: KEEP|MERGE|SPLIT|RETIRE|RE-CHARTER — <one sentence of team-level wh
 | `orchestration-design` | S framing — static (`skills:` preload) vs dynamic wiring, descriptions as connective tissue — lives in the `orchestration` plugin |
 | `rubric-author` | Author / score / repair this skill's own rubrics — lives in `scribe` |
 
+## Failure branches
+
+- `agents_dir` missing or empty → report the path and stop; an audit of nothing is not a clean pass.
+- `agent_corpus_index.py` errors or exits 2 → the run stops at Phase 0; fix the script or the
+  input, never hand-derive the index it failed to produce.
+- No `campaign/` directory yet (first-ever campaign) → create it with an empty `PLAN.md` and say
+  so; batch-1 exemplars calibrate the standard, they are not graded against prior batches.
+- A dispatched critic returns off-contract → one re-dispatch with the contract quoted, then the
+  agent is marked UNMEASURED with the reason; never aggregate improvised prose.
+
 **Done** when every agent in scope carries a scored review with its delegation dispositioned, every
 finding is a ledger row with an owner, claims are reconciled into a standard revision, and the
 fold-back has been applied. **NOT done** while any verdict is two-valued where a surface was

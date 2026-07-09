@@ -1,6 +1,6 @@
 {
   "name": "forge",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "description": "The foundational authoring plugin, self-contained: forge/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (linguistic-techniques), intent extraction, and two-plane decomposition; /harness-audit as the recurring outer loop.",
   "license": "MIT",
   "author": {

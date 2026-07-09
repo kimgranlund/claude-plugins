@@ -40,6 +40,6 @@ Focus-ring and hit-target values come from the `ui` plugin's `focus-verify` skil
 otherwise apply WCAG 2.2 target-size and focus-visible minimums directly.
 
 Return your work via forge's `handoff-compose` block where forge is installed; otherwise: Status /
-Summary / Files changed / Tests run / Evidence / Risks / Open questions / Recommended next action,
+Summary / Files changed / Tests/checks run / Evidence / Risks / Open questions / Recommended next action,
 in that order — the token diff: each role/constant changed, its value in each scheme, the contrast
 + high-contrast check, and which probe pins it.
