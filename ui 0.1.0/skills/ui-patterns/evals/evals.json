@@ -1,6 +1,6 @@
 {
   "skill": "ui-patterns",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (sibling re-aimed 2026-07-06 for the color-science-* split \u2014 the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genres and layout-decompose are the dangerous near-neighbors; plus ui-audit, component-author, flow-decompose, color-science-accessibility, typography-lettering, knowledge-author.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (sibling re-aimed 2026-07-06 for the color-science-* split \u2014 the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genres and layout-decompose are the dangerous near-neighbors; plus ui-audit, component-forge, flow-decompose, color-science-accessibility, typography-lettering, knowledge-forge.",
   "cases": [
     {
       "id": "t01",

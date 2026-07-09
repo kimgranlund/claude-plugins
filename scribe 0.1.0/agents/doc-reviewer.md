@@ -27,8 +27,8 @@ upstream sources it must trace to — not the maker's reasoning.
    PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) the standard is `doc-authoring-standards` (type
    contract, mutability classes, universal practices) and the review procedure is `doc-review`'s
    J1-J6 (both preloaded — no external lookup needed). For the other document families this seat
-   also covers: reference doc → reference-author, llms.txt → llms-txt-author, vision memo →
-   vision-memo-author, standalone rubric → rubric-author (all now scribe siblings), CLAUDE.md/
+   also covers: reference doc → reference-forge, llms.txt → llms-txt-forge, vision memo →
+   vision-memo-forge, standalone rubric → rubric-forge (all now scribe siblings), CLAUDE.md/
    AGENTS.md → entry-file-author, /goal condition → loop-design, handoff block → handoff-compose,
    decomposition manifest → system-decompose, DESIGN.md/guidelines spine → its platform sibling
    (design-system-author-claude-code / -google-stitch / -figma-make) — load that owning skill's

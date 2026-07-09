@@ -10,7 +10,7 @@ description: >
   font per family slot — distinctive vs. neutral, by voice. Never hardcode a px size, line-height,
   tracking, or font family. TYPE only. NOT for Material's `--md-sys-typescale-*`
   (material-design-typography-tokens); NOT for a no-token typography question
-  (typography-lettering); NOT for building/placing a component (component-author); NOT for locale
+  (typography-lettering); NOT for building/placing a component (component-forge); NOT for locale
   number/date/currency formatting (i18n-verify).
 disable-model-invocation: false
 user-invocable: false
@@ -84,7 +84,7 @@ Steps 1–3 name the five font-family *roles* (`--font-display/heading/body/ui/m
 say which real typeface fills each one. That choice is a judgment call, not a token lookup — a
 brand-forward marketing display voice and a dense enterprise data-table body voice want opposite
 answers, both correct. Designing that choice from a brand concept or creative brief is
-`typography-system-author`'s job (territory interpretation, per-voice rationale, pairing drama,
+`typography-system-design`'s job (territory interpretation, per-voice rationale, pairing drama,
 verified metric compatibility) — route there for the full treatment, then bind its decision here.
 Read [`references/font-selection.md`](references/font-selection.md) only for the no-brief fallback
 heuristic (distinctiveness vs. neutrality by slot, absent any other signal).

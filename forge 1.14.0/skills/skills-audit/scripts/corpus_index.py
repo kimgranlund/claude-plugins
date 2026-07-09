@@ -371,8 +371,8 @@ def main(argv):
         is_transform = "-to-" in d
         if tail in {"author", "design", "compose"} and not CRITIC.search(body_):
             findings.append(f"{d}: maker names no critic route (reviewer / gen≠crit / verify pair)")
-        if tail not in VERBS and not is_transform and "knowledge-author" not in body_:
-            findings.append(f"{d}: knowledge pack names no factory route ([[knowledge-author]])")
+        if tail not in VERBS and not is_transform and "knowledge-forge" not in body_:
+            findings.append(f"{d}: knowledge pack names no factory route ([[knowledge-forge]])")
     for f_ in findings:
         print(f"  [advisory] {f_}")
     if not findings:

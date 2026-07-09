@@ -6,7 +6,7 @@ description: >-
   constants. Use whenever a token must be added or changed, a role ladder collapses in one color scheme, or
   an interaction value must stay distinct AND accessibility-safe across light and dark. Use PROACTIVELY for
   any token edit before the component that consumes it is built. NOT for token consumption inside a
-  component build, or building/grading the component itself (component-author / component-reviewer);
+  component build, or building/grading the component itself (component-forge / component-reviewer);
   NOT for building or extending a color ramp (palette-design) — this seat only realizes an
   already-designed palette as project tokens.
 tools: Read, Grep, Glob, Edit, Write, Bash

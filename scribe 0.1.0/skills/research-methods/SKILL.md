@@ -13,7 +13,7 @@ description: >-
   reviewing or scoring a finished artifact against its rubric (the *-reviewer agents); NOT for
   authoring or building the artifact itself (the *-author skills / system-builder); NOT for making a
   prompt or agent's wording more effective with no scorer, tightening a rubric's anchors, or designing
-  a loop's stopping rule (linguistic-techniques / rubric-author / loop-design).
+  a loop's stopping rule (linguistic-techniques / rubric-forge / loop-design).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -163,7 +163,7 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 - **`researcher`** runs one method in isolation and hands back the typed report above.
 - **[[intent-extract]]** / **[[intent-grill]]** sharpen a fuzzy "make it better" into a scorable
   question + a defined scorer *before* a method runs — the R1 precondition.
-- **[[rubric-author]]** owns `references/rubric.md`'s shape; **[[knowledge-author]]** owns adding or
+- **[[rubric-forge]]** owns `references/rubric.md`'s shape; **[[knowledge-forge]]** owns adding or
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an
   uncited method on inline.
 - Downstream of a finding, route the *fix* to its owner: a code change to **system-builder**, a skill

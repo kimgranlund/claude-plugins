@@ -1,6 +1,6 @@
 {
   "skill": "ui-patterns",
-  "_note": "Deep-review corpus (sibling re-aimed 2026-07-06 for the color-science-* split — the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genres and layout-decompose are the dangerous near-neighbors; plus ui-audit, component-author, flow-decompose, color-science-accessibility, typography-lettering, knowledge-author.",
+  "_note": "Deep-review corpus (sibling re-aimed 2026-07-06 for the color-science-* split — the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genres and layout-decompose are the dangerous near-neighbors; plus ui-audit, component-forge, flow-decompose, color-science-accessibility, typography-lettering, knowledge-forge.",
   "positives": [
     "what pattern is this screen using",
     "how should a data table behave when the user filters and bulk-selects",

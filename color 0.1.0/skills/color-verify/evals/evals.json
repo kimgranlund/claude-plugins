@@ -1,6 +1,6 @@
 {
   "skill": "color-verify",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: palette-design, color-science-accessibility, color-science-spaces, color-theory, focus-verify, i18n-verify, perf-verify, safety-verify, ui-audit, component-author, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: palette-design, color-science-accessibility, color-science-spaces, color-theory, focus-verify, i18n-verify, perf-verify, safety-verify, ui-audit, component-forge, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
   "cases": [
     {
       "id": "t01",

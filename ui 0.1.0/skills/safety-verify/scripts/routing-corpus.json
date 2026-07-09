@@ -1,6 +1,6 @@
 {
   "skill": "safety-verify",
-  "_note": "Review-time corpus (excellence batch 3; sibling re-aimed 2026-07-06 for the color-science-* split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-science-spaces, not accessibility). Positives across imperative/diagnostic/symptom/indirect; negatives drawn from neighbors' trigger vocabulary (color-verify, focus-verify, i18n-verify, perf-verify, color-science-spaces, component-author, ui-audit) plus the security/authz fences.",
+  "_note": "Review-time corpus (excellence batch 3; sibling re-aimed 2026-07-06 for the color-science-* split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-science-spaces, not accessibility). Positives across imperative/diagnostic/symptom/indirect; negatives drawn from neighbors' trigger vocabulary (color-verify, focus-verify, i18n-verify, perf-verify, color-science-spaces, component-forge, ui-audit) plus the security/authz fences.",
   "positives": [
     "verify the destructive actions in this app",
     "check the delete flows for undo and confirm posture",

@@ -1,6 +1,6 @@
 {
   "skill": "perf-verify",
-  "_note": "M2 corpus of record (excellence campaign batch 3, 2026-07-03; sibling re-aimed 2026-07-06 for the color-science-* split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-science-spaces, not accessibility). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the -verify siblings (color-verify, focus-verify, i18n-verify, safety-verify), color-science-spaces, component-author, ui-audit, plus the out-of-corpus fence (wire latency / bundle profiling). Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
+  "_note": "M2 corpus of record (excellence campaign batch 3, 2026-07-03; sibling re-aimed 2026-07-06 for the color-science-* split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-science-spaces, not accessibility). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the -verify siblings (color-verify, focus-verify, i18n-verify, safety-verify), color-science-spaces, component-forge, ui-audit, plus the out-of-corpus fence (wire latency / bundle profiling). Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
   "positives": [
     "verify the loading UX on the checkout page against our performance budget",
     "check that every async surface shows the right loading indicator",

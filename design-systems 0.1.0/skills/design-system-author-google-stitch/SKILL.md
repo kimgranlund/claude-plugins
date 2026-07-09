@@ -14,7 +14,7 @@ description: >
   expected-warning reading). NOT for Claude Design bundles
   (design-system-author-dscard); NOT for Figma Make guidelines
   (design-system-author-figma-make); NOT for cross-platform design-system
-  strategy (design-system-author hub); NOT for grading an export you didn't
+  strategy (design-system-hub hub); NOT for grading an export you didn't
   author (design-system-reviewer agent).
 disable-model-invocation: false
 user-invocable: true

@@ -15,4 +15,4 @@ Scores a whole `agents/` team on the four cross-cutting properties **no single-a
 
 ---
 
-**Scoring method.** `[gate]` = mechanically checkable (the index's violation exit, the harness agent gate); score by the script. `[review]` = judgment; score against the anchors with cited evidence (`agent:line`, the offending name or preload). Scale 1–5 (1 = failure anchor, 3 = adequate, 5 = excellence anchor); do not round everything to 3. A team that trips any gate tier is not production-ready regardless of the `[review]` scores. This rubric is authored, scored, and repaired via `[[rubric-author]]`.
+**Scoring method.** `[gate]` = mechanically checkable (the index's violation exit, the harness agent gate); score by the script. `[review]` = judgment; score against the anchors with cited evidence (`agent:line`, the offending name or preload). Scale 1–5 (1 = failure anchor, 3 = adequate, 5 = excellence anchor); do not round everything to 3. A team that trips any gate tier is not production-ready regardless of the `[review]` scores. This rubric is authored, scored, and repaired via `[[rubric-forge]]`.

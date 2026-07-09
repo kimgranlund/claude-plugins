@@ -8,7 +8,7 @@ description: >-
   feed, settings, board, chat), the module catalog (tables, forms, nav, pickers, toolbars, overlays,
   search, media, viz, maps, marketing), and screen-state grammar
   (ideal/empty/loading/partial/error). ANSWERS and names patterns — it does not apply or build them:
-  applying to a layout is layout-decompose, building a module is component-author, the
+  applying to a layout is layout-decompose, building a module is component-forge, the
   whole-product sweep is ui-audit. NOT for what a whole product genre conventionally includes
   (ui-genres).
 user-invocable: false
@@ -40,7 +40,7 @@ vocabulary instead of taste. Two altitudes, one state grammar — each in its ow
 3. Route output work at the boundary: apply the template to a real screen → [[layout-decompose]]
    (which applies this pack's four archetype wireframes — owned here in `references/` — to concrete
    screens); build the module →
-   [[component-author]]; check a whole product's conformance → [[ui-audit]]; the interaction
+   [[component-forge]]; check a whole product's conformance → [[ui-audit]]; the interaction
    invariants a module must clear → the verifier family ([[focus-verify]], [[perf-verify]],
    [[safety-verify]], [[i18n-verify]]).
 
@@ -57,5 +57,5 @@ vocabulary instead of taste. Two altitudes, one state grammar — each in its ow
 ## Extending this pack
 
 A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[knowledge-author]] (axis decomposition, grounded research waves, index discipline); never bolt
+[[knowledge-forge]] (axis decomposition, grounded research waves, index discipline); never bolt
 an uncited file onto the corpus inline.

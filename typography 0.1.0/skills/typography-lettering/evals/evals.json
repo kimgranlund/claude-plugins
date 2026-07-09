@@ -1,6 +1,6 @@
 {
   "skill": "typography-lettering",
-  "note": "Converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the typography plugin-decompose port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: i18n-verify, color-science-accessibility, color-science-spaces, component-author, token-builder agent, knowledge-author, ui-patterns.",
+  "note": "Converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the typography plugin-decompose port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: i18n-verify, color-science-accessibility, color-science-spaces, component-forge, token-builder agent, knowledge-forge, ui-patterns.",
   "cases": [
     {
       "id": "t01",

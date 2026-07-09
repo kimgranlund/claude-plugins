@@ -1,0 +1,31 @@
+{
+  "skill": "reference-forge",
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of reference-doc authoring+review. Negatives drawn from the neighbors' trigger vocabulary: knowledge-forge, llms-txt-forge, entry-file-author, skill-author, linguistics-reviewer/linguistic-techniques, rubric-forge.",
+  "positives": [
+    "write a reference doc for this skill",
+    "author a references file for the color-science-materials bundle",
+    "structure my project knowledge files",
+    "review this ground-truth doc for the agent",
+    "is this doc retrievable by the agent",
+    "audit our docs for drift",
+    "the agent keeps citing stale facts from our reference docs",
+    "these two knowledge docs disagree - which is canonical",
+    "turn these API notes into ground truth the agent can consult",
+    "score this @-imported knowledge doc against the rubric",
+    "evaluate whether this reference file duplicates a source owned elsewhere",
+    "name and organize the knowledge files in this corpus"
+  ],
+  "negatives": [
+    "build an expert pack on OKLCH color science",
+    "add an axis to this knowledge pack",
+    "turn this research into a knowledge skill with a typed index",
+    "generate an llms.txt for our docs site",
+    "make our docs agent-readable with an AI-facing index",
+    "write my CLAUDE.md",
+    "my CLAUDE.md is too long and being ignored",
+    "capture this procedure as a skill",
+    "why isn't my skill triggering",
+    "audit this prompt's language for potency",
+    "score this standalone rubric's anchors"
+  ]
+}

@@ -79,6 +79,9 @@ HOOK_NAME = "skill-postwrite-invocation-lint"
 CLOSING = ("If a finding seems wrong -> report it against "
            "skill-authoring-standards; do not suppress it inline.")
 
+# Genuine verbs whose spelling ends in -er/-or: legal skill heads, never agentive
+# (ADR-0001, 2026-07-09: W4 false-positived on skill-refactor).
+VERB_HEADS = {"refactor", "render", "filter", "author"} - {"author"}  # author retired per ADR-0001
 KNOWLEDGE_NOUNS = {"patterns", "principles", "standards", "conventions",
                    "context", "architecture", "catalog", "reference", "tokens"}
 TRIGGER_RE = re.compile(
@@ -198,7 +201,7 @@ def lint_text(text, skill_dir_name):
                              "name -> kebab-case, <=64 chars"))
         head = name.split("-")[-1]
         ui = fields.get("user-invocable", ("true", 0))[0].lower()
-        if len(head) >= 5 and (head.endswith("er") or head.endswith("or")):
+        if len(head) >= 5 and (head.endswith("er") or head.endswith("or")) and head not in VERB_HEADS:
             findings.append(("WARN", name_line, "W4",
                              f"agentive head '{head}' on a skill -> agents take -er/-or; "
                              "a skill takes the verb or knowledge-noun form"))
@@ -529,6 +532,10 @@ def selftest():
     assert any(f[2] == "F8" for f in lint_text(reserved, "claude-md-audit")), "reserved word must fail F8"
     assert any(f[2] == "F8" for f in lint_text(GOOD_FIXTURE, "anthropic-helper")), "reserved dir must fail F8"
     assert not any(f[2] == "F8" for f in lint_text(GOOD_FIXTURE, "demo-review")), "clean name must not trip F8"
+    verb_head = GOOD_FIXTURE.replace("name: demo-review", "name: demo-refactor")
+    assert not any(f[2] == "W4" for f in lint_text(verb_head, "demo-refactor")), "verb head 'refactor' must not trip W4 (ADR-0001 allowlist)"
+    agentive = GOOD_FIXTURE.replace("name: demo-review", "name: demo-author")
+    assert any(f[2] == "W4" for f in lint_text(agentive, "demo-author")), "agentive head 'author' must still trip W4"
     good_hooks = ('{"hooks": {"PostToolUse": [{"matcher": "Write|Edit", "hooks": '
                   '[{"type": "command", "command": "python3 \\"${CLAUDE_PLUGIN_ROOT}/scripts/x.py\\" --hook"}]}]}}')
     assert not lint_hooks_text(good_hooks), "wrapped hooks.json must pass clean"

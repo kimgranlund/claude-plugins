@@ -1,6 +1,6 @@
 {
   "skill": "ui-genres",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Review-time corpus, batch-4 deep review 2026-07-03. Positives span imperative / diagnostic / symptom / indirect. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: ui-patterns, layout-decompose, ui-audit, knowledge-author \u2014 including shared-token traps (dashboard, travel, modules).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Review-time corpus, batch-4 deep review 2026-07-03. Positives span imperative / diagnostic / symptom / indirect. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: ui-patterns, layout-decompose, ui-audit, knowledge-forge \u2014 including shared-token traps (dashboard, travel, modules).",
   "cases": [
     {
       "id": "t01",

@@ -100,7 +100,7 @@ common variants, and the per-archetype outside-in / inside-out notes. Match the 
   browser probe — route there; don't eyeball what can be measured.
 - **The shell is the scope; internals hand down.** This skill owns the frame, regions, and how surfaces host
   verbs — a single component's anatomy/API/geometry and a module's internal composition hand DOWN to
-  [[component-author]] (which hands the app shell back UP here); the journey BETWEEN screens hands ACROSS to
+  [[component-forge]] (which hands the app shell back UP here); the journey BETWEEN screens hands ACROSS to
   [[flow-decompose]] — this skill stops at one screen's edge. Grade the slot; don't re-grade what fills it.
 
 ## References

@@ -74,7 +74,7 @@ grid + one fine pass only).
 - Sensitivity: PEAKED, not flat. Full-range macro-F1 spread 0.719→0.870 = 0.151. R falls
   monotonically 0.99→0.60 as t rises; P rises 0.675→0.934; F1 peaks mid-range. Narrow
   optimal plateau (width 0.02–0.03); meaningful degradation outside [0.30, 0.40].
-- Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (vision-memo-author,
+- Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (vision-memo-forge,
   prd-author, i18n-verify, safety-verify, focus-verify, research-methods, token-builder —
   mostly paraphrase positives the lexical proxy can't see, a measurement artifact the module
   docstring flags), and a precision-driven cluster wants t≥0.35 (system-builder, color-theory,

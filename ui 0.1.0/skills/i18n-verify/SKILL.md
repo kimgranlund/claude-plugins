@@ -10,7 +10,7 @@ description: >-
   or color-blind safety (color-verify); NOT for focus order, keyboard nav, hit-targets, or focus rings
   (focus-verify); NOT for loading skeleton/spinner, CLS, or latency budgets (perf-verify); NOT for
   undo/type-to-confirm or audit-trail UX (safety-verify); NOT for color-space theory or palette math
-  (color-science-spaces); NOT for building a date-picker or language-switcher component (component-author).
+  (color-science-spaces); NOT for building a date-picker or language-switcher component (component-forge).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -116,7 +116,7 @@ mirroring, and isolation actually hold.
 | `formatting/intl-surfaces.json` | the surfaces that must route through `Intl.*` |
 | `bidi/isolation-points.json` | slot types that require bidi isolation |
 | [[typography-lettering]] | script-metrics ground truth behind the bands |
-| [[component-author]] | fix owner for surface/markup findings — dir/lang wiring, logical-axis CSS, truncation affordances land there |
+| [[component-forge]] | fix owner for surface/markup findings — dir/lang wiring, logical-axis CSS, truncation affordances land there |
 | [[spec-author]] / [[prd-author]] | fix owner for the posture — `declared_posture` is a spec/PRD decision, not a UI patch |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |
 

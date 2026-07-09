@@ -12,7 +12,7 @@ description: >-
   the gates — Make validates nothing, so this is the gate. NOT for Claude Design
   (design-system-author-dscard); NOT for Google Stitch
   (design-system-author-google-stitch); NOT for cross-platform strategy
-  (design-system-author); NOT for grading (design-system-reviewer); NOT for palette/tokens
+  (design-system-hub); NOT for grading (design-system-reviewer); NOT for palette/tokens
   (palette-design / token-builder).
 disable-model-invocation: false
 user-invocable: true
@@ -142,7 +142,7 @@ kit, dispatch the independent design-system-reviewer seat (or doc-reviewer bound
 | `references/rubric.md` | The standard — score every create/evaluate/regenerate pass against it |
 | `scripts/make_guidelines_check.py` | The mechanical gates (D1–D6, D10, D11); `selftest` fixture-locks them |
 | [[palette-design]] / [[color-verify]] | Upstream: design the ramp / verify the pairs — this skill consumes their verified output |
-| [[design-system-author]] (hub) | Cross-platform strategy; sibling exports for other platforms route to design-system-author-dscard / design-system-author-google-stitch |
+| [[design-system-hub]] (hub) | Cross-platform strategy; sibling exports for other platforms route to design-system-author-dscard / design-system-author-google-stitch |
 
 **Done** = folder authored to the shape, checker green, judgment dims ≥ 3 against the
 rubric, receipt written with honest UNMEASURED entries. **NOT done** = a green checker

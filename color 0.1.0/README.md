@@ -36,4 +36,4 @@ reconciles a pack's own file tree.
 (`forge` and `ui`, respectively) and a `skills:` preload cannot cross a plugin boundary. Both are
 still referenced in the agent's body prose as soft, degrade-gracefully mentions.
 
-v0.1.1 · assembled 2026-07-09 · 0.1.1: token-builder fallback 'Tests run'→'Tests/checks run' (harness-audit finding, estate-wide sweep) · assembled 2026-07-07 · initial: ported from ~/.claude/skills + ~/.claude/agents/design/token-builder as part of a plugin-decompose partition
+v0.1.2 · assembled 2026-07-09 · 0.1.2: references to the renamed design-systems/typography skills swept (ADR-0001) · assembled 2026-07-09 · 0.1.1: token-builder fallback 'Tests run'→'Tests/checks run' (harness-audit finding, estate-wide sweep) · assembled 2026-07-07 · initial: ported from ~/.claude/skills + ~/.claude/agents/design/token-builder as part of a plugin-decompose partition

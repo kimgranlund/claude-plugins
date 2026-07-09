@@ -14,6 +14,6 @@ scorer-driven agent loop, they do not reproduce them verbatim).
 | **Hill Climb** | Hill-climbing local search — evaluate the neighborhood, move to the best neighbor, repeat until no neighbor improves; stop at a local optimum. | Russell & Norvig, *Artificial Intelligence: A Modern Approach*, local-search chapter (hill-climbing). |
 | **Sweep** | Parameter sweep / grid search over a value range to map the scoring landscape and read sensitivity; the "narrow the range first" discipline. | Hyperparameter-optimization practice; Bergstra & Bengio, "Random Search for Hyper-Parameter Optimization" (JMLR 2012) for the grid-vs-range trade-off. |
 
-**Adding or re-homing a method** is authoring work — route to [[knowledge-author]] (axis decomposition,
+**Adding or re-homing a method** is authoring work — route to [[knowledge-forge]] (axis decomposition,
 a grounded research wave, index discipline). A new method lands with its citation added here, never as an
 uncited protocol bolted on inline.

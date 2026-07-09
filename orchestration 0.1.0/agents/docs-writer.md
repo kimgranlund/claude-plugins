@@ -7,7 +7,7 @@ description: >-
   unrepresentative example — a static check cannot catch. Use PROACTIVELY when a documented thing ships or
   changes, or when the docs have fallen behind what they document. NOT for reviewing a
   PRD/SPEC/LLD/ADR/reference doc for rubric readiness (doc-reviewer); NOT for an agent-facing
-  knowledge/reference doc, e.g. a skill's references/ file (reference-author).
+  knowledge/reference doc, e.g. a skill's references/ file (reference-forge).
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: opus
 effort: high

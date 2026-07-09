@@ -9,9 +9,9 @@ description: >-
   world scripts (Arabic, Devanagari, Hebrew niqqud, CJK), OpenType features, variable-font axes (wght, wdth,
   opsz), CSS text surface (text-wrap, leading-trim), measure, text accessibility (dyslexic,
   low-vision). NOT for designing, picking, or verifying a brand's font pairing or choosing fonts for a brand
-  (typography-system-author); NOT for
+  (typography-system-design); NOT for
   generating a type scale or design tokens (typography-tokens); NOT for building components
-  (component-author); NOT for locale date/number formatting (i18n-verify). ANSWERS, does not generate.
+  (component-forge); NOT for locale date/number formatting (i18n-verify). ANSWERS, does not generate.
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -86,7 +86,7 @@ the contested-knowledge form of the same rule.
   file still answers the typographic question inline — which ratio, why neutral vs. distinctive,
   what a script needs — from `references/techniques/modular-scale.md` and `references/voice/`;
   typography-tokens owns turning that answer into bound `--type-*` tokens.
-- **Building components** → [[component-author]].
+- **Building components** → [[component-forge]].
 - **Locale formatting, bidi, Intl, pluralization** → [[i18n-verify]] — script *metrics and
   typographic norms* stay here.
 - **Color pairing and contrast math** → [[color-science-accessibility]].
@@ -96,5 +96,5 @@ the contested-knowledge form of the same rule.
 ## Extending this pack
 
 A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[knowledge-author]] (axis decomposition, grounded research waves, index discipline); never bolt
+[[knowledge-forge]] (axis decomposition, grounded research waves, index discipline); never bolt
 an uncited file onto the corpus inline.

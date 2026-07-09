@@ -10,7 +10,7 @@ description: >-
   (color-verify); NOT for focus order, keyboard nav, hit-targets, or focus rings (focus-verify); NOT for
   RTL/bidi, locale Intl formatting, or text-expansion (i18n-verify); NOT for undo/type-to-confirm or
   audit-trail UX (safety-verify); NOT for color-space theory or palette math (color-science-spaces); NOT for
-  wire latency or bundle-size; NOT for a spinner/skeleton-loader component (component-author).
+  wire latency or bundle-size; NOT for a spinner/skeleton-loader component (component-forge).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -119,7 +119,7 @@ prove that.
 | `streaming/posture.json` | streaming invariants + aria-live chunking rules |
 | `cls/budget.json` | layout-stability budget + space-reservation patterns |
 | `cancellation/contract.json` | cancel placement + state-restoration rules |
-| [[component-author]] | the maker seat — recipe/reservation/streaming defects route there (or the repo's component seat) for the fix |
+| [[component-forge]] | the maker seat — recipe/reservation/streaming defects route there (or the repo's component seat) for the fix |
 | [[safety-verify]] | shares the recall/cancellation contract for long destructive operations |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |
 

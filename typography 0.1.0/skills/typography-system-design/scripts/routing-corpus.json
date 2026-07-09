@@ -1,0 +1,41 @@
+{
+  "skill": "typography-system-design",
+  "_note": "M2 corpus of record, built fresh at authoring time (no prior routing corpus existed). Positives span imperative/diagnostic/symptom/indirect phrasings for DESIGNING a typography system from a brief. Negatives are drawn ADVERSARIALLY from the description's own NOT-for fence: typography-tokens (realization/token vocabulary), typography-lettering (no-token history/metrics questions), material-design-typography-tokens, component-forge, and design-system-hub -- plus the color-domain analogs (palette-design, color-verify) as extra precision against the nearest cross-domain sibling shape (a generator->verifier creative-decision skill).",
+  "siblings": ["typography-tokens", "typography-lettering", "material-design-typography-tokens", "component-forge", "design-system-hub", "palette-design", "color-verify"],
+  "positives": [
+    "design our typography system from this brand brief",
+    "choose fonts for our brand across all voices",
+    "help me decide which typeface fills each of our eleven type voices",
+    "turn 'modern and clean' into an actual font decision",
+    "what font should our display and heading voices use for a 1970s ski poster brand feel",
+    "design the type system for a Kinfolk-editorial quiet-luxury brand",
+    "pick a body and display font pairing for our marketing site with real justification",
+    "our type choices feel like a grab-bag -- help make them read as one voice",
+    "is Inter and Fraunces a compatible metric pairing for our heading over body",
+    "make the distinctive-vs-neutral call for our kicker and caption voices",
+    "interpret this creative brief into concrete typeface decisions",
+    "design a font pairing with real contrast and impact for our editorial brand",
+    "verify the x-height compatibility of the fonts we picked for heading and body before we ship",
+    "our typography feels generic -- help us commit to an actual point of view",
+    "what typeface should carry our brand's display voice",
+    "design the type personality for our dev-tool product"
+  ],
+  "negatives": [
+    "what type token should I use for this heading",
+    "bind this button label to --type-ui-sm",
+    "size this caption with the token scale",
+    "which voice and step for this kicker text",
+    "why does Helvetica read as neutral",
+    "what's the design history of Garamond",
+    "explain x-height vs cap-height",
+    "what makes a typeface read as distinctive",
+    "bind this headline to Material's type scale",
+    "what M3 typescale token for this label",
+    "build a select component",
+    "author a custom checkbox element",
+    "write the DESIGN.md spine for our brand",
+    "export our design system for Claude Design",
+    "design our color ramp from this brand anchor",
+    "verify this palette's contrast ratios"
+  ]
+}

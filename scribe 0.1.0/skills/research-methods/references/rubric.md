@@ -3,7 +3,7 @@
 Scores *how well a systematic investigation was conducted*, independent of which of the six methods
 ran (autoresearch · ablation · bisect · adversarial · hill-climb · sweep). The method-specific gates
 live in each `references/<method>.md`; this rubric is the shared spine they all inherit. Built via
-`rubric-author`. `[gate]` here = a floor that, if failed, invalidates the run regardless of the rest —
+`rubric-forge`. `[gate]` here = a floor that, if failed, invalidates the run regardless of the rest —
 a *judgment-checked* floor read from the run's journal, not (yet) a lint-backed one, so it diverges
 deliberately from the mechanically-checkable `[gate]` in the skill / linguistic-potency rubrics (see the
 journal shape-check note at the foot); `[review]` = judgment with cited evidence from the run's journal.

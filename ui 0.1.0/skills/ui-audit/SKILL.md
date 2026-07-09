@@ -12,7 +12,7 @@ description: >-
   synthesizes what only the whole reveals (pattern drift across screens, systemic token misuse,
   repeated defect quadrants). NOT for grading one screen, shell, or wireframe (layout-decompose /
   the layout-reviewer agent); NOT for one flow (flow-decompose); NOT for one component
-  (component-author / component-reviewer); NOT for naming a pattern or genre in the abstract —
+  (component-forge / component-reviewer); NOT for naming a pattern or genre in the abstract —
   master-detail or list-detail (ui-patterns / ui-genres); NOT for one invariant in isolation
   (the five verifiers); NOT for fixing what it finds — findings route to owners.
 disable-model-invocation: false
@@ -76,7 +76,7 @@ instruments over every surface, then synthesizes the cross-cutting findings.
    `tasks.json` when declared; absent → severity × spread only, and the report says so) — one
    finding touching a criticality-3 flow outranks a wider finding on criticality-1 surfaces.
    Route every finding to its owner: layout → the screen's maker; component internals →
-   `component-author` (or the repo's
+   `component-forge` (or the repo's
    builder agent); tokens → the `token-builder` agent; copy/brand → out of scope, flagged.
    Persist the run: cards, checker outputs, inventory.json, and the `findings.jsonl` ledger
    (opened at step 1) — into a dated `audits/<date>/` dir in the target repo; then

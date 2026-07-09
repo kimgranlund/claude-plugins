@@ -78,5 +78,5 @@ a good-vs-bad genre-fit contrast.
 ## Extending this pack
 
 A missing genre, a stale convention, or "add X to this pack" is authoring work — route to
-[[knowledge-author]] (axis decomposition, grounded research waves, index discipline); never bolt
+[[knowledge-forge]] (axis decomposition, grounded research waves, index discipline); never bolt
 an uncited file onto the corpus inline. Re-run the harness gates after any edit.

@@ -1,6 +1,6 @@
 {
  "skill": "markdown-to-markup",
- "_note": "Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), reference-author, llms-txt-author, knowledge-author, linguistic-techniques, rubric-author.",
+ "_note": "Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), reference-forge, llms-txt-forge, knowledge-forge, linguistic-techniques, rubric-forge.",
  "positives": [
   "render this markdown",
   "render the docs prose markdown onto the page",

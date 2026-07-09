@@ -13,7 +13,7 @@ description: >
   disclosure. NOT for format Q&A alone (design-md-format); NOT for
   Stitch exports (design-system-author-google-stitch); NOT for Make guidelines
   (design-system-author-figma-make); NOT for cross-platform strategy
-  (design-system-author); NOT for grading an export you didn't author
+  (design-system-hub); NOT for grading an export you didn't author
   (design-system-reviewer).
 disable-model-invocation: false
 user-invocable: true

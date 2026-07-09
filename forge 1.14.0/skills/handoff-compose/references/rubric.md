@@ -1,6 +1,6 @@
 # Rubric — handoff-block quality (rubric-handoff)
 
-Score a returned handoff block. No canonical rubric for this output lives elsewhere, so it is defined here (authored in the `rubric-author` shape: Dim × Type × 1–5 anchors × a gate rule). Run `scripts/handoff_check.py` first — it settles H1's mechanical half (presence, order, `(none)` markers, the Status enum) deterministically; score the rest by inspection of the block against the work it reports.
+Score a returned handoff block. No canonical rubric for this output lives elsewhere, so it is defined here (authored in the `rubric-forge` shape: Dim × Type × 1–5 anchors × a gate rule). Run `scripts/handoff_check.py` first — it settles H1's mechanical half (presence, order, `(none)` markers, the Status enum) deterministically; score the rest by inspection of the block against the work it reports.
 
 | # | Dimension | Type | What it checks | 1 (fail) → 3 (adequate) → 5 (excellent) |
 |---|---|---|---|---|

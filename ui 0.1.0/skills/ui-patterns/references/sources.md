@@ -30,5 +30,5 @@ claim needs an authority or the canon disagrees, these are the references, in tr
 
 In-corpus: the shell archetypes live in THIS pack's `references/archetype-*.md` (applied by
 `layout-decompose`); interaction invariants in the verifier family; component realization in
-`component-author`. Claims here that drift from those owners should be fixed HERE — they own
+`component-forge`. Claims here that drift from those owners should be fixed HERE — they own
 their layers.

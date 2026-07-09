@@ -1,6 +1,6 @@
 {
   "skill": "color-theory",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-science-* split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-science-perception, color-science-spaces, color-science-accessibility, palette-design, color-verify, ui-patterns, knowledge-author.",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-science-* split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-science-perception, color-science-spaces, color-science-accessibility, palette-design, color-verify, ui-patterns, knowledge-forge.",
   "cases": [
     {
       "id": "t01",

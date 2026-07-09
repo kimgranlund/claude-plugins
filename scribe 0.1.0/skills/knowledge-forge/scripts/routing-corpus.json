@@ -1,0 +1,42 @@
+{
+  "skill": "knowledge-forge",
+  "_note": "Review-time corpus (excellence campaign batch 2; sibling re-aimed 2026-07-06 for the color-science-* split). Positives span imperative / diagnostic / symptom / indirect phrasings of pack-minting and pack-extending. Negatives drawn adversarially from the neighborhood's trigger vocabulary: reference-forge (single doc), skill-author (procedure skill), rubric-forge, system-decompose, and consult-questions owned by the packs that route here (ui-patterns, ui-genres, color-science-perception, color-theory, typography-lettering, linguistic-techniques), plus the Project-KB NOT-clause. FIX: check this into knowledge-forge/scripts/routing-corpus.json — a review-time corpus that evaporates is not a test of record.",
+  "neighbors": [
+    "reference-forge",
+    "skill-author",
+    "rubric-forge",
+    "system-decompose",
+    "ui-patterns",
+    "ui-genres",
+    "color-science-perception",
+    "color-theory",
+    "typography-lettering",
+    "linguistic-techniques"
+  ],
+  "positives": [
+    "build an expert pack on CSS grid layout",
+    "make a skill like ui-patterns for animation principles",
+    "turn this research into a knowledge skill",
+    "our corpus needs a retrieval surface",
+    "add an axis to the color-science-perception pack",
+    "mint a new knowledge pack for accessibility standards",
+    "package these research notes as an answers-only skill",
+    "this world-model skill needs a typed index over its references",
+    "the references in this pack are organized like the literature, not how users ask",
+    "extend the typography pack with a new subdirectory of cited references"
+  ],
+  "negatives": [
+    "write a reference doc on OAuth flows",
+    "is this doc retrievable",
+    "audit our docs for drift",
+    "structure my project knowledge",
+    "write a skill for deploying to staging",
+    "review this skill against the rubric",
+    "why isn't my skill triggering",
+    "write a rubric for grading essays",
+    "decompose this architecture into parts",
+    "what pattern is this screen using",
+    "what do users expect in a dashboard app",
+    "why do these colors clash"
+  ]
+}

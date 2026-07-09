@@ -1,8 +1,8 @@
 {
   "skill": "palette-design",
-  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03; siblings re-aimed 2026-07-06 for the color-science-* split). Positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from the neighborhood's trigger vocabulary: color-verify (verify/contrast/CVD), color-science-spaces (spaces/conversion), color-science-accessibility (APCA/CVD), color-theory (harmony/meaning/mood), token-builder agent (token layer edits), component-author (color-picker component), brand/art-direction, and (added 2026-07-04) design-system-author — the whole-bundle ask must NOT grab this color-only skill; 'design the color system for this app' (positive) vs 'author our Claude Design design system bundle' (negative) is the boundary the reciprocal fence protects.",
-  "siblings_in_repo": ["color-verify", "color-science-spaces", "color-science-accessibility", "color-theory", "component-author"],
-  "global_peers": ["token-builder (agent)", "design-system-author"],
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03; siblings re-aimed 2026-07-06 for the color-science-* split). Positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from the neighborhood's trigger vocabulary: color-verify (verify/contrast/CVD), color-science-spaces (spaces/conversion), color-science-accessibility (APCA/CVD), color-theory (harmony/meaning/mood), token-builder agent (token layer edits), component-forge (color-picker component), brand/art-direction, and (added 2026-07-04) design-system-hub — the whole-bundle ask must NOT grab this color-only skill; 'design the color system for this app' (positive) vs 'author our Claude Design design system bundle' (negative) is the boundary the reciprocal fence protects.",
+  "siblings_in_repo": ["color-verify", "color-science-spaces", "color-science-accessibility", "color-theory", "component-forge"],
+  "global_peers": ["token-builder (agent)", "design-system-hub"],
   "positives": [
     "build an OKLCH ramp from our brand anchor",
     "extend our palette to the full 13-step scale",

@@ -1,7 +1,7 @@
 # Choosing a concrete font per family slot
 
 Designing which typeface fills each of the five `--font-*` roles (`display · heading · body · ui
-· mono`) from a brand concept or creative brief is `typography-system-author`'s job — it interprets
+· mono`) from a brand concept or creative brief is `typography-system-design`'s job — it interprets
 the brief into a specific point in design space, makes the distinctive-vs-neutral call per voice
 with a stated rationale, sets the pairing/contrast drama, and verifies metric compatibility before
 handing the decision here for realization as bound CSS custom properties. Route there for the full
@@ -33,5 +33,5 @@ whatever's familiar.
 
 This file is the no-brief fallback only. For a real brand concept, creative brief, or
 visual-territory description — the actual per-voice design decision, its rationale, the pairing
-drama, and the verified metric-compatibility check — use `typography-system-author`, then return
+drama, and the verified metric-compatibility check — use `typography-system-design`, then return
 here to bind its decision to `--font-*`.

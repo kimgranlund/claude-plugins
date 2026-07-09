@@ -136,7 +136,7 @@ Portfolio: KEEP|MERGE|SPLIT|RETIRE|RE-CHARTER — <one sentence of team-level wh
 | `skills-audit` | The sibling audit for a whole *skills* corpus (the same two-mode shape), same plugin |
 | `linguistic-techniques` | L scoring — dispatch `linguistics-reviewer` per agent, same plugin |
 | `orchestration-design` | S framing — static (`skills:` preload) vs dynamic wiring, descriptions as connective tissue — lives in the `orchestration` plugin |
-| `rubric-author` | Author / score / repair this skill's own rubrics — lives in `scribe` |
+| `rubric-forge` | Author / score / repair this skill's own rubrics — lives in `scribe` |
 
 ## Failure branches
 

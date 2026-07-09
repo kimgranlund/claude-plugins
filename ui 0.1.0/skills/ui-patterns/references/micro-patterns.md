@@ -1,7 +1,7 @@
 # Micro patterns — the module catalog
 
 Each entry: anatomy → behavior contract → the failure it invites. Building any of these as a
-component routes to `component-author`; their interaction invariants route to the verifier family.
+component routes to `component-forge`; their interaction invariants route to the verifier family.
 
 ## data table
 - **Anatomy:** column headers (sortable marked, sorted indicated) · rows · selection column ·
@@ -55,7 +55,7 @@ component routes to `component-author`; their interaction invariants route to th
 - **Anatomy:** frequent verbs inline (icon+label beats icon-only), the rest behind "⋯" overflow;
   priority order declared so collapse is lowest-priority-first; verbs grouped by object.
 - **Contract:** the overflow seam is the module's load-bearing part — see
-  `component-author/references/composition-patterns.md` for the mechanism.
+  `component-forge/references/composition-patterns.md` for the mechanism.
 - **Failure:** icon-only toolbars past ~5 verbs (labels are the affordance); overflow hiding the
   primary verb at common widths.
 
