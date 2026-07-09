@@ -1,5 +1,19 @@
 # The md.sys.motion token table (M3, verified 2026-07-09)
 
+> **Amendment 2026-07-09 (same day) — a nonoun motion export now exists.** It carries a deliberate
+> SUBSET of this table, verified against `nonoun-color-tokens@e3ed458` (`src/engine/motion.mjs`):
+>
+> | | nonoun export | this table (full M3) |
+> |---|---|---|
+> | Easing | **7** — `linear`, `standard{,-decelerate,-accelerate}`, `emphasized{,-decelerate,-accelerate}` | 10 (adds the `legacy` M2 trio) |
+> | Duration | **16** — the full 50–1000ms ladder, verbatim | 16 |
+> | Springs | **none** — web-first, so duration+easing is the system (rule 2 below resolves this way) | spatial/effects × fast/default/slow |
+> | Extra | `motion.animatable` = `["transform","opacity"]` — a nonoun addition, not an M3 token | — |
+>
+> Shape: a `motion` block in the design-system `tokens.json` (**not** `--md-sys-motion-*` CSS custom
+> properties), plus the `## Motion` rulebook in `DESIGN.md`. A nonoun kit that needs the `legacy`
+> trio or springs must add them itself — they are absent by design, not by oversight.
+
 Verified verbatim against the material-foundation token repo (`css/motion.css`), MDC-Android
 `docs/theming/Motion.md`, and m3.material.io — accessed 2026-07-09. Two CSS shapes exist in the
 wild, so bind expecting either: the tier-named single-property form shown in this file

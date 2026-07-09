@@ -26,9 +26,15 @@ duration ladder, and the M3 Expressive spring tokens.
 
 1. **Find the export.** A CSS file whose `:root` defines `--md-sys-motion-*` custom properties
    (or the platform equivalent: `motionEasing*`/`MotionScheme` on Android, M3 theme slots in
-   Flutter). **No export in this project?** Unlike its geometry/color/typography siblings, no
-   nonoun motion export exists yet (as of 2026-07-09) — bind to the **M3 spec defaults** carried
-   verbatim in [`references/tokens.md`](references/tokens.md), and say you did.
+   Flutter). **A nonoun kit?** Its motion export is NOT a CSS file — it is the `motion` block in
+   the design-system `tokens.json` (`motion.easing` · `motion.duration` · `motion.animatable`)
+   plus the `## Motion` rulebook in `DESIGN.md`. Bind to that; it is a **subset** of the table
+   below (see the amendment in `references/tokens.md`). **No export at all?** Bind to the **M3
+   spec defaults** carried verbatim in [`references/tokens.md`](references/tokens.md), and say
+   you did.
+   > _Amended 2026-07-09 (same day): this step previously read "no nonoun motion export exists
+   > yet." One landed hours later (nonoun-color-tokens PR #243). The original claim was true when
+   > written and is preserved here for audit._
 2. **Let the export decide the system.** Spring tokens present → M3 Expressive springs; absent
    (every material-web project — it implements duration+easing only) → duration+easing; no export
    at all → springs, the M3 recommendation for new work. Never mix the two per-animation.
@@ -69,7 +75,13 @@ animation sits on the project's one system — springs XOR duration+easing.
 - Color/sizing/type tokens: the three sibling packs. Designing a new motion system: not this pack.
 
 _Provenance: authored 2026-07-09 against the published M3 spec (the material-foundation token
-repo's `css/motion.css`, MDC-Android Motion.md, m3.material.io — all accessed
-2026-07-09), NOT against a nonoun export: none exists yet. When the engine grows a motion export,
-re-run bind step 1 against it and re-sync `references/tokens.md` (a checker script is part of
-that export's definition of done) — owner: the kit maintainer._
+repo's `css/motion.css`, MDC-Android Motion.md, m3.material.io — all accessed 2026-07-09), NOT
+against a nonoun export: none existed at authoring time._
+
+_Amended 2026-07-09 (same day, by the kit maintainer): a nonoun motion export now exists
+(nonoun-color-tokens PR #243, `src/engine/motion.mjs` → the `tokens.json` `motion` block + the
+`DESIGN.md` `## Motion` section). Bind step 1 and `references/tokens.md` are re-synced against it.
+Its drift gate is the export repo's own suite (`test/engine/exports.mjs` asserts every easing is a
+`cubic-bezier()`, the 16-step ladder is strictly ascending, `short2` is the 100ms instant floor,
+and `animatable` is exactly `transform`+`opacity`) — that is the checker the definition of done
+called for; this pack does not ship a duplicate._
