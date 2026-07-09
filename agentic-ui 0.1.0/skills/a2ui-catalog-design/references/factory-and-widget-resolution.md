@@ -22,7 +22,7 @@ a live control — no Basic-catalog adapter (SPEC-R8):
   renderer's input controller (LLD-C8) wires for two-way binding (`types.ts:26-30`). Absent on
   non-inputs.
 - **`submitGate?: true`** — marks the control a submit-action gate (ADR-0054); the registry
-  aggregates it into a derived selector (`types.ts:32-39`; see [[two-tier-extensibility]]).
+  aggregates it into a derived selector (`types.ts:32-39`; see `references/two-tier-extensibility.md`).
 
 ## Resolution is the RENDERER's job, not the catalog's
 
@@ -32,10 +32,10 @@ contract is restated at `catalog/types.ts:46-48` and `renderer/widget.ts:83`). T
 (`makeCreateWidget`, `widget.ts:104`) ALWAYS returns an element: on an unknown type it emits a
 `CATALOG` error and returns a placeholder so sibling nodes still mount — non-fatal (`widget.ts:110-120`,
 runtime SPEC-R9 AC2). This is the security-allowlist enforcement point — see
-[[security-allowlist-and-conformance]].
+`references/security-allowlist-and-conformance.md`.
 
 - **Caveat:** a catalog author never writes resolution code. Adding a row = a `catalog.json` entry +
-  a `factories.ts` factory + the derived-gate coverage (see [[coverage-policy-and-drift-gates]]);
+  a `factories.ts` factory + the derived-gate coverage (see `references/coverage-policy-and-drift-gates.md`);
   the renderer picks it up through `registry.get` with zero renderer edits.
 
 ## The `accessorFactory` vs bespoke split — the load-bearing INVARIANT
@@ -74,4 +74,4 @@ they are passive list items, not bindable components.
 Every declared type MUST have a factory: `registry.register` throws `CATALOG_FACTORY_MISSING`
 (SPEC-R7 AC1) on a gap (`registry.ts:47-54`), and the reverse ("no extra factory-less type") is held
 by the derived coverage gate. The `defaultFactories` table (`factories.ts:418-451`) is keyed by
-A2UI type and must be 1:1 with `catalog.json`'s components. See [[coverage-policy-and-drift-gates]].
+A2UI type and must be 1:1 with `catalog.json`'s components. See `references/coverage-policy-and-drift-gates.md`.

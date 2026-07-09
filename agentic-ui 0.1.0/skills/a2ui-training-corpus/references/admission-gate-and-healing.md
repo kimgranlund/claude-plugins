@@ -9,8 +9,8 @@
 Every stage is independently testable; failures return a typed `AdmitResult` (`admit.ts:64-76`). The exact order (`admit.ts:5-9`):
 
 1. **heal** (`admit.ts:82-93`) — LLD-C7 / ADR-0061. Only `a2uiOutput` is healable; its absence is legal (an eval candidate carries none). `heal` failure → `E_SCHEMA`.
-2. **schema/field** (`admit.ts:102-105`) — `validateRecord`'s `E_SCHEMA` failures (see [[record-schema-and-provenance]]).
-3. **facet gate** (`admit.ts:112-114`) — reject `facet:"eval"` with `E_LEAK` (fail-closed, see [[exemplar-eval-split-and-no-leak]]).
+2. **schema/field** (`admit.ts:102-105`) — `validateRecord`'s `E_SCHEMA` failures (see `references/record-schema-and-provenance.md`).
+3. **facet gate** (`admit.ts:112-114`) — reject `facet:"eval"` with `E_LEAK` (fail-closed, see `references/exemplar-eval-split-and-no-leak.md`).
 4. **pin check** (`admit.ts:117-118`) — `validateRecord`'s `E_PIN` failures.
 5. **tier-1 deterministic** (`admit.ts:128-129`) — the shared `validateA2ui`.
 6. **pointer RESOLUTION** (`admit.ts:133-136`) — corpus-only, `E_POINTER`.
@@ -34,7 +34,7 @@ Tier 1 is `validateA2ui` (`admit.ts:128`), which corpus `validate.ts` **re-expor
 
 Tier 2 runs only if `deps.judge` is present (`admit.ts:179`). Below-bar → `E_QUALITY` with `failingDimensions` (`admit.ts:181-183`); at/above-bar → sets `meta.qualityScore` (`admit.ts:184`). **Absent → the stage is skipped and `qualityScore` stays unset — the honest, queryable marker of an unjudged record** (`admit.ts:176-177`, ADR-0060 Decision clause 1).
 
-Why injected, not inline: judgment is a document-scored rubric run by a critic seat, and `admit()` is pure Node-side pipeline code where no Claude seat can be dispatched mid-call. Full detail — the verdict adapter, back-scoring, quarantine — is [[judge-and-verdict-adapter]]. **Caveat:** SPEC-R8 AC2 (`E_QUALITY`) is proven with a *fake* judge in the test matrix (`admit.ts:46-47`); a real rubric gates production admission only once the harness wave wires one (ADR-0060 Consequences).
+Why injected, not inline: judgment is a document-scored rubric run by a critic seat, and `admit()` is pure Node-side pipeline code where no Claude seat can be dispatched mid-call. Full detail — the verdict adapter, back-scoring, quarantine — is `references/judge-and-verdict-adapter.md`. **Caveat:** SPEC-R8 AC2 (`E_QUALITY`) is proven with a *fake* judge in the test matrix (`admit.ts:46-47`); a real rubric gates production admission only once the harness wave wires one (ADR-0060 Consequences).
 
 ## `AdmitDeps` — the shipped seam (ADR-0060 realization note)
 
@@ -58,6 +58,6 @@ Structured `A2uiOutput` input skips the text arms (a)/(b) — only (c)/(d) can a
 
 **NOTHING SEMANTIC IS EVER HEALED** (`heal.ts:17-21`). Unknown components, malformed pointers, missing/duplicate roots, wrong catalogs — none are form defects, so heal leaves them untouched to flow to tier-1 and reject there. **This is the load-bearing contract:** an over-eager healer would *launder invalidity* into a corpus whose whole point is provable validity (PRD-G4). Arm (d) fills only an *absent* version; a *present-but-wrong* version is left for tier-1's `VERSION_UNSUPPORTED` → `E_PIN` (`heal.ts:77`, `heal.ts:44-45`).
 
-`HealResult` is verdict-neutral (`heal.ts:38-40`): `ok:true` always carries a `messages` array (even when `changed:false` — the next stage always runs against `messages`, never raw `input`); `ok:false` means the input couldn't be coerced to JSON at all. Each caller maps `ok:false` to its own vocabulary — admission → `E_SCHEMA` (`admit.ts:89`), the streaming codec → `PARSE` (`heal.ts:36`). A healed admission is marked `status:"repaired"`; the `repairs` list travels in `AdmitResult`, not on the record (the schema is closed — ADR-0061 rejected a `meta.repairs` field; see [[record-schema-and-provenance]]).
+`HealResult` is verdict-neutral (`heal.ts:38-40`): `ok:true` always carries a `messages` array (even when `changed:false` — the next stage always runs against `messages`, never raw `input`); `ok:false` means the input couldn't be coerced to JSON at all. Each caller maps `ok:false` to its own vocabulary — admission → `E_SCHEMA` (`admit.ts:89`), the streaming codec → `PARSE` (`heal.ts:36`). A healed admission is marked `status:"repaired"`; the `repairs` list travels in `AdmitResult`, not on the record (the schema is closed — ADR-0061 rejected a `meta.repairs` field; see `references/record-schema-and-provenance.md`).
 
 **Deviation doctrine:** the closed list "will feel too small" the first time a new common LLM defect appears (e.g. smart quotes) — that is deliberate (ADR-0061 Consequences). Widening it is an **amendment to ADR-0061 clause 1**, and each new arm must argue it is *form, not semantics* — never an ad-hoc addition in the module (`heal.ts:19-21`).

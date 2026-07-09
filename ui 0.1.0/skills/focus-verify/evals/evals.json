@@ -1,126 +1,126 @@
 {
-  "skill": "focus-verify",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition).",
-  "cases": [
-    {
-      "id": "t01",
-      "prompt": "check the focus order of this view",
-      "expect": "trigger"
-    },
-    {
-      "id": "t02",
-      "prompt": "verify the tab sequence on the settings page",
-      "expect": "trigger"
-    },
-    {
-      "id": "t03",
-      "prompt": "is keyboard navigation trapped inside this dialog",
-      "expect": "trigger"
-    },
-    {
-      "id": "t04",
-      "prompt": "our modal loses focus when it closes",
-      "expect": "trigger"
-    },
-    {
-      "id": "t05",
-      "prompt": "the focus ring is invisible on the dark theme",
-      "expect": "trigger"
-    },
-    {
-      "id": "t06",
-      "prompt": "does this focus ring clear 3:1 against every surface",
-      "expect": "trigger"
-    },
-    {
-      "id": "t07",
-      "prompt": "these icon buttons are too small to tap",
-      "expect": "trigger"
-    },
-    {
-      "id": "t08",
-      "prompt": "check that the hit targets meet the 24px minimum",
-      "expect": "trigger"
-    },
-    {
-      "id": "t09",
-      "prompt": "where should focus go after a route change",
-      "expect": "trigger"
-    },
-    {
-      "id": "t10",
-      "prompt": "tab order jumps around the page unexpectedly",
-      "expect": "trigger"
-    },
-    {
-      "id": "t11",
-      "prompt": "derive focus-ring tokens for our buttons and inputs",
-      "expect": "trigger"
-    },
-    {
-      "id": "t12",
-      "prompt": "what keys should a menu widget respond to",
-      "expect": "trigger"
-    },
-    {
-      "id": "n01",
-      "prompt": "verify this palette passes WCAG contrast",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n02",
-      "prompt": "check the color-blind safety of these ramps",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n03",
-      "prompt": "check RTL support and icon mirroring across locales",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n04",
-      "prompt": "verify text-expansion headroom for German translations",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n05",
-      "prompt": "should this loading state use a skeleton or a spinner",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n06",
-      "prompt": "our CLS budget is blown by late-loading images",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n07",
-      "prompt": "add type-to-confirm for this irreversible delete",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n08",
-      "prompt": "verify the undo window for destructive bulk actions",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n09",
-      "prompt": "convert this sRGB color to OKLCH",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n10",
-      "prompt": "build a tab-list component with roving tabindex",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n11",
-      "prompt": "audit the whole app's UX before launch",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n12",
-      "prompt": "author a custom element for a dropdown menu",
-      "expect": "no-trigger"
-    }
-  ]
+ "skill": "focus-verify",
+ "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Blind run 2026-07-09 (0.4.1): t12 (what keys should a menu widget respond to) stolen by ui-patterns despite this description's near-verbatim APG phrasing — first strike; remedied on the thief's side (ui-patterns gains a keys/focus fence). Watch for second strike.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "check the focus order of this view",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "verify the tab sequence on the settings page",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "is keyboard navigation trapped inside this dialog",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "our modal loses focus when it closes",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "the focus ring is invisible on the dark theme",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "does this focus ring clear 3:1 against every surface",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "these icon buttons are too small to tap",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "check that the hit targets meet the 24px minimum",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "where should focus go after a route change",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "tab order jumps around the page unexpectedly",
+   "expect": "trigger"
+  },
+  {
+   "id": "t11",
+   "prompt": "derive focus-ring tokens for our buttons and inputs",
+   "expect": "trigger"
+  },
+  {
+   "id": "t12",
+   "prompt": "what keys should a menu widget respond to",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "verify this palette passes WCAG contrast",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "check the color-blind safety of these ramps",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "check RTL support and icon mirroring across locales",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "verify text-expansion headroom for German translations",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "should this loading state use a skeleton or a spinner",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "our CLS budget is blown by late-loading images",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "add type-to-confirm for this irreversible delete",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "verify the undo window for destructive bulk actions",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n09",
+   "prompt": "convert this sRGB color to OKLCH",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n10",
+   "prompt": "build a tab-list component with roving tabindex",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n11",
+   "prompt": "audit the whole app's UX before launch",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n12",
+   "prompt": "author a custom element for a dropdown menu",
+   "expect": "no-trigger"
+  }
+ ]
 }

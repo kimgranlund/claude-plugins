@@ -205,7 +205,14 @@ def gate(root: Path, package: bool = False):
              "skill-corpus", "knowledge-corpus", "rubric-agent-corpus", "rubric-skill-corpus",
              "anti-patterns", "component-patterns", "contrast-standards", "audit-report",
              "lossy-by-design", "first-run", "material-design", "color-tokens",
-             "figma-make", "google-stitch"}
+             "figma-make", "google-stitch",
+             # figma-plugin-api joining the estate added the -api suffix (2026-07-09):
+             "attributes-as-api",
+             # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
+             # "sees" the tail of legitimate full names; plus that plugin's prose compounds
+             # and a references file (2026-07-09):
+             "agent-design", "isolation-verify", "agent-to-agent", "inter-agent",
+             "clean-run", "halt-and-report", "report-format"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

@@ -32,7 +32,7 @@ Hashing is SHA-256 over the stable serialization, via `globalThis.crypto.subtle`
 
 ## The disconnected / root-cycle backstop
 
-`CanonicalizeError` (code `IDGRAPH`, `canonical.ts:66-72`) is thrown if `root` is missing (`canonical.ts:151`) or a cycle is detected (`canonical.ts:161`). **Caveat: this is a defensive backstop, not a reachable validation surface** — tier-1 (`validateA2ui`) already rejects a missing/duplicate root, a cycle, and dangling refs *before* admission's canonical stage runs (`canonical.ts:60-64`, and the admission ordering in [[admission-gate-and-healing]]). Admission maps a `CanonicalizeError` to `E_IDGRAPH` (`admit.ts:152`) but comments it as a totality guard, not a live path. A component declared but unreachable from `root` is dropped and reported in `disconnected` (`canonical.ts:81`, `canonical.ts:48-50`) — noted, not an error.
+`CanonicalizeError` (code `IDGRAPH`, `canonical.ts:66-72`) is thrown if `root` is missing (`canonical.ts:151`) or a cycle is detected (`canonical.ts:161`). **Caveat: this is a defensive backstop, not a reachable validation surface** — tier-1 (`validateA2ui`) already rejects a missing/duplicate root, a cycle, and dangling refs *before* admission's canonical stage runs (`canonical.ts:60-64`, and the admission ordering in `references/admission-gate-and-healing.md`). Admission maps a `CanonicalizeError` to `E_IDGRAPH` (`admit.ts:152`) but comments it as a totality guard, not a live path. A component declared but unreachable from `root` is dropped and reported in `disconnected` (`canonical.ts:81`, `canonical.ts:48-50`) — noted, not an error.
 
 ## Deduplication — two independent checks (SPEC-R7)
 
@@ -43,7 +43,7 @@ Hashing is SHA-256 over the stable serialization, via `globalThis.crypto.subtle`
 
 `DEFAULT_THETA_DUP = 0.9` (`dedup.ts:27`) — the named default (SPEC-R7: "SHOULD be documented and tunable"; callers pass their own `theta` to `near()`, so the threshold is never a literal buried in admission code).
 
-**The near-dup recipe lives in the CALLER, not this module.** `dedup.ts` only turns text into a signature and signatures into a similarity estimate (`dedup.ts:7-9`, `dedup.ts:98-100`); `admit.ts` composes the exact text `` `${promptText} ${canonical.serialized}` `` (`admit.ts:170`). Any tool that warms the index must use the *identical* recipe or its warmed signatures won't match what `admit()` would produce — `warmDedupIndex` does exactly this (`import-seeds.ts:158-166`); see [[admission-gate-and-healing]] and [[judge-and-verdict-adapter]].
+**The near-dup recipe lives in the CALLER, not this module.** `dedup.ts` only turns text into a signature and signatures into a similarity estimate (`dedup.ts:7-9`, `dedup.ts:98-100`); `admit.ts` composes the exact text `` `${promptText} ${canonical.serialized}` `` (`admit.ts:170`). Any tool that warms the index must use the *identical* recipe or its warmed signatures won't match what `admit()` would produce — `warmDedupIndex` does exactly this (`import-seeds.ts:158-166`); see `references/admission-gate-and-healing.md` and `references/judge-and-verdict-adapter.md`.
 
 ## Determinism of the MinHash family (SPEC-N6-adjacent)
 

@@ -43,4 +43,4 @@ Read the ADR/SPEC clause a code comment cites before repeating it (verify-cited-
 
 ## What is corpus-backed vs general knowledge
 
-Everything in this pack's references is corpus-backed (file:line or ADR/SPEC clause). Where an answer leans on general knowledge — e.g. what MinHash/TF-IDF *are* as algorithms — say so and keep the corpus-specific parameters (128 perms, k=3, θ=0.9, TF-IDF-not-embeddings) as the cited part. Anything the code marks "designed but not built" (the `repair()` orchestrator, `score()`, lift measurement — see [[retrieval-and-repair-loop]]) must be flagged as specced-not-shipped, never described as working.
+Everything in this pack's references is corpus-backed (file:line or ADR/SPEC clause). Where an answer leans on general knowledge — e.g. what MinHash/TF-IDF *are* as algorithms — say so and keep the corpus-specific parameters (128 perms, k=3, θ=0.9, TF-IDF-not-embeddings) as the cited part. Anything the code marks "designed but not built" (the `repair()` orchestrator, `score()`, lift measurement — see `references/retrieval-and-repair-loop.md`) must be flagged as specced-not-shipped, never described as working.

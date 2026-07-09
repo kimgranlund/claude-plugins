@@ -9,32 +9,32 @@ to the repo root `/Users/kimba/Projects/nonoun/agent-ui/`. Dated 2026-07-07 (Wav
 The shipped source is the ground truth; specs/ADRs describe intent, code is what runs.
 
 - `packages/agent-ui/a2ui/src/catalog/catalog.ts` — `Catalog`/`ComponentDef`/`PropDef`/`FunctionDef`
-  schema model + `loadCatalog` (LLD-C1). Owner of [[component-definition-contract]].
+  schema model + `loadCatalog` (LLD-C1). Owner of `references/component-definition-contract.md`.
 - `packages/agent-ui/a2ui/src/catalog/types.ts` — `WidgetFactory` / `CatalogEntry` /
-  `CatalogRegistry` render contracts. Owner of [[factory-and-widget-resolution]].
+  `CatalogRegistry` render contracts. Owner of `references/factory-and-widget-resolution.md`.
 - `packages/agent-ui/a2ui/src/catalog/registry.ts` — the two-tier `Registry` (register / get /
-  supportedCatalogIds / submitGateSelector). Owner of [[two-tier-extensibility]].
+  supportedCatalogIds / submitGateSelector). Owner of `references/two-tier-extensibility.md`.
 - `packages/agent-ui/a2ui/src/catalog/naming.ts` — `validName` UAX-31 / reserved-`@` validator.
-  Cited by [[naming-law]].
+  Cited by `references/naming-law.md`.
 - `packages/agent-ui/a2ui/src/catalog/conformance.ts` — `validateCatalogConformance` (the shared
-  validator half). Owner of [[security-allowlist-and-conformance]].
+  validator half). Owner of `references/security-allowlist-and-conformance.md`.
 - `packages/agent-ui/a2ui/src/catalog/default/factories.ts` — the default factory table + the
   `accessorFactory`/bespoke split INVARIANT + the shipped per-type rationale. Heavily cited.
 - `packages/agent-ui/a2ui/src/catalog/default/catalog.json` — the shipped catalog document (the rows).
 - `packages/agent-ui/a2ui/src/catalog/default/index.test.ts` — the fleet-derived coverage gate,
   `EXCLUSION_ALLOWLIST`, `typesMissingCatalog`, negative controls. Owner of
-  [[coverage-policy-and-drift-gates]].
+  `references/coverage-policy-and-drift-gates.md`.
 - `packages/agent-ui/a2ui/src/renderer/widget.ts` — `makeCreateWidget`, the resolution seam
   (`registry.get(catalogId)?.factories[type]`) + the CATALOG placeholder. Cited by
-  [[factory-and-widget-resolution]] + [[security-allowlist-and-conformance]].
+  `references/factory-and-widget-resolution.md` + `references/security-allowlist-and-conformance.md`.
 
 ## Tier 2 — the decision records (why the code is shaped as it is)
 
 - `.claude/docs/adr/0087-a2ui-whole-fleet-catalog-scope-policy.md` — the whole-fleet policy flip, the
   CI-silent vs fleet-derived gate distinction, seed-and-drain, the four forks. Primary source for
-  [[coverage-policy-and-drift-gates]].
+  `references/coverage-policy-and-drift-gates.md`.
 - `.claude/docs/adr/0053-a2ui-form-family-catalog-rows.md` — the bindable-naming law (fork F2), the
-  form-family rows, the type↔tag bijection. Primary source for [[naming-law]].
+  form-family rows, the type↔tag bijection. Primary source for `references/naming-law.md`.
 - `.claude/docs/adr/0016-a2ui-faithful-flex-layout-container-queries.md` — Row/Column/List/Grid; its
   List/Grid non-catalog exclusion was SUPERSEDED by ADR-0087 Fork A. Its Row/Column decision stands.
 - Related, cited in passing: ADR-0019 (the one-`value`-mark two-way seam), ADR-0026/0034 (function

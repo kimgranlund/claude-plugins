@@ -23,8 +23,9 @@ original routing corpus, kept as-is) alongside an `evals/evals.json` (this works
 forge-native tooling can regress the same cases. **The A2A four were distilled 2026-07-08** from
 the HV ledger (character-verified A2A v0.3.0 quotes) + the shipped `@agent-ui/a2a` sources, then
 citation-verified by an independent pass (~70 citations opened, zero fabrications). Honest
-residue: four narrow spec-fetch gaps bannered inside `a2a-protocol`'s references, and **routing
-evals are still pending** for all four (the one pre-ship gate left).
+residue: four narrow spec-fetch gaps bannered inside `a2a-protocol`'s references. The A2A four
+gained their `evals/evals.json` suites 2026-07-09 and the whole plugin passed a blind /eval-run
+the same day (191/195; the four failures fence-tuned in the same change).
 
 ## Cross-plugin seam
 
@@ -32,5 +33,5 @@ evals are still pending** for all four (the one pre-ship gate left).
 to a clean pass before the independent `skill-reviewer` + `linguistics-reviewer` critics; otherwise
 apply forge's skill-authoring standard by hand. No hard edge crosses the plugin boundary.
 
-v0.1.0 · assembled 2026-07-07 · initial: ported from ~/.claude/skills (a2ui-*) as part of a
+v0.2.0 · assembled 2026-07-09 · 0.2.0: description-hygiene pass (the A2UI four trimmed from 1218-1536 chars to under the 1024 portability bar, triggers kept verbatim; a2a-protocol gains the Use-when formula; a2a-agent-design under the bar); the A2A four gain their eval suites (the pending pre-ship gate closed) and the plugin's first blind /eval-run lands 191/195 over 8 suites — a2ui-training-corpus's running-curation fence strengthened (n12 leak), validate-then-stream added to a2ui-conversational-agent (t14 stolen by a2ui-protocol), t03/t04 judge-noise first-strikes recorded · assembled 2026-07-07 · 0.1.0: initial: ported from ~/.claude/skills (a2ui-*) as part of a
 plugin-decompose partition; scoped for future A2A content

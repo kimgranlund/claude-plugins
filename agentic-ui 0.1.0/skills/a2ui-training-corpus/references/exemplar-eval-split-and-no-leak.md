@@ -17,7 +17,7 @@ The single most load-bearing decision in the corpus SPEC (SPEC §2): **two facet
 
 ## The no-leak invariant (SPEC-R3)
 
-No eval-corpus `promptText` — or a near-duplicate of it, by the [[canonicalization-and-dedup]] similarity measure — may appear in the exemplar corpus (SPEC-R3). A leak means the model has effectively seen a held-out prompt, so its eval score is inflated.
+No eval-corpus `promptText` — or a near-duplicate of it, by the `references/canonicalization-and-dedup.md` similarity measure — may appear in the exemplar corpus (SPEC-R3). A leak means the model has effectively seen a held-out prompt, so its eval score is inflated.
 
 Two enforcement points:
 - **Admission-time** (`admit.ts:139-142`, `checkLeakGate` at `admit.ts:249-257`): an *exemplar* candidate's `promptText` is checked (MinHash near-match, `DEFAULT_THETA_DUP = 0.9`) against every already-admitted `facet:"eval"` record's `promptText`. A collision rejects `E_LEAK` naming the eval record. Note this uses `promptText` alone, not the full dedup recipe — an eval record may carry no `a2uiOutput` (`admit.ts:245-248`).

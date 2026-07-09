@@ -130,8 +130,8 @@ the same flag is untouched — two documented, non-colliding layer-local meaning
 The transport the meta-line rides (agent-transport-seam) · the turn/session model (turn-session-and-
 input-intent) · the produce() loop mechanics beyond the peel/gates above (produce-loop) · the wire
 shape of `wantResponse`/`action` ([[a2ui-protocol]]) · building any of this in SOURCE
-([[a2ui-builder]]) · composing a payload that sets `wantResponse` ([[a2ui-composer]]) · authoring or
-ratifying the ADRs ([[system-planner]] / [[adr-author]]).
+(`a2ui-builder`) · composing a payload that sets `wantResponse` (`a2ui-composer`) · authoring or
+ratifying the ADRs (`system-planner` / scribe's `doc-forge`).
 
 ## History
 

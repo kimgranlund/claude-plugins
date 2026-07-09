@@ -6,7 +6,7 @@ description: >-
   agent", "wire the task lifecycle", "add SSE streaming to my agent", "my agent fails the other
   side's validation". Method: outside-in from the card's advertised capabilities (what the agent
   CLAIMS), inside-out from the Message/Task state machine (what the runtime must honor), reconciled
-  before code; conformance is a gate (validator-clean card + fixtures), not an aspiration. Uses the
+  before code; conformance is a gate (validator-clean card + fixtures). Uses the
   estate's shipped patterns as reference implementations: the referee/seat pair, the pure RPC core
   behind a thin socket shell, fail-fast card validation at construction. NOT for protocol facts —
   what a field means, which method, which state (a2a-protocol answers; this skill builds); NOT for

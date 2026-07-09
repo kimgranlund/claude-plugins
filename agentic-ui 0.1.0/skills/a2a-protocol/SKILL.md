@@ -2,7 +2,8 @@
 name: a2a-protocol
 description: >-
   Explains the A2A (Agent2Agent) wire protocol + this estate's zero-dependency implementation
-  (@agent-ui/a2a, pinned spec v0.3.0). Use to answer "what is an AgentCard / where does discovery
+  (@agent-ui/a2a, pinned spec v0.3.0). Use when the user asks "what is an AgentCard / where does
+  discovery
   look", "Message vs Task vs Artifact — when is a task minted", "which TaskState transitions are
   legal", "what goes in a TextPart / DataPart / FilePart", "which JSON-RPC method sends a message /
   polls a task", "how does SSE streaming work", "how do A2A extensions negotiate", "how is A2UI
@@ -10,8 +11,8 @@ description: >-
   drift is wire-breaking), "why did validateA2a reject this". ANSWERS from a cited, host-verified
   corpus (the HV ledger); it does not build. NOT for rendering payload content — surfaces, catalogs,
   bindings (a2ui-protocol / a2ui-catalog-design); NOT for building an A2A server or client
-  (a2a-agent-design); NOT for proving agent-vs-agent isolation (a2a-isolation-verify); NOT for the
-  concept/demo corpus record format or admission (a2a-training-corpus).
+  (a2a-agent-design); NOT for proving agent-vs-agent isolation (a2a-isolation-verify); NOT for
+  corpus record format or admission (a2a-training-corpus).
 disable-model-invocation: false
 user-invocable: false
 ---

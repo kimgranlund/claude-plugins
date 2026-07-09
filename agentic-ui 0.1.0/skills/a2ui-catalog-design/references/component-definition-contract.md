@@ -18,7 +18,7 @@ re-checks shape (the LLD-C1 load-time invariant, `catalog.ts:1-6`).
   (`default/index.test.ts:68-72`). *Caveat:* a `name` that disagrees with its key is a load-time
   `CATALOG_MALFORMED` throw, not a silent rename.
 - **`properties`** — `Record<string, PropDef>`, the typed prop schema (below). Every property name
-  must be a valid UAX-31 non-`@` identifier (`catalog.ts:134-136`; see [[naming-law]]).
+  must be a valid UAX-31 non-`@` identifier (`catalog.ts:134-136`; see `references/naming-law.md`).
 - **`children`** — the child model, one of `'child' | 'children' | 'ChildList'`
   (`catalog.ts:26`, `catalog.ts:141-146`). Absent ⇒ a leaf (no children). `child` = exactly one
   wrapped node (e.g. `Field`, SPEC §5.2 / ADR-0053 cl.2); `ChildList` = an ordered list (the
@@ -26,8 +26,8 @@ re-checks shape (the LLD-C1 load-time invariant, `catalog.ts:1-6`).
   payloads stay structurally validatable (SPEC-R1).
 - **`value`** — `{ prop, event }`, present ONLY on input components (`catalog.ts:27`). It is the
   two-way-binding contract the renderer's input controller reads (renderer LLD-C8): the control's
-  bindable DOM prop + the DOM event that commits it. See [[factory-and-widget-resolution]] and
-  [[naming-law]].
+  bindable DOM prop + the DOM event that commits it. See `references/factory-and-widget-resolution.md` and
+  `references/naming-law.md`.
 
 ## The `PropDef` shape — `{ type, bindable?, mapsTo }`
 
@@ -35,13 +35,13 @@ Defined at `catalog.ts:29-33`; validated by `validatePropDef` (`catalog.ts:158-1
 
 - **`type`** — a JSON-Schema fragment (`JsonSchema = Record<string,unknown> | boolean`,
   `catalog.ts:11`). The conformance validator checks only the primitive `type` keyword against the
-  JS runtime type (see [[security-allowlist-and-conformance]]).
+  JS runtime type (see `references/security-allowlist-and-conformance.md`).
 - **`mapsTo`** (REQUIRED, a string — `catalog.ts:161`) — the control-side target the factory writes.
   When `mapsTo` **equals** the property name, the factory sets `el[prop]` directly (the 1:1
   reflection, SPEC-R8); when it **differs** (e.g. `Button.label` → `textContent`,
   `catalog.json`), the row needs a **bespoke factory** — routing it through the generic
   `accessorFactory` is the documented factories.ts INVARIANT violation (`default/factories.ts:143-144`).
-  This is why `mapsTo` is load-bearing, not cosmetic — see [[factory-and-widget-resolution]].
+  This is why `mapsTo` is load-bearing, not cosmetic — see `references/factory-and-widget-resolution.md`.
 - **`bindable`** — marks the prop as accepting a `{path}` data reference or `{call}` function-call
   binding (`catalog.ts:32`). Only a bindable prop may carry a binding through conformance
   (`conformance.ts:49-52`). A prop is bindable iff the control can actually reflect a runtime write

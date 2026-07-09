@@ -3,14 +3,14 @@ name: ui-patterns
 description: >-
   Answers questions about common UI patterns — how software UIs are structured at macro (shells, templates)
   and micro (modules) level. Use when naming, choosing, or explaining a pattern: "what pattern is this",
-  "name this screen type", "how should a data table / form / wizard behave", "what's the common layout for
-  settings / search / a feed", "what modules does a dashboard / settings / landing page need", "what states does a screen need", "empty state best practice", "when is a modal wrong". Covers page templates (master-detail, canvas+inspector, wizard,
+  "name this screen type", "how should a data table / form / wizard behave", "common layout for
+  settings / search / a feed", "what modules does a dashboard / landing page need", "what states does a screen need", "empty state best practice", "when is a modal wrong". Covers page templates (master-detail, canvas+inspector, wizard,
   feed, settings, board, chat), the module catalog (tables, forms, nav, pickers, toolbars, overlays,
-  search, media, viz, maps, marketing), and screen-state grammar
+  search, media, viz, maps), and screen-state grammar
   (ideal/empty/loading/partial/error). ANSWERS and names patterns — it does not apply or build them:
-  applying to a layout is layout-decompose, building a module is component-forge, the
-  whole-product sweep is ui-audit. NOT for what a whole product genre conventionally includes
-  (ui-genres).
+  apply to a layout: layout-decompose; build a module: component-forge; whole-product sweep:
+  ui-audit. NOT for what a whole product genre conventionally includes or
+  needs (ui-genres); NOT for which keys a widget answers (focus-verify).
 user-invocable: false
 disable-model-invocation: false
 ---

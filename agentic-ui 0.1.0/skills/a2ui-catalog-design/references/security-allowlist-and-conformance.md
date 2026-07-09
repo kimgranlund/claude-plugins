@@ -44,7 +44,7 @@ Worked example (from the shipped tests, `default/index.test.ts:252-261`): a `Mod
 `RESERVED = {id, component, child, children, checks}` (`conformance.ts:14`) are the adjacency-model
 keys owned by the tree, skipped by conformance. Critically, `checks` is RESERVED: any node may carry
 a component-level `checks` array without an unknown-property failure — it is a renderer-layer
-construct (ADR-0029), never a bindable catalog prop (SPEC-R4; see [[component-definition-contract]]).
+construct (ADR-0029), never a bindable catalog prop (SPEC-R4; see `references/component-definition-contract.md`).
 
 ## Bindings: accepted only on `bindable` props
 

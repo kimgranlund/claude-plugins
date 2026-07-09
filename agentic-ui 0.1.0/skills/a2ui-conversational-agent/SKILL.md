@@ -1,23 +1,18 @@
 ---
 name: a2ui-conversational-agent
 description: >-
-  Explains the A2UI LIVE-AGENT system in @agent-ui/a2ui — a real LLM emitting A2UI over the wire.
-  Use for "how does the transport swap from recorded to live work", "how does a UI click become a
-  chat turn", "wire a new LLM provider / add a model", "where does the API key live / is it safe",
-  "why can't the agent explain why it chose X not Y", "what is the produce() self-correct loop",
-  "how is the system prompt built", "what does the provider switcher do", "why did every click
-  trigger a turn". Covers the AgentTransport isolation seam (backbone vs dev-only live overlay,
-  zero-edit swap), the Turn/Session/TurnInput model + the pure reducer (intent vs client turns),
-  the bounded generate→heal→validate→self-correct produce() loop + the catalog-derived drift-gated
-  prompt, the multi-provider seam (AgentProvider, providers.json, the dev-proxy trust boundary, the
-  PAIR-allowlist, the VITE_ footgun), the in-chat switcher, and the conversational channel + asks
-  (ADR-0088..0091/0097, SHIPPED 2026-07-08: note channel, ask grammar + mode axis, mini-skills,
-  feed asks + wantResponse routing). ANSWERS
-  from a cited repo corpus; it does not build. NOT for the A2UI wire shape / renderer mechanics
-  (a2ui-protocol); NOT for catalog design or coverage (a2ui-catalog-design); NOT for corpus records
-  / retrieve() internals (a2ui-training-corpus — this layer CALLS it); NOT for composing a payload
-  (the a2ui-composer agent); NOT for writing live-agent/renderer/catalog SOURCE (the a2ui-builder
-  agent); NOT for authoring the ADRs/SPEC (system-planner).
+  The A2UI LIVE-AGENT system in @agent-ui/a2ui — a real LLM emitting A2UI over the wire.
+  Use for "swap recorded → live transport", "how does a UI click become a
+  chat turn", "wire a new LLM provider / add a model", "what is the produce() self-correct loop /
+  validate-then-stream", "how is the system prompt built", "why did every click trigger
+  a turn". Covers the AgentTransport seam (zero-edit recorded↔live swap), the
+  Turn/Session model + pure reducer, the bounded produce() loop + drift-gated prompt, the multi-provider seam
+  (providers.json, dev-proxy, API keys, VITE_ footgun), the in-chat
+  switcher, and the conversational channel + asks (ADR-0088 family, shipped 2026-07-08). ANSWERS
+  from a cited corpus; it does not build. NOT for the wire shape / renderer (a2ui-protocol);
+  NOT for catalog design or coverage (a2ui-catalog-design); NOT for corpus records / retrieve()
+  (a2ui-training-corpus); NOT for composing a payload (a2ui-composer) or live-agent SOURCE
+  (a2ui-builder); NOT for authoring ADRs/SPEC (system-planner).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -85,11 +80,11 @@ answer with the *why*, not just the rule:
 ## Boundaries — this pack ANSWERS; it routes ALL making
 
 - **Build/fix live-agent, renderer, or catalog SOURCE** (the transport, the `produce()` loop, the
-  proxy, a new provider adapter) → the **[[a2ui-builder]]** agent.
+  proxy, a new provider adapter) → the **`a2ui-builder`** agent.
 - **Compose an actual A2UI payload** (message stream / node shapes, e.g. one that sets
-  `wantResponse`) → the **[[a2ui-composer]]** agent.
-- **Author or revise ADR-0088 (or any ADR/SPEC/LLD in this space)** → **[[system-planner]]** (via
-  [[adr-author]] / [[spec-author]] / [[lld-author]]). Grading or ratifying a design doc routes
+  `wantResponse`) → the **`a2ui-composer`** agent.
+- **Author or revise ADR-0088 (or any ADR/SPEC/LLD in this space)** → **`system-planner`** (via
+  scribe's `doc-forge`, where installed). Grading or ratifying a design doc routes
   there too, not here.
 - **Sibling knowledge packs** (answers, like this one): the A2UI wire shape + renderer mechanics →
   [[a2ui-protocol]]; catalog design + coverage → [[a2ui-catalog-design]]; the corpus records +
@@ -100,6 +95,6 @@ answer with the *why*, not just the rule:
 ## Extending this pack
 
 A missing axis, a stale reference (a canon ADR/SPEC moved, or ADR-0088 flips to `accepted`/built),
-or "add X to this pack" is authoring work — route to [[knowledge-author]] (axis decomposition,
+or "add X to this pack" is authoring work — route to [[knowledge-forge]] (axis decomposition,
 grounded research waves, index discipline). Never bolt an uncited file onto the corpus inline. The
 pack's routing corpus of record lives at `scripts/routing-corpus.json`.

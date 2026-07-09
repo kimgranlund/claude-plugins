@@ -68,7 +68,7 @@ Composite sub-types (`Option`/`Tab`/`TabPanel`/`CardHeader`/`CardContent`/`CardF
 `MenuItem`/`Radio`) are **parent-declared and exempt** from the fleet derivation (SPEC-N2; ADR-0087
 Consequences). The REVERSE direction — "no extra catalog type without a factory" — is guarded
 separately by the catalog↔factory bijection (`factories.test.ts` + `registry.register`'s
-`CATALOG_FACTORY_MISSING`; see [[factory-and-widget-resolution]]).
+`CATALOG_FACTORY_MISSING`; see `references/factory-and-widget-resolution.md`).
 
 - **`Radio` is NOT exempt.** `ui-radio` ships its own descriptor (`radio.md`), so it enters the
   fleet-derived set directly and needs a real row — unlike `Option`/`MenuItem`, which never ship a

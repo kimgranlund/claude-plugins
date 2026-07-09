@@ -1,19 +1,18 @@
 ---
 name: a2ui-protocol
 description: >-
-  Explains the A2UI wire protocol + this repo's zero-dependency renderer (@agent-ui/a2ui). Use to
-  answer "why did this payload fail validation", "what does a binding / action / check look like on
+  The A2UI wire protocol + this repo's zero-dependency renderer (@agent-ui/a2ui). Use
+  when the user asks "why did this payload fail validation", "what does a binding / action / check look like on
   the wire", "how do dynamic lists render", "action vs function call", "which error code and why",
   "what does wantResponse / sendDataModel / callableFrom do". Covers the message lifecycle
-  (createSurface / updateComponents / updateDataModel / deleteSurface / actionResponse), the Binding
-  union (literal | {path} JSON-Pointer | {call,args}), positional dynamic-list templates (no per-item
-  key), two-way input binding, ${...} DynamicString interpolation, checks (client-side validation),
-  client-side function eval vs the server-initiated callFunction RPC, the two-code wire error taxonomy
-  (VALIDATION_FAILED / INVALID_FUNCTION_CALL), and version pinning. ANSWERS from a cited corpus; it
-  does not build. NOT for a NEW catalog type or coverage policy (a2ui-builder / a2ui-catalog-design);
-  NOT for corpus record format or admission (a2ui-training-corpus); NOT for the live demo's
-  session/provider/turn model (a2ui-conversational-agent); NOT for composing a payload (a2ui-composer)
-  or building renderer/catalog source (a2ui-builder).
+  (createSurface / updateComponents / updateDataModel / deleteSurface / actionResponse), the
+  Binding union, dynamic-list templates, two-way input binding, DynamicString interpolation,
+  checks, the callFunction RPC, the two-code error taxonomy
+  (VALIDATION_FAILED / INVALID_FUNCTION_CALL), version pinning. ANSWERS from a cited corpus;
+  it does not build. NOT for a NEW catalog type or coverage policy (a2ui-catalog-design);
+  NOT for corpus record format or admission (a2ui-training-corpus); NOT for the
+  session/provider/turn model (a2ui-conversational-agent); NOT for composing a payload
+  (a2ui-composer) or renderer/catalog source (a2ui-builder).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -91,7 +90,7 @@ routing-eval or skill review reads it from there.
 ## Extending / re-syncing this pack
 
 A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[knowledge-author]] (this pack's factory: axis decomposition, grounded research waves, the typed
+[[knowledge-forge]] (this pack's factory: axis decomposition, grounded research waves, the typed
 index). **Re-sync trigger:** when a cited SPEC/ADR is amended or a renderer symbol is renamed, re-run
 the research wave for the affected axis, re-date `references/sources.md`, and re-verify the cited
 `file:line`s and ADR clauses — a pack answering from a superseded edition is a false manifest with

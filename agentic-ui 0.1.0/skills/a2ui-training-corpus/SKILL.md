@@ -1,23 +1,19 @@
 ---
 name: a2ui-training-corpus
 description: >-
-  Explains the A2UI training-corpus subsystem in @agent-ui/a2ui — the curated store that conditions
-  and measures A2UI generation. Use for "how do I curate / admit a corpus record", "why was this
-  record quarantined / rejected", "what error code does admission raise and why" (E_SCHEMA / E_PIN /
-  E_CATALOG / E_DUP / E_LEAK / E_QUALITY / E_POINTER / E_IDGRAPH), "how does retrieval pick exemplars",
-  "what does the healer fix (and what it must never)", "what happens to the corpus on a catalog /
-  protocol version change", "why is qualityScore the min over dimensions", "exemplar vs eval and the
-  no-leak invariant". Covers the record schema (aligned to upstream dataset_schema.json, ADR-0063),
-  the two sub-corpora + no-leak invariant, canonicalization + MinHash dedup, the two-tier admission
-  gate (deterministic validate then judgment rubric) + the closed form-only healer, the judge/verdict
-  adapter (qualityScore = min over gate dimensions, ADR-0068) + quarantine, top-k retrieval + export,
-  and the version-change repair loop (specced, partly built). ANSWERS from a cited repo corpus; it
-  does not build. NOT for
-  the wire protocol a record's output conforms to (a2ui-protocol); NOT for catalog design / coverage
-  (a2ui-catalog-design); NOT for how the live demo consumes retrieval (a2ui-conversational-agent, a
-  caller of retrieve()); NOT for running the curation procedure (the a2ui-corpus-curate skill); NOT
-  for building / fixing pipeline SOURCE (the a2ui-builder agent) or judging a record (the a2ui-reviewer
-  agent).
+  The A2UI training-corpus subsystem in @agent-ui/a2ui — the curated store conditioning and
+  measuring generation. Use for "how do I curate/admit a corpus record", "why was this
+  record quarantined/rejected", "what error code does admission raise" (E_SCHEMA, E_PIN, E_DUP,
+  E_LEAK …), "how does retrieval pick exemplars", "what does the healer fix",
+  "what happens on a catalog/protocol version change". Covers the record schema (ADR-0063), two sub-corpora + no-leak
+  invariant, canonicalization+dedup, the two-tier admission gate + form-only
+  healer, the judge adapter (qualityScore = min) + quarantine, top-k retrieval +
+  export, version-change repair. ANSWERS from a cited corpus; it does not build.
+  NOT for the wire protocol (a2ui-protocol); NOT for catalog design / coverage
+  (a2ui-catalog-design); NOT for the live demo's retrieval use (a2ui-conversational-agent);
+  NOT for RUNNING curation — importing, back-scoring, quarantining
+  (a2ui-corpus-curate); NOT for pipeline SOURCE (a2ui-builder) or judging a record
+  (a2ui-reviewer).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -102,7 +98,7 @@ the SPEC-R13 work today; the orchestrator lands with the deferred eval wave (ADR
 ## Extending this pack
 
 A missing axis, a stale reference (a SPEC/ADR revision, a pipeline change), or "add X to this pack" is
-authoring work — route to [[knowledge-author]] (axis decomposition, grounded research waves against real
+authoring work — route to [[knowledge-forge]] (axis decomposition, grounded research waves against real
 source, index + cite discipline). Never bolt an uncited file onto the corpus inline; a claim without a
 `file:line` or ADR/SPEC clause does not belong here. The routing corpus of record is
 `scripts/routing-corpus.json`.

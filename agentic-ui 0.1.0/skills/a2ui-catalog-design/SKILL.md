@@ -2,20 +2,15 @@
 name: a2ui-catalog-design
 description: >-
   Answers how an A2UI catalog is designed and extended in @agent-ui/a2ui. Use for "how do I add a
-  component to the catalog", "why is this control uncatalogued", "what is our coverage policy", "how
-  does the renderer resolve a type to a widget", "why did this payload fail CATALOG", "what should
-  this bindable prop be named". Covers what one catalog row declares (name, typed properties + mapsTo,
-  the {prop,event} value mark, child model), the factory pattern (type → ui-* widget, accessorFactory
-  vs a bespoke factory, how the renderer resolves a type to a widget), the naming law (a bindable prop
-  is named by the control's own prop, not Basic's), two-tier extensibility (register a project catalog
-  with zero package edits; the callableFrom clientOnly security floor), the security allowlist (only
-  catalogued types render) + conformance validation, and COVERAGE POLICY — whole-fleet vs deliberate
-  subset, a CI-silent hand-frozen list vs a fleet-derived drift gate, seed-and-drain.
-  NOT for the wire shape a component renders (a2ui-protocol); NOT for corpus exemplars
-  (a2ui-training-corpus); NOT for system-prompt derivation (a2ui-conversational-agent); NOT for composing
-  a payload (the a2ui-composer agent) or writing catalog/renderer/factory SOURCE (the a2ui-builder
-  agent); NOT for grading a catalog row against its rubric (the a2ui-reviewer agent). ANSWERS from the
-  cited repo corpus; it does not build.
+  component to the catalog", "why is this control uncatalogued", "what is our coverage policy", "why did this payload fail CATALOG", "what should
+  this bindable prop be named". Covers the catalog row contract (typed properties + mapsTo, the
+  {prop,event} mark, child model), the factory/resolution pattern (type → ui-* widget), the naming law (a bindable prop takes the control's own prop name), two-tier
+  extensibility + the callableFrom clientOnly floor, security allowlist + conformance, and
+  COVERAGE POLICY (whole-fleet vs subset, drift gates, seed-and-drain). NOT for
+  the wire shape a component renders (a2ui-protocol); NOT for corpus exemplars
+  (a2ui-training-corpus); NOT for system-prompt derivation (a2ui-conversational-agent); NOT for
+  composing a payload (a2ui-composer) or catalog/renderer/factory SOURCE (a2ui-builder); NOT for
+  grading a catalog row (a2ui-reviewer). ANSWERS from the cited repo corpus; it does not build.
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -85,7 +80,7 @@ failure mode it guards against; a claim missing its source OR its failure mode i
 ## Extending this pack
 
 A missing axis, a stale reference (a spec revision, a new ADR, a drifted `file:line`), or "add X to
-this pack" is authoring work — route to **[[knowledge-author]]** (axis decomposition, grounded
+this pack" is authoring work — route to **[[knowledge-forge]]** (axis decomposition, grounded
 research waves, the INDEX discipline). Re-run the affected axis's research wave, re-date its
 reference + `sources.md`, and re-verify the stated file count; never bolt an uncited file on inline.
 

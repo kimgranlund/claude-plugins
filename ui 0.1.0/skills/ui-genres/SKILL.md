@@ -5,9 +5,10 @@ description: >-
   model behind "is this the right pattern for THIS kind of product". Use when identifying or
   judging genre fit: "what genre is this app", "what do users expect in a dashboard / collab tool /
   habit tracker / AI chat app", "which patterns does this category demand", "genre conventions for
-  X", "is this convention-violation acceptable here". Covers the genres: dashboards/analytics,
-  workplace collaboration, productivity, single-purpose utilities, content consumption, social
-  media, AI-native apps, games, tracking/quantified-self (habit apps, streaks), health,
+  X", "is this convention-violation acceptable here", "does a marketplace / this kind of product
+  need a [surface]". Covers the genres: dashboards/analytics,
+  collaboration, productivity, single-purpose utilities, content consumption, social
+  media, AI-native apps, games, tracking/quantified-self, health,
   finance/fintech, marketplaces, and
   travel/booking. ANSWERS and names genre expectations; it does not apply or build them — NOT for which modules a
   page or screen needs (ui-patterns); naming
