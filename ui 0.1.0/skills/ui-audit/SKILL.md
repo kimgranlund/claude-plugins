@@ -5,16 +5,12 @@ description: >-
   single screen review catches. Use when sweeping a product before launch or after a redesign:
   "audit this UI", "review the whole app's UX", "sweep this product for accessibility / i18n /
   latency / safety issues", "how consistent is this UI", "pre-launch UI review", "the same data
-  table paginates on one page and infinite-scrolls on another". Composes the owned design
-  instruments over the SET: layout-decompose per screen, flow-decompose per flow, the invariant
-  verifiers (color-verify · focus-verify · i18n-verify · perf-verify · safety-verify), and
-  ui-patterns conformance anchored to the product's genre (ui-genres) — then
-  synthesizes what only the whole reveals (pattern drift across screens, systemic token misuse,
-  repeated defect quadrants). NOT for grading one screen, shell, or wireframe (layout-decompose /
-  the layout-reviewer agent); NOT for one flow (flow-decompose); NOT for one component
-  (component-forge / component-reviewer); NOT for naming a pattern or genre in the abstract —
-  master-detail or list-detail (ui-patterns / ui-genres); NOT for one invariant in isolation
-  (the five verifiers); NOT for fixing what it finds — findings route to owners.
+  table paginates on one page and infinite-scrolls on another". Composes layout-decompose per screen,
+  flow-decompose per flow, the five verifiers (color/focus/i18n/perf/safety-verify), and
+  ui-patterns conformance per genre (ui-genres), then synthesizes what only the whole reveals —
+  pattern drift, systemic token misuse, repeated defect quadrants. NOT for one screen or shell (layout-decompose); NOT for one
+  flow (flow-decompose); NOT for one component (component-forge); NOT for naming a pattern or genre in the abstract
+  (ui-patterns / ui-genres); NOT for one invariant (the five verifiers); NOT for fixing what it finds — findings route to owners.
 disable-model-invocation: false
 user-invocable: true
 ---

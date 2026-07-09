@@ -1,6 +1,6 @@
 {
   "name": "orchestration",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end.",
   "license": "MIT",
   "author": {

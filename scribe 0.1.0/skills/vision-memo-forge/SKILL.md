@@ -1,19 +1,15 @@
 ---
 name: vision-memo-forge
 description: >-
-  Use to author — or improve a drafted — vision memo: the class of document that argues
+  Use when the user asks to author — or improve — a vision memo: the class of document that argues
   *how to think* about a problem, not what to build: manifestos, reframe essays, strategic case-for
   pieces, and synthesis memos. Triggers: "write a vision memo / manifesto / strategic brief / position
   paper / think piece", "make the first-principles case for", "reframe this decision", "crystallize
   this thinking into a shareable doc", "synthesize these competing positions", "tighten this drafted
-  memo's argument", or when accumulated conversation-thinking should become a
-  standalone opinionated argument. Picks the archetype (manifesto · reframe · case-for ·
-  synthesis), locates the thesis, performs the reduction, and drafts in an opinionated, physics-literal,
-  compressed voice; scored by its rubric (doc-reviewer grades it). NOT for a PRD, product brief, or SPEC
-  (prd-author / spec-author), an LLD / ADR (lld-author / adr-author), or a reference doc
-  (reference-forge) — those describe what to build or document; NOT for scoring or reviewing a finished memo against its rubric (doc-review); NOT for marketing
-  copy, a tutorial, a
-  status update, or a neutral balanced survey — a vision memo takes a stake and argues one thesis.
+  memo's argument", or when conversation-thinking should become a standalone
+  argument. Picks the archetype, locates the thesis, drafts in an opinionated compressed voice;
+  doc-reviewer grades it. NOT for a PRD, SPEC, LLD, or ADR
+  (doc-forge), or a reference doc (reference-forge) — those describe what to build or document; NOT for scoring or reviewing a finished memo against its rubric (doc-review); NOT for marketing copy, a tutorial, or a neutral balanced survey — a vision memo takes a stake and argues one thesis.
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -107,7 +103,7 @@ changed understanding. Re-dispatch, don't edit.
 - **doc-reviewer** is the memo's independent critic — it loads `references/rubric.md` and scores.
 - **[[intent-extract]]** / **[[intent-grill]]** sharpen a fuzzy "make the case for X" into a statable
   thesis *before* drafting (the V1 precondition).
-- **[[prd-author]]** / **[[spec-author]]** / **[[lld-author]]** own what-to-build documents; this owns
+- **doc-forge** (this plugin) owns the what-to-build documents — PRD, SPEC, LLD, ADR; this owns
   the argument for *how to think* about building it. Route a spec request there, not here.
 - **[[rubric-forge]]** owns `references/rubric.md`'s shape.
 

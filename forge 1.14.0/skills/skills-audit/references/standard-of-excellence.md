@@ -128,7 +128,7 @@ template rises one severity band (stamping multiplies it) and mandates a family-
 - **S2 Place in the graph.** Charter unique (no capability twin at any scope); **boundary
   reciprocity at DESCRIPTION altitude** — fences live where routing happens: every NOT-clause names
   a neighbor whose description claims that territory, and every neighbor fencing *toward* this skill
-  is fenced back in this skill's description (a body [[edge]] is composition, not a fence); altitude
+  is fenced back in this skill's description (a body `[[edge]]` is composition, not a fence); altitude
   correct (screen/flow/product, one/set, within/between). **Fence form is load-bearing**: a fence is
   written in the house form — a `NOT for … (owner)` clause — because that is the only form the
   measurement layer (`routing_eval.py`) parses; a semantic fence invisible to measurement is not a

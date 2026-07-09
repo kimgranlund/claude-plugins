@@ -47,7 +47,7 @@ Blank-line-separated runs → `<p>`; `- ` lines → `<ul>`/`<li>` (each item's t
 | `references/foundations.md` | The data-not-markup model, the inline/block split, why zero-dep |
 | `references/best-practices.md` | The `appendInline` pattern, per-form mappings, escaping, the safety do/don'ts |
 | `references/rubric.md` | Scoring a markdown→markup change — safety, completeness, graceful degradation |
-| `scripts/routing-corpus.json` | The routing corpus of record — after any description change, re-run `skill-author`'s `routing_eval.py` against it |
+| `scripts/routing-corpus.json` | The routing corpus of record — after any description change, re-run forge's `routing_eval.py` against it (where forge is installed) |
 | `[[html-to-markdown]]` | The inverse direction — HTML *into* markdown source |
 
 ## Validation loop (round-trip)

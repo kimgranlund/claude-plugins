@@ -105,4 +105,4 @@ by resolving four questions:
 
 A new profile lands as: this map gains a column, the profile checklist lands with the
 receipt, and — if the platform will recur — a new `design-system-author-{platform}`
-sibling is minted via [[skill-author]] to own execution.
+sibling is minted via [[forge's skill-forge]] to own execution.

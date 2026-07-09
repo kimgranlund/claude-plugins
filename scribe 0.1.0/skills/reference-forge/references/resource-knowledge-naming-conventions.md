@@ -117,7 +117,7 @@ Rules:
 
 ## 6. Enforcement
 
-What exists today: no knowledge-corpus validator is wired. The nearest live gates are `skill-author/scripts/harness_checks.py` (D9 — the files a skill references exist and are substantive) and `skills-audit`'s `scripts/corpus_index.py` (corpus-wide naming histogram + shadow check); this family follows the same gated-vs-advised discipline as `skill-author/references/skill-naming-conventions.md` §6. The manifest below is the *target* validator config — a spec for the next enforcement revision, not a live file:
+What exists today: no knowledge-corpus validator is wired. The nearest live gates are `forge's skill-forge/scripts/harness_checks.py` (D9 — the files a skill references exist and are substantive) and `skills-audit`'s `scripts/corpus_index.py` (corpus-wide naming histogram + shadow check); this family follows the same gated-vs-advised discipline as `forge's skill-forge/references/skill-naming-conventions.md` §6. The manifest below is the *target* validator config — a spec for the next enforcement revision, not a live file:
 
 ```jsonc
 {

@@ -1,18 +1,17 @@
 ---
 name: typography-system-design
 description: >-
-  Design a full, opinionated 11-voice typography system — font choices and pairing drama — from a brand
-  concept or creative brief. Use when the user wants to design a typography system, pick or design a font pairing
+  Design a full, opinionated 11-voice typography system — font choices and pairing drama — from a
+  brand concept or brief. Use when the user wants to design a typography system, pick or design a font pairing
   ("pick a body and display pairing", "is this pairing metric-compatible"), choose fonts for a
-  brand, decide which typeface fills each voice (display, heading, body, ui, code, etc.), turn "modern and
-  clean" into a specific point in design space, or make the distinctive-vs-neutral call per voice with a
-  stated rationale: territory interpretation, per-voice rationale, an 11-voice coherence pass, and craft
-  verification (metric compatibility, weight/size extremity, accessibility floor) — routes to
-  typography-tokens for realization. NOT for designing color ramps or palettes (palette-design); NOT for
+  brand, decide which typeface fills each voice (display, heading, body, ui, code), turn "modern and
+  clean" into a specific point in design space, or make the distinctive-vs-neutral call per voice: territory, per-voice rationale, a coherence pass, and craft
+  verification (metric compatibility, extremity, accessibility floor) — typography-tokens
+  realizes it. NOT for color ramps (palette-design); NOT for
   realizing a decided system as tokens, or which font/voice an existing system's token already
-  binds (typography-tokens); NOT for type-history/metrics knowledge
-  (typography-lettering); NOT for Material's typescale (material-design-typography-tokens); NOT for building
-  a component (component-forge); NOT for the whole design-system export bundle (design-system-hub).
+  binds (typography-tokens); NOT for type-history knowledge (typography-lettering); NOT for
+  Material's typescale (material-design-typography-tokens); NOT for a component (component-forge)
+  or the export bundle (design-system-hub).
 disable-model-invocation: false
 user-invocable: true
 ---

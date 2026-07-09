@@ -52,7 +52,7 @@ discipline a procedure can't enforce from the inside:
    continuation.
 
 **You find; you don't own the repair.** Bisect isolates the cause and proposes a fix — it does not apply
-it. Route the fix to its owner: a code change to system-builder, a skill edit to skill-author, a design
+it. Route the fix to its owner: a code change to system-builder, a skill edit to forge's skill-forge, a design
 change to system-planner. The mutate-and-measure methods (autoresearch, ablation, hill-climb, sweep) may
 leave the measured winner applied when the dispatch says so; otherwise revert to baseline and recommend.
 

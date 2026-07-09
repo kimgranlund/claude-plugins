@@ -1,19 +1,17 @@
 ---
 name: research-methods
 description: >-
-  Use to pick and run the right systematic-investigation method — the library of six measured
-  techniques for optimizing, debugging, stress-testing, or understanding any *scorable* system
-  (code, config, prompt, model, pipeline, skill, agent). Triggers: "improve the score", "figure out
-  why it regressed / what broke / find the root cause", "which parts actually matter / which scoring
-  checks pull their weight", "what's the best value for X", "what breaks this / find the edge cases",
-  "tune these parameters", "it used to work, now it doesn't", "research why this regressed", or a
-  technique by name — "autoresearch", "ablation", "bisect", "hill-climb", "sweep", "adversarial
-  probe". Each method's protocol and rubric live here; the `researcher` agent runs one in isolation.
+  Use whenever a *scorable* system (code, config, prompt, pipeline, skill, agent) needs a measured
+  investigation — optimizing, debugging, or stress-testing it via the library of six methods. Triggers: "improve the score", "why did
+  it regress / what broke / find the root cause", "which parts actually matter", "what's the best
+  value for X", "what breaks this / find the edge cases", "tune these parameters", "it used to
+  work, now it doesn't", or a technique by name (autoresearch, ablation, bisect, hill-climb,
+  sweep, adversarial probe). Each method's protocol and rubric live here; the `researcher` agent runs one.
   NOT for looking up facts, docs, or prior art (ordinary web search, no method needed); NOT for
-  reviewing or scoring a finished artifact against its rubric (the *-reviewer agents); NOT for
-  authoring or building the artifact itself (the *-author skills / system-builder); NOT for making a
-  prompt or agent's wording more effective with no scorer, tightening a rubric's anchors, or designing
-  a loop's stopping rule (linguistic-techniques / rubric-forge / loop-design).
+  reviewing a finished artifact against its rubric (the *-reviewer agents); NOT for building
+  the artifact itself (the *-forge skills / system-builder); NOT for making a prompt or
+  agent's wording more effective with no scorer (linguistic-techniques), rubric anchors
+  (rubric-forge), or loop stopping rules (loop-design).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -138,7 +136,7 @@ terminated on a predicate.
 
 A real, dated run of the pack on itself. **Question class:** "improve the score" + a known weak
 dimension (recall) → **autoresearch**. **System:** this SKILL.md's `description`. **Scorer:**
-the `routing_eval` aid (skill-author's routing tool) computing F1 over `scripts/routing-corpus.json` —
+the `routing_eval` aid (forge's routing tool) computing F1 over `scripts/routing-corpus.json` —
 reproducible, baseline **0.750** (this pass reached **0.889**).
 **Round 1** — weakest dimension: recall; hypothesis: fenced tokens (`skill`, `scoring`) repel owned
 positives and two bisect triggers are absent; one change: add `skill, agent` to the scorable-system
@@ -167,5 +165,5 @@ change available. The journal and disposition live in `CHANGELOG.md`.
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an
   uncited method on inline.
 - Downstream of a finding, route the *fix* to its owner: a code change to **system-builder**, a skill
-  edit to **skill-author**, a design change to **system-planner**. This skill finds; it does not own
+  edit to forge's **skill-forge**, a design change to **system-planner**. This skill finds; it does not own
   the repair.

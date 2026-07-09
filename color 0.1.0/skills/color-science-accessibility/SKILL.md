@@ -6,8 +6,8 @@ description: >-
   contrast value), contrast ratios and relative luminance, readable and legible text for low
   vision and reduced contrast sensitivity, color-blindness simulation (simulate protanopia and
   deuteranopia; Brettel/Viénot/Machado), CVD-safe pairs (e.g. error vs. success state colors), and
-  "which colors look identical to a colorblind user". NOT for verifying a candidate palette
-  end-to-end / ColorProof (color-verify); NOT for focus rings or hit targets (focus-verify); NOT
+  "which colors look identical to a colorblind user". NOT for checking or verifying the contrast,
+  floor, or CVD-safety of a GIVEN pair, scheme, or palette — measurement asks (color-verify); NOT for focus rings or hit targets (focus-verify); NOT
   for space-conversion or gamut math (color-science-spaces); NOT for vision science beyond CVD
   (color-science-perception); NOT for building palettes (palette-design). ANSWERS, does not
   generate.

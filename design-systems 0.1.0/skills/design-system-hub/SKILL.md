@@ -8,13 +8,11 @@ description: >-
   profile", "make our generation prompts better", "our design agent output is generic —
   fix the context", "what belongs in the spine so generation stays on-brand", "teach the
   design agent our token naming grammar". Owns core+profiles architecture and doctrines
-  (prose-over-tokens, terminal values). NOT for a single-platform export — and an ask for ONE
-  DESIGN.md/bundle from source material (css, a brand deck, Figma exports) with no platform
-  named defaults to Claude Design/@dsCard (design-system-author-dscard), Stitch DESIGN.md/lint
-  (design-system-author-google-stitch), Make guidelines (design-system-author-figma-make);
+  (prose-over-tokens, terminal values). NOT for a single-platform export
+  (design-system-author-dscard / -google-stitch / -figma-make) — and ONE DESIGN.md/bundle from
+  source material (css, brand deck, Figma exports) with no platform named defaults to dscard;
   NOT for grading an export you didn't author (design-system-reviewer); NOT for the
-  palette (palette-design), token layer (token-builder), or a PRD/SPEC (prd-author /
-  spec-author).
+  palette (palette-design), token layer (token-builder), or a PRD/SPEC (scribe's doc-forge).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -86,7 +84,7 @@ Strategy and core decisions → score against `references/rubric.md` (gate: H1 r
 | `references/shared-doctrines.md` | Enforcing or teaching a doctrine: prose doctrine, naming grammar, encoding, reduction R1–R5, gates + receipts, standing rules |
 | `references/context-potency.md` | Making generation context potent: technique-by-surface mapping, the generic-output clinic, the altitude rule |
 | `references/rubric.md` | Scoring a hub engagement (strategy + core + context) — H1–H7 |
-| `scripts/routing-corpus.json` | The routing eval corpus for this description (`skill-author/scripts/routing_eval.py`) |
+| `scripts/routing-corpus.json` | The routing eval corpus for this description (forge's `routing_eval.py`, where installed) |
 | [[design-system-author-dscard]] · [[design-system-author-google-stitch]] · [[design-system-author-figma-make]] | Platform execution — each owns its format ground truth, gates, and rubric |
 | **design-system-reviewer** (agent) | Independent grading of any export |
 | [[linguistic-techniques]] · **linguistics-reviewer** | The wording layer this hub applies and teaches; its independent audit |

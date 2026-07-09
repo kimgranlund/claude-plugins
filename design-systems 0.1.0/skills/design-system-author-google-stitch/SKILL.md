@@ -13,8 +13,8 @@ description: >
   grammar, and the lint gate (npx @google/design.md lint — zero errors,
   expected-warning reading). NOT for Claude Design bundles
   (design-system-author-dscard); NOT for Figma Make guidelines
-  (design-system-author-figma-make); NOT for cross-platform design-system
-  strategy (design-system-hub hub); NOT for grading an export you didn't
+  (design-system-author-figma-make); NOT for cross-platform strategy
+  (design-system-hub); NOT for grading an export you didn't
   author (design-system-reviewer agent).
 disable-model-invocation: false
 user-invocable: true

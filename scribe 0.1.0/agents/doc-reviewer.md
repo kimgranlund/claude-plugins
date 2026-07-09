@@ -29,7 +29,7 @@ upstream sources it must trace to — not the maker's reasoning.
    J1-J6 (both preloaded — no external lookup needed). For the other document families this seat
    also covers: reference doc → reference-forge, llms.txt → llms-txt-forge, vision memo →
    vision-memo-forge, standalone rubric → rubric-forge (all now scribe siblings), CLAUDE.md/
-   AGENTS.md → entry-file-author, /goal condition → loop-design, handoff block → handoff-compose,
+   AGENTS.md → forge's entry-file-standards, /goal condition → loop-design, handoff block → handoff-compose,
    decomposition manifest → system-decompose, DESIGN.md/guidelines spine → its platform sibling
    (design-system-author-claude-code / -google-stitch / -figma-make) — load that owning skill's
    bundled `references/rubric.md` wherever it is installed. That rubric is the standard, plus any

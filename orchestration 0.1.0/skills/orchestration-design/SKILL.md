@@ -10,7 +10,7 @@ description: >
   token cost", "should this agent preload the skill", "review my
   wiring/integration frontmatter". NOT for a whole-corpus or team audit
   (skills-audit / agents-audit); NOT for a single agent definition
-  (agent-author); NOT for when the next turn fires — /goal, Stop hooks,
+  (forge's agent-forge / agent-authoring-standards); NOT for when the next turn fires — /goal, Stop hooks,
   continuation (loop-design).
 disable-model-invocation: false
 user-invocable: true

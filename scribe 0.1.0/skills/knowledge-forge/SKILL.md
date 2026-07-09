@@ -8,7 +8,7 @@ description: >-
   (subdirs = retrieval taxonomy), grounded research waves (one topic per file, cited and dated), the
   INDEX + consult-table entry surface, and the answers-not-generates boundary with routed builder
   peers. NOT for a single reference document (reference-forge); NOT for a procedure skill
-  (skill-author — which also owns the entry surface's final gate); NOT for maintaining a Claude
+  (forge's skill-forge — which also owns the entry surface's final gate); NOT for maintaining a Claude
   Project knowledge base (that is a different substrate).
 disable-model-invocation: false
 user-invocable: true
@@ -27,7 +27,7 @@ species itself — every domain's world model — so the stem's breadth equals t
 
 1. **Charter.** Name the domain and its breadth (the stem must match exactly — over-broad
    false-triggers, over-narrow misses); pick a **noun-compound name** (knowledge packs take no verb
-   — `skill-author/references/skill-naming-conventions.md` §species); write the ANSWERS-only
+   — forge's skill-authoring-standards §species); write the ANSWERS-only
    boundary first: which builder peers receive the making (and where a builder doesn't exist yet,
    an explicit "not installed — derive inline" dead-end, never a phantom handle).
 2. **Axis decomposition.** Decompose the question space into 3–7 retrieval axes — e.g.
@@ -37,7 +37,7 @@ species itself — every domain's world model — so the stem's breadth equals t
    `references/` subdir, each ask-class landing in exactly one. Axes follow how users ASK, not how
    the literature is organized (macro/micro/state beats alphabetical; per-script beats
    per-standard). Run [[system-decompose]] when the axes aren't obvious.
-3. **Research waves — [[skill-author]]'s grounding rule governs.** Write each reference from solid
+3. **Research waves — forge's pack-authoring-standards grounding rules govern.** Write each reference from solid
    knowledge or research it first (`WebSearch`/`WebFetch`, several authoritative sources; a
    deep-research skill, where installed, for contested or fast-moving domains). One topic per file ·
    claims cite their source · editions/dates on canon · a `sources.md` axis carrying provenance in
@@ -58,7 +58,7 @@ species itself — every domain's world model — so the stem's breadth equals t
    carries its rationale, so the consumer knows when deviating is legal) · boundaries that route
    ALL making · the factory route (the pack names this skill as its factory) · the
    corpus-of-record rule (the pack checks its routing corpus in at `scripts/routing-corpus.json`)
-   — then run the [[skill-author]] loop: all harness gates green, `skill-reviewer` +
+   — then run forge's skill-forge loop: all harness gates green, its skill-auditor +
    `linguistics-reviewer` dispatch (**generator ≠ critic**), fix, re-gate.
 
 ## Update (re-sync after drift)
@@ -81,7 +81,7 @@ never duplicate).
 | Peer | For |
 |---|---|
 | [[reference-forge]] | the per-file standard each reference is written to |
-| [[skill-author]] | the entry surface's gates + the create/evaluate/improve loop |
+| forge's `skill-forge` + `skill-authoring-standards` (where installed) | the entry surface's gates + the create/evaluate/improve loop |
 | [[rubric-forge]] | when the pack needs a scoring standard alongside the corpus |
 | [[system-decompose]] | deriving the axis taxonomy when it isn't obvious |
 | [[ui-patterns]] | the hand-authored reference instance of the shape |

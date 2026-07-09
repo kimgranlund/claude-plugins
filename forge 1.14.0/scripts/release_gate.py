@@ -110,9 +110,16 @@ def gate(root: Path, package: bool = False):
     if "G4" not in fails:
         ok(f"bundled selftests green ({tested} scripts)")
 
-    # G5 phantom sweep — backticked/fenced [[handles]] are mentions, not routing
-    phantom_hits = []
+    # G5 phantom sweep — backticked/fenced [[handles]] are mentions, not routing.
+    # Sibling-aware (2026-07-09, same rule as G8): a [[handle]] naming a real skill anywhere
+    # in the workspace is the ported corpus's link STYLE, not rot — only handles resolving
+    # to nothing warn. Style-only handles are reported as an ok-line count.
+    g5_inventory = {p.parent.name for p in root.glob("skills/*/SKILL.md")}
+    for sib in root.parent.glob("*/.claude-plugin/plugin.json"):
+        g5_inventory |= {p.parent.name for p in sib.parent.parent.glob("skills/*/SKILL.md")}
+    phantom_hits, style_refs = [], 0
     inline_code = re.compile(r"`[^`]*`")
+    handle_re = re.compile(r"\[\[([a-z0-9-]+)\]\]")
     for md in root.rglob("*.md"):
         if "CHANGELOG" in md.name or "dist" in md.parts:
             continue
@@ -121,10 +128,17 @@ def gate(root: Path, package: bool = False):
             if line.lstrip().startswith("```"):
                 fenced = not fenced
                 continue
-            if not fenced and PHANTOM_RE.search(inline_code.sub("", line)):
-                phantom_hits.append(f"{md.relative_to(root)}:{i}")
+            if fenced:
+                continue
+            for h in handle_re.findall(inline_code.sub("", line)):
+                if h in g5_inventory:
+                    style_refs += 1
+                else:
+                    phantom_hits.append(f"{md.relative_to(root)}:{i} [[{h}]]")
     if phantom_hits:
-        warn("G5", f"{len(phantom_hits)} [[handle]] refs ({phantom_hits[:3]}...) -> unresolved routing; point them at installed artifacts or cut them")
+        warn("G5", f"{len(phantom_hits)} dangling [[handle]] refs ({phantom_hits[:3]}...) -> they resolve to no skill anywhere in the workspace; repoint or cut")
+    elif style_refs:
+        ok(f"no dangling [[handles]] ({style_refs} style refs resolve to workspace skills)")
     else:
         ok("no phantom [[handles]] in live markdown")
 
@@ -169,10 +183,29 @@ def gate(root: Path, package: bool = False):
             ok("docs cover every artifact; ledger matches manifest")
 
     # G8 stale sibling names — deliberately does NOT strip code spans: a backticked
-    # stale name is still rot on a routing-bearing surface (contrast G5's mention rule)
+    # stale name is still rot on a routing-bearing surface (contrast G5's mention rule).
+    # Sibling-aware (2026-07-09): cross-plugin soft mentions are doctrine-legal, so tokens
+    # resolve against every workspace sibling's skills too before warning — only TRUE
+    # phantoms (matching no skill anywhere in the workspace) remain findings.
     inventory = {p.parent.name for p in root.glob("skills/*/SKILL.md")}
+    for sib in root.parent.glob("*/.claude-plugin/plugin.json"):
+        inventory |= {p.parent.name for p in sib.parent.parent.glob("skills/*/SKILL.md")}
     suffixes = {n.rsplit("-", 1)[-1] for n in inventory}
-    allow = {"re-run", "dry-run", "no-split", "keep-separate", "cross-cite"}
+    # verified prose-compound false positives (hyphenated phrases sharing a real suffix)
+    allow = {"re-run", "dry-run", "no-split", "keep-separate", "cross-cite",
+             "deep-review", "data-not-markup", "color-accessibility", "geometry-not-perception",
+             "from-color-science-perception", "from-color-science-spaces", "neutral-by-design",
+             "orphaned-tokens", "over-tokens", "prose-over-tokens", "ultimate-tokens",
+             "change-verify", "composition-patterns", "macro-patterns", "micro-patterns",
+             "state-patterns", "live-agent", "routing-corpus", "training-corpus",
+             "catalog-design", "conversational-agent",
+             # widened by sibling-aware suffixes (2026-07-09) — verified prose, not names:
+             "agent-vs-agent", "fork-vs-agent", "per-agent", "sub-agent", "single-agent",
+             "non-agent", "multi-agent", "whole-corpus", "thin-corpus", "source-corpus",
+             "skill-corpus", "knowledge-corpus", "rubric-agent-corpus", "rubric-skill-corpus",
+             "anti-patterns", "component-patterns", "contrast-standards", "audit-report",
+             "lossy-by-design", "first-run", "material-design", "color-tokens",
+             "figma-make", "google-stitch"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

@@ -114,7 +114,7 @@
     },
     {
       "id": "n11",
-      "prompt": "review this skill against the skill-author rubric",
+      "prompt": "review this skill against skill-authoring-standards",
       "expect": "no-trigger"
     },
     {

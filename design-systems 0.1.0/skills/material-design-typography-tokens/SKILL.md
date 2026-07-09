@@ -1,21 +1,17 @@
 ---
 name: material-design-typography-tokens
 description: >
-  Use when setting the TYPE of any UI in a project whose type tokens use the Material
-  `--md-sys-typescale-*` naming (a nonoun / ADIA "Material-Design-founded" export) — the
-  font/size/weight/leading/tracking for a heading, body copy, a menu item, a table cell, a standalone
-  label, a badge, a caption, code, a quote, or a kicker ("what type token for this heading/label/caption",
-  "which voice/step should this text use", "which typescale class for a menu item or table cell", "why is
-  this text the wrong size/weight"). The consumption guide for the eleven-voice type scale that EXTENDS
-  Material 3: how to find and bind the project's `--md-sys-typescale-*` variables and `--font-*` families,
-  choose the right VOICE (prose you READ vs. chrome you OPERATE) and LEVEL (rank), and apply the baked
-  leading/tracking/paragraph rhythm. Never hardcode a px size, line-height, letter-spacing, or font family
-  — this names the Material `--md-sys-typescale-*` role for every job.
-  NOT for a control's own text-SIZE — a button/input/select with a `.md-sys-control-{step}` box takes its
-  size from material-design-geometry-tokens' `--md-sys-size-{step}-font` (this voice supplies only its
-  family/weight/tracking); NOT for color (material-design-color-tokens); NOT for radius/spacing/density
-  (material-design-geometry-tokens); NOT for kits on the default `--type-*` grammar (the ultimate-tokens
-  `typography-tokens` skill); NOT for DESIGNING a type scale or specimen (typography-lettering).
+  Use when setting the TYPE of any UI whose type tokens use the Material `--md-sys-typescale-*`
+  naming (a nonoun/ADIA export) — font/size/weight/leading/tracking for a heading, body, label,
+  menu item, table cell, badge, caption, code, or kicker ("what type token for this", "which voice/step",
+  "why is this text the wrong size/weight"). The consumption guide for the
+  eleven-voice scale extending Material 3: bind `--md-sys-typescale-*` + `--font-*`, pick VOICE (prose you READ vs chrome you
+  OPERATE) and LEVEL (rank), apply the baked leading/tracking/paragraph rhythm. Never hardcode a
+  px size, line-height, tracking, or family. NOT for a control's own text-SIZE
+  (material-design-geometry-tokens' `--md-sys-size-{step}-font`; this supplies family/weight only); NOT for color (material-design-color-tokens);
+  NOT for radius/spacing (material-design-geometry-tokens); NOT for kits on the default `--type-*`
+  grammar (typography plugin's typography-tokens); NOT for DESIGNING a type scale
+  (typography-lettering).
 disable-model-invocation: false
 user-invocable: false
 ---
