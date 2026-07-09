@@ -1,8 +1,24 @@
 # Versioning & conformance — the pin, and why drift is wire-breaking
 
-> **GAP (one residual, 2026-07-08):** the FULL v0.3.0 → v1.0 method-name mapping table is not
-> HV-quoted (the ledger carries only three PascalCase examples) — needs a spec fetch of [S1] §5.3
-> before publishing a complete side-by-side table. Everything else below is grounded.
+> **GAP RESOLVED (spec fetch 2026-07-09, `[fetch — S §3.5.6]` + `[fetch — S1 §5.3]` — one trust
+> rung below the HV ledger).** The complete v0.3.0 → v1.0.1 JSON-RPC method rename:
+>
+> | v0.3.0 | v1.0.1 |
+> |---|---|
+> | `message/send` | `SendMessage` |
+> | `message/stream` | `SendStreamingMessage` |
+> | `tasks/get` | `GetTask` |
+> | `tasks/list` | `ListTasks` |
+> | `tasks/cancel` | `CancelTask` |
+> | `tasks/resubscribe` | `SubscribeToTask` |
+> | `tasks/pushNotificationConfig/set` | `CreateTaskPushNotificationConfig` |
+> | `tasks/pushNotificationConfig/get` | `GetTaskPushNotificationConfig` |
+> | `tasks/pushNotificationConfig/list` | `ListTaskPushNotificationConfigs` |
+> | `tasks/pushNotificationConfig/delete` | `DeleteTaskPushNotificationConfig` |
+> | `agent/getAuthenticatedExtendedCard` | `GetExtendedAgentCard` |
+>
+> Not just casing: `tasks/resubscribe` is *renamed* (`SubscribeToTask`), the push-config four grow
+> full nouns, and REST paths drop the `/v1/` prefix in places — every pair is wire-breaking.
 
 Estate paths relative to `agent-ui/packages/agent-ui/`; HV rows live in SPEC §2
 (`agent-ui/.claude/docs/spec/a2a-foundations.spec.md`).
@@ -22,7 +38,7 @@ required field with upstream default `"0.3.0"` `[spec — HV-7]`.
 examples are `SendMessage`, `GetTask`, `SubscribeToTask` ([S1] §5.3/§9: "Method Naming: PascalCase
 method names matching gRPC conventions"). A v0.3.0 client calling a 1.0.x server (or vice versa)
 fails at the METHOD level (`-32601`) before any payload semantics engage. The v0.3.0 names are in
-`transport-and-streaming.md`; the full pairing table awaits the fetch (banner above).
+`transport-and-streaming.md`; the full pairing table is in the resolved banner above.
 
 Other HV-grounded 1.0.x deltas:
 - Error codes `[spec — HV-9]`: `-32007` renamed `ExtendedAgentCardNotConfiguredError`; NEW

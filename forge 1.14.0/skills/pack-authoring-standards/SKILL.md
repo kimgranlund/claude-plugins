@@ -41,13 +41,19 @@ are declared in the INDEX as its section headings, and the SKILL.md consult tabl
 stated axis or file count that has drifted from the tree is the first strain signal — which is why
 `corpus_check.py` reconciles counts mechanically instead of trusting prose.
 
-## INDEX.md: the retrieval map
+## INDEX.md: the retrieval map — when the consult table stops being one
 
-One line per reference file — `path — the question it answers (≤ 1 line)` — grouped under axis
-headings. The INDEX is what loads *first*; files load on demand from it. Budget: an INDEX pushing
-past ~150 lines is a pack answering too many kinds of question. Every file in `references/` appears
-in the INDEX and every INDEX line names a real file — zero tolerance both directions, because a
-ghost line misroutes and an unlisted file is unreachable.
+The threshold is **enumerability, not authoring method** (ruled 2026-07-09, reconciling this
+standard with knowledge-forge's scaling note and the shipped practice — ui-patterns,
+motion-design, iconography): when the SKILL.md consult table lists every reference file 1:1
+(a flat corpus of ≤~7 files), the table IS the retrieval map and a separate INDEX would be a
+second copy that drifts — ship no INDEX. An INDEX.md earns its keep the moment files outgrow
+what the table enumerates or `references/` grows subdirectories (the color-science family,
+ui-genres). Then: one line per reference file — `path — the question it answers (≤ 1 line)` —
+grouped under axis headings; the INDEX loads *first*, files load on demand from it. Budget: an
+INDEX pushing past ~150 lines is a pack answering too many kinds of question. Every file in
+`references/` appears in the INDEX and every INDEX line names a real file — zero tolerance both
+directions, because a ghost line misroutes and an unlisted file is unreachable.
 
 ## Load discipline
 

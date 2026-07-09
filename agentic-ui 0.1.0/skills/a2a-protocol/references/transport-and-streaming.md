@@ -1,8 +1,28 @@
 # Transport — JSON-RPC methods, streaming, push
 
-> **GAP (one residual, 2026-07-08):** push-notification callback semantics (the webhook contract,
-> when it beats polling) and `tasks/resubscribe` resumption semantics are not HV-quoted — needs a
-> spec fetch before answering those; everything else below is grounded.
+> **GAP RESOLVED (spec fetch 2026-07-09, tags v0.3.0 + v1.0.1 of a2aproject/A2A
+> `docs/specification.md` — cite as `[fetch — S §n]`, one trust rung below the HV ledger):**
+>
+> **Push webhook contract** `[fetch — S §6.8-6.10, §9.5]`: the client's `PushNotificationConfig`
+> carries `url` (required, HTTPS webhook), optional `token`, and `authentication`
+> (`PushNotificationAuthenticationInfo`: `schemes` array e.g. `["Bearer"]`, `credentials`);
+> per-task form (`TaskPushNotificationConfig`) adds `taskId` (required) + `configId`. The server
+> POSTs a **Task object** to the webhook with `Authorization: Bearer <jwt>`,
+> `Content-Type: application/json`, and `X-A2A-Notification-Token: <the client's token>`.
+> v1.0.1 hardens the contract `[fetch — S1 §4.3.3]`: payload becomes a `StreamResponse` (exactly
+> one of task/message/statusUpdate/artifactUpdate), clients MUST 2xx-ack and SHOULD process
+> idempotently (duplicate deliveries may occur), servers MUST attempt at-least-once delivery, MAY
+> retry with backoff, SHOULD timeout webhooks at 10-30 s. Push is for long-running tasks where
+> holding an SSE connection is impractical — the config methods exist precisely so polling isn't
+> the only fallback.
+>
+> **`tasks/resubscribe`** `[fetch — S §7.9]`: reconnects a client to the SSE stream of an ongoing
+> task after an interrupted connection (requires `capabilities.streaming: true`); each SSE `data`
+> is a `SendStreamingMessageResponse`. **v0.3.0 is VERIFIED SILENT on replay** (which past events
+> re-emit, buffering, ordering across reconnects — do not assert them). v1.0.1's successor
+> (`SubscribeToTask`) closes half of that: the stream MUST open with a `Task` object carrying
+> current state (preventing the GetTask→subscribe gap) and MUST terminate at a terminal state
+> `[fetch — S1 §3.1.6]`.
 
 Estate paths relative to `agent-ui/packages/agent-ui/`; HV rows live in SPEC §2
 (`agent-ui/.claude/docs/spec/a2a-foundations.spec.md`).

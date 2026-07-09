@@ -1,10 +1,14 @@
 # Extensions & bridging — carrying a payload protocol over A2A
 
-> **GAP (one residual, 2026-07-08):** A2A's GENERIC extension mechanism — the shape of the card's
-> `capabilities.extensions` entries (the AgentExtension object), required-vs-optional extension
-> semantics, and the activation handshake — is not HV-quoted. The ledger grounds only the FIELDS
-> that exist (below) and the A2UI extension's own binding (HV-8). Needs an A2A-spec fetch before
-> answering generic-mechanism questions.
+> **GAP LARGELY RESOLVED (spec fetch 2026-07-09, `[fetch — S §5.5.2.1]` + `[fetch — S1 §4.4.4,
+> §4.6.3]` — one trust rung below the HV ledger):** at the estate's pin **v0.3.0, the
+> AgentExtension object is `name` + `description` + `documentation` — there is NO `required`
+> field, no activation handshake, and no unsupported-extension mandate** (VERIFIED at §5.5.2.1;
+> required-extension semantics simply don't exist at this pin — don't assert them). v1.0.1
+> reshapes it to `uri` (globally unique) + `description` + `required` (boolean), and §4.6.3 adds
+> the one normative rule: an agent SHOULD ignore an unsupported extension request **unless marked
+> required — then return an error**. Honest residual: v1.0.1's activation mechanism (header or
+> otherwise) was not retrievable this fetch — still open, now narrowly.
 
 Estate paths relative to `agent-ui/packages/agent-ui/`; HV rows live in SPEC §2
 (`agent-ui/.claude/docs/spec/a2a-foundations.spec.md`).
@@ -57,7 +61,8 @@ both ways, zero runtime deps; never exported from either package barrel)
   (`foreignParts: number`), never a throw.
 - Negotiation failure modes the estate gates (SPEC-R16 AC2 negative controls): untagged part ·
   invalid payload · caps-less client message · wrong pin — each must fail the standing gate.
-  What the A2A spec itself mandates on unsupported-extension at v0.3.0 is part of the GAP above.
+  At v0.3.0 the spec itself mandates nothing on unsupported extensions (resolved banner above) —
+  the estate's gates are stricter than the pin requires, by design.
 
 ## Design lessons the exemplar teaches (for ANY extension)
 

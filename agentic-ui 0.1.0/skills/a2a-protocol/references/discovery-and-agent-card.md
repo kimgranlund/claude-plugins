@@ -80,8 +80,16 @@ compatibility is the pin check: a consumer encountering an unsupported `protocol
 coded, never silently proceed (SPEC-R2) — the estate realizes this as `A2A_PIN` with nothing
 downstream consuming the artifact `[estate — a2a/src/protocol/validate.ts:255-270]`.
 
-> GAP (needs a spec fetch): client-side caching rules for a fetched card, and any normative
-> selection/negotiation guidance beyond the declared fields, are not HV-quoted — do not assert them.
+> GAP RESOLVED (spec fetch 2026-07-09 — one trust rung below the HV ledger). **Caching**: v0.3.0
+> carries exactly ONE rule — clients retrieving the authenticated extended card SHOULD replace
+> their cached public card with it for the duration of the authenticated session
+> `[fetch — S §7.10]`; the spec is otherwise **VERIFIED SILENT** on card caching (no TTL,
+> invalidation, storage, or conditional-request guidance — sections 5, 5.2, 5.3, 7.10 checked; do
+> not assert any). **Selection**: the normative guidance is transport selection, §5.6.3's five
+> client rules `[fetch — S §5.6.3]` — parse transports from `url`/`preferredTransport` +
+> `additionalInterfaces`; SHOULD use the main `url` when the preferred transport is supported;
+> MAY pick any supported transport from `additionalInterfaces` otherwise; SHOULD implement
+> fallback on failure; MUST use the URL matching the selected transport.
 
 ## Worked example
 
