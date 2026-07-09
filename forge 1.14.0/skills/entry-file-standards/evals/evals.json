@@ -1,6 +1,6 @@
 {
   "skill": "entry-file-standards",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (eval-run 2026-07-09): asks owned by /entry-file-audit (user-only command) leak here on a model-only menu — benign; do not tune to chase.",
   "cases": [
     {
       "id": "t01",
