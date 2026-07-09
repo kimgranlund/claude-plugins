@@ -21,7 +21,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
 | Design-system export bundles (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design-systems` |
-| UI structure (layouts, flows, components, patterns) or non-functional verification (focus/i18n/perf/safety) | `ui` |
+| UI structure (layouts, flows, components, patterns), motion knowledge (durations/easing/reduced-motion), or non-functional verification (focus/i18n/perf/safety) | `ui` |
 | Multi-agent feature-delivery team (plan → build → review → coordinate), composition/continuation design | `orchestration` |
 | Routing proof after description edits | `/eval-run <plugin>` |
 | Periodic health sweep | `/harness-audit` |

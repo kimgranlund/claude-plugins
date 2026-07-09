@@ -1,91 +1,96 @@
 {
-  "skill": "material-design-typography-tokens",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-typescale consumption queries, incl. the ui-territory nouns (menu item/table cell/badge). Negatives: the KEY control-text-size case belongs to geometry ('what font size for this button'), plus color, geometry, the --type-* twin, and typography-lettering.",
-  "cases": [
-    {
-      "id": "t01",
-      "prompt": "what type token for this heading",
-      "expect": "trigger"
-    },
-    {
-      "id": "t02",
-      "prompt": "which voice for this menu item",
-      "expect": "trigger"
-    },
-    {
-      "id": "t03",
-      "prompt": "which typescale class for a table cell",
-      "expect": "trigger"
-    },
-    {
-      "id": "t04",
-      "prompt": "size this section heading",
-      "expect": "trigger"
-    },
-    {
-      "id": "t05",
-      "prompt": "why is this text the wrong weight",
-      "expect": "trigger"
-    },
-    {
-      "id": "t06",
-      "prompt": "what font for body copy",
-      "expect": "trigger"
-    },
-    {
-      "id": "t07",
-      "prompt": "which level for a figure caption",
-      "expect": "trigger"
-    },
-    {
-      "id": "t08",
-      "prompt": "type token for a badge label",
-      "expect": "trigger"
-    },
-    {
-      "id": "t09",
-      "prompt": "which voice for a standalone label",
-      "expect": "trigger"
-    },
-    {
-      "id": "t10",
-      "prompt": "wire the type fonts and families",
-      "expect": "trigger"
-    },
-    {
-      "id": "n01",
-      "prompt": "what font size for this button",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n02",
-      "prompt": "how tall should this control be",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n03",
-      "prompt": "which color for this text",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n04",
-      "prompt": "what padding and gap for this row",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n05",
-      "prompt": "design a bespoke type scale and specimen",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n06",
-      "prompt": "our tokens are --type-body not md-sys",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n07",
-      "prompt": "what radius for this card corner",
-      "expect": "no-trigger"
-    }
-  ]
+ "skill": "material-design-typography-tokens",
+ "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-typescale consumption queries, incl. the ui-territory nouns (menu item/table cell/badge). Negatives: the KEY control-text-size case belongs to geometry ('what font size for this button'), plus color, geometry, the --type-* twin, and typography-lettering. Motion fence added 2026-07-09 (reciprocal to new sibling material-design-motion-tokens).",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "what type token for this heading",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "which voice for this menu item",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "which typescale class for a table cell",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "size this section heading",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "why is this text the wrong weight",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "what font for body copy",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "which level for a figure caption",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "type token for a badge label",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "which voice for a standalone label",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "wire the type fonts and families",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "what font size for this button",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "how tall should this control be",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "which color for this text",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "what padding and gap for this row",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "design a bespoke type scale and specimen",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "our tokens are --type-body not md-sys",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "what radius for this card corner",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "which md-sys motion spring token for this text reveal",
+   "expect": "no-trigger"
+  }
+ ]
 }

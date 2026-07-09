@@ -4,13 +4,15 @@ description: >-
   Reason about and verify perceived latency. Use when auditing loading UX against a performance budget —
   the invariants an async surface must satisfy: latency feedback windows, skeleton vs spinner vs optimistic
   decisions, streaming UX, Core Web Vitals (CWV) and CLS budgets, layout shift / jank, image-dimension
-  reservation, and cancellation (can the user cancel a long-running operation) — "the page feels slow even
+  reservation, and cancellation of long-running operations — "the page feels slow even
   though the API is fast", "the layout jumps around while images load", when CLS is eroding trust, or
-  streaming needs coherent presentation. NOT for text/background contrast, palette, or color-blind safety
-  (color-verify); NOT for focus order, keyboard nav, hit-targets, or focus rings (focus-verify); NOT for
-  RTL/bidi, locale Intl formatting, or text-expansion (i18n-verify); NOT for undo/type-to-confirm or
-  audit-trail UX (safety-verify); NOT for color-space theory or palette math (color-science-spaces); NOT for
-  wire latency or bundle-size; NOT for a spinner/skeleton-loader component (component-forge).
+  streaming needs coherent presentation. NOT for contrast/palette/color-blind safety
+  (color-verify); NOT for focus order, keyboard nav, or hit-targets (focus-verify); NOT for
+  RTL/bidi/Intl/text-expansion (i18n-verify); NOT for undo/type-to-confirm or
+  audit-trail UX (safety-verify); NOT for color-space math (color-science-spaces); NOT for
+  wire latency or bundle-size; NOT for a spinner/skeleton-loader component (component-forge);
+  NOT for animation duration/easing/choreography — sluggish by design, not by load
+  (motion-design).
 disable-model-invocation: false
 user-invocable: true
 ---

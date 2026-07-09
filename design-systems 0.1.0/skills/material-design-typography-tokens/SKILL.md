@@ -2,16 +2,16 @@
 name: material-design-typography-tokens
 description: >
   Use when setting the TYPE of any UI whose type tokens use the Material `--md-sys-typescale-*`
-  naming (a nonoun/ADIA export) — font/size/weight/leading/tracking for a heading, body, label,
-  menu item, table cell, badge, caption, code, or kicker ("what type token for this", "which voice/step",
-  "why is this text the wrong size/weight"). The consumption guide for the
+  naming — font/size/weight/leading/tracking for a heading, body, label,
+  menu item, table cell, badge, caption, code, kicker ("what type token for this", "which voice/step",
+  "why is this text the wrong size/weight"). Consumption guide for the
   eleven-voice scale extending Material 3: bind `--md-sys-typescale-*` + `--font-*`, pick VOICE (prose you READ vs chrome you
-  OPERATE) and LEVEL (rank), apply the baked leading/tracking/paragraph rhythm. Never hardcode a
+  OPERATE) and LEVEL, apply the baked leading/tracking rhythm. Never hardcode a
   px size, line-height, tracking, or family. NOT for a control's own text-SIZE
   (material-design-geometry-tokens' `--md-sys-size-{step}-font`; this supplies family/weight only); NOT for color (material-design-color-tokens);
   NOT for radius/spacing (material-design-geometry-tokens); NOT for kits on the default `--type-*`
   grammar (typography plugin's typography-tokens); NOT for DESIGNING a type scale
-  (typography-lettering).
+  (typography-lettering); NOT for motion easing/duration (material-design-motion-tokens).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -2,15 +2,16 @@
 name: material-design-color-tokens
 description: >
   Use when choosing the COLOR of any UI whose color tokens use the Material `--md-sys-color-*` naming —
-  the color/role for a button, control, text, card, modal, nav, toast, border, surface, or state ("which
+  the color/role for a button, control, text, card, modal, nav, toast, border, or state ("which
   color should this use", "what token for this background/text", "add hover/disabled colors", "wire the
-  theme", "make it work in dark mode", "why is this the wrong color"). The consumption guide for the
-  59-role semantic layer extending Material 3: binding the project's palettes, M3 baseline vs. extensions
+  theme", "make it work in dark mode", "why is this the wrong color"). Consumption guide for the
+  59-role semantic layer extending Material 3: binding palettes, M3 baseline vs. extensions
   (state families, tonal variants, surface/scrim ladders, intents as palettes), pairing laws keeping fg on
-  a legal bg, and per-surface role maps. Never guess a hex or use a raw stop. NOT for type/font/weight/leading
-  (material-design-typography-tokens); NOT for radius/spacing/size/density (material-design-geometry-tokens);
+  a legal bg, per-surface role maps. Never guess a hex or raw stop. NOT for type/font/weight
+  (material-design-typography-tokens); NOT for radius/spacing/density (material-design-geometry-tokens);
   NOT for the default `--c-*` grammar (`color-tokens`); NOT for designing or verifying a palette
-  (palette-design / color-verify); NOT for color-space math (color-science-spaces).
+  (palette-design / color-verify); NOT for color-space math (color-science-spaces); NOT for motion
+  easing/duration (material-design-motion-tokens).
 disable-model-invocation: false
 user-invocable: false
 ---
