@@ -1,6 +1,6 @@
 {
  "skill": "material-design-geometry-tokens",
- "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Checked-in routing corpus (test of record). Positives = md-sys size/space consumption queries INCLUDING a control's own text-size ('what font size for this button' — geometry owns it via --md-sys-size-{step}-font). Negatives: color, the type SCALE of non-control text, the --size-* twin. Motion fence added 2026-07-09 (reciprocal to new sibling material-design-motion-tokens).",
+ "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Checked-in routing corpus (test of record). Positives = md-sys size/space consumption queries INCLUDING a control's own text-size ('what font size for this button' — geometry owns it via --md-sys-size-{step}-font). Negatives: color, the type SCALE of non-control text, the --size-* twin. Motion fence added 2026-07-09 (reciprocal to new sibling material-design-motion-tokens). Iconography fence added 2026-07-09 (reciprocal to the new iconography pack). Blind run 2026-07-09 (0.5.0): 16/18 — t09 (icon size token) stolen by the new iconography pack and t10 (border width token) dead after this description's fence-work trims; both phrasings restored verbatim same-change. n08 (stroke weight) routed to iconography as designed.",
  "cases": [
   {
    "id": "t01",
@@ -85,6 +85,11 @@
   {
    "id": "n07",
    "prompt": "what duration token for the drawer slide animation",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "what stroke weight should our icons use",
    "expect": "no-trigger"
   }
  ]

@@ -2,17 +2,18 @@
 name: material-design-geometry-tokens
 description: >
   Use when SIZING or SPACING any UI whose dimension tokens use the Material `--md-sys-size-*` /
-  `--md-sys-radius-*` / `--md-sys-space-*` naming — the
-  height/padding/radius of a control, a card's inset, gaps, icon sizes, focus rings, borders
-  ("what size/spacing token for this", "how tall should this control be", "what padding/gap/
-  radius", "make the layout denser"). The consumption guide for the dimensional layer extending
-  Material 3: the control ramp, corner scale, and space/inset/gap
-  ladders; the centering law; the two paddings by anatomy. A CONTROL's own text-SIZE is this skill's
-  `--md-sys-size-{step}-font` field — "what font size for this button" lands HERE. Never hardcode
-  a px height/padding/radius. NOT for color (material-design-color-tokens); NOT for the type
-  scale/voices of NON-control text (material-design-typography-tokens); NOT for motion
-  easing/duration (material-design-motion-tokens); NOT for kits on the
-  default `--size-*`/`--space-*` grammar; NOT for DESIGNING the dimensional system.
+  `--md-sys-radius-*` / `--md-sys-space-*` naming — a
+  control's height/padding/radius, a card's inset, gaps, icon sizes, focus rings, borders
+  ("what size/spacing token", "what icon size token", "the border/focus-ring token", "how tall
+  should this control be", "what padding/gap/radius", "make the layout denser"). Consumption
+  guide for the dimensional layer of Material 3: the control ramp, corner scale, space/inset/gap
+  ladders; the centering law; two paddings by anatomy. A CONTROL's own text-SIZE is this skill's
+  `--md-sys-size-{step}-font` field — "what font size for this button" lands HERE. Never
+  hardcode px. NOT for color (material-design-color-tokens); NOT for NON-control text
+  type/voices (material-design-typography-tokens); NOT for motion
+  easing/duration (material-design-motion-tokens); NOT for icon grid/style
+  (iconography); NOT for the default `--size-*`/`--space-*` grammar; NOT for DESIGNING the
+  dimensional system.
 disable-model-invocation: false
 user-invocable: false
 ---
