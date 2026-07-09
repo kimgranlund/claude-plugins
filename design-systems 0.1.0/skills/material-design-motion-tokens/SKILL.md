@@ -33,7 +33,7 @@ duration ladder, and the M3 Expressive spring tokens.
    spec defaults** carried verbatim in [`references/tokens.md`](references/tokens.md), and say
    you did.
    > _Amended 2026-07-09 (same day): this step previously read "no nonoun motion export exists
-   > yet." One landed hours later (nonoun-color-tokens PR #243). The original claim was true when
+   > yet." One landed hours later (the nonoun color-tokens repo, PR #243). The original claim was true when
    > written and is preserved here for audit._
 2. **Let the export decide the system.** Spring tokens present → M3 Expressive springs; absent
    (every material-web project — it implements duration+easing only) → duration+easing; no export
@@ -79,7 +79,7 @@ repo's `css/motion.css`, MDC-Android Motion.md, m3.material.io — all accessed 
 against a nonoun export: none existed at authoring time._
 
 _Amended 2026-07-09 (same day, by the kit maintainer): a nonoun motion export now exists
-(nonoun-color-tokens PR #243, `src/engine/motion.mjs` → the `tokens.json` `motion` block + the
+(the nonoun color-tokens repo's PR #243, `src/engine/motion.mjs` → the `tokens.json` `motion` block + the
 `DESIGN.md` `## Motion` section). Bind step 1 and `references/tokens.md` are re-synced against it.
 Its drift gate is the export repo's own suite (`test/engine/exports.mjs` asserts every easing is a
 `cubic-bezier()`, the 16-step ladder is strictly ascending, `short2` is the 100ms instant floor,
