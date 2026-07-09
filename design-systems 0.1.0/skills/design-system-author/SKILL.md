@@ -8,8 +8,9 @@ description: >-
   profile", "make our generation prompts better", "our design agent output is generic —
   fix the context", "what belongs in the spine so generation stays on-brand", "teach the
   design agent our token naming grammar". Owns core+profiles architecture and doctrines
-  (prose-over-tokens, terminal values). NOT for a single-platform export — Claude
-  Design/@dsCard (design-system-author-dscard), Stitch DESIGN.md/lint
+  (prose-over-tokens, terminal values). NOT for a single-platform export — and an ask for ONE
+  DESIGN.md/bundle from source material (css, a brand deck, Figma exports) with no platform
+  named defaults to Claude Design/@dsCard (design-system-author-dscard), Stitch DESIGN.md/lint
   (design-system-author-google-stitch), Make guidelines (design-system-author-figma-make);
   NOT for grading an export you didn't author (design-system-reviewer); NOT for the
   palette (palette-design), token layer (token-builder), or a PRD/SPEC (prd-author /

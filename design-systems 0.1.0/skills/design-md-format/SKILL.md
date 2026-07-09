@@ -3,7 +3,7 @@ name: design-md-format
 description: >-
   Ground-truth knowledge of the DESIGN.md design-system spec format consumed by Claude Design and
   Claude Code. Use when reading, explaining, extending, or validating a DESIGN.md (or "design spec",
-  "design system file"): file anatomy, YAML frontmatter token schema, the --{prefix}-{family}-{slot}
+  "design system file"): file anatomy, "explain the frontmatter schema" (the YAML token layer), the --{prefix}-{family}-{slot}
   grammar, light/-dark scheme pairing, the pairing law, prose spine sections, Root Brand Architecture,
   @dsCard preview cards, disclosure-over-correction. Also loads as the knowledge substrate when
   creating a design system from a corpus of design files/css/descriptions. NOT for the end-to-end

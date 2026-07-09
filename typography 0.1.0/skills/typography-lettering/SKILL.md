@@ -1,14 +1,15 @@
 ---
 name: typography-lettering
 description: >-
-  Answers typography and lettering questions; points at a builder peer for output. Use when choosing,
-  comparing, pairing, explaining, classifying, or specifying type — "my headings jump when the webfont swaps
+  Answers typography and lettering questions; points at a builder peer for output. Use when
+  comparing, explaining, classifying, or specifying type — "my headings jump when the webfont swaps
   in", "does OpenDyslexic actually help", "why does this font look boring / generic": type anatomy
-  (x-height, cap-height), classification (Vox-ATypI, humanist/geometric, grotesque/neo-grotesque),
-  metric-compatible fallback stacks (font-size-adjust), font personality (neutral-by-design vs. distinctive,
-  when each fits), world scripts (Arabic, Devanagari, Hebrew niqqud, CJK), OpenType features (small caps,
-  oldstyle figures), variable-font axes (wght, wdth, opsz), CSS text surface (text-wrap, leading-trim,
-  text-box-trim), measure / characters per line, text accessibility (dyslexic, low-vision). NOT for
+  (x-height, cap-height), classification (Vox-ATypI, humanist/geometric, grotesque),
+  metric-compatible fallback stacks (font-size-adjust), font personality (neutral vs. distinctive),
+  world scripts (Arabic, Devanagari, Hebrew niqqud, CJK), OpenType features, variable-font axes (wght, wdth,
+  opsz), CSS text surface (text-wrap, leading-trim), measure, text accessibility (dyslexic,
+  low-vision). NOT for designing, picking, or verifying a brand's font pairing or choosing fonts for a brand
+  (typography-system-author); NOT for
   generating a type scale or design tokens (typography-tokens); NOT for building components
   (component-author); NOT for locale date/number formatting (i18n-verify). ANSWERS, does not generate.
 disable-model-invocation: false

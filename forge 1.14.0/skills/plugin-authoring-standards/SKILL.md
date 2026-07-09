@@ -4,7 +4,8 @@ description: >-
   Standards for authoring and releasing Claude Code plugins — the distribution unit. Use when the
   user asks how to structure a plugin, write plugin.json, package or release a plugin, version it,
   ship hooks or agents or MCP servers in one, why a plugin fails to load or install, why an update
-  isn't picked up, or how plugin namespacing and trust work. Carries the verified load, reload,
+  isn't picked up, where a plugin's state or config lives, or how plugin namespacing and trust
+  work. Carries the verified load, reload,
   and versioning semantics (July 2026), including the three load-failure classes this plugin hit.
 disable-model-invocation: false
 user-invocable: false

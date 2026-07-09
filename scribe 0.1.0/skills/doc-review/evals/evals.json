@@ -46,6 +46,11 @@
       "id": "n03",
       "prompt": "review this skill",
       "expect": "no-trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "review this vision memo against its rubric before I share it",
+      "expect": "trigger"
     }
   ]
 }

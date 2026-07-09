@@ -1,6 +1,6 @@
 {
   "skill": "layout-decompose",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-patterns owns (failed as layout's trigger in two consecutive blind runs, routing to ui-patterns both times — the judges were right).",
   "cases": [
     {
       "id": "t01",
@@ -20,7 +20,7 @@
     {
       "id": "t04",
       "prompt": "what shell is this app using",
-      "expect": "trigger"
+      "expect": "no-trigger"
     },
     {
       "id": "t05",

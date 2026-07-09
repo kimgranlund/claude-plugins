@@ -9,7 +9,8 @@ description: >-
   workplace collaboration, productivity, single-purpose utilities, content consumption, social
   media, AI-native apps, games, tracking/quantified-self (habit apps, streaks), health,
   finance/fintech, marketplaces, and
-  travel/booking. ANSWERS and names genre expectations; it does not apply or build them — naming
+  travel/booking. ANSWERS and names genre expectations; it does not apply or build them — NOT for which modules a
+  page or screen needs (ui-patterns); naming
   the underlying pattern is ui-patterns, applying it to a concrete layout is layout-decompose,
   sweeping a whole product for conformance is ui-audit.
 user-invocable: false

@@ -51,6 +51,11 @@
       "id": "n04",
       "prompt": "what order of reasoning does this decision need",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "Improve this prompt brief",
+      "expect": "no-trigger"
     }
   ]
 }

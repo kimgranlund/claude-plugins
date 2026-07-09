@@ -116,6 +116,16 @@
       "id": "n11",
       "prompt": "build an expert knowledge pack on animation easing",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "pick a body and display font pairing for our marketing site with real justification",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "verify the x-height compatibility of the fonts we picked before we ship",
+      "expect": "no-trigger"
     }
   ]
 }

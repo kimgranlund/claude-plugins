@@ -1,17 +1,18 @@
 ---
 name: vision-memo-author
 description: >-
-  Use to author — or evaluate and improve a drafted — vision memo: the class of document that argues
+  Use to author — or improve a drafted — vision memo: the class of document that argues
   *how to think* about a problem, not what to build: manifestos, reframe essays, strategic case-for
   pieces, and synthesis memos. Triggers: "write a vision memo / manifesto / strategic brief / position
   paper / think piece", "make the first-principles case for", "reframe this decision", "crystallize
   this thinking into a shareable doc", "synthesize these competing positions", "tighten this drafted
-  memo's argument against its rubric", or when accumulated conversation-thinking should become a
+  memo's argument", or when accumulated conversation-thinking should become a
   standalone opinionated argument. Picks the archetype (manifesto · reframe · case-for ·
   synthesis), locates the thesis, performs the reduction, and drafts in an opinionated, physics-literal,
   compressed voice; scored by its rubric (doc-reviewer grades it). NOT for a PRD, product brief, or SPEC
   (prd-author / spec-author), an LLD / ADR (lld-author / adr-author), or a reference doc
-  (reference-author) — those describe what to build or document; NOT for marketing copy, a tutorial, a
+  (reference-author) — those describe what to build or document; NOT for scoring or reviewing a finished memo against its rubric (doc-review); NOT for marketing
+  copy, a tutorial, a
   status update, or a neutral balanced survey — a vision memo takes a stake and argues one thesis.
 disable-model-invocation: false
 user-invocable: true

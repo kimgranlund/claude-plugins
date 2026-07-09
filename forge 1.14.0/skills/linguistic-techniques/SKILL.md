@@ -7,7 +7,8 @@ description: >-
   ignores this instruction", "make this prompt/agent/skill more effective", "audit or harden this
   prompt's language", "why doesn't it follow X", "rewrite this so it actually works", or when
   authoring or reviewing any instruction the model must obey. The cross-cutting language layer
-  beneath the artifact authors — NOT for the artifact's structure, standard, or frontmatter
+  beneath the artifact authors — NOT for sharpening WHAT is being asked, the ask/brief/intent
+  itself (intent-extract) — this skill sharpens instructions the model must obey; NOT for the artifact's structure, standard, or frontmatter
   (skill-forge / skill-authoring-standards): the SKILL.md, agent, or CLAUDE.md itself, why a skill
   isn't triggering, or why an agent won't auto-delegate — only the language inside it.
 disable-model-invocation: false

@@ -1,6 +1,6 @@
 {
   "skill": "skill-authoring-standards",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (eval-run 2026-07-09): cases whose true owner is a user-only command leak to this standards skill on a model-only menu — the standards loading as background for a forge-shaped ask is benign (the model then suggests the command). Do not tune the description to chase these.",
   "cases": [
     {
       "id": "t01",

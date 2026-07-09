@@ -4,13 +4,12 @@ description: >-
   Answers questions about common UI patterns — how software UIs are structured at macro (shells, templates)
   and micro (modules) level. Use when naming, choosing, or explaining a pattern: "what pattern is this",
   "name this screen type", "how should a data table / form / wizard behave", "what's the common layout for
-  settings / search / a feed", "what states does a screen need", "empty state best practice", "master-detail
-  or list-detail?", "when is a modal wrong". Covers page templates (master-detail, canvas+inspector, wizard,
-  feed, settings, board, chat), the module catalog (tables, forms, navigation, pickers, toolbars, overlays,
-  search, media/carousel, viz, maps, marketing), and screen-state grammar
+  settings / search / a feed", "what modules does a dashboard / settings / landing page need", "what states does a screen need", "empty state best practice", "when is a modal wrong". Covers page templates (master-detail, canvas+inspector, wizard,
+  feed, settings, board, chat), the module catalog (tables, forms, nav, pickers, toolbars, overlays,
+  search, media, viz, maps, marketing), and screen-state grammar
   (ideal/empty/loading/partial/error). ANSWERS and names patterns — it does not apply or build them:
-  applying a pattern to a layout is layout-decompose, building the module is component-author, sweeping a
-  product for conformance is ui-audit. NOT for what a whole product genre conventionally includes
+  applying to a layout is layout-decompose, building a module is component-author, the
+  whole-product sweep is ui-audit. NOT for what a whole product genre conventionally includes
   (ui-genres).
 user-invocable: false
 disable-model-invocation: false
