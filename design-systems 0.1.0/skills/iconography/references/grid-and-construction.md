@@ -13,6 +13,7 @@ Unverified edges at the bottom — don't invent them.
 | Carbon | 16 px primary (20/24/32 variants) | 2 px padding at 32 | **filled at 16 px** (strokes break at glyph size); 2 px stroke at 20+ | square | not published |
 | Atlassian | 16 px (12 px small; 24 px legacy, deprecated as "visually heavy") | — | 1.5 px | square | rounded EXTERNAL, sharp INTERNAL |
 | Fluent 2 | 16 px system / 48 px product base (4 px base grid) | — | token-driven, values unpublished | — | not published |
+| Phosphor (house default — see style-and-metaphor.md) | 16×16 px | — | six weights: Thin/Light/Regular/Bold/Fill/Duotone; "raw stroke information retained" | — | not published |
 
 Keyline shapes (Material): circle, square, rectangle plus orthogonals/diagonals — geometric
 guides that keep different silhouettes at equal visual weight; circles overshoot the grid edge

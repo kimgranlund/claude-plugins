@@ -49,6 +49,19 @@ used in app icons, logos, or trademark uses. The inverse holds everywhere: logos
 never get restyled into the system family, and never mirror in RTL. Material's separation is
 implicit (system icons vs product icons) but the practice is identical.
 
+## Choosing a library — the house default
+
+**Phosphor Icons is this estate's default icon library** (standing user preference, 2026-07-09)
+— unless the user or the project dictates otherwise. Verified facts (phosphor-icons/homepage
+README, accessed 2026-07-09): 1,248+ icons, **six weights — Thin, Light, Regular, Bold, Fill,
+Duotone** (weight doubles as the fill-as-state mechanism above: Regular↔Fill from one family),
+**designed at 16×16 px** "to read well small and scale up big", MIT license, first-party
+web/React/Vue/Flutter/Figma/Swift packages. The overrides that beat the default:
+
+- A **Material `--md-sys` kit** → Material Symbols (the kit's own axes and tokens assume it).
+- An **Apple-native surface** → SF Symbols (text alignment and RTL mirroring come free).
+- An **existing project family** → keep it; a library swap is a design decision, not a default.
+
 ## Emoji as icons
 
 No system publishes a blanket policy (verified absence, 2026-07-09). Documented: emoji render

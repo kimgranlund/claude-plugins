@@ -1,6 +1,6 @@
 {
  "skill": "iconography",
- "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (construction, sizing, style/metaphor, accessibility/RTL). Negatives adversarially from neighbors: material-design-geometry-tokens (icon-size TOKENS) and design-md-format (the DESIGN.md format itself) are the dangerous same-plugin near-neighbors; plus cross-plugin escapes (component build, i18n/color verification, figma-plugin-api). t14/t15 added with the linguistics-review trigger additions (metaphor selection, tap-target feel), same change as the description edit. Blind run 2026-07-09 (debut): 22/23 — t13 (touch target around a 24dp icon) stolen by material-design-geometry-tokens; genuinely shared territory (the ask carries Material dp vocabulary; geometry's detail.md owns the kit's hit-target floor, this pack owns the WCAG floor). First strike — if a second run agrees, reassign t13 to geometry per the 0.2.3 precedent.",
+ "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (construction, sizing, style/metaphor, accessibility/RTL). Negatives adversarially from neighbors: material-design-geometry-tokens (icon-size TOKENS) and design-md-format (the DESIGN.md format itself) are the dangerous same-plugin near-neighbors; plus cross-plugin escapes (component build, i18n/color verification, figma-plugin-api). t14/t15 added with the linguistics-review trigger additions (metaphor selection, tap-target feel), same change as the description edit. Blind run 2026-07-09 (debut): 22/23 — t13 (touch target around a 24dp icon) stolen by material-design-geometry-tokens; genuinely shared territory (the ask carries Material dp vocabulary; geometry's detail.md owns the kit's hit-target floor, this pack owns the WCAG floor). First strike — if a second run agrees, reassign t13 to geometry per the 0.2.3 precedent. t16 added 2026-07-09 with the Phosphor house-default (library-choice vocabulary now answerable from the corpus).",
  "cases": [
   {
    "id": "t01",
@@ -115,6 +115,11 @@
   {
    "id": "t15",
    "prompt": "is this icon button big enough to tap",
+   "expect": "trigger"
+  },
+  {
+   "id": "t16",
+   "prompt": "which icon set should we standardize on",
    "expect": "trigger"
   }
  ]
