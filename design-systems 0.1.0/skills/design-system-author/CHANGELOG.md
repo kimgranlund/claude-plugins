@@ -1,5 +1,30 @@
 # Changelog — design-system-author
 
+## 2026-07-08 — kit-fidelity re-sync (nonoun-color-tokens PR #229) — hub + all three siblings
+
+*(Entry recovered from the `~/.claude/skills` mirror at its retirement, 2026-07-08 — the change
+itself landed here as commit 4bad63c, but its changelog entry had been written only in the mirror.
+"claude-code" below is the sibling's pre-rename handle; it is `design-system-author-dscard` here.)*
+
+The generator reversed the "R1 measured on-color" doctrine: `onColorMode` is a USER SETTING
+("fixed" = uniform brand labels, sub-4.5:1 accepted per ADR-003; "contrast" = the role table
+re-points per fill/state). Exports ship the kit's resolved roles VERBATIM; contrast is MEASURED
+and DISCLOSED count-exact in the receipt, never silently corrected. Re-synced in lockstep:
+
+- `shared-doctrines.md` §4 R1 rewritten (fidelity, not re-measurement; the F1 fix routes to the
+  KIT's contrast mode) + §5 gate set (disclosed-not-waived, count drift IS a FAIL).
+- `bundle_gates.py`: G1 misses report **DISCLOSED** (exit 0) when the bundle README carries the
+  `onColorMode` ADR-003 disclosure; the disclosed count must be COUNT-EXACT vs the measurement
+  (mismatch = FAIL); selftest locks both directions.
+- `make_guidelines_check.py`: D2 misses report measured-and-disclosed with the receipt present
+  (no count-exact — D2 sees the leaf subset, the receipt counts the full grammar); `--compare`
+  now accepts a DS tokens.json directly (colors/colorsDark → pairs; `$`/container keys skipped)
+  and D10 reads the styles.css full token layer for grammar-named presence.
+- `prelint.py`: `classify <lint.json> [<bundle-README.md>]` — with the disclosure, contrast
+  findings route EXPECTED (a measurement), not ACTION; strict without it.
+- Rubric anchors updated: claude-code B1 (+gates G1), figma-make D2 (+gates), stitch G5/G6
+  (+lint-gate contrast row).
+
 ## 2026-07-05 — recharter as the cross-platform hub (v2)
 
 **The v1 charter moved.** Authoring the Claude Design governed bundle (DESIGN.md spine +
