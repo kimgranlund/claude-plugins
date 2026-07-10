@@ -1,6 +1,6 @@
 # Figma Styles — paint + text styles that BIND to variables (and the traps)
 
-Provenance: the nonoun-color-tokens styles feature, PRs #231–#238 (2026-07-09), including one bug
+Provenance: the ultimate-tokens styles feature, PRs #231–#238 (2026-07-09), including one bug
 caught only by real-Figma validation. Confidence markers per claim.
 
 ## How do I create a paint style bound to a color variable?

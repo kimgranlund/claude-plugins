@@ -291,7 +291,7 @@ def check_folder(root, r, compare=None):
                 if ratio < AA:
                     contrast_bad.append(
                         f"`{tn}` on `{sn}` {scheme} {ratio:.2f}:1 < {AA}:1")
-    # KIT FIDELITY (nonoun-color-tokens PR #229): `onColorMode: fixed` is a user setting whose
+    # KIT FIDELITY (ultimate-tokens PR #229): `onColorMode: fixed` is a user setting whose
     # sub-4.5 pairs are an accepted brand override (ADR-003), disclosed in the bundle README
     # (guidelines/ parent). With the disclosure present, D2 misses report as measured-and-
     # disclosed, not FAIL. (No count-exact check here: the receipt counts the FULL grammar-pair

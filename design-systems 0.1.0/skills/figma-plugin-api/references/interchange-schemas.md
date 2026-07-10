@@ -1,6 +1,6 @@
 # Figma interchange schemas — the JSON that moves tokens in and out
 
-Provenance: the nonoun-color-tokens export/import surfaces (`exportDTCG`, `exportUI3`,
+Provenance: the ultimate-tokens export/import surfaces (`exportDTCG`, `exportUI3`,
 `typeTokensFigmaModes/Primitives`, `modeApplyPlan`, `stylePlans`), 2026-06 → 2026-07.
 These are the shapes that worked against real Figma; markers per claim.
 

@@ -1,6 +1,6 @@
 # Figma Variables — collections, modes, aliasing, and safe mutation
 
-Provenance: the nonoun-color-tokens variable system (Color Primitives → Color Modes cascade,
+Provenance: the ultimate-tokens variable system (Color Primitives → Color Modes cascade,
 Typography/Geometry moded collections, Font Primitives), `figma/plugin/code.js` +
 `figma/binder/*.mjs`, PRs through #238 (2026-07). Confidence markers per claim.
 

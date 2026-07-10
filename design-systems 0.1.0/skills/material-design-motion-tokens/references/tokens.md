@@ -1,7 +1,7 @@
 # The md.sys.motion token table (M3, verified 2026-07-09)
 
 > **Amendment 2026-07-09 (same day) — a nonoun motion export now exists.** It carries a deliberate
-> SUBSET of this table, verified against `nonoun-color-tokens@e3ed458` (`src/engine/motion.mjs`):
+> SUBSET of this table, verified against `ultimate-tokens@e3ed458` (`src/engine/motion.mjs`):
 >
 > | | nonoun export | this table (full M3) |
 > |---|---|---|

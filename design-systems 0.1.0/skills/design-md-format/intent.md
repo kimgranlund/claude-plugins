@@ -32,6 +32,6 @@ format-knowledge seat — its authoring fence now points at design-system-author
 eval routings were corrected in the schema conversion (--md-sys-* semantics → material-design-
 color-tokens; the corpus-authoring flagship → design-system-author-dscard). Doctrine rulings
 ratified at the merge: accessibility is disclose-not-enforce with the gate enforcing count-exact
-disclosure honesty (already implemented in bundle_gates.py via nonoun-color-tokens PR #229);
+disclosure honesty (already implemented in bundle_gates.py via ultimate-tokens PR #229);
 DESIGN.md teaches the system (grammar + consumption roles) while the exhaustive token inventory
 stays in the companion carrier (anatomy.md updated).

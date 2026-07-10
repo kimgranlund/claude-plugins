@@ -1,6 +1,6 @@
 # intent.md — figma-plugin-api
 
-Minted 2026-07-09 from the nonoun-color-tokens Figma work (variables + moded collections + the
+Minted 2026-07-09 from the ultimate-tokens Figma work (variables + moded collections + the
 styles feature, PRs #231–#238) via an intent-extraction fork; placement (design-systems plugin)
 ratified by the owner the same day.
 

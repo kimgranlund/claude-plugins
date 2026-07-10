@@ -1,6 +1,6 @@
 # The Figma plugin sandbox & VM — what actually runs, and what silently doesn't
 
-Provenance: earned in the nonoun-color-tokens generator (repo `nonoun/nonoun-color-tokens`:
+Provenance: earned in the ultimate-tokens generator (repo `nonoun/ultimate-tokens`:
 `figma/plugin/code.js`, `figma/binder/figma-semantic-binder/code.js`, verifiers `test/figma/*.mjs`),
 2026-06 → 2026-07. Confidence markers per claim.
 

@@ -239,7 +239,7 @@ def _norm(h):
     return re.sub(r"\s+", " ", h).strip().lower()
 
 
-# KIT FIDELITY (nonoun-color-tokens PR #229): `onColorMode` is a USER SETTING — "fixed" ships
+# KIT FIDELITY (ultimate-tokens PR #229): `onColorMode` is a USER SETTING — "fixed" ships
 # uniform brand labels whose sub-4.5:1 pairs are an accepted brand override (ADR-003), disclosed
 # in the bundle's README receipt; "contrast" re-points labels inside the role table. The gate
 # stays the MEASUREMENT; the receipt is the DISCLOSURE. read_disclosure returns (count, mode)

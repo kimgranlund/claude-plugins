@@ -229,7 +229,7 @@ def classify_finding(sev, path, message, rule="", disclosed=None):
     if rule == "missing-primary" or ("primary" in msg and ("auto-generate" in msg or "no" in msg)):
         return "ACTION", "add the documented `primary` compat alias of the brand base fill"
     if rule == "contrast-ratio" or "contrast" in msg:
-        # KIT FIDELITY (nonoun-color-tokens PR #229): `onColorMode` is a user setting; "fixed"
+        # KIT FIDELITY (ultimate-tokens PR #229): `onColorMode` is a user setting; "fixed"
         # ships uniform brand labels whose sub-4.5 pairs are an accepted brand override
         # (ADR-003), DISCLOSED in the bundle README. With that receipt passed as the second
         # classify argument, contrast findings are the disclosed measurement — not an ACTION.
