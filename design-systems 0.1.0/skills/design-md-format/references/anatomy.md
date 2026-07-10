@@ -65,7 +65,7 @@ The reference spine, in order — each section earns its place by changing agent
 
 1. **Overview** — the philosophy in one line ("calm, even surfaces carry the layout and color arrives as accent") plus the brand's explicit refusals.
 2. **Colors** — role reasoning ("reason over roles, never raw hexes"), the token naming grammar, surface ladder, the pairing law. See `grammar.md`.
-3. **Typography** — the one-level rule ("set size and line-height and weight together from one level, never free-type"); weight as voice.
+3. **Typography** — the one-level rule ("set size and line-height and weight together from one level, never free-type"); weight as voice; and the **text-rendering baseline, always included** (a fenced CSS block the consumer pastes verbatim): `-webkit-font-smoothing: antialiased` + `-moz-osx-font-smoothing: grayscale` (the macOS pair — consistent weight in both schemes), `text-rendering: optimizeLegibility` (kerning + ligatures engaged), `font-optical-sizing: auto` (variable fonts use their optical axes), `font-synthesis: none` (no faux bold/italic — weights resolve from the actual font, never synthesized), `font-kerning: normal`, `font-variant-ligatures: common-ligatures`, plus `code, pre, kbd { font-variant-ligatures: none }` so code-like units and mono values never ligate.
 4. **Layout** — the spacing composition law ("an off-scale gap does not exist"), reading measure (~60–75ch), whitespace-over-borders.
 5. **Elevation & Depth** — "a surface step, not a drop shadow": background → surface → surface-high; shadow as garnish only.
 6. **Shapes** — the radius-per-element map (chips xs · inputs sm · buttons md · cards lg · modals xl · pills full) and "one radius language per view".

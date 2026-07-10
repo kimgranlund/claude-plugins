@@ -113,6 +113,22 @@ heuristic (distinctiveness vs. neutrality by slot, absent any other signal).
    the vars are re-declared inside `@media` blocks and the same class restyles automatically. A
    Base-only export (no `@media` blocks) is a valid fixed-type choice; don't add fluid
    `clamp()`/`vw` type to "fix" it (see [`references/responsive.md`](references/responsive.md)).
+7. **The text-rendering baseline is always on.** Include it once in the project's global CSS —
+   part of the token layer's contract, not an option:
+   ```css
+   html {
+     -webkit-font-smoothing: antialiased;  /* macOS pair: consistent weight in light AND dark */
+     -moz-osx-font-smoothing: grayscale;
+     text-rendering: optimizeLegibility;   /* kerning + ligatures engaged */
+     font-optical-sizing: auto;            /* variable fonts use their optical axes */
+     font-synthesis: none;                 /* no faux bold/italic — weights resolve from the font */
+     font-kerning: normal;
+     font-variant-ligatures: common-ligatures;
+   }
+   code, pre, kbd { font-variant-ligatures: none; } /* code-like units never ligate */
+   ```
+   `font-synthesis: none` means an unresolvable weight renders at the nearest REAL weight — if
+   something looks un-bold, fix the loaded font (or the `-weight` var), never fake it.
 
 ## Surface map — where to look things up
 

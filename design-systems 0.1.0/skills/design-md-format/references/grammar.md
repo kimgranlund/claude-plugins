@@ -48,5 +48,5 @@ A DESIGN.md ships the brand's values **verbatim** and discloses what measurement
 
 - **Spacing** — one closed ladder (reference: 0/4/8/12/16/24/32/48/64/96). The law travels with it: *an off-scale gap does not exist.*
 - **Radii** — one closed scale with an element map (chips xs · inputs sm · buttons md · cards lg · modals xl · pills full) and the mixing prohibition: one radius language per view.
-- **Typography** — leading is a **unitless factor**, tracking is **em**; px in either slot is a defect. Weight is voice: never interchange weights across levels.
+- **Typography** — leading is a **unitless factor**, tracking is **em**; px in either slot is a defect. Weight is voice: never interchange weights across levels. The section always carries the **text-rendering baseline** block (the macOS smoothing pair · `text-rendering: optimizeLegibility` · `font-optical-sizing: auto` · `font-synthesis: none` · `font-kerning: normal` + `font-variant-ligatures: common-ligatures` · the `code, pre, kbd { font-variant-ligatures: none }` exception) — a DESIGN.md whose Typography section omits it is incomplete.
 - **Geometry (optional extended layer)** — a control-size ramp (height/icon/font/padding per size step), insets, gaps, border widths, and a numeric focus ring (e.g. 2px ring at 2px offset). Include when the brand ships dense product UI.
