@@ -72,6 +72,7 @@ condition, whenever the work already has one:
 | `eval_check.py <suite>` | 0 FAIL findings | 3 tries |
 | `handoff_check.py <block>` | H1 gate passes | 1 try — a malformed handback is a compose error, not a retry loop |
 | a bug-shaped TICKET's `## Findings` section | gains a dated entry (bug-report's own dispatch contract) | 5 tries, per-investigation |
+| a feature-shaped TICKET's `## Findings` section | gains a dated entry (the `/build` dispatch contract) | 5 tries per build |
 
 A cap that repeats the identical fix is thrashing, not iterating — the escalation clause (Design
 step 2) fires on the *same* check failing twice, not merely on failing twice.

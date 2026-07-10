@@ -76,6 +76,17 @@ defeats the filtering `kind: bug` exists for. `Findings` is append-only in pract
 mechanically): every dispatched investigation adds a dated entry at each significant result, not
 only at the end — the record that survives a fork killed mid-investigation.
 
+## Feature-shaped tickets
+
+A feature idea is likewise a TICKET, not a ninth type: `kind: feature` plus `size: small | big`
+in frontmatter (machine-read — orchestration's `/build` branches its dispatch machinery on it;
+small = one context holds it, no contract change · big = multi-component, contract-changing, or
+decision-ratifying — the estate's one materiality floor), and two sections beyond the type's
+minimum: Scope/Open (the intake's named gaps) and Findings (same append-only dated-entry
+discipline as bug tickets — the build's write-back lands here). Scribe's `/feature` mints and
+updates these; big features link their earned PRD/SPEC/LLD through the standard Links section,
+never inline.
+
 **Which type?** Route by the question being answered: recording a decision → ADR; why build →
 PRD; what exactly → SPEC; how internally → LLD; in what order → PLAN/ROADMAP; who does what next →
 TICKET/TASK. A document answering two of these questions is usually two documents joined by IDs.

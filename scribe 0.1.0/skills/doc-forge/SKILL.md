@@ -6,7 +6,8 @@ description: >-
   template, language pass, doc_lint validation. Run /doc-forge [type and one-line intent], e.g.
   "/doc-forge adr postgres over dynamo" or "/doc-forge spec for the checkout flow". Human-timed;
   writes one document. NOT for the rules themselves (doc-authoring-standards); NOT for reviewing
-  an existing document (doc-review); NOT for capturing and dispatching a bug investigation
+  an existing document (doc-review); NOT for feature intake (feature — it routes here for the TICKET);
+  NOT for capturing and dispatching a bug investigation
   end-to-end (bug-report, which calls this skill's own TICKET path internally).
 disable-model-invocation: true
 user-invocable: true

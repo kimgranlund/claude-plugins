@@ -3,16 +3,15 @@ name: bug-report
 description: >-
   Capture a user-reported bug — functional, structural, visual, or subjective — as a durable
   bug-shaped TICKET before any investigation starts, then dispatch the investigation (fork or
-  agent) under a mandatory write-back contract. Closes the loss window that raw ad hoc
-  `/fork bug-name ...` leaves open: the report and its findings lived only in the fork's context
-  and vanished with it. Runs intent-extract (literal report vs. root cause and repro) and
+  agent) under a mandatory write-back contract. Closes the loss window raw `/fork bug-name ...`
+  leaves open: report + findings lived only in the fork's context and vanished with it. Runs intent-extract (literal report vs. root cause and repro) and
   system-decompose (which part of the system is implicated) during capture, then doc-forge's
   TICKET path to record it, then dispatches with the ticket path as context. Run
   /bug-report [raw report, or an existing TKT- id to resume], e.g. "/bug-report the export button
-  does nothing on Safari" or "/bug-report TKT-0031". Human-timed; writes one ticket, then dispatches
-  or resolves one investigation. NOT for non-bug documents (doc-forge); NOT for reviewing a doc
-  (doc-review); NOT for intent extraction or system decomposition outside a bug (intent-extract,
-  system-decompose).
+  does nothing on Safari" or "/bug-report TKT-0031". Human-timed; writes one ticket, then one
+  investigation. NOT for a feature idea or build request (feature / orchestration's build);
+  NOT for non-bug documents (doc-forge); NOT for reviewing a doc
+  (doc-review); NOT for intent extraction outside a bug (intent-extract).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[raw bug report, or an existing TKT- id to resume]"

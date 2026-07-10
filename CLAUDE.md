@@ -16,8 +16,9 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Split or merge a pack; execute the verdict | `/skill-decompose` · `/skill-synthesize` → `/skill-refactor` |
 | Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | scribe: `/doc-forge` · `/doc-review` |
 | A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work; it drops the report on exit |
+| A feature idea to capture, or a feature to build | scribe: `/feature` (pure intake → sized ticket/doc/corpus) · orchestration: `/build` (record-first build — runs the intake when no record exists) |
 | Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s Map |
-| A2UI protocol / renderer / catalog / training-corpus knowledge | `agentic-ui` — scoped for future A2A content too, none built yet |
+| A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agentic-ui` (the A2UI four + the A2A four) |
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
 | Design-system export bundles (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design-systems` |

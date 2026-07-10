@@ -103,7 +103,7 @@ changed understanding. Re-dispatch, don't edit.
 - **doc-reviewer** is the memo's independent critic — it loads `references/rubric.md` and scores.
 - **[[intent-extract]]** / **[[intent-grill]]** sharpen a fuzzy "make the case for X" into a statable
   thesis *before* drafting (the V1 precondition).
-- **doc-forge** (this plugin) owns the what-to-build documents — PRD, SPEC, LLD, ADR; this owns
+- **doc-forge** (this plugin) owns the what to build documents — PRD, SPEC, LLD, ADR; this owns
   the argument for *how to think* about building it. Route a spec request there, not here.
 - **[[rubric-forge]]** owns `references/rubric.md`'s shape.
 
