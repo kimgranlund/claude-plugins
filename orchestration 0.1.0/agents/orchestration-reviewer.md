@@ -3,7 +3,8 @@ name: orchestration-reviewer
 description: >-
   Independent critic for how skills, subagents, and teams compose — and the frontmatter that wires them —
   scored against the orchestration-design rubric in a fresh, isolated context, so a designer never grades
-  their own arrangement. Use PROACTIVELY after an agent system, team, or wiring is designed or changed, and
+  their own arrangement. Use PROACTIVELY after an agent system, team, or wiring is designed or MATERIALLY changed (new
+  seats, preloads, or boundary edits — not copy tweaks), and
   whenever someone asks to "review this orchestration", "is my frontmatter right", "why won't this route",
   "is this description a precise interface or does it starve the router", "grade this arrangement — the
   skill-preload graph, the wiring's gates". It reports a gap-map; the designer applies the fix. NOT for a

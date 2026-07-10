@@ -4,7 +4,7 @@ Scores a system's use of skills, subagents, and teams together, and the frontmat
 
 | # | Dimension | Type | What it checks | 1 → 3 → 5 |
 |---|---|---|---|---|
-| D1 | Right unit choice | [review] | skill / subagent / team matched to task (procedure / result / collaboration) | 1: team where a subagent would do · 3: defensible · 5: each unit matched to task shape |
+| D1 | Right unit choice | [review] | HOST-INLINE (the null unit, the default) / skill / subagent / team matched to task — a seat must buy isolation, parallelism, or independence the host can't provide | 1: team where a subagent would do, or a seat where host-inline would do · 3: defensible · 5: each unit matched to task shape, null unit respected |
 | D2 | Connective-tissue health | [gate] | Every capability's description is a precise interface | 1: vague descriptions present · 3: mostly precise · 5: all descriptions are clean triggers |
 | D3 | Static vs. dynamic wiring | [review] | `skills:` preload for standing expertise; discovery left dynamic otherwise | 1: hard-wires everything or nothing · 3: partial · 5: deliberate split |
 | D4 | Frontmatter validity | [gate] | Required fields present, correct keys, version-checked | 1: missing/invalid keys · 3: valid · 5: valid + verified against build |

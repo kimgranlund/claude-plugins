@@ -4,8 +4,8 @@ description: >-
   The build seat for a team. Use to implement an approved LLD's build sequence step by step and keep
   the code within the system-design rules and the standing gates. Runs the mechanical checks and returns
   evidence — the independent reviewer issues the verdict; escalates needed design changes to the
-  coordinator rather than editing the contract. Use PROACTIVELY when building from an LLD or when code
-  must be brought into adherence with the system design. NOT for UI component builds in a repo with its
+  coordinator rather than editing the contract. Use PROACTIVELY when building from an LLD or when adherence
+  work spans more than one context — a single-context fix is the host's own, no seat. NOT for UI component builds in a repo with its
   own build seat (component-builder, a2ui-builder) — the repo seat owns its standard; NOT for
   reviewing the change it built or issuing the merge verdict (code-reviewer); NOT for running a
   measured experiment loop to find something — optimizing to a scorer, bisecting a regression, or

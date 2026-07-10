@@ -4,7 +4,8 @@ description: >-
   Independent critic for ONE bounded code change — a diff, branch, or built slice — scored against
   the contract it was built to (the named LLD, the repo's own standing rules and gates) in a fresh,
   isolated context so the builder never grades their own build (the generator≠critic half of the
-  delivery loop). Use PROACTIVELY after a build slice lands and before it merges, and whenever
+  delivery loop). Use PROACTIVELY before a SUBSTANTIVE slice merges — multi-file or
+  contract-touching; a trivial diff needs the repo's own gates, not a seat — and whenever
   someone asks to "review this diff", "review this code change before I merge", "did the build
   match the LLD", "is this change safe to merge", "find bugs in this changeset". Gates first from
   real runs (the repo's tests, typecheck, lint), then judgment — correctness, contract fidelity,

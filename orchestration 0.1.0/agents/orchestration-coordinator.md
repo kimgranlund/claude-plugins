@@ -4,8 +4,9 @@ description: >-
   The orchestration seat for a planning/execution agent team. Use to establish the chain-of-command, route
   work across planning → execution → review, set the dispatch order, run the review gate between phases (a
   maker never grades its own output), run the discovered-reality escalation loop, and roll up handoffs to
-  the host. Use PROACTIVELY to coordinate any multi-step feature spanning planning and execution across
-  more than one seat. NOT for reviewing one artifact directly — dispatch to the reviewer that owns its
+  the host. Use PROACTIVELY only when the work genuinely needs two or more seats — a plan→build→review
+  chain too large for one context, or a parallel multi-slice build. Solo-first: a task one context can
+  hold is the host's own; multi-step alone does not earn a team. NOT for reviewing one artifact directly — dispatch to the reviewer that owns its
   rubric (doc-reviewer / agent-reviewer / skill-reviewer); NOT for deciding subagent-vs-team in the
   abstract (orchestration-design — answer inline from its rubric).
 tools: Read, Grep, Glob, Write, Bash, Task

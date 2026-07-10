@@ -28,7 +28,12 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
 - Every dispatch is a sealed contract: charter + enumerated inputs + budget + typed return (`references/best-practices.md` "The dispatch is a sealed contract"); the worker never sees the host's deliberation or sibling transcripts.
 
 ## Design
-1. Match the unit to the task; justify team fan-out by genuine parallel value.
+1. **Solo-first — the host inline is the null unit and wins by default.** A seat must buy
+   something the host cannot provide: isolation (fresh context), parallelism (genuinely
+   concurrent slices), or independence (generator≠critic on a high-stakes artifact). A team must
+   buy it twice. A dispatch that costs more context and latency than doing the work inline is
+   over-orchestration, whatever the task's step count — then match the unit to the task and
+   justify team fan-out by genuine parallel value.
 2. Each description a precise interface; `tools` scoped, `model` to task class, `skills:` only for standing expertise; verify keys against the installed build.
 3. Keep teammate roles as subagent definitions (teams compose them at runtime).
 4. Dispatch sealed and shallow: enumerate inputs, state the budget, name the typed return; depth ≤ 2 (host → specialist) — a third level needs justification, a fourth means the decomposition under-cut.
@@ -63,4 +68,4 @@ Top issues: 1) … — fix: …
 | `[[handoff-compose]]` | The return contract a composed agent hands back — the other half of composition |
 | `[[loop-design]]` | Continuation mechanics (`/goal`, `/loop`, hooks) and loop discipline — owns the self-orchestrated-looping canon (budgets, locus escalation, durable state) |
 
-**Done** when every unit matches its task shape, every description is a precise fenced interface, frontmatter is verified against the build, dispatches are sealed and typed, both gate dimensions (D2, D4) score ≥ 3, and a high-stakes arrangement carries its independent orchestration-reviewer pass. **NOT done** while any description starves the router, a fence is one-way, a dispatch leaks history or lacks a budget, planes are conflated — or the only score the arrangement has is its designer's.
+**Done** when every unit matches its task shape (the null unit respected — no seat doing host-inline work), every description is a precise fenced interface, frontmatter is verified against the build, dispatches are sealed and typed, both gate dimensions (D2, D4) score ≥ 3, and a high-stakes arrangement carries its independent orchestration-reviewer pass. **NOT done** while any description starves the router, a fence is one-way, a dispatch leaks history or lacks a budget, planes are conflated — or the only score the arrangement has is its designer's.

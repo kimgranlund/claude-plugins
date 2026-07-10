@@ -81,6 +81,8 @@ Frontmatter is the integration contract. Treat each field as load-bearing.
 - Scope `tools` to the role's actual needs.
 - Use `skills:` preload for a specialist that should never have to "discover" its expertise.
 - Keep discovery dynamic; only hard-wire what genuinely must always be present.
+- Solo-first: the host inline is the null unit — dispatch a seat only for isolation,
+  parallelism, or independence the host can't provide.
 - Match the unit to the task: subagent for results, team for collaboration, skill for procedures.
 - Dispatch sealed: enumerate the inputs, state the budget, name the typed return — never leak history or sibling output.
 - For a parallel build, fan file-disjoint slices into one tree; let each worker self-gate its own path and the host gate the whole tree at the wave boundary.
@@ -91,6 +93,8 @@ Frontmatter is the integration contract. Treat each field as load-bearing.
 - Write vague descriptions ("helps with documents") — that starves the router and silently disables the capability.
 - Inherit the full toolset by omitting `tools` on a constrained role.
 - Reach for a team when a subagent's summary would do.
+- Dispatch a seat for work the host finishes inline faster than the dispatch round-trips —
+  "multi-step" alone never earns a team.
 - Nest delegation past host → specialist without justification — depth is a smell of under-decomposition.
 - Conflate discovery with continuation (see foundations).
 - Spin up a worktree per slice for a file-disjoint fan-out — it adds merge cost for no isolation gain; worktrees are the overlap-only fallback.
