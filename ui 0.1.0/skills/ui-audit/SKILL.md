@@ -54,7 +54,7 @@ instruments over every surface, then synthesizes the cross-cutting findings.
    Each has a deterministic checker — run it; a checker FAIL is a gate finding, not an opinion.
    When the app RUNS, generate the cards from rendered truth:
    `node scripts/ui-probe.mjs <baseURL> --inventory inventory.json` (needs playwright — the target
-   repo's install works) — probed cards supersede hand-built ones; hand-build only what the probe
+   repo's install works) — probed cards supersede hand-built ones; author by hand only what the probe
    can't reach, and report those as computed-not-measured.
 5. **Pattern conformance.** Anchor the genre first — [[ui-genres]] names what THIS category's
    users expect, so conformance asks "the right pattern for this kind of product", and a deliberate

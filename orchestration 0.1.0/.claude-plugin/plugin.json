@@ -1,9 +1,9 @@
 {
   "name": "orchestration",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end.",
   "license": "MIT",
   "author": {
-    "name": "Agentic Harness"
+    "name": "Kim G / NONOUN"
   }
 }
