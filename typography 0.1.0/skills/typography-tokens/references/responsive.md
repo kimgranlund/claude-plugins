@@ -3,10 +3,13 @@
 ## Breakpoint modes (not `clamp()`, not `vw`)
 
 If a kit was exported with breakpoint modes, the `--type-*` variables are **re-declared inside
-`@media (min-width: …)` blocks** — one block per breakpoint (a common web set steps at
-768/992/1280/1540 above a mobile Base). Because a `.type-{voice}-{step}` class reads the
-*variables*, the same class restyles automatically at each breakpoint: you write `.type-body-md`
-once and it grows with the viewport.
+`@media (min-width: …)` blocks** — one block per breakpoint; read the actual widths from the blocks
+(Ultimate Tokens kits since 2026-07 always carry **Mobile ≤476 → Tablet 992 → Desktop 1280**; other
+producers choose their own ladder). Because a `.type-{voice}-{step}` class reads the *variables*,
+the same class restyles automatically at each breakpoint: you write `.type-body-md` once and it
+grows with the viewport. Expect **hierarchy-aware** stepping: body-class text may be frozen across
+breakpoints while display-class type compresses steeply on smaller screens — that asymmetry is the
+system, not a defect to normalize.
 
 - **Do not** author fluid `clamp()` type or `vw`-based font sizes — if modes exist they are the
   responsive mechanism and land on the kit's exact quantized sizes at each breakpoint (no
