@@ -91,7 +91,7 @@ or the project manifest's name field where one exists), so doc-shaped asks ("wha
 requirements for X", "which tickets are open") route to the corpus in every future session.
 Options: install (recommended) · not now. Installing writes exactly one file and reports the
 path. Declined → one pointer line in the close-out report ("index skill not installed — a later
-/feature run can add it"), no re-ask this session, no marker files — which is why the option is
+/feature run can add it; a scattered existing corpus is /docs-align's job"), no re-ask this session, no marker files — which is why the option is
 "not now", never "never": with no durable record of a refusal, a standing no cannot be honored,
 so it is not offered. This step is opt-in by design: writing into `.claude/skills/` changes the
 project's routing surface, and that earns a knowing yes even inside a human-timed command. The

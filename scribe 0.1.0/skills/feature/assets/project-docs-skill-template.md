@@ -29,8 +29,13 @@ path; a question the corpus doesn't answer is reported as absent, never guessed.
 | Horizons of intent — Now / Next / Later | `docs/roadmap/` (ROADMAP-*) |
 | One actor, one sitting, one done-when | `docs/task/` (TASK-*) |
 
-(Directories that don't exist simply mean the project has none of that record type yet — say
-so. Knowledge corpora authored at intake are linked from their ticket, not mapped here.)
+(A directory that doesn't exist usually means the project has none of that record type yet —
+but before answering "absent", sweep for near-miss locations: misnamed dirs (`docs/specs/`,
+`rfcs/`, `design-docs/`, `adrs/`), loose files (`NOTES.md`, `DECISIONS.md`, `ARCHITECTURE.md`),
+doc-shaped README sections. A hit → answer with the real location, marked non-canonical:
+"spec-shaped content lives at rfcs/ — not indexed; /docs-align (scribe) can migrate it." A false
+"this project has no specs" is this skill's own worst failure. Knowledge corpora authored at
+intake are linked from their ticket, not mapped here.)
 
 ## Consult procedure
 
