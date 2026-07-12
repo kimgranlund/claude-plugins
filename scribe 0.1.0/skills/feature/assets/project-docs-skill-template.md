@@ -33,7 +33,7 @@ path; a question the corpus doesn't answer is reported as absent, never guessed.
 but before answering "absent", sweep for near-miss locations: misnamed dirs (`docs/specs/`,
 `rfcs/`, `design-docs/`, `adrs/`), loose files (`NOTES.md`, `DECISIONS.md`, `ARCHITECTURE.md`),
 doc-shaped README sections. A hit → answer with the real location, marked non-canonical:
-"spec-shaped content lives at rfcs/ — not indexed; /docs-align (scribe) can migrate it." A false
+"spec-shaped content lives at rfcs/ — not indexed; /docs-alignment (scribe) can migrate it." A false
 "this project has no specs" is this skill's own worst failure. Knowledge corpora authored at
 intake are linked from their ticket, not mapped here.)
 

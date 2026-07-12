@@ -1,22 +1,24 @@
 ---
-name: docs-align
+name: docs-alignment
 description: >-
   Align an existing repo's scattered documents to the canonical docs/ layout — inventory what
   document reality the repo actually has (rfcs/, design-docs/, NOTES.md, spec-shaped README
   sections, near-miss dirs like docs/specs/), classify each artifact by the question it answers,
   propose ONE batched migration plan, and on approval execute it with git mv (history preserved),
   minimal frontmatter, link repair, and the project-docs index installed at the end. Run
-  /docs-align [optional: a subtree to scope the sweep]. Human-timed; one approval gate for the
+  /docs-alignment [optional: a subtree to scope the sweep]. Human-timed; one approval gate for the
   whole plan; migration only — content is never rewritten. NOT for authoring a document
   (doc-forge); NOT for reviewing content quality (doc-review); NOT for capturing a new idea or
   bug (/feature, /bug-report); NOT for repos with no documents (the index bootstrap alone is
-  /feature's Phase 6).
+  /feature's Phase 6); NOT for whole-harness drift — entry files, dead
+  automation, corpus liveness (repo-alignment, forge — it decides a repo's grammar; this
+  command executes the canonical-map case).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[optional subtree to scope the sweep]"
 ---
 
-# docs-align — migrate the corpus, never the content
+# docs-alignment — migrate the corpus, never the content
 
 Turns a repo's scattered document reality into the canonical layout the tooling and the
 project-docs index assume — `doc-authoring-standards`' directory-per-type map is the single

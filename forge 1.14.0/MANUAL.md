@@ -26,6 +26,9 @@ Install, then `/reload-plugins`. Everything below is invoked as `/forge:<name>` 
 **`/harness-audit [root]`** — the recurring outer loop: lint sweep, standards-preloading fresh-context reviews of every artifact, triage table routing each finding to a fix, a decision, or permanent infrastructure.
 > `/harness-audit` · `/harness-audit ~/projects/monorepo`
 
+**`/repo-alignment [repo path] [--phases 0-6 | audit-only]`** — the committing campaign for a drifted repo (where `/harness-audit` only reports): phased inventory → unify duplicates → orphan manifest → schema + standing guards → audit verdicts → work-package execution → lessons distillation; human-checkpointed at every destructive step.
+> `/repo-alignment .` · `/repo-alignment ~/projects/app audit-only`
+
 **`/eval-run [plugin-root]`** — run the trigger-eval suites as a blind routing simulation: judges pick a skill from the description menu alone; you get a routing matrix and per-failure tuning targets (stolen / leaked / dead).
 > `/eval-run .` — worth running after any description edit
 

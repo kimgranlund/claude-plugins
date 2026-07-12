@@ -16,7 +16,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Split or merge a pack; execute the verdict | `/skill-decompose` · `/skill-synthesize` → `/skill-refactor` |
 | Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | scribe: `/doc-forge` · `/doc-review` |
 | A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work; it drops the report on exit |
-| Scattered docs in an existing repo to organize into the canonical layout | scribe: `/docs-align` (one approval gate, git mv, never rewrites prose) |
+| Scattered docs in an existing repo to organize into the canonical layout | scribe: `/docs-alignment` (one approval gate, git mv, never rewrites prose) |
 | A feature idea to capture, or a feature to build | scribe: `/feature` (pure intake → sized ticket/doc/corpus) · orchestration: `/build` (record-first build — runs the intake when no record exists) |
 | Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s Map |
 | A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agentic-ui` (the A2UI four + the A2A four) |
@@ -26,7 +26,8 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | UI structure (layouts, flows, components, patterns), motion knowledge (durations/easing/reduced-motion), or non-functional verification (focus/i18n/perf/safety) | `ui` |
 | Multi-agent feature-delivery team (plan → build → review → coordinate), composition/continuation design | `orchestration` |
 | Routing proof after description edits | `/eval-run <plugin>` |
-| Periodic health sweep | `/harness-audit` |
+| Periodic health sweep | `/harness-audit` (read-only; proposes) |
+| A drifted repo — duplicated instruction trees, stale corpus, dead automation: the committing campaign | forge: `/repo-alignment` |
 | Ship | `/plugin-release <plugin>` — the only way anything ships |
 
 ## Common commands

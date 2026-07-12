@@ -51,7 +51,7 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    consume THIS map — a second map is drift): `docs/prd/` · `docs/spec/` · `docs/lld/` ·
    `docs/adr/` · `docs/plan/` · `docs/roadmap/` · `docs/tickets/` · `docs/task/`. The two
    pluralization exceptions (`tickets`, `adr`) are historical and load-bearing (three command
-   skills hardcode `docs/tickets/`) — recorded, not to be "fixed". Aligning an EXISTING repo to this map is `/docs-align`'s job.
+   skills hardcode `docs/tickets/`) — recorded, not to be "fixed". Aligning an EXISTING repo to this map is `/docs-alignment`'s job.
 
 ## The type contract table
 
