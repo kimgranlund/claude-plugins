@@ -47,6 +47,11 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    criterion with no requirement is scope creep in the evaluator.
 6. **Location and naming are routing.** `docs/adr/adr-0042-postgres-over-dynamo.md` — type, then
    number/date, then slug; directory conventions are what let hooks and path-scoped rules fire.
+   The canonical directory per type (ruled 2026-07-12; doc-forge and the project-docs index both
+   consume THIS map — a second map is drift): `docs/prd/` · `docs/spec/` · `docs/lld/` ·
+   `docs/adr/` · `docs/plan/` · `docs/roadmap/` · `docs/tickets/` · `docs/task/`. The two
+   pluralization exceptions (`tickets`, `adr`) are historical and load-bearing (three command
+   skills hardcode `docs/tickets/`) — recorded, not to be "fixed".
 
 ## The type contract table
 

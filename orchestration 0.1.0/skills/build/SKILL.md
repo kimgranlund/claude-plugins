@@ -31,8 +31,9 @@ carrying the evidence. Seed: `$ARGUMENTS`.
 - Otherwise sweep the three surfaces `/feature`'s dedup names — records (`docs/tickets/`,
   ROADMAP/PLAN), the codebase, and existing docs/corpora: a queued match → build from it; an already-shipped match → report where
   it lives and stop.
-- **No match → run the full `/feature` intake first** (scribe, where installed; apply its phases
-  inline where not: extract → dedup → size/shape → lint-clean `kind: feature` ticket). The record
+- **No match → run the full `/feature` intake first** (scribe, where installed — its opt-in
+  project-docs index offer rides along; apply its phases inline where not: extract → dedup →
+  size/shape → lint-clean `kind: feature` ticket, no index offer without scribe's template). The record
   exists on disk before any build effort is spent — ticket-first is the entire loss-window fix,
   and it does not move.
 

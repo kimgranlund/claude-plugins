@@ -41,7 +41,7 @@ Copy `references/templates/<type>.md` (in doc-authoring-standards) and fill it â
 the contract, not a suggestion: frontmatter complete, required sections present, head-first
 ordering, IDs minted where the type carries them (REQ-, OUT-, step numbers), substrate referenced
 never restated. Instance filename per the standards: type, number/date, slug, in the type's
-directory (`docs/adr/`, `docs/specs/`, ...).
+directory, per doc-authoring-standards' canonical map (`docs/adr/`, `docs/spec/`, ...).
 
 ## Phase 4 â€” Language pass
 

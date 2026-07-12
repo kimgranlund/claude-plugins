@@ -9,7 +9,8 @@ description: >-
   may already exist or already be queued), and system-decompose (which plane, what size), then
   routes the record by shape. Run /feature [raw idea, or an existing TKT- id to resume], e.g.
   "/feature calculator that uses a tarzan theme" or "/feature TKT-0042". Human-timed; writes one
-  record set, then stops — building is /build's job (orchestration, where installed). NOT for
+  record set (plus, opt-in on first run, the project-docs index skill), then stops — building is
+  /build's job (orchestration, where installed). NOT for
   bug-shaped reports (bug-report); NOT for dispatching or performing the build (/build); NOT for
   other document types (doc-forge).
 disable-model-invocation: true
@@ -80,6 +81,22 @@ write-back. Run `doc_lint.py` — fix until clean; an unlintable record is not a
 Place it: add the line to ROADMAP (Now/Next/Later) or PLAN **only where those docs already
 exist** — never mint living-state docs unprompted.
 
+## Phase 6 — Bootstrap the project index (opt-in, when absent)
+
+The record is durable but not yet DISCOVERABLE: a fresh session finds `docs/` only if told. When
+`.claude/skills/project-docs/SKILL.md` is absent from the project, offer — once, via ONE
+AskUserQuestion — to install the project-docs index skill from this skill's
+`assets/project-docs-skill-template.md` (fill `{{PROJECT_NAME}}` from the repo directory name,
+or the project manifest's name field where one exists), so doc-shaped asks ("what are the
+requirements for X", "which tickets are open") route to the corpus in every future session.
+Options: install (recommended) · not now. Installing writes exactly one file and reports the
+path. Declined → one pointer line in the close-out report ("index skill not installed — a later
+/feature run can add it"), no re-ask this session, no marker files — which is why the option is
+"not now", never "never": with no durable record of a refusal, a standing no cannot be honored,
+so it is not offered. This step is opt-in by design: writing into `.claude/skills/` changes the
+project's routing surface, and that earns a knowing yes even inside a human-timed command. The
+skill already present → skip silently.
+
 ## Failure branches
 
 - Idea too vague after one round → capture with gaps named (Phase 2); never stall persistence.
@@ -87,7 +104,9 @@ exist** — never mint living-state docs unprompted.
 - `doc_lint.py` fails → fix and re-run.
 - The ask is actually bug-shaped ("X is broken") → hand to `bug-report`, don't force a feature
   ticket onto a defect.
+- Index bootstrap declined → the pointer line, nothing else this session.
 
 Done when a lint-clean `kind: feature` record exists on disk sized and shaped correctly, linked
-into whatever queue docs exist, with every extraction gap named — and NO build was dispatched
+into whatever queue docs exist, with every extraction gap named, the index offer's disposition
+reported (installed path, pointer line, or already-present skip) — and NO build was dispatched
 (that is `/build`'s contract, orchestration plugin, where installed).
