@@ -114,6 +114,22 @@ Match grammatical mood to the computation wanted. Imperatives request the *form*
 
 The check is a **baseline comparison**: a few realistic prompts, each run in a fresh session with the skill available and again with it disabled (`skillOverrides: "off"`), comparing trigger reliability and output quality separately — a skill triggering proves Claude found it, not that it worked. A fresh session is mandatory; authoring-session context masks gaps in the written instructions. The official `skill-creator` plugin automates the loop (isolated runs, grading, benchmark, description tuning with should-trigger and near-miss should-not-trigger prompts). `/skill-forge` builds this in as Phase 2 and Phase 5.
 
+## What an edit owes — the tier ladder
+
+Authoring earns the full loop; an edit owes only its tier (ruled 2026-07-12, codifying the
+estate's proven practice — the forge-side twin of orchestration's solo-first floors):
+
+| Edit class | Owes |
+|---|---|
+| **Mechanical** — trim, typo, formatting, a suite annotation, a ledger line | lint, nothing more |
+| **Description/boundary** — trigger phrasing, a fence added or moved, dials | lint + the suite updated in the SAME change + `/eval-run` at the wave boundary (a batch of boundary edits shares one run; per-edit runs are ceremony) |
+| **Semantic body change, or a new artifact** | the full loop — lint, fresh-context critic (generator ≠ critic), behavior check |
+
+Two clauses the ladder carries: **a reciprocal fence costs description characters — re-budget
+the description before adding one**, not after the 1,024 warn (the trim round-trip is the
+predictable failure); and an edit that *changes tier mid-flight* (a "trim" that reworded a
+trigger) owes the higher tier it became.
+
 ## Failure catalog
 
 | Failure | Mechanism | Fix |
