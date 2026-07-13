@@ -30,7 +30,7 @@ One question per turn; the record lands next to the agent file as `<name>.intent
 - **Tool walls** — the least-privilege `tools` list. Reporting agents get `Write` plus the single-write discipline line.
 - **Preloads** — which skills carry the knowledge. Each must exist and be model-invocable (`disable-model-invocation: true` blocks preloads); a needed module that doesn't exist routes to `/skill-forge` first.
 - **Dispatch shape** — what the spawner passes every time (target, destination, deltas). These become the failure branches for missing fields.
-- **Config** — model / effort / maxTurns only where the default is wrong; `color` by function (analysis blue/cyan, validation yellow, generation magenta).
+- **Config** — `model` + `effort` from the seat ladder (`agent-authoring-standards` §Model tiering) — state the row, never leave it implicit; `maxTurns` only where the default is wrong; `color` by function (analysis blue/cyan, validation yellow, generation magenta).
 
 Name check before closing: agentive head that reconstructs the primary preload (`x-review` → `x-reviewer`); the interview rejects status nouns.
 
@@ -51,7 +51,8 @@ description: |
   user: "<verbatim ask>"
   assistant: "Dispatching <name> on <target>."
   </example>
-model: inherit
+model: <seat-ladder row — agent-authoring-standards §Model tiering>
+effort: <its effort default>
 color: <function color>
 tools: ["Read", "Grep", "Glob"<, "Write" if reporting>]
 skills:

@@ -109,7 +109,8 @@ name: security-reviewer
 description: Reviews code for security exposure and hardening gaps. Use
   PROACTIVELY immediately after writing or modifying code.
 tools: Read, Grep, Glob, Bash
-model: sonnet
+model: fable
+effort: high
 skills: [clinical-coding-standards]
 ---
 You are a senior code reviewer. When invoked: run `git diff`, focus on changed

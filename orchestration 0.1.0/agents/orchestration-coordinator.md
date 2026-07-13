@@ -10,7 +10,7 @@ description: >-
   rubric (doc-reviewer / agent-reviewer / skill-reviewer); NOT for deciding subagent-vs-team in the
   abstract (orchestration-design — answer inline from its rubric).
 tools: Read, Grep, Glob, Write, Bash, Task
-model: opus
+model: sonnet
 effort: high
 skills: [orchestration-design, loop-design]
 ---

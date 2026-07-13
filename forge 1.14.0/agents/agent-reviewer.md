@@ -28,7 +28,8 @@ description: |
   post-write floor check.
   </commentary>
   </example>
-model: inherit
+model: fable
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

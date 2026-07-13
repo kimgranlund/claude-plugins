@@ -11,7 +11,8 @@ description: >-
   fix. NOT for one screen's layout (layout-reviewer), documents (doc-reviewer), or the
   whole-product sweep (ui-audit).
 tools: Read, Grep, Glob, Bash
-model: opus
+model: fable
+effort: high
 skills: [flow-decompose]
 ---
 

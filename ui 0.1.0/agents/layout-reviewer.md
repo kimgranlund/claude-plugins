@@ -13,6 +13,7 @@ description: >-
   (layout-decompose DESIGN mode) — this seat only judges an existing artifact, never produces one.
 tools: Read, Grep, Glob
 model: fable
+effort: high
 skills: [layout-decompose]
 ---
 

@@ -46,36 +46,52 @@ Route here only when the task needs a property `context: fork` on a skill cannot
 - The description carries dispatch conditions with 1–2 `<example>` blocks: when the lead should delegate here, in the phrasings tasks actually surface.
 - Declare `tools` explicitly, always — an agent without an allowlist runs with everything (A5 warns). A reporting agent that must land a file takes `Write` plus a body line scoping it: writes exactly one file, the report at the dispatched destination.
 
-## Model tiering
+## Model tiering — the seat ladder
 
-`model` is not a cosmetic default — route it by what the dispatch actually asks the agent to
-decide, same principle as any other loop-cost decision (`orchestration`'s `loop-design` covers the
-turn/time axis; this is the per-agent axis):
+`model` and `effort` are not cosmetic defaults — route them by what the dispatch actually asks the
+agent to decide, same principle as any other loop-cost decision (`orchestration`'s `loop-design`
+covers the turn/time axis; this is the per-agent axis). The estate's contract is a **ceiling
+ladder** (ratified 2026-07-12, superseding the 1.16.0 three-tier doctrine): frontmatter carries
+each seat's standing default; adaptivity — effort up one step or down several, model down to a
+simpler tier for a routine dispatch — happens at dispatch time, never by editing the seat.
 
+| Seat class | Frontmatter default | Effort range | Model step-downs |
+|---|---|---|---|
+| Planning & architecture | `fable` + `high` | high–xhigh | never below `fable` |
+| Review / hard-bug analysis | `fable` + `high` | low–xhigh | never below `fable` |
+| Coding / execution | `opus` + `xhigh` | low–xhigh | `sonnet`, `haiku` |
+| Orchestration / coordination | `sonnet` + `high` | low–xhigh | — |
+| Mechanical / fully-specified | cheapest correct (`haiku`) | — | — |
+
+- **Planning & architecture** — decomposition, contracts, LLDs. `system-planner` (`fable` +
+  `high`) is the worked example. Planning sets the ceiling on everything downstream; it never
+  steps below its row's floor.
+- **Review / hard-bug analysis** — scoring against a rubric, weighing severity, deciding a
+  portfolio verdict, root-causing a resistant defect → `fable` + `high`, guaranteed, never
+  downgraded. The estate's critic seats (`*-reviewer`, `skill-auditor`, `doc-reviewer`,
+  `researcher`) pin the row explicitly — a verdict must not depend on the caller's tier, so
+  `inherit` is reserved for the rare seat that *means* to ride the session.
+- **Coding / execution** — implementing an approved plan (technical decisions, edge cases, no
+  adversarial stance toward its own output): `opus` + `xhigh` is the ceiling (`system-builder`);
+  a seat whose standing work is routine pins a step-down instead (`docs-writer`, `sonnet` +
+  `high`) rather than paying the ceiling on every dispatch.
 - **Mechanical or fully-specified** — no judgment call, the output is fully determined by the
-  input (classify against a fixed menu, search-and-append with no synthesis, apply a checklist
-  with no discretion) → the fastest/cheapest model that completes the task correctly. `eval-judge`
+  input (classify against a fixed menu, gather with no synthesis, apply a checklist with no
+  discretion) → the fastest/cheapest model that completes the task correctly. `eval-judge`
   (blind classification, zero reasoning permitted by its own contract) and `pack-researcher`
-  (gather-only, no synthesis) are the worked examples — both declare a small model explicitly.
-- **Adversarial judgment** — scoring against a rubric, weighing severity, deciding a portfolio
-  verdict → a capable model, guaranteed, never downgraded. Two valid mechanisms: `inherit` (rides
-  the calling session's model — this plugin's own reviewers, `skill-auditor` /
-  `agent-reviewer` / `hook-reviewer` / `plugin-reviewer` / `linguistics-reviewer`, all take this)
-  or an explicit pin to a named capable model when the dispatch must not depend on the caller's own
-  tier (the sibling plugins' pure critic/coordinator/planner agents — `token-builder`,
-  `*-reviewer`, `orchestration-coordinator`, `system-planner` — all pin explicitly). Either is
-  correct; what's wrong is silence, or a pin to a small/fast model on a judgment seat.
-- **Capable execution** — implementing an approved plan (technical decisions, edge cases, no
-  adversarial stance toward its own output) sits between the two: not mechanical, but not a critic
-  either. Pin a fast-but-capable model rather than the top tier reserved for judgment —
-  `orchestration`'s `system-builder` (`model: sonnet`, distinct from its sibling `system-planner`'s
-  judgment-tier pin) is the worked example.
-- **Parallel fan-out of any kind** — the tiering applies per-worker, not per-campaign: a hundred
+  (gather-only, no synthesis) both declare `haiku` explicitly.
+- **Parallel fan-out of any kind** — the ladder applies per-worker, not per-campaign: a hundred
   mechanical workers still each take the cheap model; one judgment worker among them still takes
-  the capable one. Mixing tiers inside one fan-out is a sign the dispatch is actually two jobs.
+  its row. Mixing tiers inside one fan-out is a sign the dispatch is actually two jobs.
 
-An agent with no stated `model` is not neutral — it silently inherits, which is correct for
-judgment seats and wasted spend for mechanical ones. State the tier; don't leave it implicit.
+Dispatch-time mechanics [drift-prone]: the Agent tool's `model` param overrides frontmatter per
+dispatch; Workflow's `agent()` opts take both `model` and `effort`. A plain Agent dispatch cannot
+vary `effort` — the frontmatter value is what it always gets — so frontmatter carries the seat's
+*default*, not its maximum; the top of an effort range is reached via Workflow dispatch.
+
+An agent with no stated `model` is not neutral — it silently inherits, which is wasted spend for
+mechanical seats and an unguaranteed verdict for judgment ones. State the row; don't leave it
+implicit.
 
 ## Naming
 

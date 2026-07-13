@@ -11,7 +11,7 @@ description: >-
   already-designed palette as project tokens.
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: opus
-effort: high
+effort: xhigh
 skills: [color-verify]
 ---
 You are the token specialist — owner of the color + dimension token layer. You design the tokens

@@ -61,6 +61,10 @@ Good (residency + pointer):           Deploys are human-timed: /deploy (never ru
 | Stale lines | Absorbed as presupposed world-state | Audit for staleness first — it outranks length |
 | Imperative walls | Salience inflation; adherence decay past ~150–200 | Declarative register; ≤ 3 hard gates; cut the rest |
 
+## Shipped seed — the worked example
+
+`assets/engineering-operating-contract.md` is a ready-to-install global `~/.claude/CLAUDE.md` that passes this standard (~20 lines: loop identity, four standing convictions in declarative register, a pointer block to the estate's doctrine skills). For a new setup, copy it in and adapt. The asset is the canonical seed — installed copies refresh *from* it, never the reverse (distilled 2026-07-12 from the standard's first full audit of a live 49-line contract). Its pointer block presupposes the forge/scribe/orchestration plugins; trim any pointer whose owner isn't installed.
+
 ## Provenance
 
 Adherence ceiling and compliance figures are ecosystem measurements (HumanLayer et al., 2025–26); hierarchy and loading mechanics verified against code.claude.com/docs 2026-07, [drift-prone]. Position/salience mechanisms: `linguistic-techniques` (§8, §9). The routing destinations' own standards: `hook-authoring-standards`, `skill-authoring-standards`.

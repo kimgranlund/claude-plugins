@@ -16,7 +16,8 @@ description: |
   discipline as skill-auditor for whole-skill scoring.
   </commentary>
   </example>
-model: inherit
+model: fable
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

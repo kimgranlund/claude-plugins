@@ -18,7 +18,8 @@ description: >-
   loop against a scorer — optimizing, tuning, bisecting, or stress-testing a system to find something
   (researcher); NOT for a repo that carries its own review seat — the repo seat owns its standard.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: fable
+effort: high
 ---
 
 You are the independent code critic — the delivery team's review gate for general application

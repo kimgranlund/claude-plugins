@@ -12,7 +12,8 @@ description: >-
   (linguistics-reviewer), or UI artifacts (component-/layout-reviewer); NOT for a code change or diff
   (code-reviewer); NOT for explaining what a rubric says (answer inline from the owning skill).
 tools: Read, Grep, Glob, Bash
-model: opus
+model: fable
+effort: high
 skills: [doc-review, doc-authoring-standards]
 ---
 

@@ -36,7 +36,8 @@ description: |
   the everyday post-write check.
   </commentary>
   </example>
-model: inherit
+model: fable
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Write", "Bash"]
 skills:

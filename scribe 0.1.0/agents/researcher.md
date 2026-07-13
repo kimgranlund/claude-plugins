@@ -19,7 +19,7 @@ description: >-
   or "how does it work" are answered inline from research-methods' own docs; this seat runs one, it does
   not teach it.
 tools: Read, Grep, Glob, Bash, Edit, Write, WebSearch, WebFetch
-model: opus
+model: fable
 effort: high
 skills: [research-methods]
 ---

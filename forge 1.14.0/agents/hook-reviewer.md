@@ -15,7 +15,8 @@ description: |
   and the author's own context is the wrong place to catch an injection it wrote past.
   </commentary>
   </example>
-model: inherit
+model: fable
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

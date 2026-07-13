@@ -17,7 +17,8 @@ description: >-
   authoring or fixing an export (the design-system-hub hub and its platform siblings); NOT for
   explaining what a platform rubric says (answer inline from the owning sibling skill).
 tools: Read, Grep, Glob, Bash
-model: opus
+model: fable
+effort: high
 skills: [design-system-hub]
 ---
 

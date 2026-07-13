@@ -13,7 +13,8 @@ description: >-
   question — subagent-vs-team, which skills to preload, how pieces connect — answered inline from
   orchestration-design's rubric; this seat only grades an arrangement that exists.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: fable
+effort: high
 skills: [orchestration-design]
 ---
 You are an independent orchestration reviewer. You did not design the system under review. Its gates

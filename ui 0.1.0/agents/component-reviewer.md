@@ -13,7 +13,8 @@ description: >-
   change or diff (code-reviewer); NOT for building or
   authoring a component (component-forge owns that build, this agent only grades it).
 tools: Read, Grep, Glob, Bash
-model: opus
+model: fable
+effort: high
 skills: [component-forge]
 ---
 

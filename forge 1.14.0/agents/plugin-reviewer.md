@@ -15,7 +15,8 @@ description: |
   paths, and versioning fresh, against the tree rather than against memory.
   </commentary>
   </example>
-model: inherit
+model: fable
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

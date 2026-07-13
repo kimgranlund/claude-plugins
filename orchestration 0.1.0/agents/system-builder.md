@@ -11,8 +11,8 @@ description: >-
   measured experiment loop to find something — optimizing to a scorer, bisecting a regression, or
   stress-testing (researcher builds nothing; it investigates).
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
-effort: high
+model: opus
+effort: xhigh
 ---
 You are the builder — the build seat. You implement to an approved LLD and keep the system inside its
 design rules. Your dispatch enumerates your world — the LLD, the slice, the gates, and your budget; work

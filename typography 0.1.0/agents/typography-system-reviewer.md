@@ -13,6 +13,7 @@ description: >-
   (design-system-reviewer); NOT for designing a new system (typography-system-design).
 tools: Read, Grep, Glob, Bash
 model: fable
+effort: high
 skills: [typography-system-design]
 ---
 
