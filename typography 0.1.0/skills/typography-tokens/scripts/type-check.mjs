@@ -30,13 +30,14 @@ const [exportPath, ...targets] = args;
 
 const CORE = ["size", "line", "tracking", "weight", "para"];      // every voice×step carries these five
 const FONT_ROLES = ["display", "heading", "body", "ui", "mono"];  // the five --font-* family roles
-// Closed voice registry, LONGEST FIRST so "sub-heading" is preferred over the "heading" substring
-// it contains — prefix detection below depends on trying the longer voice name first.
-const VOICES = ["display", "sub-heading", "heading", "kicker", "lead", "body", "quote", "caption", "ui", "code", "legal"]
+// Closed voice registry, LONGEST FIRST so "sub-heading" and "sub-title" are preferred over the
+// "heading"/"title" suffixes they contain — prefix detection below depends on trying the longer
+// voice name first.
+const VOICES = ["display", "headline", "sub-heading", "title", "sub-title", "lead", "body", "code", "label", "kicker", "tiny"]
   .sort((a, b) => b.length - a.length);
 // The three voices the grammar REQUIRES to carry -line-single — seeded, not inferred, so a kit
-// that drops -line-single entirely from ui/code/kicker still fails instead of silently passing.
-const BOX_VOICES = new Set(["ui", "code", "kicker"]);
+// that drops -line-single entirely from label/code/kicker still fails instead of silently passing.
+const BOX_VOICES = new Set(["label", "code", "kicker"]);
 // "line-single" MUST be tried before "line" or it would only ever match the "line" prefix of it.
 const PROPS = ["line-single", "size", "line", "tracking", "weight", "para"];
 

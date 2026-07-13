@@ -9,8 +9,8 @@ fixed table, not a scan of live UI source files — the job typography-tokens' `
 does. It matches the corpus's Python convention for deterministic-derivation checkers
 (`ramp_build.py`, `contrast-check.py`, `routing_eval.py`).
 
-Checks three things for a same-baseline pairing (a heading over its body, a quote over its
-citation, a kicker over the display it introduces):
+Checks three things for a same-baseline pairing (a headline over its body, a lead pull-quote
+over its citation, a kicker over the display it introduces):
 
   metric ratio   — x-height AND cap-height (when both fonts have a verified figure) compatibility:
                    ratio = min(a, b) / max(a, b); compatible when ratio >= METRIC_TOLERANCE (0.90,

@@ -42,7 +42,11 @@ every voice gets decided against a different, unstated mental image.
 
 Classify the ask: design a full system from a brief (needs the BrandSchema above) · re-decide one
 voice within an existing system (needs the existing decision doc + which voice changed — steps 2–4
-still apply to that voice, step 3's coherence pass re-runs against the other 10) · "what token for
+still apply to that voice, step 3's coherence pass re-runs against the other 10) · design or pick
+a type SCALE (the size ladder itself) — start from the house fixed typescale
+([`references/house-typescale.md`](references/house-typescale.md)): treatments and brands vary
+styling (font, weight, tracking, leading, case), never the numbers; deviate only for a stated
+platform mandate · "what token for
 this text" is not this skill — route to [[typography-tokens]] · "why does this font read neutral"
 or "what's the history of X" is not this skill — route to [[typography-lettering]] · "verify this
 palette/contrast" is a different artifact class — route to [[color-verify]].
@@ -58,12 +62,13 @@ palette/contrast" is a different artifact class — route to [[color-verify]].
    [`references/territory-interpretation.md`](references/territory-interpretation.md)). A vague
    brief is this skill's own gate: push back and ask for the named reference before proceeding.
 2. **Per-voice creative decisions.** Typography-tokens' five font-family roles (`display · heading
-   · body · ui · mono`) are the concrete slots; its eleven voices ride on them (`sub-heading` and
-   `quote` take `heading`'s face, `kicker` and `code` take `mono`'s, `caption` and `legal` take
-   `ui`'s, `lead` takes `body`'s — `typography-tokens/SKILL.md`'s voice table is canonical, not
-   restated in full here). For each of the five slots: call distinctive or neutral against the
-   interpreted territory (usually `display`/`heading`/`kicker`/`code` earn distinctiveness;
-   `body`/`ui`/`legal`/`caption` usually want neutrality — the judgment framework this skill
+   · body · ui · mono`) are the concrete slots; its eleven voices ride on them (`headline`,
+   `sub-heading`, and `title` take `heading`'s face, `kicker`, `code`, and `sub-title` take
+   `mono`'s, `label` and `tiny` take `ui`'s, `lead` takes `body`'s — `typography-tokens/SKILL.md`'s
+   voice table is canonical, not restated in full here). For each of the five slots: call
+   distinctive or neutral against the
+   interpreted territory (usually `display`/`headline`/`kicker`/`code` earn distinctiveness;
+   `body`/`label`/`tiny` usually want neutrality — the judgment framework this skill
    deepens past `typography-tokens/references/font-selection.md`'s fallback heuristic lives in
    [`references/font-craft.md`](references/font-craft.md)), name a concrete font per slot with a
    rationale tied to the territory (never "this font is modern and clean" — that rationale fits
@@ -78,13 +83,13 @@ palette/contrast" is a different artifact class — route to [[color-verify]].
    chosen for enterprise-dashboard neutrality, with no bridging logic, is two systems wearing one
    README. Every slot's rationale should trace to the SAME interpreted territory from step 1.
 4. **Craft-correctness verification.** Run [`scripts/typeface-check.py`](scripts/typeface-check.py)
-   over every same-baseline pairing (a heading over its body, a quote over its citation, a kicker
-   over the display it introduces): x-height/cap-height ratio in tolerance or a stated
+   over every same-baseline pairing (a headline over its body, a lead pull-quote over its
+   citation, a kicker over the display it introduces): x-height/cap-height ratio in tolerance or a stated
    `font-size-adjust` compensation, at least one real axis apart (classification, register, or a
    ≥300-unit weight gap) so a "contrast" pairing doesn't read as an accident, and — when the pair's
    actual sizes are known from `typography-tokens`' bound scale — the size-jump ratio (≥3× hierarchy
    or ≤1.5× rounding-range; the interval between is flagged). Check the
-   accessibility floor separately: a distinctive choice on `ui`/`body`/`legal`/`caption` needs a
+   accessibility floor separately: a distinctive choice on `label`/`body`/`tiny` needs a
    stated reason (a brand mandate, an explicit deliberate override) or it defaults to neutral —
    cite `typography-lettering/references/accessibility/low-vision.md` and
    `typography-lettering/references/accessibility/dyslexia.md` for why those voices carry the
@@ -104,7 +109,7 @@ palette/contrast" is a different artifact class — route to [[color-verify]].
 | "Real axis apart" — weight | ≥ 300 weight units apart reads as a considered, deliberate axis; chosen just above pairing.md's documented accidental bound (a 200-unit gap, "400 vs 600") and below its considered bound (an 800-unit gap, "100 vs 900") — it also coincides with the conventional regular(400)→bold(700) step. No exact boundary is given in the source, so this is a stated judgment call, not a re-derivation |
 | "Real axis apart" — classification/register | family (serif/sans/mono) differs, OR register (neutral/distinctive/editorial/technical/code) differs — either alone satisfies the axis, independent of weight |
 | Size-jump extremity | ≥ 3× ratio reads as hierarchy; ≤ 1.5× reads as a rounding error; the interval between is the "ambiguous" anti-pattern — mechanized in `typeface-check.py`'s optional `<sizeA> <sizeB>` args, see [`references/font-craft.md`](references/font-craft.md) |
-| Accessibility floor | `ui` / `body` / `legal` / `caption` default to the accessibility-safe (usually neutral) choice; a distinctive override needs a stated reason, never silence |
+| Accessibility floor | `label` / `body` / `tiny` default to the accessibility-safe (usually neutral) choice; a distinctive override needs a stated reason, never silence |
 
 ## Mechanism — `scripts/typeface-check.py`
 
@@ -134,7 +139,7 @@ size-jump rounding-range pass (sizes 16/18, ratio 1.125), and the size-jump ambi
 ## Detection catalog (generation anti-patterns)
 
 An adjective-only territory ("modern and premium") accepted without pushback — the model fills the
-region with its prior · a distinctive choice on `ui`/`body`/`legal`/`caption` with no stated reason
+region with its prior · a distinctive choice on `label`/`body`/`tiny` with no stated reason
 · two near-identical fonts, or one font at two middling weights, standing in for "contrast" · a
 same-baseline pairing with a computed ratio outside ±10% and no stated `font-size-adjust`
 compensation · per-voice rationale that is generic ("this font is modern and clean") rather than
@@ -151,6 +156,7 @@ custom properties) instead of this skill's (deciding which typeface fills the ro
 | [`references/rubric.md`](references/rubric.md) | the 6 scored dimensions + promote gate |
 | [`references/font-craft.md`](references/font-craft.md) | the deepened per-voice distinctive-vs-neutral judgment, the metrics table, the categorized font register |
 | [`references/territory-interpretation.md`](references/territory-interpretation.md) | worked point-vs-region transformations |
+| [`references/house-typescale.md`](references/house-typescale.md) | the house fixed typescale — the 11-voice size table (per breakpoint) every ask about designing a type scale starts from |
 | [`scripts/typeface-check.py`](scripts/typeface-check.py) | the metric-ratio + axis-apart + size-jump checker + selftest |
 | `scripts/routing-corpus.json` | the checked-in M2 routing corpus |
 | [[typography-tokens]] | the mandatory REALIZATION handoff — binds the decision as `--font-*`/`--type-*` |

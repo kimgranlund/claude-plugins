@@ -157,3 +157,11 @@ quote · caption · legal** — even though caption/legal render in the *ui font
 _Provenance: the eleven-voice scale is the nonoun type engine's (`src/engine/type.mjs`); this skill was
 authored against the ADIA reference export (`typography/type.css`, 2026-07-05). When the engine regenerates
 the export, re-run the bind check and re-sync any changed voices/levels here — owner: the kit maintainer._
+
+_Drift note (2026-07-12): the engine rewrote its voice taxonomy (ultimate-tokens PR #279 — `headline`,
+`title`, `sub-title`, `label`, `tiny` replace `heading`/`quote`/`caption`/`ui`/`legal`; uniform SM/MD/LG
+ramps; fixed hand-authored size table). **This skill stays bound to the ADIA export as shipped**, which
+predates the rewrite — the voice table above matches that file, and "read what's actually in the file"
+remains the rule. A kit regenerated after 2026-07 carries the NEW taxonomy (consumption guide:
+typography plugin's `typography-tokens`); re-sync this skill against the regenerated export when the
+kit maintainer ships it._

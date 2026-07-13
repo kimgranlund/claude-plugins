@@ -42,7 +42,7 @@ body{margin:0;background:var(--md-sys-color-neutral-background);padding:24px;dis
 Err toward **more small cards**, split at the sub-concept level — one concept per card:
 
 - one card per color story: primary states · signature families · status · surfaces · text-and-hairline
-- one card per type voice: display/headings · body/lead · UI/caption · mono (kicker/code)
+- one card per type voice group: display/headings (headline · sub-heading · title) · body/lead · label/tiny · mono (code · kicker · sub-title) — use the bound kit's own voice names; a pre-2026-07 export still says ui/caption/legal/quote
 - spacing ladder · radii map
 - one dense card per component recipe in the frontmatter, showing states (default/hover/disabled) side by side — a component card with a single default render is under-built
 - brand cards (wordmark, app icon) when assets exist — never draw a mark that wasn't provided

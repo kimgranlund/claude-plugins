@@ -18,22 +18,23 @@ concrete binding slots, but the eleven voices riding on them don't all carry ide
 | Voice | Family role | Distinctiveness earns its keep when… | Neutrality wins when… |
 |---|---|---|---|
 | `display` | display | the one big statement IS the product — marketing, editorial, portfolio | the "hero" is itself dense information, or the brand wants restraint |
-| `heading` | heading | headings carry brand voice/personality (editorial, content brands) | heavy i18n, or headings must match body rhythm closely |
+| `headline` | heading | headings carry brand voice/personality (editorial, content brands) | heavy i18n, or headings must match body rhythm closely |
 | `sub-heading` | heading | rides the heading face's call — rarely decided independently | rides the heading face's call |
+| `title` | heading | rides the heading face's call — a smaller headline, same register | rides the heading face's call |
+| `sub-title` | mono (prose) | rides the mono face's call — an alternate-typeface small heading, by design | rides the mono face's call |
 | `kicker` | mono | a considered overline is part of the brand's texture (dev-tool, editorial) | the mono face is purely functional (code, tabular data) |
-| `lead` | body | an editorial standfirst wants a touch more presence than body | matches body's neutrality call — it's still a reading voice |
-| `body` | body | long-form editorial reading where a text face sets tone | dense data UI, enterprise products, heavy i18n, extended reading at small sizes |
-| `quote` | heading | takes the heading face's distinctiveness for presence, by design | rides the heading face's call |
-| `caption` | ui (as prose) | almost never — captions are read, not felt | almost always — fine print and captions want to disappear |
-| `ui` | ui | rarely — chrome legibility usually outweighs personality | almost always: dense tables, forms, admin consoles, accessibility-first products |
+| `lead` | body | an editorial standfirst or pull-quote wants a touch more presence than body | matches body's neutrality call — it's still a reading voice |
+| `body` | body | long-form editorial reading where a text face sets tone | dense data UI, enterprise products, heavy i18n, extended reading at small sizes (incl. its fine-print SM step) |
+| `label` | ui | rarely — chrome legibility usually outweighs personality | almost always: dense tables, forms, admin consoles, accessibility-first products |
 | `code` | mono | a code-aesthetic brand (dev tools, terminal-flavored products) | rarely a concern — mono faces are already a narrow, legibility-first category |
-| `legal` | ui (as prose) | almost never | always — disclaimers and footnotes are read, not felt |
+| `tiny` | ui (as prose) | almost never — captions are read, not felt | almost always — captions and small supporting text want to disappear |
 
-The pattern typography-tokens' fallback heuristic already names — display/heading/kicker/code earn
-distinctiveness most often, body/ui/legal/caption want neutrality most often — holds here too; what
-this table adds is that `sub-heading`, `lead`, and `quote` don't get an independent call: they
-inherit their family role's decision, and stating that inheritance explicitly (rather than silently
-picking a sixth font) is itself part of the coherence pass (SKILL.md step 3).
+The pattern typography-tokens' fallback heuristic already names — display/headline/kicker/code earn
+distinctiveness most often, body/label/tiny want neutrality most often — holds here too; what
+this table adds is that `sub-heading`, `title`, `sub-title`, `lead`, and `tiny` don't get an
+independent call: they inherit their family role's decision, and stating that inheritance
+explicitly (rather than silently picking a sixth font) is itself part of the coherence pass
+(SKILL.md step 3).
 
 ## The metrics table (verified, cited — the checker's canon)
 

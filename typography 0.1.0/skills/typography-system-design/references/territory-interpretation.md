@@ -64,9 +64,9 @@ A cold-start template — the shape of the decision doc SKILL.md step 5 hands to
 > **Coherence pass**: all five slots trace to the same two-clause territory (brand ↔ chrome); no
 > slot introduces an unstated third register.
 >
-> **Checker verdicts** (same-baseline pairings only — sub-heading/quote inherit heading's call,
-> caption/legal inherit ui's, kicker/code inherit mono's, so no separate pairing check is needed
-> for those slots):
+> **Checker verdicts** (same-baseline pairings only — sub-heading/title inherit headline's call,
+> tiny inherits label's, kicker/code/sub-title inherit mono's, so no separate pairing check is
+> needed for those slots):
 > ```
 > $ typeface-check.py pair Inter 800 Inter 400          # heading over body
 > Inter (800) vs Inter (400)
