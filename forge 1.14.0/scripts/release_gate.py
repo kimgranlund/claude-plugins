@@ -23,6 +23,8 @@ Gate order (plugin-authoring-standards §Release discipline):
   G9 packs: every skill with references/INDEX.md passes corpus_check (K1 FAILs fail the gate)
   G8 sibling names: kebab tokens in SKILL.md files that carry one of this plugin's own
      name-suffixes but match no installed skill -> WARN (rename drift, phantom prose siblings)
+  G11 style lint (ADR-0002): ruff over .py / eslint over .mjs|.js, workspace-root configs;
+      run when a runner is reachable, WARN when not (CI enforces); no config -> not applicable
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -264,6 +266,41 @@ def gate(root: Path, package: bool = False):
     else:
         ok("no stale sibling names in any SKILL.md")
 
+    # G11 style lint (ADR-0002, 2026-07-15) — ruff for .py, eslint for .mjs/.js, configs at the
+    # WORKSPACE root (ruff.toml / eslint.config.mjs beside the plugin dirs). Behavior stays G4's
+    # job (selftests); this layer catches unused/undefined names and dead code. Run-if-reachable,
+    # WARN-if-not (same posture as G4's node leg) — CI installs both, so absence only softens
+    # local runs. No workspace config = the check doesn't apply (a standalone plugin checkout).
+    ws = root.parent
+    if (ws / "ruff.toml").is_file():
+        ruff_cmd = [shutil.which("ruff")] if shutil.which("ruff") else (
+            [shutil.which("uvx"), "ruff"] if shutil.which("uvx") else None)
+        if ruff_cmd:
+            r = subprocess.run([*ruff_cmd, "check", str(root)], capture_output=True, text=True,
+                               cwd=ws, timeout=300)
+            if r.returncode != 0:
+                head = (r.stdout or r.stderr).strip().splitlines()
+                fail("G11", f"ruff findings in {root.name} -> {'; '.join(head[-2:])}")
+            else:
+                ok("style lint: ruff clean")
+        else:
+            warn("G11", "ruff.toml present but no ruff/uvx on PATH -> .py style lint unproven locally (CI enforces)")
+    if (ws / "eslint.config.mjs").is_file():
+        npx = shutil.which("npx")
+        has_js = any(root.rglob("scripts/*.mjs")) or any(root.rglob("scripts/*.js"))
+        if not has_js:
+            pass  # nothing for eslint to check in this plugin
+        elif npx:
+            r = subprocess.run([npx, "--yes", "eslint", "--no-error-on-unmatched-pattern", str(root)],
+                               capture_output=True, text=True, cwd=ws, timeout=300)
+            if r.returncode != 0:
+                head = (r.stdout or r.stderr).strip().splitlines()
+                fail("G11", f"eslint findings in {root.name} -> {'; '.join(head[-2:])}")
+            else:
+                ok("style lint: eslint clean")
+        else:
+            warn("G11", "eslint.config.mjs present but no npx on PATH -> .mjs style lint unproven locally (CI enforces)")
+
     # G6 package
     artifact = None
     if package and name and version and not fails:
@@ -302,7 +339,8 @@ def selftest():
         assert code == 0, "clean fixture plugin must pass"
         body = (r / "skills" / "demo-review" / "SKILL.md")
         body.write_text(body.read_text() + "\nsee ancient-review for history\n")
-        import io, contextlib
+        import io
+        import contextlib
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             gate(r)
@@ -329,12 +367,27 @@ def selftest():
             code, _ = gate(r)
             assert code == 0, "passing .mjs selftest must keep the gate clean"
             (js / "demo-skip.mjs").write_text("if (process.argv[2] === 'selftest') process.exit(2)\n")
-            import io as _io, contextlib as _ctx
+            import io as _io
+            import contextlib as _ctx
             _buf = _io.StringIO()
             with _ctx.redirect_stdout(_buf):
                 code, _ = gate(r)
             assert code == 0 and "demo-skip.mjs" in _buf.getvalue(), "exit-2 selftest must SKIP disclosed, not fail"
             (js / "demo-skip.mjs").unlink()
+        # G11 ruff leg: a workspace-root ruff.toml + a defective .py must bite; fixing restores clean
+        if _sh.which("ruff") or _sh.which("uvx"):
+            ws_cfg = r.parent / "ruff.toml"
+            ws_cfg.write_text('extend-exclude = ["*/dist"]\n[lint]\nignore = ["E702", "E731"]\n')
+            lintdir = r / "skills" / "demo-review" / "scripts"
+            lintdir.mkdir(exist_ok=True)
+            (lintdir / "demo_lint.py").write_text("import os\nprint('hi')\n")  # F401 unused import
+            code, _ = gate(r)
+            assert code == 1, "ruff F401 in a bundled script must fail G11"
+            (lintdir / "demo_lint.py").write_text("print('hi')\n")
+            code, _ = gate(r)
+            assert code == 0, "clean script must restore a clean G11"
+            (lintdir / "demo_lint.py").unlink()
+            ws_cfg.unlink()
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)

@@ -29,8 +29,6 @@ Corpus (JSON):
 — it is a tripwire to prompt a human read, NOT a certification. Python 3.8+.
 """
 import json
-import math
-import os
 import re
 import sys
 

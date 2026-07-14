@@ -4,6 +4,22 @@ Repo-level milestones only. Each plugin's own `README.md` footer carries its ful
 ledger — this file exists to show how the nine plugins came to exist relative to each other, not
 to duplicate their per-version detail.
 
+## 2026-07-15 — ADR-0002: git-native execution — Issues, PRs, worktrees, CI, and the style-lint tier
+
+Three maintainer rulings (in-session AskUserQuestion), one ADR, executed as the estate's **first
+branch → PR**. (1) **Git-native max**: GitHub Issues become the work-item canon for this
+workspace, PRs the merge gate, branch+worktree the campaign vehicle — motivated by three
+concurrent-session working-tree collisions in one week; decisions/contracts/ledgers stay in-repo
+files (no second canon), and adapting scribe's `/bug-report`//`/feature` to a git-native backend
+is queued as Issue #1 rather than redesigned inline. (2) **Local + CI**: `.github/workflows/
+gate.yml` runs the same plain gate scripts (G1–G11 across all nine plugins + the scripts' own
+selftests) on every push/PR, closing the human-editor/parallel-session bypass of the in-session
+hook. (3) **Style lint both ecosystems**: ruff + eslint join as gate **G11** (forge 1.26.0) with
+dependency-free workspace-root configs; 13 real defects fixed estate-wide on arrival. The
+campaign also refined scribe's T4 same-day (scribe 0.12.0): its own ADR's authoring exposed that
+the ledger hook blocked legitimate ratification — T4 is now git-aware, guarding COMMITTED history
+only.
+
 ## 2026-07-14 — Mechanization becomes a first-class capability; every plugin gets a display name
 
 Two estate-wide changes landed the same day. **The mechanization pair** (`forge` 1.25.0):

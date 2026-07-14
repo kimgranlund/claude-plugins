@@ -55,7 +55,7 @@ def check_pack(skill_dir: Path):
         if not MARKER_RE.search(p.read_text(encoding="utf-8", errors="replace")):
             findings.append(("WARN", "K3", f"references/{f} has no grounding markers -> orphan claims; mark [verified]/[inferred]/[drift-prone]"))
 
-    axes = [l for l in lines if l.startswith("## ")]
+    axes = [ln for ln in lines if ln.startswith("## ")]
     if axes and not (3 <= len(axes) <= 7):
         findings.append(("WARN", "K4", f"{len(axes)} axis headings in INDEX -> healthy range is 3-7; "
                                        f"{'consider skill-synthesize' if len(axes) < 3 else 'consider skill-decompose'}"))

@@ -171,7 +171,7 @@ def selftest():
         errs.append("no-exclusion baseline drifted: expected 4 vague hits, 0 excluded, got %d/%d"
                     % (counts_nx["vague quantifiers"], excl_nx))
     # derivation: a bundle SKILL.md inherits its dir's tokens; the noun 'brief' lands in the set
-    import tempfile, os
+    import tempfile
     with tempfile.TemporaryDirectory() as td:
         d = Path(td) / "prd-to-product-design-brief"
         d.mkdir()

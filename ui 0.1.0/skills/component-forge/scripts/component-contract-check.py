@@ -129,7 +129,6 @@ def check_card(card):
                      "(@media (forced-colors: active)) — it will vanish in Windows High Contrast" % name)
 
     # --- A3/A4 policy reviews (advisory) ---
-    bools = card.get("boolean_props") or [p for p in card.get("props", []) if p in (card.get("boolean_props") or [])]
     if len(card.get("boolean_props", [])) > BOOLEAN_PROP_WARN:
         warns.append("%s: %d boolean props (> %d) — likely a variant enum or composition is hiding "
                      "(boolean-prop explosion)" % (name, len(card["boolean_props"]), BOOLEAN_PROP_WARN))

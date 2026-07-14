@@ -54,7 +54,6 @@ def build_map(root: Path):
         nodes.append({"id": "hooks.json", "type": "hooks"})
         texts["hooks.json"] = hooks.read_text(encoding="utf-8", errors="replace")
 
-    ids = {n["id"] for n in nodes}
     skill_ids = {n["id"] for n in nodes if n["type"] == "skill"}
     script_ids = {n["id"] for n in nodes if n["type"] == "script"}
     edges = []
