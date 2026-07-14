@@ -7,46 +7,55 @@
   "plugins": [
     {
       "name": "forge",
+      "displayName": "Forge",
       "source": "./forge 1.14.0",
       "description": "The foundational authoring plugin, self-contained: forge/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (linguistic-techniques), intent extraction, and two-plane decomposition; /harness-audit as the recurring outer loop."
     },
     {
       "name": "scribe",
+      "displayName": "Scribe",
       "source": "./scribe 0.1.0",
       "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK — standards, forge, review, validator, eight type templates, and bug-report (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, rubric-forge), markdown↔markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (reference-forge, knowledge-forge, llms-txt-forge, vision-memo-forge), and a fresh-context doc-reviewer agent alongside the researcher agent."
     },
     {
       "name": "agentic-ui",
+      "displayName": "Agentic UI",
       "source": "./agentic-ui 0.1.0",
       "description": "A2UI knowledge packs — wire protocol/renderer, catalog design, the live conversational agent, and the training corpus — answering how @agent-ui/a2ui works from a cited repo corpus; named agentic-ui (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
     },
     {
       "name": "llm",
+      "displayName": "LLM",
       "source": "./llm 0.1.0",
       "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, and the six-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack."
     },
     {
       "name": "color",
+      "displayName": "Color",
       "source": "./color 0.1.0",
       "description": "Explain color science (accessibility, materials, perception, spaces, theory), build an OKLCH palette, and verify its contrast and CVD-safety."
     },
     {
       "name": "typography",
+      "displayName": "Typography",
       "source": "./typography 0.1.0",
       "description": "Choose, pair, and tokenize typography: design an 11-voice typography system from a brand brief, realize it as bound --type-*/--font-* tokens, and answer type-anatomy and lettering questions from a cited corpus."
     },
     {
       "name": "design-systems",
+      "displayName": "Design Systems",
       "source": "./design-systems 0.1.0",
       "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch, plus the Material Design token grammar they can extend."
     },
     {
       "name": "ui",
+      "displayName": "UI",
       "source": "./ui 0.1.0",
       "description": "Design and critique UI structure (layouts, flows, components, patterns) and verify it against non-functional bars (focus, i18n, perf, safety) — plus ui-change-verify, which drives the live artifact instead of reasoning about it in the abstract."
     },
     {
       "name": "orchestration",
+      "displayName": "Orchestration",
       "source": "./orchestration 0.1.0",
       "description": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end."
     }

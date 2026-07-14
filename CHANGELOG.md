@@ -4,6 +4,25 @@ Repo-level milestones only. Each plugin's own `README.md` footer carries its ful
 ledger — this file exists to show how the nine plugins came to exist relative to each other, not
 to duplicate their per-version detail.
 
+## 2026-07-14 — Mechanization becomes a first-class capability; every plugin gets a display name
+
+Two estate-wide changes landed the same day. **The mechanization pair** (`forge` 1.25.0):
+`script-authoring-standards` (the deterministic tier's canon — selftest contract with a negative
+control that bites, exit tri-state 0 pass / 1 fail / 2 dependency-skip, placement, the
+arithmetic-not-judgment boundary) and `/script-forge` (qualify → plan → confirm → author →
+validate), designed via a `system-decompose` manifest and proven by blind `/eval-run` (4 suites
+clean after one symmetric intra-pair steal was fenced). Grounding the standard exposed and closed
+a live gate hole the same day: `release_gate.py` G4 swept only `scripts/*.py`, so every `.mjs`
+selftest in the estate shipped unrun — G4 now sweeps all three extensions and ratifies
+`ui-probe.mjs`'s exit-2 SKIP convention house-wide. The workspace invariant and routing table
+widened to match; the audits' A4 dimension now cites the standard as canon. **Naming hygiene**:
+all nine plugins and their marketplace entries gained `displayName` (Title Case, `UI`/`LLM`
+acronyms uppercased — the /plugin UI otherwise title-cases kebab names into "Ui"/"Llm"); verified
+field semantics recorded in `plugin-authoring-standards`. Eight patch bumps;
+`design-systems` separately reached 0.7.2 the same day (its own ledger: the Material re-sync
+campaign, the new `material-design-token-semantics` glossary skill, and its 12-suite eval-run
+proof).
+
 ## 2026-07-13 — `llm`: a ninth plugin, authored fresh via `system-decompose`
 
 Unlike the six `plugin-decompose`-partitioned domain plugins, `llm` was greenfield-designed: ran

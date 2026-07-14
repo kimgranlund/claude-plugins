@@ -55,7 +55,7 @@ similarly do not own Claude Code's own docs as a versioned reference — they te
 citing this session's own observed, current mechanics and flagging where a tool name may drift
 across harness versions (the portable claim is the two-mechanism SHAPE, not one exact tool name).
 
-v0.2.0 · assembled 2026-07-13 · the chat-harness six added: a second `system-decompose` pass (6
+v0.2.1 · assembled 2026-07-14 · 0.2.1: displayName 'LLM' added to the manifest — plugin naming hygiene ruled 2026-07-14: Title Case display names with UI/LLM acronyms uppercased (marketplace entries carry the same field; Claude Code ≥2.1.143, falls back to name) · v0.2.0 · assembled 2026-07-13 · the chat-harness six added: a second `system-decompose` pass (6
 nodes/21 actions, `coverage_check.py` clean) built into 6 parallel-authored knowledge packs
 covering the mini/portable chat-agent-harness construction layer, folded into this plugin rather
 than a new one (a chat harness is built ON TOP OF the LLM-integration layer this plugin already

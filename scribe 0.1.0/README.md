@@ -43,7 +43,7 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.11.0 · assembled 2026-07-13 · 0.11.0: doc-authoring-standards' location-and-naming rule gains
+v0.11.1 · assembled 2026-07-14 · 0.11.1: displayName 'Scribe' added to the manifest — plugin naming hygiene ruled 2026-07-14: Title Case display names with UI/LLM acronyms uppercased (marketplace entries carry the same field; Claude Code ≥2.1.143, falls back to name) · v0.11.0 · assembled 2026-07-13 · 0.11.0: doc-authoring-standards' location-and-naming rule gains
 repo-rootedness (ruled 2026-07-13) — every canonical directory resolves against the local or
 target repo's own root, never a plugin's installed directory; bug-report Phase 4 and /feature
 Phase 5 each gain a pointer clause so their TICKET writes land in the right repo by construction
