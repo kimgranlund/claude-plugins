@@ -130,7 +130,9 @@ seats are checked for shadowing and deference only; their findings file to their
   moves — proven twice in one batch.
 - **A4 Mechanization.** Gates-first is wired: the seat runs its real checkers before judging and
   reports verdicts from real runs, never re-derived by eye; anything mechanizable in the seat's
-  loop routes to an existing instrument; judgment is retained only where argued.
+  loop routes to an existing instrument; judgment is retained only where argued. What a compliant
+  instrument *is* — selftest contract, exit tri-state, placement — is `script-authoring-standards`'
+  canon (2026-07-14); a missing instrument routes to `script-forge`, never to a hand-rolled twin.
 
 ## L · Language (the potency rubric — `linguistic-techniques/references/rubric.md`)
 

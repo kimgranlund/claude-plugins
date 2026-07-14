@@ -72,6 +72,9 @@ Install, then `/reload-plugins`. Everything below is invoked as `/forge:<name>` 
 **`skills-audit`** — the skill-corpus counterpart: a CORPUS pass (naming grammar, linguistic potency, front-matter routing, peer composition) or a DEEP-review CAMPAIGN against its own standard of excellence. Dispatches `skill-auditor` at DEEP depth per member; never fixes.
 > "audit the skill corpus" · "do my skills actually compose" · "run a deep-review campaign batch"
 
+**`script-forge`** — mechanize a hand-run check, eyeballed gate, or prose checklist as a bundled `scripts/taskname.py|mjs` with a selftest that proves it: qualify (arithmetic or judgment?) → plan (name, language, home, selftest shape) → confirm → author to `script-authoring-standards` → validate (negative control bites, caller wired, the gate's G4 sweeps it). Also retrofits an existing script shipping without a selftest.
+> "turn this checklist into a script" · "mechanize this check — we keep eyeballing it every release" · "add a selftest to this script" · `/script-forge "the contrast check we run by hand"`
+
 ---
 
 ## Knowledge (loads itself when your question matches; never a command)
@@ -81,6 +84,7 @@ Ask naturally — these are the standards the workflows above enforce, available
 - **`skill-authoring-standards`** — "why does my skill never trigger?" · "what belongs in the description vs the body?" · "how do the two invocation flags interact?"
 - **`agent-authoring-standards`** — "why is my agent fat and drifting?" · "how does the skills: preload work?" · "agent or context: fork?"
 - **`hook-authoring-standards`** — "hook or skill for this rule?" · "why does my hook fire twice / never?" · "how do exit codes work?"
+- **`script-authoring-standards`** — "what does a selftest need?" · "skill scripts/ or plugin scripts/?" · "python or js for this check?" · "is this even mechanizable, or judgment?" — the deterministic tier's canon; the audits' A4 dimension scores against it.
 - **`entry-file-standards`** — "what belongs in CLAUDE.md?" · "why is an instruction that's right there being ignored?"
 - **`plugin-authoring-standards`** — "why does my plugin fail to load?" · "my users aren't getting the update I shipped" (the version-cache-key trap) · "where does plugin state live?"
 - **`pack-authoring-standards`** — "how do I structure a reference corpus / INDEX?" · "how many axes should a pack have?" · "how do I ground claims?" · "how do research waves work?"

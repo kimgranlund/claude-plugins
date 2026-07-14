@@ -12,6 +12,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | New plugin from a domain | `/plugin-forge` (never hand-scaffold) |
 | Partition or merge existing plugins, gap analysis | `/plugin-decompose` |
 | New skill / agent / hook / entry-file work | `/skill-forge` · `/agent-forge` · `/hook-forge` · `/entry-file-audit` |
+| A hand-run check or prose checklist that could be code | forge: `/script-forge` (mechanize as `scripts/taskname.py\|mjs` + proven selftest) |
 | Fill or grow a knowledge corpus | `/pack-forge` (one axis per wave) |
 | Split or merge a pack; execute the verdict | `/skill-decompose` · `/skill-synthesize` → `/skill-refactor` |
 | Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | scribe: `/doc-forge` · `/doc-review` |
@@ -56,8 +57,9 @@ quote plugin paths (the version suffix contains a space).
   version — the version is the update cache key; bump every change and log it in that plugin's
   README footer ledger. `dist/` is gate output: read-only.
 - **Incident → infrastructure, same day.** A load failure, false positive, or skipped step becomes
-  a lint rule, gate check, or selftest fixture before the fix ships. Every `scripts/*.py` in every
-  plugin carries a `selftest` mode and it stays green.
+  a lint rule, gate check, or selftest fixture before the fix ships. Every `scripts/*.py|mjs|js`
+  in every plugin carries a `selftest` mode and it stays green (anatomy, exit tri-state, and
+  placement: forge's `script-authoring-standards`; the gate's G4 sweeps all three extensions).
 - **Descriptions are the routing surface.** Any model-invocable description edit updates its
   `evals/evals.json` in the same change, closes reciprocal fences in sibling suites, and gets an
   `/eval-run` after boundary changes.

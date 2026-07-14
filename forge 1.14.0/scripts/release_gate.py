@@ -10,7 +10,9 @@ Gate order (plugin-authoring-standards §Release discipline):
   G1 manifest: .claude-plugin/plugin.json valid, kebab name, semver version
   G2 structure: only the manifest in .claude-plugin/; every skills/* dir has SKILL.md
   G3 full lint: every SKILL.md, agents/*.md, hooks.json, plugin.json via skill_lint (FAIL fails)
-  G4 bundled selftests: every scripts/*.py exposing a selftest mode must exit 0
+  G4 bundled selftests: every scripts/*.py|*.mjs|*.js exposing a selftest mode must exit 0
+     (py via this interpreter, js via node; js with node absent -> WARN, unproven;
+      exit 2 = SKIP, runtime dependency absent -> disclosed in the ok line, not failed)
   G5 phantom sweep: [[handle]] refs in live .md (CHANGELOG excluded) — WARN, counted
   G6 package (--package): dist/<name>-<version>.plugin, excluding dist/, .claude/, and the
      repo's root CLAUDE.md (dev harness != distribution); a same-version artifact FAILS
@@ -95,20 +97,39 @@ def gate(root: Path, package: bool = False):
     else:
         ok(f"lint clean across {len(targets)} files")
 
-    # G4 bundled selftests
-    scripts = [p for p in root.rglob("scripts/*.py") if "dist" not in p.parts]
-    tested = 0
+    # G4 bundled selftests — py via the running interpreter, js/mjs via node (parity, 2026-07-14:
+    # the original .py-only rglob left every .mjs selftest in the estate unrun at the gate)
+    import shutil
+    node = shutil.which("node")
+    scripts = sorted(p for pat in ("scripts/*.py", "scripts/*.mjs", "scripts/*.js")
+                     for p in root.rglob(pat) if "dist" not in p.parts)
+    tested, js_skipped, dep_skipped = 0, 0, []
     for s in scripts:
         if "selftest" not in s.read_text(encoding="utf-8", errors="replace"):
             continue
         if s.resolve() == Path(__file__).resolve():
             continue  # the gate proves itself via its own selftest mode, not recursively
-        r = subprocess.run([sys.executable, str(s), "selftest"], capture_output=True, text=True, timeout=120)
+        if s.suffix == ".py":
+            runner = [sys.executable]
+        elif node:
+            runner = [node]
+        else:
+            js_skipped += 1
+            continue
+        r = subprocess.run([*runner, str(s), "selftest"], capture_output=True, text=True, timeout=120)
+        if r.returncode == 2:
+            # ratified tri-state (2026-07-14, pioneered by ui-probe.mjs): exit 2 = SKIP,
+            # the selftest cannot prove itself here (runtime dependency absent) — disclosed, not failed
+            dep_skipped.append(s.name)
+            continue
         tested += 1
         if r.returncode != 0:
             fail("G4", f"{s.relative_to(root)} selftest exit {r.returncode} -> a shipped script proves its counters or does not ship")
+    if js_skipped:
+        warn("G4", f"{js_skipped} js script(s) expose a selftest but node is not on PATH -> unproven, install node to run them")
     if "G4" not in fails:
-        ok(f"bundled selftests green ({tested} scripts)")
+        skipnote = f"; {len(dep_skipped)} skipped, dependency absent: {', '.join(dep_skipped)}" if dep_skipped else ""
+        ok(f"bundled selftests green ({tested} scripts{skipnote})")
 
     # G5 phantom sweep — backticked/fenced [[handles]] are mentions, not routing.
     # Sibling-aware (2026-07-09, same rule as G8): a [[handle]] naming a real skill anywhere
@@ -208,6 +229,9 @@ def gate(root: Path, package: bool = False):
              "figma-make", "google-stitch",
              # figma-plugin-api joining the estate added the -api suffix (2026-07-09):
              "attributes-as-api",
+             # the mechanization pair (2026-07-14): "hand-run" is prose ("a hand-run check",
+             # -run suffix from eval-run); "selftest-patterns" is a references file:
+             "hand-run", "selftest-patterns",
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):
@@ -285,6 +309,24 @@ def selftest():
           + [{"id": f"n{i}", "prompt": f"m{i}", "expect": "no-trigger"} for i in range(3)])}))
         code, _ = gate(r)
         assert code == 0, "valid suite must restore a clean gate"
+        # G4 js leg: a failing .mjs selftest must bite; a passing one must not flag
+        import shutil as _sh
+        if _sh.which("node"):
+            js = r / "skills" / "demo-review" / "scripts"
+            js.mkdir()
+            (js / "demo-check.mjs").write_text("if (process.argv[2] === 'selftest') process.exit(1)\n")
+            code, _ = gate(r)
+            assert code == 1, "failing .mjs selftest must fail G4"
+            (js / "demo-check.mjs").write_text("if (process.argv[2] === 'selftest') { console.log('ok'); process.exit(0) }\n")
+            code, _ = gate(r)
+            assert code == 0, "passing .mjs selftest must keep the gate clean"
+            (js / "demo-skip.mjs").write_text("if (process.argv[2] === 'selftest') process.exit(2)\n")
+            import io as _io, contextlib as _ctx
+            _buf = _io.StringIO()
+            with _ctx.redirect_stdout(_buf):
+                code, _ = gate(r)
+            assert code == 0 and "demo-skip.mjs" in _buf.getvalue(), "exit-2 selftest must SKIP disclosed, not fail"
+            (js / "demo-skip.mjs").unlink()
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)

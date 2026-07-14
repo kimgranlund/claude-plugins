@@ -103,6 +103,9 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   **inversion fixtures** (prove the wrong leg/state is detectable, not merely that a good input
   passes), **reverse controls** (assert valid inputs are NOT flagged), and **fact×fact consistency
   gates** (a declared design choice cross-checked against a measured value, e.g. RECIPE_MISMATCH).
+  The script anatomy this dimension scores against — selftest contract, exit tri-state, placement,
+  the mechanization test itself — is canon in `script-authoring-standards` (2026-07-14); this
+  section names what A4 *scores*, that skill owns what a compliant script *is*.
 
 ## L · Language (the potency rubric — `linguistic-techniques/references/rubric.md`)
 

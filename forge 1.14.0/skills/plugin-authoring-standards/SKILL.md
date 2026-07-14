@@ -28,7 +28,7 @@ plugin-name/
 └── README.md
 ```
 
-`plugin.json`: `name` (kebab-case) is required; `version` (semver) is effectively required because **the version is the update cache key** — an edited plugin re-shipped under the same version is skipped by `/plugin update` as already installed. Change without bump = a release nobody receives.
+`plugin.json`: `name` (kebab-case) is required; `version` (semver) is effectively required because **the version is the update cache key** — an edited plugin re-shipped under the same version is skipped by `/plugin update` as already installed. Change without bump = a release nobody receives. `displayName` (optional, Claude Code ≥2.1.143; verified 2026-07-14) is the human-facing name in the /plugin UI — any casing/spaces, never used for namespacing or lookup, falls back to `name` (which the UI otherwise title-cases: `llm` renders as "Llm"); marketplace.json plugin entries carry the same field. House rule: Title Case, acronyms uppercased (`UI`, `LLM`).
 
 ## The three load-failure classes — this plugin's own ledger
 

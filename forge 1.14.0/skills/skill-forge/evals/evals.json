@@ -86,6 +86,12 @@
       "id": "n08",
       "prompt": "our knowledge pack needs a new research wave on this axis",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "Mechanize this check as a bundled script with a selftest",
+      "expect": "no-trigger",
+      "note": "script-forge — one script inside an existing surface, not a whole new skill"
     }
   ]
 }
