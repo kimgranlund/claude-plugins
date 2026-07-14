@@ -108,6 +108,12 @@ hover, a disabled, a divider, or an elevation with `opacity` / `color-mix()`.
 - Interactive elements use the full state family (hover, active, disabled — not just base).
 - Intent palettes carry meaning only; chrome (`neutral`) and the brand accent (`primary`) carry everything else.
 
-_Provenance: the 59-role canon is the nonoun engine's `role-table.json` (`.claude/docs/spec/data/role-table.json`);
-this skill was authored against the ADIA reference export (`css-oklch/adia.css`, 2026-07-05). When the engine
-regenerates the export, re-run the bind check and re-sync any changed role names here — owner: the kit maintainer._
+_Provenance: 53 of the 59 roles are the nonoun engine's own canon — `role-table.json`
+(`docs/reference/data/role-table.json`, moved from `.claude/docs/spec/` in 2026-07); the remaining 6
+(`-on-surface-variant-{hover,active,disabled}`, `-outline-variant-{hover,active,disabled}`) are this
+kit's own ADIA-side extension, giving state families to the two "variant" roles nonoun itself doesn't.
+This skill was authored against the ADIA reference export (`css-oklch/adia.css`, 2026-07-05). When the
+engine regenerates the export, re-run the bind check and re-sync any changed role names here — owner:
+the kit maintainer. Every role's MEANING (not its binding grammar) is mirrored in
+`material-design-token-semantics` — re-sync that pack's `references/color.md` on any role rename,
+addition, or removed state family too, the same trigger as this file._

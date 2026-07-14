@@ -29,7 +29,7 @@ For a chosen `{step}` (values shown for `md` = the 28px baseHeight):
 | height | `--md-sys-size-{step}-height` | the control's block-size | 28px |
 | icon | `--md-sys-size-{step}-icon` | leading content-icon / slot glyph size | 18px |
 | caret | `--md-sys-size-{step}-caret` | the affordance mark (dropdown ▾) | 14px |
-| font | `--md-sys-size-{step}-font` | the control's text size (composed from the UI type voice) | 14px |
+| font | `--md-sys-size-{step}-font` | the control's text size — composed from the `label` type voice at `sm`/`md`/`lg` ONLY; `xs`/`xl`/`2xl` fall back to geometry's own standalone size law (the type engine's `label` voice no longer reaches those steps, 2026-07-13) | 14px |
 | gap | `--md-sys-size-{step}-gap` | icon↔label gap INSIDE the control | 7px |
 | pad | `--md-sys-size-{step}-pad` | inline edge padding for a control WITH a leading slot/icon | 5px |
 | pad-edge | `--md-sys-size-{step}-pad-edge` | inline edge padding for a SLOTLESS (bare text) control | 14px |
@@ -56,12 +56,14 @@ control's padding independently of its height you break centering — always use
   font-size: var(--md-sys-size-md-font);
 }
 ```
-Text: the box above already set `font-size` from `--md-sys-size-md-font` — which **is** the UI voice's
-size at this step (`--md-sys-size-{step}-font` ≡ `--md-sys-typescale-ui-{step}-size`, so the box and its
-text share one number). Add only the label's character from the UI voice VARS —
-`font-family: var(--font-ui)`, `font-weight: var(--md-sys-typescale-ui-md-weight)`,
-`letter-spacing: var(--md-sys-typescale-ui-md-tracking)` — **never** its `-size` or the whole
-`.md-sys-typescale-ui-md` class (that re-sets `font-size` and a multi-line `-line` against the control box).
+Text: the box above already set `font-size` from `--md-sys-size-md-font` — at `md` this **is** the
+`label` voice's own size (`--md-sys-size-md-font` ≡ `--md-sys-typescale-label-md-size`, so the box and
+its text share one number; this equality holds at `sm`/`md`/`lg` only — `xs`/`xl`/`2xl` don't have a
+`label` counterpart, so their `-font` comes from geometry's own fallback law instead, a legitimately
+different value). Add only the label's character from the `label` voice VARS —
+`font-family: var(--font-ui)`, `font-weight: var(--md-sys-typescale-label-md-weight)`,
+`letter-spacing: var(--md-sys-typescale-label-md-tracking)` — **never** its `-size` or the whole
+`.md-sys-typescale-label-md` class (that re-sets `font-size` and a multi-line `-line` against the control box).
 
 - **With a leading icon:** icon `--md-sys-size-md-icon` (18px), and swap the padding to
   `--md-sys-size-md-pad` (the slot edge, 5px) instead of `-pad-edge`.

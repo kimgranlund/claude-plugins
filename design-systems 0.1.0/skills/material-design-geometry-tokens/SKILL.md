@@ -136,4 +136,6 @@ never hand-roll a control height, a centered padding, or a container inset with 
 _Provenance: the two-tier dimensional system is the nonoun geometry engine's (`src/engine/geometry.mjs`);
 this skill was authored against the ADIA reference export (`geometry/geometry.css`, 2026-07-05). When the
 engine regenerates the export, re-run the bind check and re-sync any changed steps/values here (the value
-tables live in `references/controls.md` + `containers.md`) — owner: the kit maintainer._
+tables live in `references/controls.md` + `containers.md`) — owner: the kit maintainer. Every field's
+MEANING (not its binding grammar) is mirrored in `material-design-token-semantics` — re-sync that pack's
+`references/geometry.md` on any step/field/ladder change too, the same trigger as this file._

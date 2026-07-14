@@ -1,0 +1,94 @@
+{
+  "skill": "material-design-token-semantics",
+  "note": "Glossary skill: what a --md-sys-* token MEANS and when to reach for it. Fences: the three consumption siblings own binding/recipes/values for their axis (color/typography/geometry), motion-tokens owns easing/duration, raw values route to the owning consumption skill, non-Material prefixes have no owner here.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What's the difference between surface-lowest and surface-lower?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "What is the kicker voice for?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "When do I use -dim vs -low?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "What's inset-card vs inset-panel?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "What's the difference between the scrim strengths?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "What does on-surface-variant mean?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "What does --md-sys-color-on-primary-variant actually mean — when would I reach for it?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "What's the difference between the space and gap token families?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Which color token for this button's background?",
+      "expect": "no-trigger",
+      "note": "material-design-color-tokens — choosing a token for a concrete build, not asking what one means"
+    },
+    {
+      "id": "n02",
+      "prompt": "What type token should this menu item use?",
+      "expect": "no-trigger",
+      "note": "material-design-typography-tokens — consumption"
+    },
+    {
+      "id": "n03",
+      "prompt": "What padding token for a dense table row?",
+      "expect": "no-trigger",
+      "note": "material-design-geometry-tokens — consumption"
+    },
+    {
+      "id": "n04",
+      "prompt": "What's the actual value behind --md-sys-radius-card?",
+      "expect": "no-trigger",
+      "note": "raw value — the owning consumption skill (geometry), per this skill's own fence"
+    },
+    {
+      "id": "n05",
+      "prompt": "Which easing token should this dialog's entrance use?",
+      "expect": "no-trigger",
+      "note": "material-design-motion-tokens"
+    },
+    {
+      "id": "n06",
+      "prompt": "What does --c-surface mean in our default kit?",
+      "expect": "no-trigger",
+      "note": "non-Material prefix — no owner in this plugin (color plugin's color-tokens); decline per fence"
+    },
+    {
+      "id": "n07",
+      "prompt": "Is surface-container M3 baseline or one of our extensions?",
+      "expect": "no-trigger",
+      "note": "M3-vs-extension history — the sibling's own Foundation vs. extension table (color-tokens)"
+    },
+    {
+      "id": "n08",
+      "prompt": "Which scrim strength for a drawer?",
+      "expect": "no-trigger",
+      "note": "a choosing ask for a concrete surface — color-tokens' consumption territory (same grammar as n01); this glossary owns what the strengths MEAN (ruled 2026-07-14, eval-run round 1)"
+    }
+  ]
+}
