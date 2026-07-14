@@ -52,6 +52,14 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    `docs/adr/` · `docs/plan/` · `docs/roadmap/` · `docs/tickets/` · `docs/task/`. The two
    pluralization exceptions (`tickets`, `adr`) are historical and load-bearing (three command
    skills hardcode `docs/tickets/`) — recorded, not to be "fixed". Aligning an EXISTING repo to this map is `/docs-alignment`'s job.
+   Every canonical directory is repo-rooted, never plugin-rooted (ruled 2026-07-13): resolve
+   against the **local or target repo's own root** — the repo the session is already working in
+   by default, or a different repo the raw report/idea explicitly names or clearly implies —
+   never against a plugin's own installed directory (`${CLAUDE_PLUGIN_ROOT}` names *scripts*, it
+   never names a doc destination). Where more than one repo is plausibly in play and the ask
+   doesn't disambiguate, name the resolved repo in the close-out report rather than guessing
+   silently; never split one document's read (template, standards) from a different repo than its
+   write (the instance file).
 
 ## The type contract table
 

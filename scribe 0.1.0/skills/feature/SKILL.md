@@ -72,8 +72,10 @@ decision-ratifying.
 
 ## Phase 5 — Record, lint, place
 
-Mint the `kind: feature` TICKET via doc-forge's TICKET path (`docs/tickets/`, frontmatter
-`doc-type: ticket, kind: feature`), carrying Summary · Acceptance (from the extraction's success
+Mint the `kind: feature` TICKET via doc-forge's TICKET path (`docs/tickets/` of the local or
+target repo — repo-rooted per doc-authoring-standards' location-and-naming rule, never written
+under a plugin's own installed directory — frontmatter `doc-type: ticket, kind: feature`), carrying
+Summary · Acceptance (from the extraction's success
 criterion) · Links (the ID spine to any PRD/SPEC/LLD/corpus minted in Phase 4) · Scope/Open (the
 named gaps) · `size: small | big` in FRONTMATTER (machine-read — /build branches on it) · an
 empty `## Findings` section for the eventual build's

@@ -57,7 +57,9 @@ force-fit one of the four examples.
 ## Phase 4 — Record
 
 Mint or update a TICKET via doc-forge's TICKET path (`doc-authoring-standards`
-references/templates/ticket.md), in `docs/tickets/`, with `kind: bug` in frontmatter, carrying the
+references/templates/ticket.md), in `docs/tickets/` of the local or target repo — repo-rooted per
+doc-authoring-standards' location-and-naming rule, never written under a plugin's own installed
+directory — with `kind: bug` in frontmatter, carrying the
 type's standard Summary/Acceptance/Links plus Repro, Expected vs actual, Classification, Severity
 (`blocker | major | minor | cosmetic` — the one scale doc-authoring-standards' "Bug-shaped
 tickets" defines; use it, never invent one per ticket), and an empty Findings section. Run
