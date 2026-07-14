@@ -14,6 +14,7 @@
 // Usage:
 //   node dimension-check.mjs <geometry.css>                 # bind check only
 //   node dimension-check.mjs <geometry.css> <file|dir> ...  # bind check + lint the given UI sources
+//   node dimension-check.mjs selftest                       # prove the checker's own counters
 // Exit 0 = clean; 1 = a token is missing OR a lint violation was found; 2 = usage / read error.
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
@@ -36,6 +37,44 @@ const GROUPS = [
   ["border",        ["border-thin", "border-thick"]],
   ["focus",         ["focus-ring-width", "focus-ring-offset"]],
 ];
+
+// ── selftest ─────────────────────────────────────────────────────────────────────────────────────
+if (args[0] === "selftest") {
+  const { mkdtempSync, writeFileSync, rmSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { execFileSync } = await import("node:child_process");
+  const { fileURLToPath } = await import("node:url");
+  const self = fileURLToPath(import.meta.url);
+  const dir = mkdtempSync(join(tmpdir(), "dimension-check-selftest-"));
+  const allNames = GROUPS.flatMap(([, names]) => names);
+  const goodCss = [":root {", ...allNames.map((n) => `  --md-sys-${n}: 4px;`), "}"].join("\n");
+  const badCss = goodCss.replace(/  --md-sys-radius-full: [^\n]*\n/, ""); // drop one token
+  writeFileSync(join(dir, "good.css"), goodCss);
+  writeFileSync(join(dir, "bad.css"), badCss);
+  writeFileSync(join(dir, "ok-ui.css"), ".card { padding: var(--md-sys-size-md-pad); }\n");
+  writeFileSync(join(dir, "bad-ui.css"), ".card { padding: 16px; }\n");
+  const run = (a) => {
+    try { const out = execFileSync(process.execPath, [self, ...a], { stdio: ["ignore", "pipe", "pipe"] }); return { code: 0, out: out.toString() }; }
+    catch (e) { return { code: e.status ?? 1, out: (e.stdout || Buffer.alloc(0)).toString() + (e.stderr || Buffer.alloc(0)).toString() }; }
+  };
+  const goodBind = run([join(dir, "good.css")]);
+  const badBind = run([join(dir, "bad.css")]);
+  const goodLint = run([join(dir, "good.css"), join(dir, "ok-ui.css")]);
+  const badLint = run([join(dir, "good.css"), join(dir, "bad-ui.css")]);
+  rmSync(dir, { recursive: true, force: true });
+  const r = {
+    goodBindExit0: goodBind.code === 0,
+    badBindExit1: badBind.code === 1,
+    badBindNamesRadius: /radius scale/.test(badBind.out),
+    goodLintExit0: goodLint.code === 0,
+    badLintExit1: badLint.code === 1,
+    badLintCatchesPx: /hardcoded padding length/.test(badLint.out),
+  };
+  const ok = Object.values(r).every(Boolean);
+  console.log(`dimension-check selftest · ${ok ? "PASS" : "FAIL"} · a full dimensional export binds clean, one dropped radius token fails, var()-wrapped padding lints clean, a hardcoded px length is caught`);
+  if (!ok) console.log("  " + JSON.stringify(r));
+  process.exit(ok ? 0 : 1);
+}
 
 let failed = false;
 

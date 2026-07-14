@@ -19,7 +19,8 @@
 // Usage:
 //   node type-check.mjs <type.css>                 # bind check only
 //   node type-check.mjs <type.css> <file|dir> ...  # bind check + lint the given UI sources
-// Exit 0 = clean; 1 = a voice is missing props / a font role is missing OR a lint violation was found.
+//   node type-check.mjs selftest                   # prove the checker's own counters
+// Exit 0 = clean; 1 = a voice is missing props / a font role is missing OR a lint violation was found; 2 = usage/read error.
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, extname } from "node:path";
@@ -40,6 +41,49 @@ const VOICES = ["display", "headline", "sub-heading", "title", "sub-title", "lea
 const BOX_VOICES = new Set(["label", "code", "kicker"]);
 // "line-single" MUST be tried before "line" or it would only ever match the "line" prefix of it.
 const PROPS = ["line-single", "size", "line", "tracking", "weight", "para"];
+
+// ── selftest ─────────────────────────────────────────────────────────────────────────────────────
+if (args[0] === "selftest") {
+  const { mkdtempSync, writeFileSync, rmSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { execFileSync } = await import("node:child_process");
+  const { fileURLToPath } = await import("node:url");
+  const self = fileURLToPath(import.meta.url);
+  const dir = mkdtempSync(join(tmpdir(), "type-check-selftest-"));
+  const fontLines = FONT_ROLES.map((f) => `  --font-${f}: system-ui;`).join("\n");
+  const voiceLines = CORE.map((p) => `  --type-body-md-${p}: ${p === "size" ? "1rem" : p === "weight" ? "400" : "normal"};`).join("\n");
+  const goodCss = `:root {\n${fontLines}\n${voiceLines}\n}\n`;
+  const badCss = goodCss.replace(/  --type-body-md-para: [^\n]*\n/, ""); // drop one prop
+  const materialCss = ":root {\n  --md-sys-typescale-body-md-size: 1rem;\n}\n";
+  writeFileSync(join(dir, "good.css"), goodCss);
+  writeFileSync(join(dir, "bad.css"), badCss);
+  writeFileSync(join(dir, "material.css"), materialCss);
+  writeFileSync(join(dir, "ok-ui.css"), ".p { font-size: var(--type-body-md-size); }\n");
+  writeFileSync(join(dir, "bad-ui.css"), ".p { font-size: 14px; }\n");
+  const run = (a) => {
+    try { const out = execFileSync(process.execPath, [self, ...a], { stdio: ["ignore", "pipe", "pipe"] }); return { code: 0, out: out.toString() }; }
+    catch (e) { return { code: e.status ?? 1, out: (e.stdout || Buffer.alloc(0)).toString() + (e.stderr || Buffer.alloc(0)).toString() }; }
+  };
+  const goodBind = run([join(dir, "good.css")]);
+  const badBind = run([join(dir, "bad.css")]);
+  const materialRedirect = run([join(dir, "material.css")]);
+  const goodLint = run([join(dir, "good.css"), join(dir, "ok-ui.css")]);
+  const badLint = run([join(dir, "good.css"), join(dir, "bad-ui.css")]);
+  rmSync(dir, { recursive: true, force: true });
+  const r = {
+    goodBindExit0: goodBind.code === 0,
+    badBindExit1: badBind.code === 1,
+    badBindNamesGap: /missing/.test(badBind.out),
+    materialRedirects: materialRedirect.code === 1 && /material-design-typography-tokens/.test(materialRedirect.out),
+    goodLintExit0: goodLint.code === 0,
+    badLintExit1: badLint.code === 1,
+    badLintCatchesSize: /hardcoded font-size/.test(badLint.out),
+  };
+  const ok = Object.values(r).every(Boolean);
+  console.log(`type-check selftest · ${ok ? "PASS" : "FAIL"} · a full body voice + five font roles binds clean under the type- prefix, one dropped prop fails, a Material export redirects instead of false-gapping, var()-wrapped font-size lints clean, a hardcoded px size is caught`);
+  if (!ok) console.log("  " + JSON.stringify(r));
+  process.exit(ok ? 0 : 1);
+}
 
 let failed = false;
 

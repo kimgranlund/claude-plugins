@@ -10,7 +10,8 @@
 // Usage:
 //   node token-check.mjs <export.css>                 # bind check only
 //   node token-check.mjs <export.css> <file|dir> ...  # bind check + lint the given UI sources
-// Exit 0 = clean; 1 = a palette is missing roles OR a lint violation was found.
+//   node token-check.mjs selftest                     # prove the checker's own counters
+// Exit 0 = clean; 1 = a palette is missing roles OR a lint violation was found; 2 = usage/read error.
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, extname } from "node:path";
@@ -36,6 +37,44 @@ const SUFFIXES = [
   "-surface-lowest", "-surface-lower", "-surface-low", "-surface-high", "-surface-higher", "-surface-highest",
   "-scrim-weakest", "-scrim-weaker", "-scrim-weak", "-scrim", "-scrim-strong", "-scrim-stronger", "-scrim-strongest",
 ]; // 59
+
+// ── selftest ──────────────────────────────────────────────────────────────────────────────────────
+if (args[0] === "selftest") {
+  const { mkdtempSync, writeFileSync, rmSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { execFileSync } = await import("node:child_process");
+  const { fileURLToPath } = await import("node:url");
+  const self = fileURLToPath(import.meta.url);
+  const dir = mkdtempSync(join(tmpdir(), "token-check-selftest-"));
+  const roleLine = (p, s) => `  --md-sys-color-${p}${s.replace(/\{p\}/g, p)}: oklch(0.5 0.1 250);`;
+  const goodCss = [":root {", "  --md-sys-color-primary-050: oklch(0.98 0.02 250);", ...SUFFIXES.map((s) => roleLine("primary", s)), "}"].join("\n");
+  const badCss = goodCss.replace(/  --md-sys-color-primary-scrim: [^\n]*\n/, ""); // drop one role
+  writeFileSync(join(dir, "good.css"), goodCss);
+  writeFileSync(join(dir, "bad.css"), badCss);
+  writeFileSync(join(dir, "ok-ui.css"), ".btn { background: var(--md-sys-color-primary); }\n");
+  writeFileSync(join(dir, "bad-ui.css"), ".btn { background: #ffffff; }\n");
+  const run = (a) => {
+    try { const out = execFileSync(process.execPath, [self, ...a], { stdio: ["ignore", "pipe", "pipe"] }); return { code: 0, out: out.toString() }; }
+    catch (e) { return { code: e.status ?? 1, out: (e.stdout || Buffer.alloc(0)).toString() + (e.stderr || Buffer.alloc(0)).toString() }; }
+  };
+  const goodBind = run([join(dir, "good.css")]);
+  const badBind = run([join(dir, "bad.css")]);
+  const goodLint = run([join(dir, "good.css"), join(dir, "ok-ui.css")]);
+  const badLint = run([join(dir, "good.css"), join(dir, "bad-ui.css")]);
+  rmSync(dir, { recursive: true, force: true });
+  const r = {
+    goodBindExit0: goodBind.code === 0,
+    badBindExit1: badBind.code === 1,
+    badBindNamesScrim: /scrim/.test(badBind.out),
+    goodLintExit0: goodLint.code === 0,
+    badLintExit1: badLint.code === 1,
+    badLintCatchesHex: /literal hex color/.test(badLint.out),
+  };
+  const ok = Object.values(r).every(Boolean);
+  console.log(`token-check selftest · ${ok ? "PASS" : "FAIL"} · full 59-role export binds clean, one dropped role (scrim) fails, var()-wrapped color lints clean, a raw hex literal is caught`);
+  if (!ok) console.log("  " + JSON.stringify(r));
+  process.exit(ok ? 0 : 1);
+}
 
 let failed = false;
 
