@@ -1,6 +1,6 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and six domain plugins (agentic-ui, color, typography, design-systems, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and seven domain plugins (agentic-ui, llm, color, typography, design-systems, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
   "owner": {
     "name": "Kim Granlund"
   },
@@ -19,6 +19,11 @@
       "name": "agentic-ui",
       "source": "./agentic-ui 0.1.0",
       "description": "A2UI knowledge packs — wire protocol/renderer, catalog design, the live conversational agent, and the training corpus — answering how @agent-ui/a2ui works from a cited repo corpus; named agentic-ui (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
+    },
+    {
+      "name": "llm",
+      "source": "./llm 0.1.0",
+      "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, and the six-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack."
     },
     {
       "name": "color",

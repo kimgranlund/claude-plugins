@@ -136,6 +136,11 @@
       "id": "n15",
       "prompt": "fill the gaps in this corpus with new researched files",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "build a skill for reviewing PRs",
+      "expect": "no-trigger"
     }
   ]
 }

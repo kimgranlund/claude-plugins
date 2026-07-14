@@ -1,0 +1,36 @@
+{
+  "skill": "knowledge-harvest",
+  "_note": "Routing corpus of record (minted 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (frequency/impact detection, placement+confirmation, staleness re-verification). Negatives drawn adversarially from the dangerous near-neighbors: knowledge-forge (a cross-plugin sibling — AUTHORS the actual reference content once a plan is confirmed; this skill only detects+proposes+confirms), system-decompose (the two-plane decomposition behind a brand-new skill's DESIGN, not deciding whether a fact is worth harvesting), skill-forge (building a skill end-to-end from an intent, not judging whether a fact crossed the harvest bar), release_gate.py/eval-run (this skill invokes them as Phase 5 steps, it does not replace running them directly), intent-extract (sharpening an ambiguous ASK, not judging knowledge-worthiness), plus a genuine unrelated build/implement ask.",
+  "positives": [
+    "this is the third time I've had to explain this convention",
+    "we keep re-explaining the same correction every week, can we write this down somewhere",
+    "should this become a skill or just stay in the conversation",
+    "is this actually project knowledge or just one-off noise",
+    "we just ratified this ADR decision, should it become a reusable reference",
+    "scan our docs folder for knowledge we haven't captured as a skill yet",
+    "check if our harvested knowledge is still accurate",
+    "did this citation go stale, the file it points to moved",
+    "should we harvest this fact into the existing reference or make a new one",
+    "we've said this correction twice now, is it worth writing down",
+    "help me decide if this is worth turning into a knowledge-pack entry",
+    "our ticket's findings section closed, should that become a written pattern",
+    "is there already a reference file covering this so we don't duplicate it",
+    "re-verify the citations in our knowledge packs against current reality",
+    "propose a plan for capturing this decision before we write anything",
+    "what's the right home for this fact — new skill, new reference, or an existing one"
+  ],
+  "negatives": [
+    "author the actual reference content for this new knowledge pack",
+    "write the SKILL.md and evals for this brand new corpus",
+    "decompose this system before we spec it",
+    "run the two-plane structural breakdown for this new architecture",
+    "forge a brand new skill from scratch for this unrelated feature",
+    "run the intent interview for this new skill idea",
+    "run release_gate.py on this plugin",
+    "run /eval-run against this plugin's routing corpus",
+    "just implement this feature in code",
+    "summarize what changed in this pull request",
+    "extract the root intent behind this vague request",
+    "review this skill's language and potency"
+  ]
+}

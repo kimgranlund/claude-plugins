@@ -111,6 +111,11 @@
       "id": "n12",
       "prompt": "why do these colors clash",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "this is the third time I've had to explain this convention, should it become a skill",
+      "expect": "no-trigger"
     }
   ]
 }

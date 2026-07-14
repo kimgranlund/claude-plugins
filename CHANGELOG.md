@@ -1,8 +1,28 @@
 # Changelog
 
 Repo-level milestones only. Each plugin's own `README.md` footer carries its full, dated version
-ledger — this file exists to show how the eight plugins came to exist relative to each other, not
+ledger — this file exists to show how the nine plugins came to exist relative to each other, not
 to duplicate their per-version detail.
+
+## 2026-07-13 — `llm`: a ninth plugin, authored fresh via `system-decompose`
+
+Unlike the six `plugin-decompose`-partitioned domain plugins, `llm` was greenfield-designed: ran
+`forge`'s `system-decompose` (technical-architecture domain) against "everything learned about
+Anthropic LLM gateways and JSONL streaming" while building `@agent-ui/a2ui`'s live-agent system,
+producing a 2-node/21-action/0-unhosted manifest (`coverage_check.py` clean) before a line of
+content was written. Two knowledge packs resulted — `llm-provider-gateway` (the swappable-provider
+adapter seam, registry + trust boundary, dev-proxy, the bundler env-inlining footgun,
+stateless-session/turn model) and `llm-jsonl-streaming` (SSE chunk-buffering technique, the
+Anthropic SSE contract as a worked instance, validate-then-stream self-correction) — each grounded
+in TWO kinds of sources (a platform/vendor fact, or the `@agent-ui/a2ui` implementation cited as a
+worked example, never as sole authority), a deliberate posture split from `agentic-ui`'s own packs,
+which document that repo's actual dated behavior. Independently reviewed (`skill-auditor` ×2,
+`plugin-reviewer` ×1) before landing: fixed an intra-skill `[[cross-reference]]` convention error
+(18 handles wrongly double-bracketed — that syntax is reserved for cross-*skill* links only), one
+worked-instance citation that overclaimed its scope (`nextTurn` narrowed to the continuation-only
+half it actually implements), two loose citation ranges tightened, both descriptions trimmed under
+the 1024-char portability cap, and this file's + the top-level `README.md`'s stale plugin counts
+corrected. (`llm` 0.1.0; marketplace + README updated to nine plugins/seven domain plugins)
 
 ## 2026-07-07 — Repo goes public
 

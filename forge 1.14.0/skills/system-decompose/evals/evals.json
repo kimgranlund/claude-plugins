@@ -56,6 +56,11 @@
       "id": "n06",
       "prompt": "push this analysis to higher-order reasoning about the rules themselves",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "is this fact worth turning into a knowledge-pack entry",
+      "expect": "no-trigger"
     }
   ]
 }

@@ -1,9 +1,11 @@
 # nonoun-plugins
 
-Eight Claude Code plugins: `forge` and `scribe` are the authoring toolchain — they build and
-validate everything else, including each other. The other six are domain plugins, partitioned out
-of a legacy personal skill/agent corpus (61 skills, 19 agents) via a `plugin-decompose` analysis
-run by `forge` itself.
+Nine Claude Code plugins: `forge` and `scribe` are the authoring toolchain — they build and
+validate everything else, including each other. The other seven are domain plugins; six were
+partitioned out of a legacy personal skill/agent corpus (61 skills, 19 agents) via a
+`plugin-decompose` analysis run by `forge` itself, and `llm` was authored fresh via
+`system-decompose` (distilled from `@agent-ui/a2ui`'s live-agent implementation, generalized as
+portable technique).
 
 Directory names carry a version suffix (`forge 1.14.0`, `scribe 0.1.0`, ...) — quote the path, it
 contains a space. See `CLAUDE.md` for the workspace's own operating rules if you're working *on*
@@ -18,6 +20,7 @@ these plugins rather than just installing them.
 | [`forge`](<forge 1.14.0/README.md>) | Author and validate Claude Code skills, agents, hooks, entry files, and plugins themselves — the toolchain every other plugin here was built and gated through. |
 | [`scribe`](<scribe 0.1.0/README.md>) | Author functional documents (ADR/PRD/SPEC/LLD/PLAN/ROADMAP/TICKET/TASK), capture bug reports durably before dispatching an investigation, research methods & rubrics, markdown↔markup conversion, knowledge/reference authoring. |
 | [`agentic-ui`](<agentic-ui 0.1.0/README.md>) | Knowledge packs for the A2UI wire protocol, renderer, catalog design, and training corpus. |
+| [`llm`](<llm 0.1.0/README.md>) | Portable LLM-integration knowledge (the swappable-provider gateway pattern, streaming structured output safely) plus a six-layer mini/portable chat-agent-harness family (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). |
 | [`color`](<color 0.1.0/README.md>) | Color science (accessibility, materials, perception, spaces), OKLCH palette design, contrast/CVD verification. |
 | [`typography`](<typography 0.1.0/README.md>) | Typography systems, pairing, tokens, lettering knowledge. |
 | [`design-systems`](<design-systems 0.1.0/README.md>) | Design-system export bundles (Claude Design, Figma Make, Google Stitch) and the Material Design token grammar. |
@@ -35,7 +38,7 @@ As a marketplace (recommended — lets you install only the plugins you want):
 claude plugin marketplace add kimgranlund/claude-plugins
 claude plugin install forge@nonoun-plugins
 claude plugin install scribe@nonoun-plugins
-# ...and so on for any of the eight
+# ...and so on for any of the nine
 ```
 
 For local development against a working copy instead:

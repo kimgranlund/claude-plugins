@@ -1,0 +1,33 @@
+{
+  "skill": "llm-jsonl-streaming",
+  "_note": "Routing corpus of record (minted 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (SSE chunk-buffering technique, the Anthropic worked example, validate-then-stream self-correct). Negatives drawn adversarially from the dangerous near-neighbors: llm-provider-gateway (the sibling pack — the adapter/registry/trust-boundary/session pattern this streaming sits BEHIND), the agentic-ui plugin's a2ui-protocol (the A2UI wire MESSAGE shape) and a2ui-conversational-agent (this repo's OWN dated implementation), plus a genuine build/implement ask (this pack answers, it does not build).",
+  "positives": [
+    "how do I parse a chunked SSE stream correctly",
+    "why is my SSE parser dropping or duplicating text",
+    "what's the Anthropic Messages API's exact streaming event contract",
+    "how do I stream structured JSON output without ever rendering an invalid partial",
+    "what is validate-then-stream",
+    "how do I bound a self-correct retry loop against a model emitting invalid output",
+    "how do I signal a mid-stream upstream error without throwing inside a generator",
+    "why does my SSE frame get corrupted across two fetch reads",
+    "what is content_block_delta and when does it carry text",
+    "how do I heal a model's slightly malformed JSON before validating it",
+    "how do I feed a model its own validation failures so it self-corrects",
+    "what should happen when my LLM keeps producing invalid output after several retries",
+    "is an empty model response the same as an invalid one",
+    "how do I buffer partial SSE frames across network chunks"
+  ],
+  "negatives": [
+    "how do I support multiple LLM providers behind one interface",
+    "how do I keep an API key off the client and out of a static build",
+    "one config as both a provider picker and a server-side allowlist",
+    "keep a multi-turn LLM conversation stateless server-side",
+    "why did this A2UI payload fail validation",
+    "what does a binding or a check look like on the A2UI wire",
+    "how does the A2UI live-agent's produce loop work in this repo",
+    "what is ADR-0088 proposing for conversational reasoning in @agent-ui/a2ui",
+    "implement an SSE parser for my Node server",
+    "write the validate-then-stream loop for my project",
+    "add a new axis to this knowledge pack"
+  ]
+}

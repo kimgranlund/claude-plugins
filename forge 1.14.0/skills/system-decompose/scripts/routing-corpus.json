@@ -1,7 +1,7 @@
 {
   "skill": "system-decompose",
-  "_note": "M2 test-of-record candidate (deep review 2026-07-03). Positives across imperative / diagnostic / symptom / indirect. Negatives drawn from the trigger vocabulary of graph neighbors: layout-decompose, flow-decompose, component-forge, prd/spec/lld-author, intent-grill. Should be checked into scripts/routing-corpus.json.",
-  "neighbors": ["layout-decompose", "flow-decompose", "component-forge", "prd-author", "spec-author", "lld-author", "intent-grill"],
+  "_note": "M2 test-of-record candidate (deep review 2026-07-03). Positives across imperative / diagnostic / symptom / indirect. Negatives drawn from the trigger vocabulary of graph neighbors: layout-decompose, flow-decompose, component-forge, prd/spec/lld-author, intent-grill. Should be checked into scripts/routing-corpus.json. Reciprocal fence added 2026-07-13 against forge's new knowledge-harvest skill (judges whether a fact crosses the bar for durable knowledge; this skill decomposes a NEW system's structure, a related but distinct question).",
+  "neighbors": ["layout-decompose", "flow-decompose", "component-forge", "prd-author", "spec-author", "lld-author", "intent-grill", "knowledge-harvest"],
   "positives": [
     "decompose this system into parts",
     "break down this technical architecture into subsystems and modules",
@@ -29,6 +29,7 @@
     "spec this out - pin down the API and acceptance requirements",
     "write the LLD and plan the components and data models",
     "grill me on this greenfield design before we plan",
-    "what do we need to decide here before designing this family"
+    "what do we need to decide here before designing this family",
+    "is this fact worth turning into a knowledge-pack entry"
   ]
 }

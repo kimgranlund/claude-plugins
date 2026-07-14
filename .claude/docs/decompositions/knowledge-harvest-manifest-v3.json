@@ -1,0 +1,96 @@
+{
+  "_diff_from_v2": [
+    "Added n1d (managed-docs scanner) + actions a18/a19: the signal layer can now also read a per-project, CONFIGURABLE managed-docs folder (e.g. agent-ui's .claude/docs/ with its typed ADR/PRD/SPEC/LLD/ticket corpus) and a named allowlist of pre-vetted document TYPES/sections (a ratified ADR Decision, a closed ticket's Findings, a ratified SPEC/PRD clause, an existing reference doc) as a second candidate source alongside live-conversation frequency/impact detection, AND as calibration exemplars that sharpen n1a/n1b's admission bar ('this is what good knowledge already looks like in this project').",
+    "This directly operationalizes system-decompose's own documented judgment-layer gap (its 'Scope of the gate' note: a ratified ADR Decision that never became an action has nothing to leave UNHOSTED, so a manifest can pass clean while the need ships nothing — 'catch that upstream with the ADR-Decision -> action completeness review, a judgement step, not this gate'). n1d/a18 is that review, now a first-class signal source rather than a manual afterthought.",
+    "Per-project config assumption (stated, correctable): the managed-docs folder path and the document-type allowlist are NOT hardcoded — each project (agent-ui, nonoun-plugins, a future repo) names its own, consistent with the portable/project-agnostic scope decided earlier. A managed-docs candidate still passes through the SAME n6a->n3a->n2a->n2b confirmation gate as every other candidate — this is an additional SOURCE, not a bypass of requirement 1 (never auto-author)."
+  ],
+  "domain": "technical-architecture",
+  "plan": false,
+  "nodes": [
+    { "id": "n0", "label": "knowledge-harvesting system", "leaf": false, "justify": "grouping" },
+
+    { "id": "n1", "label": "signal layer", "leaf": false, "justify": "grouping" },
+    { "id": "n1a", "label": "frequency detector (\"third telling\" heuristic)", "leaf": true },
+    { "id": "n1b", "label": "impact/blast-radius detector", "leaf": true },
+    { "id": "n1d", "label": "managed-docs scanner (reads a configured per-project docs folder + a named allowlist of pre-vetted document types/sections: ratified ADR Decisions, closed-ticket Findings, ratified SPEC/PRD clauses, existing reference docs)", "leaf": true },
+    { "id": "n1c", "label": "candidate assembler (quote + source + count/impact + dates)", "leaf": true },
+
+    { "id": "n6", "label": "cross-project routing layer", "leaf": false, "justify": "grouping" },
+    { "id": "n6a", "label": "project-substrate map (which repo/plugin owns this fact)", "leaf": true },
+
+    { "id": "n3", "label": "placement + authoring layer", "leaf": false, "justify": "grouping" },
+    { "id": "n3a", "label": "placement resolver (PROPOSES: new skill vs extend reference vs new reference-file vs reject-duplicate, plus a versioning plan) — tentative, subject to user override at n2b", "leaf": true },
+
+    { "id": "n2", "label": "confirmation layer", "leaf": false, "justify": "grouping" },
+    { "id": "n2a", "label": "candidate summarizer (candidate + PROPOSED placement/versioning plan -> a concrete, decidable question)", "leaf": true },
+    { "id": "n2b", "label": "AskUserQuestion gate (confirm / override / skip the proposed plan) — no write happens without a pass through here, regardless of which signal source produced the candidate", "leaf": true },
+
+    { "id": "n3b", "label": "content author (SKILL.md/reference/routing-corpus/evals + citation capture) — only runs on a confirmed plan", "leaf": true },
+
+    { "id": "n4", "label": "corpus validation layer", "leaf": false, "justify": "grouping" },
+    { "id": "n4a", "label": "structural gate (release_gate.py — includes the handle-convention/dangling-reference checks, G5+G8)", "leaf": true },
+    { "id": "n4c", "label": "independent reviewer dispatch (skill-auditor / plugin-reviewer, generator≠critic) — runs on gate-clean content only", "leaf": true },
+    { "id": "n4b", "label": "routing gate (blind judge simulation, eval-run) — runs on the final, post-review descriptions", "leaf": true },
+
+    { "id": "n5", "label": "staleness layer", "leaf": false, "justify": "grouping" },
+    { "id": "n5c", "label": "trigger integration (a concrete, user-invoked entry point — e.g. a slash command run periodically — never an assumed background process)", "leaf": true },
+    { "id": "n5a", "label": "re-verify trigger (checks recorded citations still hold, once invoked via n5c)", "leaf": true },
+    { "id": "n5b", "label": "stale-entry resolution (re-confirm with user before edit/retire)", "leaf": true }
+  ],
+  "actions": [
+    { "id": "a1", "label": "detect a repeated correction/fact crossing the frequency admission bar" },
+    { "id": "a2", "label": "detect a high-impact/blast-radius fact even on first occurrence" },
+    { "id": "a18", "label": "scan a configured managed-docs folder for pre-vetted document types/sections as a direct candidate source" },
+    { "id": "a19", "label": "use the managed-docs folder's existing high-quality entries as calibration exemplars, sharpening the frequency/impact admission bar" },
+    { "id": "a3", "label": "assemble a candidate record (quote, source, count/impact score, dates) from whichever signal source produced it" },
+    { "id": "a15", "label": "propose which project's substrate a candidate belongs to" },
+    { "id": "a6", "label": "propose placement: new skill vs new reference file vs extend existing reference vs reject as duplicate" },
+    { "id": "a16", "label": "propose a versioning plan: in-place edit vs a new dated entry, never silently mutate a finalized claim" },
+    { "id": "a4", "label": "summarize the candidate AND its proposed placement/versioning plan into a question the user can decide on" },
+    { "id": "a5", "label": "ask the user via AskUserQuestion to confirm, override, or skip the proposed plan before any write happens" },
+    { "id": "a7", "label": "author/update the actual SKILL.md, reference, routing-corpus, and evals content per the confirmed plan" },
+    { "id": "a12", "label": "record each cited claim's exact source (file:line, commit/date) at authoring time" },
+    { "id": "a9", "label": "run the structural gate (release_gate.py, incl. handle-convention checks) on the affected plugin" },
+    { "id": "a11", "label": "dispatch an independent reviewer before treating a candidate change as landed" },
+    { "id": "a10", "label": "run the blind routing simulation on the affected plugin's final descriptions" },
+    { "id": "a17", "label": "wire the re-verify trigger to a concrete, user-invoked entry point rather than an assumed background process" },
+    { "id": "a13", "label": "re-check a recorded citation still holds, once the trigger is invoked" },
+    { "id": "a14", "label": "on a broken/stale citation, ask the user again before editing or retiring the entry" }
+  ],
+  "hosts": [
+    { "action": "a1", "node": "n1a" },
+    { "action": "a2", "node": "n1b" },
+    { "action": "a18", "node": "n1d" },
+    { "action": "a19", "node": "n1d" },
+    { "action": "a3", "node": "n1c" },
+    { "action": "a15", "node": "n6a" },
+    { "action": "a6", "node": "n3a" },
+    { "action": "a16", "node": "n3a" },
+    { "action": "a4", "node": "n2a" },
+    { "action": "a5", "node": "n2b" },
+    { "action": "a7", "node": "n3b" },
+    { "action": "a12", "node": "n3b" },
+    { "action": "a9", "node": "n4a" },
+    { "action": "a11", "node": "n4c" },
+    { "action": "a10", "node": "n4b" },
+    { "action": "a17", "node": "n5c" },
+    { "action": "a13", "node": "n5a" },
+    { "action": "a14", "node": "n5b" }
+  ],
+  "edges": [
+    { "from": "n1d", "to": "n1a", "why": "the managed-docs folder's existing entries calibrate what counts as 'good knowledge,' sharpening the frequency detector's threshold before it fires" },
+    { "from": "n1d", "to": "n1b", "why": "the same calibration exemplars sharpen the impact/blast-radius detector's threshold" },
+    { "from": "n1d", "to": "n1c", "why": "a candidate mined directly from a ratified doc (e.g. an ADR Decision) still needs assembling into the same candidate-record shape as a conversation-detected one" },
+    { "from": "n1c", "to": "n6a", "why": "the assembled candidate is needed before proposing which project's substrate it belongs to" },
+    { "from": "n6a", "to": "n3a", "why": "the target project must be known before proposing where within that corpus the entry lands" },
+    { "from": "n3a", "to": "n2a", "why": "the summarizer needs the proposed placement/versioning plan to build a concrete, decidable question rather than a vague yes/no" },
+    { "from": "n2a", "to": "n2b", "why": "the AskUserQuestion dispatch needs the summarized question as its input" },
+    { "from": "n2b", "to": "n3b", "why": "authoring must not start until the user has confirmed (or overridden) the specific proposed plan" },
+    { "from": "n3b", "to": "n4a", "why": "the structural gate runs against authored content, and needs it to exist first" },
+    { "from": "n4a", "to": "n4c", "why": "reviewer attention is reserved for content that already passes the cheap deterministic gate, not a pre-gate draft" },
+    { "from": "n4c", "to": "n4b", "why": "the routing simulation should measure the final, post-review descriptions, since review may change wording that affects routing" },
+    { "from": "n3b", "to": "n5a", "why": "a citation must be recorded during authoring before it can ever be re-verified later" },
+    { "from": "n5c", "to": "n5a", "why": "the re-verify trigger only runs through its concrete invocation point; the entry point must be wired before the check logic can fire" },
+    { "from": "n5a", "to": "n5b", "why": "a re-verify trigger firing on a broken citation is what feeds the stale-entry resolution step" }
+  ]
+}

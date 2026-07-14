@@ -7,7 +7,8 @@ description: >-
   validate-then-stream", "how is the system prompt built", "why did every click trigger
   a turn". Covers the AgentTransport seam (zero-edit recorded↔live swap), the
   Turn/Session model + pure reducer, the bounded produce() loop + drift-gated prompt, the multi-provider seam
-  (providers.json, dev-proxy, API keys, VITE_ footgun), the in-chat
+  (providers.json, dev-proxy, API keys, VITE_ footgun), the EXACT Anthropic SSE wire contract
+  (event sequence, buffering, error sentinel), the in-chat
   switcher, and the conversational channel + asks (ADR-0088 family, shipped 2026-07-08). ANSWERS
   from a cited corpus; it does not build. NOT for the wire shape / renderer (a2ui-protocol);
   NOT for catalog design or coverage (a2ui-catalog-design); NOT for corpus records / retrieve()
@@ -34,6 +35,7 @@ claim cites its source file:line or an ADR/SPEC clause.
 | Turn model — "how does a click become a turn?", "intent vs client turn", "the reducer", "the agent continues" | `references/turn-session-and-input-intent.md` |
 | The runtime loop — "the produce() self-correct loop", "validate-then-stream", "how is the prompt built?", "halt-and-report" | `references/produce-loop.md` |
 | Providers & keys — "wire a new provider", "add a model", "where's the key?", "is it safe?", "the trust boundary", "the VITE_ footgun" | `references/provider-model-seam-and-trust-boundary.md` |
+| The Anthropic SSE wire contract — "why did my SSE parsing break", "what's the exact event sequence", "why is text getting dropped mid-stream", "the buffering assumption", "the error sentinel" | `references/anthropic-sse-wire-contract.md` |
 | The switcher & overlay — "the in-chat provider/model picker", "how the live overlay is wired dev-only" | `references/switcher-and-live-overlay.md` |
 | The conversational channel & asks — "the note beside the stream", "clarify/boundary asks", "the mode axis", "mini-skills", "wantResponse routing" (ADR-0088..0091/0097) | `references/conversational-reasoning-and-click-routing-gap.md` |
 | Provenance — where a claim comes from | `references/sources.md` |

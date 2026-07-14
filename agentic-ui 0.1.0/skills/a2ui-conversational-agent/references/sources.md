@@ -14,7 +14,12 @@ repaired.
   `session.ts` (the pure reducer + framing), `produce.ts` (the bounded loop),
   `system-prompt.ts` (the drift-gated derived prompt), `providers-config.ts` (`resolvePair` — the
   trust boundary), `providers.json` (the registry), `dev-proxy-plugin.ts` (the dev-only proxy),
-  `transcript.ts` (the recorded backbone data).
+  `transcript.ts` (the recorded backbone data), `providers/anthropic.ts` (the implemented
+  `AgentProvider` adapter — the SSE wire contract, `parseAnthropicSSE`/`splitFrames` — see
+  anthropic-sse-wire-contract).
+- **`packages/agent-ui/a2ui/src/live-agent/anthropic-sse.test.ts`** — the fixture suite proving
+  `parseAnthropicSSE` (SPEC-R11 AC3); the anthropic-sse-wire-contract axis's non-network ground
+  truth.
 - **`site/`** — the browser side: `lib/agent-runtime.ts` (the re-export shim),
   `lib/live-proxy-transport.ts` (the dev-only overlay transport),
   `lib/provider-switcher.ts` (the in-chat switcher), `pages/a2ui-live.ts` (the demo page —

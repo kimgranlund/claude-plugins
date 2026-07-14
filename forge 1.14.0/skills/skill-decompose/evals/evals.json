@@ -146,6 +146,11 @@
       "id": "n17",
       "prompt": "which plugins should our skills folder be divided into",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n18",
+      "prompt": "build a skill for reviewing PRs",
+      "expect": "no-trigger"
     }
   ]
 }

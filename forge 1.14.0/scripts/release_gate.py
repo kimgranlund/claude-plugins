@@ -212,7 +212,12 @@ def gate(root: Path, package: bool = False):
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):
              "agent-design", "isolation-verify", "agent-to-agent", "inter-agent",
-             "clean-run", "halt-and-report", "report-format"}
+             "clean-run", "halt-and-report", "report-format",
+             # the `llm` plugin's chat-harness-* family (2026-07-13): "chat-agent" is the
+             # family's own shared framing phrase ("a chat-agent harness"), tripping the
+             # `-agent` suffix a2ui-conversational-agent already owns; "hardcoded-feature" is
+             # ordinary prose in chat-harness-skills-and-routing's own axis description:
+             "chat-agent", "hardcoded-feature"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

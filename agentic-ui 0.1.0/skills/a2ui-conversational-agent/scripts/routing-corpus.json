@@ -1,6 +1,6 @@
 {
   "skill": "a2ui-conversational-agent",
-  "_note": "Routing corpus of record (minted 2026-07-07). Positives: imperative / diagnostic / symptom / indirect phrasings of live-agent asks across the six axes (transport seam, turn/session, produce loop, provider seam + trust boundary, switcher/overlay, the ADR-0088 gap). Negatives drawn adversarially from the dangerous near-neighbors: a2ui-protocol and a2ui-catalog-design (sibling ANSWER packs — the wire shape / catalog line), a2ui-training-corpus (this pack CALLS retrieve(); it does not own retrieval), a2ui-composer / a2ui-builder (the MAKER agents), system-planner (ADR/SPEC authoring), plus knowledge-author.",
+  "_note": "Routing corpus of record (minted 2026-07-07; SSE-wire-contract axis + t20/n18 added 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings of live-agent asks across the seven axes (transport seam, turn/session, produce loop, provider seam + trust boundary, the Anthropic SSE wire contract, switcher/overlay, the ADR-0088 gap). Negatives drawn adversarially from the dangerous near-neighbors: a2ui-protocol and a2ui-catalog-design (sibling ANSWER packs — the wire shape / catalog line), a2ui-training-corpus (this pack CALLS retrieve(); it does not own retrieval), a2ui-composer / a2ui-builder (the MAKER agents), system-planner (ADR/SPEC authoring), plus knowledge-author.",
   "positives": [
     "how does the transport swap from the recorded backbone to a live model",
     "how does clicking a button in the canvas become a chat turn",
@@ -20,7 +20,8 @@
     "what is the dev-proxy trust boundary and the PAIR allowlist",
     "why is the VITE_ prefix a footgun for the live agent key",
     "how does the agent continue the conversation after a client message",
-    "what is ADR-0088 proposing for conversational reasoning"
+    "what is ADR-0088 proposing for conversational reasoning",
+    "why is the live agent's text streaming in truncated or dropping fragments"
   ],
   "negatives": [
     "why did this A2UI payload fail validation",
@@ -39,6 +40,7 @@
     "add the Anthropic SSE parsing to the provider adapter",
     "write ADR-0088 and mark it accepted",
     "revise the live-agent SPEC to add the note requirement",
-    "add a new axis to this knowledge pack"
+    "add a new axis to this knowledge pack",
+    "why did this A2UI JSONL message fail to parse on the wire"
   ]
 }

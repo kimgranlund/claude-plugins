@@ -1,11 +1,16 @@
 ---
 name: skill-forge
 description: >-
-  Forge a Claude Code skill end-to-end through six gated phases: route check, intent interview
-  (the grilling), evals-first, species-template draft, language pass, lint + fresh-context audit +
-  behavioral validation. Run /skill-forge [skill-name or one-line intent]. Human-timed; writes
-  files. NOT for auditing an existing skill without changes (skill-review).
-disable-model-invocation: true
+  Forge a Claude Code skill end-to-end through six gated phases: route check, intent interview,
+  evals-first, species-template draft, language pass, lint + fresh-context audit + behavioral
+  validation. Use when the user wants to build, create, author, or scaffold a NEW skill from an
+  intent — "build a skill for X", "make a skill that does Y", "I want a reusable capability for Z",
+  "turn this workflow into a skill", "write me a new skill for migrations", "add this as something
+  the model can invoke on its own". Human-timed; writes files; interviews before minting. NOT for
+  auditing an EXISTING skill without changes (skill-review); NOT for deciding whether a corpus
+  should split (skill-decompose) or merge (skill-synthesize); NOT an agent (agent-forge), a hook
+  (hook-forge), or CLAUDE.md (entry-file-audit) — different primitives.
+disable-model-invocation: false
 user-invocable: true
 argument-hint: "[skill-name or one-line intent]"
 ---
