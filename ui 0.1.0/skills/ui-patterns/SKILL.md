@@ -1,16 +1,18 @@
 ---
 name: ui-patterns
 description: >-
-  Answers questions about common UI patterns — how software UIs are structured at macro (shells, templates)
-  and micro (modules) level. Use when naming, choosing, or explaining a pattern: "what pattern is this",
-  "name this screen type", "how should a data table / form / wizard behave", "common layout for
-  settings / search / a feed", "what modules does a dashboard / landing page need", "what states does a screen need", "empty state best practice", "when is a modal wrong". Covers page templates (master-detail, canvas+inspector, wizard,
-  feed, settings, board, chat), the module catalog (tables, forms, nav, pickers, toolbars, overlays,
-  search, media, viz, maps), and screen-state grammar
-  (ideal/empty/loading/partial/error). ANSWERS and names patterns — it does not apply or build them:
-  apply to a layout: layout-decompose; build a module: component-forge; whole-product sweep:
-  ui-audit. NOT for what a whole product genre conventionally includes or
-  needs (ui-genres); NOT for which keys a widget answers (focus-verify).
+  Answers questions about common UI patterns at macro (shells, templates), micro (modules), and
+  container (card/panel/dialog/drawer anatomy) level. Use when naming, choosing, or explaining a
+  pattern: "what pattern is this", "name this screen type", "how should a table / form / wizard
+  behave", "common layout for settings / a feed", "what does a card usually contain", "should this
+  header be sticky", "how should footer buttons lay out", "what states does a screen need", "when
+  is a modal wrong". Covers page templates, the module catalog (tables, forms, nav, pickers,
+  toolbars, overlays), container Header·Body·Footer anatomy (sticky headers, scroll bodies,
+  footer conventions, nested chrome), and screen states. ANSWERS and names patterns; does
+  not apply or build: apply to a layout: layout-decompose; build a module:
+  component-forge; whole-product sweep: ui-audit. NOT a genre's needs (ui-genres); NOT which keys
+  a widget answers (focus-verify); NOT the spacing arithmetic behind composed padding
+  (geometry-systems).
 user-invocable: false
 disable-model-invocation: false
 ---
@@ -25,12 +27,13 @@ vocabulary instead of taste. Two altitudes, one state grammar — each in its ow
 | Page/screen shape — "what template fits this job?", "name this screen type" | `references/macro-patterns.md` |
 | Shell archetypes — the four ASCII wireframes (productivity-shell, saas-dashboard, marketing-site, mobile-app) | `references/archetype-*.md` (applied by [[layout-decompose]]) |
 | Module behavior — "how should this table/form/picker/carousel/map work?" | `references/micro-patterns.md` |
+| Container anatomy — "what does a card/panel/dialog/drawer contain?", sticky headers, scrollable bodies, footer actions | `references/container-patterns.md` |
 | Screen states — empty/loading/partial/error, progressive disclosure | `references/state-patterns.md` |
 | Provenance — where a pattern claim comes from | `references/sources.md` |
 
 ## Consult procedure
 
-1. Classify the ask: template (macro) · module (micro) · state. Load only the matching reference —
+1. Classify the ask: template (macro) · module (micro) · container anatomy · state. Load only the matching reference —
    Grep for the pattern name, Read that section; the files are catalogs, not linear reads.
 2. Answer with the pattern's **name, anatomy, when-it-fits, and its named failure mode** — a pattern
    recommendation without the failure mode it invites is half an answer. Worked shape:

@@ -1,0 +1,22 @@
+{
+  "skill": "dom-block-flow",
+  "note": "Answers-only knowledge pack: raw CSS/DOM layout mechanics. Fences: component-forge owns token-level component geometry, geometry-systems owns spacing-scale theory, layout-decompose owns page-region placement.",
+  "cases": [
+    { "id": "t01", "prompt": "Why did the margin between these two divs collapse?", "expect": "trigger" },
+    { "id": "t02", "prompt": "What triggers a new block formatting context?", "expect": "trigger" },
+    { "id": "t03", "prompt": "Why can't this z-index escape above its parent's sibling?", "expect": "trigger" },
+    { "id": "t04", "prompt": "What's the containing block for this absolutely positioned element?", "expect": "trigger" },
+    { "id": "t05", "prompt": "Why is this flex item overflowing even though I set flex-shrink?", "expect": "trigger" },
+    { "id": "t06", "prompt": "What's the difference between auto-fill and auto-fit in repeat()?", "expect": "trigger" },
+    { "id": "t07", "prompt": "Why doesn't height: 100% work on this element?", "expect": "trigger" },
+    { "id": "t08", "prompt": "Why does adding overflow: hidden fix this layout bug?", "expect": "trigger" },
+    { "id": "t09", "prompt": "How do fr units distribute space in CSS grid?", "expect": "trigger" },
+    { "id": "t10", "prompt": "Why doesn't position: sticky work inside this scroll container?", "expect": "trigger" },
+    { "id": "n01", "prompt": "What padding should this button use at the XL size?", "expect": "no-trigger", "note": "component-forge — a component's own derived geometry, not raw CSS mechanics" },
+    { "id": "n02", "prompt": "Why do most design systems use 4px or 8px spacing steps?", "expect": "no-trigger", "note": "geometry-systems — spacing-scale theory, not box-model mechanics" },
+    { "id": "n03", "prompt": "Where should the sidebar sit relative to the canvas in this dashboard?", "expect": "no-trigger", "note": "layout-decompose — page-region placement" },
+    { "id": "n04", "prompt": "Build this card component with a header and footer", "expect": "no-trigger", "note": "component-forge — realization, not mechanism explanation" },
+    { "id": "n05", "prompt": "What icon size pairs with this button height?", "expect": "no-trigger", "note": "component-forge geometry ramp" },
+    { "id": "n06", "prompt": "How long should this modal's entrance animation be?", "expect": "no-trigger", "note": "motion-design — unrelated domain" }
+  ]
+}

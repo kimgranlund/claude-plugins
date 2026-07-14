@@ -232,6 +232,14 @@ def gate(root: Path, package: bool = False):
              # the mechanization pair (2026-07-14): "hand-run" is prose ("a hand-run check",
              # -run suffix from eval-run); "selftest-patterns" is a references file:
              "hand-run", "selftest-patterns",
+             # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
+             # "scale-theory" are references files (ui-patterns, geometry-systems); "design-systems"
+             # is the sibling PLUGIN's name, caught by geometry-systems' own "-systems" suffix;
+             # "box-model-and-flow" is a references file (dom-block-flow); "mid-flow" is prose
+             # ("mid-flow" in the hook skills), caught once dom-block-flow added the -flow suffix:
+             "container-patterns", "scale-theory", "design-systems", "box-model-and-flow",
+             # prose compounds newly caught by the same two suffixes (-flow, -systems):
+             "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):

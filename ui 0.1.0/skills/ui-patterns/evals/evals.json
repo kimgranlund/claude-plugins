@@ -1,161 +1,209 @@
 {
- "skill": "ui-patterns",
- "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (sibling re-aimed 2026-07-06 for the color-science-* split — the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genres and layout-decompose are the dangerous near-neighbors; plus ui-audit, component-forge, flow-decompose, color-science-accessibility, typography-lettering, knowledge-forge. 0.4.1: two fences added after the blind run — 'includes or needs' (ui-genres) and which-keys/focus-keyboard (focus-verify); this suite itself ran 31/31 clean.",
- "cases": [
-  {
-   "id": "t01",
-   "prompt": "what pattern is this screen using",
-   "expect": "trigger"
-  },
-  {
-   "id": "t02",
-   "prompt": "how should a data table behave when the user filters and bulk-selects",
-   "expect": "trigger"
-  },
-  {
-   "id": "t03",
-   "prompt": "master-detail or list-detail for our mail app",
-   "expect": "trigger"
-  },
-  {
-   "id": "t04",
-   "prompt": "what is the best practice for empty states",
-   "expect": "trigger"
-  },
-  {
-   "id": "t05",
-   "prompt": "when is a modal the wrong choice",
-   "expect": "trigger"
-  },
-  {
-   "id": "t06",
-   "prompt": "what modules does a dashboard page need",
-   "expect": "trigger"
-  },
-  {
-   "id": "t07",
-   "prompt": "our form shows errors on every keystroke, is that normal",
-   "expect": "trigger"
-  },
-  {
-   "id": "t08",
-   "prompt": "what's the common layout for a settings page",
-   "expect": "trigger"
-  },
-  {
-   "id": "t09",
-   "prompt": "should wizard steps be revisitable",
-   "expect": "trigger"
-  },
-  {
-   "id": "t10",
-   "prompt": "what screen states do I need to design besides the happy path",
-   "expect": "trigger"
-  },
-  {
-   "id": "t11",
-   "prompt": "explain the canvas plus inspector template",
-   "expect": "trigger"
-  },
-  {
-   "id": "t12",
-   "prompt": "should this picker be a dropdown or a combobox",
-   "expect": "trigger"
-  },
-  {
-   "id": "t13",
-   "prompt": "name this screen type for me",
-   "expect": "trigger"
-  },
-  {
-   "id": "t14",
-   "prompt": "is infinite scroll or pagination right for this table",
-   "expect": "trigger"
-  },
-  {
-   "id": "n01",
-   "prompt": "decompose this UI screenshot into regions",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n02",
-   "prompt": "which archetype fits this app shell",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n03",
-   "prompt": "wireframe a dashboard for me",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n04",
-   "prompt": "is this layout right, grade it",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n05",
-   "prompt": "what do users expect in a fintech app",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n06",
-   "prompt": "what genre is this app",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n07",
-   "prompt": "which patterns does this product category demand",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n08",
-   "prompt": "is this convention violation acceptable for a game",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n09",
-   "prompt": "audit the whole app's UX before launch",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n10",
-   "prompt": "sweep this product for consistency issues",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n11",
-   "prompt": "build a combobox web component",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n12",
-   "prompt": "add an overflow seam to this toolbar module",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n13",
-   "prompt": "map the checkout flow and find dead ends",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n14",
-   "prompt": "can the user recover and resume this journey",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n15",
-   "prompt": "pick an accessible contrast ratio for this text",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n16",
-   "prompt": "which font pairing should I use",
-   "expect": "no-trigger"
-  },
-  {
-   "id": "n17",
-   "prompt": "add an axis to this knowledge pack",
-   "expect": "no-trigger"
-  }
- ]
+  "skill": "ui-patterns",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (sibling re-aimed 2026-07-06 for the color-science-* split — the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genres and layout-decompose are the dangerous near-neighbors; plus ui-audit, component-forge, flow-decompose, color-science-accessibility, typography-lettering, knowledge-forge. 0.4.1: two fences added after the blind run — 'includes or needs' (ui-genres) and which-keys/focus-keyboard (focus-verify); this suite itself ran 31/31 clean.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "what pattern is this screen using",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "how should a data table behave when the user filters and bulk-selects",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "master-detail or list-detail for our mail app",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "what is the best practice for empty states",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "when is a modal the wrong choice",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what modules does a dashboard page need",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "our form shows errors on every keystroke, is that normal",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what's the common layout for a settings page",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "should wizard steps be revisitable",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "what screen states do I need to design besides the happy path",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "explain the canvas plus inspector template",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "should this picker be a dropdown or a combobox",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "name this screen type for me",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "is infinite scroll or pagination right for this table",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "decompose this UI screenshot into regions",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "which archetype fits this app shell",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "wireframe a dashboard for me",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "is this layout right, grade it",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "what do users expect in a fintech app",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "what genre is this app",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "which patterns does this product category demand",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "is this convention violation acceptable for a game",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "audit the whole app's UX before launch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "sweep this product for consistency issues",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "build a combobox web component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "add an overflow seam to this toolbar module",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "map the checkout flow and find dead ends",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "can the user recover and resume this journey",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "pick an accessible contrast ratio for this text",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "which font pairing should I use",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n17",
+      "prompt": "add an axis to this knowledge pack",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "t26",
+      "prompt": "What does a card usually contain — header, body, footer?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t27",
+      "prompt": "Should this dialog's header stay sticky while the body scrolls?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t28",
+      "prompt": "How should the footer buttons in this panel be laid out?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t29",
+      "prompt": "Is it okay to nest a card inside another card?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t30",
+      "prompt": "Does this drawer need a footer, or can it autosave?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n18",
+      "prompt": "Should we use a dialog or a drawer for this edit flow?",
+      "expect": "trigger",
+      "note": "both the overlay-CHOICE (micro-patterns.md) and the container ANATOMY (container-patterns.md) live inside this same skill's corpus — the router doesn't split at the reference-file level, only the skill level; reclassified from no-trigger after a blind judge correctly routed it here (2026-07-15)"
+    },
+    {
+      "id": "n19",
+      "prompt": "How much padding should compose at this card's nested boundary?",
+      "expect": "no-trigger",
+      "note": "geometry-systems — the spacing arithmetic, not the chrome-redundancy pattern"
+    },
+    {
+      "id": "n20",
+      "prompt": "Build the actual card component with this header/body/footer",
+      "expect": "no-trigger",
+      "note": "component-forge — realization, not naming"
+    },
+    {
+      "id": "t31",
+      "prompt": "Should this be a settings modal or a full settings page?",
+      "expect": "trigger"
+    }
+  ]
 }

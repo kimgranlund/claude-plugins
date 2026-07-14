@@ -102,6 +102,13 @@ common variants, and the per-archetype outside-in / inside-out notes. Match the 
   verbs — a single component's anatomy/API/geometry and a module's internal composition hand DOWN to
   [[component-forge]] (which hands the app shell back UP here); the journey BETWEEN screens hands ACROSS to
   [[flow-decompose]] — this skill stops at one screen's edge. Grade the slot; don't re-grade what fills it.
+- **Match at pattern altitude; cite the substrate, don't re-derive it.** This skill's judgments stay at the
+  region/verb level — when a finding bottoms out in a lower layer, name the pattern-level defect here and
+  cite the owning knowledge pack for the WHY: spacing rhythm → [[geometry-systems]], the CSS mechanism
+  behind a frame/scroll/stacking failure → [[dom-block-flow]], HIG semantics on a mobile-app match →
+  [[mobile-hig-patterns]], container anatomy → [[ui-patterns]]'s container catalog. A grade that re-derives
+  substrate theory inline is working below its altitude; a grade that names a defect with no owning layer
+  cited is an opinion.
 
 ## References
 
@@ -111,8 +118,11 @@ common variants, and the per-archetype outside-in / inside-out notes. Match the 
 | `../ui-patterns/references/archetype-productivity-shell.md` | a work-in tool (editor / designer / cockpit / IDE) |
 | `../ui-patterns/references/archetype-saas-dashboard.md` | a navigated app (records / settings / tables / charts) |
 | `../ui-patterns/references/archetype-marketing-site.md` | a read-to-convert site (homepage / feature / about / pricing / lead-gen / blog) |
-| `../ui-patterns/references/archetype-mobile-app.md` | a phone app (tabs / view stack / sheets) |
-| [[ui-patterns]] | the page templates *inside* a shell (master-detail, wizard, settings, feed…) and the module/state catalogs |
+| `../ui-patterns/references/archetype-mobile-app.md` | a phone app (tabs / view stack / sheets) — for HIG's own semantics of those regions (modality, detents, stack push/pop), consult [[mobile-hig-patterns]] |
+| [[ui-patterns]] | the page templates *inside* a shell (master-detail, wizard, settings, feed…), the module/state catalogs, and container Header·Body·Footer anatomy |
+| [[geometry-systems]] | an A3/A5 finding is really about spacing *rhythm* — inconsistent gaps, nesting that doesn't compose, a density question — cite its scale/composition theory instead of eyeballing |
+| [[dom-block-flow]] | an A1/A2 finding needs the CSS *mechanism* named — why the frame doesn't fix, a pane that won't scroll independently, sticky chrome that isn't sticking — the box-model/BFC/containing-block substrate |
+| [[mobile-hig-patterns]] | the matched archetype is mobile-app and the finding touches HIG semantics — tab-bar vs stack, sheet modality, alert escalation |
 
 ## Verify Target
 

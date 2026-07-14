@@ -30,5 +30,13 @@ claim needs an authority or the canon disagrees, these are the references, in tr
 
 In-corpus: the shell archetypes live in THIS pack's `references/archetype-*.md` (applied by
 `layout-decompose`); interaction invariants in the verifier family; component realization in
-`component-forge`. Claims here that drift from those owners should be fixed HERE — they own
+`component-forge`; the spacing arithmetic behind `container-patterns.md`'s nested-boundary note in
+`geometry-systems`. Claims here that drift from those owners should be fixed HERE — they own
 their layers.
+
+## container-patterns.md wave (2026-07-15)
+
+Researched from the same pattern-canon trust order above (Designing Interfaces 3rd ed.'s
+container/dialog conventions, Material Design 3's card component anatomy, NN/g's modal and form
+guidance already cited elsewhere in this pack) — no new source class introduced, one axis
+distilled from the existing canon this pack already draws on.

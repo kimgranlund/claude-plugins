@@ -39,6 +39,22 @@ Grouped preference panes: category navigation + a form pane per category.
 - **Failure:** mixed save models (some panes instant, some buffered) — the single most common
   settings defect; and burying the one setting users seek (no search, wrong category names).
 
+**Variant — settings modal.** A lightweight dialog for a handful of preferences, not a shrunk-down
+page: no category nav, no per-section headers — `container-patterns.md`'s dialog anatomy (Header ·
+Body · Footer) applied directly to a flat preferences payload. Header names the surface
+("Settings" / "Preferences"); Body is a flat list of controls with no category structure; Footer
+carries Save/Cancel, or nothing at all when every control is instant-apply and the dialog closes
+on outside-click.
+- **Fits:** roughly ≤10 settings with no natural category grouping — a browser extension's popup,
+  a single feature's quick-preferences dialog.
+- **The choice, not a spectrum:** settings-as-page and settings-as-modal are two DIFFERENT
+  patterns, not two densities of the same one — pick one at design time; don't let the container
+  drift under a growing control count.
+- **Failure:** the modal that outgrows itself — a settings dialog that keeps gaining toggles past
+  ~10 without ever being promoted to the page template above ends up an un-categorized, scrolling
+  wall of controls in a container that was never meant to hold that much. The fix is promotion to
+  the page template, never a bigger dialog.
+
 ## feed / timeline
 A reverse-chronological or ranked stream of homogeneous-ish items.
 - **Anatomy:** composer or filter header · item cards (identity · content · actions · timestamp) ·

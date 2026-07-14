@@ -1,6 +1,6 @@
 # Archetype · mobile-app
 
-> The A1–A5/B1–B5 notes below are owned by layout-decompose's method (references/decomposition-method.md there); this file hosts them for one-stop reading.
+> The A1–A5/B1–B5 notes below are owned by layout-decompose's method (references/decomposition-method.md there); this file hosts them for one-stop reading. This file names the shell's REGIONS; the platform's own semantics for them — tab-bar vs stack guidance, sheet modality (incl. iOS's modal-vs-nonmodal split), detents, alert escalation — are `mobile-hig-patterns`' territory (2026-07-15): consult it when the question is what HIG says a region is FOR, not where it sits.
 
 A phone app — **thumb-first**, a small viewport navigated as a **stack of views** with a few top-level **tabs**, and
 **modality expressed through sheets** (popover / bottom / full) rather than side panes. Examples: iOS/Android native
