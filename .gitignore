@@ -12,3 +12,6 @@ dist/
 .claude/settings.local.json
 *.zip
 harness-audit-*/
+
+# Harness-managed git worktrees (EnterWorktree) — in-repo by design, never committed (ruled 2026-07-15)
+.claude/worktrees/

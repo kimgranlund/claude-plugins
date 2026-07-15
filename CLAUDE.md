@@ -29,7 +29,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Routing proof after description edits | `/eval-run <plugin>` |
 | Periodic health sweep | `/harness-audit` (read-only; proposes) |
 | A drifted repo — duplicated instruction trees, stale corpus, dead automation: the committing campaign | forge: `/repo-alignment` |
-| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs G1–G11 on it; solo single-file fixes may still commit to main. Worktrees live OUTSIDE the repo root (the harness default); an in-repo worktree must be gitignored the moment it exists, and any change that retires a path a `.gitignore` rule names repairs that rule in the same change (ruled 2026-07-15) |
+| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs G1–G11 on it; solo single-file fixes may still commit to main. Worktrees are gitignored the moment they exist — the harness's EnterWorktree puts them IN-REPO at `.claude/worktrees/` (ignored here since 2026-07-15; amended same day — an earlier wording claimed out-of-repo placement) — and any change that retires a path a `.gitignore` rule names repairs that rule in the same change (ruled 2026-07-15) |
 | Ship | `/plugin-release <plugin>` — the only way anything ships |
 
 ## Common commands
