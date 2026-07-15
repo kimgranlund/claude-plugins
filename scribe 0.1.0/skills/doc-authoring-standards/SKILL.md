@@ -60,6 +60,11 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    doesn't disambiguate, name the resolved repo in the close-out report rather than guessing
    silently; never split one document's read (template, standards) from a different repo than its
    write (the instance file).
+   One delegation is legal (ruled 2026-07-15, ADR-0002 pattern): a workspace's entry file may
+   route the **work-item tier only** (TICKET/TASK) to a git-native backend (`gh issue`) — the
+   record then lives as an Issue with the same section contract, and `docs/tickets/`/`docs/task/`
+   retire for new items THERE. The decision/contract tiers (ADR, PRD, SPEC, LLD) and living-state
+   docs (PLAN, ROADMAP) are never delegated — they stay files on this map, always.
 
 ## The type contract table
 
