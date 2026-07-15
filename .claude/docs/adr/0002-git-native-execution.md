@@ -1,7 +1,7 @@
 ---
 doc-type: adr
 id: adr-0002
-status: proposed
+status: accepted
 date: 2026-07-15
 ratified: 2026-07-15 (maintainer, in-session AskUserQuestion — three rulings, one session)
 owner: kim.granlund
