@@ -37,7 +37,7 @@ NOT modeled; a target claiming either is argued in step 3, never encoded.
 2. **Gate:** `python3 scripts/focus-check.py <card.json | dir>` — a FAIL blocks the emit; fix the
    surface, not the card. `selftest` proves the checker itself.
 3. **Judge what the checker can't:** walk the passing tab order against reading order and task
-   flow; match each ring to its recipe and each role's keys to APG (`keyboard/affordances.json`);
+   flow; match each ring to its recipe and each role's keys to APG (`assets/keyboard/affordances.json`);
    apply the invariant table below to sizes, contrast, and motion.
 4. **Emit** the verdict — every violation cites the element/CSS rule it evaluates and routes its
    fix to the artifact that can make it. Where values are missing or non-compliant, the verdict
@@ -50,7 +50,7 @@ NOT modeled; a target claiming either is argued in step 3, never encoded.
 | Invariant | Value | Source |
 |---|---|---|
 | Hit target | ≥ 24×24 CSS px — or inline-text exception, or ≥24px center-to-center spacing, documented | SC 2.5.8 |
-| Platform floors | Apple 44pt · Material 48dp — the stricter wins on those platforms | `targets/minimums.json` |
+| Platform floors | Apple 44pt · Material 48dp — the stricter wins on those platforms | `assets/targets/minimums.json` |
 | Hit vs visual | hit area ≥ visual size; a 16×16 icon-button expands via padding/pseudo-element | SC 2.5.8 |
 | Ring thickness | ≥ 2 CSS px | SC 2.4.13 |
 | Ring contrast | ≥ 3:1 against **every** adjacent surface, in **both** schemes | SC 1.4.11/2.4.13 |
@@ -58,13 +58,13 @@ NOT modeled; a target claiming either is argued in step 3, never encoded.
 | forced-colors | `outline: 2px solid CanvasText` — custom ring colors are ignored, plan for it | recipes.json |
 | Ring motion | transition `outline-offset`/`outline-color` only — never `outline-width` (layout jitter); reduced-motion keeps color at ~80ms (it is feedback) | — |
 
-`targets/minimums.json` and `focus-ring/recipes.json` are canonical for these numbers; this table
+`assets/targets/minimums.json` and `assets/focus-ring/recipes.json` are canonical for these numbers; this table
 is the summary.
 
-**Ring recipes** (`focus-ring/recipes.json`): **outer** (default — 2px outline, offset per the
+**Ring recipes** (`assets/focus-ring/recipes.json`): **outer** (default — 2px outline, offset per the
 radius table) · **inner-outer** (2px + 2px, when both element and page surfaces could match a
 single ring color) · **inset** (for elements that cannot paint outside their bounds). Offset grows
-with radius (`offsets/per-surface.json`): none/sm/md → 2px, lg → 3px, xl → 4px — a square-cornered
+with radius (`assets/offsets/per-surface.json`): none/sm/md → 2px, lg → 3px, xl → 4px — a square-cornered
 ring on a round element reads as broken.
 
 ## Detection catalog (what a review hunts)
@@ -97,10 +97,10 @@ cleanly. The gate is **necessary, not sufficient** — a clean run proves no mec
 
 | Path / peer | Use |
 |---|---|
-| `targets/minimums.json` | SC 2.5.8 rules, exceptions, platform floors |
-| `focus-ring/recipes.json` | the three recipes + color strategies + contrast/forced-colors handling |
-| `offsets/per-surface.json` | ring offset/radius per element radius |
-| `keyboard/affordances.json` | per-role tab order, keys, escape, arrows (APG) |
+| `assets/targets/minimums.json` | SC 2.5.8 rules, exceptions, platform floors |
+| `assets/focus-ring/recipes.json` | the three recipes + color strategies + contrast/forced-colors handling |
+| `assets/offsets/per-surface.json` | ring offset/radius per element radius |
+| `assets/keyboard/affordances.json` | per-role tab order, keys, escape, arrows (APG) |
 | [[color-verify]] | the ramps/contrast primitives ring colors draw on |
 | `token-builder` agent | consumes emitted interactive-role tokens |
 | [[component-forge]] / the repo's component seat | where keyboard-affordance defects route — the maker that fixes a role's missing APG keys |

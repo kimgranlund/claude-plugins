@@ -38,7 +38,7 @@ spec"), not 2×N red lines; adding `declared_posture` (e.g. "en-US only, prototy
 a single advisory. If no inventory exists, enumerate every surface that renders text or formatted
 values (numbers, dates, currency, plurals, lists) from the codebase, and build a locale matrix
 `{locale, script, direction, expansion}` — expansion read per regime from
-`locales/expansion-factors.json` (unknown locales take its `default`: shortString ×2.5,
+`assets/locales/expansion-factors.json` (unknown locales take its `default`: shortString ×2.5,
 runningText +40% / −30%). The card never carries the judgment tier: translation naturalness,
 metric fit (whether a line-height suits its script), and mirroring rightness are step-3 judgment —
 no card boolean can attest them.
@@ -50,9 +50,9 @@ no card boolean can attest them.
    surface, not the card. `selftest` proves the checker itself.
 3. **Judge what the checker can't:** check script metrics against the bands below; hunt
    physical-axis CSS on text surfaces; match each icon to its mirroring policy
-   (`mirroring/icon-policies.json`); verify bidi isolation at every interpolation point
-   (`bidi/isolation-points.json`) and Intl routing on every formatted surface
-   (`formatting/intl-surfaces.json`).
+   (`assets/mirroring/icon-policies.json`); verify bidi isolation at every interpolation point
+   (`assets/bidi/isolation-points.json`) and Intl routing on every formatted surface
+   (`assets/formatting/intl-surfaces.json`).
 4. **Emit** the verdict — every violation cites the surface/CSS rule it evaluates and routes its
    fix to the artifact that can make it — plus per-locale entries where asked:
    `{tag, script, direction, expansion: {shortString, runningText}, lineHeightBand, minBodyPx}`.
@@ -61,16 +61,16 @@ no card boolean can attest them.
 
 | Invariant | Value | Source |
 |---|---|---|
-| Line-height bands | Latin 1.4–1.7 · CJK 1.55–1.8 · Arabic 1.6–2.0 · Devanagari 1.5–1.8 — one `line-height` rule is locale-incorrect | `locales/script-metrics.json` |
-| Min body size | Latin ≥ 14px · CJK ≥ 15px for equivalent legibility; `:lang()` may raise size 1 step for tall-ink scripts | `locales/script-metrics.json` |
-| Expansion budgets | regime-split (`string_regime`): **shortString** (≤ ~10 en chars — labels, buttons) +100–200% (de/fi/it ~×3, fr/pt ~×2.6, ru ~×2.5) · **runningText** (> ~70 chars) +30–50% European incl. Russian · CJK contracts (~×0.7) but glyphs run ~2× Latin width; unknown locale → shortString ×2.5 / runningText +40%; squish only to `contractionFactor` | `locales/expansion-factors.json` (W3C/IBM-cited canon) |
+| Line-height bands | Latin 1.4–1.7 · CJK 1.55–1.8 · Arabic 1.6–2.0 · Devanagari 1.5–1.8 — one `line-height` rule is locale-incorrect | `assets/locales/script-metrics.json` |
+| Min body size | Latin ≥ 14px · CJK ≥ 15px for equivalent legibility; `:lang()` may raise size 1 step for tall-ink scripts | `assets/locales/script-metrics.json` |
+| Expansion budgets | regime-split (`string_regime`): **shortString** (≤ ~10 en chars — labels, buttons) +100–200% (de/fi/it ~×3, fr/pt ~×2.6, ru ~×2.5) · **runningText** (> ~70 chars) +30–50% European incl. Russian · CJK contracts (~×0.7) but glyphs run ~2× Latin width; unknown locale → shortString ×2.5 / runningText +40%; squish only to `contractionFactor` | `assets/locales/expansion-factors.json` (W3C/IBM-cited canon) |
 | Axes | logical only (`inline-start`, `block-end`, `padding-inline-*`) on anything that holds or positions text — never `left`/`right` | — |
 | dir/lang | declared on every text root (`dir="auto"` for user content); inheritance from a declared ancestor counts for BOTH `lang` and `dir` (an LTR-only app with `html lang` and default direction passes); gate `dir` absence only when RTL is in scope or user content renders | — |
-| Bidi isolation | `<bdi>` or `unicode-bidi: isolate` around every runtime interpolation — user names, queries, filenames, tag chips | `bidi/isolation-points.json` |
-| Intl | numbers/dates/currency/relative-time/plurals/lists via `Intl.*` at render; `formatToParts` for mixed markup; currency carries `{amount, currency}`, never `"$12.50"` | `formatting/intl-surfaces.json` |
+| Bidi isolation | `<bdi>` or `unicode-bidi: isolate` around every runtime interpolation — user names, queries, filenames, tag chips | `assets/bidi/isolation-points.json` |
+| Intl | numbers/dates/currency/relative-time/plurals/lists via `Intl.*` at render; `formatToParts` for mixed markup; currency carries `{amount, currency}`, never `"$12.50"` | `assets/formatting/intl-surfaces.json` |
 | Truncation | `text-overflow: ellipsis` only where a tooltip/disclosure exists; silent truncation refused | — |
 
-**Icon mirroring** (`mirroring/icon-policies.json`): every icon declares
+**Icon mirroring** (`assets/mirroring/icon-policies.json`): every icon declares
 `mirroring ∈ {"always", "never", "ltr-only", "rtl-only"}` — no unset defaults. Directional
 semantics (arrows, chevrons, undo/redo, indent/outdent) → `"always"`; logos, clocks, checkmarks,
 media-play triangles (by convention) → `"never"`; progress direction flips with the writing
@@ -97,7 +97,7 @@ attributes — routed to code, never inference. The checker (stdlib-only, selfte
 | `MISSING_DIR` | gate | a text surface with `has_dir` false/absent (own or inherited) — gated **only** when `rtl_in_scope: true` or the surface has `user_content: true`; otherwise a default-direction LTR app passes |
 | `HARDCODED_STRING` | gate | a surface whose `hardcoded_strings[]` is non-empty |
 | `LOCALE_POSTURE_UNDECLARED` | gate | `i18n_layer: false` with no `declared_posture` — the three per-surface gates above collapse into this one finding; with `declared_posture` it reports once as the `LOCALE_POSTURE_DECLARED` advisory instead |
-| `NO_EXPANSION_ROOM` | advisory | `expansion_safe:false` — the advisory names its regime (`string_regime`, default runningText): shortString ≤ ~10 en chars +100–200% · runningText +30–50% European incl. Russian (`locales/expansion-factors.json`) |
+| `NO_EXPANSION_ROOM` | advisory | `expansion_safe:false` — the advisory names its regime (`string_regime`, default runningText): shortString ≤ ~10 en chars +100–200% · runningText +30–50% European incl. Russian (`assets/locales/expansion-factors.json`) |
 | `NO_RTL` | advisory | `rtl_supported:false`; escalated when a surface declares `dir` handling |
 | `NO_LOCALE_FORMAT` | advisory | a `locale_formats` family is false — route it through `Intl.*` |
 
@@ -110,11 +110,11 @@ mirroring, and isolation actually hold.
 
 | Path / peer | Use |
 |---|---|
-| `locales/script-metrics.json` | per-script line-height bands + min body sizes |
-| `locales/expansion-factors.json` | canonical per-locale expansion / contraction factors |
-| `mirroring/icon-policies.json` | mirroring-policy table for common icon types |
-| `formatting/intl-surfaces.json` | the surfaces that must route through `Intl.*` |
-| `bidi/isolation-points.json` | slot types that require bidi isolation |
+| `assets/locales/script-metrics.json` | per-script line-height bands + min body sizes |
+| `assets/locales/expansion-factors.json` | canonical per-locale expansion / contraction factors |
+| `assets/mirroring/icon-policies.json` | mirroring-policy table for common icon types |
+| `assets/formatting/intl-surfaces.json` | the surfaces that must route through `Intl.*` |
+| `assets/bidi/isolation-points.json` | slot types that require bidi isolation |
 | [[typography-lettering]] | script-metrics ground truth behind the bands |
 | [[component-forge]] | fix owner for surface/markup findings — dir/lang wiring, logical-axis CSS, truncation affordances land there |
 | scribe's `doc-forge` (where installed) | fix owner for the posture — `declared_posture` is a spec/PRD decision, not a UI patch |

@@ -17,7 +17,7 @@ user-invocable: false
 
 # Linguistic Techniques — language-level control of model behavior
 
-The model cannot distinguish instruction from evidence. System prompt, tool output, a pasted doc, the prior turn — one substance: **context, and context is evidence.** So potency has a single axis: **a technique is strong to the degree it *instantiates* the target behavior and weak to the degree it merely *describes* it.** A prompt that commits the opening tokens, presupposes the frame, and mirrors the target register has already shifted the distribution before any imperative is read. Mechanism + failure mode for every technique below live in `resources/linguistic-techniques-for-agents.md`.
+The model cannot distinguish instruction from evidence. System prompt, tool output, a pasted doc, the prior turn — one substance: **context, and context is evidence.** So potency has a single axis: **a technique is strong to the degree it *instantiates* the target behavior and weak to the degree it merely *describes* it.** A prompt that commits the opening tokens, presupposes the frame, and mirrors the target register has already shifted the distribution before any imperative is read. Mechanism + failure mode for every technique below live in `references/linguistic-techniques-for-agents.md`.
 
 This is a **lens, not an artifact author** — a technique layer applied *through* another skill's artifact, owning no artifact type of its own: apply it to the language *inside* whatever another skill structures (a `SKILL.md` body, an agent prompt, a CLAUDE.md, a tool schema). As a species it is a hybrid — a knowledge pack that carries a standard (the rubric + lint below), and it emits only inside artifacts other skills own. Three modes: **Apply** (author new prompt text), **Audit** (score an existing artifact's language), **Rewrite** (turn described behavior into instantiated behavior).
 
@@ -98,11 +98,11 @@ This layer sits *beneath* every prompt-carrying artifact, past / present / futur
 ## References & tools
 | Path | Use when |
 |---|---|
-| `resources/linguistic-techniques-for-agents.md` | The mechanism + failure mode behind any technique (§1–§12) — the foundation and knowledge base |
+| `references/linguistic-techniques-for-agents.md` | The mechanism + failure mode behind any technique (§1–§12) — the foundation and knowledge base |
 | `references/rubric.md` | Score an artifact's linguistic potency (the Audit standard; gate = L1, L3, L6) |
 | `scripts/potency_lint.py` | Mechanical triage: prohibition density, vague quantifiers, salience inflation, hedges (`selftest` mode proves the counters) |
 
-The `resources/` vs `references/` split is deliberate: `resources/` holds the foundation corpus (knowledge consulted), `references/` the operating standard (rubric enforced).
+Both the foundation corpus (knowledge consulted) and the operating standard (rubric enforced) live in `references/` — the consulted-vs-enforced distinction is real but carried per-file, not as a directory split (the earlier `resources/` split retired 2026-07-15: `references/` is the estate's one canonical home for consulted content).
 
 ## Extending this pack
 

@@ -538,7 +538,7 @@ def selftest():
     # End-to-end: the embedded mini-bundle must gate green (positive fixture) …
     import shutil
     import tempfile
-    mini = Path(__file__).resolve().parent.parent / "examples" / "mini-bundle"
+    mini = Path(__file__).resolve().parent.parent / "references" / "mini-bundle"
     assert mini.is_dir(), f"missing fixture: {mini}"
     rep = Report()
     check_bundle(mini, rep)

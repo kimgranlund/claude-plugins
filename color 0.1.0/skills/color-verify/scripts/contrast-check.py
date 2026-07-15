@@ -44,7 +44,7 @@ Per pair (all keys optional except fg + bg):
             opaque (resolve any translucent backdrop upstream).
   fgToken/bgToken — optional free-text provenance (token names); passed through to --json.
 
-Flags (per the contrast floors in verification/contrast-pairs.json):
+Flags (per the contrast floors in assets/verification/contrast-pairs.json):
   CONTRAST_FAIL_AA   (gate)      text below 4.5 (normal) / 3.0 (large); ui/non-text below 3.0.
   CONTRAST_FAIL_AAA  (advisory)  text below 7.0 (normal) / 4.5 (large) — only when AA already passes.
   OKLCH_OUT_OF_GAMUT (advisory)  an oklch() color outside sRGB gamut — clamped for the ratio;

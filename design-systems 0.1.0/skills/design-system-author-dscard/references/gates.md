@@ -105,7 +105,7 @@ and used everywhere. Inconsistency — not off-scale-ness — is the violation.
 **Criteria for blessing a new exception** (apply before adding one): (1) reproduces
 across ≥2 independent generations or builds; (2) has a structural reason the
 token schema can't express it as a single value; (3) is named explicitly in
-DESIGN.md prose and demonstrated in a preview (`examples/mini-bundle/` shows the
+DESIGN.md prose and demonstrated in a preview (`references/mini-bundle/` shows the
 badge/chip case); (4) gains a narrow, specific mechanical check — never a broad
 loosening of an existing gate.
 

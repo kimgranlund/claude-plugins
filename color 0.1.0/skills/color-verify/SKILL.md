@@ -46,13 +46,13 @@ alpha < 1 and **no** `over` is a per-pair ERROR (silent-opaque substitution inve
 on exactly the riskiest pairs), and `bg`/`over` must be opaque · `fgToken`/`bgToken` — free-text
 token provenance, passed through to the JSON report. A malformed color is a clear per-pair
 error, never a crash.
-`verification/contrast-pairs.json` is the authoritative list of semantic pairs a card must cover
+`assets/verification/contrast-pairs.json` is the authoritative list of semantic pairs a card must cover
 (a repo may ship a role→pair manifest mapping those roles onto its concrete token names).
 
 ## Procedure
 
 1. **Assemble the card** from the candidate palette + the semantic pairs in
-   `verification/contrast-pairs.json` — one card per (theme × scheme × contrast) combination the
+   `assets/verification/contrast-pairs.json` — one card per (theme × scheme × contrast) combination the
    system claims. A pair the palette cannot express is already a violation.
 2. **Gate:** `python3 scripts/contrast-check.py <card.json | dir>` — a FAIL blocks the emit; fix
    the palette, not the card. `selftest` proves the checker itself.
@@ -71,7 +71,7 @@ error, never a crash.
 
 | Invariant | Value | Source |
 |---|---|---|
-| Text contrast (AA) | ≥ 4.5:1 normal · ≥ 3.0:1 large | `verification/contrast-pairs.json` — the authoritative pairs + targets |
+| Text contrast (AA) | ≥ 4.5:1 normal · ≥ 3.0:1 large | `assets/verification/contrast-pairs.json` — the authoritative pairs + targets |
 | UI / non-text contrast | ≥ 3.0:1 (borders, focus rings, icons) | WCAG 1.4.11; same file |
 | AAA tier (advisory) | ≥ 7.0:1 normal · ≥ 4.5:1 large — text only | same file |
 | Neutral chroma | C ≤ 0.02 for declared `neutral: true-grey` · C ≤ 0.06 for declared `neutral: tinted` (slate) — the declaration is REQUIRED, never inferred | ramp invariant |
@@ -81,7 +81,7 @@ error, never a crash.
 | L monotonic | L strictly monotonic in the ramp's **declared** direction — lightness- and darkness-indexed ladders are both legal | ramp invariant |
 
 The ramp-geometry rows ("ramp invariant", the named gamut check) restate a canon owned by
-[[palette-design]] — its `ramps/` data and `ramp_build.py` gates; this table is the gate's view,
+[[palette-design]] — its `assets/ramps/` data and `ramp_build.py` gates; this table is the gate's view,
 not a second canon.
 
 Escalation for a failing pair (canon: `contrast-pairs.json`): the `DecompositionGap` carries the
@@ -96,7 +96,7 @@ floor an eyeball passes) · verified in the light scheme only · an alpha fg ver
 color bound as text ink but verified at the 3.0 ui floor · intent colors sharing one hue
 region (danger/success collapse under CVD) · meaning carried by hue alone · gamut overflow solved
 by darkening (an L shift) instead of C-only reduction · a "verified" palette whose card omits
-pairs from `verification/contrast-pairs.json` · hardcoded hex with no OKLCH provenance.
+pairs from `assets/verification/contrast-pairs.json` · hardcoded hex with no OKLCH provenance.
 
 ## Mechanism gate — `scripts/contrast-check.py`
 
@@ -104,7 +104,7 @@ WCAG contrast is **arithmetic**, not taste — the floor always routes to code. 
 perceptual evenness are perceptual judgments and stay a review (step 3). The checker sees PAIRS,
 not ramps — the ramp-geometry gates run mechanically in [[palette-design]]'s `ramp_build.py` and
 are re-judged here in step 3 against the invariant table. And it verifies only the pairs the card
-shows: coverage against `verification/contrast-pairs.json` is never checked mechanically — an
+shows: coverage against `assets/verification/contrast-pairs.json` is never checked mechanically — an
 omitted canonical pair is skipped-not-passed (step 1 assembles it; the detection catalog hunts
 the omission). The checker (stdlib-only, selftest-locked) computes the WCAG 2.x ratio per pair
 (sRGB → linearized relative luminance → `(L1+0.05)/(L2+0.05)`):
@@ -131,7 +131,7 @@ palette safe.
 
 | Path / peer | Use |
 |---|---|
-| `verification/contrast-pairs.json` | authoritative semantic pairs, AA/AAA targets, the escalation rule |
+| `assets/verification/contrast-pairs.json` | authoritative semantic pairs, AA/AAA targets, the escalation rule |
 | `scripts/contrast-check.py` | the contrast gate + selftest |
 | [[palette-design]] | builds/extends ramps and mappings; every failing ramp routes back to it |
 | [[color-science-accessibility]] | the perceptual theory under these constraints (APCA/WCAG math, CVD models) |
@@ -142,4 +142,4 @@ palette safe.
 
 **Done** = the contrast gate passes on every card + the full (theme × scheme × contrast) sweep
 passes + CVD safety judged; **NOT done** = a green contrast-check alone, or a card omitting pairs
-from `verification/contrast-pairs.json`.
+from `assets/verification/contrast-pairs.json`.

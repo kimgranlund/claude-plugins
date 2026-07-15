@@ -8,7 +8,8 @@ Usage:
 
 Gate order (plugin-authoring-standards §Release discipline):
   G1 manifest: .claude-plugin/plugin.json valid, kebab name, semver version
-  G2 structure: only the manifest in .claude-plugin/; every skills/* dir has SKILL.md
+  G2 structure: only the manifest in .claude-plugin/; every skills/* dir has SKILL.md;
+     skill subfolders outside {evals,references,scripts,assets} -> WARN (ruled 2026-07-15)
   G3 full lint: every SKILL.md, agents/*.md, hooks.json, plugin.json via skill_lint (FAIL fails)
   G4 bundled selftests: every scripts/*.py|*.mjs|*.js exposing a selftest mode must exit 0
      (py via this interpreter, js via node; js with node absent -> WARN, unproven;
@@ -79,12 +80,22 @@ def gate(root: Path, package: bool = False):
         if strays:
             fail("G2", f"components inside .claude-plugin/ ({strays[:3]}) -> only the manifest lives there")
     skills_dir = root / "skills"
+    SANCTIONED_SUBDIRS = {"evals", "references", "scripts", "assets"}  # ruled 2026-07-15
+    rogue_dirs = []
     if skills_dir.is_dir():
         for d in sorted(skills_dir.iterdir()):
             if d.is_dir() and not (d / "SKILL.md").is_file():
                 fail("G2", f"skills/{d.name}/ has no SKILL.md")
+            if d.is_dir():
+                rogue_dirs += [f"{d.name}/{s.name}" for s in sorted(d.iterdir())
+                               if s.is_dir() and s.name not in SANCTIONED_SUBDIRS]
+    if rogue_dirs:
+        warn("G2", f"{len(rogue_dirs)} skill subfolder(s) outside the sanctioned set "
+                   f"(evals/references/scripts/assets): {', '.join(rogue_dirs[:4])} "
+                   "-> topical data dirs live under assets/<topic>/ (ruled 2026-07-15)")
     if "G2" not in fails:
-        ok("structure: manifest isolated; every skill dir carries SKILL.md")
+        ok("structure: manifest isolated; every skill dir carries SKILL.md"
+           + ("" if rogue_dirs else "; subfolders conform"))
 
     # G3 full lint via skill_lint
     targets = (sorted(root.glob("skills/*/SKILL.md")) + sorted(root.glob("agents/*.md"))
@@ -346,6 +357,18 @@ def selftest():
             gate(r)
         assert "G8" in buf.getvalue() and "ancient-review" in buf.getvalue(), "stale sibling name must warn G8"
         body.write_text(body.read_text().replace("\nsee ancient-review for history\n", ""))
+        # G2 subfolder conformance: a rogue topical dir warns; a sanctioned one doesn't
+        rogue = r / "skills" / "demo-review" / "recipes"
+        rogue.mkdir()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "demo-review/recipes" in buf.getvalue(), "rogue skill subfolder must WARN G2, not fail"
+        rogue.rmdir()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert "recipes" not in buf.getvalue(), "removed rogue dir must clear the G2 warn"
         (r / "skills" / "demo-review" / "evals").mkdir()
         (r / "skills" / "demo-review" / "evals" / "evals.json").write_text('{"skill": "wrong-owner", "cases": [{"id": "t0", "prompt": "x", "expect": "trigger"}]}')
         code, _ = gate(r)
