@@ -39,6 +39,13 @@ horizons→ROADMAP · work item→TICKET/TASK):
    moves), and doc-shaped README sections — the one EXTRACTION case: offered, and marked in the
    plan as creating a new file rather than moving one.
 
+Alongside the three surfaces, inventory the **git-visibility of every hit**: `git check-ignore`
+each source location and `git ls-files` its contents (forge repo-alignment's razor — tracked
+does not imply not-ignored). A gitignored source (the classic: a repo that ignores `.claude/`
+wholesale, so a `.claude/docs/` corpus was never tracked at all) changes the move mechanics —
+`git mv` fails on untracked files — and means the migration is also the corpus's FIRST commit;
+both facts belong in the plan, not discovered mid-execute.
+
 Nothing found → report the repo is already clean (or empty), offer only the index bootstrap,
 stop. The inventory is a deliverable in itself: a rejected plan still leaves the user knowing
 what they have and where.
@@ -49,7 +56,12 @@ Build the migration manifest — per artifact: source → canonical destination
 (`docs/<type>/<type>-<number-or-date>-<slug>.md` per the standards; ticket exception:
 `docs/tickets/tkt-…`) · frontmatter to add (`doc-type`, `id` — derived from the minted
 filename — and `status`; nothing more: doc_lint's T1 requires exactly these three) · links that
-will need repair. Classification genuinely
+will need repair. The manifest also carries a **.gitignore row** whenever Phase 1's
+git-visibility pass found anything: ignore rules to retire (a rule matching the migrated source
+tree is stale the moment the move lands), rules that would swallow a destination (`docs/` or a
+subpath matched by an existing pattern — the migration must not move records from one shadow
+into another), and untracked-source moves flagged as plain `mv` + `git add` (history cannot be
+preserved for a file git never saw — disclosed, not silently downgraded). Classification genuinely
 ambiguous → ONE batched AskUserQuestion round (≤4 questions, concrete options); ambiguity beyond
 that round lands in an **unresolved bucket — left in place and listed**, never force-classified.
 The plan's last line is always "install/update the project-docs index skill."
@@ -61,7 +73,11 @@ Rejected → write nothing; the inventory is the report.
 ## Phase 3 — Execute (approved plan only, nothing beyond it)
 
 1. `git mv` every approved move — history preserved; extractions (README sections) create the
-   new file and replace the section with a one-line pointer to it.
+   new file and replace the section with a one-line pointer to it; untracked sources move per
+   their plan flag (`mv` + `git add`). Apply the plan's .gitignore row in the same pass, then
+   prove it: `git check-ignore` every destination (must hit nothing) and `git status` the moved
+   set (every record visible). A destination still ignored, or a rule still matching the emptied
+   source tree, is an execute failure — fix before proceeding.
 2. Add the minimal frontmatter where records lack it. **Exception: an accepted ADR is
    append-only — move it untouched; needed frontmatter is noted in the report, not added.**
 3. Repair inbound links: grep by BASENAME first (relative links — `../rfcs/foo.md`, bare
@@ -86,7 +102,9 @@ Rejected → write nothing; the inventory is the report.
 - `doc_lint` content failures → doc-review candidates list, never in-place rewrites.
 - The ask was really "write me a doc" or "review this doc" → doc-forge / doc-review.
 
-Done when every approved move landed via `git mv`, no repo reference to an old path survives,
-migrated frontmatter lints clean, the index skill matches the new layout, and the unresolved
-bucket + doc-review candidates are reported. NOT done if any file moved without plan approval,
+Done when every approved move landed via `git mv` (or the disclosed `mv` + `git add` for
+untracked sources), no repo reference to an old path survives, `git check-ignore` hits no
+destination and no ignore rule still names the migrated source tree, migrated frontmatter lints
+clean, the index skill matches the new layout, and the unresolved bucket + doc-review candidates
+are reported. NOT done if any file moved without plan approval,
 any prose was rewritten, or the report claims a repair a grep would refute.

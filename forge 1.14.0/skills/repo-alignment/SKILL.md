@@ -69,6 +69,11 @@ log (below) and the phase adapts; it is never executed on the template's say-so.
   its trigger source is itself alive; `continue-on-error` + advisory modes paint corpses green.
 - **Tracked does not imply not-ignored** — gitignored dirs can contain force-added tracked
   files; new files there need `git add -f`, `git mv` of tracked files works.
+- **.gitignore is a record and drifts like one** — sweep it both directions: a rule naming a
+  retired path (a migrated docs tree, a removed worktree dir, a renamed build output) is stale
+  context, repaired by the same change that invalidated it; and an in-repo worktree or
+  generated dir sitting unignored is one `git add -A` from being committed (worktrees belong
+  OUTSIDE the repo root by default — one placed in-repo must be ignored the moment it exists).
 - **Hooks fire on tool writes, not scripted writes** — after any batch/scripted sweep, run
   the lints in batch mode.
 - **A status field is a claim, not evidence** — a document's liveness comes from whether its
