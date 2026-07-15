@@ -253,6 +253,8 @@ def gate(root: Path, package: bool = False):
              "container-patterns", "scale-theory", "design-systems", "box-model-and-flow",
              # prose compounds newly caught by the same two suffixes (-flow, -systems):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
+             # a2a-protocol's references file (2026-07-15) — the estate's last standing G8 warn:
+             "transport-and-streaming",
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):
