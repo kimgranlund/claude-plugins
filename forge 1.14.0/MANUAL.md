@@ -54,6 +54,9 @@ Install, then `/reload-plugins`. Everything below is invoked as `/forge:<name>` 
 **`plugin-decompose`** — analyze an existing surface (skills + agents + hooks + scripts; frontmatter and structure suffice) and decide its partition into 1–5 portable plugins: dependency graph via surface_map.py, four distribution-layer tests, rejected-alternatives ledger, mechanically validated manifest handed to /plugin-forge. Direction-agnostic — merging scattered plugins is the same partition with fewer groups. Also runs negative-space analysis: dangling handoffs and the family matrix surface what might be missing, under the anti-matrix guard (absence + job evidence = gap; absence alone = correctly absent).
 > "which plugins should these skills become" · "should this mega-plugin be several smaller ones" · `/plugin-decompose ~/.claude`
 
+**`plugin-onboard`** — declare an external plugin or marketplace repo in a project's `.claude/settings.json` so every contributor who trusts the repo is prompted to install it: classifies each URL (marketplace repo → `extraKnownMarketplaces` entry; bare plugin repo → a self-hosted `marketplace.json` wrapper first), then verifies via `/plugin`. Project-scoped and portable — never an operator-local install masquerading as project config.
+> "add this plugin repo so contributors can install it" · "declare a marketplace in settings.json" · `/plugin-onboard <url>`
+
 **`skill-review`** — audit an existing SKILL.md against the standards; verdict-first findings report. The mechanical half runs first via `skill_lint.py`.
 > "review this skill" · "this skill misfires constantly — what's wrong with it"
 
