@@ -46,9 +46,9 @@ summary line — unmeasured is never a pass.
 2. **Gate:** `python3 scripts/budget-check.py <card.json | dir>` — a FAIL blocks the emit; fix the
    surface, not the card. `selftest` proves the checker itself.
 3. **Judge what the checker can't:** match each operation's feedback recipe to the windows below;
-   apply the affordance decision (`decisions/skeleton-vs-spinner.json`,
-   `optimistic/eligibility.json`); check streaming posture (`streaming/posture.json`) and
-   cancellation (`cancellation/contract.json`); verify every async insertion reserves its space.
+   apply the affordance decision (`assets/decisions/skeleton-vs-spinner.json`,
+   `assets/optimistic/eligibility.json`); check streaming posture (`assets/streaming/posture.json`) and
+   cancellation (`assets/cancellation/contract.json`); verify every async insertion reserves its space.
 4. **Emit** the verdict — every violation cites the operation/metric it evaluates and routes its
    fix to the artifact that can make it — plus per-operation recipes where asked, drawn from the
    checker's accepted set: `{id, recipe: none|instant|busy|spinner|skeleton|skeleton-or-spinner|
@@ -59,17 +59,17 @@ summary line — unmeasured is never a pass.
 
 | Invariant | Value | Source |
 |---|---|---|
-| Instant | < 100ms — no indicator; the state change itself is the feedback | `thresholds/perception.json` |
-| Responsive | 100–300ms — inline busy micro-feedback; placeholder only past 300ms | `thresholds/perception.json` |
-| Acknowledged | 300ms–1s — skeleton (layout-bearing) or spinner (unknown shape); never a blocking dialog | `thresholds/perception.json` |
-| Progressing | 1–3s skeleton + continuous animation (show cached data) · 3–10s progress + ETA, cancel mandatory · > 10s add a proactive explanation ("usually takes ~15s") | `thresholds/perception.json` |
+| Instant | < 100ms — no indicator; the state change itself is the feedback | `assets/thresholds/perception.json` |
+| Responsive | 100–300ms — inline busy micro-feedback; placeholder only past 300ms | `assets/thresholds/perception.json` |
+| Acknowledged | 300ms–1s — skeleton (layout-bearing) or spinner (unknown shape); never a blocking dialog | `assets/thresholds/perception.json` |
+| Progressing | 1–3s skeleton + continuous animation (show cached data) · 3–10s progress + ETA, cancel mandatory · > 10s add a proactive explanation ("usually takes ~15s") | `assets/thresholds/perception.json` |
 | Route loaders | hold ~200ms before showing loading UI — wire < 200ms with an 800ms skeleton is presentation scheduling, not server speed | — |
-| CLS | ≤ 0.1 per interaction (checker poor line 0.25); every async insertion reserves space — skeleton, aspect-ratio box, or `min-block-size` | `cls/budget.json` |
-| Image reservation | every image/media declares `width × height` or `aspect-ratio`; fonts use `font-display: swap` + matched metrics (or `optional`), never `block` | `cls/budget.json` |
-| Cancellation | > 10s exposes cancel co-located with progress; cancel restores prior state; recall-window cancel is non-destructive | `cancellation/contract.json` |
-| Streaming | render tokens as they arrive; no flash at stream-end (the streaming view *is* the final view); container grows monotonically; aria-live chunked to sentence/paragraph, never per-token; reduced-motion drops typing animation | `streaming/posture.json` |
+| CLS | ≤ 0.1 per interaction (checker poor line 0.25); every async insertion reserves space — skeleton, aspect-ratio box, or `min-block-size` | `assets/cls/budget.json` |
+| Image reservation | every image/media declares `width × height` or `aspect-ratio`; fonts use `font-display: swap` + matched metrics (or `optional`), never `block` | `assets/cls/budget.json` |
+| Cancellation | > 10s exposes cancel co-located with progress; cancel restores prior state; recall-window cancel is non-destructive | `assets/cancellation/contract.json` |
+| Streaming | render tokens as they arrive; no flash at stream-end (the streaming view *is* the final view); container grows monotonically; aria-live chunked to sentence/paragraph, never per-token; reduced-motion drops typing animation | `assets/streaming/posture.json` |
 
-**Affordance decision** (`decisions/skeleton-vs-spinner.json` · `optimistic/eligibility.json`;
+**Affordance decision** (`assets/decisions/skeleton-vs-spinner.json` · `assets/optimistic/eligibility.json`;
 windows: the invariants ladder above): **skeleton** when the data is layout-bearing with known
 shape (lists, grids) — it reserves the space; **spinner** when the shape is unknown or a single
 item replaces in place — honest about not knowing; **neither** below the ladder's placeholder
@@ -89,7 +89,7 @@ update without rollback · "streaming" buffered server-side and rendered in one 
 ## Mechanism gate — `scripts/budget-check.py`
 
 Measured-vs-budget is pure arithmetic — routed to code, never inference. The ladder's canon
-speaks p50 (`thresholds/perception.json` picks the recipe by p50); the gate holds each recipe to
+speaks p50 (`assets/thresholds/perception.json` picks the recipe by p50); the gate holds each recipe to
 its **P95** window — the canon's own upgrade rule ("if p95 crosses a boundary, upgrade; never
 downgrade") made mechanical. The checker (stdlib-only, selftest-locked) classifies each metric:
 
@@ -115,12 +115,12 @@ prove that.
 
 | Path / peer | Use |
 |---|---|
-| `thresholds/perception.json` | canonical latency → recipe table |
-| `decisions/skeleton-vs-spinner.json` | loading-affordance decision tree |
-| `optimistic/eligibility.json` | when optimistic UI applies |
-| `streaming/posture.json` | streaming invariants + aria-live chunking rules |
-| `cls/budget.json` | layout-stability budget + space-reservation patterns |
-| `cancellation/contract.json` | cancel placement + state-restoration rules |
+| `assets/thresholds/perception.json` | canonical latency → recipe table |
+| `assets/decisions/skeleton-vs-spinner.json` | loading-affordance decision tree |
+| `assets/optimistic/eligibility.json` | when optimistic UI applies |
+| `assets/streaming/posture.json` | streaming invariants + aria-live chunking rules |
+| `assets/cls/budget.json` | layout-stability budget + space-reservation patterns |
+| `assets/cancellation/contract.json` | cancel placement + state-restoration rules |
 | [[component-forge]] | the maker seat — recipe/reservation/streaming defects route there (or the repo's component seat) for the fix |
 | [[safety-verify]] | shares the recall/cancellation contract for long destructive operations |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |

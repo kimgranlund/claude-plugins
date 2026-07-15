@@ -41,7 +41,7 @@ Per surface (all keys optional except `id`):
                       source <= ~10 chars — labels, buttons; +100-200% expansion) or "runningText"
                       (sentences/paragraphs; ~+30-50% European). Optional per surface; falls back
                       to a top-level string_regime, then defaults to runningText. The factors are
-                      canonical in locales/expansion-factors.json (W3C/IBM-cited).
+                      canonical in assets/locales/expansion-factors.json (W3C/IBM-cited).
   text              — optional explicit flag. A surface is "text-bearing" if text:true, OR it declares
                       any of has_lang/has_dir/hardcoded_strings/user_content (the default — a surface
                       that mentions these is reasoning about text). Set text:false to mark a non-text
@@ -192,7 +192,7 @@ def check_card(card):
                           if regime == "shortString"
                           else "~+30-50%% European incl. RU (running text)")
                 warns.append(("%s: NO_EXPANSION_ROOM [%s regime] — reserves no expansion headroom; "
-                              "budget " + budget + " per locales/expansion-factors.json — fluid "
+                              "budget " + budget + " per assets/locales/expansion-factors.json — fluid "
                               "width or longest-locale sizing, no silent truncation")
                              % (sid, regime))
 

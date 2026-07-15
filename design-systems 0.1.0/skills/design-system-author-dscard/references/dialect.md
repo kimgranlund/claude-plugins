@@ -8,7 +8,7 @@ Design bundle format; structural snippets quote the NONOUN "Studio 54 · the
 dancefloor" reference implementation. The snapshot embedded here is authoritative at
 runtime; re-derive from the upstream specs on a version bump. Companions:
 `token-grammar.md` (names), `gates.md` (encoding + verification); an end-to-end
-micro-example ships at `../examples/mini-bundle/` (8 roles, all four artifacts,
+micro-example ships at `mini-bundle/` (8 roles, all four artifacts,
 gates green — copy the shape, not the size). Updated 2026-07-05 with findings
 from live Claude Design generation testing (two independent runs against the
 Studio 54 reference bundle) — the badge/chip padding and type-floor additions

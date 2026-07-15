@@ -44,16 +44,16 @@ own honesty.
 
 | Invariant | Value | Source |
 |---|---|---|
-| Undo toast | ≥ 6s visible; 12–30s for bulk-destructive (durations + bulk rationale canonical in the file) | `friction/recipes.json` |
-| Re-auth window | ≤ 15 minutes within the session — session-wide re-auth defeats the purpose | `friction/recipes.json` |
-| Recall windows | declared in seconds per action type (send, publish, invite); countdown rendered ("Undo send (10s)"); recall needs no re-confirmation | `recall/windows.json` |
+| Undo toast | ≥ 6s visible; 12–30s for bulk-destructive (durations + bulk rationale canonical in the file) | `assets/friction/recipes.json` |
+| Re-auth window | ≤ 15 minutes within the session — session-wide re-auth defeats the purpose | `assets/friction/recipes.json` |
+| Recall windows | declared in seconds per action type (send, publish, invite); countdown rendered ("Undo send (10s)"); recall needs no re-confirmation | `assets/recall/windows.json` |
 | Bulk preview | count ("Delete 42 items") + sampled preview of up to 10 affected entities before executing; dry-run where the API allows | — |
-| Confirm posture | default focus on Cancel; Escape closes without executing; destructive CTA styled danger + a non-color cue; Enter never executes unless the destructive CTA is intentionally focused | `defaults/confirm-posture.json` |
-| Audit events | every high-blast or irreversible action emits a user-visible `{actor, verb, target, at, before/after, recoverable, recoveryDeadline}` — filterable, searchable, exportable | `audit/event-schema.json` |
-| Permission failures | name the missing permission, the role that holds it, and a request-access CTA — never a silently disabled affordance | `permissions/error-ux.json` |
+| Confirm posture | default focus on Cancel; Escape closes without executing; destructive CTA styled danger + a non-color cue; Enter never executes unless the destructive CTA is intentionally focused | `assets/defaults/confirm-posture.json` |
+| Audit events | every high-blast or irreversible action emits a user-visible `{actor, verb, target, at, before/after, recoverable, recoveryDeadline}` — filterable, searchable, exportable | `assets/audit/event-schema.json` |
+| Permission failures | name the missing permission, the role that holds it, and a request-access CTA — never a silently disabled affordance | `assets/permissions/error-ux.json` |
 
-**The plane and the friction ladder** (`blast-reversibility/matrix.json` ·
-`friction/recipes.json`) — undo > confirm for anything **user-reversible in-app**; friction
+**The plane and the friction ladder** (`assets/blast-reversibility/matrix.json` ·
+`assets/friction/recipes.json`) — undo > confirm for anything **user-reversible in-app**; friction
 escalates only with the coordinate. Reversibility has two species: *user-reversible in-app*
 (undo genuinely available to the user — the undo>confirm rule applies) vs *ops-reversible*
 (refunds, support processes — review-then-commit is the domain norm and NO_UNDO is not a defect;
@@ -106,12 +106,12 @@ dangerous case (high-blast / irreversible) adversarially.
 
 | Path / peer | Use |
 |---|---|
-| `blast-reversibility/matrix.json` | the canonical (blast × reversibility) → treatment table |
-| `friction/recipes.json` | undo toast, confirm, type-to-confirm, re-auth, 2-person recipes |
-| `recall/windows.json` | recall-window durations per action type |
-| `audit/event-schema.json` | AuditEvent schema + user-visibility requirements |
-| `permissions/error-ux.json` | permission-failure copy + affordance pattern |
-| `defaults/confirm-posture.json` | destructive-confirm default posture (focus, keyboard, styling) |
+| `assets/blast-reversibility/matrix.json` | the canonical (blast × reversibility) → treatment table |
+| `assets/friction/recipes.json` | undo toast, confirm, type-to-confirm, re-auth, 2-person recipes |
+| `assets/recall/windows.json` | recall-window durations per action type |
+| `assets/audit/event-schema.json` | AuditEvent schema + user-visibility requirements |
+| `assets/permissions/error-ux.json` | permission-failure copy + affordance pattern |
+| `assets/defaults/confirm-posture.json` | destructive-confirm default posture (focus, keyboard, styling) |
 | [[focus-verify]] | enforces Cancel-as-default-focus and Escape handling |
 | [[component-forge]] | fix owner for affordance findings — the confirm dialog, undo toast, or type-to-confirm input a verdict prescribes is built there |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |

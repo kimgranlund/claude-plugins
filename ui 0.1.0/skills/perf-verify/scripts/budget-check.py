@@ -39,7 +39,7 @@ Core Web Vitals have canonical budgets, so a missing budget key for lcp/cls/inp/
 default (lcp 2500ms, cls 0.1, inp 200ms, tbt 300ms). bundle_kb / image_kb / requests have no
 universal "good" number, so they are only checked when the card supplies a budget for them.
 
-Per operation (the feedback-window ladder — SKILL.md + thresholds/perception.json):
+Per operation (the feedback-window ladder — SKILL.md + assets/thresholds/perception.json):
 
   - OP_UNCLASSIFIED (advisory) — an operations[] entry missing any required field (id,
                       expectedLatencyP50Ms, expectedLatencyP95Ms, outcomeShape, idempotent,
@@ -92,7 +92,7 @@ REQUIRED_OP_FIELDS = ["id", "expectedLatencyP50Ms", "expectedLatencyP95Ms", "out
                       "idempotent", "cancelable", "reversible"]
 
 # Valid P95 window (ms) per recipe — the feedback-window ladder (SKILL.md invariants +
-# thresholds/perception.json): <100ms instant/none · 100-300ms busy (also harmless below) ·
+# assets/thresholds/perception.json): <100ms instant/none · 100-300ms busy (also harmless below) ·
 # 300ms-1s spinner · 300ms-3s skeleton · 3s+ progress(+eta+cancel[, +explain past 10s]).
 # The canon's own composite tokens are accepted: skeleton-or-spinner (the union of its two
 # legs) and skeleton+subtle-continuous (the skeleton window). P95 below the floor: the

@@ -140,7 +140,7 @@ values — follow-up is at the author's discretion.
 | Path | Use when |
 |---|---|
 | `scripts/bundle_gates.py <bundle-dir>` | The mechanical gates: contrast (both schemes), parity, carrier equality ±1/255, previews, references, sections, on-partner coverage, relative leading/tracking (never px, any carrier), pill/chip padding consistency (G9). `--selftest` locks the color math, gates the fixture green, and proves broken copies gate red |
-| `examples/mini-bundle/` | Cold-start template: the smallest well-shaped bundle end-to-end (8 roles × 2 schemes, all four artifacts, gates green) — copy the shape, then scale to the 15–25 band |
+| `references/mini-bundle/` | Cold-start template: the smallest well-shaped bundle end-to-end (8 roles × 2 schemes, all four artifacts, gates green) — copy the shape, then scale to the 15–25 band |
 | `references/dialect.md` | Writing or judging the spine: section table, frontmatter conventions, prose doctrine, Agent Prompt Guide shape, tokens.json schema, @dsCard rules, receipt shape |
 | `references/token-grammar.md` | Naming any token: prefix adaptivity, family rules, the closed slot registry, the consumption subset, pairing law, compat aliases |
 | `references/gates.md` | Encoding rules, the reduction discipline R1–R5 with measured failures F1/F2, the gate table (mechanical vs judgment), divergence handling |

@@ -42,7 +42,7 @@ this skill — route to [[color-verify]].
 
 1. **Skeleton.** Per family the UISchema declares (`neutral`, `accent`, `danger`, …): step count
    from `UISchema.primitive.color.scale` — the project token spec's scale list; absent → elicit
-   (default 13: `0, 50, 100..900, 950, 1000`); the L grid from `ramps/<family>-curve.json` (the
+   (default 13: `0, 50, 100..900, 950, 1000`); the L grid from `assets/ramps/<family>-curve.json` (the
    canon); steps the curve doesn't anchor interpolate linearly in label space.
 2. **Anchor.** A stated brand anchor (e.g. `accent-500 = oklch(0.62 0.18 270)`) overrides step
    500's ideal L; re-interpolate so per-label-unit evenness (numbers table) still holds. If the
@@ -61,7 +61,7 @@ this skill — route to [[color-verify]].
    (`gamut-reduced: ΔC = 0.015`); anchor-step ΔC > 0.05 means the anchor itself is out of gamut —
    flag it.
 5. **Roles.** Map steps to the UISchema's semantic roles (defaults below; UISchema overrides).
-   Intent hues (danger/warning/success/info) come from `ramps/intent-hues.json`: distinct,
+   Intent hues (danger/warning/success/info) come from `assets/ramps/intent-hues.json`: distinct,
    culturally load-bearing hue regions.
 6. **Dark scheme.** Neutrals mirror L (`L_dark = 1 − L_light`); accents flip L around 0.55, hold
    hue, cut chroma 10–15% (dark surfaces hide chroma less — reducing C avoids glow).
@@ -71,7 +71,7 @@ this skill — route to [[color-verify]].
    names. No ramp or mapping is emitted unverified; each emitted token carries OKLCH + sRGB +
    provenance + its checked contrast pairs.
 
-## The numbers (derived from `ramps/` — the canon)
+## The numbers (derived from `assets/ramps/` — the canon)
 
 | Parameter | Value |
 |---|---|
@@ -92,7 +92,7 @@ or neutral-1000 (whichever clears contrast) · `--focus-ring` accent-600 light /
 ## Mechanism — `scripts/ramp_build.py`
 
 The ramp arithmetic is deterministic derivation, so it routes to code: `ramp_build.py <family>
-[--curve ramps/<file>.json] [--anchor "oklch(...)"] --json` runs skeleton → chroma bell → C-only
+[--curve assets/ramps/<file>.json] [--anchor "oklch(...)"] --json` runs skeleton → chroma bell → C-only
 gamut walk from the curve JSON, reports monotonicity, evenness, gamut state, and any
 `DecompositionGap` (exit 1 — a gap is never silently shipped). `ramp_build.py selftest` locks it:
 the neutral canon build (monotone L, evenness ≤ 1.5, all steps in gamut) plus a negative control —
@@ -112,9 +112,9 @@ is already the defect).
 
 | Path / peer | Use |
 |---|---|
-| `ramps/neutral-curve.json` | CANON — L-anchor grid + chroma bell/ceiling for neutral families |
-| `ramps/accent-curve.json` | CANON — L-anchor grid, chroma-bell parameters, extreme caps, gamut policy for accent/intent families |
-| `ramps/intent-hues.json` | CANON — hue ranges for danger/warning/success/info + tolerance + collision rule |
+| `assets/ramps/neutral-curve.json` | CANON — L-anchor grid + chroma bell/ceiling for neutral families |
+| `assets/ramps/accent-curve.json` | CANON — L-anchor grid, chroma-bell parameters, extreme caps, gamut policy for accent/intent families |
+| `assets/ramps/intent-hues.json` | CANON — hue ranges for danger/warning/success/info + tolerance + collision rule |
 | `scripts/ramp_build.py` | the build arithmetic + selftest (skeleton · bell · gamut walk · invariant report) |
 | `scripts/routing-corpus.json` | the checked-in M2 routing corpus |
 | [[color-verify]] | the mandatory verify handoff — contrast gate, (theme × scheme × contrast) sweep, ColorProof |

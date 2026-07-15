@@ -2,7 +2,7 @@
 """ramp_build.py — the palette-design build mechanism. Self-contained (stdlib only).
 
 Ramp construction is DETERMINISTIC DERIVATION, not judgment — so its arithmetic routes to code
-(right tool for the job). This script builds one family's ramp from its curve JSON (ramps/ — the
+(right tool for the job). This script builds one family's ramp from its curve JSON (assets/ramps/ — the
 canon) in three stages:
 
   skeleton     — the L grid: anchors from the curve JSON's lightnessAnchors; any step the JSON
@@ -34,10 +34,10 @@ A violation is reported as a DecompositionGap and the build exits 1 — never si
   python3 scripts/ramp_build.py selftest
   python3 scripts/ramp_build.py neutral --json
   python3 scripts/ramp_build.py accent --anchor "oklch(0.62 0.18 270)" --json
-  python3 scripts/ramp_build.py danger --curve ramps/accent-curve.json --anchor "oklch(0.58 0.19 25)"
+  python3 scripts/ramp_build.py danger --curve assets/ramps/accent-curve.json --anchor "oklch(0.58 0.19 25)"
 
-<family>: `neutral` resolves to ramps/neutral-curve.json; every other family (accent, danger,
-warning, success, info, …) resolves to ramps/accent-curve.json unless --curve overrides.
+<family>: `neutral` resolves to assets/ramps/neutral-curve.json; every other family (accent, danger,
+warning, success, info, …) resolves to assets/ramps/accent-curve.json unless --curve overrides.
 Accent-curve families REQUIRE --anchor (C_max and hue inherit from the brand anchor); a neutral
 built without --anchor uses the tinted default (C_max = chromaCeiling, hue = hueDefault).
 
@@ -269,7 +269,7 @@ def load_curve(path):
 
 def curve_path_for(family):
     name = "neutral-curve.json" if family == "neutral" else "accent-curve.json"
-    return os.path.join(_skill_root(), "ramps", name)
+    return os.path.join(_skill_root(), "assets", "ramps", name)
 
 
 # --- selftest ------------------------------------------------------------------------------------
@@ -374,7 +374,7 @@ def main(argv):
         elif arg == "--json":
             as_json = True
         else:
-            sys.stderr.write("usage: ramp_build.py <family> [--curve ramps/<file>.json] "
+            sys.stderr.write("usage: ramp_build.py <family> [--curve assets/ramps/<file>.json] "
                              "[--anchor \"oklch(L C H)\"] [--json] | selftest\n")
             return 2
     curve_path = curve_path or curve_path_for(family)

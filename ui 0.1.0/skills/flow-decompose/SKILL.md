@@ -74,7 +74,7 @@ destructive?, guard?}], exits: [{state, kind: success|abandon|error, asserts: []
 [{from, to, preserves_input}], persistence: {resumable, across?}}`. Each exit's `asserts[]` names
 what must be TRUE at it ("balance reflects payment") — the card can NEVER settle whether an assert
 *holds* or whether the journey is the *right* one; those are the axes' judgment tiers. A worked
-card: `examples/one-time-pay.flow.json` (statement → pay wizard → receipt, decline recovery,
+card: `references/one-time-pay.flow.json` (statement → pay wizard → receipt, decline recovery,
 timeout-resume persistence). In a [[ui-audit]] sweep the inventory's declared flows are the card
 list, and `--inventory inventory.json` cross-checks each state's `screen` against the audited set.
 
@@ -138,7 +138,7 @@ actually hold.
 | Path / peer | Use |
 |---|---|
 | `scripts/flow-check.py` | the mechanism gate (+ `selftest`); exit 1 on any gate |
-| `examples/one-time-pay.flow.json` | a worked real card — the shape to copy |
+| `references/one-time-pay.flow.json` | a worked real card — the shape to copy |
 | the `flow-reviewer` agent | GRADE's fresh-context critic for a flow you designed (generator ≠ critic) |
 | [[layout-decompose]] | within-screen space + behavior (the sibling altitude, same two-axis polarity) |
 | [[ui-audit]] | the set-scoped sweep that composes this per declared flow |

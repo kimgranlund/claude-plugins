@@ -152,7 +152,7 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 | `references/autoresearch.md` · `hill-climb.md` · `ablation.md` · `sweep.md` · `bisect.md` · `adversarial.md` | The selected method's full protocol + its per-method rubric section |
 | `references/rubric.md` | Score how well the investigation was conducted (gate = R1, R3, R7) |
 | `references/sources.md` | The prior art each method's protocol is grounded in (provenance) |
-| `examples/threshold-sweep-2026-07-04.md` | A real dispatched run end-to-end (sweep) — also the reference journal shape for the R1/R3/R7 gates |
+| `references/threshold-sweep-2026-07-04.md` | A real dispatched run end-to-end (sweep) — also the reference journal shape for the R1/R3/R7 gates |
 | `scripts/journal_check.py` | Arithmetic shape-check of a run's journal (R1/R3/R7, three-valued; `selftest` proves the checks) |
 | `scripts/routing-corpus.json` | The routing eval corpus for this skill's description |
 
