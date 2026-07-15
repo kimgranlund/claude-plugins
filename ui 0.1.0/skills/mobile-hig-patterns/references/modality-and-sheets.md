@@ -46,25 +46,30 @@ with the content behind it.
 
 ## Sheet detents
 
-[inferred — NOT found on a current HIG page in this wave.] "Detent" is UIKit
-(`UISheetPresentationController`) API terminology for a sheet's resting heights (commonly a
-**medium** and a **large** detent) with a drag-to-resize **grabber** affordance — this is
-FRAMEWORK documentation, not confirmed HIG guidance under that name. Treat "detent" as the
-correct technical term for the mechanism, but do not cite it as "HIG says" without a HIG page to
-point at — this wave found none. See `sources.md`.
+[verified, HIG "Sheets" — promoted 2026-07-15 from [inferred]; the second wave found this on the
+Sheets page's own Anatomy section, which the first wave missed:
+developer.apple.com/design/human-interface-guidelines/sheets, accessed 2026-07-15.] A sheet's
+resting heights are **detents** — HIG's own term, not just UIKit's: "Sheets automatically support
+the large detent"; adding the **medium** detent lets the sheet rest at a lower height for
+progressive disclosure. A resizable sheet expands when people scroll its contents or drag the
+**grabber** — "a small horizontal bar" — and HIG's guidance is to include a grabber in a
+resizable sheet. The API realization is `UISheetPresentationController.detents` /
+`prefersGrabberVisible` (linked from the HIG page itself).
 
 ## Alerts vs. action sheets vs. sheets — the escalation ladder
 
-[inferred — NOT independently confirmed against a current HIG page in this wave; the "Sheets"
-page does not itself cover alerts or action sheets.] The escalation logic below is ecosystem
-convention this pack states as a reasonable, widely-observed pattern, not a verified HIG citation:
+[verified, HIG "Alerts" + "Action sheets" — promoted 2026-07-15 from [inferred]; the second wave
+found both as current, dedicated pages the first wave missed:
+developer.apple.com/design/human-interface-guidelines/alerts and …/action-sheets, both accessed
+2026-07-15. The distinction is HIG's own words: "Use an action sheet — not an alert — to offer
+choices related to an intentional action" (Alerts page, linking to Action sheets).]
 
-- **Alert:** the most interruptive, reserved for critical information or a decision the user must
-  make before doing anything else — conventionally minimal text (a short title, an optional short
-  message) and few actions.
-- **Action sheet:** presents a set of two or more choices related to the current context, typically
-  sliding up from the bottom — appropriate when the user needs to choose AMONG options rather than
-  simply acknowledge information the way an alert does.
+- **Alert:** [verified] "gives people critical information they need right away" — the most
+  interruptive form, used sparingly, for information to acknowledge or a decision that can't wait;
+  conventionally minimal text (a short title, an optional short message) and few actions.
+- **Action sheet:** [verified] "a modal view that presents choices related to an action people
+  initiate" — appropriate when the user needs to choose AMONG options rather than simply
+  acknowledge information the way an alert does.
 - **Sheet** (per the corrected definition above): the right escalation when the task needs real
   content and interaction (a form, a multi-field composer) rather than a short choice or a pure
   acknowledgment.

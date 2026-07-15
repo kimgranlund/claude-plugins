@@ -55,18 +55,24 @@ screens that were never really "above" each other).
 "[If you need to provide] controls that act on elements in the current view, use a toolbar
 instead" of a tab bar. (HIG, "Tab bars" — accessed 2026-07-14.)
 
-[inferred — the large-title collapse behavior and the specific "title/back-button/trailing-
-actions" nav-bar anatomy below were NOT independently re-confirmed against a current, dedicated
-HIG page in this wave; treat as widely-observed iOS convention, not a cited HIG rule, until a
-specific page is found.] The navigation bar hosts the screen's title, the automatic back button,
-and trailing actions specific to the current screen; a large title (oversized, left-aligned) is
-commonly documented as collapsing to a smaller, centered inline title as the user scrolls content
-below it.
+[inferred — absence CONFIRMED by the 2026-07-15 second wave (Issue #6): direct navigation to a
+/navigation-bars slug 404s, the Navigation-and-search hub lists Path controls, Search fields,
+Sidebars, Tab bars, and Token fields but NO Navigation bars page, and no HIG page addresses the
+large-title collapse. This is a real gap in the current HIG, disclosed — treat as widely-observed
+iOS convention, not a cited HIG rule.] The navigation bar hosts the screen's title, the automatic
+back button, and trailing actions specific to the current screen; a large title (oversized,
+left-aligned) is commonly documented as collapsing to a smaller, centered inline title as the
+user scrolls content below it.
 
 ## Search placement in a navigation hierarchy
 
-[inferred — NOT found on a current, dedicated HIG page in this wave; treat as ecosystem
-convention, not a cited HIG rule.] Search is commonly integrated into the navigation bar of the
-screen it searches (rather than a dedicated separate search screen/tab) for content naturally
-scoped to that screen's list; a dedicated search TAB is reserved for apps where search is itself a
-primary, first-class destination.
+[verified, HIG "Search fields" — promoted 2026-07-15 from [inferred]; the second wave found the
+page's own "Search in a navigation hierarchy" section (Platform considerations → iOS):
+developer.apple.com/design/human-interface-guidelines/search-fields, accessed 2026-07-15.] HIG
+names three placements for the search entry point — **as a tab in a tab bar** ("keeps search
+visible and always available", for apps where search is a primary destination), **in a toolbar at
+the bottom or top of the screen**, and **directly inline with content** (a field inline with the
+content it searches) — with the choice depending "on the layout, content, and navigation of your
+app". This pack's earlier convention statement (inline/nav-bar search for screen-scoped content,
+a search tab where search is a first-class destination) matches HIG's own framing and is now
+citable.
