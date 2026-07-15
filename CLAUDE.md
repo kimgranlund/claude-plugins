@@ -16,7 +16,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Fill or grow a knowledge corpus | `/pack-forge` (one axis per wave) |
 | Split or merge a pack; execute the verdict | `/skill-decompose` · `/skill-synthesize` → `/skill-refactor` |
 | Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | scribe: `/doc-forge` · `/doc-review` |
-| A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work; it drops the report on exit |
+| A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work; it drops the report on exit. In THIS workspace the record lands as a GitHub Issue via `gh` (ADR-0002), not a `docs/tickets/` file |
 | Scattered docs in an existing repo to organize into the canonical layout | scribe: `/docs-alignment` (one approval gate, git mv, never rewrites prose) |
 | A feature idea to capture, or a feature to build | scribe: `/feature` (pure intake → sized ticket/doc/corpus) · orchestration: `/build` (record-first build — runs the intake when no record exists) |
 | Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s Map |
@@ -29,6 +29,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Routing proof after description edits | `/eval-run <plugin>` |
 | Periodic health sweep | `/harness-audit` (read-only; proposes) |
 | A drifted repo — duplicated instruction trees, stale corpus, dead automation: the committing campaign | forge: `/repo-alignment` |
+| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs G1–G11 on it; solo single-file fixes may still commit to main |
 | Ship | `/plugin-release <plugin>` — the only way anything ships |
 
 ## Common commands
@@ -73,7 +74,13 @@ quote plugin paths (the version suffix contains a space).
 - **Docs and ledgers:** functional documents follow scribe's type contracts and mutability classes
   (accepted ADRs are append-only — supersede, never edit; the hook enforces it).
   `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted
-  casually.
+  casually. **Work items are GitHub Issues in this workspace (ADR-0002)** — decisions/contracts
+  (ADR/PRD/SPEC/LLD) and README ledgers stay in-repo files; `docs/tickets/` is retired for new
+  work items here.
+- **CI mirrors the local gates (ADR-0002).** `.github/workflows/gate.yml` runs `release_gate.py`
+  (G1–G11, incl. the ruff/eslint style tier — configs `ruff.toml`/`eslint.config.mjs` at this
+  root) over all nine plugins on every push/PR — it executes the same plain scripts, no CI-only
+  logic.
 - **Sources of record flow outward.** Standards skills in the plugins are canonical; corpus
   snapshots and project-knowledge copies refresh *from* them at release boundaries, never the
   reverse. Falsified claims are amended in place with a dated note.

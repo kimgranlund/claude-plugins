@@ -379,8 +379,8 @@ def lint_claude_md_text(text):
         findings.append(("WARN", 201, "C1",
                          f"{len(lines)} lines -> entry files are paid every turn and adherence "
                          "decays past ~150-200 instructions; run /entry-file-audit"))
-    hits = [i + 1 for i, l in enumerate(lines)
-            if not l.lstrip().startswith("```") and CHECK_PROSE_RE.search(l)]
+    hits = [i + 1 for i, ln in enumerate(lines)
+            if not ln.lstrip().startswith("```") and CHECK_PROSE_RE.search(ln)]
     if len(hits) > 10:
         findings.append(("WARN", hits[0], "C2",
                          f"{len(hits)} imperative-check lines -> checks in prose are hook "

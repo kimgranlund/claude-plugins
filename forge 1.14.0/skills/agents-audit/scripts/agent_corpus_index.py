@@ -41,7 +41,6 @@ a reverse control (this plugin's own real agents/ estate, when present, passes c
 """
 import importlib.util
 import io
-import os
 import re
 import sys
 import tempfile
@@ -127,7 +126,7 @@ def full_description(fm):
                 block.append(lines[j].strip())
             if rest.startswith("|"):
                 return "\n".join(block)
-            return " ".join(l for l in block if l)
+            return " ".join(seg for seg in block if seg)
         return rest.strip('"').strip("'")
     return ""
 

@@ -82,6 +82,13 @@ standard, not merely a gate: the gate cannot demand what it cannot see. The work
 incident→fixture rule applies (worked through in `references/selftest-patterns.md` §Incident →
 fixture).
 
+**Style tier (G11, ADR-0002, 2026-07-15):** where the workspace root carries `ruff.toml` /
+`eslint.config.mjs`, the gate also style-lints — ruff over `.py`, eslint over `.mjs|.js` — for the
+defect classes selftests can't see (unused imports/variables, ambiguous/undefined names, dead
+code). Run-if-reachable, WARN-if-absent locally; CI enforces. Two ruff rules are configured out as
+deliberate house idiom (E702 compact semicolon one-liners, E731 lambda helpers) — a new exclusion
+needs the same argued-in-config treatment, never an inline `# noqa` scattered per site.
+
 ## Failure catalog
 
 | Failure | Mechanism | Fix |

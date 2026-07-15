@@ -11,8 +11,11 @@ Rules ("no validator, no type" — Vol 3 §3.1):
   T1 [FAIL] frontmatter parses and carries doc-type, id, status
   T2 [FAIL] doc-type is one of the eight; status is in that type's enum
   T3 [FAIL] required sections for the type present as `## ` headings
-  T4 [FAIL] ledger protection: editing a file whose doc-type is adr AND status is accepted
-            (hook mode) — supersede, never edit
+  T4 [FAIL] ledger protection (hook mode): editing a file whose COMMITTED (HEAD) version is an
+            accepted ADR — supersede, never edit. Refined 2026-07-15: a new/untracked ADR, or one
+            still `proposed` in HEAD, may be authored and ratified (the proposed->accepted flip is
+            the ratification act, not a forgery); the append-only guarantee protects history.
+            git absent / not a repo / any doubt -> conservative block, as before.
   T5 [WARN] plan steps without a done-when token; spec Requirements without REQ- IDs
 """
 import json
@@ -83,6 +86,31 @@ def render(path, findings):
     return 1 if verdict == "FAIL" else 0
 
 
+def head_is_accepted_adr(p: Path) -> bool:
+    """T4's scope test (refined 2026-07-15): the ledger protection guards COMMITTED history.
+    True (block) when the file's HEAD version is an accepted ADR; False (allow) when the file
+    is new/untracked or still `proposed` in HEAD — authoring and the proposed->accepted
+    ratification flip are legal acts on an uncommitted ledger entry. git absent, not a repo,
+    or any failure -> True (conservative block, the pre-refinement behavior)."""
+    import subprocess
+    try:
+        r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
+                           text=True, cwd=p.parent, timeout=10)
+        if r.returncode != 0:
+            return True
+        top = Path(r.stdout.strip())
+        rel = p.resolve().relative_to(top.resolve())
+        r = subprocess.run(["git", "show", f"HEAD:{rel.as_posix()}"], capture_output=True,
+                           text=True, cwd=top, timeout=10)
+        if r.returncode != 0:
+            return False  # not in HEAD: a new ledger entry, not history
+        head_fm = parse_frontmatter(r.stdout)
+        return bool(head_fm and head_fm.get("doc-type") == "adr"
+                    and head_fm.get("status") == "accepted")
+    except Exception:
+        return True
+
+
 def hook_mode():
     try:
         payload = json.load(sys.stdin)
@@ -97,9 +125,9 @@ def hook_mode():
     if fm is None or "doc-type" not in fm:
         return 0
     findings = lint_text(text) or []
-    if fm.get("doc-type") == "adr" and fm.get("status") == "accepted":
-        findings.append(("FAIL", "T4", "this ADR is accepted — the ledger is append-only; revert this edit "
-                                       "and write a new ADR with `supersedes: " + fm.get("id", "adr-????") + "`"))
+    if fm.get("doc-type") == "adr" and fm.get("status") == "accepted" and head_is_accepted_adr(p):
+        findings.append(("FAIL", "T4", "this ADR is accepted in committed history — the ledger is append-only; "
+                                       "revert this edit and write a new ADR with `supersedes: " + fm.get("id", "adr-????") + "`"))
     fails = [f for f in findings if f[0] == "FAIL"]
     if fails:
         print(json.dumps({"decision": "block",
@@ -120,7 +148,30 @@ def selftest():
     assert any(f[1] == "T5" for f in lint_text(bad.replace("status: shipped", "status: draft"))), "REQ-less spec must warn T5"
     nofm = lint_text("---\ndoc-type: adr\n---\n# A\n## Context\n## Decision\n## Consequences\n")
     assert any(f[1] == "T1" for f in nofm), "missing id/status must fail T1"
-    print("doc_lint selftest · PASS · all 8 templates self-consistent; type/status/sections/spine counters bite")
+    # T4 git-aware scope (2026-07-15): committed-accepted blocks; new/ratifying doesn't
+    import shutil
+    if shutil.which("git"):
+        import subprocess
+        import tempfile
+        adr = ("---\ndoc-type: adr\nid: adr-0001\nstatus: {s}\ndate: 2026-07-15\n---\n"
+               "# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            env_git = lambda *a: subprocess.run(["git", *a], cwd=repo, capture_output=True, text=True,
+                                                env={"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+                                                     "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t",
+                                                     "PATH": __import__("os").environ["PATH"], "HOME": td})
+            env_git("init", "-q")
+            f = repo / "0001-x.md"
+            f.write_text(adr.format(s="accepted"))
+            assert not head_is_accepted_adr(f), "untracked new accepted ADR must be ALLOWED (authoring, not forgery)"
+            env_git("add", "0001-x.md"); env_git("commit", "-qm", "adr proposed")
+            # HEAD holds accepted now -> editing must block
+            assert head_is_accepted_adr(f), "committed-accepted ADR must BLOCK edits (the ledger)"
+            f.write_text(adr.format(s="proposed"))
+            env_git("add", "0001-x.md"); env_git("commit", "-qm", "as proposed")
+            assert not head_is_accepted_adr(f), "HEAD-proposed ADR must allow the ratification flip"
+    print("doc_lint selftest · PASS · all 8 templates self-consistent; type/status/sections/spine counters bite; T4 guards committed history only")
     return 0
 
 

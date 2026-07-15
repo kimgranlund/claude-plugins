@@ -1,0 +1,13 @@
+# Style/static lint for the estate's bundled .py scripts (ruled 2026-07-15, ADR-0002).
+# Runs in CI (.github/workflows/gate.yml) and locally via release_gate G11 when ruff is present.
+# Selftests prove BEHAVIOR (G4); this layer catches the defect classes selftests miss
+# (unused imports/variables, ambiguous names, undefined names).
+
+extend-exclude = ["*/dist"]
+
+[lint]
+# Ruff defaults (E4, E7, E9, F) minus two deliberate house idioms:
+#   E702 (semicolon one-liners) — the compact `fails.append(code); lines.append(...)` style
+#         these scripts use on purpose; flagging it fights the idiom, catches nothing real.
+#   E731 (lambda assignment)    — `ok = lambda m: ...` helper style, same reasoning.
+ignore = ["E702", "E731"]
