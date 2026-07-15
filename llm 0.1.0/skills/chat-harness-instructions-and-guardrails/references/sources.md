@@ -1,8 +1,11 @@
 # Sources — provenance for the harness-instruction and guardrail claims
 
-This pack teaches a PATTERN, distilled from **two independently real, inspectable systems** plus
-general platform facts — the reference files say which grounds each claim. Three trust classes
-appear, and they are not interchangeable:
+This pack teaches a PATTERN, distilled from **three real, inspectable worked instances** (two
+distinct codebases — this session's own Claude Code harness and the `nonoun-plugins` workspace —
+plus a third, distinct ARTIFACT inside the first codebase: a specific application refactor in the
+`agent-ui` repo, cited separately because it grounds a different concern than that repo's own
+project-layer settings/CLAUDE.md citations do) plus general platform facts — the reference files
+say which grounds each claim. Three trust classes appear, and they are not interchangeable:
 
 1. **Verified `file:line`** — a real path this authoring session opened directly and quoted from.
 2. **Observed harness behavior** — a real system's stated rule, reported at task-dispatch time
@@ -71,6 +74,43 @@ still exists, rather than just the structural pattern.
 - `forge 1.14.0/hooks/hooks.json:3-13` and `forge 1.14.0/scripts/skill_lint.py:180-183` — the real
   `skill-postwrite-invocation-lint` `PostToolUse` gate and the exact description-length rule it
   enforces (the mechanism that caught this plugin's own sibling skills' description overruns).
+
+## The `agent-ui` repo's ADR-0135 — a third worked instance (a distinct artifact, same repo as system #1's project-layer citations)
+
+**Verified `file:line`, this authoring session, 2026-07-14:**
+
+- `/Users/kimba/Projects/nonoun/agent-ui/.claude/docs/adr/0135-agent-harness-config-schema-and-prompt-files.md`
+  — the ratified decision record: a config-schema hoist (Piece A), a live-agent config schema
+  instance (Piece B), and a system-prompt/mini-skill-registry file externalization (Piece C).
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/shared/src/settings-schema.ts:17-98` —
+  the hoisted pure `SettingsSchema` types (`SettingsFieldType`/`SettingsField`/`SettingsSchema`,
+  lines 17-54) + the `initialValuesFor`/`findField`/`sanitizeNumber`/`sanitizeSelect` fail-closed
+  guards (lines 67-98), moved to the bottom of the repo's `shared ← components ← a2ui ← app`
+  package DAG.
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/agent-config-schema.ts:69,139`
+  — `liveAgentConfigSchema(providers)` (line 69; options projected from a real `providers.json`
+  registry, not a duplicated hardcoded list) + `resolveProduceOptions(read, schema)` (line 139).
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/system-prompt.ts:62,71-72`
+  — the post-refactor loader: `GRAMMAR` read whole from `prompts/grammar.md` (line 62) then
+  sliced via the SAME `GRAMMAR.slice(0, GRAMMAR.indexOf(...))`/`GRAMMAR.slice(GRAMMAR.indexOf(...))`
+  derivation (lines 71-72) the original hardcoded constant used before the file move, preserving a
+  prior ADR's byte-identity-by-construction guarantee across the file-externalization move.
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/mini-skills.ts:60` — the
+  mini-skill cap module constant (`DEFAULT_MINI_SKILL_CAP = 3`) before ADR-0135, and
+  `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/produce.ts:76-78,265` —
+  the additive `ProduceOptions.miniSkillCap?: number` field (lines 76-78) and its call site,
+  `opts.miniSkillCap ?? DEFAULT_MINI_SKILL_CAP` (line 265) — the fallback-to-old-constant idiom that
+  keeps an absent field byte-for-byte unchanged from before the refactor.
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/providers-config.ts` —
+  the already-parsed, already-validated `ProvidersConfig` registry `liveAgentConfigSchema` projects
+  its `model` field's options from, rather than re-listing them.
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/src/live-agent/prompt-equivalence.test.ts`
+  + its committed `prompt-equivalence.baseline.json` — the byte-identity gate asserting every
+  prompt "mode" and every externalized mini-skill body is `.toBe()`-identical to a baseline
+  captured from the original hardcoded source, before the file-externalization move.
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/app/src/controls/agent-admin/agent-admin-schema.ts`
+  — the calibrated exception: a small, deliberately-hardcoded `SUPPORTED_MODELS` list in a
+  consumer with no real provider registry of its own yet to project from.
 
 ## Platform / vendor facts — verify against current docs if stale-sensitive
 

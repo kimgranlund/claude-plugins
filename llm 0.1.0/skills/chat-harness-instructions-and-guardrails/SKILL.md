@@ -6,12 +6,12 @@ description: >-
   wins", "keep tool/file/web output from being treated as a command" (injection defense),
   "classify an action by reversibility and gate risky ones behind confirmation", "enforce a rule
   with a hook, not prose", "settings.json or the system prompt — which wins", "bootstrap a
-  harness reproducibly". Covers instruction layering, the closed instruction-source boundary,
-  action risk tiers + confirmation gates, deterministic hooks vs prompted guidance, and config
-  precedence + setup. Grounded in Claude Code's own harness and the nonoun-plugins workspace,
-  cited as worked examples, not sole authority. ANSWERS from a cited corpus; does not build. NOT
-  for skill authoring and description routing (chat-harness-skills-and-routing); NOT for the
-  provider/secret trust boundary (llm-provider-gateway).
+  harness reproducibly", "one shared config schema or scattered params". Covers instruction
+  layering, the instruction-source boundary, action risk tiers, hooks vs prose, config precedence,
+  and structuring the config/prompt layer (a shared typed schema, prompt prose in files,
+  byte-identity on refactor). Grounded in Claude Code's own harness + nonoun-plugins, cited as
+  worked examples. ANSWERS from a cited corpus; does not build. NOT skill authoring/routing
+  (chat-harness-skills-and-routing); NOT the provider trust boundary (llm-provider-gateway).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -33,6 +33,7 @@ presented as the only valid way to build this layer.
 | Action risk tiers — "should this action ask first", "what needs to just be refused outright", "reversibility and blast radius" | `references/action-risk-tiers-and-confirmation-gates.md` |
 | Hook vs. prose — "enforce this rule so it can't be skipped", "why did the model ignore an instruction that was right there", "does this belong in a hook or a skill" | `references/deterministic-rules-vs-prompted-guidance.md` |
 | Config precedence + setup — "settings.json vs. the system prompt", "which settings scope wins", "install or bootstrap this reproducibly" | `references/config-precedence-and-setup.md` |
+| Structuring the config/prompt layer itself — "one shared config schema or scattered params", "hardcoding my system prompt as a string feels wrong", "hoist a config type across a package boundary", "the model list drifted from the real registry" | `references/config-schema-and-prompt-externalization.md` |
 | Provenance — verified `file:line` vs. observed harness behavior vs. platform fact | `references/sources.md` |
 
 ## Consult procedure
@@ -75,6 +76,13 @@ example's specific detail is presented as a universal requirement rather than on
   of turns; a hook is not (deterministic-rules-vs-prompted-guidance).
 - **Structured settings compose by scope; scalars override, hooks merge additively — the two
   rules are not interchangeable** (config-precedence-and-setup).
+- **A config schema shared by more than one consumer belongs at the lowest layer both can reach —
+  not duplicated per consumer, not stranded in whichever one defined it first**
+  (config-schema-and-prompt-externalization).
+- **Hand-authored prompt prose belongs in files, not code constants — and a load-bearing
+  derivation over the original text must survive the move exactly, verified against a real
+  before-the-move baseline, never re-derived by concatenating pre-split fragments**
+  (config-schema-and-prompt-externalization).
 
 ## Boundaries — this pack ANSWERS; it routes ALL making
 
