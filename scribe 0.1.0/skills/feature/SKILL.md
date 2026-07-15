@@ -2,20 +2,19 @@
 name: feature
 description: >-
   Capture a feature idea — however vague — as a durable, scope-appropriate record BEFORE any
-  building starts: a `kind: feature` TICKET, the design docs the change actually earns
-  (PRD/SPEC/LLD via doc-forge, never the bundle), or a reference corpus when the "feature" is
-  really knowledge to encode. Pure intake: it sizes and records; it never builds. Runs
-  intent-extract (root goal vs literal ask, one clarifying round max), a dedup sweep (the feature
-  may already exist or already be queued), and system-decompose (which plane, what size), then
-  routes the record by shape. Run /feature [raw idea, or an existing TKT- id to resume], e.g.
-  "/feature calculator that uses a tarzan theme" or "/feature TKT-0042". Human-timed; writes one
-  record set (plus, opt-in on first run, the project-docs index skill), then stops — building is
-  /build's job (orchestration, where installed). NOT for
-  bug-shaped reports (bug-report); NOT for dispatching or performing the build (/build); NOT for
-  other document types (doc-forge).
+  building starts: a `kind: feature` record, the design docs the change earns (PRD/SPEC/LLD via
+  doc-forge, never the bundle), or a reference corpus when the "feature" is really knowledge to
+  encode. Pure intake: sizes and records, never builds. Runs intent-extract (root goal vs literal
+  ask, one round max), a dedup sweep, and system-decompose (which plane, what size), then records
+  by shape — the TICKET file by default, or the workspace's ruled git-native backend (`gh
+  issue`). Run /feature [raw idea, or a TKT-/#issue id to resume], e.g. "/feature calculator that
+  uses a tarzan theme", "/feature TKT-0042", "/feature #17". Human-timed; writes one record set
+  (plus, opt-in on first run, the project-docs index skill), then stops — building is /build's
+  job (orchestration, where installed). NOT for bug-shaped reports (bug-report); NOT for
+  dispatching or performing the build (/build); NOT for other document types (doc-forge).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[raw feature idea, or an existing TKT- id to resume]"
+argument-hint: "[raw feature idea, or a TKT-/#issue id to resume]"
 ---
 
 # feature — intake that ends in a record, never a build
@@ -24,15 +23,23 @@ Turns a raw feature idea into the smallest durable record that fully carries it,
 spends build effort — the same loss-window fix `bug-report` made for bugs: an idea that lives
 only in chat context vanishes with it. Seed: `$ARGUMENTS`.
 
+**Backend seam (Phase 0, decided once per run — bug-report's rule, shared verbatim):** the
+record's home is the **file backend** (doc-forge's TICKET path) unless the hosting workspace's
+entry file routes work items to a **git-native backend** (a routing-table row naming `gh issue`,
+an ADR-0002-style ruling) and `gh` is available — then "ticket file" below reads "GitHub Issue":
+same payload contract, same ordering, different store. No ruling, or no `gh` → file backend,
+unchanged for every consumer outside such a workspace.
+
 ## Phase 1 — Route: fresh idea, or resume by record state
 
-`$ARGUMENTS` contains a ticket id (`tkt-####`/`TKT-####`, case-insensitive) resolving to a file in
-`docs/tickets/` → resume by that record's state: `done`/`wontfix` → report and stop (reopening is
-the user's call); open with new detail following the id → fold it into Summary/Scope and re-run
-Phase 4's sizing only if the new detail changes the size class; otherwise (open, no new detail)
-→ report the record's state, size, and placement, point at `/build` for momentum, and stop. An
-id that does not resolve is a
-fresh idea — say so, never proceed as if a record existed.
+`$ARGUMENTS` contains a record id — `tkt-####`/`TKT-####` (case-insensitive) resolving to a file
+in `docs/tickets/`, or on the git-native backend `#NN`/a bare issue number resolving via
+`gh issue view` — → resume by that record's state: `done`/`wontfix`/closed → report and stop
+(reopening is the user's call); open with new detail following the id → fold it into
+Summary/Scope and re-run Phase 4's sizing only if the new detail changes the size class;
+otherwise (open, no new detail) → report the record's state, size, and placement, point at
+`/build` for momentum, and stop. An id that does not resolve (no such file; `gh issue view`
+errors) is a fresh idea — say so, never proceed as if a record existed.
 
 ## Phase 2 — Extract
 
@@ -44,8 +51,9 @@ vagueness is a note, never a blocker to persistence.
 ## Phase 3 — Dedup: it may already exist
 
 Before minting anything, sweep three surfaces and report what's found:
-1. **Records** — `docs/tickets/`, ROADMAP/PLAN entries: already queued → this is a resume
-   (Phase 1 semantics); update placement or detail, don't re-mint.
+1. **Records** — `docs/tickets/`, ROADMAP/PLAN entries, and on the git-native backend the open
+   issues (`gh issue list --search`): already queued → this is a resume (Phase 1 semantics);
+   update placement or detail, don't re-mint.
 2. **The codebase** — Grep the feature's nouns/verbs: already shipped → report where it lives and
    stop; partially shipped → the record captures the delta, not the whole.
 3. **Docs/corpora** — an existing PRD/SPEC already covering it → link, don't duplicate (the ID
@@ -72,16 +80,23 @@ decision-ratifying.
 
 ## Phase 5 — Record, lint, place
 
-Mint the `kind: feature` TICKET via doc-forge's TICKET path (`docs/tickets/` of the local or
-target repo — repo-rooted per doc-authoring-standards' location-and-naming rule, never written
-under a plugin's own installed directory — frontmatter `doc-type: ticket, kind: feature`), carrying
-Summary · Acceptance (from the extraction's success
-criterion) · Links (the ID spine to any PRD/SPEC/LLD/corpus minted in Phase 4) · Scope/Open (the
-named gaps) · `size: small | big` in FRONTMATTER (machine-read — /build branches on it) · an
-empty `## Findings` section for the eventual build's
-write-back. Run `doc_lint.py` — fix until clean; an unlintable record is not a captured one.
+The payload contract, identical on both backends: Summary · Acceptance (from the extraction's
+success criterion) · Links (the ID spine to any PRD/SPEC/LLD/corpus minted in Phase 4) ·
+Scope/Open (the named gaps) · the size class · an empty `## Findings` section for the eventual
+build's write-back.
+
+- **File backend:** mint the `kind: feature` TICKET via doc-forge's TICKET path (`docs/tickets/`
+  of the local or target repo — repo-rooted per doc-authoring-standards' location-and-naming
+  rule, never written under a plugin's own installed directory — frontmatter `doc-type: ticket,
+  kind: feature`, `size: small | big` in FRONTMATTER, machine-read — /build branches on it). Run
+  `doc_lint.py` — fix until clean; an unlintable record is not a captured one.
+- **Git-native backend:** `gh issue create` — title = the Summary line; body = the sections above
+  as `##` headings; labels `feature` + `size:small`/`size:big` (the machine-read size lives in
+  the label). The section contract is this skill's own gate here (doc_lint validates files, not
+  issues): an issue missing a required section is not a captured record.
+
 Place it: add the line to ROADMAP (Now/Next/Later) or PLAN **only where those docs already
-exist** — never mint living-state docs unprompted.
+exist** — never mint living-state docs unprompted (both backends; queue docs stay files).
 
 ## Phase 6 — Bootstrap the project index (opt-in, when absent)
 
@@ -103,12 +118,16 @@ skill already present → skip silently.
 
 - Idea too vague after one round → capture with gaps named (Phase 2); never stall persistence.
 - Dedup finds it shipped → report location, stop; found queued → resume, not re-mint.
-- `doc_lint.py` fails → fix and re-run.
+- `doc_lint.py` fails → fix and re-run (file backend).
 - The ask is actually bug-shaped ("X is broken") → hand to `bug-report`, don't force a feature
   ticket onto a defect.
 - Index bootstrap declined → the pointer line, nothing else this session.
+- Workspace rules git-native but `gh` fails partway through a run → fall back to the file backend for THIS
+  record, say so, and note the migration in the record — never leave the idea uncaptured because
+  the preferred store was unreachable (bug-report's rule, shared).
 
-Done when a lint-clean `kind: feature` record exists on disk sized and shaped correctly, linked
-into whatever queue docs exist, with every extraction gap named, the index offer's disposition
-reported (installed path, pointer line, or already-present skip) — and NO build was dispatched
-(that is `/build`'s contract, orchestration plugin, where installed).
+Done when a `kind: feature` record exists — a lint-clean file on disk, or a labeled GitHub Issue
+whose URL was reported — sized and shaped correctly, linked into whatever queue docs exist, with
+every extraction gap named, the index offer's disposition reported (installed path, pointer line,
+or already-present skip) — and NO build was dispatched (that is `/build`'s contract,
+orchestration plugin, where installed).
