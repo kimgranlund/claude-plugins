@@ -111,6 +111,21 @@ reported**, never silently passed; a non-numeric value errors cleanly. The gate 
 not sufficient** — a clean budget run does not prove the surface *feels* fast; step 3's reviews
 prove that.
 
+## Family mechanics (canon: [[ui-audit]]'s `references/verify-mechanics.md` — cited, not restated)
+
+- **Findings format:** `file:line — [RULE_ID] finding → fix` — checker names above for
+  mechanical; judgment findings take the slugs `perf.affordance-fit` (the indicator suits the
+  wait) · `perf.streaming-posture` · `perf.cancellation` · `perf.space-reservation`.
+- **Symptom index:** "it feels slow after I click" → `POOR` (inp) / `RECIPE_MISMATCH` / `OVER_BUDGET` · "the
+  spinner flashes for a split second" → `RECIPE_MISMATCH` (too-fast indicator) · "the page
+  jumps around while loading" → `POOR` (cls) / `SHAPE_MISMATCH` · "I can't cancel a long
+  operation" → `CANCEL_MISSING`.
+- **Armed mode:** no card/artifact in play → the budgets become standing session constraints for
+  subsequent UI work; one-shot mode unchanged.
+- **Disputed finding** → the canon's waiver ladder — the card's per-metric budget is rung 2
+  for `OVER_BUDGET`; and a declared indulgent budget never waives `POOR` — poor is poor. After
+  any fix: same-scope re-run, none new (canon §3).
+
 ## Material & routing
 
 | Path / peer | Use |

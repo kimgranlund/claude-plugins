@@ -102,6 +102,20 @@ malformed card errors cleanly. The gate is **necessary, not sufficient** — it 
 friction matches the declared coordinate, not that the action is safe; step 3 confirms the
 dangerous case (high-blast / irreversible) adversarially.
 
+## Family mechanics (canon: [[ui-audit]]'s `references/verify-mechanics.md` — cited, not restated)
+
+- **Findings format:** `file:line — [RULE_ID] finding → fix` — checker names above for
+  mechanical; judgment findings take the slugs `safety.blast-honesty` (the UI states what the
+  action destroys) · `safety.recovery-real` · `safety.audit-surfaced` · `safety.consequence-named`.
+- **Symptom index:** "I deleted it by accident" → `UNGUARDED_DESTRUCTIVE` / `DEFAULT_DESTRUCTIVE`
+  · "Enter confirmed the delete" → `DEFAULT_DESTRUCTIVE` · "it asks me to confirm everything" →
+  `OVER_CONFIRM` · "there's no way to undo" → `NO_UNDO` · "the bulk action gave no preview" →
+  `NO_PREVIEW`.
+- **Armed mode:** no card/artifact in play → the guard matrix becomes a standing session constraint
+  for subsequent UI work; one-shot mode unchanged.
+- **Disputed finding** → the canon's waiver ladder (`ops_reversible` is this card's rung-2
+  instrument). After any fix: same-scope re-run, none new (canon §3).
+
 ## Material & routing
 
 | Path / peer | Use |

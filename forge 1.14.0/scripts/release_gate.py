@@ -255,6 +255,9 @@ def gate(root: Path, package: bool = False):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
              # a2a-protocol's references file (2026-07-15) — the estate's last standing G8 warn:
              "transport-and-streaming",
+             # verify-family judgment rule-ID slugs (2026-07-16, Issue #8) — findings
+             # vocabulary, not skill names:
+             "order-vs-task-flow",
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):

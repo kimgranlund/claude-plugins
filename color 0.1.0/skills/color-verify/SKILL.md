@@ -127,6 +127,23 @@ selection per scheme, the composited-outline inversion (α ≈ 0.35 black: 21:1 
 **necessary, not sufficient** — a clean run proves the arithmetic floor holds; step 3 proves the
 palette safe.
 
+## Family mechanics (canon: ui's ui-audit `references/verify-mechanics.md`, where installed — the verify-species discipline, degraded inline: rule-ID'd findings, scope-matched checks, post-fix same-scope re-run with none new, the narrowest-control waiver ladder with its anti-sycophancy clause, armed mode, symptom index)
+
+- **Findings format:** `pair/token — [RULE_ID] finding → fix` — checker names above for
+  mechanical; judgment findings take the slugs `color.cvd-collapse` (intent pairs
+  indistinguishable under the Brettel/Machado sweep) · `color.ramp-evenness-feel` ·
+  `color.role-fit`.
+- **Symptom index:** "the text is hard to read in dark mode" → `CONTRAST_FAIL_AA` (dark-scheme
+  pair) · "it passes AA but still looks faint" → `CONTRAST_FAIL_AAA` · "these two states look
+  identical to a colorblind user" → `color.cvd-collapse` · "the color looks different
+  than specified" → `OKLCH_OUT_OF_GAMUT`.
+- **Armed mode:** no palette/pair in play → the floors become standing session constraints
+  for subsequent color work; one-shot mode unchanged.
+- **Disputed finding** → the waiver ladder — this card schema carries no per-pair exception
+  flag, so the ladder starts at the per-rule project rung (recorded in DESIGN.md, visible) — and
+  never the AA floor: contrast floors are the verified envelope taste operates inside, not a
+  waivable rule. After any fix: same-scope re-run, none new.
+
 ## Material & routing
 
 | Path / peer | Use |

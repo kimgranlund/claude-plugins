@@ -106,6 +106,21 @@ a false "OK"; a malformed card errors cleanly. The gate is **necessary, not suff
 run proves `dir`/`lang` are present and no literals were declared; step 3 proves the metrics,
 mirroring, and isolation actually hold.
 
+## Family mechanics (canon: [[ui-audit]]'s `references/verify-mechanics.md` — cited, not restated)
+
+- **Findings format:** `file:line — [RULE_ID] finding → fix` — checker names above for
+  mechanical; judgment findings take the slugs `i18n.mirroring` (what flips vs what doesn't) ·
+  `i18n.bidi-isolation` · `i18n.intl-formats` · `i18n.naturalness` (translation register).
+- **Symptom index:** "the text is cut off in German" → `NO_EXPANSION_ROOM` · "the layout breaks
+  in Arabic" → `NO_RTL` / `MISSING_DIR` · "dates/numbers look wrong for French users" →
+  `NO_LOCALE_FORMAT` · "translators can't reach this string" → `HARDCODED_STRING`.
+- **Armed mode:** no card/artifact in play → the invariants become standing session constraints for
+  subsequent UI work; one-shot mode unchanged.
+- **Disputed finding** → the canon's waiver ladder — the card's per-surface flags
+  (`text: false`, `string_regime`, `rtl_in_scope`) are rung 2; `declared_posture` is not a
+  waiver instrument, it is the posture-gate's own resolution (card-wide, spec-tier). After any
+  fix: same-scope re-run, none new (canon §3).
+
 ## Material & routing
 
 | Path / peer | Use |

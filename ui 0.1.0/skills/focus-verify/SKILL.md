@@ -93,6 +93,27 @@ Absent card sections are **skipped and reported**, never silently passed; a malf
 cleanly. The gate is **necessary, not sufficient** — a clean run proves no mechanical defect; step
 3's walk proves the order is the *right* order.
 
+## Family mechanics (canon: [[ui-audit]]'s `references/verify-mechanics.md` — cited, not restated)
+
+- **Findings format:** `file:line — [RULE_ID] finding → fix` — mechanical findings take the
+  checker's own names (table above); step 3's judgment findings take the slugs
+  `focus.order-vs-task-flow` · `focus.recipe-fit` · `focus.apg-keys` · `focus.invariant-fit`
+  (the table's judgment rows: platform floors, hit-vs-visual, ring motion, forced-colors) ·
+  `focus.route-change`.
+- **Symptom index:** "the focus ring is invisible in dark mode" → `RING_LOW_CONTRAST` · "the
+  ring flashes on mouse click" → `focus.recipe-fit` (`:focus` vs `:focus-visible`) · "I can't
+  tab to it" → `NO_VISIBLE_FOCUS` · "tab jumps around the page" →
+  `POSITIVE_TABINDEX` / `ORDER_MISMATCH` · "focus is lost when the dialog closes" →
+  `MODAL_NO_RESTORE`.
+- **Armed mode:** invoked with no card/artifact → these invariants become standing session
+  constraints; subsequent UI edits are held to them at edit time. One-shot mode is unchanged.
+- **Disputed finding** → the canon's waiver ladder; this card's `inline_text`/`spacing_ok`
+  flags ARE rung 2 (per-instance, documented, checkable). An accepted `essential`-exception
+  argument (step 3's territory, never encoded in the card) is recorded as an ELEMENT-scoped
+  rung-3 line — `waived: TARGET_TOO_SMALL @ <element> — essential — <date>` — never a wholesale
+  rule waiver. After any fix: re-run at the same scope — addressed findings gone, none new
+  (canon §3).
+
 ## Material & routing
 
 | Path / peer | Use |
@@ -106,6 +127,7 @@ cleanly. The gate is **necessary, not sufficient** — a clean run proves no mec
 | [[component-forge]] / the repo's component seat | where keyboard-affordance defects route — the maker that fixes a role's missing APG keys |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |
 
-**Done** = the checker gates pass AND step 3's judgment walk confirms the order, recipes, and keys
-fit their surface — the gate is **necessary, not sufficient**; **NOT done** = a green `focus-check`
-run alone, or a verdict over skipped card sections left unargued.
+**Done** (one-shot mode) = the checker gates pass AND step 3's judgment walk confirms the order,
+recipes, and keys fit their surface — the gate is **necessary, not sufficient**; **NOT done** = a
+green `focus-check` run alone, or a verdict over skipped card sections left unargued. Armed mode
+has no terminal Done — its steady state is the standing constraint.
