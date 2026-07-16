@@ -22,7 +22,8 @@ Answers-only domain pack, distilled from shipping a production Figma plugin (the
 color/token generator: variable cascades, moded collections, bound style swatches — PRs #231–#238
 and the incidents before them). Every claim carries a confidence marker (`[verified]` with source
 + date · `[inferred]` · `[drift-prone]`) — trust accordingly, and re-verify `[drift-prone]` rows
-against developers.figma.com when the stakes are real.
+against developers.figma.com when the stakes are real — mandatory when the row gates a
+mutation (discipline 4).
 
 ## Consult table
 
@@ -34,7 +35,7 @@ against developers.figma.com when the stakes are real.
 | Token JSON in/out of Figma: UI3 native-import files (`com.figma.modeName`, `aliasData`), the collection interchange envelope, value-complete moded apply plans, the styles plan schema, DTCG-proper vs Figma-flavor | `references/interchange-schemas.md` |
 | `root.pluginData` vs `clientStorage`, the config-embed round-trip (lossless vs approximate), registry storage — **partial axis: no scene-graph coverage** | `references/document-plugindata.md` |
 
-## The three cross-cutting disciplines (load-bearing everywhere)
+## The cross-cutting disciplines (load-bearing everywhere)
 
 1. **Pure planner + dumb executor** — compute a deterministic plan outside the sandbox, execute it
    verbatim inside; parity-gate any hardcoded mirror the no-modules VM forces.
@@ -42,3 +43,12 @@ against developers.figma.com when the stakes are real.
    safe; nothing the user made is ever touched.
 3. **Resolve from reality, mutate after success** — read Figma's actual state (fonts, collections,
    modes) before acting; never create-then-hope (the Inter-Regular-12 lesson).
+4. **Tombstones and live re-verification** (added 2026-07-16, Issue #10; the shadcn specimen's
+   named-hallucination fences, shadcn-ui/ui@bc0705384) — when an incident shows the model
+   inventing a specific API (a method, property, or flag that does not exist), the reference file
+   that owns that surface gains a tombstone naming the EXACT invention, not a generic "don't
+   invent APIs" (the FLOAT-reads-px and Inter-Regular-12 entries are this pattern for real-but-
+   surprising behavior; extend it to nonexistent surfaces as they bite). And a `[drift-prone]`
+   claim that gates a MUTATION is re-verified against developers.figma.com at consult time, not
+   trusted from the snapshot — indirection where the live authoritative source exists, snapshots
+   everywhere else (the standing sources-of-record invariant).

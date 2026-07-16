@@ -121,8 +121,11 @@ bundle/
 - **Evaluate**: run the gate script, then score `references/rubric.md` B1–B7 with
   cited evidence — a score with a fix, never a bare number.
 - **Regenerate**: evaluate first, then rebuild from the role inventory outward —
-  never patch values in place. A reduction is re-verified, not trusted: upstream
-  contrast proofs do not survive dropping, collapsing, or re-pairing (R4).
+  never patch values in place, and never over the shipped bundle: the hub's
+  destructive-op ladder (shared-doctrines §7) governs — staged build, diff against
+  the shipped export with hand-edits named individually, apply on approval where
+  hand-edits exist. A reduction is re-verified, not trusted: upstream contrast
+  proofs do not survive dropping, collapsing, or re-pairing (R4).
 
 ## The divergence rule
 
