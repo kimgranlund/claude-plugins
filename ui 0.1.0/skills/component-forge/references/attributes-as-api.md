@@ -87,3 +87,10 @@ The mechanizable subset of the above (the judgment stays in A3):
 
 The `attributes` / `properties` / `events` / `upgrades_manual_props` fields are **additive**: a
 contract card that carries only the flat `props` / `boolean_props` still lints clean.
+
+## Rulings — taste-gate answers recorded on the card (added 2026-07-16)
+
+A contract card MAY carry `rulings: [{fork, choice, date}]` — the durable record of any
+taste-gate answer (SKILL.md step 4's gate; canon: layout-decompose's
+`references/taste-elicitation.md`). Checkers tolerate the key; sessions consult it before
+asking — a recorded fork is never re-asked.

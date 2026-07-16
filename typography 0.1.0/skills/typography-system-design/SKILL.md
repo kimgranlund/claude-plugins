@@ -61,6 +61,18 @@ palette/contrast" is a different artifact class — route to [[color-verify]].
    generic-output clinic — cited, not re-derived here; worked point-vs-region transformations in
    [`references/territory-interpretation.md`](references/territory-interpretation.md)). A vague
    brief is this skill's own gate: push back and ask for the named reference before proceeding.
+
+   **How the push-back asks** (canon: ui's layout-decompose `references/taste-elicitation.md`,
+   where installed — five rules in one line: ask only genuine taste forks inside the verified
+   envelope, options as artifacts not adjectives, one batched round, every option a committable
+   plan, the answer locked durably): when the brief admits two or more live territory points —
+   or the user cannot name a reference at all — do not ask for adjectives back. Render 2–3
+   candidate directions as ONE private HTML artifact of type specimens (each direction's display
+   + body faces set in the user's actual product copy, labeled A/B/C), then one AskUserQuestion
+   whose options reference the labels, recommended first with what picking it commits ("Kinfolk
+   editorial: <faces>, distinctive display, neutral ui"). The chosen territory point lands in the
+   per-voice decision doc in the same change; a territory ruled once for this brand is never
+   re-asked.
 2. **Per-voice creative decisions.** Typography-tokens' five font-family roles (`display · heading
    · body · ui · mono`) are the concrete slots; its eleven voices ride on them (`headline`,
    `sub-heading`, and `title` take `heading`'s face, `kicker`, `code`, and `sub-title` take
@@ -162,12 +174,15 @@ custom properties) instead of this skill's (deciding which typeface fills the ro
 | [[typography-tokens]] | the mandatory REALIZATION handoff — binds the decision as `--font-*`/`--type-*` |
 | [[typography-lettering]] | the knowledge peer — voice/, techniques/pairing.md, accessibility/, metrics/, scripts/ |
 | `design-system-hub/references/context-potency.md` | the presupposition / generic-output-clinic doctrine step 1 applies (read-only citation, not this skill's to edit) |
+| ui's layout-decompose `references/taste-elicitation.md` (soft, where installed) | the asking discipline step 1's push-back wires — read-only citation; its five-rule one-liner is compressed inline |
 | [[component-forge]] | NOT this skill's job — builds the component that consumes the type |
 
 **Update:** when typography-tokens' voice table or five family-role slots change, or
 typography-lettering's `voice/`, `techniques/pairing.md`, or `accessibility/` files move, re-derive
 this skill's citations and the numbers table from the changed source — never patch the prose
-independently — then re-run `typeface-check.py selftest` and the routing corpus.
+independently — then re-run `typeface-check.py selftest` and the routing corpus. When ui's
+taste-elicitation canon moves, re-derive step 1's "How the push-back asks" block (its five-rule
+one-liner is a compression of that canon; the canon wins).
 
 **Done** = every same-baseline pairing in the decision doc carries a computed ratio (in tolerance
 or compensated) and an axis-apart verdict, the territory is a stated point with a named reference,

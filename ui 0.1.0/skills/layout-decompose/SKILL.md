@@ -58,6 +58,15 @@ matching archetype wireframe.
 **Modes:** **DESIGN** (intent → pick an archetype → place the actions → emit a wireframe) · **DECOMPOSE** (read an
 existing UI → region map + grade) · **GRADE** (score a layout against the rubric, gates before reviews — a layout you designed goes to the `layout-reviewer` agent instead: generator ≠ critic).
 
+**DESIGN mode's taste gate** (compressed from `references/taste-elicitation.md`, the canon —
+on divergence the reference wins): after intent and constraints are in but BEFORE the wireframe is emitted, when
+more than one archetype/variant/density remains genuinely legal, one batched AskUserQuestion
+round (≤4 questions) presents the candidates as ASCII-wireframe previews of the USER'S screen —
+never adjective menus, never an option that fails a gate. The answer lands as a project DESIGN.md
+ruling in the same change; a fork already covered by a standing ruling or memory is never re-asked.
+Constraints that leave only one legal candidate skip the gate entirely — derivable forks are
+computed, not asked.
+
 ## The two axes (the method)
 
 Load `references/decomposition-method.md` for the full method. The skeleton:
@@ -115,6 +124,7 @@ common variants, and the per-archetype outside-in / inside-out notes. Match the 
 | File | Load when |
 |---|---|
 | `references/decomposition-method.md` | **always, first** — the full two-axis method, the leveled rubric (gates + reviews), and the DECOMPOSE / DESIGN / GRADE workflows |
+| `references/taste-elicitation.md` | DESIGN mode reaches a genuine taste fork (archetype/variant/density all legal) — the AskUserQuestion discipline: preview-backed options, the ask-then-lock loop, one batched round; also the canon the sibling design skills' gates cite |
 | `../ui-patterns/references/archetype-productivity-shell.md` | a work-in tool (editor / designer / cockpit / IDE) |
 | `../ui-patterns/references/archetype-saas-dashboard.md` | a navigated app (records / settings / tables / charts) |
 | `../ui-patterns/references/archetype-marketing-site.md` | a read-to-convert site (homepage / feature / about / pricing / lead-gen / blog) |
@@ -129,5 +139,7 @@ common variants, and the per-archetype outside-in / inside-out notes. Match the 
 The decomposition is **done** when: every visible region is named with a pattern from the matched archetype; the
 two axes are graded *separately* in the Quick Start report shape with gate failures called first; each gate failure
 names its single corrective; and (DESIGN mode) the emitted ASCII wireframe places every required action on a
-surface (no orphan verb, no orphan surface). **NOT done** when the output is one blended score, when regions are
-described in prose instead of named patterns, or when a review judgment is offered over a failed gate.
+surface (no orphan verb, no orphan surface) with every genuine taste fork asked-and-locked or covered by a
+standing ruling. **NOT done** when the output is one blended score, when regions are
+described in prose instead of named patterns, when a review judgment is offered over a failed gate, or when a
+wireframe was emitted over an open taste fork (or its ruling left unrecorded).
