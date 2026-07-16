@@ -5,6 +5,22 @@ blocks, stacking contexts, flex/grid mechanics). Re-run the wave for an axis whe
 (a CSS Working Group spec advances stage, `contain`/`content-visibility` semantics shift, a new
 `repeat()` keyword ships).
 
+## Verification pass — 2026-07-15 (Issue #5)
+
+The authoring wave's research agent never delivered its findings ledger, so an independent
+citation-verification pass ran the same week: **71 claims checked against live
+developer.mozilla.org and w3.org/TR pages — 70 CONFIRMED, 0 DIVERGED, 0 pages moved,
+1 UNDETERMINED**. The full per-claim ledger (claim · verdict · live-page wording · URL · access
+date 2026-07-15) is recorded in the repo's Issue #5 (git-native Findings).
+
+The one UNDETERMINED claim, disclosed: box-model-and-flow.md's statement that a plain inline
+box's vertical margin/padding "affects rendering but not surrounding layout." MDN confirms the
+layout half (inline boxes ignore top/bottom margins) but no single MDN line states the
+paints-without-affecting-line-height half; that half rests on CSS 2.1 inline-formatting
+mechanics (line-box height is computed from line-height/vertical-align, not from inline padding,
+which is why vertically-padded inline links visibly overlap adjacent lines). Kept, with this
+note as its citation class — spec-mechanics-grounded, not page-quotable.
+
 ## Trust order
 
 1. **Normative specs** — w3.org/TR/css-box-3 (box model), w3.org/TR/css-display-3 (BFC,
