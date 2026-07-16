@@ -85,16 +85,28 @@ instruments over every surface, then synthesizes the cross-cutting findings.
 ```
 Inventory: <N screens · M flows · K shared modules>   [bounded? what was dropped]
 Genre anchor: <genre>   (ui-genres — the category whose conventions judged conformance)
-Gate failures (all verifiers + layout gates), each: <inventory-ID · finding · owner · fix>
+Gate failures (all verifiers + layout gates), each: <inventory-ID · [RULE_ID] finding · owner · fix>  (rule IDs per references/verify-mechanics.md)
 | Screen | Axis A | Axis B | Quadrant |
 | Flow | gates | asserts verified | verdict |
-Cross-cutting: 1) <finding — spread: which IDs — criticality (or "no tasks.json: spread-only") — systemic fix + owner> …
+Cross-cutting: 1) <[RULE_ID] finding — spread: which IDs — criticality (or "no tasks.json: spread-only") — systemic fix + owner> …  (this sweep's own judgment slugs: `audit.pattern-drift` · `audit.token-systemic` · `audit.quadrant-repeat`)
 Verifier summary, three-valued: color <pass|fail|UNMEASURED(what's missing)> · focus <…> · i18n <…> · perf <…> · safety <…>
   (a card that could not be built reports UNMEASURED — skipped is never laundered into pass)
-Delta vs baseline: <N new · M resolved · K still-failing>   (or: first run — baseline established)
+Delta vs baseline: <N new · M resolved · K still-failing · W waived (each: [RULE_ID] · reason · date — visible, never deleted)>   (or: first run — baseline established)
 ```
 
 ## Boundaries
+
+- This sweep OWNS the verify-family canon — `references/verify-mechanics.md` (rule-ID'd findings,
+  the scope ladder, monotonicity, repair-scope, the waiver ladder with its anti-sycophancy
+  clause, armed mode, symptom indexes). The sibling verifiers cite it; disputes about a finding
+  route through its waiver ladder. `audit-diff.py` mechanizes §3's never-regress side at sweep
+  scope (NEW findings gate); STILL_FAILING carries the addressed-gone side to the auditor's
+  judgment. The GATE findings enter `findings.jsonl` and the delta; cross-cutting judgment
+  findings carry their rule IDs in the report and are compared by hand. A partial re-audit
+  verifies at fix scope (canon §2/§3) and is NEVER persisted as an `audits/<date>/` baseline —
+  diffing a partial run against a full baseline mints false RESOLVED entries. Waived findings
+  stay in the ledger and the gate count; the report's W row annotates them from the project's
+  DESIGN.md — a waiver is visible, never a deletion.
 
 - One screen, not the set → [[layout-decompose]]. One component → the `component-reviewer` agent.
 - This skill orders the instruments and synthesizes; each instrument's depth stays its own — never
