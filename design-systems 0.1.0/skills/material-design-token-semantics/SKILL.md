@@ -54,7 +54,7 @@ sibling consumption skills:
   repurpose a role for a documented reason (e.g. using `-low/-high` for something other than a data-viz
   series) — judge a deviation against the CONFUSION it risks (two tokens meaning the same thing
   app-wide is the failure this pack exists to prevent), not against the letter of the one-liner.
-- The M3-baseline-vs-nonoun-extension HISTORY (why 59 roles, why 13 voices, why two geometry tiers) is
+- The M3-baseline-vs-nonoun-extension HISTORY (why 59 roles, why 15 voices, why two geometry tiers) is
   each sibling skill's own "Foundation vs. extension" table — this pack only answers "what does the
   token mean today," not "why does it exist."
 
@@ -64,9 +64,11 @@ Grounded directly in the three sibling consumption skills' own battle-tested pro
 containers/interactive/feedback/text/navigation references; typography's own voice table; geometry's
 controls/containers/detail references) and the current nonoun engine source (`src/engine/semantic.js`,
 `type.mjs`, `geometry.mjs`) — not an external literature search. Authored 2026-07-14 against the
-engine's current shape (13 typography voices, the fixed-size table, 53+6 color roles, the unchanged
-6-step geometry ramp); re-sync this pack's claims whenever a sibling skill's own token shape changes,
-the same trigger that re-syncs the siblings themselves.
+engine's then-current shape (13 typography voices, the fixed-size table, 53+6 color roles, the
+unchanged 6-step geometry ramp); re-synced 2026-07-16 for TKT-0008 (the `ui-control`/`ui-widget`
+voices, 15 total, the BOX-voice reassignment, and the full-ramp control-text composition into
+geometry); re-sync this pack's claims whenever a sibling skill's own token shape changes, the same
+trigger that re-syncs the siblings themselves.
 
 ## Extending this pack
 

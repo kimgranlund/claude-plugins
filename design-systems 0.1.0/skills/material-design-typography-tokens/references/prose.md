@@ -1,8 +1,10 @@
 # Prose — body copy, lead, tiny fine-print, lists, links, code-in-text
 
 Running text you *read* (as opposed to interface chrome you *operate*) is the **body** voice on the
-`body` font role. Interface text is `label` — see interface.md; the split matters. Prose also has two
-dedicated smaller-register voices — reach for the specific voice over a body level when one fits.
+`body` font role. Interface chrome now splits three ways — static text you read is `label`, a
+control's own text is `ui-control`, a compact widget's is `ui-widget` — see interface.md; the
+read-vs-operate split still matters. Prose also has two dedicated smaller-register voices — reach for
+the specific voice over a body level when one fits.
 
 ## The prose voices
 
@@ -34,9 +36,10 @@ tuned the way they are.
 
 `tiny` and `tiny-mono` render in the `ui`/`mono` font roles respectively, but they are **prose voices**:
 they wrap, read as multi-line runs, and use `-line` + `-para`. They deliberately have **no
-`-line-single`** (unlike the box voices — label, body-mono, label-mono, kicker). Use `tiny` for fine
-print/footnotes and `tiny-mono` when that fine print needs the mono face (a legal ID, a tabular
-disclaimer figure) — not `label`/`kicker`, which are chrome tuned to sit in a box.
+`-line-single`** — same as `label`/`body-mono`/`label-mono` now (changed 2026-07-16; the BOX voices
+are `kicker`, `ui-control`, and `ui-widget` only). Use `tiny` for fine print/footnotes and `tiny-mono`
+when that fine print needs the mono face (a legal ID, a tabular disclaimer figure) — not `kicker`,
+which is chrome tuned to sit in a box, or `ui-control`/`ui-widget`, which are for controls/widgets.
 
 ## Lists, blockquotes, fine print
 
@@ -55,8 +58,9 @@ bare accent + underline). Don't bump the weight or size for a link; that's the c
 ## Inline code & code blocks
 
 - Inline code: `.md-sys-typescale-body-mono-sm` (or match the surrounding level) — the mono-role sibling
-  of body, tabular figures, a BOX voice (has `-line-single`, though inline code sits inside prose flow so
-  `-line` is usually the right choice there — see interface.md for the box-voice mechanics).
+  of body, tabular figures. `body-mono` is a PROSE voice (changed 2026-07-16 — it has no
+  `-line-single`), so `-line` is simply the only leading it carries; no box-voice mechanics to reach
+  for here, unlike `ui-control`/`ui-widget` (see interface.md).
 - Code block: `.md-sys-typescale-body-mono-md` with `-line` for comfortable multi-line leading. The
   surface/color come from material-design-color-tokens; the type here is only the mono-role voice +
   level.

@@ -28,9 +28,9 @@ For a chosen `{step}` (values shown for `md` = the 28px baseHeight):
 |---|---|---|---|
 | height | `--md-sys-size-{step}-height` | the control's block-size | 28px |
 | icon | `--md-sys-size-{step}-icon` | leading content-icon / slot glyph size | 18px |
-| caret | `--md-sys-size-{step}-caret` | the affordance mark (dropdown ▾) | 14px |
-| font | `--md-sys-size-{step}-font` | the control's text size — composed from the `label` type voice at `sm`/`md`/`lg` ONLY; `xs`/`xl`/`2xl` fall back to geometry's own standalone size law (the type engine's `label` voice no longer reaches those steps, 2026-07-13) | 14px |
-| gap | `--md-sys-size-{step}-gap` | icon↔label gap INSIDE the control | 7px |
+| caret | `--md-sys-size-{step}-caret` | the affordance mark (dropdown ▾) — its own sublinear height law, gentler than the text's | 13px |
+| font | `--md-sys-size-{step}-font` | the control's text size — composed from the `ui-control` type voice at EVERY step (`xs`..`2xl`; the voice rides the full 6-level ramp since 2026-07-16 — the old partial `label`-voice composition is retired) | 15px |
+| gap | `--md-sys-size-{step}-gap` | icon↔label gap INSIDE the control | 8px |
 | pad | `--md-sys-size-{step}-pad` | inline edge padding for a control WITH a leading slot/icon | 5px |
 | pad-edge | `--md-sys-size-{step}-pad-edge` | inline edge padding for a SLOTLESS (bare text) control | 14px |
 | min | `--md-sys-size-{step}-min` | the 1:1 floor — an icon-only control is at least square | 28px |
@@ -57,13 +57,14 @@ control's padding independently of its height you break centering — always use
 }
 ```
 Text: the box above already set `font-size` from `--md-sys-size-md-font` — at `md` this **is** the
-`label` voice's own size (`--md-sys-size-md-font` ≡ `--md-sys-typescale-label-md-size`, so the box and
-its text share one number; this equality holds at `sm`/`md`/`lg` only — `xs`/`xl`/`2xl` don't have a
-`label` counterpart, so their `-font` comes from geometry's own fallback law instead, a legitimately
-different value). Add only the label's character from the `label` voice VARS —
-`font-family: var(--font-ui)`, `font-weight: var(--md-sys-typescale-label-md-weight)`,
-`letter-spacing: var(--md-sys-typescale-label-md-tracking)` — **never** its `-size` or the whole
-`.md-sys-typescale-label-md` class (that re-sets `font-size` and a multi-line `-line` against the control box).
+`ui-control` voice's own size (`--md-sys-size-md-font` ≡ `--md-sys-typescale-ui-control-md-size`, so
+the box and its text share one number; since 2026-07-16 this equality holds at EVERY step, `xs`..`2xl` —
+the `ui-control` voice rides the full 6-level ramp, and the old partial `label`-voice composition is
+retired). Add only the text's character from the `ui-control` voice VARS —
+`font-family: var(--font-ui)`, `font-weight: var(--md-sys-typescale-ui-control-md-weight)`,
+`letter-spacing: var(--md-sys-typescale-ui-control-md-tracking)` — **never** its `-size` or the whole
+`.md-sys-typescale-ui-control-md` class (that re-sets `font-size` and a multi-line `-line` against the
+control box; the single-line fit is `--md-sys-typescale-ui-control-md-line-single`).
 
 - **With a leading icon:** icon `--md-sys-size-md-icon` (18px), and swap the padding to
   `--md-sys-size-md-pad` (the slot edge, 5px) instead of `-pad-edge`.
