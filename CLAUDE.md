@@ -1,7 +1,10 @@
 # Plugin workspace — entry file
 
-Each child directory here is one Claude Code plugin, named `<manifest-name> <version>` (e.g.
-`forge 1.14.0`, `scribe 0.1.0`) — quote the path, it contains a space. **forge is the toolchain**:
+Each child directory here is one Claude Code plugin, named `<manifest-name> <version-at-creation>`
+(e.g. `forge 1.14.0`, `scribe 0.1.0`) — quote the path, it contains a space. The dir's version
+suffix is FROZEN at creation and drifts from the manifest by design (forge's manifest is well past
+1.14.0); the current version lives in `.claude-plugin/plugin.json` and the README footer ledger,
+never in the path. **forge is the toolchain**:
 its commands and standards govern work on every plugin in this workspace, including forge itself.
 Work on a plugin happens in its directory; decisions that span plugins happen here.
 
