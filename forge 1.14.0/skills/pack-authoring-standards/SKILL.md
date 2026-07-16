@@ -23,7 +23,9 @@ type*, an INDEX that maps asks to files, and a SKILL.md surface (owned by
 decompose/synthesize tests presuppose. Provenance: the axis and wave doctrine is imported from the
 source-corpus lineage (the `color-science`/`ui-patterns` practice, worked cases in
 `skill-decompose/references/`); the freshness and grounding rules are this project's own earned
-practice — none of it is platform-verified fact, all of it is [battle-tested convention].
+practice — none of it is platform-verified fact, all of it is [battle-tested convention]
+(amended 2026-07-15: the [incident] class and severity-ranked INDEX ordering are grounded in
+external type specimens, cited inline at their rules — no longer solely this project's practice).
 
 ## The unit is the question type
 
@@ -37,7 +39,7 @@ share a file, however related their subject.
 
 A pack holds 3–7 retrieval axes — below 3 it's usually one axis padded (or a merge candidate,
 `skill-synthesize`); above 7 the entry surface strains (a split signal, `skill-decompose`). Axes
-are declared in the INDEX as its section headings, and the SKILL.md consult table mirrors them. A
+are declared in the INDEX as its section headings, and the SKILL.md consult table mirrors the axis SET (ordering is INDEX-local; see below). A
 stated axis or file count that has drifted from the tree is the first strain signal — which is why
 `corpus_check.py` reconciles counts mechanically instead of trusting prose.
 
@@ -50,8 +52,14 @@ motion-design, iconography): when the SKILL.md consult table lists every referen
 second copy that drifts — ship no INDEX. An INDEX.md earns its keep the moment files outgrow
 what the table enumerates or `references/` grows subdirectories (the color-science family,
 ui-genres). Then: one line per reference file — `path — the question it answers (≤ 1 line)` —
-grouped under axis headings; the INDEX loads *first*, files load on demand from it. Budget: an
-INDEX pushing past ~150 lines is a pack answering too many kinds of question. Every file in
+grouped under axis headings; the INDEX loads *first*, files load on demand from it. Where the
+axes have a natural severity or impact order (a rules corpus tiered CRITICAL→LOW), the INDEX
+orders its axis headings by that severity — triage order becomes structural instead of a
+convention the reader must remember (added 2026-07-15; type specimen:
+vercel-labs/agent-skills@f8a72b960's async-CRITICAL → advanced-LOW prefix ladder); topic-only
+corpora keep topical order, never a faked ranking.
+
+Budget: an INDEX pushing past ~150 lines is a pack answering too many kinds of question. Every file in
 `references/` appears in the INDEX and every INDEX line names a real file — zero tolerance both
 directions, because a ghost line misroutes and an unlisted file is unreachable.
 
@@ -62,13 +70,18 @@ file is flagged for an ask-shaped split. The SKILL.md body carries a consult tab
 INDEX section), never content — under compaction only a skill's head survives, so a body that
 points survives compaction intact while a body that carries gets truncated mid-claim.
 
-## Grounding: every claim wears its confidence
+## Grounding: every claim wears its grounding marker
 
 Reference content states where each claim came from and how much to trust it:
 
 - **[verified]** — checked against a primary source, dated. Cite the source and the check date.
 - **[inferred]** — derived, not confirmed; say from what.
 - **[drift-prone]** — true now, expiring; these are the refresh list at every release boundary.
+- **[incident]** — a dated real-world failure grounding a rule: who, when, what broke, what the
+  rule would have prevented (added 2026-07-15; type specimen: the Vercel dropped-frames incident
+  cited in emilkowalski/skills@6bf24434f). Not decoration — an incident is causal evidence a rule
+  paid rent, and survives the deletion test on evidentiary value; an undated anecdote is not this
+  class, it is an orphan wearing a story.
 
 A claim with none of these is an orphan; a corpus of orphans is vibes with a directory structure.
 When a claim is corrected, the old text is amended in place with a dated note (the correction is
@@ -82,7 +95,7 @@ A wave is the unit of corpus growth, and it is question-led, not source-led:
    written before any searching (the evals-first principle at corpus scale).
 2. **Gather with dates** — sources collected per question cluster; every capture carries its date
    and origin, because ungrounded gathering produces orphan claims by construction.
-3. **Distill ask-shaped** — one file per question type, confidence-marked, within load budgets.
+3. **Distill ask-shaped** — one file per question type, grounding-marked, within load budgets.
 4. **Register** — INDEX lines, consult-table row, and the pack's eval suite gains the new axis's
    trigger phrasings in the same change (an unregistered file is unreachable; an unrouted axis is
    invisible).
@@ -113,5 +126,6 @@ authority it no longer has. The [drift-prone] inventory is the refresh checklist
 
 Axis/wave doctrine: imported from the source-corpus lineage 2026-07-07 (worked cases:
 `skill-decompose/references/best-practices.md`). Grounding, amendment, and snapshot rules: this
-project's practice, 2026-07. Surface rules: `skill-authoring-standards`. Split/merge decisions:
+project's practice, 2026-07; amended 2026-07-15 — the [incident] class and severity-ranked INDEX
+ordering enter from the external-skill review's type specimens, cited inline. Surface rules: `skill-authoring-standards`. Split/merge decisions:
 `skill-decompose` / `skill-synthesize`. The executing workflow: `pack-forge`.

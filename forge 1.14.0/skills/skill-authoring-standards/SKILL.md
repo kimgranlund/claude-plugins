@@ -44,6 +44,8 @@ Corrected rule, verified against live docs 2026-07: **`disable-model-invocation:
 
 Declare both dials on every skill, explicitly, including at their defaults. An omitted field couples the skill's behavior to whatever the current version defaults to; an explicit field pins what was meant. The lint fails omission.
 
+Name-grammar exception (amended 2026-07-15; type specimen: raphaelsalaja/skill@dc9eef22f): when a knowledge catalog's subject IS a term of art users type verbatim (`12-principles-of-animation`, not `animation-principles`), the term outranks the noun-head grammar — the name is itself a trigger surface, and normalizing it destroys the exact-phrase match. The checkable slice (reserved words F8, length caps) still applies unconditionally. (The canonical naming grammar lives in corpus Vol 2, which should be amended with this exception — the same flag discipline as the §6.6 correction above.)
+
 Two design axes cut across species (both primary-sourced from Anthropic):
 - **Capability uplift** (Claude can't do it, or not consistently) vs **encoded preference** (Claude can do each piece; the skill sequences them your way). Uplift skills earn detail; preference skills earn brevity — state the sequence and stop.
 - **Degrees of freedom**: many valid approaches → prose intent (high); one preferred pattern → pseudocode or a parameterized script (medium); fragile, consistency-critical operation → an exact script, no parameters (low). "Solve, don't punt": a bundled script beats instructions to improvise one, and it removes a hallucination surface.
@@ -60,7 +62,7 @@ Runtime fields (Claude Code): `name`, `description`, `when_to_use`, `argument-hi
 
 ### Description engineering
 
-The description is matched against *the user's words*, not the skill's content. Third person; [what it does] + [when to use it]; the verbatim phrasings a user actually types, front-loaded; slightly pushy — the documented bias is under-triggering, not over-triggering. Fence what it is NOT for using the parseable form `NOT for <thing> (<owner>)` — a repellent the router and measurement tooling can both key on.
+The description is matched against *the user's words*, not the skill's content. Third person; [what it does] + [when to use it]; the verbatim phrasings a user actually types, front-loaded; slightly pushy — the documented bias is under-triggering, not over-triggering. Fence what it is NOT for using the parseable form `NOT for <thing> (<owner>)` — a repellent the router and measurement tooling can both key on. Three trigger vocabularies, mined in that order: **feature nouns** (what the user names), **symptom phrases** ("feels sluggish", "looks off", "why did the wrong one fire"), and **lifecycle moments** ("before committing…", "finishing a feature…", "ready to merge") — the third routes by WHEN the user is rather than what they can name, and fits verify/review skills whose users don't know the defect vocabulary yet (amended 2026-07-15; type specimen: millionco/react-doctor@5915a5823).
 
 ```
 Bad  (label — never fires):
@@ -79,10 +81,10 @@ For command skills the description never reaches the model — write it as docum
 
 1. **Standing instructions, spec-present tense.** The body persists un-re-read for the whole session; "the report cites file:line for every finding" keeps binding at turn thirty in a way "first, cite your sources" does not.
 2. **Contracts first, examples last.** Compaction keeps the head. The output contract, the hard gates, and the failure branches live in the first 5,000 tokens; worked examples fill the tail.
-3. **The deletion test** — the calibration instrument for every line: *delete it; would Claude's output change?* No → the line restates model knowledge; cut it. Measured across public skills, >60% of body content fails this test.
+3. **The deletion test** — the calibration instrument for every line: *delete it; would Claude's output change?* No → the line restates model knowledge; cut it. Measured across public skills, >60% of body content fails this test. One scoring exception (amended 2026-07-15): a **coverage-forcing enumeration** — a checklist whose every line is individually model knowledge but whose value is forcing complete, priority-ordered coverage instead of open recall (type specimen: the 9-category a11y sweep in ibelick/ui-skills@ce91b8595) — is scored on the enumeration, not per line: it survives iff deleting the LIST would change which categories get checked or in what order.
 4. One contrastive good/bad pair binds a quality bar better than a paragraph of criteria. Label the bad side — unlabeled counterexamples get imitated.
 5. Numeric anchors on load-bearing dimensions ("3 sentences", "under 40 lines"); vague quantifiers ("briefly", "a few") inherit the model's prior, which is verbose.
-6. ≤ 3 hard gates (`NEVER` / `MUST NOT`) per body, spent only on catastrophic invariants — a body with thirty has none.
+6. ≤ 3 hard gates (`NEVER` / `MUST NOT`) per body, spent only on catastrophic invariants — a body with thirty has none. **Parameter locks are a different instrument, and uncapped** (amended 2026-07-15 — the external-skill review hit this misfire three times independently): a lock pins one aesthetic or config knob to a sanctioned value AND names its forbidden neighbors ("scale to `0.96`, never `0.95` or below" — the type specimen is jakubkrehel/make-interfaces-feel-better@366f0f86e). Locks are written lowercase (always/never + backticked values), keeping the uppercase salience budget — and lint W7's case-sensitive count — reserved for the catastrophic tier; a "lock" that names no forbidden neighbor is a preference, and earns no never at all.
 7. **Escape hatch**: procedures state when to skip ("if no migration exists yet, skip to step 4") so the model doesn't march through irrelevant steps.
 8. Reference, never restate: point at the canonical skill or doc. A restated convention is a drift pair with a countdown.
 
@@ -104,7 +106,7 @@ For command skills the description never reaches the model — write it as docum
 | Vague quantifiers on load-bearing dimensions | Instruction walls — adherence decays past ~150–200 instructions in context |
 | Description is a noun-phrase label | Overfit to one repo: hardcoded paths, voodoo constants, brittle assumptions |
 
-The symmetric resolution is the same move: run the deletion test line by line; what survives is the skill.
+The symmetric resolution is the same move: run the deletion test line by line — coverage-forcing enumerations as a block, per rule 3; what survives is the skill.
 
 ## Stimulating the right reasoning
 
