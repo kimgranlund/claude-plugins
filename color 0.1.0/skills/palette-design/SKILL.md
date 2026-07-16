@@ -47,8 +47,21 @@ this skill — route to [[color-verify]].
 2. **Anchor.** A stated brand anchor (e.g. `accent-500 = oklch(0.62 0.18 270)`) overrides step
    500's ideal L; re-interpolate so per-label-unit evenness (numbers table) still holds. If the
    anchor cannot yield a full ramp while holding evenness, flag a `DecompositionGap` — ask for a
-   different anchor. `scripts/ramp_build.py` owns the arithmetic of steps 1–4; anchor negotiation
+   different anchor (or, when several repair directions exist, the taste gate below decides). `scripts/ramp_build.py` owns the arithmetic of steps 1–4; anchor negotiation
    and role-mapping judgment stay with the model — the script reports gaps, it never renegotiates.
+
+   **Taste gate at anchor negotiation** (canon: ui's layout-decompose
+   `references/taste-elicitation.md`, where installed — five rules in one line: ask only genuine
+   taste forks inside the verified envelope, options as artifacts not adjectives, one batched
+   round, every option a committable plan, the answer locked durably): when the brief leaves
+   direction genuinely open (no anchor, or a `DecompositionGap` admits 2–3 repair directions),
+   render the candidate ramps side by side as ONE private HTML artifact — palette strips labeled
+   A/B/C, every candidate already gamut-safe and evenness-passing (a clean `ramp_build.py` run
+   each; contrast is step 7's gate, not asserted here) — then one AskUserQuestion whose
+   options reference the labels, recommended first with what it commits ("warm neutral anchored
+   at your brand hue, dark scheme derived"). The answer lands in ramp provenance + the
+   BrandSchema/UISchema anchor field in the same change (token-file realization stays downstream
+   of the ColorProof, via token-builder); an anchor ruled once is never re-asked.
 3. **Chroma arc.** `C(L) = C_max × exp(−k × (L − L_peak)²)` — `C_max` solved so the anchor step
    reproduces the anchor's C exactly; `L_peak`/`k` from the curve JSON (accent 0.60/28; ≈ 0.70+
    pastels · ≈ 0.50 jewel tones are anchor-negotiation moves); extreme caps per
@@ -112,6 +125,7 @@ is already the defect).
 
 | Path / peer | Use |
 |---|---|
+| ui's layout-decompose `references/taste-elicitation.md` (soft, where installed) | the taste-gate canon step 2's gate degrades inline — five rules, one artifact per gate |
 | `assets/ramps/neutral-curve.json` | CANON — L-anchor grid + chroma bell/ceiling for neutral families |
 | `assets/ramps/accent-curve.json` | CANON — L-anchor grid, chroma-bell parameters, extreme caps, gamut policy for accent/intent families |
 | `assets/ramps/intent-hues.json` | CANON — hue ranges for danger/warning/success/info + tolerance + collision rule |
@@ -125,7 +139,8 @@ is already the defect).
 
 **Update:** when [[color-verify]]'s invariants or `ramps/*.json` move, re-derive the numbers
 table and the procedure's constants from them — never patch the prose independently — then re-run
-`ramp_build.py selftest` and the routing corpus.
+`ramp_build.py selftest` and the routing corpus. When ui's taste-elicitation canon moves, re-derive
+step 2's gate block (its five-rule one-liner is a compression of that canon; the canon wins).
 
 **Done** = every scheme carries a passing ColorProof + provenance; **NOT done** = any emit
 without one.

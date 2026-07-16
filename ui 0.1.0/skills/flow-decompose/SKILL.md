@@ -66,6 +66,16 @@ truth, then gate) · **DECOMPOSE** (read an app/spec → card + grade) · **GRAD
 card; a flow you designed goes to the `flow-reviewer` agent — the fresh-context critic; generator ≠
 critic).
 
+**DESIGN mode's taste gate** (canon: [[layout-decompose]]'s `references/taste-elicitation.md` —
+five rules, cited not restated): when the task inventory admits more than one journey shape the
+checker would find legal (a linear wizard AND a hub-and-spoke both viable), one batched
+AskUserQuestion round presents the candidate machines as compact stage-graph previews
+(`entry → stage → exit` sketches of the USER'S task, recommended first as a committable plan)
+BEFORE the card is written. The answer lands in the `.flow.json` card in the same change — and an
+area-wide ruling additionally lands as one DESIGN.md line (the findable record a sibling flow's
+session checks before asking); a journey shape ruled once for this flow is never re-asked. One
+passing shape → no gate.
+
 ## The card
 
 A **flow card** (`*.flow.json`) declares one journey:

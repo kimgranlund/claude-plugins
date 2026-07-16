@@ -153,13 +153,16 @@ One model, many agreeing projections.
 
 ### DESIGN (intent → wireframe)
 1. **Pick the archetype** from the intent: *work in one artifact* → productivity-shell; *navigate many records* →
-   saas-dashboard; *read to convert* → marketing-site; *thumb-first* → mobile-app.
+   saas-dashboard; *read to convert* → marketing-site; *thumb-first* → mobile-app. When intent + constraints
+   leave MORE than one shell (or variant/density) genuinely legal, run the taste gate
+   (`taste-elicitation.md` — one batched AskUserQuestion round, wireframe previews of the user's screen,
+   answer locked as a DESIGN.md ruling) before proceeding; a standing ruling settles it silently.
 2. **Inside-out first** — list the verbs the product must afford (B1), then assign each a surface and a home pane
    (B2/B4). This decides which regions you actually need.
 3. **Outside-in second** — lay the chosen regions into the archetype's frame (A1/A2), then specify each region's
    internal order, cards, and atoms (A3–A5).
 4. **Emit the ASCII wireframe** with every region named and every required verb placed. Verify: no orphan verb, no
-   orphan surface.
+   orphan surface, no taste fork still open (asked-and-locked, or covered by a standing ruling).
 
 ### GRADE (score a layout against the rubric)
 Run the rubric top-down per axis, gates before reviews, and produce the two separate axis scores with evidence

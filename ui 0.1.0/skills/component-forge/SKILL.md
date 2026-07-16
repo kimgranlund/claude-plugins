@@ -42,6 +42,15 @@ not judgment**); judge the rest.
 4. **Composition** — how it wires upward: the seam (e.g. priority + overflow, lowest-priority-first),
    slot presence, cross-component state, no self-margin. Recipes in
    `references/composition-patterns.md`. Where the module *sits* is the layout's job, not this skill's.
+
+   **Taste gate** (canon: [[layout-decompose]]'s `references/taste-elicitation.md` — five rules,
+   cited not restated): when steps 3–4 leave more than one API shape or variant set genuinely legal
+   under the charter, one batched AskUserQuestion round presents the alternatives as code-snippet
+   previews (each option's attribute surface + one usage line; recommended first, as a committable
+   plan) BEFORE step 5 realizes geometry. The answer lands in the component's contract card as a `rulings` entry
+   (fork · choice · date; schema note in `references/attributes-as-api.md`) in the same change; a
+   shape ruled once in this project is never re-asked. One legal shape → no gate:
+   derivable forks are computed, not asked.
 5. **Realize — geometry first** — five free values per size (height · icon · caret · font · spacer,
    the XS–2XL ramp); **everything else is derived** by the law *edge padding = (height − glyph) / 2*:
    asymmetric icon-vs-caret padding, the square icon-only cell, pill radius, composed insets. The law
