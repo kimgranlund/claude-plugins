@@ -11,7 +11,7 @@ description: >-
   machine-checked. NOT for ui-* controls in agent-ui / @agent-ui — "add a ui-button", "fix
   ui-select" (that repo's own build seat); NOT for app shells (layout-decompose);
   NOT for naming a UI pattern (ui-patterns); NOT for decomposing a feature/system (system-decompose);
-  NOT for color ramps (palette-design); NOT for grading a component you didn't author (component-reviewer).
+  NOT for color ramps (palette-design); NOT for nested-surface radius/spacing composition — "what radius on the inner card" (geometry-systems); NOT for grading a component you didn't author (component-reviewer).
 disable-model-invocation: false
 user-invocable: true
 ---
