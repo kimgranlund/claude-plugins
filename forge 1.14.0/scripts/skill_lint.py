@@ -35,7 +35,8 @@ Agent files (agents/*.md) get a focused rule set:
      bare <example> blocks and other multi-line description content must be
      indented under a block scalar (`description: |`)
   A3 name and description present
-  A4 body <= 60 lines (thin-shell law: knowledge belongs in skills: preloads)
+  A4 body <= 60 lines — <= 75 for -reviewer/-auditor seats, the dual-depth allowance
+     (thin-shell law: knowledge belongs in skills: preloads)
   A5 tools declared (an agent without an allowlist runs with everything)
 
 hooks.json files get:
@@ -269,10 +270,16 @@ def lint_agent_text(text):
             findings.append(("FAIL", fm_end + 1, "A3",
                              f"missing `{key}` -> required for agent discovery"))
     body_len = len(lines) - fm_end - 1
-    if body_len > 60:
+    # Reviewer-class seats (dual-depth dispatch contracts) carry a documented ~75-line
+    # allowance (ruled 2026-07-16, harness-audit): the earned residual of a FLOOR+DEEP
+    # contract hovers near 60 even when clean, so the standing 60-line warn stays for
+    # every other seat and reviewers warn only past 75.
+    name_val = fields.get("name", ("", 0))[0]
+    a4_cap = 75 if re.search(r"-(reviewer|auditor)$", name_val) else 60
+    if body_len > a4_cap:
         findings.append(("WARN", fm_end + 2, "A4",
-                         f"body is {body_len} lines -> thin shell; knowledge belongs in "
-                         "`skills:` preloads, not the agent prompt"))
+                         f"body is {body_len} lines -> thin shell (cap {a4_cap}); knowledge "
+                         "belongs in `skills:` preloads, not the agent prompt"))
     if "tools" not in fields:
         findings.append(("WARN", fm_end + 1, "A5",
                          "no `tools` allowlist -> the agent runs with everything; declare "
@@ -524,6 +531,15 @@ def selftest():
     assert not [f for f in good_agent if f[0] == "FAIL"], f"good agent failed: {good_agent}"
     bad_agent = {f[2] for f in lint_agent_text(BAD_AGENT_FIXTURE)}
     assert "A2" in bad_agent, f"expected A2 in {bad_agent}"
+    body70 = "\n".join(f"line {i}" for i in range(70))
+    import re as _re
+    fm = GOOD_AGENT_FIXTURE.split("---")[1]
+    fm_rev  = _re.sub(r"(?m)^name: .*$", "name: demo-reviewer", fm)
+    fm_gen  = _re.sub(r"(?m)^name: .*$", "name: demo-helper", fm)
+    assert not any(f[2] == "A4" for f in lint_agent_text("---" + fm_rev + "---\n" + body70)), \
+        "70-line -reviewer body is inside the dual-depth allowance (ruled 2026-07-16)"
+    assert any(f[2] == "A4" for f in lint_agent_text("---" + fm_gen + "---\n" + body70)), \
+        "70-line non-reviewer body must still warn A4"
     mention = GOOD_FIXTURE + "\nThe catalog discusses `NEVER`, `NEVER`, `NEVER`, `IMPORTANT`, `IMPORTANT`, `CRITICAL` as vocabulary.\n"
     assert not any(f[2] == "W7" for f in lint_text(mention, "demo-review")), "backticked markers are mentions, not uses"
     bare = GOOD_FIXTURE + ("\nNEVER do X. NEVER do Y. NEVER do Z. IMPORTANT note. IMPORTANT note. CRITICAL step.\n")

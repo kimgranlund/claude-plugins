@@ -1,17 +1,18 @@
 ---
 name: component-forge
 description: >-
-  Author a zero-dependency web component, or a composition of them, to the standard shape. Use when
-  building or upgrading a custom element, control, or component module outside a framework: "build a
-  web component / custom element", "make a checkbox / select / toolbar component", "design
-  this component's API/anatomy", "add an overflow seam", "wrap a native element or
-  form-associated?", "the tiers feel mis-cut", "my custom element renders empty after a re-render",
-  "the icon-only button isn't square", "what icon/caret size on the ramp", "upgrade
-  this jQuery dropdown" — tier, anatomy, API contract, composition, geometry, via Compose-then-Realize,
-  machine-checked. NOT for ui-* controls in agent-ui / @agent-ui — "add a ui-button", "fix
-  ui-select" (that repo's own build seat); NOT for app shells (layout-decompose);
-  NOT for naming a UI pattern (ui-patterns); NOT for decomposing a feature/system (system-decompose);
-  NOT for color ramps (palette-design); NOT for nested-surface radius/spacing composition — "what radius on the inner card" (geometry-systems); NOT for grading a component you didn't author (component-reviewer).
+  Author a zero-dependency web component or composition to the standard shape. Use when building
+  or upgrading a custom element, control, or module outside a framework: "build a web component
+  / custom element", "make a checkbox / select / toolbar component", "design this component's
+  API/anatomy", "wrap a native element or form-associated?", "the tiers feel mis-cut", "my
+  custom element renders empty after a re-render", "the icon-only button isn't square", "what
+  icon/caret size on the ramp" — tier, anatomy, API contract, composition, geometry;
+  Compose-then-Realize, machine-checked. NOT for ui-* controls in agent-ui — "add a ui-button"
+  (that repo's own build seat); NOT for app shells (layout-decompose); NOT for naming a UI
+  pattern (ui-patterns); NOT for feature/system decomposition (system-decompose); NOT for color
+  ramps (palette-design); NOT for nested-surface radius/spacing composition — "what radius on
+  the inner card" (geometry-systems); NOT for grading a component you didn't author
+  (component-reviewer).
 disable-model-invocation: false
 user-invocable: true
 ---

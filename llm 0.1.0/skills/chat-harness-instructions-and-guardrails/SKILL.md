@@ -1,17 +1,16 @@
 ---
 name: chat-harness-instructions-and-guardrails
 description: >-
-  The instruction-layering, safety, and config layer of a mini/portable chat agent harness —
-  project-agnostic. Use for "layer global/project/session instructions so the more specific
-  wins", "keep tool/file/web output from being treated as a command" (injection defense),
-  "classify an action by reversibility and gate risky ones behind confirmation", "enforce a rule
-  with a hook, not prose", "settings.json or the system prompt — which wins", "bootstrap a
-  harness reproducibly", "one shared config schema or scattered params", "an option list drifted
-  from the real registry it should derive from". Covers instruction layering, the
-  instruction-source boundary, action risk tiers, hooks vs prose, config precedence, and
-  structuring the config/prompt layer (a shared typed schema, registry-projected option lists,
-  prompt prose in files, byte-identity on refactor). Grounded in Claude Code's own harness + nonoun-plugins, cited as
-  worked examples. ANSWERS from a cited corpus; does not build. NOT skill authoring/routing
+  The instruction-layering, safety, and config layer of a portable chat-agent harness. Use for
+  "layer global/project/session instructions, the specific wins", "keep tool/file/web output
+  from being treated as a command", "classify actions by reversibility, gate the risky behind
+  confirmation", "enforce a rule with a hook, not prose", "settings.json or the system prompt —
+  which wins", "bootstrap a harness reproducibly", "one shared config schema or scattered
+  params", "an option list drifted from its registry". Covers instruction layering, action risk
+  tiers, hooks vs prose, config precedence, and the config/prompt layer's shape (shared typed
+  schema, registry-projected option lists, prompt prose in files). Grounded in Claude Code's own
+  harness. ANSWERS from a cited corpus; does not build — a hook implementation, a settings.json
+  edit, or a CLAUDE.md draft to WRITE is the project's own work. NOT skill authoring/routing
   (chat-harness-skills-and-routing); NOT the provider trust boundary (llm-provider-gateway).
 disable-model-invocation: false
 user-invocable: false

@@ -1,7 +1,7 @@
 {
   "name": "ui",
   "displayName": "UI",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-design), and verify it all against non-functional bars (focus, i18n, perf, safety) — plus ui-change-verify, which drives the live artifact instead of reasoning about it in the abstract.",
   "license": "MIT",
   "author": {

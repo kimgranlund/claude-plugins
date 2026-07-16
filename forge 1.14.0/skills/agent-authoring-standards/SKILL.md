@@ -16,7 +16,7 @@ An agent file is a cold-start system prompt plus a set of structural guarantees.
 
 ## The thin-shell law
 
-The body earns roughly a dozen lines: identity declarative, single-purpose discipline, failure branches, stopping predicate. Substantive knowledge — procedures, criteria, patterns — is imported via `skills:`, never restated. An agent prompt that could diff near-identical to a skill body is a drift pair; the fix is deletion on the agent side plus a preload. `skill_lint` warns past 60 body lines (A4); the target is far below it.
+The body earns roughly a dozen lines: identity declarative, single-purpose discipline, failure branches, stopping predicate. Substantive knowledge — procedures, criteria, patterns — is imported via `skills:`, never restated. An agent prompt that could diff near-identical to a skill body is a drift pair; the fix is deletion on the agent side plus a preload. `skill_lint` warns past 60 body lines (A4); the target is far below it. One documented allowance (ruled 2026-07-16, harness-audit): `-reviewer`/`-auditor` seats carry a dual-depth dispatch contract (FLOOR + DEEP modes) whose earned residual hovers near 60 even when clean of restatement — A4 warns them only past 75. The allowance covers CONTRACT, never knowledge: a reviewer body restating its own preload is fat at any length (the 2026-07-16 deep review found ~35 such lines in a 101-line reviewer — the warn was signal).
 
 ```
 Bad  (fat — restates the procedure):   50 lines of review criteria inside the agent body
