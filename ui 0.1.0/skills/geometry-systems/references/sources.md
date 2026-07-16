@@ -34,3 +34,7 @@ default scale shape).
 - **IBM Carbon's exact base-unit rationale.** Carbon's spacing tokens (`spacing-01`…`spacing-13`)
   were confirmed to exist and follow the sparse-at-the-top shape, but this pack did not locate
   Carbon's own stated rationale for its specific base unit — cited for the shape, not the "why."
+
+## House rulings — a distinct provenance class (added 2026-07-16, Issue #9)
+
+composable-spacing.md's §House lock (nested-radius composition) is RULED in this workspace, informed by jakubkrehel/make-interfaces-feel-better@366f0f86e (surfaces.md) and adopted on geometric coherence, not authority. House rulings are labeled at the claim site and overridable by a project ruling; cited theory stays cited.

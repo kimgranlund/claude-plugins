@@ -26,13 +26,19 @@ the choice, this one for the anatomy once chosen.
 - **Contract — the Footer:** the action zone — primary action right/bottom-aligned, secondary
   action beside it (never stacked as visually equal weight — see `micro-patterns.md`'s form
   entry for the same primary/destructive-separation rule), a system note (status, last-saved,
-  a count) left-aligned when both share the footer. A footer with only a system note and no
+  a count) left-aligned when both share the footer. House lock (ruled 2026-07-16, Issue #9):
+  always exactly `1` visually-prominent action per footer/action group; never `2`+ equal-weight
+  primaries (the user is left to guess which action matters — two primaries signal none), never
+  `0` where the container poses a decision (an undecidable modal) — an inline-commit (autosave)
+  container poses no footer decision, so the `0` clause doesn't fire there. *Exception: a read-only
+  container's status-only footer has zero actions by design — that is the status-bar sentence that follows in this entry,
+  not a violation.* A footer with only a system note and no
   actions is a status bar, not a dead footer — still worth the fixed zone so it doesn't scroll
   away with the body.
 - **Failure:** an unreachable footer (buttons scroll out of view because the body has no own
   scroll boundary — the container scrolls as one block instead); a header that grows with content
   (a subtitle or breadcrumb pushes the close button around instead of staying fixed height); a
-  footer with three-plus actions of equal visual weight (no primary signaled).
+  footer with two-plus actions of equal visual weight (no primary signaled).
 
 ## dialog / sheet — the same anatomy, modal contract layered on top
 

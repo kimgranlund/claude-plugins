@@ -32,3 +32,7 @@ an axis when its canon moves (a new HIG revision, a WCAG dot-release, an M3 moti
 - Any distance→duration formula, any universal enter:exit ratio — no system publishes one.
 - M3 spring-token numeric values — owned by `material-design-motion-tokens` (design-systems),
   which carries the current state of that table.
+
+## House rulings — a distinct provenance class (added 2026-07-16, Issue #9)
+
+`references/house-locks.md` carries values RULED in this workspace (one point per knob inside the corpus's cited envelope), informed by the 2026-07-15 external-skill review's type specimens (jakubkrehel/make-interfaces-feel-better@366f0f86e, emilkowalski/skills@6bf24434f). They are never platform citations and are labeled house rulings at the claim site; the cited envelope stays in the sibling files, and the reduced-motion floor is outside every override seam.
