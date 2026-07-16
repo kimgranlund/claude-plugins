@@ -1,22 +1,98 @@
 {
   "skill": "geometry-systems",
-  "note": "Answers-only knowledge pack: sizing/spacing SCALE theory. Fences: component-forge owns one control family's derived law (cited as worked instance, not restated); material-design-geometry-tokens owns Material's bound-export consumption; layout-decompose owns page-region placement; dom-block-flow owns raw CSS box-model/flow mechanics.",
+  "note": "Answers-only knowledge pack: sizing/spacing SCALE theory. Fences: component-forge owns one control family's derived law (cited as worked instance, not restated); material-design-geometry-tokens owns Material's bound-export consumption; layout-decompose owns page-region placement; dom-block-flow owns raw CSS box-model/flow mechanics. Extended 2026-07-16 (t10): the nested-radius house lock's trigger phrase (Issue #9); /eval-run owed at the wave boundary.",
   "cases": [
-    { "id": "t01", "prompt": "Why do most design systems use 4px or 8px spacing steps?", "expect": "trigger" },
-    { "id": "t02", "prompt": "How do I build a spacing scale for our new design system?", "expect": "trigger" },
-    { "id": "t03", "prompt": "Should our spacing scale be linear or geometric?", "expect": "trigger" },
-    { "id": "t04", "prompt": "Why does our spacing scale skip numbers at the larger sizes?", "expect": "trigger" },
-    { "id": "t05", "prompt": "How should padding compose when a card is nested inside a section?", "expect": "trigger" },
-    { "id": "t06", "prompt": "What's the right base unit for our token system?", "expect": "trigger" },
-    { "id": "t07", "prompt": "How does a density setting (compact/comfortable/spacious) actually scale spacing?", "expect": "trigger" },
-    { "id": "t08", "prompt": "How does Material's spacing scale compare to Tailwind's?", "expect": "trigger" },
-    { "id": "t09", "prompt": "Should tags and badges share the same size ramp as our buttons?", "expect": "trigger" },
-    { "id": "n01", "prompt": "What padding should this specific button use at the XL size?", "expect": "no-trigger", "note": "component-forge — applying the derived button ramp to a concrete component" },
-    { "id": "n02", "prompt": "Does our bound Material export carry the full space ladder?", "expect": "no-trigger", "note": "material-design-geometry-tokens — consumption/bind-check of an already-specified export" },
-    { "id": "n03", "prompt": "Where should the sidebar sit relative to the canvas in this dashboard?", "expect": "no-trigger", "note": "layout-decompose — region placement, not spacing scale" },
-    { "id": "n04", "prompt": "Why did this margin collapse between two adjacent divs?", "expect": "no-trigger", "note": "dom-block-flow — raw CSS box-model mechanics" },
-    { "id": "n05", "prompt": "What icon size and font size pair with this button height?", "expect": "no-trigger", "note": "component-forge's own geometry-system.md ramp" },
-    { "id": "n06", "prompt": "Design us a new OKLCH color palette", "expect": "no-trigger", "note": "palette-design — unrelated domain" },
-    { "id": "n07", "prompt": "What's the recommended duration for this modal's entrance animation?", "expect": "no-trigger", "note": "motion-design — timing, not spacing" }
+    {
+      "id": "t01",
+      "prompt": "Why do most design systems use 4px or 8px spacing steps?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "How do I build a spacing scale for our new design system?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Should our spacing scale be linear or geometric?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Why does our spacing scale skip numbers at the larger sizes?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "How should padding compose when a card is nested inside a section?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "What's the right base unit for our token system?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "How does a density setting (compact/comfortable/spacious) actually scale spacing?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "How does Material's spacing scale compare to Tailwind's?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "Should tags and badges share the same size ramp as our buttons?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "what corner radius should the inner card use inside this rounded container",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "What padding should this specific button use at the XL size?",
+      "expect": "no-trigger",
+      "note": "component-forge — applying the derived button ramp to a concrete component"
+    },
+    {
+      "id": "n02",
+      "prompt": "Does our bound Material export carry the full space ladder?",
+      "expect": "no-trigger",
+      "note": "material-design-geometry-tokens — consumption/bind-check of an already-specified export"
+    },
+    {
+      "id": "n03",
+      "prompt": "Where should the sidebar sit relative to the canvas in this dashboard?",
+      "expect": "no-trigger",
+      "note": "layout-decompose — region placement, not spacing scale"
+    },
+    {
+      "id": "n04",
+      "prompt": "Why did this margin collapse between two adjacent divs?",
+      "expect": "no-trigger",
+      "note": "dom-block-flow — raw CSS box-model mechanics"
+    },
+    {
+      "id": "n05",
+      "prompt": "What icon size and font size pair with this button height?",
+      "expect": "no-trigger",
+      "note": "component-forge's own geometry-system.md ramp"
+    },
+    {
+      "id": "n06",
+      "prompt": "Design us a new OKLCH color palette",
+      "expect": "no-trigger",
+      "note": "palette-design — unrelated domain"
+    },
+    {
+      "id": "n07",
+      "prompt": "What's the recommended duration for this modal's entrance animation?",
+      "expect": "no-trigger",
+      "note": "motion-design — timing, not spacing"
+    }
   ]
 }

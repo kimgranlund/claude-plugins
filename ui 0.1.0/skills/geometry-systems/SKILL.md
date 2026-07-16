@@ -4,8 +4,8 @@ description: >-
   Answers questions about sizing and spacing SCALE design — the theory beneath any dimensional
   token system, from a cited corpus. Use when the user asks "why 4px/8px steps", "how do I build
   a spacing scale", "linear or geometric progression", "why the scale gets sparser at larger
-  sizes", "how nested containers compose their padding", "what's the right base unit", or "how
-  density scaling actually works". Carries base-unit rationale, the dense-then-sparse progression
+  sizes", "how nested containers compose their padding", "what corner radius on a nested surface",
+  "what's the right base unit", or "how density scaling actually works". Carries base-unit rationale, the dense-then-sparse progression
   shape every major system converges on, composable-spacing/nesting theory, and cross-system
   comparison (Material, Tailwind, Carbon, Apple). ANSWERS the theory — does not derive one
   component family's law (component-forge) or bind to an already-specified platform scale
@@ -25,7 +25,7 @@ principle instead of copied by eye from whichever system is open in another tab.
 | Ask | Load |
 |---|---|
 | "Why 4px/8px? Linear or geometric? Why does it get sparser at the top?" | `references/scale-theory.md` |
-| "How does nested padding compose? What does density actually scale?" | `references/composable-spacing.md` |
+| "How does nested padding compose? What does density actually scale? What radius on a nested surface?" | `references/composable-spacing.md` (its §House lock carries the ratified nested-radius formula + escape hatch) |
 | "How do Material/Tailwind/Carbon/Apple structure their scales?" | `references/scale-theory.md` §Cross-system comparison |
 | Provenance and the unverified edges | `references/sources.md` |
 
@@ -33,7 +33,9 @@ principle instead of copied by eye from whichever system is open in another tab.
 
 1. Classify the ask: base-unit choice · progression shape · composition/nesting · density · cross-
    system comparison. Load only the matching reference.
-2. Answer on the contract: **claim + cited source + the failure mode the default prevents**. A
+2. Answer on the contract: **claim + cited source + the failure mode the default prevents** —
+   naming the register: corpus-backed · house-ruled (composable-spacing.md §House lock — a ruled
+   point, overridable by a project ruling) · general convention. A
    scale question answered without naming what breaks if you ignore it is an opinion, not this
    pack's answer.
 3. State which register the answer comes from: corpus-backed vs general convention — and say so

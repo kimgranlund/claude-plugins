@@ -28,7 +28,8 @@ from a cited, dated corpus, so motion decisions reason from evidence instead of 
 | "What curve?" — Apple springs (house default), damping vocabulary, CSS beziers, `linear()` | `references/easing.md` |
 | "How do these move together?" — transition patterns, stagger, z-space, interruptibility, what never animates | `references/choreography.md` |
 | "Who does this hurt?" — WCAG floor, `prefers-reduced-motion`, vestibular triggers, substitutions | `references/reduced-motion.md` |
-| "Fill the Motion section of a DESIGN.md" — durations, easings, what never animates, reduced-motion policy | all four references, in table order (the section's contract is design-md-format's, design-systems plugin) |
+| "Just give me the value" — the ratified house point per knob (press scale, bounce, asymmetry, stagger, hover onset) + the frequency gate | `references/house-locks.md` |
+| "Fill the Motion section of a DESIGN.md" — durations, easings, what never animates, reduced-motion policy | all five references, in table order — house-locks.md supplies the ratified values the section states (the section's contract is design-md-format's, design-systems plugin) |
 | Provenance and the unverified edges | `references/sources.md` |
 
 ## Consult procedure
@@ -41,8 +42,9 @@ from a cited, dated corpus, so motion decisions reason from evidence instead of 
    > (m1.material.io's codified drawer spec; exits run faster because the user is already done
    > with the drawer — web.dev asymmetric-animation-timing). The failure to design against is
    > symmetry: equal open/close reads as sluggish dismissal.
-3. State which register the answer comes from: corpus-backed (cited above) vs general knowledge —
-   and say so when it's the latter.
+3. State which register the answer comes from: corpus-backed (cited above) · **house lock**
+   (`house-locks.md` — a ruled point inside the cited envelope, overridable only by a project
+   ruling) · general knowledge — and say so when it's the latter.
 4. Route output work at the boundary (below).
 
 ## House default and deviation doctrine
@@ -54,7 +56,9 @@ Every default here carries its rationale, so deviation is legal when the rationa
 a Material-token project uses Material's own easing/spring set
 (`material-design-motion-tokens`); technical motion (spinners, progress) stays `linear`.
 Deviating? Name the rationale above that doesn't apply — a deviation with no named failing
-rationale is drift.
+rationale is drift. The specific ratified values (one point per knob, forbidden neighbors named)
+and their precedence seam live in `references/house-locks.md`; the reduced-motion floor sits
+outside every seam — nothing trades it away.
 
 ## Boundaries
 

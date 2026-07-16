@@ -60,3 +60,21 @@ much space* separates them once the region map is decided).
   new numbers.
 - A raw CSS mechanism for the gap itself (`gap` property vs. margin vs. `:where()` selectors) —
   the box-model/flow mechanics that realize a gap in the DOM are `dom-block-flow`'s territory.
+
+## House lock — nested radius composition (ruled 2026-07-16, Issue #9)
+
+House ruling (informed by the 2026-07-15 external-skill review,
+jakubkrehel/make-interfaces-feel-better@366f0f86e surfaces.md, adopted because it is the
+geometrically coherent rule, not because the source says so): nested rounded surfaces compose as
+**always `outerRadius = innerRadius + gap`**; never equal radii on nested surfaces — an inner
+card sharing its container's radius leaves a visibly thicker corner seam that reads as a mistake,
+and an inner radius LARGER than the outer reads as a different component family altogether.
+*Validity domain (the escape hatch, shipped with the rule): when the gap exceeds ~`24px`, the
+surfaces stop reading as nested — treat them as independent surfaces, each taking its own
+surface-level radius; the formula only binds while the eye parses containment. Degenerate case:
+working outer-fixed, `inner = outer − gap` clamps to `0` (square inner corners) when the gap
+meets or exceeds the outer radius. Derived nested radii are computed values, never per-instance
+overrides of the library's radius ramp — snap to the nearest ramp step where one exists
+(component-forge's one-scale-per-library rule).* Precedence: a
+project ruling (DESIGN.md/token lock, minted via a taste gate) overrides; this lock fills
+silence.
