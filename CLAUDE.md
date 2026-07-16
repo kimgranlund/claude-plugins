@@ -19,10 +19,10 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Fill or grow a knowledge corpus | `/pack-forge` (one axis per wave) |
 | Split or merge a pack; execute the verdict | `/skill-decompose` · `/skill-synthesize` → `/skill-refactor` |
 | Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | scribe: `/doc-forge` · `/doc-review` |
-| A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work; it drops the report on exit. In THIS workspace the record lands as a GitHub Issue (ADR-0002) — `/bug-report` and `/feature` detect this routing row natively (scribe 0.13.0's backend seam) |
+| A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work (it drops the report on exit). In THIS workspace the record lands as a GitHub Issue (ADR-0002); `/bug-report` and `/feature` detect this row natively |
 | Scattered docs in an existing repo to organize into the canonical layout | scribe: `/docs-alignment` (one approval gate, git mv, never rewrites prose) |
 | A feature idea to capture, or a feature to build | scribe: `/feature` (pure intake → sized ticket/doc/corpus) · orchestration: `/build` (record-first build — runs the intake when no record exists) |
-| Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s Map |
+| Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s artifact table |
 | A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agentic-ui` (the A2UI four + the A2A four) |
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
@@ -32,7 +32,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Routing proof after description edits | `/eval-run <plugin>` |
 | Periodic health sweep | `/harness-audit` (read-only; proposes) |
 | A drifted repo — duplicated instruction trees, stale corpus, dead automation: the committing campaign | forge: `/repo-alignment` |
-| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs G1–G11 on it; solo single-file fixes may still commit to main. Worktrees are gitignored the moment they exist — the harness's EnterWorktree puts them IN-REPO at `.claude/worktrees/` (ignored here since 2026-07-15; amended same day — an earlier wording claimed out-of-repo placement) — and any change that retires a path a `.gitignore` rule names repairs that rule in the same change (ruled 2026-07-15) |
+| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs the release gates on it; solo single-file fixes may still commit to main. EnterWorktree worktrees live in-repo at `.claude/worktrees/` (gitignored); a change that retires a path a `.gitignore` rule names repairs the rule in the same change (rulings + history: ADR-0002, the git-native memory, forge's repo-alignment razor) |
 | Ship | `/plugin-release <plugin>` — the only way anything ships |
 
 ## Common commands
@@ -69,20 +69,20 @@ quote plugin paths (the version suffix contains a space).
   `/eval-run` after boundary changes.
 - **Plugin boundaries are hard for preloads and `${CLAUDE_PLUGIN_ROOT}` paths, soft for mentions.**
   Cross-plugin handoffs are named mentions that degrade gracefully when the other plugin isn't
-  installed; an agent preload or script path crossing plugins is a defect (`surface_map.py check`
+  installed; an agent preload or script path crossing plugins is a defect (plugin-decompose's `surface_map.py check`
   kills it).
 - **Naming:** plugin names are distribution-scoped, disjoint from member domain prefixes (no
   `/ui:ui-review` stutter), and never contain `claude` or `anthropic` anywhere in a skill name or
   directory — the install rejects it and the whole plugin fails to load.
 - **Docs and ledgers:** functional documents follow scribe's type contracts and mutability classes
-  (accepted ADRs are append-only — supersede, never edit; the hook enforces it).
+  (the accepted-ADR append-only rule is hook-enforced — doc_lint T4; supersede, never edit).
   `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted
   casually. **Work items are GitHub Issues in this workspace (ADR-0002)** — decisions/contracts
   (ADR/PRD/SPEC/LLD) and README ledgers stay in-repo files; `docs/tickets/` is retired for new
   work items here.
 - **CI mirrors the local gates (ADR-0002).** `.github/workflows/gate.yml` runs `release_gate.py`
   (G1–G11, incl. the ruff/eslint style tier — configs `ruff.toml`/`eslint.config.mjs` at this
-  root) over all nine plugins on every push/PR — it executes the same plain scripts, no CI-only
+  root) over every plugin on each push/PR — it executes the same plain scripts, no CI-only
   logic.
 - **Sources of record flow outward.** Standards skills in the plugins are canonical; corpus
   snapshots and project-knowledge copies refresh *from* them at release boundaries, never the
@@ -92,5 +92,5 @@ quote plugin paths (the version suffix contains a space).
 
 Read the target plugin's own `CLAUDE.md` and README footer ledger first (per-plugin invariants and
 version history live there, not here). If a task has no owner in the routing table above, that
-absence is a finding: check it against the anti-matrix rule (job evidence required) before
+absence is a finding: check it against the anti-matrix rule (plugin-decompose; job evidence required) before
 building anything new.

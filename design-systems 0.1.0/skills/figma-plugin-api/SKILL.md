@@ -12,7 +12,7 @@ description: >
   own binder/apply procedure (its repo-local maintaining-figma-plugins); NOT the DESIGN.md format
   (design-md-format); NOT --md-sys-* semantics (material-design-*-tokens); NOT the Figma MCP
   tools; NOT the REST API, widgets, or scene-node/layer work (not covered).
-user-invocable: true
+user-invocable: false
 disable-model-invocation: false
 ---
 

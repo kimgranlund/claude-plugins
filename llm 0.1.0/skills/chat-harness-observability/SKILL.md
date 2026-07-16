@@ -1,19 +1,17 @@
 ---
 name: chat-harness-observability
 description: >-
-  How a chat-agent harness makes its own behavior legible — project-agnostic. Use for "log what
-  the harness did, not what the user typed", "distinguish an enforced hook block from the model
-  just deciding not to act", "measure whether skill routing is actually accurate, not a felt
-  sense", "build a held-out adversarial suite for a skill's description", "is this routing
-  regression real or judge noise", "notify on background-task completion instead of polling".
-  Covers hook logging/tracing (PreToolUse/PostToolUse vs. the transcript),
-  routing-accuracy via a held-out adversarial suite (judge noise vs a real regression vs a
-  structural leak), and background-task notification vs polling. Grounded in this harness's
-  verified hook/tool mechanics + a dated eval-run history here. ANSWERS from a cited corpus; never
-  builds. NOT agents that DO the work (chat-harness-orchestration-and-workflows); NOT the routing
-  MECHANISM (chat-harness-skills-and-routing); NOT implementing or building any of this — a
-  logging pipeline, an eval-suite runner, or a notification webhook to write is the project's own
-  build seat, not this pack.
+  How a chat-agent harness makes its own behavior legible. Use for "log what the harness did,
+  not what the user typed", "distinguish an enforced hook block from the model just deciding not
+  to act", "measure whether skill routing is actually accurate", "build a held-out adversarial
+  suite for a skill's description", "is this routing regression real or judge noise", "notify on
+  task completion instead of polling". Covers hook logging/tracing (PreToolUse/PostToolUse vs
+  the transcript), routing-accuracy via a held-out adversarial suite (judge noise vs regression
+  vs structural leak), and notification vs polling. Grounded in this harness's verified
+  hook/tool mechanics + a dated eval-run history. ANSWERS from a cited corpus; never builds. NOT
+  agents that DO the work (chat-harness-orchestration-and-workflows); NOT the routing MECHANISM
+  (chat-harness-skills-and-routing); NOT implementing or building any of this — a logging
+  pipeline, eval-suite runner, or notification webhook to write is the project's own build seat.
 disable-model-invocation: false
 user-invocable: false
 ---
