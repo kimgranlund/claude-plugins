@@ -528,6 +528,11 @@ def selftest():
     assert not any(f[2] == "W7" for f in lint_text(mention, "demo-review")), "backticked markers are mentions, not uses"
     bare = GOOD_FIXTURE + ("\nNEVER do X. NEVER do Y. NEVER do Z. IMPORTANT note. IMPORTANT note. CRITICAL step.\n")
     assert any(f[2] == "W7" for f in lint_text(bare, "demo-review")), "bare markers over budget must warn"
+    locks = GOOD_FIXTURE + ("\nScale to `0.96`, never `0.95` or below. Bounce is always `0`, never `0.1`. "
+                            "Duration `200ms`, never `300ms`. Opacity from `0.4`, never `0`. "
+                            "Blur `8px`, never `4px`. Stagger `50ms`, never `100ms`.\n")
+    assert not any(f[2] == "W7" for f in lint_text(locks, "demo-review")), \
+        "lowercase parameter locks are uncapped (standards 2026-07-15); W7 counts only the uppercase tier"
     reserved = GOOD_FIXTURE.replace("name: demo-review", "name: claude-md-audit")
     assert any(f[2] == "F8" for f in lint_text(reserved, "claude-md-audit")), "reserved word must fail F8"
     assert any(f[2] == "F8" for f in lint_text(GOOD_FIXTURE, "anthropic-helper")), "reserved dir must fail F8"
