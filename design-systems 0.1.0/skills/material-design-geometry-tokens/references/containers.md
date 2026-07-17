@@ -64,6 +64,6 @@ ladder (e.g. `inset-card` = `space-4` = 16px) — use the semantic name first; d
 
 - Don't reach for `--md-sys-space-N` when a `--md-sys-inset-*` / `--md-sys-gap-*` names the job — the
   semantic tier is why you don't guess rungs.
-- Don't pad a card with a control's `--md-sys-size-{step}-pad` — that's control-internal; a container uses
-  `--md-sys-inset-*`.
+- Don't pad a card with a control's `--md-sys-size-{step}-padding-narrow` / `-padding-wide` — that's
+  control-internal; a container uses `--md-sys-inset-*`.
 - Don't hardcode `border-radius` / `padding` / `gap` in px.

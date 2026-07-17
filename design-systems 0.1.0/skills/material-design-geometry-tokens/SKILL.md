@@ -7,7 +7,7 @@ description: >
   ("what size/spacing token", "what icon size token", "the border/focus-ring token", "how tall
   should this control be", "what padding/gap/radius", "make the layout denser"). Consumption
   guide for the dimensional layer of Material 3: the control ramp, corner scale, space/inset/gap
-  ladders; the centering law; two paddings by anatomy. A CONTROL's own text-SIZE is this skill's
+  ladders; the centering law; four pads by anatomy × density. A CONTROL's own text-SIZE is this skill's
   `--md-sys-size-{step}-font` field — "what font size for this button" lands HERE. Never
   hardcode px. NOT for color (material-design-color-tokens); NOT for NON-control text
   type/voices (material-design-typography-tokens); NOT for motion
@@ -30,9 +30,9 @@ and around components). Raw px values live only inside the tokens as substrate.
 
 | Material 3 baseline (recognizable M3) | The nonoun extensions (why two tiers, not one grid) |
 |---|---|
-| The **shape-corner scale** `--md-sys-radius-{none·xs·sm·md·lg·xl·full}` = `0·4·8·12·16·28·9999px` — M3's own corner tokens | **A per-step control ramp**: `--md-sys-size-{xs…2xl}-{9 fields}` — every control's height, icon, caret, font, gap, paddings, min and radius, which M3 leaves to per-component specs |
+| The **shape-corner scale** `--md-sys-radius-{none·xs·sm·md·lg·xl·full}` = `0·4·8·12·16·28·9999px` — M3's own corner tokens | **A per-step control ramp**: `--md-sys-size-{xs…2xl}-{11 fields}` — every control's height, icon, caret, font, gap, four pads, min and radius, which M3 leaves to per-component specs |
 | The 4dp spacing grid (`--md-sys-space-{0…9}`, a 4px-founded ladder) | **A centering law**: everything in a control derives from its height — edge padding = (height − glyph)/2 — so a glyph sits optically centered in a height² cell, not hand-tuned per component |
-| `--md-sys-density` = 1 (the density concept) | **Two paddings by anatomy**: `-pad` (the SLOT edge, a control WITH a leading icon) vs `-pad-edge` (the SLOTLESS edge, a bare text button/label) — M3 folds this into component variants |
+| `--md-sys-density` = 1 (the density concept) | **Four pads, by anatomy × density**: `-padding-narrow` (the SLOT edge, keyed on the icon glyph) / `-padding-wide` (the SLOTLESS/bare-text edge, keyed on the caret glyph) — each with a `-compact` twin that also absorbs the control's own gap, for dense layouts — M3 folds this into component variants |
 | M3's fully-rounded / pill shape | **Control radius = height/2** (already a full pill — a "rounded" control needs nothing extra); plus **semantic insets & gaps** (`--md-sys-inset-*` / `--md-sys-gap-*`, named rungs of the space ladder) and `--md-sys-border-*` / `--md-sys-focus-ring-*` primitives |
 
 So: recognize the M3 radius scale and 4dp grid, but reach for the extensions — they exist precisely so you
@@ -47,11 +47,12 @@ never hand-roll a control height, a centered padding, or a container inset with 
 2. **Know the two tiers.** *Control* geometry is per-size (`--md-sys-size-{step}-*`, steps `xs…2xl`) and
    scales with the control's height. *Container* geometry (`--md-sys-radius-*`, `--md-sys-space-*`,
    `--md-sys-inset-*`, `--md-sys-gap-*`, borders, focus ring) is treatment-derived and mode-independent.
-   **Don't cross them** — a control's inner padding is `--md-sys-size-{step}-pad`; a card's is
+   **Don't cross them** — a control's inner padding is `--md-sys-size-{step}-padding-narrow`/`-padding-wide`; a card's is
    `--md-sys-inset-card`.
 3. **Classify the control ramp.** Six steps `xs…2xl`; `md`=28px is this kit's **baseHeight** — start
-   there. Each step carries **9 fields**: `height · icon · caret · font · gap · pad · pad-edge · min ·
-   radius`. The full per-step value table lives in [`references/controls.md`](references/controls.md)
+   there. Each step carries **11 fields**: `height · icon · caret · font · gap · padding-narrow ·
+   padding-wide · padding-narrow-compact · padding-wide-compact · min · radius`. The full per-step
+   value table lives in [`references/controls.md`](references/controls.md)
    (the single source of truth for the numbers); the bind check echoes the heights it actually reads. This
    kit's geometry treatment is **"comfortable"**.
 4. **Know the grammar.** Control = `--md-sys-size-{step}-{field}`. Ladders = `--md-sys-radius-{none…full}`
@@ -70,7 +71,7 @@ never hand-roll a control height, a centered padding, or a container inset with 
      block-size: var(--md-sys-size-md-height);
      min-inline-size: var(--md-sys-size-md-min);
      font-size: var(--md-sys-size-md-font);
-     padding-inline: var(--md-sys-size-md-pad-edge);   /* slotless — bare text; -pad if it has a leading icon */
+     padding-inline: var(--md-sys-size-md-padding-wide);   /* bare/caret edge; -padding-narrow if it has a leading icon */
      padding-block: 0;
      gap: var(--md-sys-size-md-gap);
      border-radius: var(--md-sys-size-md-radius);       /* = height/2, already a pill */
@@ -86,9 +87,13 @@ never hand-roll a control height, a centered padding, or a container inset with 
    icon, font, and paddings all come from `--md-sys-size-{step}-*` — the centering law guarantees the glyph
    sits optically centered. Never set a control's padding independently of its height. See
    [`references/controls.md`](references/controls.md).
-3. **Two paddings, by anatomy.** `--md-sys-size-{step}-pad` is the SLOT edge (a control WITH a leading
-   icon); `--md-sys-size-{step}-pad-edge` is the SLOTLESS edge (a bare text button/label). ADIA `md`:
-   `pad`=5px, `pad-edge`=14px. Use the one that matches the anatomy — mixing them mis-centers the content.
+3. **Four pads, by anatomy × density.** `--md-sys-size-{step}-padding-narrow` is the SLOT edge (a control
+   WITH a leading icon, keyed on the icon glyph); `--md-sys-size-{step}-padding-wide` is the bare/caret
+   edge (keyed on the caret glyph). Each has a `-compact` twin (`-padding-narrow-compact` /
+   `-padding-wide-compact`) that also absorbs the control's own gap, for dense layouts. ADIA `md`:
+   `padding-narrow`=5px, `padding-wide`=7.5px, `padding-narrow-compact`=3px, `padding-wide-compact`=5.5px
+   (half-pixel results are exact by design — never round them). Use the one that matches the anatomy —
+   mixing them mis-centers the content.
 4. **Container spacing is the tier, not a raw `--md-sys-space-N`.** Reach for a semantic
    `--md-sys-inset-*` / `--md-sys-gap-*` first — they ARE named rungs of the space ladder, so you get the
    rhythm without guessing a number. Drop to a raw `--md-sys-space-{0…9}` only for a one-off the tier
@@ -119,7 +124,7 @@ never hand-roll a control height, a centered padding, or a container inset with 
 
 ## Verify before you ship
 
-- **Run the checker** — it binds the export (confirms the `xs…2xl` ramp × 9 fields, the radius scale, the
+- **Run the checker** — it binds the export (confirms the `xs…2xl` ramp × 11 fields, the radius scale, the
   `space-0…9` ladder, and the inset/gap/border/focus primitives all resolve, so your `var(--md-sys-…)` will
   bind) and lints your UI sources for hardcoded `px`/`rem`/`em` on a dimensional property:
   ```
@@ -128,7 +133,7 @@ never hand-roll a control height, a centered padding, or a container inset with 
   A missing-token report means the bound export drifted from the assumed ramp — re-bind before trusting the
   recipes.
 - A control's inner spacing uses the paired `--md-sys-size-{step}-*` (not an independent padding), and one
-  step throughout — height, icon, font, and pad all the same `{step}`.
+  step throughout — height, icon, font, and pads all the same `{step}`.
 - Container spacing uses `--md-sys-inset-*` / `--md-sys-gap-*` before any raw `--md-sys-space-N`.
 - Every focusable element carries the focus-ring recipe; borders are `--md-sys-border-*`, never a hardcoded
   `1px`; a control's corner is `--md-sys-size-{step}-radius`, containers use the `--md-sys-radius-*` scale.

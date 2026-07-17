@@ -2,7 +2,7 @@
 // dimension-check.mjs — consumer-side gate for a Material `--md-sys-*` (nonoun / ADIA) GEOMETRY export.
 // Zero-dependency, Node ESM. Two jobs:
 //   BIND CHECK  — parse the bound geometry CSS and verify it carries the whole dimensional system the
-//                 skill's recipes assume: the control ramp (xs…2xl × 9 fields), the M3 radius scale, the
+//                 skill's recipes assume: the control ramp (xs…2xl × 11 fields), the M3 radius scale, the
 //                 space-0…9 ladder, and the inset / gap / border / focus primitives — so every
 //                 `var(--md-sys-{size|radius|space|inset|gap|border|focus-ring}-…)` you write resolves.
 //   LINT        — scan UI files for the defect this skill forbids: a hardcoded px/rem/em length literal on
@@ -26,10 +26,13 @@ const [exportPath, ...targets] = args;
 
 // ── the expected dimensional system (names AFTER the `--md-sys-` prefix) ───────────────────────────────
 const STEPS  = ["xs", "sm", "md", "lg", "xl", "2xl"];
-const FIELDS = ["height", "icon", "caret", "font", "gap", "pad", "pad-edge", "min", "radius"]; // 9
-const RAMP   = STEPS.flatMap((s) => FIELDS.map((f) => `size-${s}-${f}`)); // 54
+// TKT-0010 (2026-07-16): padding/edgePadding renamed + reformulated into FOUR pads — padding-narrow
+// (icon-edge centering law), padding-wide (caret/bare edge, was edgePadding=height/2), and their
+// -compact twins (the same edges with the control's own gap absorbed).
+const FIELDS = ["height", "icon", "caret", "font", "gap", "padding-narrow", "padding-wide", "padding-narrow-compact", "padding-wide-compact", "min", "radius"]; // 11
+const RAMP   = STEPS.flatMap((s) => FIELDS.map((f) => `size-${s}-${f}`)); // 66
 const GROUPS = [
-  ["control ramp (6 steps × 9 fields)", RAMP],
+  ["control ramp (6 steps × 11 fields)", RAMP],
   ["radius scale",  ["none", "xs", "sm", "md", "lg", "xl", "full", "default"].map((r) => `radius-${r}`)],
   ["space ladder",  Array.from({ length: 10 }, (_, i) => `space-${i}`)],
   ["insets",        ["control-group", "card", "panel", "dialog", "page"].map((n) => `inset-${n}`)],
@@ -51,7 +54,7 @@ if (args[0] === "selftest") {
   const badCss = goodCss.replace(/  --md-sys-radius-full: [^\n]*\n/, ""); // drop one token
   writeFileSync(join(dir, "good.css"), goodCss);
   writeFileSync(join(dir, "bad.css"), badCss);
-  writeFileSync(join(dir, "ok-ui.css"), ".card { padding: var(--md-sys-size-md-pad); }\n");
+  writeFileSync(join(dir, "ok-ui.css"), ".card { padding: var(--md-sys-size-md-padding-narrow); }\n");
   writeFileSync(join(dir, "bad-ui.css"), ".card { padding: 16px; }\n");
   const run = (a) => {
     try { const out = execFileSync(process.execPath, [self, ...a], { stdio: ["ignore", "pipe", "pipe"] }); return { code: 0, out: out.toString() }; }

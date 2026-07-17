@@ -15,10 +15,12 @@ field below follows from it — never set one field independently of its step.
 | `-height` | The control's own block-size — the one number everything else derives from. | Sizing the box itself: `block-size`/`height` on a button, input, select. |
 | `-icon` | The leading content-icon / slot glyph size, centered by the height. | An icon living INSIDE this control's step. |
 | `-caret` | The affordance mark (a dropdown ▾, a disclosure chevron). | A select/dropdown/expandable control at this step. |
-| `-font` | The control's text size — composed from the `label` typescale voice at `sm`/`md`/`lg` ONLY; `xs`/`xl`/`2xl` fall back to this ramp's own standalone size law (no `label` counterpart at those three steps). | Setting a control's `font-size` — never the typescale's own `-size` var for a control. |
-| `-gap` | The icon↔label gap INSIDE the control. | Spacing a leading/trailing icon from its label, same step. |
-| `-pad` | Inline edge padding for a control WITH a leading slot/icon (the SLOT edge). | The control has an icon, avatar, or other leading element. |
-| `-pad-edge` | Inline edge padding for a SLOTLESS (bare text) control. | A plain text button/label/input with no leading slot. |
+| `-font` | The control's text size — composed from the `ui-control` typescale voice at EVERY step (`xs`..`2xl`; the voice rides the full 6-level ramp — the old partial `label`-voice composition at `sm`/`md`/`lg` only is retired). | Setting a control's `font-size` — never the typescale's own `-size` var for a control. |
+| `-gap` | The icon↔label gap INSIDE the control — a hand-CALIBRATED unit per step (not a font fraction), scaled by baseHeight and the density knob. | Spacing a leading/trailing icon from its label, same step. |
+| `-padding-narrow` | Inline edge padding for a control WITH a leading slot/icon (the SLOT edge) — (height − icon)/2. | The control has an icon, avatar, or other leading element. |
+| `-padding-wide` | Inline edge padding for a SLOTLESS (bare text) control (the bare/caret edge) — (height − caret)/2. | A plain text button/label/input with no leading slot. |
+| `-padding-narrow-compact` | The slot edge with the control's own gap absorbed — (height − gap − icon)/2. | A dense layout that also wants the tighter compact rhythm. |
+| `-padding-wide-compact` | The bare/caret edge with the control's own gap absorbed — (height − gap − caret)/2. | A dense layout's bare-text control. |
 | `-min` | The 1:1 hit-target floor — an icon-only control is at least square (height×height). | Sizing an icon-only control's minimum footprint; also the base to extend from for the ~44px touch-target floor on compact steps. |
 | `-radius` | The control's own corner = height/2 — already a full pill. | A control's `border-radius` — never a fixed radius level here; it must track the step. |
 
