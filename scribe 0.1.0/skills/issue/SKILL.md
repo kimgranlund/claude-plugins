@@ -88,6 +88,8 @@ when any) · an empty `## Findings` section** for dated write-backs.
 The close-out reports the issue URL (or ticket path) — the record exists before this skill
 stops; that ordering is the contract.
 
+`.github/ISSUE_TEMPLATE/task.yml` mirrors this contract for a human filing directly on GitHub.
+
 ## Failure branches
 
 - Backend ruled git-native but `gh` fails partway → fall back to the file backend for THIS

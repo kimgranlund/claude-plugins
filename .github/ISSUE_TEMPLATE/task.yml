@@ -1,0 +1,48 @@
+name: Task
+description: A chore, follow-up, research item, or debt — anything that isn't a bug or a feature idea. Mirrors scribe's /issue payload contract.
+title: "[Task]: "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form mirrors the record scribe's `/issue` skill mints for the same kind of item —
+        so this ticket arrives sectioned the same way whether a session or a human filed it.
+        If this is actually a defect, use the **Bug** form instead; if it's a feature idea that
+        may need sizing into docs, use **Feature**.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What ships and why now — two sentences, head-first.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      description: >-
+        One checkable done-condition. No obvious condition? Use "done when <the artifact>
+        exists" — never leave this blank.
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: The ID spine to any owning docs, PRs, or sibling issues.
+    validations:
+      required: false
+  - type: textarea
+    id: scope-open
+    attributes:
+      label: Scope/Open
+      description: Named gaps or explicit exclusions. Write "None" if there aren't any.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        ## Findings
+
+        _(left empty on purpose — dated entries land here as the record progresses)_
