@@ -263,6 +263,13 @@ def gate(root: Path, package: bool = False):
              # (references/merge-semantics.md) — the standing references-file false-positive
              # class, same shape as container-patterns/scale-theory/box-model-and-flow:
              "authoring-standards", "merge-semantics",
+             # github-issue-pr-primitives (2026-07-17): "lifecycle-and-review" is the tail of a
+             # references-file mention (`pr-lifecycle-and-review.md`) whose 2-char "pr-" prefix
+             # falls below the token regex's 3-char first-segment floor, same class as
+             # merge-semantics above; "sub-issue" is GitHub's own singular terminology in a
+             # trigger phrase, colliding with scribe's `issue` skill's no-hyphen name (its own
+             # suffix IS "issue" under rsplit) — legitimate prose, not a phantom sibling ref:
+             "lifecycle-and-review", "sub-issue",
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):
