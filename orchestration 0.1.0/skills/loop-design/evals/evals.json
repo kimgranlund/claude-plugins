@@ -116,6 +116,11 @@
       "id": "n11",
       "prompt": "the goal text is already written - just run it and watch it finish",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "another Claude session has uncommitted changes to files I need to edit",
+      "expect": "no-trigger"
     }
   ]
 }

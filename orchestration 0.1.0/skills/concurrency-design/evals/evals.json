@@ -1,0 +1,111 @@
+{
+  "skill": "concurrency-design",
+  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the three fenced siblings' own trigger vocabulary: orchestration-design (solo-vs-team, wiring, fan-out), loop-design (/goal, /loop continuation), and forge's hook-authoring-standards/entry-file-standards/agent-authoring-standards (harness-mechanics authoring once a rule is already decided).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "should I work in a worktree for this task",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "set up this repo so multiple Claude sessions don't collide",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "another Claude session has uncommitted changes to the files I need to edit",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "should this subagent use isolation: worktree",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "I'm about to dispatch two builders that both touch the same files",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "git status shows changes I didn't make \u2014 is another session active in this checkout",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "we keep getting merge conflicts between parallel Claude Code sessions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "how do multiple agents avoid stepping on each other in the same repo checkout",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "should I commit before starting this risky multi-file move",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "design a protocol for running several Claude Code terminals against one repo",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "my build collided with another session's in-progress edits \u2014 how should I have sequenced this",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "when should a dispatched agent get its own worktree instead of the shared tree",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "should this be a subagent or a team",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "how do my skills and agents connect",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "should I fan out N subagents for this review",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "write a /goal for this migration",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "my /loop keeps re-running work that's already finished",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "how do I write a PreToolUse hook that blocks a bad edit",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "what belongs in CLAUDE.md versus a skill",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "review my agent's tool allowlist before I ship it",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "dispatch the disjoint same-tree fan-out for these three builders",
+      "expect": "no-trigger"
+    }
+  ]
+}
