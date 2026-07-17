@@ -82,6 +82,8 @@ tickets" defines; use it, never invent one per ticket), and an empty Findings se
 The record exists (on disk, or as a created issue whose URL is reported) before Phase 5 starts;
 this ordering is the entire fix, and it does not move.
 
+`.github/ISSUE_TEMPLATE/bug.yml` mirrors this contract for a human filing directly on GitHub.
+
 ## Phase 5 — Dispatch, or fix inline
 
 Root cause already evident from Phase 2/3 → fix inline; bug-report itself appends the dated

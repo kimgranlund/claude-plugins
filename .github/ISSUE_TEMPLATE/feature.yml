@@ -1,0 +1,57 @@
+name: Feature
+description: A new capability or idea that may need sizing into docs. Mirrors scribe's /feature payload contract.
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form mirrors the record scribe's `/feature` skill mints for the same kind of idea
+        — so this ticket arrives sectioned the same way whether a session or a human filed it.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What ships and why now — two sentences, head-first.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      description: One checkable success criterion — never leave this blank.
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: The ID spine to any owning PRD/SPEC/LLD/corpus, or sibling issues.
+    validations:
+      required: false
+  - type: textarea
+    id: scope-open
+    attributes:
+      label: Scope/Open
+      description: Named gaps or explicit exclusions. Write "None" if there aren't any.
+    validations:
+      required: false
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      description: >-
+        The materiality floor — same law as the estate's orchestration seats. Small: one
+        context can hold it, no contract change. Big: multi-component, contract-changing, or
+        decision-ratifying.
+      options:
+        - small
+        - big
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Findings
+
+        _(left empty on purpose — the eventual build's write-back lands here)_

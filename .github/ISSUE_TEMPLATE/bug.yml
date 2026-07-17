@@ -1,0 +1,76 @@
+name: Bug
+description: Something is broken — a reproducible defect. Mirrors scribe's /bug-report payload contract.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form mirrors the record scribe's `/bug-report` skill mints for the same kind of
+        report — so this ticket arrives sectioned the same way whether a session or a human
+        filed it.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What's broken and why it matters — two sentences, head-first.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      description: One checkable done-condition — usually "the repro below no longer reproduces".
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: The ID spine to any owning docs, PRs, or sibling issues.
+    validations:
+      required: false
+  - type: textarea
+    id: repro
+    attributes:
+      label: Repro
+      description: >-
+        Steps to reproduce. If there's no fixed repro, say so explicitly rather than leaving
+        this blank.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: Expected vs actual
+      description: What you expected to happen, and what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: classification
+    attributes:
+      label: Classification
+      description: >-
+        Component or area affected. If detail is missing after one round of investigation,
+        name the gap here rather than delaying the report.
+    validations:
+      required: false
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: >-
+        The one scale this workspace uses everywhere — never invent a per-ticket scale.
+      options:
+        - blocker
+        - major
+        - minor
+        - cosmetic
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Findings
+
+        _(left empty on purpose — dated entries land here as the investigation progresses)_

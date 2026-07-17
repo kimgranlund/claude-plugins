@@ -95,6 +95,8 @@ build's write-back.
   the label). The section contract is this skill's own gate here (doc_lint validates files, not
   issues): an issue missing a required section is not a captured record.
 
+`.github/ISSUE_TEMPLATE/feature.yml` mirrors this contract for a human filing directly on GitHub.
+
 Place it: add the line to ROADMAP (Now/Next/Later) or PLAN **only where those docs already
 exist** — never mint living-state docs unprompted (both backends; queue docs stay files).
 
