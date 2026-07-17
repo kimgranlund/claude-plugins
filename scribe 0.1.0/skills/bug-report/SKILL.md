@@ -4,13 +4,13 @@ description: >-
   Capture a user-reported bug — functional, structural, visual, or subjective — as a durable
   bug-shaped record before any investigation starts, then dispatch the investigation (fork or
   agent) under a mandatory write-back contract; closes the loss window raw `/fork bug-name ...`
-  leaves open. Runs intent-extract (literal report vs. root cause and repro) and system-decompose
-  (which part is implicated) during capture, then records — doc-forge's TICKET path by default,
-  or the workspace's ruled git-native backend (`gh issue`) — and dispatches with the record as
-  context. Run /bug-report [raw report, or a TKT-/#issue id to resume], e.g. "/bug-report the
-  export button does nothing on Safari", "/bug-report TKT-0031", "/bug-report #14". Human-timed;
-  writes one record, then one investigation. NOT for a feature idea or build request (feature /
-  orchestration's build); NOT for non-bug documents (doc-forge); NOT for reviewing a doc
+  leaves open. Runs intent-extract (literal report vs root cause/repro) and system-decompose
+  during capture, then records — doc-forge's TICKET path by default, or the workspace's ruled
+  git-native backend (`gh issue`) — and dispatches with the record as context. Run /bug-report
+  [raw report, or a TKT-/#issue id to resume], e.g. "/bug-report the export button does nothing
+  on Safari", "/bug-report #14". Human-timed; writes one record, then one investigation. NOT for
+  a feature idea or build request (feature / orchestration's build); NOT for a generic
+  chore/follow-up/task (issue); NOT for non-bug documents (doc-forge); NOT for reviewing a doc
   (doc-review); NOT for intent extraction outside a bug (intent-extract).
 disable-model-invocation: true
 user-invocable: true
