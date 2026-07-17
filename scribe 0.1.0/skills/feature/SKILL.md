@@ -4,14 +4,14 @@ description: >-
   Capture a feature idea — however vague — as a durable, scope-appropriate record BEFORE any
   building starts: a `kind: feature` record, the design docs the change earns (PRD/SPEC/LLD via
   doc-forge, never the bundle), or a reference corpus when the "feature" is really knowledge to
-  encode. Pure intake: sizes and records, never builds. Runs intent-extract (root goal vs literal
-  ask, one round max), a dedup sweep, and system-decompose (which plane, what size), then records
-  by shape — the TICKET file by default, or the workspace's ruled git-native backend (`gh
-  issue`). Run /feature [raw idea, or a TKT-/#issue id to resume], e.g. "/feature calculator that
-  uses a tarzan theme", "/feature TKT-0042", "/feature #17". Human-timed; writes one record set
-  (plus, opt-in on first run, the project-docs index skill), then stops — building is /build's
-  job (orchestration, where installed). NOT for bug-shaped reports (bug-report); NOT for
-  dispatching or performing the build (/build); NOT for other document types (doc-forge).
+  encode. Pure intake: sizes and records, never builds. Runs intent-extract (one round max), a
+  dedup sweep, and system-decompose, then records by shape — the TICKET file by default, or the
+  workspace's ruled git-native backend (`gh issue`). Run /feature [raw idea, or a TKT-/#issue id
+  to resume], e.g. "/feature calculator with a tarzan theme", "/feature #17". Human-timed;
+  writes one record set (plus, opt-in on first run, the project-docs index skill), then stops —
+  building is /build's job (orchestration, where installed). NOT for bug-shaped reports
+  (bug-report); NOT for generic chores/follow-ups/tasks needing no sizing or docs (issue); NOT
+  for dispatching or performing the build (/build); NOT for other document types (doc-forge).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[raw feature idea, or a TKT-/#issue id to resume]"
@@ -119,8 +119,9 @@ skill already present → skip silently.
 - Idea too vague after one round → capture with gaps named (Phase 2); never stall persistence.
 - Dedup finds it shipped → report location, stop; found queued → resume, not re-mint.
 - `doc_lint.py` fails → fix and re-run (file backend).
-- The ask is actually bug-shaped ("X is broken") → hand to `bug-report`, don't force a feature
-  ticket onto a defect.
+- The ask is actually bug-shaped ("X is broken") → stop and point the user at `/bug-report`
+  (a user-invoked command this skill cannot invoke); don't force a feature ticket onto a defect.
+- The ask is a generic chore/follow-up with nothing to size or shape → point at `/issue`.
 - Index bootstrap declined → the pointer line, nothing else this session.
 - Workspace rules git-native but `gh` fails partway through a run → fall back to the file backend for THIS
   record, say so, and note the migration in the record — never leave the idea uncaptured because

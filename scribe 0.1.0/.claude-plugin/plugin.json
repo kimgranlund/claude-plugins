@@ -1,7 +1,7 @@
 {
   "name": "scribe",
   "displayName": "Scribe",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK — standards, forge, review, validator, eight type templates, and bug-report (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, rubric-forge), markdown↔markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (reference-forge, knowledge-forge, llms-txt-forge, vision-memo-forge), and a fresh-context doc-reviewer agent alongside the researcher agent.",
   "license": "MIT",
   "author": {
