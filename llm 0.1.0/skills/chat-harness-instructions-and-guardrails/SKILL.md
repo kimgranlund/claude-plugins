@@ -1,15 +1,14 @@
 ---
 name: chat-harness-instructions-and-guardrails
 description: >-
-  The instruction-layering, safety, and config layer of a portable chat-agent harness. Use for
-  "layer global/project/session instructions, the specific wins", "keep tool/file/web output
-  from being treated as a command", "classify actions by reversibility, gate the risky behind
-  confirmation", "enforce a rule with a hook, not prose", "settings.json or the system prompt —
-  which wins", "bootstrap a harness reproducibly", "one shared config schema or scattered
-  params", "an option list drifted from its registry". Covers instruction layering, action risk
-  tiers, hooks vs prose, config precedence, and the config/prompt layer's shape (shared typed
-  schema, registry-projected option lists, prompt prose in files). Grounded in Claude Code's own
-  harness. ANSWERS from a cited corpus; does not build — a hook implementation, a settings.json
+  The instruction, safety, and config layer of a portable chat-agent harness. Use for
+  "which instruction layer wins", "keep tool/file/web output from being treated as a command",
+  "gate risky actions behind confirmation", "enforce a rule with a hook, not prose",
+  "settings.json or the system prompt", "bootstrap a harness reproducibly", "one
+  shared config schema or scattered params", "an option list drifted from its registry", "my
+  per-turn validator fights cross-turn rules". Covers instruction layering, action risk tiers, hooks vs prose, config precedence, the
+  config/prompt layer's shape (shared typed schema, registry-projected options, prompt prose in
+  files), and multi-turn state-seeded validation gates. Grounded in Claude Code's own harness. ANSWERS from a cited corpus; does not build — a hook implementation, a settings.json
   edit, or a CLAUDE.md draft to WRITE is the project's own work. NOT skill authoring/routing
   (chat-harness-skills-and-routing); NOT the provider trust boundary (llm-provider-gateway).
 disable-model-invocation: false
@@ -34,6 +33,7 @@ presented as the only valid way to build this layer.
 | Hook vs. prose — "enforce this rule so it can't be skipped", "why did the model ignore an instruction that was right there", "does this belong in a hook or a skill" | `references/deterministic-rules-vs-prompted-guidance.md` |
 | Config precedence + setup — "settings.json vs. the system prompt", "which settings scope wins", "install or bootstrap this reproducibly" | `references/config-precedence-and-setup.md` |
 | Structuring the config/prompt layer itself — "one shared config schema or scattered params", "hardcoding my system prompt as a string feels wrong", "hoist a config type across a package boundary", "the model list drifted from the real registry" | `references/config-schema-and-prompt-externalization.md` |
+| Multi-turn validation gates — "my per-turn validator contradicts the consumer's cross-turn rules", "the model keeps re-sending what it was told not to", "validate against the session's accumulated state", "catch violations producer-side instead of shipping the error" | `references/multi-turn-validation-and-state-seeded-gates.md` |
 | Provenance — verified `file:line` vs. observed harness behavior vs. platform fact | `references/sources.md` |
 
 ## Consult procedure
@@ -83,6 +83,10 @@ example's specific detail is presented as a universal requirement rather than on
   derivation over the original text must survive the move exactly, verified against a real
   before-the-move baseline, never re-derived by concatenating pre-split fragments**
   (config-schema-and-prompt-externalization).
+- **A per-payload validator in a multi-turn loop must judge the state the consumer will hold —
+  a session-blind gate and a stateful consumer guard can each be correct alone and still leave
+  the model no legal output; persistent "misbehavior" is a harness question before it is a model
+  question** (multi-turn-validation-and-state-seeded-gates).
 
 ## Boundaries — this pack ANSWERS; it routes ALL making
 

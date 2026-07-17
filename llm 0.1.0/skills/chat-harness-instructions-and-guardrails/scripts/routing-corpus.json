@@ -1,6 +1,6 @@
 {
   "skill": "chat-harness-instructions-and-guardrails",
-  "_note": "Routing corpus of record (minted 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings across the five axes (instruction layering, injection defense, action risk tiers, deterministic vs prompted rules, config precedence + setup). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-skills-and-routing (a sibling skill being authored in parallel, about SKILL AUTHORING and description-routing, not instruction layering), llm-provider-gateway (the trust-boundary/secrets pattern — a narrower, different concern), llm-jsonl-streaming (the wire-format sibling, a different layer entirely), plus a genuine build/implement ask (this pack answers, it does not build).",
+  "_note": "Routing corpus of record (minted 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings across the seven axes (incl. config-schema/prompt-externalization and multi-turn state-seeded validation) (instruction layering, injection defense, action risk tiers, deterministic vs prompted rules, config precedence + setup). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-skills-and-routing (a sibling skill being authored in parallel, about SKILL AUTHORING and description-routing, not instruction layering), llm-provider-gateway (the trust-boundary/secrets pattern — a narrower, different concern), llm-jsonl-streaming (the wire-format sibling, a different layer entirely), plus a genuine build/implement ask (this pack answers, it does not build).",
   "positives": [
     "layer a global CLAUDE.md, a project CLAUDE.md, and a session instruction so the more specific one wins",
     "does a project-level instruction need to repeat everything the global one already says",
@@ -18,7 +18,13 @@
     "does settings.json or the system prompt win when they conflict",
     "where should a permission or hook config live versus an in-context instruction",
     "how do I bootstrap or install this chat harness reproducibly on a new machine",
-    "what command sequence installs a plugin or extension for this harness the same way every time"
+    "what command sequence installs a plugin or extension for this harness the same way every time",
+    "my per-turn output validator keeps rejecting the incremental update my renderer would accept",
+    "the model keeps re-sending the full structure it was explicitly told not to resend",
+    "should my producer loop validate each turn standalone or against the session's accumulated state",
+    "should my agent's tunable knobs live in one shared typed config schema or as scattered params",
+    "hardcoding my system prompt as a giant string literal in source feels wrong",
+    "the model option list in my settings UI drifted from the provider registry it should mirror"
   ],
   "negatives": [
     "why isn't my skill triggering when the user asks about this",
