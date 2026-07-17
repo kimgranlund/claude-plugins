@@ -76,7 +76,8 @@ log (below) and the phase adapts; it is never executed on the template's say-so.
   routinely IN-repo — Claude Code's own EnterWorktree creates them at `.claude/worktrees/` —
   so verify the ignore rule exists rather than assuming out-of-repo placement (this razor's
   first wording assumed exactly that; amended 2026-07-15, same day, when the tool's own
-  contract falsified it).
+  contract falsified it). Mechanized (2026-07-17): `scripts/gitignore_check.py` runs both
+  directions of this sweep in one pass — use it instead of eyeballing.
 - **Hooks fire on tool writes, not scripted writes** — after any batch/scripted sweep, run
   the lints in batch mode.
 - **A status field is a claim, not evidence** — a document's liveness comes from whether its
