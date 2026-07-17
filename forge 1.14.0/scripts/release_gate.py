@@ -258,6 +258,11 @@ def gate(root: Path, package: bool = False):
              # verify-family judgment rule-ID slugs (2026-07-16, Issue #8) — findings
              # vocabulary, not skill names:
              "order-vs-task-flow",
+             # git-campaign-workflows (2026-07-17, Issue #24): "authoring-standards" is the
+             # `*-authoring-standards` glob in prose; "merge-semantics" is a references file
+             # (references/merge-semantics.md) — the standing references-file false-positive
+             # class, same shape as container-patterns/scale-theory/box-model-and-flow:
+             "authoring-standards", "merge-semantics",
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):

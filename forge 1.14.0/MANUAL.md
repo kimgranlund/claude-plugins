@@ -94,6 +94,7 @@ Ask naturally — these are the standards the workflows above enforce, available
 - **`reasoning-orders`** — "what order of reasoning does this need?" · "this feels like tidying, push further" · "should we question the rules themselves?" — the escalation ladder with the rent rule; invoked by plugin-decompose's refactor phase.
 - **`linguistic-techniques`** — "the model keeps ignoring this instruction — fix the wording" · "harden this tool description" — the language layer beneath every artifact above.
 - **`handoff-compose`** — "how do I hand this back" · "report my results" · "is this handoff complete" — the standard block (Status·Summary·Files changed·Tests/checks run·Evidence·Risks·Open questions·Recommended next action) every reviewer agent below returns through.
+- **`git-campaign-workflows`** — "why did that merge's branch never actually get deleted?" · "a git command said it worked but nothing changed" · "how do I pull without clobbering a parallel session's work?" · "solo commit or a full campaign?" — five axes, every claim traced to a dated 2026-07-16/17 incident; `gitignore_check.py`/`campaign_close.py`/`sync_main.py` mechanize what it documents.
 
 ---
 
