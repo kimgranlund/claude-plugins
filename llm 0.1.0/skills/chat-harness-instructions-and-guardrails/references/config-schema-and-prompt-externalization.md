@@ -6,7 +6,8 @@
 > shared config schema instead of scattered loose params, and prompt prose in individually-
 > editable files instead of hardcoded string literals. Grounded in one real, directly verified
 > worked instance — the `agent-ui` repo's ADR-0135 — not sole authority; the pattern generalizes
-> past that one repo. Verified directly, 2026-07-14.
+> past that one repo. Verified directly, 2026-07-14; moved paths (the repo's ADR-0137
+> `tools/agent/` → `src/agent/` relocation) re-verified 2026-07-17.
 
 ## Describe agent config as one typed, shared schema — not scattered loose params
 
@@ -17,9 +18,9 @@ Scattered params drift silently: a knob added to one consumer's signature has no
 second consumer can discover, validate against, or default consistently.
 
 **Worked instance, verified directly:** before, `agent-ui`'s live-agent turn loop
-(`packages/agent-ui/a2ui/tools/agent/produce.ts`) took its tuning knobs — `mode`, `model`, `k`
+(`packages/agent-ui/a2ui/src/agent/produce.ts`; at `tools/agent/` until the repo's ADR-0137 move, 2026-07-16) took its tuning knobs — `mode`, `model`, `k`
 (retrieval top-k), `maxRounds` — as independent optional function params, and the mini-skill
-selection cap was a hardcoded module constant (`mini-skills.ts:60`'s `DEFAULT_MINI_SKILL_CAP`)
+selection cap was a hardcoded module constant (`DEFAULT_MINI_SKILL_CAP`, now `src/agent/mini-skills.ts:71`)
 threaded positionally into a call site, not a param at all. After ADR-0135, a single
 `liveAgentConfigSchema(providers)` (`packages/agent-ui/a2ui/tools/agent/agent-config-schema.ts:69`)
 describes every knob — `mode`/`model`/`k`/`maxRounds`/`miniSkillCap` — as one typed
@@ -80,7 +81,7 @@ reads worse than the same prose in a plain `.md` file a non-engineer could also 
 **Worked instance:** before ADR-0135, `agent-ui`'s `system-prompt.ts` hardcoded ~9 large
 template-literal constants (the emission grammar, several mode-scaled variants) and `mini-skills.ts`
 hardcoded a 6-entry idiom registry as inline object literals. After, each piece of prose lives
-under `packages/agent-ui/a2ui/tools/agent/prompts/*.md` (one file per constant, one frontmatter
+under `packages/agent-ui/a2ui/src/agent/prompts/*.md` (at `tools/agent/prompts/` until ADR-0137; one file per constant, one frontmatter
 file per mini-skill — `id`/`triggers` as a tiny `---`-delimited frontmatter block, the prose body
 below it, deliberately mirroring this workspace's own `SKILL.md` frontmatter+body shape), loaded
 via `readFileSync` at module load — safe specifically because that code is Node-only tooling never
@@ -102,8 +103,9 @@ byte-identity-by-construction derivation was built to eliminate in the first pla
 across every prompt "mode," specifically so the default mode reproduced the literal `GRAMMAR`
 value byte-for-byte "by construction, never by re-transcription" — a prior ADR's own stated
 design principle, enforced by a module-load assertion that throws if the slice markers ever go
-stale. Post-externalization, `system-prompt.ts:62` loads `GRAMMAR` whole from one file and
-`system-prompt.ts:71-72` runs the SAME slice-based derivation against the loaded string; it was
+stale. Post-externalization, `system-prompt.ts:64` loads `GRAMMAR` whole from one file and
+`system-prompt.ts:73-74` runs the SAME slice-based derivation against the loaded string (now
+`src/agent/system-prompt.ts` — moved by ADR-0137; re-verified 2026-07-17); it was
 never split into pre-sliced fragment files. The change was
 verified, not assumed: a byte-identity gate asserts every mode's fully-composed prompt is
 `.toBe()`-identical to a baseline captured from the ORIGINAL, pre-externalization source, committed

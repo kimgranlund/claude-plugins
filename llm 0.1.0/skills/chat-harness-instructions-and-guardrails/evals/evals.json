@@ -1,6 +1,6 @@
 {
   "skill": "chat-harness-instructions-and-guardrails",
-  "note": "Routing corpus of record (minted 2026-07-13, not yet run). Positives: imperative / diagnostic / symptom / indirect phrasings across the five axes (instruction layering, injection defense, action risk tiers, deterministic vs prompted rules, config precedence + setup). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-skills-and-routing (a sibling skill being authored in parallel, about SKILL AUTHORING and description-routing, not instruction layering), llm-provider-gateway (the trust-boundary/secrets pattern — a narrower, different concern), llm-jsonl-streaming (the wire-format sibling, a different layer entirely), plus a genuine build/implement ask (this pack answers, it does not build). Extended 2026-07-15 with t18-t21 for the sixth axis (config-schema and prompt externalization, the ADR-0135-grounded reference).",
+  "note": "Routing corpus of record (minted 2026-07-13, not yet run). Positives: imperative / diagnostic / symptom / indirect phrasings across the seven axes (instruction layering, injection defense, action risk tiers, deterministic vs prompted rules, config precedence + setup, config-schema/prompt-externalization, multi-turn state-seeded validation). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-skills-and-routing (a sibling skill being authored in parallel, about SKILL AUTHORING and description-routing, not instruction layering), llm-provider-gateway (the trust-boundary/secrets pattern — a narrower, different concern), llm-jsonl-streaming (the wire-format sibling, a different layer entirely), plus a genuine build/implement ask (this pack answers, it does not build). Extended 2026-07-15 with t18-t21 for the sixth axis (config-schema and prompt externalization, the ADR-0135-grounded reference).",
   "cases": [
     {
       "id": "t01",
@@ -166,6 +166,21 @@
       "id": "n12",
       "prompt": "build a dev-proxy plugin for my Vite app",
       "expect": "no-trigger"
+    },
+    {
+      "id": "t22",
+      "prompt": "my per-turn output validator keeps rejecting the incremental update my renderer would accept",
+      "expect": "trigger"
+    },
+    {
+      "id": "t23",
+      "prompt": "the model keeps re-sending the full structure it was explicitly told not to resend",
+      "expect": "trigger"
+    },
+    {
+      "id": "t24",
+      "prompt": "should my producer loop validate each turn standalone or against the session's accumulated state",
+      "expect": "trigger"
     }
   ]
 }

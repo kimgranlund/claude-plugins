@@ -90,16 +90,16 @@ still exists, rather than just the structural pattern.
 - `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/agent-config-schema.ts:69,139`
   — `liveAgentConfigSchema(providers)` (line 69; options projected from a real `providers.json`
   registry, not a duplicated hardcoded list) + `resolveProduceOptions(read, schema)` (line 139).
-- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/system-prompt.ts:62,71-72`
-  — the post-refactor loader: `GRAMMAR` read whole from `prompts/grammar.md` (line 62) then
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/src/agent/system-prompt.ts:64,73-74` (moved from `tools/agent/` by ADR-0137; re-verified 2026-07-17)
+  — the post-refactor loader: `GRAMMAR` read whole from `prompts/grammar.md` (line 64) then
   sliced via the SAME `GRAMMAR.slice(0, GRAMMAR.indexOf(...))`/`GRAMMAR.slice(GRAMMAR.indexOf(...))`
-  derivation (lines 71-72) the original hardcoded constant used before the file move, preserving a
+  derivation (lines 73-74) the original hardcoded constant used before the file move, preserving a
   prior ADR's byte-identity-by-construction guarantee across the file-externalization move.
-- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/mini-skills.ts:60` — the
+- `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/src/agent/mini-skills.ts:71` (moved by ADR-0137; re-verified 2026-07-17) — the
   mini-skill cap module constant (`DEFAULT_MINI_SKILL_CAP = 3`) before ADR-0135, and
-  `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/produce.ts:76-78,265` —
-  the additive `ProduceOptions.miniSkillCap?: number` field (lines 76-78) and its call site,
-  `opts.miniSkillCap ?? DEFAULT_MINI_SKILL_CAP` (line 265) — the fallback-to-old-constant idiom that
+  `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/src/agent/produce.ts:80,319` (moved by ADR-0137; re-verified 2026-07-17) —
+  the additive `ProduceOptions.miniSkillCap?: number` field (line 80) and its call site,
+  `opts.miniSkillCap ?? DEFAULT_MINI_SKILL_CAP` (line 319) — the fallback-to-old-constant idiom that
   keeps an absent field byte-for-byte unchanged from before the refactor.
 - `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/a2ui/tools/agent/providers-config.ts` —
   the already-parsed, already-validated `ProvidersConfig` registry `liveAgentConfigSchema` projects
