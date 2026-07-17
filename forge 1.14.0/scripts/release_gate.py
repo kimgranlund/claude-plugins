@@ -279,7 +279,10 @@ def gate(root: Path, package: bool = False):
              # family's own shared framing phrase ("a chat-agent harness"), tripping the
              # `-agent` suffix a2ui-conversational-agent already owns; "hardcoded-feature" is
              # ordinary prose in chat-harness-skills-and-routing's own axis description:
-             "chat-agent", "hardcoded-feature"}
+             "chat-agent", "hardcoded-feature",
+             # concurrency-design (2026-07-17): "self-report" is prose ("never act on either
+             # side's self-report") tripping the `-report` suffix handoff-compose already owns:
+             "self-report"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

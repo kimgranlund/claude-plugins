@@ -1,6 +1,6 @@
 {
   "skill": "entry-file-standards",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (eval-run 2026-07-09): asks owned by /entry-file-audit (user-only command) leak here on a model-only menu — benign; do not tune to chase.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (eval-run 2026-07-09): asks owned by /entry-file-audit (user-only command) leak here on a model-only menu \u2014 benign; do not tune to chase.",
   "cases": [
     {
       "id": "t01",
@@ -24,7 +24,7 @@
     },
     {
       "id": "t05",
-      "prompt": "My CLAUDE.md keeps growing — how do I trim it?",
+      "prompt": "My CLAUDE.md keeps growing \u2014 how do I trim it?",
       "expect": "trigger"
     },
     {
@@ -40,6 +40,11 @@
     {
       "id": "n03",
       "prompt": "What's the right skill body length?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "should I work in a worktree for this task",
       "expect": "no-trigger"
     }
   ]
