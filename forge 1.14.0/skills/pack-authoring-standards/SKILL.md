@@ -25,7 +25,9 @@ source-corpus lineage (the `color-science`/`ui-patterns` practice, worked cases 
 `skill-decompose/references/`); the freshness and grounding rules are this project's own earned
 practice — none of it is platform-verified fact, all of it is [battle-tested convention]
 (amended 2026-07-15: the [incident] class and severity-ranked INDEX ordering are grounded in
-external type specimens, cited inline at their rules — no longer solely this project's practice).
+external type specimens, cited inline at their rules — no longer solely this project's practice;
+amended 2026-07-18: the canonical-reachability check is translated from an external type specimen
+the same way, cited inline where it lives).
 
 ## The unit is the question type
 
@@ -110,6 +112,30 @@ record and every copy is a headed snapshot naming its source path and refresh da
 refresh at release boundaries — a stale snapshot is worse than none, because it answers with
 authority it no longer has. The [drift-prone] inventory is the refresh checklist.
 
+## Canonical means reachable from every surface the estate builds
+
+A "canonical" artifact — a spec, a decision, a reference file, a corpus entry — that isn't actually
+*reachable* is canon in name only. The check translates five generic surfaces into this estate's
+own equivalents: a sitemap/nav (the SKILL.md consult table), a corpus/search index (INDEX.md, where
+one ships), a harvester/generator's input list (the eval suite's trigger phrasings), the
+import/mention graph (`[[handle]]`/preload references), and self-documentation (the file naming
+itself canonical in frontmatter or a header). An artifact reachable from every surface the estate
+actually builds for its class is canon; missing one of *those* ⇒ treat it as a draft, a dead
+branch, or a currency lapse (canon that fell off a surface and was never refreshed), not canon —
+the label alone never carries the artifact's weight. A surface the estate doesn't build for that
+class at all (a flat ≤~7-file pack ships no INDEX by the 2026-07-09 ruling above; packs have no
+standing harvester) is N/A, not a miss — the detector counts what should exist, never penalizes an
+absence this standard itself already sanctions.
+
+This composes with, not replaces, the estate's existing single-surface reachability checks (the
+INDEX/tree reconciliation above, `corpus_check.py`'s K1, `release_gate.py`'s G5/G8/G9,
+`plugin-decompose`'s `surface_map.py` orphan sweep) — each of those enforces *one* surface; this is
+the threshold for how many of the applicable surfaces a claim of canonicity actually needs before it
+counts (added 2026-07-18; type specimen: adia-ui-kit v3.7.13's
+`references/reasoning-methodologies.md` method #5, via kimgranlund/claude-plugins#40 — the source
+estate's docs monolith carried a real sitemap, search index, and harvester, so its literal ≥5
+threshold is translated here, not copied verbatim).
+
 ## Failure catalog
 
 | Failure | Mechanism | Fix |
@@ -121,11 +147,15 @@ authority it no longer has. The [drift-prone] inventory is the refresh checklist
 | Heroic single wave | Gathering outruns distillation → dump with citations | One axis per wave; register before starting the next |
 | Stale snapshot | Copy outlives its source's truth | Headed snapshots, refresh at release, [drift-prone] as the checklist |
 | Axis sprawl | 8+ axes accrete silently | Declared axes + count reconciliation; past 7, run skill-decompose |
+| Fake-canonical artifact | Labeled canon but missing an applicable surface: sitemap/nav, corpus index, harvester input, import graph, self-doc | Treat as draft/dead-branch/currency-lapse; don't cite as authority until every surface the estate builds for its class reaches it |
 
 ## Provenance
 
 Axis/wave doctrine: imported from the source-corpus lineage 2026-07-07 (worked cases:
 `skill-decompose/references/best-practices.md`). Grounding, amendment, and snapshot rules: this
 project's practice, 2026-07; amended 2026-07-15 — the [incident] class and severity-ranked INDEX
-ordering enter from the external-skill review's type specimens, cited inline. Surface rules: `skill-authoring-standards`. Split/merge decisions:
+ordering enter from the external-skill review's type specimens, cited inline. Amended 2026-07-18 —
+the canonical-reachability check enters from adia-ui-kit v3.7.13's `reasoning-methodologies.md`
+method #5 (harvested via kimgranlund/claude-plugins#40), its literal ≥5 threshold translated to this
+estate's own surfaces rather than copied verbatim. Surface rules: `skill-authoring-standards`. Split/merge decisions:
 `skill-decompose` / `skill-synthesize`. The executing workflow: `pack-forge`.

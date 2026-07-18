@@ -109,7 +109,17 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.5 · assembled 2026-07-18 · 1.34.5: a workflow-backed xhigh code review of open-questions-
+v1.34.6 · assembled 2026-07-18 · 1.34.6: pack-authoring-standards gains a canonical-reachability
+check (Issue #40) — a "canonical" artifact must be reachable from every surface the estate actually
+builds for its class (consult table ≈ nav, INDEX ≈ corpus index, eval trigger phrasings ≈ generator
+input, `[[handle]]`/preload graph, frontmatter self-claim); a surface the estate doesn't build (a
+flat pack's absent INDEX, the fact packs have no harvester) is N/A, not a miss. Translated, not
+copied, from adia-ui-kit v3.7.13's `reasoning-methodologies.md` method #5 — its literal ≥5-of-5
+threshold would have falsely flagged this estate's own compliant flat packs (scoring ~2/5) as
+fake-canonical, caught by a fresh-context FLOOR audit before ship (F1) and fixed by translating the
+threshold to applicable-surfaces-only instead of a raw count; four minor register/consistency fixes
+alongside (header Provenance parity, house "(added ...; type specimen: ...)" marker convention,
+"currency lapse" gloss for imported jargon, dropped the redundant "≥5 of 5" phrasing) · v1.34.5 · assembled 2026-07-18 · 1.34.5: a workflow-backed xhigh code review of open-questions-
 sweep's own PR (generator-independent — the maker did not author or see the run mid-flight) found
 6 real defects the P5 FLOOR audit missed, all fixed same-change: open-questions-sweep's step 3
 forced a fabricated "recommended" marking onto stray-idea items with no stated assumption (now
