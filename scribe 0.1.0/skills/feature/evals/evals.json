@@ -1,0 +1,21 @@
+{
+  "skill": "feature",
+  "note": "Routing corpus of record (minted 2026-07-17, when feature converted from command to procedural species so it and its two siblings — issue, bug-report — can invoke each other directly on a mis-routed ask instead of just pointing the user at a command). Positives: natural capability-proposal phrasings plus id-resume syntax, plus (t07) the knowledge-shape claim the description makes but the original suite never tested, per a fresh-context review. t03 was swapped from an ambiguous 'I want a calculator with a tarzan theme' (plausibly a /build ask, not an intake ask) to an unambiguous proposal phrasing. Negatives drawn adversarially from the two siblings (bug-shaped and chore-shaped asks must NOT trigger feature), doc-review, doc-forge (authoring a doc directly rather than intake), intent-extract, and a build request (feature never builds).",
+  "cases": [
+    {"id": "t01", "prompt": "can we add a dark mode", "expect": "trigger"},
+    {"id": "t02", "prompt": "what if we supported CSV export", "expect": "trigger"},
+    {"id": "t03", "prompt": "here's an idea: a calculator with a tarzan theme, worth capturing", "expect": "trigger"},
+    {"id": "t04", "prompt": "pitch: a plugin marketplace browser", "expect": "trigger"},
+    {"id": "t07", "prompt": "this 'feature' request is really asking us to document our color contrast standards as a reference corpus", "expect": "trigger"},
+    {"id": "t05", "prompt": "/feature #17", "expect": "trigger"},
+    {"id": "t06", "prompt": "/feature tkt-0022 also needs SSO login", "expect": "trigger"},
+    {"id": "n01", "prompt": "the export button does nothing on Safari", "expect": "no-trigger"},
+    {"id": "n02", "prompt": "note this down as a follow-up", "expect": "no-trigger"},
+    {"id": "n03", "prompt": "/bug-report #14", "expect": "no-trigger"},
+    {"id": "n04", "prompt": "/issue #19 done", "expect": "no-trigger"},
+    {"id": "n05", "prompt": "review this PRD against its own rubric", "expect": "no-trigger"},
+    {"id": "n06", "prompt": "author a new SPEC for this system directly", "expect": "no-trigger"},
+    {"id": "n07", "prompt": "build this feature now that it's sized", "expect": "no-trigger"},
+    {"id": "n08", "prompt": "extract the root intent behind this idea", "expect": "no-trigger"}
+  ]
+}

@@ -3,15 +3,16 @@ name: issue
 description: >-
   Capture ANY work item — a chore, follow-up, research item, debt, or task that is neither
   bug-shaped nor a feature idea — as a durable, labeled record, and drive that record's whole
-  lifecycle: resume by id, fold new detail, append dated Findings, advance status. Records land
-  on the workspace's ruled backend — a GitHub Issue (`kind: task` label + optional size) where
-  the entry file rules git-native, a `kind: task` TICKET file everywhere else — with the same
-  payload contract either way. Run /issue [raw item, or an id to resume], e.g. "/issue tighten
-  the allowlist comments", "/issue #19 done", "/issue #19 also cover negated rules",
-  "/issue TKT-0044". Human-timed; writes one record set, then stops. NOT for bug-shaped reports
-  (bug-report — repro/dispatch); NOT for feature ideas that need sizing into docs (feature);
-  NOT for building anything (/build, orchestration); NOT for other document types (doc-forge).
-disable-model-invocation: true
+  lifecycle: resume by id, fold new detail, append dated Findings, advance status. Use when the
+  user asks to log a follow-up, track a chore or debt item, note something down for later, or
+  file a generic task — "note this down as a follow-up", "log this technical debt", "track this
+  for later", "file a task for X". Records land on the workspace's ruled backend — a GitHub Issue
+  (`kind: task` label + optional size) where the entry file rules git-native, a `kind: task`
+  TICKET file everywhere else. Also runs via /issue [raw item, or an id to resume]. Writes one
+  record set, then stops. NOT for bug-shaped reports (bug-report); NOT for feature
+  ideas needing sizing into docs (feature); NOT for building anything (/build); NOT for other
+  document types (doc-forge).
+disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw work item, or a #NN / TKT-#### id to resume]"
 ---
@@ -24,12 +25,13 @@ follow-ups, research items, debts. One capture replaces the hand-rolled `gh issu
 measured variance (missing labels, drifting section sets, no dedup, contractless closes) is this
 skill's baseline evidence. Seed: `$ARGUMENTS`.
 
-**Backend seam (Phase 0, decided once per run — bug-report's rule, shared verbatim):** the
-record's home is the **file backend** (doc-forge's TICKET path, repo-rooted per
-doc-authoring-standards) unless the hosting workspace's entry file routes work items to a
-**git-native backend** (a routing-table row naming `gh issue`, an ADR-0002-style ruling) AND
-`gh` is available — then every "ticket file" below reads "GitHub Issue": same payload contract,
-same ordering, different store.
+**Backend seam (Phase 0, decided once per run):** the record's home is the **file backend**
+(doc-forge's TICKET path, repo-rooted per doc-authoring-standards) unless the hosting workspace's
+entry file routes work items to a **git-native backend** (a routing-table row naming `gh issue`,
+an ADR-0002-style ruling) AND `gh` is available — then every "ticket file" below reads "GitHub
+Issue": same payload contract, same ordering, different store. Canonical statement:
+`bug-report`'s SKILL.md — this is the same seam, not a second one; a drift between this
+paragraph and that one is a bug in this file, never the other way round.
 
 ## Phase 1 — Route: fresh item, or resume by id
 
@@ -57,11 +59,27 @@ on the file backend only `tkt-####` resolves.
 
 ## Phase 2 — Classify the shape (the routing gate)
 
-A defect ("X is broken", a repro, a wrong output) → stop and point: report the shape and name
-the command to run (`/bug-report <the seed>`) — both siblings are user-invoked commands this
-skill cannot invoke for you. A feature idea (new capability, needs sizing or may earn docs) →
-same move, `/feature <the seed>`. Neither — the generic remainder — continues here. When genuinely ambiguous, ONE clarifying question; still ambiguous → capture
-here as `task` with the ambiguity named in Scope/Open (persistence beats taxonomy).
+On the FIRST classification only: a defect ("X is broken", a repro, a wrong output) → invoke
+`bug-report` directly via the Skill tool, carrying the seed verbatim; report which sibling was
+invoked and why, never leave the user to type the command themselves. A feature idea (new
+capability, needs sizing or may earn docs) → same move, invoke `feature`. Neither — the generic
+remainder — continues here. When genuinely ambiguous AND a human is present to ask, ONE
+clarifying question; no interactive channel (a sibling redirect, a subagent dispatch, a
+scheduled/unattended firing) or still ambiguous after asking → capture here as `task` with the
+ambiguity named in Scope/Open (persistence beats taxonomy, and a question nobody can answer is
+not a gate).
+
+A seed arrives HERE already redirected from a sibling → captured regardless of fit: `task` with
+the mismatch named in Scope/Open, per this skill's own named fallback below. This skill's own
+redirect (above) never fires on a seed it did not originate the classification for.
+
+**The one-hop-only redirect rule (shared by all three siblings):** a sibling reached by redirect
+never redirects again — its own classification finding a poor fit is not license to bounce a
+second time, only to capture under its own named fallback: **here** (`issue`), `task` with the
+ambiguity in Scope/Open; **`bug-report`**, `kind: bug` with the shape gap named in
+Classification; **`feature`**, `kind: feature` with the gap named in Scope/Open. One hop resolves
+genuine mis-routing; a second hop is thrash, not routing — the receiving skill always ends in a
+captured record, never a second redirect.
 
 ## Phase 3 — Dedup: it may already exist
 
@@ -94,8 +112,8 @@ stops; that ordering is the contract.
 
 - Backend ruled git-native but `gh` fails partway → fall back to the file backend for THIS
   record, say so, note the migration in the record (the shared sibling rule).
-- The item is really a bug or feature in disguise → stop and point at the sibling command
-  (Phase 2); never force-file it as a task to save a hop.
+- The item is really a bug or feature in disguise → invoke the correct sibling (Phase 2) via the
+  Skill tool with the seed; never force-file it as a task to save a hop.
 - Resume finds the record closed → report its state; reopening is the user's explicit call.
 - A status verb on an unresolved id → report the failed resolution; nothing is created.
 - Dedup finds it shipped or queued → report, stop or resume; never a duplicate record.
@@ -103,6 +121,8 @@ stops; that ordering is the contract.
 Done when a `task`-labeled record exists (an issue URL reported, or a lint-clean `kind: task`
 TICKET on disk) carrying the full payload contract — or a resume acted on the existing record
 (detail folded, Findings appended, or status advanced with its Findings-first close rule) — the
-dedup sweep ran, and NO build was dispatched (/build's contract, where installed). NOT done
-while a close leaves Findings empty, a duplicate was minted over a dedup hit, or a bug/feature
-shape was filed here instead of routed.
+dedup sweep ran, and NO build was dispatched (/build's contract, where installed) — OR the seed
+was redirected to `bug-report`/`feature` under the one-hop rule and the sibling invocation was
+reported; no task record is owed on a redirected seed. NOT done while a close leaves Findings
+empty, a duplicate was minted over a dedup hit, or a bug/feature shape was filed here instead of
+routed.
