@@ -7,7 +7,7 @@ shipped through the forge release gate.
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
 | `skills/doc-authoring-standards` | Declarative skill | model-only | Mutability classes, universal practices, the type contract table; `references/templates/` — eight authoring contracts (adr, prd, spec, lld, plan, roadmap, ticket, task) |
-| `skills/doc-forge` | Command | user-only (`/doc-forge`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
+| `skills/doc-forge` | Procedural | both (`/doc-forge`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
 | `skills/doc-review` | Procedural | both (`/doc-review`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
 | `skills/bug-report` | Command (orchestrator) | user-only (`/bug-report`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
 | `skills/feature` | Command skill | user-only (`/feature`) | Feature intake, the bug-report mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → reference-forge/knowledge-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build` (orchestration) is the momentum half |
@@ -44,7 +44,14 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.16.0 · assembled 2026-07-18 · 0.16.0: the ADR-0003 Linear adapter (Issue #34) — `bug-report`,
+v0.17.0 · assembled 2026-07-18 · 0.17.0: `doc-forge` converted from Command to Procedural species
+(`disable-model-invocation: true` → `false`), mirroring `skill-forge`'s own 2026-07-14 conversion —
+closes the gap where `doc-review`/`doc-authoring-standards`/`feature`/`bug-report`/`issue` already
+fenced "NOT for drafting (doc-forge)" but doc-forge itself was invisible to auto-discovery.
+Description rewritten with a real trigger contract (verbatim phrasings); `evals/evals.json` minted
+from scratch (9 trigger / 9 no-trigger). Independent skill-auditor FLOOR review: no defects in the
+body or dial consistency; this artifact-table row repaired same-change per its stale-species
+finding · v0.16.0 · assembled 2026-07-18 · 0.16.0: the ADR-0003 Linear adapter (Issue #34) — `bug-report`,
 `feature`, and `issue`'s hand-duplicated Phase-0 backend seam collapses to one call into
 doc-authoring-standards' new shared resolver (`references/backend-resolver.md`), which names a
 three-way choice: Option A (local, unchanged), Option B (git-native, unchanged), Option C

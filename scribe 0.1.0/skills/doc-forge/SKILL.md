@@ -20,8 +20,10 @@ argument-hint: "[type] [one-line intent]"
 # doc-forge
 
 doc-forge produces one document that its own validator accepts and its consumers — human, agent,
-and hook — can read. Seed: `$ARGUMENTS`. Invoke `doc-authoring-standards` now; the classes,
-practices, and type contracts below are its, not restated here.
+and hook — can read. Seed: `$ARGUMENTS`; invoked with none (a model-triggered ask, not a typed
+`/doc-forge`), take the type and intent straight from the conversation instead. Invoke
+`doc-authoring-standards` now; the classes, practices, and type contracts below are its, not
+restated here.
 
 ## Phase 1 — Route the type
 

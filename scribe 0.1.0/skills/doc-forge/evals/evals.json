@@ -44,7 +44,7 @@
     },
     {
       "id": "t09",
-      "prompt": "/doc-forge adr postgres over dynamo",
+      "prompt": "record this decision as an ADR",
       "expect": "trigger"
     },
     {
