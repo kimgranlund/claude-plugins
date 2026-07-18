@@ -1,6 +1,6 @@
 {
   "skill": "handoff-compose",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Negatives are near-misses owned by orchestration-design, loop-design, scribe's adr/lld-author paths, skill-author, rubric-forge, and skills-refactor.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema. Negatives are near-misses owned by orchestration-design, loop-design, scribe's adr/lld-author paths, skill-author, rubric-forge, skills-refactor, and reviewer-discipline (n14 — this skill owns the return-block FIELDS, reviewer-discipline owns per-finding review CONDUCT; no query claims both).",
   "cases": [
     { "id": "t01", "prompt": "how do I hand this back to the coordinator", "expect": "trigger" },
     { "id": "t02", "prompt": "report my results", "expect": "trigger" },
@@ -26,6 +26,7 @@
     { "id": "n10", "prompt": "write the PR description for this change", "expect": "no-trigger" },
     { "id": "n11", "prompt": "summarize the changes for the changelog", "expect": "no-trigger" },
     { "id": "n12", "prompt": "design how planning and execution seats compose", "expect": "no-trigger" },
-    { "id": "n13", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: open-questions-sweep — closes a live session's own unresolved items, distinct from a handback block's Open-questions field" }
+    { "id": "n13", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: open-questions-sweep — closes a live session's own unresolved items, distinct from a handback block's Open-questions field" },
+    { "id": "n14", "prompt": "before you file this review, steelman what the author would say back", "expect": "no-trigger" }
   ]
 }

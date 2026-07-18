@@ -282,7 +282,13 @@ def gate(root: Path, package: bool = False):
              "chat-agent", "hardcoded-feature",
              # concurrency-design (2026-07-17): "self-report" is prose ("never act on either
              # side's self-report") tripping the `-report` suffix handoff-compose already owns:
-             "self-report"}
+             "self-report",
+             # reviewer-discipline (2026-07-18, Issue #39) added the `-discipline` suffix to the
+             # estate inventory: "self-review" is this skill's own prose ("steelman self-review"),
+             # and "load-discipline" is skill-decompose's pre-existing, unrelated prose (a
+             # references/best-practices.md phrase about corpus load pressure) newly caught by
+             # the same suffix — the standing false-positive class, same shape as -flow/-systems:
+             "self-review", "load-discipline"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):
