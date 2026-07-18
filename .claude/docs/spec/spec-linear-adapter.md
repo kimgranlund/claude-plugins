@@ -2,8 +2,8 @@
 doc-type: spec
 id: spec-linear-adapter
 status: draft
-version: 0.1.0
-date: 2026-07-17
+version: 0.2.0
+date: 2026-07-18
 owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 3 (Linear ships as a concrete,
             # scribe-shipped Option-C adapter, everything else Option-C stays bring-your-own)
@@ -15,13 +15,21 @@ adapter ADR-0003 Decision 3 commits scribe to shipping. It is a sibling of, not 
 `spec-ticketing-watch-triage`: that SPEC's watch/triage/trust behavior applies to *any* Option B/C
 backend, including this one, without change.
 
+**v0.2.0 amendment (2026-07-18):** REQ-010/AC-010 added. Three independent fresh-context audits of
+the implementing skills (`bug-report`/`feature`/`issue`) converged on the same gap: AC-004 and
+AC-007 already required "read back through the adapter," and every capture skill's resume-by-id
+and post-dispatch status-check logic needs to resolve an adapter-native id to a record, but no
+REQ named the operation that does this — the five-operation list (REQ-001) was silently missing
+its sixth, load-bearing member. v0.1.0's REQ-001 through REQ-009 are otherwise unchanged.
+
 ## Requirements
 
-- **REQ-001** — Interface conformance. The Linear adapter implements the same five operations the
-  local and git-native adapters implement — create, dedup-search, update, close, and discover
-  (REQ-009) — behind the backend resolver (ADR-0003 Decision 2), so capture skills
-  (`bug-report`/`feature`/`issue`) and the watch loop (`spec-ticketing-watch-triage` REQ-003) call
-  it identically to the other two adapters, with no Linear-specific branch in their own logic.
+- **REQ-001** — Interface conformance. The Linear adapter implements the same six operations the
+  local and git-native adapters implement — create, dedup-search, update, close, discover
+  (REQ-009), and read (REQ-010) — behind the backend resolver (ADR-0003 Decision 2), so capture
+  skills (`bug-report`/`feature`/`issue`) and the watch loop (`spec-ticketing-watch-triage`
+  REQ-003) call it identically to the other two adapters, with no Linear-specific branch in their
+  own logic.
 - **REQ-002** — Transport preference. The adapter uses Linear's MCP server when the workspace has
   it connected; it falls back to Linear's GraphQL API (with a workspace-supplied API key) when no
   MCP connection is available — Linear has no REST surface, so GraphQL is the only fallback.
@@ -65,6 +73,15 @@ backend, including this one, without change.
   loop calls. It is its own operation with its own pagination/checkpoint contract, not a filtered
   call to dedup-search (REQ-005), which matches one candidate record rather than enumerating every
   change since a point in time.
+- **REQ-010** — Record read-back. The adapter exposes a `read` operation: fetch one record, by its
+  adapter-native id, together with its Findings/comment trail — the same primitive the local
+  adapter realizes as a plain file read and the git-native adapter realizes as `gh issue view
+  --comments`. Every capture skill's resume-by-id branch (Phase 1) resolves an id in the resolved
+  adapter's own native format through this operation before falling through to "fresh item," and
+  the post-dispatch close-out (bug-report Phase 6) uses it to check whether a dispatched
+  investigation posted a Findings entry while it ran. Distinct from dedup-search (REQ-005, matches
+  a candidate by content) and discover (REQ-009, enumerates by checkpoint): read resolves one
+  already-known id to its full record.
 
 ## Non-goals
 
@@ -129,3 +146,8 @@ time — the shape `spec-ticketing-watch-triage` REQ-003 consumes.
 - **AC-009** (↔ REQ-009) — Given a checkpoint and one issue created plus one issue updated in the
   configured team after it, a discover call returns exactly those two issues and a new checkpoint;
   a second discover call using the new checkpoint returns nothing until a further change occurs.
+- **AC-010** (↔ REQ-010) — Given the native id of a record already created via the adapter, a read
+  call returns that record's current fields and its full Findings/comment trail; given an id that
+  does not exist on the configured team, read reports not-found rather than throwing an unhandled
+  exception, and the calling skill treats that exactly as it treats an unresolved `tkt-####`/`#NN`
+  id — a fresh item, never a crash.

@@ -60,10 +60,13 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    doesn't disambiguate, name the resolved repo in the close-out report rather than guessing
    silently; never split one document's read (template, standards) from a different repo than its
    write (the instance file).
-   One delegation is legal (ruled 2026-07-15, ADR-0002 pattern): a workspace's entry file may
-   route the **work-item tier only** (TICKET/TASK) to a git-native backend (`gh issue`) — the
-   record then lives as an Issue with the same section contract, and `docs/tickets/`/`docs/task/`
-   retire for new items THERE. The decision/contract tiers (ADR, PRD, SPEC, LLD) and living-state
+   Delegation is legal for the **work-item tier only** (TICKET/TASK), and generalizes to a
+   three-way choice (ruled 2026-07-17, ADR-0003, superseding the 2026-07-15 binary ruling): a
+   workspace's entry file names Option A (local — the file default, unchanged), Option B
+   (git-native — `gh issue`, ADR-0002's own ruled instance), or Option C (external — a typed
+   adapter interface; Linear ships as scribe's own concrete Option-C adapter, everything else is
+   bring-your-own against the same interface) — see "Work-item backend delegation" below for the
+   full three-way contract. The decision/contract tiers (ADR, PRD, SPEC, LLD) and living-state
    docs (PLAN, ROADMAP) are never delegated — they stay files on this map, always.
 
 ## The type contract table
@@ -81,6 +84,10 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 | ROADMAP | Horizons of intent, reviewed on a cadence | living state | Now · Next · Later |
 | TICKET | One shippable unit, traced to spec IDs (bug reports: `kind: bug`, see below) | work item | Summary · Acceptance · Links |
 | TASK | One actor, one sitting, one done-when | work item | Goal · Done-when |
+
+**Which type?** Route by the question being answered: recording a decision → ADR; why build →
+PRD; what exactly → SPEC; how internally → LLD; in what order → PLAN/ROADMAP; who does what next →
+TICKET/TASK. A document answering two of these questions is usually two documents joined by IDs.
 
 ## Bug-shaped tickets
 
@@ -105,9 +112,17 @@ discipline as bug tickets — the build's write-back lands here). Scribe's `/fea
 updates these; big features link their earned PRD/SPEC/LLD through the standard Links section,
 never inline.
 
-**Which type?** Route by the question being answered: recording a decision → ADR; why build →
-PRD; what exactly → SPEC; how internally → LLD; in what order → PLAN/ROADMAP; who does what next →
-TICKET/TASK. A document answering two of these questions is usually two documents joined by IDs.
+## Work-item backend delegation (ADR-0003)
+
+`bug-report`, `feature`, and `issue` each call one shared resolver instead of re-deriving their own
+backend check — closing the hand-duplication ADR-0003 exists to fix, not extending it a third way.
+The three-way choice (Option A/local, B/git-native, C/external), the ruling shape a repo's entry
+file carries, and the six-operation adapter interface (create · dedup-search · update · close ·
+discover · read) every backend realizes: `references/backend-resolver.md`. Linear's own concrete
+realization of that interface (transport resolution, configuration, status-type mapping, payload
+mapping): `references/linear-adapter.md`. A bring-your-own Option-C adapter documents its own
+realization the same way, in its own workspace — this skill owns the interface, not every
+implementation of it.
 
 ## Failure catalog
 
