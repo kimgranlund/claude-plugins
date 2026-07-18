@@ -2,15 +2,17 @@
 name: doc-forge
 description: >-
   Author a functional document — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, or TASK — through
-  gated phases: type routing (often not the type asked for), intent capture, draft from the type's
-  template, language pass, doc_lint validation. Run /doc-forge [type and one-line intent], e.g.
-  "/doc-forge adr postgres over dynamo" or "/doc-forge spec for the checkout flow". Human-timed;
+  gated phases: type routing (often not the type asked for), intent capture, draft from the
+  template, language pass, doc_lint validation. Use when the user wants to write, draft, author,
+  or record a document directly — "write the PRD for this feature", "draft an ADR about the
+  database choice", "author a new SPEC for this system directly", "spec out the checkout flow",
+  "write the PLAN for this migration". Also runs via /doc-forge [type and intent]. Human-timed;
   writes one document. NOT for the rules themselves (doc-authoring-standards); NOT for reviewing
-  an existing document (doc-review); NOT for feature intake (feature — it routes here for the TICKET);
-  NOT for migrating existing docs into the canonical layout (docs-alignment);
-  NOT for capturing and dispatching a bug investigation
-  end-to-end (bug-report, which calls this skill's own TICKET path internally).
-disable-model-invocation: true
+  a document (doc-review); NOT for feature intake (feature — routes here for the TICKET); NOT for
+  migrating docs into the canonical layout (docs-alignment); NOT for a bug investigation
+  end-to-end (bug-report, which calls this skill's TICKET path internally); NOT for a generic
+  chore or follow-up record (issue).
+disable-model-invocation: false
 user-invocable: true
 argument-hint: "[type] [one-line intent]"
 ---
