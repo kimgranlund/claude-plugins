@@ -87,13 +87,18 @@ them, not assumed):
    naming each finding, its classification, and the specific recommended action. No mutation. (A
    gated worktree-reap script doesn't exist yet; until one does, worktree cleanup is always a plan
    for a human to execute.)
+5. Before writing the report, read the most recent file in `.claude/ops/reports/` (by filename —
+   they sort chronologically). If this firing's classification set is identical to that report's
+   (same findings, same executed/proposed split), write an abbreviated report — one paragraph,
+   pointing at the unchanged prior report by name, plus a running count of consecutive unchanged
+   firings — instead of a full restatement. A genuinely new or changed finding always gets the
+   full report, resetting the count. This is why the report destination is a directory, not a
+   single file: each firing's own report is what the next firing diffs against.
 
-## Boundaries — hygiene execution is exactly these two script-gated cases
+## Boundaries
 
-Never discards uncommitted work outside `sync_main.py`'s own mechanism, never force-pushes, never
-deletes a branch `campaign_close.py` hasn't independently verified merged, never removes a worktree
-directly, never touches source files. Work-item intake (features, bugs, triage) routes to the
-`ops-issues` agent; instruction-tree or corpus drift routes to `/repo-alignment`.
+Never force-pushes; never touches source files. Work-item intake routes to `ops-issues`;
+instruction-tree or corpus drift routes to `/repo-alignment`.
 
 ## Failure branches
 
