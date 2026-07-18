@@ -1,0 +1,15 @@
+{
+  "_comment": "Per-source discovery checkpoint for ops-issues (spec-ticketing-watch-triage.md REQ-003). A source that fails to reach does NOT advance its own entry; each source advances independently. Today's resolved backend is git-native (ADR-0002/ADR-0003) -- discovery is gh-only; no Linear entry exists until that adapter ships and an MCP connector is configured (spec-linear-adapter.md REQ-009).",
+  "repo": "kimgranlund/claude-plugins",
+  "sources": {
+    "github": {
+      "adapter": "git-native (gh CLI, no MCP/Linear adapter shipped yet)",
+      "mechanism": "on-demand gh issue list / gh pr list (no polling interval or MCP subscription configured yet -- REQ-002's entry-mode choice has not been made for this repo)",
+      "status": "reachable",
+      "last_successful_check_at": "2026-07-18T17:33:02Z",
+      "bootstrap_note": "First-ever firing -- no prior checkpoint existed. Treated as discovering everything currently open plus full closed history for classification/dedup context (16 issues, 20 PRs, gh issue/pr list --state all, 2026-07-18). The checkpoint below is the discovery high-water mark going forward: the next firing's window is 'changed since this timestamp', not 'since repo creation' again.",
+      "issues_checkpoint": "2026-07-18T17:33:02Z",
+      "prs_checkpoint": "2026-07-18T17:33:02Z"
+    }
+  }
+}
