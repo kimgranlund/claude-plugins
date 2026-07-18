@@ -8,9 +8,11 @@ description: |
   quarantining a dirty `main` via `sync_main.py` on an interactive dispatch only, never on an
   unattended firing. Everything else — worktree removal, local-branch deletion, stale-open or
   orphaned PRs — is always a proposed plan, never a mutation. Fired via session-scoped `CronCreate`
-  for a bounded hygiene sweep, or dispatched directly to triage a specific mess. NOT for work-item
-  intake — features, bugs, tickets (`ops-issues`, a distinct seat); NOT for instruction-tree or
-  corpus drift (`/repo-alignment`).
+  — ruled 2026-07-18 as this seat's intended deployment, re-armed per work session rather than a
+  durable OS-level crontab; each firing is bounded and idempotent, so a lapse between sessions
+  costs nothing but a delayed sweep — or dispatched directly to triage a specific mess. NOT for
+  work-item intake — features, bugs, tickets (`ops-issues`, a distinct seat); NOT for
+  instruction-tree or corpus drift (`/repo-alignment`).
 
   <example>
   Context: A CronCreate firing for the repo-hygiene routine, bounded to this session.
