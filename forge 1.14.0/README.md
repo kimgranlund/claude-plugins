@@ -108,7 +108,16 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.1 · assembled 2026-07-18 · 1.34.1: ops-repo's session-scoped `CronCreate` deployment ruled
+v1.34.2 · assembled 2026-07-18 · 1.34.2: ops-issues first-run bootstrap contract (spec-ticketing-
+watch-triage 0.2.0, REQ-011/REQ-012) — a firing with no `friendlies.json` seeds evidence-only (the
+repo owner/maintainer when historical authorship proves it, never a guessed second author) and
+returns roster candidates for the DISPATCHING session's one AskUserQuestion round (private repo →
+approved collaborators; public → historical issue/PR authors + owners), with the confirmed roster
+plus a future-collaborator standing rule (`auto-friendly-on-access` | `hold-first-filing`)
+persisted in the file's `policy` block, never re-asked; REQ-012 makes explicit that trust never
+widens action — a friendly skips only the hold, never the execution barrier. Ruled during the
+first live bootstrap (kimgranlund/claude-plugins, 2026-07-18): owner-only roster confirmed,
+hold-first-filing chosen · v1.34.1 · assembled 2026-07-18 · 1.34.1: ops-repo's session-scoped `CronCreate` deployment ruled
 (Issue #32) — accepted as this seat's intended mechanism rather than a standing OS-level crontab:
 re-armed per work session, each firing bounded and idempotent so a lapse between sessions costs
 only a delayed sweep. Description updated to say so plainly instead of implying an unfinished gap;
