@@ -46,6 +46,12 @@
       "id": "n04",
       "prompt": "is this refactor actually improving things or just reorganizing them",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "Before we wrap up, is there anything still open?",
+      "expect": "no-trigger",
+      "comment": "owner: open-questions-sweep — sweeping a session's already-raised unresolved items closed, not sharpening a not-yet-started ask"
     }
   ]
 }

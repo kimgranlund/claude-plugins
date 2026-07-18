@@ -18,6 +18,7 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `agents/skill-auditor` | Agent | spawned | Fresh-context reviewer; preloads skill-review + standards; returns report by file |
 | `skills/linguistic-techniques` | Declarative skill (hybrid) | model-only | The language layer beneath every prompt-carrying artifact: twelve techniques, potency rubric (L1–L10), `potency_lint.py`; skill-forge Phase 4 runs its Audit |
 | `skills/intent-extract` | Procedural skill | both (`/intent-extract`) | Root-intent extraction: literal ask vs goal, delta taxonomy, batched multiple-choice forks, the Resolved Intent contract |
+| `skills/open-questions-sweep` | Procedural skill | both (`/open-questions-sweep`) | Clears a session's backlog of unresolved items — an unanswered question, an unconfirmed assumption, a stray idea left undecided — into one batched AskUserQuestion round instead of a prose dump nobody actually resolves |
 | `skills/system-decompose` | Procedural skill | both (`/system-decompose`) | Two-plane decomposition (OUTSIDE-IN × INSIDE-OUT) with five domain references and the deterministic `coverage_check.py` gate |
 | `skills/agent-authoring-standards` | Declarative skill | model-only | Agent files: thin-shell law, preload semantics, tool walls, cold-start language; doubles as fan-out audit criteria |
 | `skills/agent-forge` | Command | user-only (`/agent-forge`) | Fork-vs-agent gate → dispatch interview → thin-shell draft → language pass → lint + spawn smoke test |
@@ -108,7 +109,40 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.2 · assembled 2026-07-18 · 1.34.2: ops-issues first-run bootstrap contract (spec-ticketing-
+v1.34.5 · assembled 2026-07-18 · 1.34.5: a workflow-backed xhigh code review of open-questions-
+sweep's own PR (generator-independent — the maker did not author or see the run mid-flight) found
+6 real defects the P5 FLOOR audit missed, all fixed same-change: open-questions-sweep's step 3
+forced a fabricated "recommended" marking onto stray-idea items with no stated assumption (now
+conditional); its on-its-own trigger had no unattended/scheduled-firing fence, risking an
+unanswerable AskUserQuestion hang (added, mirroring ops-issues' own convention); its stopping
+predicate didn't recognize a user decline as terminal despite the failure branch requiring one
+(reconciled); its P5 fence-closure step missed scribe's issue/feature/bug-report suites (reciprocal
+cases added there too); its own intent.md P2 gate line overclaimed eval-fencing coverage
+(corrected); and ops-issues.md overclaimed that bug-report/feature share `issue`'s missing-label-
+creation fallback when only `issue` documents it (scoped accurately). intent.md's rulings section
+records the generator-fixes-own-findings deviation and why it doesn't violate generator≠critic
+here · v1.34.4 · assembled 2026-07-18 · 1.34.4: ops-issues' minted-record-shape restatement gained the
+git-native labeling clause it was missing — the Scope section named `kind: bug`/`kind: feature`
+(TICKET frontmatter, file-backend vocabulary only) but never said how that classification lands on
+today's actually-resolved backend: as a GitHub label (`bug`+severity, `feature`+size, `task`+size),
+exactly as `bug-report`/`feature`/`issue` already apply it. Found while answering a direct question
+about whether the issue/ticket-writing skills use labels for bug/feature/task context — the three
+scribe capture skills already did; this standing intake agent, the other place that mints directly
+against the resolved backend, had an incomplete restatement of the same contract. `issue` added to
+the named cross-plugin skill list alongside doc-authoring-standards/bug-report/feature. Pre-existing
+A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 87→92 lines — a WARN, not a
+gate FAIL; the added lines are the load-bearing fix, not restatable knowledge · v1.34.3 · assembled 2026-07-18 · 1.34.3: open-questions-sweep — a new procedural skill closing a
+gap this session's own baseline test confirmed: without it, Claude correctly recalls a session's
+unanswered questions and unconfirmed assumptions but dumps them as prose plus one open-ended
+follow-up instead of resolving them; the skill batches every qualifying item into ONE
+AskUserQuestion round (built via `/forge:intent-extract` → `/skill-forge`, which corrected the
+original ask's "knowledge skill" framing to procedural — it changes behavior, it isn't reference
+content). Reciprocal no-trigger fences added to intent-extract and orchestration's loop-design
+(both named in its own NOT-clauses) plus handoff-compose (an auditor-flagged near-miss on
+session-close vocabulary); ops-issues is an agent, not a skill, so that fence stands
+unreciprocated by mechanism, not oversight. FLOOR audit: PASS, two minor fixes applied (the
+ops-issues fence broadened to cover backlog queries, a user-declines-the-round failure branch
+added) · v1.34.2 · assembled 2026-07-18 · 1.34.2: ops-issues first-run bootstrap contract (spec-ticketing-
 watch-triage 0.2.0, REQ-011/REQ-012) — a firing with no `friendlies.json` seeds evidence-only (the
 repo owner/maintainer when historical authorship proves it, never a guessed second author) and
 returns roster candidates for the DISPATCHING session's one AskUserQuestion round (private repo →

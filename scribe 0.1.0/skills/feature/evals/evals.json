@@ -16,6 +16,7 @@
     {"id": "n05", "prompt": "review this PRD against its own rubric", "expect": "no-trigger"},
     {"id": "n06", "prompt": "author a new SPEC for this system directly", "expect": "no-trigger"},
     {"id": "n07", "prompt": "build this feature now that it's sized", "expect": "no-trigger"},
-    {"id": "n08", "prompt": "extract the root intent behind this idea", "expect": "no-trigger"}
+    {"id": "n08", "prompt": "extract the root intent behind this idea", "expect": "no-trigger"},
+    {"id": "n09", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: forge's open-questions-sweep — closes a session's already-raised loose ends, not a new feature proposal"}
   ]
 }

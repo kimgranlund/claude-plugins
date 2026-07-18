@@ -25,6 +25,7 @@
     { "id": "n09", "prompt": "write a rubric with 1-5 anchors for grading layouts", "expect": "no-trigger" },
     { "id": "n10", "prompt": "write the PR description for this change", "expect": "no-trigger" },
     { "id": "n11", "prompt": "summarize the changes for the changelog", "expect": "no-trigger" },
-    { "id": "n12", "prompt": "design how planning and execution seats compose", "expect": "no-trigger" }
+    { "id": "n12", "prompt": "design how planning and execution seats compose", "expect": "no-trigger" },
+    { "id": "n13", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: open-questions-sweep — closes a live session's own unresolved items, distinct from a handback block's Open-questions field" }
   ]
 }

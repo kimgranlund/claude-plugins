@@ -18,6 +18,7 @@
     {"id": "n06", "prompt": "review this SPEC document against its own rubric", "expect": "no-trigger"},
     {"id": "n07", "prompt": "what's the difference between a github issue and a discussion", "expect": "no-trigger"},
     {"id": "n08", "prompt": "extract the root intent behind this vague ask", "expect": "no-trigger"},
-    {"id": "n09", "prompt": "build the login feature now that it's sized", "expect": "no-trigger"}
+    {"id": "n09", "prompt": "build the login feature now that it's sized", "expect": "no-trigger"},
+    {"id": "n10", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: forge's open-questions-sweep — closes a session's already-raised loose ends, not a new defect report"}
   ]
 }
