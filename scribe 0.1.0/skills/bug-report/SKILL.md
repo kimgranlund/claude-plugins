@@ -7,15 +7,15 @@ description: >-
   gives a repro or wrong output, or flags a regression — "the export button does nothing on
   Safari", "this crashes when I click X", "this used to work and now it doesn't". Runs
   intent-extract and system-decompose during capture, then
-  records — doc-forge's TICKET path by default, or the workspace's ruled git-native backend
-  (`gh issue`) — and dispatches with the record as context. Also runs via /bug-report [raw
-  report, or a TKT-/#issue id]. Writes one record, then one investigation. NOT for
+  records — doc-forge's TICKET path by default, or the workspace's ruled backend (git-native, or a
+  named external adapter) — and dispatches with the record as context. Also runs via /bug-report
+  [raw report, or a TKT-/#issue/adapter id]. Writes one record, then one investigation. NOT for
   a feature idea or build request (feature / orchestration's build); NOT for a generic
   chore/follow-up/task (issue); NOT for non-bug documents (doc-forge); NOT for reviewing a doc
   (doc-review); NOT for intent extraction outside a bug (intent-extract).
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[raw bug report, or a TKT-/#issue id to resume]"
+argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id to resume]"
 ---
 
 # bug-report
@@ -24,19 +24,23 @@ bug-report turns a raw bug report into a durable, classified record before any i
 begins, and supersedes ad hoc `/fork bug-name ...` for bug work — a fork that carries the report
 and its findings and nothing else is exactly the failure this replaces. Seed: `$ARGUMENTS`.
 
-**Backend seam (Phase 0, decided once per run):** the record's home is the **file backend** —
-doc-forge's TICKET path into `docs/tickets/` — unless the hosting workspace's entry file routes
-work items to a **git-native backend** (a routing-table row naming `gh issue`, an ADR-0002-style
-ruling). Where so ruled AND `gh` is available, every phase below reads "ticket file" as "GitHub
-Issue": same payload contract, same ordering, different store. No ruling, or no `gh` → file
-backend, exactly as always — consumers of this skill outside such a workspace see no change.
+**Backend seam (Phase 0, decided once per run):** call doc-authoring-standards' backend resolver
+(`references/backend-resolver.md`) once; it returns Option A (local — the file backend, doc-forge's
+TICKET path into `docs/tickets/`), Option B (git-native — `gh issue`, an ADR-0002-style ruling), or
+Option C (external — a named adapter; Linear's realization: `references/linear-adapter.md`, a
+bring-your-own adapter documents its own). No ruling, or the ruled option's adapter is unreachable
+→ Option A, exactly as always — consumers of this skill outside a ruled workspace see no change.
+Every phase below follows whichever option the resolver returned: "ticket file" reads as "GitHub
+Issue" under Option B, or as the named external adapter's own record under Option C — same payload
+contract, same ordering, different store.
 
 ## Phase 1 — Route: fresh report, or resume by record state
 
 `$ARGUMENTS` contains a record id — `tkt-####`/`TKT-####` (case-insensitive) resolving to a file
-in `docs/tickets/`, or on the git-native backend `#NN`/a bare issue number resolving via
-`gh issue view` — → this is a resume; branch by that record's own state, never re-dispatch
-blindly:
+in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
+`gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
+`TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`, REQ-010)
+— → this is a resume; branch by that record's own state, never re-dispatch blindly:
 - `## Findings` already carries an entry and status is still `open`/`doing` → Phase 6, to close
   the loop on what already came back — not a second investigation chasing the first.
 - Extra text follows the id (new detail, a repro that did not exist before) → fold it into the
@@ -44,9 +48,9 @@ blindly:
 - Status is `done` or `wontfix` → report the closed state and stop; reopening is the user's call.
 - Otherwise (open/doing, no findings yet) → continue directly to Phase 5.
 
-An id that does not resolve (no such file; `gh issue view` errors) is not a resume: treat it as a
-fresh report, continue to Phase 2, and say so — never proceed as if an unresolved id already had a
-record behind it.
+An id that does not resolve (no such file; `gh issue view` errors; Option C's `read` returns
+not-found, AC-010) is not a resume: treat it as a fresh report, continue to Phase 2, and say so —
+never proceed as if an unresolved id already had a record behind it.
 
 ## Phase 2 — Capture
 
@@ -77,19 +81,26 @@ skill's own redirect (above) never fires on a seed it did not originate the clas
 
 ## Phase 4 — Record
 
-The payload contract, identical on both backends: `kind: bug`, the type's standard
+The payload contract, identical regardless of backend: `kind: bug`, the type's standard
 Summary/Acceptance/Links plus Repro, Expected vs actual, Classification, Severity
 (`blocker | major | minor | cosmetic` — the one scale doc-authoring-standards' "Bug-shaped
 tickets" defines; use it, never invent one per ticket), and an empty Findings section.
 
-- **File backend:** mint or update a TICKET via doc-forge's TICKET path (`doc-authoring-standards`
-  references/templates/ticket.md), in `docs/tickets/` of the local or target repo — repo-rooted
-  per doc-authoring-standards' location-and-naming rule, never written under a plugin's own
-  installed directory. Run `doc_lint.py` on the result — fix and re-run until clean.
-- **Git-native backend:** `gh issue create` — title = the Summary line; body = the same sections
-  as `##` headings; labels `bug` + the severity. `doc_lint.py` validates files, not issues — the
-  section contract above is this skill's own gate here: an issue missing a required section is not
-  a captured record; edit it before proceeding.
+- **Option A (local/file backend):** mint or update a TICKET via doc-forge's TICKET path
+  (`doc-authoring-standards` references/templates/ticket.md), in `docs/tickets/` of the local or
+  target repo — repo-rooted per doc-authoring-standards' location-and-naming rule, never written
+  under a plugin's own installed directory. Run `doc_lint.py` on the result — fix and re-run until
+  clean.
+- **Option B (git-native):** `gh issue create` — title = the Summary line; body = the same
+  sections as `##` headings; labels `bug` + the severity. `doc_lint.py` validates files, not
+  issues — the section contract above is this skill's own gate here: an issue missing a required
+  section is not a captured record; edit it before proceeding.
+- **Option C (external, e.g. Linear):** the resolved adapter's `create` operation
+  (`doc-authoring-standards` references/linear-adapter.md for Linear; a bring-your-own adapter
+  documents its own) — the same payload contract mapped onto that backend's native fields. A
+  create call that fails partway falls back to the file backend for this operation and reports the
+  fallback in the close-out; never leave the report uncaptured because the preferred store was
+  unreachable.
 
 The record exists (on disk, or as a created issue whose URL is reported) before Phase 5 starts;
 this ordering is the entire fix, and it does not move.
@@ -120,11 +131,15 @@ twice.
 
 ## Phase 6 — Close the loop
 
-Read the record back on return (`gh issue view --comments` on the git-native backend). Findings
-gained an entry → advance status — file backend: frontmatter `open` → `doing`, `done` once
-shipped, or `wontfix`; git-native: `doing` is a label, `done` closes the issue, `wontfix` closes
-with a `wontfix` label — and report the record (path or issue URL) and status. Findings gained no
-entry and the dispatch was an agent → one re-dispatch with the contract quoted, then check again.
+Read the record back on return (`gh issue view --comments` on the git-native backend; the resolved
+adapter's own read operation under Option C). Findings gained an entry → advance status — file
+backend: frontmatter `open` → `doing`, `done` once shipped, or `wontfix`; git-native: `doing` is a
+label, `done` closes the issue, `wontfix` closes with a `wontfix` label; Option C: the resolved
+adapter's own status representation (Linear: a state of the mapped type — `doing`/`done`/`wontfix`
+→ `started`/`completed`/`canceled`, `references/linear-adapter.md`, Findings-first, same ordering)
+— and report the record (path,
+issue URL, or adapter-native id) and status. Findings gained no entry and the dispatch was an
+agent → one re-dispatch with the contract quoted, then check again.
 Still nothing, or the dispatch was a fork that is no longer addressable → append a dated
 "investigation returned with no findings recorded" entry (file section, or issue comment), leave
 status unchanged, and say so plainly. A fork's conversational summary never substitutes for the
@@ -150,9 +165,13 @@ entry it owed the record.
 - Workspace rules git-native but `gh` fails partway through a run (auth, network) → fall back to the file
   backend for THIS record, say so, and note the migration in the record so it can be re-homed —
   never leave the report uncaptured because the preferred store was unreachable.
+- Workspace rules Option C but the adapter operation fails partway (auth, API error, MCP
+  disconnect) → same fallback discipline, to the file backend for that operation, noted in the
+  record.
 
-Done when a `kind: bug` record exists — a `doc-type: ticket` file on disk, or a labeled GitHub
-Issue whose URL was reported — carrying the report and classification, and either bug-report's own
+Done when a `kind: bug` record exists — a `doc-type: ticket` file on disk, a labeled GitHub Issue,
+or an Option-C adapter's record (its native id reported) — carrying the report and classification,
+and either bug-report's own
 inline fix or the dispatched investigation has left at least one dated `## Findings` entry (file
 section or issue comment) — OR the seed was redirected to `feature`/`issue` under the one-hop rule
 (first classification only) and the sibling invocation was reported; no bug record is owed on a

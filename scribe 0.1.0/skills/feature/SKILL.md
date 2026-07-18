@@ -8,13 +8,14 @@ description: >-
   "can we add a dark mode", "what if we supported CSV export". Pure intake: sizes and records,
   never builds. Runs intent-extract (one round max), a
   dedup sweep, and system-decompose, then records by shape — the TICKET file by default, or the
-  workspace's ruled git-native backend. Also runs via /feature [raw idea, or a TKT-/#issue id].
-  Writes one record set, then stops — building is /build's job. NOT for bug-shaped
+  workspace's ruled backend (git-native, or a named external adapter). Also runs via /feature [raw
+  idea, or a TKT-/#issue/adapter id]. Writes one record set, then stops — building is /build's
+  job. NOT for bug-shaped
   reports (bug-report); NOT for generic chores/follow-ups/tasks needing no sizing (issue); NOT
   for dispatching or performing the build (/build); NOT for other document types (doc-forge).
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[raw feature idea, or a TKT-/#issue id to resume]"
+argument-hint: "[raw feature idea, or a TKT-/#issue/adapter-native id to resume]"
 ---
 
 # feature — intake that ends in a record, never a build
@@ -23,23 +24,29 @@ Turns a raw feature idea into the smallest durable record that fully carries it,
 spends build effort — the same loss-window fix `bug-report` made for bugs: an idea that lives
 only in chat context vanishes with it. Seed: `$ARGUMENTS`.
 
-**Backend seam (Phase 0, decided once per run):** the record's home is the **file backend**
-(doc-forge's TICKET path) unless the hosting workspace's entry file routes work items to a
-**git-native backend** (a routing-table row naming `gh issue`, an ADR-0002-style ruling) and `gh`
-is available — then "ticket file" below reads "GitHub Issue": same payload contract, same
-ordering, different store. Canonical statement: `bug-report`'s SKILL.md — this is the same seam,
-not a second one.
+**Backend seam (Phase 0, decided once per run):** call doc-authoring-standards' backend resolver
+(`references/backend-resolver.md`) once; it returns Option A (local — the file backend, doc-forge's
+TICKET path), Option B (git-native — `gh issue`, an ADR-0002-style ruling), or Option C (external —
+a named adapter; Linear's realization: `references/linear-adapter.md`, a bring-your-own adapter
+documents its own). No ruling, or the ruled option's adapter is unreachable → Option A, exactly as
+always. Every phase below follows whichever option the resolver returned: "ticket file" reads as
+"GitHub Issue" under Option B, or as the named external adapter's own record under Option C — same
+payload contract, same ordering, different store. Canonical statement: `bug-report`'s SKILL.md —
+this is the same seam, not a second one.
 
 ## Phase 1 — Route: fresh idea, or resume by record state
 
 `$ARGUMENTS` contains a record id — `tkt-####`/`TKT-####` (case-insensitive) resolving to a file
-in `docs/tickets/`, or on the git-native backend `#NN`/a bare issue number resolving via
-`gh issue view` — → resume by that record's state: `done`/`wontfix`/closed → report and stop
+in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
+`gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
+`TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`,
+REQ-010) — → resume by that record's state: `done`/`wontfix`/closed → report and stop
 (reopening is the user's call); open with new detail following the id → fold it into
 Summary/Scope and re-run Phase 4's sizing only if the new detail changes the size class;
 otherwise (open, no new detail) → report the record's state, size, and placement, point at
 `/build` for momentum, and stop. An id that does not resolve (no such file; `gh issue view`
-errors) is a fresh idea — say so, never proceed as if a record existed.
+errors; Option C's `read` returns not-found, AC-010) is a fresh idea — say so, never proceed as if
+a record existed.
 
 ## Phase 2 — Extract
 
@@ -53,9 +60,10 @@ section; vagueness is a note, never a blocker to persistence.
 ## Phase 3 — Dedup: it may already exist
 
 Before minting anything, sweep three surfaces and report what's found:
-1. **Records** — `docs/tickets/`, ROADMAP/PLAN entries, and on the git-native backend the open
-   issues (`gh issue list --search`): already queued → this is a resume (Phase 1 semantics);
-   update placement or detail, don't re-mint.
+1. **Records** — `docs/tickets/`, ROADMAP/PLAN entries, on the git-native backend the open issues
+   (`gh issue list --search`), or under Option C the resolved adapter's own `dedup-search`
+   operation (`references/backend-resolver.md` REQ-005): already queued → this is a resume (Phase
+   1 semantics); update placement or detail, don't re-mint.
 2. **The codebase** — Grep the feature's nouns/verbs: already shipped → report where it lives and
    stop; partially shipped → the record captures the delta, not the whole.
 3. **Docs/corpora** — an existing PRD/SPEC already covering it → link, don't duplicate (the ID
@@ -85,20 +93,26 @@ decision-ratifying.
 
 ## Phase 5 — Record, lint, place
 
-The payload contract, identical on both backends: Summary · Acceptance (from the extraction's
+The payload contract, identical regardless of backend: Summary · Acceptance (from the extraction's
 success criterion) · Links (the ID spine to any PRD/SPEC/LLD/corpus minted in Phase 4) ·
 Scope/Open (the named gaps) · the size class · an empty `## Findings` section for the eventual
 build's write-back.
 
-- **File backend:** mint the `kind: feature` TICKET via doc-forge's TICKET path (`docs/tickets/`
-  of the local or target repo — repo-rooted per doc-authoring-standards' location-and-naming
-  rule, never written under a plugin's own installed directory — frontmatter `doc-type: ticket,
-  kind: feature`, `size: small | big` in FRONTMATTER, machine-read — /build branches on it). Run
-  `doc_lint.py` — fix until clean; an unlintable record is not a captured one.
-- **Git-native backend:** `gh issue create` — title = the Summary line; body = the sections above
-  as `##` headings; labels `feature` + `size:small`/`size:big` (the machine-read size lives in
-  the label). The section contract is this skill's own gate here (doc_lint validates files, not
+- **Option A (local/file backend):** mint the `kind: feature` TICKET via doc-forge's TICKET path
+  (`docs/tickets/` of the local or target repo — repo-rooted per doc-authoring-standards'
+  location-and-naming rule, never written under a plugin's own installed directory — frontmatter
+  `doc-type: ticket, kind: feature`, `size: small | big` in FRONTMATTER, machine-read — /build
+  branches on it). Run `doc_lint.py` — fix until clean; an unlintable record is not a captured one.
+- **Option B (git-native):** `gh issue create` — title = the Summary line; body = the sections
+  above as `##` headings; labels `feature` + `size:small`/`size:big` (the machine-read size lives
+  in the label). The section contract is this skill's own gate here (doc_lint validates files, not
   issues): an issue missing a required section is not a captured record.
+- **Option C (external, e.g. Linear):** the resolved adapter's `create` operation
+  (`doc-authoring-standards` references/linear-adapter.md for Linear; a bring-your-own adapter
+  documents its own) — the same payload contract mapped onto that backend's native fields, `size`
+  carried as a label. A create call that fails partway falls back to the file backend for this
+  operation and reports the fallback in the close-out; never leave the idea uncaptured because the
+  preferred store was unreachable.
 
 `.github/ISSUE_TEMPLATE/feature.yml` mirrors this contract for a human filing directly on GitHub.
 
@@ -143,9 +157,13 @@ give one. The skill already present → skip silently.
 - Workspace rules git-native but `gh` fails partway through a run → fall back to the file backend for THIS
   record, say so, and note the migration in the record — never leave the idea uncaptured because
   the preferred store was unreachable (bug-report's rule, shared).
+- Workspace rules Option C but the adapter operation fails partway (auth, API error, MCP
+  disconnect) → same fallback discipline, to the file backend for that operation, noted in the
+  record.
 
-Done when a `kind: feature` record exists — a lint-clean file on disk, or a labeled GitHub Issue
-whose URL was reported — sized and shaped correctly, linked into whatever queue docs exist, with
+Done when a `kind: feature` record exists — a lint-clean file on disk, a labeled GitHub Issue (its
+URL reported), or an Option-C adapter's record (its native id reported) — sized and shaped
+correctly, linked into whatever queue docs exist, with
 every extraction gap named, the index offer's disposition reported (installed path, pointer line,
 or already-present skip) — and NO build was dispatched BY THIS SKILL (that is `/build`'s
 contract, orchestration plugin, where installed) — OR the seed was redirected to

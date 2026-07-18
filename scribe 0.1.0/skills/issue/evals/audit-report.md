@@ -1,3 +1,147 @@
+# Audit — /issue (scribe) · ADR-0003 Option-C generalization · floor depth · fresh context
+
+Skill: scribe 0.1.0/skills/issue/SKILL.md · Standards: skill-authoring-standards · Lint: clean
+Verdict: FIX-FIRST (1 blocking, 1 major, 2 minor, 2 nit — every fix is a clause-level edit, no
+restructure; the Option-C additions are otherwise accurate against both reference files and
+consistent with the sibling pattern. Ship after fixes.)
+
+**Resolution (2026-07-18, same session):** all findings applied. (1) Description rewritten
+(SKILL.md:9–11) to drop the false "everywhere else" binary; evals.json re-checked, no case
+changes needed (backend is not a trigger axis), no boundary moved, no /eval-run owed. (2) Phase 1
+gained an Option-C id form (an adapter-native id resolves via the new `read` operation, REQ-010 —
+added to `spec-linear-adapter` v0.2.0 and both reference files at the SAME root cause all three
+siblings shared, rather than patched per-skill). (3) Phase 3's dedup sweep now names the adapter's
+`dedup-search` operation. (4) backend-resolver.md's fallback sentence widened to cover both
+Option B (`gh` unavailable) and Option C (adapter unreachable). (5)/(6) nits left as-is — cosmetic,
+non-blocking, no reader-facing ambiguity. `skill_lint.py` and the plugin's `release_gate.py`
+re-run clean after all fixes.
+
+Reviewed: SKILL.md (145 lines, post-edit), git diff vs HEAD, intent.md, evals/evals.json,
+doc-authoring-standards/references/backend-resolver.md, .../references/linear-adapter.md.
+Siblings read for the shared-seam check: ../bug-report/SKILL.md (Phase 0 + description),
+../feature/SKILL.md (Phase 0 + description).
+Auditor: fresh-context skill-auditor, 2026-07-18. Lint run: `skill_lint.py` → `clean` (exit 0).
+Frontmatter untouched by this edit (diff starts at body line 25), so no same-change evals.json
+obligation was *triggered* — but see finding 1, which creates one.
+
+## Dispatch answers, condensed
+
+1. **Natural extension of the A/B pattern?** Yes in four of five touch points. Phase 0
+   (SKILL.md:28–38), the Phase 4 Option-C bullet (:112–117), the Option-C failure branch
+   (:128–130), and the Done-when clause (:137–139) all mirror the existing A/B ordering, detail
+   level, and register — the Phase 4 bullet even reproduces the sibling bullets' "gate sentence
+   last" shape. The one dense spot is the Phase 1 insertion (finding 5, nit): accurate, but
+   nested two em-dash asides deep inside an already three-clause parenthetical.
+2. **Accurate against the reference files?** Yes — no operation-name or field-name drift.
+   `create` (:112) is the interface's own operation name; the fallback triple "auth, API error,
+   MCP disconnect" (:128–129) matches REQ-008 verbatim; "size … carried as a label" matches
+   REQ-004's Size→labels row; the status mapping `doing`/`done`/`wontfix` →
+   `started`/`completed`/`canceled` (:53–54) matches REQ-007 exactly, and "a state of the mapped
+   type" correctly preserves linear-adapter's type-not-name binding. No overclaiming: the skill
+   never promises the `[inferred]` label-field mechanics linear-adapter itself declines to
+   hardcode. One scope mismatch runs the other direction — finding 4.
+3. **Phase 1 status-mapping clause in the folded-resume location?** Correctly placed, no
+   duplication, no contradiction. Phase 4's Option-C bullet covers the `create` operation only;
+   Phase 1's clause covers status representation only; the shared linear-adapter.md pointer is
+   needed in both. "Findings-first, same ordering" (:55) correctly carries the close discipline
+   into Option C, matching linear-adapter's close op (comment lands before the state
+   transition). Residual looseness is register-only (finding 5).
+4. **Dangling references / redundancy?** Both cited reference files exist at
+   doc-authoring-standards/references/. No dangling pointer. The per-phase Option-C clauses
+   mildly restate Phase 0's blanket "every phase below follows whichever option the resolver
+   returned", but that matches the pre-existing A/B pattern — not a defect. The real gaps are
+   the two places the generalization *didn't* reach: the frontmatter description (finding 1)
+   and the Phase 1 id grammar (finding 2).
+
+## Findings, severity-ordered
+
+**1. BLOCKING — the frontmatter description still describes the retired binary, and it is now
+model-visible routing surface.** SKILL.md:9–11: "Records land on the workspace's ruled backend —
+a GitHub Issue (`kind: task` label + optional size) where the entry file rules git-native, a
+`kind: task` TICKET file **everywhere else**." Under an Option-C ruling that last clause is false
+— records land in the external tracker, not a TICKET file. Since the 2026-07-17 species
+conversion (`disable-model-invocation: false`, evals.json's own note) this description enters
+model context on every routing decision. The estate's stale-context rule (a change that
+invalidates a record repairs it in the same change) makes this same-PR work: the ADR-0003 edit
+invalidated the sentence and did not repair it. *Fix:* one clause — e.g. "…where the entry file
+rules git-native, a `kind: task` TICKET file by default, or the workspace's ruled external
+adapter (ADR-0003, e.g. Linear)". Description edit → touch evals.json in the same change (the
+invariant); no *case* changes needed — backend choice is not a trigger axis, all 19 cases stand
+— and no boundary moved, so no /eval-run owed. **Cross-sibling:** bug-report's description
+("doc-forge's TICKET path by default, or the workspace's ruled git-native backend") and
+feature's ("the TICKET file by default, or the workspace's ruled git-native backend") carry the
+identical staleness — same fix, all three.
+
+**2. MAJOR — Phase 1's resume-id grammar has no Option-C form, so an Option-C record can be
+minted and reported but never resumed.** SKILL.md:42–44 and :64–65 define exactly two id shapes:
+`#NN`/bare number (git-native) and `tkt-####` (file). The close-out promises "the issue URL,
+ticket path, **or adapter-native id**" (:119) and Done-when promises status-advance works
+(:139–140) — but `/issue ENG-123 done` parses as *no leading record id* and falls through to
+fresh-item capture: Phase 2 classifies it, Phase 3's dedup sweeps only `gh issue list` and
+`docs/tickets/` (finding 3), and the skill mints a junk task titled from the id it should have
+resolved. The asymmetry is structural: this skill's whole status-advance design lives in Phase
+1's resume branch, so under Option C the folded lifecycle (the thing this skill uniquely owns)
+is unreachable. *Fix:* extend the id grammar — "on an Option-C backend, the adapter's native id
+form (Linear: `TEAM-NN`, e.g. `ENG-123`) resolves via the adapter; on other backends it is not
+an id." *Cross-sibling:* bug-report:39–41 and feature's Phase 1 define the same two-shape
+grammar — same gap, same fix, all three.
+
+**3. MINOR — Phase 3 dedup is the one backend-specific phase the generalization skipped.**
+SKILL.md:93 names `gh issue list --search` and `docs/tickets/` but not the adapter's
+`dedup-search` operation — which backend-resolver.md defines precisely so "a capture skill's own
+call sequence never branches on which backend is active" (five-op table). The edit chose
+explicit Option-C clauses in Phases 0/1/4/Failure/Done-when; Phase 3 is the odd one out, and
+under Option C it is load-bearing (it is the only net against finding 2's junk mint). *Fix:*
+three words — "…(`gh issue list --search`, `docs/tickets/`, or the resolved adapter's
+`dedup-search`)".
+
+**4. MINOR — fallback-scope drift between the skill trio and backend-resolver.md, resolver side
+suspect.** All three skills say "No ruling, or **the ruled option's** adapter is unreachable →
+Option A" (issue:32–33) — covering Option B's `gh`-unavailable case, which the pre-ADR text
+guaranteed explicitly ("AND `gh` is available"). backend-resolver.md:19 states the narrower "No
+ruling, or **Option C ruled** but its adapter is unreachable → Option A". The skills preserve
+the pre-ADR semantic; the resolver's sentence would lose it if read as canon. *Fix (resolver
+side, one file):* widen backend-resolver.md's fallback sentence to "the ruled option's
+realization is unreachable (Option B: `gh` unavailable; Option C: the adapter)" — otherwise the
+next drift-check will "correct" three skills into a regression.
+
+**5. NIT — Phase 1 Option-C clause density.** SKILL.md:52–55 nests two em-dash asides inside the
+pre-existing three-clause parenthetical hanging off the `wontfix` arm; and the tail
+"Findings-first, same ordering" formally attaches to all three verbs though the ordering rule
+governs closes only (`doing` is a plain state update — linear-adapter's `update`, no Findings
+gate). Accurate but the densest sentence in the file; the mid-clause wrap "same ordering).
+Closing a" (:55–56) reads as a paste seam. *Fix (optional):* unpack to its own sentence after
+the parenthetical.
+
+**6. NIT — citation-form drift within the file.** Phase 0 cites `` `references/backend-resolver.md` ``
+and `` `references/linear-adapter.md` `` (backticked, bare-relative — no `references/` dir
+exists under issue itself; the "doc-authoring-standards'" attribution disambiguates), while
+Phase 4 writes "(`doc-authoring-standards` references/linear-adapter.md" — plugin backticked,
+path bare (:113). Pick one form; the Phase 0 shape matches both siblings.
+
+## Cross-sibling expectation (per the dispatch)
+
+Findings 1 and 2 are structural to the shared edit and should reproduce in bug-report and
+feature (both descriptions verified stale here; both Phase 1 grammars verified two-shape here —
+the sibling auditors should confirm in situ). Finding 4's fix lands once, in
+backend-resolver.md. Findings 3/5/6 are issue-local (Phase 3's command list and the folded
+status-advance parenthetical are this skill's own shapes).
+
+## Top 3
+
+1. Repair the description's "everywhere else" clause + touch evals.json, all three siblings
+   (finding 1 — blocking, same-change rule).
+2. Give Phase 1 an Option-C id form so adapter records are resumable — the folded lifecycle is
+   this skill's entire value under Option C (finding 2; siblings likewise).
+3. Add `dedup-search` to Phase 3 and widen the resolver's fallback sentence (findings 3 + 4 —
+   two one-line edits, one per file).
+
+---
+---
+
+*The 2026-07-16 forge audit below is preserved verbatim — intent.md's P5 gate record cites it;
+it predates the ADR-0003 edit audited above.*
+
 # Audit — /issue (scribe) · floor depth · fresh context
 
 Skill: scribe 0.1.0/skills/issue/SKILL.md · Standards: skill-authoring-standards · Lint: clean
