@@ -83,9 +83,12 @@ or `kind: feature`'s Scope/Open **and** `size: small | big` (owned by `feature` 
 backend only — on today's resolved git-native backend it lands as a GitHub **label** at create
 time, exactly as the sibling skills apply it: `bug` + the severity label (`bug-report`'s scale),
 `feature` + `size:small`/`size:big` (`feature`'s scale), or `task` + the same size scale where
-clear (`issue`'s default — unsized is legal for tasks). A missing label in the repo is created once
-(`gh label create`), never worked around or skipped. Those skills are the canonical source of truth
-for this contract; this agent only carries the minimum shape it needs to mint correctly.
+clear (`issue`'s default — unsized is legal for tasks). A missing label is created once
+(`gh label create`) before this agent's own mint completes, never worked around or skipped — the
+same fallback `issue`'s SKILL.md documents explicitly; `bug-report` and `feature` don't document a
+missing-label path themselves, so this agent's own create calls own the fallback rather than
+assuming those two self-heal it too. Those skills are the canonical source of truth for the record
+shape; this agent only carries the minimum it needs to mint correctly.
 
 ## Procedure, one firing
 

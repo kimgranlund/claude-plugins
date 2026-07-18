@@ -20,6 +20,7 @@
     {"id": "n08", "prompt": "what sections does a TICKET need in its frontmatter", "expect": "no-trigger"},
     {"id": "n09", "prompt": "extract the root intent behind this ask", "expect": "no-trigger"},
     {"id": "n10", "prompt": "build the dark mode feature now that it's sized", "expect": "no-trigger"},
-    {"id": "n11", "prompt": "does GitHub have a native way to type issues as bug vs feature now", "expect": "no-trigger"}
+    {"id": "n11", "prompt": "does GitHub have a native way to type issues as bug vs feature now", "expect": "no-trigger"},
+    {"id": "n12", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: forge's open-questions-sweep — closes a session's already-raised loose ends, not a new work item to file"}
   ]
 }

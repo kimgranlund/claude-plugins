@@ -6,7 +6,8 @@ description: >-
   instead of a prose dump nobody actually resolves. Use when the user asks "before we wrap up, is
   there anything still open", "anything still pending", "any decisions still open before we
   close this out", or "wrap up any loose ends"; also fires on its own at a natural closing point
-  in a long session where items like this have piled up. NOT for resolving ambiguity before
+  in an interactive session where items like this have piled up — never on an unattended or
+  scheduled firing with no one to answer. NOT for resolving ambiguity before
   starting a task (intent-extract); NOT for a scheduled/interval reminder (loop-design / `/loop`);
   NOT for querying, tracking, or filing work items in an external tracker (ops-issues); NOT for
   producing a persisted decision record or ticket afterward (a separate, heavier ask).
@@ -26,9 +27,12 @@ prose list nobody actually resolves.
    — a speculative "would this be useful" idea with no prior mention stays out of scope.
 2. Nothing qualifies → report "nothing open" in one line and stop there. A clean session earns
    that line, not a manufactured question.
-3. Turn every qualifying item into ONE AskUserQuestion call: 1-4 questions, 2-4 options each, the
-   option matching the working assumption listed first and marked recommended. One call covers
-   every item — a question-per-turn or a prose paragraph both fall short of the contract.
+3. Turn every qualifying item into ONE AskUserQuestion call: 1-4 questions, 2-4 options each. An
+   item with a working assumption behind it (the default it shipped with, the lean it was heading
+   toward) lists that option first, marked recommended; a stray idea with no assumption ever
+   stated lists its options unranked — inventing one to satisfy the marking misrepresents a real
+   lean that was never there. One call covers every item — a question-per-turn or a prose
+   paragraph both fall short of the contract.
 4. The reply after the user answers resolves each item by name — the decision, the insight, or
    the next step — earning more than a bare acknowledgment.
 
@@ -37,6 +41,10 @@ One AskUserQuestion call carrying every qualifying item, or (step 2) a single "n
 line — the two outcomes are exclusive; a prose list satisfies neither.
 
 ## Failure branches
+- Dispatched in an unattended or scheduled context (a cloud-routine firing, a subagent with no
+  interactive user on the other end) → skip auto-fire entirely, even with qualifying items on
+  hand; an AskUserQuestion round nobody can answer just hangs the firing. User-invocation is
+  unaffected — this only guards the on-its-own trigger.
 - More than 4 items qualify → batch the 4 most consequential (most likely to change what happens
   next); name the remainder in the batch's own framing text ("N more minor items — ask again to
   cover those"), keeping the surplus visible instead of dropped.
@@ -46,8 +54,9 @@ line — the two outcomes are exclusive; a prose list satisfies neither.
   stop there; the reply resolves nothing further and the same batch stays unasked for the rest of
   the session.
 
-Done when every qualifying item has been asked about in that one call and answered, or the skill
-reported "nothing open" and stopped there.
+Done when every qualifying item has been asked about in that one call and answered, the skill
+reported "nothing open" and stopped there, or the user declined the round per the failure branch
+above — each a valid terminal state; a decline is not re-asked later in the same session.
 
 ## Example
 Good (one batched call, options that instantiate the real choices):

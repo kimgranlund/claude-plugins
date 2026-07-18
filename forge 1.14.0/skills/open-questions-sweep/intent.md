@@ -54,7 +54,10 @@ P0 route:      PASS — primitive=skill. Not mechanically checkable (judgment ca
 P1 intent:     PASS — slots filled from the upstream /forge:intent-extract resolved intent plus
                 author judgment on trigger phrasing/freedom/type (background session, user
                 already greenlit the full resolved spec with "yes"); no slot stalled.
-P2 evals:      PASS — evals/evals.json (12 should-trigger, 10 no-trigger fenced to owners) +
+P2 evals:      PASS — evals/evals.json (12 should-trigger, 10 no-trigger: 7 fenced to a named
+                owner — ops-issues, intent-extract, loop-design, scribe doc-authoring — and 3
+                (n02/n07/n10) deliberately unfenced, ordinary model behavior with no sweep owner
+                to route to) +
                 4 assertions (recorded above) + evals/baseline/ (2 scenarios: 4 unresolved items,
                 and a clean session as negative control). Baseline confirms the actual gap: Claude
                 already recalls dropped items correctly but dumps them as prose + one open-ended
@@ -108,3 +111,18 @@ P5 validate:   PASS
   piece (notice a gap, call AskUserQuestion) — the delta is making the noticing-and-batching
   actually happen at the right moment instead of never. Per standards, encoded-preference skills
   earn brevity: state the sequence and stop.
+- Post-ship workflow-backed code review (xhigh, on the open PR) found and this record's own
+  maker fixed 5 real defects the P5 audit's FLOOR depth missed: (1) step 3 forced a fabricated
+  "recommended" marking on stray-idea items with no stated assumption — now conditional on one
+  actually existing; (2) the on-its-own trigger had no unattended/scheduled-firing fence, risking
+  an unanswerable AskUserQuestion hang — added, mirroring ops-issues' own established convention;
+  (3) the stopping predicate didn't recognize a user decline as a valid terminal state despite the
+  failure branch requiring one — reconciled; (4) this skill's own fence-closure step (P5.4) closed
+  reciprocal no-trigger cases for intent-extract/loop-design/handoff-compose but missed scribe's
+  issue/feature/bug-report — added n12/n09/n10 there too; (5) this file's own P2 gate line
+  overclaimed "10 no-trigger fenced to owners" when 3 (n02/n07/n10) were deliberately unfenced —
+  corrected in place. A sixth finding (ops-issues.md overclaiming bug-report/feature share
+  `issue`'s missing-label-creation fallback, when only `issue` documents it) was fixed in the
+  sibling agent file, not this record. Generator-fixes-own-findings is an accepted deviation from
+  strict generator≠critic here: the review ran in an independent workflow context this maker did
+  not author or see mid-run, satisfying the independence the principle actually protects.

@@ -109,7 +109,19 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.4 · assembled 2026-07-18 · 1.34.4: ops-issues' minted-record-shape restatement gained the
+v1.34.5 · assembled 2026-07-18 · 1.34.5: a workflow-backed xhigh code review of open-questions-
+sweep's own PR (generator-independent — the maker did not author or see the run mid-flight) found
+6 real defects the P5 FLOOR audit missed, all fixed same-change: open-questions-sweep's step 3
+forced a fabricated "recommended" marking onto stray-idea items with no stated assumption (now
+conditional); its on-its-own trigger had no unattended/scheduled-firing fence, risking an
+unanswerable AskUserQuestion hang (added, mirroring ops-issues' own convention); its stopping
+predicate didn't recognize a user decline as terminal despite the failure branch requiring one
+(reconciled); its P5 fence-closure step missed scribe's issue/feature/bug-report suites (reciprocal
+cases added there too); its own intent.md P2 gate line overclaimed eval-fencing coverage
+(corrected); and ops-issues.md overclaimed that bug-report/feature share `issue`'s missing-label-
+creation fallback when only `issue` documents it (scoped accurately). intent.md's rulings section
+records the generator-fixes-own-findings deviation and why it doesn't violate generator≠critic
+here · v1.34.4 · assembled 2026-07-18 · 1.34.4: ops-issues' minted-record-shape restatement gained the
 git-native labeling clause it was missing — the Scope section named `kind: bug`/`kind: feature`
 (TICKET frontmatter, file-backend vocabulary only) but never said how that classification lands on
 today's actually-resolved backend: as a GitHub label (`bug`+severity, `feature`+size, `task`+size),
