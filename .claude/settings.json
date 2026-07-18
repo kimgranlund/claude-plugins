@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Write(.claude/ops/watch-checkpoint.json)",
+      "Write(.claude/ops/friendlies.json)",
+      "Write(.claude/ops/held-items.md)",
+      "Write(.claude/ops/reports/*.md)"
+    ]
+  }
+}
