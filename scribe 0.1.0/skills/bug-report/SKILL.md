@@ -2,17 +2,18 @@
 name: bug-report
 description: >-
   Capture a user-reported bug — functional, structural, visual, or subjective — as a durable
-  bug-shaped record before any investigation starts, then dispatch the investigation (fork or
-  agent) under a mandatory write-back contract; closes the loss window raw `/fork bug-name ...`
-  leaves open. Runs intent-extract (literal report vs root cause/repro) and system-decompose
-  during capture, then records — doc-forge's TICKET path by default, or the workspace's ruled
-  git-native backend (`gh issue`) — and dispatches with the record as context. Run /bug-report
-  [raw report, or a TKT-/#issue id to resume], e.g. "/bug-report the export button does nothing
-  on Safari", "/bug-report #14". Human-timed; writes one record, then one investigation. NOT for
+  bug-shaped record before any investigation starts, then dispatch under a mandatory write-back
+  contract. Use when the user reports something broken,
+  gives a repro or wrong output, or flags a regression — "the export button does nothing on
+  Safari", "this crashes when I click X", "this used to work and now it doesn't". Runs
+  intent-extract and system-decompose during capture, then
+  records — doc-forge's TICKET path by default, or the workspace's ruled git-native backend
+  (`gh issue`) — and dispatches with the record as context. Also runs via /bug-report [raw
+  report, or a TKT-/#issue id]. Writes one record, then one investigation. NOT for
   a feature idea or build request (feature / orchestration's build); NOT for a generic
   chore/follow-up/task (issue); NOT for non-bug documents (doc-forge); NOT for reviewing a doc
   (doc-review); NOT for intent extraction outside a bug (intent-extract).
-disable-model-invocation: true
+disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw bug report, or a TKT-/#issue id to resume]"
 ---
@@ -52,8 +53,10 @@ record behind it.
 Invoke intent-extract on the raw report: separate the literal complaint from the root cause, and
 produce a repro (or the explicit statement "no fixed repro" for an intermittent or subjective
 report). Where intent-extract is not installed, apply its discipline inline — one batched round of
-clarifying questions, never more. Missing detail after that round does not block capture: write
-the ticket with what is known and name the gap in Classification, rather than delaying
+clarifying questions, never more, and only when a human is actually present to answer (a sibling
+redirect, a subagent dispatch, or a scheduled/unattended firing has no one to ask — skip straight
+to capture-with-gaps). Missing detail after the round, or no round at all, does not block capture:
+write the ticket with what is known and name the gap in Classification, rather than delaying
 persistence for completeness.
 
 ## Phase 3 — Classify
@@ -62,6 +65,15 @@ Invoke system-decompose (or apply its two-plane lens inline where not installed)
 the bug lands on — functional, structural, visual, subjective, or another named axis — and the
 specific component or plane it implicates. This is not a fixed enum: name the real axis: do not
 force-fit one of the four examples.
+
+On the FIRST classification only, the capture reveals no defect at all — a capability request
+("it should also do X"), or a generic chore/follow-up with nothing to reproduce → invoke `feature`
+or `issue` respectively via the Skill tool, carrying the seed; report which sibling was invoked
+and why; bug-report ends there — Phases 4–6 never run for a redirected seed. One hop only (the
+siblings' shared redirect rule, `issue`'s SKILL.md): a seed that arrives HERE already redirected
+from a sibling is captured regardless of fit — mint the `kind: bug` record anyway, naming the
+shape mismatch in Classification, per this skill's own named fallback in the shared rule. This
+skill's own redirect (above) never fires on a seed it did not originate the classification for.
 
 ## Phase 4 — Record
 
@@ -122,6 +134,10 @@ entry it owed the record.
 
 - Report too vague after one clarifying round → capture anyway (Phase 2); the gap becomes a
   Classification note, not a blocker.
+- Classification (Phase 3) finds no defect on the FIRST classification → invoke the correct
+  sibling via the Skill tool (Phase 3); never force a bug record onto non-bug work at this step.
+  A seed arriving already redirected from a sibling is captured here regardless of fit (the
+  one-hop rule's fallback, Phase 3) — this skill's own redirect never fires twice.
 - Named id does not resolve (file or issue) → treat as fresh (Phase 1); never proceed as if it
   existed.
 - Resume finds unprocessed Findings → Phase 6, not a second dispatch (Phase 1's named branch).
@@ -138,4 +154,7 @@ entry it owed the record.
 Done when a `kind: bug` record exists — a `doc-type: ticket` file on disk, or a labeled GitHub
 Issue whose URL was reported — carrying the report and classification, and either bug-report's own
 inline fix or the dispatched investigation has left at least one dated `## Findings` entry (file
-section or issue comment).
+section or issue comment) — OR the seed was redirected to `feature`/`issue` under the one-hop rule
+(first classification only) and the sibling invocation was reported; no bug record is owed on a
+redirected seed, and no build is dispatched BY THIS SKILL either way — a sibling reached by
+redirect runs its own contract, including its own build/no-build rule.

@@ -1,0 +1,25 @@
+{
+  "skill": "issue",
+  "note": "Routing corpus of record (minted 2026-07-17, when issue converted from command to procedural species so it and its two siblings — bug-report, feature — can invoke each other directly on a mis-routed ask instead of just pointing the user at a command). Positives: natural chore/follow-up/debt/task phrasings plus id-resume syntax. Negatives drawn adversarially from the two siblings (bug-shaped and feature-shaped asks must NOT trigger issue — that's exactly the routing collision this species conversion risks), plus doc-review, doc-authoring-standards, intent-extract, a build request, and forge's github-issue-pr-primitives (n11) — the maximum-collision neighbor given this skill's own name is literally 'issue', added per a fresh-context review's E2 finding (reciprocal to that pack's own fence back at this skill).",
+  "cases": [
+    {"id": "t01", "prompt": "note this down as a follow-up for later", "expect": "trigger"},
+    {"id": "t02", "prompt": "log this technical debt so we don't forget", "expect": "trigger"},
+    {"id": "t03", "prompt": "track this for later, low priority", "expect": "trigger"},
+    {"id": "t04", "prompt": "file a task for updating the changelog format", "expect": "trigger"},
+    {"id": "t05", "prompt": "/issue #19 done", "expect": "trigger"},
+    {"id": "t06", "prompt": "/issue #19 also cover negated rules", "expect": "trigger"},
+    {"id": "t07", "prompt": "resume tkt-0044 and check its status", "expect": "trigger"},
+    {"id": "t08", "prompt": "there's a chore here: rename this variable estate-wide eventually", "expect": "trigger"},
+    {"id": "n01", "prompt": "the export button does nothing on Safari", "expect": "no-trigger"},
+    {"id": "n02", "prompt": "this crashes when I click X", "expect": "no-trigger"},
+    {"id": "n03", "prompt": "can we add a dark mode", "expect": "no-trigger"},
+    {"id": "n04", "prompt": "what if we supported CSV export", "expect": "no-trigger"},
+    {"id": "n05", "prompt": "/bug-report #14", "expect": "no-trigger"},
+    {"id": "n06", "prompt": "/feature #17", "expect": "no-trigger"},
+    {"id": "n07", "prompt": "review this PRD against its own rubric", "expect": "no-trigger"},
+    {"id": "n08", "prompt": "what sections does a TICKET need in its frontmatter", "expect": "no-trigger"},
+    {"id": "n09", "prompt": "extract the root intent behind this ask", "expect": "no-trigger"},
+    {"id": "n10", "prompt": "build the dark mode feature now that it's sized", "expect": "no-trigger"},
+    {"id": "n11", "prompt": "does GitHub have a native way to type issues as bug vs feature now", "expect": "no-trigger"}
+  ]
+}
