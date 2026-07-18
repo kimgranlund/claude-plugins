@@ -109,7 +109,17 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.3 · assembled 2026-07-18 · 1.34.3: open-questions-sweep — a new procedural skill closing a
+v1.34.4 · assembled 2026-07-18 · 1.34.4: ops-issues' minted-record-shape restatement gained the
+git-native labeling clause it was missing — the Scope section named `kind: bug`/`kind: feature`
+(TICKET frontmatter, file-backend vocabulary only) but never said how that classification lands on
+today's actually-resolved backend: as a GitHub label (`bug`+severity, `feature`+size, `task`+size),
+exactly as `bug-report`/`feature`/`issue` already apply it. Found while answering a direct question
+about whether the issue/ticket-writing skills use labels for bug/feature/task context — the three
+scribe capture skills already did; this standing intake agent, the other place that mints directly
+against the resolved backend, had an incomplete restatement of the same contract. `issue` added to
+the named cross-plugin skill list alongside doc-authoring-standards/bug-report/feature. Pre-existing
+A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 87→92 lines — a WARN, not a
+gate FAIL; the added lines are the load-bearing fix, not restatable knowledge · v1.34.3 · assembled 2026-07-18 · 1.34.3: open-questions-sweep — a new procedural skill closing a
 gap this session's own baseline test confirmed: without it, Claude correctly recalls a session's
 unanswered questions and unconfirmed assumptions but dumps them as prose plus one open-ended
 follow-up instead of resolving them; the skill batches every qualifying item into ONE
