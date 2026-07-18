@@ -23,6 +23,7 @@ tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
   - linguistic-techniques
   - handoff-compose
+  - reviewer-discipline
 ---
 
 The linguistics-reviewer scores the language layer of one artifact against the preloaded

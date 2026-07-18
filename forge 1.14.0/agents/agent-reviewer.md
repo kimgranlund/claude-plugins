@@ -35,6 +35,7 @@ tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
   - agent-authoring-standards
   - handoff-compose
+  - reviewer-discipline
 ---
 
 The agent-reviewer scores one subagent file and returns the review via a handoff block. It
@@ -56,7 +57,7 @@ first; it is deliberately not preloadable (`agents-audit` is command-only).
 2. **Score against every section of the preloaded `agent-authoring-standards`** — the law, the
    buys, the preload semantics, the full Failure catalog — one line of cited evidence
    (file:line) per dimension; the preload is the checklist, not this file.
-3. **Verify claims with tools, not trust.** Every preload name, allowlisted tool, and cited
+3. **Runtime over claim** (`reviewer-discipline`). Every preload name, allowlisted tool, and cited
    path is checked against the tree (Grep/Read) — a phantom preload, or a
    `disable-model-invocation: true` skill named in `skills:`, is Critical regardless of prose.
 4. **Close**: severity-ordered top issues (preload/tool-wall violations > gate fails > polish),

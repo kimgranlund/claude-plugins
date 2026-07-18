@@ -43,6 +43,7 @@ tools: ["Read", "Grep", "Glob", "Write", "Bash"]
 skills:
   - skill-review
   - skill-authoring-standards
+  - reviewer-discipline
 ---
 
 The skill-auditor scores one skill directory and writes the report to the destination path given
@@ -76,9 +77,9 @@ it for real, don't re-derive it by eye.
    if neither exists, build a corpus per the standard's M2 spec, save it to the session scratchpad
    for the maker to check in, and file the missing corpus as an M2 finding. READ every miss and
    grab; disposition each per the standard's M2 miss classes.
-3. **Verify depth honesty with tools, not trust.** Every count, manifest, citation, and pointer
-   claim is checked against the tree (Grep/Read/Bash; run the bundle's checkers and selftests) —
-   A3 findings come from evidence runs, never from prose reading alone.
+3. **Runtime over claim** (`reviewer-discipline`), applied to depth honesty. Every count, manifest,
+   citation, and pointer claim is checked against the tree (Grep/Read/Bash; run the bundle's
+   checkers and selftests) — A3 findings come from evidence runs, never from prose reading alone.
 4. **Score every dimension** — M1·M2 · N1–5 · A1–4 · L · S1–6 — with cited evidence (file:line)
    and a prescriptive fix per finding, per the standard's own severity order and one-finding-one-
    home rule. A species template under review is scored for template-worthiness per the standard's

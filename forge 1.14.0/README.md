@@ -109,7 +109,26 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.6 · assembled 2026-07-18 · 1.34.6: pack-authoring-standards gains a canonical-reachability
+v1.34.7 · assembled 2026-07-18 · 1.34.7: reviewer-discipline (Issue #39) — a new cross-cutting
+skill piloted on 5 forge reviewer agents (agent-reviewer, plugin-reviewer, hook-reviewer,
+linguistics-reviewer, skill-auditor), encoding three reviewer-conduct priors confirmed absent from
+every reviewer/auditor agent in this workspace: evidentiary symmetry (a dismissal costs the same
+evidence as a confirmation), runtime over claim (a "fixed/shipped" claim is checked against the
+artifact, never accepted from a changelog), and steelman before filing (draft the maker's rebuttal
+before a finding ships; revise or drop what wouldn't survive it). A fourth candidate prior — an
+emoji verdict taxonomy — was explicitly rejected as competing with the estate's own ratified
+🟢/🟡/🔴 convention. Minted via skill-forge's full 6-phase gate: fresh-context FLOOR audit (PASS,
+4 minors triaged — a letter-vs-spirit gap between the Procedure and Output contract, a missing
+good-dismissal exemplar, a stale workspace-coupled identity clause, a naming-grammar nuance
+recorded not fixed since the name was already user-ratified); linguistic-techniques' potency pass
+(L1/L3/L6 gates, prohibition density more than halved with identical semantics); a 4-prompt
+behavior check comparing fresh-session baselines against with-skill reruns, including one
+genuinely neutral-framed prompt (no explicit "verify this" cue) that cleanly demonstrated all
+three disciplines firing unprompted — the real bar a preloaded skill needs to clear. The three
+target agents' pre-existing generic "verify claims with tools, not trust" steps now name the skill
+by handle instead of restating it (agent-reviewer.md, plugin-reviewer.md, skill-auditor.md);
+handoff-compose's eval suite gained the reciprocal fence-closure case (n14, renumbered same-change
+to avoid an id collision with open-questions-sweep's own n13 landed moments earlier) · v1.34.6 · assembled 2026-07-18 · 1.34.6: pack-authoring-standards gains a canonical-reachability
 check (Issue #40) — a "canonical" artifact must be reachable from every surface the estate actually
 builds for its class (consult table ≈ nav, INDEX ≈ corpus index, eval trigger phrasings ≈ generator
 input, `[[handle]]`/preload graph, frontmatter self-claim); a surface the estate doesn't build (a

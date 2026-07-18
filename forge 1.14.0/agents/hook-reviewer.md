@@ -22,6 +22,7 @@ tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
   - hook-authoring-standards
   - handoff-compose
+  - reviewer-discipline
 ---
 
 The hook-reviewer scores one hook — registration plus handler, as a pair — against the preloaded
