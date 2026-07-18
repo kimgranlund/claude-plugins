@@ -69,7 +69,15 @@ Each of the three skills ships `evals/evals.json`, converted from the pre-migrat
 `scripts/routing-corpus.json` positives/negatives into this workspace's `{skill, cases:[{id, prompt,
 expect}]}` schema (`eval_check.py` E1–E5).
 
-v0.7.2 · assembled 2026-07-17 · 0.7.2: concurrency-design — decide whether concurrent
+v0.7.3 · assembled 2026-07-18 · 0.7.3: concurrency-design gains async git-native coordination —
+the opaque-session actor-type row and its escalation step now cover the case where the other
+actor's work lives on a branch/PR/Issue with no live `SendMessage` channel: post a comment there
+(durable, visible to whoever looks next) in addition to, not instead of, asking the human. Grounded
+in a real incident: a repo-orchestrator session found three open PRs independently bumping the
+same plugin's version from the same base, two still owned by live background sessions with no
+teammate-message channel — resolved by posting the dependency on each PR rather than escalating
+each one to the human. New tools-table row (`gh pr comment`/`gh issue comment`), Output contract's
+Action enum extended, second worked example added · v0.7.2 · assembled 2026-07-17 · 0.7.2: concurrency-design — decide whether concurrent
 sessions/subagents touching one repo need git-tree isolation, and what to do when they collide
 anyway. Core uplift: baselines conflate three distinct actor types into "spawned vs. not"; this
 skill's three-way classification (subagent spawned this session, full control · a peer session

@@ -37,7 +37,7 @@ vs. not" is the single most common mistake:
 |---|---|---|
 | **Subagent you spawned this session** | You called `Agent`/`Task` for it | Full control: assign scope via `TaskList`, set `isolation:"worktree"` at dispatch, edit its brief directly |
 | **Peer session reachable as a named teammate** | It surfaces as a `<teammate-message>` sender in your transcript | Addressable via `SendMessage` — you can ask it directly what it's doing, whether it's done, whether it can commit |
-| **Opaque concurrent session** | Uncommitted diffs exist that no known actor claims | **No channel exists.** You cannot message it, cannot confirm its intent, cannot ask it to pause. The only remaining move is asking the human. |
+| **Opaque concurrent session** | Uncommitted diffs exist that no known actor claims, or its work lives on a branch/PR/Issue with no addressable owner in-session | **No live channel exists.** You cannot message it, cannot confirm its intent, cannot ask it to pause synchronously. If its work has a PR/Issue home, post a comment there — async, durable, visible to whoever looks next — before or alongside asking the human; a bare uncommitted-diff collision with no such home routes straight to the human. |
 
 A response that treats (b) as unreachable, or treats (c) as if it could be — is wrong before the
 rest of the decision even starts.
@@ -86,6 +86,13 @@ rest of the decision even starts.
      — losing them is a bug in HOW you resolve, not a reason to avoid resolving).
    - Opaque session → ask the human. Present what you found (which files, whose edits, how old);
      let them confirm sequencing, and proceed once — and only once — they have.
+   - Opaque session whose work lives on a branch/PR/Issue → post a comment there naming the
+     dependency, blocker, or finding (e.g. "this PR's version bump collides with #45/#46, land
+     first" or "found gap X here, flagging rather than pushing to your branch") — this is in
+     addition to, not instead of, asking the human when the coordination is urgent or the comment
+     goes unanswered. Git-native surfaces are the durable coordination channel this workspace
+     already treats as canonical for work items (ADR-0002); the same surface works for
+     inter-agent coordination, not only for recording decisions.
 5. Once cleared, re-verify the result — diff before/after to confirm nothing the other actor owned
    was silently dropped, not just that your own change landed.
 
@@ -95,7 +102,7 @@ rest of the decision even starts.
 Posture: <isolated | shared-tree — reason>
 Actors on the tree: <spawned subagent(s) | named teammate(s) | opaque session(s) | none>
 Collision: <none | files: X,Y,Z — actor: <type> — verified via: <git status/diff/mtime>>
-Action: <proceeded | escalated to: <teammate name via SendMessage | the user> | blocked>
+Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue comment: URL | the user> | blocked>
 ```
 
 ## References & tools
@@ -105,6 +112,7 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | the user> | 
 | `Agent` tool, `isolation:"worktree"` | Dispatching subagents that mutate files in parallel and could conflict |
 | `EnterWorktree` / `ExitWorktree` | Isolating the whole session — requires an explicit trigger (user or CLAUDE.md), never assumed |
 | `SendMessage` | The other actor is a named teammate (surfaced a `<teammate-message>`), not silence |
+| `gh pr comment` / `gh issue comment` | The other actor's work lives on a branch/PR/Issue but no live `SendMessage` channel reaches it — async, durable, git-native coordination |
 | A project's ticket status vocabulary (e.g. `open`/`doing`/`done`) | Cheap pre-flight check before claiming scope — see the project's own doc-authoring-standards, where one exists |
 | [[orchestration-design]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-design]] | The question is when the next turn fires, not who else is touching the tree |
@@ -129,6 +137,16 @@ later in the same task WAS a named teammate (a `<teammate-message>` sender) — 
 The reusable lesson isn't "worktrees would have prevented this" (true, but retrospective) — it's
 that the stop → classify → verify-independently → escalate-by-type sequence is the same regardless
 of whether isolation was set up in advance, and it degrades gracefully when it wasn't.
+
+**A second worked example (async sequencing, no live collision at all):** a repo-orchestrator
+session surveyed four open PRs and found three independently bumping the same plugin's version
+number from the same base — two of them each still owned by a live background session with no
+`<teammate-message>` channel to either. There was no file collision to stop (each PR's own
+worktree was clean) — the coordination need was purely about merge ORDER. The fix wasn't asking
+the human per PR: it was posting one comment on each affected PR naming the dependency ("this
+version bump collides with #45/#46 — land first"), then waiting. Durable, visible to whichever
+session or human looks next, and it doesn't consume the human's attention for something two
+sessions can resolve async once the dependency is named where both can see it.
 
 **Done** when a concurrency-touching task states its posture (isolated or knowingly shared) before
 starting, and — if a collision surfaces — names the actor type, the independent verification, and
