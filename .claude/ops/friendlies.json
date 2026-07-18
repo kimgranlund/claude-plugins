@@ -3,11 +3,17 @@
   "repo": "kimgranlund/claude-plugins",
   "bootstrapped_at": "2026-07-18T17:33:02Z",
   "bootstrap_note": "First-ever ops-issues firing, no prior allow-list existed. Seeded with the repo owner/maintainer only: every one of the 16 issues and 20 PRs in the repo's full history (verified via `gh issue list --state all` / `gh pr list --state all`, 2026-07-18) was authored by kimgranlund, who is also the GitHub repo owner (`gh repo view` owner.login), the ADR-0002/ADR-0003 ratifying maintainer (both ADRs record 'ratified: maintainer, in-session AskUserQuestion'), and the local git user (Kim Granlund). No other author has ever filed against this repo, so no one else can be evidenced as friendly yet -- the next unfamiliar author is correctly held, not guessed onto this list.",
+  "policy": {
+    "collaborator_rule": "hold-first-filing",
+    "confirmed_by": "kimgranlund",
+    "confirmed_at": "2026-07-18T17:45:56Z",
+    "note": "REQ-011 bootstrap interview (interactive AskUserQuestion, 2026-07-18): private repo, both approved collaborators offered as candidates. Owner confirmed the roster as kimgranlund only -- mgrabovskyi deliberately NOT pre-seeded; their first filing is held per REQ-007 and approval adds them per REQ-008. Standing rule for future collaborators: hold-first-filing (repo access alone never auto-lists an author). Allow-list membership affects only hold-vs-mint (REQ-012): no PR, issue, or ticket is ever auto-actioned for any author."
+  },
   "friendlies": [
     {
       "login": "kimgranlund",
       "added_at": "2026-07-18T17:33:02Z",
-      "reason": "repo owner / maintainer -- bootstrap seed, evidenced by 36/36 historical issues+PRs and both ADR ratifications"
+      "reason": "repo owner / maintainer -- bootstrap seed, evidenced by 36/36 historical issues+PRs and both ADR ratifications; roster confirmed by the owner in the 2026-07-18 REQ-011 bootstrap interview"
     }
   ]
 }

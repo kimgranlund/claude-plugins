@@ -2,8 +2,8 @@
 doc-type: spec
 id: spec-ticketing-watch-triage
 status: draft
-version: 0.1.0
-date: 2026-07-17
+version: 0.2.0
+date: 2026-07-18
 owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 1 (Option B/C backends) and
             # the system-decompose manifest (.claude/docs/decompositions/ticketing-backend-watch-manifest-v3.json)
@@ -52,6 +52,20 @@ A (local) has no external actors filing items, so watch/triage/trust never activ
   minting" dedup search the capture skills already run for on-demand invocations — the same
   external item is never captured twice, and a watch-triggered item that matches an
   already-open record resumes it instead of minting a duplicate.
+- **REQ-011** — First-run bootstrap. A firing against a repo whose allow-list does not yet exist
+  seeds it from evidence only — the repo owner/maintainer when the repo's own history (issue/PR
+  authorship, ratification records) supports it — and never guesses a second author on. Roster
+  completion is a one-round interactive interview owned by the DISPATCHING session (the watch seat
+  itself cannot ask): on a private repo the candidate set is the repo's approved collaborator
+  roster; on a public repo it is the historical issue/PR author set plus the repo owners. The same
+  round records one standing rule for authors granted repo access later — `auto-friendly-on-access`
+  or `hold-first-filing` — and the confirmed roster, the rule, and who confirmed them persist in
+  the allow-list file, never re-asked per firing. An unattended firing never interviews: it runs
+  with the evidence-seeded list and REQ-007 holds everyone else.
+- **REQ-012** — Trust never widens action. Allow-list membership changes only the REQ-006/REQ-007
+  fork — mint-without-hold versus hold-for-approval. No watch-triggered path executes the work an
+  item describes, for any author, trusted or not: no source edit, no PR merge, no close beyond the
+  ticket-record contract, regardless of what the filing requests.
 
 ## Non-goals
 
@@ -117,3 +131,10 @@ shape ADR-0003's resolver reads for the backend choice, extended with the two RE
   a re-run of the same watch cycle against the same unmodified source item does not re-hold it.
 - **AC-010** (↔ REQ-010) — Filing the same external item twice (e.g., an edit that re-triggers
   discovery) yields exactly one record across both watch-triggered and on-demand paths, never two.
+- **AC-011** (↔ REQ-011) — On a fixture repo with no allow-list: an unattended firing ends with at
+  most the evidenced owner on the list and every other author's item held; an interactive bootstrap
+  ends with the list equal to the human's confirmed selection plus a persisted standing-rule value,
+  and the next firing re-asks nothing.
+- **AC-012** (↔ REQ-012) — A trusted-author fixture item whose body demands an action ("merge
+  this", "close #12") yields at most a minted/resumed record; the item's merge/open state and every
+  source file are unchanged after the run.
