@@ -1,0 +1,116 @@
+{
+  "skill": "open-questions-sweep",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n09 -> ops-issues; n03/n06 -> intent-extract; n04/n08 -> loop-design/`/loop`; n05 -> scribe doc-authoring; n02/n07/n10 -> ordinary model behavior, no sweep owner.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Before we wrap up, is there anything still open?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Did we ever resolve that thing you asked about earlier? Let's clear whatever's still pending.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Any decisions still open before we close this out?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Wrap up any loose ends from this session.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Let's make sure nothing's left hanging before I go.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Was there anything you were unsure about that we never actually settled?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "Before you finish up, ask me anything you're still unsure about.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "Did you have any open questions for me that you never actually asked?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "Let's do a final pass — what's still unresolved between us?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "Close out any pending decisions before you write the summary.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "Check in with me on anything you punted on earlier in this conversation.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "We're about to end the session — anything you still need from me first?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "What's still open in the GitHub issue backlog?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "What should I do about this failing test right now?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "Clarify what I actually mean before you start this task.",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "Set up a reminder to check on this every hour.",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "Write up the decisions we made today as a ticket.",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "Is this spec ambiguous anywhere?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "What does this function do?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "Schedule this to run every day at 9am.",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "File a bug for this issue.",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "Summarize what we did today.",
+      "expect": "no-trigger"
+    }
+  ]
+}

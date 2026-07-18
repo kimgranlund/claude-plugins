@@ -18,6 +18,7 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `agents/skill-auditor` | Agent | spawned | Fresh-context reviewer; preloads skill-review + standards; returns report by file |
 | `skills/linguistic-techniques` | Declarative skill (hybrid) | model-only | The language layer beneath every prompt-carrying artifact: twelve techniques, potency rubric (L1–L10), `potency_lint.py`; skill-forge Phase 4 runs its Audit |
 | `skills/intent-extract` | Procedural skill | both (`/intent-extract`) | Root-intent extraction: literal ask vs goal, delta taxonomy, batched multiple-choice forks, the Resolved Intent contract |
+| `skills/open-questions-sweep` | Procedural skill | both (`/open-questions-sweep`) | Clears a session's backlog of unresolved items — an unanswered question, an unconfirmed assumption, a stray idea left undecided — into one batched AskUserQuestion round instead of a prose dump nobody actually resolves |
 | `skills/system-decompose` | Procedural skill | both (`/system-decompose`) | Two-plane decomposition (OUTSIDE-IN × INSIDE-OUT) with five domain references and the deterministic `coverage_check.py` gate |
 | `skills/agent-authoring-standards` | Declarative skill | model-only | Agent files: thin-shell law, preload semantics, tool walls, cold-start language; doubles as fan-out audit criteria |
 | `skills/agent-forge` | Command | user-only (`/agent-forge`) | Fork-vs-agent gate → dispatch interview → thin-shell draft → language pass → lint + spawn smoke test |
@@ -108,7 +109,18 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.2 · assembled 2026-07-18 · 1.34.2: ops-issues first-run bootstrap contract (spec-ticketing-
+v1.34.3 · assembled 2026-07-18 · 1.34.3: open-questions-sweep — a new procedural skill closing a
+gap this session's own baseline test confirmed: without it, Claude correctly recalls a session's
+unanswered questions and unconfirmed assumptions but dumps them as prose plus one open-ended
+follow-up instead of resolving them; the skill batches every qualifying item into ONE
+AskUserQuestion round (built via `/forge:intent-extract` → `/skill-forge`, which corrected the
+original ask's "knowledge skill" framing to procedural — it changes behavior, it isn't reference
+content). Reciprocal no-trigger fences added to intent-extract and orchestration's loop-design
+(both named in its own NOT-clauses) plus handoff-compose (an auditor-flagged near-miss on
+session-close vocabulary); ops-issues is an agent, not a skill, so that fence stands
+unreciprocated by mechanism, not oversight. FLOOR audit: PASS, two minor fixes applied (the
+ops-issues fence broadened to cover backlog queries, a user-declines-the-round failure branch
+added) · v1.34.2 · assembled 2026-07-18 · 1.34.2: ops-issues first-run bootstrap contract (spec-ticketing-
 watch-triage 0.2.0, REQ-011/REQ-012) — a firing with no `friendlies.json` seeds evidence-only (the
 repo owner/maintainer when historical authorship proves it, never a guessed second author) and
 returns roster candidates for the DISPATCHING session's one AskUserQuestion round (private repo →

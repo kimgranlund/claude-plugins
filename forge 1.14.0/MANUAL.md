@@ -63,6 +63,9 @@ Install, then `/reload-plugins`. Everything below is invoked as `/forge:<name>` 
 **`intent-extract`** — separate the literal ask from the root goal before acting: surface ambiguities and conflicting signals, resolve them with low-effort multiple-choice questions, restate the task sharper.
 > "figure out what this ticket is actually asking for" · "improve this prompt brief" · `/intent-extract`
 
+**`open-questions-sweep`** — clears a session's backlog of unresolved items (an unanswered question, an unconfirmed assumption, a stray idea left undecided) into one batched AskUserQuestion round, instead of a prose dump nobody actually resolves. Fires on its own at a session's natural closing point; also invocable directly.
+> "before we wrap up, is there anything still open" · "any decisions still open before we close this out" · `/open-questions-sweep`
+
 **`system-decompose`** — break any system down along two crossing planes (whole→parts × actions→surfaces) and verify they cover each other. For architectures, UX, goals — not for knowledge-pack split decisions (that's skill-decompose).
 > "decompose this feature into parts" · "my acceptance criteria don't map to any task"
 

@@ -121,6 +121,12 @@
       "id": "n12",
       "prompt": "another Claude session has uncommitted changes to files I need to edit",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "Before we wrap up, is there anything still open?",
+      "expect": "no-trigger",
+      "comment": "owner: forge's open-questions-sweep — a one-off end-of-session sweep of unresolved items, not a scheduled/interval continuation pattern"
     }
   ]
 }
