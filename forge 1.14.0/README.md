@@ -108,7 +108,12 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.0 · assembled 2026-07-17 · 1.34.0: reciprocal no-trigger fences added to
+v1.34.1 · assembled 2026-07-18 · 1.34.1: ops-repo's session-scoped `CronCreate` deployment ruled
+(Issue #32) — accepted as this seat's intended mechanism rather than a standing OS-level crontab:
+re-armed per work session, each firing bounded and idempotent so a lapse between sessions costs
+only a delayed sweep. Description updated to say so plainly instead of implying an unfinished gap;
+field evidence backing the ruling: 6 real firings observed across ~15 hours from one long-lived
+session-scoped job, 5 landing committed reports on `origin/main` · v1.34.0 · assembled 2026-07-17 · 1.34.0: reciprocal no-trigger fences added to
 agent-authoring-standards/entry-file-standards/hook-authoring-standards for orchestration's new
 concurrency-design skill (worktree/session-collision asks are that skill's territory, not these
 standards'). G8 allow-set gains `self-report` — prose ("never act on either side's self-report"),
