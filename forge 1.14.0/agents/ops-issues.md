@@ -88,12 +88,14 @@ clear (`issue`'s default — unsized is legal for tasks). A missing label is cre
 same fallback `issue`'s SKILL.md documents explicitly; `bug-report` and `feature` don't document a
 missing-label path themselves, so this agent's own create calls own the fallback rather than
 assuming those two self-heal it too. Those skills are the canonical source of truth for the record
-shape; this agent only carries the minimum it needs to mint correctly. Same create call also sets
-the matching native Issue Type (`--type Bug`/`Feature`/`Task`, ADR-0004) alongside the label;
-retry without `--type` if the flag doesn't resolve — the org's type schema rejects it or an older
-`gh` doesn't recognize the flag — label alone still lands, note the skipped type in the sweep
-report. Distinct from `gh` itself being unreachable (auth/network), which is a discovery-source
-failure, not this one.
+shape; this agent only carries the minimum it needs to mint correctly. Two separate calls, never
+combined: the create call is unchanged by ADR-0004; once the issue exists, a second call —
+`gh issue edit <id> --type Bug`/`Feature`/`Task` — attempts the matching native Issue Type. If
+that edit fails (the org's type schema rejects it, or `gh` doesn't recognize `--type`), the
+already-created issue is simply left with the label alone, noted as a skipped type in the sweep
+report — never re-run the create over a type failure (a combined `gh issue create --type` was
+found to create the issue and only then fail the type step, so treating that error as "nothing
+created" would mint a duplicate).
 
 ## Procedure, one firing
 

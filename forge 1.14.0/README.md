@@ -109,27 +109,42 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.11 · assembled 2026-07-19 · 1.34.11: ADR-0005 ticket-claim protocol — ops-repo gains a
-read-only, propose-only stale-claim check (where the workspace rules ADR-0005): inventory now also
-reads claimed-ticket state, a new `stale-claim` classification joins stale-open/orphaned, never
-auto-reclaimed. Prompted by a same-day near-miss (two independent sessions almost duplicating
-Issue #44's own implementation, caught only by incidental worktree inspection) — the ADR adds
-`claim` as a seventh backend-resolver operation (scribe) and cross-references concurrency-design
-(orchestration) as the ticket-layer check beneath its existing git-tree collision response ·
-v1.34.10 · assembled 2026-07-19 · 1.34.10: ADR-0004 dual-write, implemented (Issue #44) —
-`ops-issues`' own mint call gains the same Issue-Type-alongside-label treatment its sibling
-scribe skills now carry (`--type Bug|Feature|Task`, fallback to label-only if the org's type
-schema doesn't resolve, skipped type noted in the sweep report). `github-issue-pr-primitives`'
-`bug-task-feature-mapping-nuances.md` gains a dated update answering ADR-0004's own two "Open
-verification items": `gh issue create --type` is directly supported, and Issue Types is
-organization-scoped — this workspace's repo is personal-account-owned with zero types configured,
-confirmed via a live probe. An independent agent-reviewer FLOOR pass (fresh context) found the
-sibling scribe skills' own fallback wording too narrow — "the org's type schema doesn't resolve"
-missed an older `gh` that doesn't recognize `--type` at all — broadened here too (and across the
-three scribe skills, same-change): a `--type` resolution failure, whichever cause, is its own
-fallback (retry without the flag, stay git-native), distinct from `gh` itself being unreachable.
-Pre-existing A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 95→100 lines — a
-WARN, not a gate FAIL; same precedent as 1.34.4's own labeling fix, the added lines are
+v1.34.12 · assembled 2026-07-19 · 1.34.12: ADR-0004 dual-write, corrected — v1.34.10 (below)
+shipped a real bug, found and fixed same-day: a combined `gh issue create --type <Kind>` call was
+verified to create the issue and only THEN fail the type-attach step, silently (no URL printed on
+that error) — proven by a leftover test issue (`#51`, closed once found). That makes "retry the
+same create without `--type`" unsafe: a partially-succeeded create retried blind mints a
+duplicate. `ops-issues` and all three scribe capture skills (`bug-report`/`feature`/`issue`) are
+rewritten to two separate calls, never combined: the existing `gh issue create` (unchanged, no
+`--type`, ever), then — once the id is known — a second, independent `gh issue edit <id> --type
+Bug|Feature|Task`; a failure there leaves the already-created issue with the label alone, no
+duplication risk, since the create step never carries the parameter that could partially fail.
+`github-issue-pr-primitives`'s `bug-task-feature-mapping-nuances.md` and `doc-authoring-standards`
+both corrected to match. This landed as a follow-up PR rather than a v1.34.10 amendment: v1.34.10
+was already merged (by the maintainer, from a green CI run) before this fix could be pushed to the
+same PR — the ledger entry below is left as an accurate record of what v1.34.10 actually shipped,
+not rewritten · v1.34.11 · assembled 2026-07-19 · 1.34.11: ADR-0005 ticket-claim protocol —
+ops-repo gains a read-only, propose-only stale-claim check (where the workspace rules ADR-0005):
+inventory now also reads claimed-ticket state, a new `stale-claim` classification joins
+stale-open/orphaned, never auto-reclaimed. Prompted by a same-day near-miss (two independent
+sessions almost duplicating Issue #44's own implementation, caught only by incidental worktree
+inspection) — the ADR adds `claim` as a seventh backend-resolver operation (scribe) and
+cross-references concurrency-design (orchestration) as the ticket-layer check beneath its existing
+git-tree collision response · v1.34.10 · assembled 2026-07-19 · 1.34.10: ADR-0004 dual-write,
+implemented (Issue #44) — `ops-issues`' own mint call gains the same Issue-Type-alongside-label
+treatment its sibling scribe skills now carry (`--type Bug|Feature|Task`, fallback to label-only
+if the org's type schema doesn't resolve, skipped type noted in the sweep report).
+`github-issue-pr-primitives`' `bug-task-feature-mapping-nuances.md` gains a dated update answering
+ADR-0004's own two "Open verification items": `gh issue create --type` is directly supported, and
+Issue Types is organization-scoped — this workspace's repo is personal-account-owned with zero
+types configured, confirmed via a live probe. An independent agent-reviewer FLOOR pass (fresh
+context) found the sibling scribe skills' own fallback wording too narrow — "the org's type schema
+doesn't resolve" missed an older `gh` that doesn't recognize `--type` at all — broadened here too
+(and across the three scribe skills, same-change): a `--type` resolution failure, whichever cause,
+is its own fallback (retry without the flag, stay git-native), distinct from `gh` itself being
+unreachable. **Superseded same-day by v1.34.12 above** — this design turned out unsafe; see that
+entry. Pre-existing A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 95→100
+lines — a WARN, not a gate FAIL; same precedent as 1.34.4's own labeling fix, the added lines are
 load-bearing, not restatable knowledge · v1.34.9 · assembled 2026-07-18 · 1.34.9: `/eval-run forge` + `/eval-run orchestration` tuning —
 a 493-case blind-judge routing simulation across all 9 installed plugins found 16 failures across
 10 suites (477/493 passed, 18/28 suites clean). Fixed 9 of them at the description layer: three
