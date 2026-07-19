@@ -44,7 +44,31 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.18.1 · assembled 2026-07-18 · 0.18.1: `research-methods` gains a reciprocal NOT-for fence
+v0.19.0 · assembled 2026-07-19 · 0.19.0: ADR-0004 dual-write, implemented (Issue #44) —
+`bug-report`/`feature`/`issue`'s Option-B create call becomes `gh issue create --type
+Bug|Feature|Task` alongside the existing label, with the ADR's own fallback discipline (retry
+without `--type`, label alone still lands, skipped type noted in the close-out) — additive, label
+stays system of record. `doc-authoring-standards` gains a new "Issue Type dual-write" section
+carrying the contract all three skills point back to. Both of ADR-0004's own "Open verification
+items" answered and recorded in `github-issue-pr-primitives`' knowledge pack: `gh issue create
+--type` is directly supported (no raw GraphQL needed), and Issue Types is confirmed
+organization-scoped — this workspace's own repo (`kimgranlund/claude-plugins`, a personal
+User-owned account) has zero Issue Types configured, verified via a live `gh issue create --type
+Bug` probe that GitHub rejected before creating anything. This repo's own dual-write will always
+take the label-only fallback path until/unless it transfers to an organization; the
+implementation remains correct and portable to org-owned repos running these same skills.
+Independent skill-auditor review (all four scribe touch points, fresh context) caught a real
+MAJOR: the pre-existing "`gh` fails partway → fall back to file backend" Failure branch could
+have swallowed a `--type` rejection and abandoned git-native entirely — which would fire on
+EVERY mint in this repo (zero Issue Types). Fixed same-change in all three capture skills plus
+doc-authoring-standards' canon: a `--type` resolution failure (org schema rejects it, or an older
+`gh` doesn't recognize the flag) is explicitly carved out as its own fallback — retry without
+`--type`, stay on git-native — distinct from a genuine `gh`-unreachable failure. Also added the
+`type:` key (a documented top-level field, verified against GitHub's own issue-form schema) to
+all three `.github/ISSUE_TEMPLATE/*.yml` files, closing the gap the audit found in their own
+"mirrors this contract" claim. `doc-authoring-standards` also gained a one-line fix for a
+pre-existing gap the new section surfaced: `kind: task` was referenced but never defined
+alongside `kind: bug`/`kind: feature` · v0.18.1 · assembled 2026-07-18 · 0.18.1: `research-methods` gains a reciprocal NOT-for fence
 against forge's `reasoning-orders` — a cross-plugin `/eval-run` pass found "how do I know if this
 improvement claim is real or just relabeling" stolen by research-methods when it should have
 routed to reasoning-orders (a judgment call about claim genuineness, not a measured investigation

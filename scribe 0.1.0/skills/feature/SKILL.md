@@ -103,10 +103,13 @@ build's write-back.
   location-and-naming rule, never written under a plugin's own installed directory — frontmatter
   `doc-type: ticket, kind: feature`, `size: small | big` in FRONTMATTER, machine-read — /build
   branches on it). Run `doc_lint.py` — fix until clean; an unlintable record is not a captured one.
-- **Option B (git-native):** `gh issue create` — title = the Summary line; body = the sections
-  above as `##` headings; labels `feature` + `size:small`/`size:big` (the machine-read size lives
-  in the label). The section contract is this skill's own gate here (doc_lint validates files, not
-  issues): an issue missing a required section is not a captured record.
+- **Option B (git-native):** `gh issue create --type Feature` — title = the Summary line; body =
+  the sections above as `##` headings; labels `feature` + `size:small`/`size:big` (the
+  machine-read size lives in the label), and sets the native Issue Type `Feature` (ADR-0004;
+  fallback: retry without `--type` if the org's type schema doesn't resolve — label alone still
+  lands, note the skipped type in the close-out). The section contract is this skill's own gate
+  here (doc_lint validates files, not issues): an issue missing a required section is not a
+  captured record.
 - **Option C (external, e.g. Linear):** the resolved adapter's `create` operation
   (`doc-authoring-standards` references/linear-adapter.md for Linear; a bring-your-own adapter
   documents its own) — the same payload contract mapped onto that backend's native fields, `size`
@@ -156,7 +159,11 @@ give one. The skill already present → skip silently.
 - Index bootstrap declined → the pointer line, nothing else this session.
 - Workspace rules git-native but `gh` fails partway through a run → fall back to the file backend for THIS
   record, say so, and note the migration in the record — never leave the idea uncaptured because
-  the preferred store was unreachable (bug-report's rule, shared).
+  the preferred store was unreachable (bug-report's rule, shared). `--type` not resolving is NOT
+  this failure, whether the org's type schema rejects it ("type X not found") or an older `gh`
+  doesn't recognize the flag at all ("unknown flag") — it's the ADR-0004 fallback (Phase 5): retry
+  the same `gh issue create` without `--type`, stay on git-native, never drop to the file backend
+  over a missing Issue Type alone.
 - Workspace rules Option C but the adapter operation fails partway (auth, API error, MCP
   disconnect) → same fallback discipline, to the file backend for that operation, noted in the
   record.

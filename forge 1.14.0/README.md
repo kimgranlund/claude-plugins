@@ -109,7 +109,21 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.9 · assembled 2026-07-18 · 1.34.9: `/eval-run forge` + `/eval-run orchestration` tuning —
+v1.34.10 · assembled 2026-07-19 · 1.34.10: ADR-0004 dual-write, implemented (Issue #44) —
+`ops-issues`' own mint call gains the same Issue-Type-alongside-label treatment its sibling
+scribe skills now carry (`--type Bug|Feature|Task`, fallback to label-only if the org's type
+schema doesn't resolve, skipped type noted in the sweep report). `github-issue-pr-primitives`'
+`bug-task-feature-mapping-nuances.md` gains a dated update answering ADR-0004's own two "Open
+verification items": `gh issue create --type` is directly supported, and Issue Types is
+organization-scoped — this workspace's repo is personal-account-owned with zero types configured,
+confirmed via a live probe. An independent agent-reviewer FLOOR pass (fresh context) found the
+sibling scribe skills' own fallback wording too narrow — "the org's type schema doesn't resolve"
+missed an older `gh` that doesn't recognize `--type` at all — broadened here too (and across the
+three scribe skills, same-change): a `--type` resolution failure, whichever cause, is its own
+fallback (retry without the flag, stay git-native), distinct from `gh` itself being unreachable.
+Pre-existing A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 92→100 lines — a
+WARN, not a gate FAIL; same precedent as 1.34.4's own labeling fix, the added lines are
+load-bearing, not restatable knowledge · v1.34.9 · assembled 2026-07-18 · 1.34.9: `/eval-run forge` + `/eval-run orchestration` tuning —
 a 493-case blind-judge routing simulation across all 9 installed plugins found 16 failures across
 10 suites (477/493 passed, 18/28 suites clean). Fixed 9 of them at the description layer: three
 `git-campaign-workflows` leaks (bare action-imperatives — "delete this branch", "pull the

@@ -82,7 +82,7 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 | LLD | How it's built: components, interfaces, tradeoffs | versioned contract | Components · Interfaces · Data · Risks |
 | PLAN | Sequenced steps, each with "done when" and a status | living state | Steps · Validation · Rollback |
 | ROADMAP | Horizons of intent, reviewed on a cadence | living state | Now · Next · Later |
-| TICKET | One shippable unit, traced to spec IDs (bug reports: `kind: bug`, see below) | work item | Summary · Acceptance · Links |
+| TICKET | One shippable unit, traced to spec IDs (`kind: bug`/`feature`, see below; `kind: task` — a generic chore/follow-up, `issue`'s own convention, no dedicated section needed beyond this row) | work item | Summary · Acceptance · Links |
 | TASK | One actor, one sitting, one done-when | work item | Goal · Done-when |
 
 **Which type?** Route by the question being answered: recording a decision → ADR; why build →
@@ -111,6 +111,21 @@ minimum: Scope/Open (the intake's named gaps) and Findings (same append-only dat
 discipline as bug tickets — the build's write-back lands here). Scribe's `/feature` mints and
 updates these; big features link their earned PRD/SPEC/LLD through the standard Links section,
 never inline.
+
+## Issue Type dual-write (Option B, ADR-0004)
+
+On the git-native backend, `kind: bug`/`kind: feature`/`kind: task` also sets GitHub's native
+Issue Type (`Bug`/`Feature`/`Task`) at create time, in addition to the label each capture skill
+already applies — additive, not a replacement: the label stays the system of record, Issue Type
+is best-effort. `bug-report`, `feature`, `issue`, and `ops-issues` (forge) each attempt `gh issue
+create --type <Kind>`; if `--type` doesn't resolve — the org's type schema rejects it (renamed,
+disabled, or, the verified case for a personal-account-owned repo: no Issue Types at all, an
+organization-scoped feature — 2026-07-19), or an older `gh` doesn't recognize the flag — the call
+retries without `--type`, the label alone still lands, and the skipped type is noted in the
+close-out. Never blocks or fails a mint over a missing type; this is a distinct failure from `gh`
+itself being unreachable (auth/network), which stays the existing git-native → file-backend
+fallback. Size (`size: small | big`) stays a label; migrating it to GitHub's newer Issue Fields is
+an explicit non-goal (ADR-0004).
 
 ## Work-item backend delegation (ADR-0003)
 

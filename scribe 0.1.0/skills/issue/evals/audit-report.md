@@ -198,3 +198,107 @@ Auditor: fresh-context skill-auditor, 2026-07-16. Lint run: `skill_lint.py` → 
 1. Rewrite intent.md's P5 entry to record reality; re-gate after fixes (finding 1 — blocking).
 2. Make the resume grammar executable: verb = whole trailing text, single token, `wontfix <reason>` exception (findings 2+6 — one edit).
 3. Add the closed-record guard and the real handoff mechanism; open a sibling-side change for the reciprocal fences (findings 3, 4, 5).
+
+---
+---
+
+# Audit — /issue (scribe) · ADR-0004 Issue-Type dual-write · floor depth · fresh context
+
+Skill: scribe 0.1.0/skills/issue/SKILL.md · Standards: skill-authoring-standards · Lint: clean
+Verdict: PASS (0 blocking, 0 major, 0 minor, 2 nit — ship as-is; no fix owed before merge)
+
+Reviewed: SKILL.md (153 lines, post-edit), `git diff HEAD` (single hunk, Phase 4 Option-B bullet
+only — SKILL.md:113–119), `.claude/docs/adr/0004-issue-types-for-bug-feature-task.md` (accepted,
+ratified 2026-07-18), the 2026-07-19 verification update in forge's
+`github-issue-pr-primitives/references/bug-task-feature-mapping-nuances.md` (this worktree's
+diff), and the parallel clauses in bug-report:94–96, feature:106–109,
+doc-authoring-standards:115–123, ops-issues.md:92–93 (grep-level, siblings audited separately).
+Auditor: fresh-context skill-auditor, 2026-07-18. Lint run: `skill_lint.py` → `clean` (exit 0).
+Frontmatter/description untouched by this edit → no same-change evals.json obligation, no
+/eval-run owed.
+
+## Criteria table
+
+| ID | Verdict | Severity | Evidence (file:line) | Fix |
+|----|---------|----------|----------------------|-----|
+| R1 | PASS | — | Three new load-bearing lines all survive deletion: `--type Task` (:113 — delete it and ADR-0004 Decision 1 is unimplemented); the retry-without-`--type` fallback (:115–116 — delete it and the mint FAILS on this very repo, which is personal-account-owned and has no Issue Types per the 2026-07-19 verification); "note the skipped type in the close-out" (:117 — delete it and the skip is silent, contra ADR Decision 4's "reports the Issue Type as skipped") | — |
+| R2 | PASS | — | Description untouched by this edit; triggers ("note this down as a follow-up", "log this technical debt", "file a task for X" :7–9) and fences (bug-report/feature//build/doc-forge :12–15) unchanged; prior audit's blocking description fix verified still in place (:9–12, three-backend phrasing) | — |
+| R3 | PASS | — | Dials unchanged (:16–17), species story unchanged; the edit adds a mint-mechanism clause, no species pressure | — |
+| R4 | PASS | nit | New clause instantiates ("sets", "retry", "note the") rather than describes; lint W7 clean. Nit: subject splice — the bullet's nominal list ("title = …; body = …; labels …") pivots to a verb phrase ("and sets the native Issue Type") whose subject is the command, and `--type Task` (:113) restates as prose (:115). See finding 1 | optional |
+| R5 | PASS | nit | The dual-write canon lives in doc-authoring-standards:115–123 and this bullet is its named instantiation (:104–105 "TICKET contract is the canon, this line its instantiation" — the drift-pair annotation already covers the new clause). The fallback sentence is near-verbatim across the four consuming files, but that is ADR-0004's own prescribed shape ("four files, one line each, same shape") | — |
+| R6 | PASS | — | Whole file ≈2.3K tokens; the new clause sits inside Phase 4, well inside the head; no tail growth | — |
+| R7 | PASS | — | The fallback is a named, inline failure branch with a checkable trigger ("the org's type schema doesn't resolve") and a reporting duty (close-out note). Interaction with the generic git-native branch (:134–135, `gh` fails partway → file backend) is specific-before-generic and safe: the 2026-07-19 probe verified GitHub validates the type and rejects BEFORE creating anything, so the retry cannot double-mint. Done-when (:145) stays anchored on the `task` LABEL, correctly not the type — a mint is never blocked over a missing type, exactly ADR Decision 4 | — |
+| R8 | PASS | — | "retry without `--type`" is one bounded retry, not "retry until"; label set unchanged and exact (`task` + `size:small`/`size:big`) | — |
+
+## Dispatch answers, condensed
+
+1. **Natural extension or bolted on?** Natural, with one seam. The clause threads into the
+   existing bullet's grammar (the labels clause gains "…, and sets the native Issue Type `Task`"),
+   the parenthetical carries the ADR citation + fallback in the same register as the file's other
+   inline fallbacks, and the sentence order (mint mechanics → fallback → label-creation rule →
+   section gate) is untouched. The seam: `--type Task` appears twice — in the command string
+   (:113) and as prose (:115) — and the prose verb "sets" splices a verb phrase into a nominal
+   list. Identical shape in bug-report:94–96 and feature:106–109, so it is a deliberate
+   four-file parallel, not a local accident. Nit, not a defect (finding 1).
+2. **Accurate against ADR-0004 Decisions 1 and 4?** Yes, fully. Decision 1: type set at
+   `gh issue create` time, in addition to the label, same payload contract — matched exactly
+   (:113–115; labels clause intact, additive). Decision 4: label stays system of record, create
+   succeeds on label alone, skip reported, never blocks a mint — matched exactly (:115–117), and
+   the Done-when predicate (:145 "a `task`-labeled record exists") structurally enforces
+   never-block by not requiring the type. Bonus: the ADR's two open verification items are now
+   answered and recorded (reference update 2026-07-19: `--type` exists on gh 2.96.0; this repo is
+   personal-account-owned with NO Issue Types) — the skill's hardcoded `--type Task` is grounded,
+   not the unverified-platform-claim class the ADR warned about. Non-goals respected: size stays
+   a label (:114), dedup (Phase 3, :97–100) untouched.
+3. **Phase 1 status-verb bullet untouched?** Confirmed mechanically: `git diff HEAD` shows exactly
+   one hunk (`@@ -110,11 +110,13 @@`), entirely inside the Phase 4 Option-B bullet. Phase 1's
+   status-advance arm (:49–60, doing/done/wontfix — `doing` = a label, closes, wontfix reason) is
+   byte-identical to the pre-edit file. Correctly so: ADR-0004 governs the create-time kind axis
+   (Bug/Feature/Task); doing/done/wontfix is the separate status axis and GitHub Issue Types
+   carry no status semantics — no edit was owed there and none landed.
+4. **Dangling refs / overclaims / fallback collision?** None. "ADR-0004" resolves
+   (`.claude/docs/adr/0004-issue-types-for-bug-feature-task.md`, status accepted), cited bare
+   exactly as ADR-0002 already is in this file (:32). No overclaim: every platform claim in the
+   clause is backed by the 2026-07-19 empirical probe. The two fallbacks coexist cleanly because
+   they remedy different scopes with correctly different verbs: labels are REPO-scoped and
+   creatable, so "created once (`gh label create`), not worked around" (:117–118); types are
+   ORG-ADMIN-scoped and NOT creatable by the skill, so "retry without" — no duplication, no
+   conflict, and the wording keeps them in separate sentences. The close-out contract (:127)
+   absorbs the new "skipped type" note without contradiction (it enumerates a minimum, not an
+   exhaustive list).
+
+## Findings, severity-ordered
+
+**1. NIT — intra-bullet double statement of the type mechanism.** SKILL.md:113 (`--type Task` in
+the command) + :115 ("and sets the native Issue Type `Task`" in prose). The prose clause earns
+its place — it carries the ADR citation and hosts the fallback parenthetical, which the command
+string cannot — but a fused form ("…the `--type` sets the native Issue Type (ADR-0004; fallback:
+…)") would say it once. Shared verbatim-shape with bug-report and feature: any rewording is a
+three-file (plus ops-issues) change or none. Leave as-is.
+
+**2. NIT — "the org's type schema" presupposes an organization.** SKILL.md:116. The verified live
+case for THIS workspace (reference update 2026-07-19) is a personal-account-owned repo with no
+Issue Types at all — no org, no schema. The phrase still routes correctly (no org ⇒ the schema
+trivially doesn't resolve ⇒ fallback fires), and the canon home spells the personal-account case
+out explicitly (doc-authoring-standards:121–123), so the thin instantiation here is the right
+layering. Same phrase in all four consuming files — a wording fix, if ever taken, lands
+four-wide or not at all. Leave as-is.
+
+## Cross-sibling expectation (per the dispatch)
+
+No fix is owed here, so nothing propagates as a defect. Both nits are shared-shape observations
+(the four files carry the identical clause deliberately); if a sibling auditor grades the
+subject-splice or the "org's" presupposition harsher, the resolution must land in all four files
+plus the doc-authoring-standards canon in one change, not per-skill. The safety fact worth
+echoing to the siblings: the retry-without-`--type` fallback is double-mint-safe ONLY because
+GitHub validates the type before creating anything — that guarantee is recorded in
+bug-task-feature-mapping-nuances.md's 2026-07-19 update and is the load-bearing ground under all
+four fallback clauses.
+
+## Top 3
+
+1. Nothing blocks — merge as-is; both findings are nits on a deliberate four-file parallel shape.
+2. If any sibling audit rewords the fallback clause, land it four-wide + canon in one change
+   (findings 1–2 are shared shapes, not local defects).
+3. Keep the 2026-07-19 verification update (reference file) in the same PR — it is the evidence
+   that `--type Task` is not an unverified platform claim and that the retry is double-mint-safe.

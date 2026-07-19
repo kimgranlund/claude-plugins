@@ -110,11 +110,13 @@ when any) · an empty `## Findings` section** for dated write-backs.
 - **Option A (local/file backend):** mint the TICKET via doc-forge's TICKET path — frontmatter
   `doc-type: ticket, kind: task` — and run `doc_lint.py` until clean; an unlintable record is not
   a captured one.
-- **Option B (git-native):** `gh issue create` — title = the Summary line; body = the sections as
-  `##` headings; labels `task` + `size:small`/`size:big` where the size is clear (unsized is
-  legal for tasks). Missing labels in the repo are created once (`gh label create`), not worked
-  around. The section contract is this skill's own gate here: an issue missing a required
-  section is not a captured record.
+- **Option B (git-native):** `gh issue create --type Task` — title = the Summary line; body = the
+  sections as `##` headings; labels `task` + `size:small`/`size:big` where the size is clear
+  (unsized is legal for tasks), and sets the native Issue Type `Task` (ADR-0004; fallback: retry
+  without `--type` if the org's type schema doesn't resolve — label alone still lands, note the
+  skipped type in the close-out). Missing labels in the repo are created once (`gh label create`),
+  not worked around. The section contract is this skill's own gate here: an issue missing a
+  required section is not a captured record.
 - **Option C (external, e.g. Linear):** the resolved adapter's `create` operation
   (`doc-authoring-standards` references/linear-adapter.md for Linear; a bring-your-own adapter
   documents its own) — the same payload contract mapped onto that backend's native fields, `size`
@@ -130,7 +132,11 @@ this skill stops; that ordering is the contract.
 ## Failure branches
 
 - Backend ruled git-native but `gh` fails partway → fall back to the file backend for THIS
-  record, say so, note the migration in the record (the shared sibling rule).
+  record, say so, note the migration in the record (the shared sibling rule). `--type` not
+  resolving is NOT this failure, whether the org's type schema rejects it ("type X not found") or
+  an older `gh` doesn't recognize the flag at all ("unknown flag") — it's the ADR-0004 fallback
+  (Phase 4): retry the same `gh issue create` without `--type`, stay on git-native, never drop to
+  the file backend over a missing Issue Type alone.
 - Backend ruled Option C but the adapter operation fails partway (auth, API error, MCP
   disconnect) → same fallback discipline, to the file backend for that operation, noted in the
   record.
