@@ -2,16 +2,16 @@
 name: knowledge-harvest
 description: >-
   Detects when a fact crosses the bar for durable project knowledge — a correction restated a
-  third time, a ratified ADR/ticket/SPEC decision never captured as reusable knowledge, a
-  high-impact convention worth keeping on first mention — and turns it into this workspace's
-  knowledge-pack format (SKILL.md + references + routing-corpus + evals), always via an
-  AskUserQuestion confirmation carrying the concrete plan before writing. Use for "this is the
-  third time I've explained X", "should this become a skill or reference", "is this actually
-  project knowledge or just noise", "scan our docs for knowledge we haven't captured yet", or
-  "check if our harvested knowledge is still accurate". NOT for authoring the actual reference
-  content once a plan is confirmed (knowledge-forge); NOT for the two-plane decomposition behind a
-  brand-new skill's design (system-decompose); NOT for running the structural or routing gates
-  directly (release_gate.py, /eval-run).
+  third time, a ratified decision never captured as reusable knowledge, a high-impact convention
+  worth keeping on first mention — turns it into a knowledge-pack (SKILL.md + references +
+  routing-corpus + evals), via an AskUserQuestion confirming the plan before writing. Use for
+  "third time I've explained X", "skill or reference?", "is this knowledge or noise", "scan our
+  docs for uncaptured knowledge", "is our harvested knowledge still accurate", "did this citation
+  go stale, the file moved", "is there already a reference covering this", or "propose a plan for
+  capturing this decision before we write". NOT authoring content once confirmed (knowledge-forge);
+  NOT a new skill's decomposition (system-decompose); NOT running gates directly (release_gate.py,
+  /eval-run); NOT the decision record itself — an ADR IS a decision, this decides whether a fact
+  FROM one earns a knowledge-pack entry (doc-authoring-standards).
 disable-model-invocation: false
 user-invocable: true
 ---

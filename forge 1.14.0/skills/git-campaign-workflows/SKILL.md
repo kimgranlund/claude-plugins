@@ -6,12 +6,12 @@ description: >-
   a cited, dated corpus of real incidents. Use for "gh reports a post-merge checkout error", "did
   the remote branch actually get deleted", "pull without clobbering a parallel session's work",
   "a git command said it worked but nothing changed", "solo commit or a full campaign", "resolve
-  a stash-pop conflict safely". Covers worktree placement/discard safety, merge semantics (the
-  ten-branch delete-failure class, CI as the gate), the silent-failure catalog (verify by
-  re-reading, never a command's print), the reconcile protocol, and the ADR-0002 decision tree.
-  ANSWERS from a cited corpus. NOT for authoring/reviewing skills/agents/hooks/plugins (the
-  `*-authoring-standards` family); NOT for running a campaign end-to-end (CLAUDE.md); NOT for
-  actually running the checks (the sibling scripts mechanize what's documented here).
+  a stash-pop conflict safely". Covers discard safety, merge semantics (ten-branch delete-failure
+  class, CI as gate), the silent-failure catalog (verify by re-reading, never a command's print),
+  the reconcile protocol, and the ADR-0002 decision tree. ANSWERS; never performs a git op on
+  request — "delete this branch", "pull the latest", "merge and clean up" — sibling scripts or
+  plain git/gh do that. NOT for authoring/reviewing skills/agents/hooks/plugins (the
+  `*-authoring-standards` family); NOT running a campaign end-to-end (CLAUDE.md).
 disable-model-invocation: false
 user-invocable: false
 ---

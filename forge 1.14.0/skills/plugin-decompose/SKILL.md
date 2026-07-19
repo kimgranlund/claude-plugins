@@ -2,16 +2,16 @@
 name: plugin-decompose
 description: >-
   Analyze an existing harness surface — a folder of skills (plus agents, hooks, scripts), one
-  oversized plugin, or several scattered ones — and decide how it should partition into 1–5
-  manageable, portable, composable plugins. Use when: "which plugins should these skills become",
+  oversized plugin, or several scattered ones — decide how it partitions into 1–5 manageable,
+  portable, composable plugins. Use when: "which plugins should these skills become",
   "partition our .claude folder into plugins", "should this mega-plugin be several smaller ones",
-  "can these skills and hooks be divided into portable domains", "group this grab-bag into
-  installable units", "what is missing from this plugin corpus", "run a gap analysis on this
-  plugin family". Direction-agnostic: fewer plugins than today is a merge verdict, more is a
-  split, same tests either way. Frontmatter + structure is sufficient input (surface_map.py
-  extracts the dependency graph). NOT for one knowledge corpus splitting into packs
-  (skill-decompose); NOT greenfield family design (plugin-forge); NOT releasing or structuring a
-  single plugin (plugin-release / plugin-authoring-standards).
+  "group this grab-bag into installable units", "what is missing from this plugin corpus", "run a
+  gap analysis on this plugin family". Direction-agnostic: fewer plugins is a merge verdict, more
+  is a split, same tests either way. Frontmatter + structure suffices (surface_map.py extracts the
+  dependency graph). NOT for one corpus splitting into packs (skill-decompose); NOT greenfield
+  family design — "create a plugin with all the skills related to X" builds new, not partitions
+  existing (plugin-forge); NOT releasing/structuring a single plugin (plugin-release /
+  plugin-authoring-standards); NOT a periodic health sweep — "audit the harness" (harness-audit).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[surface-root]"

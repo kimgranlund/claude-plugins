@@ -1,19 +1,18 @@
 ---
 name: github-issue-pr-primitives
 description: >-
-  Answers what GitHub's Issue, Pull Request, Discussion, and Projects v2 primitives actually ARE
-  and how they behave — a cited corpus grounded 2026-07-17, not recalled knowledge. Use for
-  "issue vs. discussion", "does GitHub have native issue types now", "sub-issue or task-list
-  checkbox", "does Closes #N work with squash merge", "draft PR reviewers", "is Projects v2 a real
-  backend or just a view", "sub-issue nesting depth", "when a linked PR closes its issue". Covers
-  Issue Types and Issue Fields vs. labels; sub-issues vs. the retired tasklist-block feature; the
-  nine closing keywords and the merge-strategy gap GitHub's docs leave open; draft-PR/review/
-  CODEOWNERS/required-checks/merge-queue mechanics; Projects v2's GraphQL-only structure. ANSWERS
-  from a cited corpus. NOT for this workspace's OWN git worktree/merge/campaign mechanics
-  (`git-campaign-workflows`, same plugin); NOT for the TICKET/ADR/SPEC contract itself (scribe's
-  `doc-authoring-standards`); NOT for the ADR-0002 ruling itself (states platform facts a future
-  ADR would cite, does not decide); NOT for filing or closing a work item
-  (`bug-report`/`feature`/`issue`, scribe).
+  Answers what GitHub's Issue, PR, Discussion, and Projects v2 primitives actually ARE and how
+  they behave — a cited corpus grounded 2026-07-17, not recalled knowledge. Use for
+  "issue vs. discussion", "native issue types", "sub-issue vs task-list checkbox", "Closes #N with
+  squash merge", "draft PR reviewers", "is Projects v2 a real backend", "sub-issue nesting depth",
+  "when a linked PR closes its issue". Covers Issue Types/Fields vs. labels; sub-issues vs. the
+  retired tasklist-block; the nine closing keywords and the merge-strategy gap GitHub's docs leave
+  open; draft-PR/review/CODEOWNERS/required-checks/merge-queue; Projects v2's GraphQL-only
+  structure. NOT this workspace's OWN git
+  worktree/merge/campaign mechanics (`git-campaign-workflows`); NOT the TICKET/ADR/SPEC contract
+  (scribe's `doc-authoring-standards`); NOT deciding — "should this repo use a git-native or local
+  ticketing backend" — states facts a future ADR cites, never decides; NOT filing/closing a
+  work item (`bug-report`/`feature`/`issue`, scribe).
 disable-model-invocation: false
 user-invocable: false
 ---

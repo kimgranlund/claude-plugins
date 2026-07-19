@@ -44,7 +44,11 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.18.0 · assembled 2026-07-18 · 0.18.0: README artifact-table species sweep — `bug-report`,
+v0.18.1 · assembled 2026-07-18 · 0.18.1: `research-methods` gains a reciprocal NOT-for fence
+against forge's `reasoning-orders` — a cross-plugin `/eval-run` pass found "how do I know if this
+improvement claim is real or just relabeling" stolen by research-methods when it should have
+routed to reasoning-orders (a judgment call about claim genuineness, not a measured investigation
+with a scorer); fixed at both skills, re-verified passing · v0.18.0 · assembled 2026-07-18 · 0.18.0: README artifact-table species sweep — `bug-report`,
 `feature`, and `issue` were converted from Command to Procedural species on 2026-07-17 (so the
 three siblings could invoke each other directly on a mis-routed ask) but their rows here still
 read Command/user-only, a stale-record debt a fresh-context skill-auditor review of a sibling

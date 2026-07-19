@@ -69,7 +69,12 @@ Each of the three skills ships `evals/evals.json`, converted from the pre-migrat
 `scripts/routing-corpus.json` positives/negatives into this workspace's `{skill, cases:[{id, prompt,
 expect}]}` schema (`eval_check.py` E1–E5).
 
-v0.7.3 · assembled 2026-07-18 · 0.7.3: concurrency-design gains async git-native coordination —
+v0.7.4 · assembled 2026-07-18 · 0.7.4: `/eval-run orchestration` tuning — a full blind-judge
+routing pass (all 4 suites, against the estate's full 96-skill menu) found `orchestration-design`
+leaking on two whole-corpus-audit phrasings ("audit the agent team for duplicates", "do my agents
+leverage the right skills") despite an existing skills-audit/agents-audit fence that wasn't
+landing on this exact wording — both added verbatim to the NOT-for clause and re-verified passing
+via a second blind-judge pass · v0.7.3 · assembled 2026-07-18 · 0.7.3: concurrency-design gains async git-native coordination —
 the opaque-session actor-type row and its escalation step now cover the case where the other
 actor's work lives on a branch/PR/Issue with no live `SendMessage` channel: post a comment there
 (durable, visible to whoever looks next) in addition to, not instead of, asking the human. Grounded
