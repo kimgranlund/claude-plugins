@@ -109,6 +109,13 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
+v1.34.11 · assembled 2026-07-19 · 1.34.11: ADR-0005 ticket-claim protocol — ops-repo gains a
+read-only, propose-only stale-claim check (where the workspace rules ADR-0005): inventory now also
+reads claimed-ticket state, a new `stale-claim` classification joins stale-open/orphaned, never
+auto-reclaimed. Prompted by a same-day near-miss (two independent sessions almost duplicating
+Issue #44's own implementation, caught only by incidental worktree inspection) — the ADR adds
+`claim` as a seventh backend-resolver operation (scribe) and cross-references concurrency-design
+(orchestration) as the ticket-layer check beneath its existing git-tree collision response ·
 v1.34.10 · assembled 2026-07-19 · 1.34.10: ADR-0004 dual-write, implemented (Issue #44) —
 `ops-issues`' own mint call gains the same Issue-Type-alongside-label treatment its sibling
 scribe skills now carry (`--type Bug|Feature|Task`, fallback to label-only if the org's type
@@ -121,7 +128,7 @@ sibling scribe skills' own fallback wording too narrow — "the org's type schem
 missed an older `gh` that doesn't recognize `--type` at all — broadened here too (and across the
 three scribe skills, same-change): a `--type` resolution failure, whichever cause, is its own
 fallback (retry without the flag, stay git-native), distinct from `gh` itself being unreachable.
-Pre-existing A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 92→100 lines — a
+Pre-existing A4 thin-shell WARN (agents/ops-issues.md, cap 60) unchanged in kind, 95→100 lines — a
 WARN, not a gate FAIL; same precedent as 1.34.4's own labeling fix, the added lines are
 load-bearing, not restatable knowledge · v1.34.9 · assembled 2026-07-18 · 1.34.9: `/eval-run forge` + `/eval-run orchestration` tuning —
 a 493-case blind-judge routing simulation across all 9 installed plugins found 16 failures across

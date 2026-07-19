@@ -68,7 +68,15 @@ rest of the decision even starts.
      small, per gate-green unit of work, independent of whether you're isolating.
 3. Where a project already has ticket status (`open`/`doing`/`done` or equivalent), check it before
    claiming file-level scope — it's a cheaper signal than any git inspection and catches the case
-   where the collision hasn't produced a diff yet.
+   where the collision hasn't produced a diff yet. Where the backend supports an explicit `claim`
+   operation (write identity + re-read to confirm it wasn't outraced, ADR-0005 where installed),
+   that's the ticket-layer check to run before starting — this skill's own collision response
+   below starts only once a git-tree collision already exists or is imminent; `claim` is the layer
+   underneath it that stops two independent agents from starting the *same* ticket in the first
+   place. A clean `claim` doesn't retire this skill's own checks: the ticket layer and the
+   git-tree layer catch different failures — duplicate work on one ticket vs. two *different*
+   tickets that happen to touch the same file, which a clean claim on each side can't prevent and
+   this skill's own collision response still has to catch.
 
 ## Respond (a collision is discovered mid-task)
 
@@ -114,6 +122,7 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | `SendMessage` | The other actor is a named teammate (surfaced a `<teammate-message>`), not silence |
 | `gh pr comment` / `gh issue comment` | The other actor's work lives on a branch/PR/Issue but no live `SendMessage` channel reaches it — async, durable, git-native coordination |
 | A project's ticket status vocabulary (e.g. `open`/`doing`/`done`) | Cheap pre-flight check before claiming scope — see the project's own doc-authoring-standards, where one exists |
+| scribe's backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
 | [[orchestration-design]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-design]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-standards` (forge) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |

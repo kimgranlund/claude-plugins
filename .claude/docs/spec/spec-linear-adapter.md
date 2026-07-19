@@ -2,7 +2,7 @@
 doc-type: spec
 id: spec-linear-adapter
 status: draft
-version: 0.2.0
+version: 0.3.0
 date: 2026-07-18
 owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 3 (Linear ships as a concrete,
@@ -22,14 +22,23 @@ and post-dispatch status-check logic needs to resolve an adapter-native id to a 
 REQ named the operation that does this — the five-operation list (REQ-001) was silently missing
 its sixth, load-bearing member. v0.1.0's REQ-001 through REQ-009 are otherwise unchanged.
 
+**v0.3.0 amendment (2026-07-19):** REQ-011/AC-011 added. ADR-0005 extends the backend-resolver's
+operation set with `claim` — a ticket-layer primitive independent agents use to take ownership of
+an existing record before starting execution work against it, prompted by a same-day incident
+where two independent sessions nearly duplicated the same work with no mechanism to detect the
+collision before it happened (see ADR-0005's Context). REQ-001 through REQ-010 are otherwise
+unchanged.
+
 ## Requirements
 
-- **REQ-001** — Interface conformance. The Linear adapter implements the same six operations the
-  local and git-native adapters implement — create, dedup-search, update, close, discover
-  (REQ-009), and read (REQ-010) — behind the backend resolver (ADR-0003 Decision 2), so capture
-  skills (`bug-report`/`feature`/`issue`) and the watch loop (`spec-ticketing-watch-triage`
-  REQ-003) call it identically to the other two adapters, with no Linear-specific branch in their
-  own logic.
+- **REQ-001** — Interface conformance. The Linear adapter implements the same seven operations the
+  local and git-native adapters implement — create, dedup-search, claim (REQ-011), update, close,
+  discover (REQ-009), and read (REQ-010) — behind the backend resolver (ADR-0003 Decision 2), so
+  capture skills (`bug-report`/`feature`/`issue`) and the watch loop
+  (`spec-ticketing-watch-triage` REQ-003) call it identically to the other two adapters, with no
+  Linear-specific branch in their own logic. `claim` has no caller among the three capture skills
+  today — they file and update records, they do not execute one — so this requirement binds the
+  adapter's own conformance, not a present integration.
 - **REQ-002** — Transport preference. The adapter uses Linear's MCP server when the workspace has
   it connected; it falls back to Linear's GraphQL API (with a workspace-supplied API key) when no
   MCP connection is available — Linear has no REST surface, so GraphQL is the only fallback.
@@ -82,6 +91,18 @@ its sixth, load-bearing member. v0.1.0's REQ-001 through REQ-009 are otherwise u
   investigation posted a Findings entry while it ran. Distinct from dedup-search (REQ-005, matches
   a candidate by content) and discover (REQ-009, enumerates by checkpoint): read resolves one
   already-known id to its full record.
+- **REQ-011** — Claim (ADR-0005). The adapter exposes a `claim` operation: set the caller's own
+  identity as the issue's assignee, transition it to the team's configured `started`-type state
+  (REQ-007's cached map), and post a comment recording the caller's identity, a timestamp, and the
+  branch name it is about to create — the ticket-layer coordination primitive independent agents
+  use to avoid duplicate work before a git-tree collision would ever surface. The caller MUST
+  re-read the issue (REQ-010) immediately after claiming and treat an earlier-timestamped claim
+  comment from a different identity as having won the race; a caller that loses the race abandons
+  its own claim (does not revert the assignee/state it just wrote — see AC-011) and selects a
+  different item instead. `claim` never blocks on a missing prior state — an already-`started`,
+  unassigned issue is still claimable, matching ADR-0005's staleness-reclaim allowance. Distinct
+  from `update` (REQ-004-adjacent, folds in arbitrary detail) and `create` (mints a new record):
+  `claim` only ever targets a record that already exists and is not yet exclusively owned.
 
 ## Non-goals
 
@@ -151,3 +172,12 @@ time — the shape `spec-ticketing-watch-triage` REQ-003 consumes.
   does not exist on the configured team, read reports not-found rather than throwing an unhandled
   exception, and the calling skill treats that exactly as it treats an unresolved `tkt-####`/`#NN`
   id — a fresh item, never a crash.
+- **AC-011** (↔ REQ-011) — Calling claim against an open, unclaimed fixture issue sets its assignee
+  and transitions its state, and appends exactly one claim comment; reading it back (REQ-010)
+  immediately afterward returns that same claim as current. Given a fixture where an
+  earlier-timestamped claim comment from a different identity already exists on the same issue,
+  the losing caller's own re-read surfaces that earlier comment — the adapter's own contract ends
+  at "write, then let REQ-010 read back truthfully"; race arbitration is the caller's
+  responsibility, not adapter-side logic. A claim call against an issue with no prior state
+  (unassigned, not yet `started`) succeeds identically to one against a previously-claimed-then-
+  reclaimed issue — claim never refuses on account of missing prior state.

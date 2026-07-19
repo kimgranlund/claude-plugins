@@ -44,7 +44,14 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.19.0 · assembled 2026-07-19 · 0.19.0: ADR-0004 dual-write, implemented (Issue #44) —
+v0.20.0 · assembled 2026-07-19 · 0.20.0: ADR-0005 ticket-claim protocol — `claim` added as a
+seventh backend-resolver operation (`references/backend-resolver.md`) alongside
+create/dedup-search/update/close/discover/read: write identity + in-progress state + a dated claim
+comment, then re-read to confirm the claim wasn't outraced. Linear's realization added
+(`references/linear-adapter.md`; `spec-linear-adapter.md` amended to v0.3.0, REQ-011/AC-011).
+`doc-authoring-standards`' backend-delegation section updated to name the seventh operation.
+Defines the primitive only — `bug-report`/`feature`/`issue` are capture-only and are not required
+to call it; a future ticket-executing agent is `claim`'s first real caller · v0.19.0 · assembled 2026-07-19 · 0.19.0: ADR-0004 dual-write, implemented (Issue #44) —
 `bug-report`/`feature`/`issue`'s Option-B create call becomes `gh issue create --type
 Bug|Feature|Task` alongside the existing label, with the ADR's own fallback discipline (retry
 without `--type`, label alone still lands, skipped type noted in the close-out) — additive, label
