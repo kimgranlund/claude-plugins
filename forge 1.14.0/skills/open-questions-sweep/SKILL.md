@@ -10,7 +10,9 @@ description: >-
   scheduled firing with no one to answer. NOT for resolving ambiguity before
   starting a task (intent-extract); NOT for a scheduled/interval reminder (loop-design / `/loop`);
   NOT for querying, tracking, or filing work items in an external tracker (ops-issues); NOT for
-  producing a persisted decision record or ticket afterward (a separate, heavier ask).
+  producing a persisted decision record or ticket afterward (a separate, heavier ask); NOT for a
+  git worktree's own uncommitted state, findings, or knowledge capture before a session ends
+  (orchestration's session-close — a different axis: repo state, not conversation loose ends).
 disable-model-invocation: false
 user-invocable: true
 ---

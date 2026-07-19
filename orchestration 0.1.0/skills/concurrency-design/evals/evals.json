@@ -1,6 +1,6 @@
 {
   "skill": "concurrency-design",
-  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the three fenced siblings' own trigger vocabulary: orchestration-design (solo-vs-team, wiring, fan-out), loop-design (/goal, /loop continuation), and forge's hook-authoring-standards/entry-file-standards/agent-authoring-standards (harness-mechanics authoring once a rule is already decided).",
+  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the fenced siblings' own trigger vocabulary: orchestration-design (solo-vs-team, wiring, fan-out), loop-design (/goal, /loop continuation), forge's hook-authoring-standards/entry-file-standards/agent-authoring-standards (harness-mechanics authoring once a rule is already decided), and session-close (n10 — this session's own worktree close-out, not a peer-collision question).",
   "cases": [
     {
       "id": "t01",
@@ -105,6 +105,11 @@
     {
       "id": "n09",
       "prompt": "dispatch the disjoint same-tree fan-out for these three builders",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "wrap up this session before we're done — check for anything left to capture in the worktree",
       "expect": "no-trigger"
     }
   ]

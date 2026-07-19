@@ -1,0 +1,28 @@
+{
+  "skill": "session-close",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n02 -> concurrency-design; n03 -> ExitWorktree (tool, no skill owner); n04 -> ops-repo (agent, no evals to reciprocate against); n05 -> knowledge-harvest; n06 -> open-questions-sweep; n07 -> bug-report; n08 -> issue; n09/n10/n11 -> ordinary model behavior, no sweep owner; n12 -> doc-review/code-review.",
+  "cases": [
+    { "id": "t01", "prompt": "Wrap up this session before we're done.", "expect": "trigger" },
+    { "id": "t02", "prompt": "Close this out — check for anything left to capture.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Before you exit, make sure nothing's left uncaptured.", "expect": "trigger" },
+    { "id": "t04", "prompt": "I'm about to end this session, prepare to close it out.", "expect": "trigger" },
+    { "id": "t05", "prompt": "Clean up before ending — capture whatever's real.", "expect": "trigger" },
+    { "id": "t06", "prompt": "Make sure nothing's left hanging in the worktree before I go.", "expect": "trigger" },
+    { "id": "t07", "prompt": "We're wrapping up — write up anything worth keeping first.", "expect": "trigger" },
+    { "id": "t08", "prompt": "Before you stop, check if there's a PR or issue we should file from this session.", "expect": "trigger" },
+    { "id": "t09", "prompt": "Session's done on my end — anything to write up before you close?", "expect": "trigger" },
+    { "id": "t10", "prompt": "Finish this out properly before you stop — don't just leave things mid-work.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Is my worktree colliding with a peer session's uncommitted changes?", "expect": "no-trigger" },
+    { "id": "n02", "prompt": "Should I isolate this in a worktree before dispatching subagents?", "expect": "no-trigger" },
+    { "id": "n03", "prompt": "Remove this worktree, I'm done with it.", "expect": "no-trigger" },
+    { "id": "n04", "prompt": "Sweep the whole repo for stale worktrees and dangling branches.", "expect": "no-trigger" },
+    { "id": "n05", "prompt": "Harvest this fact into a knowledge pack.", "expect": "no-trigger" },
+    { "id": "n06", "prompt": "Before we wrap up, is there anything still open between us — any question you never got an answer to?", "expect": "no-trigger" },
+    { "id": "n07", "prompt": "File a bug for this crash.", "expect": "no-trigger" },
+    { "id": "n08", "prompt": "Log this as a follow-up task for later.", "expect": "no-trigger" },
+    { "id": "n09", "prompt": "What's still open in the issue tracker?", "expect": "no-trigger" },
+    { "id": "n10", "prompt": "Commit this change.", "expect": "no-trigger" },
+    { "id": "n11", "prompt": "Open a PR for this fix.", "expect": "no-trigger" },
+    { "id": "n12", "prompt": "Review this PR before we merge it.", "expect": "no-trigger" }
+  ]
+}

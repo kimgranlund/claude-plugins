@@ -15,6 +15,8 @@ reviews a feature. Assembled by a `plugin-decompose` partition of `~/.claude/ski
 | `skills/orchestration-design` | Declarative skill | both | Design or review how skills, subagents, and teams compose, and the YAML frontmatter that wires them — unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate |
 | `skills/loop-design` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
 | `skills/concurrency-design` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
+| `skills/session-close` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through bug-report/feature/issue, triggers knowledge-harvest's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
+| `hooks/hooks.json` (`SessionEnd`) | Hook | automatic | Passive safety net for `session-close`: on actual session termination, logs a durable warning line if a git worktree was left dirty or unpushed — `SessionEnd` cannot block, so this never gates, only records |
 | `skills/build` | Command skill | user-only (`/build`) | Record-first build: finds or mints the feature record (running scribe's `/feature` intake inline on a miss), sizes the dispatch by the solo-first floors (small → host inline / one sealed fork; big → the floored seats), drives it under a mandatory Findings write-back, closes the loop on the ticket |
 | `agents/orchestration-coordinator` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
 | `agents/system-planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
@@ -65,11 +67,27 @@ been materialized as a real, self-contained copy so the skill's Review step
 
 ## Evals
 
-Each of the three skills ships `evals/evals.json`, converted from the pre-migration library's
-`scripts/routing-corpus.json` positives/negatives into this workspace's `{skill, cases:[{id, prompt,
-expect}]}` schema (`eval_check.py` E1–E5).
+Each model-invocable skill ships `evals/evals.json` in this workspace's `{skill, cases:[{id, prompt,
+expect}]}` schema (`eval_check.py` E1–E5); the original three converted from the pre-migration
+library's `scripts/routing-corpus.json` positives/negatives, `session-close`'s authored fresh at
+mint.
 
-v0.7.5 · assembled 2026-07-19 · 0.7.5: `concurrency-design` cross-references ADR-0005's ticket-claim
+v0.7.6 · assembled 2026-07-19 · 0.7.6: new `session-close` skill — wraps up a session's own git
+worktree before it ends: checks mechanical git state, routes real findings through
+bug-report/feature/issue, triggers knowledge-harvest's detection pass for a durable lesson, verifies
+every write via read-back before counting it, and states a mandatory two-shape verdict (a
+captured-items list or a single clean line — never silence, never a manufactured write to fill the
+silence). Paired with a new, non-blocking `SessionEnd` hook (`hooks/hooks.json` +
+`scripts/session_end_worktree_check.py`) that logs a durable warning if a worktree is left dirty or
+unpushed at real session termination — a separate, secondary artifact, since `SessionEnd` carries no
+decision control and cannot gate anything (verified against Claude Code's own hook docs before
+building it, correcting an earlier plan that assumed otherwise). Fresh-context audit
+(skill-auditor, FLOOR): 1 blocking finding fixed (a clean-tree fast path was skipping the
+knowledge-harvest scan too, not just the git-side capture) and 2 majors fixed (an unanchored trigger
+phrase collided with `open-questions-sweep`'s own eval case; this intent record had been advanced
+past gates not yet actually run). Reciprocal NOT-for fences added: `concurrency-design` (this
+plugin) and forge's `open-questions-sweep`, each gaining a return no-trigger case in its own
+`evals/evals.json` · v0.7.5 · assembled 2026-07-19 · 0.7.5: `concurrency-design` cross-references ADR-0005's ticket-claim
 protocol — one boundary note added to its existing ticket-status pre-flight check (Decide step 3)
 and one References & tools row: `claim` (scribe, where installed) prevents two independent agents
 from starting the SAME ticket, one layer beneath this skill's own git-tree collision response,
