@@ -115,16 +115,21 @@ never inline.
 ## Issue Type dual-write (Option B, ADR-0004)
 
 On the git-native backend, `kind: bug`/`kind: feature`/`kind: task` also sets GitHub's native
-Issue Type (`Bug`/`Feature`/`Task`) at create time, in addition to the label each capture skill
-already applies — additive, not a replacement: the label stays the system of record, Issue Type
-is best-effort. `bug-report`, `feature`, `issue`, and `ops-issues` (forge) each attempt `gh issue
-create --type <Kind>`; if `--type` doesn't resolve — the org's type schema rejects it (renamed,
-disabled, or, the verified case for a personal-account-owned repo: no Issue Types at all, an
-organization-scoped feature — 2026-07-19), or an older `gh` doesn't recognize the flag — the call
-retries without `--type`, the label alone still lands, and the skipped type is noted in the
-close-out. Never blocks or fails a mint over a missing type; this is a distinct failure from `gh`
-itself being unreachable (auth/network), which stays the existing git-native → file-backend
-fallback. Size (`size: small | big`) stays a label; migrating it to GitHub's newer Issue Fields is
+Issue Type (`Bug`/`Feature`/`Task`) in addition to the label each capture skill already applies —
+additive, not a replacement: the label stays the system of record, Issue Type is best-effort.
+**Two separate calls, never combined into one:** `bug-report`, `feature`, `issue`, and
+`ops-issues` (forge) first run the ordinary `gh issue create` (no `--type`) — the create step is
+unchanged from before this ADR, atomic, and always succeeds or fails on its own pre-existing
+terms; THEN, once the issue exists, a second call — `gh issue edit <id> --type <Kind>` — attempts
+the type. If that second call fails (the org's type schema rejects it — renamed, disabled, or,
+the verified case for a personal-account-owned repo: no Issue Types at all, an
+organization-scoped feature — or an older `gh` doesn't recognize `--type`), the already-created
+issue is simply left with the label alone; the skipped type is noted in the close-out. Never
+blocks or fails a mint over a missing type, and — the reason for the two-call split — never risks
+minting a second issue: a combined `gh issue create --type <Kind>` was verified (2026-07-19) to
+create the issue and only THEN fail the type-attach step silently (no URL printed on that
+error), so treating that error as "nothing was created" and retrying the create would duplicate
+the record. Size (`size: small | big`) stays a label; migrating it to GitHub's newer Issue Fields is
 an explicit non-goal (ADR-0004).
 
 ## Work-item backend delegation (ADR-0003)

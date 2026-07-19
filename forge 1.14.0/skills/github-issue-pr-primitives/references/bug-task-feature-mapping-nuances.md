@@ -38,10 +38,20 @@ implementation. Both confirmed empirically against `kimgranlund/claude-plugins`:
 2. **Issue Types is organization-scoped, not available on personal-account-owned repos at all.**
    `kimgranlund/claude-plugins` is owned by a `User`, not an `Organization` (confirmed via `gh api
    graphql`'s `owner { __typename }`); a live `gh issue create --type Bug` probe returned `type
-   "Bug" not found; available types:` (empty list) — GitHub validates and rejects before creating
-   anything, so the probe left no artifact. **This repo's dual-write will always take the
-   label-only fallback path** until/unless it transfers to an organization; the implementation is
-   still correct and portable to org-owned repos running these same skills.
+   "Bug" not found; available types:` (empty list) exit code 1. **Correction to this pack's first
+   draft of this update:** the probe's error was initially assumed to mean nothing was created —
+   wrong. The probe DID create the issue (`kimgranlund/claude-plugins#51`, closed same-day once
+   found) — `gh issue create --type <invalid>` creates the base issue and only THEN fails the
+   type-attach step, silently (no issue URL printed on that error path, which is what caused the
+   wrong assumption). **Load-bearing consequence for the adapter design:** a combined
+   `create --type` call cannot be safely retried without `--type` on failure — the retry would
+   mint a second issue. The safe pattern is two separate calls: `gh issue create` (never with
+   `--type`, unchanged from before this ADR, atomic on its own pre-existing terms), then a
+   second, independent `gh issue edit <id> --type <Kind>` once the id is known; a failure on the
+   second call leaves the already-created issue with the label alone, no duplication risk. This
+   repo's dual-write will always take that label-only path until/unless it transfers to an
+   organization; the implementation is still correct and portable to org-owned repos running
+   these same skills.
 
 ## Finding 2 — `size: small`/`size: big` is also a label; Issue Fields is an even newer typed alternative
 

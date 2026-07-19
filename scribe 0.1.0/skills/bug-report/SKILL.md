@@ -91,10 +91,14 @@ tickets" defines; use it, never invent one per ticket), and an empty Findings se
   target repo — repo-rooted per doc-authoring-standards' location-and-naming rule, never written
   under a plugin's own installed directory. Run `doc_lint.py` on the result — fix and re-run until
   clean.
-- **Option B (git-native):** `gh issue create --type Bug` — title = the Summary line; body = the
-  same sections as `##` headings; labels `bug` + the severity, and sets the native Issue Type
-  `Bug` (ADR-0004; fallback: retry without `--type` if the org's type schema doesn't resolve —
-  label alone still lands, note the skipped type in the close-out). `doc_lint.py` validates files,
+- **Option B (git-native):** `gh issue create` (no `--type`) — title = the Summary line; body =
+  the same sections as `##` headings; labels `bug` + the severity. Once created, a second call —
+  `gh issue edit <id> --type Bug` (ADR-0004) — attempts the native Issue Type; if it fails (the
+  org's type schema doesn't resolve, or `gh` doesn't recognize `--type`), the issue already exists
+  with the label alone, note the skipped type in the close-out — never retry the create itself
+  over a type failure (two separate calls, never combined: a combined
+  `gh issue create --type` was found to create the issue and only then fail the type step, so
+  treating that error as "nothing created" would mint a duplicate). `doc_lint.py` validates files,
   not issues — the section contract above is this skill's own gate here: an issue missing a
   required section is not a captured record; edit it before proceeding.
 - **Option C (external, e.g. Linear):** the resolved adapter's `create` operation
@@ -166,11 +170,9 @@ entry it owed the record.
   captured one (file backend).
 - Workspace rules git-native but `gh` fails partway through a run (auth, network) → fall back to the file
   backend for THIS record, say so, and note the migration in the record so it can be re-homed —
-  never leave the report uncaptured because the preferred store was unreachable. `--type` not
-  resolving is NOT this failure, whether the org's type schema rejects it ("type X not found") or
-  an older `gh` doesn't recognize the flag at all ("unknown flag") — it's the ADR-0004 fallback
-  (Phase 4): retry the same `gh issue create` without `--type`, stay on git-native, never drop to
-  the file backend over a missing Issue Type alone.
+  never leave the report uncaptured because the preferred store was unreachable. A failed
+  `gh issue edit --type` (Phase 4) is not this failure — the record already exists by the time
+  that call runs; it never triggers the file-backend fallback, only the skipped-type note.
 - Workspace rules Option C but the adapter operation fails partway (auth, API error, MCP
   disconnect) → same fallback discipline, to the file backend for that operation, noted in the
   record.

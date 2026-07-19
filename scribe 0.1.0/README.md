@@ -44,15 +44,34 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.20.0 · assembled 2026-07-19 · 0.20.0: ADR-0005 ticket-claim protocol — `claim` added as a
-seventh backend-resolver operation (`references/backend-resolver.md`) alongside
-create/dedup-search/update/close/discover/read: write identity + in-progress state + a dated claim
-comment, then re-read to confirm the claim wasn't outraced. Linear's realization added
-(`references/linear-adapter.md`; `spec-linear-adapter.md` amended to v0.3.0, REQ-011/AC-011).
-`doc-authoring-standards`' backend-delegation section updated to name the seventh operation.
-Defines the primitive only — `bug-report`/`feature`/`issue` are capture-only and are not required
-to call it; a future ticket-executing agent is `claim`'s first real caller · v0.19.0 · assembled 2026-07-19 · 0.19.0: ADR-0004 dual-write, implemented (Issue #44) —
-`bug-report`/`feature`/`issue`'s Option-B create call becomes `gh issue create --type
+v0.21.0 · assembled 2026-07-19 · 0.21.0: ADR-0004 dual-write, corrected — v0.19.0 (below) shipped
+a real bug, found and fixed same-day: a combined `gh issue create --type <Kind>` call was verified
+to create the issue and only THEN fail the type-attach step, silently (no URL printed on that
+error) — proven by a leftover test issue (`#51`, closed once found). That makes "retry the same
+create without `--type`" unsafe: a partially-succeeded create retried blind mints a duplicate.
+`bug-report`/`feature`/`issue` are rewritten to two separate calls, never combined: the existing
+`gh issue create` (unchanged, no `--type`, ever), then — once the id is known — a second,
+independent `gh issue edit <id> --type Bug|Feature|Task`; a failure there leaves the
+already-created issue with the label alone, no duplication risk, since the create step never
+carries the parameter that could partially fail. `doc-authoring-standards` and
+`github-issue-pr-primitives`'s `bug-task-feature-mapping-nuances.md` (forge) corrected to match.
+Also added the `type:` key (a documented top-level field, verified against GitHub's own
+issue-form schema) to all three `.github/ISSUE_TEMPLATE/*.yml` files, closing a gap an
+independent skill-auditor review found in their own "mirrors this contract" claim; and a one-line
+fix for a pre-existing `doc-authoring-standards` gap the same review surfaced: `kind: task` was
+referenced but never defined alongside `kind: bug`/`kind: feature`. This landed as a follow-up PR
+rather than a v0.19.0 amendment: v0.19.0 was already merged (by the maintainer, from a green CI
+run) before this fix could be pushed to the same PR — the ledger entry below is left as an
+accurate record of what v0.19.0 actually shipped, not rewritten · v0.20.0 · assembled 2026-07-19 ·
+0.20.0: ADR-0005 ticket-claim protocol — `claim` added as a seventh backend-resolver operation
+(`references/backend-resolver.md`) alongside create/dedup-search/update/close/discover/read: write
+identity + in-progress state + a dated claim comment, then re-read to confirm the claim wasn't
+outraced. Linear's realization added (`references/linear-adapter.md`; `spec-linear-adapter.md`
+amended to v0.3.0, REQ-011/AC-011). `doc-authoring-standards`' backend-delegation section updated
+to name the seventh operation. Defines the primitive only — `bug-report`/`feature`/`issue` are
+capture-only and are not required to call it; a future ticket-executing agent is `claim`'s first
+real caller · v0.19.0 · assembled 2026-07-19 · 0.19.0: ADR-0004 dual-write, implemented (Issue
+#44) — `bug-report`/`feature`/`issue`'s Option-B create call becomes `gh issue create --type
 Bug|Feature|Task` alongside the existing label, with the ADR's own fallback discipline (retry
 without `--type`, label alone still lands, skipped type noted in the close-out) — additive, label
 stays system of record. `doc-authoring-standards` gains a new "Issue Type dual-write" section
@@ -61,7 +80,8 @@ items" answered and recorded in `github-issue-pr-primitives`' knowledge pack: `g
 --type` is directly supported (no raw GraphQL needed), and Issue Types is confirmed
 organization-scoped — this workspace's own repo (`kimgranlund/claude-plugins`, a personal
 User-owned account) has zero Issue Types configured, verified via a live `gh issue create --type
-Bug` probe that GitHub rejected before creating anything. This repo's own dual-write will always
+Bug` probe that GitHub rejected before creating anything. **Superseded same-day by v0.21.0
+above** — this design turned out unsafe; see that entry. This repo's own dual-write will always
 take the label-only fallback path until/unless it transfers to an organization; the
 implementation remains correct and portable to org-owned repos running these same skills.
 Independent skill-auditor review (all four scribe touch points, fresh context) caught a real
