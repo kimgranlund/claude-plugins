@@ -50,11 +50,13 @@ A verdict block, always: either the captured-items list or the single clean line
 
 ## Failure branches
 
-- Dispatched in an unattended or scheduled context (no interactive user to answer
-  knowledge-harvest's own confirm gate) → steps 1, 2, 4, and 5 still run on their own; step 3's
-  AskUserQuestion-gated authoring is named as deferred in the verdict rather than attempted.
-- Not inside a git repo, or the repo has no changes of any kind → "nothing to check" is the whole
-  report; this skill has no work to do outside a git context.
+- Dispatched in an unattended or scheduled context (no interactive user to answer an
+  AskUserQuestion-gated confirm) → step 2's own capture skills (bug-report/feature run
+  intent-extract's interactive round) and step 3's knowledge-harvest confirm gate are both named as
+  deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own.
+- Not inside a git repo at all → the single clean-verdict shape applies, with the reason stated
+  ("nothing to capture — no git context here"); this is not a second verdict shape, just the
+  existing one with its reason filled in.
 - Uncommitted state exists but reads as mid-thought scratch or a deliberate WIP still being shaped,
   not finished work → name it in the verdict as left open, since capturing is a judgment call on
   each diff, not a blanket action across all of them.

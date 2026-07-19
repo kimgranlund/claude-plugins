@@ -85,9 +85,15 @@ building it, correcting an earlier plan that assumed otherwise). Fresh-context a
 (skill-auditor, FLOOR): 1 blocking finding fixed (a clean-tree fast path was skipping the
 knowledge-harvest scan too, not just the git-side capture) and 2 majors fixed (an unanchored trigger
 phrase collided with `open-questions-sweep`'s own eval case; this intent record had been advanced
-past gates not yet actually run). Reciprocal NOT-for fences added: `concurrency-design` (this
-plugin) and forge's `open-questions-sweep`, each gaining a return no-trigger case in its own
-`evals/evals.json` · v0.7.5 · assembled 2026-07-19 · 0.7.5: `concurrency-design` cross-references ADR-0005's ticket-claim
+past gates not yet actually run). A second, independently-dispatched skill-auditor (a separate
+earlier-launched teammate whose report arrived after the fixes above already shipped)
+cross-validated the same three findings against the pre-fix tree and surfaced two further MINORs,
+fixed same-day: the git-absent failure branch collapsed from a third ad hoc verdict string into the
+existing two-shape contract's own clean line, and the unattended-context failure branch now names
+step 2's own capture skills (bug-report/feature run their own interactive intent-extract round) as
+deferred alongside step 3's confirm gate, not step 3 alone. Reciprocal NOT-for fences added:
+`concurrency-design` (this plugin) and forge's `open-questions-sweep`, each gaining a return
+no-trigger case in its own `evals/evals.json` · v0.7.5 · assembled 2026-07-19 · 0.7.5: `concurrency-design` cross-references ADR-0005's ticket-claim
 protocol — one boundary note added to its existing ticket-status pre-flight check (Decide step 3)
 and one References & tools row: `claim` (scribe, where installed) prevents two independent agents
 from starting the SAME ticket, one layer beneath this skill's own git-tree collision response,

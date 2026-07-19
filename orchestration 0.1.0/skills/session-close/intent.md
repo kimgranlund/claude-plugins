@@ -132,6 +132,21 @@ P5 validate:   PASS (2026-07-19)
                    Verified via the skill-auditor dispatch above that both reciprocal fences
                    actually landed in the sibling files (concurrency-design SKILL.md:19,
                    open-questions-sweep SKILL.md:15-16 + suite case n11).
+                5. Second, independently-dispatched skill-auditor (teammate id
+                   `audit-session-close`, a separate earlier-launched dispatch whose report arrived
+                   after the fixes above already landed and shipped): corroborated all three same
+                   findings (B1/M1/M2 above) against the pre-fix tree, cross-validating the fix —
+                   no new blocking issues. Surfaced two genuine MINORs this session's own re-audit
+                   had not caught, fixed here: (a) the "not inside a git repo, or repo has no
+                   changes" failure branch produced a third verdict-string shape ("nothing to
+                   check") instead of reusing the two-shape contract's own clean line, and
+                   duplicated step 1's already-correct clean-tree routing under a different string
+                   — collapsed to the single clean-verdict shape with its reason filled in, the
+                   "repo has no changes" sub-clause dropped as redundant with step 1; (b) the
+                   unattended/scheduled failure branch named only step 3's confirm gate as deferred,
+                   but step 2's own capture skills (bug-report/feature) run their own interactive
+                   intent-extract round and can hang the same way unattended — branch reworded to
+                   name both. `skill_lint.py` re-run clean after both fixes.
 
 ## Separate artifact — the SessionEnd log hook
 A non-blocking safety net, NOT part of this skill's own gates: `orchestration 0.1.0/hooks/`
