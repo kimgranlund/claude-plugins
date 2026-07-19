@@ -9,9 +9,9 @@ shipped through the forge release gate.
 | `skills/doc-authoring-standards` | Declarative skill | model-only | Mutability classes, universal practices, the type contract table; `references/templates/` — eight authoring contracts (adr, prd, spec, lld, plan, roadmap, ticket, task) |
 | `skills/doc-forge` | Procedural | both (`/doc-forge`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
 | `skills/doc-review` | Procedural | both (`/doc-review`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
-| `skills/bug-report` | Command (orchestrator) | user-only (`/bug-report`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
-| `skills/feature` | Command skill | user-only (`/feature`) | Feature intake, the bug-report mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → reference-forge/knowledge-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build` (orchestration) is the momentum half |
-| `skills/issue` | Command skill | user-only (`/issue`) | The generic third sibling: any work item that is neither bug- nor feature-shaped (chore, follow-up, research item, debt) — shape-gate → dedup → `kind: task` record on the ruled backend (`task` label + optional size), plus the full resume surface: fold detail, dated Findings, status verbs (done/doing/wontfix) with the Findings-first close |
+| `skills/bug-report` | Procedural (orchestrator) | both (`/bug-report`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
+| `skills/feature` | Procedural skill | both (`/feature`) | Feature intake, the bug-report mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → reference-forge/knowledge-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build` (orchestration) is the momentum half |
+| `skills/issue` | Procedural skill | both (`/issue`) | The generic third sibling: any work item that is neither bug- nor feature-shaped (chore, follow-up, research item, debt) — shape-gate → dedup → `kind: task` record on the ruled backend (`task` label + optional size), plus the full resume surface: fold detail, dated Findings, status verbs (done/doing/wontfix) with the Findings-first close |
 | `skills/docs-alignment` | Command skill | user-only (`/docs-alignment`) | Migrate an existing repo's scattered docs to the canonical directory-per-type map: three-surface inventory (canonical dirs, near-miss locations, loose files/README extractions) → ONE batched plan approval → git mv + minimal frontmatter (doc-type/id/status) + basename-first link repair + doc_lint → project-docs index installed; prose never rewritten, never commits |
 | `skills/research-methods` | Declarative skill | model-only | Six measured-investigation methods (autoresearch, ablation, bisect, adversarial, hill-climb, sweep); the Phase −1/0/1/2 spine + investigation rubric; the `researcher` agent runs one method in isolation |
 | `skills/rubric-forge` | Procedural | both (`/rubric-forge`) | Create · evaluate · improve · update a rubric against the bundled rubric-for-rubrics |
@@ -44,7 +44,12 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.17.0 · assembled 2026-07-18 · 0.17.0: `doc-forge` converted from Command to Procedural species
+v0.18.0 · assembled 2026-07-18 · 0.18.0: README artifact-table species sweep — `bug-report`,
+`feature`, and `issue` were converted from Command to Procedural species on 2026-07-17 (so the
+three siblings could invoke each other directly on a mis-routed ask) but their rows here still
+read Command/user-only, a stale-record debt a fresh-context skill-auditor review of a sibling
+change (the `doc-forge` conversion) flagged as pre-existing and out of scope for that PR. Swept
+here: all three rows corrected to Procedural/both, matching their actual frontmatter dials · v0.17.0 · assembled 2026-07-18 · 0.17.0: `doc-forge` converted from Command to Procedural species
 (`disable-model-invocation: true` → `false`), mirroring `skill-forge`'s own 2026-07-14 conversion —
 closes the gap where `doc-review`/`doc-authoring-standards`/`feature`/`bug-report`/`issue` already
 fenced "NOT for drafting (doc-forge)" but doc-forge itself was invisible to auto-discovery.
