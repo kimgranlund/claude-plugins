@@ -104,3 +104,118 @@ Nothing documented contradicts any AC. (AC-009's boundary nuance: see observatio
 - `git diff HEAD -- …/SKILL.md` → confirms body-only edit (bullet rewrite + new section); frontmatter/description untouched
 - Existence checks: both reference files, both SPECs, templates dir, evals.json
 - Full read: ADR-0003, spec-linear-adapter, SKILL.md, backend-resolver.md, linear-adapter.md
+
+---
+
+# Audit — doc-authoring-standards after ADR-0004 (Issue Type dual-write section)
+
+Date: 2026-07-18 · Auditor: fresh-context skill audit (post-ADR-0004 edit, worktree
+`issue-44-adr-0004-dual-write`)
+Scope: the new `## Issue Type dual-write (Option B, ADR-0004)` section (SKILL.md:115–126, the
+file's only diff vs HEAD), checked against `.claude/docs/adr/0004-issue-types-for-bug-feature-task.md`,
+the three sibling capture skills' Option-B bullets (bug-report:94–99, feature:107–112,
+issue:114–119), `forge 1.14.0/agents/ops-issues.md:90–94`, and the updated
+`github-issue-pr-primitives/references/bug-task-feature-mapping-nuances.md`.
+
+```
+Skill: scribe 0.1.0/skills/doc-authoring-standards · Standards: skill-authoring-standards · Lint: clean
+Verdict: PASS
+```
+
+🟢 **SHIP.** Zero blocking findings. The section restates ADR-0004's ratified Decision faithfully
+and completely at the standards altitude, is word-consistent with all four implementation
+siblings, sits in a defensible structural position, and keeps the repo-specific fact OUT of the
+general standards file (the right division — see check 4). One minor finding (`kind: task` is
+referenced but never defined in this file — a pre-existing gap the new section surfaces), one
+date question for the change-set author, three nits.
+
+## The four dispatched checks
+
+1. **ADR-0004 fidelity (Decision + Consequences):** 🟢 complete and accurate. All four ratified
+   elements restated: additive dual-write at create time ("in addition to the label… additive,
+   not a replacement", SKILL.md:118–119 ↔ ADR Decision 1); label stays system of record
+   ("the label stays the system of record, Issue Type is best-effort", :119–120 ↔ ADR Decision 4
+   + Consequences); size stays a label with Issue Fields an explicit non-goal (:125–126 ↔ ADR
+   Decision 2); never blocks a mint (:124–125 ↔ ADR Decision 4, verbatim discipline). The
+   `gh issue create --type <Kind>` mechanism claim — one of the ADR's own named open
+   verification items — is verified against the live CLI in this audit (`gh issue create --help`
+   shows `--type name · Set the issue type by name`, example literally `gh issue create --type
+   Bug`), matching the nuances-file's empirical confirmation (gh 2.96.0). Deliberate,
+   correctly-scoped omissions: dedup-search-unchanged (ADR Decision 3) and no-backfill
+   (Consequences) are non-changes with no standards surface — the ADR's own Consequence scopes
+   this file's change to the create-time line. Do not "fix" their absence.
+2. **Sibling consistency:** 🟢 no contradiction. All three capture skills carry the same fallback
+   clause ("fallback: retry without `--type` if the org's type schema doesn't resolve — label
+   alone still lands, note the skipped type in the close-out"); ops-issues carries the identical
+   discipline with "sweep report" in place of "close-out" (correct per its artifact). This
+   section's phrasing ("the call retries without `--type`, the label alone still lands, and the
+   skipped type is noted in the close-out") is the same rule in standards register. The
+   per-kind type names (`Bug`/`Feature`/`Task`) match across all five files.
+3. **Structural placement:** 🟢 standalone section is the right call; current position is
+   defensible. Folding into "Bug-shaped tickets"/"Feature-shaped tickets" would mint two copies
+   of the same kind-agnostic rule (a drift pair) and leave `kind: task` homeless (no task-shaped
+   section exists). The rule is backend-specific, not kind-specific, so it earns its own H2;
+   adjacency to "Work-item backend delegation (ADR-0003)" groups the backend material, and the
+   header's `(Option B, ADR-0004)` parallels the sibling header's `(ADR-0003)`. Nit: it could
+   equally sit AFTER the ADR-0003 section (dual-write refines Option B, which that section
+   owns), but Option B is already defined upstream at Universal practice 6 (:63–70), so reading
+   order is not broken. No move required.
+4. **Overclaim / repo-specific drift risk:** 🟢 clean — and the division of facts is exactly
+   right. The section states only the platform-general truth ("a personal-account-owned repo…
+   has no Issue Types at all; Issue Types is an organization-scoped feature"), dated per the
+   estate's grounding convention. The repo-specific consequence ("THIS repo's dual-write will
+   always take the label-only fallback path" — kimgranlund/claude-plugins is User-owned) lives
+   where it belongs: forge's `bug-task-feature-mapping-nuances.md` update, a dated finding in
+   the researched pack, NOT in this general standards file. If GitHub later extends Issue Types
+   to user-owned repos, the dated stamp marks the claim's freshness boundary.
+
+## Criteria table
+
+| ID | Verdict | Severity | Evidence (file:line) | Fix |
+|----|---------|----------|----------------------|-----|
+| R1 behavior delta | pass | — | "never blocks or fails a mint" :124 (deletion → a failed `--type` could abort a mint); "size stays a label… explicit non-goal" :125–126 (deletion → someone migrates size to Issue Fields); "label stays the system of record" :119 (deletion → label removal looks legal) | — |
+| R2 trigger fidelity | pass | — | Description untouched (git diff: body-only change) — "what sections a TICKET requires", "which document type", "why a doc failed doc_lint" all still route here; no evals.json owed per the tier ladder | — |
+| R3 species/dials | pass | — | knowledge species, `false`/`false` dials, noun name — unchanged, consistent | — |
+| R4 register | pass | — | New section is declarative throughout ("also sets", "the call retries", "Never blocks") — knowledge register, no imperatives, no new uppercase gates | — |
+| R5 no restatement | pass | minor (obs.) | Fallback clause now exists in 5 copies (this + 3 siblings + ops-issues), word-consistent today; ADR-mandated shape — operational skills need the mechanism inline. This section is the standards-of-record master | Any future change to the fallback discipline owes a 5-file sweep — recorded here as the drift-watch |
+| R6 position | pass | — | Section at :115–126 of a 159-line body; contracts ahead of it, references/failure catalog behind | — |
+| R7 contracts | N/A | — | knowledge species | — |
+| R8 quantities | pass | — | No vague quantifiers in the new section; type names and kind values enumerated exactly | — |
+
+## Findings
+
+1. **[minor] `kind: task` is referenced but never defined in this file.** SKILL.md:117 names
+   `kind: bug`/`kind: feature`/`kind: task`, but this file's own TICKET material defines only the
+   first two (type-table row :85 "bug reports: `kind: bug`, see below"; "Bug-shaped tickets" :92;
+   "Feature-shaped tickets" :104). `kind: task` is the `issue` skill's established convention
+   (issue/SKILL.md:9, :111 "`doc-type: ticket, kind: task`", :145) — a pre-existing gap in this
+   standards file that the new section now surfaces, not a defect introduced by this edit. Fix is
+   half a line, e.g. extend the TICKET row's parenthetical to "(bug reports: `kind: bug`; plain
+   tasks: `kind: task` via `issue` — see below)". Sibling-applicability: none — this gap is local
+   to doc-authoring-standards.
+2. **[nit — verify intent] The section's verification date is 2026-07-19; the audit session's
+   context date is 2026-07-18.** The date is uniform across the whole change set (both README
+   ledgers say "assembled 2026-07-19", the nuances update is dated 2026-07-19), so it is
+   internally consistent and possibly just the author's timezone; but the ADR it implements is
+   dated/ratified 2026-07-18. If the 19th is unintended, the sweep is six occurrences across the
+   PR (SKILL.md:123, nuances:33, forge README:112, scribe README:47 + any sibling ledger lines),
+   not just this file. Flagged to the change-set author; not blocking.
+3. **[nit] Two-home platform fact.** The org-scoped/personal-account fact now lives here and in
+   forge's `bug-task-feature-mapping-nuances.md` (the researched home). The copy here is one
+   clause, degradation-graceful when forge isn't installed — acceptable under the soft-mention
+   boundary rule; keep it this size.
+
+## Checks run (this audit)
+
+- `python3 …/skill_lint.py "…/doc-authoring-standards/SKILL.md"` → clean
+- `git diff HEAD -- "scribe 0.1.0/skills/doc-authoring-standards/"` → single 13-line section
+  insertion, frontmatter/description untouched → no evals.json owed (tier ladder: semantic body
+  edit → lint + fresh-context critic, which is this audit)
+- `gh issue create --help` → `--type name` flag confirmed live
+- Full reads: ADR-0004, SKILL.md; targeted reads: three sibling Option-B bullets,
+  ops-issues.md:90–94, nuances-file diff; greps: "Issue Type" estate-wide, "2026-07-19",
+  `kind:` in issue/SKILL.md
+
+Top 3: 1) Ship as-is — zero blocking. 2) Half-line fix available for the undefined `kind: task`
+(finding 1, this file only). 3) Confirm the 2026-07-19 date is intended (finding 2, change-set-wide
+if not).

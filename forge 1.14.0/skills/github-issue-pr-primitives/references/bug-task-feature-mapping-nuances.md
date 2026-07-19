@@ -30,6 +30,19 @@ weaker of the two primitives GitHub offers for exactly this purpose, on a platfo
 stronger one has been GA for over a year. This is not this pack's call to make; it's the specific,
 citable fact a future ADR revision would need.
 
+**Update (2026-07-19, ADR-0004's own "Open verification items", now answered):** ADR-0004 ratified
+dual-write (Issue Type alongside the label) and flagged two facts to verify before/during
+implementation. Both confirmed empirically against `kimgranlund/claude-plugins`:
+1. `gh issue create` supports `--type <name>` directly (`gh version 2.96.0`) — no raw
+   `gh api graphql`/REST call needed for the simple create path.
+2. **Issue Types is organization-scoped, not available on personal-account-owned repos at all.**
+   `kimgranlund/claude-plugins` is owned by a `User`, not an `Organization` (confirmed via `gh api
+   graphql`'s `owner { __typename }`); a live `gh issue create --type Bug` probe returned `type
+   "Bug" not found; available types:` (empty list) — GitHub validates and rejects before creating
+   anything, so the probe left no artifact. **This repo's dual-write will always take the
+   label-only fallback path** until/unless it transfers to an organization; the implementation is
+   still correct and portable to org-owned repos running these same skills.
+
 ## Finding 2 — `size: small`/`size: big` is also a label; Issue Fields is an even newer typed alternative
 
 The `feature` skill's `size: small`/`size: big` label has the same shape as Finding 1, but the

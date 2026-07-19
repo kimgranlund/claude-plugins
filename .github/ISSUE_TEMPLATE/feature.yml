@@ -2,6 +2,7 @@ name: Feature
 description: A new capability or idea that may need sizing into docs. Mirrors scribe's /feature payload contract.
 title: "[Feature]: "
 labels: ["feature"]
+type: "Feature"
 body:
   - type: markdown
     attributes:

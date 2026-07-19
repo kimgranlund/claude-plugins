@@ -2,6 +2,7 @@ name: Bug
 description: Something is broken — a reproducible defect. Mirrors scribe's /bug-report payload contract.
 title: "[Bug]: "
 labels: ["bug"]
+type: "Bug"
 body:
   - type: markdown
     attributes:

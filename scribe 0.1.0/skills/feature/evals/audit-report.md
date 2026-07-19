@@ -148,3 +148,141 @@ argument-hints).
 | F2 (stale "both backends") | ×2 | ×1 (line 83) | ×1 (line 99) |
 | F3 (no Option-C resume/dedup) | yes | yes (Phase 1) | yes (Phases 1, 3) |
 | N1 (binary description) | yes | yes | yes |
+
+---
+
+# Audit report — `feature` SKILL.md after the ADR-0004 Issue-Type dual-write edit
+
+- **Target:** `scribe 0.1.0/skills/feature/SKILL.md` (uncommitted edit on `issue-44-adr-0004-dual-write` worktree)
+- **Audited against:** `.claude/docs/adr/0004-issue-types-for-bug-feature-task.md` (ratified),
+  `forge:skill-authoring-standards`, siblings `bug-report`/`issue`/`ops-issues` (same edit class),
+  `.github/ISSUE_TEMPLATE/feature.yml`, live `gh` 2.96.0
+- **Depth:** FLOOR + the four dispatch-specific checks
+- **Date:** 2026-07-18
+
+```
+Skill: scribe 0.1.0/skills/feature/SKILL.md · Standards: skill-authoring-standards · Lint: clean
+Verdict: PASS — no blocking finding; 1 major (class-wide), 1 minor, 4 notes
+```
+
+## FLOOR criteria
+
+| ID | Verdict | Severity | Evidence (file:line) | Fix |
+|----|---------|----------|----------------------|-----|
+| R1 behavior delta | PASS | — | SKILL.md:106–110 (delete → no `--type`, no retry discipline); :27–35 (resolver); :128–141 (opt-in gate) — all three fail the deletion test in the right direction | — |
+| R2 trigger fidelity | PASS | — | Description untouched by this edit; "can we add a dark mode" / "what if we supported CSV export" / `/feature` all match :7–8; fences :13–15 repel bug/issue//build/doc-forge | — |
+| R3 species/dials | PASS | nit | Procedural, both dials explicit (:16–17); noun-head name `feature` predates this edit, shipped through prior gates — precedent, not a new finding | — |
+| R4 register | PASS | — | New clause instantiates, spec-present ("fallback: retry without `--type` … note the skipped type", :108–110); uppercase-gate count unchanged, lint clean | — |
+| R5 no restatement | PASS | note | The fallback line now exists verbatim in 4 files (three skills + ops-issues) with doc-authoring-standards' new §Issue Type dual-write as canon — ADR-0004's own ratified consequence ("four files, one line each"), so sanctioned; it is a 4-way drift-watch from here on | — |
+| R6 position | PASS | — | 176-line body, entirely inside the 5,000-token survival window; contract (Phase 5) ahead of Failure branches ahead of Done-when | — |
+| R7 contracts | PASS | see F1 | Payload contract :96–99, failure branches :143–165, checkable Done-when :167–176 all present; the NEW failure mode is named inline only (F1) | one clause |
+| R8 quantities | PASS | — | "one round max" :54, "ONE AskUserQuestion" :131, "one hop only" :152; the retry clause is singular and unambiguous | — |
+
+## Dispatch-specific checks
+
+### 1. Natural extension, not bolted on — YES
+
+The clause rides the existing sentence spine: command flag up front (`gh issue create --type
+Feature`, :106), prose consequence appended after the label list with the same "and sets…"
+shape ADR-0004's own Consequences section prescribes ("labels `X` + sets Issue Type `X'`
+(fallback: …)"), and the parenthetical fallback mirrors the in-bullet fallback style Option C
+already established two bullets down (:116–118). Sibling diffs are token-for-token the same
+shape (`bug-report` :94–96, `issue` :113–117), so the family stays uniform. The one echo — the
+flag appears in the command AND "sets the native Issue Type `Feature`" in prose — is the ADR's
+own phrasing, and the prose half is what carries the ADR citation + fallback, so it earns its
+place.
+
+### 2. Fidelity to ADR-0004's ratified decision — YES, points 1 and 4 both honored
+
+- **Point 1 (additive dual-write):** label list untouched, type added alongside — "same payload
+  contract, one more field" ✓ (:107–109).
+- **Point 4 (label stays system of record, never block a mint):** "label alone still lands, note
+  the skipped type in the close-out" ✓ (:109–110). The Done-when line (:167) still says "a
+  labeled GitHub Issue (its URL reported)" — correctly UNCHANGED: a type-skipped issue still
+  satisfies it, which is exactly point 4's never-block semantics.
+- **Size stays a label — confirmed, no accidental drift:** the pre-existing parenthetical "(the
+  machine-read size lives in the label)" (:107–108) survives the edit verbatim, and the new
+  clause names only the Issue Type `Feature`. Nothing implies `size:` becomes a type or Field
+  (ADR-0004's explicit non-goal, Decision point 2); doc-authoring-standards' new section states
+  the non-goal canonically, so this skill correctly doesn't restate it.
+- **The ADR's two open verification items are answered and recorded** (pack reference
+  `bug-task-feature-mapping-nuances.md`, update block in this same change-set): `--type` is a
+  real `gh issue create` flag — re-confirmed live in this audit against gh 2.96.0 (`--type name
+  · Set the issue type by name`) — and this repo, being personal-account-owned, has NO Issue
+  Types, so the fallback path is the always-taken path here. The recorded probe also confirms
+  gh validates-and-rejects before creating anything, so the retry can never double-mint. The
+  skill's clause is therefore not an overclaim: verified mechanism, verified-safe fallback.
+
+### 3. Fallback discipline vs the skill's own patterns — consistent in shape; one placement gap (F1)
+
+Same grammar as every existing fallback: attempt → degrade without losing the record → note in
+the close-out. Vocabulary matches ("note … in the close-out" = Option C's "reports the fallback
+in the close-out", :117–118). But the skill's established pattern (this file's prior audit,
+check 4) is that **Failure branches is the canonical enumeration and the Phase-5 text is its
+echo** — this new failure mode inverts that: inline only, no branch line. See F1.
+
+### 4. Dangling refs / overclaims
+
+- `ADR-0004` named mention (:108) — file exists at `.claude/docs/adr/0004-issue-types-for-bug-feature-task.md`;
+  workspace-level mention degrading gracefully outside this repo, same class as the standing
+  ADR-0002 mention (:29) ✓.
+- `--type Feature` — verified real (check 2) ✓.
+- One partial-mirror claim now stale by omission: F2 below.
+
+## Findings
+
+### 🟡 F1 — major (non-blocking, ALL FOUR consumers): the type-resolution retry lives only inline; the pre-existing "`gh` fails partway → file backend" branch can capture it
+
+The new failure mode ("org's type schema doesn't resolve") is documented only inside the Phase-5
+bullet (:108–110). The Failure branches section still says "Workspace rules git-native but `gh`
+fails partway through a run → fall back to the file backend for THIS record" (:160–162) — and a
+`--type` rejection IS `gh` erroring. In THIS workspace the collision is not an edge case: the
+repo is personal-account-owned, so `gh issue create --type Feature` fails on **every** mint;
+a run that consults the branch list instead of the bullet's inline parenthetical would abandon
+git-native for the file backend on every capture. Record never lost either way (both paths
+capture), which is why this is major, not blocking — but for `ops-issues`, which runs this
+identical clause unattended hourly, a misroute would silently move records to the wrong store.
+
+**Fix (one clause, all four files or just the canonical branch line per file):** extend the
+gh-fails branch: "…(a `--type` resolution error is not a `gh` failure — retry without the flag
+first, per Phase 5; only a create that still fails falls back here)". Siblings `bug-report`
+(no explicit gh-fails branch wording checked here — verify), `issue`, and `ops-issues` (sweep
+report analog) carry the same inline-only shape.
+
+### 🟡 F2 — minor (all three templates): the issue-template mirror claim is now partial
+
+SKILL.md:120 — "`.github/ISSUE_TEMPLATE/feature.yml` mirrors this contract for a human filing
+directly on GitHub." The contract now includes the Issue Type; the template sets
+`labels: ["feature"]` but no top-level `type:` key, so a human-filed issue gets the label and
+never the type. GitHub issue forms do support a top-level `type:` key (verify against current
+docs before editing — and note a template-declared type is untestable in this personal-account
+repo). Either add `type: Feature` (org-portable, matches best-effort semantics since GitHub
+ignores/rejects it gracefully where types are absent — verify) or scope the claim ("mirrors the
+section/label contract"). Same for `bug.yml`/`task.yml` and the siblings' mirror lines. ADR-0004
+did not name the templates in its four-file consequence list, so this is contract-mirror drift
+introduced by the change-set, not an ADR violation.
+
+## Notes (no action owed to ship this edit)
+
+- **N1 — "org's type schema" phrasing is org-centric** where the verified failure case here is
+  "personal account, no org at all". doc-authoring-standards' new section carries the precise
+  fact; the skill's compressed clause is acceptable reference-not-restate. No action.
+- **N2 — Edit-tier accounting (semantic body change → full loop):** lint clean ✓; this audit is
+  the fresh-context critic ✓; behavior evidence = the recorded live probe (fallback path proven
+  in-repo; happy path — `--type` accepted — is structurally untestable in a personal-account
+  repo and rests on gh 2.96.0's documented flag + the ADR's own reversibility clause). Evidence
+  gap acknowledged, not closable in this workspace.
+- **N3 — evals.json correctly untouched:** description unchanged, no eval update owed, no
+  /eval-run owed for this file.
+- **N4 — Date anomaly in adjacent files (outside this audit's target):** the pack-reference
+  update block and doc-authoring-standards' new section are both dated **2026-07-19**; today is
+  2026-07-18. Flagging for the change-set owner — likely a typo, fix before commit.
+
+## Cross-sibling applicability
+
+| Finding | feature | bug-report | issue | ops-issues | templates |
+|---|---|---|---|---|---|
+| F1 (retry vs gh-fails branch ambiguity) | yes | yes (verify branch wording) | yes | yes (unattended — highest stakes) | — |
+| F2 (mirror claim omits `type:`) | :120 | likely (verify) | likely (verify) | — | bug.yml, feature.yml, task.yml |
+| N1 (org-centric phrasing) | yes | yes | yes | yes | — |
+| N4 (2026-07-19 dates) | — | — | — | — | pack reference + doc-authoring-standards |

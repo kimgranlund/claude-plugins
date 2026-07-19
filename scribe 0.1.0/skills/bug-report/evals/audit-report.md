@@ -157,3 +157,134 @@ the guarantee explicit at the point of close.
 | MINOR-1/2 (bullet naming, inline fallback) | Identical Option-C bullet phrasing confirmed (issue/SKILL.md:112) | Identical (feature/SKILL.md:105) |
 | MINOR-3 (stale description) | Verify each | Verify each |
 | MINOR-4 | N/A — issue already carries "Findings-first, same ordering" | Verify |
+
+---
+
+# Audit — bug-report after the ADR-0004 Issue-Type dual-write edit
+
+Auditor: skill-review seat (FLOOR depth + the four dispatch-specific checks) · 2026-07-18
+Target: `scribe 0.1.0/skills/bug-report/SKILL.md` (worktree issue-44-adr-0004-dual-write; edit
+confirmed by diff — Option-B bullet only, SKILL.md:94–99)
+Judged against: `.claude/docs/adr/0004-issue-types-for-bug-feature-task.md` (accepted 2026-07-18)
+
+```
+Skill: scribe 0.1.0/skills/bug-report · Standards: skill-authoring-standards · Lint: clean
+Verdict: PASS
+```
+
+Edit tier: semantic body change → owes lint (clean), fresh-context critic (this report), behavior
+check. Description untouched (diff confirms; `git status` shows SKILL.md only, evals suite
+untouched) → no `/eval-run` owed. The behavior check's non-mutating slice ran live (gh help +
+GraphQL, below); a full mint would create a real issue and was not run.
+
+## Verification data (ADR-0004's two open items, answered live)
+
+- **`gh issue create --type` exists: YES.** gh 2.96.0 (2026-07-02, this machine): `--type name —
+  Set the issue type by name`; the help's own example is literally `gh issue create --type Bug`.
+- **Home repo type schema resolves: NO.** `kimgranlund/claude-plugins` is user-owned
+  (`isInOrganization: false`); GraphQL `repository.issueTypes` returns `null`. Issue Types are
+  org-scoped — in THIS workspace the fallback branch fires on **every** mint and every close-out
+  will note a skipped type, until the repo lives in an org.
+
+## Findings
+
+### MAJOR-1 — Record the verification answers (PR-level, not a skill-text defect)
+
+ADR-0004's Consequences names both items above and rules "verify once, record the answer, don't
+assume." Both answers now exist (this audit produced them) but live nowhere durable. The skill
+text itself is correct either way — its fallback is designed for exactly the null-schema case —
+so this does not fail the audit; but shipping the four-file implementation without recording the
+data re-creates the unverified-platform-claim class the ADR was written against, and the
+maintainer should knowingly accept that the dual-write's type half is inert at home. **Fix once
+for the whole PR:** record both answers in Issue #44 / the PR body / a dated append-only note on
+ADR-0004.
+
+### MINOR-1 — Fallback condition is narrower than the failure class it must catch
+
+SKILL.md:96: "retry without `--type` if **the org's type schema doesn't resolve**" names one
+cause. An older `gh` without the flag errors `unknown flag: --type` — literally not a schema
+miss — so a literal run routes it to the nearest enumerated branch, "`gh` fails partway (auth,
+network)" (SKILL.md:167–169), whose degrade target is the **file backend**: a worse outcome than
+ADR-0004 pt 4 mandates (the create "still succeeds on the label alone"). **Fix:** widen the
+condition — "retry without `--type` if it doesn't resolve (the flag — older `gh` — or the org's
+type schema)". Applies verbatim to all four sibling edits.
+
+### MINOR-2 — New fallback is inline-only; absent from the Failure branches enumeration
+
+Both pre-existing backend fallbacks are enumerated in `## Failure branches` (gh-partway
+:167–169; Option-C partway :170–172 — the latter also inline, the post-ADR-0003 house pattern).
+The type-skip fallback appears only inside the Phase-4 parenthetical, so a mid-run consult of the
+enumeration finds no type branch and the nearest match prescribes the wrong degrade (re-home to
+file backend instead of drop-the-field). **Fix:** one line in Failure branches: "Option B's
+`--type` doesn't resolve (the flag, or the org's schema) → retry the create without it — the
+label alone still lands, never re-home to the file backend over a missing type; note the skipped
+type in the close-out." Worded there, it also absorbs MINOR-1.
+
+### NIT-1 — The one graft mark: command example carries one flag, prose carries the rest
+
+Pre-edit the command was bare `gh issue create` with every field prose-decomposed (title/body/
+labels); post-edit the command names `--type Bug` (SKILL.md:94) AND the prose re-states it ("and
+sets the native Issue Type `Bug`", :95–96) — the type is the only field stated twice and the only
+flag shown. Either restore the bare command and let the prose clause carry the type, or accept
+(the shown form matches gh's own help example). Cosmetic.
+
+### NIT-2 — `bug.yml` mirror claim now trails the contract by one field
+
+SKILL.md:110 says `.github/ISSUE_TEMPLATE/bug.yml` "mirrors this contract"; the template sets
+`labels: ["bug"]` but no top-level `type: Bug` key (issue forms support one). Out of ADR scope
+(four named files) and inert on this repo (no schema) — optional parity follow-up if the
+workspace ever moves to an org.
+
+## The four dispatch-specific checks
+
+1. **Natural extension?** Yes, near-native: the clause extends the bullet's existing field
+   decomposition in the same register ("labels `bug` + the severity, **and sets** the native
+   Issue Type `Bug`"), cites its ADR the way the body cites ADR-0002-style rulings, and the
+   parenthetical fallback keeps the house em-dash cadence. The single graft mark is NIT-1.
+2. **Accurate to ADR-0004 pts 1 & 4?** Yes on every claim. Pt 1: type set at create time in
+   addition to the label — additive, same payload contract. Pt 4: the retry drops only the type;
+   the label lands; the skip is noted in the close-out; the mint never blocks — and the Done-when
+   line (:174) still keys on "a **labeled** GitHub Issue," not the type, so the skill's own
+   completion contract correctly does not depend on the type. The clause tracks the ADR's
+   Consequences template ("labels `X` + sets Issue Type `X′` (fallback: label only …)") nearly
+   verbatim. No non-goal touched: severity stays a label; bug-report has no dedup phase.
+3. **Fallback discipline consistent?** Yes on shape — degrade + persist the record + note the
+   degradation in the close-out, the same three-part shape as :167–169 and :170–172, not a fourth
+   pattern. The degrade **axis** is deliberately different and correct: a within-backend field
+   drop (stay on Option B) rather than the other two fallbacks' cross-backend re-home — exactly
+   what ADR pt 4 requires (a missing type must not push the mint off git-native). The two Option-B
+   fallbacks compose: schema miss → retry sans type; gh itself down → partway branch → file
+   backend. Gaps: MINOR-1 (condition wording) and MINOR-2 (placement).
+4. **Overclaims / dangling refs?** None blocking. The clause never claims types definitely work —
+   the fallback rides in the same sentence. The `--type` flag is verified real (gh 2.96.0), so no
+   unverified-platform-claim in the text; the unrecorded answers are MAJOR-1. The ADR-0004 cite
+   resolves (accepted, 2026-07-18). One latent claim inside "retry", flagged `[inferred]`: that a
+   failed typed create creates nothing (gh resolves the type name before the create mutation, so
+   the retry cannot double-mint) — believed true from CLI mechanics, unverifiable without minting
+   a real issue.
+
+## FLOOR criteria
+
+| ID | Verdict | Severity | Evidence (file:line) | Fix |
+|----|---------|----------|----------------------|-----|
+| R1 | PASS | — | :96–98 fallback clause, :107–108 record-before-dispatch, :143–144 one-re-dispatch — all three fail the deletion test's null case (output differs without each) | — |
+| R2 | PASS | — | description carries verbatim user phrasings (:6–8) and owner-named fences (:12–15); unchanged by this edit → suite stays valid | — |
+| R3 | PASS | — | procedural; both dials explicit (:16–17); verb-head name — one story | — |
+| R4 | PASS | nit | new clause instantiates (imperative "retry", "note the skipped type"); hard-gate budget intact; NIT-1 double-mention | NIT-1 |
+| R5 | PASS | — | cites ADR-0004 rather than restating its rationale; drift-pair partner is doc-authoring-standards' TICKET-contract line (sibling edit — keep the two on the ADR's template) | watch |
+| R6 | PASS | — | body ~190 lines ≈ 2.4k tokens, contract in the head, references one level deep | — |
+| R7 | PASS | minor | output contract :84–87; stopping predicate :174–181; failure enumeration :151–172 lacks the new branch | MINOR-2 (+ MINOR-1) |
+| R8 | PASS | — | anchors hold: one clarifying round :62, 5 tries :130, one re-dispatch :144, one hop :78 | — |
+
+## Sibling applicability (same-class edits: feature, issue, doc-authoring-standards, ops-issues)
+
+| Finding | Applies? |
+|---|---|
+| MAJOR-1 (record the answers) | Once for the whole PR — not per-file |
+| MINOR-1 (condition too narrow) | Expected in all four — same clause template |
+| MINOR-2 (missing failure-branch line) | Per file, where the file carries a failure enumeration |
+| NIT-1 (flag-in-command asymmetry) | Verify per file — depends whether each shows a command example |
+| NIT-2 (issue-template parity) | feature.yml / task.yml equivalents, same optional follow-up |
+
+doc-authoring-standards' TICKET-contract line is the drift-pair root: the four consumers should
+match ITS wording (which should match the ADR's template), not drift four ways.

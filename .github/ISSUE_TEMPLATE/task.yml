@@ -2,6 +2,7 @@ name: Task
 description: A chore, follow-up, research item, or debt — anything that isn't a bug or a feature idea. Mirrors scribe's /issue payload contract.
 title: "[Task]: "
 labels: ["task"]
+type: "Task"
 body:
   - type: markdown
     attributes:
