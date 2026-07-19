@@ -124,8 +124,12 @@ actually builds for its class is canon; missing one of *those* ⇒ treat it as a
 branch, or a currency lapse (canon that fell off a surface and was never refreshed), not canon —
 the label alone never carries the artifact's weight. A surface the estate doesn't build for that
 class at all (a flat ≤~7-file pack ships no INDEX by the 2026-07-09 ruling above; packs have no
-standing harvester) is N/A, not a miss — the detector counts what should exist, never penalizes an
-absence this standard itself already sanctions.
+standing harvester; no reference file anywhere in this workspace currently self-documents as
+canonical — verified against the full corpus, not assumed — so self-documentation is N/A estate-wide
+until a convention for it exists) is N/A, not a miss — the detector counts what should exist, never
+penalizes an absence this standard itself already sanctions. The moment any class adopts one of
+these surfaces for real (an INDEX ships, a self-canonical header convention starts), that surface
+stops being N/A for that class and starts counting.
 
 This composes with, not replaces, the estate's existing single-surface reachability checks (the
 INDEX/tree reconciliation above, `corpus_check.py`'s K1, `release_gate.py`'s G5/G8/G9,
@@ -157,5 +161,8 @@ project's practice, 2026-07; amended 2026-07-15 — the [incident] class and sev
 ordering enter from the external-skill review's type specimens, cited inline. Amended 2026-07-18 —
 the canonical-reachability check enters from adia-ui-kit v3.7.13's `reasoning-methodologies.md`
 method #5 (harvested via kimgranlund/claude-plugins#40), its literal ≥5 threshold translated to this
-estate's own surfaces rather than copied verbatim. Surface rules: `skill-authoring-standards`. Split/merge decisions:
+estate's own surfaces rather than copied verbatim. Amended 2026-07-18 (same day, a fresh `/review`
+pass on that change) — the self-documentation surface named a third N/A example, verified against
+the full `references/*.md` corpus: no file anywhere currently satisfies it, and the original edit's
+N/A carve-out named only two of the three surfaces the estate doesn't yet build (issue #48). Surface rules: `skill-authoring-standards`. Split/merge decisions:
 `skill-decompose` / `skill-synthesize`. The executing workflow: `pack-forge`.
