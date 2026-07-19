@@ -109,7 +109,25 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.8 · assembled 2026-07-18 · 1.34.8: pack-authoring-standards' canonical-reachability check
+v1.34.9 · assembled 2026-07-18 · 1.34.9: `/eval-run forge` + `/eval-run orchestration` tuning —
+a 493-case blind-judge routing simulation across all 9 installed plugins found 16 failures across
+10 suites (477/493 passed, 18/28 suites clean). Fixed 9 of them at the description layer: three
+`git-campaign-workflows` leaks (bare action-imperatives — "delete this branch", "pull the
+latest", "merge and clean up" — now excluded); one `plugin-decompose` build-vs-partition leak
+("create a plugin with X") and one audit-scope leak ("audit my whole harness surface", now
+fenced to harness-audit); one `github-issue-pr-primitives` decision-phrased leak ("should this
+repo use X backend"); one `script-authoring-standards` bare-imperative leak ("run the release
+gate"); one `entry-file-standards` steal (reworded "how big the file" → "how big CLAUDE.md
+itself" to stop losing to skill-authoring-standards' body-length coverage); a reciprocal
+`plugin-onboard`/`plugin-authoring-standards` fence (declared-but-invisible vs. installed-but-
+failing); a reciprocal `reasoning-orders`/scribe's `research-methods` fence (judging whether a
+claim is a genuine higher-order gain vs. measuring one empirically); and `knowledge-harvest`
+gained its own three stolen trigger phrasings verbatim (a stale citation, a dedup check, "propose
+a plan before we write"). All 15 non-judgment-call failures
+re-verified passing post-fix via a second blind-judge pass against the corrected menu. One
+finding left as a judgment call, not a bug: `agent-authoring-standards` leaking on "forge me a
+reviewer agent" is arguably correct degradation — `agent-forge` is deliberately off-menu
+(command species, human-timed), so no router-discoverable owner exists for that ask · v1.34.8 · assembled 2026-07-18 · 1.34.8: pack-authoring-standards' canonical-reachability check
 (Issue #48, a same-day `/review` follow-up to #45/#40) — the self-documentation surface named as a
 third N/A example alongside INDEX-absence and harvester-absence: verified against the full
 `references/*.md` corpus that no file anywhere currently self-documents as canonical, so applying

@@ -8,7 +8,8 @@ description: >
   or auditing an agent system's integration: "should this be a subagent or a
   team", "how do my skills and agents connect", "is this fan-out worth its
   token cost", "should this agent preload the skill", "review my
-  wiring/integration frontmatter". NOT for a whole-corpus or team audit
+  wiring/integration frontmatter". NOT for a whole-corpus or team audit —
+  "audit the agent team for duplicates", "do my agents leverage the right skills"
   (skills-audit / agents-audit); NOT for a single agent definition
   (forge's agent-forge / agent-authoring-standards); NOT for when the next turn fires — /goal, Stop hooks,
   continuation (loop-design).

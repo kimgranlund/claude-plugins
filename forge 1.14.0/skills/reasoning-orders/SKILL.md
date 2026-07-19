@@ -5,11 +5,13 @@ description: >-
   decision actually demands, the question each order asks, when to escalate, and the rent rule
   that keeps higher-order claims honest. Use when a verdict feels like tidying rather than
   improvement, when the same finding class recurs despite fixes, when tests conflict, when asked to
-  "push the reasoning further", "question the rules themselves", "apply higher-order reasoning", or
-  "check whether we're at a local maximum" — and when any skill's output would merely reorganize
-  what exists. NOT the wording layer (linguistic-techniques); NOT a structural breakdown
-  (system-decompose); NOT extracting what's being asked (intent-extract) — this governs how hard
-  and how high to think once the ask and structure are clear.
+  "push the reasoning further", "question the rules themselves", "apply higher-order reasoning",
+  "check whether we're at a local maximum", or "how do I know if this improvement claim is real
+  or just relabeling" — and when any skill's output would merely reorganize what exists. NOT the
+  wording layer (linguistic-techniques); NOT a structural breakdown (system-decompose); NOT
+  extracting what's being asked (intent-extract); NOT running a measured experiment against a
+  scorer to find out empirically (scribe's research-methods) — this governs the judgment call of
+  what order of claim is being made, not the measurement itself.
 disable-model-invocation: false
 user-invocable: false
 ---

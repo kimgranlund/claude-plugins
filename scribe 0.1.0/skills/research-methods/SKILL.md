@@ -2,16 +2,16 @@
 name: research-methods
 description: >-
   Use whenever a *scorable* system (code, config, prompt, pipeline, skill, agent) needs a measured
-  investigation — optimizing, debugging, or stress-testing it via the library of six methods. Triggers: "improve the score", "why did
-  it regress / what broke / find the root cause", "which parts actually matter", "what's the best
-  value for X", "what breaks this / find the edge cases", "tune these parameters", "it used to
-  work, now it doesn't", or a technique by name (autoresearch, ablation, bisect, hill-climb,
-  sweep, adversarial probe). Each method's protocol and rubric live here; the `researcher` agent runs one.
-  NOT for looking up facts, docs, or prior art (ordinary web search, no method needed); NOT for
-  reviewing a finished artifact against its rubric (the *-reviewer agents); NOT for building
-  the artifact itself (the *-forge skills / system-builder); NOT for making a prompt or
-  agent's wording more effective with no scorer (linguistic-techniques), rubric anchors
-  (rubric-forge), or loop stopping rules (loop-design).
+  investigation — optimizing, debugging, stress-testing via the library of six methods. Triggers:
+  "improve the score", "why did it regress / find the root cause", "which parts actually matter",
+  "what's the best value for X", "what breaks this", "tune these parameters", "it used to work,
+  now it doesn't", or a technique by name (autoresearch, ablation, bisect, hill-climb, sweep,
+  adversarial probe). Each method's protocol/rubric live here; `researcher` runs one. NOT for
+  looking up facts/prior art (web search, no method); NOT reviewing a finished artifact against
+  its rubric (*-reviewer agents); NOT building the artifact (*-forge / system-builder); NOT
+  wording effectiveness with no scorer (linguistic-techniques), rubric anchors (rubric-forge), or
+  loop stopping rules (loop-design); NOT judging whether a claim is a genuine higher-order gain or
+  just relabeling, with no scorer to run (forge's reasoning-orders).
 disable-model-invocation: false
 user-invocable: false
 ---

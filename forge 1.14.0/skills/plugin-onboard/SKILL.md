@@ -5,13 +5,13 @@ description: >-
   .claude/settings.json so any contributor who trusts the repo is prompted to install it — no
   operator-local assumption. Use when the user asks to add a plugin repo so contributors can
   install it, declare a plugin marketplace in settings.json, set up extraKnownMarketplaces, wire
-  up a list of skill/plugin URLs as installable dependencies, or asks why a declared plugin
-  isn't showing up in /plugin. NOT for general settings.json edits with no plugin/marketplace
-  object involved — permissions, env vars, model choice, hooks (the separate `update-config`
-  skill, where installed). NOT for
-  authoring a NEW plugin's own manifest or structure (plugin-authoring-standards). NOT for
-  building a plugin's actual skill/agent content (plugin-forge). NOT for deciding how an
-  existing local surface should partition into plugins (plugin-decompose).
+  up a list of skill/plugin URLs as installable dependencies, or asks why a plugin they just
+  added to `enabledPlugins`/a marketplace declaration isn't showing up in /plugin. NOT for
+  general settings.json edits with no plugin/marketplace object — permissions, env vars, model
+  choice, hooks (`update-config`, where installed). NOT authoring a NEW plugin's manifest, or why
+  an ALREADY-DECLARED plugin fails to load once Claude Code tries to read it
+  (plugin-authoring-standards). NOT building a plugin's skill/agent content (plugin-forge). NOT
+  deciding how an existing local surface should partition (plugin-decompose).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[plugin/marketplace URL or list of URLs]"
