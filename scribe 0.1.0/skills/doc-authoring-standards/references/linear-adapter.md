@@ -1,7 +1,8 @@
 # The Linear adapter — scribe's shipped Option-C realization (spec-linear-adapter)
 
-Realizes `backend-resolver.md`'s six-operation interface against Linear specifically. Grounded
-2026-07-18 against Linear's own developer docs and changelog — the facts below carry the standard
+Realizes `backend-resolver.md`'s seven-operation interface against Linear specifically. Grounded
+2026-07-18 (claim: 2026-07-19, ADR-0005) against Linear's own developer docs and changelog — the
+facts below carry the standard
 grounding-marker classes (`pack-authoring-standards`): `[verified]` (checked directly against a
 first-party Linear doc page), `[drift-prone]` (verified but likely to move — re-check before
 trusting past this quarter), and `[inferred]` (standard GraphQL/Relay convention, not itself
@@ -40,7 +41,7 @@ adapter: linear` row (`backend-resolver.md`), never re-prompted per invocation:
   ruling, not re-queried on every operation; re-resolve if the adapter starts getting `stateId`
   errors (a sign the team's workflow states were reconfigured).
 
-## The six operations
+## The seven operations
 
 - **create** — `[verified]` the `issueCreate` mutation, input at minimum `title`, `description`,
   `teamId`; response `{ success, issue { id, title } }`. `title` = the record's Summary line;
@@ -56,6 +57,18 @@ adapter: linear` row (`backend-resolver.md`), never re-prompted per invocation:
   `https://linear.app/developers/graphql` at call time rather than trusting a memorized shape.
   Sweep before minting, same discipline as the local/git-native adapters (REQ-005): a match updates
   that issue's fields instead of minting a duplicate.
+- **claim** (REQ-011, ADR-0005) — `[inferred]` the `issueUpdate` mutation, input `id` plus
+  `assigneeId` (the caller's own Linear user id) plus `stateId` set to the team's configured
+  `started`-type state (REQ-007's cached map) — the same mutation `update` uses, since Linear has
+  no separate "claim" or "assign" mutation; claiming a ticket and starting it are the same
+  `started`-type transition. `assigneeId` is not independently confirmed against a first-party
+  schema page in this research pass — introspect (`__type(name: "IssueUpdateInput")`) before the
+  first real call. Immediately followed by a comment recording the caller's identity, a timestamp,
+  and the branch it is about to create (the same `issueCommentCreate`-shaped call `update` already
+  uses for a Findings entry), then a **read** (REQ-010, below) to confirm the claim landed and
+  wasn't outraced by a different identity's earlier-timestamped claim comment on the same issue —
+  Linear's GraphQL API gives no atomic check-then-set here, so the write-then-re-read discipline is
+  the adapter's only race guard, identical in shape to the git-native realization.
 - **update** — `[verified]` the `issueUpdate` mutation, input `id` plus whatever changed (e.g.
   `stateId`, or a comment create for a Findings entry — Linear separates issue-field updates from
   comments; a dated Findings entry is a **comment**, not a description edit, mirroring how the
@@ -152,3 +165,7 @@ opt-in-per-team nature of Triage: verified against `linear.app/developers/graphq
 convention, not independently fetched from a Linear schema page in this research pass — verify via
 live introspection (`__type(name: "IssueFilter")`, `__type(name: "WorkflowState")`, `__type(name:
 "Issue")`) before the first real call in any implementation, not assumed from this file alone.
+`claim`'s `assigneeId` field (REQ-011, added 2026-07-19 in this SPEC's v0.3.0 amendment, ADR-0005):
+inferred from the same standard `issueUpdate` mutation shape already verified for status/comment
+writes — not itself confirmed against a schema page; introspect (`__type(name:
+"IssueUpdateInput")`) before the first real claim call.

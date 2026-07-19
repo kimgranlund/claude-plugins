@@ -44,22 +44,29 @@ per run (Phase 0), then follows the returned option's own Record/Close realizati
 documents the interface every adapter (including the two already inline in each skill) implicitly
 satisfies; `linear-adapter.md` documents Linear's concrete realization of it.
 
-## The six-operation adapter interface (REQ-001, spec-linear-adapter)
+## The seven-operation adapter interface (REQ-001, spec-linear-adapter; claim, ADR-0005)
 
-Every backend — local, git-native, or an Option-C adapter — realizes the same six operations, so a
-capture skill's own call sequence never branches on which backend is active:
+Every backend — local, git-native, or an Option-C adapter — realizes the same seven operations, so
+a capture skill's own call sequence never branches on which backend is active:
 
 | Operation | What it does | Local (Option A) | Git-native (Option B) |
 |---|---|---|---|
 | **create** | Mint a new record carrying the full payload contract for its type/kind | Write a TICKET file, `doc_lint.py` clean | `gh issue create`, section contract is the skill's own gate |
 | **dedup-search** | Sweep for an already-open match before minting | Search `docs/tickets/` for the item's nouns | `gh issue list --search` |
+| **claim** (REQ-011, ADR-0005) | Take ownership of an already-existing record before starting execution work against it — write the caller's identity + an in-progress state + a dated claim comment (identity, timestamp, branch name), then **re-read to confirm the claim wasn't outraced**. A re-read showing an earlier-timestamped competing claim means this caller lost the race and abandons it. Distinct from `create` (which mints a new record) — `claim` only ever targets one that already exists | Set `claimed-by`/`claimed-at` in the record's frontmatter, then re-read the file | `gh issue edit --add-assignee <id>` + `gh issue comment` (identity, timestamp, branch), then re-read via `read` |
 | **update** | Fold new detail into an existing record, or advance status | Edit the file's frontmatter/sections | `gh issue comment` / relabel |
 | **close** | Close with a Findings-first guarantee — an empty Findings section takes the close-out line as its first entry | Frontmatter `status: done`/`wontfix`, Findings entry written first | `gh issue close` (+ `wontfix` label where applicable), Findings entry as a comment written first |
 | **discover** | List records created or updated since a checkpoint — the primitive `spec-ticketing-watch-triage`'s watch loop calls; distinct from dedup-search (matches one candidate, not "everything since X") | `docs/tickets/` mtimes since checkpoint | `gh issue list --search "updated:>=<checkpoint>"` |
-| **read** (REQ-010) | Resolve one already-known native id to its current record + full Findings/comment trail — what a resume-by-id branch and a post-dispatch Findings check both need | Read the TICKET file directly | `gh issue view --comments` |
+| **read** (REQ-010) | Resolve one already-known native id to its current record + full Findings/comment trail — what a resume-by-id branch, a post-dispatch Findings check, and `claim`'s own re-read step all need | Read the TICKET file directly | `gh issue view --comments` |
 
-Linear's realization of all six lives in `references/linear-adapter.md`; a bring-your-own Option-C
-adapter documents its own realization the same way, in its own workspace.
+**`claim` has no caller today.** ADR-0005 defines the primitive because `PARALLEL-AGENTS-PLAYBOOK.md`
+needs it and nothing in this workspace prevented the near-duplicate-work incident that ADR
+documents; it does not require `bug-report`/`feature`/`issue` (capture-only, they never execute a
+ticket) to call it. Whatever eventually plays the "discover an open ticket and build it" role is
+the operation's first real caller.
+
+Linear's realization of all seven lives in `references/linear-adapter.md`; a bring-your-own
+Option-C adapter documents its own realization the same way, in its own workspace.
 
 ## Failure fallback (REQ-008)
 

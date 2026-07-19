@@ -132,12 +132,15 @@ an explicit non-goal (ADR-0004).
 `bug-report`, `feature`, and `issue` each call one shared resolver instead of re-deriving their own
 backend check — closing the hand-duplication ADR-0003 exists to fix, not extending it a third way.
 The three-way choice (Option A/local, B/git-native, C/external), the ruling shape a repo's entry
-file carries, and the six-operation adapter interface (create · dedup-search · update · close ·
-discover · read) every backend realizes: `references/backend-resolver.md`. Linear's own concrete
-realization of that interface (transport resolution, configuration, status-type mapping, payload
-mapping): `references/linear-adapter.md`. A bring-your-own Option-C adapter documents its own
-realization the same way, in its own workspace — this skill owns the interface, not every
-implementation of it.
+file carries, and the seven-operation adapter interface (create · dedup-search · claim · update ·
+close · discover · read) every backend realizes: `references/backend-resolver.md`. ADR-0005 adds
+`claim` as the seventh operation — the ticket-layer primitive an agent uses to take ownership of an
+existing record before starting execution work against it, distinct from `create` (which mints a
+new one); it defines the primitive only, it does not require `bug-report`/`feature`/`issue`
+(capture-only skills) to call it. Linear's own concrete realization of the full interface
+(transport resolution, configuration, status-type mapping, payload mapping, claim):
+`references/linear-adapter.md`. A bring-your-own Option-C adapter documents its own realization the
+same way, in its own workspace — this skill owns the interface, not every implementation of it.
 
 ## Failure catalog
 

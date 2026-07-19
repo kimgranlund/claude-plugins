@@ -69,7 +69,12 @@ Each of the three skills ships `evals/evals.json`, converted from the pre-migrat
 `scripts/routing-corpus.json` positives/negatives into this workspace's `{skill, cases:[{id, prompt,
 expect}]}` schema (`eval_check.py` E1–E5).
 
-v0.7.4 · assembled 2026-07-18 · 0.7.4: `/eval-run orchestration` tuning — a full blind-judge
+v0.7.5 · assembled 2026-07-19 · 0.7.5: `concurrency-design` cross-references ADR-0005's ticket-claim
+protocol — one boundary note added to its existing ticket-status pre-flight check (Decide step 3)
+and one References & tools row: `claim` (scribe, where installed) prevents two independent agents
+from starting the SAME ticket, one layer beneath this skill's own git-tree collision response,
+which still has to catch two DIFFERENT tickets touching the same file. No description change, so
+no eval-run obligation follows · v0.7.4 · assembled 2026-07-18 · 0.7.4: `/eval-run orchestration` tuning — a full blind-judge
 routing pass (all 4 suites, against the estate's full 96-skill menu) found `orchestration-design`
 leaking on two whole-corpus-audit phrasings ("audit the agent team for duplicates", "do my agents
 leverage the right skills") despite an existing skills-audit/agents-audit fence that wasn't
