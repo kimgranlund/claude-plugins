@@ -109,7 +109,14 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.7 · assembled 2026-07-18 · 1.34.7: reviewer-discipline (Issue #39) — a new cross-cutting
+v1.34.8 · assembled 2026-07-18 · 1.34.8: pack-authoring-standards' canonical-reachability check
+(Issue #48, a same-day `/review` follow-up to #45/#40) — the self-documentation surface named as a
+third N/A example alongside INDEX-absence and harvester-absence: verified against the full
+`references/*.md` corpus that no file anywhere currently self-documents as canonical, so applying
+the rule literally would have flagged every reference file in the estate as "fake-canonical" on
+that one axis, contradicting the rule's own stated intent. N/A is now framed as reversible — the
+moment any class actually adopts a surface (an INDEX ships, a self-canonical header convention
+starts), that surface stops being N/A and starts counting · v1.34.7 · assembled 2026-07-18 · 1.34.7: reviewer-discipline (Issue #39) — a new cross-cutting
 skill piloted on 5 forge reviewer agents (agent-reviewer, plugin-reviewer, hook-reviewer,
 linguistics-reviewer, skill-auditor), encoding three reviewer-conduct priors confirmed absent from
 every reviewer/auditor agent in this workspace: evidentiary symmetry (a dismissal costs the same
