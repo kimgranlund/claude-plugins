@@ -109,7 +109,13 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.12 · assembled 2026-07-19 · 1.34.12: ADR-0004 dual-write, corrected — v1.34.10 (below)
+v1.34.13 · assembled 2026-07-19 · 1.34.13: `open-questions-sweep` gains a reciprocal NOT-for fence
+pointing at orchestration's new `session-close` skill — a git worktree's own uncommitted state,
+findings, or knowledge capture before a session ends is a different axis (repo state) from this
+skill's own unresolved conversational loose ends. One no-trigger eval case added
+(`evals/evals.json` n11: "wrap up this session... check for anything left to capture in the
+worktree") and verified clean via `eval_check.py`. No behavior change to this skill's own trigger
+logic otherwise · v1.34.12 · assembled 2026-07-19 · 1.34.12: ADR-0004 dual-write, corrected — v1.34.10 (below)
 shipped a real bug, found and fixed same-day: a combined `gh issue create --type <Kind>` call was
 verified to create the issue and only THEN fail the type-attach step, silently (no URL printed on
 that error) — proven by a leftover test issue (`#51`, closed once found). That makes "retry the

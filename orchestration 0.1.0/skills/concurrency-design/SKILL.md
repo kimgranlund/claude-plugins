@@ -5,18 +5,17 @@ description: >
   git-tree isolation, and what to do when they collide anyway. Use
   whenever actors may mutate the same tree with overlapping scope: "should
   I work in a worktree for this", "set up this repo so sessions don't
-  collide", "another Claude session has uncommitted changes to files I
-  need", "should this subagent use isolation: worktree", "two builders
-  touching the same files", "should I commit before this risky multi-file
-  move", "my build collided with another session's in-progress edits".
-  NOT for dispatch shape/cost — solo vs.
-  team, how many subagents (orchestration-design); this skill only decides
-  whether the chosen shape's targets overlap enough to need isolation, and
-  owns cross-session collision entirely. NOT for when the next turn fires
-  — /goal, /loop, Stop hooks (loop-design). NOT for authoring the
-  hook/agent/entry-file mechanics once a rule is decided
-  (hook-authoring-standards / agent-authoring-standards /
-  entry-file-standards, forge).
+  collide", "another session has uncommitted changes to files I need",
+  "should this subagent use isolation: worktree", "two builders touching
+  the same files", "should I commit before this risky move", "my build
+  collided with another session's edits". NOT dispatch shape/cost — solo
+  vs. team, how many subagents (orchestration-design); this skill only
+  decides whether the shape's targets overlap enough to need isolation,
+  and owns cross-session collision entirely. NOT when the next turn fires
+  — /goal, /loop, Stop hooks (loop-design). NOT hook/agent/entry-file
+  mechanics once a rule is decided (hook-authoring-standards /
+  agent-authoring-standards / entry-file-standards, forge). NOT wrapping
+  up THIS session's worktree before ending (session-close).
 disable-model-invocation: false
 user-invocable: true
 ---

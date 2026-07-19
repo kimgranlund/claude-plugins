@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/session_end_worktree_check.py\" --hook",
+            "timeout": 10,
+            "statusMessage": "session-end-worktree-check"
+          }
+        ]
+      }
+    ]
+  }
+}
