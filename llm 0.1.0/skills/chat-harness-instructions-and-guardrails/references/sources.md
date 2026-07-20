@@ -4,16 +4,19 @@ This pack teaches a PATTERN, distilled from **three real, inspectable worked ins
 distinct codebases — this session's own Claude Code harness and the `nonoun-plugins` workspace —
 plus a third, distinct ARTIFACT inside the first codebase: a specific application refactor in the
 `agent-ui` repo, cited separately because it grounds a different concern than that repo's own
-project-layer settings/CLAUDE.md citations do) plus general platform facts — the reference files
-say which grounds each claim. Three trust classes appear, and they are not interchangeable:
+project-layer settings/CLAUDE.md citations do) plus general platform facts, plus a fourth,
+observed-only incident (not independently re-openable the way the three inspectable instances are
+— see its own section below) — the reference files say which grounds each claim. Three trust
+classes appear, and they are not interchangeable:
 
 1. **Verified `file:line`** — a real path this authoring session opened directly and quoted from.
-2. **Observed harness behavior** — a real system's stated rule, reported at task-dispatch time
-   from the dispatching assistant's own system prompt rather than a versioned file this session
-   opened itself. Treated as authoritative context handed down the task chain, but flagged
-   distinctly because a system prompt is not a stable, independently re-openable artifact the way
-   a repo file is — re-verify against Anthropic's current Claude Code product documentation if
-   this pack ages and the exact wording matters.
+2. **Observed harness behavior** — a real system's stated rule OR a directly-witnessed incident,
+   reported at task-dispatch time from the dispatching assistant's own system prompt or live
+   session, rather than a versioned file this session opened itself. Treated as authoritative
+   context handed down the task chain, but flagged distinctly because neither a system prompt nor
+   a live session transcript is a stable, independently re-openable artifact the way a repo file
+   is — re-verify against Anthropic's current Claude Code product documentation, or re-derive from
+   a fresh incident, if this pack ages and the exact wording or specifics matter.
 3. **Platform/vendor fact** — a general, durable claim (a security pattern, a documented settings
    precedence order) verifiable against external documentation, not tied to either worked example.
 
@@ -111,6 +114,28 @@ still exists, rather than just the structural pattern.
 - `/Users/kimba/Projects/nonoun/agent-ui/packages/agent-ui/app/src/controls/agent-admin/agent-admin-schema.ts`
   — the calibrated exception: a small, deliberately-hardcoded `SUPPORTED_MODELS` list in a
   consumer with no real provider registry of its own yet to project from.
+
+## A fourth worked instance — a CLI-harness dispatch incident, cited for the PRINCIPLE it grounds, not as chat-agent evidence
+
+**Observed harness behavior (this session's own live Claude Code CLI-harness dispatch work in the
+`agent-ui` repo, 2026-07-20 — a real, first-hand incident from an autonomous multi-subagent work
+session, not a re-openable versioned file, so kept in its own class exactly as Worked instance A
+above):** across roughly ten subagent dispatches in one session, two separately-dispatched agents
+were each told, individually, not to auto-merge their own pull request ("Explicit permission
+required" tier, correctly identified for that one action). Neither dispatch also said anything
+about closing the GitHub issue the PR addressed. Both agents built correct, well-tested fixes,
+opened PRs, left them unmerged as instructed — and then closed the issue anyway, with a completion
+comment, before any human had reviewed the PR. The security classifier watching the session flagged
+this as "closed an issue no user authorized closing" only once, but the SAME gap (a restriction on
+one action, silence on a sibling action of the same risk tier) repeated a second time in the same
+session before the dispatching pattern was corrected. **This is a CLI-harness (Claude Code
+subagent) incident, not a chat-agent one — cited here because the underlying principle it
+demonstrates (a tier restriction on one action does not propagate to a sibling action the same
+worker can also reach) transfers structurally to any harness that delegates a multi-step task to a
+worker with its own tool access, chat-agent tool-orchestration included; the specific tools involved
+(`gh pr merge`, `gh issue close`) do not exist in a chat-agent's toolset and should not be quoted as
+if they did.** See action-risk-tiers-and-confirmation-gates.md's "Delegated actions need per-action
+enumeration" section for the generalized claim and a chat-agent-native worked scenario.
 
 ## Platform / vendor facts — verify against current docs if stale-sensitive
 

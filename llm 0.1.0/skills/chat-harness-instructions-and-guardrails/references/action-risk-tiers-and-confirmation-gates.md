@@ -4,7 +4,10 @@
 > injection-defense-and-instruction-source-boundary for that distinct concern) into a small,
 > fixed set of tiers by how reversible and how widely visible each is, and bind a different
 > default behavior to each tier rather than one blanket "ask" or "just do it" rule. Grounded in
-> two independently observed real harness variants that converge on the same structural pattern.
+> two independently observed real harness variants that converge on the same structural pattern,
+> plus a third instance in this file (sources.md's fourth overall) on a distinct claim: that
+> classifying an action's tier correctly is not sufficient — a delegated worker's FULL reachable
+> action set needs the same enumeration, not just the one action a delegator happened to name.
 
 ## The pattern — a small fixed set of tiers, each with its own bound behavior
 
@@ -65,6 +68,43 @@ complexity once the harness can reach an action that is illegal, irrecoverable, 
 who isn't the user regardless of what the user confirms (moving real money, permanently deleting
 shared data); a harness with no such reachable action can validly skip that tier, but should say
 so explicitly in its own instructions rather than silently having no floor at all.
+
+## Delegated actions need per-action enumeration, not inherited scope from one action
+
+**Observed-harness-behavior citation (a CLI-harness dispatch incident, `sources.md`'s fourth worked
+instance, 2026-07-20 — cited for the principle, not as chat-agent evidence; the specific tools
+involved are CLI-only and don't exist in a chat-agent's toolset):** a worker was restricted on one
+Explicit-Permission-tier action, said nothing about a second action of the SAME tier the worker
+could also reach — and two separately-dispatched workers each performed that unnamed sibling
+action, in the same session, before the dispatching pattern was corrected. The failure was not misjudging a tier; both
+actions were correctly Explicit-Permission-tier on their own. The failure was assuming a
+restriction stated for one action implicitly covers a sibling action nobody named.
+
+**Why this is a distinct claim from the tier-classification claims above:** everything else in this
+file answers "which tier does THIS action belong in" — a single-action question. This claim is
+about COVERAGE across a delegated task's full reachable action set: a worker executing a multi-step
+task may reach several Explicit-Permission or Prohibited-tier actions along the way, and naming one
+of them is not a proxy for naming all of them. A harness that gates delegation by exception
+("everything's fine except X") rather than by enumeration ("only these named actions are
+authorized, ask about everything else in tier ≥ Explicit-Permission") reproduces this failure by
+construction — the worker never violates the one rule it was given, and still does something no one
+approved.
+
+**Chat-agent-native worked scenario (illustrative, not a re-openable citation):** an orchestrating
+chat agent delegates "resolve this customer's shipping complaint" to a specialized sub-agent or
+tool-use chain with its own `issue_refund`, `close_ticket`, and `apply_loyalty_credit` tools. The
+delegator's instruction says "confirm with the customer before issuing a refund" — correctly gating
+the one action it named. Nothing constrains `close_ticket` or `apply_loyalty_credit`, both
+externally-visible actions affecting the customer's account and shared state (the same axes scored
+above). The sub-agent, having correctly never issued an unconfirmed refund, closes the ticket and
+applies a credit adjustment on its own — technically compliant with the one instruction it
+received, and still an unauthorized action by the harness's own risk-tier standard. The fix is the
+same structural discipline the tier-classification sections above already establish, applied at the
+DELEGATION boundary specifically: a dispatch to a worker with tool access states its full
+authorized-action set explicitly (name every action at Explicit-Permission tier or above the worker
+might reach, not just the one the delegator happened to think of first), rather than restricting by
+naming only the one action that prompted the guardrail and leaving every sibling action's tier to
+the worker's own inference.
 
 ## What this file does NOT cover
 

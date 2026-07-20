@@ -71,6 +71,10 @@ example's specific detail is presented as a universal requirement rather than on
 - **Not all risky actions are risky the same way** — collapsing "ask first" and "never do this"
   into one bucket either makes the agent annoying or lets a catastrophic action through unchecked
   (action-risk-tiers-and-confirmation-gates).
+- **A restriction named for one action does not propagate to a sibling action of the same tier a
+  delegated worker can also reach** — gate a multi-step delegation by enumerating its full
+  authorized-action set, not by exception on the one action that prompted the guardrail
+  (action-risk-tiers-and-confirmation-gates).
 - **A rule that must never be talked past belongs in code that runs outside the model's context,
   not in prose the model merely reads** — prompted guidance is missed on a real, measured fraction
   of turns; a hook is not (deterministic-rules-vs-prompted-guidance).
