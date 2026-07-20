@@ -51,7 +51,8 @@ description: |
   richer session browsing."
   <commentary>
   Two distinct first-firing questions (REQ-011's roster, REQ-013's MCP offer), asked once each,
-  never re-asked on a later firing regardless of outcome.
+  never re-asked on a later firing once a decision is on record — REQ-013's offer may re-surface
+  (not re-ask as new) on a subsequent firing if no dispatch yet carried the human's choice.
   </commentary>
   </example>
 model: sonnet

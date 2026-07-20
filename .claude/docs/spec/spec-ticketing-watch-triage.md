@@ -2,7 +2,7 @@
 doc-type: spec
 id: spec-ticketing-watch-triage
 status: draft
-version: 0.3.0
+version: 0.3.1
 date: 2026-07-20
 owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 1 (Option B/C backends) and
@@ -170,4 +170,8 @@ shape ADR-0003's resolver reads for the backend choice, extended with the two RE
   interactive firing offers the choice exactly once, and a second interactive firing against the
   same repo does not re-offer once a decision (accept or decline) is on record. An accepted offer's
   `.mcp.json` entry never contains a literal PAT (env-var expansion only). A fixture resolved to
-  Option C never receives the offer, regardless of firing type.
+  Option C never receives the offer, regardless of firing type. A fixture where an interactive
+  firing surfaces the offer but no dispatch carries a confirmed choice before the firing ends
+  records no decision; a subsequent interactive firing against the same repo re-surfaces the SAME
+  offer (not a new one) rather than silently dropping it — the pending state is re-surfaced, never
+  re-asked as if fresh, until a dispatch actually carries the choice.
