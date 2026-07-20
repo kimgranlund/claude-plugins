@@ -3,7 +3,10 @@
 > `system-decompose` domain reference. Method depth in `method.md`. Scope: **what screens and
 > states EXIST and what each hosts** — the product's information architecture. The journey
 > *between* screens — entry, transitions, exits declared as a state machine — is out of
-> scope here; this reference stops at what screens/states exist and what each hosts. · 2026-07-06
+> scope here; this reference stops at what screens/states exist and what each hosts. Model that
+> journey with `ui:flow-decompose` instead — its `*.flow.json` card and graph-liveness/safety
+> checks (unreachable states, dead ends, orphan exits, missing recovery) are a different mechanism
+> for a different consumer, not a deeper version of this one. · 2026-07-06, named 2026-07-19
 
 ## OUTSIDE-IN axis (structure)
 
@@ -32,7 +35,7 @@ Stop dividing when a **screen presents one decision** and a **task is one user i
 - Every task must have a screen/state to occur in → else `UNHOSTED` (a step with no place to happen).
 - Every leaf screen/state must serve a task **or** carry a `justify` (`transition`, `confirmation`) → else `UNJUSTIFIED-LEAF` (a screen for the org chart, not the user).
 - A task with no `feedback` interaction is a coverage gap even if hosted (no failure-support / status visibility).
-- The *ordering* of screens, the verbs that move between them, recovery, and resume are NOT checked here — model the journey separately as a state machine when the work needs it.
+- The *ordering* of screens, the verbs that move between them, recovery, and resume are NOT checked here — model that journey with `ui:flow-decompose` instead (see the header note above).
 
 ## Worked pass (the account-recovery section)
 

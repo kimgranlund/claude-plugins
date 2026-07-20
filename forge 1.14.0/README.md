@@ -109,7 +109,18 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.13 · assembled 2026-07-19 · 1.34.13: `open-questions-sweep` gains a reciprocal NOT-for fence
+v1.34.14 · assembled 2026-07-19 · 1.34.14: fixed a stale, actively-misleading claim in
+`system-decompose`'s domain references, found by a `plugin-decompose` gap analysis run against a
+candidate "consolidate the two-plane decomposition method" reorg (verdict: no-partition — the three
+"-decompose"-named skills share a narrative skeleton but not a mechanism, and unifying them would
+cross a hard plugin boundary via `layout-reviewer`/`flow-reviewer`'s own agent dependencies).
+`references/layout.md` previously called `ui:layout-decompose`'s richer archetype/rubric apparatus
+"the retired sibling pack" — it is alive, not retired, and is the deliberate landing spot for live
+UI design/critique work this thin manifest-adapter deliberately doesn't carry; corrected to name it
+explicitly instead of leaving a stale retirement claim standing. `references/ux-architecture.md`'s
+two "model the journey separately" deferral lines now name `ui:flow-decompose` explicitly rather
+than leaving an unnamed pointer. Both are soft `mention`-only edges — no preload, no script
+coupling, fully compatible with the plugin boundary · v1.34.13 · assembled 2026-07-19 · 1.34.13: `open-questions-sweep` gains a reciprocal NOT-for fence
 pointing at orchestration's new `session-close` skill — a git worktree's own uncommitted state,
 findings, or knowledge capture before a session ends is a different axis (repo state) from this
 skill's own unresolved conversational loose ends. One no-trigger eval case added

@@ -2,9 +2,15 @@
 
 > `system-decompose` domain reference — **canon for this domain in this pack**: the two axis
 > ladders (frame → regions → groups → atoms; feature-actions → bindings → surfaces), the justify
-> values, and the manifest mapping below. The deeper archetype catalog and per-domain grading of
-> the retired sibling pack are not carried here — grade against the generic `rubric.md`. Method
-> depth in `method.md` (`scripts/coverage_check.py` runs the gate). · 2026-07-06
+> values, and the manifest mapping below — for the case where a layout decomposition feeds a
+> downstream PRD/SPEC/LLD as a verified manifest. This adapter deliberately carries no archetype
+> catalog, wireframes, or leveled per-domain grading — grade against the generic `rubric.md`. For
+> live UI design/critique (a screenshot, mockup, or wireframe to grade, not a manifest to feed
+> forward), route to `ui:layout-decompose` instead — its archetype library, leveled A1-B5 rubric,
+> and dedicated `layout-reviewer` critic are a different mechanism serving a different consumer,
+> not a deeper version of this one (corrected 2026-07-19: this line previously called that pack
+> "retired," which was stale — it is alive and is the deliberate landing spot for that need).
+> Method depth in `method.md` (`scripts/coverage_check.py` runs the gate). · 2026-07-06
 
 ## Mapping to the manifest
 
