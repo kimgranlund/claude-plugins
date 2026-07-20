@@ -37,6 +37,7 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `skills/github-issue-pr-primitives` | Declarative skill | model-only | GitHub's own Issue/PR/Discussion/Projects-v2 platform facts, cited and dated 2026-07-17 — deliberately disjoint from git-campaign-workflows (that pack is OUR git mechanics; this one is GitHub's data model): Issue Types + Issue Fields vs. labels, sub-issues vs. the retired tasklist-block feature, the nine closing keywords and the one merge-strategy gap GitHub's own docs never closed, PR review/CODEOWNERS/merge-queue mechanics, Projects v2's GraphQL-only structure — seven axes plus a sources.md provenance file; the synthesis axis names where this workspace's own ADR-0002/doc-authoring-standards convention aligns or diverges from the platform, without ratifying a change |
 | `agents/ops-issues` | Agent | spawned (scheduled + on-demand) | Standing intake/triage seat: classifies, dedupes, and routes features/bugs/tasks/issues/PRs onto the resolved ticketing backend per the watch/triage/trust SPEC (`.claude/docs/spec/spec-ticketing-watch-triage.md`); trust-gates unknown filers behind a durable friendlies allow-list; structurally barred from source edits, merges, or closes beyond the ticket record. Preloads `github-issue-pr-primitives` + `intent-extract` only — scribe's `doc-authoring-standards` is a different plugin, so the TICKET shape it needs is stated inline rather than preloaded (the hard plugin-preload boundary, not a soft mention) |
 | `agents/ops-repo` | Agent | spawned (scheduled + on-demand) | Standing repo-hygiene seat: inventories worktrees/branches/PRs, executes cleanup ONLY through this plugin's own gated scripts (`campaign_close.py`/`gitignore_check.py`/`sync_main.py`) on independently-verified-merged findings, proposes (never mutates) everything else. Preloads `git-campaign-workflows` + `github-issue-pr-primitives` |
+| `agents/ops-adr` | Agent | spawned (scheduled + on-demand) | Standing periodic ADR-review seat: `scripts/adr_checkpoint.py` diffs the ADR corpus by content hash since the last firing (new/amended/newly-superseded, cost proportional to the delta not the corpus), each changed Decision judged against `knowledge-harvest`'s own bar, candidates queued via `scripts/adr_queue.py` for ONE batched confirm round rather than blocking on a live human; structurally barred from authoring — a confirmed candidate's next step is a named `/pack-forge`/`/skill-forge`/`knowledge-harvest` Phase-6 command, never a write this agent performs. Preloads `knowledge-harvest` + `pack-authoring-standards` (both same-plugin) — scribe's `doc-authoring-standards` is a different plugin, so the ADR frontmatter contract (`doc-type`/`id`/`status`/`supersedes`) is stated inline rather than preloaded |
 | `scripts/release_gate.py` | Script | CLI + selftest | G1–G11: manifest, structure, full lint (composes skill_lint), bundled selftests (py+js, exit tri-state), phantom sweep, package + same-version refusal, eval validation (composes eval_check), sibling names, packs (composes corpus_check), docs freshness (composes docs_check), style lint (ruff/eslint, ADR-0002) |
 | `skills/eval-run` | Command | user-only (`/eval-run`) | Blind fresh-context routing simulation over the eval suites: menu → fan-out → routing matrix → tuning targets (stolen/leaked/dead) |
 | `skills/skill-decompose` | Procedural | both (`/skill-decompose`) | Imported family (source-corpus lineage): four evidence tests deciding whether a knowledge corpus splits — manifest + repair map or an honest no-split; `manifest_check.py` as gate |
@@ -61,6 +62,8 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `scripts/gitignore_check.py` | Script | CLI + selftest | G1/G2: a `.gitignore` rule matching nothing in the tree is stale (retire it); a known generated/tool-output dir (`.claude/worktrees`, `dist`, `__pycache__`, …) existing on disk with no ignore coverage is one `git add -A` from being committed — repo-alignment's razor, mechanized |
 | `scripts/campaign_close.py` | Script | CLI + selftest | The post-merge ritual, mechanized: PR state == MERGED (never touch the branch otherwise) → delete the remote branch AND REVERIFY it's gone (the ten-branch silent-delete-failure class, 2026-07-16) → gate the touched plugins (warn, not fail) |
 | `scripts/sync_main.py` | Script | CLI + selftest | Pulling onto a possibly-dirty main without clobbering a parallel session: classify dirty-vs-incoming overlap → quarantine as a named stash → `--ff-only` pull → reverify HEAD by SHA (never trust a command's print alone — the 2026-07-17 truncated-pipe incident) |
+| `scripts/adr_checkpoint.py` | Script | CLI + selftest | Cheap, deterministic ADR-corpus diff by content hash against a checkpoint: new / amended / newly-superseded (read from `supersedes:` frontmatter, never inferred from prose) / unchanged — cost stays proportional to what changed, never to corpus size; `ops-adr`'s only economic lever |
+| `scripts/adr_queue.py` | Script | CLI + selftest | Durable held-queue for ADR-review candidates: append-or-update by (adr, kind) — a re-detected candidate updates in place, never duplicates — so a scheduled firing never blocks on a live human; one batched confirm round clears however many accumulated |
 | `scripts/eval_check.py` | Script | CLI + selftest | E1–E6: suite schema, id/owner identity, prompt dedup, case-mix floors, plugin-wide coverage |
 | `hooks/hooks.json` + `scripts/skill_lint.py` | Hook + script | fires on `Write\|Edit` of any `SKILL.md`, `agents/*.md`, or `hooks.json` | Check tier: skill F/W rules; agent A1–A5 (YAML shape, thin shell, allowlist); hooks H1–H5 (wrapper, shape, portable paths); CLAUDE.md C1–C2 in CLI mode only |
 
@@ -109,7 +112,39 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.35.0 · assembled 2026-07-19 · 1.35.0: absorbed scribe's `knowledge-forge` skill, retired as
+v1.36.0 · assembled 2026-07-20 · 1.36.0: `ops-adr` — a new standing agent closing the periodic-
+ADR-review gap, sibling to `ops-issues`/`ops-repo`: `scripts/adr_checkpoint.py` diffs the ADR
+corpus by content hash against a checkpoint (new/amended/newly-superseded, read from `supersedes:`
+frontmatter rather than inferred from prose), keeping judgment cost proportional to the delta,
+never the corpus; `scripts/adr_queue.py` holds candidates durably so a scheduled firing never
+blocks on a live human, idempotent by (adr, kind) so a re-detected candidate updates in place
+instead of piling up. Structurally barred from authoring: a confirmed harvest candidate's next
+step is a named `/pack-forge`/`/skill-forge` command, a confirmed stale-citation candidate's is
+`knowledge-harvest`'s own Phase 6 — this agent runs neither itself, only names it, mirroring
+`ops-repo`'s propose-don't-mutate posture. Preloads `knowledge-harvest` + `pack-authoring-standards`
+(both same-plugin, both `disable-model-invocation: false` and therefore preloadable — unlike
+`ops-issues`/`ops-repo`'s scribe dependencies, which are cross-plugin and must be restated).
+Designed via a `system-decompose` PLAN-mode manifest (technical-architecture domain, 11 leaf nodes
+across 5 subsystems, `coverage_check.py` clean on the second pass — checkpoint-store needed a
+`shared-util` justify) before either script was written. Both scripts' selftests include a
+negative control apiece: `adr_checkpoint.py` proves an already-recorded supersession never
+re-fires, and that a 500-ADR fixture with one new entry costs the same as a 1-ADR corpus would;
+`adr_queue.py` proves a re-added (adr, kind) pair never duplicates a row. Fresh-context
+`agent-reviewer` FLOOR pass: 4 majors fixed — the Write-tool-scope claim read as structural but
+wasn't (corrected to "contract, not a tool wall," matching `ops-issues`/`ops-repo`'s own honest
+phrasing); `adr_checkpoint.py` split into separate `classify`/`advance` calls after the review
+found the original single-call version advanced the checkpoint before judgment ran, so a crash
+mid-firing would have silently lost the unjudged delta forever; a missing report-destination
+default (added, matching the siblings' own `.claude/ops/reports/<UTC-timestamp>.md` convention);
+and the body's restatement of `knowledge-harvest`'s own Phase 1/2/6 content trimmed to cite by
+phase name. Plus 3 minors: script paths repointed to `${CLAUDE_PLUGIN_ROOT}` (were cwd-relative,
+which only happened to work from the plugin root); `adr_queue.py clear` gained an `id:kind` precise
+form (a bare id was dropping a deferred sibling candidate's row); one clause added scoping the
+schedule-as-consent argument OFF `knowledge-harvest`'s own separately-worded Phase 6 constraint —
+detection/queueing runs on schedule, Phase 6 execution is always named for a human. A4 thin-shell
+WARN (agents/ops-adr.md, cap 60, 118 lines after the fixes) — accepted precedent, same kind as
+`ops-issues` (102) and `ops-repo` (97): all three restate cross-plugin content they can't preload.
+Wired: README/MANUAL entries, root CLAUDE.md routing row · v1.35.0 · assembled 2026-07-19 · 1.35.0: absorbed scribe's `knowledge-forge` skill, retired as
 part of a workspace-wide `plugin-decompose` gap analysis (job-to-be-done test: it duplicated this
 plugin's own `pack-forge` end to end, while shipping no mechanical corpus-integrity gate of its
 own — `pack-forge` carries `corpus_check.py` + a dedicated `pack-researcher` agent, `knowledge-forge`
