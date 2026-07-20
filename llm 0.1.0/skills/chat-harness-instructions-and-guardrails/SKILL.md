@@ -102,6 +102,11 @@ example's specific detail is presented as a universal requirement rather than on
 - **The provider/secret trust-boundary pattern** (registry validation, dev-proxy, adapter
   injection) → [[llm-provider-gateway]] (the sibling pack in this plugin) — a narrower, different
   concern than this pack's general instruction-layering/guardrail scope.
+- **Whether a claim grounded in a CLI-harness incident (this pack's own `references/sources.md`
+  fourth worked instance) actually transfers to this pack's Ephemeral-agent scope, or a question
+  naming both a CLI harness and a hosted chatbot in the same breath** →
+  [[agent-residency-taxonomy]] (the sibling pack in this plugin) — this pack answers the guardrail
+  content once the tier is known; that pack is the check for whether it's the right tier at all.
 
 ## Extending this pack
 
