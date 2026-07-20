@@ -101,6 +101,6 @@ universal requirement rather than one valid instance of the role it plays.
 
 A missing axis, a stale worked-example citation (the source moved or was renamed), or a second
 worked example proving a pattern generalizes beyond the one cited here — route to
-`knowledge-forge` (axis decomposition, grounded research waves, index discipline), where
+`pack-forge` (axis decomposition, grounded research waves, index discipline), where
 installed; otherwise apply its discipline inline: one reference per distinct class of ask, every
 claim grounded, never an uncited file bolted on.

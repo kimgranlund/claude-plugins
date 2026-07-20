@@ -50,5 +50,5 @@ it in full.
 
 Every citation in every reference file was accessed **2026-07-17**. A pack answering from this
 citation set more than a few months past that date should re-run the affected axis's research wave
-before being trusted on any `[drift-prone]`-marked claim — per this skill's own "Update" doctrine
-(`knowledge-forge`'s re-sync-after-drift procedure).
+before being trusted on any `[drift-prone]`-marked claim — per `pack-authoring-standards`'
+snapshots-and-freshness doctrine.

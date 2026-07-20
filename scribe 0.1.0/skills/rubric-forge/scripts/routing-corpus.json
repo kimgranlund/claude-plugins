@@ -1,6 +1,6 @@
 {
   "skill": "rubric-forge",
-  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings from the charter (rubric, eval criteria, quality checklist, /goal completion condition, anchors, reviewer convergence). Negatives drawn adversarially from neighbors' trigger vocabulary: skill-author, agent-author, skills-audit, loop-design, linguistic-techniques, reference-forge, spec-author, knowledge-forge, entry-file-author. Corpus of record per M2, checked into the bundle at scripts/routing-corpus.json.",
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings from the charter (rubric, eval criteria, quality checklist, /goal completion condition, anchors, reviewer convergence). Negatives drawn adversarially from neighbors' trigger vocabulary: skill-author, agent-author, skills-audit, loop-design, linguistic-techniques, reference-forge, spec-author, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), entry-file-author. Corpus of record per M2, checked into the bundle at scripts/routing-corpus.json.",
   "positives": [
     "write a rubric for grading model outputs",
     "is this rubric any good",

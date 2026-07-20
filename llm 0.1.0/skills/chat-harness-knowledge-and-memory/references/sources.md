@@ -28,10 +28,13 @@ move.
 Unlike the platform-fact half above, these are files and directories directly readable in this
 workspace right now — inspect them to verify a claim, not "verify against external docs":
 
-- **`scribe`'s `knowledge-forge`** (`/Users/kimba/Projects/nonoun/plugins/scribe 0.1.0/skills/knowledge-forge/SKILL.md`)
-  — the authoring factory for this exact shape: charter → axis decomposition → grounded research
-  waves → the typed index → the entry-surface loop. Cited throughout
-  `knowledge-packs-and-cited-retrieval.md`.
+- **forge's `pack-authoring-standards` + `skill-authoring-standards`** (`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/pack-authoring-standards/SKILL.md`,
+  `/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/skill-authoring-standards/SKILL.md`)
+  — the authoring factory for this exact shape: axis decomposition → grounded research waves → the
+  typed index (pack-authoring-standards) → the entry-surface charter/boundary/deviation-doctrine
+  (skill-authoring-standards). Scribe's `knowledge-forge`, the original single-skill version of
+  this factory, was retired 2026-07-19 and folded into these two forge skills as the estate-wide
+  factory route. Cited throughout `knowledge-packs-and-cited-retrieval.md`.
 - **This very skill family** (`/Users/kimba/Projects/nonoun/plugins/llm 0.1.0/skills/`) —
   `llm-provider-gateway` and `llm-jsonl-streaming` are live instances of the pattern this pack
   describes in the abstract: each carries its own consult table, Grep-first load discipline,

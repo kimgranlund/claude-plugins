@@ -98,7 +98,7 @@ the SPEC-R13 work today; the orchestrator lands with the deferred eval wave (ADR
 ## Extending this pack
 
 A missing axis, a stale reference (a SPEC/ADR revision, a pipeline change), or "add X to this pack" is
-authoring work — route to [[knowledge-forge]] (axis decomposition, grounded research waves against real
+authoring work — route to [[pack-forge]] (axis decomposition, grounded research waves against real
 source, index + cite discipline). Never bolt an uncited file onto the corpus inline; a claim without a
 `file:line` or ADR/SPEC clause does not belong here. The routing corpus of record is
 `scripts/routing-corpus.json`.

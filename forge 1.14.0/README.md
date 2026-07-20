@@ -109,7 +109,28 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.34.14 · assembled 2026-07-19 · 1.34.14: fixed a stale, actively-misleading claim in
+v1.35.0 · assembled 2026-07-19 · 1.35.0: absorbed scribe's `knowledge-forge` skill, retired as
+part of a workspace-wide `plugin-decompose` gap analysis (job-to-be-done test: it duplicated this
+plugin's own `pack-forge` end to end, while shipping no mechanical corpus-integrity gate of its
+own — `pack-forge` carries `corpus_check.py` + a dedicated `pack-researcher` agent, `knowledge-forge`
+explicitly deferred that job to this plugin's `skills-audit`). `skill-authoring-standards` gains a
+new "Knowledge pack" body-style subsection — the entry-surface conventions `pack-authoring-standards`
+deliberately excludes (answers-only boundary, Grep-first consult discipline, deviation doctrine,
+corpus-of-record rule, the answer-contract format) had no home in this plugin before now; a genuine
+content gap, not a restatement. Two hardcoded `"knowledge-forge"` string dependencies fixed
+(`skills-audit/scripts/corpus_index.py`'s factory-route advisory now checks for `pack-forge`;
+`skill-decompose/scripts/manifest_check.py`'s axis-count warning re-attributed to
+`pack-authoring-standards`, the doctrine's actual home even before this retirement). `knowledge-harvest`,
+`git-campaign-workflows`, and `github-issue-pr-primitives` repointed their own routing. This is the
+forge leg of a workspace-wide rename campaign — every knowledge-pack skill across
+color/ui/typography/llm/agentic-ui/design-systems/scribe that named `knowledge-forge` as its own
+factory route is repointed to `pack-forge` in the same change, each plugin versioned and ledgered
+separately. Fresh-context review (skill-auditor): 1 blocking finding fixed (this ledger entry itself
+— the first-pass campaign left forge unbumped despite 13 changed files), 1 major fixed (the
+Grep-first/Read-the-section consult discipline was genuinely lost in the first-pass migration, not
+just moved — added back as skill-authoring-standards' fifth knowledge-pack bullet), 2 minors fixed
+(a systematic off-by-one-day date across ~20 files; a "two pieces" vs. four-item list count
+mismatch in scribe's own ledger entry) · v1.34.14 · assembled 2026-07-19 · 1.34.14: fixed a stale, actively-misleading claim in
 `system-decompose`'s domain references, found by a `plugin-decompose` gap analysis run against a
 candidate "consolidate the two-plane decomposition method" reorg (verdict: no-partition — the three
 "-decompose"-named skills share a narrative skeleton but not a mechanism, and unifying them would

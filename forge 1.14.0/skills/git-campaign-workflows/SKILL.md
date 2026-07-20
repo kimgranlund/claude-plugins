@@ -82,6 +82,6 @@ the operational context the doctrine gets applied inside.
 
 A new dated incident that generalizes past this one workspace, a stale citation (a cited script
 path or commit that moved), or a sixth axis genuinely distinct from the five above — route to
-`knowledge-forge`/`pack-forge` where installed; otherwise apply the discipline inline: one file
+`pack-forge` where installed; otherwise apply the discipline inline: one file
 per question type, every claim dated and sourced, register a new axis in this table in the same
 change that adds the file.

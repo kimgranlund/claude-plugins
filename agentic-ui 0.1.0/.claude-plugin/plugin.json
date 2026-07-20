@@ -1,7 +1,7 @@
 {
   "name": "agentic-ui",
   "displayName": "Agentic UI",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A2UI knowledge packs — wire protocol/renderer, catalog design, the live conversational agent, and the training corpus — answering how @agent-ui/a2ui works from a cited repo corpus; named agentic-ui (not a2ui) to leave room for future Agent2Agent (A2A) protocol material.",
   "license": "MIT",
   "author": {

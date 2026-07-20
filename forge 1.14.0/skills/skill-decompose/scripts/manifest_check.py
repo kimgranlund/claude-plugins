@@ -60,7 +60,7 @@ def check(manifest):
         axes = pack.get("axes", [])
         if len(axes) < AXIS_MIN or len(axes) > AXIS_MAX:
             warns.append(f"pack {name!r} has {len(axes)} axes, outside the healthy "
-                        f"{AXIS_MIN}-{AXIS_MAX} range (knowledge-forge doctrine) — verify this is deliberate")
+                        f"{AXIS_MIN}-{AXIS_MAX} range (pack-authoring-standards doctrine) — verify this is deliberate")
 
         if "invocation_posture" not in pack:
             fails.append(f"pack {name!r} has no stated invocation_posture — D5 requires a deliberate decision")

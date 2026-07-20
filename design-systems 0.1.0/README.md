@@ -32,7 +32,10 @@ inline checklist or fallback report shape when forge isn't installed. No hard ed
 literal script paths) cross the plugin boundary; every same-plugin script/rubric reference among
 the four `design-system-hub*` skills and the agent resolves via `${CLAUDE_PLUGIN_ROOT}`.
 
-v0.10.0 · assembled 2026-07-17 · 0.10.0: material-design-geometry-tokens (+ material-design-token-semantics'
+v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
+retired `knowledge-forge` to forge's `pack-forge` (workspace-wide rename campaign) —
+iconography/material-design-token-semantics' reference to its authoring factory updated; no
+functional/behavior change, a naming correction only. · v0.10.0 · assembled 2026-07-17 · 0.10.0: material-design-geometry-tokens (+ material-design-token-semantics'
 geometry.md) re-synced to the nonoun engine's TKT-0010 shape (2026-07-16) — `padding`/`edgePadding`
 are RENAMED and reformulated into FOUR pads: `padding-narrow` = (height − icon)/2 (the centering
 law, was `pad`) and `padding-wide` = (height − caret)/2 (was `pad-edge`, a flat height/2 — the new

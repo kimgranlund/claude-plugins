@@ -10,7 +10,7 @@ shipped through the forge release gate.
 | `skills/doc-forge` | Procedural | both (`/doc-forge`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
 | `skills/doc-review` | Procedural | both (`/doc-review`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
 | `skills/bug-report` | Procedural (orchestrator) | both (`/bug-report`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
-| `skills/feature` | Procedural skill | both (`/feature`) | Feature intake, the bug-report mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → reference-forge/knowledge-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build` (orchestration) is the momentum half |
+| `skills/feature` | Procedural skill | both (`/feature`) | Feature intake, the bug-report mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → reference-forge / forge's pack-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build` (orchestration) is the momentum half |
 | `skills/issue` | Procedural skill | both (`/issue`) | The generic third sibling: any work item that is neither bug- nor feature-shaped (chore, follow-up, research item, debt) — shape-gate → dedup → `kind: task` record on the ruled backend (`task` label + optional size), plus the full resume surface: fold detail, dated Findings, status verbs (done/doing/wontfix) with the Findings-first close |
 | `skills/docs-alignment` | Command skill | user-only (`/docs-alignment`) | Migrate an existing repo's scattered docs to the canonical directory-per-type map: three-surface inventory (canonical dirs, near-miss locations, loose files/README extractions) → ONE batched plan approval → git mv + minimal frontmatter (doc-type/id/status) + basename-first link repair + doc_lint → project-docs index installed; prose never rewritten, never commits |
 | `skills/research-methods` | Declarative skill | model-only | Six measured-investigation methods (autoresearch, ablation, bisect, adversarial, hill-climb, sweep); the Phase −1/0/1/2 spine + investigation rubric; the `researcher` agent runs one method in isolation |
@@ -18,7 +18,6 @@ shipped through the forge release gate.
 | `skills/markdown-to-markup` | Procedural | both (`/markdown-to-markup`) | Markdown source -> safe rendered markup (DOM); inline + block grammar, parsed via `textContent`, never `innerHTML` |
 | `skills/html-to-markdown` | Procedural | both (`/html-to-markdown`) | HTML -> markdown source; semantic element map (headings, strong/em, code, links, lists), drops presentational markup |
 | `skills/reference-forge` | Procedural | both (`/reference-forge`) | Author or review a referential knowledge doc (a skill's `references/` file, an @-imported doc, a Project Knowledge file) against its bundled rubric |
-| `skills/knowledge-forge` | Procedural | both (`/knowledge-forge`) | Mint a knowledge pack: axis decomposition, grounded research waves, the INDEX + consult-table entry surface |
 | `skills/llms-txt-forge` | Procedural | both (`/llms-txt-forge`) | Author or review an `llms.txt` (and `llms-full.txt`) to the standard shape |
 | `skills/vision-memo-forge` | Procedural | both (`/vision-memo-forge`) | Author, or evaluate and improve, a vision memo (manifesto · reframe · case-for · synthesis); `doc-reviewer` grades the draft |
 | `agents/researcher` | Agent | dispatched | Runs ONE systematic investigation of a scorable system to a measured conclusion in its own context; preloads `research-methods` |
@@ -28,8 +27,10 @@ shipped through the forge release gate.
 
 Folded in from the personal skill corpus per a `plugin-decompose` partition decision: `measure`
 (research-methods, rubric-forge, the `researcher` agent), `markdown-render` (markdown-to-markup,
-html-to-markdown), and `knowledge-docs` (reference-forge, knowledge-forge, llms-txt-forge,
-vision-memo-forge) — all small enough to fold into scribe rather than ship as standalone plugins.
+html-to-markdown), and `knowledge-docs` (reference-forge, llms-txt-forge, vision-memo-forge —
+knowledge-pack authoring, originally `knowledge-forge` in this group, retired 2026-07-19 in favor
+of forge's `pack-forge`, the estate-wide factory-route name) — all small enough to fold into scribe
+rather than ship as standalone plugins.
 Both ported agents soft-mention forge's `handoff-compose` in body prose (not a preload — forge is a
 sibling plugin) and fall back to a plain Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
 questions/Recommended next action block where forge isn't installed.
@@ -44,7 +45,24 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.21.0 · assembled 2026-07-19 · 0.21.0: ADR-0004 dual-write, corrected — v0.19.0 (below) shipped
+v0.22.0 · assembled 2026-07-19 · 0.22.0: `knowledge-forge` retired — a `plugin-decompose` gap
+analysis (job-to-be-done test) found it duplicated forge's `pack-forge` end to end (axis
+decomposition, grounded research waves, INDEX/consult-table registration — near-identical
+descriptions, no daylight between them), while diverging in rigor: `pack-forge` carries a
+mechanical `corpus_check.py` gate and a dedicated `pack-researcher` agent; `knowledge-forge` shipped
+no checker of its own and explicitly deferred that job to forge's `skills-audit` — a scribe-only
+install got the weaker, ungated path by default on the model-invoked route. Its four pieces of
+unique value — the answers-only boundary discipline, the deviation doctrine, the corpus-of-record
+rule, and the answer-contract format for a pack's SKILL.md entry surface — are not duplicated
+elsewhere and were authored fresh into forge's `skill-authoring-standards` (a genuine content gap:
+`pack-authoring-standards` explicitly excludes SKILL.md-surface authoring, and the generic
+"Knowledge" species entry there didn't cover pack-specific sub-conventions). Callers repointed:
+`feature`, `research-methods` (×2), `reference-forge`'s NOT-for fence; five siblings' eval negative-
+corpora (`rubric-forge`, `markdown-to-markup`, `html-to-markdown`, `llms-txt-forge`,
+`reference-forge`) annotated rather than silently rewritten. This is one leg of a workspace-wide
+rename campaign — every knowledge-pack skill across color/ui/typography/llm/agentic-ui/design-
+systems that named `knowledge-forge` as its own factory route is repointed to `pack-forge` in the
+same change, each plugin versioned and ledgered separately · v0.21.0 · assembled 2026-07-19 · 0.21.0: ADR-0004 dual-write, corrected — v0.19.0 (below) shipped
 a real bug, found and fixed same-day: a combined `gh issue create --type <Kind>` call was verified
 to create the issue and only THEN fail the type-attach step, silently (no URL printed on that
 error) — proven by a leftover test issue (`#51`, closed once found). That makes "retry the same

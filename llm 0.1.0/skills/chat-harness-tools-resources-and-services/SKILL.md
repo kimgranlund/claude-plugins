@@ -109,6 +109,6 @@ failure mode it prevents, or this pack's external-service file re-explains what
 
 A missing axis, a stale citation (this session's ToolSearch mechanics or the MCP spec moved), or a
 second worked example proving one of these patterns generalizes beyond this harness — route to
-`knowledge-forge` (axis decomposition, grounded research waves, index discipline), where installed;
+`pack-forge` (axis decomposition, grounded research waves, index discipline), where installed;
 otherwise apply its discipline inline: one reference per distinct class of ask, every claim
 grounded, never an uncited file bolted on.

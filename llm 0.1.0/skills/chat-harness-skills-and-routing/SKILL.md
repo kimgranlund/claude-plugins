@@ -113,6 +113,6 @@ requirement rather than one valid instance of the discipline.
 
 A missing axis, a stale platform-mechanic citation (Claude Code's own loading behavior moved), or a
 second worked instance of the routing-corpus discipline from a different workspace — route to
-`knowledge-forge` (axis decomposition, grounded research waves, index discipline), where installed;
+`pack-forge` (axis decomposition, grounded research waves, index discipline), where installed;
 otherwise apply its discipline inline: one reference per distinct class of ask, every claim
 grounded, never an uncited file bolted on.
