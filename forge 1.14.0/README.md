@@ -112,7 +112,27 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.36.0 · assembled 2026-07-20 · 1.36.0: `ops-adr` — a new standing agent closing the periodic-
+v1.37.0 · assembled 2026-07-20 · 1.37.0: `ops-issues` gains REQ-013 — a one-time, interactive-only
+offer on a GitHub-backed (Option B) repo's first interactive firing to declare a project-scoped
+GitHub MCP server (`.mcp.json`) for richer session browsing, recommended default a read-only-scoped
+fine-grained PAT so REQ-012's no-widened-action guarantee holds by construction of the credential's
+own scope, not agent discipline — the write path for issues/PRs stays the existing capture skills
+exclusively. Governing SPEC `spec-ticketing-watch-triage.md` bumped 0.2.0 → 0.3.0 (new REQ-013 +
+AC-013, three new Non-goals bullets: no webhook receiver, no full-write default credential, no
+revoking a recorded decision). Grounded via WebFetch against Claude Code's own `.mcp.json`/`claude
+mcp add` docs before designing (the earlier, unverified assumption — a webhook receiver — was
+already ruled out by this SPEC's own REQ-002/Non-goals; the real mechanism is a project-scoped
+config file Claude Code approves automatically on first checkout, not custom infrastructure).
+Fresh-context `agent-reviewer` FLOOR pass: 1 Moderate fixed (step 8 read as if the watch seat asks
+the question itself — `tools` carries no `AskUserQuestion`; corrected to mirror REQ-011's own
+dispatch-carrier pattern, and the SPEC's REQ-013 text amended to stop implying it must fire in the
+SAME firing as REQ-011's bootstrap, matching AC-013's actual any-interactive-firing gate) and 3
+minors (description said "first firing," corrected to "first interactive firing"; no failure
+branch named the pre-existing-`.mcp.json` clobber risk, added — merge, never overwrite; the
+stopping predicate's outcome enum couldn't express an offer surfaced but not yet confirmed by a
+carrying dispatch, added as a fourth named state). A4 thin-shell WARN (agents/ops-issues.md, cap
+60, 145 lines) — accepted precedent, unchanged in kind from the file's own prior state (the
+cross-plugin TICKET-shape restatement, not today's delta, is the bulk of it) · v1.36.0 · assembled 2026-07-20 · 1.36.0: `ops-adr` — a new standing agent closing the periodic-
 ADR-review gap, sibling to `ops-issues`/`ops-repo`: `scripts/adr_checkpoint.py` diffs the ADR
 corpus by content hash against a checkpoint (new/amended/newly-superseded, read from `supersedes:`
 frontmatter rather than inferred from prose), keeping judgment cost proportional to the delta,

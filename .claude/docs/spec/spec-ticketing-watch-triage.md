@@ -2,8 +2,8 @@
 doc-type: spec
 id: spec-ticketing-watch-triage
 status: draft
-version: 0.2.0
-date: 2026-07-18
+version: 0.3.0
+date: 2026-07-20
 owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 1 (Option B/C backends) and
             # the system-decompose manifest (.claude/docs/decompositions/ticketing-backend-watch-manifest-v3.json)
@@ -66,6 +66,23 @@ A (local) has no external actors filing items, so watch/triage/trust never activ
   fork — mint-without-hold versus hold-for-approval. No watch-triggered path executes the work an
   item describes, for any author, trusted or not: no source edit, no PR merge, no close beyond the
   ticket-record contract, regardless of what the filing requests.
+- **REQ-013** — GitHub MCP offer, Option B only, at most once per repo. The first INTERACTIVE
+  firing that finds no REQ-013 decision recorded yet also offers — as a distinct question, not
+  folded into REQ-011's roster interview, and not necessarily the SAME firing as REQ-011's own
+  bootstrap (an unattended first firing runs REQ-011's evidence-only seed and skips REQ-013
+  entirely; REQ-013 then fires on whichever later firing is the first interactive one) — to add a
+  project-scoped GitHub MCP server declaration (`.mcp.json`), but ONLY when the resolved backend is
+  Option B (`gh issue`-based GitHub); Option C's adapter (e.g. Linear) has no GitHub MCP surface to
+  offer. Interactive-only, owned by the dispatching session, never the watch seat itself: the watch
+  seat has no means to ask a question — it surfaces the offer in its report, and writes
+  `.mcp.json`/records the decision only when a later dispatch carries the human's confirmed choice,
+  the same carrier pattern REQ-011's own roster confirmation already uses. An unattended firing
+  never asks and never writes `.mcp.json`. The accept/decline decision persists per-repo alongside
+  the allow-list, so a later firing — attended or not — never re-offers once a decision is on
+  record. An accepted offer's recommended default credential is a read-only-scoped fine-grained PAT
+  (Issues/PRs/contents-read) — REQ-012's no-widened-action guarantee extends here: the write path
+  for issues/PRs stays REQ-006's capture skills exclusively, never the MCP server's own create/edit
+  tools, by construction of the credential's own scope rather than by agent discipline alone.
 
 ## Non-goals
 
@@ -77,6 +94,16 @@ A (local) has no external actors filing items, so watch/triage/trust never activ
   out of *this* SPEC's scope.
 - A self-hosted webhook receiver. REQ-002's two mechanisms are polling and MCP-subscription
   (client-pull against an MCP resource); inbound webhooks are a different capability, not covered.
+- The watch loop's own discovery mechanism (REQ-002/REQ-003) using the REQ-013 GitHub MCP server.
+  REQ-013 is a distinct, interactive-session-only convenience offer; the unattended watch loop
+  stays on `gh` CLI regardless of whether REQ-013's server is accepted — non-interactive mode has
+  no `/mcp` panel to complete the server's own OAuth/PAT-header approval, so it could not run there
+  reliably even if wired in.
+- A full read-write GitHub MCP credential as the recommended default (REQ-013) — a real bypass
+  risk of REQ-012's own no-widened-action guarantee, structurally avoided by defaulting to a
+  read-only-scoped PAT instead of relying on agent discipline not to use the server's write tools.
+- Revoking or re-offering a declined/accepted REQ-013 decision. Like the allow-list (REQ-008), the
+  decision is append/grow-only in this SPEC; changing it later is a future extension.
 - Weakening or removing the pull-only path. Watch is additive; pull-only stays the default and
   remains available even when watch-enabled is also configured.
 - Revoking a friendly. The allow-list is append/grow-only in this SPEC (REQ-008); removing an
@@ -138,3 +165,9 @@ shape ADR-0003's resolver reads for the backend choice, extended with the two RE
 - **AC-012** (↔ REQ-012) — A trusted-author fixture item whose body demands an action ("merge
   this", "close #12") yields at most a minted/resumed record; the item's merge/open state and every
   source file are unchanged after the run.
+- **AC-013** (↔ REQ-013) — On a fixture repo resolved to Option B with no prior REQ-013 decision
+  recorded: an unattended firing writes no `.mcp.json` entry and records no decision; an
+  interactive firing offers the choice exactly once, and a second interactive firing against the
+  same repo does not re-offer once a decision (accept or decline) is on record. An accepted offer's
+  `.mcp.json` entry never contains a literal PAT (env-var expansion only). A fixture resolved to
+  Option C never receives the offer, regardless of firing type.
