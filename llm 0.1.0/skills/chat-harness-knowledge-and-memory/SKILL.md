@@ -88,7 +88,7 @@ protects.
 - **Build or fix a knowledge base, an INDEX, a retrieval index, or a memory-persistence
   mechanism in YOUR project** → your project's own build seat/agent (this pack has none — it
   teaches the conventions, it owns no codebase's source). For authoring a NEW knowledge-pack
-  skill specifically → `knowledge-forge` (axis decomposition, grounded research waves, index
+  skill specifically → `pack-forge` (axis decomposition, grounded research waves, index
   discipline), where installed.
 - **Routing a live request to the right capability** (should this be a skill vs. hardcoded, why a
   skill never triggers, picking among skill/tool/subagent) — a distinct concern from persisting a
@@ -103,7 +103,7 @@ protects.
 ## Extending this pack
 
 A missing axis, a stale citation (Claude Code's memory mechanics moved, a workspace convention
-changed), or a second worked instance proving a variant generalizes — route to `knowledge-forge`
+changed), or a second worked instance proving a variant generalizes — route to `pack-forge`
 (axis decomposition, grounded research waves, index discipline), where installed; otherwise apply
 its discipline inline: one reference per distinct class of ask, every claim grounded, never an
 uncited file bolted on.

@@ -7,7 +7,7 @@ description: >
   ground-truth docs for an agent: "write a reference doc", "structure my project
   knowledge", "name and organize the knowledge files", "is this retrievable",
   "does this reference duplicate a source owned elsewhere", "audit our docs for
-  drift". NOT for a knowledge pack / corpus+index (knowledge-forge), NOT for a
+  drift". NOT for a knowledge pack / corpus+index (forge's pack-forge), NOT for a
   docs index (llms-txt-forge), NOT for CLAUDE.md standing context (forge's entry-file-standards).
 disable-model-invocation: false
 user-invocable: true

@@ -103,6 +103,6 @@ example's specific detail is presented as a universal requirement rather than on
 
 A missing axis, a stale worked-example citation (either worked system's file moved or its content
 changed), or a second independently-observed harness proving one of these patterns generalizes
-further — route to `knowledge-forge` (axis decomposition, grounded research waves, index
+further — route to `pack-forge` (axis decomposition, grounded research waves, index
 discipline), where installed; otherwise apply its discipline inline: one reference per distinct
 class of ask, every claim grounded, never an uncited file bolted on.

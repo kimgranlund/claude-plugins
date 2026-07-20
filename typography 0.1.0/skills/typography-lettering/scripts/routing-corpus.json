@@ -1,13 +1,13 @@
 {
   "skill": "typography-lettering",
-  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: i18n-verify, color-science-accessibility, color-science-spaces, component-forge, token-builder agent, knowledge-forge, ui-patterns.",
+  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-science-* split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: i18n-verify, color-science-accessibility, color-science-spaces, component-forge, token-builder agent, pack-forge, ui-patterns.",
   "neighbors": [
     "i18n-verify",
     "color-science-accessibility",
     "color-science-spaces",
     "component-forge",
     "token-builder(agent)",
-    "knowledge-forge",
+    "pack-forge",
     "ui-patterns"
   ],
   "positives": [

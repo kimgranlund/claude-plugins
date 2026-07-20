@@ -90,7 +90,7 @@ routing-eval or skill review reads it from there.
 ## Extending / re-syncing this pack
 
 A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[knowledge-forge]] (this pack's factory: axis decomposition, grounded research waves, the typed
+[[pack-forge]] (this pack's factory: axis decomposition, grounded research waves, the typed
 index). **Re-sync trigger:** when a cited SPEC/ADR is amended or a renderer symbol is renamed, re-run
 the research wave for the affected axis, re-date `references/sources.md`, and re-verify the cited
 `file:line`s and ADR clauses — a pack answering from a superseded edition is a false manifest with

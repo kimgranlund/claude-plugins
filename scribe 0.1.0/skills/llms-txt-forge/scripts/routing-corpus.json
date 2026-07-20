@@ -1,7 +1,7 @@
 {
   "skill": "llms-txt-forge",
-  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from graph neighbors: reference-forge, knowledge-forge, entry-file-author, html-to-markdown, and the repo-local docs-author (agent-ui). Not yet checked into the bundle — M2 requires scripts/routing-corpus.json.",
-  "neighbors": ["reference-forge", "knowledge-forge", "entry-file-author", "html-to-markdown", "docs-author (repo-local, agent-ui)"],
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from graph neighbors: reference-forge, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), entry-file-author, html-to-markdown, and the repo-local docs-author (agent-ui). Not yet checked into the bundle — M2 requires scripts/routing-corpus.json.",
+  "neighbors": ["reference-forge", "knowledge-forge (retired 2026-07-19, folded into forge's pack-forge)", "entry-file-author", "html-to-markdown", "docs-author (repo-local, agent-ui)"],
   "positives": [
     "generate an llms.txt for our docs",
     "review our llms.txt",

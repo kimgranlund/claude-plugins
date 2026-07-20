@@ -83,10 +83,10 @@ decision-ratifying.
   change earns via doc-forge — PRD (why/what) / SPEC (behavior) / LLD (how) — never the bundle by
   default, and ADR only for a ratified fork (the standing ADR-default-no ruling).
 - **Knowledge** (the ask is really reference material, standards, or a world model to encode) →
-  AUTHOR it at intake via reference-forge (one document) or knowledge-forge (a corpus), scribe's
-  own seats — encoding knowledge IS the record, so "never builds" is intact (that clause bars
-  SOFTWARE builds, /build's territory); the TICKET records the routing, links the authored
-  result, and closes.
+  AUTHOR it at intake via reference-forge (one document, scribe's own seat) or forge's `pack-forge`
+  (a corpus, where installed) — encoding knowledge IS the record, so "never builds" is intact (that
+  clause bars SOFTWARE builds, /build's territory); the TICKET records the routing, links the
+  authored result, and closes.
 - **Defect** (this "feature" is actually a bug) or **generic chore** (nothing to size or shape) →
   neither Work nor Knowledge; redirect instead (Failure branches) rather than forcing a size/shape
   decision onto something that isn't one.

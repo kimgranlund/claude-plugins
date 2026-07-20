@@ -78,5 +78,5 @@ apply — a deviation with no named failing rationale is drift.
 ## Extending this pack
 
 A missing axis, a stale reference (canon moves: HIG revisions, Material Symbols re-specs, WCAG
-dot-releases), or "add X" is authoring work — route to scribe's `knowledge-forge` (grounded
+dot-releases), or "add X" is authoring work — route to forge's `pack-forge` (grounded
 research waves, one axis per wave); never bolt an uncited file onto the corpus inline.

@@ -1,6 +1,6 @@
 {
   "skill": "color-theory",
-  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-science-* split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-science-perception, color-science-spaces, color-science-accessibility, palette-design, color-verify, ui-patterns, knowledge-forge.",
+  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-science-* split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-science-perception, color-science-spaces, color-science-accessibility, palette-design, color-verify, ui-patterns, pack-forge.",
   "siblings_in_repo": [
     "color-science-perception",
     "color-science-spaces",
@@ -8,7 +8,7 @@
     "palette-design",
     "color-verify",
     "ui-patterns",
-    "knowledge-forge"
+    "pack-forge"
   ],
   "positives": [
     "explain why complementary color schemes are supposed to work",

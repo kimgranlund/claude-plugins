@@ -288,7 +288,11 @@ def gate(root: Path, package: bool = False):
              # and "load-discipline" is skill-decompose's pre-existing, unrelated prose (a
              # references/best-practices.md phrase about corpus load pressure) newly caught by
              # the same suffix — the standing false-positive class, same shape as -flow/-systems:
-             "self-review", "load-discipline"}
+             "self-review", "load-discipline",
+             # pack-authoring-standards (2026-07-19): "knowledge-forge" is a deliberate historical
+             # citation of a now-retired scribe skill (folded into this plugin's own pack-forge),
+             # not rename drift — the sentence explains provenance, it doesn't point at a live sibling:
+             "knowledge-forge"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

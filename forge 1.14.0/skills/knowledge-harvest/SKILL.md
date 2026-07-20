@@ -8,7 +8,7 @@ description: >-
   "third time I've explained X", "skill or reference?", "is this knowledge or noise", "scan our
   docs for uncaptured knowledge", "is our harvested knowledge still accurate", "did this citation
   go stale, the file moved", "is there already a reference covering this", or "propose a plan for
-  capturing this decision before we write". NOT authoring content once confirmed (knowledge-forge);
+  capturing this decision before we write". NOT authoring content once confirmed (pack-forge);
   NOT a new skill's decomposition (system-decompose); NOT running gates directly (release_gate.py,
   /eval-run); NOT the decision record itself — an ADR IS a decision, this decides whether a fact
   FROM one earns a knowledge-pack entry (doc-authoring-standards).
@@ -22,7 +22,7 @@ knowledge-harvest turns a signal — a repeated correction, a ratified decision,
 — into a confirmed, gated addition to a project's knowledge-pack corpus, or explicitly declines to.
 It never authors silently: every candidate reaches an AskUserQuestion gate carrying a concrete
 plan before any file is written, and every landed citation is later re-checked rather than trusted
-forever. This skill orchestrates existing machinery (`knowledge-forge` authors, `release_gate.py`
+forever. This skill orchestrates existing machinery (`pack-forge` authors, `release_gate.py`
 gates, `/eval-run` measures routing) — its own delta is the signal, the confirmation payload, the
 placement/versioning judgment, and the staleness loop.
 
@@ -86,9 +86,9 @@ record nothing, and do not re-propose the same candidate again this session.
 confirmation is on record for this candidate, stop and return to Phase 3 — Phase 4 has no
 independent authority to write.
 
-Route the confirmed plan to `knowledge-forge` (or apply its convention inline where not installed):
-write or update the `SKILL.md` / `references/*.md` / `scripts/routing-corpus.json` /
-`evals/evals.json` per this workspace's established knowledge-pack shape. Record the citation's
+Route the confirmed plan to `pack-forge` (the corpus: `references/*.md`, `scripts/routing-corpus.json`,
+`evals/evals.json`) and `skill-forge` (the `SKILL.md` entry surface) — or apply their conventions
+inline where not installed — per this workspace's established knowledge-pack shape. Record the citation's
 exact source (`file:line`, quote, commit/date) inline. Where the target project already has a
 trust-class labeling convention for citations (e.g. the `llm` plugin's "Platform/vendor fact" /
 "Worked instance" / "Observed harness behavior" split), follow it; where it doesn't, a bare

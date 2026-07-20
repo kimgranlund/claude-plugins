@@ -161,7 +161,7 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 - **`researcher`** runs one method in isolation and hands back the typed report above.
 - **[[intent-extract]]** / **[[intent-grill]]** sharpen a fuzzy "make it better" into a scorable
   question + a defined scorer *before* a method runs — the R1 precondition.
-- **[[rubric-forge]]** owns `references/rubric.md`'s shape; **[[knowledge-forge]]** owns adding or
+- **[[rubric-forge]]** owns `references/rubric.md`'s shape; forge's `pack-forge` owns adding or
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an
   uncited method on inline.
 - Downstream of a finding, route the *fix* to its owner: a code change to **system-builder**, a skill

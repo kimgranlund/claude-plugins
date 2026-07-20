@@ -98,6 +98,6 @@ real instance of the underlying discipline.
 
 A missing axis, a stale citation (a cited hook, tool, or eval-run number that no longer matches
 current reality), or a second worked instance from a different workspace proving the discipline
-generalizes — route to `knowledge-forge` (axis decomposition, grounded research waves, index
+generalizes — route to `pack-forge` (axis decomposition, grounded research waves, index
 discipline), where installed; otherwise apply its discipline inline: one reference per distinct
 class of ask, every claim grounded, never an uncited file bolted on.

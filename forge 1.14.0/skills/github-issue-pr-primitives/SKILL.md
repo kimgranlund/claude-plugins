@@ -94,6 +94,6 @@ assumed facts about that platform turned out wrong.
 
 A GitHub platform feature this pack doesn't yet cover, a citation gone stale (re-run that axis's
 research wave, re-date it, note what changed rather than silently overwriting), or a genuinely new
-eighth ask-class — route to `knowledge-harvest`/`knowledge-forge` where installed; otherwise apply
+eighth ask-class — route to `knowledge-harvest`/`pack-forge` where installed; otherwise apply
 the discipline inline: one file per question type, every claim dated and sourced against a real
 fetch, register the new axis in this table in the same change that adds the file.
