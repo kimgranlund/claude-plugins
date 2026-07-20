@@ -4,6 +4,66 @@ Repo-level milestones only. Each plugin's own `README.md` footer carries its ful
 ledger — this file exists to show how the nine plugins came to exist relative to each other, not
 to duplicate their per-version detail.
 
+## 2026-07-20 — ops-adr: a standing periodic ADR-review agent, and a GitHub MCP offer for ops-issues
+
+Closes the ADR-side gap next to the ticketing-backend agents from 2026-07-17. `ops-adr` checkpoints
+an ADR corpus by content hash (`scripts/adr_checkpoint.py`), judging only the new/amended/
+newly-superseded delta against `knowledge-harvest`'s own bar — cost stays proportional to what
+changed, never to corpus size — and queues candidates durably (`scripts/adr_queue.py`) so a
+scheduled firing never blocks on a human. Structurally barred from authoring: a confirmed
+candidate's next step is always a named `/pack-forge`/`/skill-forge`/`knowledge-harvest` command,
+never a write this agent performs itself. Designed via a `system-decompose` PLAN-mode manifest
+before either script was written; a fresh-context `agent-reviewer` pass caught a real crash-safety
+gap pre-ship (the checkpoint would have advanced before judgment ran), fixed by splitting the
+script into separate `classify`/`advance` calls. The same week, `ops-issues` gained REQ-013: a
+one-time, interactive-only offer to declare a read-only-scoped GitHub MCP server on a GitHub-backed
+repo's first interactive firing — the existing capture skills stay the sole write path for
+issues/PRs by construction of the credential's own scope, not agent discipline. (`forge` 1.35.0 →
+1.37.0)
+
+## 2026-07-19 — Retire scribe:knowledge-forge, fold into forge:pack-forge
+
+A `plugin-decompose` gap analysis (job-to-be-done test, run alongside two other candidate groupings
+kept as no-partition) found scribe's `knowledge-forge` duplicated forge's `pack-forge` end to end
+while shipping no mechanical corpus-integrity gate of its own — a scribe-only install got the
+weaker, ungated authoring path by default. Retired the skill; its genuinely unique entry-surface
+conventions (answers-only boundary, Grep-first consult discipline, deviation doctrine,
+corpus-of-record rule) were authored fresh into forge's `skill-authoring-standards`, not merely
+moved. Retiring the name meant repointing every knowledge-pack skill across all 8 downstream
+plugins that named `knowledge-forge` as its own factory route — 81 files in the initial campaign.
+Verified via a full `/eval-run` (255 cases, 13 scribe suites) that no sibling skill wrongly grabbed
+the orphaned trigger vocabulary once the model-routable skill was deleted. Two independent
+fresh-context reviews caught real gaps before and after merge (a missed version bump, a genuinely
+lost Grep-first convention, an overclaimed "confirmed pre-existing" framing later corrected and
+filed as Issue #58). (`forge` 1.34.14 → 1.35.0; `scribe` 0.21.0 → 0.22.0; six domain plugins
+patch-bumped)
+
+## 2026-07-18 — ADR-0004 and ADR-0005: native GitHub Issue Types, and a ticket-claim protocol
+
+Two ADRs ratified the same week. **ADR-0004**: dual-write GitHub's native Issue Type alongside the
+existing `kind:` label on every capture skill's mint call — found and fixed a real same-day bug
+before it could ship a second time: a combined `gh issue create --type` call was proven (via a
+leftover test issue) to create the issue and only then silently fail the type-attach step, making a
+naive "retry without --type" fallback mint a duplicate; redesigned as two always-separate calls,
+create then a separate edit, eliminating the risk structurally rather than patching around it.
+**ADR-0005**: a `claim` backend operation — write identity, re-read to confirm it wasn't outraced —
+preventing two independent parallel agents from starting the same ticket before a git-tree
+collision even exists; cross-referenced into `orchestration`'s `concurrency-design` skill as the
+layer beneath its own git-tree collision response. (`forge` 1.34.9 → 1.34.12; `scribe` 0.18.1 →
+0.20.0; `orchestration` 0.7.4 → 0.7.5)
+
+## 2026-07-17 — ADR-0003: a three-way work-item backend, and the Linear adapter realized
+
+Generalizes scribe's bug-report/feature/issue capture skills beyond the single git-native
+assumption ADR-0002 ruled for this workspace: a repo now resolves to Option A (local TICKET file,
+unchanged default), Option B (git-native, `gh issue` — this workspace's own ruled instance), or
+Option C (a named external adapter) behind one resolver seam, decided once per repo and never
+re-asked per capture. The watch/triage/trust SPEC this ADR's Decision 1 anticipates
+(`spec-ticketing-watch-triage.md`) followed the same wave as `ops-issues`/`ops-repo` — the estate's
+first standing operational agents, scheduled via `CronCreate`, structurally barred from doing the
+captured work themselves. Linear shipped as the first Option C adapter shortly after, proven live.
+(`forge` 1.32.0 → 1.33.0; `scribe` 0.15.0 → 0.16.0)
+
 ## 2026-07-15 — ADR-0002: git-native execution — Issues, PRs, worktrees, CI, and the style-lint tier
 
 Three maintainer rulings (in-session AskUserQuestion), one ADR, executed as the estate's **first
