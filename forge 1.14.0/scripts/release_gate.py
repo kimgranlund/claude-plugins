@@ -93,9 +93,18 @@ def gate(root: Path, package: bool = False):
         warn("G2", f"{len(rogue_dirs)} skill subfolder(s) outside the sanctioned set "
                    f"(evals/references/scripts/assets): {', '.join(rogue_dirs[:4])} "
                    "-> topical data dirs live under assets/<topic>/ (ruled 2026-07-15)")
+    # Broken symlinks FAIL: a rename sweep cannot see a symlink's target text, so a renamed
+    # target dir silently strands the link — locally masked by macOS glob behavior, then a
+    # FileNotFoundError crash on the Linux CI runner (bitten 2026-07-21, ADR-0006 harness merge:
+    # make-llms-txt's best-practices.md pointed at the renamed reference-forge/).
+    broken_links = [str(p.relative_to(root)) for p in root.rglob("*")
+                    if p.is_symlink() and not p.resolve().exists()]
+    if broken_links:
+        fail("G2", f"{len(broken_links)} broken symlink(s): {', '.join(broken_links[:3])} "
+                   "-> repoint the target; symlink targets are invisible to rename sweeps")
     if "G2" not in fails:
         ok("structure: manifest isolated; every skill dir carries SKILL.md"
-           + ("" if rogue_dirs else "; subfolders conform"))
+           + ("" if rogue_dirs else "; subfolders conform") + "; no broken symlinks")
 
     # G3 full lint via skill_lint
     targets = (sorted(root.glob("skills/*/SKILL.md")) + sorted(root.glob("agents/*.md"))
@@ -157,6 +166,8 @@ def gate(root: Path, package: bool = False):
     for md in root.rglob("*.md"):
         if "CHANGELOG" in md.name or "dist" in md.parts:
             continue
+        if md.is_symlink() and not md.resolve().exists():
+            continue  # broken symlink — already FAILED at G2; reading it would crash the sweep
         fenced = False
         for i, line in enumerate(md.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
             if line.lstrip().startswith("```"):
@@ -369,6 +380,12 @@ def gate(root: Path, package: bool = False):
              "post-merge", "preloaded-skill", "return-by-file", "shared-file", "single-plugin",
              "some-plugin", "some-plugin-repo", "standards-skill", "sub-split", "target-repo",
              "whole-pack",
+             # Post-merge main sweep (2026-07-21): docs-plugin prose compounds surfaced once the
+             # full merged state gated together — same class:
+             "design-docs", "force-file", "non-bug", "whole-file",
+             # path-tokenizer artifacts of "…/references/rubric.md" citations inside the make-*
+             # skills ("llms.txt by `make-llms-txt/references/rubric.md`" etc.):
+             "rubric-llms-txt", "rubric-reference", "rubric-rubric",
              # "llms-txt" is the FILE format (llms.txt) named in naming-rules' shapes table,
              # not a phantom sibling of make-llms-txt:
              "llms-txt",
@@ -494,6 +511,16 @@ def selftest():
         with contextlib.redirect_stdout(buf):
             code, _ = gate(r)
         assert "recipes" not in buf.getvalue(), "removed rogue dir must clear the G2 warn"
+        # G2 broken-symlink control: a link to a missing target must FAIL; repointed, it clears
+        link = r / "skills" / "demo-review" / "references"
+        link.mkdir()
+        (link / "ghost.md").symlink_to("../../retired-skill/references/ghost.md")
+        code, _ = gate(r)
+        assert code == 1, "broken symlink must FAIL G2 (the CI FileNotFoundError class)"
+        (link / "ghost.md").unlink()
+        code, _ = gate(r)
+        assert code == 0, "removed broken symlink must restore a clean gate"
+        link.rmdir()
         (r / "skills" / "demo-review" / "evals").mkdir()
         (r / "skills" / "demo-review" / "evals" / "evals.json").write_text('{"skill": "wrong-owner", "cases": [{"id": "t0", "prompt": "x", "expect": "trigger"}]}')
         code, _ = gate(r)
