@@ -4,7 +4,7 @@
   "cases": [
     {
       "id": "t01",
-      "prompt": "what size token for this control",
+      "prompt": "what md-sys size token for this control",
       "expect": "trigger"
     },
     {
@@ -14,17 +14,17 @@
     },
     {
       "id": "t03",
-      "prompt": "what font size for this md-sys button",
+      "prompt": "what's the --md-sys-size font for this button",
       "expect": "trigger"
     },
     {
       "id": "t04",
-      "prompt": "what padding for this card",
+      "prompt": "what md-sys padding for this card",
       "expect": "trigger"
     },
     {
       "id": "t05",
-      "prompt": "what gap between these elements",
+      "prompt": "what md-sys gap between these elements",
       "expect": "trigger"
     },
     {
@@ -39,7 +39,7 @@
     },
     {
       "id": "t08",
-      "prompt": "the focus ring token",
+      "prompt": "the md-sys focus ring token",
       "expect": "trigger"
     },
     {

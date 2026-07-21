@@ -4,7 +4,7 @@ description: >-
   Answers vision and color-appearance science questions — what the eye and brain do with light. Use
   when explaining chroma vs saturation, lightness vs brightness, colorfulness, or why two colors of
   equal saturation aren't equally vivid; cones, opponent process, afterimages, simultaneous
-  contrast; metamerism;
+  contrast; metamerism — why two paints or swatches match under one light but not another;
   color appearance models and viewing conditions (Fairchild, CIECAM02); MacAdam ellipses and
   just-noticeable differences; warm/cool as a perceptual axis; tetrachromacy, OLO, color philosophy
   and color education; why JPEG throws away color information via chroma subsampling with no visible

@@ -3,7 +3,7 @@ name: material-color-facts
 description: >
   Use when choosing the COLOR of any UI whose color tokens use the Material `--md-sys-color-*` naming —
   the color/role for a button, control, text, card, modal, nav, toast, border, or state ("which
-  color should this use", "what token for this background/text", "add hover/disabled colors", "wire the
+  color should this button use", "what token for this background/text", "add hover/disabled colors", "wire the
   theme", "make it work in dark mode", "why is this the wrong color"). Consumption guide for the
   59-role semantic layer extending Material 3: binding palettes, M3 baseline vs. extensions
   (state families, tonal variants, surface/scrim ladders, intents as palettes), pairing laws keeping fg on

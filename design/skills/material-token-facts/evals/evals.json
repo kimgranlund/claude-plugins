@@ -9,7 +9,7 @@
     },
     {
       "id": "t02",
-      "prompt": "What is the kicker voice for?",
+      "prompt": "What is the kicker voice for in the md-sys typescale?",
       "expect": "trigger"
     },
     {

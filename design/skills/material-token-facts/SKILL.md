@@ -10,8 +10,9 @@ description: >-
   meaning — not the binding grammar, recipes, pairing laws, or bind-check procedure: for those, load
   the matching material-{color,type,shape}-facts skill. NOT for a raw hex/px value — "what's the
   actual value behind this token" (the owning consumption skill); NOT for M3-vs-extension history —
-  "is this token M3 baseline or one of our extensions" (each sibling's own
-  "Foundation vs. extension" table); NOT for a non-Material `--{prefix}-*` kit (no owner — decline).
+  "is this token M3 baseline or one of our extensions", "is surface-container M3 baseline" (each
+  sibling's own "Foundation vs. extension" table, e.g. material-color-facts for surface roles);
+  NOT for a non-Material `--{prefix}-*` kit (no owner — decline).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -9,7 +9,8 @@ description: >
   "catch without a param", "networkAccess none", "unit-test plugin code"), token JSON shapes
   ("UI3 import format", "com.figma.modeName", "aliasData", "moded plan"), and
   pluginData/clientStorage. ANSWERS, does not generate. NOT for the nonoun color-tokens plugin's
-  own binder/apply procedure (its repo-local maintaining-figma-plugins); NOT the DESIGN.md format
+  own binder/apply cascade — "the binder skipped roles when applying" (its repo-local
+  maintaining-figma-plugins); NOT the DESIGN.md format
   (design-md-rules); NOT --md-sys-* semantics (material-design-*-tokens); NOT the Figma MCP
   tools; NOT the REST API, widgets, or scene-node/layer work (not covered).
 user-invocable: false
