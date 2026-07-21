@@ -72,6 +72,12 @@
       "prompt": "What should we name this new skill?",
       "expect": "no-trigger",
       "comment": "owner: naming-rules — forward naming under the simple paradigm"
+    },
+    {
+      "id": "n08",
+      "prompt": "Run the trigger evals and show me the routing matrix.",
+      "expect": "no-trigger",
+      "comment": "owner: eval-run"
     }
   ]
 }

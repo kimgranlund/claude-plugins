@@ -51,5 +51,7 @@ P5 validate:   PASS 2026-07-20 — skill_lint clean; fresh-context skill-auditor
 - Auditor nit accepted: the name `naming-rules` self-instantiates the new paradigm inside a
   legacy-grammar estate (legacy-conformant would be `naming-standards`) — deliberate
   self-demonstration; the skill is the paradigm's first artifact.
-- Description-tier fix (fence citation) lands in this same change per the edit ladder; the
-  `/eval-run` blind-judge pass at the wave boundary is human-timed — named as the PR follow-up.
+- Description-tier fix (fence citation) lands in this same change per the edit ladder.
+- Wave-boundary eval-run executed 2026-07-20 (user: "proceed"): first pass 21/22 — n05 ("why are
+  our existing naming conventions structured the way they are") leaked to naming-rules; fence
+  rewritten to name the EXISTING-estate question explicitly; re-judge 22/22 clean.

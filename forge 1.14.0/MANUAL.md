@@ -29,7 +29,7 @@ Install, then `/reload-plugins`. Everything below is invoked as `/forge:<name>` 
 **`/repo-alignment [repo path] [--phases 0-6 | audit-only]`** — the committing campaign for a drifted repo (where `/harness-audit` only reports): phased inventory → unify duplicates → orphan manifest → schema + standing guards → audit verdicts → work-package execution → lessons distillation; human-checkpointed at every destructive step.
 > `/repo-alignment .` · `/repo-alignment ~/projects/app audit-only`
 
-**`/eval-run [plugin-root]`** — run the trigger-eval suites as a blind routing simulation: judges pick a skill from the description menu alone; you get a routing matrix and per-failure tuning targets (stolen / leaked / dead).
+**`/eval-run [plugin-root]`** — run the trigger-eval suites as a blind routing simulation: judges pick a skill from the description menu alone; you get a routing matrix and per-failure tuning targets (stolen / leaked / dead). Also model-invocable (1.41.0): "prove the routing after that description change" fires it without the slash.
 > `/eval-run .` — worth running after any description edit
 
 **`/skill-refactor [manifest.json]`** — execute a validated skill-decompose or skill-synthesize manifest: plan shown for approval, files moved, old surfaces retired to an attic (never deleted), referrers rewritten, sweep proven (zero live references to retired handles).

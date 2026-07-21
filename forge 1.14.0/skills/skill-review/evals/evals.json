@@ -51,6 +51,12 @@
       "id": "n05",
       "prompt": "decide whether this sprawling skill should split into several",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "Prove the routing still works after my description edit.",
+      "expect": "no-trigger",
+      "comment": "owner: eval-run"
     }
   ]
 }

@@ -45,7 +45,7 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `skills/ops-orchestrator` | Command skill | user-only (`/ops-orchestrator`) | Dispatches the ops-orchestrator agent above for an on-demand sweep — the /ops-issues same-name pairing; banner-before-dispatch on the shared first-queue marker (`.claude/ops/plan.md` absent — the sweep itself creates that file, so the check precedes the dispatch), scope instructions passed verbatim, single-seat asks redirected to their direct door |
 | `skills/ops-planner` | Command skill | user-only (`/ops-planner`) | Dispatches the ops-planner agent above standalone — same pairing; banner-before-dispatch on the same marker, focus instructions passed verbatim (an emphasis, never a new entry contract), fresh-sweep asks redirected to `/ops-orchestrator` |
 | `scripts/release_gate.py` | Script | CLI + selftest | G1–G11: manifest, structure, full lint (composes skill_lint), bundled selftests (py+js, exit tri-state), phantom sweep, package + same-version refusal, eval validation (composes eval_check), sibling names, packs (composes corpus_check), docs freshness (composes docs_check), style lint (ruff/eslint, ADR-0002) |
-| `skills/eval-run` | Command | user-only (`/eval-run`) | Blind fresh-context routing simulation over the eval suites: menu → fan-out → routing matrix → tuning targets (stolen/leaked/dead) |
+| `skills/eval-run` | Procedural skill | both (`/eval-run`) | Blind fresh-context routing simulation over the eval suites: menu → fan-out → routing matrix → tuning targets (stolen/leaked/dead); model-invocable since 1.41.0 (per explicit user direction, the 1.24.0 skill-forge precedent) so "prove the routing" asks fire it directly |
 | `skills/skill-decompose` | Procedural | both (`/skill-decompose`) | Imported family (source-corpus lineage): four evidence tests deciding whether a knowledge corpus splits — manifest + repair map or an honest no-split; `manifest_check.py` as gate |
 | `skills/skill-synthesize` | Procedural | both (`/skill-synthesize`) | The formal inverse: four inverse tests + the skill-decompose self-check deciding a merge; `consolidation_check.py` as gate |
 | `skills/skill-refactor` | Command | user-only (`/skill-refactor`) | The executor sibling: applies validated decompose/synthesize manifests — plan→approve→apply→sweep proof; `refactor_apply.py` attics, never deletes |
@@ -118,7 +118,19 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.40.0 · assembled 2026-07-20 · 1.40.0: naming-rules — knowledge skill carrying the simple
+v1.41.0 · assembled 2026-07-20 · 1.41.0: eval-run converted command species → procedural
+(disable-model-invocation: true → false, per explicit user direction — the 1.24.0 skill-forge
+precedent): description rewritten from slash-menu documentation into a real trigger contract
+("prove the routing after a description edit", "did my description change break routing", the
+wave-boundary check), gains its own evals/evals.json (9 trigger / 6 no-trigger, accepted-leak
+class annotated for the off-menu commands harness-audit/plugin-release); reciprocal no-trigger
+cases added to skill-authoring-standards and skill-review per the fence-closure rule. Landed
+mid-wave inside the naming-rules eval-run itself, so the same wave's blind-judge pass covers it:
+suites B/C/D/E scored 14/14 · 10/11+1 accepted-leak · 29/30 · 15/16+1 accepted-leak on the
+naming-rules menu; the two real findings fixed same change (naming-rules' n05 leak → the
+legacy-grammar fence now names "why the EXISTING estate's names are structured the way they
+are"; git-campaign-workflows' t08 dead case → its description gains the verbatim "was requiring
+PRs on main ever considered here"), each re-judged post-fix · v1.40.0 · assembled 2026-07-20 · 1.40.0: naming-rules — knowledge skill carrying the simple
 ("Fisher-Price") naming paradigm for NEW harness artifacts: five checkable tests (says-the-job ·
 kind-audible · registry-verb · no-lore · loud-contrast), a per-kind shape table (verb-first
 runnables, `-rules`/`-facts` knowledge, person-word seats, plain-noun shelves), the

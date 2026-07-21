@@ -5,8 +5,9 @@ description: >-
   naming something new ("what should we name this skill/plugin/agent", "what should I call it"),
   simplifying a name ("is this name too vague", "name this so it reads like plain English",
   "a name a five-year-old would understand"), reviewing names for simplicity, or naming a
-  skill↔agent pair. NOT for the legacy estate grammar as enforced today (agent-authoring-standards
-  §Naming; skill_lint's checkable slice); NOT for executing renames across an estate
+  skill↔agent pair. NOT for the legacy estate grammar, or why the EXISTING estate's names are
+  structured the way they are (agent-authoring-standards §Naming; skill_lint's checkable slice);
+  NOT for executing renames across an estate
   (git-campaign-workflows — names are APIs); NOT for plugin partitioning (plugin-decompose);
   NOT for code identifiers — variables, functions (general engineering).
 disable-model-invocation: false
