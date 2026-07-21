@@ -1,0 +1,31 @@
+{
+ "skill": "llm-streaming-facts",
+ "note": "Routing corpus of record (minted 2026-07-13, not yet run). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (SSE chunk-buffering technique, the Anthropic worked example, validate-then-stream self-correct). Negatives drawn adversarially from the dangerous near-neighbors: llm-gateway-facts (the sibling pack — the adapter/registry/trust-boundary/session pattern this streaming sits BEHIND), the agentic-ui plugin's a2ui-protocol (the A2UI wire MESSAGE shape) and a2ui-conversational-agent (this repo's OWN dated implementation), plus a genuine build/implement ask (this pack answers, it does not build).",
+ "cases": [
+  { "id": "t01", "prompt": "how do I parse a chunked SSE stream correctly", "expect": "trigger" },
+  { "id": "t02", "prompt": "why is my SSE parser dropping or duplicating text", "expect": "trigger" },
+  { "id": "t03", "prompt": "what's the Anthropic Messages API's exact streaming event contract", "expect": "trigger" },
+  { "id": "t04", "prompt": "how do I stream structured JSON output without ever rendering an invalid partial", "expect": "trigger" },
+  { "id": "t05", "prompt": "what is validate-then-stream", "expect": "trigger" },
+  { "id": "t06", "prompt": "how do I bound a self-correct retry loop against a model emitting invalid output", "expect": "trigger" },
+  { "id": "t07", "prompt": "how do I signal a mid-stream upstream error without throwing inside a generator", "expect": "trigger" },
+  { "id": "t08", "prompt": "why does my SSE frame get corrupted across two fetch reads", "expect": "trigger" },
+  { "id": "t09", "prompt": "what is content_block_delta and when does it carry text", "expect": "trigger" },
+  { "id": "t10", "prompt": "how do I heal a model's slightly malformed JSON before validating it", "expect": "trigger" },
+  { "id": "t11", "prompt": "how do I feed a model its own validation failures so it self-corrects", "expect": "trigger" },
+  { "id": "t12", "prompt": "what should happen when my LLM keeps producing invalid output after several retries", "expect": "trigger" },
+  { "id": "t13", "prompt": "is an empty model response the same as an invalid one", "expect": "trigger" },
+  { "id": "t14", "prompt": "how do I buffer partial SSE frames across network chunks", "expect": "trigger" },
+  { "id": "n01", "prompt": "how do I support multiple LLM providers behind one interface", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "how do I keep an API key off the client and out of a static build", "expect": "no-trigger" },
+  { "id": "n03", "prompt": "one config as both a provider picker and a server-side allowlist", "expect": "no-trigger" },
+  { "id": "n04", "prompt": "keep a multi-turn LLM conversation stateless server-side", "expect": "no-trigger" },
+  { "id": "n05", "prompt": "why did this A2UI payload fail validation", "expect": "no-trigger" },
+  { "id": "n06", "prompt": "what does a binding or a check look like on the A2UI wire", "expect": "no-trigger" },
+  { "id": "n07", "prompt": "how does the A2UI live-agent's produce loop work in this repo", "expect": "no-trigger" },
+  { "id": "n08", "prompt": "what is ADR-0088 proposing for conversational reasoning in @agent-ui/a2ui", "expect": "no-trigger" },
+  { "id": "n09", "prompt": "implement an SSE parser for my Node server", "expect": "no-trigger" },
+  { "id": "n10", "prompt": "write the validate-then-stream loop for my project", "expect": "no-trigger" },
+  { "id": "n11", "prompt": "add a new axis to this knowledge pack", "expect": "no-trigger" }
+ ]
+}

@@ -278,7 +278,7 @@ def gate(root: Path, package: bool = False):
              # the `llm` plugin's chat-harness-* family (2026-07-13): "chat-agent" is the
              # family's own shared framing phrase ("a chat-agent harness"), tripping the
              # `-agent` suffix a2ui-conversational-agent already owns; "hardcoded-feature" is
-             # ordinary prose in chat-harness-skills-and-routing's own axis description:
+             # ordinary prose in chat-harness-routing-facts's own axis description:
              "chat-agent", "hardcoded-feature",
              # concurrency-design (2026-07-17): "self-report" is prose ("never act on either
              # side's self-report") tripping the `-report` suffix handoff-compose already owns:

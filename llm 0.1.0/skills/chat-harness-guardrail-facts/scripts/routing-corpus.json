@@ -1,0 +1,43 @@
+{
+  "skill": "chat-harness-guardrail-facts",
+  "_note": "Routing corpus of record (minted 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings across the seven axes (incl. config-schema/prompt-externalization and multi-turn state-seeded validation) (instruction layering, injection defense, action risk tiers, deterministic vs prompted rules, config precedence + setup). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-routing-facts (a sibling skill being authored in parallel, about SKILL AUTHORING and description-routing, not instruction layering), llm-gateway-facts (the trust-boundary/secrets pattern — a narrower, different concern), llm-streaming-facts (the wire-format sibling, a different layer entirely), plus a genuine build/implement ask (this pack answers, it does not build).",
+  "positives": [
+    "layer a global CLAUDE.md, a project CLAUDE.md, and a session instruction so the more specific one wins",
+    "does a project-level instruction need to repeat everything the global one already says",
+    "a session instruction seems to be overriding a safety rule that should never be overridable",
+    "how do I stop a fetched web page's text from being treated as a command by the agent",
+    "a file the agent read contained a line claiming I already authorized this action",
+    "what's the defense against prompt injection through tool output",
+    "quote a suspicious instruction found inside a document back to the user before acting on it",
+    "classify which actions need explicit confirmation versus which can just proceed",
+    "what should the agent flatly refuse to do versus just ask permission for",
+    "gate an irreversible action behind a confirmation step",
+    "why did the model ignore a rule that was clearly written in the CLAUDE.md",
+    "enforce this rule with a hook instead of hoping the model remembers a prompted instruction",
+    "should this invariant be a PreToolUse gate or a system-prompt instruction",
+    "does settings.json or the system prompt win when they conflict",
+    "where should a permission or hook config live versus an in-context instruction",
+    "how do I bootstrap or install this chat harness reproducibly on a new machine",
+    "what command sequence installs a plugin or extension for this harness the same way every time",
+    "my per-turn output validator keeps rejecting the incremental update my renderer would accept",
+    "the model keeps re-sending the full structure it was explicitly told not to resend",
+    "should my producer loop validate each turn standalone or against the session's accumulated state",
+    "should my agent's tunable knobs live in one shared typed config schema or as scattered params",
+    "hardcoding my system prompt as a giant string literal in source feels wrong",
+    "the model option list in my settings UI drifted from the provider registry it should mirror"
+  ],
+  "negatives": [
+    "why isn't my skill triggering when the user asks about this",
+    "how do I write a SKILL.md description so it routes correctly",
+    "should this be a procedural, knowledge, or command skill",
+    "how do I support multiple LLM providers behind one interface",
+    "keep an API key off the client and out of a static build",
+    "design a dev-time proxy for calling an LLM from a browser app",
+    "one config as both a provider picker and a server-side allowlist",
+    "why is my SSE parser dropping text fragments",
+    "implement the PreToolUse hook that blocks this ADR status flip in my repo",
+    "write the CLAUDE.md file for my new project",
+    "add a permissions.allow entry to my project's settings.json",
+    "build a dev-proxy plugin for my Vite app"
+  ]
+}
