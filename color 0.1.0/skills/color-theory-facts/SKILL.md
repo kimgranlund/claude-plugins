@@ -1,7 +1,7 @@
 ---
 name: color-theory-facts
 description: >-
-  Answers color-theory-facts questions — harmony, meaning, and history: whether a color choice reads as
+  Answers questions about color theory — harmony, meaning, and history: whether a color choice reads as
   intended, and why. Use when asked about color harmony ("why do these colors clash", complementary
   / triadic / analogous schemes, 60-30-10 dominant/accent proportion), the color wheel and its
   history (Newton, Goethe, Itten's seven contrasts, Albers, Ostwald, RYB vs CMY), what a color
