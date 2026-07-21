@@ -1,6 +1,6 @@
 {
  "skill": "research-methods",
- "_note": "Routing corpus for the research-methods description. Positives span the six question-classes (optimize / debug-regression / contribution / tune / stress-test) in imperative, symptom, and named-technique phrasings. Negatives are the fenced neighbors: bare web/literature lookup (no system, no scorer), artifact review (the *-reviewer agents), authoring/building (the *-author skills / system-builder), and the nearest IMPROVE-FAMILY siblings whose 'make X better' overlaps but is owned elsewhere (linguistic-techniques improves prompt language, rubric-forge tightens anchors, loop-design owns stopping predicates) — these three run no measured scorer loop, so they are researcher's neighbors, not its work.",
+ "_note": "Routing corpus for the research-methods description. Positives span the six question-classes (optimize / debug-regression / contribution / tune / stress-test) in imperative, symptom, and named-technique phrasings. Negatives are the fenced neighbors: bare web/literature lookup (no system, no scorer), artifact review (the *-reviewer agents), authoring/building (the *-author skills / builder), and the nearest IMPROVE-FAMILY siblings whose 'make X better' overlaps but is owned elsewhere (linguistic-techniques improves prompt language, rubric-forge tightens anchors, loop-rules owns stopping predicates) — these three run no measured scorer loop, so they are researcher's neighbors, not its work.",
  "positives": [
   "improve the score on this skill's routing",
   "figure out why this suddenly got slower",

@@ -11,7 +11,7 @@ description: >-
   external adapter's own record where it rules Option C. Also runs via /issue [raw item, or an
   id/adapter id to resume]. Writes one record set, then stops. NOT for bug-shaped
   reports (bug-report); NOT for feature
-  ideas needing sizing into docs (feature); NOT for building anything (/build); NOT for other
+  ideas needing sizing into docs (feature); NOT for building anything (/build-feature); NOT for other
   document types (doc-forge).
 disable-model-invocation: false
 user-invocable: true
@@ -152,7 +152,7 @@ Done when a `task`-labeled record exists (an issue URL reported, a lint-clean `k
 TICKET on disk, or an Option-C adapter's record with its native id reported) carrying the full
 payload contract — or a resume acted on the existing record
 (detail folded, Findings appended, or status advanced with its Findings-first close rule) — the
-dedup sweep ran, and NO build was dispatched (/build's contract, where installed) — OR the seed
+dedup sweep ran, and NO build was dispatched (/build-feature's contract, where installed) — OR the seed
 was redirected to `bug-report`/`feature` under the one-hop rule and the sibling invocation was
 reported; no task record is owed on a redirected seed. NOT done while a close leaves Findings
 empty, a duplicate was minted over a dedup hit, or a bug/feature shape was filed here instead of

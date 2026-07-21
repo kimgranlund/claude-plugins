@@ -1,5 +1,5 @@
 ---
-name: session-close
+name: close-session
 description: >-
   Wraps up a session's own work in a git worktree before it ends: captures a real finding as an
   Issue, gets in-progress work to a PR (or updates the existing one), triggers knowledge-harvest's
@@ -7,17 +7,17 @@ description: >-
   clear verdict. Use for "wrap up this session", "close this out", "prepare to close this
   session", "clean up before ending", "make sure nothing's left hanging in the worktree before I
   go", or "before you exit, check for anything left to capture" — also fires at a natural closing point with real
-  work behind it. NOT for a PEER session's worktree (concurrency-design); NOT for unresolved
-  conversational questions (open-questions-sweep); NOT for the removal mechanics themselves
+  work behind it. NOT for a PEER session's worktree (parallel-work-rules); NOT for unresolved
+  conversational questions — "anything still open between us" (open-questions-sweep); NOT for the removal mechanics themselves
   (ExitWorktree); NOT for a repo-wide hygiene sweep (forge's ops-repo); NOT for authoring
   knowledge once confirmed (knowledge-harvest owns authoring, this only triggers its detection).
 disable-model-invocation: false
 user-invocable: true
 ---
 
-# session-close
+# close-session
 
-session-close wraps up a session's own work in a git worktree before it ends, turning an
+close-session wraps up a session's own work in a git worktree before it ends, turning an
 unverified "write anything, then close" prompt into a checked sequence: capture what's real, name
 what isn't, and account for every finding in a stated verdict.
 
@@ -88,5 +88,5 @@ actually checked or captured.
 |---|---|
 | `bug-report` / `feature` / `issue` (scribe) | Step 2's own dedup, payload contract, and record mechanics — invoked, not restated |
 | `knowledge-harvest` (forge) | Step 3's detection pass and its own confirm-before-mint gate |
-| `concurrency-design` (this plugin) | The question is a PEER session's worktree, not this session's own close-out |
+| `parallel-work-rules` (this plugin) | The question is a PEER session's worktree, not this session's own close-out |
 | `ExitWorktree` | The actual removal step, once this skill's verdict says it's safe |

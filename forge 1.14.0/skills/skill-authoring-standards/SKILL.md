@@ -127,7 +127,7 @@ The check is a **baseline comparison**: a few realistic prompts, each run in a f
 ## What an edit owes — the tier ladder
 
 Authoring earns the full loop; an edit owes only its tier (ruled 2026-07-12, codifying the
-estate's proven practice — the forge-side twin of orchestration's solo-first floors):
+estate's proven practice — the forge-side twin of teamwork's solo-first floors):
 
 | Edit class | Owes |
 |---|---|

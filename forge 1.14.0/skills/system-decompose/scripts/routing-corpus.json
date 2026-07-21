@@ -1,7 +1,7 @@
 {
   "skill": "system-decompose",
-  "_note": "M2 test-of-record candidate (deep review 2026-07-03). Positives across imperative / diagnostic / symptom / indirect. Negatives drawn from the trigger vocabulary of graph neighbors: break-down-layout, break-down-flow, make-component, prd/spec/lld-author, intent-grill. Should be checked into scripts/routing-corpus.json. Reciprocal fence added 2026-07-13 against forge's new knowledge-harvest skill (judges whether a fact crosses the bar for durable knowledge; this skill decomposes a NEW system's structure, a related but distinct question).",
-  "neighbors": ["break-down-layout", "break-down-flow", "make-component", "prd-author", "spec-author", "lld-author", "intent-grill", "knowledge-harvest"],
+  "_note": "M2 test-of-record candidate (deep review 2026-07-03). Positives across imperative / diagnostic / symptom / indirect. Negatives drawn from the trigger vocabulary of graph neighbors: break-down-layout, break-down-flow, make-component, prd/spec/lld-author, grill-the-ask. Should be checked into scripts/routing-corpus.json. Reciprocal fence added 2026-07-13 against forge's new knowledge-harvest skill (judges whether a fact crosses the bar for durable knowledge; this skill decomposes a NEW system's structure, a related but distinct question).",
+  "neighbors": ["break-down-layout", "break-down-flow", "make-component", "prd-author", "spec-author", "lld-author", "grill-the-ask", "knowledge-harvest"],
   "positives": [
     "decompose this system into parts",
     "break down this technical architecture into subsystems and modules",

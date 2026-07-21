@@ -1,5 +1,5 @@
 ---
-name: loop-design
+name: loop-rules
 description: >
   Design or review continuation patterns — /goal, /loop, Stop hooks, auto mode —
   that drive autonomous work, scoring against the bundled rubric. Use whenever
@@ -8,10 +8,10 @@ description: >
   an autonomous run", "my goal loop never stops / spins", "it keeps retrying
   the same failure", "the agent spins / thrashes and burns turns", "make it
   keep working until clean". NOT for how the delegated work composes —
-  skill/agent wiring, dispatch, frontmatter (orchestration-design); this skill
+  skill/agent wiring, dispatch, frontmatter (team-or-solo-rules); this skill
   owns only when the next turn fires.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 ---
 
 # Harness — Control Patterns (/goal, /loop) Design & Review
@@ -56,7 +56,7 @@ Top issues: 1) … — fix: …
 | `references/best-practices.md` | Design guidance / explaining a finding |
 | `references/foundations.md` | When a finding turns on a shared model |
 | `references/self-orchestrated-looping-agentic-systems.md` | Designing an orchestrated / multi-agent loop (host + planner/creator seats), or diagnosing a loop that spins, thrashes, or can't resume across sessions |
-| [[orchestration-design]] | The loop delegates work — the dispatch/composition design belongs there |
+| [[team-or-solo-rules]] | The loop delegates work — the dispatch/composition design belongs there |
 
 ## This workspace's gates as goal conditions
 
@@ -72,7 +72,7 @@ condition, whenever the work already has one:
 | `eval_check.py <suite>` | 0 FAIL findings | 3 tries |
 | `handoff_check.py <block>` | H1 gate passes | 1 try — a malformed handback is a compose error, not a retry loop |
 | a bug-shaped TICKET's `## Findings` section | gains a dated entry (bug-report's own dispatch contract) | 5 tries, per-investigation |
-| a feature-shaped TICKET's `## Findings` section | gains a dated entry (the `/build` dispatch contract) | 5 tries per build |
+| a feature-shaped TICKET's `## Findings` section | gains a dated entry (the `/build-feature` dispatch contract) | 5 tries per build |
 
 A cap that repeats the identical fix is thrashing, not iterating — the escalation clause (Design
 step 2) fires on the *same* check failing twice, not merely on failing twice.
@@ -91,7 +91,7 @@ instead of a per-invocation one — the same escalation this skill's canon (`ref
 `<source>` and `<interval>` are the operator's call, not this skill's — name a concrete source
 (an inbox, a channel, a queue) before scheduling; a source too vague to poll is a design smell the
 same way an unverifiable goal condition is. Composition (which agent watches, which agent
-dispatches) belongs to `orchestration-design`; this skill owns only the trigger/stop shape above.
+dispatches) belongs to `team-or-solo-rules`; this skill owns only the trigger/stop shape above.
 
 ## Generator ≠ critic
 

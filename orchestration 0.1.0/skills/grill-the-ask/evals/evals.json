@@ -1,5 +1,5 @@
 {
-  "skill": "intent-grill",
+  "skill": "grill-the-ask",
   "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus, excellence campaign batch 4 (2026-07-03): positives imperative / diagnostic / symptom / indirect. Negatives adversarial from the neighborhood: intent-extract, system-decompose (forge), and scribe's PRD/SPEC/LLD authoring surface (doc-forge, governed by doc-authoring-standards) \u2014 the pre-migration corpus named the now-retired prd-author/lld-author skills scribe has since consolidated.",
   "cases": [
     {

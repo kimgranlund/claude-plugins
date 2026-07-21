@@ -25,7 +25,7 @@ these plugins rather than just installing them.
 | [`typography`](<typography 0.1.0/README.md>) | Typography systems, pairing, tokens, lettering knowledge. |
 | [`design-kits`](<design-systems 0.1.0/README.md>) | Design-system export bundles (Claude Design, Figma Make, Google Stitch) and the Material Design token grammar. |
 | [`screens`](<ui 0.1.0/README.md>) | UI structure (layouts, flows, components, patterns), the design/UI knowledge layer (spacing-scale theory, CSS box-model/flow mechanics, Apple HIG semantics, motion), and non-functional verification (focus, i18n, perf, safety, live-artifact checks). |
-| [`orchestration`](<orchestration 0.1.0/README.md>) | Decision-deriving, composition/continuation design, and a multi-agent feature-delivery team (planner, builder, coordinator, reviewers). |
+| [`teamwork`](<orchestration 0.1.0/README.md>) | Decision-deriving, composition/continuation design, and a multi-agent feature-delivery team (planner, builder, coordinator, reviewers). |
 
 Each plugin's own `README.md` carries its full component map and a dated version ledger in the
 footer — that's the source of truth for what changed and why, not this file.
@@ -59,6 +59,6 @@ frontmatter, hardcoded script paths) into a soft mention with an inline fallback
 pattern `scribe` already used for its own dependency on `forge`. Two real gaps surfaced during
 that migration and were closed rather than left as silent capability loss: `agents-audit` and
 `skills-audit` (deep-review campaigns against each estate's own standard-of-excellence, ported
-into `forge` with their gate scripts) and `orchestration-reviewer` (ported into `orchestration`).
+into `forge` with their gate scripts) and `wiring-checker` (ported into `teamwork`).
 Every plugin validates clean against both `forge/scripts/release_gate.py` and the product's own
 `claude plugin validate`.

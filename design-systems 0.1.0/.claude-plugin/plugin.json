@@ -1,7 +1,7 @@
 {
   "name": "design-kits",
   "displayName": "Design Kits",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch \u2014 from a corpus or a bare brief \u2014 plus first-party DESIGN.md format knowledge (design-md-rules) and the Material Design token grammar the exports can extend.",
   "license": "MIT",
   "author": {

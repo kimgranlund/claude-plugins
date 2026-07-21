@@ -1,5 +1,5 @@
 ---
-name: code-reviewer
+name: code-checker
 description: >-
   Independent critic for ONE bounded code change — a diff, branch, or built slice — scored against
   the contract it was built to (the named LLD, the repo's own standing rules and gates) in a fresh,
@@ -13,8 +13,8 @@ description: >-
   builder applies the fix. NOT for a UI component or custom element (component-checker), a screen
   layout (layout-checker), or a cross-screen flow (flow-checker); NOT for
   a PRD/SPEC/LLD or other document (doc-reviewer); NOT for a subagent definition (agent-reviewer)
-  or a SKILL.md (skill-reviewer); NOT for authoring or revising the design itself (system-planner);
-  NOT for implementing or fixing to an approved LLD (system-builder); NOT for a measured experiment
+  or a SKILL.md (skill-reviewer); NOT for authoring or revising the design itself (planner);
+  NOT for implementing or fixing to an approved LLD (builder); NOT for a measured experiment
   loop against a scorer — optimizing, tuning, bisecting, or stress-testing a system to find something
   (researcher); NOT for a repo that carries its own review seat — the repo seat owns its standard.
 tools: Read, Grep, Glob, Bash

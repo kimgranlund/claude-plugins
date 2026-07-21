@@ -12,11 +12,11 @@ Verification is a step *separate* from making — a maker never grades its own w
 
 ## 3. The up-loop routes on two fields
 
-`orchestration-coordinator` decides what happens next from **Recommended next action** (the single step + its owner) and **Open questions** (the unresolved forks). These are the routing surface of the discovered-reality loop: an escalation a worker raises here is what sends planning to repair an owning doc, or the host to ratify. **Risks** feed the eval gate (they tell the critic where to look). Vague entries here stall the loop; a precise "next step + owner" keeps it moving.
+`team-lead` decides what happens next from **Recommended next action** (the single step + its owner) and **Open questions** (the unresolved forks). These are the routing surface of the discovered-reality loop: an escalation a worker raises here is what sends planning to repair an owning doc, or the host to ratify. **Risks** feed the eval gate (they tell the critic where to look). Vague entries here stall the loop; a precise "next step + owner" keeps it moving.
 
 ## 4. The rollup is the same block
 
-`orchestration-coordinator` does not invent a new format to report upward — it returns **the same eight fields**, aggregated across the team it ran. *Summary* becomes the wave outcome, *Files changed* the union, *Recommended next action* the dispatch/ratify decision. One shape at every level keeps the loop legible from leaf to host.
+`team-lead` does not invent a new format to report upward — it returns **the same eight fields**, aggregated across the team it ran. *Summary* becomes the wave outcome, *Files changed* the union, *Recommended next action* the dispatch/ratify decision. One shape at every level keeps the loop legible from leaf to host.
 
 ## 5. Drain-the-inbox-first is a correctness rule, not etiquette
 

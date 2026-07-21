@@ -1,6 +1,6 @@
 {
   "skill": "open-questions-sweep",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n09 -> ops-issues; n03/n06 -> intent-extract; n04/n08 -> loop-design/`/loop`; n05 -> scribe doc-authoring; n11 -> orchestration's session-close; n02/n07/n10 -> ordinary model behavior, no sweep owner.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n09 -> ops-issues; n03/n06 -> intent-extract; n04/n08 -> loop-rules/`/loop`; n05 -> scribe doc-authoring; n11 -> teamwork's close-session; n02/n07/n10 -> ordinary model behavior, no sweep owner.",
   "cases": [
     {
       "id": "t01",

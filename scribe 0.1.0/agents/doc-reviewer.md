@@ -10,7 +10,7 @@ description: >-
   reports the gap-map; the maker applies the fix. NOT for authoring these (the matching *-author skills);
   NOT for SKILL.md files (skill-reviewer), subagent definitions (agent-reviewer), wording potency alone
   (linguistics-reviewer), or UI artifacts (component-/layout-checker); NOT for a code change or diff
-  (code-reviewer); NOT for explaining what a rubric says (answer inline from the owning skill).
+  (code-checker); NOT for explaining what a rubric says (answer inline from the owning skill).
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: high
@@ -30,7 +30,7 @@ upstream sources it must trace to — not the maker's reasoning.
    J1-J6 (both preloaded — no external lookup needed). For the other document families this seat
    also covers: reference doc → reference-forge, llms.txt → llms-txt-forge, vision memo →
    vision-memo-forge, standalone rubric → rubric-forge (all now scribe siblings), CLAUDE.md/
-   AGENTS.md → forge's entry-file-standards, /goal condition → loop-design, handoff block → handoff-compose,
+   AGENTS.md → forge's entry-file-standards, /goal condition → loop-rules, handoff block → handoff-compose,
    decomposition manifest → system-decompose, DESIGN.md/guidelines spine → its platform sibling
    (make-dscard-kit / -google-stitch / -figma-make) — load that owning skill's
    bundled `references/rubric.md` wherever it is installed. That rubric is the standard, plus any

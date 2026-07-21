@@ -8,9 +8,9 @@ description: >-
   now it doesn't", or a technique by name (autoresearch, ablation, bisect, hill-climb, sweep,
   adversarial probe). Each method's protocol/rubric live here; `researcher` runs one. NOT for
   looking up facts/prior art (web search, no method); NOT reviewing a finished artifact against
-  its rubric (*-reviewer agents); NOT building the artifact (*-forge / system-builder); NOT
+  its rubric (*-reviewer agents); NOT building the artifact (*-forge / builder); NOT
   wording effectiveness with no scorer (linguistic-techniques), rubric anchors (rubric-forge), or
-  loop stopping rules (loop-design); NOT judging whether a claim is a genuine higher-order gain or
+  loop stopping rules (loop-rules); NOT judging whether a claim is a genuine higher-order gain or
   just relabeling, with no scorer to run (forge's reasoning-orders).
 disable-model-invocation: false
 user-invocable: false
@@ -159,11 +159,11 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 ## Composition
 
 - **`researcher`** runs one method in isolation and hands back the typed report above.
-- **[[intent-extract]]** / **[[intent-grill]]** sharpen a fuzzy "make it better" into a scorable
+- **[[intent-extract]]** / **[[grill-the-ask]]** sharpen a fuzzy "make it better" into a scorable
   question + a defined scorer *before* a method runs — the R1 precondition.
 - **[[rubric-forge]]** owns `references/rubric.md`'s shape; forge's `pack-forge` owns adding or
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an
   uncited method on inline.
-- Downstream of a finding, route the *fix* to its owner: a code change to **system-builder**, a skill
-  edit to forge's **skill-forge**, a design change to **system-planner**. This skill finds; it does not own
+- Downstream of a finding, route the *fix* to its owner: a code change to **builder**, a skill
+  edit to forge's **skill-forge**, a design change to **planner**. This skill finds; it does not own
   the repair.

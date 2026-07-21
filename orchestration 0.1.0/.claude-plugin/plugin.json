@@ -1,7 +1,7 @@
 {
-  "name": "orchestration",
-  "displayName": "Orchestration",
-  "version": "0.7.9",
+  "name": "teamwork",
+  "displayName": "Teamwork",
+  "version": "1.0.0",
   "description": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end.",
   "license": "MIT",
   "author": {

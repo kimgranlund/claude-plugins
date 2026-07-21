@@ -100,7 +100,7 @@ plugin — not preloadable across that boundary — so the minted-record shape t
 directly rather than restated from a preload: Summary · Acceptance (one checkable done-condition) ·
 Links, plus `kind: bug`'s Repro/Expected-vs-actual/Classification/Severity (owned by `bug-report`)
 or `kind: feature`'s Scope/Open **and** `size: small | big` (owned by `feature` — machine-read by
-`/build`, never omit it), plus an empty Findings section. `kind:` is TICKET frontmatter on the file
+`/build-feature`, never omit it), plus an empty Findings section. `kind:` is TICKET frontmatter on the file
 backend only — on today's resolved git-native backend it lands as a GitHub **label** at create
 time, exactly as the sibling skills apply it: `bug` + the severity label (`bug-report`'s scale),
 `feature` + `size:small`/`size:big` (`feature`'s scale), or `task` + the same size scale where

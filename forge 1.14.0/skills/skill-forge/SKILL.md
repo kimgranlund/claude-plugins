@@ -87,7 +87,7 @@ Invoke `linguistic-techniques` (in this plugin) and run its **Audit** on the dra
 
 Three checks, in order; each has a branch:
 
-1. **Lint (deterministic):** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/skill_lint.py" <skill-dir>/SKILL.md` — fix and re-run until clean. The same finding failing 3 times → stop and hand the finding to the user; do not suppress it. (This is a goal loop in miniature — `orchestration`'s `loop-design` catalogs this exact gate-as-condition pattern, where installed.)
+1. **Lint (deterministic):** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/skill_lint.py" <skill-dir>/SKILL.md` — fix and re-run until clean. The same finding failing 3 times → stop and hand the finding to the user; do not suppress it. (This is a goal loop in miniature — `teamwork`'s `loop-rules` catalogs this exact gate-as-condition pattern, where installed.)
 2. **Fresh-context audit (generator ≠ critic):** dispatch the `skill-auditor` agent with the skill directory and a report destination `<skill-dir>/evals/audit-report.md`. Triage every finding: fix it, or accept it with a one-line note in intent.md. Blocking findings are fixed, always. Auditor and author disagree → the user arbitrates; record the ruling.
 3. **Behavior check:** rerun the Phase-2 baseline prompts in a fresh session *with* the skill; compare against the assertions. A failed assertion names its failed layer — description (didn't trigger), body (triggered, wrong output), species/dials (wrong invocation path) — and the fix lands in that layer. For trigger-rate tuning at scale, the official `skill-creator` plugin's benchmark runs the evals.json automatically.
 

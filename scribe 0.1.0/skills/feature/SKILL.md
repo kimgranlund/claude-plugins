@@ -9,10 +9,10 @@ description: >-
   never builds. Runs intent-extract (one round max), a
   dedup sweep, and system-decompose, then records by shape — the TICKET file by default, or the
   workspace's ruled backend (git-native, or a named external adapter). Also runs via /feature [raw
-  idea, or a TKT-/#issue/adapter id]. Writes one record set, then stops — building is /build's
+  idea, or a TKT-/#issue/adapter id]. Writes one record set, then stops — building is /build-feature's
   job. NOT for bug-shaped
   reports (bug-report); NOT for generic chores/follow-ups/tasks needing no sizing (issue); NOT
-  for dispatching or performing the build (/build); NOT for other document types (doc-forge).
+  for dispatching or performing the build (/build-feature); NOT for other document types (doc-forge).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw feature idea, or a TKT-/#issue/adapter-native id to resume]"
@@ -44,7 +44,7 @@ REQ-010) — → resume by that record's state: `done`/`wontfix`/closed → repo
 (reopening is the user's call); open with new detail following the id → fold it into
 Summary/Scope and re-run Phase 4's sizing only if the new detail changes the size class;
 otherwise (open, no new detail) → report the record's state, size, and placement, point at
-`/build` for momentum, and stop. An id that does not resolve (no such file; `gh issue view`
+`/build-feature` for momentum, and stop. An id that does not resolve (no such file; `gh issue view`
 errors; Option C's `read` returns not-found, AC-010) is a fresh idea — say so, never proceed as if
 a record existed.
 
@@ -85,7 +85,7 @@ decision-ratifying.
 - **Knowledge** (the ask is really reference material, standards, or a world model to encode) →
   AUTHOR it at intake via reference-forge (one document, scribe's own seat) or forge's `pack-forge`
   (a corpus, where installed) — encoding knowledge IS the record, so "never builds" is intact (that
-  clause bars SOFTWARE builds, /build's territory); the TICKET records the routing, links the
+  clause bars SOFTWARE builds, /build-feature's territory); the TICKET records the routing, links the
   authored result, and closes.
 - **Defect** (this "feature" is actually a bug) or **generic chore** (nothing to size or shape) →
   neither Work nor Knowledge; redirect instead (Failure branches) rather than forcing a size/shape
@@ -101,7 +101,7 @@ build's write-back.
 - **Option A (local/file backend):** mint the `kind: feature` TICKET via doc-forge's TICKET path
   (`docs/tickets/` of the local or target repo — repo-rooted per doc-authoring-standards'
   location-and-naming rule, never written under a plugin's own installed directory — frontmatter
-  `doc-type: ticket, kind: feature`, `size: small | big` in FRONTMATTER, machine-read — /build
+  `doc-type: ticket, kind: feature`, `size: small | big` in FRONTMATTER, machine-read — /build-feature
   branches on it). Run `doc_lint.py` — fix until clean; an unlintable record is not a captured one.
 - **Option B (git-native):** `gh issue create` (no `--type`) — title = the Summary line; body =
   the sections above as `##` headings; labels `feature` + `size:small`/`size:big` (the
@@ -173,7 +173,7 @@ Done when a `kind: feature` record exists — a lint-clean file on disk, a label
 URL reported), or an Option-C adapter's record (its native id reported) — sized and shaped
 correctly, linked into whatever queue docs exist, with
 every extraction gap named, the index offer's disposition reported (installed path, pointer line,
-or already-present skip) — and NO build was dispatched BY THIS SKILL (that is `/build`'s
+or already-present skip) — and NO build was dispatched BY THIS SKILL (that is `/build-feature`'s
 contract, orchestration plugin, where installed) — OR the seed was redirected to
 `bug-report`/`issue` under the one-hop rule (first classification only) and the sibling
 invocation was reported; no feature record is owed on a redirected seed, and a sibling reached by

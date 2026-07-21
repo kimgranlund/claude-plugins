@@ -1,6 +1,6 @@
 {
   "skill": "agent-residency-facts",
-  "note": "Trigger-routing suite, authored at skill mint (2026-07-20) from the intent interview's Slot-1 phrasings plus tier-boundary-question and cross-tier-transfer variants. Negatives drawn from the fenced siblings' own trigger vocabulary: chat-harness-guardrail-facts (the Ephemeral-side content itself, once the tier is already known), orchestration:concurrency-design and orchestration:orchestration-design (Resident-side dispatch/isolation questions with no cross-tier framing), forge:agent-authoring-standards (subagent preload mechanics once the tier is already known).",
+  "note": "Trigger-routing suite, authored at skill mint (2026-07-20) from the intent interview's Slot-1 phrasings plus tier-boundary-question and cross-tier-transfer variants. Negatives drawn from the fenced siblings' own trigger vocabulary: chat-harness-guardrail-facts (the Ephemeral-side content itself, once the tier is already known), teamwork:parallel-work-rules and teamwork:team-or-solo-rules (Resident-side dispatch/isolation questions with no cross-tier framing), forge:agent-authoring-standards (subagent preload mechanics once the tier is already known).",
   "cases": [
     {
       "id": "t01",
@@ -54,7 +54,7 @@
     },
     {
       "id": "t11",
-      "prompt": "can I reuse orchestration-design's concurrency guidance for a hosted customer-support bot",
+      "prompt": "can I reuse team-or-solo-rules's concurrency guidance for a hosted customer-support bot",
       "expect": "trigger"
     },
     {

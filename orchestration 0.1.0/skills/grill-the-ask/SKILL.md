@@ -1,5 +1,5 @@
 ---
-name: intent-grill
+name: grill-the-ask
 description: >-
   Proactively DERIVE the load-bearing design decisions for a greenfield system, component family, or
   feature whose decision space is mostly unmade. Use when designing or planning something new and largely
@@ -30,7 +30,7 @@ mostly-unmade design implies.
   this", "what do we need to decide".
 - **Skip** when the decision space is small or already mostly settled — that is `intent-extract`'s
   job (resolve only the gaps in a given ask). And skip when a ratified design already exists.
-- **The pipeline.** `intent-extract` sharpens *a given* intent → `intent-grill` *derives* the
+- **The pipeline.** `intent-extract` sharpens *a given* intent → `grill-the-ask` *derives* the
   design decisions → both hand off to `[[system-decompose]]`. Extraction is **reactive, minimize** (one
   ask, one batched round, ask only what you must). Grilling is **proactive, derive** (a whole space,
   cascading rounds, derive what must be decided). Same closed-question discipline; opposite posture.

@@ -4,7 +4,7 @@
 > clear chain of command, so a builder never grades its own work and a broken assumption gets
 > repaired at its source instead of ground against by the same worker repeatedly. Grounded in this
 > harness's own Agent tool mechanics + the `orchestration` plugin's five-seat delivery team
-> (`agents/orchestration-coordinator.md`, `agents/system-planner.md`, `agents/system-builder.md`
+> (`agents/team-lead.md`, `agents/planner.md`, `agents/builder.md`
 > in `/Users/kimba/Projects/nonoun/plugins/orchestration 0.1.0/`).
 
 ## Solo-first — a team is not the default unit
@@ -13,10 +13,10 @@
 host alone cannot: isolation (fresh context), parallelism (genuinely concurrent slices), or
 independence (generator≠critic on a high-stakes artifact).** A task one context can hold is the
 host's own — multi-step alone does not earn a team. **Worked instance:**
-`orchestration-design/SKILL.md` (the same plugin family) states this as Design step 1:
+`team-or-solo-rules/SKILL.md` (the same plugin family) states this as Design step 1:
 "Solo-first — the host inline is the null unit and wins by default... A dispatch that costs more
 context and latency than doing the work inline is over-orchestration, whatever the task's step
-count." `orchestration-coordinator.md`'s own description states the same floor for itself: "Use
+count." `team-lead.md`'s own description states the same floor for itself: "Use
 PROACTIVELY only when the work genuinely needs two or more seats... Solo-first: a task one context
 can hold is the host's own; multi-step alone does not earn a team." **Why this matters (the
 failure mode it prevents):** reflexive multi-agent ceremony on a task the host could finish in one
@@ -29,13 +29,13 @@ for work that genuinely doesn't fit one context, not a default posture.
 a planner seat, build-to-plan → a builder seat, adversarial review → a reviewer seat), and never
 does the design or build work itself.** Each dispatch is a **sealed contract**: a charter,
 enumerated inputs (never the coordinator's own deliberation or a sibling's transcript), a budget,
-and a typed return. **Worked instance:** `orchestration-coordinator.md` priority 1: "Route by
-shape, dispatch sealed. Design / decomposition / doc work → system-planner. Build-to-plan /
-enforcement work → system-builder... Adversarial review of a design doc → doc-reviewer;
-adversarial review of a built change → code-reviewer" — each dispatch runs "on fresh context as a
+and a typed return. **Worked instance:** `team-lead.md` priority 1: "Route by
+shape, dispatch sealed. Design / decomposition / doc work → planner. Build-to-plan /
+enforcement work → builder... Adversarial review of a design doc → doc-reviewer;
+adversarial review of a built change → code-checker" — each dispatch runs "on fresh context as a
 sealed contract: charter, enumerated inputs... its budget, and the return contract." The
 coordinator's own charter explicitly scopes its writes: "authoring docs and writing code are
-system-planner's and system-builder's seats, not yours."
+planner's and builder's seats, not yours."
 
 **Also directly verifiable in this session's own harness:** the Agent tool this exact reply is
 using carries a `subagent_type` parameter naming a persona + tool-allowlist preset (a narrow
@@ -48,10 +48,10 @@ dispatching model right now.
 
 **Claim — a maker's own closing summary is never the verdict; a distinct agent, in its own fresh
 context, scores the artifact against a named standard.** **Worked instance:**
-`system-planner.md` priority 4: "Report, don't grade. Return a concise design-status summary to
+`planner.md` priority 4: "Report, don't grade. Return a concise design-status summary to
 the coordinator. Your docs are reviewed by the doc-reviewer seat; you leave your own output for
-that reviewer to score (generator ≠ critic)." `orchestration-coordinator.md` priority 3 states the
-coordinator's own limit on this: "the review verdict is theirs [doc-reviewer/code-reviewer] to
+that reviewer to score (generator ≠ critic)." `team-lead.md` priority 3 states the
+coordinator's own limit on this: "the review verdict is theirs [doc-reviewer/code-checker] to
 render, not yours to assign." **Why this ordering, not the reverse:** a coordinator (or a builder)
 that certifies its own work has removed the one check that catches a plan the builder silently
 deviated from, or a doc that reads as done to the person who just wrote it. **Failure mode this
@@ -62,10 +62,10 @@ artifact and its own passing grade.
 
 **Pattern — when a build seat discovers the plan it was given doesn't match reality, it escalates
 UP to the seat that owns the broken document rather than silently deviating or being re-dispatched
-to try again.** **Worked instance:** `orchestration-coordinator.md` priority 4-5: "The same finding
+to try again.** **Worked instance:** `team-lead.md` priority 4-5: "The same finding
 failing twice indicts the contract, not the seat — escalate the locus instead of re-dispatching...
-Run the discovered-reality loop. When system-builder... escalates a constraint, engage
-system-planner to repair the OWNING doc and record the decision; ratify it; then let it propagate
+Run the discovered-reality loop. When builder... escalates a constraint, engage
+planner to repair the OWNING doc and record the decision; ratify it; then let it propagate
 down. Repair the owner — downstream copies are regenerated, not patched." **Why this matters (the
 failure mode it prevents):** re-dispatching the same worker against the same wall a third time
 wastes budget on a problem re-dispatch cannot fix — the plan itself is wrong, and only its owner
@@ -79,8 +79,8 @@ argues against): model/effort tier should be assigned deliberately, per role, an
 team's understanding of each role's real cognitive load shifts — not fixed once and left alone.**
 **Worked instance, quoted exactly (the citation the earlier draft of this file got wrong — see the
 correction note below):** the `orchestration` plugin's own changelog records its most recent
-re-tiering as "system-planner opus+xhigh→fable+high, system-builder sonnet+high→opus+xhigh,
-orchestration-coordinator opus→sonnet (deliberate reclassification: routing/gating is coordination,
+re-tiering as "planner opus+xhigh→fable+high, builder sonnet+high→opus+xhigh,
+team-lead opus→sonnet (deliberate reclassification: routing/gating is coordination,
 not judgment)" (`README.md`, v0.7.0 entry, 2026-07-12). Read plainly, this is the OPPOSITE of
 "planning gets the stronger tier": the PLANNING seat was moved to a CHEAPER tier, the seat that
 BUILDS against an already-ratified plan was moved to a MORE expensive one, and coordination/routing
@@ -92,8 +92,8 @@ same team's OWN prior tiering (visible in the changelog's earlier entries) had p
 higher tier before this very re-tiering moved it down.
 
 **Correction note:** an earlier draft of this reference misquoted this same v0.7.0 line as
-"system-planner sonnet+high→opus+xhigh" (the system-builder half of the real quote, misattributed
-to system-planner) and used it to argue planning gets the stronger tier — a citation error caught
+"planner sonnet+high→opus+xhigh" (the builder half of the real quote, misattributed
+to planner) and used it to argue planning gets the stronger tier — a citation error caught
 on independent review and fixed here; the quote above is the real, complete v0.7.0 entry.
 
 ## What this file does NOT cover
@@ -102,4 +102,4 @@ The exact fields and shape of the block a seat hands back when it reports (typed
 contracts.md) · the scripted, deterministic alternative to a coordinator deciding each dispatch
 turn by turn (deterministic-workflows-vs-ad-hoc-dispatch.md) · how to design the wiring itself —
 which unit, which frontmatter keys, `skills:` preloads — for a specific project (routed to that
-project's own orchestration-design seat, out of this pack's scope).
+project's own team-or-solo-rules seat, out of this pack's scope).

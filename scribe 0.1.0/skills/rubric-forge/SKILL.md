@@ -10,7 +10,7 @@ description: >
   at what threshold", "re-anchor this rubric — the artifact standard changed",
   "the level descriptors are vague — fix the anchors". NOT for the skill/agent
   carrying the rubric (forge's skill-forge / agent-forge) nor the /goal loop itself
-  (loop-design — this skill owns only the completion condition's quality).
+  (loop-rules — this skill owns only the completion condition's quality).
 disable-model-invocation: false
 user-invocable: true
 ---

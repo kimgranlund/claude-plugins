@@ -1,5 +1,5 @@
 ---
-name: concurrency-design
+name: parallel-work-rules
 description: >
   Decide whether concurrent sessions/subagents touching one repo need
   git-tree isolation, and what to do when they collide anyway. Use
@@ -9,15 +9,15 @@ description: >
   "should this subagent use isolation: worktree", "two builders touching
   the same files", "should I commit before this risky move", "my build
   collided with another session's edits". NOT dispatch shape/cost — solo
-  vs. team, how many subagents (orchestration-design); this skill only
+  vs. team, how many subagents (team-or-solo-rules); this skill only
   decides whether the shape's targets overlap enough to need isolation,
   and owns cross-session collision entirely. NOT when the next turn fires
-  — /goal, /loop, Stop hooks (loop-design). NOT hook/agent/entry-file
+  — /goal, /loop, Stop hooks (loop-rules). NOT hook/agent/entry-file
   mechanics once a rule is decided (hook-authoring-standards /
   agent-authoring-standards / entry-file-standards, forge). NOT wrapping
-  up THIS session's worktree before ending (session-close).
+  up THIS session's worktree before ending (close-session).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 ---
 
 # Harness — Concurrent-Session Isolation Design & Response
@@ -46,7 +46,7 @@ rest of the decision even starts.
 1. Will 2+ actors mutate the same repo checkout concurrently, AND do their target files/imports
    actually overlap? Multiple actors alone isn't the trigger — same-session subagents assigned
    genuinely disjoint slices need no isolation at all: dispatching the disjoint same-tree fan-out
-   (each worker self-gating its own path) is orchestration-design's own sanctioned default, not a
+   (each worker self-gating its own path) is team-or-solo-rules's own sanctioned default, not a
    risk this skill overrides. Isolation answers the overlap question, not the actor-count question.
 2. Isolate when slices overlap, can't be cleanly partitioned, or you can't confirm disjointness at
    all (an actor outside your control — a peer session, an opaque one):
@@ -57,7 +57,7 @@ rest of the decision even starts.
      directly, or... project instructions") — nothing routes a session into it automatically. If
      this project runs concurrent sessions regularly, that trigger belongs in a standing CLAUDE.md
      rule, not a per-invocation reminder — but the rule is a one-line pointer ("this project runs
-     concurrent sessions — consult `concurrency-design` before dispatching parallel file-mutating
+     concurrent sessions — consult `parallel-work-rules` before dispatching parallel file-mutating
      work"), the skill's own doctrine staying here, in this one file. Copying these steps into
      CLAUDE.md instead creates a second, drift-prone copy the moment this file changes (the
      mechanics of writing the pointer are entry-file-standards'; this skill only requires the
@@ -122,8 +122,8 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | `gh pr comment` / `gh issue comment` | The other actor's work lives on a branch/PR/Issue but no live `SendMessage` channel reaches it — async, durable, git-native coordination |
 | A project's ticket status vocabulary (e.g. `open`/`doing`/`done`) | Cheap pre-flight check before claiming scope — see the project's own doc-authoring-standards, where one exists |
 | scribe's backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
-| [[orchestration-design]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
-| [[loop-design]] | The question is when the next turn fires, not who else is touching the tree |
+| [[team-or-solo-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
+| [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-standards` (forge) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
 | `hook-authoring-standards` (forge) | The decision should become a mechanically-enforced guard (e.g. blocking a specific unsafe edit), not just guidance |
 

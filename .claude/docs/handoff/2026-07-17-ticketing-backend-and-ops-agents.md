@@ -28,8 +28,8 @@ For the next agent/session opening this repo. Contract: forge's `handoff-compose
   `forge 1.14.0/scripts/release_gate.py` (G8 allow-set: `lifecycle-and-review`, `sub-issue` —
   verified false-positives).
   NOT mine, pre-existing on entry to this session: `design-systems 0.1.0/*` (5 files),
-  `orchestration 0.1.0/skills/{loop-design,orchestration-design}/evals/evals.json`,
-  `orchestration 0.1.0/skills/concurrency-design/`,
+  `orchestration 0.1.0/skills/{loop-rules,team-or-solo-rules}/evals/evals.json`,
+  `orchestration 0.1.0/skills/parallel-work-rules/`,
   `forge 1.14.0/skills/{agent-authoring-standards,entry-file-standards,hook-authoring-standards}/evals/evals.json`
   — `git status` shows these alongside mine; do not attribute them to this handoff.
 

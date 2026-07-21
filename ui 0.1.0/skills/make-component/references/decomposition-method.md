@@ -145,7 +145,7 @@ boundaries look clean; a composition that works but whose tiers are mis-cut (a g
 - **DESIGN** — new component **or composition**. Walk **A-down** (layer/tier → anatomy → API → the
   composition seam → coherence), then **B-up** (geometry → element → semantics+state → interaction →
   resilience), reconcile at the contract, run the relevant `scripts/` checks, hand the locked artifacts to
-  the repo's component seat (in agent-ui, the `component-builder` agent) or the host/`system-builder`
+  the repo's component seat (in agent-ui, the `component-builder` agent) or the host/`builder`
   agent; the *app shell* hands up to break-down-layout.
   Output: a `*.contract.json` card and/or a `*.composition.json` card + a geometry spec + the two-axis
   grade.

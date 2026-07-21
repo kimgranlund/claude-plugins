@@ -1,6 +1,6 @@
 {
-  "skill": "session-close",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n02 -> concurrency-design; n03 -> ExitWorktree (tool, no skill owner); n04 -> ops-repo (agent, no evals to reciprocate against); n05 -> knowledge-harvest; n06 -> open-questions-sweep; n07 -> bug-report; n08 -> issue; n09/n10/n11 -> ordinary model behavior, no sweep owner; n12 -> doc-review/code-review.",
+  "skill": "close-session",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n02 -> parallel-work-rules; n03 -> ExitWorktree (tool, no skill owner); n04 -> ops-repo (agent, no evals to reciprocate against); n05 -> knowledge-harvest; n06 -> open-questions-sweep; n07 -> bug-report; n08 -> issue; n09/n10/n11 -> ordinary model behavior, no sweep owner; n12 -> doc-review/code-review.",
   "cases": [
     { "id": "t01", "prompt": "Wrap up this session before we're done.", "expect": "trigger" },
     { "id": "t02", "prompt": "Close this out — check for anything left to capture.", "expect": "trigger" },

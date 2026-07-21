@@ -7,14 +7,14 @@ description: >
   finishes a unit of work and must report, when a coordinator rolls several reports into
   one, or when judging whether a handoff is verifiable and routable: "how do I hand this
   back", "report my results", "write the handback", "is this handoff complete". NOT for
-  designing how the seats compose (orchestration-design) — this owns only the return block.
+  designing how the seats compose (team-or-solo-rules) — this owns only the return block.
 disable-model-invocation: false
 user-invocable: true
 ---
 
 # Harness — Agent Handoff Contract
 
-The single block every team agent emits when it hands work back (to the coordinator seat — `orchestration-coordinator` or a project equivalent — or to the host). One **verifiable, routable** shape, so the next step *checks* the work instead of re-reading it. Agents point at this contract rather than restating it; this skill is the authority on the fields and how to fill them. It is the return half of `[[orchestration-design]]`: that skill designs how capabilities compose, this one standardizes how a worker reports back. Its critic is the block's consumer: the recipient — the coordinator's eval gate, or the host — is fresh-context by construction (**consumer-as-critic**, a deliberate form the standard sanctions, not a missing reviewer seat).
+The single block every team agent emits when it hands work back (to the coordinator seat — `team-lead` or a project equivalent — or to the host). One **verifiable, routable** shape, so the next step *checks* the work instead of re-reading it. Agents point at this contract rather than restating it; this skill is the authority on the fields and how to fill them. It is the return half of `[[team-or-solo-rules]]`: that skill designs how capabilities compose, this one standardizes how a worker reports back. Its critic is the block's consumer: the recipient — the coordinator's eval gate, or the host — is fresh-context by construction (**consumer-as-critic**, a deliberate form the standard sanctions, not a missing reviewer seat).
 
 ## Before you hand back
 
@@ -31,11 +31,11 @@ Keep each tight; omit nothing — write `(none)` when a field is empty. Inline w
 - **Evidence** — the proof a reviewer can verify *without re-doing the work*: gate exit codes, counts, `file:line` citations. Raw output longer than ~10 lines goes to a file, cited by path.
 - **Risks** — what could be wrong or fragile, the assumptions made, the blast radius — max ~5, each with its suspected locus (`execution | spec | plan`) so the repair can be aimed. Honest, not reassuring.
 - **Open questions** — unresolved decisions needing a human or another role; max 3, each decision-shaped.
-- **Recommended next action** — the single best next step **and who owns it** (`system-planner` / `system-builder` / the maker whose work was reviewed — a reviewer's handback recommends "maker applies the fix" / host).
+- **Recommended next action** — the single best next step **and who owns it** (`planner` / `builder` / the maker whose work was reviewed — a reviewer's handback recommends "maker applies the fix" / host).
 
 ## Gate ≠ commit
 
-A green gate is **not** a landed change. Read the gate output, *then* commit as a separate step — never chain a commit onto a test run with `&&`, or a regression rides in on a gate whose output was never read. (`orchestration-coordinator`/host commits; a maker hands back gated state, it does not self-land.)
+A green gate is **not** a landed change. Read the gate output, *then* commit as a separate step — never chain a commit onto a test run with `&&`, or a regression rides in on a gate whose output was never read. (`team-lead`/host commits; a maker hands back gated state, it does not self-land.)
 
 ## References & tools
 

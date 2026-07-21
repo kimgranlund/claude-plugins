@@ -10,7 +10,7 @@ description: >-
   chatbot", "which agent tier does this pattern belong to", or before writing agent-authoring
   knowledge into a knowledge-pack. NOT for Ephemeral guardrail content
   (llm:chat-harness-guardrail-facts); NOT for Resident authoring/orchestration patterns
-  (forge:agent-authoring-standards, orchestration:concurrency-design); NOT for building either
+  (forge:agent-authoring-standards, teamwork:parallel-work-rules); NOT for building either
   agent kind from scratch (route to the owning tier's authoring skill).
 disable-model-invocation: false
 user-invocable: false
@@ -42,7 +42,7 @@ hosted chat-agent facts, and had to be caught and reverted by the user mid-task.
 | Host & persistence | A real, persistent filesystem + git + shell on one machine; state survives across sessions (CLAUDE.md, memory files, git history) | A per-conversation/per-session sandbox; no persistent filesystem in the same sense; session state typically lives in an external database, not files |
 | Context assembly | Layered file-based discovery — global/project/session CLAUDE.md, on-demand skill preload via `skills:` frontmatter, subagent `.md` definitions | System prompt + injected context (RAG retrieval, conversation history) — no file-layer discovery of that kind |
 | Tool use | OS-level tools with real side effects — shell, file read/write/edit, git, browser automation | Narrower, business-domain function-calling against a defined API surface (e.g. `issue_refund`, `close_ticket`) |
-| Orchestration & concurrency | Can spawn sub-agents into isolated environments with no self-resume once a dispatched subagent's turn ends; other actors (peer sessions) may concurrently touch the same shared repo (`orchestration:concurrency-design` owns the operational detail) | Typically isolated per-conversation; a collision, if it exists, is usually about a shared backend resource (a customer record), not a shared file tree |
+| Orchestration & concurrency | Can spawn sub-agents into isolated environments with no self-resume once a dispatched subagent's turn ends; other actors (peer sessions) may concurrently touch the same shared repo (`teamwork:parallel-work-rules` owns the operational detail) | Typically isolated per-conversation; a collision, if it exists, is usually about a shared backend resource (a customer record), not a shared file tree |
 | Trust boundary | The operator is generally the trusted principal (though tool output is still untrusted data) | The end user is often an external, less-trusted party the agent transacts with (a customer, not the operator) |
 
 An agent that splits across the columns (a hosted sandbox with a persistent filesystem, a
@@ -50,7 +50,7 @@ cloud-resident dev agent) classifies **per axis, not per agent**: each row stand
 row that matches, and never carry the other rows over on the column label's authority.
 
 **Neither column is generic "best practice" — each is grounded in a real system.** The Resident
-column is Claude Code's own documented and observed behavior (`orchestration:concurrency-design`'s
+column is Claude Code's own documented and observed behavior (`teamwork:parallel-work-rules`'s
 actor-classification taxonomy, `forge:agent-authoring-standards`'s async-lifecycle note, and this
 skill's own incident above, each exists because of these mechanics). The Ephemeral column is what
 `llm:chat-harness-guardrail-facts` and its sibling packs already document in depth for
@@ -60,8 +60,8 @@ the hosted chat-agent shape.
 
 | Question shape | Tier | Owner |
 |---|---|---|
-| "Should this subagent use `isolation:worktree`", "another session has uncommitted changes I need" | Resident | `orchestration:concurrency-design` |
-| "Solo vs. team, how many subagents, is this fan-out worth it" | Resident | `orchestration:orchestration-design` |
+| "Should this subagent use `isolation:worktree`", "another session has uncommitted changes I need" | Resident | `teamwork:parallel-work-rules` |
+| "Solo vs. team, how many subagents, is this fan-out worth it" | Resident | `orchestration:team-or-solo-rules` |
 | "How do I write a thin subagent file, what belongs in `skills:` preload" | Resident | `forge:agent-authoring-standards` |
 | "Which instruction layer wins, how do I gate a risky action behind confirmation" | Ephemeral | `llm:chat-harness-guardrail-facts` |
 | "How does my chatbot remember things across turns/sessions" | Ephemeral | `llm:chat-harness-memory-facts` |

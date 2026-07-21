@@ -128,10 +128,10 @@ the write-back verb — and requires a dated `## Findings` entry (file section, 
 fork killed mid-investigation has still left something behind. Its stopping predicate includes at
 least one such entry before the work counts as done.
 
-Where `orchestration`'s `loop-design` is installed, run this dispatch under `/goal` rather than an
+Where `orchestration`'s `loop-rules` is installed, run this dispatch under `/goal` rather than an
 open-ended fork — "a dated Findings entry exists" is exactly the verifiable end-state a goal needs,
-and a turn cap (5 tries, per loop-design's own recipe) turns a stuck investigation into a reported
-blocker instead of a silently abandoned one. Where loop-design is not installed, apply its
+and a turn cap (5 tries, per loop-rules's own recipe) turns a stuck investigation into a reported
+blocker instead of a silently abandoned one. Where loop-rules is not installed, apply its
 discipline inline: name the stopping predicate, cap the tries, escalate on the same check failing
 twice.
 

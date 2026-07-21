@@ -8,7 +8,7 @@ R1/R3/R7 gates to be line-checkable; see rubric.md's journal shape-check note).
 `routing_eval.py`; scorer = macro-F1 + sub-0.70 tripwire count over all 55 checked-in corpus pairs;
 method = SWEEP (mandated); measure-only, winner not applied. **Result:** 0.34 is the joint optimum
 (macro-F1 0.8699, tied 0.34–0.36; delta +0.0000), the estate is peaked not flat, and the sweep
-surfaced one real defect no threshold rescues (orchestration-reviewer, F1 ≤ 0.57 at every t —
+surfaced one real defect no threshold rescues (wiring-checker, F1 ≤ 0.57 at every t —
 filed to its owner). **Consumer-as-critic grade (the dispatching seat):** R1/R3/R7 pass — each
 verified from the journal below, not the self-score; measure-only verified against git status.
 
@@ -77,10 +77,10 @@ grid + one fine pass only).
 - Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (vision-memo-forge,
   prd-author, check-translations, check-safety, check-focus, research-methods, token-builder —
   mostly paraphrase positives the lexical proxy can't see, a measurement artifact the module
-  docstring flags), and a precision-driven cluster wants t≥0.35 (system-builder, color-theory-facts,
-  spec-author, code-reviewer, component-checker@0.55). 0.34 is the balance point between them
+  docstring flags), and a precision-driven cluster wants t≥0.35 (builder, color-theory-facts,
+  spec-author, code-checker, component-checker@0.55). 0.34 is the balance point between them
   — exactly why a single global knob peaks in the middle.
-- Outlier (below tripwire at 0.34): orchestration-reviewer (agent), F1=0.545. Its own curve
+- Outlier (below tripwire at 0.34): wiring-checker (agent), F1=0.545. Its own curve
   caps at 0.57 at EVERY threshold — no knob value rescues it. This is a description/corpus
   quality defect, NOT a threshold issue → route to the agent's owner.
 - Outlier (wants higher t): component-checker (agent), individual optimum t=0.55, but not

@@ -10,7 +10,7 @@ description: >-
   "review this skill against the standard of excellence". Owns references/standard-of-excellence.md and the
   campaign/ ledger. NOT for reviewing one skill against its own rubric (skill-authoring-standards);
   NOT for executing the restructures it verdicts (skill-refactor); NOT for the agents estate
-  (agents-audit); NOT for frontmatter wiring decisions (orchestration-design).
+  (agents-audit); NOT for frontmatter wiring decisions (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
 ---
@@ -114,7 +114,7 @@ Claims against the standard: … (or none) · Portfolio: KEEP|MERGE|SPLIT|RETIRE
 | `skill-refactor` | Executes MERGE/SPLIT/RETIRE and rename verdicts corpus-wide |
 | `agents-audit` | The sibling estate: agent definitions, preload graph, team shape — same plugin |
 | `linguistic-techniques` | L scoring — dispatch `linguistics-reviewer` per skill, same plugin |
-| `orchestration-design` | P framing — static vs dynamic wiring, descriptions as connective tissue — lives in the `orchestration` plugin |
+| `team-or-solo-rules` | P framing — static vs dynamic wiring, descriptions as connective tissue — lives in the `teamwork` plugin |
 | `rubric-forge` | Author / score / repair this skill's own rubrics — lives in `scribe` |
 
 ## Failure branches

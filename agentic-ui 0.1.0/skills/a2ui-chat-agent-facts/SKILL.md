@@ -12,7 +12,7 @@ description: >-
   build. NOT for the wire shape / renderer (a2ui-protocol-facts); NOT for catalog design or coverage
   (a2ui-catalog-facts); NOT for corpus records (a2ui-training-facts); NOT for composing a
   payload (a2ui-composer) or live-agent SOURCE (a2ui-builder); NOT for authoring ADRs/SPEC
-  (system-planner).
+  (planner).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -84,7 +84,7 @@ answer with the *why*, not just the rule:
   proxy, a new provider adapter) → the **`a2ui-builder`** agent.
 - **Compose an actual A2UI payload** (message stream / node shapes, e.g. one that sets
   `wantResponse`) → the **`a2ui-composer`** agent.
-- **Author or revise ADR-0088 (or any ADR/SPEC/LLD in this space)** → **`system-planner`** (via
+- **Author or revise ADR-0088 (or any ADR/SPEC/LLD in this space)** → **`planner`** (via
   scribe's `doc-forge`, where installed). Grading or ratifying a design doc routes
   there too, not here.
 - **Sibling knowledge packs** (answers, like this one): the A2UI wire shape + renderer mechanics →

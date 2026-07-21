@@ -47,10 +47,10 @@ behavior but lower-provenance than the official plugin above:
 
 **The `orchestration` plugin's five-seat delivery team**,
 `/Users/kimba/Projects/nonoun/plugins/orchestration 0.1.0/`:
-- `agents/orchestration-coordinator.md` — the apex/chain-of-command seat: routing by task shape,
+- `agents/team-lead.md` — the apex/chain-of-command seat: routing by task shape,
   sealed dispatch, the generator≠critic gate, the discovered-reality escalation loop.
-- `agents/system-planner.md` — the design seat: decompose-before-author, "report, don't grade."
-- `skills/orchestration-design/SKILL.md` — the solo-first null-unit doctrine this pack's chain-of-
+- `agents/planner.md` — the design seat: decompose-before-author, "report, don't grade."
+- `skills/team-or-solo-rules/SKILL.md` — the solo-first null-unit doctrine this pack's chain-of-
   command file opens with.
 - `README.md` — the recorded model/effort re-tiering by role (v0.7.0 changelog entry).
 
@@ -72,5 +72,5 @@ This pack answers how MULTIPLE agents compose for one job; it does not restate i
 single skill's own trigger/description routing is [[chat-harness-routing-facts]]. Measuring or
 logging what an agent run actually did (tokens, latency, tool calls fired) is
 [[chat-harness-logging-facts]]. Designing the wiring itself for a specific project — which unit,
-which frontmatter keys, `skills:` preloads — is that project's own orchestration-design seat or
+which frontmatter keys, `skills:` preloads — is that project's own team-or-solo-rules seat or
 skill, not this pack.

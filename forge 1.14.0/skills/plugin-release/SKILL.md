@@ -25,7 +25,7 @@ Invoke `plugin-authoring-standards` now — the gate order and every rule below 
 
 ## Phase 2 — The gate
 
-`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/release_gate.py" <root>` — structure, manifest, full lint over every SKILL.md / agent / hooks.json / plugin.json, bundled-script selftests, phantom sweep. Findings are fixed and the gate re-run; the same finding failing 3 times → stop and hand it to the user (`orchestration`'s `loop-design` names this exact gate as a goal condition, where installed). The gate's own counters are proven by `release_gate.py selftest` — run it first if the gate itself was edited this cycle.
+`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/release_gate.py" <root>` — structure, manifest, full lint over every SKILL.md / agent / hooks.json / plugin.json, bundled-script selftests, phantom sweep. Findings are fixed and the gate re-run; the same finding failing 3 times → stop and hand it to the user (`teamwork`'s `loop-rules` names this exact gate as a goal condition, where installed). The gate's own counters are proven by `release_gate.py selftest` — run it first if the gate itself was edited this cycle.
 
 ## Phase 3 — Package
 

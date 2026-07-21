@@ -49,7 +49,7 @@ Route here only when the task needs a property `context: fork` on a skill cannot
 ## Model tiering — the seat ladder
 
 `model` and `effort` are not cosmetic defaults — route them by what the dispatch actually asks the
-agent to decide, same principle as any other loop-cost decision (`orchestration`'s `loop-design`
+agent to decide, same principle as any other loop-cost decision (`teamwork`'s `loop-rules`
 covers the turn/time axis; this is the per-agent axis). The estate's contract is a **ceiling
 ladder** (ratified 2026-07-12, superseding the 1.16.0 three-tier doctrine): frontmatter carries
 each seat's standing default; adaptivity — effort up one step or down several, model down to a
@@ -63,7 +63,7 @@ simpler tier for a routine dispatch — happens at dispatch time, never by editi
 | Orchestration / coordination | `sonnet` + `high` | low–xhigh | — |
 | Mechanical / fully-specified | cheapest correct (`haiku`) | — | — |
 
-- **Planning & architecture** — decomposition, contracts, LLDs. `system-planner` (`fable` +
+- **Planning & architecture** — decomposition, contracts, LLDs. `planner` (`fable` +
   `high`) is the worked example. Planning sets the ceiling on everything downstream; it never
   steps below its row's floor.
 - **Review / hard-bug analysis** — scoring against a rubric, weighing severity, deciding a
@@ -72,7 +72,7 @@ simpler tier for a routine dispatch — happens at dispatch time, never by editi
   `researcher`) pin the row explicitly — a verdict must not depend on the caller's tier, so
   `inherit` is reserved for the rare seat that *means* to ride the session.
 - **Coding / execution** — implementing an approved plan (technical decisions, edge cases, no
-  adversarial stance toward its own output): `opus` + `xhigh` is the ceiling (`system-builder`);
+  adversarial stance toward its own output): `opus` + `xhigh` is the ceiling (`builder`);
   a seat whose standing work is routine pins a step-down instead (`docs-writer`, `sonnet` +
   `high`) rather than paying the ceiling on every dispatch.
 - **Mechanical or fully-specified** — no judgment call, the output is fully determined by the

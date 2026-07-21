@@ -8,7 +8,7 @@ description: |
   standalone, it reads durable ops state (`.claude/ops/`) plus live `gh` evidence directly, and
   may carry a focus instruction — an emphasis that reorders attention, never a new entry
   contract. Plans only — executes nothing it queues, and writes exactly its one plan file. NOT for design
-  docs or feature planning (the orchestration plugin's system-planner, where installed); NOT for
+  docs or feature planning (the teamwork plugin's planner, where installed); NOT for
   minting or triaging work items (ops-issues); NOT for executing hygiene actions (ops-repo);
   NOT for running the sweep itself (ops-orchestrator, which dispatches this seat last).
 

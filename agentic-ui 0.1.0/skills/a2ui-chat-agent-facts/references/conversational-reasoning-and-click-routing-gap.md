@@ -131,7 +131,7 @@ The transport the meta-line rides (agent-transport-seam) · the turn/session mod
 input-intent) · the produce() loop mechanics beyond the peel/gates above (produce-loop) · the wire
 shape of `wantResponse`/`action` ([[a2ui-protocol-facts]]) · building any of this in SOURCE
 (`a2ui-builder`) · composing a payload that sets `wantResponse` (`a2ui-composer`) · authoring or
-ratifying the ADRs (`system-planner` / scribe's `doc-forge`).
+ratifying the ADRs (`planner` / scribe's `doc-forge`).
 
 ## History
 

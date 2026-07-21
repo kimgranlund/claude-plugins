@@ -378,10 +378,14 @@ def selftest():
         errs.append("distinct-domain role family must pass with (domain-disambiguated), "
                     "no ROLE COLLISION, got %d:\n%s" % (code, out))
 
-    # collision arithmetic: a bare role name (no domain qualifier) in a family MUST flag
+    # collision arithmetic: a bare role name (no domain qualifier) in a family MUST flag.
+    # Fixture uses a phantom domain (widget-) on purpose: a fixture named after a REAL estate
+    # agent gets rewritten by rename sweeps, silently breaking the same-role premise this
+    # control needs (bitten 2026-07-21, ADR-0006 teamwork sweep: code-reviewer → code-checker
+    # split the pair into two different roles and the control stopped biting).
     def bare(d):
         _write_agent(d, "reviewer.md", "reviewer")
-        _write_agent(d, "code-reviewer.md", "code-reviewer")
+        _write_agent(d, "widget-reviewer.md", "widget-reviewer")
     code, out = _run_fixture(bare)
     if "ROLE COLLISION" not in out:
         errs.append("bare role name beside a qualified twin must flag ROLE COLLISION:\n%s" % out)
