@@ -18,6 +18,7 @@ reviews a feature. Assembled by a `plugin-decompose` partition of `~/.claude/ski
 | `skills/session-close` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through bug-report/feature/issue, triggers knowledge-harvest's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
 | `hooks/hooks.json` (`SessionEnd`) | Hook | automatic | Passive safety net for `session-close`: on actual session termination, logs a durable warning line if a git worktree was left dirty or unpushed — `SessionEnd` cannot block, so this never gates, only records |
 | `skills/build` | Command skill | user-only (`/build`) | Record-first build: finds or mints the feature record (running scribe's `/feature` intake inline on a miss), sizes the dispatch by the solo-first floors (small → host inline / one sealed fork; big → the floored seats), drives it under a mandatory Findings write-back, closes the loop on the ticket |
+| `skills/orchestration-coordinator` | Command skill | user-only (`/orchestration-coordinator`) | Makes THIS host session adopt `agents/orchestration-coordinator.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides orchestration-design's solo-first default for the charter's duration; same exact-name-pairing convention as forge's `ops-issues`, inverted (host adopts, never dispatches, the seat it shares a name with) |
 | `agents/orchestration-coordinator` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
 | `agents/system-planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
 | `agents/system-builder` | Subagent | dispatch-only | The build seat: implements an approved LLD's build sequence, runs mechanical checks, escalates design conflicts rather than editing the contract |
@@ -71,6 +72,22 @@ Each model-invocable skill ships `evals/evals.json` in this workspace's `{skill,
 expect}]}` schema (`eval_check.py` E1–E5); the original three converted from the pre-migration
 library's `scripts/routing-corpus.json` positives/negatives, `session-close`'s authored fresh at
 mint.
+
+v0.7.7 · assembled 2026-07-20 · 0.7.7: new `orchestration-coordinator` command skill — makes the
+HOST session itself adopt `agents/orchestration-coordinator.md`'s own eight priorities directly for
+one stated charter (read from the agent file, never restated inline, so the two can't silently
+drift), with no separate agent spawn for the coordinator role; a stated (not tool-walled) discipline
+that the host never touches Write/Edit on charter deliverables, dispatching every unit of real work
+instead. Deliberately overrides `orchestration-design`'s solo-first default for the charter's
+duration — invoking the command IS the scoped choice to force team-shaped delegation regardless of
+size, with no escape hatch back to solo mid-charter. Shares its exact name with the agent it adopts
+the contract of, the same deliberate pairing ruled for forge's `ops-issues` — inverted here: the
+skill there dispatches its same-named agent, this one never does. Independent FLOOR audit
+(skill-auditor): 2 majors fixed pre-ship (Phase 2's restatement had silently dropped 7 of 8 priority
+sub-clauses vs. the agent source — fixed by pointing at the agent file directly instead of
+restating; the host was never told to load `orchestration-design`/`loop-design`, the same two skills
+the agent itself preloads — fixed), plus 2 minors (no failure branch for re-invocation mid-open-
+charter; bare relative citations to the agent file resolved to `${CLAUDE_PLUGIN_ROOT}` paths) ·
 
 v0.7.6 · assembled 2026-07-19 · 0.7.6: new `session-close` skill — wraps up a session's own git
 worktree before it ends: checks mechanical git state, routes real findings through
