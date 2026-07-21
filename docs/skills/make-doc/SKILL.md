@@ -8,7 +8,7 @@ description: >-
   database choice", "author a new SPEC for this system directly", "spec out the checkout flow",
   "write the PLAN for this migration". Also runs via /make-doc [type and intent]. Human-timed;
   writes one document. NOT for the rules themselves (doc-writing-rules); NOT for reviewing
-  a document (check-doc); NOT for feature intake (feature — routes here for the TICKET); NOT for
+  a document (check-doc); NOT for feature intake (file-feature — routes here for the TICKET); NOT for
   migrating docs into the canonical layout (tidy-docs); NOT for a bug investigation
   end-to-end (file-bug, which calls this skill's TICKET path internally); NOT for a generic
   chore or follow-up record (file-task).

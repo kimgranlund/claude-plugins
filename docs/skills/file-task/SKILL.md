@@ -1,5 +1,5 @@
 ---
-name: issue
+name: file-task
 description: >-
   Capture ANY work item — a chore, follow-up, research item, debt, or task that is neither
   bug-shaped nor a feature idea — as a durable, labeled record, and drive that record's whole
@@ -86,9 +86,9 @@ redirect (above) never fires on a seed it did not originate the classification f
 
 **The one-hop-only redirect rule (shared by all three siblings):** a sibling reached by redirect
 never redirects again — its own classification finding a poor fit is not license to bounce a
-second time, only to capture under its own named fallback: **here** (`issue`), `task` with the
+second time, only to capture under its own named fallback: **here** (`file-task`), `task` with the
 ambiguity in Scope/Open; **`file-bug`**, `kind: bug` with the shape gap named in
-Classification; **`feature`**, `kind: feature` with the gap named in Scope/Open. One hop resolves
+Classification; **`file-feature`**, `kind: feature` with the gap named in Scope/Open. One hop resolves
 genuine mis-routing; a second hop is thrash, not routing — the receiving skill always ends in a
 captured record, never a second redirect.
 
