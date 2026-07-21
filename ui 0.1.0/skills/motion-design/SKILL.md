@@ -12,7 +12,7 @@ description: >-
   stagger values, vestibular triggers + the WCAG floor. ANSWERS only: building the animated
   component is component-forge; perceived-latency/skeleton/CWV verification is perf-verify;
   driving a live change is ui-change-verify; the md.sys.motion token table is
-  material-design-motion-tokens.
+  material-motion-facts.
 user-invocable: false
 disable-model-invocation: false
 ---
@@ -29,7 +29,7 @@ from a cited, dated corpus, so motion decisions reason from evidence instead of 
 | "How do these move together?" — transition patterns, stagger, z-space, interruptibility, what never animates | `references/choreography.md` |
 | "Who does this hurt?" — WCAG floor, `prefers-reduced-motion`, vestibular triggers, substitutions | `references/reduced-motion.md` |
 | "Just give me the value" — the ratified house point per knob (press scale, bounce, asymmetry, stagger, hover onset) + the frequency gate | `references/house-locks.md` |
-| "Fill the Motion section of a DESIGN.md" — durations, easings, what never animates, reduced-motion policy | all five references, in table order — house-locks.md supplies the ratified values the section states (the section's contract is design-md-format's, design-systems plugin) |
+| "Fill the Motion section of a DESIGN.md" — durations, easings, what never animates, reduced-motion policy | all five references, in table order — house-locks.md supplies the ratified values the section states (the section's contract is design-md-rules's, design-kits plugin) |
 | Provenance and the unverified edges | `references/sources.md` |
 
 ## Consult procedure
@@ -54,7 +54,7 @@ duration+bounce parameterized, interruptible — because velocity continuity and
 retargeting are the two properties fixed curves cannot provide (WWDC23 10158; `easing.md`).
 Every default here carries its rationale, so deviation is legal when the rationale doesn't apply:
 a Material-token project uses Material's own easing/spring set
-(`material-design-motion-tokens`); technical motion (spinners, progress) stays `linear`.
+(`material-motion-facts`); technical motion (spinners, progress) stays `linear`.
 Deviating? Name the rationale above that doesn't apply — a deviation with no named failing
 rationale is drift. The specific ratified values (one point per knob, forbidden neighbors named)
 and their precedence seam live in `references/house-locks.md`; the reduced-motion floor sits
@@ -67,8 +67,8 @@ outside every seam — nothing trades it away.
   verify perceived latency, skeleton-vs-spinner, CWV budgets → [[perf-verify]]; drive the change
   live → [[ui-change-verify]]; screen-state grammar (what an empty/loading state contains, not how
   it moves) → [[ui-patterns]].
-- Material's `md.sys.motion.*` token table and its pairing laws → `material-design-motion-tokens`
-  (design-systems plugin, where installed; otherwise cite the equivalent values from
+- Material's `md.sys.motion.*` token table and its pairing laws → `material-motion-facts`
+  (design-kits plugin, where installed; otherwise cite the equivalent values from
   `easing.md`'s cross-reference row).
 - Realizing motion constants as project tokens is the color plugin's `token-builder` seat (where
   installed) — this pack supplies the values and rationale it realizes.

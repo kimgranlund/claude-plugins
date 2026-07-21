@@ -1,0 +1,121 @@
+{
+ "skill": "design-md-rules",
+ "note": "Converted 2026-07-08 from Claude Design's original suite (should_trigger schema) to forge's cases schema during the design-md-author -> make-dscard-kit synthesis merge. Two routings corrected in the conversion: the --md-sys-* semantics case flipped to no-trigger (material-color-facts owns that namespace, same plugin); the corpus-authoring flagship flipped to no-trigger (make-dscard-kit owns the authoring run — this skill loads as its knowledge substrate, but the router's one pick is the workflow). Iconography-section CONTENT fenced to the icon-rules pack 2026-07-09; the format/anatomy stays here. Blind run 2026-07-09 (0.5.0 menu): 22/23 — t06 (pairing law for on-colors) stolen by material-color-facts; the term is legitimately shared (format definition here, application there) and t06 passed the earlier same-day run. First strike, no tuning; watch. t06 (pairing law for on-colors) REASSIGNED to no-trigger 2026-07-09 after two consecutive blind runs routed it to material-color-facts (0.2.3 precedent: the judges were right — the ask wants the law applied in color terms; this pack keeps the format-level pairing asks t03/t13).",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "what is a DESIGN.md file?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "explain the frontmatter schema for a claude design DESIGN.md",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "why does every color need a -dark sibling in DESIGN.md?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "how do I name tokens in the {prefix}-{family}-{slot} grammar?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "what sections should the prose spine of a design spec have?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "what is the pairing law for on-colors?",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "how open-ended can a DESIGN.md be? can I add a motion section?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "what is root brand architecture in a design spec?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "how do @dsCard preview cards work?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "validate this DESIGN.md I wrote for my brand",
+   "expect": "trigger"
+  },
+  {
+   "id": "t11",
+   "prompt": "add a data-viz palette section to our DESIGN.md",
+   "expect": "trigger"
+  },
+  {
+   "id": "t12",
+   "prompt": "what's light-dark() and why does color-scheme matter?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t13",
+   "prompt": "how should a design spec handle contrast failures the brand accepts?",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "what does --md-sys-color-primary-on-primary mean?",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "based on these css files create a design system for use in claude design and claude code",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "write a design tokens file in W3C DTCG format",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "make me a React component library from these tokens",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "use the adia design system to mock a settings screen",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "audit my site for WCAG compliance",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "design a logo for my startup",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "lint my Google Stitch DESIGN.md before I upload it",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n09",
+   "prompt": "grade the design system bundle the other team shipped",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n10",
+   "prompt": "fill the Iconography section of our DESIGN.md",
+   "expect": "no-trigger"
+  }
+ ]
+}

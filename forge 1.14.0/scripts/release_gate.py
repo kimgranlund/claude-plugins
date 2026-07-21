@@ -240,17 +240,17 @@ def gate(root: Path, package: bool = False):
              "anti-patterns", "component-patterns", "contrast-standards", "audit-report",
              "lossy-by-design", "first-run", "material-design", "color-tokens",
              "figma-make", "google-stitch",
-             # figma-plugin-api joining the estate added the -api suffix (2026-07-09):
+             # figma-plugin-facts joining the estate added the -api suffix (2026-07-09):
              "attributes-as-api",
              # the mechanization pair (2026-07-14): "hand-run" is prose ("a hand-run check",
              # -run suffix from eval-run); "selftest-patterns" is a references file:
              "hand-run", "selftest-patterns",
              # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
-             # "scale-theory" are references files (ui-patterns, geometry-systems); "design-systems"
+             # "scale-theory" are references files (ui-patterns, geometry-systems); "design-kits"
              # is the sibling PLUGIN's name, caught by geometry-systems' own "-systems" suffix;
              # "box-model-and-flow" is a references file (dom-block-flow); "mid-flow" is prose
              # ("mid-flow" in the hook skills), caught once dom-block-flow added the -flow suffix:
-             "container-patterns", "scale-theory", "design-systems", "box-model-and-flow",
+             "container-patterns", "scale-theory", "design-kits", "box-model-and-flow",
              # prose compounds newly caught by the same two suffixes (-flow, -systems):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
              # a2a-protocol-facts's references file (2026-07-15) — the estate's last standing G8 warn:
@@ -307,7 +307,7 @@ def gate(root: Path, package: bool = False):
              # same 2026-07-20 estate-wide sweep, other plugins' pre-existing prose newly caught
              # by suffixes added in recent ships (-rules here; -routing/-sweep/-orchestrator from
              # llm's chat-harness family and forge 1.39.0's ops pair): "three-hard-rules" is
-             # design-md-format's own named block, "mis-routing" is issue's prose,
+             # design-md-rules's own named block, "mis-routing" is issue's prose,
              # "threshold-sweep" cites a research-methods references FILENAME
              # (threshold-sweep-2026-07-04.md), "repo-orchestrator" is a hypothetical agent in
              # concurrency-design's worked example:
@@ -320,12 +320,17 @@ def gate(root: Path, package: bool = False):
              # phantom until the llm/design-kits rename PRs mint them for real (remove from this
              # set then):
              "forced-colors", "font-palette", "tonal-palette", "github-facts",
-             "material-color-facts",
+             # material-color-facts removed 2026-07-21: the design-kits rename made it a real skill.
              # ADR-0006 agent-protocols rename (2026-07-21): the a2a-*/a2ui-* digit-prefix
              # tokenizer artifact (1.20.1 class — the regex skips digit-bearing segments), now
              # over the renamed -facts members: catalog-facts/chat-agent-facts/protocol-facts/
              # training-facts are the tails of full a2a-/a2ui- names, not phantom siblings:
              "catalog-facts", "chat-agent-facts", "protocol-facts", "training-facts",
+             # ADR-0006 design-kits rename (2026-07-21): the -kit and -isolation suffixes joined
+             # the inventory — "bidi-isolation" is the Unicode/CSS term of art in i18n-verify's
+             # prose, "adia-ui-kit" cites an external package in pack-authoring-standards; the
+             # standing false-positive class:
+             "bidi-isolation", "adia-ui-kit",
              # the new ops-issues COMMAND skill (2026-07-20) added the "-issues" suffix to this
              # plugin's own inventory for the first time: "sub-issues" is github-issue-pr-primitives'
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real

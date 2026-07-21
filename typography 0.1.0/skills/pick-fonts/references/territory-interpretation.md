@@ -1,7 +1,7 @@
 # Territory interpretation — turning a brief into a point, not a region
 
 This is SKILL.md step 1's worked ground truth. The underlying doctrine belongs to
-`design-system-hub/references/context-potency.md` (its presupposition technique and
+`make-design-kit/references/context-potency.md` (its presupposition technique and
 generic-output clinic table) — this file does not re-derive that doctrine, it applies it to the
 specific artifact class this skill produces: a typographic decision, not a generation-prompt
 carrier. Read `context-potency.md`'s "Why potency governs this artifact class" section for the
@@ -87,6 +87,6 @@ A cold-start template — the shape of the decision doc SKILL.md step 5 hands to
 
 ## Boundary
 
-This file is worked application, not the doctrine itself — `design-system-hub/references/
+This file is worked application, not the doctrine itself — `make-design-kit/references/
 context-potency.md` owns the presupposition technique and the generic-output clinic in general;
 this file exists so that discipline doesn't have to be re-derived on every typography brief.

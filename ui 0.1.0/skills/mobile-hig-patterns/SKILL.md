@@ -10,7 +10,7 @@ description: >-
   modality/sheet-detent behavior, alert/action-sheet/sheet escalation, button-style vocabulary,
   list/swipe conventions, and nav-bar/toolbar/search placement — cited to specific HIG pages.
   ANSWERS HIG's semantics; does not name page-shell regions (ui-patterns), animation timing
-  (motion-design), or icon sizing (iconography). NOT Android/Material guidance
+  (motion-design), or icon sizing (icon-rules). NOT Android/Material guidance
   (material-design-*-tokens); NOT building the component (component-forge).
 user-invocable: false
 disable-model-invocation: false
@@ -52,10 +52,10 @@ stated rules instead of a remembered screenshot of some other app.
     names where it sits on the screen.
   - Spring/animation timing values (Apple's spring model, durations) → [[motion-design]] — already
     the house default for motion generally; this pack never restates spring numbers.
-  - Icon construction and sizing (SF Symbols weights, grid, sizing) → [[iconography]] — already
+  - Icon construction and sizing (SF Symbols weights, grid, sizing) → [[icon-rules]] — already
     covers SF Symbols in its per-system construction table; this pack covers HIG's *button* and
     *navigation* vocabulary, not icon geometry.
-- **Android/Material's equivalent guidance** → `material-design-*-tokens` (design-systems plugin,
+- **Android/Material's equivalent guidance** → `material-design-*-tokens` (design-kits plugin,
   where installed) — a different platform's own stated rules; this pack is Apple-specific.
 - **Building the actual component** → [[component-forge]] — this pack cites HIG's rule; it never
   emits a wireframe or component code.

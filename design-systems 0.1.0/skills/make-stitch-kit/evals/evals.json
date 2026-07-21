@@ -1,0 +1,18 @@
+{
+  "skill": "make-stitch-kit",
+  "note": "First suite (closed the estate's last E6 coverage gap, 2026-07-09). Positives from the description's own trigger phrasings; negatives are the family fences: dscard (Claude bundles), figma-make, the hub (cross-platform), design-md-rules (format Q&A), the reviewer agent (grading).",
+  "cases": [
+    { "id": "t01", "prompt": "create a Google Stitch DESIGN.md for our brand", "expect": "trigger" },
+    { "id": "t02", "prompt": "write a stitch design-md file", "expect": "trigger" },
+    { "id": "t03", "prompt": "port my design system tokens to Stitch", "expect": "trigger" },
+    { "id": "t04", "prompt": "my DESIGN.md fails lint", "expect": "trigger" },
+    { "id": "t05", "prompt": "why all these orphan warnings from the design.md linter", "expect": "trigger" },
+    { "id": "t06", "prompt": "lint my Stitch DESIGN.md before I upload it", "expect": "trigger" },
+    { "id": "t07", "prompt": "regenerate the stitch export, the palette changed", "expect": "trigger" },
+    { "id": "n01", "prompt": "create a Claude Design design-system bundle", "expect": "no-trigger" },
+    { "id": "n02", "prompt": "build the Figma Make guidelines folder", "expect": "no-trigger" },
+    { "id": "n03", "prompt": "which design tool should get our design system", "expect": "no-trigger" },
+    { "id": "n04", "prompt": "what sections should the prose spine of a design spec have?", "expect": "no-trigger" },
+    { "id": "n05", "prompt": "grade the design system export the other team shipped", "expect": "no-trigger" }
+  ]
+}

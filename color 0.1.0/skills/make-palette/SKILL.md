@@ -9,7 +9,7 @@ description: >-
   palette or emitting a ColorProof (check-colors); NOT for color-space math or converting between color spaces
   (color-space-facts); NOT for harmony, meaning, or art direction — vibe, mood (color-theory-facts); NOT for
   realizing token layers in a repo (token-builder); NOT for the whole design-system export a platform consumes
-  (design-system-author-claude-code / -google-stitch / -figma-make; cross-platform: the design-system-hub
+  (make-dscard-kit / -google-stitch / -figma-make; cross-platform: the make-design-kit
   hub) — this skill designs only the ramp it consumes.
 disable-model-invocation: false
 user-invocable: true

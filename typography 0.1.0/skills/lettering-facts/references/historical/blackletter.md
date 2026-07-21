@@ -208,7 +208,7 @@ Key moments in the dispute:
 - **Third Reich (1933–1941).** The Nazi regime initially embraced Fraktur as a "German script" — state propaganda, textbooks, and official publications through ~1940 were heavily Fraktur-set. The 1941 reversal was abrupt and came, as noted, from occupation-practicality motives.
 - **Post-1945.** The dispute was effectively dead. Fraktur's place in contemporary German typography is ornamental/heritage only.
 
-The Antiqua-Fraktur dispute is worth knowing because it explains the cultural weight that Fraktur still carries in German-language contexts. A Fraktur-set nameplate reads as "traditional" and "heritage"; it does not read as straightforwardly legible, and for many German-speakers it carries additional fraught associations (both pre-1933 conservative nationalism and 1933–1941 Nazi-era iconography). Designers working with Fraktur in contemporary German-language contexts should be aware that the associations are not neutral.
+The Antiqua-Fraktur dispute is worth knowing because it explains the cultural weight that Fraktur still carries in German-language contexts. A Fraktur-set nameplate reads as "traditional" and "heritage"; it does not read as straightforwardly legible, and for many German-speakers it carries additional fraught associations (both pre-1933 conservative nationalism and 1933–1941 Nazi-era icon-rules). Designers working with Fraktur in contemporary German-language contexts should be aware that the associations are not neutral.
 
 ---
 
@@ -356,7 +356,7 @@ Pitfalls specific to blackletter work.
 
 4. **Mixing multiple blackletter sub-traditions.** A Textura nameplate with a Fraktur pullquote reads as confused; each blackletter sub-tradition has distinct visual weight and cultural coding. Pick one and commit.
 
-5. **Treating blackletter as culturally neutral.** In German-language contexts particularly, Fraktur carries associations (pre-1933 conservative nationalism, 1933–1941 Nazi-era iconography, post-1945 heritage-nostalgia). Designers working in German or for German audiences should be aware; non-German contexts are more neutral but not fully so (blackletter metal, gothic aesthetic, etc. carry their own codings).
+5. **Treating blackletter as culturally neutral.** In German-language contexts particularly, Fraktur carries associations (pre-1933 conservative nationalism, 1933–1941 Nazi-era icon-rules, post-1945 heritage-nostalgia). Designers working in German or for German audiences should be aware; non-German contexts are more neutral but not fully so (blackletter metal, gothic aesthetic, etc. carry their own codings).
 
 6. **Using "Gothic"-named American sans-serifs thinking they are blackletter.** Franklin Gothic, News Gothic, Trade Gothic, Copperplate Gothic are all sans-serif. "Gothic" in American type naming means sans; "Gothic" in European type naming means blackletter. See `./sans-grotesque.md`.
 

@@ -3,7 +3,7 @@
 Researched 2026-07-09 from primary sources (developer.apple.com, w3.org, MDN, m3.material.io).
 This corpus's default recommendation is **spring-based motion in the Apple style** — the estate's
 standing preference — with the CSS realizations that approximate it. Material's own easing/spring
-token set is owned by `material-design-motion-tokens` (design-systems plugin); one cross-reference
+token set is owned by `material-motion-facts` (design-kits plugin); one cross-reference
 row lives at the bottom.
 
 ## The spring model (Apple)
@@ -73,5 +73,5 @@ approximations for anything the user touches.
 ## Cross-reference
 
 Material easing/spring tokens (`md.sys.motion.*` — the M2 cubic-beziers, the M3 spring scheme):
-consult `material-design-motion-tokens` (design-systems plugin) where installed; historical anchor
+consult `material-motion-facts` (design-kits plugin) where installed; historical anchor
 M2 standard = cubic-bezier(0.4, 0.0, 0.2, 1).

@@ -1,7 +1,7 @@
-# design-systems — design-system export authoring + the Material Design token grammar
+# design-kits — design-system export authoring + the Material Design token grammar
 
 Sibling plugin to forge (which authors the harness) and scribe (which authors documents);
-design-systems authors, regenerates, and grades the export bundles a generative design agent
+design-kits authors, regenerates, and grades the export bundles a generative design agent
 consumes — Claude Design/Claude Code, Figma Make, Google Stitch — and carries the Material Design
 token grammar those exports can extend. Two decomposition candidates (design-system-export and
 material-design-tokens) merge here on explicit direction: the token skills exist chiefly to be
@@ -11,28 +11,50 @@ cited from the exports, so one plugin boundary serves both.
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/design-system-hub` | Procedural skill | both (model + user) | The cross-platform hub: core+profiles architecture, prose-over-tokens and terminal-value doctrines, `references/rubric.md` (H1–H7) and `references/shared-doctrines.md`; dispatches the three platform siblings and design-system-reviewer |
-| `skills/design-system-author-dscard` | Procedural skill | both | Claude Design / Claude Code bundle authoring, from a corpus (css/tokens/codebase/brand deck) or a bare brief — corpus census, six-slot Root Brand Architecture, DESIGN.md spine + tokens.json + `@dsCard` previews, round-trip check; the Ultimate Tokens grammar, OKLCH frontmatter, `scripts/bundle_gates.py` (B1–B7, count-exact contrast disclosure), `evals/assertions.md` |
-| `skills/design-md-format` | Declarative skill | both | First-party ground truth for the DESIGN.md format (written by Claude Design itself): anatomy + the openness doctrine ("a SKILL for a brand" — the spine is a floor, not a ceiling), the six-slot Root Brand Architecture, the token grammar, `@dsCard` card syntax; the knowledge substrate dscard's method steps 1–2 and 5 lean on |
-| `skills/design-system-author-figma-make` | Procedural skill | both | Figma Make `guidelines/` folder authoring — Guidelines.md entry + routed `foundations/`/`components/` leaves; `scripts/make_guidelines_check.py` (D1–D11), the only gate since Make validates nothing natively |
-| `skills/design-system-author-google-stitch` | Procedural skill | both | Google Stitch single-file DESIGN.md authoring — YAML frontmatter tokens + 8 canonical sections; `scripts/prelint.py` (G1–G7, R1–R5) ahead of `npx @google/design.md lint` |
-| `skills/figma-plugin-api` | Declarative skill | both | Figma Plugin-API knowledge earned shipping the ultimate-tokens plugin — variables/aliasing, bound paint+text styles, sandbox/VM traps, interchange schemas, pluginData; every claim confidence-marked ([verified]+date / [inferred] / [drift-prone]); minted by the ultimate-tokens session (then named `nonoun-color-tokens`; commit 5f3ee90), absorbed into 0.4.0 |
-| `skills/iconography` | Declarative skill | model-only | Icon-system world model answered from a cited corpus — per-system construction table (grid/stroke/corners), size ladders + WCAG target floors, style families + the no-mixing law + NN/g metaphor doctrine, icon a11y + RTL mirror/never-mirror taxonomy; `references/` — grid-and-construction, sizing-and-placement, style-and-metaphor, accessibility-and-rtl, sources |
-| `skills/material-design-color-tokens` | Declarative skill | model-only | Consumption guide for the `--md-sys-color-*` 59-role semantic layer extending Material 3 (53 nonoun + 6 ADIA state-extension roles) — pairing laws, state families, tonal variants, surface/scrim ladders |
-| `skills/material-design-geometry-tokens` | Declarative skill | model-only | Consumption guide for `--md-sys-size-*` / `--md-sys-radius-*` / `--md-sys-space-*` — control ramp, corner scale, spacing/inset/gap ladders, the centering law |
-| `skills/material-design-typography-tokens` | Declarative skill | model-only | Consumption guide for the `--md-sys-typescale-*` fifteen-voice type scale — thirteen voices at uniform SM/MD/LG levels plus `ui-control`/`ui-widget` on their own full XS…2XL ramp — voice x level selection, baked leading/tracking/paragraph rhythm, sibling weights, control-text composition into geometry |
-| `skills/material-design-token-semantics` | Declarative skill | model-only | Cross-domain glossary answering what each color/typography/geometry token MEANS and when to reach for it — one line per token or per graduated group (e.g. surface-lowest→highest); routes all binding/recipe asks to the three sibling consumption guides |
-| `skills/material-design-motion-tokens` | Declarative skill | model-only | Consumption guide for the `md.sys.motion.*` layer — the verified easing/duration token table, M3 Expressive spring tokens (spatial/effects x fast/default/slow), pairing laws, platform-drift map; binds to M3 spec defaults until a nonoun motion export exists (disclosed in provenance) |
-| `agents/design-system-reviewer` | Agent | spawned | Independent critic for ONE export corpus (a bundle, a DESIGN.md, a guidelines folder, or a cross-platform set) — generator≠critic; preloads `design-system-hub`; runs each owning sibling's checker plus the platform linter as the gate of record, then judges against the bound rubric |
+| `skills/make-design-kit` | Procedural skill | both (model + user) | The cross-platform hub: core+profiles architecture, prose-over-tokens and terminal-value doctrines, `references/rubric.md` (H1–H7) and `references/shared-doctrines.md`; dispatches the three platform siblings and design-kit-checker |
+| `skills/make-dscard-kit` | Procedural skill | both | Claude Design / Claude Code bundle authoring, from a corpus (css/tokens/codebase/brand deck) or a bare brief — corpus census, six-slot Root Brand Architecture, DESIGN.md spine + tokens.json + `@dsCard` previews, round-trip check; the Ultimate Tokens grammar, OKLCH frontmatter, `scripts/bundle_gates.py` (B1–B7, count-exact contrast disclosure), `evals/assertions.md` |
+| `skills/design-md-rules` | Declarative skill | both | First-party ground truth for the DESIGN.md format (written by Claude Design itself): anatomy + the openness doctrine ("a SKILL for a brand" — the spine is a floor, not a ceiling), the six-slot Root Brand Architecture, the token grammar, `@dsCard` card syntax; the knowledge substrate dscard's method steps 1–2 and 5 lean on |
+| `skills/make-figma-make-kit` | Procedural skill | both | Figma Make `guidelines/` folder authoring — Guidelines.md entry + routed `foundations/`/`components/` leaves; `scripts/make_guidelines_check.py` (D1–D11), the only gate since Make validates nothing natively |
+| `skills/make-stitch-kit` | Procedural skill | both | Google Stitch single-file DESIGN.md authoring — YAML frontmatter tokens + 8 canonical sections; `scripts/prelint.py` (G1–G7, R1–R5) ahead of `npx @google/design.md lint` |
+| `skills/figma-plugin-facts` | Declarative skill | both | Figma Plugin-API knowledge earned shipping the ultimate-tokens plugin — variables/aliasing, bound paint+text styles, sandbox/VM traps, interchange schemas, pluginData; every claim confidence-marked ([verified]+date / [inferred] / [drift-prone]); minted by the ultimate-tokens session (then named `nonoun-color-tokens`; commit 5f3ee90), absorbed into 0.4.0 |
+| `skills/icon-rules` | Declarative skill | model-only | Icon-system world model answered from a cited corpus — per-system construction table (grid/stroke/corners), size ladders + WCAG target floors, style families + the no-mixing law + NN/g metaphor doctrine, icon a11y + RTL mirror/never-mirror taxonomy; `references/` — grid-and-construction, sizing-and-placement, style-and-metaphor, accessibility-and-rtl, sources |
+| `skills/material-color-facts` | Declarative skill | model-only | Consumption guide for the `--md-sys-color-*` 59-role semantic layer extending Material 3 (53 nonoun + 6 ADIA state-extension roles) — pairing laws, state families, tonal variants, surface/scrim ladders |
+| `skills/material-shape-facts` | Declarative skill | model-only | Consumption guide for `--md-sys-size-*` / `--md-sys-radius-*` / `--md-sys-space-*` — control ramp, corner scale, spacing/inset/gap ladders, the centering law |
+| `skills/material-type-facts` | Declarative skill | model-only | Consumption guide for the `--md-sys-typescale-*` fifteen-voice type scale — thirteen voices at uniform SM/MD/LG levels plus `ui-control`/`ui-widget` on their own full XS…2XL ramp — voice x level selection, baked leading/tracking/paragraph rhythm, sibling weights, control-text composition into geometry |
+| `skills/material-token-facts` | Declarative skill | model-only | Cross-domain glossary answering what each color/typography/geometry token MEANS and when to reach for it — one line per token or per graduated group (e.g. surface-lowest→highest); routes all binding/recipe asks to the three sibling consumption guides |
+| `skills/material-motion-facts` | Declarative skill | model-only | Consumption guide for the `md.sys.motion.*` layer — the verified easing/duration token table, M3 Expressive spring tokens (spatial/effects x fast/default/slow), pairing laws, platform-drift map; binds to M3 spec defaults until a nonoun motion export exists (disclosed in provenance) |
+| `agents/design-kit-checker` | Agent | spawned | Independent critic for ONE export corpus (a bundle, a DESIGN.md, a guidelines folder, or a cross-platform set) — generator≠critic; preloads `make-design-kit`; runs each owning sibling's checker plus the platform linter as the gate of record, then judges against the bound rubric |
 
-Cross-plugin seams (soft, by design): `design-system-hub`'s validation loop and
-`design-system-reviewer`'s output contract mention `linguistic-techniques`, `linguistics-reviewer`,
+Cross-plugin seams (soft, by design): `make-design-kit`'s validation loop and
+`design-kit-checker`'s output contract mention `linguistic-techniques`, `linguistics-reviewer`,
 and `handoff-compose` — artifacts that now live in the forge plugin — and each degrades to an
 inline checklist or fallback report shape when forge isn't installed. No hard edges (preloads or
 literal script paths) cross the plugin boundary; every same-plugin script/rubric reference among
-the four `design-system-hub*` skills and the agent resolves via `${CLAUDE_PLUGIN_ROOT}`.
+the four `make-design-kit*` skills and the agent resolves via `${CLAUDE_PLUGIN_ROOT}`.
 
-v0.10.3 · assembled 2026-07-21 · 0.10.3: ADR-0006 typography-rename sweep — live references rewritten (material-design-typography-tokens fence, platform-author references); pointer updates only · v0.10.2 · assembled 2026-07-21 · 0.10.2: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (design-system-reviewer, platform-author fences and references, suites); pointer updates only · v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
+## ADR-0006 transition table (renamed 2026-07-21)
+
+The PLUGIN renamed: `design-systems` → `design-kits` (new install identity; the directory
+`design-systems 0.1.0/` keeps its frozen path — see the workspace CLAUDE.md alias table). Old
+handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
+
+| Old name | New name |
+|---|---|
+| `design-system-hub` | `make-design-kit` |
+| `design-system-author-dscard` | `make-dscard-kit` |
+| `design-system-author-figma-make` | `make-figma-make-kit` |
+| `design-system-author-google-stitch` | `make-stitch-kit` |
+| `design-md-format` | `design-md-rules` |
+| `iconography` | `icon-rules` |
+| `figma-plugin-api` | `figma-plugin-facts` |
+| `material-design-color-tokens` | `material-color-facts` |
+| `material-design-geometry-tokens` | `material-shape-facts` |
+| `material-design-motion-tokens` | `material-motion-facts` |
+| `material-design-typography-tokens` | `material-type-facts` |
+| `material-design-token-semantics` | `material-token-facts` |
+| `design-system-reviewer` (agent) | `design-kit-checker` |
+
+v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 5/9 — the PLUGIN renames design-systems → design-kits and all twelve members + the reviewer agent take the simple paradigm (transition table above). MAJOR bump — breaking. Workspace sweep (79 files, ledger history + forging evidence excluded; one historical suite-note corruption caught and restored with the true two-rename lineage); baseline = color/typography-wave results for 6 suites + a fresh 111-case run for the other 6; post-rename re-measure in the campaign PR · v0.10.3 · assembled 2026-07-21 · 0.10.3: ADR-0006 typography-rename sweep — live references rewritten (material-design-typography-tokens fence, platform-author references); pointer updates only · v0.10.2 · assembled 2026-07-21 · 0.10.2: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (design-system-reviewer, platform-author fences and references, suites); pointer updates only · v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
 retired `knowledge-forge` to forge's `pack-forge` (workspace-wide rename campaign) —
 iconography/material-design-token-semantics' reference to its authoring factory updated; no
 functional/behavior change, a naming correction only. · v0.10.0 · assembled 2026-07-17 · 0.10.0: material-design-geometry-tokens (+ material-design-token-semantics'
