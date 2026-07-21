@@ -3,7 +3,8 @@ name: pick-fonts
 description: >-
   Design a full, opinionated 11-voice typography system — font choices and pairing drama — from a
   brand concept or brief. Use when the user wants to design a typography system, pick or design a font pairing
-  ("pick a body and display pairing", "is this pairing metric-compatible"), choose fonts for a
+  ("pick a body and display pairing"), verify a chosen pairing's craft ("is this pairing
+  metric-compatible", "verify the x-height compatibility of the fonts we picked"), choose fonts for a
   brand, decide which typeface fills each voice (display, heading, body, ui, code), turn "modern and
   clean" into a specific point in design space, or make the distinctive-vs-neutral call per voice: territory, per-voice rationale, a coherence pass, and craft
   verification (metric compatibility, extremity, accessibility floor) — font-token-rules

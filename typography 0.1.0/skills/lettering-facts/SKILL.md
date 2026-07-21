@@ -8,7 +8,8 @@ description: >-
   metric-compatible fallback stacks (font-size-adjust), font personality (neutral vs. distinctive),
   world scripts (Arabic, Devanagari, Hebrew niqqud, CJK), OpenType features, variable-font axes (wght, wdth,
   opsz), CSS text surface (text-wrap, leading-trim), measure, text accessibility (dyslexic,
-  low-vision). NOT for designing, picking, or verifying a brand's font pairing or choosing fonts for a brand
+  low-vision). NOT for designing, picking, or verifying a brand's font pairing — including
+  metric/x-height compatibility of CHOSEN fonts — or choosing fonts for a brand
   (pick-fonts); NOT for
   generating a type scale or design tokens (font-token-rules); NOT for building components
   (component-forge); NOT for locale date/number formatting (i18n-verify). ANSWERS, does not generate.
