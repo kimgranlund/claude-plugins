@@ -134,7 +134,10 @@ re-run until clean; never hand off an unreconciled partition.
 `partition` (1–5 plugins, named) or `no-partition`, with the ledger either way. Handoff:
 `/make-plugin` scaffolds each new plugin and runs its member, fence-closure, and release phases;
 each plugin's own release gate (G5/G8 sweeps, `/check-routing`) is the proof that no retired grouping
-leaks. This skill's job ends at the validated manifest.
+leaks. This skill's job ends at the validated manifest. A MERGE verdict's executor additionally
+owes a post-merge routing re-measure — the union menu creates seams the source plugins' green
+baselines cannot predict; the measured method (ordered context splits, thief-side fences,
+reciprocal cases, noise calibration) is `references/merge-seam-remeasure.md`.
 
 ## Boundaries
 
