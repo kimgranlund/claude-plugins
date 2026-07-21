@@ -11,7 +11,9 @@ description: |
   beyond the ticket record. Fired hourly by a cloud routine (`/schedule`) for unattended GitHub
   intake, or dispatched directly for an on-demand sweep or to execute a human's approve/deny
   decision on a held item. NOT for repo-hygiene work — dangling worktrees, drifted branches
-  (`ops-repo`, a distinct seat); NOT for instruction-tree or corpus drift (`/repo-alignment`).
+  (`ops-repo`, a distinct seat); NOT for instruction-tree or corpus drift (`/repo-alignment`);
+  NOT for the whole-family sweep with a rolled-up queue (`ops-orchestrator`) or prioritizing
+  what to tackle first across the ops backlog (`ops-planner`).
 
   <example>
   Context: The hourly cloud-routine firing for the ticketing-watch routine.
