@@ -1,7 +1,7 @@
 # color-science-project-files
 
 The color-math TypeScript library and interactive demo site behind the
-`color-science-*` family of agent skills. Built from resources I keep looking up,
+`color-*-facts` family of agent skills. Built from resources I keep looking up,
 returning to, and sharing with others.
 
 ## What this is
@@ -11,15 +11,15 @@ skill + reference corpus + library — until the 2026-07-06 extraction split it 
 two: the reference corpus (159 markdown files) moved out into four focused,
 independently-routed [agent skills](https://agentskills.io):
 
-- **`color-science-spaces`** (72 files) — computational color: spaces, conversions,
+- **`color-space-facts`** (72 files) — computational color: spaces, conversions,
   gamut, gradients/ramps, ΔE, HDR/tone mapping, CSS color syntax, quantization,
   palette-generation methods, the library/tool catalog.
-- **`color-science-perception`** (49 files) — vision & appearance science: cones,
+- **`color-perception-facts`** (49 files) — vision & appearance science: cones,
   opponent process, appearance models, MacAdam/JND, metamerism, warm-cool, plus the
   full David Briggs (huevaluechroma) and colorandcontrast scrapes.
-- **`color-science-accessibility`** (8 files) — contrast standards & CVD: APCA vs
+- **`color-contrast-facts`** (8 files) — contrast standards & CVD: APCA vs
   WCAG 2.2, relative luminance, low vision, colorblindness simulation.
-- **`color-science-materials`** (30 files) — physical color & naming: pigment
+- **`color-material-facts`** (30 files) — physical color & naming: pigment
   mixing (Kubelka-Munk), paint data, print-vs-screen/ICC, iridescence, Pointer's
   gamut, naming standards (ISCC-NBS, Munsell, Ridgway, Jaffer).
 
@@ -31,7 +31,7 @@ library and the demo site built on top of it:
    pigment mixing, spectral integration).
 2. **`examples/`** — A static showcase site of 54 live interactive demos that
    dogfood every `src/` module, so an agent answering "show me a perceptual
-   gradient" or "build me an OKLCh picker" (routed to `color-science-spaces`, which
+   gradient" or "build me an OKLCh picker" (routed to `color-space-facts`, which
    points here) can hand the user a working example, not just a paragraph.
 3. **`ARCHITECTURE.md` + `MATH-ROADMAP.md`** — the src/-reference co-versioning
    contract (markdown = explanation, TypeScript = implementation, same commit) and
@@ -54,7 +54,7 @@ The collection process is simple: when I come across a color resource worth keep
 - **Websites** (like huevaluechroma.com) get fully scraped chapter by chapter
 - **Tools and links** mentioned in any resource get collected into the Online Tools table
 
-That collection process built the reference corpus — now the four `color-science-*`
+That collection process built the reference corpus — now the four `color-*-facts`
 packs' `references/`, not a folder here. This history is preserved for provenance;
 new resources go straight into the owning pack, not into this folder.
 
@@ -90,8 +90,8 @@ CHANGELOG.md                          # Version history (full lineage, incl. pre
 
 The reference corpus (markdown reference files, `INDEX.md`, per-topic `SKILL.md`)
 lives in the four packs, each a sibling of this folder:
-`../color-science-spaces/`, `../color-science-perception/`,
-`../color-science-accessibility/`, `../color-science-materials/`.
+`../color-space-facts/`, `../color-perception-facts/`,
+`../color-contrast-facts/`, `../color-material-facts/`.
 
 ## Reviewing this folder
 
@@ -124,8 +124,8 @@ mixing ≠ RGB averaging, etc.) live in the owning pack's `SKILL.md`, not here.
 
 This folder itself is not installed as a skill — there's nothing here for an agent
 to trigger on. What gets installed (as [agent skills](https://agentskills.io)) are
-the four sibling packs: `color-science-spaces`, `color-science-perception`,
-`color-science-accessibility`, `color-science-materials`. Each is self-contained
+the four sibling packs: `color-space-facts`, `color-perception-facts`,
+`color-contrast-facts`, `color-material-facts`. Each is self-contained
 (its own `SKILL.md`, `references/`, `evals/`) and can be copied, symlinked, or
 installed independently; this folder is a shared dependency the `spaces` pack
 points to for "show me a live demo" asks, not a skill in its own right.
@@ -141,7 +141,7 @@ See LICENSE and THIRD_PARTY_NOTICES.md.
 ---
 
 _The library and demo site were vibe-coded; the reference corpus that once lived
-alongside them (now split into the four `color-science-*` packs) came from a
+alongside them (now split into the four `color-*-facts` packs) came from a
 collection of color resources curated over time. Original sources remain
 attributed to their authors._
 

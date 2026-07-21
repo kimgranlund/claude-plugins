@@ -1,8 +1,8 @@
 {
   "name": "design-systems",
   "displayName": "Design Systems",
-  "version": "0.10.1",
-  "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch — from a corpus or a bare brief — plus first-party DESIGN.md format knowledge (design-md-format) and the Material Design token grammar the exports can extend.",
+  "version": "0.10.2",
+  "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch \u2014 from a corpus or a bare brief \u2014 plus first-party DESIGN.md format knowledge (design-md-format) and the Material Design token grammar the exports can extend.",
   "license": "MIT",
   "author": {
     "name": "Kim G / NONOUN"

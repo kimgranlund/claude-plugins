@@ -32,7 +32,7 @@ inline checklist or fallback report shape when forge isn't installed. No hard ed
 literal script paths) cross the plugin boundary; every same-plugin script/rubric reference among
 the four `design-system-hub*` skills and the agent resolves via `${CLAUDE_PLUGIN_ROOT}`.
 
-v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
+v0.10.2 · assembled 2026-07-21 · 0.10.2: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (design-system-reviewer, platform-author fences and references, suites); pointer updates only · v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
 retired `knowledge-forge` to forge's `pack-forge` (workspace-wide rename campaign) —
 iconography/material-design-token-semantics' reference to its authoring factory updated; no
 functional/behavior change, a naming correction only. · v0.10.0 · assembled 2026-07-17 · 0.10.0: material-design-geometry-tokens (+ material-design-token-semantics'

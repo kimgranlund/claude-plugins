@@ -7,10 +7,10 @@ description: >-
   and text-expansion budgets (German expansion): RTL support, dir/lang on text surfaces, icon mirroring,
   hardcoded/untranslated strings, or translation-expansion headroom across scripts and locales. NOT for
   choosing/pairing type or script anatomy (typography-lettering); NOT for text/background contrast, palette,
-  or color-blind safety (color-verify); NOT for focus order, keyboard nav, hit-targets, or focus rings
+  or color-blind safety (check-colors); NOT for focus order, keyboard nav, hit-targets, or focus rings
   (focus-verify); NOT for loading skeleton/spinner, CLS, or latency budgets (perf-verify); NOT for
   undo/type-to-confirm or audit-trail UX (safety-verify); NOT for color-space theory or palette math
-  (color-science-spaces); NOT for building a date-picker or language-switcher component (component-forge).
+  (color-space-facts); NOT for building a date-picker or language-switcher component (component-forge).
 disable-model-invocation: false
 user-invocable: true
 ---

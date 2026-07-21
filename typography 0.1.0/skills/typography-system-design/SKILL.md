@@ -7,7 +7,7 @@ description: >-
   brand, decide which typeface fills each voice (display, heading, body, ui, code), turn "modern and
   clean" into a specific point in design space, or make the distinctive-vs-neutral call per voice: territory, per-voice rationale, a coherence pass, and craft
   verification (metric compatibility, extremity, accessibility floor) — typography-tokens
-  realizes it. NOT for color ramps (palette-design); NOT for
+  realizes it. NOT for color ramps (make-palette); NOT for
   realizing a decided system as tokens, or which font/voice an existing system's token already
   binds (typography-tokens); NOT for type-history knowledge (typography-lettering); NOT for
   Material's typescale (material-design-typography-tokens); NOT for a component (component-forge)
@@ -20,7 +20,7 @@ user-invocable: true
 
 Generator peer of [[typography-tokens]]: this skill DECIDES which typeface fills each voice; the
 tokens skill REALIZES that decision as bound `--font-*`/`--type-*` custom properties. Where
-[[palette-design]] designs an OKLCH ramp before [[color-verify]] gates it, this skill designs a
+[[make-palette]] designs an OKLCH ramp before [[check-colors]] gates it, this skill designs a
 typographic system before its own craft-correctness checks gate it — same shape, different
 artifact. Its knowledge peer is [[typography-lettering]]: the world-model (why a face reads
 neutral or distinctive, real design-history, metric science) this skill draws on but does not
@@ -49,7 +49,7 @@ styling (font, weight, tracking, leading, case), never the numbers; deviate only
 platform mandate · "what token for
 this text" is not this skill — route to [[typography-tokens]] · "why does this font read neutral"
 or "what's the history of X" is not this skill — route to [[typography-lettering]] · "verify this
-palette/contrast" is a different artifact class — route to [[color-verify]].
+palette/contrast" is a different artifact class — route to [[check-colors]].
 
 ## Procedure (territory → per-voice decisions → coherence → craft check → handoff)
 

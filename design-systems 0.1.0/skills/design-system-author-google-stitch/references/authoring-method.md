@@ -83,7 +83,7 @@ A useful opener above the sections (the H1 is unparsed): *"Read this file as you
 
 1. Inventory the upstream system: roles, values, scales, states, dark story, naming.
 2. Map to the grammar; where upstream names diverge (`brand-500`, `text-muted`), **call the divergence out** in the deliverable and either alias or rename — never silently rewrite a system's made decisions. Same for payload (upstream hex stays hex if the owner prefers; note that OKLCH is verified-accepted).
-3. Fill gaps by *measurement*, not invention: missing on-colors, missing dark ends, missing states are computed/verified upstream (dispatch [[palette-design]] / [[color-verify]]), then land here as terminal values.
+3. Fill gaps by *measurement*, not invention: missing on-colors, missing dark ends, missing states are computed/verified upstream (dispatch [[make-palette]] / [[check-colors]]), then land here as terminal values.
 4. Reduce prose and tokens together; run the gate loop; write the receipt.
 
 Checklist before the gate: specific reference present · 15–25 roles, each in prose · every fill has its on-partner in both schemes · states as variant keys · `primary` alias · scales closed · canonical section order · appended sections after Do's and Don'ts.

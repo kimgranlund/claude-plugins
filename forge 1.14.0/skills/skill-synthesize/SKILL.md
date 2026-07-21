@@ -94,14 +94,14 @@ on descriptions, why ask co-occurrence is the empirical proof); `references/best
 
 ## Worked precedent (read in reverse)
 
-The source corpus's own `color-theory` no-split verdict (archival:
-`~/.claude/docs/color-theory-partition-assessment.md`, external to this plugin) is the clearest
+The source corpus's own `color-theory-facts` no-split verdict (archival:
+`~/.claude/docs/color-theory-facts-partition-assessment.md`, external to this plugin) is the clearest
 available worked example, read backwards. Its four axes — Harmony, Wheel/history, Programmes,
 Meaning — were never actually shipped as separate skills, but the exact reasoning that kept them one
 pack (entangled shared vocabulary, a cross-axis majority of real asks, a 3-file Meaning axis too
 thin to stand alone) is precisely the *positive* signal this skill looks for. Had someone mistakenly
 shipped those four as separate thin packs, `skill-synthesize`'s inverse tests would catch the
-identical signal from the other direction and recommend re-merging them into one `color-theory`
+identical signal from the other direction and recommend re-merging them into one `color-theory-facts`
 pack — which is exactly the pack that already exists today. `references/best-practices.md` walks
 this reverse reading in full, plus a second, hypothetical worked case.
 

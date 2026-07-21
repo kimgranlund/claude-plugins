@@ -5,15 +5,15 @@ This file provides guidance when working with code in this repository.
 ## Project Overview
 
 **This folder registers no skill.** It is the color-math TypeScript library and
-interactive demo site behind the `color-science-*` family of agent skills
+interactive demo site behind the `color-*-facts` family of agent skills
 (compatible with Claude Code, Codex, Cursor, Copilot, OpenCode, and others via
 [agentskills.io](https://agentskills.io)). Until the 2026-07-06 extraction this
 folder was `color-science` — a combined skill + reference corpus + library. The
 reference corpus (159 files) split out into four independently-routed sibling
-packs: `color-science-spaces`, `color-science-perception`,
-`color-science-accessibility`, `color-science-materials` (each with its own
+packs: `color-space-facts`, `color-perception-facts`,
+`color-contrast-facts`, `color-material-facts` (each with its own
 `SKILL.md`, `references/`, `evals/`). Aesthetics/meaning/history — harmony, the
-color wheel, palette mood — live in the separate `color-theory` pack (split
+color wheel, palette mood — live in the separate `color-theory-facts` pack (split
 2026-07-02, predates this extraction).
 
 ## Architecture
@@ -32,7 +32,7 @@ color wheel, palette mood — live in the separate `color-theory` pack (split
 - `examples/` — Static showcase site dogfooding `src/`. 54 live demos as classic
   HTML pages; 28 custom-element components; single IIFE bundle
   (`examples/lib/dist/refcolor.bundle.js`) so everything works directly over
-  `file://`. The `color-science-spaces` pack's SKILL.md points here for
+  `file://`. The `color-space-facts` pack's SKILL.md points here for
   "show me a live demo / where's the implementation" asks.
 
 ## Build
@@ -51,7 +51,7 @@ cd examples
 - This folder has no SKILL.md and cannot misroute — don't add one here (D2: the
   goal was project *files* vs "proper set of skills"; if that reading changes, a
   new SKILL.md scoped to demo/implementation asks would need those triggers
-  removed from `color-science-spaces`'s description first, not duplicated).
+  removed from `color-space-facts`'s description first, not duplicated).
 - Every math module in `src/` is co-versioned with a markdown reference file in
   one of the four packs (`ARCHITECTURE.md` Decision 8): when the TS changes, the
   paired pack's markdown is updated in the same commit; when the math description

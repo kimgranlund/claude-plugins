@@ -31,7 +31,7 @@ roughly ten distinguishable question types. Running the four tests:
 tested a 5th `palette`-generation pack (rejected — "the seam cuts through the interpolation files…
 splitting it would make cross-pack consults the common case") and a 5th `naming` pack (rejected —
 "shares its paint-dataset files with pigment; one pack avoids splitting those pairs"). It also
-explicitly kept its largest single cluster — 72 files under `color-science-spaces` — unified,
+explicitly kept its largest single cluster — 72 files under `color-space-facts` — unified,
 because those files cross-cite densely. **A pack having the most files does not mean it should split
 further; it means its internal cohesion earned it that size.**
 
@@ -39,9 +39,9 @@ Manifest discipline: every one of the 159 files was assigned to exactly one chil
 mechanical count (`find … | wc -l` = 159, sorted-basename diff against the pre-move list empty).
 This is exactly what `scripts/manifest_check.py` automates.
 
-## Case 2 — split rejected: `color-theory` (28 files, stays one pack)
+## Case 2 — split rejected: `color-theory-facts` (28 files, stays one pack)
 
-Canonical source (archival): `~/.claude/docs/color-theory-partition-assessment.md`.
+Canonical source (archival): `~/.claude/docs/color-theory-facts-partition-assessment.md`.
 
 The literal request was "break this into a family." The corpus: 28 reference files, no `src/`, no
 demo site, no `evals/` — a lean, hand-authored-scale pack with four axes already declared in its

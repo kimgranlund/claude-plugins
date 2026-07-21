@@ -47,7 +47,7 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   AND every miss/grab dispositioned (fixed here, or filed to S2 with an owner). The corpus is
   **checked into the bundle** (`scripts/routing-corpus.json`) so it survives ports and diffs across
   passes — a review-time corpus that evaporates is not a test of record. **The `_measured` block**
-  (house practice, ref: `design-system-hub` / `vision-memo-forge` / `palette-design` corpora): the
+  (house practice, ref: `design-system-hub` / `vision-memo-forge` / `make-palette` corpora): the
   corpus file also carries a `_measured` field recording the *result* (F1, precision/recall, date), the
   *disposition of every miss and grab* (which of the five classes, and why kept or filed), and the
   *description-fix history* that produced the number. The corpus proves the test exists; `_measured`

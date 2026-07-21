@@ -1,7 +1,7 @@
 # Color Math References — Roadmap
 
 A prioritized roadmap of math-algorithm reference files, now distributed across the
-four `color-science-*` packs' `references/techniques/` (split 2026-07-06), **paired
+four `color-*-facts` packs' `references/techniques/` (split 2026-07-06), **paired
 with** TypeScript implementations under `src/` (kept here, in
 `color-science-project-files`). The goal: each file is a markdown description
 (natural language + LaTeX) **plus** a working TS module (branded-typed,
@@ -77,20 +77,20 @@ with forward + inverse and primary-source-cited test vectors.
 
 | File | Markdown | TypeScript |
 |---|---|---|
-| `../color-science-spaces/references/techniques/brucelindbloom-color-math.md` | 🟡 | (superseded by `src/spaces/srgb.ts` etc.) |
-| `../color-science-spaces/references/techniques/iq-cosine-palette-formula.md` | 🟡 | 🔲 `src/interpolation/iq-cosine.ts` |
-| `../color-science-materials/references/contemporary/iridescent-color-math.md` | 🟡 | 🔲 `src/spectral/thin-film.ts` |
-| `../color-science-spaces/references/techniques/oklch-gamut-peak-math.md` | ✅ | ✅ `src/gamut/oklch-peak.ts` |
+| `../color-space-facts/references/techniques/brucelindbloom-color-math.md` | 🟡 | (superseded by `src/spaces/srgb.ts` etc.) |
+| `../color-space-facts/references/techniques/iq-cosine-palette-formula.md` | 🟡 | 🔲 `src/interpolation/iq-cosine.ts` |
+| `../color-material-facts/references/contemporary/iridescent-color-math.md` | 🟡 | 🔲 `src/spectral/thin-film.ts` |
+| `../color-space-facts/references/techniques/oklch-gamut-peak-math.md` | ✅ | ✅ `src/gamut/oklch-peak.ts` |
 
 ## Already documented
 
 | File | Markdown | TypeScript |
 |---|---|---|
-| `../color-science-spaces/references/techniques/brucelindbloom-color-math.md` | 🟡 | 🔲 `src/spaces/{srgb,p3,rec2020,adobe-rgb,prophoto}.ts`, `src/adaptation/bradford.ts` |
-| `../color-science-spaces/references/techniques/iq-cosine-palette-formula.md` | 🟡 | 🔲 `src/interpolation/iq-cosine.ts` |
-| `../color-science-materials/references/contemporary/iridescent-color-math.md` | 🟡 | 🔲 `src/spectral/thin-film.ts` |
-| `../color-science-spaces/references/techniques/oklch-gamut-peak-math.md` | ✅ | ✅ `src/gamut/oklch-peak.ts` |
-| `../color-science-spaces/references/techniques/oklab-xyz-math.md` | 🔲 | ✅ `src/spaces/oklab.ts` (markdown still to write) |
+| `../color-space-facts/references/techniques/brucelindbloom-color-math.md` | 🟡 | 🔲 `src/spaces/{srgb,p3,rec2020,adobe-rgb,prophoto}.ts`, `src/adaptation/bradford.ts` |
+| `../color-space-facts/references/techniques/iq-cosine-palette-formula.md` | 🟡 | 🔲 `src/interpolation/iq-cosine.ts` |
+| `../color-material-facts/references/contemporary/iridescent-color-math.md` | 🟡 | 🔲 `src/spectral/thin-film.ts` |
+| `../color-space-facts/references/techniques/oklch-gamut-peak-math.md` | ✅ | ✅ `src/gamut/oklch-peak.ts` |
+| `../color-space-facts/references/techniques/oklab-xyz-math.md` | 🔲 | ✅ `src/spaces/oklab.ts` (markdown still to write) |
 
 ---
 
@@ -98,57 +98,57 @@ with forward + inverse and primary-source-cited test vectors.
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-spaces/references/techniques/gamma-transfer-functions.md` | sRGB segmented transfer, P3 transfer (= sRGB), Rec.709/2020 OETF, PQ (BT.2100), HLG (BT.2100). Linear ↔ encoded round-trip. Paired with `src/transfer/{srgb,rec2020,pq,hlg}.ts`. |
-| ✅ `../color-science-spaces/references/techniques/xyz-rgb-conversion-matrices.md` | XYZ↔sRGB / Display P3 / Rec.2020 / Rec.709 at D65 with W3C high-precision values. Paired with `src/spaces/{srgb,p3,rec2020}.ts`. |
-| ✅ `../color-science-spaces/references/techniques/cielab-xyz-conversion.md` | Lab/LCh ↔ XYZ with the cube-root nonlinearity, D65 (D50 future), hue from atan2. Paired with `src/spaces/{cielab,cielch}.ts`. |
-| ✅ `../color-science-accessibility/references/techniques/relative-luminance-derivation.md` | Y from linear RGB per gamut, the WCAG L formula, gamma-encoded vs linear inputs. Paired with `src/metrics/luminance.ts`. |
-| ✅ `../color-science-spaces/references/techniques/cylindrical-rgb-conversions.md` | HSL/HSV ↔ RGB exact formulas, hue-sector math, why these aren't perceptual. Paired with `src/spaces/{hsl,hsv}.ts`. |
-| ✅ `../color-science-spaces/references/techniques/oklab-xyz-math.md` | Ottosson's perceptual space; $M_1$/$M_2$ matrices, cube-root, polar OKLCH. Paired with `src/spaces/{oklab,oklch}.ts`. |
+| ✅ `../color-space-facts/references/techniques/gamma-transfer-functions.md` | sRGB segmented transfer, P3 transfer (= sRGB), Rec.709/2020 OETF, PQ (BT.2100), HLG (BT.2100). Linear ↔ encoded round-trip. Paired with `src/transfer/{srgb,rec2020,pq,hlg}.ts`. |
+| ✅ `../color-space-facts/references/techniques/xyz-rgb-conversion-matrices.md` | XYZ↔sRGB / Display P3 / Rec.2020 / Rec.709 at D65 with W3C high-precision values. Paired with `src/spaces/{srgb,p3,rec2020}.ts`. |
+| ✅ `../color-space-facts/references/techniques/cielab-xyz-conversion.md` | Lab/LCh ↔ XYZ with the cube-root nonlinearity, D65 (D50 future), hue from atan2. Paired with `src/spaces/{cielab,cielch}.ts`. |
+| ✅ `../color-contrast-facts/references/techniques/relative-luminance-derivation.md` | Y from linear RGB per gamut, the WCAG L formula, gamma-encoded vs linear inputs. Paired with `src/metrics/luminance.ts`. |
+| ✅ `../color-space-facts/references/techniques/cylindrical-rgb-conversions.md` | HSL/HSV ↔ RGB exact formulas, hue-sector math, why these aren't perceptual. Paired with `src/spaces/{hsl,hsv}.ts`. |
+| ✅ `../color-space-facts/references/techniques/oklab-xyz-math.md` | Ottosson's perceptual space; $M_1$/$M_2$ matrices, cube-root, polar OKLCH. Paired with `src/spaces/{oklab,oklch}.ts`. |
 
 ## Tier 2 — Comparison & measurement
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-spaces/references/techniques/delta-e-formulas.md` | ΔE76, ΔE94, ΔE2000 (CIEDE2000 with rotations), ΔE_ok, HyAB. When each is correct. Paired with `src/metrics/deltaE.ts`; Sharma 2005 test pairs verified. |
+| ✅ `../color-space-facts/references/techniques/delta-e-formulas.md` | ΔE76, ΔE94, ΔE2000 (CIEDE2000 with rotations), ΔE_ok, HyAB. When each is correct. Paired with `src/metrics/deltaE.ts`; Sharma 2005 test pairs verified. |
 | 🟡 `wcag-contrast-ratio-math.md` (planned → accessibility) | Already covered in `relative-luminance-derivation.md`; standalone file deferred. |
-| ✅ `../color-science-accessibility/references/techniques/apca-lc-formula.md` | The actual Lc formula (polarity-sensitive), BoW/WoB branches, Bronze Simple Mode readability tiers. Paired with `src/metrics/apca.ts`. |
-| ✅ `../color-science-spaces/references/techniques/chromatic-adaptation-matrices.md` | Bradford, CAT16 — matrix forms, generic adaptation procedure, why diagonal scaling works. Paired with `src/adaptation/bradford.ts`. CAT02 / VonKries still pending. |
+| ✅ `../color-contrast-facts/references/techniques/apca-lc-formula.md` | The actual Lc formula (polarity-sensitive), BoW/WoB branches, Bronze Simple Mode readability tiers. Paired with `src/metrics/apca.ts`. |
+| ✅ `../color-space-facts/references/techniques/chromatic-adaptation-matrices.md` | Bradford, CAT16 — matrix forms, generic adaptation procedure, why diagonal scaling works. Paired with `src/adaptation/bradford.ts`. CAT02 / VonKries still pending. |
 
 ## Tier 3 — Gamut operations
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-spaces/references/techniques/css-color-4-gamut-mapping.md` | Binary search reducing OKLCh chroma with ΔE_ok ≤ JND clamp. Paired with `src/gamut/mapping.ts`. |
-| ✅ `../color-science-spaces/references/techniques/ottosson-cusp-algorithm.md` | Closed-form max-chroma cusp per hue (sRGB). Paired with `src/gamut/cusp.ts`. |
-| 🔲 `../color-science-materials/references/techniques/pointers-gamut-math.md` | Real-surface gamut boundary as a function of (Y, hue). |
+| ✅ `../color-space-facts/references/techniques/css-color-4-gamut-mapping.md` | Binary search reducing OKLCh chroma with ΔE_ok ≤ JND clamp. Paired with `src/gamut/mapping.ts`. |
+| ✅ `../color-space-facts/references/techniques/ottosson-cusp-algorithm.md` | Closed-form max-chroma cusp per hue (sRGB). Paired with `src/gamut/cusp.ts`. |
+| 🔲 `../color-material-facts/references/techniques/pointers-gamut-math.md` | Real-surface gamut boundary as a function of (Y, hue). |
 | 🟡 `gamut-clipping-vs-mapping.md` (consolidated, no separate file) | Consolidated into `css-color-4-gamut-mapping.md` "Comparison: clipping vs. mapping" section. |
 
 ## Tier 4 — Generation & interpolation
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-spaces/references/techniques/gradient-interpolation-math.md` | Linear interp across color spaces, gamma-compounding "muddy gradient" problem, CSS color-mix semantics. Paired with `src/interpolation/linear.ts`. |
+| ✅ `../color-space-facts/references/techniques/gradient-interpolation-math.md` | Linear interp across color spaces, gamma-compounding "muddy gradient" problem, CSS color-mix semantics. Paired with `src/interpolation/linear.ts`. |
 | 🟡 `hue-interpolation-paths.md` (consolidated, no separate file) | CSS Color 4 hue paths consolidated into `gradient-interpolation-math.md`. |
-| ✅ `../color-science-spaces/references/techniques/cubehelix-formula.md` | D. A. Green's perceptual-brightness ramp. Paired with `src/interpolation/cubehelix.ts`. |
-| 🔲 `../color-science-spaces/references/techniques/spline-interpolation-color.md` | Catmull-Rom and Bezier in OKLab; monotone cubic. Deferred. |
-| ✅ `../color-science-spaces/references/techniques/lightness-ramp-curves.md` | Linear / gamma / smoothstep + Tailwind v4 + Radix step math. Paired with `src/interpolation/lightness-curves.ts`. |
+| ✅ `../color-space-facts/references/techniques/cubehelix-formula.md` | D. A. Green's perceptual-brightness ramp. Paired with `src/interpolation/cubehelix.ts`. |
+| 🔲 `../color-space-facts/references/techniques/spline-interpolation-color.md` | Catmull-Rom and Bezier in OKLab; monotone cubic. Deferred. |
+| ✅ `../color-space-facts/references/techniques/lightness-ramp-curves.md` | Linear / gamma / smoothstep + Tailwind v4 + Radix step math. Paired with `src/interpolation/lightness-curves.ts`. |
 | 🟡 `color-mix-algorithm.md` (consolidated, no separate file) | Consolidated into `gradient-interpolation-math.md` (mixVia helper). |
 
 ## Tier 5 — Appearance models
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-spaces/references/techniques/ciecam16-forward-inverse.md` | Full CIECAM16 math: viewing conditions, CAT16, cone response, opponent signals, JMh output. Paired with `src/spaces/ciecam16.ts`. |
-| ✅ `../color-science-spaces/references/techniques/cam16-ucs-math.md` | Jab UCS coordinates with Li 2017 constants; ΔE_CAM16. Paired with `src/spaces/cam16-ucs.ts`. |
-| ✅ `../color-science-spaces/references/techniques/material-hct-math.md` | CAM16 H + CAM16 C + CIELAB L* hybrid; iterative inverse; +40/+50 tone-delta guarantee. Paired with `src/spaces/hct.ts`. |
-| 🔲 `../color-science-spaces/references/techniques/hsluv-hpluv-math.md` | CIELUV normalized saturation; chroma-per-(hue,lightness) lookup. |
-| 🔲 `../color-science-spaces/references/techniques/jzazbz-ictcp-math.md` | HDR uniform spaces. Jzazbz forward/inverse; ICtCp constant-luminance encoding. |
+| ✅ `../color-space-facts/references/techniques/ciecam16-forward-inverse.md` | Full CIECAM16 math: viewing conditions, CAT16, cone response, opponent signals, JMh output. Paired with `src/spaces/ciecam16.ts`. |
+| ✅ `../color-space-facts/references/techniques/cam16-ucs-math.md` | Jab UCS coordinates with Li 2017 constants; ΔE_CAM16. Paired with `src/spaces/cam16-ucs.ts`. |
+| ✅ `../color-space-facts/references/techniques/material-hct-math.md` | CAM16 H + CAM16 C + CIELAB L* hybrid; iterative inverse; +40/+50 tone-delta guarantee. Paired with `src/spaces/hct.ts`. |
+| 🔲 `../color-space-facts/references/techniques/hsluv-hpluv-math.md` | CIELUV normalized saturation; chroma-per-(hue,lightness) lookup. |
+| 🔲 `../color-space-facts/references/techniques/jzazbz-ictcp-math.md` | HDR uniform spaces. Jzazbz forward/inverse; ICtCp constant-luminance encoding. |
 
 ## Tier 6 — Color vision deficiency simulation
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-accessibility/references/techniques/cvd-simulation-algorithms.md` | Consolidated doc covering Brettel 1997, Viénot 1999, and Machado 2009 (severity-parameterized). Paired with `src/cvd/machado-2009.ts`. Brettel and Viénot covered as math reference; only Machado has TS implementation. |
+| ✅ `../color-contrast-facts/references/techniques/cvd-simulation-algorithms.md` | Consolidated doc covering Brettel 1997, Viénot 1999, and Machado 2009 (severity-parameterized). Paired with `src/cvd/machado-2009.ts`. Brettel and Viénot covered as math reference; only Machado has TS implementation. |
 | 🔲 Separate Brettel TS module (`src/cvd/brettel-1997.ts`) | LMS confusion-line projection. Math documented; TS deferred (Machado covers ~95% of use cases). |
 | 🔲 Separate Viénot TS module (`src/cvd/vienot-1999.ts`) | Matrix-based simplified version. Math documented; TS deferred (Machado supersedes). |
 
@@ -156,25 +156,25 @@ with forward + inverse and primary-source-cited test vectors.
 
 | File | Content |
 |---|---|
-| ⚙️ `../color-science-materials/references/techniques/kubelka-munk-single-constant.md` | The K/S function; mixing in K/S space; R → K/S → R round-trip. Math companion to existing `spectraljs-pigment-mixing.md`. |
+| ⚙️ `../color-material-facts/references/techniques/kubelka-munk-single-constant.md` | The K/S function; mixing in K/S space; R → K/S → R round-trip. Math companion to existing `spectraljs-pigment-mixing.md`. |
 | 🔲 `kubelka-munk-two-constant.md` (planned → materials) | Separate K and S coefficients for opaque paints. |
 | 🔲 `saunderson-correction.md` (planned → materials) | Air-paint surface reflection correction applied to K-M. |
-| 🔲 `../color-science-spaces/references/techniques/spectral-to-xyz-integration.md` | CIE 1931 (2°) and 1964 (10°) color matching functions; integration against an illuminant SPD. |
+| 🔲 `../color-space-facts/references/techniques/spectral-to-xyz-integration.md` | CIE 1931 (2°) and 1964 (10°) color matching functions; integration against an illuminant SPD. |
 | 🔲 `metamer-construction.md` (planned → perception) | How to construct spectra that produce identical XYZ values; metamerism math. |
 
 ## Tier 8 — Image processing
 
 | File | Content |
 |---|---|
-| 🔲 `../color-science-spaces/references/techniques/color-quantization-math.md` | k-means in Lab/OKLab, octree, median-cut, Wu's algorithm. |
-| 🔲 `../color-science-spaces/references/techniques/dithering-algorithms.md` | Floyd-Steinberg error diffusion, Bayer/ordered, blue noise. |
+| 🔲 `../color-space-facts/references/techniques/color-quantization-math.md` | k-means in Lab/OKLab, octree, median-cut, Wu's algorithm. |
+| 🔲 `../color-space-facts/references/techniques/dithering-algorithms.md` | Floyd-Steinberg error diffusion, Bayer/ordered, blue noise. |
 | 🔲 `image-palette-extraction.md` (planned → spaces; distinct from the existing `image-color-extraction-tools.md`) | Histogram quantization, salience-weighted clustering, perceptual palette embeddings. |
 
 ## Tier 9 — Tone mapping / HDR
 
 | File | Content |
 |---|---|
-| ✅ `../color-science-spaces/references/techniques/tone-mapping-operators.md` | Reinhard (simple/extended/luminance-preserving), ACES filmic Narkowicz fit, Uncharted 2 reference. Paired with `src/tonemap/{reinhard,aces}.ts`. |
+| ✅ `../color-space-facts/references/techniques/tone-mapping-operators.md` | Reinhard (simple/extended/luminance-preserving), ACES filmic Narkowicz fit, Uncharted 2 reference. Paired with `src/tonemap/{reinhard,aces}.ts`. |
 | 🟡 `pq-hlg-transfer-functions.md` (consolidated, no separate file) | Consolidated into `gamma-transfer-functions.md`. TS modules in `src/transfer/{pq,hlg}.ts`. |
 | 🔲 `sdr-hdr-conversion-math.md` (planned → spaces) | Inverse tone mapping, gamut expansion sRGB → Rec.2020, BT.2390 conversion. |
 
@@ -182,10 +182,10 @@ with forward + inverse and primary-source-cited test vectors.
 
 | File | Content |
 |---|---|
-| 🔲 `../color-science-perception/references/techniques/macadam-ellipses-math.md` | The JND ellipses on the 1931 chromaticity diagram — coordinate forms and modern OKLab analogue. |
+| 🔲 `../color-perception-facts/references/techniques/macadam-ellipses-math.md` | The JND ellipses on the 1931 chromaticity diagram — coordinate forms and modern OKLab analogue. |
 | 🔲 `spectral-upsampling.md` (planned → spaces) | Meng et al. RGB → spectrum; Smits method. |
 | 🔲 `retinex-algorithms.md` (planned → perception) | Single-Scale, Multi-Scale Retinex; the math behind color constancy algorithms. |
-| 🔲 `../color-science-spaces/references/techniques/white-point-conversion.md` | D65↔D50↔A↔E with Bradford; when each conversion is needed in real pipelines. |
+| 🔲 `../color-space-facts/references/techniques/white-point-conversion.md` | D65↔D50↔A↔E with Bradford; when each conversion is needed in real pipelines. |
 
 ---
 
@@ -201,7 +201,7 @@ with forward + inverse and primary-source-cited test vectors.
 
 ## Authoring conventions
 
-**The canonical pair is `../color-science-spaces/references/techniques/oklch-gamut-peak-math.md` +
+**The canonical pair is `../color-space-facts/references/techniques/oklch-gamut-peak-math.md` +
 `src/gamut/oklch-peak.ts`.** Every new math reference follows this pattern.
 
 ### What goes in markdown (`<owning-pack>/references/techniques/<name>.md`)

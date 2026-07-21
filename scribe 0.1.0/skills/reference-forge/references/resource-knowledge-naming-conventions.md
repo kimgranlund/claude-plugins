@@ -56,7 +56,7 @@ topic := 2–4 kebab-case content tokens; the grep surface
 
 **No dates in names.** For a reference, the date is metadata — it answers "how fresh," not "which file." It lives in frontmatter (`updated: 2026-06-14`) where it can change without breaking every inbound link. A date in a reference filename is a promise of staleness: it will be wrong within a quarter and un-renameable forever.
 
-**Axes are a closed enumeration** with the root `INDEX.md` as the source of truth — the same closed-set discipline as skill suffixes and agent role families. `references/color-science-materials/`, `references/component-contracts/`, `references/clinical-coding/`. Creating an axis is a manifest edit, not a filing improvisation; the moment `references/misc/` exists, the axis system is dead.
+**Axes are a closed enumeration** with the root `INDEX.md` as the source of truth — the same closed-set discipline as skill suffixes and agent role families. `references/color-material-facts/`, `references/component-contracts/`, `references/clinical-coding/`. Creating an axis is a manifest edit, not a filing improvisation; the moment `references/misc/` exists, the axis system is dead.
 
 **Topic naming is retrieval engineering:**
 
@@ -122,7 +122,7 @@ What exists today: no knowledge-corpus validator is wired. The nearest live gate
 ```jsonc
 {
   "knowledge_axes": [
-    "color-science-materials", "component-contracts", "clinical-coding",
+    "color-material-facts", "component-contracts", "clinical-coding",
     "generation-grammar", "design-tokens"
   ],
   "record_dirs":    { "decisions": "date", "incidents": "date", "adr": "sequence" },

@@ -1,7 +1,7 @@
 {
   "skill": "typography-system-design",
-  "_note": "M2 corpus of record, built fresh at authoring time (no prior routing corpus existed). Positives span imperative/diagnostic/symptom/indirect phrasings for DESIGNING a typography system from a brief. Negatives are drawn ADVERSARIALLY from the description's own NOT-for fence: typography-tokens (realization/token vocabulary), typography-lettering (no-token history/metrics questions), material-design-typography-tokens, component-forge, and design-system-hub -- plus the color-domain analogs (palette-design, color-verify) as extra precision against the nearest cross-domain sibling shape (a generator->verifier creative-decision skill).",
-  "siblings": ["typography-tokens", "typography-lettering", "material-design-typography-tokens", "component-forge", "design-system-hub", "palette-design", "color-verify"],
+  "_note": "M2 corpus of record, built fresh at authoring time (no prior routing corpus existed). Positives span imperative/diagnostic/symptom/indirect phrasings for DESIGNING a typography system from a brief. Negatives are drawn ADVERSARIALLY from the description's own NOT-for fence: typography-tokens (realization/token vocabulary), typography-lettering (no-token history/metrics questions), material-design-typography-tokens, component-forge, and design-system-hub -- plus the color-domain analogs (make-palette, check-colors) as extra precision against the nearest cross-domain sibling shape (a generator->verifier creative-decision skill).",
+  "siblings": ["typography-tokens", "typography-lettering", "material-design-typography-tokens", "component-forge", "design-system-hub", "make-palette", "check-colors"],
   "positives": [
     "design our typography system from this brand brief",
     "choose fonts for our brand across all voices",

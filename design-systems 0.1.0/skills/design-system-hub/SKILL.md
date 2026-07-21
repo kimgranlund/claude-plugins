@@ -12,7 +12,7 @@ description: >-
   (design-system-author-dscard / -google-stitch / -figma-make) — and ONE DESIGN.md/bundle from
   source material (css, brand deck, Figma exports) with no platform named defaults to dscard;
   NOT for grading an export you didn't author (design-system-reviewer); NOT for the
-  palette (palette-design), token layer (token-builder), or a PRD/SPEC (scribe's doc-forge).
+  palette (make-palette), token layer (token-builder), or a PRD/SPEC (scribe's doc-forge).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -27,7 +27,7 @@ A design-system file for LLMs is a consumption artifact: its consumer is a gener
 |---|---|
 | Author / fix / regenerate a **named single-platform** export | the sibling: [[design-system-author-dscard]] (DESIGN.md + tokens.json + @dsCard bundle) · [[design-system-author-google-stitch]] (single-file DESIGN.md + lint gate) · [[design-system-author-figma-make]] (routed guidelines/ folder) |
 | Grade an existing export this session didn't author | **design-system-reviewer** agent (generator ≠ critic) |
-| Design the color ramp / palette · prove contrast | [[palette-design]] · [[color-verify]] |
+| Design the color ramp / palette · prove contrast | [[make-palette]] · [[check-colors]] |
 | A codebase's token layer (role ladders, state tokens) | **token-builder** agent |
 | Cross-platform strategy · the canonical core · context potency · a new platform profile | **this skill** |
 
@@ -71,7 +71,7 @@ The load-bearing moves: a **named world** presupposes a point in design space wh
    adjective-region theme that forces a rambling don't-list downstream, or an engagement that
    regenerates over reality it never read.
 2. **Choose platform(s)** via `references/platform-map.md`; state the choice and its consumption-model reason.
-3. **Fix the canonical core**: 15–25 roles named by the grammar, both schemes, every value terminal, taken from the verified upstream palette/token source ([[palette-design]] / [[color-verify]] / token-builder are upstream — a value invented here bypasses every upstream proof). Call out every divergence from an upstream system's made decisions.
+3. **Fix the canonical core**: 15–25 roles named by the grammar, both schemes, every value terminal, taken from the verified upstream palette/token source ([[make-palette]] / [[check-colors]] / token-builder are upstream — a value invented here bypasses every upstream proof). Call out every divergence from an upstream system's made decisions.
 4. **Dispatch each named sibling for its export**, passing the core, the doctrines, and the divergence callouts — a dispatch is a cold-start prompt, so it carries everything the sibling needs to gate its own run.
 5. **Verify across exports**: each sibling's gate run green, receipts written, and carrier equality across exports (same build, values equal within ±1/255 per sRGB channel).
 6. **Review independently**: design-system-reviewer grades the exports; linguistics-reviewer audits the prompt-carrying prose. Generator ≠ critic — the independent seats issue the verdicts; the maker applies the gap-maps.
@@ -97,7 +97,7 @@ Strategy and core decisions → score against `references/rubric.md` (gate: H1 r
 | [[design-system-author-dscard]] · [[design-system-author-google-stitch]] · [[design-system-author-figma-make]] | Platform execution — each owns its format ground truth, gates, and rubric |
 | **design-system-reviewer** (agent) | Independent grading of any export |
 | [[linguistic-techniques]] · **linguistics-reviewer** | The wording layer this hub applies and teaches; its independent audit |
-| [[palette-design]] · [[color-verify]] · **token-builder** | Upstream: ramp design, contrast proof, project token layer — consumed as verified inputs |
+| [[make-palette]] · [[check-colors]] · **token-builder** | Upstream: ramp design, contrast proof, project token layer — consumed as verified inputs |
 | [[rubric-forge]] | Author or repair `references/rubric.md` |
 
 **Done** = the ask routed to its owning seat (or handled here because it is cross-platform / context work), the platform choice stated with its consumption-model reason, one canonical core with no forked design facts, doctrines and standing rules applied, sibling gate runs green with honest receipts, and independent review dispatched with its gap-map applied. **NOT done** = a single-platform export executed in the hub, a design fact introduced inside one export, a described-not-instantiated guardrail shipped, an upstream decision silently overridden, or an unrun check laundered into a pass.

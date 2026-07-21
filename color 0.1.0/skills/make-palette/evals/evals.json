@@ -1,0 +1,116 @@
+{
+  "skill": "make-palette",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Deep-review corpus (excellence campaign batch 2, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from the neighborhood's trigger vocabulary: check-colors (verify/contrast/CVD), color-space-facts (spaces/conversion), color-contrast-facts (APCA/CVD), color-theory-facts (harmony/meaning/mood), token-builder agent (token layer edits), component-forge (color-picker component), brand/art-direction, and (added 2026-07-04) design-system-hub \u2014 the whole-bundle ask must NOT grab this color-only skill; 'design the color system for this app' (positive) vs 'author our Claude Design design system bundle' (negative) is the boundary the reciprocal fence protects.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "build an OKLCH ramp from our brand anchor",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "extend our palette to the full 13-step scale",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "design the color system for this app",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "map the semantic color roles onto ramp steps",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "derive the dark scheme from the light palette",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "our accent ramp looks muddy in the middle steps - redesign the chroma arc",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "the brand purple washes out at the light steps, rebuild the ramp",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "we have one brand color and no shades - we need the full scale",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "choose distinct hues for danger, warning, success and info",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "which ramp step should the border token map to",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "verify this palette against WCAG",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "does this palette pass contrast AA",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "check color-blind CVD safety across light and dark themes",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "emit a ColorProof for the current theme",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "convert this sRGB color to OKLCH",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "explain saturation vs chroma",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "why do these two colors clash",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "what mood does a pale muted palette communicate",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "add a hover state token to the repo token layer",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "build a color-picker web component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "define the brand's vibe and mood direction",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "author our Claude Design design system bundle",
+      "expect": "no-trigger"
+    }
+  ]
+}

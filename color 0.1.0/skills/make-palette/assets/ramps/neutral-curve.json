@@ -1,0 +1,37 @@
+{
+  "note": "CANON: default L anchors for the 13-step neutral ramp — SKILL.md's numbers table and scripts/ramp_build.py derive from this file; re-derive, never patch the prose. Chroma ceiling is 0.02 for tinted neutrals (a design margin — check-colors gates declared-tinted at 0.06), 0 for true grey. Hue is inherited from the brand's neutral tint (if any) or set to 260° (slightly cool) by default.",
+  "scaleSteps": [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 1000],
+  "lightnessAnchors": {
+    "0":    0.995,
+    "50":   0.970,
+    "100":  0.940,
+    "200":  0.890,
+    "300":  0.820,
+    "400":  0.720,
+    "500":  0.600,
+    "600":  0.490,
+    "700":  0.380,
+    "800":  0.280,
+    "900":  0.200,
+    "950":  0.150,
+    "1000": 0.080
+  },
+  "chromaCeiling": 0.02,
+  "chromaBell": {
+    "formula": "C(L) = C_max * exp(-k * (L - L_peak)^2) — peaks at mid lightness, decays toward both ends",
+    "defaults": {
+      "C_max": "chromaCeiling (a brand tint's C caps at it); 0 for true grey",
+      "L_peak": 0.5,
+      "k": 12,
+      "kRationale": "k >= ~9 keeps the L=0.995 end under the sRGB gamut limit for a 260° tint (~C 0.0023), so the default build never needs gamut rescue"
+    }
+  },
+  "hueDefault": 260,
+  "hueRange": [240, 280],
+  "invariants": [
+    "L is monotonic decreasing from step 0 → step 1000",
+    "Per-label-unit evenness (check-colors's form): adjacent gap-to-gap ratio of (ΔL ÷ Δlabel) ≤ 1.5 — label-unit normalization makes the 50-unit end gaps commensurate, so no gap is excluded",
+    "Chroma never exceeds 0.02",
+    "Hue is constant across the ramp"
+  ]
+}

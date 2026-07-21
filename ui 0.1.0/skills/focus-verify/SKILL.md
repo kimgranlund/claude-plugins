@@ -1,6 +1,6 @@
 ---
 name: focus-verify
-description: Verify focus-ring recipes, hit-target minimums, focus order, and keyboard affordances — and prescribe compliant values where missing. Use when checking focus order / tab sequence, keyboard navigation and traps, modal/dialog focus trap and restore, Escape and arrow keys per role, which keys a menu / tabs / listbox answers (APG), focus management on route change, focus-ring tokens that clear 3:1 under every surface, "the focus ring is invisible in dark mode", or hit-area expansions for small interactive elements. NOT for general text/background contrast, palette, or color-blind safety (color-verify) — owns only focus-ring contrast; NOT for RTL/bidi, dir/lang, locale Intl formatting, or text-expansion (i18n-verify); NOT for loading skeleton/spinner, CLS, or perceived-latency budgets (perf-verify); NOT for destructive-action undo/type-to-confirm or audit-trail UX (safety-verify); NOT for color-space theory or palette math (color-science-spaces); NOT for building a tab-list or menu component (component-forge).
+description: Verify focus-ring recipes, hit-target minimums, focus order, and keyboard affordances — and prescribe compliant values where missing. Use when checking focus order / tab sequence, keyboard navigation and traps, modal/dialog focus trap and restore, Escape and arrow keys per role, which keys a menu / tabs / listbox answers (APG), focus management on route change, focus-ring tokens that clear 3:1 under every surface, "the focus ring is invisible in dark mode", or hit-area expansions for small interactive elements. NOT for general text/background contrast, palette, or color-blind safety (check-colors) — owns only focus-ring contrast; NOT for RTL/bidi, dir/lang, locale Intl formatting, or text-expansion (i18n-verify); NOT for loading skeleton/spinner, CLS, or perceived-latency budgets (perf-verify); NOT for destructive-action undo/type-to-confirm or audit-trail UX (safety-verify); NOT for color-space theory or palette math (color-space-facts); NOT for building a tab-list or menu component (component-forge).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -122,7 +122,7 @@ cleanly. The gate is **necessary, not sufficient** — a clean run proves no mec
 | `assets/focus-ring/recipes.json` | the three recipes + color strategies + contrast/forced-colors handling |
 | `assets/offsets/per-surface.json` | ring offset/radius per element radius |
 | `assets/keyboard/affordances.json` | per-role tab order, keys, escape, arrows (APG) |
-| [[color-verify]] | the ramps/contrast primitives ring colors draw on |
+| [[check-colors]] | the ramps/contrast primitives ring colors draw on |
 | `token-builder` agent | consumes emitted interactive-role tokens |
 | [[component-forge]] / the repo's component seat | where keyboard-affordance defects route — the maker that fixes a role's missing APG keys |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |

@@ -1,7 +1,7 @@
 {
   "skill": "component-forge",
-  "_note": "Deep-review corpus (excellence campaign batch 3, 2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives drawn from neighbors' trigger vocabulary: layout-decompose, ui-patterns, system-decompose, ui-audit, palette-design, component-reviewer agent, agent-ui component-builder agent.",
-  "siblings_in_repo": ["layout-decompose", "ui-patterns", "system-decompose", "ui-audit", "palette-design", "flow-decompose"],
+  "_note": "Deep-review corpus (excellence campaign batch 3, 2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives drawn from neighbors' trigger vocabulary: layout-decompose, ui-patterns, system-decompose, ui-audit, make-palette, component-reviewer agent, agent-ui component-builder agent.",
+  "siblings_in_repo": ["layout-decompose", "ui-patterns", "system-decompose", "ui-audit", "make-palette", "flow-decompose"],
   "global_peers": ["component-reviewer (agent)", "component-builder (agent-ui repo agent)"],
   "positives": [
     "build a web component for a date picker",

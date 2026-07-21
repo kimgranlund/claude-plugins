@@ -7,7 +7,7 @@ description: >-
   wireframes for four archetypes (productivity-shell, saas-dashboard, marketing-site, mobile-app). Also:
   "review / critique this layout", "wireframe a dashboard / marketing page / mobile app", "which archetype
   fits", "the screen looks clean but nothing on it does anything", "every action works but it's all one
-  giant stacked column". NOT for visual or color design (the color-science-* packs / typography-lettering), production
+  giant stacked column". NOT for visual or color design (the color-*-facts packs / typography-lettering), production
   CSS/component code, or copywriting — structure + interaction only; NOT for the cross-screen journey
   (flow-decompose — this owns within-screen); NOT for the whole-product sweep (ui-audit); NOT for naming a
   pattern in the abstract (ui-patterns — needs a concrete UI or intent).

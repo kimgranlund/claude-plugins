@@ -5,7 +5,7 @@ An audit run persists its evidence into a dated dir (audits/<date>/): cards, che
 inventory.json, and findings.jsonl — the NORMALIZED ledger Step 6 appends every gate finding to,
 one JSON object per line:
 
-  {"checker": "color-verify", "gate": "CONTRAST_FAIL_AA", "id": "dashboard",
+  {"checker": "check-colors", "gate": "CONTRAST_FAIL_AA", "id": "dashboard",
    "screen": "dashboard", "detail": "4.2:1 body text"}
 
 checker/gate/id are REQUIRED (they are the finding's identity); screen/detail are optional
@@ -244,13 +244,13 @@ def run(argv, out, err):
 # Baseline: 3 findings. Current: 2 of them persist, 1 (NO_VISIBLE_FOCUS) is resolved, 1 is new —
 # so the diff must report NEW=1, RESOLVED=1, STILL_FAILING=2 and exit 1 (regression gate).
 FIX_BASE = [
-    {"checker": "color-verify", "gate": "CONTRAST_FAIL_AA", "id": "dashboard",
+    {"checker": "check-colors", "gate": "CONTRAST_FAIL_AA", "id": "dashboard",
      "screen": "dashboard", "detail": "4.2:1 body text"},
     {"checker": "focus-verify", "gate": "NO_VISIBLE_FOCUS", "id": "settings#save"},
     {"checker": "flow-check", "gate": "DEAD_END", "id": "checkout:pay"},
 ]
 FIX_CUR = [
-    {"checker": "color-verify", "gate": "CONTRAST_FAIL_AA", "id": "dashboard",
+    {"checker": "check-colors", "gate": "CONTRAST_FAIL_AA", "id": "dashboard",
      "screen": "dashboard", "detail": "4.2:1 body text"},
     {"checker": "flow-check", "gate": "DEAD_END", "id": "checkout:pay"},
     {"checker": "focus-verify", "gate": "POSITIVE_TABINDEX", "id": "reports#filter",
@@ -321,7 +321,7 @@ def selftest():
         if _keys(data["resolved"]) != [("focus-verify", "NO_VISIBLE_FOCUS", "settings#save")]:
             errs.append("RESOLVED bucket wrong: %r" % _keys(data["resolved"]))
         if sorted(_keys(data["still_failing"])) != [
-                ("color-verify", "CONTRAST_FAIL_AA", "dashboard"),
+                ("check-colors", "CONTRAST_FAIL_AA", "dashboard"),
                 ("flow-check", "DEAD_END", "checkout:pay")]:
             errs.append("STILL_FAILING bucket wrong: %r" % _keys(data["still_failing"]))
         if data["counts"] != {"new": 1, "resolved": 1, "still_failing": 2}:

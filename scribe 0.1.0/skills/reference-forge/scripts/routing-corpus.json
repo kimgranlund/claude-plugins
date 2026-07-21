@@ -3,7 +3,7 @@
   "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of reference-doc authoring+review. Negatives drawn from the neighbors' trigger vocabulary: knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), llms-txt-forge, entry-file-author, skill-author, linguistics-reviewer/linguistic-techniques, rubric-forge.",
   "positives": [
     "write a reference doc for this skill",
-    "author a references file for the color-science-materials bundle",
+    "author a references file for the color-material-facts bundle",
     "structure my project knowledge files",
     "review this ground-truth doc for the agent",
     "is this doc retrievable by the agent",

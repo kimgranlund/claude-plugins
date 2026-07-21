@@ -86,7 +86,7 @@
       "id": "n06",
       "prompt": "Design us a new OKLCH color palette",
       "expect": "no-trigger",
-      "note": "palette-design — unrelated domain"
+      "note": "make-palette — unrelated domain"
     },
     {
       "id": "n07",

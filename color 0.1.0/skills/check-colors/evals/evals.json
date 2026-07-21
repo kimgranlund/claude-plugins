@@ -1,0 +1,136 @@
+{
+  "skill": "check-colors",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: make-palette, color-contrast-facts, color-space-facts, color-theory-facts, focus-verify, i18n-verify, perf-verify, safety-verify, ui-audit, component-forge, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "verify this palette",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "does this palette pass WCAG AA",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "check the contrast ratio of this text on this background",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "is this color scheme safe for color-blind users",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "the muted gray text looks too faint - does it meet the accessibility contrast floor",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "run a contrast check on every pair across the light and dark schemes",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "emit a ColorProof for this candidate palette",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "our danger red on white looks borderline - which pairs fail AA",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "check this semantic color mapping against WCAG and APCA pass-fail",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "verify CVD safety - can deuteranopes tell success from danger in this palette",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "does this translucent outline still clear 3:1 once composited over the surface",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "the hue drifts across the ramp - check hue stability and evenness",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "build a ramp from this brand anchor",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "derive the dark scheme from our light palette",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "map the semantic roles for surface, border, and accent",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "the focus ring is invisible in dark mode",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "check focus order and keyboard navigation in this modal",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "convert this color from HSL to OKLCH",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "why do these two colors clash - suggest a harmonious scheme",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "what mood does a pale muted palette communicate",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "check RTL support and text-expansion headroom across locales",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "the skeleton loader causes layout shift - check our CLS budget",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "add type-to-confirm to this destructive delete action",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "audit the whole app UI before launch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "build a color-picker web component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "realize the verified palette as token layers in the repo",
+      "expect": "no-trigger"
+    }
+  ]
+}

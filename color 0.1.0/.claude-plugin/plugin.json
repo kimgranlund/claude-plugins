@@ -1,7 +1,7 @@
 {
   "name": "color",
   "displayName": "Color",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Explain color science (accessibility, materials, perception, spaces, theory), build an OKLCH palette, and verify its contrast and CVD-safety.",
   "license": "MIT",
   "author": {
