@@ -292,7 +292,13 @@ def gate(root: Path, package: bool = False):
              # pack-authoring-standards (2026-07-19): "knowledge-forge" is a deliberate historical
              # citation of a now-retired scribe skill (folded into this plugin's own pack-forge),
              # not rename drift — the sentence explains provenance, it doesn't point at a live sibling:
-             "knowledge-forge"}
+             "knowledge-forge",
+             # the new ops-issues COMMAND skill (2026-07-20) added the "-issues" suffix to this
+             # plugin's own inventory for the first time: "sub-issues" is github-issue-pr-primitives'
+             # pre-existing, unrelated prose (GitHub's own plural term, cited from a real
+             # references/sub-issues-and-task-lists.md file) newly caught by that suffix — the
+             # standing false-positive class, same shape as -flow/-systems/-discipline above:
+             "sub-issues"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

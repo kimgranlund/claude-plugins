@@ -36,6 +36,7 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `skills/git-campaign-workflows` | Declarative skill | model-only | The estate's own git operational lessons, citable: worktree placement/discard safety, merge semantics (the ten-branch delete-failure class), the silent-failure catalog (verify by re-reading, never a command's print), parallel-session reconcile, the ADR-0002 decision tree — five axes, each grounded in a dated 2026-07-16/17 incident; the three scripts below mechanize what it documents |
 | `skills/github-issue-pr-primitives` | Declarative skill | model-only | GitHub's own Issue/PR/Discussion/Projects-v2 platform facts, cited and dated 2026-07-17 — deliberately disjoint from git-campaign-workflows (that pack is OUR git mechanics; this one is GitHub's data model): Issue Types + Issue Fields vs. labels, sub-issues vs. the retired tasklist-block feature, the nine closing keywords and the one merge-strategy gap GitHub's own docs never closed, PR review/CODEOWNERS/merge-queue mechanics, Projects v2's GraphQL-only structure — seven axes plus a sources.md provenance file; the synthesis axis names where this workspace's own ADR-0002/doc-authoring-standards convention aligns or diverges from the platform, without ratifying a change |
 | `agents/ops-issues` | Agent | spawned (scheduled + on-demand) | Standing intake/triage seat: classifies, dedupes, and routes features/bugs/tasks/issues/PRs onto the resolved ticketing backend per the watch/triage/trust SPEC (`.claude/docs/spec/spec-ticketing-watch-triage.md`); trust-gates unknown filers behind a durable friendlies allow-list; structurally barred from source edits, merges, or closes beyond the ticket record. Preloads `github-issue-pr-primitives` + `intent-extract` only — scribe's `doc-authoring-standards` is a different plugin, so the TICKET shape it needs is stated inline rather than preloaded (the hard plugin-preload boundary, not a soft mention) |
+| `skills/ops-issues` | Command skill | user-only (`/ops-issues`) | Dispatches the `ops-issues` agent above for an on-demand run; states the agent's own capture/author-only contract as a fixed banner before the first CONFIRMED-roster dispatch (never mere file existence — an unattended firing seeds the allow-list too, evidence-only), and — since the agent has no `AskUserQuestion` of its own — runs the REQ-011/REQ-013 interview here, in this command's own session, whenever the agent's report surfaces one pending. This workspace's first case of a skill and an agent sharing one name (a command dispatching its own-named standing seat), deliberate, not yet a rule |
 | `agents/ops-repo` | Agent | spawned (scheduled + on-demand) | Standing repo-hygiene seat: inventories worktrees/branches/PRs, executes cleanup ONLY through this plugin's own gated scripts (`campaign_close.py`/`gitignore_check.py`/`sync_main.py`) on independently-verified-merged findings, proposes (never mutates) everything else. Preloads `git-campaign-workflows` + `github-issue-pr-primitives` |
 | `agents/ops-adr` | Agent | spawned (scheduled + on-demand) | Standing periodic ADR-review seat: `scripts/adr_checkpoint.py` diffs the ADR corpus by content hash since the last firing (new/amended/newly-superseded, cost proportional to the delta not the corpus), each changed Decision judged against `knowledge-harvest`'s own bar, candidates queued via `scripts/adr_queue.py` for ONE batched confirm round rather than blocking on a live human; structurally barred from authoring — a confirmed candidate's next step is a named `/pack-forge`/`/skill-forge`/`knowledge-harvest` Phase-6 command, never a write this agent performs. Preloads `knowledge-harvest` + `pack-authoring-standards` (both same-plugin) — scribe's `doc-authoring-standards` is a different plugin, so the ADR frontmatter contract (`doc-type`/`id`/`status`/`supersedes`) is stated inline rather than preloaded |
 | `scripts/release_gate.py` | Script | CLI + selftest | G1–G11: manifest, structure, full lint (composes skill_lint), bundled selftests (py+js, exit tri-state), phantom sweep, package + same-version refusal, eval validation (composes eval_check), sibling names, packs (composes corpus_check), docs freshness (composes docs_check), style lint (ruff/eslint, ADR-0002) |
@@ -112,6 +113,31 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
+v1.38.0 · assembled 2026-07-20 · 1.38.0: `/ops-issues` — a new command skill dispatching the
+`ops-issues` agent on demand, and stating its own capture/author-only contract as a fixed banner
+before the first CONFIRMED-roster dispatch. Prompted by a user question ("can we make ops-issues
+ask if it should only capture and never do the work") that turned out to already be answered
+structurally by REQ-012 — there was nothing to ask, since the boundary isn't configurable. The
+genuinely missing piece was disclosure, not a choice: a command entry point that states the
+contract plainly before dispatching, rather than leaving it buried in the agent's own file. First
+case in this workspace of a skill and an agent sharing one name (a command dispatching its
+own-named standing seat) — noted as a deliberate choice, not yet a rule. Fresh-context
+`skill-auditor` FLOOR pass found 1 blocking + 2 major-class findings, all fixed: the first draft's
+banner claimed "the dispatched agent asks itself" for the REQ-011/REQ-013 interviews — backwards,
+since the agent's own `tools` carries no `AskUserQuestion` (verified against `agents/ops-issues.md`
+directly) and the SPEC assigns that question to "the dispatching session," which on this path IS
+this command's own session; rewritten so the command runs the interview itself and re-dispatches
+carrying the confirmed answer. The first-invocation detection was also wrong: keying the banner on
+bare `friendlies.json` absence misses that an UNATTENDED hourly firing already writes that file via
+REQ-011's evidence-only seed, so the banner would have silently never shown in the primary
+(scheduled) deployment shape — corrected to key on whether a CONFIRMED roster is on record in the
+file's own `policy` block, not mere file existence. `release_gate` G8's own suffix-inventory
+mechanism caught two consequences of this change: adding `ops-issues` as a skill name newly matched
+`github-issue-pr-primitives`' pre-existing "sub-issues" prose (a real GitHub term, cited from its
+own references file) against the new `-issues` suffix; the fix draft's own "model-routing" phrase
+tripped a second suffix — the first was allowlisted (dated, cited comment, the standing
+false-positive class), the second was reworded instead, since avoiding a fresh false-positive by
+rephrasing is cheaper than growing the allowlist for a sentence that reads fine either way ·
 v1.37.0 · assembled 2026-07-20 · 1.37.0: `ops-issues` gains REQ-013 — a one-time, interactive-only
 offer on a GitHub-backed (Option B) repo's first interactive firing to declare a project-scoped
 GitHub MCP server (`.mcp.json`) for richer session browsing, recommended default a read-only-scoped
