@@ -7,7 +7,7 @@ description: >-
   vision and reduced contrast sensitivity, color-blindness simulation (simulate protanopia and
   deuteranopia; Brettel/Viénot/Machado), CVD-safe pairs (e.g. error vs. success state colors), and
   "which colors look identical to a colorblind user". NOT for checking or verifying the contrast,
-  floor, or CVD-safety of a GIVEN pair, scheme, or palette — measurement asks (check-colors); NOT for focus rings or hit targets (focus-verify); NOT
+  floor, or CVD-safety of a GIVEN pair, scheme, or palette — measurement asks (check-colors); NOT for focus rings or hit targets (check-focus); NOT
   for space-conversion or gamut math (color-space-facts); NOT for vision science beyond CVD
   (color-perception-facts); NOT for building palettes (make-palette). ANSWERS, does not
   generate.
@@ -86,7 +86,7 @@ an uncited file onto the corpus inline.
   standards, and thresholds are answered here; a pass-fail verdict on an actual candidate
   palette — a ColorProof, an AA/AAA sweep across theme × scheme × contrast, CVD-safety proof on
   real hex values — is [[check-colors]]'s job. Route there, never improvise a verdict.
-- **Focus-ring contrast belongs to `focus-verify`** — it owns the 3:1 UI-component contrast
+- **Focus-ring contrast belongs to `check-focus`** — it owns the 3:1 UI-component contrast
   invariant and hit-target sizing; this pack owns text/background contrast theory only.
 - **Space-conversion and gamut math belong to `color-space-facts`** — sRGB/OKLCH/CIELAB
   conversion, gamut mapping, gradients. This pack cites its CSS Color snapshot but owns no

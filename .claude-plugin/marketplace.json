@@ -48,10 +48,10 @@
       "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch, plus the Material Design token grammar they can extend."
     },
     {
-      "name": "ui",
-      "displayName": "UI",
+      "name": "screens",
+      "displayName": "Screens",
       "source": "./ui 0.1.0",
-      "description": "Design and critique UI structure (layouts, flows, components, patterns) and verify it against non-functional bars (focus, i18n, perf, safety) — plus ui-change-verify, which drives the live artifact instead of reasoning about it in the abstract."
+      "description": "Design and critique UI structure (layouts, flows, components, patterns) and verify it against non-functional bars (focus, i18n, perf, safety) — plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract."
     },
     {
       "name": "orchestration",

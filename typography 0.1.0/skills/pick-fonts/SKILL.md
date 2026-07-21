@@ -9,7 +9,7 @@ description: >-
   (metric compatibility, accessibility floor) — font-token-rules realizes it. NOT for color ramps (make-palette); NOT for
   realizing a decided system as tokens, or which font/voice an existing system's token already
   binds (font-token-rules); NOT for type-history knowledge (lettering-facts); NOT for
-  Material's typescale (material-type-facts); NOT for a component (component-forge)
+  Material's typescale (material-type-facts); NOT for a component (make-component)
   or the export bundle (make-design-kit).
 disable-model-invocation: false
 user-invocable: true
@@ -61,7 +61,7 @@ palette/contrast" is a different artifact class — route to [[check-colors]].
    [`references/territory-interpretation.md`](references/territory-interpretation.md)). A vague
    brief is this skill's own gate: push back and ask for the named reference before proceeding.
 
-   **How the push-back asks** (canon: ui's layout-decompose `references/taste-elicitation.md`,
+   **How the push-back asks** (canon: ui's break-down-layout `references/taste-elicitation.md`,
    where installed — five rules in one line: ask only genuine taste forks inside the verified
    envelope, options as artifacts not adjectives, one batched round, every option a committable
    plan, the answer locked durably): when the brief admits two or more live territory points —
@@ -173,8 +173,8 @@ custom properties) instead of this skill's (deciding which typeface fills the ro
 | [[font-token-rules]] | the mandatory REALIZATION handoff — binds the decision as `--font-*`/`--type-*` |
 | [[lettering-facts]] | the knowledge peer — voice/, techniques/pairing.md, accessibility/, metrics/, scripts/ |
 | `make-design-kit/references/context-potency.md` | the presupposition / generic-output-clinic doctrine step 1 applies (read-only citation, not this skill's to edit) |
-| ui's layout-decompose `references/taste-elicitation.md` (soft, where installed) | the asking discipline step 1's push-back wires — read-only citation; its five-rule one-liner is compressed inline |
-| [[component-forge]] | NOT this skill's job — builds the component that consumes the type |
+| ui's break-down-layout `references/taste-elicitation.md` (soft, where installed) | the asking discipline step 1's push-back wires — read-only citation; its five-rule one-liner is compressed inline |
+| [[make-component]] | NOT this skill's job — builds the component that consumes the type |
 
 **Update:** when font-token-rules' voice table or five family-role slots change, or
 lettering-facts's `voice/`, `techniques/pairing.md`, or `accessibility/` files move, re-derive

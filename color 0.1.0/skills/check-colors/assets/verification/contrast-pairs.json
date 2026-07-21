@@ -1,5 +1,5 @@
 {
-  "note": "The authoritative list of semantic pairs a candidate card must cover for its palette to verify against WCAG 2.2. A pair below its target is a violation in the ColorProof — the verdict blocks until it passes or routes to make-palette. Focus-ring pairs are deliberately ABSENT: focus-ring contrast is owned by focus-verify (both skills' NOT clauses name that boundary) — route --focus-ring pairs there; never re-add them here.",
+  "note": "The authoritative list of semantic pairs a candidate card must cover for its palette to verify against WCAG 2.2. A pair below its target is a violation in the ColorProof — the verdict blocks until it passes or routes to make-palette. Focus-ring pairs are deliberately ABSENT: focus-ring contrast is owned by check-focus (both skills' NOT clauses name that boundary) — route --focus-ring pairs there; never re-add them here.",
   "mapping": "A repo may ship its own role→pair manifest mapping these semantic roles onto its concrete token names (e.g. --a-fg-muted → --on-surface-muted). This file is the default role set, not a token spelling; the card's fgToken/bgToken fields carry the repo-side provenance.",
   "version": "wcag-2.2",
   "targets": {

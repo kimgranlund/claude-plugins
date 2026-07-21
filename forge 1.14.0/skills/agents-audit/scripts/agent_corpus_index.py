@@ -371,8 +371,8 @@ def selftest():
 
     # collision arithmetic: all-distinct domains are domain-disambiguated, NOT a collision
     def disamb(d):
-        _write_agent(d, "layout-reviewer.md", "layout-reviewer")
-        _write_agent(d, "flow-reviewer.md", "flow-reviewer")
+        _write_agent(d, "layout-checker.md", "layout-checker")
+        _write_agent(d, "flow-checker.md", "flow-checker")
     code, out = _run_fixture(disamb)
     if code != 0 or "ROLE COLLISION" in out or "(domain-disambiguated)" not in out:
         errs.append("distinct-domain role family must pass with (domain-disambiguated), "

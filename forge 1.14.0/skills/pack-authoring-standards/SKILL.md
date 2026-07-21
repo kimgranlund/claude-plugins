@@ -21,7 +21,7 @@ type*, an INDEX that maps asks to files, and a SKILL.md surface (owned by
 `skill-authoring-standards`) thin enough to point rather than carry. This is the standard
 `/pack-forge` builds against, `corpus_check.py` enforces the checkable slice of, and the
 decompose/synthesize tests presuppose. Provenance: the axis and wave doctrine is imported from the
-source-corpus lineage (the `color-science`/`ui-patterns` practice, worked cases in
+source-corpus lineage (the `color-science`/`ui-pattern-facts` practice, worked cases in
 `skill-decompose/references/`); the freshness and grounding rules are this project's own earned
 practice — none of it is platform-verified fact, all of it is [battle-tested convention]
 (amended 2026-07-15: the [incident] class and severity-ranked INDEX ordering are grounded in
@@ -48,12 +48,12 @@ stated axis or file count that has drifted from the tree is the first strain sig
 ## INDEX.md: the retrieval map — when the consult table stops being one
 
 The threshold is **enumerability, not authoring method** (ruled 2026-07-09, reconciling this
-standard with the shipped practice — ui-patterns, motion-design, icon-rules — and, historically,
+standard with the shipped practice — ui-pattern-facts, motion-rules, icon-rules — and, historically,
 scribe's now-retired knowledge-forge's scaling note, folded in here 2026-07-19): when the SKILL.md consult table lists every reference file 1:1
 (a flat corpus of ≤~7 files), the table IS the retrieval map and a separate INDEX would be a
 second copy that drifts — ship no INDEX. An INDEX.md earns its keep the moment files outgrow
 what the table enumerates or `references/` grows subdirectories (the color-science family,
-ui-genres). Then: one line per reference file — `path — the question it answers (≤ 1 line)` —
+ui-genre-facts). Then: one line per reference file — `path — the question it answers (≤ 1 line)` —
 grouped under axis headings; the INDEX loads *first*, files load on demand from it. Where the
 axes have a natural severity or impact order (a rules corpus tiered CRITICAL→LOW), the INDEX
 orders its axis headings by that severity — triage order becomes structural instead of a

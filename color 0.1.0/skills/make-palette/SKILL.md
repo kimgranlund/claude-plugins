@@ -50,7 +50,7 @@ this skill — route to [[check-colors]].
    different anchor (or, when several repair directions exist, the taste gate below decides). `scripts/ramp_build.py` owns the arithmetic of steps 1–4; anchor negotiation
    and role-mapping judgment stay with the model — the script reports gaps, it never renegotiates.
 
-   **Taste gate at anchor negotiation** (canon: ui's layout-decompose
+   **Taste gate at anchor negotiation** (canon: ui's break-down-layout
    `references/taste-elicitation.md`, where installed — five rules in one line: ask only genuine
    taste forks inside the verified envelope, options as artifacts not adjectives, one batched
    round, every option a committable plan, the answer locked durably): when the brief leaves
@@ -125,7 +125,7 @@ is already the defect).
 
 | Path / peer | Use |
 |---|---|
-| ui's layout-decompose `references/taste-elicitation.md` (soft, where installed) | the taste-gate canon step 2's gate degrades inline — five rules, one artifact per gate |
+| ui's break-down-layout `references/taste-elicitation.md` (soft, where installed) | the taste-gate canon step 2's gate degrades inline — five rules, one artifact per gate |
 | `assets/ramps/neutral-curve.json` | CANON — L-anchor grid + chroma bell/ceiling for neutral families |
 | `assets/ramps/accent-curve.json` | CANON — L-anchor grid, chroma-bell parameters, extreme caps, gamut policy for accent/intent families |
 | `assets/ramps/intent-hues.json` | CANON — hue ranges for danger/warning/success/info + tolerance + collision rule |

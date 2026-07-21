@@ -1,9 +1,9 @@
 {
   "skill": "color-contrast-facts",
-  "_note": "Re-derived 2026-07-06 for the color-contrast-facts extraction (T4 of the color-science split; see .claude/docs/color-science-extraction-plan.md). Positives span four phrasing classes: APCA/WCAG picks, contrast ratios/relative luminance, low-vision/readable color choices, CVD simulation/safe pairs; each class also carries an imperative/diagnostic/symptom/indirect mix. Negatives drawn adversarially from live neighbors: check-colors (verify/prove asks MUST NOT land here), focus-verify (focus-ring contrast), color-space-facts (space/gamut math), color-perception-facts (vision science beyond CVD), color-material-facts (pigment/print), make-palette (building), color-theory-facts (harmony).",
+  "_note": "Re-derived 2026-07-06 for the color-contrast-facts extraction (T4 of the color-science split; see .claude/docs/color-science-extraction-plan.md). Positives span four phrasing classes: APCA/WCAG picks, contrast ratios/relative luminance, low-vision/readable color choices, CVD simulation/safe pairs; each class also carries an imperative/diagnostic/symptom/indirect mix. Negatives drawn adversarially from live neighbors: check-colors (verify/prove asks MUST NOT land here), check-focus (focus-ring contrast), color-space-facts (space/gamut math), color-perception-facts (vision science beyond CVD), color-material-facts (pigment/print), make-palette (building), color-theory-facts (harmony).",
   "siblings_in_repo": [
     "check-colors",
-    "focus-verify",
+    "check-focus",
     "color-space-facts",
     "color-perception-facts",
     "color-material-facts",

@@ -1,0 +1,29 @@
+{
+  "skill": "motion-rules",
+  "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (durations, easing/springs, choreography, reduced-motion). Negatives drawn adversarially from neighbors' trigger vocabulary: check-speed (perceived latency / skeletons / CWV) and material-motion-facts (md.sys.motion token values, design-kits plugin) are the dangerous near-neighbors; plus make-component, ui-pattern-facts, check-ui-change, check-focus, check-colors.",
+  "cases": [
+    { "id": "t01", "prompt": "how long should this modal open animation be", "expect": "trigger" },
+    { "id": "t02", "prompt": "what easing curve should I use for this drawer", "expect": "trigger" },
+    { "id": "t03", "prompt": "spring or ease-in-out for our card expansion", "expect": "trigger" },
+    { "id": "t04", "prompt": "should list items stagger in and by how much", "expect": "trigger" },
+    { "id": "t05", "prompt": "this transition feels sluggish and mechanical", "expect": "trigger" },
+    { "id": "t06", "prompt": "what does prefers-reduced-motion actually require us to do", "expect": "trigger" },
+    { "id": "t07", "prompt": "is parallax scrolling a problem for accessibility", "expect": "trigger" },
+    { "id": "t08", "prompt": "what should never be animated in a UI", "expect": "trigger" },
+    { "id": "t09", "prompt": "fill in the Motion section of our DESIGN.md", "expect": "trigger" },
+    { "id": "t10", "prompt": "exits should be faster than entrances right", "expect": "trigger" },
+    { "id": "t11", "prompt": "what transition should connect the card grid to the detail screen", "expect": "trigger" },
+    { "id": "t12", "prompt": "why do Apple animations feel smoother than ours", "expect": "trigger" },
+    { "id": "t13", "prompt": "make this animation snappier", "expect": "trigger" },
+    { "id": "t14", "prompt": "should the notification badge bounce when it appears", "expect": "trigger" },
+    { "id": "n01", "prompt": "should this loading state be a skeleton or a spinner", "expect": "no-trigger" },
+    { "id": "n02", "prompt": "our LCP is over budget on the dashboard", "expect": "no-trigger" },
+    { "id": "n03", "prompt": "what md.sys.motion easing token do I use for this dialog", "expect": "no-trigger" },
+    { "id": "n04", "prompt": "build me an animated accordion component", "expect": "no-trigger" },
+    { "id": "n05", "prompt": "what states does this screen need besides ideal", "expect": "no-trigger" },
+    { "id": "n06", "prompt": "run the animation change in the app and screenshot before and after", "expect": "no-trigger" },
+    { "id": "n07", "prompt": "is the focus ring visible enough on this button", "expect": "no-trigger" },
+    { "id": "n08", "prompt": "do our error and success colors survive deuteranopia", "expect": "no-trigger" },
+    { "id": "n09", "prompt": "what sections does a DESIGN.md need", "expect": "no-trigger" }
+  ]
+}

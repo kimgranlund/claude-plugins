@@ -1,0 +1,34 @@
+{
+  "skill": "check-whole-ui",
+  "_note": "Deep-review corpus (excellence campaign batch 4). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood trigger vocab: break-down-layout, break-down-flow, the five verifiers, ui-pattern-facts, ui-genre-facts, component seats.",
+  "positives": [
+    "audit this UI",
+    "review the whole app's UX",
+    "sweep this product for accessibility issues before we ship",
+    "run a full pre-launch UI review across every screen",
+    "how consistent is this UI across screens",
+    "the same data table paginates on one page and infinite-scrolls on another",
+    "every screen passes review on its own but the product feels incoherent",
+    "we redesigned the app \u2014 check the whole product for regressions",
+    "find the cross-cutting UX problems no single screen review catches",
+    "sweep this product for i18n and latency issues",
+    "which patterns drift across our screens",
+    "do a systemic pass over all our screens, flows, and shared modules"
+  ],
+  "negatives": [
+    "decompose this UI layout into regions and groups",
+    "is this one screen's layout right",
+    "walk this checkout flow and find where it dead-ends",
+    "map the signup flow as a state machine",
+    "verify this palette passes WCAG AA contrast",
+    "the focus ring is invisible in dark mode",
+    "check RTL support and text-expansion headroom on this form",
+    "the page feels slow even though the API is fast",
+    "does this delete action need type-to-confirm",
+    "what pattern is this screen \u2014 master-detail or list-detail",
+    "what do users expect in a dashboard app",
+    "build a confirm-dialog component",
+    "design an app shell and wireframe a dashboard",
+    "fix the contrast failures the audit found"
+  ]
+}

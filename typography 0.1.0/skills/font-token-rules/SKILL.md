@@ -10,8 +10,8 @@ description: >
   font per family slot — distinctive vs. neutral, by voice. Never hardcode a px size, line-height,
   tracking, or font family. TYPE only. NOT for Material's `--md-sys-typescale-*`
   (material-type-facts); NOT for a no-token typography question
-  (lettering-facts); NOT for building/placing a component (component-forge); NOT for locale
-  number/date/currency formatting (i18n-verify).
+  (lettering-facts); NOT for building/placing a component (make-component); NOT for locale
+  number/date/currency formatting (check-translations).
 disable-model-invocation: false
 user-invocable: false
 ---

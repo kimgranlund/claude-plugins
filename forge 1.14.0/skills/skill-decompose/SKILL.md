@@ -35,11 +35,11 @@ Tests 1–3 gate whether a split is even worth pricing; test 4 prices it. A corp
 does not reach test 4 — state the no-split verdict there and stop.
 
 1. **Sizing** — the imported pack doctrine's healthy range is 3–7 retrieval axes per pack (the
-   reference instances are `ui-patterns`, hand-authored, and the `color-*-facts` family,
+   reference instances are `ui-pattern-facts`, hand-authored, and the `color-*-facts` family,
    research-wave scale). Is one entry surface actually straining — INDEX line count, load-discipline
    pressure (files >1000 lines forcing Grep-first warnings), a stated file count that has drifted
    from the tree? `color-science` at 159 files / ~10 axes was straining; `color-theory-facts` at 28 files
-   / 4 axes was not — the same size as `ui-patterns`, the source corpus's own model of a healthy
+   / 4 axes was not — the same size as `ui-pattern-facts`, the source corpus's own model of a healthy
    single pack.
 2. **Ask co-occurrence** — pull the corpus's own `evals/evals.json` trigger prompts (or a legacy
    `scripts/routing-corpus.json` / `evals/task-prompts.md` if that's what it has); for each, name

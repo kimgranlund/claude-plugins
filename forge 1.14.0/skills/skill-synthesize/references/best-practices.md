@@ -45,7 +45,7 @@ demo site, no `evals/` — a lean, hand-authored-scale pack with four axes alrea
 SKILL.md (Harmony, Wheel & history, Programmes, Meaning). Running the identical four tests:
 
 - **Sizing** — not straining: 28 files / 4 axes is inside the healthy range, the same scale as
-  `ui-patterns`, the corpus's own model of a single healthy pack. No INDEX bloat, no load-discipline
+  `ui-pattern-facts`, the corpus's own model of a single healthy pack. No INDEX bloat, no load-discipline
   pressure, no count drift.
 - **Ask co-occurrence** — the corpus's own 12-item routing corpus, mapped query-by-query:
 

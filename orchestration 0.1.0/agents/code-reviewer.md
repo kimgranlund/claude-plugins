@@ -10,8 +10,8 @@ description: >-
   match the LLD", "is this change safe to merge", "find bugs in this changeset". Gates first from
   real runs (the repo's tests, typecheck, lint), then judgment — correctness, contract fidelity,
   blast radius — as severity-ordered, file:line-cited findings. It assesses and reports; the
-  builder applies the fix. NOT for a UI component or custom element (component-reviewer), a screen
-  layout (layout-reviewer), or a cross-screen flow (flow-reviewer); NOT for
+  builder applies the fix. NOT for a UI component or custom element (component-checker), a screen
+  layout (layout-checker), or a cross-screen flow (flow-checker); NOT for
   a PRD/SPEC/LLD or other document (doc-reviewer); NOT for a subagent definition (agent-reviewer)
   or a SKILL.md (skill-reviewer); NOT for authoring or revising the design itself (system-planner);
   NOT for implementing or fixing to an approved LLD (system-builder); NOT for a measured experiment

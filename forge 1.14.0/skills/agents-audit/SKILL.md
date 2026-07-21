@@ -10,7 +10,7 @@ description: >-
   portfolio verdicts: "review this agent against the standard of excellence". Owns
   references/standard-of-excellence.md and the campaign/ ledger. NOT for a single agent's definition or why
   it won't auto-delegate (agent-authoring-standards / agent-forge); NOT for the skills corpus
-  (skills-audit); NOT for a product's UI (ui-audit); NOT for wiring decisions — subagent or team
+  (skills-audit); NOT for a product's UI (check-whole-ui); NOT for wiring decisions — subagent or team
   (orchestration-design).
 disable-model-invocation: true
 user-invocable: true
@@ -67,7 +67,7 @@ Team: <agents_dir> · <N> agents · Rubric: rubric-agent-corpus
 | Dim | Type | Verdict (PASS/FAIL/UNMEASURED) | Finding | Evidence |
 Gate tiers, three-valued: N-unique/no-non-agent <…> · F-harness <…> · L1 <…> · S-dangling <…>
 Per-agent gate-fails: <agent: dim> …  ·  Cross-axis: 1) … — fix: …  ·  Top team moves: 1) …
-Ledger: findings.jsonl (per-pass; diffed via ui-audit's audit-diff.py, or: first pass — baseline)
+Ledger: findings.jsonl (per-pass; diffed via check-whole-ui's audit-diff.py, or: first pass — baseline)
 ```
 
 ## Mode 2 — deep-review campaign (every agent a seat, the team a system)

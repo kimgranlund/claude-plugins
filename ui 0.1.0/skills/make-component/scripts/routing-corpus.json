@@ -1,0 +1,32 @@
+{
+  "skill": "make-component",
+  "_note": "Deep-review corpus (excellence campaign batch 3, 2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives drawn from neighbors' trigger vocabulary: break-down-layout, ui-pattern-facts, system-decompose, check-whole-ui, make-palette, component-checker agent, agent-ui component-builder agent.",
+  "siblings_in_repo": ["break-down-layout", "ui-pattern-facts", "system-decompose", "check-whole-ui", "make-palette", "break-down-flow"],
+  "global_peers": ["component-checker (agent)", "component-builder (agent-ui repo agent)"],
+  "positives": [
+    "build a web component for a date picker",
+    "author a custom element toolbar with overflow",
+    "make a checkbox component without a framework",
+    "design this component's API and anatomy",
+    "add an overflow seam to this toolbar module",
+    "should this select wrap a native select or be form-associated",
+    "is this thing a component or a module — the tiers feel mis-cut",
+    "my custom element renders empty after the list re-renders",
+    "the icon-only button isn't square — what padding should it have",
+    "what icon and caret size does an XL control take on the ramp",
+    "turn this pile of buttons into a proper toolbar component",
+    "upgrade this jQuery dropdown into a zero-dependency custom element"
+  ],
+  "negatives": [
+    "decompose this UI screenshot and name the regions",
+    "design an app shell for a saas dashboard",
+    "what pattern is this screen — master-detail or list-detail",
+    "when is a modal the wrong pattern",
+    "grade this component someone else built and score both axes",
+    "add a ui-button to agent-ui",
+    "fix ui-select to standard in @agent-ui/components",
+    "build a color ramp from our brand anchor",
+    "break down this feature architecture into parts before planning",
+    "sweep the whole product UI for conformance"
+  ]
+}

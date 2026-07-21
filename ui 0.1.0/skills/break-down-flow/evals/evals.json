@@ -1,0 +1,141 @@
+{
+  "skill": "break-down-flow",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, system-decompose.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "walk the checkout flow",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "map the signup flow across screens",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "design the flow for password reset",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "decompose this user journey into states and transitions",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "is this payment journey right",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "grade this flow card",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "where does this flow dead-end",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "can the user recover from a failed submit in this flow",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "can the user resume the wizard after a session timeout",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "the user gets stranded after the error screen with no way back",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "after paying, nothing confirms the balance actually changed",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "trace what happens from the statement to the receipt",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "does every exit of this journey leave the account in a true state",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "decompose this UI layout into regions and groups",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "name these regions on the screen",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "is this layout right",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "design an app shell and wireframe a dashboard",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "audit this UI before launch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "sweep the whole product for consistency issues",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "what pattern is this screen type",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "how should a wizard form behave in general",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "the spinner feels slow despite fast responses",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "this async step needs a skeleton or optimistic update",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "add type-to-confirm to this destructive delete action",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "is there undo for this bulk delete",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "break down this technical architecture into parts",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "decompose this goal into a plan",
+      "expect": "no-trigger"
+    }
+  ]
+}

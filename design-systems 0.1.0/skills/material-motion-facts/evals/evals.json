@@ -1,6 +1,6 @@
 {
  "skill": "material-motion-facts",
- "note": "Initial suite, authored with the pack (2026-07-09). Positives: token-selection, token-value, spring-scheme, and web-realization asks in the --md-sys-motion-* / M3 vocabulary. Negatives drawn adversarially from neighbors: motion-design (ui plugin — platform-agnostic durations/easing/choreography/reduced-motion) is the dangerous near-neighbor; plus the three token siblings (color, geometry, typography), make-design-kit, and component build asks. Blind run 2026-07-09: 15/16 — n01 leaked to this pack (its true owner motion-design is cross-plugin, absent from the plugin-scoped menu); fence tuned to carry the 'how long in general' phrasing verbatim.",
+ "note": "Initial suite, authored with the pack (2026-07-09). Positives: token-selection, token-value, spring-scheme, and web-realization asks in the --md-sys-motion-* / M3 vocabulary. Negatives drawn adversarially from neighbors: motion-rules (screens plugin — platform-agnostic durations/easing/choreography/reduced-motion) is the dangerous near-neighbor; plus the three token siblings (color, geometry, typography), make-design-kit, and component build asks. Blind run 2026-07-09: 15/16 — n01 leaked to this pack (its true owner motion-rules is cross-plugin, absent from the plugin-scoped menu); fence tuned to carry the 'how long in general' phrasing verbatim.",
  "cases": [
   {
    "id": "t01",

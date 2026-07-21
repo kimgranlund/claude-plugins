@@ -246,10 +246,10 @@ def gate(root: Path, package: bool = False):
              # -run suffix from eval-run); "selftest-patterns" is a references file:
              "hand-run", "selftest-patterns",
              # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
-             # "scale-theory" are references files (ui-patterns, geometry-systems); "design-kits"
-             # is the sibling PLUGIN's name, caught by geometry-systems' own "-systems" suffix;
-             # "box-model-and-flow" is a references file (dom-block-flow); "mid-flow" is prose
-             # ("mid-flow" in the hook skills), caught once dom-block-flow added the -flow suffix:
+             # "scale-theory" are references files (ui-pattern-facts, size-and-shape-rules); "design-kits"
+             # is the sibling PLUGIN's name, caught by size-and-shape-rules' own "-systems" suffix;
+             # "box-model-and-flow" is a references file (dom-layout-facts); "mid-flow" is prose
+             # ("mid-flow" in the hook skills), caught once dom-layout-facts added the -flow suffix:
              "container-patterns", "scale-theory", "design-kits", "box-model-and-flow",
              # prose compounds newly caught by the same two suffixes (-flow, -systems):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
@@ -321,13 +321,27 @@ def gate(root: Path, package: bool = False):
              # set then):
              "forced-colors", "font-palette", "tonal-palette", "github-facts",
              # material-color-facts removed 2026-07-21: the design-kits rename made it a real skill.
+             # ADR-0006 screens rename (2026-07-21): the plugin + 15 members add the -ui /
+             # -component / -change / -focus suffixes and the *-facts tails to the inventory,
+             # flagging three standing false-positive classes. (a) pre-existing prose compounds:
+             # "font-ui" (the ui FONT-role compound in typography/design-kits), "agent-ui"
+             # (a2ui-world prose + the historical component-builder agent mention), "shadcn-ui"
+             # (external library), "per-component"/"one-mark-per-component"/"cross-component"/
+             # "multi-component" (per-unit prose), "version-change"/"background-change"/
+             # "route-change" (event prose), "default-focus" (state prose). (b) the 2-char-prefix
+             # tokenizer floor (lifecycle-and-review class): "genre-facts"/"pattern-facts" are the
+             # tails of the REAL ui-genre-facts/ui-pattern-facts whose "ui-" prefix falls below
+             # the 3-char first-segment floor:
+             "font-ui", "agent-ui", "shadcn-ui", "per-component", "one-mark-per-component",
+             "cross-component", "multi-component", "version-change", "background-change",
+             "route-change", "default-focus", "genre-facts", "pattern-facts",
              # ADR-0006 agent-protocols rename (2026-07-21): the a2a-*/a2ui-* digit-prefix
              # tokenizer artifact (1.20.1 class — the regex skips digit-bearing segments), now
              # over the renamed -facts members: catalog-facts/chat-agent-facts/protocol-facts/
              # training-facts are the tails of full a2a-/a2ui- names, not phantom siblings:
              "catalog-facts", "chat-agent-facts", "protocol-facts", "training-facts",
              # ADR-0006 design-kits rename (2026-07-21): the -kit and -isolation suffixes joined
-             # the inventory — "bidi-isolation" is the Unicode/CSS term of art in i18n-verify's
+             # the inventory — "bidi-isolation" is the Unicode/CSS term of art in check-translations's
              # prose, "adia-ui-kit" cites an external package in pack-authoring-standards; the
              # standing false-positive class:
              "bidi-isolation", "adia-ui-kit",
