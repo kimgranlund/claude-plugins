@@ -30,7 +30,7 @@ an axis when its canon moves (a new HIG revision, a WCAG dot-release, an M3 moti
 - Apple HIG Motion page's exact principle list — page resisted extraction; principles cited via
   WWDC sessions instead.
 - Any distance→duration formula, any universal enter:exit ratio — no system publishes one.
-- M3 spring-token numeric values — owned by `material-motion-facts` (design-kits),
+- M3 spring-token numeric values — owned by `material-motion-facts` (design),
   which carries the current state of that table.
 
 ## House rulings — a distinct provenance class (added 2026-07-16, Issue #9)

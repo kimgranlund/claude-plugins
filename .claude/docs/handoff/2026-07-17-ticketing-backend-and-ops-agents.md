@@ -27,7 +27,7 @@ For the next agent/session opening this repo. Contract: harness's `write-handoff
   (map rows + two ledger entries) · `harness/MANUAL.md` (new entries) ·
   `harness/scripts/release_gate.py` (G8 allow-set: `lifecycle-and-review`, `sub-issue` —
   verified false-positives).
-  NOT mine, pre-existing on entry to this session: `design-kits/*` (5 files),
+  NOT mine, pre-existing on entry to this session: `design/*` (5 files),
   `teamwork/skills/{loop-rules,team-or-solo-rules}/evals/evals.json`,
   `teamwork/skills/parallel-work-rules/`,
   `harness/skills/{agent-writing-rules,entry-file-rules,hook-writing-rules}/evals/evals.json`

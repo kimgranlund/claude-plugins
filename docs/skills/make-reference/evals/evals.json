@@ -9,7 +9,7 @@
     },
     {
       "id": "t02",
-      "prompt": "author a references file for the color-material-facts bundle",
+      "prompt": "author a references file for the physical-color-facts bundle",
       "expect": "trigger"
     },
     {

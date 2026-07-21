@@ -34,9 +34,8 @@ jobs:
         run: |
           set -e
           fail=0
-          for p in harness docs "agent-protocols" llm \
-                   color typography design-kits \
-                   screens teamwork; do
+          for p in harness docs agent-protocols llm \
+                   design screens teamwork; do
             echo "::group::$p"
             python3 harness/scripts/release_gate.py "$p" || fail=1
             echo "::endgroup::"

@@ -24,9 +24,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | A feature idea to capture, or a feature to build | docs: `/file-feature` (pure intake → sized ticket/doc/corpus) · teamwork: `/build-feature` (record-first build — runs the intake when no record exists) |
 | Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | docs (folded in, not a separate plugin) — browse `docs/README.md`'s artifact table |
 | A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agent-protocols` (the A2UI four + the A2A four) |
-| Color science, palette design, contrast/CVD verification | `color` |
-| Typography system design, pairing, tokens | `typography` |
-| Design-system export bundles (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design-kits` |
+| Color science, palettes, typography systems, design-system exports (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design` |
 | UI structure (layouts, flows, components, patterns), motion knowledge (durations/easing/reduced-motion), or non-functional verification (focus/i18n/perf/safety) | `screens` |
 | Multi-agent feature-delivery team (plan → build → review → coordinate), composition/continuation design | `teamwork` |
 | Routing proof after description edits | `/check-routing <plugin>` |
@@ -38,8 +36,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 
 ## Common commands
 
-No installed harness required; every check is a plain script. Run from the workspace root, and
-quote plugin paths (the version suffix contains a space).
+No installed harness required; every check is a plain script. Run from the workspace root.
 
 - **Prove a script's own counters:** `python3 harness/scripts/skill_lint.py selftest`
   (same pattern for `release_gate.py`, `eval_check.py`, `docs_check.py`, `corpus_check.py`, and
@@ -74,7 +71,9 @@ quote plugin paths (the version suffix contains a space).
   kills it).
 - **Naming:** the canon is harness's `naming-rules` (ADR-0006, 2026-07-21). Plugin names are
   distribution-scoped, disjoint from member domain prefixes (no `/ui:ui-review` stutter) — with
-  the recorded term-of-art shelf exception for `color` and `llm` (ADR-0006 Decision 7) — and
+  the recorded term-of-art shelf exceptions: `llm` at plugin level (ADR-0006 Decision 7), and
+  at member level a name containing the plugin word when it IS the term of art —
+  `design:make-design-system`, `design:design-md-rules` (ADR-0008) — and
   never contain `claude` or `anthropic` anywhere in a skill name or directory — the install
   rejects it and the whole plugin fails to load.
 - **Docs and ledgers:** functional documents follow docs' type contracts and mutability classes

@@ -1,6 +1,6 @@
 {
   "skill": "motion-rules",
-  "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (durations, easing/springs, choreography, reduced-motion). Negatives drawn adversarially from neighbors' trigger vocabulary: check-speed (perceived latency / skeletons / CWV) and material-motion-facts (md.sys.motion token values, design-kits plugin) are the dangerous near-neighbors; plus make-component, ui-pattern-facts, check-ui-change, check-focus, check-colors.",
+  "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (durations, easing/springs, choreography, reduced-motion). Negatives drawn adversarially from neighbors' trigger vocabulary: check-speed (perceived latency / skeletons / CWV) and material-motion-facts (md.sys.motion token values, design plugin) are the dangerous near-neighbors; plus make-component, ui-pattern-facts, check-ui-change, check-focus, check-colors.",
   "cases": [
     { "id": "t01", "prompt": "how long should this modal open animation be", "expect": "trigger" },
     { "id": "t02", "prompt": "what easing curve should I use for this drawer", "expect": "trigger" },
