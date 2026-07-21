@@ -12,7 +12,7 @@ description: >-
   folder ready to ship", "audit our claude design bundle before upload", or "did our exports
   drift apart". It reports a gap-map; the maker applies the fix. NOT for ONE component preview's
   internals (component-checker); NOT for a screen or shell layout (layout-checker); NOT for the
-  wording layer alone (linguistics-reviewer); NOT for APPLYING token fixes (token-builder — this
+  wording layer alone (wording-checker); NOT for APPLYING token fixes (token-builder — this
   seat reports findings, builders fix); NOT for a code change or diff (code-checker); NOT for
   authoring or fixing an export (the make-design-kit hub and its platform siblings); NOT for
   explaining what a platform rubric says (answer inline from the owning sibling skill).
@@ -86,13 +86,13 @@ it is not a review.
 - **Grade only; the maker fixes.** Token-level fixes route to token-builder; export repairs route
   to the owning make-design-kit sibling; one preview component's internals hand to
   component-checker; a screen/shell to layout-checker; the wording layer alone to
-  linguistics-reviewer; a code diff to code-checker.
+  wording-checker; a code diff to code-checker.
 - **The receipt is a claim, not evidence** — a checker-clean export still owes the judgment
   dimensions and the standing-rules sweep.
 
 ## Output contract
 
-Return your work via forge's `handoff-compose` block where forge is installed; otherwise return,
+Return your work via harness's `write-handoff` block where harness is installed; otherwise return,
 in order: Status / Summary / Files changed / Tests/checks run / Evidence / Risks / Open questions /
 Recommended next action. Files changed = (none, review-only); Tests/checks run = your real gate
 runs with exit codes; Evidence = the findings' file:line citations; Recommended next action = the

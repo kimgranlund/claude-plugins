@@ -1,6 +1,6 @@
 {
   "skill": "issue",
-  "note": "Routing corpus of record (minted 2026-07-17, when issue converted from command to procedural species so it and its two siblings — file-bug, feature — can invoke each other directly on a mis-routed ask instead of just pointing the user at a command). Positives: natural chore/follow-up/debt/task phrasings plus id-resume syntax. Negatives drawn adversarially from the two siblings (bug-shaped and feature-shaped asks must NOT trigger issue — that's exactly the routing collision this species conversion risks), plus check-doc, doc-writing-rules, intent-extract, a build request, and forge's github-issue-pr-primitives (n11) — the maximum-collision neighbor given this skill's own name is literally 'issue', added per a fresh-context review's E2 finding (reciprocal to that pack's own fence back at this skill).",
+  "note": "Routing corpus of record (minted 2026-07-17, when issue converted from command to procedural species so it and its two siblings — file-bug, feature — can invoke each other directly on a mis-routed ask instead of just pointing the user at a command). Positives: natural chore/follow-up/debt/task phrasings plus id-resume syntax. Negatives drawn adversarially from the two siblings (bug-shaped and feature-shaped asks must NOT trigger issue — that's exactly the routing collision this species conversion risks), plus check-doc, doc-writing-rules, find-the-ask, a build request, and harness's github-facts (n11) — the maximum-collision neighbor given this skill's own name is literally 'issue', added per a fresh-context review's E2 finding (reciprocal to that pack's own fence back at this skill).",
   "cases": [
     {"id": "t01", "prompt": "note this down as a follow-up for later", "expect": "trigger"},
     {"id": "t02", "prompt": "log this technical debt so we don't forget", "expect": "trigger"},
@@ -21,6 +21,6 @@
     {"id": "n09", "prompt": "extract the root intent behind this ask", "expect": "no-trigger"},
     {"id": "n10", "prompt": "build the dark mode feature now that it's sized", "expect": "no-trigger"},
     {"id": "n11", "prompt": "does GitHub have a native way to type issues as bug vs feature now", "expect": "no-trigger"},
-    {"id": "n12", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: forge's open-questions-sweep — closes a session's already-raised loose ends, not a new work item to file"}
+    {"id": "n12", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: harness's find-open-questions — closes a session's already-raised loose ends, not a new work item to file"}
   ]
 }

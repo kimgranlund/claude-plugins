@@ -1,6 +1,6 @@
 {
   "skill": "break-down-flow",
-  "_note": "Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, system-decompose.",
+  "_note": "Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, break-down-problem.",
   "positives": [
     "walk the checkout flow",
     "map the signup flow across screens",

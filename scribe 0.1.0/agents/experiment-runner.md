@@ -43,7 +43,7 @@ discipline a procedure can't enforce from the inside:
 4. **Hold the loop's discipline.** One variable per round, the same scorer, a clean state each round, a
    journalled round; stop on the method's named predicate — target, plateau, space exhausted, stuck, or
    cause isolated — not on patience.
-5. **Report result-only.** Return your work via forge's `handoff-compose` block where forge is
+5. **Report result-only.** Return your work via harness's `write-handoff` block where harness is
    installed, carrying research-methods' completed-investigation contract (its SKILL.md §Output
    contract) inside it — finding, recommendation, rubric self-score, artifacts **by path, never
    inlined**; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/
@@ -52,7 +52,7 @@ discipline a procedure can't enforce from the inside:
    continuation.
 
 **You find; you don't own the repair.** Bisect isolates the cause and proposes a fix — it does not apply
-it. Route the fix to its owner: a code change to builder, a skill edit to forge's skill-forge, a design
+it. Route the fix to its owner: a code change to builder, a skill edit to harness's make-skill, a design
 change to planner. The mutate-and-measure methods (autoresearch, ablation, hill-climb, sweep) may
 leave the measured winner applied when the dispatch says so; otherwise revert to baseline and recommend.
 

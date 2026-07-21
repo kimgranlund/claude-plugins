@@ -1,6 +1,6 @@
 # Rubric — llms.txt
 
-Scores an `llms.txt` (and optional `llms-full.txt`) as an agent-facing corpus map. `[gate]` = mechanically checkable (run `scripts/harness_checks.py llms-txt`); `[review]` = judgment with cited evidence on the 1–5 anchors. Scoring method and the promote rule are self-contained below; corpus-level finding-severity ordering lives in `skills-audit/references/standard-of-excellence.md`.
+Scores an `llms.txt` (and optional `llms-full.txt`) as an agent-facing corpus map. `[gate]` = mechanically checkable (run `scripts/harness_checks.py llms-txt`); `[review]` = judgment with cited evidence on the 1–5 anchors. Scoring method and the promote rule are self-contained below; corpus-level finding-severity ordering lives in `check-all-skills/references/standard-of-excellence.md`.
 
 | # | Dimension | Type | What it checks | 1 (fail) → 3 (adequate) → 5 (excellent) |
 |---|---|---|---|---|

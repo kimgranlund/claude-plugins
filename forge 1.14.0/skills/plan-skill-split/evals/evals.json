@@ -1,0 +1,156 @@
+{
+  "skill": "plan-skill-split",
+  "note": "Converted 2026-07-07 from the source corpus's routing-corpus.json on import. expect=trigger: should fire fresh-session; expect=no-trigger: near-miss owned elsewhere. Runnable via /check-routing.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "should we split this knowledge pack into smaller skills",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "this SKILL.md has gotten enormous, break it up",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "does this corpus need to become a family of packs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "our reference pack is a monolith, how do we split it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "decompose this sprawling skill into smaller ones",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "is one entry surface enough for all these reference files",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "turn this 200-file reference dump into several packs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "we keep loading way too much context for one simple question, split this pack",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "test whether this pack should fork into a family before we rewrite it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "the routing for this skill feels muddy — maybe it's actually several skills",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "plan how to break up our largest knowledge skill",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "figure out which pieces of this corpus should become their own skill",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write a new reference file for this knowledge pack",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "grow the naming axis of this pack with a research wave",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "author a brand-new knowledge skill from scratch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "execute the rename we already decided on for this skill",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "rewire every reference to the old skill handle after the move",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "move this skill from repo scope to global scope",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "decompose this UI layout into regions and groups",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "break this technical architecture into subsystems and modules",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "decompose this product goal into milestones and tasks",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "merge these three thin skills into one consolidated pack",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "consolidate these overlapping reference skills for efficiency",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "audit the whole skills corpus for naming and drift issues",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "review this skill against the standards",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n14",
+      "prompt": "score the routing precision of this description",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "apply this split manifest and move all the files",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "grow this pack's naming axis with a research wave",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n17",
+      "prompt": "which plugins should our skills folder be divided into",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n18",
+      "prompt": "build a skill for reviewing PRs",
+      "expect": "no-trigger"
+    }
+  ]
+}

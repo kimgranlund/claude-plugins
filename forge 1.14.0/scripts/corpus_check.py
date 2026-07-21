@@ -5,7 +5,7 @@ Usage:
   corpus_check.py <skill-dir> [...]     validate pack(s) (needs references/INDEX.md to apply)
   corpus_check.py selftest              prove the counters bite
 
-Rules (pack-authoring-standards, checkable slice):
+Rules (pack-writing-rules, checkable slice):
   K1 INDEX <-> tree reconciliation, both directions: every references/*.md (except INDEX itself
      and .wave-* ledgers) appears in INDEX; every INDEX path names a real file  [FAIL]
   K2 load budget: any reference file over 1000 lines  [WARN]
@@ -58,7 +58,7 @@ def check_pack(skill_dir: Path):
     axes = [ln for ln in lines if ln.startswith("## ")]
     if axes and not (3 <= len(axes) <= 7):
         findings.append(("WARN", "K4", f"{len(axes)} axis headings in INDEX -> healthy range is 3-7; "
-                                       f"{'consider skill-synthesize' if len(axes) < 3 else 'consider skill-decompose'}"))
+                                       f"{'consider plan-skill-merge' if len(axes) < 3 else 'consider plan-skill-split'}"))
     if len(lines) > 150:
         findings.append(("WARN", "K5", f"INDEX.md is {len(lines)} lines (>150) -> the pack may answer too many kinds of question"))
     return findings

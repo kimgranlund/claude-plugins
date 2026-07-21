@@ -6,7 +6,7 @@ Usage:
                                               dist/<name>-<version>.plugin on a clean gate
   release_gate.py selftest                    prove the checks on a temp fixture plugin
 
-Gate order (plugin-authoring-standards §Release discipline):
+Gate order (plugin-writing-rules §Release discipline):
   G1 manifest: .claude-plugin/plugin.json valid, kebab name, semver version
   G2 structure: only the manifest in .claude-plugin/; every skills/* dir has SKILL.md;
      skill subfolders outside {evals,references,scripts,assets} -> WARN (ruled 2026-07-15)
@@ -243,7 +243,7 @@ def gate(root: Path, package: bool = False):
              # figma-plugin-facts joining the estate added the -api suffix (2026-07-09):
              "attributes-as-api",
              # the mechanization pair (2026-07-14): "hand-run" is prose ("a hand-run check",
-             # -run suffix from eval-run); "selftest-patterns" is a references file:
+             # -run suffix from check-routing); "selftest-patterns" is a references file:
              "hand-run", "selftest-patterns",
              # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
              # "scale-theory" are references files (ui-pattern-facts, size-and-shape-rules); "design-kits"
@@ -258,12 +258,12 @@ def gate(root: Path, package: bool = False):
              # verify-family judgment rule-ID slugs (2026-07-16, Issue #8) — findings
              # vocabulary, not skill names:
              "order-vs-task-flow",
-             # git-campaign-workflows (2026-07-17, Issue #24): "authoring-standards" is the
+             # big-change-git-rules (2026-07-17, Issue #24): "authoring-standards" is the
              # `*-authoring-standards` glob in prose; "merge-semantics" is a references file
              # (references/merge-semantics.md) — the standing references-file false-positive
              # class, same shape as container-patterns/scale-theory/box-model-and-flow:
              "authoring-standards", "merge-semantics",
-             # github-issue-pr-primitives (2026-07-17): "lifecycle-and-review" is the tail of a
+             # github-facts (2026-07-17): "lifecycle-and-review" is the tail of a
              # references-file mention (`pr-lifecycle-and-review.md`) whose 2-char "pr-" prefix
              # falls below the token regex's 3-char first-segment floor, same class as
              # merge-semantics above; "sub-issue" is GitHub's own singular terminology in a
@@ -283,16 +283,16 @@ def gate(root: Path, package: bool = False):
              # ordinary prose in chat-harness-routing-facts's own axis description:
              "chat-agent", "hardcoded-feature",
              # parallel-work-rules (2026-07-17): "self-report" is prose ("never act on either
-             # side's self-report") tripping the `-report` suffix handoff-compose already owns:
+             # side's self-report") tripping the `-report` suffix write-handoff already owns:
              "self-report",
-             # reviewer-discipline (2026-07-18, Issue #39) added the `-discipline` suffix to the
+             # checking-rules (2026-07-18, Issue #39) added the `-discipline` suffix to the
              # estate inventory: "self-review" is this skill's own prose ("steelman self-review"),
-             # and "load-discipline" is skill-decompose's pre-existing, unrelated prose (a
+             # and "load-discipline" is plan-skill-split's pre-existing, unrelated prose (a
              # references/best-practices.md phrase about corpus load pressure) newly caught by
              # the same suffix — the standing false-positive class, same shape as -flow/-systems:
              "self-review", "load-discipline",
-             # pack-authoring-standards (2026-07-19): "knowledge-forge" is a deliberate historical
-             # citation of a now-retired scribe skill (folded into this plugin's own pack-forge),
+             # pack-writing-rules (2026-07-19): "knowledge-forge" is a deliberate historical
+             # citation of a now-retired scribe skill (folded into this plugin's own make-pack),
              # not rename drift — the sentence explains provenance, it doesn't point at a live sibling:
              "knowledge-forge",
              # naming-rules (2026-07-20) added the `-rules` suffix to the estate inventory: the
@@ -300,8 +300,8 @@ def gate(root: Path, package: bool = False):
              # siblings (doc-rules is its labeled counter-example; doc-writing-rules,
              # entry-file-rules, icon-rules, file-feature, sort-issues are proposed-name
              # demonstrations), and three pre-existing prose compounds are newly caught by the
-             # widened inventory — path-scoped-rules (skill-authoring-standards' frontmatter
-             # prose), folder-taxonomy (agents-audit prose), planner (an orchestration
+             # widened inventory — path-scoped-rules (skill-writing-rules' frontmatter
+             # prose), folder-taxonomy (check-all-agents prose), planner (an orchestration
              # AGENT cited in prose, not a skill) — the standing false-positive class, same
              # shape as -flow/-systems/-discipline:
              "doc-rules", "doc-writing-rules", "entry-file-rules", "icon-rules", "file-feature",
@@ -321,7 +321,8 @@ def gate(root: Path, package: bool = False):
              # "material-color-facts" are naming-rules' illustrative shape-table examples —
              # phantom until the llm/design-kits rename PRs mint them for real (remove from this
              # set then):
-             "forced-colors", "font-palette", "tonal-palette", "github-facts",
+             "forced-colors", "font-palette", "tonal-palette",
+             # github-facts pruned 2026-07-21: the harness rename made it a real skill.
              # material-color-facts removed 2026-07-21: the design-kits rename made it a real skill.
              # ADR-0006 screens rename (2026-07-21): the plugin + 15 members add the -ui /
              # -component / -change / -focus suffixes and the *-facts tails to the inventory,
@@ -349,6 +350,25 @@ def gate(root: Path, package: bool = False):
              "mid-task", "scheduled-task", "single-purpose-task", "vendor-doc", "design-doc",
              "self-doc", "corpus-docs", "project-docs", "cross-reference", "dangling-reference",
              "extend-reference", "inbound-reference", "plugins-reference", "hard-bug",
+             # ADR-0006 harness rename (2026-07-21): make-skill/-agent/-pack/-plugin/-script,
+             # plan-*-split/-merge, clean-repo, entry-file-rules et al. add the estate's most
+             # generic suffixes (-skill/-pack/-plugin/-file/-script/-repo/-split/-merge) to the
+             # inventory, flagging ~60 pre-existing prose compounds in one wave — the standing
+             # false-positive class at its structural worst. Allowlisted wholesale; FOLLOW-UP
+             # (watch item): G8's suffix heuristic may need a generic-suffix exemption tier now
+             # that single-word suffixes dominate the inventory.
+             "cross-pack", "non-skill", "token-file", "multi-script", "per-file", "per-script",
+             "knowledge-pack", "one-skill", "pre-split", "single-skill", "sub-agents",
+             "mini-skills", "single-file", "regime-split", "entry-file", "multi-skill",
+             "agent-skills", "agent-to-skill", "agent-vs-preloaded-skill", "bundled-script",
+             "check-script", "chosen-skill", "claude-plugin", "cross-plugin", "external-skill",
+             "global-skill", "knowledge-skill", "linguistic-techniques-for-agents",
+             "mega-plugin", "merge-skills", "multi-repo", "new-consolidated-pack",
+             "new-reference-file", "new-skill", "non-agent-file", "non-knowledge-pack",
+             "old-skill", "one-pack", "one-plugin", "out-of-repo", "per-plugin", "per-skill",
+             "post-merge", "preloaded-skill", "return-by-file", "shared-file", "single-plugin",
+             "some-plugin", "some-plugin-repo", "standards-skill", "sub-split", "target-repo",
+             "whole-pack",
              # "llms-txt" is the FILE format (llms.txt) named in naming-rules' shapes table,
              # not a phantom sibling of make-llms-txt:
              "llms-txt",
@@ -359,11 +379,11 @@ def gate(root: Path, package: bool = False):
              "catalog-facts", "chat-agent-facts", "protocol-facts", "training-facts",
              # ADR-0006 design-kits rename (2026-07-21): the -kit and -isolation suffixes joined
              # the inventory — "bidi-isolation" is the Unicode/CSS term of art in check-translations's
-             # prose, "adia-ui-kit" cites an external package in pack-authoring-standards; the
+             # prose, "adia-ui-kit" cites an external package in pack-writing-rules; the
              # standing false-positive class:
              "bidi-isolation", "adia-ui-kit",
-             # the new ops-issues COMMAND skill (2026-07-20) added the "-issues" suffix to this
-             # plugin's own inventory for the first time: "sub-issues" is github-issue-pr-primitives'
+             # the new issue-sorter COMMAND skill (2026-07-20) added the "-issues" suffix to this
+             # plugin's own inventory for the first time: "sub-issues" is github-facts'
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real
              # references/sub-issues-and-task-lists.md file) newly caught by that suffix — the
              # standing false-positive class, same shape as -flow/-systems/-discipline above:

@@ -1,6 +1,6 @@
 {
   "skill": "break-down-layout",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-pattern-facts owns (failed as layout's trigger in two consecutive blind runs, routing to ui-pattern-facts both times — the judges were right).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-pattern-facts owns (failed as layout's trigger in two consecutive blind runs, routing to ui-pattern-facts both times — the judges were right).",
   "cases": [
     {
       "id": "t01",

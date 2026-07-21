@@ -80,7 +80,7 @@ failure mode it guards against; a claim missing its source OR its failure mode i
 ## Extending this pack
 
 A missing axis, a stale reference (a spec revision, a new ADR, a drifted `file:line`), or "add X to
-this pack" is authoring work — route to **[[pack-forge]]** (axis decomposition, grounded
+this pack" is authoring work — route to **[[make-pack]]** (axis decomposition, grounded
 research waves, the INDEX discipline). Re-run the affected axis's research wave, re-date its
 reference + `sources.md`, and re-verify the stated file count; never bolt an uncited file on inline.
 

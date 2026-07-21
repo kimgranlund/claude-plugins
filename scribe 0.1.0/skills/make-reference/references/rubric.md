@@ -1,6 +1,6 @@
 # Rubric — Reference (Knowledge Document)
 
-Scores a referential knowledge doc (skill `references/` file, `@`-imported doc, Project Knowledge file). `[gate]` = mechanically checkable (run `scripts/harness_checks.py reference`); `[review]` = judgment with cited evidence on the 1–5 anchors. Scoring method and the promote rule are self-contained below; corpus-level finding-severity ordering lives in `skills-audit/references/standard-of-excellence.md`.
+Scores a referential knowledge doc (skill `references/` file, `@`-imported doc, Project Knowledge file). `[gate]` = mechanically checkable (run `scripts/harness_checks.py reference`); `[review]` = judgment with cited evidence on the 1–5 anchors. Scoring method and the promote rule are self-contained below; corpus-level finding-severity ordering lives in `check-all-skills/references/standard-of-excellence.md`.
 
 | # | Dimension | Type | What it checks | 1 (fail) → 3 (adequate) → 5 (excellent) |
 |---|---|---|---|---|

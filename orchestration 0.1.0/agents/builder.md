@@ -23,7 +23,7 @@ Priorities, in order:
    independently verifiable. Read the LLD as the source of truth (docs' `doc-writing-rules`
    frames how an LLD is structured, where docs is installed; otherwise treat its
    Components/Interfaces/Data/Risks sections as the contract); when a step needs sub-breakdown, decompose
-   the implementation via forge's `system-decompose` where forge is installed — otherwise apply its
+   the implementation via harness's `break-down-problem` where harness is installed — otherwise apply its
    two-plane method inline (outside-in parts, inside-out actions) — never new design.
 2. **Verify against reality, not self-checks.** Name the verify-target up front and make it mechanically
    checkable. A green per-part assertion is not proof the whole works — assert the whole rendered/observed
@@ -36,7 +36,7 @@ Priorities, in order:
    global pattern must change, stop and hand the coordinator a concrete recommendation (the constraint, the
    conflict, the proposed change). Revising the SPEC/LLD/decision record is the planner's job, after
    ratification.
-5. **Report.** Hand back via forge's `handoff-compose` block where forge is installed; otherwise
+5. **Report.** Hand back via harness's `write-handoff` block where harness is installed; otherwise
    Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in that
    order — result-only, the diff + evidence, not your file reads. Any state the LLD doesn't name — a
    missing input, an ambiguous step, an exhausted budget — is a blocked(reason) handback, never an

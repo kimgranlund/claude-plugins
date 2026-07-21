@@ -65,5 +65,5 @@ gets root-caused against the actual mechanism instead of patched by trial-and-er
 
 A missing mechanism, a stale spec citation (a CSS Working Group spec advances to a new stage,
 `content-visibility`/`contain` semantics shift), or "add X" is authoring work — route to
-[[pack-forge]] (grounded research waves, one axis per wave); never bolt an uncited claim onto the
+[[make-pack]] (grounded research waves, one axis per wave); never bolt an uncited claim onto the
 corpus inline.

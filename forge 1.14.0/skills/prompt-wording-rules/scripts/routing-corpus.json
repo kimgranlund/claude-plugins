@@ -1,0 +1,32 @@
+{
+  "skill": "prompt-wording-rules",
+  "_note": "Deep-review corpus, batch 4. Positives span imperative/diagnostic/symptom/indirect. Negatives drawn from neighbors' trigger vocabulary: skill-author, agent-author, entry-file-author, make-rubric, make-pack, loop-rules, write-handoff.",
+  "positives": [
+    "audit this prompt's language",
+    "harden the wording of this system prompt so it actually binds",
+    "rewrite this instruction so it actually works",
+    "sharpen the language of this tool description",
+    "why won't the model follow this instruction",
+    "is this wording potent enough to drive the behavior",
+    "the model ignores this instruction",
+    "my prompt describes the behavior but the agent doesn't do it",
+    "the agent keeps doing the thing I told it not to do",
+    "turn this described behavior into something the model actually does",
+    "make this prompt more effective",
+    "where should the constraints go in this long prompt"
+  ],
+  "negatives": [
+    "write a skill for deploying the app",
+    "review this skill against the rubric and bring it up to standard",
+    "write a subagent for code review",
+    "why won't my agent auto-delegate",
+    "write my CLAUDE.md",
+    "my CLAUDE.md is too long and being ignored",
+    "write a rubric for grading essays",
+    "tighten these rubric anchors so reviewers score consistently",
+    "build an expert knowledge pack on color science",
+    "design a bounded retry loop for this agent",
+    "compose the handback block for this completed task",
+    "why isn't my skill triggering"
+  ]
+}

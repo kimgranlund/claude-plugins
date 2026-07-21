@@ -10,7 +10,7 @@ description: >-
   chatbot", "which agent tier does this pattern belong to", or before writing agent-authoring
   knowledge into a knowledge-pack. NOT for Ephemeral guardrail content
   (llm:chat-harness-guardrail-facts); NOT for Resident authoring/orchestration patterns
-  (forge:agent-authoring-standards, teamwork:parallel-work-rules); NOT for building either
+  (harness:agent-writing-rules, teamwork:parallel-work-rules); NOT for building either
   agent kind from scratch (route to the owning tier's authoring skill).
 disable-model-invocation: false
 user-invocable: false
@@ -51,7 +51,7 @@ row that matches, and never carry the other rows over on the column label's auth
 
 **Neither column is generic "best practice" — each is grounded in a real system.** The Resident
 column is Claude Code's own documented and observed behavior (`teamwork:parallel-work-rules`'s
-actor-classification taxonomy, `forge:agent-authoring-standards`'s async-lifecycle note, and this
+actor-classification taxonomy, `harness:agent-writing-rules`'s async-lifecycle note, and this
 skill's own incident above, each exists because of these mechanics). The Ephemeral column is what
 `llm:chat-harness-guardrail-facts` and its sibling packs already document in depth for
 the hosted chat-agent shape.
@@ -62,7 +62,7 @@ the hosted chat-agent shape.
 |---|---|---|
 | "Should this subagent use `isolation:worktree`", "another session has uncommitted changes I need" | Resident | `teamwork:parallel-work-rules` |
 | "Solo vs. team, how many subagents, is this fan-out worth it" | Resident | `orchestration:team-or-solo-rules` |
-| "How do I write a thin subagent file, what belongs in `skills:` preload" | Resident | `forge:agent-authoring-standards` |
+| "How do I write a thin subagent file, what belongs in `skills:` preload" | Resident | `harness:agent-writing-rules` |
 | "Which instruction layer wins, how do I gate a risky action behind confirmation" | Ephemeral | `llm:chat-harness-guardrail-facts` |
 | "How does my chatbot remember things across turns/sessions" | Ephemeral | `llm:chat-harness-memory-facts` |
 | "How do my chat-agent's skills/tools get selected at runtime" | Ephemeral | `llm:chat-harness-routing-facts` |
@@ -71,7 +71,7 @@ A question that names both tiers, or asks "does X from one apply to the other," 
 territory — answer with the relevant axis row above, then route to the owning skill only for the
 tier the question is actually about.
 
-## Running the residency check at knowledge-harvest time
+## Running the residency check at save-lessons time
 
 Same tier → cite directly. Different tier → either confirm the underlying mechanism genuinely
 exists in the target tier's architecture (not just a superficially similar-sounding concept), or

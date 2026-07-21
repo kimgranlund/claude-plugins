@@ -1,6 +1,6 @@
 {
   "skill": "make-llms-txt",
-  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from graph neighbors: make-reference, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), entry-file-author, html-to-markdown, and the repo-local docs-author (agent-ui). Not yet checked into the bundle — M2 requires scripts/routing-corpus.json. Renamed llms-txt-author -> make-llms-txt 2026-07-09 per ADR-0001 (verb-form grammar).",
+  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from graph neighbors: make-reference, knowledge-forge (retired 2026-07-19, folded into harness's make-pack), entry-file-author, html-to-markdown, and the repo-local docs-author (agent-ui). Not yet checked into the bundle — M2 requires scripts/routing-corpus.json. Renamed llms-txt-author -> make-llms-txt 2026-07-09 per ADR-0001 (verb-form grammar).",
   "cases": [
     {
       "id": "t01",

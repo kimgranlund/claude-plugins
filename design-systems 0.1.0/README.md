@@ -1,6 +1,6 @@
 # design-kits — design-system export authoring + the Material Design token grammar
 
-Sibling plugin to forge (which authors the harness) and docs (which authors documents);
+Sibling plugin to harness (the authoring toolchain) and docs (which authors documents);
 design-kits authors, regenerates, and grades the export bundles a generative design agent
 consumes — Claude Design/Claude Code, Figma Make, Google Stitch — and carries the Material Design
 token grammar those exports can extend. Two decomposition candidates (design-system-export and
@@ -26,9 +26,9 @@ cited from the exports, so one plugin boundary serves both.
 | `agents/design-kit-checker` | Agent | spawned | Independent critic for ONE export corpus (a bundle, a DESIGN.md, a guidelines folder, or a cross-platform set) — generator≠critic; preloads `make-design-kit`; runs each owning sibling's checker plus the platform linter as the gate of record, then judges against the bound rubric |
 
 Cross-plugin seams (soft, by design): `make-design-kit`'s validation loop and
-`design-kit-checker`'s output contract mention `linguistic-techniques`, `linguistics-reviewer`,
-and `handoff-compose` — artifacts that now live in the forge plugin — and each degrades to an
-inline checklist or fallback report shape when forge isn't installed. No hard edges (preloads or
+`design-kit-checker`'s output contract mention `prompt-wording-rules`, `wording-checker`,
+and `write-handoff` — artifacts that now live in the harness plugin — and each degrades to an
+inline checklist or fallback report shape when harness isn't installed. No hard edges (preloads or
 literal script paths) cross the plugin boundary; every same-plugin script/rubric reference among
 the four `make-design-kit*` skills and the agent resolves via `${CLAUDE_PLUGIN_ROOT}`.
 
@@ -54,7 +54,7 @@ handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `material-design-token-semantics` | `material-token-facts` |
 | `design-system-reviewer` (agent) | `design-kit-checker` |
 
-v1.0.3 · assembled 2026-07-21 · 1.0.3: ADR-0006 docs-rename sweep — live references rewritten (make-doc fences, docs plugin mentions); pointer updates only · v1.0.2 · assembled 2026-07-21 · 1.0.2: ADR-0006 teamwork-rename sweep — design-kit-checker's code-checker fence repointed; pointer updates only · v1.0.1 · assembled 2026-07-21 · 1.0.1: ADR-0006 screens-rename sweep — live references rewritten (icon-rules + material-motion-facts fences now name the screens plugin, suites); pointer updates only · v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 5/9 — the PLUGIN renames design-systems → design-kits and all twelve members + the reviewer agent take the simple paradigm (transition table above). MAJOR bump — breaking. Workspace sweep (79 files, ledger history + forging evidence excluded; one historical suite-note corruption caught and restored with the true two-rename lineage); baseline = color/typography-wave results for 6 suites + a fresh 111-case run for the other 6; post-rename re-measure in the campaign PR · v0.10.3 · assembled 2026-07-21 · 0.10.3: ADR-0006 typography-rename sweep — live references rewritten (material-design-typography-tokens fence, platform-author references); pointer updates only · v0.10.2 · assembled 2026-07-21 · 0.10.2: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (design-system-reviewer, platform-author fences and references, suites); pointer updates only · v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
+v1.0.4 · assembled 2026-07-21 · 1.0.4: ADR-0006 harness-rename sweep — live references rewritten; pointer updates only · v1.0.3 · assembled 2026-07-21 · 1.0.3: ADR-0006 docs-rename sweep — live references rewritten (make-doc fences, docs plugin mentions); pointer updates only · v1.0.2 · assembled 2026-07-21 · 1.0.2: ADR-0006 teamwork-rename sweep — design-kit-checker's code-checker fence repointed; pointer updates only · v1.0.1 · assembled 2026-07-21 · 1.0.1: ADR-0006 screens-rename sweep — live references rewritten (icon-rules + material-motion-facts fences now name the screens plugin, suites); pointer updates only · v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 5/9 — the PLUGIN renames design-systems → design-kits and all twelve members + the reviewer agent take the simple paradigm (transition table above). MAJOR bump — breaking. Workspace sweep (79 files, ledger history + forging evidence excluded; one historical suite-note corruption caught and restored with the true two-rename lineage); baseline = color/typography-wave results for 6 suites + a fresh 111-case run for the other 6; post-rename re-measure in the campaign PR · v0.10.3 · assembled 2026-07-21 · 0.10.3: ADR-0006 typography-rename sweep — live references rewritten (material-design-typography-tokens fence, platform-author references); pointer updates only · v0.10.2 · assembled 2026-07-21 · 0.10.2: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (design-system-reviewer, platform-author fences and references, suites); pointer updates only · v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
 retired `knowledge-forge` to forge's `pack-forge` (workspace-wide rename campaign) —
 iconography/material-design-token-semantics' reference to its authoring factory updated; no
 functional/behavior change, a naming correction only. · v0.10.0 · assembled 2026-07-17 · 0.10.0: material-design-geometry-tokens (+ material-design-token-semantics'

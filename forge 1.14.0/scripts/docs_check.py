@@ -5,7 +5,7 @@ Usage:
   docs_check.py <plugin-root>     validate README.md / MANUAL.md / CLAUDE.md coverage
   docs_check.py selftest          prove the counters bite
 
-Rules (the checkable slice; description *accuracy* stays with /plugin-release and /harness-audit):
+Rules (the checkable slice; description *accuracy* stays with /ship-plugin and /check-everything):
   R1 [FAIL] every skills/<name> appears in README.md
   R2 [FAIL] every skills/<name> appears in MANUAL.md (skipped if no MANUAL.md)
   R3 [FAIL] README footer's version equals .claude-plugin/plugin.json version

@@ -64,5 +64,5 @@ principle instead of copied by eye from whichever system is open in another tab.
 ## Extending this pack
 
 A missing axis, a stale reference (a cited system re-specs its scale), or "add X" is authoring
-work — route to [[pack-forge]] (grounded research waves, one axis per wave); never bolt an
+work — route to [[make-pack]] (grounded research waves, one axis per wave); never bolt an
 uncited claim onto the corpus inline.

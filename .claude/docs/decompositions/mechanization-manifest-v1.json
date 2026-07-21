@@ -5,30 +5,30 @@
     "subject": "Mechanization capability for the plugins workspace — 'if it can (or should) be mechanized, mechanize it as scripts/taskname.py|js'",
     "date": "2026-07-14",
     "prior_art": [
-      "skills-audit/agents-audit standard-of-excellence A4 'Mechanization' — scores the property but is an audit rubric, not an authoring standard",
-      "skill-authoring-standards degrees-of-freedom row — 'a bundled script beats instructions to improvise one' (doctrine, no anatomy)",
+      "check-all-skills/check-all-agents standard-of-excellence A4 'Mechanization' — scores the property but is an audit rubric, not an authoring standard",
+      "skill-writing-rules degrees-of-freedom row — 'a bundled script beats instructions to improvise one' (doctrine, no anatomy)",
       "workspace CLAUDE.md invariants — 'incident → infrastructure, same day' + 'every scripts/*.py carries a selftest mode'",
       "~40 scripts across 9 plugins implementing the convention implicitly (naming, exit codes, selftest, stdlib-only)"
     ]
   },
   "nodes": [
-    { "id": "n0", "label": "mechanization capability (forge plugin)", "leaf": false },
+    { "id": "n0", "label": "mechanization capability (harness plugin)", "leaf": false },
 
-    { "id": "n1", "label": "script-authoring-standards — knowledge skill", "leaf": false },
+    { "id": "n1", "label": "script-writing-rules — knowledge skill", "leaf": false },
     { "id": "n1a", "label": "standard body: script anatomy (argv contract, exit codes, selftest mode, stdlib-only, ${CLAUDE_SKILL_DIR}/${CLAUDE_PLUGIN_ROOT} pathing), placement rule (skill-level vs plugin-level scripts/), language rule (py default, mjs for node-domain checks), the can-vs-should judgment boundary ('arithmetic, not judgment'), gate-discovery facts", "leaf": true },
     { "id": "n1b", "label": "references/selftest-patterns.md — worked selftest + negative-control shapes (inversion fixtures, reverse controls, fact-x-fact consistency gates)", "leaf": true },
 
-    { "id": "n2", "label": "script-forge — procedural skill (the executor workflow)", "leaf": false },
+    { "id": "n2", "label": "make-script — procedural skill (the executor workflow)", "leaf": false },
     { "id": "n2a", "label": "Phase: qualify — detector signals (repeated manual step, prose checklist, eyeballed gate) + the escape hatch for judgment-work", "leaf": true },
     { "id": "n2b", "label": "Phase: plan — script name, language, home, selftest shape, caller wiring", "leaf": true },
     { "id": "n2c", "label": "Phase: confirm — AskUserQuestion gate carrying the concrete plan", "leaf": true },
     { "id": "n2d", "label": "Phase: author — write scripts/taskname.py|mjs to the standard", "leaf": true },
     { "id": "n2e", "label": "Phase: validate — selftest green, negative control bites, wired into caller prose + release_gate sweep", "leaf": true },
-    { "id": "n2f", "label": "script-forge evals/evals.json + routing corpus (trigger + fence cases)", "leaf": true },
+    { "id": "n2f", "label": "make-script evals/evals.json + routing corpus (trigger + fence cases)", "leaf": true },
 
     { "id": "n3", "label": "estate integration", "leaf": false },
-    { "id": "n3a", "label": "reciprocal fence cases in neighbor suites: hook-forge (event-fired enforcement), knowledge-harvest (prose knowledge), skill-forge (whole new skill)", "leaf": true },
-    { "id": "n3b", "label": "canon repoint: skills-audit / agents-audit A4 sections cite script-authoring-standards as the canon for the mechanization bar", "leaf": true },
+    { "id": "n3a", "label": "reciprocal fence cases in neighbor suites: make-hook (event-fired enforcement), save-lessons (prose knowledge), make-skill (whole new skill)", "leaf": true },
+    { "id": "n3b", "label": "canon repoint: check-all-skills / check-all-agents A4 sections cite script-writing-rules as the canon for the mechanization bar", "leaf": true },
     { "id": "n3c", "label": "G4 parity: release_gate's selftest sweep extended to scripts/*.mjs|*.js (node-guarded), with a selftest fixture proving the new leg bites", "leaf": true }
   ],
   "actions": [
@@ -66,6 +66,6 @@
     { "from": "n3c", "to": "n1a", "why": "the standard records gate-discovery behavior — close the G4 js hole first so the standard records the fixed state, not the hole" },
     { "from": "n1a", "to": "n2d", "why": "the author phase writes TO the standard — the standard's anatomy must exist before the workflow that cites it" },
     { "from": "n1a", "to": "n3b", "why": "the canon repoint needs the canon to exist" },
-    { "from": "n2f", "to": "n3a", "why": "reciprocal fences answer script-forge's own suite — its trigger phrases must be fixed before siblings fence them" }
+    { "from": "n2f", "to": "n3a", "why": "reciprocal fences answer make-script's own suite — its trigger phrases must be fixed before siblings fence them" }
   ]
 }

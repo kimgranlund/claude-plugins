@@ -17,7 +17,7 @@ persisted ledger. No ledger, no diff: that is an error, not an empty result.
   python3 audit-diff.py --ledger <baseline> <current> [--json] [--first-run]
   python3 audit-diff.py selftest
 
---ledger mode diffs CAMPAIGN ledgers (the skills-audit deep-review shard format) instead of audit
+--ledger mode diffs CAMPAIGN ledgers (the check-all-skills deep-review shard format) instead of audit
 runs: rows are {"skill", "dim", "tier", "finding"?, "fix"?, "status"?} — skill/dim/tier REQUIRED —
 and are mapped onto the usual identity (checker <- dim, gate <- tier, id <- skill; finding <-
 detail, fix/status passed through), then diffed exactly as usual: same buckets, same exit codes.
@@ -260,22 +260,22 @@ FIX_BASE_INV = {"screens": [{"id": "home"}, {"id": "settings"}], "flows": [],
                 "modules": [{"id": "x-chip", "kind": "element"}]}
 FIX_CUR_INV = {"screens": [{"id": "home"}, {"id": "admin"}], "flows": [], "modules": []}
 # Campaign-ledger fixtures (--ledger mode): rows keyed (dim, tier, skill) after mapping.
-# Baseline: 3 rows. Current: 2 persist, check-whole-ui/S2 resolves, agents-audit/A4 is the PLANTED
+# Baseline: 3 rows. Current: 2 persist, check-whole-ui/S2 resolves, check-all-agents/A4 is the PLANTED
 # regression -> NEW=1, RESOLVED=1, STILL_FAILING=2, exit 1.
 LEDGER_BASE = [
     {"skill": "check-whole-ui", "dim": "S2", "tier": "review",
      "finding": "description missing genre anchor", "fix": "anchor added", "status": "fixed"},
     {"skill": "check-whole-ui", "dim": "A3", "tier": "review",
      "finding": "probe docstring stale", "status": "open"},
-    {"skill": "agents-audit", "dim": "M2", "tier": "gate",
+    {"skill": "check-all-agents", "dim": "M2", "tier": "gate",
      "finding": "fence not parseable", "status": "open"},
 ]
 LEDGER_CUR = [
     {"skill": "check-whole-ui", "dim": "A3", "tier": "review",
      "finding": "probe docstring stale", "status": "open"},
-    {"skill": "agents-audit", "dim": "M2", "tier": "gate",
+    {"skill": "check-all-agents", "dim": "M2", "tier": "gate",
      "finding": "fence not parseable", "status": "open"},
-    {"skill": "agents-audit", "dim": "A4", "tier": "review",
+    {"skill": "check-all-agents", "dim": "A4", "tier": "review",
      "finding": "index has no selftest", "status": "open"},
 ]
 
@@ -393,7 +393,7 @@ def selftest():
         if code != 1 or data["regression_gate"] != "FAIL":
             errs.append("ledger planted regression must bite (exit 1/FAIL), got %d %r"
                         % (code, data.get("regression_gate")))
-        if _keys(data["new"]) != [("A4", "review", "agents-audit")]:
+        if _keys(data["new"]) != [("A4", "review", "check-all-agents")]:
             errs.append("ledger NEW bucket wrong (mapping dim->checker, tier->gate, skill->id): %r"
                         % _keys(data["new"]))
         if _keys(data["resolved"]) != [("S2", "review", "check-whole-ui")]:

@@ -90,12 +90,12 @@ routing-eval or skill review reads it from there.
 ## Extending / re-syncing this pack
 
 A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[pack-forge]] (this pack's factory: axis decomposition, grounded research waves, the typed
+[[make-pack]] (this pack's factory: axis decomposition, grounded research waves, the typed
 index). **Re-sync trigger:** when a cited SPEC/ADR is amended or a renderer symbol is renamed, re-run
 the research wave for the affected axis, re-date `references/sources.md`, and re-verify the cited
 `file:line`s and ADR clauses — a pack answering from a superseded edition is a false manifest with
-citations. Never bolt an uncited file onto the corpus inline. Gate: where forge is installed, run
-this workspace's skill lint (forge's `skill_lint.py SKILL.md`) to a clean pass, then the independent
-`skill-reviewer` + `linguistics-reviewer` critics (generator ≠ critic); otherwise apply forge's
+citations. Never bolt an uncited file onto the corpus inline. Gate: where harness is installed, run
+this workspace's skill lint (harness's `skill_lint.py SKILL.md`) to a clean pass, then the independent
+`skill-checker` + `wording-checker` critics (generator ≠ critic); otherwise apply harness's
 skill-authoring standard by hand as the checklist (frontmatter completeness, both invocation dials,
 a cited corpus).

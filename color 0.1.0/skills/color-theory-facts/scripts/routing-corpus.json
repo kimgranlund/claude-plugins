@@ -1,6 +1,6 @@
 {
   "skill": "color-theory-facts",
-  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-perception-facts, color-space-facts, color-contrast-facts, make-palette, check-colors, ui-pattern-facts, pack-forge.",
+  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-perception-facts, color-space-facts, color-contrast-facts, make-palette, check-colors, ui-pattern-facts, make-pack.",
   "siblings_in_repo": [
     "color-perception-facts",
     "color-space-facts",
@@ -8,7 +8,7 @@
     "make-palette",
     "check-colors",
     "ui-pattern-facts",
-    "pack-forge"
+    "make-pack"
   ],
   "positives": [
     "explain why complementary color schemes are supposed to work",

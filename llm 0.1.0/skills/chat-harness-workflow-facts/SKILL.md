@@ -25,7 +25,7 @@ contract the next step can *check* rather than merely trust, and — where the s
 known in advance — run it as a deterministic script instead of an agent deciding dispatch
 turn-by-turn. This is a PATTERN pack: every claim is grounded either in this harness's own,
 directly-inspectable Agent/Workflow tool mechanics or in a real shipped instance of the pattern
-(the `orchestration` plugin's five-seat delivery team; forge's `handoff-compose` skill) — cited as
+(the `orchestration` plugin's five-seat delivery team; harness's `write-handoff` skill) — cited as
 a worked example so a claim can be verified against a real file, never as "the only way to do
 this."
 
@@ -101,6 +101,6 @@ universal requirement rather than one valid instance of the role it plays.
 
 A missing axis, a stale worked-example citation (the source moved or was renamed), or a second
 worked example proving a pattern generalizes beyond the one cited here — route to
-`pack-forge` (axis decomposition, grounded research waves, index discipline), where
+`make-pack` (axis decomposition, grounded research waves, index discipline), where
 installed; otherwise apply its discipline inline: one reference per distinct class of ask, every
 claim grounded, never an uncited file bolted on.

@@ -67,7 +67,7 @@ condition, whenever the work already has one:
 | Gate | Verifiable end-state | Suggested cap |
 |---|---|---|
 | `release_gate.py <root>` | exits 0 (warnings allowed) | 3 tries, then stop and report the failing check |
-| `skill_lint.py <file>` | 0 FAIL findings | 3 tries (matches skill-forge's own three-strikes rule) |
+| `skill_lint.py <file>` | 0 FAIL findings | 3 tries (matches make-skill's own three-strikes rule) |
 | `doc_lint.py <file>` | 0 FAIL findings | 3 tries |
 | `eval_check.py <suite>` | 0 FAIL findings | 3 tries |
 | `handoff_check.py <block>` | H1 gate passes | 1 try — a malformed handback is a compose error, not a retry loop |
@@ -97,7 +97,7 @@ dispatches) belongs to `team-or-solo-rules`; this skill owns only the trigger/st
 
 A high-stakes loop design you authored gets an independent pass: dispatch the **doc-checker**
 agent (goal conditions are in its charter) to score against `references/rubric.md` — and the
-`linguistics-reviewer` agent where the wording itself is load-bearing; the maker applies the fix.
+`wording-checker` agent where the wording itself is load-bearing; the maker applies the fix.
 
 **Done** when the pattern fits the job, the condition is a verifiable end-state whose proof lands
 in the transcript, the run is bounded with an escalation clause, every gate dimension (C1, C3)

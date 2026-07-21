@@ -8,8 +8,8 @@ description: >-
   whenever someone asks to "review this orchestration", "is my frontmatter right", "why won't this route",
   "is this description a precise interface or does it starve the router", "grade this arrangement — the
   skill-preload graph, the wiring's gates". It reports a gap-map; the designer applies the fix. NOT for a
-  whole skill (skill-auditor), a whole document (doc-checker), a subagent's own definition
-  (agent-reviewer), or team/corpus-wide sweeps (agents-audit / skills-audit). NOT for a forward design-time
+  whole skill (skill-checker), a whole document (doc-checker), a subagent's own definition
+  (agent-checker), or team/corpus-wide sweeps (check-all-agents / check-all-skills). NOT for a forward design-time
   question — subagent-vs-team, which skills to preload, how pieces connect — answered inline from
   team-or-solo-rules's rubric; this seat only grades an arrangement that exists.
 tools: Read, Grep, Glob, Bash
@@ -35,8 +35,8 @@ budget, self-terminate against it and mark what went unscored.
 - **Scope tight.** Cite `file:line` / the offending description. **Judge, don't redesign** — hand back a gap-map, not a rebuilt system.
 
 Return the gap-map in team-or-solo-rules's Review output contract
-(`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/SKILL.md`) via forge's `handoff-compose` block
-where forge is installed; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
+(`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/SKILL.md`) via harness's `write-handoff` block
+where harness is installed; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
 questions/Recommended next action, in that order. Either shape: Files changed = (none,
 review-only); Evidence = the per-dimension score table's cited rows; Recommended next action =
 designer applies the fix. Include both gate verdicts (D2, D4) and the top issues each paired with

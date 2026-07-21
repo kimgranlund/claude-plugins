@@ -88,7 +88,7 @@
       "id": "n08",
       "prompt": "Which scrim strength for a drawer?",
       "expect": "no-trigger",
-      "note": "a choosing ask for a concrete surface — color-tokens' consumption territory (same grammar as n01); this glossary owns what the strengths MEAN (ruled 2026-07-14, eval-run round 1)"
+      "note": "a choosing ask for a concrete surface — color-tokens' consumption territory (same grammar as n01); this glossary owns what the strengths MEAN (ruled 2026-07-14, check-routing round 1)"
     }
   ]
 }

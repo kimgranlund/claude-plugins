@@ -9,9 +9,9 @@ description: >-
   adversarial probe). Each method's protocol/rubric live here; `experiment-runner` runs one. NOT for
   looking up facts/prior art (web search, no method); NOT reviewing a finished artifact against
   its rubric (*-reviewer agents); NOT building the artifact (*-forge / builder); NOT
-  wording effectiveness with no scorer (linguistic-techniques), rubric anchors (make-rubric), or
+  wording effectiveness with no scorer (prompt-wording-rules), rubric anchors (make-rubric), or
   loop stopping rules (loop-rules); NOT judging whether a claim is a genuine higher-order gain or
-  just relabeling, with no scorer to run (forge's reasoning-orders).
+  just relabeling, with no scorer to run (harness's thinking-depth-rules).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -30,7 +30,7 @@ checklist / LLM-judge rubric. No scorer → define one with the user *first*; do
 against a measure you'll invent later to justify the change you already made (rubric R1).
 
 **Species — a knowledge pack that carries an execution spine (declared hybrid).** Like
-`linguistic-techniques`, this is not a pure reference: it documents the six methods *and* carries the
+`prompt-wording-rules`, this is not a pure reference: it documents the six methods *and* carries the
 runnable spine (Step 2 below) plus the investigation rubric they're judged by. It is consulted **inline
 only for a single-round check**; a real bounded loop — mandatory web research, dozens of measured rounds
 — is **dispatched to the `experiment-runner` agent**, which preloads this pack and runs one method in
@@ -136,7 +136,7 @@ terminated on a predicate.
 
 A real, dated run of the pack on itself. **Question class:** "improve the score" + a known weak
 dimension (recall) → **autoresearch**. **System:** this SKILL.md's `description`. **Scorer:**
-the `routing_eval` aid (forge's routing tool) computing F1 over `scripts/routing-corpus.json` —
+the `routing_eval` aid (harness's routing tool) computing F1 over `scripts/routing-corpus.json` —
 reproducible, baseline **0.750** (this pass reached **0.889**).
 **Round 1** — weakest dimension: recall; hypothesis: fenced tokens (`skill`, `scoring`) repel owned
 positives and two bisect triggers are absent; one change: add `skill, agent` to the scorable-system
@@ -159,11 +159,11 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 ## Composition
 
 - **`experiment-runner`** runs one method in isolation and hands back the typed report above.
-- **[[intent-extract]]** / **[[grill-the-ask]]** sharpen a fuzzy "make it better" into a scorable
+- **[[find-the-ask]]** / **[[grill-the-ask]]** sharpen a fuzzy "make it better" into a scorable
   question + a defined scorer *before* a method runs — the R1 precondition.
-- **[[make-rubric]]** owns `references/rubric.md`'s shape; forge's `pack-forge` owns adding or
+- **[[make-rubric]]** owns `references/rubric.md`'s shape; harness's `make-pack` owns adding or
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an
   uncited method on inline.
 - Downstream of a finding, route the *fix* to its owner: a code change to **builder**, a skill
-  edit to forge's **skill-forge**, a design change to **planner**. This skill finds; it does not own
+  edit to harness's **make-skill**, a design change to **planner**. This skill finds; it does not own
   the repair.

@@ -2,15 +2,15 @@
 name: close-session
 description: >-
   Wraps up a session's own work in a git worktree before it ends: captures a real finding as an
-  Issue, gets in-progress work to a PR (or updates the existing one), triggers knowledge-harvest's
+  Issue, gets in-progress work to a PR (or updates the existing one), triggers save-lessons's
   detection pass for a durable lesson worth keeping, verifies every write landed, and states one
   clear verdict. Use for "wrap up this session", "close this out", "prepare to close this
   session", "clean up before ending", "make sure nothing's left hanging in the worktree before I
   go", or "before you exit, check for anything left to capture" — also fires at a natural closing point with real
   work behind it. NOT for a PEER session's worktree (parallel-work-rules); NOT for unresolved
-  conversational questions — "anything still open between us" (open-questions-sweep); NOT for the removal mechanics themselves
-  (ExitWorktree); NOT for a repo-wide hygiene sweep (forge's ops-repo); NOT for authoring
-  knowledge once confirmed (knowledge-harvest owns authoring, this only triggers its detection).
+  conversational questions — "anything still open between us" (find-open-questions); NOT for the removal mechanics themselves
+  (ExitWorktree); NOT for a repo-wide hygiene sweep (harness's repo-cleaner); NOT for authoring
+  knowledge once confirmed (save-lessons owns authoring, this only triggers its detection).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -27,7 +27,7 @@ what isn't, and account for every finding in a stated verdict.
    whether the current branch carries commits still unpushed to its upstream, and whether an
    already-open PR from this session exists and needs finishing. Clean on all three → skip step 2
    (there's no git-side capture to make); steps 3-5 still run — a read-only session can still carry
-   a repeated correction or a ratified decision worth the knowledge-harvest scan.
+   a repeated correction or a ratified decision worth the save-lessons scan.
 2. **Judge what's real.** A genuine bug or follow-up found this session goes through
    `file-bug`/`feature`/`issue` (Skill tool) — their own dedup sweep and payload contract apply
    as-is, so route through them rather than a raw `gh issue create`. In-progress work that's
@@ -35,7 +35,7 @@ what isn't, and account for every finding in a stated verdict.
    count of open PRs from this session stays one. Work that's genuinely unfinished gets named as
    such, plainly, rather than forced into a premature PR.
 3. **Scan for durable knowledge.** A correction repeated, a ratified decision never captured, a
-   high-impact convention this session surfaced → hand off to `knowledge-harvest` (Skill tool) for
+   high-impact convention this session surfaced → hand off to `save-lessons` (Skill tool) for
    its own detection pass, confirm gate, and placement judgment — this step's job ends at
    triggering the scan at the right moment.
 4. **Verify before counting.** Read back every write this step just made — `git log`, `gh issue
@@ -52,7 +52,7 @@ A verdict block, always: either the captured-items list or the single clean line
 
 - Dispatched in an unattended or scheduled context (no interactive user to answer an
   AskUserQuestion-gated confirm) → step 2's own capture skills (file-bug/feature run
-  intent-extract's interactive round) and step 3's knowledge-harvest confirm gate are both named as
+  find-the-ask's interactive round) and step 3's save-lessons confirm gate are both named as
   deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own.
 - Not inside a git repo at all → the single clean-verdict shape applies, with the reason stated
   ("nothing to capture — no git context here"); this is not a second verdict shape, just the
@@ -74,7 +74,7 @@ is only as true as what step 4 actually verified.
 Good (verdict names both captures and the gap):
 ```
 Captured: Issue #61 (a repro found for the flaky test), PR #62 (the fix, gate-clean, open).
-knowledge-harvest: declined — nothing crossed the bar this session.
+save-lessons: declined — nothing crossed the bar this session.
 Remaining: the flaky test's root cause is still unconfirmed, noted in Issue #61.
 ```
 
@@ -87,6 +87,6 @@ actually checked or captured.
 | Path | Use when |
 |---|---|
 | `file-bug` / `feature` / `issue` (docs) | Step 2's own dedup, payload contract, and record mechanics — invoked, not restated |
-| `knowledge-harvest` (forge) | Step 3's detection pass and its own confirm-before-mint gate |
+| `save-lessons` (harness) | Step 3's detection pass and its own confirm-before-mint gate |
 | `parallel-work-rules` (this plugin) | The question is a PEER session's worktree, not this session's own close-out |
 | `ExitWorktree` | The actual removal step, once this skill's verdict says it's safe |

@@ -1,7 +1,7 @@
 {
   "skill": "make-component",
-  "_note": "Deep-review corpus (excellence campaign batch 3, 2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives drawn from neighbors' trigger vocabulary: break-down-layout, ui-pattern-facts, system-decompose, check-whole-ui, make-palette, component-checker agent, agent-ui component-builder agent.",
-  "siblings_in_repo": ["break-down-layout", "ui-pattern-facts", "system-decompose", "check-whole-ui", "make-palette", "break-down-flow"],
+  "_note": "Deep-review corpus (excellence campaign batch 3, 2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives drawn from neighbors' trigger vocabulary: break-down-layout, ui-pattern-facts, break-down-problem, check-whole-ui, make-palette, component-checker agent, agent-ui component-builder agent.",
+  "siblings_in_repo": ["break-down-layout", "ui-pattern-facts", "break-down-problem", "check-whole-ui", "make-palette", "break-down-flow"],
   "global_peers": ["component-checker (agent)", "component-builder (agent-ui repo agent)"],
   "positives": [
     "build a web component for a date picker",

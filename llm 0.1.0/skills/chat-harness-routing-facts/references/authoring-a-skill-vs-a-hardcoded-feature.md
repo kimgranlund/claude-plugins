@@ -4,15 +4,15 @@
 > skill versus baking it directly into the harness's own standing instructions or its
 > always-loaded tool surface. Grounded in Claude Code's own skill-loading mechanics (a shipped
 > platform mechanism, verify against current docs if stale-sensitive) plus a directly-inspectable
-> primary source on the same mechanics: `forge:skill-authoring-standards` (installed at
-> `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.23.0/skills/skill-authoring-standards/SKILL.md`).
+> primary source on the same mechanics: `harness:skill-writing-rules` (installed at
+> `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.23.0/skills/skill-writing-rules/SKILL.md`).
 
 ## The load-on-demand shape
 
 **Platform fact** — a skill is a directory carrying a `SKILL.md` (YAML frontmatter + markdown
 body); the frontmatter's `description` field is the ONLY text weighed to decide whether the body
 loads for a given turn, and the body itself enters context only on invocation, never eagerly.
-**Worked instance:** `skill-authoring-standards/SKILL.md:16` states this directly — "the
+**Worked instance:** `skill-writing-rules/SKILL.md:16` states this directly — "the
 **description is the API** — the only text that controls triggering; the **body is the
 payload**" — and its physics table at `SKILL.md:23` gives the exact mechanism: "Description
 listing budget | 1% of context window, shared by all descriptions; least-invoked dropped first."
@@ -45,7 +45,7 @@ suggested) — it isn't worth spending a trigger-match on something that's alway
 A capability that's occasional, optional, or domain-specific earns a skill, because the cost of
 NOT loading it on the turns that don't need it is exactly the point.
 
-**Two design axes from the same source, worth naming explicitly:** `skill-authoring-standards`
+**Two design axes from the same source, worth naming explicitly:** `skill-writing-rules`
 (`SKILL.md:48`) draws a further distinction at "capability uplift" (Claude can't do the thing at
 all, or not consistently, without the skill) vs "encoded preference" (Claude can already do each
 piece; the skill only sequences them a particular way). Uplift skills earn detailed bodies;
@@ -55,7 +55,7 @@ hardcoding; both are cases for a skill, just at different lengths.
 ## Failure catalog reversed — skill-ifying something that needed to be standing
 
 A skill's trigger is probabilistic, never guaranteed: model-invocation depends on the router
-matching the CURRENT description menu against THIS turn's actual words. `skill-authoring-standards`
+matching the CURRENT description menu against THIS turn's actual words. `skill-writing-rules`
 (`SKILL.md:63`) names the documented bias explicitly as "under-triggering, not over-triggering." A
 behavior that
 must hold on every single turn regardless of phrasing — a hard safety invariant, a "never do X" —

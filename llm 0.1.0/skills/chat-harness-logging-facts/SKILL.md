@@ -8,7 +8,7 @@ description: >-
   task completion instead of polling". Covers hook logging/tracing (PreToolUse/PostToolUse vs
   the transcript), routing-accuracy via a held-out adversarial suite (judge noise vs regression
   vs structural leak), and notification vs polling. Grounded in this harness's verified
-  hook/tool mechanics + a dated eval-run history. ANSWERS from a cited corpus; never builds. NOT
+  hook/tool mechanics + a dated check-routing history. ANSWERS from a cited corpus; never builds. NOT
   agents that DO the work (chat-harness-workflow-facts); NOT the routing MECHANISM
   (chat-harness-routing-facts); NOT implementing or building any of this — a logging
   pipeline, eval-suite runner, or notification webhook to write is the project's own build seat.
@@ -26,7 +26,7 @@ over repeated runs, vs. a felt sense that "routing seems fine"), and **completio
 state the harness cannot track). This is a PATTERN pack: every claim is grounded either in this
 harness's own currently-verified mechanics (a hook registration, a tool's own governing
 instructions) or in a real, dated worked instance from this workspace's own skill corpus (an actual
-eval-run history, a genuinely blind judge agent) — cited so a claim can be checked against a real
+check-routing history, a genuinely blind judge agent) — cited so a claim can be checked against a real
 file, never presented as "the only way to do this."
 
 | Ask | Load |
@@ -39,7 +39,7 @@ file, never presented as "the only way to do this."
 ## Consult procedure
 
 1. Classify the ask against the table above, then **Grep the matching file for the term first**
-   (`PostToolUse`, `eval-judge`, `task-notification`, `Monitor`, …) and Read that section — the
+   (`PostToolUse`, `routing-judge`, `task-notification`, `Monitor`, …) and Read that section — the
    files are cited catalogs, not linear reads.
 2. Answer on the **answer contract**: the **claim + its grounding (this harness's own currently-
    verified mechanic, or the worked instance's exact file/quote) + the failure mode it prevents**.
@@ -96,8 +96,8 @@ real instance of the underlying discipline.
 
 ## Extending this pack
 
-A missing axis, a stale citation (a cited hook, tool, or eval-run number that no longer matches
+A missing axis, a stale citation (a cited hook, tool, or check-routing number that no longer matches
 current reality), or a second worked instance from a different workspace proving the discipline
-generalizes — route to `pack-forge` (axis decomposition, grounded research waves, index
+generalizes — route to `make-pack` (axis decomposition, grounded research waves, index
 discipline), where installed; otherwise apply its discipline inline: one reference per distinct
 class of ask, every claim grounded, never an uncited file bolted on.

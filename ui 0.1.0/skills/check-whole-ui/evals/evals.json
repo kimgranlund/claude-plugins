@@ -1,6 +1,6 @@
 {
   "skill": "check-whole-ui",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Deep-review corpus (excellence campaign batch 4). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood trigger vocab: break-down-layout, break-down-flow, the five verifiers, ui-pattern-facts, ui-genre-facts, component seats.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: Deep-review corpus (excellence campaign batch 4). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood trigger vocab: break-down-layout, break-down-flow, the five verifiers, ui-pattern-facts, ui-genre-facts, component seats.",
   "cases": [
     {
       "id": "t01",

@@ -10,7 +10,7 @@ Three primitives, three different jobs. Pick by the shape of the task, not by ha
 
 A **skill** is a *procedure* — a repeatable workflow loaded on demand. Use it when the same multi-step method recurs.
 
-A **subagent** is *delegation with isolation* — a focused worker in its own context window that returns a bounded, typed result to the caller (the `handoff-compose` block), its working transcript dying with it. Use it when a task is scoped, isolatable, and only the result matters ("research X and report back"). Cost is lower because only the result returns — and a large artifact comes back by reference (a path), never inlined.
+A **subagent** is *delegation with isolation* — a focused worker in its own context window that returns a bounded, typed result to the caller (the `write-handoff` block), its working transcript dying with it. Use it when a task is scoped, isolatable, and only the result matters ("research X and report back"). Cost is lower because only the result returns — and a large artifact comes back by reference (a path), never inlined.
 
 An **agent team** is *collaboration* — multiple full Claude instances that message each other and self-coordinate through a shared task list. Use it only when workers need to share findings and challenge each other ("investigate this bug from three angles and debate"). Cost is higher (each teammate is a separate instance); justify the fan-out with genuine parallel value.
 
@@ -39,7 +39,7 @@ A subagent invocation is a fresh distribution with a sealed input set. Every del
 - **inputs** — the complete world, enumerated: the plan node, file paths, doc/decision IDs
 - **skills** — the policy the role loads (its `skills:` manifest)
 - **budget** — tool calls / tokens / attempts it self-terminates against
-- **returns** — the typed handback (`handoff-compose`)
+- **returns** — the typed handback (`write-handoff`)
 
 Explicitly absent: conversation history, the host's deliberation, sibling transcripts. Every leaked token biases the fresh context toward the host's framing and silently couples workers the architecture claims are independent. When a worker can't succeed from its enumerated inputs alone, the fix is a better input artifact, not more leaked context — leakage is how systems paper over bad contracts until the contracts are unrecoverable.
 
@@ -54,7 +54,7 @@ Consequences:
 
 When an agent team's job is to BUILD — apply many edits across one repository — the default execution model is a **disjoint same-tree fan-out**: dispatch file- and import-disjoint slices CONCURRENTLY into ONE working tree, with no merge step. Proven on the doctrine-hardening build (~18 concurrent slices, zero collisions, no integration merge).
 
-It works because the slices are disjoint by construction — that is the decomposition side (slice by owning file so each file has exactly one writer), owned by `system-decompose`; do not re-derive it here. Given disjoint slices, the execution discipline is:
+It works because the slices are disjoint by construction — that is the decomposition side (slice by owning file so each file has exactly one writer), owned by `break-down-problem`; do not re-derive it here. Given disjoint slices, the execution discipline is:
 
 - **Each worker self-gates only its own path.** A worker confirms `npm run check 2>&1 | grep <own-path>` comes back empty and runs its own targeted test — it NEVER runs the whole-tree gate. Siblings are mid-write, so a whole-tree `npm run check && npm test` during the wave reports their half-finished state and is meaningless. The worker's contract is "my path is clean," nothing wider.
 - **The host runs the authoritative whole-tree gate at the wave boundary.** Only once every worker in the wave has handed back does the host run `npm run check && npm test` over the whole tree, plus the negative controls for any governance code, and THEN commit. The wave boundary is the only place a whole-tree gate is meaningful. The host's role there is mechanical — run the gate, read the verdict, commit; a failure routes back as a dispatched repair slice, never an inline host fix.
@@ -63,7 +63,7 @@ It works because the slices are disjoint by construction — that is the decompo
 
 **Worktrees are the fallback, not the default.** Reach for git-worktree isolation ONLY when slices genuinely must mutate overlapping files and cannot be made disjoint. For a properly file-disjoint fan-out, a worktree per slice adds merge cost for no isolation benefit — one tree is correct.
 
-This pairs with `system-decompose`, which owns the decomposition side: the file-disjoint slicing test (single writer per file; shared edits deferred) and the serial-PREP pattern that make this execution model safe. This skill owns the execution model; that skill owns the slicing that feeds it.
+This pairs with `break-down-problem`, which owns the decomposition side: the file-disjoint slicing test (single writer per file; shared edits deferred) and the serial-PREP pattern that make this execution model safe. This skill owns the execution model; that skill owns the slicing that feeds it.
 
 ## Frontmatter: productive expressions
 
@@ -71,7 +71,7 @@ Frontmatter is the integration contract. Treat each field as load-bearing.
 
 **Skill frontmatter** — `name` and `description`. The description is the whole trigger: state what it does *and* when to use it, in third-person natural language ("This skill should be used when…"), carrying the intent keywords a user would actually say. No keyword dumps; a few representative anchors generalize better than an exhaustive list.
 
-**The fence is part of the interface.** A description does two routing jobs: PULL the asks it owns (the trigger vocabulary) and REPEL the asks a neighbor owns — a NOT-clause at description altitude ("NOT for X (neighbor)") is how adjacent capabilities keep from grabbing each other's work. Fences live where routing happens: a body cross-reference is composition, not a fence. They are reciprocal — every NOT-clause names a neighbor whose own description claims that territory, and a neighbor fencing toward this capability gets fenced back (the corpus-level law is `skills-audit/references/standard-of-excellence.md` §S2). A truthful fence never weakens the positive vocabulary; it counterbalances it.
+**The fence is part of the interface.** A description does two routing jobs: PULL the asks it owns (the trigger vocabulary) and REPEL the asks a neighbor owns — a NOT-clause at description altitude ("NOT for X (neighbor)") is how adjacent capabilities keep from grabbing each other's work. Fences live where routing happens: a body cross-reference is composition, not a fence. They are reciprocal — every NOT-clause names a neighbor whose own description claims that territory, and a neighbor fencing toward this capability gets fenced back (the corpus-level law is `check-all-skills/references/standard-of-excellence.md` §S2). A truthful fence never weakens the positive vocabulary; it counterbalances it.
 
 **Subagent frontmatter** — `name`, `description` (the auto-delegation trigger; write it as a use condition, add a proactive nudge like "Use PROACTIVELY immediately after writing code" when warranted), `tools` (whitelist to the verbs the role needs — omitting it inherits the full toolset including MCP, which is unsafe for a read-only role), `model` (set deliberately: a fast model for search, a stronger one for implementation), and optionally `skills:` to preload standing expertise.
 

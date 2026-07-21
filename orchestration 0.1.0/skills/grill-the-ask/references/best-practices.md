@@ -20,7 +20,7 @@
   scope pulls in the stateful-composite + sequencing forks; a chosen mechanism closes some forks and
   opens others. The cascade *is* the method.
 - **Synthesize across both planes.** End on a Ratified Design that names decisions on Structural **and**
-  Mechanism, ready to hand to `system-decompose` / docs' `make-doc` (`doc-writing-rules`).
+  Mechanism, ready to hand to `break-down-problem` / docs' `make-doc` (`doc-writing-rules`).
 
 ## Don't
 
@@ -34,7 +34,7 @@
   spends the author's attention for no change in the design. Converge on a *settled surface*, not the
   absence of every small doubt.
 - **Stop short.** Leaving a load-bearing (cascading) fork to a silent default ships an unhosted decision
-  to `system-decompose` — caught only downstream, expensively.
+  to `break-down-problem` — caught only downstream, expensively.
 - **Drip.** Multiple rounds are not dripping — each round is a full batch. Never trickle one question per
   turn.
 
@@ -50,7 +50,7 @@
   both-planes check trivial: a design with no `[M]` decisions (or no `[S]`) failed to grill one plane.
 - **Recommend-with-tradeoff.** Lead every option set with "(recommended) … — tradeoff: …". The author
   decides by *editing* a recommendation faster than by composing from scratch (shared with
-  `intent-extract`'s closed-question discipline).
+  `find-the-ask`'s closed-question discipline).
 
 ## The validation loop
 
@@ -58,11 +58,11 @@ Before handing off, check the Ratified Design and fix until clean: **both-planes
 Structural *and* Mechanism?), **leverage** (each round the highest-cascade forks, none silently
 defaulted?), **grounding** (every option concrete, traceable to a codebase fact?), **convergence**
 (stopped at settled — no over-grilling, no unhosted load-bearing fork?), **handoff** (could
-`system-decompose` run both planes without re-grilling?).
+`break-down-problem` run both planes without re-grilling?).
 
 ---
 
 Sources: [Design space exploration](https://en.wikipedia.org/wiki/Design_space_exploration) ·
 [Architecture Decision Records](https://adr.github.io/) ·
 [Rolling-wave / progressive elaboration (PMI)](https://www.pmi.org/learning/library/rolling-wave-planning-progressive-elaboration-6822) ·
-companion: `.claude/skills/intent-extract/`
+companion: `.claude/skills/find-the-ask/`

@@ -56,7 +56,7 @@ grades.
 
 ## Output contract
 
-Return the review via forge's `handoff-compose` block where forge is installed; otherwise close
+Return the review via harness's `write-handoff` block where harness is installed; otherwise close
 with Status / Summary / Files changed / Tests/checks run / Evidence / Risks / Open questions /
 Recommended next action, in that order. Either shape: Files changed = (none, review-only);
 Evidence = the checker output per pairing + the quoted lines backing each S1–S4 score; Recommended

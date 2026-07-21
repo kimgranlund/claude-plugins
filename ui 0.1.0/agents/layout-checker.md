@@ -42,7 +42,7 @@ method, not the maker's reasoning.
 Return the break-down-layout report shape (`${CLAUDE_PLUGIN_ROOT}/skills/break-down-layout/SKILL.md`):
 gate failures first, then Axis A (space) and Axis B (behavior) scored separately with cited findings,
 the named defect quadrant and matched archetype, and every below-bar row paired with the one fix it
-implies. Return it via forge's `handoff-compose` block where forge is installed; otherwise:
+implies. Return it via harness's `write-handoff` block where harness is installed; otherwise:
 Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in
 that order.
 

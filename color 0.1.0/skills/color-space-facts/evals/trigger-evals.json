@@ -2,7 +2,7 @@
   {
     "query": "i need a 10-step OKLCH ramp for a warning color that still keeps body text readable on white and near-black backgrounds",
     "should_trigger": false,
-    "_note": "relabeled 2026-07-06 post skill-reviewer verdict: this is a generation ask (build a ramp) — expected owner make-palette, not this answers-only pack. Originally trigger-evals.json #1 (color-science-project-files, since removed; git history at af81c64)."
+    "_note": "relabeled 2026-07-06 post skill-checker verdict: this is a generation ask (build a ramp) — expected owner make-palette, not this answers-only pack. Originally trigger-evals.json #1 (color-science-project-files, since removed; git history at af81c64)."
   },
   {
     "query": "why does my OKLCH ramp clip at high chroma near yellow",

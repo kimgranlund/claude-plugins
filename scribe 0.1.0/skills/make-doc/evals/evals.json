@@ -99,7 +99,7 @@
       "id": "n09",
       "prompt": "extract the root intent behind this idea",
       "expect": "no-trigger",
-      "note": "intent-extract (forge)"
+      "note": "find-the-ask (harness)"
     }
   ]
 }

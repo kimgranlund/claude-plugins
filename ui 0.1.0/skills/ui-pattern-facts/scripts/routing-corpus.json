@@ -1,6 +1,6 @@
 {
   "skill": "ui-pattern-facts",
-  "_note": "Deep-review corpus (sibling re-aimed 2026-07-06 for the color-*-facts split — the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genre-facts and break-down-layout are the dangerous near-neighbors; plus check-whole-ui, make-component, break-down-flow, color-contrast-facts, lettering-facts, pack-forge.",
+  "_note": "Deep-review corpus (sibling re-aimed 2026-07-06 for the color-*-facts split — the 'accessible contrast ratio' negative cites the accessibility pack). Positives: imperative / diagnostic / symptom / indirect phrasings of pattern-naming and pattern-behavior asks. Negatives drawn adversarially from neighbors' trigger vocabulary: ui-genre-facts and break-down-layout are the dangerous near-neighbors; plus check-whole-ui, make-component, break-down-flow, color-contrast-facts, lettering-facts, make-pack.",
   "positives": [
     "what pattern is this screen using",
     "how should a data table behave when the user filters and bulk-selects",

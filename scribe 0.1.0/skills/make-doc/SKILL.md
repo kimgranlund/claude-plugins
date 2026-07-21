@@ -36,8 +36,8 @@ IDs — say so and forge them in dependency order.
 
 One batched round covering the type's load-bearing slots: for a SPEC, the testable requirements
 and the non-goals; for an ADR, the alternatives actually considered; for a PLAN, each step's
-done-when; for a TICKET, what it traces to. Where the forge plugin's intent-extract and
-system-decompose are installed, use them here; where not, apply their discipline inline —
+done-when; for a TICKET, what it traces to. Where the harness plugin's find-the-ask and
+break-down-problem are installed, use them here; where not, apply their discipline inline —
 ambiguities surfaced as multiple-choice, structure before prose.
 
 ## Phase 3 — Draft from the template
@@ -52,7 +52,7 @@ directory, per doc-writing-rules' canonical map (`docs/adr/`, `docs/spec/`, ...)
 
 Requirements phrased so they can fail; statuses as enums, never sentences; examples marked
 NORMATIVE or ILLUSTRATIVE; non-goals concrete enough to block scope creep. Where
-linguistic-techniques is installed, run its pass; otherwise apply this paragraph as the checklist.
+prompt-wording-rules is installed, run its pass; otherwise apply this paragraph as the checklist.
 
 ## Phase 5 — Validate
 

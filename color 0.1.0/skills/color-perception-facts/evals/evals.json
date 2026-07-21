@@ -1,6 +1,6 @@
 {
   "skill": "color-perception-facts",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Re-derived 2026-07-06 extraction from color-science (T3). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's four axes (terminology, vision mechanics, appearance science, textbook layer). Negatives drawn adversarially from the live neighbors: color-space-facts (space-conversion math, gamut, gradients, CSS), color-contrast-facts (contrast standards, CVD), color-material-facts (pigment, print, naming), color-theory-facts (harmony/meaning/history vs. mechanism -- the big seam), check-colors (pass/fail verification of a candidate palette).",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the color plugin port. Re-derived 2026-07-06 extraction from color-science (T3). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's four axes (terminology, vision mechanics, appearance science, textbook layer). Negatives drawn adversarially from the live neighbors: color-space-facts (space-conversion math, gamut, gradients, CSS), color-contrast-facts (contrast standards, CVD), color-material-facts (pigment, print, naming), color-theory-facts (harmony/meaning/history vs. mechanism -- the big seam), check-colors (pass/fail verification of a candidate palette).",
   "cases": [
     {
       "id": "t01",

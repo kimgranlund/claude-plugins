@@ -20,7 +20,7 @@
     "v2_manifest": ".claude/docs/decompositions/ticketing-backend-watch-manifest-v2.json"
   },
   "nodes": [
-    { "id": "n0", "label": "ticketing/issue-management system (cross-plugin: docs capture skills + forge entry-file ruling + orchestration watch loop)", "leaf": false },
+    { "id": "n0", "label": "ticketing/issue-management system (cross-plugin: docs capture skills + harness entry-file ruling + orchestration watch loop)", "leaf": false },
 
     { "id": "n1", "label": "backend adapter layer", "leaf": false },
     { "id": "n1a", "label": "local-file adapter (docs/tickets/ TICKET files via make-doc)", "leaf": true },

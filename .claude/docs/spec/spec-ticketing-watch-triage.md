@@ -6,7 +6,7 @@ version: 0.3.1
 date: 2026-07-20
 owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 1 (Option B/C backends) and
-            # the system-decompose manifest (.claude/docs/decompositions/ticketing-backend-watch-manifest-v3.json)
+            # the break-down-problem manifest (.claude/docs/decompositions/ticketing-backend-watch-manifest-v3.json)
 ---
 # SPEC — Watch, triage, and trust-gated auto-routing for externally-filed work items
 

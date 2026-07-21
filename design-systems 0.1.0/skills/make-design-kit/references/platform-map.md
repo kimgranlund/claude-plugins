@@ -105,4 +105,4 @@ by resolving four questions:
 
 A new profile lands as: this map gains a column, the profile checklist lands with the
 receipt, and — if the platform will recur — a new `make-{platform}-kit`
-sibling is minted via [[forge's skill-forge]] to own execution.
+sibling is minted via [[harness's make-skill]] to own execution.

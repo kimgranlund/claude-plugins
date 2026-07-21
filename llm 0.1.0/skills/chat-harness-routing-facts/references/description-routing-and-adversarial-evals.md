@@ -2,14 +2,14 @@
 
 > Axis: once several skills (or tools, or subagents) exist side by side, how a single request
 > finds the correct one, and how that routing is measured rather than assumed. Grounded in
-> `forge:skill-authoring-standards`'s description-engineering rule (a platform-facing mechanism)
+> `harness:skill-writing-rules`'s description-engineering rule (a platform-facing mechanism)
 > plus this workspace's own routing-corpus + evals convention — a real, directly-inspectable
 > worked instance of the discipline, not a hypothetical.
 
 ## The routing mechanism
 
 **Platform fact — the description is matched against the user's own words, not the skill's
-content.** `skill-authoring-standards/SKILL.md:63` states this as the core rule: "The description
+content.** `skill-writing-rules/SKILL.md:63` states this as the core rule: "The description
 is matched against *the user's words*, not the skill's content... slightly pushy — the documented
 bias is under-triggering, not over-triggering." The same source's worked example at `SKILL.md:65-74`
 contrasts a description that is a mere label ("Database migration helper" — "never fires") against
@@ -19,7 +19,7 @@ front-loaded).
 **The identical shape governs subagent routing, not only skills.** **Worked instance, observed
 directly in this session's own environment:** the subagent registry this session was given
 carries entries such as `a2ui-composer` and `a2ui-builder`, whose descriptions each end with the
-exact `NOT for <thing> (<owner>)` fence `skill-authoring-standards/SKILL.md:63` names as "a
+exact `NOT for <thing> (<owner>)` fence `skill-writing-rules/SKILL.md:63` names as "a
 repellent the router and measurement tooling can both key on" — the same repellent convention,
 applied to routing BETWEEN subagents instead of between skills. A request that could plausibly go
 to more than one seat is exactly where this fence earns its keep.
@@ -54,7 +54,7 @@ positives: [...], negatives: [...]}` — flat prompt-string arrays; the same pac
 — the SAME sixteen positives and twelve negatives, re-keyed with per-case IDs so an eval run can
 report which specific case regressed. Neither file invents content the other lacks; the two
 schemas exist because `scripts/` (a plain corpus a human or a script can scan) and `evals/` (a
-structured suite `eval_check.py` and `/eval-run` can execute) serve different consumers of the
+structured suite `eval_check.py` and `/check-routing` can execute) serve different consumers of the
 identical test set.
 
 ## Measure, and re-measure — a corpus is not proof until it has been run
@@ -78,7 +78,7 @@ the corpus "should" pass.
 
 ## Baseline comparison — the check that proves the skill, not just the router
 
-**Platform fact:** `skill-authoring-standards/SKILL.md:115` names the check as "a baseline
+**Platform fact:** `skill-writing-rules/SKILL.md:115` names the check as "a baseline
 comparison: a few realistic prompts, each run in a fresh session with the skill available and
 again with it disabled (`skillOverrides: "off"`), comparing trigger reliability and output quality
 separately — a skill triggering proves Claude found it, not that it worked." A routing corpus

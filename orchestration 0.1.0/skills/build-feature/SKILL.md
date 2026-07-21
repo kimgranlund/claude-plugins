@@ -47,7 +47,7 @@ carry, applied from the caller's side:
 
 - **small** — the host builds it inline, or one sealed fork/agent when isolation or tooling
   demands it — an agent only for tool restriction, parallelism, or multi-skill preload; a fork
-  for everything else (forge's fork-vs-agent gate, applied inline where forge is absent). No planner, no
+  for everything else (harness's fork-vs-agent gate, applied inline where harness is absent). No planner, no
   coordinator, no team: a task one context can hold is the host's own.
 - **big** — the delivery seats, each already floored: `planner` authors what the change
   earns (the record's Links may already carry the docs — don't re-author), `builder`

@@ -1,0 +1,83 @@
+{
+  "skill": "make-script",
+  "note": "Procedural maker: mechanize a check/procedure as a bundled script with a proven selftest. Fences: script-writing-rules carries the rules; make-hook owns event-fired enforcement; make-skill owns whole new skills; save-lessons owns prose knowledge capture.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Turn this manual checklist into a script",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Mechanize this check — we keep eyeballing it every release",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "This verification step should really be a script",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Add a selftest to this script — it ships unproven",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Script this verification so the gate can run it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "We follow these same five steps by hand every time we cut a release — automate it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "Make this contrast check code so we stop eyeballing it",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "What does a selftest mode need?",
+      "expect": "no-trigger",
+      "note": "script-writing-rules — a rules ask, not a making ask"
+    },
+    {
+      "id": "n02",
+      "prompt": "Block any commit that touches dist/ automatically",
+      "expect": "no-trigger",
+      "note": "make-hook — event-fired enforcement"
+    },
+    {
+      "id": "n03",
+      "prompt": "Build a skill for database migrations",
+      "expect": "no-trigger",
+      "note": "make-skill — a whole new skill, not a script"
+    },
+    {
+      "id": "n04",
+      "prompt": "This is the third time I've explained our deploy convention — capture it",
+      "expect": "no-trigger",
+      "note": "save-lessons — prose knowledge, not a procedure to code"
+    },
+    {
+      "id": "n05",
+      "prompt": "Why did G4 fail my script at the gate?",
+      "expect": "no-trigger",
+      "note": "script-writing-rules carries the gate semantics"
+    },
+    {
+      "id": "n06",
+      "prompt": "Write me a quick one-off script to rename these files",
+      "expect": "no-trigger",
+      "note": "session-local scratchpad work — the Phase 1 ephemeral escape hatch; no shipped script, no workflow"
+    },
+    {
+      "id": "n07",
+      "prompt": "Can this check be code instead of instructions?",
+      "expect": "no-trigger",
+      "note": "the bare is-this-mechanizable interrogative — script-writing-rules owns the test; this workflow only runs it once the answer is yes"
+    }
+  ]
+}

@@ -6,8 +6,8 @@ description: >-
   make-doc, never the bundle), or a reference corpus when the "feature" is really knowledge to
   encode. Use when the user proposes a new capability, pitches an idea, or asks "can we add X" —
   "can we add a dark mode", "what if we supported CSV export". Pure intake: sizes and records,
-  never builds. Runs intent-extract (one round max), a
-  dedup sweep, and system-decompose, then records by shape — the TICKET file by default, or the
+  never builds. Runs find-the-ask (one round max), a
+  dedup sweep, and break-down-problem, then records by shape — the TICKET file by default, or the
   workspace's ruled backend (git-native, or a named external adapter). Also runs via /file-feature [raw
   idea, or a TKT-/#issue/adapter id]. Writes one record set, then stops — building is /build-feature's
   job. NOT for bug-shaped
@@ -50,7 +50,7 @@ a record existed.
 
 ## Phase 2 — Extract
 
-Invoke intent-extract (forge, where installed; apply its discipline inline otherwise): root goal
+Invoke find-the-ask (harness, where installed; apply its discipline inline otherwise): root goal
 vs literal ask, the delta taxonomy, ONE batched clarifying round maximum — and only when a human
 is actually present to answer (a sibling redirect, a subagent dispatch, or a scheduled/unattended
 firing has no one to ask — skip straight to capture-with-gaps). A still-vague idea after that
@@ -71,7 +71,7 @@ Before minting anything, sweep three surfaces and report what's found:
 
 ## Phase 4 — Size and shape
 
-Invoke system-decompose (forge, where installed; its two-plane lens inline otherwise) and decide
+Invoke break-down-problem (harness, where installed; its two-plane lens inline otherwise) and decide
 TWO things:
 
 **Size** (the materiality floor, same law as orchestration's seats): **small** = one context can
@@ -83,7 +83,7 @@ decision-ratifying.
   change earns via make-doc — PRD (why/what) / SPEC (behavior) / LLD (how) — never the bundle by
   default, and ADR only for a ratified fork (the standing ADR-default-no ruling).
 - **Knowledge** (the ask is really reference material, standards, or a world model to encode) →
-  AUTHOR it at intake via make-reference (one document, docs' own seat) or forge's `pack-forge`
+  AUTHOR it at intake via make-reference (one document, docs' own seat) or harness's `make-pack`
   (a corpus, where installed) — encoding knowledge IS the record, so "never builds" is intact (that
   clause bars SOFTWARE builds, /build-feature's territory); the TICKET records the routing, links the
   authored result, and closes.

@@ -13,7 +13,7 @@ cannot see** (whether the tab walk matches task flow, whether a recipe fits its 
 Breadth under one stem, cited: hit-targets and keyboard affordances live under `focus` because one
 interactive-surface card (`*.focus.json`) carries all three facts — ring, target, keys — for the
 same elements, and splitting the stem would split the card; renaming was considered, keep-as-is
-chosen (`skills-audit/references/standard-of-excellence.md` §N3).
+chosen (`check-all-skills/references/standard-of-excellence.md` §N3).
 
 ## The card
 

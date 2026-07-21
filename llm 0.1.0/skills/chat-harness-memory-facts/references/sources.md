@@ -28,11 +28,11 @@ move.
 Unlike the platform-fact half above, these are files and directories directly readable in this
 workspace right now — inspect them to verify a claim, not "verify against external docs":
 
-- **forge's `pack-authoring-standards` + `skill-authoring-standards`** (`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/pack-authoring-standards/SKILL.md`,
-  `/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/skill-authoring-standards/SKILL.md`)
+- **harness's `pack-writing-rules` + `skill-writing-rules`** (`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/pack-writing-rules/SKILL.md`,
+  `/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/skill-writing-rules/SKILL.md`)
   — the authoring factory for this exact shape: axis decomposition → grounded research waves → the
-  typed index (pack-authoring-standards) → the entry-surface charter/boundary/deviation-doctrine
-  (skill-authoring-standards). docs' `knowledge-forge`, the original single-skill version of
+  typed index (pack-writing-rules) → the entry-surface charter/boundary/deviation-doctrine
+  (skill-writing-rules). docs' `knowledge-forge`, the original single-skill version of
   this factory, was retired 2026-07-19 and folded into these two forge skills as the estate-wide
   factory route. Cited throughout `knowledge-packs-and-cited-retrieval.md`.
 - **This very skill family** (`/Users/kimba/Projects/nonoun/plugins/llm 0.1.0/skills/`) —

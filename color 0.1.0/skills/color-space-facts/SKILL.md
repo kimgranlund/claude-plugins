@@ -104,5 +104,5 @@ effect. The aesthetic judgment ("does this look right, is this harmonious") is
 ## Extending this pack
 
 A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[pack-forge]] (axis decomposition, grounded research waves, index discipline); never bolt an
+[[make-pack]] (axis decomposition, grounded research waves, index discipline); never bolt an
 uncited file onto the corpus inline.

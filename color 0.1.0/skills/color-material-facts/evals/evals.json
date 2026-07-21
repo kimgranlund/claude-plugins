@@ -1,6 +1,6 @@
 {
   "skill": "color-material-facts",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Re-derived 2026-07-06 for the color-material-facts pack (extracted from color-science). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's 4 topic groups: paint mixing, print-vs-screen/ICC, naming systems, iridescence/Pointer's gamut. Negatives drawn adversarially from the other three color-*-facts siblings plus color-theory-facts and make-palette.",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the color plugin port. Re-derived 2026-07-06 for the color-material-facts pack (extracted from color-science). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's 4 topic groups: paint mixing, print-vs-screen/ICC, naming systems, iridescence/Pointer's gamut. Negatives drawn adversarially from the other three color-*-facts siblings plus color-theory-facts and make-palette.",
   "cases": [
     {
       "id": "t01",

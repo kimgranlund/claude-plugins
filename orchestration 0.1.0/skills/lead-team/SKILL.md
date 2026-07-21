@@ -18,7 +18,7 @@ argument-hint: "[charter — the plan/build-feature/review work needing a team]"
 
 # lead-team — the host runs the seat, not a dispatched copy of it
 
-`ops-issues` dispatches a separate agent instance for its standing seat. This command does the
+`issue-sorter` dispatches a separate agent instance for its standing seat. This command does the
 opposite on purpose: it makes **this session** — the one the human is talking to — hold the
 `team-lead` agent's own contract
 (`${CLAUDE_PLUGIN_ROOT}/agents/team-lead.md`) directly, for one named charter, with
@@ -26,7 +26,7 @@ no separate `Agent`/`Task` spawn for the coordinator role itself. The host becom
 OTHER seat in the chain is still a real dispatch. Seed: `$ARGUMENTS`.
 
 This command imports the contract of `agents/team-lead.md` — a deliberate pairing in the same
-family as forge's `ops-issues` ruling. Under ADR-0006 the pair splits by species on purpose: the
+family as harness's `issue-sorter` ruling. Under ADR-0006 the pair splits by species on purpose: the
 command takes the verb form (`/lead-team` — what you DO), the agent the role noun (`team-lead` —
 what it IS); `disable-model-invocation: true` keeps this command off every surface the model
 routes against regardless.
@@ -88,9 +88,9 @@ and re-anchor (goal, frontier, remaining budget) at the start of each cycle.
 ## Phase 4 — Close and roll up
 
 The charter ends when a cycle closes on a named `loop-rules` decision — done, blocked, or
-replanned — checked against its own acceptance criteria. Roll up in the handoff-compose shape (or
+replanned — checked against its own acceptance criteria. Roll up in the write-handoff shape (or
 the plain Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended
-next action block where forge's `handoff-compose` isn't installed): what advanced, what is blocked,
+next action block where harness's `write-handoff` isn't installed): what advanced, what is blocked,
 what was ratified.
 
 ## Failure branches

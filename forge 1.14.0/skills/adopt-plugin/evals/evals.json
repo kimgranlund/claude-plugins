@@ -1,0 +1,82 @@
+{
+  "skill": "adopt-plugin",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-15. Contested boundaries: update-config (general settings.json edits with no plugin/marketplace object involved), plugin-writing-rules (authoring a NEW plugin's own manifest, not declaring an existing one as a dependency), make-plugin (building a plugin's actual skill/agent content).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "add this plugin repo to our settings so contributors can install it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "declare this plugin marketplace in .claude/settings.json",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "how do I set up extraKnownMarketplaces",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "I have a list of skill/plugin URLs, wire them up as installable dependencies",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "this plugin repo has no marketplace.json, how do I still make it installable",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "why doesn't this plugin show up in /plugin after I added it to enabledPlugins",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "onboard obra/superpowers-marketplace into this repo",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "our marketplace.json isn't at the repo root, how do I point extraKnownMarketplaces at it",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "change the default model for this project",
+      "expect": "no-trigger",
+      "true_owner": "update-config"
+    },
+    {
+      "id": "n02",
+      "prompt": "add a permission rule allowing npm commands",
+      "expect": "no-trigger",
+      "true_owner": "update-config"
+    },
+    {
+      "id": "n03",
+      "prompt": "set an environment variable in settings.json",
+      "expect": "no-trigger",
+      "true_owner": "update-config"
+    },
+    {
+      "id": "n04",
+      "prompt": "write the plugin.json manifest for this new plugin I'm building",
+      "expect": "no-trigger",
+      "true_owner": "plugin-writing-rules"
+    },
+    {
+      "id": "n05",
+      "prompt": "scaffold the skills and agents for a brand new plugin",
+      "expect": "no-trigger",
+      "true_owner": "make-plugin"
+    },
+    {
+      "id": "n06",
+      "prompt": "should our .claude folder be split into two plugins instead of one",
+      "expect": "no-trigger",
+      "true_owner": "plan-plugin-split"
+    }
+  ]
+}
