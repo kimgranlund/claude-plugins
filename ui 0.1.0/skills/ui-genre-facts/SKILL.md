@@ -10,10 +10,10 @@ description: >-
   collaboration, productivity, single-purpose utilities, content consumption, social
   media, AI-native apps, games, tracking/quantified-self, health,
   finance/fintech, marketplaces, and
-  travel/booking. ANSWERS and names genre expectations; it does not apply or build them — NOT for which modules a
-  page or screen needs (ui-pattern-facts); naming
-  the underlying pattern is ui-pattern-facts, applying it to a concrete layout is break-down-layout,
-  sweeping a whole product for conformance is check-whole-ui.
+  travel/booking. ANSWERS genre expectations, never applies or builds them — NOT for which modules a
+  page, screen, or dashboard needs — "what modules does a dashboard need" (ui-pattern-facts);
+  pattern naming: ui-pattern-facts; applying to a layout: break-down-layout; whole-product
+  sweep: check-whole-ui.
 user-invocable: false
 disable-model-invocation: false
 ---
