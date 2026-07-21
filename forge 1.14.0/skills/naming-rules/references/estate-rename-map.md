@@ -1,9 +1,11 @@
 # Estate rename map — the paradigm applied at scale (worked example, 2026-07-20)
 
-Status: **illustrative, not ratified.** This is the full-estate review that motivated
-`naming-rules` — 9 plugins, ~130 members, mapped from the legacy grammar to the simple paradigm.
-Executing any row is a campaign decision (ADR + branch + PR; names are APIs). Rows marked ⚠ were
-never ruled on by a human. Kind letters: C command · P procedural · K knowledge · A agent.
+Status: **fully ruled 2026-07-20; ratification pending ADR-0006.** This is the full-estate
+review that motivated `naming-rules` — 9 plugins, ~130 members, mapped from the legacy grammar
+to the simple paradigm. Every row has a human ruling (the four originally-open rows were ruled
+2026-07-20: `checking-rules`, the chore family, `agent-residency-facts`, `break-down-*`).
+Executing the map is governed by ADR-0006 (the rename campaign); names are APIs until it is
+accepted. Kind letters: C command · P procedural · K knowledge · A agent.
 
 ## Findings that motivated the paradigm
 
@@ -29,7 +31,7 @@ never ruled on by a human. Kind letters: C command · P procedural · K knowledg
 | typography | `typography` (keep) |
 | design-systems | `design-kits` |
 | agentic-ui | `agent-protocols` |
-| llm | `llm-facts` (recorded over the proposed `llm-protocols` — observability and residency members aren't protocols; open for override) |
+| llm | `llm` (keep — term of art; the `llm-facts`/`llm-protocols` candidates ratified OUT by ADR-0006: each stutters against every member, and the stutter exception (ADR-0006 Decision 7) covers the kept name) |
 
 ## forge → harness
 
@@ -40,11 +42,11 @@ never ruled on by a human. Kind letters: C command · P procedural · K knowledg
 | skill-decompose / skill-synthesize / plugin-decompose / skill-refactor | P/C | `plan-skill-split` / `plan-skill-merge` / `plan-plugin-split` / `reshape-skill` |
 | plugin-release / repo-alignment / plugin-onboard | C | `ship-plugin` / `clean-repo` / `adopt-plugin` |
 | system-decompose / intent-extract / knowledge-harvest / handoff-compose / open-questions-sweep | P | `break-down-problem` / `find-the-ask` / `save-lessons` / `write-handoff` / `find-open-questions` |
-| ops-issues / ops-planner / ops-orchestrator (commands) | C | `sort-issues` / `plan-chores` / `sweep-chores` ⚠ |
+| ops-issues / ops-planner / ops-orchestrator (commands) | C | `sort-issues` / `plan-chores` / `sweep-chores` |
 | skill-/agent-/hook-/pack-/plugin-/script-authoring-standards | K | `skill-/agent-/hook-/pack-/plugin-/script-writing-rules` |
-| entry-file-standards / linguistic-techniques / reasoning-orders / reviewer-discipline / git-campaign-workflows / github-issue-pr-primitives | K/P | `entry-file-rules` / `prompt-wording-rules` / `thinking-depth-rules` / `checker-rules` ⚠ / `big-change-git-rules` / `github-facts` |
+| entry-file-standards / linguistic-techniques / reasoning-orders / reviewer-discipline / git-campaign-workflows / github-issue-pr-primitives | K/P | `entry-file-rules` / `prompt-wording-rules` / `thinking-depth-rules` / `checking-rules` / `big-change-git-rules` / `github-facts` |
 | skill-auditor / agent-reviewer / hook-reviewer / plugin-reviewer / linguistics-reviewer / eval-judge / pack-researcher | A | `skill-checker` / `agent-checker` / `hook-checker` / `plugin-checker` / `wording-checker` / `routing-judge` / `fact-finder` |
-| ops-repo / ops-adr / ops-issues / ops-planner / ops-orchestrator | A | `repo-cleaner` / `decision-watcher` / `issue-sorter` / `chore-planner` / `chore-lead` ⚠ |
+| ops-repo / ops-adr / ops-issues / ops-planner / ops-orchestrator | A | `repo-cleaner` / `decision-watcher` / `issue-sorter` / `chore-planner` / `chore-lead` |
 
 ## scribe → docs
 
@@ -68,7 +70,7 @@ never ruled on by a human. Kind letters: C command · P procedural · K knowledg
 
 | Now | Kind | Paradigm name |
 |---|---|---|
-| component-forge / layout-decompose / flow-decompose | P | `make-component` / `break-down-layout` ⚠ / `break-down-flow` ⚠ |
+| component-forge / layout-decompose / flow-decompose | P | `make-component` / `break-down-layout` / `break-down-flow` |
 | focus-/i18n-/perf-/safety-verify / ui-audit / ui-change-verify | P | `check-focus` / `check-translations` / `check-speed` / `check-safety` / `check-whole-ui` / `check-ui-change` |
 | ui-genres / ui-patterns / dom-block-flow / geometry-systems / mobile-hig-patterns / motion-design | K | `ui-genre-facts` / `ui-pattern-facts` / `dom-layout-facts` / `size-and-shape-rules` / `apple-mobile-facts` / `motion-rules` |
 | component-/flow-/layout-reviewer | A | `component-/flow-/layout-checker` |
@@ -81,10 +83,15 @@ never ruled on by a human. Kind letters: C command · P procedural · K knowledg
 | typography-system-design / typography-tokens / typography-lettering / typography-system-reviewer | P/K/A | `pick-fonts` / `font-token-rules` / `lettering-facts` / `font-choice-checker` |
 | design-system-hub / -author-{dscard,figma-make,google-stitch} / design-md-format / iconography / figma-plugin-api / material-design-*-tokens / design-system-reviewer | P/K/A | `make-design-kit` / `make-{dscard,figma-make,stitch}-kit` / `design-md-rules` / `icon-rules` / `figma-plugin-facts` / `material-{color,shape,motion,type,token}-facts` / `design-kit-checker` |
 | a2a-agent-design / a2a-isolation-verify / a2a+a2ui knowledge ×6 | P/K | `make-a2a-agent` / `check-a2a-isolation` / `a2a-/a2ui-{protocol,training,catalog,chat-agent}-facts` |
-| agent-residency-taxonomy / chat-harness-* ×6 / llm-jsonl-streaming / llm-provider-gateway | K | `where-agents-live` ⚠ (alt: `agent-residency-facts`) / `chat-harness-{guardrail,memory,logging,workflow,routing,tool}-facts` / `llm-streaming-facts` / `llm-gateway-facts` |
+| agent-residency-taxonomy / chat-harness-* ×6 / llm-jsonl-streaming / llm-provider-gateway | K | `agent-residency-facts` / `chat-harness-{guardrail,memory,logging,workflow,routing,tool}-facts` / `llm-streaming-facts` / `llm-gateway-facts` |
 
-## Open rows (never ruled on)
+## Rulings closing the originally-open rows (2026-07-20, one batched round)
 
-`checker-rules` (reviewer-discipline) · `chore-lead` / `sweep-chores` (ops family naming) ·
-`where-agents-live` (cute vs `agent-residency-facts`) · `break-down-*` (wordy; the alternative
-reuses `split-` and loses the decide/analyze distinction).
+- reviewer-discipline → `checking-rules` (activity-carrying `-rules`, over `checker-rules`).
+- Ops family → the chore family: agents `repo-cleaner` / `decision-watcher` / `issue-sorter` /
+  `chore-planner` / `chore-lead`; commands `/sort-issues` / `/plan-chores` / `/sweep-chores`.
+- agent-residency-taxonomy → `agent-residency-facts` (sober `-facts` shape over the cuter
+  `where-agents-live`).
+- Analysis-sense decompose trio → `break-down-problem` / `break-down-layout` /
+  `break-down-flow` (wordy but unmistakable; `map-*` rejected for the sitemap/roadmap
+  collision).
