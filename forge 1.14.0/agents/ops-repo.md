@@ -15,7 +15,9 @@ description: |
   costs nothing but a delayed sweep — or dispatched directly to triage a specific mess. NOT for
   work-item intake — filing, classifying, or triaging a NEW feature/bug/ticket (`ops-issues`, a
   distinct seat; this seat only reads an EXISTING claim's staleness, it mints nothing); NOT for
-  instruction-tree or corpus drift (`/repo-alignment`).
+  instruction-tree or corpus drift (`/repo-alignment`); NOT for the whole-family sweep with a
+  rolled-up queue (`ops-orchestrator`) or prioritizing what to tackle first across the ops
+  backlog (`ops-planner`).
 
   <example>
   Context: A CronCreate firing for the repo-hygiene routine, bounded to this session.

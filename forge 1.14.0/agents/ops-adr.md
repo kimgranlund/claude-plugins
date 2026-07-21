@@ -14,7 +14,9 @@ description: |
   (`ops-issues`, a distinct seat); NOT for repo hygiene — worktrees, branches, PRs (`ops-repo`); NOT
   for authoring the corpus or entry surface once a candidate is confirmed (`pack-forge`/`skill-forge`,
   human-timed commands this seat only names); NOT for judging a fact that ISN'T from a ratified ADR
-  (`knowledge-harvest`'s own frequency/impact detectors cover that ground directly).
+  (`knowledge-harvest`'s own frequency/impact detectors cover that ground directly); NOT for the
+  whole-family sweep with a rolled-up queue (`ops-orchestrator`) or prioritizing what to tackle
+  first across the ops backlog (`ops-planner`).
 
   <example>
   Context: A session-scoped CronCreate firing for the ADR-review routine.
