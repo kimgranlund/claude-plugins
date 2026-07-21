@@ -1,0 +1,25 @@
+{
+  "skill": "figma-plugin-facts",
+  "note": "Minted 2026-07-09. Positives span all five axes; negatives fence the same-plugin siblings (design-md-rules, material-color-facts), the repo-local procedure skill, the Figma MCP, and the uncovered scene graph.",
+  "cases": [
+    { "id": "t01", "prompt": "my figma plugin fails to load with a syntax error but the same file runs fine in node", "expect": "trigger" },
+    { "id": "t02", "prompt": "how do I alias a semantic variable to a raw color variable in a figma plugin?", "expect": "trigger" },
+    { "id": "t03", "prompt": "figma threw when I tried to remove a variable collection mode — why?", "expect": "trigger" },
+    { "id": "t04", "prompt": "how do I bind a paint style's color to a figma variable?", "expect": "trigger" },
+    { "id": "t05", "prompt": "my created text styles all show Inter Regular 12 instead of the fonts I set", "expect": "trigger" },
+    { "id": "t06", "prompt": "loadFontAsync keeps throwing — how do I find which face names a family actually has?", "expect": "trigger" },
+    { "id": "t07", "prompt": "which text style fields can be bound to figma variables?", "expect": "trigger" },
+    { "id": "t08", "prompt": "what JSON format does figma's native variable import expect?", "expect": "trigger" },
+    { "id": "t09", "prompt": "what does com.figma.aliasData do in a tokens file?", "expect": "trigger" },
+    { "id": "t10", "prompt": "should I use root.pluginData or clientStorage to save my plugin's config?", "expect": "trigger" },
+    { "id": "t11", "prompt": "how do I unit test figma plugin code that can't import modules?", "expect": "trigger" },
+    { "id": "t12", "prompt": "how can my plugin prune the variables it created without touching the user's own collections?", "expect": "trigger" },
+    { "id": "t13", "prompt": "can figma variables be imported without a plugin and still resolve aliases?", "expect": "trigger" },
+    { "id": "n01", "prompt": "what sections does a DESIGN.md prose spine need?", "expect": "no-trigger" },
+    { "id": "n02", "prompt": "what does --md-sys-color-primary-container mean?", "expect": "no-trigger" },
+    { "id": "n03", "prompt": "the nonoun binder skipped roles when applying to figma — fix the cascade", "expect": "no-trigger" },
+    { "id": "n04", "prompt": "generate a login screen in figma from this design system", "expect": "no-trigger" },
+    { "id": "n05", "prompt": "how do I resize and reparent frames on the current figma page from my plugin?", "expect": "no-trigger" },
+    { "id": "n06", "prompt": "call the figma REST API to list a team's files", "expect": "no-trigger" }
+  ]
+}

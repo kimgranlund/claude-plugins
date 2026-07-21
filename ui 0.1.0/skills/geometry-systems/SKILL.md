@@ -9,7 +9,7 @@ description: >-
   shape every major system converges on, composable-spacing/nesting theory, and cross-system
   comparison (Material, Tailwind, Carbon, Apple). ANSWERS the theory — does not derive one
   component family's law (component-forge) or bind to an already-specified platform scale
-  (material-design-geometry-tokens), its two cited worked instances. NOT for page-region layout
+  (material-shape-facts), its two cited worked instances. NOT for page-region layout
   (layout-decompose); NOT for raw CSS box-model/flow mechanics (dom-block-flow); NOT for a
   component's own anatomy (component-forge).
 user-invocable: false
@@ -50,7 +50,7 @@ principle instead of copied by eye from whichever system is open in another tab.
     / 2`), the six-step comfortable ramp, and the separate compact/dense two-band system. That
     file's "Composed padding" section is the worked EXAMPLE of the nesting principle
     `composable-spacing.md` states generally — read the principle here, see it applied there.
-  - `material-design-geometry-tokens` (design-systems plugin, where installed) — the *consumption*
+  - `material-shape-facts` (design-kits plugin, where installed) — the *consumption*
     guide for a project already bound to Material's own specified scale (control ramp, radius
     scale, space ladder). This pack explains why a scale like that has the shape it does; that
     skill verifies a specific export carries it.

@@ -1,8 +1,8 @@
 {
   "skill": "font-token-rules",
-  "_note": "Positives across imperative / diagnostic / symptom / indirect phrasings, all on the default --type-* grammar. Negatives are adversarial, drawn one-for-one from each NOT-for fence in the description: material-design-typography-tokens (the Material --md-sys-typescale-* twin), lettering-facts (answers-only, no token output), component-forge (building/placing a component), i18n-verify (locale number/date/currency + RTL), plus wider neighborhood negatives (make-palette, check-colors, material-design-geometry-tokens) that share adjacent 'design system' vocabulary but are not this skill's job.",
-  "siblings_in_repo": ["material-design-typography-tokens", "lettering-facts", "component-forge", "i18n-verify"],
-  "global_peers": ["make-palette", "check-colors", "material-design-geometry-tokens"],
+  "_note": "Positives across imperative / diagnostic / symptom / indirect phrasings, all on the default --type-* grammar. Negatives are adversarial, drawn one-for-one from each NOT-for fence in the description: material-type-facts (the Material --md-sys-typescale-* twin), lettering-facts (answers-only, no token output), component-forge (building/placing a component), i18n-verify (locale number/date/currency + RTL), plus wider neighborhood negatives (make-palette, check-colors, material-shape-facts) that share adjacent 'design system' vocabulary but are not this skill's job.",
+  "siblings_in_repo": ["material-type-facts", "lettering-facts", "component-forge", "i18n-verify"],
+  "global_peers": ["make-palette", "check-colors", "material-shape-facts"],
   "positives": [
     "what type token should this heading use",
     "which voice and step should this button label use",

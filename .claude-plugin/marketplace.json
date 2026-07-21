@@ -1,6 +1,6 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design-systems, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design-kits, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
   "owner": {
     "name": "Kim Granlund"
   },
@@ -42,7 +42,7 @@
       "description": "Choose, pair, and tokenize typography: design an 11-voice typography system from a brand brief, realize it as bound --type-*/--font-* tokens, and answer type-anatomy and lettering questions from a cited corpus."
     },
     {
-      "name": "design-systems",
+      "name": "design-kits",
       "displayName": "Design Systems",
       "source": "./design-systems 0.1.0",
       "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch, plus the Material Design token grammar they can extend."

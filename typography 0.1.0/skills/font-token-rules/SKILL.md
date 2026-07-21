@@ -9,7 +9,7 @@ description: >
   vs. OPERATE chrome) and STEP by rank, apply the baked leading/paragraph rhythm, pick a concrete
   font per family slot — distinctive vs. neutral, by voice. Never hardcode a px size, line-height,
   tracking, or font family. TYPE only. NOT for Material's `--md-sys-typescale-*`
-  (material-design-typography-tokens); NOT for a no-token typography question
+  (material-type-facts); NOT for a no-token typography question
   (lettering-facts); NOT for building/placing a component (component-forge); NOT for locale
   number/date/currency formatting (i18n-verify).
 disable-model-invocation: false
@@ -23,7 +23,7 @@ of **steps**, as CSS custom properties. Your job is never to pick a px size or a
 to pick the right **voice** (the text's role) and **step** (its size within that role), then — only
 where a concrete font must be named — the right typeface for that voice's job.
 
-This is the generic twin of `material-design-typography-tokens`: same `{voice}-{step}-{prop}`
+This is the generic twin of `material-type-facts`: same `{voice}-{step}-{prop}`
 grammar, no Material-specific namespace or bound font choices — the prefix after `--` is whatever
 the project's export declares. (The Material sibling documents its kit's shipped export, which
 predates the 2026-07 taxonomy rewrite — its voice list matches that file, not this table, until
@@ -35,7 +35,7 @@ the kit regenerates.)
    (often `type.css` / `tokens.css`; a DTCG `*.tokens.json` and utility classes may sit beside
    it). **The scale prefix is configurable:** the default is `--type-*` (class `.type-*`), but a
    Material scheme exports `--md-sys-typescale-*` (that binding lives in
-   `material-design-typography-tokens`, not here) and a branded kit may export
+   `material-type-facts`, not here) and a branded kit may export
    `--{brand}-type-*` — **read the actual prefix from the file**; the grammar after it
    (`-{voice}-{step}-{prop}`) is identical either way, and font families stay `--font-*`
    regardless. If no export exists, stop and ask — do not hardcode sizes.

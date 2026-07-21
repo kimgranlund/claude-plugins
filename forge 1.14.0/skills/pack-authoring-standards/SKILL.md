@@ -48,7 +48,7 @@ stated axis or file count that has drifted from the tree is the first strain sig
 ## INDEX.md: the retrieval map — when the consult table stops being one
 
 The threshold is **enumerability, not authoring method** (ruled 2026-07-09, reconciling this
-standard with the shipped practice — ui-patterns, motion-design, iconography — and, historically,
+standard with the shipped practice — ui-patterns, motion-design, icon-rules — and, historically,
 scribe's now-retired knowledge-forge's scaling note, folded in here 2026-07-19): when the SKILL.md consult table lists every reference file 1:1
 (a flat corpus of ≤~7 files), the table IS the retrieval map and a separate INDEX would be a
 second copy that drifts — ship no INDEX. An INDEX.md earns its keep the moment files outgrow

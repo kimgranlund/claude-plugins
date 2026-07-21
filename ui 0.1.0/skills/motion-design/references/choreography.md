@@ -47,7 +47,7 @@ in touch UI. This is the choreography-level argument for springs — see `easing
 
 ## What never animates
 
-The list design-md-format's Motion section asks for, with owners:
+The list design-md-rules's Motion section asks for, with owners:
 
 | Never animate | Why | Source |
 |---|---|---|

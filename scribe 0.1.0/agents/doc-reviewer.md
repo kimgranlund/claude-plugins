@@ -32,17 +32,17 @@ upstream sources it must trace to — not the maker's reasoning.
    vision-memo-forge, standalone rubric → rubric-forge (all now scribe siblings), CLAUDE.md/
    AGENTS.md → forge's entry-file-standards, /goal condition → loop-design, handoff block → handoff-compose,
    decomposition manifest → system-decompose, DESIGN.md/guidelines spine → its platform sibling
-   (design-system-author-claude-code / -google-stitch / -figma-make) — load that owning skill's
+   (make-dscard-kit / -google-stitch / -figma-make) — load that owning skill's
    bundled `references/rubric.md` wherever it is installed. That rubric is the standard, plus any
    doc it cross-references by name for a dimension's method (e.g. an ADR's A6 change-type test
    lives in `doc-authoring-standards/references/templates/adr.md`, not the rubric alone) — the
    dimension set is closed; a dimension the rubric lacks is a finding to file against the rubric,
    not a score.
    *One exception — the design-system export:* its rubrics are per-platform and partly checker-owned
-   (e.g. design-system-author-claude-code B1 binds to `bundle_gates.py`; the stitch/make rubrics gate
+   (e.g. make-dscard-kit B1 binds to `bundle_gates.py`; the stitch/make rubrics gate
    on their own checkers). You score only the **[review] dimensions of the spine as a document**
    against the owning sibling's rubric; the [gate] dimensions are the checker's, wording potency is
-   linguistics-reviewer's, and the whole-export verdict is the design-system-reviewer agent's —
+   linguistics-reviewer's, and the whole-export verdict is the design-kit-checker agent's —
    route there when the ask is the export, not the document.
 2. **Run the owner's mechanical gates first**: for the eight scribe document types, that's
    `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/doc_lint.py" <file>` — its T1-T5 findings head the

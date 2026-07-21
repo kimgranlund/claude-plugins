@@ -1,6 +1,6 @@
 {
   "skill": "mobile-hig-patterns",
-  "note": "Answers-only knowledge pack: Apple HIG's own navigation/modality/component semantics. Fences: ui-patterns' archetype-mobile-app.md owns page-shell region naming, motion-design owns animation timing (incl. Apple springs), iconography owns SF Symbols sizing, material-design-*-tokens owns Android/Material's equivalent guidance.",
+  "note": "Answers-only knowledge pack: Apple HIG's own navigation/modality/component semantics. Fences: ui-patterns' archetype-mobile-app.md owns page-shell region naming, motion-design owns animation timing (incl. Apple springs), icon-rules owns SF Symbols sizing, material-design-*-tokens owns Android/Material's equivalent guidance.",
   "cases": [
     { "id": "t01", "prompt": "Should this app use a tab bar or a navigation stack?", "expect": "trigger" },
     { "id": "t02", "prompt": "Sheet, modal, or popover — which does HIG say to use here?", "expect": "trigger" },
@@ -13,7 +13,7 @@
     { "id": "t09", "prompt": "Where should search live in this app's navigation?", "expect": "trigger" },
     { "id": "n01", "prompt": "What regions does a mobile app shell have?", "expect": "no-trigger", "note": "ui-patterns' archetype-mobile-app.md — page-shell region naming" },
     { "id": "n02", "prompt": "What spring timing should this sheet's presentation animation use?", "expect": "no-trigger", "note": "motion-design — Apple's spring model already lives there" },
-    { "id": "n03", "prompt": "What SF Symbols weight and size for this tab bar icon?", "expect": "no-trigger", "note": "iconography — SF Symbols sizing/construction" },
+    { "id": "n03", "prompt": "What SF Symbols weight and size for this tab bar icon?", "expect": "no-trigger", "note": "icon-rules — SF Symbols sizing/construction" },
     { "id": "n04", "prompt": "What's Material's equivalent bottom navigation guidance?", "expect": "no-trigger", "note": "material-design-*-tokens — Android/Material's own rules" },
     { "id": "n05", "prompt": "Build the actual tab bar component for this app", "expect": "no-trigger", "note": "component-forge — realization, not HIG semantics" },
     { "id": "n06", "prompt": "What does a card usually contain — header, body, footer?", "expect": "no-trigger", "note": "ui-patterns' container-patterns.md" }

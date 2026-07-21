@@ -12,7 +12,7 @@ checked against this pack's own cited envelope — never presented as a platform
 
 Project ruling (a DESIGN.md/token lock, minted via a taste gate — layout-decompose's
 `taste-elicitation.md`) **>** house lock (this file) **>** cited envelope (the sibling
-references). A Material-token project's motion is governed by `material-design-motion-tokens`
+references). A Material-token project's motion is governed by `material-motion-facts`
 wholesale — these locks apply to unruled, non-Material contexts, which is exactly where taste
 drift happens. Deviation from a lock inside one project IS a project ruling: record it, per the
 ask-then-lock loop.

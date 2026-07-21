@@ -6,7 +6,7 @@ FROZEN at creation and drifts from the manifest by design (amended 2026-07-21, A
 rename campaign changes manifest NAMES too, so the dir records the name-and-version at creation;
 the current name and version live in `.claude-plugin/plugin.json` and the README footer ledger,
 never in the path). Dir → current-name aliases as renames land: `agentic-ui 0.1.0` →
-`agent-protocols`. **forge is the toolchain**:
+`agent-protocols`, `design-systems 0.1.0` → `design-kits`. **forge is the toolchain**:
 its commands and standards govern work on every plugin in this workspace, including forge itself.
 Work on a plugin happens in its directory; decisions that span plugins happen here.
 
@@ -28,7 +28,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agent-protocols` (the A2UI four + the A2A four) |
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
-| Design-system export bundles (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design-systems` |
+| Design-system export bundles (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design-kits` |
 | UI structure (layouts, flows, components, patterns), motion knowledge (durations/easing/reduced-motion), or non-functional verification (focus/i18n/perf/safety) | `ui` |
 | Multi-agent feature-delivery team (plan → build → review → coordinate), composition/continuation design | `orchestration` |
 | Routing proof after description edits | `/eval-run <plugin>` |

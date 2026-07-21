@@ -55,7 +55,7 @@ much space* separates them once the region map is decided).
 ## What this pack does NOT prescribe
 
 - The *specific* numeric ramp for a specific component family — that is a maker skill's job
-  (`component-forge`'s law, or a bound Material export via `material-design-geometry-tokens`).
+  (`component-forge`'s law, or a bound Material export via `material-shape-facts`).
   This file states the composition RULE those systems both already follow; it does not hand out
   new numbers.
 - A raw CSS mechanism for the gap itself (`gap` property vs. margin vs. `:where()` selectors) —

@@ -47,7 +47,7 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   AND every miss/grab dispositioned (fixed here, or filed to S2 with an owner). The corpus is
   **checked into the bundle** (`scripts/routing-corpus.json`) so it survives ports and diffs across
   passes — a review-time corpus that evaporates is not a test of record. **The `_measured` block**
-  (house practice, ref: `design-system-hub` / `vision-memo-forge` / `make-palette` corpora): the
+  (house practice, ref: `make-design-kit` / `vision-memo-forge` / `make-palette` corpora): the
   corpus file also carries a `_measured` field recording the *result* (F1, precision/recall, date), the
   *disposition of every miss and grab* (which of the five classes, and why kept or filed), and the
   *description-fix history* that produced the number. The corpus proves the test exists; `_measured`
@@ -160,9 +160,9 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   fresh-context by construction (a handoff's recipient; a ratifying coordinator seat) — named, not
   implied · **inverse-as-critic** for transforms (the round-trip through the named inverse) ·
   **composite-critic** for a multi-layer artifact whose rubric spans owners (ref:
-  `design-system-hub` v1, 2026-07-04 — checker for the mechanical dims, `linguistics-reviewer`
+  `make-design-kit` v1, 2026-07-04 — checker for the mechanical dims, `linguistics-reviewer`
   for potency, `component-reviewer` per preview, `doc-reviewer` for the spine's document slice; that
-  charter now lives in `design-system-author-claude-code`, whose rubric keeps the
+  charter now lives in `make-dscard-kit`, whose rubric keeps the
   checker/potency/document demarcation): legal ONLY when the
   rubric **demarcates which dimensions each critic scores** so every dimension has exactly one
   fresh-context owner and each critic scores a coherent closed slice — not one seat handed a partial

@@ -45,7 +45,7 @@ Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutti
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.22.1 · assembled 2026-07-21 · 0.22.1: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (reference-forge suite + naming-conventions reference, research-methods journal); pointer updates only · v0.22.0 · assembled 2026-07-19 · 0.22.0: `knowledge-forge` retired — a `plugin-decompose` gap
+v0.22.2 · assembled 2026-07-21 · 0.22.2: ADR-0006 design-kits-rename sweep — live references rewritten; pointer updates only · v0.22.1 · assembled 2026-07-21 · 0.22.1: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (reference-forge suite + naming-conventions reference, research-methods journal); pointer updates only · v0.22.0 · assembled 2026-07-19 · 0.22.0: `knowledge-forge` retired — a `plugin-decompose` gap
 analysis (job-to-be-done test) found it duplicated forge's `pack-forge` end to end (axis
 decomposition, grounded research waves, INDEX/consult-table registration — near-identical
 descriptions, no daylight between them), while diverging in rigor: `pack-forge` carries a

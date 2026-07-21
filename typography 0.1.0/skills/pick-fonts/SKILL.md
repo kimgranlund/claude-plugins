@@ -9,8 +9,8 @@ description: >-
   (metric compatibility, accessibility floor) — font-token-rules realizes it. NOT for color ramps (make-palette); NOT for
   realizing a decided system as tokens, or which font/voice an existing system's token already
   binds (font-token-rules); NOT for type-history knowledge (lettering-facts); NOT for
-  Material's typescale (material-design-typography-tokens); NOT for a component (component-forge)
-  or the export bundle (design-system-hub).
+  Material's typescale (material-type-facts); NOT for a component (component-forge)
+  or the export bundle (make-design-kit).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -56,7 +56,7 @@ palette/contrast" is a different artifact class — route to [[check-colors]].
    "restrained Kinfolk-editorial quiet luxury," "1977 Swiss ski-poster energy," "a specific
    existing brand" — *presupposes* a point in design space a generating model can act on without
    guessing; "modern and premium" leaves the search space open and gets filled with the prior
-   (`design-system-hub/references/context-potency.md`'s presupposition technique and
+   (`make-design-kit/references/context-potency.md`'s presupposition technique and
    generic-output clinic — cited, not re-derived here; worked point-vs-region transformations in
    [`references/territory-interpretation.md`](references/territory-interpretation.md)). A vague
    brief is this skill's own gate: push back and ask for the named reference before proceeding.
@@ -172,7 +172,7 @@ custom properties) instead of this skill's (deciding which typeface fills the ro
 | `scripts/routing-corpus.json` | the checked-in M2 routing corpus |
 | [[font-token-rules]] | the mandatory REALIZATION handoff — binds the decision as `--font-*`/`--type-*` |
 | [[lettering-facts]] | the knowledge peer — voice/, techniques/pairing.md, accessibility/, metrics/, scripts/ |
-| `design-system-hub/references/context-potency.md` | the presupposition / generic-output-clinic doctrine step 1 applies (read-only citation, not this skill's to edit) |
+| `make-design-kit/references/context-potency.md` | the presupposition / generic-output-clinic doctrine step 1 applies (read-only citation, not this skill's to edit) |
 | ui's layout-decompose `references/taste-elicitation.md` (soft, where installed) | the asking discipline step 1's push-back wires — read-only citation; its five-rule one-liner is compressed inline |
 | [[component-forge]] | NOT this skill's job — builds the component that consumes the type |
 

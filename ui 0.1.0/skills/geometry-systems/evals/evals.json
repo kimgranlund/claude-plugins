@@ -1,6 +1,6 @@
 {
   "skill": "geometry-systems",
-  "note": "Answers-only knowledge pack: sizing/spacing SCALE theory. Fences: component-forge owns one control family's derived law (cited as worked instance, not restated); material-design-geometry-tokens owns Material's bound-export consumption; layout-decompose owns page-region placement; dom-block-flow owns raw CSS box-model/flow mechanics. Extended 2026-07-16 (t10): the nested-radius house lock's trigger phrase (Issue #9); /eval-run owed at the wave boundary.",
+  "note": "Answers-only knowledge pack: sizing/spacing SCALE theory. Fences: component-forge owns one control family's derived law (cited as worked instance, not restated); material-shape-facts owns Material's bound-export consumption; layout-decompose owns page-region placement; dom-block-flow owns raw CSS box-model/flow mechanics. Extended 2026-07-16 (t10): the nested-radius house lock's trigger phrase (Issue #9); /eval-run owed at the wave boundary.",
   "cases": [
     {
       "id": "t01",
@@ -62,7 +62,7 @@
       "id": "n02",
       "prompt": "Does our bound Material export carry the full space ladder?",
       "expect": "no-trigger",
-      "note": "material-design-geometry-tokens — consumption/bind-check of an already-specified export"
+      "note": "material-shape-facts — consumption/bind-check of an already-specified export"
     },
     {
       "id": "n03",

@@ -23,7 +23,7 @@ these plugins rather than just installing them.
 | [`llm`](<llm 0.1.0/README.md>) | Portable LLM-integration knowledge (the swappable-provider gateway pattern, streaming structured output safely) plus a six-layer mini/portable chat-agent-harness family (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). |
 | [`color`](<color 0.1.0/README.md>) | Color science (accessibility, materials, perception, spaces), OKLCH palette design, contrast/CVD verification. |
 | [`typography`](<typography 0.1.0/README.md>) | Typography systems, pairing, tokens, lettering knowledge. |
-| [`design-systems`](<design-systems 0.1.0/README.md>) | Design-system export bundles (Claude Design, Figma Make, Google Stitch) and the Material Design token grammar. |
+| [`design-kits`](<design-systems 0.1.0/README.md>) | Design-system export bundles (Claude Design, Figma Make, Google Stitch) and the Material Design token grammar. |
 | [`ui`](<ui 0.1.0/README.md>) | UI structure (layouts, flows, components, patterns), the design/UI knowledge layer (spacing-scale theory, CSS box-model/flow mechanics, Apple HIG semantics, motion), and non-functional verification (focus, i18n, perf, safety, live-artifact checks). |
 | [`orchestration`](<orchestration 0.1.0/README.md>) | Decision-deriving, composition/continuation design, and a multi-agent feature-delivery team (planner, builder, coordinator, reviewers). |
 

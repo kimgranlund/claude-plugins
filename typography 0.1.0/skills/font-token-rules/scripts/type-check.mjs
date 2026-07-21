@@ -74,7 +74,7 @@ if (args[0] === "selftest") {
     goodBindExit0: goodBind.code === 0,
     badBindExit1: badBind.code === 1,
     badBindNamesGap: /missing/.test(badBind.out),
-    materialRedirects: materialRedirect.code === 1 && /material-design-typography-tokens/.test(materialRedirect.out),
+    materialRedirects: materialRedirect.code === 1 && /material-type-facts/.test(materialRedirect.out),
     goodLintExit0: goodLint.code === 0,
     badLintExit1: badLint.code === 1,
     badLintCatchesSize: /hardcoded font-size/.test(badLint.out),
@@ -143,7 +143,7 @@ console.log(`bind: ${exportPath}`);
 if (/--md-sys-typescale-/.test(css)) {
   failed = true;
   console.log("  ✗ this export uses Material's `--md-sys-typescale-*` namespace — bind it with the " +
-    "material-design-typography-tokens skill instead (this checker is for the default `--type-*` grammar)");
+    "material-type-facts skill instead (this checker is for the default `--type-*` grammar)");
   console.log("\nFAIL");
   process.exit(1);
 }

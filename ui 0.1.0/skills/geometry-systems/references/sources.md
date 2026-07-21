@@ -11,7 +11,7 @@ default scale shape).
    carbondesignsystem.com (spacing tokens).
 2. **This estate's own worked instances** — `component-forge`'s `references/geometry-system.md`
    (the mechanized button-family law and its "Composed padding" section, `geometry-check.py`
-   selftest-proven), `material-design-geometry-tokens` (Material-consumption binding guide). These
+   selftest-proven), `material-shape-facts` (Material-consumption binding guide). These
    are cited as EXAMPLES this pack's principles already hold up against, not independent external
    sources.
 3. **Domain commentary** — rejuvenate.digital, uxplanet.org, and similar 8pt-grid explainer
