@@ -13,8 +13,8 @@ description: >
   decides whether the shape's targets overlap enough to need isolation,
   and owns cross-session collision entirely. NOT when the next turn fires
   — /goal, /loop, Stop hooks (loop-rules). NOT hook/agent/entry-file
-  mechanics once a rule is decided (hook-authoring-standards /
-  agent-authoring-standards / entry-file-standards, forge). NOT wrapping
+  mechanics once a rule is decided (hook-writing-rules /
+  agent-writing-rules / entry-file-rules, harness). NOT wrapping
   up THIS session's worktree before ending (close-session).
 disable-model-invocation: false
 user-invocable: false
@@ -60,7 +60,7 @@ rest of the decision even starts.
      concurrent sessions — consult `parallel-work-rules` before dispatching parallel file-mutating
      work"), the skill's own doctrine staying here, in this one file. Copying these steps into
      CLAUDE.md instead creates a second, drift-prone copy the moment this file changes (the
-     mechanics of writing the pointer are entry-file-standards'; this skill only requires the
+     mechanics of writing the pointer are entry-file-rules'; this skill only requires the
      one-line form).
    - A worktree only pays off if it branches from something recent — an isolated worktree branched
      from a long-stale `main` just moves the merge-conflict pain to later. Commit early, commit
@@ -124,8 +124,8 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | docs' backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
 | [[team-or-solo-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
-| `entry-file-standards` (forge) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
-| `hook-authoring-standards` (forge) | The decision should become a mechanically-enforced guard (e.g. blocking a specific unsafe edit), not just guidance |
+| `entry-file-rules` (harness) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
+| `hook-writing-rules` (harness) | The decision should become a mechanically-enforced guard (e.g. blocking a specific unsafe edit), not just guidance |
 
 ## Worked example (the incident this skill was minted from)
 

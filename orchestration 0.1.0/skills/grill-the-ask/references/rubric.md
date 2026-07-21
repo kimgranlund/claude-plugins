@@ -11,7 +11,7 @@
 | D3 | Option grounding | [gate] | Every option was concrete — traceable to a codebase / catalog / token / constraint fact | 1: abstract forks (rubber-stampable) · 3: mostly grounded · 5: every option anchored to a named fact, GROUNDING section cites them |
 | D4 | Cascade discipline | [review] | Each round's answers visibly **reshaped** the next round's surface (not a pre-planned checklist) | 1: flat questionnaire, rounds independent · 3: some reshaping · 5: every round derived from the prior answers; the cascade is explicit |
 | D5 | Convergence | [gate] | Grilling stopped at a settled surface — no over-grilling, no load-bearing fork left unhosted | 1: over-grilled past convergence OR a cascading fork reached handoff open · 3: roughly right · 5: stopped exactly at settled; deferred forks each carry a default |
-| D6 | Handoff readiness | [review] | `system-decompose` could run **both** planes from the Ratified Design without re-grilling | 1: a load-bearing fork still open · 3: usable with gaps · 5: both planes decomposable verbatim, structure + mechanisms named |
+| D6 | Handoff readiness | [review] | `break-down-problem` could run **both** planes from the Ratified Design without re-grilling | 1: a load-bearing fork still open · 3: usable with gaps · 5: both planes decomposable verbatim, structure + mechanisms named |
 
 **Gate to promote:** D1, D3, D5 must each score ≥ 3. A ratified design that grills only one plane (D1),
 asks the author to commit to abstract options (D3), or stops short / over-grills (D5) is worse than no

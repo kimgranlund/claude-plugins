@@ -1,0 +1,32 @@
+{
+  "skill": "write-handoff",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Negatives are near-misses owned by team-or-solo-rules, loop-rules, docs' adr/lld-author paths, skill-author, make-rubric, skills-refactor, and checking-rules (n14 — this skill owns the return-block FIELDS, checking-rules owns per-finding review CONDUCT; no query claims both).",
+  "cases": [
+    { "id": "t01", "prompt": "how do I hand this back to the coordinator", "expect": "trigger" },
+    { "id": "t02", "prompt": "report my results", "expect": "trigger" },
+    { "id": "t03", "prompt": "write the handback for the work I just finished", "expect": "trigger" },
+    { "id": "t04", "prompt": "compose the handoff block for this subagent", "expect": "trigger" },
+    { "id": "t05", "prompt": "is this handoff complete", "expect": "trigger" },
+    { "id": "t06", "prompt": "is this report verifiable and routable", "expect": "trigger" },
+    { "id": "t07", "prompt": "review the handoff block this agent returned", "expect": "trigger" },
+    { "id": "t08", "prompt": "roll several team reports up into one handback", "expect": "trigger" },
+    { "id": "t09", "prompt": "my subagent's report just says tests pass with no evidence", "expect": "trigger" },
+    { "id": "t10", "prompt": "the coordinator can't route on this status report", "expect": "trigger" },
+    { "id": "t11", "prompt": "what fields go in a subagent's return block", "expect": "trigger" },
+    { "id": "t12", "prompt": "the worker finished — what shape does its return take", "expect": "trigger" },
+    { "id": "n01", "prompt": "should this be a subagent or a team", "expect": "no-trigger" },
+    { "id": "n02", "prompt": "how do my skills and agents connect", "expect": "no-trigger" },
+    { "id": "n03", "prompt": "review my frontmatter wiring", "expect": "no-trigger" },
+    { "id": "n04", "prompt": "write a /goal that keeps working until clean", "expect": "no-trigger" },
+    { "id": "n05", "prompt": "my goal loop never stops", "expect": "no-trigger" },
+    { "id": "n06", "prompt": "write an ADR to ratify this decision", "expect": "no-trigger" },
+    { "id": "n07", "prompt": "review this skill and score the SKILL.md", "expect": "no-trigger" },
+    { "id": "n08", "prompt": "author the LLD for this feature", "expect": "no-trigger" },
+    { "id": "n09", "prompt": "write a rubric with 1-5 anchors for grading layouts", "expect": "no-trigger" },
+    { "id": "n10", "prompt": "write the PR description for this change", "expect": "no-trigger" },
+    { "id": "n11", "prompt": "summarize the changes for the changelog", "expect": "no-trigger" },
+    { "id": "n12", "prompt": "design how planning and execution seats compose", "expect": "no-trigger" },
+    { "id": "n13", "prompt": "Before we wrap up, is there anything still open?", "expect": "no-trigger", "comment": "owner: find-open-questions — closes a live session's own unresolved items, distinct from a handback block's Open-questions field" },
+    { "id": "n14", "prompt": "before you file this review, steelman what the author would say back", "expect": "no-trigger" }
+  ]
+}

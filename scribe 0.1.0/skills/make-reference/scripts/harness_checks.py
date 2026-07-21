@@ -302,7 +302,7 @@ def check_llms_txt(t, r):
 
 def check_rubric(t, r):
     # Dimension-id prefixes in use across the corpus: D/P/S/L/C/A/B plus R (research-methods),
-    # V (vision-memo), H (handoff-compose). A row is a table line (>=3 pipes) carrying such an id.
+    # V (vision-memo), H (write-handoff). A row is a table line (>=3 pipes) carrying such an id.
     rows = [ln for ln in t.splitlines() if ln.count("|") >= 3
             and re.search(r"\b[DPSLCABRVH]\d", ln)]
     r.add(len(rows) >= 1, "structure: dimension table present", "no dimension rows found")

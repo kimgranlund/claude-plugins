@@ -10,8 +10,8 @@ description: >
   token cost", "should this agent preload the skill", "review my
   wiring/integration frontmatter". NOT for a whole-corpus or team audit —
   "audit the agent team for duplicates", "do my agents leverage the right skills"
-  (skills-audit / agents-audit); NOT for a single agent definition
-  (forge's agent-forge / agent-authoring-standards); NOT for when the next turn fires — /goal, Stop hooks,
+  (check-all-skills / check-all-agents); NOT for a single agent definition
+  (harness's make-agent / agent-writing-rules); NOT for when the next turn fires — /goal, Stop hooks,
   continuation (loop-rules).
 disable-model-invocation: false
 user-invocable: false
@@ -66,7 +66,7 @@ Top issues: 1) … — fix: …
 | `references/rubric.md` | Scoring dimensions and anchors (judgment-based) |
 | `references/best-practices.md` | Design guidance / explaining a finding |
 | `references/foundations.md` | When a finding turns on a shared model (discovery vs continuation) |
-| `[[handoff-compose]]` | The return contract a composed agent hands back — the other half of composition |
+| `[[write-handoff]]` | The return contract a composed agent hands back — the other half of composition |
 | `[[loop-rules]]` | Continuation mechanics (`/goal`, `/loop`, hooks) and loop discipline — owns the self-orchestrated-looping canon (budgets, locus escalation, durable state) |
 
 **Done** when every unit matches its task shape (the null unit respected — no seat doing host-inline work), every description is a precise fenced interface, frontmatter is verified against the build, dispatches are sealed and typed, both gate dimensions (D2, D4) score ≥ 3, and a high-stakes arrangement carries its independent wiring-checker pass. **NOT done** while any description starves the router, a fence is one-way, a dispatch leaks history or lacks a budget, planes are conflated — or the only score the arrangement has is its designer's.

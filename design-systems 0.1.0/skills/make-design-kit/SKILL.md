@@ -56,7 +56,7 @@ Every sibling applies these; the hub is their keeper — full statements with th
 
 ## Make the context potent — the hub's craft
 
-The spine, guidelines folder, or frontmatter IS a system prompt for a design agent — so [[linguistic-techniques]] governs it, and a guardrail that only *describes* ("keep layouts clean") is invisible to the generating model the same way a weak system prompt is. `references/context-potency.md` teaches the technique-by-surface mapping (which linguistic technique carries which design-system surface) plus the generic-output clinic: symptom → failed layer → fix at source.
+The spine, guidelines folder, or frontmatter IS a system prompt for a design agent — so [[prompt-wording-rules]] governs it, and a guardrail that only *describes* ("keep layouts clean") is invisible to the generating model the same way a weak system prompt is. `references/context-potency.md` teaches the technique-by-surface mapping (which linguistic technique carries which design-system surface) plus the generic-output clinic: symptom → failed layer → fix at source.
 
 The load-bearing moves: a **named world** presupposes a point in design space where adjectives describe a region; a **contrastive good/bad pair** binds where a paragraph of criteria doesn't; **numeric anchors** bind ("a 13px gap does not exist in this system") where vague quantifiers delegate to the model's prior ("hover brightens slightly" — every screen invents its own "slightly"); the **Agent Prompt Guide is a work-order placed last**, near the action. When output is generic, diagnose which layer failed — register, presupposition, altitude, salience, position — and fix that layer; stacking more imperatives dilutes the salience budget.
 
@@ -74,7 +74,7 @@ The load-bearing moves: a **named world** presupposes a point in design space wh
 3. **Fix the canonical core**: 15–25 roles named by the grammar, both schemes, every value terminal, taken from the verified upstream palette/token source ([[make-palette]] / [[check-colors]] / token-builder are upstream — a value invented here bypasses every upstream proof). Call out every divergence from an upstream system's made decisions.
 4. **Dispatch each named sibling for its export**, passing the core, the doctrines, and the divergence callouts — a dispatch is a cold-start prompt, so it carries everything the sibling needs to gate its own run.
 5. **Verify across exports**: each sibling's gate run green, receipts written, and carrier equality across exports (same build, values equal within ±1/255 per sRGB channel).
-6. **Review independently**: design-kit-checker grades the exports; linguistics-reviewer audits the prompt-carrying prose. Generator ≠ critic — the independent seats issue the verdicts; the maker applies the gap-maps.
+6. **Review independently**: design-kit-checker grades the exports; wording-checker audits the prompt-carrying prose. Generator ≠ critic — the independent seats issue the verdicts; the maker applies the gap-maps.
 
 ## Worked example — one brand, two platforms
 
@@ -83,7 +83,7 @@ no shipped exports, receipts, or upstream token files found — greenfield, ladd
 
 ## Validation loop (finalize only when it clears)
 
-Strategy and core decisions → score against `references/rubric.md` (gate: H1 routing fidelity · H2 one canonical core · H4 context potency). Context prose → where linguistic-techniques is installed, run its `potency_lint.py <file>` pass; otherwise apply its checklist by hand (strip filler and unearned intensifiers, keep only load-bearing claims) — then, either way, run the instantiation test on each load-bearing line. Platform carriers → the owning sibling's checker (`bundle_gates.py` / `prelint.py` + `npx @google/design.md lint` / `make_guidelines_check.py`) — the owning sibling's checker is the only legal gate runner; a hub re-implementation forks the gate's truth. Generator ≠ critic: dispatch design-kit-checker for exports and linguistics-reviewer for wording; apply their gap-maps and re-run.
+Strategy and core decisions → score against `references/rubric.md` (gate: H1 routing fidelity · H2 one canonical core · H4 context potency). Context prose → where prompt-wording-rules is installed, run its `potency_lint.py <file>` pass; otherwise apply its checklist by hand (strip filler and unearned intensifiers, keep only load-bearing claims) — then, either way, run the instantiation test on each load-bearing line. Platform carriers → the owning sibling's checker (`bundle_gates.py` / `prelint.py` + `npx @google/design.md lint` / `make_guidelines_check.py`) — the owning sibling's checker is the only legal gate runner; a hub re-implementation forks the gate's truth. Generator ≠ critic: dispatch design-kit-checker for exports and wording-checker for wording; apply their gap-maps and re-run.
 
 ## References & composition
 
@@ -93,10 +93,10 @@ Strategy and core decisions → score against `references/rubric.md` (gate: H1 r
 | `references/shared-doctrines.md` | Enforcing or teaching a doctrine: prose doctrine, naming grammar, encoding, reduction R1–R5, gates + receipts, standing rules |
 | `references/context-potency.md` | Making generation context potent: technique-by-surface mapping, the generic-output clinic, the altitude rule |
 | `references/rubric.md` | Scoring a hub engagement (strategy + core + context) — H1–H7 |
-| `scripts/routing-corpus.json` | The routing eval corpus for this description (forge's `routing_eval.py`, where installed) |
+| `scripts/routing-corpus.json` | The routing eval corpus for this description (harness's `routing_eval.py`, where installed) |
 | [[make-dscard-kit]] · [[make-stitch-kit]] · [[make-figma-make-kit]] | Platform execution — each owns its format ground truth, gates, and rubric |
 | **design-kit-checker** (agent) | Independent grading of any export |
-| [[linguistic-techniques]] · **linguistics-reviewer** | The wording layer this hub applies and teaches; its independent audit |
+| [[prompt-wording-rules]] · **wording-checker** | The wording layer this hub applies and teaches; its independent audit |
 | [[make-palette]] · [[check-colors]] · **token-builder** | Upstream: ramp design, contrast proof, project token layer — consumed as verified inputs |
 | [[make-rubric]] | Author or repair `references/rubric.md` |
 

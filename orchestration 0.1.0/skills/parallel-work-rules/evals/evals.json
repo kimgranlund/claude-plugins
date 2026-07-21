@@ -1,6 +1,6 @@
 {
   "skill": "parallel-work-rules",
-  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the fenced siblings' own trigger vocabulary: team-or-solo-rules (solo-vs-team, wiring, fan-out), loop-rules (/goal, /loop continuation), forge's hook-authoring-standards/entry-file-standards/agent-authoring-standards (harness-mechanics authoring once a rule is already decided), and close-session (n10 — this session's own worktree close-out, not a peer-collision question).",
+  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the fenced siblings' own trigger vocabulary: team-or-solo-rules (solo-vs-team, wiring, fan-out), loop-rules (/goal, /loop continuation), harness's hook-writing-rules/entry-file-rules/agent-writing-rules (harness-mechanics authoring once a rule is already decided), and close-session (n10 — this session's own worktree close-out, not a peer-collision question).",
   "cases": [
     {
       "id": "t01",

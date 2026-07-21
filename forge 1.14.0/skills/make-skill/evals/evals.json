@@ -1,0 +1,97 @@
+{
+  "skill": "make-skill",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere. Minted 2026-07-14 when make-skill converted from command species to procedural species (disable-model-invocation: true -> false).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "build a skill for reviewing PRs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "make a skill that parses log files",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "I want a reusable capability for summarizing tickets",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "turn this workflow into a skill",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "write me a new skill for migrations",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "scaffold a new skill from this one-line intent",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "author a SKILL.md for our deploy checklist",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "add this as something the model can invoke on its own",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "forge a skill that answers questions from our style guide",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "audit this SKILL.md and tell me what's wrong",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "why isn't my skill triggering, review it",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "should this sprawling skill split into a family of packs",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "these three skills overlap, merge them into one",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "build a new subagent for reviewing PRs",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "enforce this rule with a hook instead of a prompted instruction",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "slim down this bloated CLAUDE.md",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "our knowledge pack needs a new research wave on this axis",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "Mechanize this check as a bundled script with a selftest",
+      "expect": "no-trigger",
+      "note": "make-script — one script inside an existing surface, not a whole new skill"
+    }
+  ]
+}

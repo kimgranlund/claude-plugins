@@ -27,7 +27,7 @@ The reasons cited converge on three:
    drifts into sub-pixel values that render blurry on some densities.
 3. **A validated default.** Because Material and Apple's own systems already standardized on this
    family, adopting it is choosing an already-battle-tested convention over inventing a new one —
-   the same "why we didn't reinvent this" logic pack-authoring-standards itself uses for citing a
+   the same "why we didn't reinvent this" logic pack-writing-rules itself uses for citing a
    worked instance instead of re-deriving it.
 
 (rejuvenate.digital/news/designing-rhythm-power-8pt-grid-ui-design;

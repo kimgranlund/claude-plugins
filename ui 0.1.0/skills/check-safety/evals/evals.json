@@ -1,6 +1,6 @@
 {
   "skill": "check-safety",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Review-time corpus (excellence batch 3; sibling re-aimed 2026-07-06 for the color-*-facts split, corrected 2026-07-06 per host amendment A4 \u2014 the color-space/palette-math fence deflects color-space-facts, not accessibility). Positives across imperative/diagnostic/symptom/indirect; negatives drawn from neighbors' trigger vocabulary (check-colors, check-focus, check-translations, check-speed, color-space-facts, make-component, check-whole-ui) plus the security/authz fences.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: Review-time corpus (excellence batch 3; sibling re-aimed 2026-07-06 for the color-*-facts split, corrected 2026-07-06 per host amendment A4 \u2014 the color-space/palette-math fence deflects color-space-facts, not accessibility). Positives across imperative/diagnostic/symptom/indirect; negatives drawn from neighbors' trigger vocabulary (check-colors, check-focus, check-translations, check-speed, color-space-facts, make-component, check-whole-ui) plus the security/authz fences.",
   "cases": [
     {
       "id": "t01",

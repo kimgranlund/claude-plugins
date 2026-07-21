@@ -1,7 +1,7 @@
 {
   "skill": "ui-genre-facts",
-  "_note": "Review-time corpus, batch-4 deep review 2026-07-03. Positives span imperative / diagnostic / symptom / indirect. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: ui-pattern-facts, break-down-layout, check-whole-ui, pack-forge — including shared-token traps (dashboard, travel, modules).",
-  "siblings_in_repo": ["ui-pattern-facts", "break-down-layout", "check-whole-ui", "pack-forge"],
+  "_note": "Review-time corpus, batch-4 deep review 2026-07-03. Positives span imperative / diagnostic / symptom / indirect. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: ui-pattern-facts, break-down-layout, check-whole-ui, make-pack — including shared-token traps (dashboard, travel, modules).",
+  "siblings_in_repo": ["ui-pattern-facts", "break-down-layout", "check-whole-ui", "make-pack"],
   "positives": [
     "name the genre conventions for a habit tracking app",
     "list what users expect from a fintech onboarding flow",

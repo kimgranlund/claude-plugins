@@ -1,6 +1,6 @@
 {
   "skill": "check-ui-change",
-  "note": "Trigger-routing suite. Positives are the moment right before a UI change would be reported done — the exact moment this skill must fire instead of a bare description-read. Negatives are near-misses owned by the abstract-property verify skills (check-focus, check-translations, check-speed, check-safety), which reason about a property without a live artifact to drive, and by check-whole-ui, which sweeps a whole product rather than one change. Extended 2026-07-16 (n07): the check-whole-ui fence (Issue #8); /eval-run owed at the wave boundary.",
+  "note": "Trigger-routing suite. Positives are the moment right before a UI change would be reported done — the exact moment this skill must fire instead of a bare description-read. Negatives are near-misses owned by the abstract-property verify skills (check-focus, check-translations, check-speed, check-safety), which reason about a property without a live artifact to drive, and by check-whole-ui, which sweeps a whole product rather than one change. Extended 2026-07-16 (n07): the check-whole-ui fence (Issue #8); /check-routing owed at the wave boundary.",
   "cases": [
     {
       "id": "t01",

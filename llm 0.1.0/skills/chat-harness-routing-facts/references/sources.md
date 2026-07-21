@@ -12,8 +12,8 @@ Facts about how the Claude Code harness itself loads, triggers, and routes skill
 can drift as the platform versions — if a claim here disagrees with CURRENT Claude Code docs, the
 docs win and this pack needs repair.
 
-- **`forge:skill-authoring-standards`** (installed at
-  `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.23.0/skills/skill-authoring-standards/SKILL.md`,
+- **`harness:skill-writing-rules`** (installed at
+  `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.23.0/skills/skill-writing-rules/SKILL.md`,
   identical at `1.21.0`) — the single most directly-inspectable primary source on this exact
   mechanism, itself dated "verified 2026-07, Claude Code 2.1.20x [drift-prone]." Cited by exact
   line across all three axis files: the description-is-the-API/body-is-the-payload framing
@@ -21,7 +21,7 @@ docs win and this pack needs repair.
   its bad/good contrast (`:61-74`), the three-species table (`:37-41`), the corrected
   preload-blocking finding (`:43`), the both-dials-explicit rule (`:45`), the capability-uplift
   vs encoded-preference axis (`:48`), and the baseline-comparison evaluation check (`:115`).
-- **`skill_lint.py`** (same `forge` install, identical across `1.21.0`/`1.23.0`) — the mechanical
+- **`skill_lint.py`** (same `harness` install, identical across `1.21.0`/`1.23.0`) — the mechanical
   enforcement of the standard above; cited for the `W5` knowledge-noun/`user-invocable` mismatch
   rule (`:209-210`).
 - **The deferred-tool, load-on-demand mechanic for TOOLS** — observed directly in this session's
@@ -50,7 +50,7 @@ shape a routing corpus could take.
   — the `note` field's dated, two-entry measurement history (a 2026-07-09 blind run at 33/36, a
   same-day estate-wide re-run also at 33/36 with different cases resolved), the clearest evidence
   in this workspace that routing is measured and re-measured, not assumed after one write.
-- **`forge`'s `release_gate.py` G7 gate** (`/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.21.0/scripts/release_gate.py`)
+- **`harness`'s `release_gate.py` G7 gate** (`/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.21.0/scripts/release_gate.py`)
   — enforces that every model-invocable skill's eval suite is schema-valid (`FAIL`s the release)
   and warns (does not fail) when a model-invocable skill ships with no suite at all — the
   mechanical backstop behind "write a corpus" actually being checked, not merely encouraged.
@@ -62,6 +62,6 @@ routing; it does not restate its siblings. Layering standing instructions and en
 across a whole harness is [[chat-harness-guardrail-facts]]. Composing multiple skills,
 tools, or subagents into a multi-step workflow is [[chat-harness-workflow-facts]]. The
 repo-structural standard for writing a SKILL.md file to spec (frontmatter shape, body budgets,
-per-species templates) is `skill-authoring-standards` directly, where installed — this pack teaches
+per-species templates) is `skill-writing-rules` directly, where installed — this pack teaches
 the upstream DECISIONS that standard's file format then encodes, and should never restate its
 checkable rules.

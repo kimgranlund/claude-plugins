@@ -41,7 +41,7 @@ hook documentation, the current behavior wins and this pack needs repair.
   own and may rename across versions; the multi-mechanism SHAPE (native completion notification vs.
   deliberately-paced external polling) is the portable claim, not any specific tool's name.
 
-## The nonoun-plugins workspace's own measured eval-run history — a worked instance, real and dated
+## The nonoun-plugins workspace's own measured check-routing history — a worked instance, real and dated
 
 A genuine, inspectable measurement history from this workspace's own skill corpus — cited as proof
 the routing-accuracy discipline works in practice, not as a universal template every project must
@@ -56,8 +56,8 @@ copy verbatim.
   this pack), each a held-out `{id, prompt, expect}` case set mechanically validated by this
   workspace's own `eval_check.py` (`E1`-`E5` rules, verified directly from that script's own rule
   comments and code).
-- **The `eval-judge` agent** — verified directly from its own definition file,
-  `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.21.0/agents/eval-judge.md`: frontmatter
+- **The `routing-judge` agent** — verified directly from its own definition file,
+  `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.21.0/agents/routing-judge.md`: frontmatter
   `tools: []` (a genuinely empty allowlist, not merely a claim in prose), dispatched with only a
   skill-description menu and shuffled, expectation-stripped prompts as its stated "ENTIRE world."
   Cited as a real, worked instance of a deliberately blind measurer — not a hypothetical design

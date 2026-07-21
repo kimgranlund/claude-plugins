@@ -6,13 +6,13 @@ description: >-
   contract. Use when the user reports something broken,
   gives a repro or wrong output, or flags a regression — "the export button does nothing on
   Safari", "this crashes when I click X", "this used to work and now it doesn't". Runs
-  intent-extract and system-decompose during capture, then
+  find-the-ask and break-down-problem during capture, then
   records — make-doc's TICKET path by default, or the workspace's ruled backend (git-native, or a
   named external adapter) — and dispatches with the record as context. Also runs via /file-bug
   [raw report, or a TKT-/#issue/adapter id]. Writes one record, then one investigation. NOT for
   a feature idea or build request (file-feature / teamwork's build-feature); NOT for a generic
   chore/follow-up/task (file-task); NOT for non-bug documents (make-doc); NOT for reviewing a doc
-  (check-doc); NOT for intent extraction outside a bug (intent-extract).
+  (check-doc); NOT for intent extraction outside a bug (find-the-ask).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id to resume]"
@@ -54,9 +54,9 @@ never proceed as if an unresolved id already had a record behind it.
 
 ## Phase 2 — Capture
 
-Invoke intent-extract on the raw report: separate the literal complaint from the root cause, and
+Invoke find-the-ask on the raw report: separate the literal complaint from the root cause, and
 produce a repro (or the explicit statement "no fixed repro" for an intermittent or subjective
-report). Where intent-extract is not installed, apply its discipline inline — one batched round of
+report). Where find-the-ask is not installed, apply its discipline inline — one batched round of
 clarifying questions, never more, and only when a human is actually present to answer (a sibling
 redirect, a subagent dispatch, or a scheduled/unattended firing has no one to ask — skip straight
 to capture-with-gaps). Missing detail after the round, or no round at all, does not block capture:
@@ -65,7 +65,7 @@ persistence for completeness.
 
 ## Phase 3 — Classify
 
-Invoke system-decompose (or apply its two-plane lens inline where not installed) to name the axis
+Invoke break-down-problem (or apply its two-plane lens inline where not installed) to name the axis
 the bug lands on — functional, structural, visual, subjective, or another named axis — and the
 specific component or plane it implicates. This is not a fixed enum: name the real axis: do not
 force-fit one of the four examples.
@@ -120,8 +120,8 @@ Root cause already evident from Phase 2/3 → fix inline; file-bug itself append
 the ticket-first ordering is unchanged — only the dispatch step is skipped.
 
 Otherwise, decide fork vs. agent: an agent only when the investigation needs tool restriction,
-parallelism, or multi-skill preload; a fork for everything else (forge's fork-vs-agent gate; apply
-this test inline where forge is not installed). The dispatch prompt is a contract, not a
+parallelism, or multi-skill preload; a fork for everything else (harness's fork-vs-agent gate; apply
+this test inline where harness is not installed). The dispatch prompt is a contract, not a
 suggestion: it names the record — the ticket's path, or the issue number + `gh issue comment` as
 the write-back verb — and requires a dated `## Findings` entry (file section, or issue comment) at
 *each* significant result — repro confirmed, root cause found — not only at the very end, so a

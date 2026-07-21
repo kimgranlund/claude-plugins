@@ -50,7 +50,7 @@ Good output, fed back through a markdown renderer, yields markup **semantically 
 | `references/foundations.md` | The semantic-vs-presentation model, lossy-by-design, round-trip equivalence |
 | `references/best-practices.md` | The full element map, the escaping rules, nesting/whitespace, code & link handling |
 | `references/rubric.md` | Scoring a conversion — fidelity, escaping, presentation-stripping, structure |
-| `scripts/routing-corpus.json` | The routing corpus of record — after any description change, re-run forge's `routing_eval.py` against it (where forge is installed) |
+| `scripts/routing-corpus.json` | The routing corpus of record — after any description change, re-run harness's `routing_eval.py` against it (where harness is installed) |
 
 ## Validation loop (round-trip)
 

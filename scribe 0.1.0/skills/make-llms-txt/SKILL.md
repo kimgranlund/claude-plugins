@@ -58,7 +58,7 @@ Top issues: 1) … — fix: …
 
 A high-stakes llms.txt you authored gets an independent pass: dispatch the shared
 `doc-checker` agent for the fresh-context score against `references/rubric.md`, and the
-`linguistics-reviewer` agent for the wording layer (the link descriptions are what agents route
+`wording-checker` agent for the wording layer (the link descriptions are what agents route
 on; potency rubric); the maker applies the fix.
 
 **Done** = harness passes, every gate dimension (D1, D2, D6) ≥ 3 with cited evidence, every entry

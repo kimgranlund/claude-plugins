@@ -30,7 +30,7 @@ is a real defect class:** a scalar value (`model`, `permissions.defaultMode`) fo
 precedence ORDER where the narrowest scope that sets it wins outright, replacing wider scopes'
 values; a hook registration instead MERGES additively across every scope that registers one — "hooks
 from enterprise, project, user, local, and plugin scopes merge additively — everything that
-matches runs; nothing overrides" (`forge 1.14.0/skills/hook-authoring-standards/SKILL.md:32`,
+matches runs; nothing overrides" (`forge 1.14.0/skills/hook-writing-rules/SKILL.md:32`,
 cited fully in deterministic-rules-vs-prompted-guidance). Concretely, in the stack above: the
 global `dotenv-guard.py` (`Read|Bash`) and the project's `adr-status-guard.py`/`
 bundle-size-reminder.sh`/`css-comment-guard.py` (`Edit|Write`) ALL fire in that repo — none

@@ -63,5 +63,5 @@ stated rules instead of a remembered screenshot of some other app.
 ## Extending this pack
 
 A missing axis, a stale reference (a HIG revision changes stated guidance), or "add X" is
-authoring work — route to [[pack-forge]] (grounded research waves, one axis per wave); never bolt
+authoring work — route to [[make-pack]] (grounded research waves, one axis per wave); never bolt
 an uncited claim onto the corpus inline.

@@ -101,7 +101,7 @@ changed understanding. Re-dispatch, don't edit.
 | `scripts/routing-corpus.json` | The routing eval corpus for this skill's description |
 
 - **doc-checker** is the memo's independent critic — it loads `references/rubric.md` and scores.
-- **[[intent-extract]]** / **[[grill-the-ask]]** sharpen a fuzzy "make the case for X" into a statable
+- **[[find-the-ask]]** / **[[grill-the-ask]]** sharpen a fuzzy "make the case for X" into a statable
   thesis *before* drafting (the V1 precondition).
 - **make-doc** (this plugin) owns the what to build documents — PRD, SPEC, LLD, ADR; this owns
   the argument for *how to think* about building it. Route a spec request there, not here.

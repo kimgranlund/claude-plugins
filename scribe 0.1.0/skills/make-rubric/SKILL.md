@@ -9,7 +9,7 @@ description: >
   "turn this into eval criteria", "which dimensions should gate promotion and
   at what threshold", "re-anchor this rubric — the artifact standard changed",
   "the level descriptors are vague — fix the anchors". NOT for the skill/agent
-  carrying the rubric (forge's skill-forge / agent-forge) nor the /goal loop itself
+  carrying the rubric (harness's make-skill / make-agent) nor the /goal loop itself
   (loop-rules — this skill owns only the completion condition's quality).
 disable-model-invocation: false
 user-invocable: true
@@ -17,7 +17,7 @@ user-invocable: true
 
 # Harness — Rubric Authoring & Review
 
-A rubric is the verification artifact native to agentic systems: criteria × levels × descriptors × aggregation. It is **the standard** — the spine every generate → evaluate → improve loop turns on — which puts this skill **upstream of every other**: anything that ships a `references/rubric.md` depends on it, and forge's **skill-forge** builds skills *to* the rubric authored here. One rubric-for-rubrics drives four operations over a rubric: **create · evaluate · improve · update** — authored so two reviewers would score it the same way.
+A rubric is the verification artifact native to agentic systems: criteria × levels × descriptors × aggregation. It is **the standard** — the spine every generate → evaluate → improve loop turns on — which puts this skill **upstream of every other**: anything that ships a `references/rubric.md` depends on it, and harness's **make-skill** builds skills *to* the rubric authored here. One rubric-for-rubrics drives four operations over a rubric: **create · evaluate · improve · update** — authored so two reviewers would score it the same way.
 
 ## Operating model (essentials; depth in `references/foundations.md`)
 - `[gate]` = mechanically checkable; `[review]` = judgment against anchors with cited evidence. The tag must be accurate.

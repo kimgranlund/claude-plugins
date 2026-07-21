@@ -118,7 +118,7 @@ On the git-native backend, `kind: bug`/`kind: feature`/`kind: task` also sets Gi
 Issue Type (`Bug`/`Feature`/`Task`) in addition to the label each capture skill already applies —
 additive, not a replacement: the label stays the system of record, Issue Type is best-effort.
 **Two separate calls, never combined into one:** `file-bug`, `file-feature`, `file-task`, and
-`ops-issues` (forge) first run the ordinary `gh issue create` (no `--type`) — the create step is
+`issue-sorter` (harness) first run the ordinary `gh issue create` (no `--type`) — the create step is
 unchanged from before this ADR, atomic, and always succeeds or fails on its own pre-existing
 terms; THEN, once the issue exists, a second call — `gh issue edit <id> --type <Kind>` — attempts
 the type. If that second call fails (the org's type schema rejects it — renamed, disabled, or,
@@ -164,6 +164,6 @@ Distilled 2026-07-07 from the corpus's Vol 3 (source of record; consult it for o
 handoffs and rubric/report types beyond bugs, which this plugin does not yet template — bug
 reports route through TICKET's `kind: bug` convention above). Drafting workflow:
 `make-doc`. Judgment: `check-doc`. Method dependencies (sharpening the ask, structural
-decomposition, wording, reasoning depth) are the forge plugin's cross-cutting layer —
-`intent-extract`, `system-decompose`, `linguistic-techniques`, `reasoning-orders` — used when
+decomposition, wording, reasoning depth) are the harness plugin's cross-cutting layer —
+`find-the-ask`, `break-down-problem`, `prompt-wording-rules`, `thinking-depth-rules` — used when
 installed, degraded to inline judgment when not.

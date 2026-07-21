@@ -79,5 +79,5 @@ outside every seam — nothing trades it away.
 ## Extending this pack
 
 A missing axis, a stale reference (canon moves: HIG revisions, WCAG dot-releases, M3 re-specs),
-or "add X" is authoring work — route to [[pack-forge]] (grounded research waves, one axis per
+or "add X" is authoring work — route to [[make-pack]] (grounded research waves, one axis per
 wave); never bolt an uncited file onto the corpus inline.

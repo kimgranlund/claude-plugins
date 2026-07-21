@@ -1,0 +1,35 @@
+{
+  "skill": "break-down-problem",
+  "_note": "M2 test-of-record candidate (deep review 2026-07-03). Positives across imperative / diagnostic / symptom / indirect. Negatives drawn from the trigger vocabulary of graph neighbors: break-down-layout, break-down-flow, make-component, prd/spec/lld-author, grill-the-ask. Should be checked into scripts/routing-corpus.json. Reciprocal fence added 2026-07-13 against harness's new save-lessons skill (judges whether a fact crosses the bar for durable knowledge; this skill decomposes a NEW system's structure, a related but distinct question).",
+  "neighbors": ["break-down-layout", "break-down-flow", "make-component", "prd-author", "spec-author", "lld-author", "grill-the-ask", "save-lessons"],
+  "positives": [
+    "decompose this system into parts",
+    "break down this technical architecture into subsystems and modules",
+    "break this goal down into milestones and tasks",
+    "decompose the plan before we start building",
+    "my breakdown has structure but no behavior mapped to it",
+    "these acceptance criteria don't map to any task in the plan",
+    "the plan looks complete but half the needs have nowhere to live",
+    "this breakdown feels lopsided - actions with no home",
+    "structure with no behavior in my work breakdown",
+    "I need a decomposition before writing the PRD",
+    "run both planes on this feature before we spec it",
+    "check that my node tree covers every action",
+    "verify the two sides of my breakdown cover each other"
+  ],
+  "negatives": [
+    "decompose this UI screenshot into regions",
+    "name these regions and tell me which archetype fits",
+    "design an app shell and wireframe a dashboard",
+    "map the checkout flow and find where it dead-ends",
+    "walk this signup flow - can the user recover and resume",
+    "build a web component with a clean API and anatomy",
+    "design this component's API and composition seams",
+    "write a PRD for this product idea",
+    "spec this out - pin down the API and acceptance requirements",
+    "write the LLD and plan the components and data models",
+    "grill me on this greenfield design before we plan",
+    "what do we need to decide here before designing this family",
+    "is this fact worth turning into a knowledge-pack entry"
+  ]
+}

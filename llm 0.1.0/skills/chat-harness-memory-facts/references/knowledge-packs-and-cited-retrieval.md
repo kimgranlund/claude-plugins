@@ -2,7 +2,7 @@
 
 > Axis: authoring a knowledge base as a cited corpus retrieved by search, not prose dumped
 > wholesale into context. Grounded in this workspace's own knowledge-pack skill convention —
-> forge's `pack-authoring-standards` + `skill-authoring-standards` (retired 2026-07-19 from
+> harness's `pack-writing-rules` + `skill-writing-rules` (retired 2026-07-19 from
 > docs' `knowledge-forge`, folded into forge as the estate-wide factory), this very skill
 > family as a live instance, and `agent-protocols`'s `a2ui-training-facts` as a heavier variant —
 > cited as worked instances of the pattern, not as its only valid shape.
@@ -14,17 +14,17 @@ context wholesale.** Two failure modes this prevents: (1) a context window that 
 reference material on every turn regardless of whether the current ask needs it, and (2) an
 agent that "knows" something only because it happened to be in the initial dump rather than
 because it looked it up — a distinction that matters the moment the corpus grows past what any
-one context can hold. **Grounding:** forge's own `skill-authoring-standards` states this directly —
+one context can hold. **Grounding:** harness's own `skill-writing-rules` states this directly —
 "a knowledge pack is a corpus behind a boundary: `references/` organized by question type"
-(`forge`'s `skill-authoring-standards/SKILL.md:97`).
+(`harness`'s `skill-writing-rules/SKILL.md:97`).
 
 ## Axis decomposition — subdirectories are the retrieval taxonomy
 
 **Claim — the question space splits into 3-7 retrieval axes, each landing as one
 `references/` file, chosen by how users ASK, not how the literature organizes the topic.**
-`pack-authoring-standards` names this explicitly: "Files are ask-shaped, never literature-shaped...
+`pack-writing-rules` names this explicitly: "Files are ask-shaped, never literature-shaped...
 two genuinely different question types never share a file, however related their subject"
-(`forge`'s `pack-authoring-standards/SKILL.md:34-38`). **Worked instance — this very skill family:** the sibling packs
+(`harness`'s `pack-writing-rules/SKILL.md:34-38`). **Worked instance — this very skill family:** the sibling packs
 in this plugin split on exactly this principle — `llm-gateway-facts` axes on "adapter seam /
 registry+trust-boundary / dev-proxy+bundler footguns / stateless session model" (four rows in its
 own consult table, `llm-gateway-facts/SKILL.md:29-35`) and `llm-streaming-facts` axes on
@@ -39,33 +39,33 @@ answer.
 
 **Claim — each reference file is written FROM verified research, not filled in from
 recollection, and every claim inside it cites its source** (a `file:line`, an ADR/SPEC clause, or
-a dated vendor-doc citation). `pack-authoring-standards`' research-wave step: "Distill ask-shaped —
-one file per question type, grounding-marked, within load budgets" (`forge`'s
-`pack-authoring-standards/SKILL.md:100`), with every claim wearing a grounding marker —
-`[verified]` / `[inferred]` / `[drift-prone]` / `[incident]` (`pack-authoring-standards/SKILL.md:79-86`).
+a dated vendor-doc citation). `pack-writing-rules`' research-wave step: "Distill ask-shaped —
+one file per question type, grounding-marked, within load budgets" (`harness`'s
+`pack-writing-rules/SKILL.md:100`), with every claim wearing a grounding marker —
+`[verified]` / `[inferred]` / `[drift-prone]` / `[incident]` (`pack-writing-rules/SKILL.md:79-86`).
 **Worked instance:**
 `llm-gateway-facts/references/provider-adapter-seam.md` cites `agent-transport.ts:81-88` for
 its interface-shape claim and `anthropic.ts:124` for its factory-injection claim — a reader can
 open those exact lines and check the claim rather than trust the pack's paraphrase. An invented
 or stub reference — a file with no citation behind its claims — is a dangling pointer in this
 convention, not a lesser-quality entry: "a claim with none of these [markers] is an orphan; a
-corpus of orphans is vibes with a directory structure" (`forge`'s `pack-authoring-standards/SKILL.md:88`).
+corpus of orphans is vibes with a directory structure" (`harness`'s `pack-writing-rules/SKILL.md:88`).
 
 ## The entry surface — a typed index entered by search, never read start-to-finish
 
 **Claim — the pack's front door is a table mapping ask-class to file, with an explicit
-Grep-first, Read-the-section discipline**, not "read this whole folder." `skill-authoring-standards`
+Grep-first, Read-the-section discipline**, not "read this whole folder." `skill-writing-rules`
 names this as one of the entry surface's required elements: "the body states, in the consult
 procedure itself, that the corpus is entered by search — Grep the matching file for the term
-first, then Read the section" (`forge`'s `skill-authoring-standards/SKILL.md:100`). Every pack in
+first, then Read the section" (`harness`'s `skill-writing-rules/SKILL.md:100`). Every pack in
 this plugin states the same load discipline near-verbatim: "Grep the matching file for the term
 first... and Read that section — the files are cited catalogs, not linear reads"
 (`llm-gateway-facts/SKILL.md:39-41`; `llm-streaming-facts/SKILL.md:40-42` states the identical
-discipline with its own term list). At larger corpus scale, `pack-authoring-standards` promotes
+discipline with its own term list). At larger corpus scale, `pack-writing-rules` promotes
 this table to a root `INDEX.md` (one line per file) rather than folding it into the SKILL.md body:
 "when the SKILL.md consult table lists every reference file 1:1 (a flat corpus of ≤~7 files), the
 table IS the retrieval map... ship no INDEX. An INDEX.md earns its keep the moment files outgrow
-what the table enumerates" (`forge`'s `pack-authoring-standards/SKILL.md:50-55`); this skill family
+what the table enumerates" (`harness`'s `pack-writing-rules/SKILL.md:50-55`); this skill family
 (small, hand-authored) uses the SKILL.md-table form, the same form this pack uses.
 
 ## The answers-not-generates boundary

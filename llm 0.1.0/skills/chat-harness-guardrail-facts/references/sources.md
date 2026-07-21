@@ -71,7 +71,7 @@ still exists, rather than just the structural pattern.
   (`claude plugin marketplace add` / `claude plugin install <name>@nonoun-plugins`) plus the
   `--plugin-dir` local-development alternative and the post-install `/reload-plugins` + `/doctor`
   steps.
-- `forge 1.14.0/skills/hook-authoring-standards/SKILL.md:15,17-19,31,32` — the routing test
+- `forge 1.14.0/skills/hook-writing-rules/SKILL.md:15,17-19,31,32` — the routing test
   (check → hook, judgment → skill), the measured ~100%-vs-70–90% compliance gap, exit-code
   semantics, and the additive-merge layering rule for hooks across scopes.
 - `forge 1.14.0/hooks/hooks.json:3-13` and `forge 1.14.0/scripts/skill_lint.py:180-183` — the real

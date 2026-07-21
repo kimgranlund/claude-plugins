@@ -1,8 +1,8 @@
 # Typed hand-off contracts — verifiable, not narrative
 
 > Axis: how a subagent hands work back to whoever dispatched it (a coordinator, or the host
-> itself) on a shape the recipient can *check* rather than merely trust. Grounded in forge's
-> `handoff-compose` skill (`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/handoff-compose/`)
+> itself) on a shape the recipient can *check* rather than merely trust. Grounded in harness's
+> `write-handoff` skill (`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/write-handoff/`)
 > and this session's own Agent tool description.
 
 ## Why a hand-off must be checkable, not narrated
@@ -14,7 +14,7 @@ failed, however true its prose turns out to be. **Grounding — this session's o
 description states the exact failure mode this contract exists to prevent, verbatim, as the
 justification for checking a subagent's work:** "Trust but verify: an agent's summary describes
 what it intended to do, not necessarily what it did... check the actual changes before reporting
-the work as done." **Worked instance:** `handoff-compose/references/foundations.md` §1: "the
+the work as done." **Worked instance:** `write-handoff/references/foundations.md` §1: "the
 handoff must let the next step *confirm the work without re-doing it*. That is the whole purpose
 of Evidence and Tests/checks run: gate exit codes, file:line citations, and counts are checkable
 in seconds; 'I tested it and it works' is not."
@@ -24,7 +24,7 @@ in seconds; 'I tested it and it works' is not."
 **Pattern — one fixed, ordered field set every agent hands back, so the recipient parses instead
 of re-reading prose:** Status · Summary · Files changed · Tests/checks run · Evidence · Risks ·
 Open questions · Recommended next action. **Worked instance, quoted verbatim from
-`handoff-compose/SKILL.md`:**
+`write-handoff/SKILL.md`:**
 
 - **Status** — `done | partial | blocked(reason)`, first line, nothing else on it — "the enum the
   coordinator routes on — outcome state never lives only in Summary prose."
@@ -50,7 +50,7 @@ remove.
 
 **Claim — the field set's critic is its own consumer:** the coordinator's gate, or the host,
 reading the block fresh is a deliberate, sanctioned form of independent review, not a missing
-reviewer seat. **Worked instance:** `handoff-compose/SKILL.md`: "Its critic is the block's
+reviewer seat. **Worked instance:** `write-handoff/SKILL.md`: "Its critic is the block's
 consumer: the recipient... is fresh-context by construction (**consumer-as-critic**, a deliberate
 form the standard sanctions, not a missing reviewer seat)." This is why Evidence and Tests/checks
 run are written *for the critic specifically* (`foundations.md` §2: "Write those two fields *for
@@ -62,7 +62,7 @@ has failed this contract regardless of whether the underlying work was actually 
 
 **Pattern — a shipped hand-off is never edited in place; a correction is a re-dispatch and a fresh
 block, because the recipient may already have routed on the version it read.** **Worked instance:**
-`handoff-compose/SKILL.md`: "A handoff is **write-once**: once shipped it is never edited in
+`write-handoff/SKILL.md`: "A handoff is **write-once**: once shipped it is never edited in
 place — the recipient may already have routed on it; repair = re-dispatch + re-compose." A
 second, related discipline: a green gate is not a landed change — read the gate output, *then*
 commit as a separate step, never chained with `&&` onto the test run, "or a regression rides in on
@@ -74,7 +74,7 @@ commit lands code whose gate result nobody actually read.
 
 **Pattern, for a hand-off from an agent running inside a messaging team rather than a sealed
 one-shot dispatch: read every still-pending message before composing the block.** **Worked
-instance:** `handoff-compose/SKILL.md`: "In a messaging team, drain your full inbox first. Read
+instance:** `write-handoff/SKILL.md`: "In a messaging team, drain your full inbox first. Read
 every still-pending message before you compose — a handoff written one message behind is already
 wrong the moment it ships." A **sealed subagent has no inbox** — its world was enumerated at
 dispatch, so for it "freshness means consistency with the inputs it was handed," not draining a
@@ -84,11 +84,11 @@ newer commit already fixed.
 
 ## The mechanical gate
 
-**Worked instance:** `handoff-compose/scripts/handoff_check.py` — "Mechanical H1 gate — field
+**Worked instance:** `write-handoff/scripts/handoff_check.py` — "Mechanical H1 gate — field
 presence, order, `(none)` markers, Status enum — run before any rubric judgment"
-(`handoff-compose/SKILL.md`'s own references table). `team-lead.md` names the same
-script as the coordinator's own most-mechanizable check: "run forge's `handoff_check.py`... against
-every INBOUND handoff where forge is installed; otherwise check the block by hand against the
+(`write-handoff/SKILL.md`'s own references table). `team-lead.md` names the same
+script as the coordinator's own most-mechanizable check: "run harness's `handoff_check.py`... against
+every INBOUND handoff where harness is installed; otherwise check the block by hand against the
 [same eight fields]." The mechanical pass (field presence/order) runs before any judgment call
 about whether the content is actually good — the two are separate steps.
 

@@ -6,7 +6,7 @@
 
 ## Reactive vs proactive elicitation
 
-`intent-extract` is **reactive**: a request already exists; you recover the goal under its words and
+`find-the-ask` is **reactive**: a request already exists; you recover the goal under its words and
 resolve only the gaps that change the output. **Intent grilling is proactive**: little has been asked
 yet, but a design *must* be settled. You cannot wait for an ambiguous ask to react to — you **derive**
 the decisions the thing-being-designed implies. Reactive elicitation minimizes questions; proactive
@@ -23,12 +23,12 @@ durable form of exactly such a decision.
 
 ## Two planes, applied to question derivation
 
-The two crossing planes of `system-decompose` — **OUTSIDE-IN** (whole → parts, structure) and
+The two crossing planes of `break-down-problem` — **OUTSIDE-IN** (whole → parts, structure) and
 **INSIDE-OUT** (atoms → surfaces, behavior) — are not only a way to break down a *known* design; run
 *before* the design exists, they are a way to **derive the questions**. Structural forks come from the
 outside-in plane (scope, consumer, element set, composition, sequencing); Mechanism forks from the
 inside-out plane (primitives, capabilities, geometry/semantics, fidelity). A single plane is
-self-confirming and blind to the other's failure — the same reason `system-decompose` insists on
+self-confirming and blind to the other's failure — the same reason `break-down-problem` insists on
 both. Crossing them is what makes the load-bearing forks visible.
 
 ## Decision leverage = value of information
@@ -59,7 +59,7 @@ commit the load-bearing decision — don't ask the author to commit to a fiction
 ## Convergence and the over-grilling failure
 
 Stop when every remaining fork is defaultable-without-cascading or downstream of a decision
-`system-decompose` will make anyway. Past that point, more rounds are **over-grilling** — the
+`break-down-problem` will make anyway. Past that point, more rounds are **over-grilling** — the
 proactive mirror of extraction's over-clarifying. Both spend the author's attention for no change in the
 output. Convergence is a settled *surface*, not an absence of every small doubt.
 

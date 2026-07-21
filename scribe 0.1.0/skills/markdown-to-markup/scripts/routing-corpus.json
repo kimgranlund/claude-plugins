@@ -1,6 +1,6 @@
 {
  "skill": "markdown-to-markup",
- "_note": "Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), make-reference, make-llms-txt, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, make-rubric.",
+ "_note": "Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), make-reference, make-llms-txt, knowledge-forge (retired 2026-07-19, folded into harness's make-pack), prompt-wording-rules, make-rubric.",
  "positives": [
   "render this markdown",
   "render the docs prose markdown onto the page",

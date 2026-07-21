@@ -1,7 +1,7 @@
 # Context Potency — linguistic techniques applied to generation context
 
 How to make a spine, guidelines folder, or token carrier drive a design agent at maximum
-effectiveness. Foundation: `linguistic-techniques` (its `resources/
+effectiveness. Foundation: `prompt-wording-rules` (its `resources/
 linguistic-techniques-for-agents.md` carries each technique's mechanism + failure mode by
 §; its `references/rubric.md` L1–L10 scores the result). This file is the *application
 layer*: which technique carries which design-system surface, and the clinic for generic
@@ -20,7 +20,7 @@ a named world: those are instantiated behavior.
 
 ## The technique-by-surface map
 
-| Technique (§ in linguistic-techniques) | Design-system surface it carries | Applied |
+| Technique (§ in prompt-wording-rules) | Design-system surface it carries | Applied |
 |---|---|---|
 | **Presupposition** (§2) | the theme / Overview | A named world ("Studio 54's dancefloor") *presupposes* a point in design space — the model stops searching and starts rendering it. An adjective list leaves the search space open |
 | **Register mirroring** (§3) | the whole spine | The spine is a *sample* of the design language, not just a spec of it: an editorial brand's spine reads editorially; a brutalist system's spine is terse. Sloppy spine prose conditions sloppy screens |
@@ -66,5 +66,5 @@ addition dilutes the salience budget and buries the earlier rules.
 When improving someone's generation context, deliver the *diagnosis with the technique
 named* — "this guardrail describes (L1); here is the instantiating rewrite" — so the
 next author edits at the right layer. For a wording-layer audit of a finished artifact,
-dispatch the independent **linguistics-reviewer** (fresh context, same rubric); the hub
+dispatch the independent **wording-checker** (fresh context, same rubric); the hub
 applies the gap-map, it does not bless its own prose.

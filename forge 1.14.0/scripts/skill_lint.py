@@ -2,7 +2,7 @@
 """skill-postwrite-invocation-lint — deterministic checks for SKILL.md files.
 
 Check tier only: everything here is a pass/fail function. Judgment (behavior
-delta, trigger fidelity, register) belongs to skill-review, not this script.
+delta, trigger fidelity, register) belongs to check-skill, not this script.
 
 Modes:
   skill_lint.py <path> [<path>...]   CLI: repair-affordance report; exit 1 on any FAIL
@@ -56,7 +56,7 @@ plugin.json (.claude-plugin/plugin.json):
   P3 version present, semver (the version is the update cache key)
 
 CLAUDE.md files (CLI mode only — the write hook does not nag entry-file edits):
-  C1 length > 200 lines -> WARN (adherence ceiling; run /entry-file-audit)
+  C1 length > 200 lines -> WARN (adherence ceiling; run /check-entry-file)
   C2 > 10 imperative-check lines ("always run", "never commit", "must pass") -> WARN
      (checks in prose are hook candidates)
 """
@@ -78,10 +78,10 @@ from pathlib import Path
 
 HOOK_NAME = "skill-postwrite-invocation-lint"
 CLOSING = ("If a finding seems wrong -> report it against "
-           "skill-authoring-standards; do not suppress it inline.")
+           "skill-writing-rules; do not suppress it inline.")
 
 # Genuine verbs whose spelling ends in -er/-or: legal skill heads, never agentive
-# (ADR-0001, 2026-07-09: W4 false-positived on skill-refactor).
+# (ADR-0001, 2026-07-09: W4 false-positived on reshape-skill).
 VERB_HEADS = {"refactor", "render", "filter", "author"} - {"author"}  # author retired per ADR-0001
 KNOWLEDGE_NOUNS = {"patterns", "principles", "standards", "conventions",
                    "context", "architecture", "catalog", "reference", "tokens",
@@ -275,7 +275,7 @@ def lint_agent_text(text):
                              f"missing `{key}` -> required for agent discovery"))
     body_len = len(lines) - fm_end - 1
     # Reviewer-class seats (dual-depth dispatch contracts) carry a documented ~75-line
-    # allowance (ruled 2026-07-16, harness-audit): the earned residual of a FLOOR+DEEP
+    # allowance (ruled 2026-07-16, check-everything): the earned residual of a FLOOR+DEEP
     # contract hovers near 60 even when clean, so the standing 60-line warn stays for
     # every other seat and reviewers warn only past 75.
     name_val = fields.get("name", ("", 0))[0]
@@ -383,19 +383,19 @@ CHECK_PROSE_RE = re.compile(
 
 def lint_claude_md_text(text):
     """C-rules for entry files — mechanical smells only; the judgment lives in
-    entry-file-standards and runs through /entry-file-audit."""
+    entry-file-rules and runs through /check-entry-file."""
     findings = []
     lines = text.splitlines()
     if len(lines) > 200:
         findings.append(("WARN", 201, "C1",
                          f"{len(lines)} lines -> entry files are paid every turn and adherence "
-                         "decays past ~150-200 instructions; run /entry-file-audit"))
+                         "decays past ~150-200 instructions; run /check-entry-file"))
     hits = [i + 1 for i, ln in enumerate(lines)
             if not ln.lstrip().startswith("```") and CHECK_PROSE_RE.search(ln)]
     if len(hits) > 10:
         findings.append(("WARN", hits[0], "C2",
                          f"{len(hits)} imperative-check lines -> checks in prose are hook "
-                         "candidates (~70-90% compliance vs a hook's ~100%); run /entry-file-audit"))
+                         "candidates (~70-90% compliance vs a hook's ~100%); run /check-entry-file"))
     return findings
 
 

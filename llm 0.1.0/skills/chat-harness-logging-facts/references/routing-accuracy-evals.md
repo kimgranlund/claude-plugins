@@ -3,7 +3,7 @@
 > Axis: how to know whether a skill's routing (does it fire when it should, stay silent when it
 > shouldn't) is actually accurate, as a tracked number across repeated runs — not a felt sense
 > from a handful of interactions. Grounded in a worked instance: this workspace's own,
-> real, dated eval-run history and its blind-judge mechanism.
+> real, dated check-routing history and its blind-judge mechanism.
 
 ## The core discipline — routing accuracy is a number you track over runs, not a vibe
 
@@ -68,8 +68,8 @@ able to tell apart, and conflating any two of them wastes effort:
 **Claim — the judge that scores a routing-accuracy suite must not see more than the router sees
 at discovery time**, or its blindness is contaminated and the number it produces no longer
 predicts real routing behavior. **Worked instance, verified directly from the agent definition
-file** (`/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.21.0/agents/eval-judge.md`):
-the `eval-judge` agent is declared with `tools: []` in its frontmatter — a genuinely empty tool
+file** (`/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.21.0/agents/routing-judge.md`):
+the `routing-judge` agent is declared with `tools: []` in its frontmatter — a genuinely empty tool
 allowlist, not a documentation claim — and its own description states the reason explicitly: "a
 judge that could read skill bodies, suites, or reports could contaminate its own blindness, so the
 empty allowlist is the epistemic guarantee, not a limitation." Its dispatch prompt is described as

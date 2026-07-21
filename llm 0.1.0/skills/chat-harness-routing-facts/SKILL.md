@@ -12,7 +12,7 @@ description: >-
   corpus; does not build. NOT for instruction-layering/guardrails across a harness
   (chat-harness-guardrail-facts); NOT for multi-agent composition
   (chat-harness-workflow-facts); NOT for a repo's skill-authoring structural standard
-  (skill-authoring-standards).
+  (skill-writing-rules).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -57,7 +57,7 @@ the only valid implementation.
 
 **Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any build
 ask (writing the actual routing code, the actual SKILL.md, the actual eval harness) is routed to the
-consumer's own build seat or to `skill-authoring-standards`/`skill-forge` where installed — this
+consumer's own build seat or to `skill-writing-rules`/`make-skill` where installed — this
 pack has neither, it teaches the pattern.
 **NOT done** while a claim ships without the failure mode it prevents, or a workspace-specific
 schema detail (this repo's exact `routing-corpus.json` shape) is presented as a universal
@@ -87,7 +87,7 @@ requirement rather than one valid instance of the discipline.
 ## Boundaries — this pack ANSWERS; it routes ALL making
 
 - **Author, structure, or lint an actual SKILL.md to a repo's standard** (frontmatter shape, body
-  budgets, species templates) → `skill-authoring-standards`, where installed (this pack teaches the
+  budgets, species templates) → `skill-writing-rules`, where installed (this pack teaches the
   decision of skill-vs-hardcode and model-vs-user-invoked; that skill teaches the file itself).
 - **Layer standing instructions and enforced guardrails across a whole harness** (CLAUDE.md
   structure, hooks, what belongs where) → [[chat-harness-guardrail-facts]] (the sibling
@@ -113,6 +113,6 @@ requirement rather than one valid instance of the discipline.
 
 A missing axis, a stale platform-mechanic citation (Claude Code's own loading behavior moved), or a
 second worked instance of the routing-corpus discipline from a different workspace — route to
-`pack-forge` (axis decomposition, grounded research waves, index discipline), where installed;
+`make-pack` (axis decomposition, grounded research waves, index discipline), where installed;
 otherwise apply its discipline inline: one reference per distinct class of ask, every claim
 grounded, never an uncited file bolted on.

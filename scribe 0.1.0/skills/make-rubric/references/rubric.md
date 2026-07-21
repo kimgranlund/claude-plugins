@@ -1,6 +1,6 @@
 # Rubric — Rubric
 
-The rubric for rubrics. Scores whether a rubric is well-constructed enough to produce consistent, actionable judgments. Scoring method and promote rule are self-contained below; corpus-level finding-severity ordering lives in `skills-audit/references/standard-of-excellence.md`. (Grounded in the rubric-quality dimensions: a rubric is criteria × levels × descriptors × aggregation.)
+The rubric for rubrics. Scores whether a rubric is well-constructed enough to produce consistent, actionable judgments. Scoring method and promote rule are self-contained below; corpus-level finding-severity ordering lives in `check-all-skills/references/standard-of-excellence.md`. (Grounded in the rubric-quality dimensions: a rubric is criteria × levels × descriptors × aggregation.)
 
 | # | Dimension | Type | What it checks | 1 (fail) → 3 (adequate) → 5 (excellent) |
 |---|---|---|---|---|

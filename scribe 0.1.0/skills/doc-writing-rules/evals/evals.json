@@ -1,6 +1,6 @@
 {
   "skill": "doc-writing-rules",
-  "note": "Authored with the plugin 2026-07-07. Boundaries: make-doc (drafting), check-doc (judging), the forge plugin (harness artifacts).",
+  "note": "Authored with the plugin 2026-07-07. Boundaries: make-doc (drafting), check-doc (judging), the harness plugin (harness artifacts).",
   "cases": [
     {
       "id": "t01",

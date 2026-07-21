@@ -1,6 +1,6 @@
 {
   "skill": "break-down-flow",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Legacy note: Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, system-decompose.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, break-down-problem.",
   "cases": [
     {
       "id": "t01",

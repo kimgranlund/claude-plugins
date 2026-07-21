@@ -3,7 +3,7 @@
 Realizes `backend-resolver.md`'s seven-operation interface against Linear specifically. Grounded
 2026-07-18 (claim: 2026-07-19, ADR-0005) against Linear's own developer docs and changelog — the
 facts below carry the standard
-grounding-marker classes (`pack-authoring-standards`): `[verified]` (checked directly against a
+grounding-marker classes (`pack-writing-rules`): `[verified]` (checked directly against a
 first-party Linear doc page), `[drift-prone]` (verified but likely to move — re-check before
 trusting past this quarter), and `[inferred]` (standard GraphQL/Relay convention, not itself
 fetched from a Linear page — confirm via live introspection before depending on the exact field

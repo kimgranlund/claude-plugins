@@ -1,7 +1,7 @@
 {
   "_diff_from_v2": [
     "Added n1d (managed-docs scanner) + actions a18/a19: the signal layer can now also read a per-project, CONFIGURABLE managed-docs folder (e.g. agent-ui's .claude/docs/ with its typed ADR/PRD/SPEC/LLD/ticket corpus) and a named allowlist of pre-vetted document TYPES/sections (a ratified ADR Decision, a closed ticket's Findings, a ratified SPEC/PRD clause, an existing reference doc) as a second candidate source alongside live-conversation frequency/impact detection, AND as calibration exemplars that sharpen n1a/n1b's admission bar ('this is what good knowledge already looks like in this project').",
-    "This directly operationalizes system-decompose's own documented judgment-layer gap (its 'Scope of the gate' note: a ratified ADR Decision that never became an action has nothing to leave UNHOSTED, so a manifest can pass clean while the need ships nothing — 'catch that upstream with the ADR-Decision -> action completeness review, a judgement step, not this gate'). n1d/a18 is that review, now a first-class signal source rather than a manual afterthought.",
+    "This directly operationalizes break-down-problem's own documented judgment-layer gap (its 'Scope of the gate' note: a ratified ADR Decision that never became an action has nothing to leave UNHOSTED, so a manifest can pass clean while the need ships nothing — 'catch that upstream with the ADR-Decision -> action completeness review, a judgement step, not this gate'). n1d/a18 is that review, now a first-class signal source rather than a manual afterthought.",
     "Per-project config assumption (stated, correctable): the managed-docs folder path and the document-type allowlist are NOT hardcoded — each project (agent-ui, nonoun-plugins, a future repo) names its own, consistent with the portable/project-agnostic scope decided earlier. A managed-docs candidate still passes through the SAME n6a->n3a->n2a->n2b confirmation gate as every other candidate — this is an additional SOURCE, not a bypass of requirement 1 (never auto-author)."
   ],
   "domain": "technical-architecture",
@@ -29,8 +29,8 @@
 
     { "id": "n4", "label": "corpus validation layer", "leaf": false, "justify": "grouping" },
     { "id": "n4a", "label": "structural gate (release_gate.py — includes the handle-convention/dangling-reference checks, G5+G8)", "leaf": true },
-    { "id": "n4c", "label": "independent reviewer dispatch (skill-auditor / plugin-reviewer, generator≠critic) — runs on gate-clean content only", "leaf": true },
-    { "id": "n4b", "label": "routing gate (blind judge simulation, eval-run) — runs on the final, post-review descriptions", "leaf": true },
+    { "id": "n4c", "label": "independent reviewer dispatch (skill-checker / plugin-checker, generator≠critic) — runs on gate-clean content only", "leaf": true },
+    { "id": "n4b", "label": "routing gate (blind judge simulation, check-routing) — runs on the final, post-review descriptions", "leaf": true },
 
     { "id": "n5", "label": "staleness layer", "leaf": false, "justify": "grouping" },
     { "id": "n5c", "label": "trigger integration (a concrete, user-invoked entry point — e.g. a slash command run periodically — never an assumed background process)", "leaf": true },

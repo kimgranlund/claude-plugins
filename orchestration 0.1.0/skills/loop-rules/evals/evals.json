@@ -1,6 +1,6 @@
 {
   "skill": "loop-rules",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus (excellence campaign batch 2): positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn from neighbors' trigger vocabulary: team-or-solo-rules (compose/wiring/frontmatter), handoff-compose (handback/report, now in forge), the team-lead agent (seat coordination), plus running-vs-designing boundary probes for the bundled /goal + /loop machinery.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus (excellence campaign batch 2): positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn from neighbors' trigger vocabulary: team-or-solo-rules (compose/wiring/frontmatter), write-handoff (handback/report, now in harness), the team-lead agent (seat coordination), plus running-vs-designing boundary probes for the bundled /goal + /loop machinery.",
   "cases": [
     {
       "id": "t01",
@@ -126,7 +126,7 @@
       "id": "n13",
       "prompt": "Before we wrap up, is there anything still open?",
       "expect": "no-trigger",
-      "comment": "owner: forge's open-questions-sweep — a one-off end-of-session sweep of unresolved items, not a scheduled/interval continuation pattern"
+      "comment": "owner: harness's find-open-questions — a one-off end-of-session sweep of unresolved items, not a scheduled/interval continuation pattern"
     }
   ]
 }

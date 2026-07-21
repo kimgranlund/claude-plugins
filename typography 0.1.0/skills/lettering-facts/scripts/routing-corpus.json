@@ -1,13 +1,13 @@
 {
   "skill": "lettering-facts",
-  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: check-translations, color-contrast-facts, color-space-facts, make-component, token-builder agent, pack-forge, ui-pattern-facts.",
+  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split — the APCA negative cites accessibility, the sRGB/OKLCH negative cites spaces). Positives: imperative / diagnostic / symptom / indirect. Negatives from neighborhood trigger vocab: check-translations, color-contrast-facts, color-space-facts, make-component, token-builder agent, make-pack, ui-pattern-facts.",
   "neighbors": [
     "check-translations",
     "color-contrast-facts",
     "color-space-facts",
     "make-component",
     "token-builder(agent)",
-    "pack-forge",
+    "make-pack",
     "ui-pattern-facts"
   ],
   "positives": [

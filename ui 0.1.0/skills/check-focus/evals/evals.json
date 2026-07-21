@@ -1,6 +1,6 @@
 {
  "skill": "check-focus",
- "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the ui plugin migration (plugin-decompose partition). Blind run 2026-07-09 (0.4.1): t12 (what keys should a menu widget respond to) stolen by ui-pattern-facts despite this description's near-verbatim APG phrasing — first strike; remedied on the thief's side (ui-pattern-facts gains a keys/focus fence). Watch for second strike.",
+ "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Blind run 2026-07-09 (0.4.1): t12 (what keys should a menu widget respond to) stolen by ui-pattern-facts despite this description's near-verbatim APG phrasing — first strike; remedied on the thief's side (ui-pattern-facts gains a keys/focus fence). Watch for second strike.",
  "cases": [
   {
    "id": "t01",

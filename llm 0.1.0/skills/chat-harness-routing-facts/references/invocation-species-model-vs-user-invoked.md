@@ -3,8 +3,8 @@
 > Axis: once a capability has earned being a skill (see authoring-a-skill-vs-a-hardcoded-feature),
 > which of the two invocation dials it should carry — auto-discovered by the model against a
 > description, explicitly invoked by the user as a slash command, or both at once. Grounded in
-> `forge:skill-authoring-standards` (installed at
-> `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.23.0/skills/skill-authoring-standards/SKILL.md`),
+> `harness:skill-writing-rules` (installed at
+> `/Users/kimba/.claude/plugins/cache/nonoun-plugins/forge/1.23.0/skills/skill-writing-rules/SKILL.md`),
 > the single most directly-inspectable primary source on this exact mechanism.
 
 ## The two dials and the three coherent species
@@ -12,7 +12,7 @@
 **Platform fact — two independent YAML frontmatter fields govern invocation:**
 `disable-model-invocation` (does the model consider this skill when matching the user's request
 against the loaded description menu) and `user-invocable` (can the user reach it with an explicit
-`/skill-name`). **Worked instance:** `skill-authoring-standards/SKILL.md:37-41` lays out the exact
+`/skill-name`). **Worked instance:** `skill-writing-rules/SKILL.md:37-41` lays out the exact
 three-way species table these two dials realize:
 
 | Species | `disable-model-invocation` | `user-invocable` | Description's job |
@@ -29,7 +29,7 @@ fourth species — see below.
 ## Why declaring both dials explicitly matters
 
 **Claim — omitting either dial couples the skill's behavior to whatever the current Claude Code
-version defaults to, rather than pinning what was actually meant.** `skill-authoring-standards`
+version defaults to, rather than pinning what was actually meant.** `skill-writing-rules`
 states this as a hard rule at `SKILL.md:45`: "Declare both dials on every skill, explicitly,
 including at their defaults... The lint fails omission." **Failure mode this prevents:** a skill
 authored against one version's defaults silently changes behavior on a version bump with no edit
@@ -39,7 +39,7 @@ changed in this file."
 ## The corrected finding: `disable-model-invocation: true` also blocks preloading
 
 **Platform fact, verified against live docs at authoring time (July 2026), explicitly flagged as
-correcting an EARLIER, now-falsified belief:** `skill-authoring-standards/SKILL.md:43` states
+correcting an EARLIER, now-falsified belief:** `skill-writing-rules/SKILL.md:43` states
 "`disable-model-invocation: true` blocks subagent preloading" (and scheduled-task firing, from
 v2.1.196+) — not merely hiding the skill from the auto-discovery menu, as an older understanding
 had it. **Consequence:** the state most people reach for when they want a skill "available as a
@@ -62,7 +62,7 @@ is Command (user-only, `disable-model-invocation: true`, since a model-triggered
 user didn't ask for this turn is the failure mode a Command dial exists to prevent).
 
 **Failure mode this prevents (species/dial mismatch):** the standard's own enforcing lint,
-`skill_lint.py:209-210` (same `forge` 1.23.0 install, rule `W5`), names a specific, checkable
+`skill_lint.py:209-210` (same `harness` 1.23.0 install, rule `W5`), names a specific, checkable
 instance — a "knowledge-noun head with `user-invocable` left true" is flagged because "knowledge
 species is model-only." A knowledge pack (a noun-headed name, no actor, no side effects) left
 reachable by slash command invites a user to "invoke" something that was only ever meant to be
@@ -75,4 +75,4 @@ instruction or hook — see authoring-a-skill-vs-a-hardcoded-feature. How a requ
 model-invocable skills gets routed to the correct one, and how that routing is tested with an
 adversarial eval corpus — see description-routing-and-adversarial-evals. The repo-structural
 standard for writing the SKILL.md file itself once a species is chosen (frontmatter shape, body
-budgets, per-species templates) — `skill-authoring-standards` directly, where installed.
+budgets, per-species templates) — `skill-writing-rules` directly, where installed.

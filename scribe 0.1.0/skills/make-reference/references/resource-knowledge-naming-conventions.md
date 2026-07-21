@@ -117,7 +117,7 @@ Rules:
 
 ## 6. Enforcement
 
-What exists today: no knowledge-corpus validator is wired. The nearest live gates are `forge's skill-forge/scripts/harness_checks.py` (D9 — the files a skill references exist and are substantive) and `skills-audit`'s `scripts/corpus_index.py` (corpus-wide naming histogram + shadow check); this family follows the same gated-vs-advised discipline as `forge's skill-forge/references/skill-naming-conventions.md` §6. The manifest below is the *target* validator config — a spec for the next enforcement revision, not a live file:
+What exists today: no knowledge-corpus validator is wired. The nearest live gates are `harness's make-skill/scripts/harness_checks.py` (D9 — the files a skill references exist and are substantive) and `check-all-skills`'s `scripts/corpus_index.py` (corpus-wide naming histogram + shadow check); this family follows the same gated-vs-advised discipline as `harness's make-skill/references/skill-naming-conventions.md` §6. The manifest below is the *target* validator config — a spec for the next enforcement revision, not a live file:
 
 ```jsonc
 {
@@ -131,7 +131,7 @@ What exists today: no knowledge-corpus validator is wired. The nearest live gate
 }
 ```
 
-Validator checks, in CI and pre-commit (target state; until wired, these run as audit-time checks under `skills-audit`):
+Validator checks, in CI and pre-commit (target state; until wired, these run as audit-time checks under `check-all-skills`):
 
 1. Every file under `references/` lives in a manifest-declared axis; no undeclared directories.
 2. No date-pattern (`\d{4}-\d{2}-\d{2}`) in any reference filename; every reference has `updated:` frontmatter.
@@ -154,6 +154,6 @@ Validator checks, in CI and pre-commit (target state; until wired, these run as 
 | Retrieval | One concept per file; distinctive token first; corpus vocabulary; no stop-words |
 | Indexes | One per populated directory; state each file's question-answered; generated or gate-checked |
 | Ephemeral | Segregated by location (`_scratch/`), never by suffix |
-| Enforcement | Axes, record shapes, and banned tokens in the target manifest (§6 — spec, not live); audit-time under `skills-audit` until wired |
+| Enforcement | Axes, record shapes, and banned tokens in the target manifest (§6 — spec, not live); audit-time under `check-all-skills` until wired |
 
 *The reduction: a knowledge filename is a retrieval key typed by its mutation semantics — references carry topic identity and hide time in metadata; records carry time as identity and never change; indexes are the checked map between them.*

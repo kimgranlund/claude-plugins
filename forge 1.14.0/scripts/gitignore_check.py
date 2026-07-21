@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""gitignore_check — .gitignore is a record and drifts like one (repo-alignment's razor).
+"""gitignore_check — .gitignore is a record and drifts like one (clean-repo's razor).
 
 Usage:
   gitignore_check.py <repo-root>     sweep .gitignore both directions
@@ -8,7 +8,7 @@ Usage:
 Rules (mechanical slice; judgment on WHICH rule to add/retire stays with the author):
   G1 [WARN] a .gitignore rule matches nothing in the current tree -> stale, retire it
   G2 [FAIL] a known generated/tool-output dir exists on disk but `git check-ignore` does not
-            cover it -> one `git add -A` from being committed (repo-alignment's razor; the
+            cover it -> one `git add -A` from being committed (clean-repo's razor; the
             worktrees-placement incident, 2026-07-16, is this rule's origin case)
 
 G2's candidate list is deliberately small and conservative (real generated-output/tool-state

@@ -74,5 +74,5 @@ trigger that re-syncs the siblings themselves.
 ## Extending this pack
 
 A missing token, a new axis (e.g. motion), or "add X to this glossary" is authoring work — route to
-`pack-forge` (axis decomposition, grounded content, index discipline where the corpus grows past a
+`make-pack` (axis decomposition, grounded content, index discipline where the corpus grows past a
 hand-authored scale); never bolt an uncited entry onto a reference file inline.

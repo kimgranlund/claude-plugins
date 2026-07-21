@@ -11,7 +11,7 @@ description: >-
   (make-doc); NOT for reviewing content quality (check-doc); NOT for capturing a new idea or
   bug (/file-feature, /file-bug); NOT for repos with no documents (the index bootstrap alone is
   /file-feature's Phase 6); NOT for whole-harness drift — entry files, dead
-  automation, corpus liveness (repo-alignment, forge — it decides a repo's grammar; this
+  automation, corpus liveness (clean-repo, harness — it decides a repo's grammar; this
   command executes the canonical-map case).
 disable-model-invocation: true
 user-invocable: true
@@ -40,7 +40,7 @@ horizons→ROADMAP · work item→TICKET/TASK):
    plan as creating a new file rather than moving one.
 
 Alongside the three surfaces, inventory the **git-visibility of every hit**: `git check-ignore`
-each source location and `git ls-files` its contents (forge repo-alignment's razor — tracked
+each source location and `git ls-files` its contents (harness clean-repo's razor — tracked
 does not imply not-ignored). A gitignored source (the classic: a repo that ignores `.claude/`
 wholesale, so a `.claude/docs/` corpus was never tracked at all) changes the move mechanics —
 `git mv` fails on untracked files — and means the migration is also the corpus's FIRST commit;

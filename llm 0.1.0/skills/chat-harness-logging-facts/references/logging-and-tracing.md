@@ -2,7 +2,7 @@
 
 > Axis: how a chat-agent harness makes its own actions legible as structured, queryable events —
 > distinct from the raw conversation transcript. Grounded in this harness's own lifecycle-hook
-> mechanics (a platform fact) and a worked instance: the forge plugin's own `PostToolUse` hook.
+> mechanics (a platform fact) and a worked instance: the harness plugin's own `PostToolUse` hook.
 
 ## The core distinction — a transcript proves what was SAID, a hook proves what HAPPENED
 

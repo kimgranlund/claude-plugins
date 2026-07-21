@@ -9,7 +9,7 @@ description: >-
   icon/caret size on the ramp" — tier, anatomy, API contract, composition, geometry;
   Compose-then-Realize, machine-checked. NOT for ui-* controls in agent-ui — "add a ui-button"
   (that repo's own build seat); NOT for app shells (break-down-layout); NOT for naming a UI
-  pattern (ui-pattern-facts); NOT for feature/system decomposition (system-decompose); NOT for color
+  pattern (ui-pattern-facts); NOT for feature/system decomposition (break-down-problem); NOT for color
   ramps (make-palette); NOT for nested-surface radius/spacing composition — "what radius on
   the inner card" (size-and-shape-rules); NOT for grading a component you didn't author
   (component-checker).
@@ -97,9 +97,9 @@ its gate checks; the references summarize, the code wins).
 | `references/composition-patterns.md` | Wiring components into a module (seams, overflow, slots) |
 | `references/geometry-system.md` | The ramp + the `(height − glyph)/2` law |
 | `references/platform-baseline.md` | FACE/ElementInternals/custom-state support and fallbacks |
-| `references/decomposition-method.md` | The two-axis method AND the bound rubric (the leveled walk) — the same two-plane engine as [[break-down-layout]] / [[system-decompose]] |
+| `references/decomposition-method.md` | The two-axis method AND the bound rubric (the leveled walk) — the same two-plane engine as [[break-down-layout]] / [[break-down-problem]] |
 | `scripts/geometry-check.py` · `component-contract-check.py` · `composition-check.py` | The three mechanical gates |
-| `[[system-decompose]]` | Decomposing the surrounding feature/screen before authoring the component |
+| `[[break-down-problem]]` | Decomposing the surrounding feature/screen before authoring the component |
 | `[[make-rubric]]` | Authoring a scoring rubric when a project needs its own component standard |
 
 ## Definition of done

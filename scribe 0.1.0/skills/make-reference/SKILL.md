@@ -7,8 +7,8 @@ description: >
   ground-truth docs for an agent: "write a reference doc", "structure my project
   knowledge", "name and organize the knowledge files", "is this retrievable",
   "does this reference duplicate a source owned elsewhere", "audit our docs for
-  drift". NOT for a knowledge pack / corpus+index (forge's pack-forge), NOT for a
-  docs index (make-llms-txt), NOT for CLAUDE.md standing context (forge's entry-file-standards).
+  drift". NOT for a knowledge pack / corpus+index (harness's make-pack), NOT for a
+  docs index (make-llms-txt), NOT for CLAUDE.md standing context (harness's entry-file-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -60,7 +60,7 @@ Top issues: 1) … — fix: …
 
 A high-stakes reference doc you authored gets an independent pass: dispatch the shared
 `doc-checker` agent for the fresh-context score against `references/rubric.md`, and the
-`linguistics-reviewer` agent for the wording layer — retrieved-never-obeyed is the reference's
+`wording-checker` agent for the wording layer — retrieved-never-obeyed is the reference's
 *directive* status, but its wording still conditions every model that reads it, so the potency
 rubric applies; the maker applies the fix.
 

@@ -7,12 +7,12 @@
 
 ## The routing test — the one decision that matters
 
-**Claim, from the `nonoun-plugins` workspace's own `hook-authoring-standards` skill (a second,
+**Claim, from the `nonoun-plugins` workspace's own `hook-writing-rules` skill (a second,
 independent worked instance of this same pack's subject matter, not a repo-specific concern):** "A
 rule expressible as a program returning pass/fail is a check → hook. A rule requiring a model to
 weigh it is judgment → skill. Both misroutes are toxic: checks in prose are probabilistic,
 token-costly, and drift; judgment in a hook is wrong often and unoverridable always." **Worked
-instance:** `forge 1.14.0/skills/hook-authoring-standards/SKILL.md:17-19`. That same file states
+instance:** `forge 1.14.0/skills/hook-writing-rules/SKILL.md:17-19`. That same file states
 the measured stakes of getting this wrong (`SKILL.md:15`): hook compliance runs "~100% against
 70–90% for entry-file instructions" — a prompted rule is not just occasionally missed, it is
 missed on a predictable, non-trivial fraction of turns.
@@ -51,7 +51,7 @@ mechanism, not a hypothetical: it is what actually caught the sibling `llm-gatew
 
 ## Additive layering — a hook cannot be silently switched off by a narrower scope
 
-**Claim, from `hook-authoring-standards` (`forge 1.14.0/skills/hook-authoring-standards/SKILL.md:32`):**
+**Claim, from `hook-writing-rules` (`forge 1.14.0/skills/hook-writing-rules/SKILL.md:32`):**
 "hooks from enterprise, project, user, local, and plugin scopes merge additively — everything
 that matches runs; nothing overrides." A deterministic rule registered at any layer stays active
 no matter what a narrower, more specific layer's prose instructions say — the opposite of how

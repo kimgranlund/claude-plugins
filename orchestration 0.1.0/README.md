@@ -1,24 +1,24 @@
 # teamwork — run a multi-agent feature-delivery team end to end
 
-Sibling plugin to forge (which authors the harness) and docs (which authors what flows through it).
+Sibling plugin to harness (the authoring toolchain) and docs (which authors what flows through it).
 This plugin owns the composition layer: deriving the decisions a greenfield needs, designing how
 skills/subagents/teams discover and wire together, designing the continuation patterns that keep an
 autonomous run bounded, and the five-seat delivery team that actually plans, builds, documents, and
-reviews a feature. Assembled by a `plugin-decompose` partition of `~/.claude/skills` and
+reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/skills` and
 `~/.claude/agents/delivery`.
 
 ## Map
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/grill-the-ask` | Declarative skill | both | Derives the load-bearing design decisions for a greenfield surface across two crossing axes (Structural / Mechanism) and cascading rounds; hands off a Ratified Design to `system-decompose` and the document author |
+| `skills/grill-the-ask` | Declarative skill | both | Derives the load-bearing design decisions for a greenfield surface across two crossing axes (Structural / Mechanism) and cascading rounds; hands off a Ratified Design to `break-down-problem` and the document author |
 | `skills/team-or-solo-rules` | Declarative skill | both | Design or review how skills, subagents, and teams compose, and the YAML frontmatter that wires them — unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate |
 | `skills/loop-rules` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
 | `skills/parallel-work-rules` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
-| `skills/close-session` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through file-bug/feature/issue, triggers knowledge-harvest's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
+| `skills/close-session` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through file-bug/feature/issue, triggers save-lessons's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
 | `hooks/hooks.json` (`SessionEnd`) | Hook | automatic | Passive safety net for `close-session`: on actual session termination, logs a durable warning line if a git worktree was left dirty or unpushed — `SessionEnd` cannot block, so this never gates, only records |
 | `skills/build-feature` | Command skill | user-only (`/build-feature`) | Record-first build: finds or mints the feature record (running docs' `/file-feature` intake inline on a miss), sizes the dispatch by the solo-first floors (small → host inline / one sealed fork; big → the floored seats), drives it under a mandatory Findings write-back, closes the loop on the ticket |
-| `skills/lead-team` | Command skill | user-only (`/lead-team`) | Makes THIS host session adopt `agents/team-lead.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides team-or-solo-rules's solo-first default for the charter's duration; paired with the seat it imports per ADR-0006's species split — command = verb form (`/lead-team`), agent = role noun (`team-lead`); like forge's `ops-issues` pairing, inverted (host adopts, never dispatches) |
+| `skills/lead-team` | Command skill | user-only (`/lead-team`) | Makes THIS host session adopt `agents/team-lead.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides team-or-solo-rules's solo-first default for the charter's duration; paired with the seat it imports per ADR-0006's species split — command = verb form (`/lead-team`), agent = role noun (`team-lead`); like harness's `issue-sorter` pairing, inverted (host adopts, never dispatches) |
 | `agents/lead-team` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
 | `agents/planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
 | `agents/builder` | Subagent | dispatch-only | The build seat: implements an approved LLD's build sequence, runs mechanical checks, escalates design conflicts rather than editing the contract |
@@ -31,27 +31,27 @@ reviews a feature. Assembled by a `plugin-decompose` partition of `~/.claude/ski
 Every one of the five ported agents carried a `skills:` frontmatter preload into skills that no
 longer live in this plugin boundary. Fixing this was the bulk of the porting work:
 
-- **`team-lead`** preloaded `handoff-compose` (now in forge). Dropped from the
-  preload list; the body now soft-mentions forge's `handoff-compose` block with an inline
+- **`team-lead`** preloaded `write-handoff` (now in harness). Dropped from the
+  preload list; the body now soft-mentions harness's `write-handoff` block with an inline
   Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action
   fallback wherever it names a handback. `skills:` is now `[team-or-solo-rules, loop-rules]` —
   the two preloads that are still same-plugin, real preloads.
-- **`planner`** preloaded `system-decompose` (now in forge) plus `prd-author`, `spec-author`,
+- **`planner`** preloaded `break-down-problem` (now in harness) plus `prd-author`, `spec-author`,
   `lld-author`, `adr-author` — four names that no longer exist anywhere as skills: docs
   consolidated all four into `doc-writing-rules` plus a `make-doc` drafting command. Every one
   of the six preloads was cross-plugin or stale, so the frontmatter now carries no `skills:` field at
-  all; the body soft-mentions forge's `system-decompose` and docs' `make-doc`
+  all; the body soft-mentions harness's `break-down-problem` and docs' `make-doc`
   (`doc-writing-rules`), each with its own inline fallback (the two-plane decomposition method;
   each document type's minimum contract — Problem/Users/Outcomes/Non-goals for a PRD,
   Requirements/Non-goals/Examples/Acceptance for a SPEC, Components/Interfaces/Data/Risks for an LLD,
   Context/Decision/Consequences for an ADR).
-- **`builder`** preloaded `lld-author` (stale — same docs consolidation), `system-decompose`
-  and `handoff-compose` (both forge). Same fix: no `skills:` field; the body soft-mentions
-  docs' `doc-writing-rules` for reading an LLD's shape, forge's `system-decompose` for
-  implementation-level sub-breakdown, and forge's `handoff-compose` for the report-out, each with its
+- **`builder`** preloaded `lld-author` (stale — same docs consolidation), `break-down-problem`
+  and `write-handoff` (both harness). Same fix: no `skills:` field; the body soft-mentions
+  docs' `doc-writing-rules` for reading an LLD's shape, harness's `break-down-problem` for
+  implementation-level sub-breakdown, and harness's `write-handoff` for the report-out, each with its
   inline fallback.
-- **`docs-writer`** and **`code-checker`** each preloaded only `handoff-compose` (forge). Same fix:
-  no `skills:` field; each body soft-mentions forge's `handoff-compose` block with the same inline
+- **`docs-writer`** and **`code-checker`** each preloaded only `write-handoff` (harness). Same fix:
+  no `skills:` field; each body soft-mentions harness's `write-handoff` block with the same inline
   fallback shape.
 
 The pattern throughout: name the cross-plugin skill and use it where installed; otherwise apply its
@@ -94,7 +94,7 @@ handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `code-reviewer` (agent) | `code-checker` |
 | `orchestration-reviewer` (agent) | `wiring-checker` |
 
-v1.0.1 · assembled 2026-07-21 · 1.0.1: ADR-0006 docs-rename sweep — live references rewritten (build-feature/close-session/loop-rules pointers to file-bug/file-feature/file-task, docs plugin mentions); pointer updates only · v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 7/9 — the PLUGIN renames orchestration → teamwork and seven skills + five agents take the simple paradigm (transition table above; docs-writer keeps). The 0.7.7 exact-name pairing splits by species on purpose: command = verb form (/lead-team), agent = role noun (team-lead). MAJOR bump — names are APIs and this is breaking. Workspace sweep (90 files + ordered context splits for the shared orchestration-coordinator token + a hand pass on the bare plugin token; ledger history and .claude/ops records excluded); baseline blind run 107/108 (concurrency n09 pre-existing); post-rename re-measure 108/108 — parallel-work-rules' n09 healed by the rename itself, and two single-judge flips (close-session n06, team-or-solo-rules n03) healed same-change by carrying the stolen verbatims into the existing fences, re-judged 44/44. Species alignment rode along: the three renamed -rules packs flipped user-invocable true→false (knowledge species is model-only — skill_lint W5, the Phase 0 standard) ·
+v1.0.2 · assembled 2026-07-21 · 1.0.2: ADR-0006 harness-rename sweep — live references rewritten (write-handoff/break-down-problem/find-the-ask pointers across all seats); pointer updates only · v1.0.1 · assembled 2026-07-21 · 1.0.1: ADR-0006 docs-rename sweep — live references rewritten (build-feature/close-session/loop-rules pointers to file-bug/file-feature/file-task, docs plugin mentions); pointer updates only · v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 7/9 — the PLUGIN renames orchestration → teamwork and seven skills + five agents take the simple paradigm (transition table above; docs-writer keeps). The 0.7.7 exact-name pairing splits by species on purpose: command = verb form (/lead-team), agent = role noun (team-lead). MAJOR bump — names are APIs and this is breaking. Workspace sweep (90 files + ordered context splits for the shared orchestration-coordinator token + a hand pass on the bare plugin token; ledger history and .claude/ops records excluded); baseline blind run 107/108 (concurrency n09 pre-existing); post-rename re-measure 108/108 — parallel-work-rules' n09 healed by the rename itself, and two single-judge flips (close-session n06, team-or-solo-rules n03) healed same-change by carrying the stolen verbatims into the existing fences, re-judged 44/44. Species alignment rode along: the three renamed -rules packs flipped user-invocable true→false (knowledge species is model-only — skill_lint W5, the Phase 0 standard) ·
 v0.7.9 · assembled 2026-07-21 · 0.7.9: ADR-0006 screens-rename sweep — code-reviewer's UI-reviewer fences repointed (component-/layout-/flow-checker); pointer updates only · v0.7.8 · assembled 2026-07-20 · 0.7.8: `orchestration-coordinator` agent effort high→xhigh — with
 0.7.7's same-named command making the HOST adopt this agent's contract directly, the effort field
 now also sets the host's reasoning depth for a charter's routing/gating loop, not just a spawned

@@ -1,6 +1,6 @@
 {
   "skill": "make-reference",
-  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of reference-doc authoring+review. Negatives drawn from the neighbors' trigger vocabulary: knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), make-llms-txt, entry-file-author, skill-author, linguistics-reviewer/linguistic-techniques, make-rubric.",
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of reference-doc authoring+review. Negatives drawn from the neighbors' trigger vocabulary: knowledge-forge (retired 2026-07-19, folded into harness's make-pack), make-llms-txt, entry-file-author, skill-author, wording-checker/prompt-wording-rules, make-rubric.",
   "positives": [
     "write a reference doc for this skill",
     "author a references file for the color-material-facts bundle",

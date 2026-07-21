@@ -24,7 +24,7 @@ cite this file; they do not restate it.
 
 3. **The ask-then-lock loop.** A taste answer is expensive exactly once. Every fork answer lands
    somewhere durable in the SAME change: a parameter lock in the project's DESIGN.md or token
-   file (lock grammar per forge's skill-authoring-standards, where installed: lowercase
+   file (lock grammar per harness's skill-writing-rules, where installed: lowercase
    always/never + backticked values + named forbidden neighbors), or a session memory for
    cross-project preferences. Ratified taste is never re-asked — check the project's standing
    rulings and memories BEFORE building the question; an ask that re-opens a recorded ruling is

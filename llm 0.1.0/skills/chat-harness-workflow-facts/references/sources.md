@@ -54,8 +54,8 @@ behavior but lower-provenance than the official plugin above:
   command file opens with.
 - `README.md` — the recorded model/effort re-tiering by role (v0.7.0 changelog entry).
 
-**Forge's `handoff-compose` skill**,
-`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/handoff-compose/`:
+**Harness's `write-handoff` skill**,
+`/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/write-handoff/`:
 - `SKILL.md` — the eight-field block, in order, quoted verbatim in `typed-handoff-contracts.md`.
 - `references/foundations.md` — the "verifiable, not narrative" and "consumer-as-critic" models.
 - `scripts/handoff_check.py` — the mechanical H1 gate the block is checked against before any

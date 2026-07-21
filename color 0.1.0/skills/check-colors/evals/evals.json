@@ -1,6 +1,6 @@
 {
   "skill": "check-colors",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: make-palette, color-contrast-facts, color-space-facts, color-theory-facts, check-focus, check-translations, check-speed, check-safety, check-whole-ui, make-component, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the color plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: make-palette, color-contrast-facts, color-space-facts, color-theory-facts, check-focus, check-translations, check-speed, check-safety, check-whole-ui, make-component, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
   "cases": [
     {
       "id": "t01",

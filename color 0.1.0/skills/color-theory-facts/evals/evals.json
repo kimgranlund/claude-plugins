@@ -1,6 +1,6 @@
 {
   "skill": "color-theory-facts",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into forge's cases schema as part of the color plugin port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-perception-facts, color-space-facts, color-contrast-facts, make-palette, check-colors, ui-pattern-facts, pack-forge.",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the color plugin port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-perception-facts, color-space-facts, color-contrast-facts, make-palette, check-colors, ui-pattern-facts, make-pack.",
   "cases": [
     {
       "id": "t01",
