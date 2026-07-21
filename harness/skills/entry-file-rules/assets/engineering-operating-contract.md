@@ -20,4 +20,4 @@ produced — code, docs, skills — is a living record, not a one-time artifact.
 - Ambiguous ask → `find-the-ask` before acting. Structural breakdown → `break-down-problem`.
 - Solo vs. team, delegation, loop budgets → `team-or-solo-rules` / `loop-rules` (solo-first).
 - Model + effort per seat → `agent-writing-rules` §Model tiering — the seat ladder.
-- Reasoning altitude and escalation → `thinking-depth-rules`. Document contracts → docs' standards.
+- Reasoning altitude and escalation → `thinking-depth-rules`. Document contracts → `doc-writing-rules`.
