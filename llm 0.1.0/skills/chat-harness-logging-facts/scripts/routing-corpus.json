@@ -1,0 +1,39 @@
+{
+  "skill": "chat-harness-logging-facts",
+  "_note": "Routing corpus of record (minted 2026-07-13; reciprocal negatives against chat-harness-tool-facts/chat-harness-memory-facts/chat-harness-guardrail-facts added 2026-07-13 per independent audit, since each of those siblings names this pack as its own near-neighbor). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (hook-based logging/tracing, routing-accuracy measurement, background-task notification vs. polling). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-workflow-facts (a sibling — COMPOSING the agents that do work, not measuring/logging what they did), chat-harness-routing-facts (another sibling — the routing MECHANISM itself, a related but distinct concern from measuring its accuracy over time), chat-harness-tool-facts (whether a capability is a tool/resource/service, not whether its firing is logged), chat-harness-memory-facts (where a fact persists, not how an event is traced), chat-harness-guardrail-facts (which action-risk tier applies, not whether the tool call is observable after the fact), the llm plugin's own gateway/streaming siblings (a different topic entirely), and a genuine build/implement ask (this pack answers, it does not build).",
+  "positives": [
+    "how do I log what the harness actually did, not just what the user typed",
+    "how do I trace a tool call deterministically instead of scraping the transcript",
+    "what's the difference between a hook firing and a raw conversation log",
+    "how do I get a structured record of every tool invocation rather than the chat transcript",
+    "why can't I just grep the transcript to know what actually ran",
+    "how do I distinguish an enforced block from the model just deciding not to do something",
+    "how do I measure whether my skill descriptions actually route correctly",
+    "is this routing failure a real regression or just judge noise",
+    "how do I build a held-out adversarial test suite for a skill's description",
+    "how do I know if my routing accuracy improved after a wording change",
+    "what's a blind routing judge and why would a routing-accuracy eval need one",
+    "how do I tell a structural routing leak apart from a wording problem",
+    "how do I notify a human when a background task finishes instead of making them poll",
+    "what's the difference between task-notification and polling for an external process",
+    "how should I wait on a deploy or an external CI run my harness can't track directly",
+    "why shouldn't I sleep-loop checking if a background agent is done"
+  ],
+  "negatives": [
+    "how do I compose multiple agents into a workflow that gets the work done",
+    "design the orchestration for a team of agents that build a feature",
+    "what's the right way to chain agents together to complete a task",
+    "how does a skill get selected at discovery time",
+    "why isn't my skill triggering at all",
+    "what's the routing mechanism that picks which skill fires",
+    "implement a logging pipeline for my agent harness",
+    "build the eval suite runner for my project",
+    "write the notification webhook that pings Slack when a job finishes",
+    "why does my API key end up in the built JS bundle",
+    "why is my SSE parser dropping text fragments",
+    "add a new axis to this knowledge pack",
+    "how do I decide whether a capability should be a tool or a read-only resource",
+    "where should long-term memory live for a chat agent",
+    "which action-risk tier does a destructive tool call fall into"
+  ]
+}
