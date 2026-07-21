@@ -10,7 +10,8 @@ description: >
   the dark scheme / on-colors in my Claude design bundle". Covers corpus census, Root
   Brand Architecture, the universal dialect and token grammar, OKLCH frontmatter,
   light-dark(), the reduction discipline, and gates with count-exact contrast
-  disclosure. NOT for format Q&A alone (design-md-rules); NOT for
+  disclosure. NOT for format Q&A or extending a section of an existing
+  DESIGN.md (design-md-rules); NOT for
   Stitch exports (make-stitch-kit); NOT for Make guidelines
   (make-figma-make-kit); NOT for cross-platform strategy
   (make-design-system); NOT for grading an export you didn't author

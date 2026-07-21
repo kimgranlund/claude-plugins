@@ -11,7 +11,8 @@ description: >
   specific reference beats adjectives), OKLCH values, dark schemes as -dark
   siblings + the primary compat alias, the --{prefix}-{family}-{slot} naming
   grammar, and the lint gate (npx @google/design.md lint — zero errors,
-  expected-warning reading). NOT for Claude Design bundles
+  expected-warning reading). NOT for DESIGN.md format Q&A — schema, the
+  -dark pairing law, section anatomy (design-md-rules); NOT for Claude Design bundles
   (make-dscard-kit); NOT for Figma Make guidelines
   (make-figma-make-kit); NOT for cross-platform strategy
   (make-design-system); NOT for grading an export you didn't

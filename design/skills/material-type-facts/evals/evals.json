@@ -4,7 +4,7 @@
   "cases": [
     {
       "id": "t01",
-      "prompt": "what type token for this heading",
+      "prompt": "what md-sys type token for this heading",
       "expect": "trigger"
     },
     {
@@ -19,37 +19,37 @@
     },
     {
       "id": "t04",
-      "prompt": "size this section heading",
+      "prompt": "size this section heading on the md-sys typescale",
       "expect": "trigger"
     },
     {
       "id": "t05",
-      "prompt": "why is this text the wrong weight",
+      "prompt": "why is this text the wrong weight in our md-sys typescale",
       "expect": "trigger"
     },
     {
       "id": "t06",
-      "prompt": "what font for body copy",
+      "prompt": "what font for body copy in our md-sys typescale",
       "expect": "trigger"
     },
     {
       "id": "t07",
-      "prompt": "which level for a figure caption",
+      "prompt": "which md-sys typescale level for a figure caption",
       "expect": "trigger"
     },
     {
       "id": "t08",
-      "prompt": "type token for a badge label",
+      "prompt": "md-sys type token for a badge label",
       "expect": "trigger"
     },
     {
       "id": "t09",
-      "prompt": "which voice for a standalone label",
+      "prompt": "which md-sys voice for a standalone label",
       "expect": "trigger"
     },
     {
       "id": "t10",
-      "prompt": "wire the type fonts and families",
+      "prompt": "wire the md-sys type fonts and families",
       "expect": "trigger"
     },
     {
@@ -96,6 +96,12 @@
       "id": "n08",
       "prompt": "which md-sys motion spring token for this text reveal",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "should this table cell text be the --type-ui voice or the code voice",
+      "expect": "no-trigger",
+      "note": "font-token-rules owns the default --type-* grammar (ADR-0008 seam)"
     }
   ]
 }

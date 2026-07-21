@@ -9,7 +9,8 @@ description: >-
   management, iridescence and thin-film color (color that shifts with viewing angle), Pointer's
   gamut of physically real surface colors (paint, dye, ink), and color naming (ISCC-NBS,
   Munsell, Ridgway names, hex→name, naming across languages). NOT for space-conversion math or
-  gradients (color-space-facts); NOT for vision/appearance science (color-perception-facts);
+  gradients (color-space-facts); NOT for vision/appearance science, incl. metamerism — two
+  paints matching under one light but not another (color-perception-facts);
   NOT for contrast or CVD (color-contrast-facts); NOT for palette mood or meaning
   (color-theory-facts); NOT for building palettes (make-palette). ANSWERS, does not generate.
 disable-model-invocation: false

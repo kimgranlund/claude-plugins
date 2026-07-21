@@ -69,7 +69,7 @@
     },
     {
       "id": "t14",
-      "prompt": "should this table cell text be the ui voice or the code voice",
+      "prompt": "should this table cell text be the --type-ui voice or the code voice",
       "expect": "trigger"
     },
     {
@@ -141,6 +141,12 @@
       "id": "n14",
       "prompt": "choose a metric-compatible fallback stack for this webfont",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "what md-sys type token for this heading",
+      "expect": "no-trigger",
+      "note": "material-type-facts owns md-sys typescale asks (ADR-0008 seam)"
     }
   ]
 }

@@ -121,6 +121,12 @@
       "id": "n12",
       "prompt": "pick a body and display font pairing for our marketing site with real justification",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "why is this text the wrong weight in our md-sys typescale",
+      "expect": "no-trigger",
+      "note": "material-type-facts owns md-sys typescale asks (ADR-0008 seam)"
     }
   ]
 }

@@ -121,6 +121,12 @@
       "id": "n12",
       "prompt": "map semantic roles for danger and success colors",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "two paint swatches read as the same color under one light but not another",
+      "expect": "no-trigger",
+      "note": "color-perception-facts owns metamerism (ADR-0008 seam)"
     }
   ]
 }

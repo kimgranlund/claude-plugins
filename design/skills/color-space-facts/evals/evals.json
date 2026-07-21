@@ -1,6 +1,6 @@
 {
   "skill": "color-space-facts",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Re-derived 2026-07-06 for the color-science extraction (T2), corrected 2026-07-06 post skill-checker FIX-FIRST verdict. Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's 6 axes (spaces & conversions; gamut & interpolation; HDR & tone mapping; CSS color syntax; image palettes & quantization; palette-generation & library catalog) and include 2 of the pack's original canonical trigger evals (muddy gradients, palette sort) plus one axis-2 diagnostic (OKLCH ramp clipping) that replaces the original OKLCH-ramp trigger eval \u2014 that query ('a 10-step OKLCH ramp for a warning color...') turned out to be a generation ask this answers-only pack's own description fences, so it moved to negatives (attributed to make-palette). Negatives drawn adversarially from LIVE neighbors' own \u00a72 charters: color-perception-facts, color-contrast-facts, physical-color-facts, color-theory-facts, make-palette, check-colors.",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Re-derived 2026-07-06 for the color-science extraction (T2), corrected 2026-07-06 post skill-checker FIX-FIRST verdict. Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's 6 axes (spaces & conversions; gamut & interpolation; HDR & tone mapping; CSS color syntax; image palettes & quantization; palette-generation & library catalog) and include 2 of the pack's original canonical trigger evals (muddy gradients, palette sort) plus one axis-2 diagnostic (OKLCH ramp clipping) that replaces the original OKLCH-ramp trigger eval — that query ('a 10-step OKLCH ramp for a warning color...') turned out to be a generation ask this answers-only pack's own description fences, so it moved to negatives (attributed to make-palette). Negatives drawn adversarially from LIVE neighbors' own §2 charters: color-perception-facts, color-contrast-facts, physical-color-facts, color-theory-facts, make-palette, check-colors.",
   "cases": [
     {
       "id": "t01",
@@ -94,7 +94,7 @@
     },
     {
       "id": "t19",
-      "prompt": "my brand color ramp goes muddy at the light and dark ends \u2014 should I use a different gradient color space instead of HSL",
+      "prompt": "my brand color ramp goes muddy at the light and dark ends — should I use a different gradient color space instead of HSL",
       "expect": "trigger"
     },
     {
@@ -206,6 +206,12 @@
       "id": "n21",
       "prompt": "find the bug in my shader, the normals are flipped and the lighting looks wrong",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n22",
+      "prompt": "what's light-dark() in a DESIGN.md and why does color-scheme matter?",
+      "expect": "no-trigger",
+      "note": "design-md-rules owns DESIGN.md scheme pairing (ADR-0008 seam)"
     }
   ]
 }

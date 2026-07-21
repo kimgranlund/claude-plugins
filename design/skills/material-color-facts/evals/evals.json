@@ -19,7 +19,7 @@
     },
     {
       "id": "t04",
-      "prompt": "make these colors work in dark mode",
+      "prompt": "make these md-sys colors work in dark mode",
       "expect": "trigger"
     },
     {
