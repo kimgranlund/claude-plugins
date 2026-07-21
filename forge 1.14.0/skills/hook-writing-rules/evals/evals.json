@@ -1,56 +1,56 @@
 {
-  "skill": "hook-writing-rules",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (check-routing 2026-07-09): cases whose true owner is a user-only command leak to this standards skill on a model-only menu \u2014 the standards loading as background for a forge-shaped ask is benign (the model then suggests the command). Do not tune the description to chase these.",
-  "cases": [
-    {
-      "id": "t01",
-      "prompt": "How do exit codes work in hooks?",
-      "expect": "trigger"
-    },
-    {
-      "id": "t02",
-      "prompt": "Should this rule be a hook or a skill?",
-      "expect": "trigger"
-    },
-    {
-      "id": "t03",
-      "prompt": "My plugin hook silently never fires \u2014 why?",
-      "expect": "trigger"
-    },
-    {
-      "id": "t04",
-      "prompt": "Which event and matcher should I use for this check?",
-      "expect": "trigger"
-    },
-    {
-      "id": "t05",
-      "prompt": "How should a hook's error message read?",
-      "expect": "trigger"
-    },
-    {
-      "id": "t06",
-      "prompt": "Why does my hook fire twice?",
-      "expect": "trigger"
-    },
-    {
-      "id": "n01",
-      "prompt": "Forge the hook for me end to end",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n02",
-      "prompt": "What belongs in CLAUDE.md?",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n03",
-      "prompt": "Write a skill that runs on every edit",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n04",
-      "prompt": "should I work in a worktree for this task",
-      "expect": "no-trigger"
-    }
-  ]
+ "skill": "hook-writing-rules",
+ "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (check-routing 2026-07-09): cases whose true owner is a user-only command leak to this standards skill on a model-only menu \u2014 the standards loading as background for a forge-shaped ask is benign (the model then suggests the command). Do not tune the description to chase these. n01 flipped in the heal re-judge (2026-07-21) \u2014 'forge the hook for me end to end' is make-hook's off-menu command territory (the standing accepted-leak class); the fence now carries it explicitly.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "How do exit codes work in hooks?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "Should this rule be a hook or a skill?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "My plugin hook silently never fires \u2014 why?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "Which event and matcher should I use for this check?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "How should a hook's error message read?",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "Why does my hook fire twice?",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "Forge the hook for me end to end",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "What belongs in CLAUDE.md?",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "Write a skill that runs on every edit",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "should I work in a worktree for this task",
+   "expect": "no-trigger"
+  }
+ ]
 }

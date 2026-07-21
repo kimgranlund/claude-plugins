@@ -2,16 +2,17 @@
 name: save-lessons
 description: >-
   Detects when a fact crosses the bar for durable project knowledge — a correction restated a
-  third time, a ratified decision never captured as reusable knowledge, a high-impact convention
-  worth keeping on first mention — turns it into a knowledge-pack (SKILL.md + references +
-  routing-corpus + evals), via an AskUserQuestion confirming the plan before writing. Use for
-  "third time I've explained X", "skill or reference?", "is this knowledge or noise", "scan our
+  third time, a ratified decision never captured as knowledge, a high-impact convention
+  worth keeping at once — turns it into a knowledge-pack (SKILL.md + references +
+  evals); an AskUserQuestion confirms the plan before writing. Use for
+  "third time I've explained X", "skill or reference?", "should this become a skill or just stay
+  in the conversation", "is this knowledge or noise", "scan our
   docs for uncaptured knowledge", "is our harvested knowledge still accurate", "did this citation
   go stale, the file moved", "is there already a reference covering this", or "propose a plan for
   capturing this decision before we write". NOT authoring content once confirmed (make-pack);
   NOT a new skill's decomposition (break-down-problem); NOT running gates directly (release_gate.py,
-  /check-routing); NOT the decision record itself — an ADR IS a decision, this decides whether a fact
-  FROM one earns a knowledge-pack entry (doc-writing-rules).
+  /check-routing); NOT the decision record itself — an ADR IS a decision; this only decides
+  whether a fact FROM one earns a pack entry (doc-writing-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
