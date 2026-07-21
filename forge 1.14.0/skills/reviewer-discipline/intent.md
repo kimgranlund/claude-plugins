@@ -13,7 +13,7 @@ should_not:  ["review this PR's code style" (existing *-reviewer agents already 
 Confirmed absent from every reviewer/auditor agent and skill in this workspace (fresh grep+read
 sweep, 2026-07-18, GitHub issue #39): (1) reviewers push adversarial rigor only toward CONFIRMING
 positive claims ("a green result is the builder's claim, not your verdict — distrust it," found in
-ui:component-reviewer, typography:typography-system-reviewer) — none apply the same rigor to a
+ui:component-reviewer, typography:font-choice-checker) — none apply the same rigor to a
 DISMISSAL; a reviewer can currently wave off a real finding with no evidentiary cost. (2) ~8 of 13
 reviewer agents have a generic "verify claims with tools, don't trust the summary" step, but none
 names the runtime-vs-changelog distinction specifically — a "fixed/shipped" claim can be accepted

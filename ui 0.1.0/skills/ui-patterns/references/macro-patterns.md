@@ -80,7 +80,7 @@ Query refinement + a ranked result set.
 
 ## doc-reader
 A long-form content surface with orientation chrome.
-- **Anatomy:** content column at readable measure (see typography-lettering) · sticky outline/TOC ·
+- **Anatomy:** content column at readable measure (see lettering-facts) · sticky outline/TOC ·
   in-page anchors · prev/next at the bottom · breadcrumb identity above.
 - **Failure:** full-width text (measure > ~90ch); TOC that doesn't track scroll position.
 
