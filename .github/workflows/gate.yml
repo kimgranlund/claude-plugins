@@ -34,20 +34,20 @@ jobs:
         run: |
           set -e
           fail=0
-          for p in "forge 1.14.0" "scribe 0.1.0" "agentic-ui 0.1.0" "llm 0.1.0" \
-                   "color 0.1.0" "typography 0.1.0" "design-systems 0.1.0" \
-                   "ui 0.1.0" "orchestration 0.1.0"; do
+          for p in harness docs "agent-protocols" llm \
+                   color typography design-kits \
+                   screens teamwork; do
             echo "::group::$p"
-            python3 "forge 1.14.0/scripts/release_gate.py" "$p" || fail=1
+            python3 harness/scripts/release_gate.py "$p" || fail=1
             echo "::endgroup::"
           done
           exit $fail
 
       - name: Gate scripts prove their own counters
         run: |
-          python3 "forge 1.14.0/scripts/release_gate.py" selftest
-          python3 "forge 1.14.0/scripts/skill_lint.py" selftest
-          python3 "forge 1.14.0/scripts/eval_check.py" selftest
-          python3 "forge 1.14.0/scripts/docs_check.py" selftest
-          python3 "forge 1.14.0/scripts/corpus_check.py" selftest
-          python3 "scribe 0.1.0/scripts/doc_lint.py" selftest
+          python3 harness/scripts/release_gate.py selftest
+          python3 harness/scripts/skill_lint.py selftest
+          python3 harness/scripts/eval_check.py selftest
+          python3 harness/scripts/docs_check.py selftest
+          python3 harness/scripts/corpus_check.py selftest
+          python3 docs/scripts/doc_lint.py selftest

@@ -20,21 +20,21 @@ For the next agent/session opening this repo. Contract: harness's `write-handoff
   (status: `draft`) · `.claude/docs/spec/spec-linear-adapter.md` (status: `draft`) ·
   `.claude/docs/decompositions/ticketing-backend-watch-manifest-v1.json`, `-v2.json`, `-v3.json`
   (v3 current; v1/v2 kept per the versioned-manifest rule) ·
-  `forge 1.14.0/skills/github-facts/` — `SKILL.md`, eight `references/*.md` files,
-  `evals/evals.json` · `forge 1.14.0/agents/issue-sorter.md` · `forge 1.14.0/agents/repo-cleaner.md` ·
+  `harness/skills/github-facts/` — `SKILL.md`, eight `references/*.md` files,
+  `evals/evals.json` · `harness/agents/issue-sorter.md` · `harness/agents/repo-cleaner.md` ·
   `.claude/docs/handoff/2026-07-17-ticketing-backend-and-ops-agents.md` (this file).
-  Modified: `forge 1.14.0/.claude-plugin/plugin.json` (1.31.0→1.33.0) · `forge 1.14.0/README.md`
-  (map rows + two ledger entries) · `forge 1.14.0/MANUAL.md` (new entries) ·
-  `forge 1.14.0/scripts/release_gate.py` (G8 allow-set: `lifecycle-and-review`, `sub-issue` —
+  Modified: `harness/.claude-plugin/plugin.json` (1.31.0→1.33.0) · `harness/README.md`
+  (map rows + two ledger entries) · `harness/MANUAL.md` (new entries) ·
+  `harness/scripts/release_gate.py` (G8 allow-set: `lifecycle-and-review`, `sub-issue` —
   verified false-positives).
-  NOT mine, pre-existing on entry to this session: `design-systems 0.1.0/*` (5 files),
-  `orchestration 0.1.0/skills/{loop-rules,team-or-solo-rules}/evals/evals.json`,
-  `orchestration 0.1.0/skills/parallel-work-rules/`,
-  `forge 1.14.0/skills/{agent-writing-rules,entry-file-rules,hook-writing-rules}/evals/evals.json`
+  NOT mine, pre-existing on entry to this session: `design-kits/*` (5 files),
+  `teamwork/skills/{loop-rules,team-or-solo-rules}/evals/evals.json`,
+  `teamwork/skills/parallel-work-rules/`,
+  `harness/skills/{agent-writing-rules,entry-file-rules,hook-writing-rules}/evals/evals.json`
   — `git status` shows these alongside mine; do not attribute them to this handoff.
 
 - **Tests/checks run** —
-  `python3 "forge 1.14.0/scripts/release_gate.py" "forge 1.14.0"` → pass, CLEAN 0 fail/0 warn (last
+  `python3 harness/scripts/release_gate.py harness` → pass, CLEAN 0 fail/0 warn (last
   run, after all fixes below). `coverage_check.py` on manifest v3 `--strict` → pass, clean (21
   nodes · 20 actions · 34 hosts · 12 edges). `doc_lint.py` on ADR-0003 + both SPECs → pass, clean
   ×3. `agent_corpus_index.py selftest` → ran mid-session (caught the preload bug below); folded

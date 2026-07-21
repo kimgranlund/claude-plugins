@@ -1,0 +1,10 @@
+{
+  "name": "llm",
+  "displayName": "LLM",
+  "version": "1.0.5",
+  "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, the six-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability), and the Resident-Agent/Ephemeral-Agent residency taxonomy that keeps CLI-harness and hosted-chatbot findings from conflating. Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack.",
+  "license": "MIT",
+  "author": {
+    "name": "Kim G / NONOUN"
+  }
+}
