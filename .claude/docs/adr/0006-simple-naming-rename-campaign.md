@@ -1,7 +1,8 @@
 ---
 doc-type: adr
 id: adr-0006
-status: proposed
+status: accepted
+ratified: by Kim
 date: 2026-07-20
 owner: kim.granlund
 supersedes: null
