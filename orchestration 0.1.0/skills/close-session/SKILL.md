@@ -8,7 +8,7 @@ description: >-
   session", "clean up before ending", "make sure nothing's left hanging in the worktree before I
   go", or "before you exit, check for anything left to capture" — also fires at a natural closing point with real
   work behind it. NOT for a PEER session's worktree (parallel-work-rules); NOT for unresolved
-  conversational questions (open-questions-sweep); NOT for the removal mechanics themselves
+  conversational questions — "anything still open between us" (open-questions-sweep); NOT for the removal mechanics themselves
   (ExitWorktree); NOT for a repo-wide hygiene sweep (forge's ops-repo); NOT for authoring
   knowledge once confirmed (knowledge-harvest owns authoring, this only triggers its detection).
 disable-model-invocation: false

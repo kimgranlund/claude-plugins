@@ -14,7 +14,7 @@ description: >
   (forge's agent-forge / agent-authoring-standards); NOT for when the next turn fires — /goal, Stop hooks,
   continuation (loop-rules).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 ---
 
 # Harness — Orchestration & Frontmatter Design & Review

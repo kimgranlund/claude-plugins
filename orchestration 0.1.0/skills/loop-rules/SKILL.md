@@ -11,7 +11,7 @@ description: >
   skill/agent wiring, dispatch, frontmatter (team-or-solo-rules); this skill
   owns only when the next turn fires.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 ---
 
 # Harness — Control Patterns (/goal, /loop) Design & Review

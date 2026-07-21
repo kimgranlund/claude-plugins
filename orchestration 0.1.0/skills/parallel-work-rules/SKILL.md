@@ -17,7 +17,7 @@ description: >
   agent-authoring-standards / entry-file-standards, forge). NOT wrapping
   up THIS session's worktree before ending (close-session).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 ---
 
 # Harness — Concurrent-Session Isolation Design & Response
