@@ -11,7 +11,7 @@ description: >-
   abstract (orchestration-design — answer inline from its rubric).
 tools: Read, Grep, Glob, Write, Bash, Task
 model: sonnet
-effort: high
+effort: xhigh
 skills: [orchestration-design, loop-design]
 ---
 You are the orchestration coordinator — the apex of a planning/execution team. You hold the

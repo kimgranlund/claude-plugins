@@ -73,6 +73,11 @@ expect}]}` schema (`eval_check.py` E1–E5); the original three converted from t
 library's `scripts/routing-corpus.json` positives/negatives, `session-close`'s authored fresh at
 mint.
 
+v0.7.8 · assembled 2026-07-20 · 0.7.8: `orchestration-coordinator` agent effort high→xhigh — with
+0.7.7's same-named command making the HOST adopt this agent's contract directly, the effort field
+now also sets the host's reasoning depth for a charter's routing/gating loop, not just a spawned
+seat's. Model stays sonnet per the 0.7.0 seat-ladder reclassification (coordination, not judgment) ·
+
 v0.7.7 · assembled 2026-07-20 · 0.7.7: new `orchestration-coordinator` command skill — makes the
 HOST session itself adopt `agents/orchestration-coordinator.md`'s own eight priorities directly for
 one stated charter (read from the agent file, never restated inline, so the two can't silently
