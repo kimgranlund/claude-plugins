@@ -86,7 +86,7 @@ newer commit already fixed.
 
 **Worked instance:** `handoff-compose/scripts/handoff_check.py` — "Mechanical H1 gate — field
 presence, order, `(none)` markers, Status enum — run before any rubric judgment"
-(`handoff-compose/SKILL.md`'s own references table). `orchestration-coordinator.md` names the same
+(`handoff-compose/SKILL.md`'s own references table). `team-lead.md` names the same
 script as the coordinator's own most-mechanizable check: "run forge's `handoff_check.py`... against
 every INBOUND handoff where forge is installed; otherwise check the block by hand against the
 [same eight fields]." The mechanical pass (field presence/order) runs before any judgment call

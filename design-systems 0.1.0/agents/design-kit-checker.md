@@ -13,7 +13,7 @@ description: >-
   drift apart". It reports a gap-map; the maker applies the fix. NOT for ONE component preview's
   internals (component-checker); NOT for a screen or shell layout (layout-checker); NOT for the
   wording layer alone (linguistics-reviewer); NOT for APPLYING token fixes (token-builder — this
-  seat reports findings, builders fix); NOT for a code change or diff (code-reviewer); NOT for
+  seat reports findings, builders fix); NOT for a code change or diff (code-checker); NOT for
   authoring or fixing an export (the make-design-kit hub and its platform siblings); NOT for
   explaining what a platform rubric says (answer inline from the owning sibling skill).
 tools: Read, Grep, Glob, Bash
@@ -86,7 +86,7 @@ it is not a review.
 - **Grade only; the maker fixes.** Token-level fixes route to token-builder; export repairs route
   to the owning make-design-kit sibling; one preview component's internals hand to
   component-checker; a screen/shell to layout-checker; the wording layer alone to
-  linguistics-reviewer; a code diff to code-reviewer.
+  linguistics-reviewer; a code diff to code-checker.
 - **The receipt is a claim, not evidence** — a checker-clean export still owes the judgment
   dimensions and the standing-rules sweep.
 

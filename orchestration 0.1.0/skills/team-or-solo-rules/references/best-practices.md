@@ -1,6 +1,6 @@
 # Best Practices — Orchestration, Integration & YAML Frontmatter
 
-> `orchestration-design` domain reference. Foundations in `foundations.md`; scored by `rubric.md`. · 2026-06-27
+> `team-or-solo-rules` domain reference. Foundations in `foundations.md`; scored by `rubric.md`. · 2026-06-27
 
 Covers how subagents, skills, and teams discover and compose with each other, and the productive expressions of the frontmatter that wires them. Assumes the models in `foundations.md`. Scored by `rubric.md`.
 
@@ -48,7 +48,7 @@ Consequences:
 - **Depth ≤ 2.** Host → specialist covers almost everything; a third level needs justification; a fourth means the decomposition under-cut and a worker is compensating by becoming an orchestrator.
 - **`skills:` is the role's policy manifest.** What a role loads is declared configuration — changing a reviewer's standard is an edit to the skill it preloads, with a diff, not a per-dispatch prompt tweak. Name the skills the work leaned on in the handback, so a quality shift is traceable to a policy change.
 - **`model` in frontmatter is the default, not the routing.** Route by the task's type at dispatch — mechanical checks and extraction to a fast model, novel design to a strong one — overriding the role default when the task class differs.
-- **Planes, not a pipeline.** Authority flows down (the host authorizes), artifacts flow up (workers return), verdicts flow sideways (verifiers judge without the maker's framing) — and a failed verdict routes to the plane that caused it: the artifact, the spec that permitted it, or the plan that mis-cut it. Loop mechanics — hierarchical budgets, locus escalation, durable state — are owned by `loop-design` and its self-orchestrated-looping canon.
+- **Planes, not a pipeline.** Authority flows down (the host authorizes), artifacts flow up (workers return), verdicts flow sideways (verifiers judge without the maker's framing) — and a failed verdict routes to the plane that caused it: the artifact, the spec that permitted it, or the plan that mis-cut it. Loop mechanics — hierarchical budgets, locus escalation, durable state — are owned by `loop-rules` and its self-orchestrated-looping canon.
 
 ## Executing a parallel build: the disjoint same-tree fan-out
 

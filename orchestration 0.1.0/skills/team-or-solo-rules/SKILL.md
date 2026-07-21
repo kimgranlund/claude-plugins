@@ -1,5 +1,5 @@
 ---
-name: orchestration-design
+name: team-or-solo-rules
 description: >
   Design or review orchestration — how skills, subagents, and agent teams
   discover and compose, and the YAML frontmatter that wires them — scoring
@@ -12,7 +12,7 @@ description: >
   "audit the agent team for duplicates", "do my agents leverage the right skills"
   (skills-audit / agents-audit); NOT for a single agent definition
   (forge's agent-forge / agent-authoring-standards); NOT for when the next turn fires — /goal, Stop hooks,
-  continuation (loop-design).
+  continuation (loop-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -25,7 +25,7 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
 - Discovery (descriptions select, every turn) vs continuation (`/goal`,`/loop`,hooks decide when the next turn fires) — never conflated.
 - Descriptions are the connective tissue: the orchestrator routes on them, not on file cross-references.
 - Static vs dynamic wiring: `skills:` preload hard-wires standing expertise; leave the rest to discovery.
-- Composition is planes, not a pipeline: authority flows down, artifacts flow up, verdicts flow sideways — a failed verdict routes to the plane that caused it (loop mechanics live in `[[loop-design]]`).
+- Composition is planes, not a pipeline: authority flows down, artifacts flow up, verdicts flow sideways — a failed verdict routes to the plane that caused it (loop mechanics live in `[[loop-rules]]`).
 - Every dispatch is a sealed contract: charter + enumerated inputs + budget + typed return (`references/best-practices.md` "The dispatch is a sealed contract"); the worker never sees the host's deliberation or sibling transcripts.
 
 ## Design
@@ -44,7 +44,7 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
 ## Review
 1. This skill's gates are systemic judgment, not a single-file mechanical check — there is no `harness_checks` subcommand: D2 is judgment because whether a description is a precise interface only shows against the sibling set (no string test sees it); D4's YAML-validity half IS mechanizable — its checker is queued, not built — so until it lands, score D4 by inspection and mark uninspected fields skipped-not-passed. Score against `references/rubric.md`, citing evidence on the 1–5 anchors.
 2. Check plane separation first (the top failure: expecting `/goal` to select capabilities).
-3. Findings by severity; gate verdict; top issues with a concrete fix each. **Generator ≠ critic:** for a high-stakes system dispatch the independent **`orchestration-reviewer`** (fresh context, scores this same rubric by inspection) rather than grading your own arrangement.
+3. Findings by severity; gate verdict; top issues with a concrete fix each. **Generator ≠ critic:** for a high-stakes system dispatch the independent **`wiring-checker`** (fresh context, scores this same rubric by inspection) rather than grading your own arrangement.
 
 ## Improve (repair an arrangement)
 Review first, then close the gap — plane separation and connective tissue before polish. Fix the wiring, re-score, finalize only when every gate dimension (D2, D4) ≥ 3. (Improve = review + targeted redesign.)
@@ -67,6 +67,6 @@ Top issues: 1) … — fix: …
 | `references/best-practices.md` | Design guidance / explaining a finding |
 | `references/foundations.md` | When a finding turns on a shared model (discovery vs continuation) |
 | `[[handoff-compose]]` | The return contract a composed agent hands back — the other half of composition |
-| `[[loop-design]]` | Continuation mechanics (`/goal`, `/loop`, hooks) and loop discipline — owns the self-orchestrated-looping canon (budgets, locus escalation, durable state) |
+| `[[loop-rules]]` | Continuation mechanics (`/goal`, `/loop`, hooks) and loop discipline — owns the self-orchestrated-looping canon (budgets, locus escalation, durable state) |
 
-**Done** when every unit matches its task shape (the null unit respected — no seat doing host-inline work), every description is a precise fenced interface, frontmatter is verified against the build, dispatches are sealed and typed, both gate dimensions (D2, D4) score ≥ 3, and a high-stakes arrangement carries its independent orchestration-reviewer pass. **NOT done** while any description starves the router, a fence is one-way, a dispatch leaks history or lacks a budget, planes are conflated — or the only score the arrangement has is its designer's.
+**Done** when every unit matches its task shape (the null unit respected — no seat doing host-inline work), every description is a precise fenced interface, frontmatter is verified against the build, dispatches are sealed and typed, both gate dimensions (D2, D4) score ≥ 3, and a high-stakes arrangement carries its independent wiring-checker pass. **NOT done** while any description starves the router, a fence is one-way, a dispatch leaks history or lacks a budget, planes are conflated — or the only score the arrangement has is its designer's.

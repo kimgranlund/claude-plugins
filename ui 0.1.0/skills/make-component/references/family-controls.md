@@ -96,4 +96,4 @@ with extra parts.
 - One a11y floor: APG keyboard for the role, roving-vs-activedescendant chosen deliberately,
   forced-colors shipped, target ≥ 24px.
 - Defer the *code* to the repo's component seat (in agent-ui, the `component-builder` agent) or the
-  host/`system-builder` agent; this family file locks the **contract**.
+  host/`builder` agent; this family file locks the **contract**.

@@ -1,6 +1,6 @@
 {
   "skill": "intent-extract",
-  "_note": "Deep-review corpus, excellence campaign batch 4 (2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood: intent-grill, prd-author, spec-author, system-decompose.",
+  "_note": "Deep-review corpus, excellence campaign batch 4 (2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood: grill-the-ask, prd-author, spec-author, system-decompose.",
   "positives": [
     "figure out what they really want before you start",
     "clarify this request before acting on it",

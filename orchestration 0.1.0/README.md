@@ -1,4 +1,4 @@
-# orchestration — run a multi-agent feature-delivery team end to end
+# teamwork — run a multi-agent feature-delivery team end to end
 
 Sibling plugin to forge (which authors the harness) and scribe (which authors what flows through it).
 This plugin owns the composition layer: deriving the decisions a greenfield needs, designing how
@@ -11,32 +11,32 @@ reviews a feature. Assembled by a `plugin-decompose` partition of `~/.claude/ski
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/intent-grill` | Declarative skill | both | Derives the load-bearing design decisions for a greenfield surface across two crossing axes (Structural / Mechanism) and cascading rounds; hands off a Ratified Design to `system-decompose` and the document author |
-| `skills/orchestration-design` | Declarative skill | both | Design or review how skills, subagents, and teams compose, and the YAML frontmatter that wires them — unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate |
-| `skills/loop-design` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
-| `skills/concurrency-design` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
-| `skills/session-close` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through bug-report/feature/issue, triggers knowledge-harvest's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
-| `hooks/hooks.json` (`SessionEnd`) | Hook | automatic | Passive safety net for `session-close`: on actual session termination, logs a durable warning line if a git worktree was left dirty or unpushed — `SessionEnd` cannot block, so this never gates, only records |
-| `skills/build` | Command skill | user-only (`/build`) | Record-first build: finds or mints the feature record (running scribe's `/feature` intake inline on a miss), sizes the dispatch by the solo-first floors (small → host inline / one sealed fork; big → the floored seats), drives it under a mandatory Findings write-back, closes the loop on the ticket |
-| `skills/orchestration-coordinator` | Command skill | user-only (`/orchestration-coordinator`) | Makes THIS host session adopt `agents/orchestration-coordinator.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides orchestration-design's solo-first default for the charter's duration; same exact-name-pairing convention as forge's `ops-issues`, inverted (host adopts, never dispatches, the seat it shares a name with) |
-| `agents/orchestration-coordinator` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
-| `agents/system-planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
-| `agents/system-builder` | Subagent | dispatch-only | The build seat: implements an approved LLD's build sequence, runs mechanical checks, escalates design conflicts rather than editing the contract |
+| `skills/grill-the-ask` | Declarative skill | both | Derives the load-bearing design decisions for a greenfield surface across two crossing axes (Structural / Mechanism) and cascading rounds; hands off a Ratified Design to `system-decompose` and the document author |
+| `skills/team-or-solo-rules` | Declarative skill | both | Design or review how skills, subagents, and teams compose, and the YAML frontmatter that wires them — unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate |
+| `skills/loop-rules` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
+| `skills/parallel-work-rules` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
+| `skills/close-session` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through bug-report/feature/issue, triggers knowledge-harvest's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
+| `hooks/hooks.json` (`SessionEnd`) | Hook | automatic | Passive safety net for `close-session`: on actual session termination, logs a durable warning line if a git worktree was left dirty or unpushed — `SessionEnd` cannot block, so this never gates, only records |
+| `skills/build-feature` | Command skill | user-only (`/build-feature`) | Record-first build: finds or mints the feature record (running scribe's `/feature` intake inline on a miss), sizes the dispatch by the solo-first floors (small → host inline / one sealed fork; big → the floored seats), drives it under a mandatory Findings write-back, closes the loop on the ticket |
+| `skills/lead-team` | Command skill | user-only (`/lead-team`) | Makes THIS host session adopt `agents/team-lead.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides team-or-solo-rules's solo-first default for the charter's duration; paired with the seat it imports per ADR-0006's species split — command = verb form (`/lead-team`), agent = role noun (`team-lead`); like forge's `ops-issues` pairing, inverted (host adopts, never dispatches) |
+| `agents/lead-team` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
+| `agents/planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
+| `agents/builder` | Subagent | dispatch-only | The build seat: implements an approved LLD's build sequence, runs mechanical checks, escalates design conflicts rather than editing the contract |
 | `agents/docs-writer` | Subagent | dispatch-only | Owns a documentation site: derives pages from their canonical source, makes drift a failing gate, reports soft drift a static check can't see |
-| `agents/code-reviewer` | Subagent | dispatch-only | Independent critic for one bounded code change, scored against the contract it was built to; generator ≠ critic for the delivery loop |
-| `agents/orchestration-reviewer` | Subagent | dispatch-only | Independent critic for how skills/subagents/teams compose and the frontmatter that wires them, scored against `orchestration-design`'s rubric; a real gap closed post-migration (see below) |
+| `agents/code-checker` | Subagent | dispatch-only | Independent critic for one bounded code change, scored against the contract it was built to; generator ≠ critic for the delivery loop |
+| `agents/wiring-checker` | Subagent | dispatch-only | Independent critic for how skills/subagents/teams compose and the frontmatter that wires them, scored against `team-or-solo-rules`'s rubric; a real gap closed post-migration (see below) |
 
 ## Construction note: hard cross-plugin preloads converted to soft mentions
 
 Every one of the five ported agents carried a `skills:` frontmatter preload into skills that no
 longer live in this plugin boundary. Fixing this was the bulk of the porting work:
 
-- **`orchestration-coordinator`** preloaded `handoff-compose` (now in forge). Dropped from the
+- **`team-lead`** preloaded `handoff-compose` (now in forge). Dropped from the
   preload list; the body now soft-mentions forge's `handoff-compose` block with an inline
   Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action
-  fallback wherever it names a handback. `skills:` is now `[orchestration-design, loop-design]` —
+  fallback wherever it names a handback. `skills:` is now `[team-or-solo-rules, loop-rules]` —
   the two preloads that are still same-plugin, real preloads.
-- **`system-planner`** preloaded `system-decompose` (now in forge) plus `prd-author`, `spec-author`,
+- **`planner`** preloaded `system-decompose` (now in forge) plus `prd-author`, `spec-author`,
   `lld-author`, `adr-author` — four names that no longer exist anywhere as skills: scribe
   consolidated all four into `doc-authoring-standards` plus a `doc-forge` drafting command. Every one
   of the six preloads was cross-plugin or stale, so the frontmatter now carries no `skills:` field at
@@ -45,22 +45,22 @@ longer live in this plugin boundary. Fixing this was the bulk of the porting wor
   each document type's minimum contract — Problem/Users/Outcomes/Non-goals for a PRD,
   Requirements/Non-goals/Examples/Acceptance for a SPEC, Components/Interfaces/Data/Risks for an LLD,
   Context/Decision/Consequences for an ADR).
-- **`system-builder`** preloaded `lld-author` (stale — same scribe consolidation), `system-decompose`
+- **`builder`** preloaded `lld-author` (stale — same scribe consolidation), `system-decompose`
   and `handoff-compose` (both forge). Same fix: no `skills:` field; the body soft-mentions
   scribe's `doc-authoring-standards` for reading an LLD's shape, forge's `system-decompose` for
   implementation-level sub-breakdown, and forge's `handoff-compose` for the report-out, each with its
   inline fallback.
-- **`docs-writer`** and **`code-reviewer`** each preloaded only `handoff-compose` (forge). Same fix:
+- **`docs-writer`** and **`code-checker`** each preloaded only `handoff-compose` (forge). Same fix:
   no `skills:` field; each body soft-mentions forge's `handoff-compose` block with the same inline
   fallback shape.
 
 The pattern throughout: name the cross-plugin skill and use it where installed; otherwise apply its
 minimum contract inline. No agent here silently degrades — every fallback is spelled out in the body,
-not merely implied. `intent-grill`'s own SKILL.md carried the same stale
+not merely implied. `grill-the-ask`'s own SKILL.md carried the same stale
 `prd-author`/`spec-author`/`lld-author` references in its NOT-for clause and output contract; those
 were repaired the same way, pointing at scribe's `doc-forge`/`doc-authoring-standards`.
 
-`loop-design/scripts/harness_checks.py` shipped in the source library as a symlink to a sibling
+`loop-rules/scripts/harness_checks.py` shipped in the source library as a symlink to a sibling
 skill (`skill-author`) outside this plugin boundary — a second, quieter instance of the same
 cross-boundary problem, this time at the file-path layer rather than the frontmatter layer. It has
 been materialized as a real, self-contained copy so the skill's Review step
@@ -70,9 +70,31 @@ been materialized as a real, self-contained copy so the skill's Review step
 
 Each model-invocable skill ships `evals/evals.json` in this workspace's `{skill, cases:[{id, prompt,
 expect}]}` schema (`eval_check.py` E1–E5); the original three converted from the pre-migration
-library's `scripts/routing-corpus.json` positives/negatives, `session-close`'s authored fresh at
+library's `scripts/routing-corpus.json` positives/negatives, `close-session`'s authored fresh at
 mint.
 
+## ADR-0006 transition table (renamed 2026-07-21)
+
+The PLUGIN renamed: `orchestration` → `teamwork` (new install identity; the directory
+`orchestration 0.1.0/` keeps its frozen path — see the workspace CLAUDE.md alias table). Old
+handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
+
+| Old name | New name |
+|---|---|
+| `build` | `build-feature` |
+| `orchestration-coordinator` (command) | `lead-team` |
+| `session-close` | `close-session` |
+| `orchestration-design` | `team-or-solo-rules` |
+| `loop-design` | `loop-rules` |
+| `concurrency-design` | `parallel-work-rules` |
+| `intent-grill` | `grill-the-ask` |
+| `orchestration-coordinator` (agent) | `team-lead` |
+| `system-planner` (agent) | `planner` |
+| `system-builder` (agent) | `builder` |
+| `code-reviewer` (agent) | `code-checker` |
+| `orchestration-reviewer` (agent) | `wiring-checker` |
+
+v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 7/9 — the PLUGIN renames orchestration → teamwork and seven skills + five agents take the simple paradigm (transition table above; docs-writer keeps). The 0.7.7 exact-name pairing splits by species on purpose: command = verb form (/lead-team), agent = role noun (team-lead). MAJOR bump — names are APIs and this is breaking. Workspace sweep (90 files + ordered context splits for the shared orchestration-coordinator token + a hand pass on the bare plugin token; ledger history and .claude/ops records excluded); baseline blind run 107/108 (concurrency n09 pre-existing); post-rename re-measure in the campaign PR ·
 v0.7.9 · assembled 2026-07-21 · 0.7.9: ADR-0006 screens-rename sweep — code-reviewer's UI-reviewer fences repointed (component-/layout-/flow-checker); pointer updates only · v0.7.8 · assembled 2026-07-20 · 0.7.8: `orchestration-coordinator` agent effort high→xhigh — with
 0.7.7's same-named command making the HOST adopt this agent's contract directly, the effort field
 now also sets the host's reasoning depth for a charter's routing/gating loop, not just a spawned

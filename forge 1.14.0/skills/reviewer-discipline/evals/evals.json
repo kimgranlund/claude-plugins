@@ -1,6 +1,6 @@
 {
   "skill": "reviewer-discipline",
-  "note": "Trigger-routing suite for the pilot (GitHub issue #39). Negatives are near-misses owned by handoff-compose (return-block format), the artifact-bound *-reviewer/*-auditor agents' own rubrics (component/layout/doc-specific dimensions), agents-audit/skills-audit (DEEP portfolio scoring), and orchestration-design/doc-authoring-standards (unrelated design/document work a reviewer conversation could drift toward).",
+  "note": "Trigger-routing suite for the pilot (GitHub issue #39). Negatives are near-misses owned by handoff-compose (return-block format), the artifact-bound *-reviewer/*-auditor agents' own rubrics (component/layout/doc-specific dimensions), agents-audit/skills-audit (DEEP portfolio scoring), and team-or-solo-rules/doc-authoring-standards (unrelated design/document work a reviewer conversation could drift toward).",
   "cases": [
     { "id": "t01", "prompt": "review this diff for real bugs, not just the happy path", "expect": "trigger" },
     { "id": "t02", "prompt": "before you file this review, steelman what the author would say back", "expect": "trigger" },

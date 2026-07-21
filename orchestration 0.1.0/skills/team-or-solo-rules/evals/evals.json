@@ -1,6 +1,6 @@
 {
-  "skill": "orchestration-design",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review M2 corpus (excellence campaign batch 2, 2026-07-03): positives across imperative / diagnostic / symptom / indirect families incl. the stem token 'orchestration'. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: loop-design, agent-author, skills-audit, agents-audit, handoff-compose, system-decompose (the last three now live in forge, a sibling plugin). Known accepted-leak class (eval-run 2026-07-09): 'do my agents leverage the right skills' leaks here when agents-audit (its owner, a user-only command) is off the model menu \u2014 benign; do not tune to chase it.",
+  "skill": "team-or-solo-rules",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review M2 corpus (excellence campaign batch 2, 2026-07-03): positives across imperative / diagnostic / symptom / indirect families incl. the stem token 'orchestration'. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: loop-rules, agent-author, skills-audit, agents-audit, handoff-compose, system-decompose (the last three now live in forge, a sibling plugin). Known accepted-leak class (eval-run 2026-07-09): 'do my agents leverage the right skills' leaks here when agents-audit (its owner, a user-only command) is off the model menu \u2014 benign; do not tune to chase it.",
   "cases": [
     {
       "id": "t01",

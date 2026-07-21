@@ -7,8 +7,8 @@ description: |
   plus per-seat status. Coordination only: it edits no source and mutates nothing itself — every
   mutation happens (or is refused) inside a dispatched seat's own gates. Dispatched by the
   /ops-orchestrator command for an on-demand sweep, blank or carrying a scope instruction naming
-  a subset of seats. NOT for feature-delivery team coordination (the orchestration plugin's
-  orchestration-coordinator, where installed); NOT for one seat's job run directly — work-item
+  a subset of seats. NOT for feature-delivery team coordination (the teamwork plugin's
+  team-lead, where installed); NOT for one seat's job run directly — work-item
   intake (ops-issues), repo hygiene (ops-repo), ADR review (ops-adr) — dispatch that seat alone
   instead; NOT for producing the priority queue itself (ops-planner, which this seat dispatches,
   owns that judgment).

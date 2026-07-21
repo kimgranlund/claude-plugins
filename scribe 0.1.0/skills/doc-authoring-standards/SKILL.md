@@ -104,7 +104,7 @@ only at the end — the record that survives a fork killed mid-investigation.
 ## Feature-shaped tickets
 
 A feature idea is likewise a TICKET, not a ninth type: `kind: feature` plus `size: small | big`
-in frontmatter (machine-read — orchestration's `/build` branches its dispatch machinery on it;
+in frontmatter (machine-read — orchestration's `/build-feature` branches its dispatch machinery on it;
 small = one context holds it, no contract change · big = multi-component, contract-changing, or
 decision-ratifying — the estate's one materiality floor), and two sections beyond the type's
 minimum: Scope/Open (the intake's named gaps) and Findings (same append-only dated-entry

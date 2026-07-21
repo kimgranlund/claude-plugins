@@ -11,7 +11,7 @@ description: >-
   references/standard-of-excellence.md and the campaign/ ledger. NOT for a single agent's definition or why
   it won't auto-delegate (agent-authoring-standards / agent-forge); NOT for the skills corpus
   (skills-audit); NOT for a product's UI (check-whole-ui); NOT for wiring decisions — subagent or team
-  (orchestration-design).
+  (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
 ---
@@ -135,7 +135,7 @@ Portfolio: KEEP|MERGE|SPLIT|RETIRE|RE-CHARTER — <one sentence of team-level wh
 | `skill-refactor` | Executes MERGE/SPLIT/RETIRE and concept-folder moves the campaign verdicts |
 | `skills-audit` | The sibling audit for a whole *skills* corpus (the same two-mode shape), same plugin |
 | `linguistic-techniques` | L scoring — dispatch `linguistics-reviewer` per agent, same plugin |
-| `orchestration-design` | S framing — static (`skills:` preload) vs dynamic wiring, descriptions as connective tissue — lives in the `orchestration` plugin |
+| `team-or-solo-rules` | S framing — static (`skills:` preload) vs dynamic wiring, descriptions as connective tissue — lives in the `teamwork` plugin |
 | `rubric-forge` | Author / score / repair this skill's own rubrics — lives in `scribe` |
 
 ## Failure branches

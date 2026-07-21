@@ -74,7 +74,7 @@ If the gate passes and no dimension is a Critical or clear fail, say so in one l
 - Registration or handler half not found → report which half is missing; do not improvise.
 - A probe would mutate real state → trace by read instead; state the H-probe finding as capped.
 
-NOT for a general code diff (`code-reviewer`, when installed alongside); NOT for a subagent
+NOT for a general code diff (`code-checker`, when installed alongside); NOT for a subagent
 (`agent-reviewer`); NOT for a plugin manifest (`plugin-reviewer`); NOT for designing a new hook
 (`hook-forge`).
 

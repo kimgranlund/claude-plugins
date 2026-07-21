@@ -3,14 +3,14 @@ name: build
 description: >-
   Build a feature from its durable record — and when no record exists yet, run the /feature
   intake first (scribe, where installed; its discipline inline otherwise), THEN build. The
-  momentum half of the intake/build pair: /feature records and stops; /build guarantees a record
+  momentum half of the intake/build-feature pair: /feature records and stops; /build-feature guarantees a record
   exists, sizes the dispatch by the solo-first floors, and drives it under a mandatory Findings
-  write-back contract. Run /build [what to build, or a TKT- id], e.g. "/build a calculator" or
-  "/build TKT-0042". Small work → the host builds inline or one sealed fork; big work → the
-  planning/execution seats (system-planner/system-builder/code-reviewer) sized by their own
+  write-back contract. Run /build-feature [what to build, or a TKT- id], e.g. "/build-feature a calculator" or
+  "/build-feature TKT-0042". Small work → the host builds inline or one sealed fork; big work → the
+  planning/execution seats (planner/builder/code-checker) sized by their own
   floors. NOT for pure intake with no build intended (/feature, scribe); NOT for bug
   investigation (bug-report, scribe); NOT for deciding subagent-vs-team in the abstract
-  (orchestration-design).
+  (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[what to build, or an existing TKT- id]"
@@ -18,7 +18,7 @@ argument-hint: "[what to build, or an existing TKT- id]"
 
 # build — no record, no build; a record, then momentum
 
-The dispatch half of the `/feature` pair. `/feature` ends at a record; `/build` starts from one —
+The dispatch half of the `/feature` pair. `/feature` ends at a record; `/build-feature` starts from one —
 minting it first when it doesn't exist — and ends at shipped work with the record's `## Findings`
 carrying the evidence. Seed: `$ARGUMENTS`.
 
@@ -49,9 +49,9 @@ carry, applied from the caller's side:
   demands it — an agent only for tool restriction, parallelism, or multi-skill preload; a fork
   for everything else (forge's fork-vs-agent gate, applied inline where forge is absent). No planner, no
   coordinator, no team: a task one context can hold is the host's own.
-- **big** — the delivery seats, each already floored: `system-planner` authors what the change
-  earns (the record's Links may already carry the docs — don't re-author), `system-builder`
-  implements to the approved LLD, `code-reviewer` grades the slice before merge. The coordinator
+- **big** — the delivery seats, each already floored: `planner` authors what the change
+  earns (the record's Links may already carry the docs — don't re-author), `builder`
+  implements to the approved LLD, `code-checker` grades the slice before merge. The coordinator
   seat only when the chain genuinely spans ≥2 seats across contexts.
 
 ## Phase 3 — Dispatch under contract
@@ -59,7 +59,7 @@ carry, applied from the caller's side:
 Every dispatch is sealed: the ticket path + enumerated inputs + budget + the typed return — and a
 **mandatory dated `## Findings` write-back at each significant result** (slice built, gate green,
 merged), not only at the end, so an interrupted build still left evidence. Run under `/goal` with a
-try-cap (5, per loop-design's feature-ticket recipe): named stopping predicate, capped tries,
+try-cap (5, per loop-rules's feature-ticket recipe): named stopping predicate, capped tries,
 escalate on the same failure twice.
 
 ## Phase 4 — Close the loop
@@ -76,7 +76,7 @@ was owed.
 - Ambiguous match in Phase 1 (two plausible records) → ask which, one question, then proceed.
 - The ask is bug-shaped → `bug-report` (scribe), not a feature build.
 - Build blocked mid-flight by a discovered design fork → escalate to the record (a dated Findings
-  entry naming the fork) and, for big work, back to system-planner — never silently edit the
+  entry naming the fork) and, for big work, back to planner — never silently edit the
   contract.
 - Gates fail at the wave boundary → the failure routes to the seat that caused it; the ticket
   stays `doing` with the failure recorded.

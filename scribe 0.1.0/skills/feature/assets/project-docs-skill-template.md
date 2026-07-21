@@ -7,7 +7,7 @@ description: >-
   status of TKT-####", "what's already been queued or shipped". Consult table → the docs/ files;
   Grep first, read the matching section. ANSWERS from the corpus only. NOT for authoring or
   editing a document (/doc-forge, scribe); NOT for capturing a new feature idea (/feature) or bug
-  (/bug-report); NOT for building from a record (/build, orchestration).
+  (/bug-report); NOT for building from a record (/build-feature, orchestration).
 user-invocable: false
 disable-model-invocation: false
 ---
@@ -47,5 +47,5 @@ intake are linked from their ticket, not mapped here.)
 3. Cross-references between records use ids (the ID spine: a TKT links its SPEC by id) — follow
    them rather than assuming one file is complete.
 4. Route all making: a new idea → `/feature`; a bug → `/bug-report`; building a queued record →
-   `/build`; authoring or revising any document → `/doc-forge` (all where installed — otherwise
+   `/build-feature`; authoring or revising any document → `/doc-forge` (all where installed — otherwise
    name the record that would be touched and hand back to the user).

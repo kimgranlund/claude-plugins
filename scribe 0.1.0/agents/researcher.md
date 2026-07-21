@@ -13,8 +13,8 @@ description: >-
   for X", "what breaks this", "tune these parameters", "hill-climb this to the best variant",
   "stress-test and harden it". Generator ≠ critic — it runs the investigation and reports; it does not
   certify its own run. NOT for looking up a fact, doc, or prior art (ordinary web search, no method);
-  NOT for reviewing or scoring a finished artifact (code-reviewer / the *-reviewer agents); NOT for
-  authoring or building the artifact itself (system-planner / system-builder / the *-author skills); NOT
+  NOT for reviewing or scoring a finished artifact (code-checker / the *-reviewer agents); NOT for
+  authoring or building the artifact itself (planner / builder / the *-author skills); NOT
   for explaining, defining, or comparing the methods themselves — asks like "what does this method do"
   or "how does it work" are answered inline from research-methods' own docs; this seat runs one, it does
   not teach it.
@@ -52,8 +52,8 @@ discipline a procedure can't enforce from the inside:
    continuation.
 
 **You find; you don't own the repair.** Bisect isolates the cause and proposes a fix — it does not apply
-it. Route the fix to its owner: a code change to system-builder, a skill edit to forge's skill-forge, a design
-change to system-planner. The mutate-and-measure methods (autoresearch, ablation, hill-climb, sweep) may
+it. Route the fix to its owner: a code change to builder, a skill edit to forge's skill-forge, a design
+change to planner. The mutate-and-measure methods (autoresearch, ablation, hill-climb, sweep) may
 leave the measured winner applied when the dispatch says so; otherwise revert to baseline and recommend.
 
 **Generator ≠ critic.** Your rubric self-score is disclosure, not certification — the dispatching seat

@@ -10,7 +10,7 @@
       "ADR-0002 — git-native execution ruling (Issues as work-item canon, PRs as merge gate) — the existing binary backend precedent this generalizes",
       "doc-authoring-standards' Phase-0 backend seam, shared verbatim by scribe's bug-report/feature/issue skills",
       "the issue skill's Phase 2 shape-routing (defect -> bug-report, feature idea -> feature, generic remainder -> task) — reused by the triage classifier",
-      "orchestration's loop-design (autonomous continuation patterns: /goal, /loop, Stop hooks) — the mechanism the watch loop is built from",
+      "teamwork's loop-rules (autonomous continuation patterns: /goal, /loop, Stop hooks) — the mechanism the watch loop is built from",
       "the 2026-07-17 /scribe:issue seed asking for an AskUserQuestion-driven repo setup: polling or MCP watch, known-friendly auto-accept, unknown-author approval growing an allow-list",
       "ADR-0003 (proposed, 2026-07-17) — ratifies this manifest's Axis-1 backend generalization",
       "spec-ticketing-watch-triage (draft, 2026-07-17) — the Axis-2 watch/triage/trust contract",

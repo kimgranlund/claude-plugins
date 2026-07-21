@@ -280,7 +280,7 @@ def gate(root: Path, package: bool = False):
              # `-agent` suffix a2ui-chat-agent-facts already owns; "hardcoded-feature" is
              # ordinary prose in chat-harness-routing-facts's own axis description:
              "chat-agent", "hardcoded-feature",
-             # concurrency-design (2026-07-17): "self-report" is prose ("never act on either
+             # parallel-work-rules (2026-07-17): "self-report" is prose ("never act on either
              # side's self-report") tripping the `-report` suffix handoff-compose already owns:
              "self-report",
              # reviewer-discipline (2026-07-18, Issue #39) added the `-discipline` suffix to the
@@ -299,18 +299,18 @@ def gate(root: Path, package: bool = False):
              # entry-file-rules, icon-rules, file-feature, sort-issues are proposed-name
              # demonstrations), and three pre-existing prose compounds are newly caught by the
              # widened inventory — path-scoped-rules (skill-authoring-standards' frontmatter
-             # prose), folder-taxonomy (agents-audit prose), system-planner (an orchestration
+             # prose), folder-taxonomy (agents-audit prose), planner (an orchestration
              # AGENT cited in prose, not a skill) — the standing false-positive class, same
              # shape as -flow/-systems/-discipline:
              "doc-rules", "doc-writing-rules", "entry-file-rules", "icon-rules", "file-feature",
-             "sort-issues", "path-scoped-rules", "folder-taxonomy", "system-planner",
+             "sort-issues", "path-scoped-rules", "folder-taxonomy", "planner",
              # same 2026-07-20 estate-wide sweep, other plugins' pre-existing prose newly caught
              # by suffixes added in recent ships (-rules here; -routing/-sweep/-orchestrator from
              # llm's chat-harness family and forge 1.39.0's ops pair): "three-hard-rules" is
              # design-md-rules's own named block, "mis-routing" is issue's prose,
              # "threshold-sweep" cites a research-methods references FILENAME
              # (threshold-sweep-2026-07-04.md), "repo-orchestrator" is a hypothetical agent in
-             # concurrency-design's worked example:
+             # parallel-work-rules's worked example:
              "three-hard-rules", "mis-routing", "threshold-sweep", "repo-orchestrator",
              # ADR-0006 color rename (2026-07-21) added the -facts/-colors/-palette suffixes to
              # the inventory: "forced-colors" and "font-palette" are CSS terms of art (the media
@@ -335,6 +335,12 @@ def gate(root: Path, package: bool = False):
              "font-ui", "agent-ui", "shadcn-ui", "per-component", "one-mark-per-component",
              "cross-component", "multi-component", "version-change", "background-change",
              "route-change", "default-focus", "genre-facts", "pattern-facts",
+             # ADR-0006 teamwork rename (2026-07-21): close-session / grill-the-ask / lead-team /
+             # build-feature add the -session / -ask / -team / -feature suffixes to the inventory,
+             # flagging pre-existing prose compounds — the standing false-positive class:
+             "future-session", "per-session", "this-session", "cross-session", "same-session",
+             "authoring-session", "mid-session", "making-ask", "resolve-vs-ask",
+             "subagent-vs-team", "whole-team",
              # ADR-0006 agent-protocols rename (2026-07-21): the a2a-*/a2ui-* digit-prefix
              # tokenizer artifact (1.20.1 class — the regex skips digit-bearing segments), now
              # over the renamed -facts members: catalog-facts/chat-agent-facts/protocol-facts/

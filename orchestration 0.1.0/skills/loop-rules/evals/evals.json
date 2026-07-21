@@ -1,6 +1,6 @@
 {
-  "skill": "loop-design",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus (excellence campaign batch 2): positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn from neighbors' trigger vocabulary: orchestration-design (compose/wiring/frontmatter), handoff-compose (handback/report, now in forge), the orchestration-coordinator agent (seat coordination), plus running-vs-designing boundary probes for the bundled /goal + /loop machinery.",
+  "skill": "loop-rules",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus (excellence campaign batch 2): positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn from neighbors' trigger vocabulary: team-or-solo-rules (compose/wiring/frontmatter), handoff-compose (handback/report, now in forge), the team-lead agent (seat coordination), plus running-vs-designing boundary probes for the bundled /goal + /loop machinery.",
   "cases": [
     {
       "id": "t01",

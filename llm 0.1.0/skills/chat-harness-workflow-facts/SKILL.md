@@ -39,7 +39,7 @@ this."
 ## Consult procedure
 
 1. Classify the ask against the table above, then **Grep the matching file for the term first**
-   (`orchestration-coordinator`, `Status`/`Evidence`, `agent(`/`parallel(`/`pipeline(`, …) and Read
+   (`team-lead`, `Status`/`Evidence`, `agent(`/`parallel(`/`pipeline(`, …) and Read
    that section — the files are cited catalogs, not linear reads.
 2. Answer on the **answer contract**: the **claim + its grounding (this harness's own tool
    mechanics, or the worked example's `file:line`/named construct) + the failure mode it
@@ -55,7 +55,7 @@ this."
 **Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any
 build/design-a-team-for-my-project ask is routed to the consumer's own orchestration seat or the
 host working inline. **NOT done** while a claim ships without the failure mode it prevents, or a
-worked-example seat name (`system-planner`, `orchestration-coordinator`) is presented as a
+worked-example seat name (`planner`, `team-lead`) is presented as a
 universal requirement rather than one valid instance of the role it plays.
 
 ## The core invariants (why these patterns exist)
@@ -85,7 +85,7 @@ universal requirement rather than one valid instance of the role it plays.
 ## Boundaries — this pack ANSWERS; it routes ALL making
 
 - **Design or review the wiring itself — which unit (skill/subagent/team), frontmatter, `skills:`
-  preloads** in YOUR project → your project's own orchestration-design seat/skill (this pack
+  preloads** in YOUR project → your project's own team-or-solo-rules seat/skill (this pack
   teaches the composition PATTERN across agents; it does not own any project's frontmatter).
 - **One skill's own trigger/description routing** (why a single skill triggers or doesn't, how to write
   its trigger phrases) → [[chat-harness-routing-facts]] (the sibling pack in this plugin) —

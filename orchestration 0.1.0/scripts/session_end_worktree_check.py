@@ -6,8 +6,8 @@ against Claude Code's own hook docs, code.claude.com/docs/en/hooks, 2026-07-19):
 SessionEnd only shows stderr to the user, it cannot block or prevent termination. This script
 never attempts to. Its only job: if a git worktree is left with uncommitted changes or unpushed
 commits when the session actually ends, append one durable, discoverable log line so the state
-isn't silently lost — a future session or a human can find it — even when `session-close` (the
-paired skill, orchestration 0.1.0/skills/session-close) was never invoked at all this session.
+isn't silently lost — a future session or a human can find it — even when `close-session` (the
+paired skill, orchestration 0.1.0/skills/close-session) was never invoked at all this session.
 
 Modes:
   session_end_worktree_check.py --hook   SessionEnd hook: reads event JSON on stdin, checks git
