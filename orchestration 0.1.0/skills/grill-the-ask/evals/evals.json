@@ -1,6 +1,6 @@
 {
   "skill": "grill-the-ask",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus, excellence campaign batch 4 (2026-07-03): positives imperative / diagnostic / symptom / indirect. Negatives adversarial from the neighborhood: intent-extract, system-decompose (forge), and scribe's PRD/SPEC/LLD authoring surface (doc-forge, governed by doc-authoring-standards) \u2014 the pre-migration corpus named the now-retired prd-author/lld-author skills scribe has since consolidated.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus, excellence campaign batch 4 (2026-07-03): positives imperative / diagnostic / symptom / indirect. Negatives adversarial from the neighborhood: intent-extract, system-decompose (forge), and docs' PRD/SPEC/LLD authoring surface (make-doc, governed by doc-writing-rules) \u2014 the pre-migration corpus named the now-retired prd-author/lld-author skills docs has since consolidated.",
   "cases": [
     {
       "id": "t01",

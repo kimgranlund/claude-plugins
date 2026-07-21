@@ -1,5 +1,5 @@
 name: Task
-description: A chore, follow-up, research item, or debt — anything that isn't a bug or a feature idea. Mirrors scribe's /issue payload contract.
+description: A chore, follow-up, research item, or debt — anything that isn't a bug or a feature idea. Mirrors docs' /file-task payload contract.
 title: "[Task]: "
 labels: ["task"]
 type: "Task"
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        This form mirrors the record scribe's `/issue` skill mints for the same kind of item —
+        This form mirrors the record docs' `/file-task` skill mints for the same kind of item —
         so this ticket arrives sectioned the same way whether a session or a human filed it.
         If this is actually a defect, use the **Bug** form instead; if it's a feature idea that
         may need sizing into docs, use **Feature**.

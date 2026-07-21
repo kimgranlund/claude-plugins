@@ -8,7 +8,7 @@ description: >-
   someone asks to "review this layout", "grade this screen", "is this shell right", or "score this
   wireframe". It assesses and reports the two-axis grade + defect quadrant; the maker applies the fix.
   NOT for one component's internals (component-checker), a cross-screen flow (flow-checker), or a
-  non-UI document (doc-reviewer). NOT for explaining what break-down-layout's method/rubric itself
+  non-UI document (doc-checker). NOT for explaining what break-down-layout's method/rubric itself
   says (answer inline from decomposition-method.md); NOT for designing or scaffolding a new layout
   (break-down-layout DESIGN mode) — this seat only judges an existing artifact, never produces one.
 tools: Read, Grep, Glob

@@ -27,7 +27,7 @@ allowlist via a `str.replace()`-shaped edit failed silently when the target stri
 didn't match exactly (12 vs. 13 spaces) — the call returned the original text unchanged, the
 script reported "done," and the gate kept warning on the next run, discovered only because the
 gate was re-run immediately after. The same failure class recurred hours later reconciling
-scribe's sibling-fence edits (`feature`/`bug-report` SKILL.md descriptions): two `str.replace`
+docs' sibling-fence edits (`feature`/`file-bug` SKILL.md descriptions): two `str.replace`
 calls printed success while matching nothing, and a git-merge-conflict cross-check (see
 `parallel-session-reconcile.md`) initially diagnosed the WRONG cause before the actual gap was
 found. **The fix pattern used successfully in both cases:** after any programmatic text edit,

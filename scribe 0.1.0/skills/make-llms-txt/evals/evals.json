@@ -1,0 +1,111 @@
+{
+  "skill": "make-llms-txt",
+  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from graph neighbors: make-reference, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), entry-file-author, html-to-markdown, and the repo-local docs-author (agent-ui). Not yet checked into the bundle — M2 requires scripts/routing-corpus.json. Renamed llms-txt-author -> make-llms-txt 2026-07-09 per ADR-0001 (verb-form grammar).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "generate an llms.txt for our docs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "review our llms.txt",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "make our docs agent-readable",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "our AI-facing docs index is out of date",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "write the llms-full.txt with the whole corpus",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "does our llms.txt follow the standard shape",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "our llms.txt is just a list of concepts with no links",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "create the index file that AI crawlers fetch from the site root",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "agents can't discover where our authoritative documentation lives",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "add an llms.txt so coding agents can navigate our documentation",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write a reference doc for the API",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "structure my project knowledge",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "audit our docs for drift",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "is this reference doc retrievable",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "build an expert pack on color theory",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "turn this research into a knowledge skill",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "write my CLAUDE.md",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "review this CLAUDE.md as standing context",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "convert this HTML to markdown",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "document ui-text-field on the docs site",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "add an API page to the site",
+      "expect": "no-trigger"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # nonoun-plugins
 
-Nine Claude Code plugins: `forge` and `scribe` are the authoring toolchain — they build and
+Nine Claude Code plugins: `forge` and `docs` are the authoring toolchain — they build and
 validate everything else, including each other. The other seven are domain plugins; six were
 partitioned out of a legacy personal skill/agent corpus (61 skills, 19 agents) via a
 `plugin-decompose` analysis run by `forge` itself, and `llm` was authored fresh via
@@ -18,7 +18,7 @@ these plugins rather than just installing them.
 | Plugin | What it does |
 |---|---|
 | [`forge`](<forge 1.14.0/README.md>) | Author and validate Claude Code skills, agents, hooks, bundled scripts, entry files, and plugins themselves — the toolchain every other plugin here was built and gated through. |
-| [`scribe`](<scribe 0.1.0/README.md>) | Author functional documents (ADR/PRD/SPEC/LLD/PLAN/ROADMAP/TICKET/TASK), capture bug reports durably before dispatching an investigation, research methods & rubrics, markdown↔markup conversion, knowledge/reference authoring. |
+| [`docs`](<scribe 0.1.0/README.md>) | Author functional documents (ADR/PRD/SPEC/LLD/PLAN/ROADMAP/TICKET/TASK), capture bug reports durably before dispatching an investigation, research methods & rubrics, markdown↔markup conversion, knowledge/reference authoring. |
 | [`agent-protocols`](<agentic-ui 0.1.0/README.md>) | Knowledge packs for the A2UI wire protocol, renderer, catalog design, and training corpus. |
 | [`llm`](<llm 0.1.0/README.md>) | Portable LLM-integration knowledge (the swappable-provider gateway pattern, streaming structured output safely) plus a six-layer mini/portable chat-agent-harness family (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). |
 | [`color`](<color 0.1.0/README.md>) | Color science (accessibility, materials, perception, spaces), OKLCH palette design, contrast/CVD verification. |
@@ -37,7 +37,7 @@ As a marketplace (recommended — lets you install only the plugins you want):
 ```bash
 claude plugin marketplace add kimgranlund/claude-plugins
 claude plugin install forge@nonoun-plugins
-claude plugin install scribe@nonoun-plugins
+claude plugin install docs@nonoun-plugins
 # ...and so on for any of the nine
 ```
 
@@ -52,11 +52,11 @@ with `/doctor` — descriptions share a 1%-of-context listing budget across ever
 
 ## Provenance
 
-`forge` and `scribe` predate the rest. The other six were designed by running `forge`'s own
+`forge` and `docs` predate the rest. The other six were designed by running `forge`'s own
 `plugin-decompose` skill against a legacy `~/.claude/skills` + `~/.claude/agents` corpus, then
 built by porting each cluster's content, converting every cross-plugin hard preload (`skills:`
 frontmatter, hardcoded script paths) into a soft mention with an inline fallback — the same
-pattern `scribe` already used for its own dependency on `forge`. Two real gaps surfaced during
+pattern `docs` already used for its own dependency on `forge`. Two real gaps surfaced during
 that migration and were closed rather than left as silent capability loss: `agents-audit` and
 `skills-audit` (deep-review campaigns against each estate's own standard-of-excellence, ported
 into `forge` with their gate scripts) and `wiring-checker` (ported into `teamwork`).

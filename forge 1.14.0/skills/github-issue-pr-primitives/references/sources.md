@@ -2,7 +2,7 @@
 
 All research for this pack ran 2026-07-17 via six parallel `pack-researcher` dispatches, one per
 axis (the seventh axis, `bug-task-feature-mapping-nuances.md`, is synthesis authored directly
-against the other six plus this workspace's own ADR-0002/doc-authoring-standards — it cites no new
+against the other six plus this workspace's own ADR-0002/doc-writing-rules — it cites no new
 external sources of its own).
 
 ## Trust tier 1 — GitHub's own documentation (docs.github.com)

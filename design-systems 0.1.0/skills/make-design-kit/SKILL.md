@@ -12,7 +12,7 @@ description: >-
   (make-dscard-kit / -google-stitch / -figma-make) — and ONE DESIGN.md/bundle from
   source material (css, brand deck, Figma exports) with no platform named defaults to dscard;
   NOT for grading an export you didn't author (design-kit-checker); NOT for the
-  palette (make-palette), token layer (token-builder), or a PRD/SPEC (scribe's doc-forge).
+  palette (make-palette), token layer (token-builder), or a PRD/SPEC (docs' make-doc).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -98,6 +98,6 @@ Strategy and core decisions → score against `references/rubric.md` (gate: H1 r
 | **design-kit-checker** (agent) | Independent grading of any export |
 | [[linguistic-techniques]] · **linguistics-reviewer** | The wording layer this hub applies and teaches; its independent audit |
 | [[make-palette]] · [[check-colors]] · **token-builder** | Upstream: ramp design, contrast proof, project token layer — consumed as verified inputs |
-| [[rubric-forge]] | Author or repair `references/rubric.md` |
+| [[make-rubric]] | Author or repair `references/rubric.md` |
 
 **Done** = the ask routed to its owning seat (or handled here because it is cross-platform / context work), the platform choice stated with its consumption-model reason, one canonical core with no forked design facts, doctrines and standing rules applied, sibling gate runs green with honest receipts, and independent review dispatched with its gap-map applied. **NOT done** = a single-platform export executed in the hub, a design fact introduced inside one export, a described-not-instantiated guardrail shipped, an upstream decision silently overridden, or an unrun check laundered into a pass.

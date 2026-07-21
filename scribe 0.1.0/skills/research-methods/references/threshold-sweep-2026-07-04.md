@@ -1,6 +1,6 @@
 # Worked run — SWEEP: routing_eval threshold across the corpus estate (2026-07-04)
 
-The `researcher` seat's first live dispatch — preserved verbatim as the genre's dated, real-session
+The `experiment-runner` seat's first live dispatch — preserved verbatim as the genre's dated, real-session
 worked example AND as the reference journal fixture (what a run's journal must look like for the
 R1/R3/R7 gates to be line-checkable; see rubric.md's journal shape-check note).
 
@@ -74,7 +74,7 @@ grid + one fine pass only).
 - Sensitivity: PEAKED, not flat. Full-range macro-F1 spread 0.719→0.870 = 0.151. R falls
   monotonically 0.99→0.60 as t rises; P rises 0.675→0.934; F1 peaks mid-range. Narrow
   optimal plateau (width 0.02–0.03); meaningful degradation outside [0.30, 0.40].
-- Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (vision-memo-forge,
+- Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (make-vision-memo,
   prd-author, check-translations, check-safety, check-focus, research-methods, token-builder —
   mostly paraphrase positives the lexical proxy can't see, a measurement artifact the module
   docstring flags), and a precision-driven cluster wants t≥0.35 (builder, color-theory-facts,

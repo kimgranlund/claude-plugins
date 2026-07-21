@@ -31,7 +31,7 @@ does the design or build work itself.** Each dispatch is a **sealed contract**: 
 enumerated inputs (never the coordinator's own deliberation or a sibling's transcript), a budget,
 and a typed return. **Worked instance:** `team-lead.md` priority 1: "Route by
 shape, dispatch sealed. Design / decomposition / doc work → planner. Build-to-plan /
-enforcement work → builder... Adversarial review of a design doc → doc-reviewer;
+enforcement work → builder... Adversarial review of a design doc → doc-checker;
 adversarial review of a built change → code-checker" — each dispatch runs "on fresh context as a
 sealed contract: charter, enumerated inputs... its budget, and the return contract." The
 coordinator's own charter explicitly scopes its writes: "authoring docs and writing code are
@@ -49,9 +49,9 @@ dispatching model right now.
 **Claim — a maker's own closing summary is never the verdict; a distinct agent, in its own fresh
 context, scores the artifact against a named standard.** **Worked instance:**
 `planner.md` priority 4: "Report, don't grade. Return a concise design-status summary to
-the coordinator. Your docs are reviewed by the doc-reviewer seat; you leave your own output for
+the coordinator. Your docs are reviewed by the doc-checker seat; you leave your own output for
 that reviewer to score (generator ≠ critic)." `team-lead.md` priority 3 states the
-coordinator's own limit on this: "the review verdict is theirs [doc-reviewer/code-checker] to
+coordinator's own limit on this: "the review verdict is theirs [doc-checker/code-checker] to
 render, not yours to assign." **Why this ordering, not the reverse:** a coordinator (or a builder)
 that certifies its own work has removed the one check that catches a plan the builder silently
 deviated from, or a doc that reads as done to the person who just wrote it. **Failure mode this

@@ -100,7 +100,7 @@ its gate checks; the references summarize, the code wins).
 | `references/decomposition-method.md` | The two-axis method AND the bound rubric (the leveled walk) — the same two-plane engine as [[break-down-layout]] / [[system-decompose]] |
 | `scripts/geometry-check.py` · `component-contract-check.py` · `composition-check.py` | The three mechanical gates |
 | `[[system-decompose]]` | Decomposing the surrounding feature/screen before authoring the component |
-| `[[rubric-forge]]` | Authoring a scoring rubric when a project needs its own component standard |
+| `[[make-rubric]]` | Authoring a scoring rubric when a project needs its own component standard |
 
 ## Definition of done
 

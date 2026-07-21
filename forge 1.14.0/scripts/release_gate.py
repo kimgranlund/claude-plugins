@@ -269,7 +269,9 @@ def gate(root: Path, package: bool = False):
              # merge-semantics above; "sub-issue" is GitHub's own singular terminology in a
              # trigger phrase, colliding with scribe's `issue` skill's no-hyphen name (its own
              # suffix IS "issue" under rsplit) — legitimate prose, not a phantom sibling ref:
-             "lifecycle-and-review", "sub-issue",
+             "lifecycle-and-review",
+             # sub-issue pruned 2026-07-21: the docs rename retired the `issue` skill (now
+             # file-task), so GitHub's singular "sub-issue" no longer collides with any name.
              # a2a-* skill names: the token regex skips the digit-bearing "a2a-" segment and
              # "sees" the tail of legitimate full names; plus that plugin's prose compounds
              # and a references file (2026-07-09):
@@ -341,6 +343,15 @@ def gate(root: Path, package: bool = False):
              "future-session", "per-session", "this-session", "cross-session", "same-session",
              "authoring-session", "mid-session", "making-ask", "resolve-vs-ask",
              "subagent-vs-team", "whole-team",
+             # ADR-0006 docs rename (2026-07-21): file-task / make-doc / check-doc /
+             # make-reference / file-bug add the -task / -doc(s) / -reference / -bug suffixes
+             # to the inventory, flagging pre-existing prose compounds — the standing class:
+             "mid-task", "scheduled-task", "single-purpose-task", "vendor-doc", "design-doc",
+             "self-doc", "corpus-docs", "project-docs", "cross-reference", "dangling-reference",
+             "extend-reference", "inbound-reference", "plugins-reference", "hard-bug",
+             # "llms-txt" is the FILE format (llms.txt) named in naming-rules' shapes table,
+             # not a phantom sibling of make-llms-txt:
+             "llms-txt",
              # ADR-0006 agent-protocols rename (2026-07-21): the a2a-*/a2ui-* digit-prefix
              # tokenizer artifact (1.20.1 class — the regex skips digit-bearing segments), now
              # over the renamed -facts members: catalog-facts/chat-agent-facts/protocol-facts/

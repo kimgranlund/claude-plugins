@@ -7,7 +7,7 @@ rename campaign changes manifest NAMES too, so the dir records the name-and-vers
 the current name and version live in `.claude-plugin/plugin.json` and the README footer ledger,
 never in the path). Dir → current-name aliases as renames land: `agentic-ui 0.1.0` →
 `agent-protocols`, `design-systems 0.1.0` → `design-kits`, `ui 0.1.0` → `screens`,
-`orchestration 0.1.0` → `teamwork`. **forge is the toolchain**:
+`orchestration 0.1.0` → `teamwork`, `scribe 0.1.0` → `docs`. **forge is the toolchain**:
 its commands and standards govern work on every plugin in this workspace, including forge itself.
 Work on a plugin happens in its directory; decisions that span plugins happen here.
 
@@ -21,11 +21,11 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | A hand-run check or prose checklist that could be code | forge: `/script-forge` (mechanize as `scripts/taskname.py\|mjs` + proven selftest) |
 | Fill or grow a knowledge corpus | `/pack-forge` (one axis per wave) |
 | Split or merge a pack; execute the verdict | `/skill-decompose` · `/skill-synthesize` → `/skill-refactor` |
-| Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | scribe: `/doc-forge` · `/doc-review` |
-| A user reports a bug | scribe: `/bug-report` — never raw `/fork` for bug work (it drops the report on exit). In THIS workspace the record lands as a GitHub Issue (ADR-0002); `/bug-report` and `/feature` detect this row natively |
-| Scattered docs in an existing repo to organize into the canonical layout | scribe: `/docs-alignment` (one approval gate, git mv, never rewrites prose) |
-| A feature idea to capture, or a feature to build | scribe: `/feature` (pure intake → sized ticket/doc/corpus) · teamwork: `/build-feature` (record-first build — runs the intake when no record exists) |
-| Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s artifact table |
+| Functional docs (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK) | docs: `/make-doc` · `/check-doc` |
+| A user reports a bug | docs: `/file-bug` — never raw `/fork` for bug work (it drops the report on exit). In THIS workspace the record lands as a GitHub Issue (ADR-0002); `/file-bug` and `/file-feature` detect this row natively |
+| Scattered docs in an existing repo to organize into the canonical layout | docs: `/tidy-docs` (one approval gate, git mv, never rewrites prose) |
+| A feature idea to capture, or a feature to build | docs: `/file-feature` (pure intake → sized ticket/doc/corpus) · teamwork: `/build-feature` (record-first build — runs the intake when no record exists) |
+| Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | docs (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s artifact table |
 | A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agent-protocols` (the A2UI four + the A2A four) |
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
@@ -48,7 +48,7 @@ quote plugin paths (the version suffix contains a space).
   (same pattern for `release_gate.py`, `eval_check.py`, `docs_check.py`, `corpus_check.py`, and
   `scribe 0.1.0/scripts/doc_lint.py`).
 - **Full pre-ship gate for a plugin:** `python3 "forge 1.14.0/scripts/release_gate.py"
-  "scribe 0.1.0" [--package]` — plugin-agnostic (works on forge or scribe or any future plugin);
+  "scribe 0.1.0" [--package]` — plugin-agnostic (works on forge or docs or any future plugin);
   runs manifest/structure checks, the full lint sweep, bundled selftests, a phantom-`[[handle]]`
   sweep, eval-suite validation, and docs-freshness (G10), in that order; `--package` additionally
   writes `<plugin>/dist/<name>-<version>.plugin`.
@@ -80,7 +80,7 @@ quote plugin paths (the version suffix contains a space).
   the recorded term-of-art shelf exception for `color` and `llm` (ADR-0006 Decision 7) — and
   never contain `claude` or `anthropic` anywhere in a skill name or directory — the install
   rejects it and the whole plugin fails to load.
-- **Docs and ledgers:** functional documents follow scribe's type contracts and mutability classes
+- **Docs and ledgers:** functional documents follow docs' type contracts and mutability classes
   (the accepted-ADR append-only rule is hook-enforced — doc_lint T4; supersede, never edit).
   `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted
   casually. **Work items are GitHub Issues in this workspace (ADR-0002)** — decisions/contracts

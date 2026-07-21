@@ -1,6 +1,6 @@
 {
   "skill": "markdown-to-markup",
-  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), reference-forge, llms-txt-forge, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, rubric-forge.",
+  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), make-reference, make-llms-txt, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, make-rubric.",
   "cases": [
     {
       "id": "t01",

@@ -29,7 +29,7 @@ what isn't, and account for every finding in a stated verdict.
    (there's no git-side capture to make); steps 3-5 still run — a read-only session can still carry
    a repeated correction or a ratified decision worth the knowledge-harvest scan.
 2. **Judge what's real.** A genuine bug or follow-up found this session goes through
-   `bug-report`/`feature`/`issue` (Skill tool) — their own dedup sweep and payload contract apply
+   `file-bug`/`feature`/`issue` (Skill tool) — their own dedup sweep and payload contract apply
    as-is, so route through them rather than a raw `gh issue create`. In-progress work that's
    gate-clean earns a push and a PR — the existing open one, updated, when there is one, so the
    count of open PRs from this session stays one. Work that's genuinely unfinished gets named as
@@ -51,7 +51,7 @@ A verdict block, always: either the captured-items list or the single clean line
 ## Failure branches
 
 - Dispatched in an unattended or scheduled context (no interactive user to answer an
-  AskUserQuestion-gated confirm) → step 2's own capture skills (bug-report/feature run
+  AskUserQuestion-gated confirm) → step 2's own capture skills (file-bug/feature run
   intent-extract's interactive round) and step 3's knowledge-harvest confirm gate are both named as
   deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own.
 - Not inside a git repo at all → the single clean-verdict shape applies, with the reason stated
@@ -86,7 +86,7 @@ actually checked or captured.
 
 | Path | Use when |
 |---|---|
-| `bug-report` / `feature` / `issue` (scribe) | Step 2's own dedup, payload contract, and record mechanics — invoked, not restated |
+| `file-bug` / `feature` / `issue` (docs) | Step 2's own dedup, payload contract, and record mechanics — invoked, not restated |
 | `knowledge-harvest` (forge) | Step 3's detection pass and its own confirm-before-mint gate |
 | `parallel-work-rules` (this plugin) | The question is a PEER session's worktree, not this session's own close-out |
 | `ExitWorktree` | The actual removal step, once this skill's verdict says it's safe |

@@ -1,9 +1,9 @@
 # Mapping Bug/Task/Feature onto Issues/PRs — synthesis, and where this workspace's own convention stands
 
 This axis is different from the other six: it doesn't introduce new platform facts, it connects
-them to this workspace's own ADR-0002 (git-native execution) and doc-authoring-standards' TICKET
+them to this workspace's own ADR-0002 (git-native execution) and doc-writing-rules' TICKET
 contract, cited by ID rather than restated. **This pack answers what the platform supports — it
-does not amend ADR-0002 or doc-authoring-standards.** Any divergence noted below is a finding for
+does not amend ADR-0002 or doc-writing-rules.** Any divergence noted below is a finding for
 a future decision, not a ruling made here.
 
 ## The routing funnel, GitHub's shape
@@ -11,13 +11,13 @@ a future decision, not a ruling made here.
 Per `issue-vs-pr-vs-discussion.md`: an unscoped idea → Discussion; a scoped, actionable item →
 Issue; a code change resolving an Issue → PR, linked back via `linking-and-closing-keywords.md`'s
 keyword contract. This workspace's `issue` skill's own Phase 2 ("A defect... stop and point:
-`/bug-report`. A feature idea... `/feature`. Neither — capture here as `task`") is a **finer-grained
+`/file-bug`. A feature idea... `/file-feature`. Neither — capture here as `task`") is a **finer-grained
 version of the same funnel**, one level *inside* "this is Issue-shaped work" — it doesn't conflict
 with GitHub's Discussion/Issue/PR split, it operates entirely within the Issue side of it.
 
 ## Finding 1 — `kind: bug`/`kind: feature` is a label; GitHub has shipped a native alternative
 
-doc-authoring-standards' TICKET contract encodes `kind: bug`/`kind: feature` **as a label** on the
+doc-writing-rules' TICKET contract encodes `kind: bug`/`kind: feature` **as a label** on the
 git-native (Option B) backend. Per `issue-types-and-labels.md`: GitHub's native **Issue Types**
 reached GA 2025-04-09, ships **exactly three default types — Task, Bug, Feature** — the same three
 shapes this workspace already names, and is org-wide, validated, and REST/GraphQL-queryable in a

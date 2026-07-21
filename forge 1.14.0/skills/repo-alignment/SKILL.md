@@ -11,7 +11,7 @@ description: >
   campaign — never auto-fires; invoke explicitly via /repo-alignment (the trigger phrases
   above are what a session should recognize and SUGGEST this command for). NOT for the
   estate's own plugin workspace (harness-audit); NOT for layout-only migration of docs to
-  the canonical docs/ map (docs-alignment, scribe, where installed — this campaign's corpus
+  the canonical docs/ map (tidy-docs, docs, where installed — this campaign's corpus
   lenses go deeper: liveness, supersession, status-vs-reality).
 user-invocable: true
 disable-model-invocation: true
@@ -193,9 +193,9 @@ check after every package. Corpus dispositions execute here too, with a hard spl
 mechanical and authorial: supersession markers set; archives moved under the repo's archive
 convention — never deleted; establish the convention if none exists, recorded in the
 calibration log; merges executed mechanically only (verbatim consolidation + a pointer left
-at the absorbed doc's id). Where the RATIFIED grammar is scribe's canonical docs/ map, the
-corpus-relocation packages may delegate to `/docs-alignment` (scribe, where installed) — the
-grammar decision stays here; only the mechanical migration is delegated, and the campaign commits the staged result as that work package's commit (docs-alignment itself never commits, by design). **`update-in-place` items are NOT executed in-campaign** — content
+at the absorbed doc's id). Where the RATIFIED grammar is docs' canonical docs/ map, the
+corpus-relocation packages may delegate to `/tidy-docs` (docs, where installed) — the
+grammar decision stays here; only the mechanical migration is delegated, and the campaign commits the staged result as that work package's commit (tidy-docs itself never commits, by design). **`update-in-place` items are NOT executed in-campaign** — content
 revision is authoring, so they route to Phase 6's follow-up work queue addressed to the
 repo's own authoring process; only their mechanical residue (metadata, broken references) is
 fixed here. Extend the check script with a **corpus tier**: no dangling supersession chains,
@@ -227,8 +227,8 @@ that phase's method alone, but still gets a calibration log and the sync-target-
 ## When NOT to use
 
 - A single mechanical fix (one stale path, one dead file) — just fix it.
-- Layout-only docs reorganization to the canonical docs/ map, no harness drift → scribe's
-  `/docs-alignment` alone.
+- Layout-only docs reorganization to the canonical docs/ map, no harness drift → docs'
+  `/tidy-docs` alone.
 - Application-code refactors, dependency upgrades, or test-suite work — this skill owns the
   agent-harness/context layer and the living design-doc corpus, not the code they describe.
 - Authoring or substantively rewriting individual design docs — corpus verdicts here are

@@ -326,7 +326,7 @@ The **stress** of a round letter — the imaginary line connecting the thinnest 
 
 ### Serifs
 
-Humanist serifs are **bracketed** (the transition from stem to serif is a curved fillet, not a sharp join) and **cupped** (the underside of the serif is gently concave, not flat). Jenson's serifs are the most organic; Griffo's a shade crisper; Garamond's sharper still without losing the bracket. By contrast, Bodoni's serifs are thin, flat, unbracketed — abrupt horizontals meeting the vertical stem at 90°. The bracketing is a structural legacy of the pen — a scribe lifting the pen at the end of a stroke produces a tapered curve, not a flat terminal.
+Humanist serifs are **bracketed** (the transition from stem to serif is a curved fillet, not a sharp join) and **cupped** (the underside of the serif is gently concave, not flat). Jenson's serifs are the most organic; Griffo's a shade crisper; Garamond's sharper still without losing the bracket. By contrast, Bodoni's serifs are thin, flat, unbracketed — abrupt horizontals meeting the vertical stem at 90°. The bracketing is a structural legacy of the pen — a docs lifting the pen at the end of a stroke produces a tapered curve, not a flat terminal.
 
 ### Calligraphic letter construction
 

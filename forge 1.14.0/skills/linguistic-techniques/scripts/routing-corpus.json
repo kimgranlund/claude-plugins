@@ -1,6 +1,6 @@
 {
   "skill": "linguistic-techniques",
-  "_note": "Deep-review corpus, batch 4. Positives span imperative/diagnostic/symptom/indirect. Negatives drawn from neighbors' trigger vocabulary: skill-author, agent-author, entry-file-author, rubric-forge, pack-forge, loop-rules, handoff-compose.",
+  "_note": "Deep-review corpus, batch 4. Positives span imperative/diagnostic/symptom/indirect. Negatives drawn from neighbors' trigger vocabulary: skill-author, agent-author, entry-file-author, make-rubric, pack-forge, loop-rules, handoff-compose.",
   "positives": [
     "audit this prompt's language",
     "harden the wording of this system prompt so it actually binds",

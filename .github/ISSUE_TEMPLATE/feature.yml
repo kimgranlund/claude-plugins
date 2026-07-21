@@ -1,5 +1,5 @@
 name: Feature
-description: A new capability or idea that may need sizing into docs. Mirrors scribe's /feature payload contract.
+description: A new capability or idea that may need sizing into docs. Mirrors docs' /file-feature payload contract.
 title: "[Feature]: "
 labels: ["feature"]
 type: "Feature"
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        This form mirrors the record scribe's `/feature` skill mints for the same kind of idea
+        This form mirrors the record docs' `/file-feature` skill mints for the same kind of idea
         — so this ticket arrives sectioned the same way whether a session or a human filed it.
   - type: textarea
     id: summary

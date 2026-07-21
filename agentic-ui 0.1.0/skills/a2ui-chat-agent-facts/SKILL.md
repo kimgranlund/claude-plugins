@@ -85,7 +85,7 @@ answer with the *why*, not just the rule:
 - **Compose an actual A2UI payload** (message stream / node shapes, e.g. one that sets
   `wantResponse`) → the **`a2ui-composer`** agent.
 - **Author or revise ADR-0088 (or any ADR/SPEC/LLD in this space)** → **`planner`** (via
-  scribe's `doc-forge`, where installed). Grading or ratifying a design doc routes
+  docs' `make-doc`, where installed). Grading or ratifying a design doc routes
   there too, not here.
 - **Sibling knowledge packs** (answers, like this one): the A2UI wire shape + renderer mechanics →
   [[a2ui-protocol-facts]]; catalog design + coverage → [[a2ui-catalog-facts]]; the corpus records +

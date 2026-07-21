@@ -8,7 +8,7 @@ description: >-
   whenever someone asks to "review this orchestration", "is my frontmatter right", "why won't this route",
   "is this description a precise interface or does it starve the router", "grade this arrangement — the
   skill-preload graph, the wiring's gates". It reports a gap-map; the designer applies the fix. NOT for a
-  whole skill (skill-auditor), a whole document (doc-reviewer), a subagent's own definition
+  whole skill (skill-auditor), a whole document (doc-checker), a subagent's own definition
   (agent-reviewer), or team/corpus-wide sweeps (agents-audit / skills-audit). NOT for a forward design-time
   question — subagent-vs-team, which skills to preload, how pieces connect — answered inline from
   team-or-solo-rules's rubric; this seat only grades an arrangement that exists.

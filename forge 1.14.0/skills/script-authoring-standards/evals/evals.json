@@ -13,7 +13,7 @@
     { "id": "n01", "prompt": "Turn this manual checklist into a script for me", "expect": "no-trigger", "note": "script-forge — the executor workflow, not the standard" },
     { "id": "n02", "prompt": "Should this rule be a hook or a skill?", "expect": "no-trigger", "note": "hook-authoring-standards owns the hook-vs-skill boundary" },
     { "id": "n03", "prompt": "How long should a SKILL.md body be?", "expect": "no-trigger", "note": "skill-authoring-standards" },
-    { "id": "n04", "prompt": "Run the release gate on scribe", "expect": "no-trigger", "note": "an execution ask — plugin-release/none, not the standard" },
+    { "id": "n04", "prompt": "Run the release gate on docs", "expect": "no-trigger", "note": "an execution ask — plugin-release/none, not the standard" },
     { "id": "n05", "prompt": "Is this fact worth capturing as project knowledge?", "expect": "no-trigger", "note": "knowledge-harvest" }
   ]
 }

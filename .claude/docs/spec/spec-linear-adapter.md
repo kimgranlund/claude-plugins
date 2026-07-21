@@ -8,15 +8,15 @@ owner: kim.granlund
 prd: null   # no PRD — descends directly from ADR-0003's Decision 3 (Linear ships as a concrete,
             # scribe-shipped Option-C adapter, everything else Option-C stays bring-your-own)
 ---
-# SPEC — The Linear adapter (scribe's shipped Option-C backend)
+# SPEC — The Linear adapter (docs' shipped Option-C backend)
 
 Precondition: **ADR-0003** must be `accepted` — this SPEC contracts the one concrete Option-C
-adapter ADR-0003 Decision 3 commits scribe to shipping. It is a sibling of, not a dependency of,
+adapter ADR-0003 Decision 3 commits docs to shipping. It is a sibling of, not a dependency of,
 `spec-ticketing-watch-triage`: that SPEC's watch/triage/trust behavior applies to *any* Option B/C
 backend, including this one, without change.
 
 **v0.2.0 amendment (2026-07-18):** REQ-010/AC-010 added. Three independent fresh-context audits of
-the implementing skills (`bug-report`/`feature`/`issue`) converged on the same gap: AC-004 and
+the implementing skills (`file-bug`/`file-feature`/`file-task`) converged on the same gap: AC-004 and
 AC-007 already required "read back through the adapter," and every capture skill's resume-by-id
 and post-dispatch status-check logic needs to resolve an adapter-native id to a record, but no
 REQ named the operation that does this — the five-operation list (REQ-001) was silently missing
@@ -34,7 +34,7 @@ unchanged.
 - **REQ-001** — Interface conformance. The Linear adapter implements the same seven operations the
   local and git-native adapters implement — create, dedup-search, claim (REQ-011), update, close,
   discover (REQ-009), and read (REQ-010) — behind the backend resolver (ADR-0003 Decision 2), so
-  capture skills (`bug-report`/`feature`/`issue`) and the watch loop
+  capture skills (`file-bug`/`file-feature`/`file-task`) and the watch loop
   (`spec-ticketing-watch-triage` REQ-003) call it identically to the other two adapters, with no
   Linear-specific branch in their own logic. `claim` has no caller among the three capture skills
   today — they file and update records, they do not execute one — so this requirement binds the
@@ -48,7 +48,7 @@ unchanged.
   configuration and persisted in the entry-file ruling alongside the backend choice — never
   re-prompted per invocation, never guessed.
 - **REQ-004** — Payload-contract fidelity. A record created via the Linear adapter carries the
-  full payload contract for its type and kind, per doc-authoring-standards — the TICKET base
+  full payload contract for its type and kind, per doc-writing-rules — the TICKET base
   (Summary · Acceptance · Links) plus whatever kind-specific sections apply (`kind: bug`'s Repro ·
   Expected-vs-actual · Classification · Severity; `kind: feature`'s Scope/Open) — plus Findings,
   mapped onto Linear's native fields (title, description, labels, comments); the contract is
@@ -87,7 +87,7 @@ unchanged.
   adapter realizes as a plain file read and the git-native adapter realizes as `gh issue view
   --comments`. Every capture skill's resume-by-id branch (Phase 1) resolves an id in the resolved
   adapter's own native format through this operation before falling through to "fresh item," and
-  the post-dispatch close-out (bug-report Phase 6) uses it to check whether a dispatched
+  the post-dispatch close-out (file-bug Phase 6) uses it to check whether a dispatched
   investigation posted a Findings entry while it ran. Distinct from dedup-search (REQ-005, matches
   a candidate by content) and discover (REQ-009, enumerates by checkpoint): read resolves one
   already-known id to its full record.
@@ -109,7 +109,7 @@ unchanged.
 - Any other external tracker's concrete adapter (Jira, Notion, a custom system) — ADR-0003
   Decision 3 keeps those bring-your-own; only Linear ships.
 - Two-way sync back from a manual edit made directly in Linear's UI outside the adapter — this
-  SPEC contracts scribe's write/read path through the adapter, not a general Linear-sync engine.
+  SPEC contracts docs' write/read path through the adapter, not a general Linear-sync engine.
 - Linear-specific features with no analogue in the shared payload contract (custom fields, Linear
   Cycles/Projects hierarchy, Linear-native automations) — out of scope until a future SPEC extends
   the shared contract itself to name them.
@@ -120,9 +120,9 @@ unchanged.
 ## Examples
 
 **[NORMATIVE]** A repo rules Option C / Linear during configuration, with an MCP connector already
-attached. `/bug-report` runs, dedup-searches Linear via MCP (REQ-005), finds no match, creates a
+attached. `/file-bug` runs, dedup-searches Linear via MCP (REQ-005), finds no match, creates a
 Linear issue whose description carries its full kind-appropriate section set (REQ-004), and later
-a `/issue <id> done` close leaves a dated Findings entry even though none existed before (REQ-006).
+a `/file-task <id> done` close leaves a dated Findings entry even though none existed before (REQ-006).
 
 **[NORMATIVE]** The same repo's MCP connector is disconnected mid-session. The next capture
 attempt's Linear call fails (REQ-008); the caller falls back to a file-backend ticket for that one

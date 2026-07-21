@@ -1,7 +1,7 @@
 {
   "name": "screens",
   "displayName": "Screens",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-rules), and verify it all against non-functional bars (focus, i18n, perf, safety) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract.",
   "license": "MIT",
   "author": {

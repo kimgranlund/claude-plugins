@@ -1,13 +1,13 @@
 {
   "skill": "handoff-compose",
-  "_note": "Review-time corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of composing, rolling up, and judging a handback. Negatives drawn from the trigger vocabulary of the graph neighborhood: team-or-solo-rules, loop-rules, adr-author, skill-author/skill-reviewer, lld-author, rubric-forge, plus report-adjacent near-misses (PR description, changelog). Bundle has NO scripts/routing-corpus.json of record — adopting this file is the M2 fix.",
+  "_note": "Review-time corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings of composing, rolling up, and judging a handback. Negatives drawn from the trigger vocabulary of the graph neighborhood: team-or-solo-rules, loop-rules, adr-author, skill-author/skill-reviewer, lld-author, make-rubric, plus report-adjacent near-misses (PR description, changelog). Bundle has NO scripts/routing-corpus.json of record — adopting this file is the M2 fix.",
   "neighbors": [
     "team-or-solo-rules",
     "loop-rules",
     "adr-author",
     "skill-author",
     "lld-author",
-    "rubric-forge",
+    "make-rubric",
     "skills-refactor",
     "linguistic-techniques"
   ],

@@ -132,7 +132,7 @@ mirroring, and isolation actually hold.
 | `assets/bidi/isolation-points.json` | slot types that require bidi isolation |
 | [[lettering-facts]] | script-metrics ground truth behind the bands |
 | [[make-component]] | fix owner for surface/markup findings — dir/lang wiring, logical-axis CSS, truncation affordances land there |
-| scribe's `doc-forge` (where installed) | fix owner for the posture — `declared_posture` is a spec/PRD decision, not a UI patch |
+| docs' `make-doc` (where installed) | fix owner for the posture — `declared_posture` is a spec/PRD decision, not a UI patch |
 | [[check-whole-ui]] | the set-scoped sweep that composes this verifier |
 
 **Done** = card built, `i18n-check.py` green (or the posture gate resolved in the spec), step 3

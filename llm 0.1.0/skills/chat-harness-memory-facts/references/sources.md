@@ -32,7 +32,7 @@ workspace right now — inspect them to verify a claim, not "verify against exte
   `/Users/kimba/Projects/nonoun/plugins/forge 1.14.0/skills/skill-authoring-standards/SKILL.md`)
   — the authoring factory for this exact shape: axis decomposition → grounded research waves → the
   typed index (pack-authoring-standards) → the entry-surface charter/boundary/deviation-doctrine
-  (skill-authoring-standards). Scribe's `knowledge-forge`, the original single-skill version of
+  (skill-authoring-standards). docs' `knowledge-forge`, the original single-skill version of
   this factory, was retired 2026-07-19 and folded into these two forge skills as the estate-wide
   factory route. Cited throughout `knowledge-packs-and-cited-retrieval.md`.
 - **This very skill family** (`/Users/kimba/Projects/nonoun/plugins/llm 0.1.0/skills/`) —
@@ -57,7 +57,7 @@ differ in file layout or naming while still honoring the same invariants (see th
 ## Boundary — layers owned elsewhere
 
 This pack answers the knowledge-and-memory pair; it does not restate its neighbors. The
-per-file reference-document standard is `reference-forge`. Routing a live request to a capability
+per-file reference-document standard is `make-reference`. Routing a live request to a capability
 is [[chat-harness-routing-facts]]'s territory. The wire format of a model's own streaming
 output is [[llm-streaming-facts]]'s. When a cited worked instance and its own source repo disagree
 about current behavior, the source repo wins and this pack's citation needs repair, not the other

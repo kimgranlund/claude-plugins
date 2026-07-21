@@ -2,7 +2,7 @@
 name: ops-issues
 description: |
   Standing intake/triage seat for one repo's features, bugs, tasks, issues, and PRs — classifies,
-  dedupes, and routes each onto the resolved ticketing backend per `doc-authoring-standards`'
+  dedupes, and routes each onto the resolved ticketing backend per `doc-writing-rules`'
   TICKET contract, applies `intent-extract`'s clarifying-question discipline when interactively
   dispatched, and gates unknown filers behind a durable friendlies allow-list a human alone
   approves. On a GitHub-backed repo's first interactive firing, also offers — once — a
@@ -95,18 +95,18 @@ project-scoped `.mcp.json` entry when REQ-013 is accepted (never containing a li
 `${GITHUB_MCP_PAT}` env-var expansion only, per `.mcp.json`'s own supported syntax), plus the
 dispatched report destination.
 
-Scribe's `doc-authoring-standards`, `bug-report`, `feature`, and `issue` skills are a different
+docs' `doc-writing-rules`, `file-bug`, `file-feature`, and `file-task` skills are a different
 plugin — not preloadable across that boundary — so the minted-record shape they own is stated here
 directly rather than restated from a preload: Summary · Acceptance (one checkable done-condition) ·
-Links, plus `kind: bug`'s Repro/Expected-vs-actual/Classification/Severity (owned by `bug-report`)
+Links, plus `kind: bug`'s Repro/Expected-vs-actual/Classification/Severity (owned by `file-bug`)
 or `kind: feature`'s Scope/Open **and** `size: small | big` (owned by `feature` — machine-read by
 `/build-feature`, never omit it), plus an empty Findings section. `kind:` is TICKET frontmatter on the file
 backend only — on today's resolved git-native backend it lands as a GitHub **label** at create
-time, exactly as the sibling skills apply it: `bug` + the severity label (`bug-report`'s scale),
-`feature` + `size:small`/`size:big` (`feature`'s scale), or `task` + the same size scale where
-clear (`issue`'s default — unsized is legal for tasks). A missing label is created once
+time, exactly as the sibling skills apply it: `bug` + the severity label (`file-bug`'s scale),
+`feature` + `size:small`/`size:big` (`file-feature`'s scale), or `task` + the same size scale where
+clear (`file-task`'s default — unsized is legal for tasks). A missing label is created once
 (`gh label create`) before this agent's own mint completes, never worked around or skipped — the
-same fallback `issue`'s SKILL.md documents explicitly; `bug-report` and `feature` don't document a
+same fallback `file-task`'s SKILL.md documents explicitly; `file-bug` and `file-feature` don't document a
 missing-label path themselves, so this agent's own create calls own the fallback rather than
 assuming those two self-heal it too. Those skills are the canonical source of truth for the record
 shape; this agent only carries the minimum it needs to mint correctly. Two separate calls, never

@@ -15,9 +15,9 @@ produced — code, docs, skills — is a living record, not a one-time artifact.
 - Status reports use 🟢 done / 🟡 attention / 🔴 blocked on the items reported — never as
   decoration, never instead of stating what is wrong.
 
-## Doctrine homes (forge · scribe · teamwork plugins, user-scoped)
+## Doctrine homes (forge · docs · teamwork plugins, user-scoped)
 
 - Ambiguous ask → `intent-extract` before acting. Structural breakdown → `system-decompose`.
 - Solo vs. team, delegation, loop budgets → `team-or-solo-rules` / `loop-rules` (solo-first).
 - Model + effort per seat → `agent-authoring-standards` §Model tiering — the seat ladder.
-- Reasoning altitude and escalation → `reasoning-orders`. Document contracts → scribe's standards.
+- Reasoning altitude and escalation → `reasoning-orders`. Document contracts → docs' standards.
