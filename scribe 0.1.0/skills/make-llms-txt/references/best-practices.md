@@ -1,1 +1,1 @@
-../../reference-forge/references/best-practices.md
+../../make-reference/references/best-practices.md
