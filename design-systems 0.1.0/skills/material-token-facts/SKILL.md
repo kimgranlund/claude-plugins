@@ -2,14 +2,15 @@
 name: material-token-facts
 description: >-
   Answers what a `--md-sys-{color,typescale,size,radius,space,inset,gap,border,focus-ring}-*` token
-  MEANS and when to reach for it — one line per token, or per group for graduated variants. Use when
+  MEANS and when to reach for it. Use when
   the user asks "what's the difference between surface-lowest and surface-lower", "what is the kicker
   voice for", "when do I use -dim vs -low", "what's inset-card vs inset-panel", "what's the difference
   between the scrim strengths", or "what does on-surface-variant mean". Covers the full token vocabulary of the three
   Material-namespaced consumption guides (color/typography/geometry) as a semantic glossary. ANSWERS
   meaning — not the binding grammar, recipes, pairing laws, or bind-check procedure: for those, load
-  the matching material-design-{color,typography,geometry}-tokens skill. NOT for a raw hex/px value
-  (route to the owning consumption skill); NOT for M3-vs-extension history (each sibling's own
+  the matching material-{color,type,shape}-facts skill. NOT for a raw hex/px value — "what's the
+  actual value behind this token" (the owning consumption skill); NOT for M3-vs-extension history —
+  "is this token M3 baseline or one of our extensions" (each sibling's own
   "Foundation vs. extension" table); NOT for a non-Material `--{prefix}-*` kit (no owner — decline).
 disable-model-invocation: false
 user-invocable: false
