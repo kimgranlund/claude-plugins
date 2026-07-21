@@ -84,7 +84,11 @@ CLOSING = ("If a finding seems wrong -> report it against "
 # (ADR-0001, 2026-07-09: W4 false-positived on skill-refactor).
 VERB_HEADS = {"refactor", "render", "filter", "author"} - {"author"}  # author retired per ADR-0001
 KNOWLEDGE_NOUNS = {"patterns", "principles", "standards", "conventions",
-                   "context", "architecture", "catalog", "reference", "tokens"}
+                   "context", "architecture", "catalog", "reference", "tokens",
+                   # ADR-0006 Phase 0 (2026-07-21): the simple paradigm's knowledge shapes —
+                   # `X-facts` (what is true) and `X-rules` (what must be followed) — join the
+                   # noun set so the ~40 renamed knowledge skills keep W5's model-only check.
+                   "facts", "rules"}
 TRIGGER_RE = re.compile(
     r"\buse\s+(when|whenever|this|it|for)\b|\bwhen\s+(the\s+user|you|asked|working|writing)\b",
     re.IGNORECASE)
@@ -555,6 +559,13 @@ def selftest():
     assert not any(f[2] == "F8" for f in lint_text(GOOD_FIXTURE, "demo-review")), "clean name must not trip F8"
     verb_head = GOOD_FIXTURE.replace("name: demo-review", "name: demo-refactor")
     assert not any(f[2] == "W4" for f in lint_text(verb_head, "demo-refactor")), "verb head 'refactor' must not trip W4 (ADR-0001 allowlist)"
+    facts_ui = GOOD_FIXTURE.replace("name: demo-review", "name: demo-facts")
+    assert any(f[2] == "W5" for f in lint_text(facts_ui, "demo-facts")), \
+        "ADR-0006: '-facts' head with user-invocable true must warn W5"
+    rules_mo = (GOOD_FIXTURE.replace("name: demo-review", "name: demo-writing-rules")
+                            .replace("user-invocable: true", "user-invocable: false"))
+    assert not any(f[2] == "W5" for f in lint_text(rules_mo, "demo-writing-rules")), \
+        "ADR-0006: model-only '-rules' knowledge skill must pass W5 clean"
     agentive = GOOD_FIXTURE.replace("name: demo-review", "name: demo-author")
     assert any(f[2] == "W4" for f in lint_text(agentive, "demo-author")), "agentive head 'author' must still trip W4"
     good_hooks = ('{"hooks": {"PostToolUse": [{"matcher": "Write|Edit", "hooks": '

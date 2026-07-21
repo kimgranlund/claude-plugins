@@ -30,6 +30,7 @@
     {"id": "n11", "prompt": "merge this pull request and clean up after it", "expect": "no-trigger"},
     {"id": "n12", "prompt": "add a new axis to this knowledge pack", "expect": "no-trigger"},
     {"id": "n13", "prompt": "why doesn't my skill ever trigger for the right prompts", "expect": "no-trigger"},
-    {"id": "n14", "prompt": "what does disable-model-invocation actually do", "expect": "no-trigger"}
+    {"id": "n14", "prompt": "what does disable-model-invocation actually do", "expect": "no-trigger"},
+    {"id": "n15", "prompt": "Propose a simple name for this plugin.", "expect": "no-trigger", "comment": "owner: naming-rules — forward naming under the simple paradigm"}
   ]
 }

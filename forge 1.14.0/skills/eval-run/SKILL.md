@@ -1,11 +1,17 @@
 ---
 name: eval-run
 description: >-
-  Run the plugin's trigger-eval suites as a fresh-context routing simulation: static validation via
-  eval_check.py, then blind fan-out where judges pick a skill (or none) for each prompt given only
-  the description menu, then a routing matrix with description-tuning recommendations. Run
-  /eval-run [plugin-root, default .]. Read-only; writes only the report.
-disable-model-invocation: true
+  Run a plugin's trigger-eval suites as a blind, fresh-context routing simulation: static
+  validation via eval_check.py, one no-tools judge per suite picking from the description menu
+  alone, then a routing matrix with per-failure tuning targets (stolen/leaked/dead). Use when the
+  user asks to run or rerun the evals, prove routing after a description or fence edit, check
+  whether a new skill's description routes correctly, "did my description change break routing",
+  "do these prompts route to the right skill", "run a routing simulation" — and as the
+  wave-boundary check a batch of description edits owes. Read-only; writes only the report. NOT
+  for authoring or fixing a suite's cases (skill-authoring-standards); NOT for judging a skill's
+  content or body (skill-review); NOT for the release gate (plugin-release / release_gate.py);
+  NOT for live "why won't my skill trigger" debugging (skill-authoring-standards).
+disable-model-invocation: false
 user-invocable: true
 argument-hint: "[plugin-root]"
 ---
