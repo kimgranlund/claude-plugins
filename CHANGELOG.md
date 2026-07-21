@@ -4,6 +4,17 @@ Repo-level milestones only. Each plugin's own `README.md` footer carries its ful
 ledger — this file exists to show how the nine plugins came to exist relative to each other, not
 to duplicate their per-version detail.
 
+## 2026-07-20 — naming-rules: the simple naming paradigm lands in forge (1.40.0)
+
+A session that started as "why are our naming conventions so odd" produced a full-estate naming
+review (9 plugins, ~130 members: one "check" concept spelled four ways, "make" spelled five,
+`decompose` carrying two meanings, four skill↔agent name twins) and ended as `naming-rules` — a
+knowledge skill encoding the deliberately simple paradigm: five checkable tests, per-kind name
+shapes, a one-verb-per-concept registry. It governs NEW names only; the legacy grammar keeps
+governing shipped names (names are APIs), and the estate rename map ships inside the skill as an
+illustrative worked example, not a ratified campaign. Forged through skill-forge's six gates with
+fresh-session baselines proving the delta and a fresh-context audit (PASS, 0 blocking).
+
 ## 2026-07-20 — ops-adr: a standing periodic ADR-review agent, and a GitHub MCP offer for ops-issues
 
 Closes the ADR-side gap next to the ticketing-backend agents from 2026-07-17. `ops-adr` checkpoints

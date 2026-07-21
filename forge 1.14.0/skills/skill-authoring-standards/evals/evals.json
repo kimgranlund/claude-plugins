@@ -66,6 +66,12 @@
       "id": "n06",
       "prompt": "how should the reference corpus and INDEX behind this skill be structured",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "What should we name this new skill?",
+      "expect": "no-trigger",
+      "comment": "owner: naming-rules — forward naming under the simple paradigm"
     }
   ]
 }

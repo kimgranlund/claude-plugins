@@ -35,6 +35,7 @@ The plugin name (`forge`, distribution taxonomy) is deliberately disjoint from t
 | `skills/repo-alignment` | Command skill | user-only (`/repo-alignment`) | Phased, evidence-driven, human-checkpointed alignment campaign for a drifted repo: inventory/reconcile → unify duplicates → orphan manifest → schema + standing guards → audit verdicts → work-package execution → lessons distillation; adopted 2026-07-12 from the user's proven repo-recalibrate; delegates canonical-map corpus relocation to scribe's `/docs-alignment` |
 | `skills/git-campaign-workflows` | Declarative skill | model-only | The estate's own git operational lessons, citable: worktree placement/discard safety, merge semantics (the ten-branch delete-failure class), the silent-failure catalog (verify by re-reading, never a command's print), parallel-session reconcile, the ADR-0002 decision tree — five axes, each grounded in a dated 2026-07-16/17 incident; the three scripts below mechanize what it documents |
 | `skills/github-issue-pr-primitives` | Declarative skill | model-only | GitHub's own Issue/PR/Discussion/Projects-v2 platform facts, cited and dated 2026-07-17 — deliberately disjoint from git-campaign-workflows (that pack is OUR git mechanics; this one is GitHub's data model): Issue Types + Issue Fields vs. labels, sub-issues vs. the retired tasklist-block feature, the nine closing keywords and the one merge-strategy gap GitHub's own docs never closed, PR review/CODEOWNERS/merge-queue mechanics, Projects v2's GraphQL-only structure — seven axes plus a sources.md provenance file; the synthesis axis names where this workspace's own ADR-0002/doc-authoring-standards convention aligns or diverges from the platform, without ratifying a change |
+| `skills/naming-rules` | Declarative skill | model-only | The simple ("Fisher-Price") naming paradigm for NEW harness artifacts: five checkable tests (says-the-job, kind-audible, registry-verb, no-lore, loud-contrast), a per-kind shape table, the one-verb-per-concept registry; coexists with the legacy grammar (the `*-authoring-standards` §Naming sections keep governing shipped names — names are APIs); the full-estate rename map ships as an illustrative worked example at `references/estate-rename-map.md`, explicitly not a ratified plan |
 | `agents/ops-issues` | Agent | spawned (scheduled + on-demand) | Standing intake/triage seat: classifies, dedupes, and routes features/bugs/tasks/issues/PRs onto the resolved ticketing backend per the watch/triage/trust SPEC (`.claude/docs/spec/spec-ticketing-watch-triage.md`); trust-gates unknown filers behind a durable friendlies allow-list; structurally barred from source edits, merges, or closes beyond the ticket record. Preloads `github-issue-pr-primitives` + `intent-extract` only — scribe's `doc-authoring-standards` is a different plugin, so the TICKET shape it needs is stated inline rather than preloaded (the hard plugin-preload boundary, not a soft mention) |
 | `skills/ops-issues` | Command skill | user-only (`/ops-issues`) | Dispatches the `ops-issues` agent above for an on-demand run; states the agent's own capture/author-only contract as a fixed banner before the first CONFIRMED-roster dispatch (never mere file existence — an unattended firing seeds the allow-list too, evidence-only), and — since the agent has no `AskUserQuestion` of its own — runs the REQ-011/REQ-013 interview here, in this command's own session, whenever the agent's report surfaces one pending. This workspace's first case of a skill and an agent sharing one name (a command dispatching its own-named standing seat), deliberate, not yet a rule |
 | `agents/ops-repo` | Agent | spawned (scheduled + on-demand) | Standing repo-hygiene seat: inventories worktrees/branches/PRs, executes cleanup ONLY through this plugin's own gated scripts (`campaign_close.py`/`gitignore_check.py`/`sync_main.py`) on independently-verified-merged findings, proposes (never mutates) everything else. Preloads `git-campaign-workflows` + `github-issue-pr-primitives` |
@@ -117,7 +118,30 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.39.0 · assembled 2026-07-20 · 1.39.0: the ops-family grows its coordination pair —
+v1.40.0 · assembled 2026-07-20 · 1.40.0: naming-rules — knowledge skill carrying the simple
+("Fisher-Price") naming paradigm for NEW harness artifacts: five checkable tests (says-the-job ·
+kind-audible · registry-verb · no-lore · loud-contrast), a per-kind shape table (verb-first
+runnables, `-rules`/`-facts` knowledge, person-word seats, plain-noun shelves), the
+one-verb-per-concept registry (make/check/plan/split/merge/… with retired synonyms), and the
+design session's refinement set — activity-carrying `-rules` (`doc-writing-rules`, never bare
+`doc-rules`), `-facts` vs `-rules`, verb↔noun twins (`/sort-issues` ↔ `issue-sorter`),
+plan-decides/bare-verb-does. Scoped to coexist: shipped names are APIs and the legacy grammar
+(agent-authoring-standards §Naming, skill_lint's checkable slice) keeps governing them; the
+full-estate map (9 plugins, ~130 members; plugin layer settled with the user —
+harness/docs/teamwork/screens + color/typography kept + design-kits/agent-protocols/llm-facts)
+ships as an illustrative worked example at references/estate-rename-map.md, explicitly not a
+ratified rename plan. Forged through all six gates: fresh-session baselines demonstrated the
+delta (contrast-verify → check-contrast · issue-triage×2 → /sort-issues ↔ issue-sorter ·
+doc-authoring-standards → doc-writing-rules); fresh-context FLOOR audit PASS, 0 blocking (two
+minors — a half-stale fence citation, two drift-pair restatements — fixed same change);
+reciprocal naming fences closed in the skill-/agent-authoring-standards, git-campaign-workflows,
+and plugin-decompose suites; /eval-run at the wave boundary owed as the follow-up. G8 allow set
+gains the paradigm's six illustrative names (doc-rules · doc-writing-rules · entry-file-rules ·
+icon-rules · file-feature · sort-issues) plus seven pre-existing prose compounds newly caught by
+recent suffix growth (-rules here, -routing/-sweep/-orchestrator from earlier ships:
+path-scoped-rules, folder-taxonomy, system-planner, three-hard-rules, mis-routing,
+threshold-sweep, repo-orchestrator — the standing false-positive class, 1.25.1 precedent),
+restoring the estate-wide sweep to 0 fail / 0 warn across all nine plugins · v1.39.0 · assembled 2026-07-20 · 1.39.0: the ops-family grows its coordination pair —
 `ops-orchestrator` (sweep seat: fans out ops-adr + ops-issues + ops-repo in parallel, hands the
 returned handoffs to the planner, relays one queue + per-seat status; Read+Task wall, sonnet+high)
 and `ops-planner` (prioritization seat: one queue at `.claude/ops/plan.md`, every entry

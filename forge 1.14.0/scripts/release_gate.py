@@ -293,6 +293,25 @@ def gate(root: Path, package: bool = False):
              # citation of a now-retired scribe skill (folded into this plugin's own pack-forge),
              # not rename drift — the sentence explains provenance, it doesn't point at a live sibling:
              "knowledge-forge",
+             # naming-rules (2026-07-20) added the `-rules` suffix to the estate inventory: the
+             # skill's own illustrative paradigm names are deliberate examples, not phantom
+             # siblings (doc-rules is its labeled counter-example; doc-writing-rules,
+             # entry-file-rules, icon-rules, file-feature, sort-issues are proposed-name
+             # demonstrations), and three pre-existing prose compounds are newly caught by the
+             # widened inventory — path-scoped-rules (skill-authoring-standards' frontmatter
+             # prose), folder-taxonomy (agents-audit prose), system-planner (an orchestration
+             # AGENT cited in prose, not a skill) — the standing false-positive class, same
+             # shape as -flow/-systems/-discipline:
+             "doc-rules", "doc-writing-rules", "entry-file-rules", "icon-rules", "file-feature",
+             "sort-issues", "path-scoped-rules", "folder-taxonomy", "system-planner",
+             # same 2026-07-20 estate-wide sweep, other plugins' pre-existing prose newly caught
+             # by suffixes added in recent ships (-rules here; -routing/-sweep/-orchestrator from
+             # llm's chat-harness family and forge 1.39.0's ops pair): "three-hard-rules" is
+             # design-md-format's own named block, "mis-routing" is issue's prose,
+             # "threshold-sweep" cites a research-methods references FILENAME
+             # (threshold-sweep-2026-07-04.md), "repo-orchestrator" is a hypothetical agent in
+             # concurrency-design's worked example:
+             "three-hard-rules", "mis-routing", "threshold-sweep", "repo-orchestrator",
              # the new ops-issues COMMAND skill (2026-07-20) added the "-issues" suffix to this
              # plugin's own inventory for the first time: "sub-issues" is github-issue-pr-primitives'
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real

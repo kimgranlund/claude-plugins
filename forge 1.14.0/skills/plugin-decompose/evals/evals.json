@@ -76,6 +76,12 @@
       "id": "n06",
       "prompt": "audit my whole harness surface",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "Is this skill name too vague?",
+      "expect": "no-trigger",
+      "comment": "owner: naming-rules — forward naming under the simple paradigm"
     }
   ]
 }
