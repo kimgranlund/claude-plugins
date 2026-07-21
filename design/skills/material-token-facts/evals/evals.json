@@ -82,7 +82,7 @@
       "id": "n07",
       "prompt": "Is surface-container M3 baseline or one of our extensions?",
       "expect": "no-trigger",
-      "note": "M3-vs-extension history — the sibling's own Foundation vs. extension table (color-tokens)"
+      "note": "KNOWN-AMBIGUOUS (ADR-0008 re-measure, 3/3 rounds false-positive despite verbatim fence): the glossary claim saturates; recorded, not chased"
     },
     {
       "id": "n08",

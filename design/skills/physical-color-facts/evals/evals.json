@@ -126,7 +126,7 @@
       "id": "n13",
       "prompt": "two paint swatches read as the same color under one light but not another",
       "expect": "no-trigger",
-      "note": "color-perception-facts owns metamerism (ADR-0008 seam)"
+      "note": "color-perception-facts owns metamerism (ADR-0008 seam). KNOWN-FLAKY: bare paint-swatch phrasing flips judge-to-judge; perception's own triggers pass"
     }
   ]
 }
