@@ -45,8 +45,8 @@ shape a routing corpus could take.
   (this same plugin, sibling skill) — the `{skill, _note/note, positives/negatives or cases}`
   schema pair, and the `_note` field's explicit adversarial-negative-selection rationale (dangerous
   near-neighbors named by category: sibling pack, cross-plugin pack, genuine build ask).
-- **`a2ui-conversational-agent/evals/evals.json`** (`agentic-ui` plugin,
-  `/Users/kimba/Projects/nonoun/plugins/agentic-ui 0.1.0/skills/a2ui-conversational-agent/evals/evals.json`)
+- **`a2ui-chat-agent-facts/evals/evals.json`** (`agent-protocols` plugin,
+  `/Users/kimba/Projects/nonoun/plugins/agentic-ui 0.1.0/skills/a2ui-chat-agent-facts/evals/evals.json`)
   — the `note` field's dated, two-entry measurement history (a 2026-07-09 blind run at 33/36, a
   same-day estate-wide re-run also at 33/36 with different cases resolved), the clearest evidence
   in this workspace that routing is measured and re-measured, not assumed after one write.

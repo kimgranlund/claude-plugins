@@ -19,7 +19,7 @@ these plugins rather than just installing them.
 |---|---|
 | [`forge`](<forge 1.14.0/README.md>) | Author and validate Claude Code skills, agents, hooks, bundled scripts, entry files, and plugins themselves — the toolchain every other plugin here was built and gated through. |
 | [`scribe`](<scribe 0.1.0/README.md>) | Author functional documents (ADR/PRD/SPEC/LLD/PLAN/ROADMAP/TICKET/TASK), capture bug reports durably before dispatching an investigation, research methods & rubrics, markdown↔markup conversion, knowledge/reference authoring. |
-| [`agentic-ui`](<agentic-ui 0.1.0/README.md>) | Knowledge packs for the A2UI wire protocol, renderer, catalog design, and training corpus. |
+| [`agent-protocols`](<agentic-ui 0.1.0/README.md>) | Knowledge packs for the A2UI wire protocol, renderer, catalog design, and training corpus. |
 | [`llm`](<llm 0.1.0/README.md>) | Portable LLM-integration knowledge (the swappable-provider gateway pattern, streaming structured output safely) plus a six-layer mini/portable chat-agent-harness family (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). |
 | [`color`](<color 0.1.0/README.md>) | Color science (accessibility, materials, perception, spaces), OKLCH palette design, contrast/CVD verification. |
 | [`typography`](<typography 0.1.0/README.md>) | Typography systems, pairing, tokens, lettering knowledge. |

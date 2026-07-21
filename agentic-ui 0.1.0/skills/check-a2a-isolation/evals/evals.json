@@ -1,0 +1,18 @@
+{
+ "skill": "check-a2a-isolation",
+ "note": "Initial suite, authored 2026-07-09 (closing the A2A four's pending pre-ship gate). Positives: isolation-proof asks incl. the transport-agnostic claim (generalizes beyond A2A). Negatives adversarially from make-a2a-agent (building), a2a-protocol-facts (facts), a2ui-catalog-facts (payload-content security — the fenced neighbor).",
+ "cases": [
+  { "id": "t01", "prompt": "prove there is no cross-contamination between the two agents", "expect": "trigger" },
+  { "id": "t02", "prompt": "are these agents really isolated from each other", "expect": "trigger" },
+  { "id": "t03", "prompt": "verify the seats can't see each other's context", "expect": "trigger" },
+  { "id": "t04", "prompt": "audit this multi-agent setup for prompt leakage", "expect": "trigger" },
+  { "id": "t05", "prompt": "make our isolation claim actually testable", "expect": "trigger" },
+  { "id": "t06", "prompt": "plant per-seat canaries and check the wire origin of every message", "expect": "trigger" },
+  { "id": "t07", "prompt": "did any context leak between the referee and the players", "expect": "trigger" },
+  { "id": "n01", "prompt": "build the second agent and connect it over A2A", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "which JSON-RPC method sends a message", "expect": "no-trigger" },
+  { "id": "n03", "prompt": "is callableFrom clientOnly enough to keep this type safe", "expect": "no-trigger" },
+  { "id": "n04", "prompt": "why did this record fail admission", "expect": "no-trigger" },
+  { "id": "n05", "prompt": "check this guidelines folder before we ship the kit", "expect": "no-trigger" }
+ ]
+}

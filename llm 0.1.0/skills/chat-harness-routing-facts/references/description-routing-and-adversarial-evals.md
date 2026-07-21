@@ -31,8 +31,8 @@ negatives that matter are the ones a naive router could actually confuse with a 
 **Worked instance:** this very plugin's sibling pack, `llm-gateway-facts`, states its own
 negative-selection rule verbatim in `scripts/routing-corpus.json`'s `_note` field: "Negatives
 drawn adversarially from the dangerous near-neighbors: `llm-streaming-facts` (the sibling pack —
-SSE/JSONL wire-format concerns, a DIFFERENT layer), the `agentic-ui` plugin's
-`a2ui-conversational-agent`... and `a2ui-protocol`..., plus a genuine build/implement ask (this
+SSE/JSONL wire-format concerns, a DIFFERENT layer), the `agent-protocols` plugin's
+`a2ui-chat-agent-facts`... and `a2ui-protocol-facts`..., plus a genuine build/implement ask (this
 pack answers, it does not build)." Three distinct kinds of adversarial negative are visible in
 that one line, worth naming separately: a **sibling in the same plugin** covering a related but
 distinct layer, a **cross-plugin pack** covering the same underlying system from a different
@@ -62,9 +62,9 @@ identical test set.
 **Claim — writing the corpus is necessary but not sufficient; the discipline is running it, and
 running it again after any description edit anywhere in the menu, since an edit to an unrelated
 skill can silently change what a request now matches.** **Worked instance, the clearest one in
-this workspace:** the `agentic-ui` plugin's `a2ui-conversational-agent/evals/evals.json` `note`
+this workspace:** the `agent-protocols` plugin's `a2ui-chat-agent-facts/evals/evals.json` `note`
 field carries a real, dated measurement history, not a write-once assumption: "Blind run
-2026-07-09: 33/36 — t14 (validate-then-stream) stolen by a2ui-protocol: the term added verbatim
+2026-07-09: 33/36 — t14 (validate-then-stream) stolen by a2ui-protocol-facts: the term added verbatim
 to this description; t03/t04... chose none DESPITE the phrasing standing verbatim in the
 description — judge noise, recorded as first strike, watch for a second." A second, later entry
 in the SAME field: "Estate-wide run 2026-07-09: 33/36 — t03/t04 came home (judge-noise cleared)

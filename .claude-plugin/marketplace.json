@@ -1,6 +1,6 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and seven domain plugins (agentic-ui, llm, color, typography, design-systems, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design-systems, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
   "owner": {
     "name": "Kim Granlund"
   },
@@ -18,10 +18,10 @@
       "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK — standards, forge, review, validator, eight type templates, and bug-report (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, rubric-forge), markdown↔markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (reference-forge, llms-txt-forge, vision-memo-forge — knowledge-pack authoring lives in forge's pack-forge), and a fresh-context doc-reviewer agent alongside the researcher agent."
     },
     {
-      "name": "agentic-ui",
+      "name": "agent-protocols",
       "displayName": "Agentic UI",
       "source": "./agentic-ui 0.1.0",
-      "description": "A2UI knowledge packs — wire protocol/renderer, catalog design, the live conversational agent, and the training corpus — answering how @agent-ui/a2ui works from a cited repo corpus; named agentic-ui (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
+      "description": "A2UI knowledge packs — wire protocol/renderer, catalog design, the live conversational agent, and the training corpus — answering how @agent-ui/a2ui works from a cited repo corpus; named agent-protocols (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
     },
     {
       "name": "llm",

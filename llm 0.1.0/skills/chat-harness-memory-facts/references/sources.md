@@ -41,8 +41,8 @@ workspace right now — inspect them to verify a claim, not "verify against exte
   answers-not-generates boundary statement, and `scripts/routing-corpus.json` corpus-of-record.
   This pack (`chat-harness-memory-facts`) is itself a third instance of the same shape,
   authored alongside its `chat-harness-*` siblings in this plugin.
-- **`agentic-ui`'s `a2ui-training-corpus`**
-  (`/Users/kimba/Projects/nonoun/plugins/agentic-ui 0.1.0/skills/a2ui-training-corpus/`) — a
+- **`agent-protocols`'s `a2ui-training-facts`**
+  (`/Users/kimba/Projects/nonoun/plugins/agentic-ui 0.1.0/skills/a2ui-training-facts/`) — a
   heavier, judged-dataset flavor of the same underlying idea, documenting `@agent-ui/a2ui`'s real
   corpus subsystem (`packages/agent-ui/a2ui/src/corpus/**`), governed by ADR-0060/0061/0062/
   0063/0064/0068. Cited in the "heavier flavor" section of

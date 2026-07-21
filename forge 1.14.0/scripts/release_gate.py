@@ -253,7 +253,7 @@ def gate(root: Path, package: bool = False):
              "container-patterns", "scale-theory", "design-systems", "box-model-and-flow",
              # prose compounds newly caught by the same two suffixes (-flow, -systems):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
-             # a2a-protocol's references file (2026-07-15) — the estate's last standing G8 warn:
+             # a2a-protocol-facts's references file (2026-07-15) — the estate's last standing G8 warn:
              "transport-and-streaming",
              # verify-family judgment rule-ID slugs (2026-07-16, Issue #8) — findings
              # vocabulary, not skill names:
@@ -277,7 +277,7 @@ def gate(root: Path, package: bool = False):
              "clean-run", "halt-and-report", "report-format",
              # the `llm` plugin's chat-harness-* family (2026-07-13): "chat-agent" is the
              # family's own shared framing phrase ("a chat-agent harness"), tripping the
-             # `-agent` suffix a2ui-conversational-agent already owns; "hardcoded-feature" is
+             # `-agent` suffix a2ui-chat-agent-facts already owns; "hardcoded-feature" is
              # ordinary prose in chat-harness-routing-facts's own axis description:
              "chat-agent", "hardcoded-feature",
              # concurrency-design (2026-07-17): "self-report" is prose ("never act on either
@@ -321,6 +321,11 @@ def gate(root: Path, package: bool = False):
              # set then):
              "forced-colors", "font-palette", "tonal-palette", "github-facts",
              "material-color-facts",
+             # ADR-0006 agent-protocols rename (2026-07-21): the a2a-*/a2ui-* digit-prefix
+             # tokenizer artifact (1.20.1 class — the regex skips digit-bearing segments), now
+             # over the renamed -facts members: catalog-facts/chat-agent-facts/protocol-facts/
+             # training-facts are the tails of full a2a-/a2ui- names, not phantom siblings:
+             "catalog-facts", "chat-agent-facts", "protocol-facts", "training-facts",
              # the new ops-issues COMMAND skill (2026-07-20) added the "-issues" suffix to this
              # plugin's own inventory for the first time: "sub-issues" is github-issue-pr-primitives'
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real

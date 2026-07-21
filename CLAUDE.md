@@ -1,10 +1,12 @@
 # Plugin workspace — entry file
 
-Each child directory here is one Claude Code plugin, named `<manifest-name> <version-at-creation>`
-(e.g. `forge 1.14.0`, `scribe 0.1.0`) — quote the path, it contains a space. The dir's version
-suffix is FROZEN at creation and drifts from the manifest by design (forge's manifest is well past
-1.14.0); the current version lives in `.claude-plugin/plugin.json` and the README footer ledger,
-never in the path. **forge is the toolchain**:
+Each child directory here is one Claude Code plugin, named `<name-and-version-at-creation>`
+(e.g. `forge 1.14.0`, `scribe 0.1.0`) — quote the path, it contains a space. The dir name is
+FROZEN at creation and drifts from the manifest by design (amended 2026-07-21, ADR-0006: the
+rename campaign changes manifest NAMES too, so the dir records the name-and-version at creation;
+the current name and version live in `.claude-plugin/plugin.json` and the README footer ledger,
+never in the path). Dir → current-name aliases as renames land: `agentic-ui 0.1.0` →
+`agent-protocols`. **forge is the toolchain**:
 its commands and standards govern work on every plugin in this workspace, including forge itself.
 Work on a plugin happens in its directory; decisions that span plugins happen here.
 
@@ -23,7 +25,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Scattered docs in an existing repo to organize into the canonical layout | scribe: `/docs-alignment` (one approval gate, git mv, never rewrites prose) |
 | A feature idea to capture, or a feature to build | scribe: `/feature` (pure intake → sized ticket/doc/corpus) · orchestration: `/build` (record-first build — runs the intake when no record exists) |
 | Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | scribe (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s artifact table |
-| A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agentic-ui` (the A2UI four + the A2A four) |
+| A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agent-protocols` (the A2UI four + the A2A four) |
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
 | Design-system export bundles (Claude Design/Figma Make/Google Stitch) + Material Design tokens | `design-systems` |

@@ -50,6 +50,6 @@ This pack answers the provider/gateway pattern; it does not restate its neighbor
 wire-format parsing technique (SSE chunk buffering, the Anthropic contract as an instance,
 validate-then-stream) is [[llm-streaming-facts]]. `@agent-ui/a2ui`'s OWN system, documented as
 that repo's actual shipped behavior (dated, exhaustive, `file:line`-cited against a single
-snapshot) rather than a portable pattern, is the `agentic-ui` plugin's `a2ui-conversational-agent`
+snapshot) rather than a portable pattern, is the `agent-protocols` plugin's `a2ui-chat-agent-facts`
 pack — when the worked example and that pack disagree, THAT pack's citation-verified snapshot of
 the real repo wins; this pack's job is to have correctly generalized from it, not to duplicate it.

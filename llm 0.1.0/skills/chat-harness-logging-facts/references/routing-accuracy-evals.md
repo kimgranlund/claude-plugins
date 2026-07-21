@@ -34,11 +34,11 @@ distinguishable at the boundary that matters.
 
 ## A worked, dated measurement history — judge noise vs a real fix vs a structural leak
 
-**Worked instance — this workspace's own `agentic-ui` plugin,
-`skills/a2ui-conversational-agent/evals/evals.json`, its `"note"` field, read in full and quoted
+**Worked instance — this workspace's own `agent-protocols` plugin,
+`skills/a2ui-chat-agent-facts/evals/evals.json`, its `"note"` field, read in full and quoted
 verbatim (not paraphrased, since the exact wording is the evidence):**
 
-> "Blind run 2026-07-09: 33/36 — t14 (validate-then-stream) stolen by a2ui-protocol: the term
+> "Blind run 2026-07-09: 33/36 — t14 (validate-then-stream) stolen by a2ui-protocol-facts: the term
 > added verbatim to this description; t03/t04... chose none DESPITE the phrasing standing verbatim
 > — judge noise, recorded as first strike... Estate-wide run 2026-07-09: 33/36 — t03/t04 came home
 > (judge-noise cleared) and t14... proven; n12/n13/n14... leaked... structural: agents are absent
