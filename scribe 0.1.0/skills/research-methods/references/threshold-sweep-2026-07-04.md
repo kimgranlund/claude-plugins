@@ -77,7 +77,7 @@ grid + one fine pass only).
 - Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (vision-memo-forge,
   prd-author, i18n-verify, safety-verify, focus-verify, research-methods, token-builder —
   mostly paraphrase positives the lexical proxy can't see, a measurement artifact the module
-  docstring flags), and a precision-driven cluster wants t≥0.35 (system-builder, color-theory,
+  docstring flags), and a precision-driven cluster wants t≥0.35 (system-builder, color-theory-facts,
   spec-author, code-reviewer, component-reviewer@0.55). 0.34 is the balance point between them
   — exactly why a single global knob peaks in the middle.
 - Outlier (below tripwire at 0.34): orchestration-reviewer (agent), F1=0.545. Its own curve

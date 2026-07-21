@@ -7,7 +7,7 @@ peers:
   - ./cognitive.md
   - ../science/crowding.md
   - ../techniques/measure.md
-  - ../../../color-science-accessibility/references/techniques/apca-lc-formula.md
+  - ../../../color-contrast-facts/references/techniques/apca-lc-formula.md
 primary_sources:
   - https://www.w3.org/TR/WCAG22/
   - https://www.who.int/publications/i/item/9789241516570  # WHO World Report on Vision, 2019
@@ -104,7 +104,7 @@ Anti-pattern: `html { font-size: 10px }` to make `1rem` a convenient unit. This 
 
 - **WCAG 2.2 SC 1.4.3 (Minimum) — AA — 4.5:1** for body, **3:1** for large text. Legal floor; see [`./wcag-type.md §SC 1.4.3`](./wcag-type.md#sc-143-contrast-minimum--level-aa).
 - **WCAG 2.2 SC 1.4.6 (Enhanced) — AAA — 7:1 / 4.5:1.** Better for reading-heavy surfaces and for mild low-vision readers. Cost of hitting AAA is usually a darker body colour (`#222` or `#1a1a1a` rather than `#333`) and a matching adjustment on links.
-- **APCA ≥ Lc 75** for body (16 px / 400 weight), **Lc 60** for large text or bold body. Not a conformance target as of 2026-04 — but it is the polarity-aware check that catches the "light-on-dark at the WCAG floor" trap. See [`../../../color-science-accessibility/references/techniques/apca-lc-formula.md`](../../../color-science-accessibility/references/techniques/apca-lc-formula.md).
+- **APCA ≥ Lc 75** for body (16 px / 400 weight), **Lc 60** for large text or bold body. Not a conformance target as of 2026-04 — but it is the polarity-aware check that catches the "light-on-dark at the WCAG floor" trap. See [`../../../color-contrast-facts/references/techniques/apca-lc-formula.md`](../../../color-contrast-facts/references/techniques/apca-lc-formula.md).
 
 AMD and diabetic-retinopathy readers benefit from higher contrast than the AA floor provides. If your audience skews >60, design to AAA or APCA Lc 75 as the default body contrast, not as an accommodation mode.
 
@@ -422,7 +422,7 @@ For low-vision work specifically, APCA is the more predictive model. The WCAG 2.
 - Flag APCA failures as design smells even when WCAG 2.x passes.
 - Do **not** claim WCAG compliance via APCA — it is a supplement, not a replacement.
 
-See [`../../../color-science-accessibility/references/techniques/apca-lc-formula.md`](../../../color-science-accessibility/references/techniques/apca-lc-formula.md) for the deep APCA primer.
+See [`../../../color-contrast-facts/references/techniques/apca-lc-formula.md`](../../../color-contrast-facts/references/techniques/apca-lc-formula.md) for the deep APCA primer.
 
 ### The `color-contrast()` CSS function
 
@@ -529,4 +529,4 @@ For low-vision *print* specifically, sans-serif is usually recommended — magni
 - [`./cognitive.md`](./cognitive.md) — cognitive-accessibility typography.
 - [`../science/crowding.md`](../science/crowding.md) — Bouma's law, peripheral reading, spacing.
 - [`../techniques/measure.md`](../techniques/measure.md) — CPL math.
-- [`../../../color-science-accessibility/references/techniques/apca-lc-formula.md`](../../../color-science-accessibility/references/techniques/apca-lc-formula.md) — APCA primer.
+- [`../../../color-contrast-facts/references/techniques/apca-lc-formula.md`](../../../color-contrast-facts/references/techniques/apca-lc-formula.md) — APCA primer.

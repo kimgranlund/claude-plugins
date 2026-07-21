@@ -1,0 +1,42 @@
+{
+  "skill": "color-theory-facts",
+  "_note": "Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-perception-facts, color-space-facts, color-contrast-facts, make-palette, check-colors, ui-patterns, pack-forge.",
+  "siblings_in_repo": [
+    "color-perception-facts",
+    "color-space-facts",
+    "color-contrast-facts",
+    "make-palette",
+    "check-colors",
+    "ui-patterns",
+    "pack-forge"
+  ],
+  "positives": [
+    "explain why complementary color schemes are supposed to work",
+    "tell me the history of the color wheel",
+    "why do these two colors clash when they sit next to each other",
+    "does this palette read as calm and trustworthy",
+    "my brand colors feel garish together",
+    "the accent color feels off against the dominant color",
+    "what mood does a pale muted palette communicate",
+    "was Itten right about the seven contrasts",
+    "what does the color red communicate in an interface",
+    "should I use a triadic scheme for my poster",
+    "how do I split dominant and accent colors, the 60-30-10 rule",
+    "what was Gerstner's designing programmes approach to color"
+  ],
+  "negatives": [
+    "convert this color from sRGB to OKLCH",
+    "does this text pass WCAG AA contrast",
+    "simulate deuteranopia on this palette",
+    "extract a palette from this image",
+    "build a 13-step ramp from my brand anchor",
+    "derive the dark scheme for my palette",
+    "map semantic roles for danger and success colors",
+    "verify this palette and emit a ColorProof",
+    "check every fg/bg pair for APCA pass-fail",
+    "what states does a dashboard screen need",
+    "master-detail or list-detail for this screen",
+    "build an expert knowledge pack on typography",
+    "add a new axis to this reference pack"
+  ]
+}

@@ -228,7 +228,7 @@ def gate(root: Path, package: bool = False):
     # verified prose-compound false positives (hyphenated phrases sharing a real suffix)
     allow = {"re-run", "dry-run", "no-split", "keep-separate", "cross-cite",
              "deep-review", "data-not-markup", "color-accessibility", "geometry-not-perception",
-             "from-color-science-perception", "from-color-science-spaces", "neutral-by-design",
+             "from-color-perception-facts", "from-color-space-facts", "neutral-by-design",
              "orphaned-tokens", "over-tokens", "prose-over-tokens", "ultimate-tokens",
              "change-verify", "composition-patterns", "macro-patterns", "micro-patterns",
              "state-patterns", "live-agent", "routing-corpus", "training-corpus",
@@ -312,6 +312,15 @@ def gate(root: Path, package: bool = False):
              # (threshold-sweep-2026-07-04.md), "repo-orchestrator" is a hypothetical agent in
              # concurrency-design's worked example:
              "three-hard-rules", "mis-routing", "threshold-sweep", "repo-orchestrator",
+             # ADR-0006 color rename (2026-07-21) added the -facts/-colors/-palette suffixes to
+             # the inventory: "forced-colors" and "font-palette" are CSS terms of art (the media
+             # query / property), "tonal-palette" is Material's own term — pre-existing prose
+             # newly caught, the standing false-positive class. "github-facts" and
+             # "material-color-facts" are naming-rules' illustrative shape-table examples —
+             # phantom until the llm/design-kits rename PRs mint them for real (remove from this
+             # set then):
+             "forced-colors", "font-palette", "tonal-palette", "github-facts",
+             "material-color-facts",
              # the new ops-issues COMMAND skill (2026-07-20) added the "-issues" suffix to this
              # plugin's own inventory for the first time: "sub-issues" is github-issue-pr-primitives'
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real

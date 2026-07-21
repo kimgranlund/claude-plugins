@@ -1,11 +1,11 @@
 # Color Math System — Architecture
 
 This document fixes the architectural rules for the math-reference corpus (split
-2026-07-06 across the four `color-science-*` packs' `references/techniques/`) and
+2026-07-06 across the four `color-*-facts` packs' `references/techniques/`) and
 `src/` (kept here, in `color-science-project-files`). The math roadmap, every
 existing math reference, and every future addition must satisfy these rules. When in
 doubt, **the canonical example is `src/spaces/oklab.ts` paired with
-`../color-science-spaces/references/techniques/oklab-xyz-math.md`**.
+`../color-space-facts/references/techniques/oklab-xyz-math.md`**.
 
 ---
 
@@ -114,7 +114,7 @@ src/
 │   ├── cat16.ts              # CIECAM16 default
 │   └── vonkries.ts
 ├── gamut/                    # Gamut tests, mapping, peak chroma/lightness
-│   ├── oklch-peak.ts         # Peak L(C,h) and C(L,h) — see ../color-science-spaces/references/techniques/oklch-gamut-peak-math.md
+│   ├── oklch-peak.ts         # Peak L(C,h) and C(L,h) — see ../color-space-facts/references/techniques/oklch-gamut-peak-math.md
 │   ├── cusp.ts               # Ottosson cusp algorithm
 │   └── mapping.ts            # CSS Color 4 gamut mapping
 ├── metrics/                  # Distance and contrast
@@ -262,7 +262,7 @@ verifies:
 
 ## Decision 8: Where prose and code meet
 
-Each markdown reference file — now distributed across the four `color-science-*`
+Each markdown reference file — now distributed across the four `color-*-facts`
 packs' `references/techniques/` (accessibility owns the apca/luminance/cvd rows; the
 rest sit in spaces, perception, or materials per the pack's charter) — follows this
 shape:

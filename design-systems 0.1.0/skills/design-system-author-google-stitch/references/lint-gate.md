@@ -64,7 +64,7 @@ Ship a short receipt (README or PR note) with every delivered DESIGN.md — the 
 - 🟢 Sections in Stitch canonical order; appended sections ride the unknown-section rule
 - 🟢 Every `{path.to.token}` reference resolves
 - 🟢 All fill/foreground pairs ≥ 4.5:1 in BOTH schemes (all-pairs policy, stricter
-  than Stitch's component-pair warning) — [how verified, e.g. color-verify proof]
+  than Stitch's component-pair warning) — [how verified, e.g. check-colors proof]
 - 🟢 Standalone: the file passes every check with no sibling files present
 ```
 
@@ -86,7 +86,7 @@ Run before touching npm — `python3 scripts/prelint.py check DESIGN.md` automat
 
 ## 6. What the linter never checks (the author still owns)
 
-- **Dark-scheme contrast** — all fill/on pairs at the `-dark` end. Dispatch [[color-verify]] for the all-pairs × both-schemes proof.
+- **Dark-scheme contrast** — all fill/on pairs at the `-dark` end. Dispatch [[check-colors]] for the all-pairs × both-schemes proof.
 - **Prose–token accord** — both directions (prose promises delivered; tokens explained).
 - **Pairing-law integrity** — no crossed on-pairs in component definitions.
 - **Role budget and reduction quality** — 15–25 roles, signature colors surviving, states as values.

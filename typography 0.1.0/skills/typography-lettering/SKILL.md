@@ -89,7 +89,7 @@ the contested-knowledge form of the same rule.
 - **Building components** → [[component-forge]].
 - **Locale formatting, bidi, Intl, pluralization** → [[i18n-verify]] — script *metrics and
   typographic norms* stay here.
-- **Color pairing and contrast math** → [[color-science-accessibility]].
+- **Color pairing and contrast math** → [[color-contrast-facts]].
 - **Measure, legibility, and readability questions stay here** — answered from
   `references/techniques/measure.md` and `references/science/legibility-vs-readability.md`.
 

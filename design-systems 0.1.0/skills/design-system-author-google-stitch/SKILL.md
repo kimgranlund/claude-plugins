@@ -60,7 +60,7 @@ python3 scripts/prelint.py classify lint.json         # ACTION / EXPECTED / REVI
 
 - **Zero errors, always.** `broken-ref` is the only error-severity lint rule; duplicate headings and `light-dark()` values also hard-fail.
 - **Warnings are read, not counted.** EXPECTED class (orphaned `-dark` siblings) rides; ACTION class (contrast < 4.5:1, missing-primary, section-order) gets fixed. Full interpretation table: `references/lint-gate.md`.
-- **Deliver a receipt** with the file — lint result, warning classification, and the checks the linter does not run (all fill/on pairs in *both* schemes: dispatch [[color-verify]] for that proof; the linter only sees component pairs on the light end). Template in `references/lint-gate.md`.
+- **Deliver a receipt** with the file — lint result, warning classification, and the checks the linter does not run (all fill/on pairs in *both* schemes: dispatch [[check-colors]] for that proof; the linter only sees component pairs on the light end). Template in `references/lint-gate.md`.
 
 ## References & routing
 
@@ -71,7 +71,7 @@ python3 scripts/prelint.py classify lint.json         # ACTION / EXPECTED / REVI
 | `references/lint-gate.md` | Running and reading the linter: JSON anatomy, expected-warnings table, pre-lint checklist, receipt template |
 | `references/rubric.md` | Scoring a draft or an existing DESIGN.md |
 | `scripts/prelint.py` | Deterministic offline structural check + lint-JSON classifier (first pass needs no npm) |
-| [[color-verify]] | The all-pairs × both-schemes contrast proof the linter doesn't run |
-| [[palette-design]] | Upstream: designing the ramp/roles this file reduces from — this skill consumes a palette, it does not design one |
+| [[check-colors]] | The all-pairs × both-schemes contrast proof the linter doesn't run |
+| [[make-palette]] | Upstream: designing the ramp/roles this file reduces from — this skill consumes a palette, it does not design one |
 
 **Done** = lint zero errors · every warning classified in the receipt · rubric gates pass · prose–token accord holds both directions. **Not done** = a green lint alone — the linter never reads the dark scheme, the prose, or the pairing law.

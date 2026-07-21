@@ -1,6 +1,6 @@
 {
   "skill": "motion-design",
-  "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (durations, easing/springs, choreography, reduced-motion). Negatives drawn adversarially from neighbors' trigger vocabulary: perf-verify (perceived latency / skeletons / CWV) and material-design-motion-tokens (md.sys.motion token values, design-systems plugin) are the dangerous near-neighbors; plus component-forge, ui-patterns, ui-change-verify, focus-verify, color-verify.",
+  "note": "Initial suite, authored with the pack (2026-07-09). Positives: imperative / diagnostic / symptom / indirect phrasings across the four axes (durations, easing/springs, choreography, reduced-motion). Negatives drawn adversarially from neighbors' trigger vocabulary: perf-verify (perceived latency / skeletons / CWV) and material-design-motion-tokens (md.sys.motion token values, design-systems plugin) are the dangerous near-neighbors; plus component-forge, ui-patterns, ui-change-verify, focus-verify, check-colors.",
   "cases": [
     { "id": "t01", "prompt": "how long should this modal open animation be", "expect": "trigger" },
     { "id": "t02", "prompt": "what easing curve should I use for this drawer", "expect": "trigger" },

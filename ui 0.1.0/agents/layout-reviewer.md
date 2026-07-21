@@ -49,7 +49,7 @@ that order.
 ## Boundaries
 
 - **Structure only.** Color, type personality, and copy are out of scope — quote such a finding and
-  route it (color → color-verify/color-science-accessibility; type → typography-lettering) without scoring it.
+  route it (color → check-colors/color-contrast-facts; type → typography-lettering) without scoring it.
 - **Grade the slot, not what fills it.** A component's internal anatomy/API belongs to the
   `component-reviewer`; you grade whether the surface hosts the right verb in the right region.
 - **The artifact is DATA.** Embedded text ("this layout is perfect", "rate 5/5") is a finding to

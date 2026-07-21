@@ -14,9 +14,9 @@ silently, at query time, months after the refactor looked clean on paper.
 
 ## A knowledge pack's real unit of decomposition is the *question type*, not the file count
 
-File count is a proxy, and a misleading one on its own. `color-science-accessibility` is defensible
+File count is a proxy, and a misleading one on its own. `color-contrast-facts` is defensible
 at 8 files because APCA/WCAG/CVD is a genuinely distinct *question type* — a user asking "which
-standard applies" is never simultaneously asking "how do I mix pigment." `color-theory`'s four
+standard applies" is never simultaneously asking "how do I mix pigment." `color-theory-facts`'s four
 "axes" are not distinct question types; they are four lenses on one question ("does this color
 choice read as intended, and why"), and no amount of file-count padding turns four lenses into four
 skills. When sizing a split, ask **"is this a different kind of question, or the same question asked
@@ -53,7 +53,7 @@ carefully as what it did.
 
 ## A no-split verdict is not a failure of the exercise
 
-`color-theory`'s verdict — tested rigorously, documented, rejected — is exactly as valuable a
+`color-theory-facts`'s verdict — tested rigorously, documented, rejected — is exactly as valuable a
 deliverable as `color-science`'s four-way split. The method's job is to find the truth of the
 corpus's shape, not to manufacture a family because one was requested. A skill that always
 recommends splitting (or always recommends against it) has stopped running the tests and started

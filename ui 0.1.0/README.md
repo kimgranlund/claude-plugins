@@ -35,7 +35,7 @@ Cross-plugin seam (soft, by design): all three reviewer agents return through fo
 (Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action)
 when it is not — no hard preload crosses the plugin boundary.
 
-v0.9.4 · assembled 2026-07-20 · 0.9.4: ui-change-verify's NOT-for fence completed — a `plugin-decompose`
+v0.9.5 · assembled 2026-07-21 · 0.9.5: ADR-0006 color-rename sweep — every live reference to color's old member handles rewritten (description fences, eval suites, routing corpora, verify-mechanics, ui-probe.mjs's sibling script path); pointer updates only · v0.9.4 · assembled 2026-07-20 · 0.9.4: ui-change-verify's NOT-for fence completed — a `plugin-decompose`
 gap analysis of the color-verify/ui-verify family (kept no-partition; hard preload edge on
 color-verify's side, soft co-occurrence kill on ui's) found every sibling except ui-change-verify
 already named color-verify as the peer it drives live-artifact work for (focus/i18n/perf/safety-verify

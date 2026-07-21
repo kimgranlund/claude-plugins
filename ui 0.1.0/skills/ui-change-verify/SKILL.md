@@ -7,7 +7,7 @@ description: >-
   layout edit, a style change, "is this button working", "did that fix the layout", "verify this
   UI change" — or whenever about to report a frontend change complete. NOT for reasoning about a
   UI's properties in the abstract with no
-  live artifact to drive (color-verify, focus-verify, i18n-verify, perf-verify, safety-verify —
+  live artifact to drive (check-colors, focus-verify, i18n-verify, perf-verify, safety-verify —
   this skill drives what they reason about); NOT for launching the app itself (the `run` skill,
   where installed); NOT for the whole-product sweep (ui-audit).
 disable-model-invocation: false

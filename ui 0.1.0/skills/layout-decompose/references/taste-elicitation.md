@@ -52,7 +52,7 @@ artifact is the preview, the AskUserQuestion is still the decision instrument.
 
 ## The fence: measurement never asks
 
-Verify-species skills (color-verify, focus-verify, perf-verify, i18n-verify, safety-verify,
+Verify-species skills (check-colors, focus-verify, perf-verify, i18n-verify, safety-verify,
 ui-change-verify) run ask-free, always. A verifier that asks mid-measurement is laundering its
 responsibility onto the user; findings are reported, and any resulting fork belongs to the
 DESIGN-side skill that owns the fix. This fence is load-bearing: it is what separates taste
@@ -87,7 +87,7 @@ Lock (same change): DESIGN.md gains "shell: productivity-shell (ruled <date>)" a
 | layout-decompose (ui) | archetype/variant, density | DESIGN mode: after intent + constraints, before wireframe emission | project DESIGN.md ruling |
 | component-forge (ui) | API shape / variant set when the charter leaves both legal | after the API-surface and composition drafts, before geometry is realized | the component's contract card (`rulings` entry) |
 | flow-decompose (ui) | journey shape (linear wizard vs hub-and-spoke) when both machines pass | DESIGN mode: after the task inventory, before the card is written | the .flow.json card (+ a DESIGN.md line for area-wide rulings) |
-| palette-design (color) | anchor negotiation / temperature direction | at anchor negotiation, artifact-escalated (palette strips) | ramp provenance + the BrandSchema/UISchema anchor |
+| make-palette (color) | anchor negotiation / temperature direction | at anchor negotiation, artifact-escalated (palette strips) | ramp provenance + the BrandSchema/UISchema anchor |
 | typography-system-design (typography) | territory point: the brief names two live references, or none it can name | at the named-reference push-back, artifact-escalated (type specimens) | the per-voice decision doc |
 
 Cross-plugin consumers (color, typography) cite this file as "ui's layout-decompose

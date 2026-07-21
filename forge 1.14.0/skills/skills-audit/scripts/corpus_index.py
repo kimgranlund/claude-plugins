@@ -363,7 +363,7 @@ def main(argv):
     import re as _re
     VERBS = {"author","review","audit","score","evaluate","design","decompose","extract","compose",
              "build","orient","init","seed","run","advance","distill","edit","verify","refactor","grill"}
-    CRITIC = _re.compile(r"reviewer|generator ≠ critic|generator≠critic|\[\[ui-audit\]\]|\[\[color-verify\]\]|round-trip|fresh-context", _re.I)
+    CRITIC = _re.compile(r"reviewer|generator ≠ critic|generator≠critic|\[\[ui-audit\]\]|\[\[check-colors\]\]|round-trip|fresh-context", _re.I)
     print("\n-- B: bi-directionality (advisory — create↔evaluate wiring) --")
     findings = []
     for d, s in sorted(skills.items()):

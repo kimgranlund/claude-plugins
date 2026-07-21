@@ -49,7 +49,7 @@ instruments over every surface, then synthesizes the cross-cutting findings.
    probe, or hands-on) — an exit assert that fails is a gate finding. A flow you designed goes to
    the `flow-reviewer` agent (generator ≠ critic), as with layout in step 2.
 4. **Invariant pass.** Build each verifier's card — its per-surface JSON input artifact — from the
-   inventory, then run every invariant verifier: [[color-verify]] · [[focus-verify]] ·
+   inventory, then run every invariant verifier: [[check-colors]] · [[focus-verify]] ·
    [[i18n-verify]] · [[perf-verify]] · [[safety-verify]] (each description carries its own scope).
    Each has a deterministic checker — run it; a checker FAIL is a gate finding, not an opinion.
    When the app RUNS, generate the cards from rendered truth:

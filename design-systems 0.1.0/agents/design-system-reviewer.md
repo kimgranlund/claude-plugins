@@ -74,8 +74,8 @@ it is not a review.
 | The export raises | Consult |
 |---|---|
 | a claimed Material (M3) alignment | material-design-color-tokens · material-design-geometry-tokens · material-design-typography-tokens |
-| a harmony or mood judgment (does this palette read as the named world) | color-theory |
-| ramp quality, or a fill/on pair needing a full ColorProof | palette-design · color-verify |
+| a harmony or mood judgment (does this palette read as the named world) | color-theory-facts |
+| ramp quality, or a fill/on pair needing a full ColorProof | make-palette · check-colors |
 | type pairing or letterform anatomy | typography-lettering |
 | whole-product or genre-conformance context | ui-audit · ui-genres · ui-patterns |
 

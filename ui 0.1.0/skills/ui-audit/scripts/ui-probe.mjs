@@ -28,7 +28,7 @@
  * Per screen (navigate baseURL+route, network idle + bounded DOM-quiescence settle + double-rAF),
  * per scheme (prefers-color-scheme emulated; "both" runs twice):
  *
- *   <screen>.<scheme>.surface.json — color-verify card. Walks visible text nodes; per node the
+ *   <screen>.<scheme>.surface.json — check-colors card. Walks visible text nodes; per node the
  *     resolved color and the EFFECTIVE background (first non-transparent ancestor
  *     background-color, alpha composited down the chain, white canvas fallback). fg alpha is
  *     composited over that background, so every emitted pair is opaque rgb() — no "over" needed.
@@ -81,7 +81,7 @@
  * defects (16x16 icon button, rgb(119,119,119)-on-white text, an outline:none no-delta button,
  * tabindex=3, an open <dialog>, a :focus-visible-only ring, a setTimeout-delayed content swap, a
  * redirecting route), probes it headless, asserts the cards carry those facts, then pipes the
- * cards through the REAL checkers (color-verify/focus-verify, resolved as sibling skills) and
+ * cards through the REAL checkers (check-colors/focus-verify, resolved as sibling skills) and
  * asserts CONTRAST_FAIL_AA, TARGET_TOO_SMALL, NO_VISIBLE_FOCUS, POSITIVE_TABINDEX fire.
  * `--no-browser` runs only the pure-function unit checks (contrast math, color parsing —
  * including oklch()/oklab() — compositing, joinURL, routeMismatch, card assembly). No playwright
@@ -109,9 +109,9 @@ const INSTALL_GUIDANCE =
 // Modern Chromium serializes computed-style colors sourced from CSS custom properties in
 // oklch()/oklab() syntax (CSS Color 4), not always rgb() — confirmed against a real design system
 // (adia-pay/@adia-ai/web-components). Matrices ported verbatim (not re-derived) from this corpus's
-// own color-science-spaces knowledge pack:
+// own color-space-facts knowledge pack:
 //   - OKLab<->XYZ_D65 (M2^-1, M1^-1): Björn Ottosson, "A perceptual color space for image
-//     processing" (2020) — ~/.claude/skills/color-science-spaces/references/techniques/oklab-xyz-math.md
+//     processing" (2020) — ~/.claude/skills/color-space-facts/references/techniques/oklab-xyz-math.md
 //   - XYZ_D65->linear sRGB (M_XYZ_TO_SRGB) + the gamma transfer curve: IEC 61966-2-1 —
 //     ~/.claude/skills/color-science-project-files/src/spaces/srgb.ts + src/transfer/srgb.ts
 // Chain: OKLab -> (M2^-1) -> LMS' -> (cube) -> LMS -> (M1^-1) -> XYZ_D65 -> (M_XYZ_TO_SRGB) ->
@@ -268,7 +268,7 @@ export function rgbStr({ r, g, b }) {
 
 const PAIR_CAP = 80;
 
-/** Assemble a color-verify surface card from raw text-node measurements. */
+/** Assemble a check-colors surface card from raw text-node measurements. */
 export function buildSurfaceCard(screenId, scheme, raws) {
   const seen = new Map();
   let unparsed = 0;
@@ -1131,7 +1131,7 @@ async function selftest(noBrowser) {
     // --- pipe the generated cards through the REAL checkers --------------------------------
     const skillsDir = path.resolve(SCRIPT_DIR, '..', '..');
     const checkers = [
-      { py: path.join(skillsDir, 'color-verify', 'scripts', 'contrast-check.py'),
+      { py: path.join(skillsDir, 'check-colors', 'scripts', 'contrast-check.py'),
         card: path.join(outDir, 'fixture.light.surface.json'), gates: ['CONTRAST_FAIL_AA'] },
       { py: path.join(skillsDir, 'focus-verify', 'scripts', 'focus-check.py'),
         card: path.join(outDir, 'fixture.focus.json'),

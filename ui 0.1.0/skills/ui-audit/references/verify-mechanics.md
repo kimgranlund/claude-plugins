@@ -3,7 +3,7 @@
 Ruled 2026-07-16 (Issue #8; informed by the 2026-07-15 external-skill review — type specimens
 millionco/react-doctor@5915a5823, ibelick/ui-skills@ce91b8595, raphaelsalaja/skill@dc9eef22f).
 This file is the canon for the verify species — focus-verify, i18n-verify, perf-verify,
-safety-verify, ui-change-verify, this sweep, and color's color-verify (cross-plugin: cited
+safety-verify, ui-change-verify, this sweep, and color's check-colors (cross-plugin: cited
 softly, degrades to the mechanics stated inline per consumer). Consumers wire a compact
 "Family mechanics" block and cite this file; they do not restate it.
 

@@ -7,9 +7,9 @@ description: >-
   reservation, and cancellation of long-running operations — "the page feels slow even
   though the API is fast", "the layout jumps around while images load", when CLS is eroding trust, or
   streaming needs coherent presentation. NOT for contrast/palette/color-blind safety
-  (color-verify); NOT for focus order, keyboard nav, or hit-targets (focus-verify); NOT for
+  (check-colors); NOT for focus order, keyboard nav, or hit-targets (focus-verify); NOT for
   RTL/bidi/Intl/text-expansion (i18n-verify); NOT for undo/type-to-confirm or
-  audit-trail UX (safety-verify); NOT for color-space math (color-science-spaces); NOT for
+  audit-trail UX (safety-verify); NOT for color-space math (color-space-facts); NOT for
   wire latency or bundle-size; NOT for a spinner/skeleton-loader component (component-forge);
   NOT for animation duration/easing/choreography — sluggish by design, not by load
   (motion-design).

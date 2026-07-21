@@ -1,0 +1,42 @@
+{
+  "skill": "color-perception-facts",
+  "_note": "Re-derived 2026-07-06 extraction from color-science (T3). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's four axes (terminology, vision mechanics, appearance science, textbook layer). Negatives drawn adversarially from the live neighbors: color-space-facts (space-conversion math, gamut, gradients, CSS), color-contrast-facts (contrast standards, CVD), color-material-facts (pigment, print, naming), color-theory-facts (harmony/meaning/history vs. mechanism -- the big seam), check-colors (pass/fail verification of a candidate palette).",
+  "siblings_in_repo": [
+    "color-space-facts",
+    "color-contrast-facts",
+    "color-material-facts",
+    "color-theory-facts",
+    "check-colors"
+  ],
+  "positives": [
+    "explain the difference between chroma, saturation, and colorfulness in plain terms",
+    "walk me through how cones and the opponent process turn light into the sensation of color",
+    "why does a color at 100% hsl saturation not look as vivid as the same hue does in oklch",
+    "why does jpeg throw away so much color information before anyone notices",
+    "my teammate keeps saying blue and purple are both cool colors and I don't think that's actually true scientifically",
+    "two paint swatches read as basically the same color to me under one light but not under another, what's going on",
+    "what's actually happening physiologically when you stare at a bright color and then look away and see the opposite color",
+    "is there a real vision-science reason design nerds insist on 'chroma' and 'lightness' instead of just saying saturation and brightness",
+    "what does Fairchild's color appearance model actually account for that flat CIELAB coordinates don't",
+    "explain macadam ellipses and why they mattered for building uniform color spaces",
+    "what is metamerism and why do two things match under one light source but not another",
+    "give me the David Briggs explanation of what a color actually is, not the marketing version",
+    "why do some people apparently have four types of cone cells instead of three",
+    "is olo a real newly discovered color or just clickbait about a laser experiment on someone's retina"
+  ],
+  "negatives": [
+    "convert this oklch color to srgb hex for me",
+    "why does my css gradient go muddy gray in the middle, should I use oklch or lab interpolation",
+    "what's the css color-mix syntax for blending two colors in oklab",
+    "what's the conversion formula from hsl to rgb",
+    "does this button text pass wcag aa contrast against the background",
+    "simulate deuteranopia on this palette and tell me which pairs become indistinguishable",
+    "is apca or wcag 2.2 the right contrast standard to cite in our design system docs",
+    "why does mixing blue and yellow paint make green instead of the gray you get from averaging rgb values",
+    "name this hex color the way a vintage field guide like ridgway would",
+    "why does my printed brochure look duller and warmer than the screen mockup",
+    "why do complementary colors look good together on a poster",
+    "what mood does a pale muted palette communicate to users",
+    "verify this palette end to end and give me a colorproof pass/fail report"
+  ]
+}

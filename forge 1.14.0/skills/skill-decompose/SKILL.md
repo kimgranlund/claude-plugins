@@ -25,7 +25,7 @@ growing each child pack is `/pack-forge`'s (research waves per axis; `/skill-for
 child's SKILL.md surface), and the move/rewire/prove pass is a
 refactor executed by `/skill-refactor` from the validated manifest. The method below is the one the source corpus ran
 twice in one session on real packs: `color-science` (159 files) genuinely split into four
-(`color-science-spaces/-perception/-accessibility/-materials`); `color-theory` (28 files) was tested
+(`color-space-facts/-perception/-accessibility/-materials`); `color-theory-facts` (28 files) was tested
 against the identical four tests and **failed** every one — the honest answer was no-split. Both
 outcomes are correct uses of this skill; the second is not a lesser result.
 
@@ -35,16 +35,16 @@ Tests 1–3 gate whether a split is even worth pricing; test 4 prices it. A corp
 does not reach test 4 — state the no-split verdict there and stop.
 
 1. **Sizing** — the imported pack doctrine's healthy range is 3–7 retrieval axes per pack (the
-   reference instances are `ui-patterns`, hand-authored, and the `color-science-*` family,
+   reference instances are `ui-patterns`, hand-authored, and the `color-*-facts` family,
    research-wave scale). Is one entry surface actually straining — INDEX line count, load-discipline
    pressure (files >1000 lines forcing Grep-first warnings), a stated file count that has drifted
-   from the tree? `color-science` at 159 files / ~10 axes was straining; `color-theory` at 28 files
+   from the tree? `color-science` at 159 files / ~10 axes was straining; `color-theory-facts` at 28 files
    / 4 axes was not — the same size as `ui-patterns`, the source corpus's own model of a healthy
    single pack.
 2. **Ask co-occurrence** — pull the corpus's own `evals/evals.json` trigger prompts (or a legacy
    `scripts/routing-corpus.json` / `evals/task-prompts.md` if that's what it has); for each, name
    every candidate axis it actually needs to answer. If a majority need two or more, a split makes
-   cross-pack consult the *common* case — that is a kill, not a caveat. `color-theory`: 6 of 12
+   cross-pack consult the *common* case — that is a kill, not a caveat. `color-theory-facts`: 6 of 12
    positives spanned two axes ("should I use complementary colors" needs Wheel *and* Harmony
    simultaneously) — rejected. `color-science`'s 72-file compute cluster stayed unified for the
    identical reason: its files "cross-cite densely… splitting it would make cross-pack consults the
@@ -52,9 +52,9 @@ does not reach test 4 — state the no-split verdict there and stop.
 3. **Vocabulary separability** — do candidate children have orthogonal trigger tokens, or do they
    share one token field that would make sibling descriptions compete for the same words (the model
    routes on the description menu; siblings with identical vocabulary steal from each other —
-   `/eval-run`'s *stolen* failure shape, measured)? `color-science-accessibility` survived at only
+   `/eval-run`'s *stolen* failure shape, measured)? `color-contrast-facts` survived at only
    8 files because APCA/WCAG/CVD/contrast is orthogonal to its siblings' vocabulary.
-   `color-theory`'s four axes all trigger on one field — clash/harmony/wheel/mood/communicate —
+   `color-theory-facts`'s four axes all trigger on one field — clash/harmony/wheel/mood/communicate —
    entangled, not separable.
 4. **Cost ledger** — only price this once 1–3 clear. Each new child costs: a description (≤1024
    chars, the open-standard cap) with NOT-clauses fencing every sibling; a re-derived eval suite; a
@@ -104,7 +104,7 @@ Two dated, verified cases anchor this method — read in full via `references/be
 - **Split warranted:** `color-science` (159 files) → four packs sized 72/49/8/30, with two candidate
   5th packs (a `palette` cluster, a `naming` cluster) explicitly rejected for routing dilution and
   shared-file coupling.
-- **Split rejected:** `color-theory` (28 files) tested against the identical four tests and failed
+- **Split rejected:** `color-theory-facts` (28 files) tested against the identical four tests and failed
   1–3; the one arguable seam (wheel/history, the axis with the crispest independent vocabulary) was
   still rejected because the flagship ask spans it.
 
@@ -115,15 +115,15 @@ Two dated, verified cases anchor this method — read in full via `references/be
   "source_corpus": { "path": "skills/color-science", "total_files": 159 },
   "verdict": "split",                                    // "split" | "no-split" | "partial"
   "packs": [
-    { "name": "color-science-spaces", "files": ["references/techniques/oklab-xyz-math.md", "..."],
+    { "name": "color-space-facts", "files": ["references/techniques/oklab-xyz-math.md", "..."],
       "axes": ["spaces & conversions", "gamut & interpolation", "..."],
       "description": "...", "invocation_posture": "default" }
   ],
   "rejected_alternatives": [
-    { "candidate": "color-science-palettes", "reason": "seam cuts through interpolation files shared with spaces; routing dilution against palette-design" }
+    { "candidate": "color-science-palettes", "reason": "seam cuts through interpolation files shared with spaces; routing dilution against make-palette" }
   ],
   "referrer_repair_map": [
-    { "file": "skills/color-verify/SKILL.md", "line": 3, "old": "color-science", "new": "color-science-spaces" }
+    { "file": "skills/check-colors/SKILL.md", "line": 3, "old": "color-science", "new": "color-space-facts" }
   ]
 }
 ```

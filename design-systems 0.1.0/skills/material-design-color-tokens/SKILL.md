@@ -10,7 +10,7 @@ description: >
   a legal bg, per-surface role maps. Never guess a hex or raw stop. NOT for type/font/weight
   (material-design-typography-tokens); NOT for radius/spacing/density (material-design-geometry-tokens);
   NOT for the default `--c-*` grammar (`color-tokens`); NOT for designing or verifying a palette
-  (palette-design / color-verify); NOT for color-space math (color-science-spaces); NOT for motion
+  (make-palette / check-colors); NOT for color-space math (color-space-facts); NOT for motion
   easing/duration (material-design-motion-tokens).
 disable-model-invocation: false
 user-invocable: false

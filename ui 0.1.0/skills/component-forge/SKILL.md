@@ -10,7 +10,7 @@ description: >-
   Compose-then-Realize, machine-checked. NOT for ui-* controls in agent-ui — "add a ui-button"
   (that repo's own build seat); NOT for app shells (layout-decompose); NOT for naming a UI
   pattern (ui-patterns); NOT for feature/system decomposition (system-decompose); NOT for color
-  ramps (palette-design); NOT for nested-surface radius/spacing composition — "what radius on
+  ramps (make-palette); NOT for nested-surface radius/spacing composition — "what radius on
   the inner card" (geometry-systems); NOT for grading a component you didn't author
   (component-reviewer).
 disable-model-invocation: false
