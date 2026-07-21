@@ -56,9 +56,10 @@ three-point regression.
 
 ## The run mechanics (what a re-measure round is)
 
-Union menu built from the merged plugin's live descriptions; all suites' cases shuffled with a
-fixed seed, expectation-stripped, split across ~5 `routing-judge` agents (blind: menu + prompts
-inline, no tools); answers extracted and scored per-suite against the source plugins' measured
-baselines as floors. One full round per heal wave — description edits change the menu every suite
-sees, so partial re-runs are not parity evidence. Full trail: PR #73's parity comment and the
-design plugin's v1.0.0 ledger line.
+The base procedure is `check-routing`'s (Phases 2–4: menu from live descriptions,
+expectation-stripped shuffled prompts, blind no-tools judges) — consult it there, including its
+answer-count clause; this file adds only the merge deltas: the menu is the merged plugin's UNION;
+all suites' cases pool into one fixed-seed shuffle split across ~5 judges; scoring floors are the
+SOURCE plugins' measured baselines; and one FULL round per heal wave — description edits change
+the menu every suite sees, so partial re-runs are not parity evidence. Full trail: PR #73's
+parity comment and the design plugin's v1.0.0 ledger line.
