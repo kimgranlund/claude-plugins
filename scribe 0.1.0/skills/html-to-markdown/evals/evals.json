@@ -1,106 +1,106 @@
 {
-  "skill": "html-to-markdown",
-  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from markdown-to-markup (the inverse), reference-forge, llms-txt-forge, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, rubric-forge.",
-  "cases": [
-    {
-      "id": "t01",
-      "prompt": "convert this HTML to markdown",
-      "expect": "trigger"
-    },
-    {
-      "id": "t02",
-      "prompt": "turn this rendered page into markdown source",
-      "expect": "trigger"
-    },
-    {
-      "id": "t03",
-      "prompt": "make markdown from this HTML fragment",
-      "expect": "trigger"
-    },
-    {
-      "id": "t04",
-      "prompt": "transcribe this rendered fragment back to markdown source",
-      "expect": "trigger"
-    },
-    {
-      "id": "t05",
-      "prompt": "bring this HTML content into our markdown corpus",
-      "expect": "trigger"
-    },
-    {
-      "id": "t06",
-      "prompt": "strip the presentational markup and give me clean markdown for this snippet",
-      "expect": "trigger"
-    },
-    {
-      "id": "t07",
-      "prompt": "why does my converted markdown keep stray divs and class attributes",
-      "expect": "trigger"
-    },
-    {
-      "id": "t08",
-      "prompt": "after converting the page, literal asterisks in the text became emphasis",
-      "expect": "trigger"
-    },
-    {
-      "id": "t09",
-      "prompt": "the markdown I produced from this HTML re-renders with the wrong headings",
-      "expect": "trigger"
-    },
-    {
-      "id": "t10",
-      "prompt": "produce the markdown source that a renderer would turn back into this HTML",
-      "expect": "trigger"
-    },
-    {
-      "id": "n01",
-      "prompt": "render this markdown onto the page",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n02",
-      "prompt": "the backticks and stars show up literally in the rendered doc",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n03",
-      "prompt": "add bold and links to the doc renderer",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n04",
-      "prompt": "fix markdown that shows as literal characters on the docs page",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n05",
-      "prompt": "write a reference doc for this skill's references folder",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n06",
-      "prompt": "audit our docs for drift",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n07",
-      "prompt": "build an llms.txt docs index for the site",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n08",
-      "prompt": "turn this research into a knowledge pack",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n09",
-      "prompt": "sharpen this prompt so the model actually obeys it",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n10",
-      "prompt": "write a rubric for scoring doc quality",
-      "expect": "no-trigger"
-    }
-  ]
+ "skill": "html-to-markdown",
+ "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from markdown-to-markup (the inverse), make-reference, make-llms-txt, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, make-rubric. 2026-07-21 (ADR-0006 docs re-measure): the conversion-twins seam flipped in the post-rename run despite neither description changing \u2014 html-to-markdown t07/t08/t09 (converted-output defects) stolen by markdown-to-markup, and markdown-to-markup t09 (innerHTML injection) dead. Both sides healed with verbatims: converted-output defects claimed by html-to-markdown + fenced by the renderer; the injection phrasing added as an explicit trigger.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "convert this HTML to markdown",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "turn this rendered page into markdown source",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "make markdown from this HTML fragment",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "transcribe this rendered fragment back to markdown source",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "bring this HTML content into our markdown corpus",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "strip the presentational markup and give me clean markdown for this snippet",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "why does my converted markdown keep stray divs and class attributes",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "after converting the page, literal asterisks in the text became emphasis",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "the markdown I produced from this HTML re-renders with the wrong headings",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "produce the markdown source that a renderer would turn back into this HTML",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "render this markdown onto the page",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "the backticks and stars show up literally in the rendered doc",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "add bold and links to the doc renderer",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "fix markdown that shows as literal characters on the docs page",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "write a reference doc for this skill's references folder",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "audit our docs for drift",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "build an llms.txt docs index for the site",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "turn this research into a knowledge pack",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n09",
+   "prompt": "sharpen this prompt so the model actually obeys it",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n10",
+   "prompt": "write a rubric for scoring doc quality",
+   "expect": "no-trigger"
+  }
+ ]
 }

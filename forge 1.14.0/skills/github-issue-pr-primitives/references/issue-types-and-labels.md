@@ -7,7 +7,7 @@
 current, stable, and available by default — not a beta feature to hedge against.
 
 [verified, docs.github.com, 2026-07-17] Every organization gets three default types out of the
-box: **Task, Bug, Feature** — the exact three shapes this workspace's own `bug-report`/`feature`/
+box: **Task, Bug, Feature** — the exact three shapes this workspace's own `file-bug`/`feature`/
 `issue` skill family already routes work into by name. Organizations can rename/recolor these and
 add up to 25 total types.
 

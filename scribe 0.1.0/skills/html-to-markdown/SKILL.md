@@ -6,6 +6,9 @@ description: >
   will consume ("convert this HTML to markdown", "turn this page into markdown source", "make markdown
   from this fragment") — map semantic elements to markdown syntax (headings, strong/em, code/pre, links,
   lists, blockquotes), drop presentational markup, and escape text that would otherwise read as markdown.
+  Also owns defects in markdown a CONVERSION produced — "my converted markdown keeps stray divs and
+  class attributes", "literal asterisks became emphasis after converting", "the markdown I produced
+  re-renders with the wrong headings" — the conversion's fault even when it shows at render time.
   NOT for rendering markdown onto the page or into the DOM, or extending the doc renderer with
   bold/links/italics (markdown-to-markup).
 disable-model-invocation: false

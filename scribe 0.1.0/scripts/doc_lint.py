@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""doc_lint — structural validation for functional documents (the scribe plugin's check tier).
+"""doc_lint — structural validation for functional documents (the docs plugin's check tier).
 
 Usage:
   doc_lint.py <file.md> [...]      lint documents (files without `doc-type:` frontmatter are skipped)
@@ -136,7 +136,7 @@ def hook_mode():
 
 
 def selftest():
-    tpl_dir = Path(__file__).resolve().parent.parent / "skills" / "doc-authoring-standards" / "references" / "templates"
+    tpl_dir = Path(__file__).resolve().parent.parent / "skills" / "doc-writing-rules" / "references" / "templates"
     for tpl in sorted(tpl_dir.glob("*.md")):
         text = tpl.read_text().replace("YYYY-MM-DD", "2026-07-07")
         fs = [f for f in (lint_text(text) or []) if f[0] == "FAIL"]

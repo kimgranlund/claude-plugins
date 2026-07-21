@@ -11,7 +11,7 @@ description: >-
   capturing this decision before we write". NOT authoring content once confirmed (pack-forge);
   NOT a new skill's decomposition (system-decompose); NOT running gates directly (release_gate.py,
   /eval-run); NOT the decision record itself — an ADR IS a decision, this decides whether a fact
-  FROM one earns a knowledge-pack entry (doc-authoring-standards).
+  FROM one earns a knowledge-pack entry (doc-writing-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

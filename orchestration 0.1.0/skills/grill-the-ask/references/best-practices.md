@@ -20,7 +20,7 @@
   scope pulls in the stateful-composite + sequencing forks; a chosen mechanism closes some forks and
   opens others. The cascade *is* the method.
 - **Synthesize across both planes.** End on a Ratified Design that names decisions on Structural **and**
-  Mechanism, ready to hand to `system-decompose` / scribe's `doc-forge` (`doc-authoring-standards`).
+  Mechanism, ready to hand to `system-decompose` / docs' `make-doc` (`doc-writing-rules`).
 
 ## Don't
 

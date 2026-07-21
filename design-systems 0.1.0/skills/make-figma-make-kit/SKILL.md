@@ -128,7 +128,7 @@ leaves) · all fill/on pairs ≥ 4.5:1 in both schemes · scheme parity · runti
 the `color-scheme` trap · states as values · hard rules present · carrier equality when
 `--compare` names a sibling export (UNMEASURED otherwise — recorded, never laundered
 into a pass). `selftest` proves the checks fire. **Generator ≠ critic:** for a shipping
-kit, dispatch the independent design-kit-checker seat (or doc-reviewer bound to
+kit, dispatch the independent design-kit-checker seat (or doc-checker bound to
 `references/rubric.md`) — don't bless a folder you just wrote in the same pass.
 
 ## References & composition

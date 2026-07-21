@@ -1,106 +1,106 @@
 {
-  "skill": "markdown-to-markup",
-  "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), reference-forge, llms-txt-forge, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, rubric-forge.",
-  "cases": [
-    {
-      "id": "t01",
-      "prompt": "render this markdown",
-      "expect": "trigger"
-    },
-    {
-      "id": "t02",
-      "prompt": "render the docs prose markdown onto the page",
-      "expect": "trigger"
-    },
-    {
-      "id": "t03",
-      "prompt": "add bold and links and italics to the doc renderer",
-      "expect": "trigger"
-    },
-    {
-      "id": "t04",
-      "prompt": "extend the markdown renderer with a new inline form",
-      "expect": "trigger"
-    },
-    {
-      "id": "t05",
-      "prompt": "the backticks show up literally on the docs page",
-      "expect": "trigger"
-    },
-    {
-      "id": "t06",
-      "prompt": "why do the stars render as literal characters instead of bold",
-      "expect": "trigger"
-    },
-    {
-      "id": "t07",
-      "prompt": "our fenced code blocks display as raw backtick fences",
-      "expect": "trigger"
-    },
-    {
-      "id": "t08",
-      "prompt": "italics in the changelog display as literal underscores",
-      "expect": "trigger"
-    },
-    {
-      "id": "t09",
-      "prompt": "is this markdown rendering safe from injection, it uses innerHTML",
-      "expect": "trigger"
-    },
-    {
-      "id": "t10",
-      "prompt": "turn markdown source into DOM elements safely",
-      "expect": "trigger"
-    },
-    {
-      "id": "n01",
-      "prompt": "convert this HTML to markdown",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n02",
-      "prompt": "turn this page into markdown source",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n03",
-      "prompt": "transcribe this rendered fragment back into markdown",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n04",
-      "prompt": "bring this HTML content into the markdown corpus",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n05",
-      "prompt": "escape the markdown special characters in this converted text",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n06",
-      "prompt": "write a reference doc for the knowledge folder",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n07",
-      "prompt": "audit the docs for drift",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n08",
-      "prompt": "build an llms.txt index for our docs",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n09",
-      "prompt": "make a knowledge pack from this research",
-      "expect": "no-trigger"
-    },
-    {
-      "id": "n10",
-      "prompt": "harden this prompt's language so it drives behavior",
-      "expect": "no-trigger"
-    }
-  ]
+ "skill": "markdown-to-markup",
+ "note": "Converted from the legacy personal-corpus scripts/routing-corpus.json (positives/negatives) during the measure/markdown-render/knowledge-docs fold-in, 2026-07-07. Deep-review corpus (excellence batch 4). Positives: imperative/diagnostic/symptom/indirect. Negatives adversarial from html-to-markdown (the inverse), make-reference, make-llms-txt, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), linguistic-techniques, make-rubric. 2026-07-21 (ADR-0006 docs re-measure): the conversion-twins seam flipped in the post-rename run despite neither description changing \u2014 html-to-markdown t07/t08/t09 (converted-output defects) stolen by markdown-to-markup, and markdown-to-markup t09 (innerHTML injection) dead. Both sides healed with verbatims: converted-output defects claimed by html-to-markdown + fenced by the renderer; the injection phrasing added as an explicit trigger.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "render this markdown",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "render the docs prose markdown onto the page",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "add bold and links and italics to the doc renderer",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "extend the markdown renderer with a new inline form",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "the backticks show up literally on the docs page",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "why do the stars render as literal characters instead of bold",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "our fenced code blocks display as raw backtick fences",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "italics in the changelog display as literal underscores",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "is this markdown rendering safe from injection, it uses innerHTML",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "turn markdown source into DOM elements safely",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "convert this HTML to markdown",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "turn this page into markdown source",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "transcribe this rendered fragment back into markdown",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "bring this HTML content into the markdown corpus",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "escape the markdown special characters in this converted text",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "write a reference doc for the knowledge folder",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "audit the docs for drift",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "build an llms.txt index for our docs",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n09",
+   "prompt": "make a knowledge pack from this research",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n10",
+   "prompt": "harden this prompt's language so it drives behavior",
+   "expect": "no-trigger"
+  }
+ ]
 }

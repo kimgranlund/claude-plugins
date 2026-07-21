@@ -10,7 +10,7 @@ For the next agent/session opening this repo. Contract: forge's `handoff-compose
   versioned `system-decompose` manifests, built a new grounded knowledge pack
   (`forge:github-issue-pr-primitives`, real dated web research, forge bumped 1.31.0→1.33.0), and
   authored two new standing agents (`ops-issues`, `ops-repo`) implementing the SPECs — each passed
-  independent fresh-context review (doc-reviewer ×3, skill-auditor, linguistics-reviewer,
+  independent fresh-context review (doc-checker ×3, skill-auditor, linguistics-reviewer,
   agent-reviewer ×2) with real findings caught and fixed, not rubber-stamped. Wired scheduling
   last: `ops-issues` as an hourly cloud routine, `ops-repo` as a session-scoped local cron.
 
@@ -39,16 +39,16 @@ For the next agent/session opening this repo. Contract: forge's `handoff-compose
   nodes · 20 actions · 34 hosts · 12 edges). `doc_lint.py` on ADR-0003 + both SPECs → pass, clean
   ×3. `agent_corpus_index.py selftest` → ran mid-session (caught the preload bug below); folded
   into the clean release_gate pass above, not re-run standalone after. Independent reviews (all
-  dispatched, all findings applied, none skipped): `doc-reviewer` ×3, `skill-auditor` +
+  dispatched, all findings applied, none skipped): `doc-checker` ×3, `skill-auditor` +
   `linguistics-reviewer` on the knowledge pack, `agent-reviewer` ×2 on the two agents — pass, all
   fixed. `RemoteTrigger action:"run"` smoke test on the `ops-issues` cloud routine → UNMEASURED,
   fired but no tool here can read the cloud session's result.
 
 - **Evidence** — ADR-0003 frontmatter: `status: accepted`,
   `ratified: 2026-07-17 (maintainer, in-session AskUserQuestion — two rulings, one session; a
-  post-ratification doc-review pass then fixed wording/factual errors only...)`. The
+  post-ratification check-doc pass then fixed wording/factual errors only...)`. The
   `agent_corpus_index.py` reverse-control caught a real bug: `ops-issues.md`'s first draft
-  preloaded scribe's `doc-authoring-standards` in `skills:` — a hard cross-plugin preload
+  preloaded docs' `doc-writing-rules` in `skills:` — a hard cross-plugin preload
   violation (this workspace's own invariant: preloads are plugin-hard, mentions are plugin-soft);
   fixed by dropping the preload and stating the needed TICKET shape inline (`ops-issues.md`,
   Scope section). `ops-repo.md`'s first draft claimed `campaign_close.py` "discards the worktree" —

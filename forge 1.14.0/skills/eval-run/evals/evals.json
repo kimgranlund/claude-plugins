@@ -13,7 +13,7 @@
     { "id": "t09", "prompt": "Blind-judge the routing for these suites.", "expect": "trigger" },
     { "id": "n01", "prompt": "Add a no-trigger case to this suite.", "expect": "no-trigger", "comment": "owner: skill-authoring-standards — suite conventions" },
     { "id": "n02", "prompt": "Why won't my skill trigger even though it's installed?", "expect": "no-trigger", "comment": "owner: skill-authoring-standards — live trigger debugging" },
-    { "id": "n03", "prompt": "Run the release gate on scribe.", "expect": "no-trigger", "comment": "owner: plugin-release (command, off-menu) / direct script run — accepted-leak class if a standards sibling wins" },
+    { "id": "n03", "prompt": "Run the release gate on docs.", "expect": "no-trigger", "comment": "owner: plugin-release (command, off-menu) / direct script run — accepted-leak class if a standards sibling wins" },
     { "id": "n04", "prompt": "Review this skill and score it.", "expect": "no-trigger", "comment": "owner: skill-review" },
     { "id": "n05", "prompt": "Write trigger evals for my new skill.", "expect": "no-trigger", "comment": "owner: skill-authoring-standards / skill-forge Phase 2" },
     { "id": "n06", "prompt": "Audit my whole harness.", "expect": "no-trigger", "comment": "owner: harness-audit (command, off-menu) — accepted-leak class" }

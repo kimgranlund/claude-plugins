@@ -10,9 +10,9 @@ description: >-
   open; draft-PR/review/CODEOWNERS/required-checks/merge-queue; Projects v2's GraphQL-only
   structure. NOT this workspace's OWN git
   worktree/merge/campaign mechanics (`git-campaign-workflows`); NOT the TICKET/ADR/SPEC contract
-  (scribe's `doc-authoring-standards`); NOT deciding — "should this repo use a git-native or local
+  (docs' `doc-writing-rules`); NOT deciding — "should this repo use a git-native or local
   ticketing backend" — states facts a future ADR cites, never decides; NOT filing/closing a
-  work item (`bug-report`/`feature`/`issue`, scribe).
+  work item (`file-bug`/`file-feature`/`file-task`, docs).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -21,7 +21,7 @@ user-invocable: false
 
 Every claim below traces to GitHub's own documentation or changelog, grounded 2026-07-17 —
 grounding markers per `sources.md` (`[verified]` / `[inferred]` / `[drift-prone]` /
-`[unconfirmed]`). This pack exists because this workspace's own ADR-0002 and doc-authoring-standards
+`[unconfirmed]`). This pack exists because this workspace's own ADR-0002 and doc-writing-rules
 built a whole git-native ticketing convention on GitHub behavior that stayed unchecked against the
 platform's real, current feature set — the same class of gap a 2026-07-17 fresh-context review
 caught twice on a *different* platform (Linear, in the sibling `spec-linear-adapter`). The unit is
@@ -81,13 +81,13 @@ assumed facts about that platform turned out wrong.
   (same plugin, forge) — a disjoint pack; that one cites this workspace's own dated incidents, this
   one cites GitHub's platform docs. Neither restates the other's territory.
 - **This workspace's TICKET/ADR/SPEC document contract** (frontmatter, mutability classes, required
-  sections) → scribe's `doc-authoring-standards` — a different layer entirely (our document
+  sections) → docs' `doc-writing-rules` — a different layer entirely (our document
   convention vs. GitHub's platform primitives).
 - **Deciding whether to adopt Issue Types, sub-issues, or Issue Fields** → a future ADR, citing this
   pack's `bug-task-feature-mapping-nuances.md` findings — this pack states the platform fact, it
-  does not ratify a change to ADR-0002 or doc-authoring-standards.
-- **Actually filing, triaging, resuming, or closing a work item** → scribe's
-  `bug-report`/`feature`/`issue` skills, or the `ops-issues` agent (same plugin) for
+  does not ratify a change to ADR-0002 or doc-writing-rules.
+- **Actually filing, triaging, resuming, or closing a work item** → docs'
+  `file-bug`/`file-feature`/`file-task` skills, or the `ops-issues` agent (same plugin) for
   unattended intake — this pack is consulted BY those, it does not perform their job.
 
 ## Extending this pack

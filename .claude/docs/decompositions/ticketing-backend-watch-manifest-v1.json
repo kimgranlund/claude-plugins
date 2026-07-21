@@ -2,21 +2,21 @@
   "domain": "technical-architecture",
   "plan": false,
   "_meta": {
-    "subject": "Ticketing/issue-management architecture — generalize the binary file-vs-git backend seam (ADR-0002) shared by scribe's bug-report/feature/issue skills into a 3-way backend choice (local / git / external), and add push-mode entry (watch + triage + trust gate) for backends where external actors can file items nobody in this workspace typed",
+    "subject": "Ticketing/issue-management architecture — generalize the binary file-vs-git backend seam (ADR-0002) shared by docs' file-bug/feature/issue skills into a 3-way backend choice (local / git / external), and add push-mode entry (watch + triage + trust gate) for backends where external actors can file items nobody in this workspace typed",
     "date": "2026-07-17",
     "prior_art": [
       "ADR-0002 — git-native execution ruling (Issues as work-item canon, PRs as merge gate) — the existing binary backend precedent this generalizes",
-      "doc-authoring-standards' Phase-0 backend seam, shared verbatim by scribe's bug-report/feature/issue skills",
-      "the issue skill's Phase 2 shape-routing (defect -> bug-report, feature idea -> feature, generic remainder -> task) — reused by the triage classifier",
+      "doc-writing-rules' Phase-0 backend seam, shared verbatim by docs' file-bug/feature/issue skills",
+      "the issue skill's Phase 2 shape-routing (defect -> file-bug, feature idea -> feature, generic remainder -> task) — reused by the triage classifier",
       "teamwork's loop-rules (autonomous continuation patterns: /goal, /loop, Stop hooks) — the mechanism the watch loop is built from",
-      "the 2026-07-17 /scribe:issue seed asking for an AskUserQuestion-driven repo setup: polling or MCP watch, known-friendly auto-accept, unknown-author approval growing an allow-list"
+      "the 2026-07-17 /docs:issue seed asking for an AskUserQuestion-driven repo setup: polling or MCP watch, known-friendly auto-accept, unknown-author approval growing an allow-list"
     ]
   },
   "nodes": [
-    { "id": "n0", "label": "ticketing/issue-management system (cross-plugin: scribe capture skills + forge entry-file ruling + orchestration watch loop)", "leaf": false },
+    { "id": "n0", "label": "ticketing/issue-management system (cross-plugin: docs capture skills + forge entry-file ruling + orchestration watch loop)", "leaf": false },
 
     { "id": "n1", "label": "backend adapter layer", "leaf": false },
-    { "id": "n1a", "label": "local-file adapter (docs/tickets/ TICKET files via doc-forge)", "leaf": true },
+    { "id": "n1a", "label": "local-file adapter (docs/tickets/ TICKET files via make-doc)", "leaf": true },
     { "id": "n1b", "label": "git-native adapter (gh issue / PR)", "leaf": true },
     { "id": "n1c", "label": "external adapter interface (Linear/Jira/Notion/custom via MCP or REST) — a typed contract; concrete third-party implementations are repo-specific and out of this pack's scope", "leaf": true },
     { "id": "n1d", "label": "backend resolver — reads the repo's entry-file ruling and returns the active adapter to any caller", "leaf": true },
@@ -26,7 +26,7 @@
     { "id": "n2b", "label": "entry-mode chooser — pull-only vs watch-enabled (offered only when backend is B or C) plus, when watch is chosen, the watch mechanism (polling interval vs MCP subscription)", "leaf": true },
     { "id": "n2c", "label": "ruling writer — persists the backend + entry-mode choice into the entry file (CLAUDE.md routing-table row, ADR-0002-style) plus any adapter/watch config", "leaf": true },
 
-    { "id": "n3", "label": "on-demand capture (existing: bug-report/feature/issue skills)", "leaf": false },
+    { "id": "n3", "label": "on-demand capture (existing: file-bug/feature/issue skills)", "leaf": false },
     { "id": "n3a", "label": "capture skills' Phase 0-4 logic — mint or resume a record via the resolved backend adapter; existing behavior, only its Phase-0 backend-selection call changes from the binary check to the resolver", "leaf": true },
 
     { "id": "n4", "label": "watch/triage (relevant only when entry-mode = watch, backend B/C)", "leaf": false },

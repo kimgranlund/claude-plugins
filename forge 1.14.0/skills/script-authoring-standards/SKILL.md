@@ -10,7 +10,7 @@ description: >-
   arithmetic-not-judgment boundary. NOT for authoring the script through the gated workflow
   (script-forge); NOT for event-fired enforcement or hooks.json (hook-authoring-standards); NOT
   for the SKILL.md that calls the script (skill-authoring-standards); NOT for directly executing
-  a script — "run the release gate on scribe" just runs it, no standards question asked. Verified
+  a script — "run the release gate on docs" just runs it, no standards question asked. Verified
   gate semantics (July 2026).
 disable-model-invocation: false
 user-invocable: false

@@ -1,0 +1,105 @@
+{
+  "skill": "make-doc",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere. Minted 2026-07-18 when make-doc converted from command species to procedural species (disable-model-invocation: true -> false) — closing the gap where check-doc, file-bug, feature, and issue already fenced 'NOT for drafting/other document types (make-doc)' but make-doc itself was invisible to auto-discovery. Positives drawn from the exact near-miss prompts doc-writing-rules, feature, and grill-the-ask's own suites already reserve for make-doc. Negatives are those siblings' own trigger territory, adversarially reused here.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "write the PRD for this feature",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "draft an ADR about the database choice",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "author a new SPEC for this system directly",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "write a PRD for the payments product",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "author the LLD for the already-settled design",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "spec out the checkout flow",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "write the PLAN for this migration",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "start a ROADMAP for next quarter",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "record this decision as an ADR",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "which document type should this be, a spec or a PRD",
+      "expect": "no-trigger",
+      "note": "doc-writing-rules — asking the rules, not drafting"
+    },
+    {
+      "id": "n02",
+      "prompt": "review this spec",
+      "expect": "no-trigger",
+      "note": "check-doc"
+    },
+    {
+      "id": "n03",
+      "prompt": "can I edit an accepted ADR",
+      "expect": "no-trigger",
+      "note": "doc-writing-rules"
+    },
+    {
+      "id": "n04",
+      "prompt": "can we add a dark mode",
+      "expect": "no-trigger",
+      "note": "feature"
+    },
+    {
+      "id": "n05",
+      "prompt": "the export button does nothing on Safari",
+      "expect": "no-trigger",
+      "note": "file-bug"
+    },
+    {
+      "id": "n06",
+      "prompt": "note this down as a follow-up",
+      "expect": "no-trigger",
+      "note": "issue"
+    },
+    {
+      "id": "n07",
+      "prompt": "grill me on the design - nothing is decided yet",
+      "expect": "no-trigger",
+      "note": "grill-the-ask — before any document exists"
+    },
+    {
+      "id": "n08",
+      "prompt": "align this repo's scattered docs into the canonical layout",
+      "expect": "no-trigger",
+      "note": "tidy-docs"
+    },
+    {
+      "id": "n09",
+      "prompt": "extract the root intent behind this idea",
+      "expect": "no-trigger",
+      "note": "intent-extract (forge)"
+    }
+  ]
+}

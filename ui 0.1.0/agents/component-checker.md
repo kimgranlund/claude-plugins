@@ -9,7 +9,7 @@ description: >-
   component's definition-of-done, before it ships, and whenever someone asks to "review this
   component", "is this component ready to ship", "grade this button's anatomy and API", or "check
   this component's geometry and contract fidelity before merging". NOT for a whole screen or shell (layout-checker), a
-  cross-screen flow (flow-checker), a non-UI document (doc-reviewer), or a non-component code
+  cross-screen flow (flow-checker), a non-UI document (doc-checker), or a non-component code
   change or diff (code-checker); NOT for building or
   authoring a component (make-component owns that build, this agent only grades it).
 tools: Read, Grep, Glob, Bash

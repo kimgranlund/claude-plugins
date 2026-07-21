@@ -115,7 +115,7 @@ Claims against the standard: … (or none) · Portfolio: KEEP|MERGE|SPLIT|RETIRE
 | `agents-audit` | The sibling estate: agent definitions, preload graph, team shape — same plugin |
 | `linguistic-techniques` | L scoring — dispatch `linguistics-reviewer` per skill, same plugin |
 | `team-or-solo-rules` | P framing — static vs dynamic wiring, descriptions as connective tissue — lives in the `teamwork` plugin |
-| `rubric-forge` | Author / score / repair this skill's own rubrics — lives in `scribe` |
+| `make-rubric` | Author / score / repair this skill's own rubrics — lives in `docs` |
 
 ## Failure branches
 

@@ -7,8 +7,8 @@ description: >-
   unrepresentative example — a static check cannot catch. Use PROACTIVELY when a DOCUMENTED SURFACE ships or
   changes (the API/spec/pages the site derives from), or when the docs have fallen behind what they
   document. NOT for changes touching no documented surface — no dispatch. NOT for reviewing a
-  PRD/SPEC/LLD/ADR/reference doc for rubric readiness (doc-reviewer); NOT for an agent-facing
-  knowledge/reference doc, e.g. a skill's references/ file (reference-forge).
+  PRD/SPEC/LLD/ADR/reference doc for rubric readiness (doc-checker); NOT for an agent-facing
+  knowledge/reference doc, e.g. a skill's references/ file (make-reference).
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 effort: high

@@ -68,8 +68,8 @@ simpler tier for a routine dispatch — happens at dispatch time, never by editi
   steps below its row's floor.
 - **Review / hard-bug analysis** — scoring against a rubric, weighing severity, deciding a
   portfolio verdict, root-causing a resistant defect → `fable` + `high`, guaranteed, never
-  downgraded. The estate's critic seats (`*-reviewer`, `skill-auditor`, `doc-reviewer`,
-  `researcher`) pin the row explicitly — a verdict must not depend on the caller's tier, so
+  downgraded. The estate's critic seats (`*-reviewer`, `skill-auditor`, `doc-checker`,
+  `experiment-runner`) pin the row explicitly — a verdict must not depend on the caller's tier, so
   `inherit` is reserved for the rare seat that *means* to ride the session.
 - **Coding / execution** — implementing an approved plan (technical decisions, edge cases, no
   adversarial stance toward its own output): `opus` + `xhigh` is the ceiling (`builder`);

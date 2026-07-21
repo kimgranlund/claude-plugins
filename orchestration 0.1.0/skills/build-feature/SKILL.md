@@ -1,15 +1,15 @@
 ---
 name: build
 description: >-
-  Build a feature from its durable record — and when no record exists yet, run the /feature
-  intake first (scribe, where installed; its discipline inline otherwise), THEN build. The
-  momentum half of the intake/build-feature pair: /feature records and stops; /build-feature guarantees a record
+  Build a feature from its durable record — and when no record exists yet, run the /file-feature
+  intake first (docs, where installed; its discipline inline otherwise), THEN build. The
+  momentum half of the intake/build-feature pair: /file-feature records and stops; /build-feature guarantees a record
   exists, sizes the dispatch by the solo-first floors, and drives it under a mandatory Findings
   write-back contract. Run /build-feature [what to build, or a TKT- id], e.g. "/build-feature a calculator" or
   "/build-feature TKT-0042". Small work → the host builds inline or one sealed fork; big work → the
   planning/execution seats (planner/builder/code-checker) sized by their own
-  floors. NOT for pure intake with no build intended (/feature, scribe); NOT for bug
-  investigation (bug-report, scribe); NOT for deciding subagent-vs-team in the abstract
+  floors. NOT for pure intake with no build intended (/file-feature, docs); NOT for bug
+  investigation (file-bug, docs); NOT for deciding subagent-vs-team in the abstract
   (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
@@ -18,7 +18,7 @@ argument-hint: "[what to build, or an existing TKT- id]"
 
 # build — no record, no build; a record, then momentum
 
-The dispatch half of the `/feature` pair. `/feature` ends at a record; `/build-feature` starts from one —
+The dispatch half of the `/file-feature` pair. `/file-feature` ends at a record; `/build-feature` starts from one —
 minting it first when it doesn't exist — and ends at shipped work with the record's `## Findings`
 carrying the evidence. Seed: `$ARGUMENTS`.
 
@@ -26,19 +26,19 @@ carrying the evidence. Seed: `$ARGUMENTS`.
 
 - `$ARGUMENTS` is a resolvable `TKT-####` → that's the record — branch on its STATE first:
   `done`/`wontfix` → report the closed state and stop (reopening is the user's call);
-  `kind: bug` → this is bug-report's work, hand it over; otherwise read Size/Scope/Links and
+  `kind: bug` → this is file-bug's work, hand it over; otherwise read Size/Scope/Links and
   continue.
-- Otherwise sweep the three surfaces `/feature`'s dedup names — records (`docs/tickets/`,
+- Otherwise sweep the three surfaces `/file-feature`'s dedup names — records (`docs/tickets/`,
   ROADMAP/PLAN), the codebase, and existing docs/corpora: a queued match → build from it; an already-shipped match → report where
   it lives and stop.
-- **No match → run the full `/feature` intake first** (scribe, where installed — its opt-in
+- **No match → run the full `/file-feature` intake first** (docs, where installed — its opt-in
   project-docs index offer rides along; apply its phases inline where not: extract → dedup →
-  size/shape → lint-clean `kind: feature` ticket, no index offer without scribe's template). The record
+  size/shape → lint-clean `kind: feature` ticket, no index offer without docs' template). The record
   exists on disk before any build effort is spent — ticket-first is the entire loss-window fix,
   and it does not move.
 
 A record whose Shape is knowledge (routed to reference/corpus work at intake) is not built
-here — report that routing and stop; scribe's seats own it.
+here — report that routing and stop; docs' seats own it.
 
 ## Phase 2 — Size the dispatch (solo-first)
 
@@ -74,7 +74,7 @@ was owed.
 ## Failure branches
 
 - Ambiguous match in Phase 1 (two plausible records) → ask which, one question, then proceed.
-- The ask is bug-shaped → `bug-report` (scribe), not a feature build.
+- The ask is bug-shaped → `file-bug` (docs), not a feature build.
 - Build blocked mid-flight by a discovered design fork → escalate to the record (a dated Findings
   entry naming the fork) and, for big work, back to planner — never silently edit the
   contract.

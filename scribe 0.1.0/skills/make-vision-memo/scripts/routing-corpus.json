@@ -1,0 +1,33 @@
+{
+ "skill": "make-vision-memo",
+ "_note": "Routing corpus for make-vision-memo. Positives span the four archetypes (manifesto / reframe / case-for / synthesis) plus the 'crystallize accumulated thinking' entry (harvested from the legacy evals.json), and — added 2026-07-04 post deep-review — symptom/diagnostic and improve-phrased asks (M2 wants imperative/diagnostic/symptom/indirect coverage, not imperative-only), since this is an -author skill whose verb contract includes the evaluate/improve loop. Negatives are the fenced siblings: what-to-build documents (prd-/spec-/lld-/adr-author, make-reference) and the non-argument genres the craft doc backs off from (marketing, tutorial, status/report, neutral balanced analysis), PLUS the review-intent boundary negative ('review this vision memo against its rubric' → doc-checker independently critiques; this seat authors and self-evaluates — the maker≠critic split). The thesis-missing case (legacy eval #5, 'write about why documentation is important') is a BEHAVIOR test, not a routing case — the skill routes here but then asks for a thesis before drafting; see SKILL.md Step 2.",
+ "_measured": "routing_eval 2026-07-04 (post deep-review, hardened corpus 13 pos / 11 neg): F1 0.880 (precision 0.917 / recall 0.846). The one grab ('review this vision memo against its rubric' 0.57) is the maker↔critic type-name-sharing structural limit — this seat authors + self-evaluates a memo, doc-checker independently reviews it; both share 'vision memo' + 'rubric', and the real router disambiguates on the verb (author/tighten vs review) + comparative routing, which the lexical proxy cannot. The two misses ('think piece…' long-phrase dilution, 'twelve principles…' paraphrase) are proxy artifacts. Not corpus-gamed.",
+ "positives": [
+  "write a vision memo about adopting trunk-based development i can share with leadership",
+  "write a manifesto for evaluation-driven development with building blocks and a rollout path",
+  "write a reframe essay arguing prompt engineering is really specification writing",
+  "write a synthesis memo comparing vector-db and knowledge-graph agent memory",
+  "make the first-principles case for schema-driven documentation",
+  "reframe how we think about types in probabilistic systems",
+  "crystallize this thinking into a shareable position paper",
+  "write a strategic brief making the case for this direction",
+  "turn our conversation into a standalone opinionated memo",
+  "write a think piece on why the factory is the asset and the product is an artifact",
+  "this draft argues nothing and takes no position — help me sharpen its thesis",
+  "my memo lists twelve principles and none of them land",
+  "tighten this drafted memo's argument, it's too hedged"
+ ],
+ "negatives": [
+  "review this vision memo against its rubric before I share it",
+  "write a PRD for the checkout feature",
+  "write the spec for this API endpoint",
+  "write the LLD for this service",
+  "record this architecture decision as an ADR",
+  "write a reference doc for this module",
+  "write marketing copy for the landing page",
+  "write a tutorial on how to use the CLI",
+  "give me a balanced pros-and-cons analysis of these two databases",
+  "write up the sprint status update",
+  "document what changed in this release"
+ ]
+}

@@ -6,10 +6,10 @@ description: >-
   "improve the score", "why did it regress / find the root cause", "which parts actually matter",
   "what's the best value for X", "what breaks this", "tune these parameters", "it used to work,
   now it doesn't", or a technique by name (autoresearch, ablation, bisect, hill-climb, sweep,
-  adversarial probe). Each method's protocol/rubric live here; `researcher` runs one. NOT for
+  adversarial probe). Each method's protocol/rubric live here; `experiment-runner` runs one. NOT for
   looking up facts/prior art (web search, no method); NOT reviewing a finished artifact against
   its rubric (*-reviewer agents); NOT building the artifact (*-forge / builder); NOT
-  wording effectiveness with no scorer (linguistic-techniques), rubric anchors (rubric-forge), or
+  wording effectiveness with no scorer (linguistic-techniques), rubric anchors (make-rubric), or
   loop stopping rules (loop-rules); NOT judging whether a claim is a genuine higher-order gain or
   just relabeling, with no scorer to run (forge's reasoning-orders).
 disable-model-invocation: false
@@ -33,7 +33,7 @@ against a measure you'll invent later to justify the change you already made (ru
 `linguistic-techniques`, this is not a pure reference: it documents the six methods *and* carries the
 runnable spine (Step 2 below) plus the investigation rubric they're judged by. It is consulted **inline
 only for a single-round check**; a real bounded loop — mandatory web research, dozens of measured rounds
-— is **dispatched to the `researcher` agent**, which preloads this pack and runs one method in
+— is **dispatched to the `experiment-runner` agent**, which preloads this pack and runs one method in
 isolation. The pack answers *which method, run how, judged by what*; the seat runs it. Each method's
 protocol is grounded in prior art cited in `references/sources.md`.
 
@@ -110,9 +110,9 @@ consent — never auto-chain.
 
 A quick, single-round check runs inline. A real investigation — a bounded loop, mandatory web
 research, dozens of measured rounds — is the textbook case for **isolation**: dispatch the
-**`researcher`** agent, which preloads this skill, runs the loop in its own context (so the host
+**`experiment-runner`** agent, which preloads this skill, runs the loop in its own context (so the host
 isn't flooded with 100 rounds of experiment noise), and returns a typed report. **Generator ≠
-critic:** the researcher does not certify its own run — the **dispatching seat that receives the
+critic:** the experiment-runner does not certify its own run — the **dispatching seat that receives the
 handoff** scores the report against `references/rubric.md` (the standing consumer-as-critic; the run's
 self-score is disclosure, not a verdict). No separate reviewer seat owns investigation reports today.
 
@@ -158,10 +158,10 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 
 ## Composition
 
-- **`researcher`** runs one method in isolation and hands back the typed report above.
+- **`experiment-runner`** runs one method in isolation and hands back the typed report above.
 - **[[intent-extract]]** / **[[grill-the-ask]]** sharpen a fuzzy "make it better" into a scorable
   question + a defined scorer *before* a method runs — the R1 precondition.
-- **[[rubric-forge]]** owns `references/rubric.md`'s shape; forge's `pack-forge` owns adding or
+- **[[make-rubric]]** owns `references/rubric.md`'s shape; forge's `pack-forge` owns adding or
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an
   uncited method on inline.
 - Downstream of a finding, route the *fix* to its owner: a code change to **builder**, a skill

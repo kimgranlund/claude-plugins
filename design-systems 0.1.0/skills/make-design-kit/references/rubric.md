@@ -2,7 +2,7 @@
 
 Scores one hub engagement — the routing decision, the platform strategy, the canonical
 core, the sibling dispatches, and the generation-context work — for whether the whole
-arrangement holds: one truth, right seats, potent context. Built via `rubric-forge`;
+arrangement holds: one truth, right seats, potent context. Built via `make-rubric`;
 doctrines it scores against live in `../references/shared-doctrines.md` and
 `../references/platform-map.md`. Platform *exports* are scored by the owning sibling's
 rubric (B1–B7 claude-code; the stitch/make rubrics) and graded independently by the

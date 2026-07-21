@@ -1,6 +1,6 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the forge/scribe authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design-kits, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the forge/docs authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design-kits, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
   "owner": {
     "name": "Kim Granlund"
   },
@@ -12,10 +12,10 @@
       "description": "The foundational authoring plugin, self-contained: forge/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (linguistic-techniques), intent extraction, and two-plane decomposition; /harness-audit as the recurring outer loop."
     },
     {
-      "name": "scribe",
-      "displayName": "Scribe",
+      "name": "docs",
+      "displayName": "Docs",
       "source": "./scribe 0.1.0",
-      "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK \u2014 standards, forge, review, validator, eight type templates, and bug-report (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, rubric-forge), markdown\u2194markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (reference-forge, llms-txt-forge, vision-memo-forge \u2014 knowledge-pack authoring lives in forge's pack-forge), and a fresh-context doc-reviewer agent alongside the researcher agent."
+      "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK \u2014 standards, forge, review, validator, eight type templates, and file-bug (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, make-rubric), markdown\u2194markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (make-reference, make-llms-txt, make-vision-memo \u2014 knowledge-pack authoring lives in forge's pack-forge), and a fresh-context doc-checker agent alongside the experiment-runner agent."
     },
     {
       "name": "agent-protocols",

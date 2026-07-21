@@ -65,7 +65,7 @@ seats are checked for shadowing and deference only; their findings file to their
   to the agent's own body, never a fence addition. (ii) **Reciprocity-disposition acceptance
   test** — a shared-token grab is legitimately dispositioned as reciprocity ONLY when the shared
   token appears in the agent's own positive zone for a reason INDEPENDENT of the colliding
-  sibling (e.g. "skill" is doc-reviewer's own necessary vocabulary, not borrowed from
+  sibling (e.g. "skill" is doc-checker's own necessary vocabulary, not borrowed from
   skill-auditor) — co-occurrence alone is not sufficient; trace the token's origin before
   accepting the disposition.
   **Known tool limitation**: `agent_corpus_index.py`'s F-section tests agent-vs-agent only — it
@@ -73,8 +73,8 @@ seats are checked for shadowing and deference only; their findings file to their
   hits against team-or-solo-rules's triggers were invisible to the F-section and surfaced only
   via the sidecar M2 corpus). Do not read a clean F-section as proof of no skill-collision; the
   sidecar corpus is the only check that covers this class today. **Second blind spot (found
-  2026-07-04, researcher review)**: the F-section reads only an agent's QUOTED triggers, so a
-  corpus-positive PHRASING that collides with a sibling's territory is invisible to it — a `researcher`
+  2026-07-04, experiment-runner review)**: the F-section reads only an agent's QUOTED triggers, so a
+  corpus-positive PHRASING that collides with a sibling's territory is invisible to it — an `experiment-runner`
   deep-review cross-probe surfaced 7 sibling-boundary hits the F-section could not see. The sidecar M2
   corpus, exercised with sibling-owned positives as negatives, is again the only check covering this.
   **Fence-repel structural limit**: an agent whose charter is itself about composition (e.g.
@@ -89,7 +89,8 @@ seats are checked for shadowing and deference only; their findings file to their
   **decoupled from any skill's name**. An unregistered role suffix is a schema change, never a
   coinage. **Bare-role exception (2026-07-04):** when an agent is the singular, general-purpose
   instance of its role — no co-existing variants to disambiguate — the domain leaf may be omitted and
-  the name is the bare role noun (`researcher` under `research/` is the reference instance); a domain
+  the name is the bare role noun (the pre-rename `researcher` under `research/` was the reference
+  instance — renamed `experiment-runner` 2026-07-21 per ADR-0006, a verb-compound naming the job); a domain
   modifier returns the moment a second variant exists. Canon: `agent-naming-conventions.md` §1.
 - **N2 Role–behavior binding.** The agent DOES what its role suffix promises: a `*-reviewer`
   judges and never fixes; a `*-builder` implements and never ratifies its own work; a
@@ -97,7 +98,7 @@ seats are checked for shadowing and deference only; their findings file to their
   hand-maintains. A binding violation is fixed in the charter or the name, never by loosening the
   role registry.
 - **N3 Domain-stem breadth, exact.** The stem's promise equals the charter's breadth; a deliberate
-  breadth exception (doc-reviewer's document-artifact family) is legal only when cited in the body
+  breadth exception (doc-checker's document-artifact family) is legal only when cited in the body
   (state the family, not a running count — the count-bearing form sat stale at "ten" through two
   extensions before this de-counting on 2026-07-04).
 - **N4 Trigger–stem overlap.** Stem tokens appear verbatim in the description's quoted triggers.
@@ -124,7 +125,7 @@ seats are checked for shadowing and deference only; their findings file to their
   shape — not even labeled "verbatim" (hardened 2026-07-04: a prior fix pass added a citation LABEL
   in front of a still-reproduced ASCII block and called it fixed; batch 1 proved the block had
   already drifted from its source under that softer reading — two independent reviews caught the
-  identical pattern in two different agents, and named `doc-reviewer` as the correct instance: it
+  identical pattern in two different agents, and named `doc-checker` as the correct instance: it
   reproduces no contract shape anywhere, only "return the gap-map in a handoff block per
   handoff-compose"). A contract copied into the agent is a third canon the moment either original
   moves — proven twice in one batch.
@@ -157,7 +158,7 @@ seats are checked for shadowing and deference only; their findings file to their
   | coordinator (`*-coordinator`) | `team-lead` | chain-of-command · dispatch order · a **review gate** between phases (generator ≠ critic — an "eval gate" is an S3 misnomer) · discovered-reality escalation · roll-up contract · does no seat-work itself |
   | planner (`*-planner`) | `planner` | decomposes on the shared spine · authors/maintains the design docs · reports design status upward, never self-ratifies |
   | writer (`*-writer`) | `docs-writer` | derives every page from its canonical source · wires the deterministic drift gate · reports the soft drift a static check can't see |
-  | researcher (`researcher` / doer) | `researcher` | **first of family, template-worthy (2026-07-04)** — sealed-dispatch (enumerated world + budget, three-valued `blocked(reason)` handback; shares the builder's sealed-dispatch organ) · **scorer-first** (fix a reproducible measure and record the baseline BEFORE the loop; no scorer → `blocked(no-scorer)`, never a measure invented later) · method-selected-by-question (the preloaded `research-methods` selector maps question class → method; coin-flip → hand back the top two) · one-variable-per-round journal · stop-on-a-named-predicate (target / plateau / space-exhausted / stuck / cause-isolated), not on patience · result-only report with the rubric self-score as **disclosure, not certification** (generator ≠ critic — the dispatching seat that receives the handoff grades it) · **finds-don't-own-repair** (routes the fix to builder / skill-authoring-standards / planner; the mutate-and-measure methods leave the winner applied only on dispatch say-so) |
+  | experiment-runner (`experiment-runner` / doer) | `experiment-runner` | **first of family, template-worthy (2026-07-04)** — sealed-dispatch (enumerated world + budget, three-valued `blocked(reason)` handback; shares the builder's sealed-dispatch organ) · **scorer-first** (fix a reproducible measure and record the baseline BEFORE the loop; no scorer → `blocked(no-scorer)`, never a measure invented later) · method-selected-by-question (the preloaded `research-methods` selector maps question class → method; coin-flip → hand back the top two) · one-variable-per-round journal · stop-on-a-named-predicate (target / plateau / space-exhausted / stuck / cause-isolated), not on patience · result-only report with the rubric self-score as **disclosure, not certification** (generator ≠ critic — the dispatching seat that receives the handoff grades it) · **finds-don't-own-repair** (routes the fix to builder / skill-authoring-standards / planner; the mutate-and-measure methods leave the winner applied only on dispatch say-so) |
 - **S2 Place in the delegation graph.** Description differentiated from every peer — the
   F-section's pairwise check clean or dispositioned; fences in the parseable house form
   (`NOT for … (owner)`) wherever a sibling's description claims the territory; the

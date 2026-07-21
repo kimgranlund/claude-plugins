@@ -36,7 +36,7 @@ A (local) has no external actors filing items, so watch/triage/trust never activ
 - **REQ-005** — Trust check. Every newly discovered item's filing author is checked against a
   durable, per-repo friendlies allow-list before any record is created.
 - **REQ-006** — Auto-route trusted. A known-friendly author's classified item is routed
-  non-interactively into the matching capture skill (`bug-report`/`feature`/`issue`) — same
+  non-interactively into the matching capture skill (`file-bug`/`file-feature`/`file-task`) — same
   dedup-before-mint and resume-if-open contract those skills already apply to on-demand
   invocations (REQ-010). No human approval gate fires on this path.
 - **REQ-007** — Hold unknown. An item from an author not on the allow-list is held; it is never
@@ -87,7 +87,7 @@ A (local) has no external actors filing items, so watch/triage/trust never activ
 ## Non-goals
 
 - A concrete Option-C adapter implementation *other than Linear* (a working Jira/Notion/custom
-  integration) — ADR-0003 Decision 3 scopes those to the consuming workspace, not scribe. Linear
+  integration) — ADR-0003 Decision 3 scopes those to the consuming workspace, not docs. Linear
   itself is a scribe-shipped adapter (ADR-0003 Decision 3), contracted separately in
   `spec-linear-adapter` — this SPEC's watch/triage/trust behavior applies to it identically to
   every other non-local backend, but the adapter's own create/dedup/update/close mechanics are
@@ -115,14 +115,14 @@ A (local) has no external actors filing items, so watch/triage/trust never activ
 
 **[NORMATIVE]** A known friendly opens a GitHub issue with a repro and a wrong/expected pair. The
 watch loop (REQ-003) discovers it, classifies it as a defect (REQ-004), the trust check finds the
-author on the allow-list (REQ-005), and it's auto-routed into `bug-report`'s capture path
+author on the allow-list (REQ-005), and it's auto-routed into `file-bug`'s capture path
 (REQ-006) with no human step — the resulting ticket looks identical to one a human ran
-`/bug-report` on directly.
+`/file-bug` on directly.
 
 **[NORMATIVE]** An author with no prior history opens a PR proposing a new capability. The watch
 loop discovers it, classifies it as a feature idea, the trust check finds no allow-list match
 (REQ-005), and it's held (REQ-007). A human reviews and approves: the item is routed into
-`feature`'s capture path (REQ-008a) and the author is added to the allow-list (REQ-008b). The
+`file-feature`'s capture path (REQ-008a) and the author is added to the allow-list (REQ-008b). The
 same author's next PR skips the hold and auto-routes per REQ-006.
 
 **[NORMATIVE]** The same unknown author's item is denied instead: no ticket exists afterward, the
@@ -145,7 +145,7 @@ shape ADR-0003's resolver reads for the backend choice, extended with the two RE
   successful run, the successful run's discovery set still contains every item filed since the last
   *successful* run, including the window the failed run never covered.
 - **AC-004** (↔ REQ-004) — A defect-shaped, a feature-shaped, and an ambiguous-shaped fixture item
-  each classify to the same shape a human-typed `/issue` invocation would produce for identical text.
+  each classify to the same shape a human-typed `/file-task` invocation would produce for identical text.
 - **AC-005** (↔ REQ-005) — A fixture author present in the allow-list checks trusted; an absent
   author checks untrusted; no third state exists.
 - **AC-006** (↔ REQ-006) — A trusted-author fixture item produces a minted or resumed record with

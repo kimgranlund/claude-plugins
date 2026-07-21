@@ -71,7 +71,7 @@ condition, whenever the work already has one:
 | `doc_lint.py <file>` | 0 FAIL findings | 3 tries |
 | `eval_check.py <suite>` | 0 FAIL findings | 3 tries |
 | `handoff_check.py <block>` | H1 gate passes | 1 try — a malformed handback is a compose error, not a retry loop |
-| a bug-shaped TICKET's `## Findings` section | gains a dated entry (bug-report's own dispatch contract) | 5 tries, per-investigation |
+| a bug-shaped TICKET's `## Findings` section | gains a dated entry (file-bug's own dispatch contract) | 5 tries, per-investigation |
 | a feature-shaped TICKET's `## Findings` section | gains a dated entry (the `/build-feature` dispatch contract) | 5 tries per build |
 
 A cap that repeats the identical fix is thrashing, not iterating — the escalation clause (Design
@@ -79,13 +79,13 @@ step 2) fires on the *same* check failing twice, not merely on failing twice.
 
 ## Worked example: proactive bug intake
 
-Composing `/schedule` + `/goal` + `bug-report` turns the capture-loss fix into a recurring loop
+Composing `/schedule` + `/goal` + `file-bug` turns the capture-loss fix into a recurring loop
 instead of a per-invocation one — the same escalation this skill's canon (`references/self-orchestrated-looping-agentic-systems.md`) describes for any delegated, unattended run:
 
 ```
 /schedule <interval>: check <source> for new reports.
 /goal: every report found this run has a bug-shaped TICKET with a dated Findings entry
-       (bug-report's own contract) — stop after 5 tries per report, escalate on a repeat failure.
+       (file-bug's own contract) — stop after 5 tries per report, escalate on a repeat failure.
 ```
 
 `<source>` and `<interval>` are the operator's call, not this skill's — name a concrete source
@@ -95,12 +95,12 @@ dispatches) belongs to `team-or-solo-rules`; this skill owns only the trigger/st
 
 ## Generator ≠ critic
 
-A high-stakes loop design you authored gets an independent pass: dispatch the **doc-reviewer**
+A high-stakes loop design you authored gets an independent pass: dispatch the **doc-checker**
 agent (goal conditions are in its charter) to score against `references/rubric.md` — and the
 `linguistics-reviewer` agent where the wording itself is load-bearing; the maker applies the fix.
 
 **Done** when the pattern fits the job, the condition is a verifiable end-state whose proof lands
 in the transcript, the run is bounded with an escalation clause, every gate dimension (C1, C3)
-scores ≥ 3, and a high-stakes design carries its independent doc-reviewer pass. **NOT done** while
+scores ≥ 3, and a high-stakes design carries its independent doc-checker pass. **NOT done** while
 the condition is process-shaped or self-graded, the run is uncapped, repeat failure spends the cap
 on flat retries — or the only score the design has is its author's.

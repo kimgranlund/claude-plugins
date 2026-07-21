@@ -10,7 +10,7 @@ description: >-
   round's answers reshape the next, grounding every option in the actual codebase and constraints, until
   the surface is settled enough to decompose. NOT for sharpening one already-given ask (intent-extract);
   NOT for the decomposition itself (system-decompose); NOT for authoring the PRD/SPEC/LLD documents
-  (scribe's `doc-forge`, governed by `doc-authoring-standards`).
+  (docs' `make-doc`, governed by `doc-writing-rules`).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -65,8 +65,8 @@ ones whose answers cascade into the rest.
    chosen mechanism closes some forks and opens others. Re-rank, ask the next round. (This is the
    inverse of extraction's single round.)
 5. **Converge + synthesize.** Stop at the convergence rule (below); restate the **Ratified Design**
-   across **both** planes, ready to hand to `system-decompose` or the document author — scribe's
-   `doc-forge` (governed by `doc-authoring-standards`) — where installed; otherwise draft each
+   across **both** planes, ready to hand to `system-decompose` or the document author — docs'
+   `make-doc` (governed by `doc-writing-rules`) — where installed; otherwise draft each
    document type's minimum contract inline.
 
 ## AskUserQuestion discipline (per [[intent-extract]] — the deltas only)
@@ -102,7 +102,7 @@ GROUNDING       — the codebase/catalog/constraint facts the options were built
 OPEN (deferred) — forks intentionally left to a default or to system-decompose — each with its default.
 RATIFIED DESIGN — both planes resolved: the structure (scope · element set · composition · sequencing) AND
                   the mechanisms (primitives · semantics · fidelity) — ready for system-decompose /
-                  scribe's doc-forge (doc-authoring-standards).
+                  docs' make-doc (doc-writing-rules).
 ```
 
 ## Validation loop (finalize only when clean)

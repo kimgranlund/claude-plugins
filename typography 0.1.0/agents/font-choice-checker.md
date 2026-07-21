@@ -9,7 +9,7 @@ description: >-
   rationale, coherence, expressiveness — a cited gap-map; the maker fixes it. NOT for realizing a decision
   as tokens (font-token-rules); NOT for a no-token typography question (lettering-facts); NOT for
   Material's typescale (material-type-facts); NOT for building a component (make-component);
-  NOT for a PRD/SPEC document (doc-reviewer); NOT for a design-system export or a DESIGN.md
+  NOT for a PRD/SPEC document (doc-checker); NOT for a design-system export or a DESIGN.md
   (design-kit-checker); NOT for designing a new system (pick-fonts).
 tools: Read, Grep, Glob, Bash
 model: fable

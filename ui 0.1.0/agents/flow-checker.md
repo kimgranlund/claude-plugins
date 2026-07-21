@@ -8,7 +8,7 @@ description: >-
   card authored, and whenever someone asks to "review this flow", "grade this journey", "is this
   onboarding flow right", or "score this flow card". It runs the mechanical gates first, checks
   every exit's asserts, and reports the two-axis grade + defect quadrant; the maker applies the
-  fix. NOT for one screen's layout (layout-checker), documents (doc-reviewer), or the
+  fix. NOT for one screen's layout (layout-checker), documents (doc-checker), or the
   whole-product sweep (check-whole-ui).
 tools: Read, Grep, Glob, Bash
 model: fable

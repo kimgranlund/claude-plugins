@@ -65,7 +65,7 @@ Good (residency + pointer):           Deploys are human-timed: /deploy (never ru
 
 ## Shipped seed — the worked example
 
-`assets/engineering-operating-contract.md` is a ready-to-install global `~/.claude/CLAUDE.md` that passes this standard (~20 lines: loop identity, four standing convictions in declarative register, a pointer block to the estate's doctrine skills). For a new setup, copy it in and adapt. The asset is the canonical seed — installed copies refresh *from* it, never the reverse (distilled 2026-07-12 from the standard's first full audit of a live 49-line contract). Its pointer block presupposes the forge/scribe/teamwork plugins; trim any pointer whose owner isn't installed.
+`assets/engineering-operating-contract.md` is a ready-to-install global `~/.claude/CLAUDE.md` that passes this standard (~20 lines: loop identity, four standing convictions in declarative register, a pointer block to the estate's doctrine skills). For a new setup, copy it in and adapt. The asset is the canonical seed — installed copies refresh *from* it, never the reverse (distilled 2026-07-12 from the standard's first full audit of a live 49-line contract). Its pointer block presupposes the forge/docs/teamwork plugins; trim any pointer whose owner isn't installed.
 
 ## Provenance
 

@@ -3,7 +3,7 @@
 > Axis: authoring a knowledge base as a cited corpus retrieved by search, not prose dumped
 > wholesale into context. Grounded in this workspace's own knowledge-pack skill convention —
 > forge's `pack-authoring-standards` + `skill-authoring-standards` (retired 2026-07-19 from
-> scribe's `knowledge-forge`, folded into forge as the estate-wide factory), this very skill
+> docs' `knowledge-forge`, folded into forge as the estate-wide factory), this very skill
 > family as a live instance, and `agent-protocols`'s `a2ui-training-facts` as a heavier variant —
 > cited as worked instances of the pattern, not as its only valid shape.
 
@@ -107,7 +107,7 @@ of facts about how something works.
 
 Persisting a fact or preference so it survives past the current session, as distinct from a
 task's in-session state (the sibling durable-memory-vs-ephemeral-task-state reference file in
-this same skill) · the per-file reference-document standard itself (`reference-forge`, a scribe
+this same skill) · the per-file reference-document standard itself (`make-reference`, a docs
 skill) · routing a live request to the right capability (a distinct harness concern this skill
 does not own) · the concrete rubric a training corpus's judge scores against
 (`a2ui-training-facts`'s own `judge-and-verdict-adapter.md`, cited above as an instance, not

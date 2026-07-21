@@ -1,0 +1,32 @@
+{
+  "skill": "make-rubric",
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03). Positives span imperative / diagnostic / symptom / indirect phrasings from the charter (rubric, eval criteria, quality checklist, /goal completion condition, anchors, reviewer convergence). Negatives drawn adversarially from neighbors' trigger vocabulary: skill-author, agent-author, skills-audit, loop-rules, linguistic-techniques, make-reference, spec-author, knowledge-forge (retired 2026-07-19, folded into forge's pack-forge), entry-file-author. Corpus of record per M2, checked into the bundle at scripts/routing-corpus.json.",
+  "positives": [
+    "write a rubric for grading model outputs",
+    "is this rubric any good",
+    "my reviewers score the same artifact differently",
+    "tighten these anchors so two readers converge",
+    "turn this checklist into eval criteria",
+    "the level-3 descriptors are vague adjectives — fix the anchors",
+    "define scoring criteria for judging generated summaries",
+    "our quality checklist gives inconsistent verdicts",
+    "score this scoring rubric before we adopt it",
+    "re-anchor this rubric — the artifact standard changed",
+    "which dimensions should gate promotion and at what threshold",
+    "write the completion condition for this goal so it is checkable"
+  ],
+  "negatives": [
+    "write a skill for deploying to staging",
+    "review this skill against the standard",
+    "why isn't my skill triggering",
+    "write a subagent for code review",
+    "audit the skill corpus for naming coherence",
+    "write a /goal that keeps working until tests are clean",
+    "my goal loop never stops spinning",
+    "make this prompt more effective so the model obeys it",
+    "write a reference doc for the project knowledge base",
+    "write a spec with acceptance requirements",
+    "build an expert pack on color science",
+    "review my CLAUDE.md — it is being ignored"
+  ]
+}

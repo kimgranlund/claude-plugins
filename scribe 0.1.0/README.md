@@ -1,35 +1,35 @@
-# scribe — functional documents as interfaces
+# docs — functional documents as interfaces
 
-Sibling plugin to forge (which authors the harness; scribe authors what flows through it).
+Sibling plugin to forge (which authors the harness; docs authors what flows through it).
 Doctrine source of record: the corpus's Vol 3 (data plane). Designed by the plugin-forge method;
 shipped through the forge release gate.
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/doc-authoring-standards` | Declarative skill | model-only | Mutability classes, universal practices, the type contract table; `references/templates/` — eight authoring contracts (adr, prd, spec, lld, plan, roadmap, ticket, task) |
-| `skills/doc-forge` | Procedural | both (`/doc-forge`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
-| `skills/doc-review` | Procedural | both (`/doc-review`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
-| `skills/bug-report` | Procedural (orchestrator) | both (`/bug-report`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
-| `skills/feature` | Procedural skill | both (`/feature`) | Feature intake, the bug-report mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → reference-forge / forge's pack-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build-feature` (orchestration) is the momentum half |
-| `skills/issue` | Procedural skill | both (`/issue`) | The generic third sibling: any work item that is neither bug- nor feature-shaped (chore, follow-up, research item, debt) — shape-gate → dedup → `kind: task` record on the ruled backend (`task` label + optional size), plus the full resume surface: fold detail, dated Findings, status verbs (done/doing/wontfix) with the Findings-first close |
-| `skills/docs-alignment` | Command skill | user-only (`/docs-alignment`) | Migrate an existing repo's scattered docs to the canonical directory-per-type map: three-surface inventory (canonical dirs, near-miss locations, loose files/README extractions) → ONE batched plan approval → git mv + minimal frontmatter (doc-type/id/status) + basename-first link repair + doc_lint → project-docs index installed; prose never rewritten, never commits |
-| `skills/research-methods` | Declarative skill | model-only | Six measured-investigation methods (autoresearch, ablation, bisect, adversarial, hill-climb, sweep); the Phase −1/0/1/2 spine + investigation rubric; the `researcher` agent runs one method in isolation |
-| `skills/rubric-forge` | Procedural | both (`/rubric-forge`) | Create · evaluate · improve · update a rubric against the bundled rubric-for-rubrics |
+| `skills/doc-writing-rules` | Declarative skill | model-only | Mutability classes, universal practices, the type contract table; `references/templates/` — eight authoring contracts (adr, prd, spec, lld, plan, roadmap, ticket, task) |
+| `skills/make-doc` | Procedural | both (`/make-doc`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
+| `skills/check-doc` | Procedural | both (`/check-doc`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
+| `skills/file-bug` | Procedural (orchestrator) | both (`/file-bug`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
+| `skills/file-feature` | Procedural skill | both (`/file-feature`) | Feature intake, the file-bug mirror: intent-extract → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → make-reference / forge's pack-forge) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build-feature` (orchestration) is the momentum half |
+| `skills/file-task` | Procedural skill | both (`/file-task`) | The generic third sibling: any work item that is neither bug- nor feature-shaped (chore, follow-up, research item, debt) — shape-gate → dedup → `kind: task` record on the ruled backend (`task` label + optional size), plus the full resume surface: fold detail, dated Findings, status verbs (done/doing/wontfix) with the Findings-first close |
+| `skills/tidy-docs` | Command skill | user-only (`/tidy-docs`) | Migrate an existing repo's scattered docs to the canonical directory-per-type map: three-surface inventory (canonical dirs, near-miss locations, loose files/README extractions) → ONE batched plan approval → git mv + minimal frontmatter (doc-type/id/status) + basename-first link repair + doc_lint → project-docs index installed; prose never rewritten, never commits |
+| `skills/research-methods` | Declarative skill | model-only | Six measured-investigation methods (autoresearch, ablation, bisect, adversarial, hill-climb, sweep); the Phase −1/0/1/2 spine + investigation rubric; the `experiment-runner` agent runs one method in isolation |
+| `skills/make-rubric` | Procedural | both (`/make-rubric`) | Create · evaluate · improve · update a rubric against the bundled rubric-for-rubrics |
 | `skills/markdown-to-markup` | Procedural | both (`/markdown-to-markup`) | Markdown source -> safe rendered markup (DOM); inline + block grammar, parsed via `textContent`, never `innerHTML` |
 | `skills/html-to-markdown` | Procedural | both (`/html-to-markdown`) | HTML -> markdown source; semantic element map (headings, strong/em, code, links, lists), drops presentational markup |
-| `skills/reference-forge` | Procedural | both (`/reference-forge`) | Author or review a referential knowledge doc (a skill's `references/` file, an @-imported doc, a Project Knowledge file) against its bundled rubric |
-| `skills/llms-txt-forge` | Procedural | both (`/llms-txt-forge`) | Author or review an `llms.txt` (and `llms-full.txt`) to the standard shape |
-| `skills/vision-memo-forge` | Procedural | both (`/vision-memo-forge`) | Author, or evaluate and improve, a vision memo (manifesto · reframe · case-for · synthesis); `doc-reviewer` grades the draft |
-| `agents/researcher` | Agent | dispatched | Runs ONE systematic investigation of a scorable system to a measured conclusion in its own context; preloads `research-methods` |
-| `agents/doc-reviewer` | Agent | dispatched | Fresh-context critic for one rubric-bearing document (PRD/SPEC/LLD/ADR/PLAN/ROADMAP/TICKET/TASK plus reference doc/llms.txt/vision memo/rubric/handoff block/decomposition manifest/DESIGN.md); preloads `doc-review` + `doc-authoring-standards` — closes the gap left by `doc-review` having no fresh-context agent pairing |
+| `skills/make-reference` | Procedural | both (`/make-reference`) | Author or review a referential knowledge doc (a skill's `references/` file, an @-imported doc, a Project Knowledge file) against its bundled rubric |
+| `skills/make-llms-txt` | Procedural | both (`/make-llms-txt`) | Author or review an `llms.txt` (and `llms-full.txt`) to the standard shape |
+| `skills/make-vision-memo` | Procedural | both (`/make-vision-memo`) | Author, or evaluate and improve, a vision memo (manifesto · reframe · case-for · synthesis); `doc-checker` grades the draft |
+| `agents/experiment-runner` | Agent | dispatched | Runs ONE systematic investigation of a scorable system to a measured conclusion in its own context; preloads `research-methods` |
+| `agents/doc-checker` | Agent | dispatched | Fresh-context critic for one rubric-bearing document (PRD/SPEC/LLD/ADR/PLAN/ROADMAP/TICKET/TASK plus reference doc/llms.txt/vision memo/rubric/handoff block/decomposition manifest/DESIGN.md); preloads `check-doc` + `doc-writing-rules` — closes the gap left by `check-doc` having no fresh-context agent pairing |
 | `scripts/doc_lint.py` | Script | CLI + selftest + write hook | T1-T5: frontmatter/type/status/sections/ID-spine; hook blocks edits to accepted ADRs (ledger class, enforced) |
 | `hooks/hooks.json` | Hook | PostToolUse Write/Edit | Routes doc writes through doc_lint; silent on non-documents |
 
 Folded in from the personal skill corpus per a `plugin-decompose` partition decision: `measure`
-(research-methods, rubric-forge, the `researcher` agent), `markdown-render` (markdown-to-markup,
-html-to-markdown), and `knowledge-docs` (reference-forge, llms-txt-forge, vision-memo-forge —
+(research-methods, make-rubric, the `experiment-runner` agent), `markdown-render` (markdown-to-markup,
+html-to-markdown), and `knowledge-docs` (make-reference, make-llms-txt, make-vision-memo —
 knowledge-pack authoring, originally `knowledge-forge` in this group, retired 2026-07-19 in favor
-of forge's `pack-forge`, the estate-wide factory-route name) — all small enough to fold into scribe
+of forge's `pack-forge`, the estate-wide factory-route name) — all small enough to fold into docs
 rather than ship as standalone plugins.
 Both ported agents soft-mention forge's `handoff-compose` in body prose (not a preload — forge is a
 sibling plugin) and fall back to a plain Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
@@ -41,11 +41,33 @@ plan/roadmap family (same tests); a ninth BUG type (bugs are TICKET-shaped work 
 `kind: bug` plus five extra sections, no new template or validator needed); general rubric/report
 types beyond bugs (Vol 3 covers them — flagged as the next wave, not built without demand).
 
-Cross-plugin seams (soft, by design): scribe uses the forge plugin's cross-cutting layer —
+Cross-plugin seams (soft, by design): docs uses the forge plugin's cross-cutting layer —
 intent-extract, system-decompose, linguistic-techniques, reasoning-orders — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
-v0.22.4 · assembled 2026-07-21 · 0.22.4: ADR-0006 teamwork-rename sweep — live references rewritten (researcher/doc-reviewer fences: planner/builder/code-checker); pointer updates only · v0.22.3 · assembled 2026-07-21 · 0.22.3: ADR-0006 screens-rename sweep — doc-reviewer's UI-artifact fence repointed (component-/layout-checker), research-methods sweep-record names updated; pointer updates only · v0.22.2 · assembled 2026-07-21 · 0.22.2: ADR-0006 design-kits-rename sweep — live references rewritten; pointer updates only · v0.22.1 · assembled 2026-07-21 · 0.22.1: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (reference-forge suite + naming-conventions reference, research-methods journal); pointer updates only · v0.22.0 · assembled 2026-07-19 · 0.22.0: `knowledge-forge` retired — a `plugin-decompose` gap
+## ADR-0006 transition table (renamed 2026-07-21)
+
+The PLUGIN renamed: `scribe` → `docs` (new install identity; the directory `scribe 0.1.0/` keeps
+its frozen path — see the workspace CLAUDE.md alias table). Old handles remain greppable only in
+ledgers, CHANGELOGs, ADRs, and attics.
+
+| Old name | New name |
+|---|---|
+| `doc-forge` | `make-doc` |
+| `doc-review` | `check-doc` |
+| `doc-authoring-standards` | `doc-writing-rules` |
+| `bug-report` | `file-bug` |
+| `feature` | `file-feature` |
+| `issue` | `file-task` |
+| `docs-alignment` | `tidy-docs` |
+| `llms-txt-forge` | `make-llms-txt` |
+| `reference-forge` | `make-reference` |
+| `rubric-forge` | `make-rubric` |
+| `vision-memo-forge` | `make-vision-memo` |
+| `doc-reviewer` (agent) | `doc-checker` |
+| `researcher` (agent) | `experiment-runner` |
+
+v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 8/9 — the PLUGIN renames scribe → docs and eleven skills + both agents take the simple paradigm (transition table above; research-methods, html-to-markdown, markdown-to-markup keep — already literal). MAJOR bump — names are APIs and this is breaking. Workspace sweep (122 files; slash-form-only regex for the collision-prone feature/issue tokens + a 22-edit hand pass on their backticked skill-reference forms; the bare scribe plugin token swept with possessive care; 10 false rewrites caught by the insertion audit and reverted — lecture transcripts, generic role-noun vocabularies, a person described as a researcher). agents-audit's bare-role-noun grammar specimen amended (researcher was the reference instance; the rename is dated in place). G8 allow-set prunes sub-issue (the colliding issue skill name is retired). Baseline blind run 252/255; post-rename re-measure 250→254/255 — file-feature t07 and make-reference n03 healed by the rename itself, and the conversion-twins seam (html-to-markdown t07/t08/t09 stolen, markdown-to-markup t09 dead — neither skill renamed; the seam flipped under the new menu) healed both-sides with verbatims (converted-output defects claimed + fenced; the innerHTML-injection phrasing made an explicit trigger), re-judged 40/40. research-methods n13 stays the known pre-existing fail · v0.22.4 · assembled 2026-07-21 · 0.22.4: ADR-0006 teamwork-rename sweep — live references rewritten (researcher/doc-reviewer fences: planner/builder/code-checker); pointer updates only · v0.22.3 · assembled 2026-07-21 · 0.22.3: ADR-0006 screens-rename sweep — doc-reviewer's UI-artifact fence repointed (component-/layout-checker), research-methods sweep-record names updated; pointer updates only · v0.22.2 · assembled 2026-07-21 · 0.22.2: ADR-0006 design-kits-rename sweep — live references rewritten; pointer updates only · v0.22.1 · assembled 2026-07-21 · 0.22.1: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (reference-forge suite + naming-conventions reference, research-methods journal); pointer updates only · v0.22.0 · assembled 2026-07-19 · 0.22.0: `knowledge-forge` retired — a `plugin-decompose` gap
 analysis (job-to-be-done test) found it duplicated forge's `pack-forge` end to end (axis
 decomposition, grounded research waves, INDEX/consult-table registration — near-identical
 descriptions, no daylight between them), while diverging in rigor: `pack-forge` carries a

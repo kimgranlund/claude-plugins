@@ -1,5 +1,5 @@
 name: Bug
-description: Something is broken — a reproducible defect. Mirrors scribe's /bug-report payload contract.
+description: Something is broken — a reproducible defect. Mirrors docs' /file-bug payload contract.
 title: "[Bug]: "
 labels: ["bug"]
 type: "Bug"
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        This form mirrors the record scribe's `/bug-report` skill mints for the same kind of
+        This form mirrors the record docs' `/file-bug` skill mints for the same kind of
         report — so this ticket arrives sectioned the same way whether a session or a human
         filed it.
   - type: textarea

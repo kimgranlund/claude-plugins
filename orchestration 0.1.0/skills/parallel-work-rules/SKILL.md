@@ -120,8 +120,8 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | `EnterWorktree` / `ExitWorktree` | Isolating the whole session — requires an explicit trigger (user or CLAUDE.md), never assumed |
 | `SendMessage` | The other actor is a named teammate (surfaced a `<teammate-message>`), not silence |
 | `gh pr comment` / `gh issue comment` | The other actor's work lives on a branch/PR/Issue but no live `SendMessage` channel reaches it — async, durable, git-native coordination |
-| A project's ticket status vocabulary (e.g. `open`/`doing`/`done`) | Cheap pre-flight check before claiming scope — see the project's own doc-authoring-standards, where one exists |
-| scribe's backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
+| A project's ticket status vocabulary (e.g. `open`/`doing`/`done`) | Cheap pre-flight check before claiming scope — see the project's own doc-writing-rules, where one exists |
+| docs' backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
 | [[team-or-solo-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-standards` (forge) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |

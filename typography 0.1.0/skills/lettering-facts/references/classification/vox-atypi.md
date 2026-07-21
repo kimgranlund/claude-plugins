@@ -94,7 +94,7 @@ The earliest roman types, cut in the 1460s–1490s by printers working to imitat
 Humanes characteristics:
 
 - Low stroke contrast (pen-like — the variation between thick and thin strokes is small).
-- **Slanted axis** (the axis of the `o` and `O` tilts to the left, following the pen angle of a humanist scribe).
+- **Slanted axis** (the axis of the `o` and `O` tilts to the left, following the pen angle of a humanist docs).
 - Small x-height; tall ascenders.
 - Bracketed, slanted serifs on the lowercase; flat serifs on caps.
 - A distinctive slanted crossbar on the lowercase `e` (the "humanist e") — this is the single most reliable single-glyph marker of the Humanes family.

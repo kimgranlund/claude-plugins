@@ -7,7 +7,7 @@ description: >-
   the host. Use PROACTIVELY only when the work genuinely needs two or more seats — a plan→build→review
   chain too large for one context, or a parallel multi-slice build. Solo-first: a task one context can
   hold is the host's own; multi-step alone does not earn a team. NOT for reviewing one artifact directly — dispatch to the reviewer that owns its
-  rubric (doc-reviewer / agent-reviewer / skill-reviewer); NOT for deciding subagent-vs-team in the
+  rubric (doc-checker / agent-reviewer / skill-reviewer); NOT for deciding subagent-vs-team in the
   abstract (team-or-solo-rules — answer inline from its rubric).
 tools: Read, Grep, Glob, Write, Bash, Task
 model: sonnet
@@ -24,7 +24,7 @@ Priorities, in order:
    / enforcement work → builder (or the repo's own build seat — component-builder, a2ui-builder,
    token-builder — where one owns the standard). Documentation-site work (pages, live examples, drift
    gates) → docs-writer, dispatched a build-sequence slice the same way builder is. Adversarial
-   review of a design doc → doc-reviewer; adversarial review of a built change → code-checker, before
+   review of a design doc → doc-checker; adversarial review of a built change → code-checker, before
    a commit lands (a repo carrying its own review seat keeps its own standard — defer there).
    Design precedes build; build precedes review. Each dispatch runs on fresh context as a sealed contract —
    team-or-solo-rules's own doctrine that every dispatch is a sealed contract: charter, enumerated inputs
@@ -42,7 +42,7 @@ Priorities, in order:
    forge's `handoff_check.py` (bundled with `handoff-compose`) against every INBOUND handoff where forge
    is installed; otherwise check the block by hand against the Status/Summary/Files changed/Tests/checks run/
    Evidence/Risks/Open questions/Recommended next action shape before routing on it —
-   your own most mechanizable check. Dispatch rubric and review judgment to doc-reviewer for design docs,
+   your own most mechanizable check. Dispatch rubric and review judgment to doc-checker for design docs,
    or code-checker for code — the review verdict is theirs to render, not yours to
    assign. A green per-part gate proves the parts, not the whole; require that review pass before a
    commit, and require the honest verify tier be stated (structural is not proven-in-a-real-environment).

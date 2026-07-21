@@ -1,0 +1,56 @@
+{
+  "skill": "check-doc",
+  "note": "Authored with the plugin 2026-07-07.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "review this PRD",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "audit this spec against our standards",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "critique my ADR before I mark it accepted",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "is this plan actually executable by a fresh agent",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "score this LLD",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "this roadmap feels off, what is wrong with it",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write me a spec for checkout",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "which type of document should this be",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "review this skill",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "review this vision memo against its rubric before I share it",
+      "expect": "trigger"
+    }
+  ]
+}

@@ -29,8 +29,8 @@ A proposed name passes all five or gets reworked; the test that fails names the 
 |---|---|---|---|
 | 1 | says-the-job | An invocable name completes "I want to ___" read aloud | Bad: `skill-forge` → Good: `make-skill` |
 | 2 | kind-audible | The shape alone identifies the kind (table below) | Bad: `feature` (verb-less runnable) → Good: `file-feature` |
-| 3 | registry-verb | The verb comes from the registry — one verb per concept, kindergarten vocabulary | Bad: `docs-alignment` → Good: `tidy-docs` |
-| 4 | no-lore | Zero metaphor, mythology, or seniority theater; a shelf noun says what the shelf holds | Bad: `forge`, `scribe` → Good: `harness`, `docs` |
+| 3 | registry-verb | The verb comes from the registry — one verb per concept, kindergarten vocabulary | Bad: `tidy-docs` → Good: `tidy-docs` |
+| 4 | no-lore | Zero metaphor, mythology, or seniority theater; a shelf noun says what the shelf holds | Bad: `forge`, `docs` → Good: `harness`, `docs` |
 | 5 | loud-contrast | Siblings differ by a whole word; a suffix or number as the only difference is a test-5 failure | Bad: `skill-review` + `skills-audit` coexisting → Good: `check-skill` + `check-all-skills` |
 
 ## Shapes by kind — normative

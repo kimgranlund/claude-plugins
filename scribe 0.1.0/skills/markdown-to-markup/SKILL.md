@@ -4,10 +4,11 @@ description: >
   Render markdown source into safe rendered markup (DOM), or extend a markdown→markup renderer. Use
   when rendering docs/prose markdown into the DOM, adding an inline or block form to the renderer, or
   fixing markdown that shows as literal characters ("render this markdown", "the backticks/stars show up
-  literally", "add bold/links/italics to the doc renderer") — the inline grammar (code, bold, italic,
-  link) and block grammar (paragraph, list, heading, fenced code), parsed to elements via textContent,
-  never innerHTML. NOT for converting rendered HTML or turning a page back into markdown source
-  (html-to-markdown).
+  literally", "add bold/links/italics to the doc renderer", "is this markdown rendering safe from
+  injection") — the inline grammar (code, bold, italic, link) and block grammar (paragraph, list,
+  heading, fenced code), parsed to elements via textContent, never innerHTML. NOT for converting
+  rendered HTML or turning a page back into markdown source, or defects in markdown a CONVERTER
+  produced — stray divs, converted text re-rendering wrong (html-to-markdown).
 disable-model-invocation: false
 user-invocable: true
 ---

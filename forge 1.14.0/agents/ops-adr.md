@@ -92,7 +92,7 @@ clause, and this agent's schedule does not extend to it: a stale-citation candid
 queued, never auto-executed, and Phase 6 itself is always named as the next command for a human to
 run (step 7), the same never-authors boundary this agent holds everywhere else.
 
-`doc-authoring-standards` (scribe) is a different plugin, not preloadable across that boundary — so
+`doc-writing-rules` (docs) is a different plugin, not preloadable across that boundary — so
 the ADR frontmatter contract is stated here directly rather than restated from a preload: `doc-type:
 adr`, `id: adr-NNNN`, `status: accepted | superseded`, `supersedes: <adr-id> | null`. An ADR is
 superseded the moment ANY other ADR's `supersedes:` field names it, or its own `status:` field

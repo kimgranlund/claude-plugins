@@ -6,7 +6,7 @@ description: >-
   gating/budget/rollup discipline directly for the charter's duration. Deliberately overrides
   team-or-solo-rules's solo-first default: invoking this IS the choice to force team-shaped
   delegation regardless of task size — every unit of real work is dispatched via Task/Agent to
-  planner / builder / docs-writer / doc-reviewer / code-checker, never done by the
+  planner / builder / docs-writer / doc-checker / code-checker, never done by the
   host directly, while the charter stays open. Run /lead-team [charter]. NOT for a
   task one context can hold (team-or-solo-rules's solo-first default governs there, no command
   needed); NOT for reviewing one artifact directly (dispatch the reviewer that owns its rubric);
@@ -59,8 +59,8 @@ dispatched subagent:
 - **Roll-up audience (Priority 8).** The agent rolls up to a dispatching host above it; this
   session has none for this charter — the roll-up's audience is the human or caller who invoked
   this command.
-- **Adversarial-review seat availability (Priority 1).** `doc-reviewer` is scribe's — where scribe
-  isn't installed, review the design doc by hand against `doc-authoring-standards`' own rubric
+- **Adversarial-review seat availability (Priority 1).** `doc-checker` is docs' — where docs
+  isn't installed, review the design doc by hand against `doc-writing-rules`' own rubric
   before treating it as gated.
 - **Write scoping (agent body, line 19).** The agent's `Write` tool is structurally scoped to
   coordination records by its own frontmatter allowlist. The host has no such wall — see the
