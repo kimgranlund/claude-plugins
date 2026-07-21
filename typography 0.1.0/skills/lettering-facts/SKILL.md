@@ -1,7 +1,7 @@
 ---
 name: lettering-facts
 description: >-
-  Answers typography and lettering questions; points at a builder peer for output. Use when
+  Answers typography and lettering questions. Use when
   comparing, explaining, classifying, or specifying type — "my headings jump when the webfont swaps
   in", "does OpenDyslexic actually help", "why does this font look boring / generic": type anatomy
   (x-height, cap-height), classification (Vox-ATypI, humanist/geometric, grotesque),
