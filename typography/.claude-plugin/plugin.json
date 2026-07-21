@@ -1,0 +1,10 @@
+{
+  "name": "typography",
+  "displayName": "Typography",
+  "version": "1.0.5",
+  "description": "Choose, pair, and tokenize typography: design an 11-voice typography system from a brand brief, realize it as bound --type-*/--font-* tokens, and answer type-anatomy and lettering questions from a cited corpus.",
+  "license": "MIT",
+  "author": {
+    "name": "Kim G / NONOUN"
+  }
+}

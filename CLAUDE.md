@@ -1,13 +1,10 @@
 # Plugin workspace — entry file
 
-Each child directory here is one Claude Code plugin, named `<name-and-version-at-creation>`
-(e.g. `forge 1.14.0`, `scribe 0.1.0`) — quote the path, it contains a space. The dir name is
-FROZEN at creation and drifts from the manifest by design (amended 2026-07-21, ADR-0006: the
-rename campaign changes manifest NAMES too, so the dir records the name-and-version at creation;
-the current name and version live in `.claude-plugin/plugin.json` and the README footer ledger,
-never in the path). Dir → current-name aliases as renames land: `agentic-ui 0.1.0` →
-`agent-protocols`, `design-systems 0.1.0` → `design-kits`, `ui 0.1.0` → `screens`,
-`orchestration 0.1.0` → `teamwork`, `scribe 0.1.0` → `docs`, `forge 1.14.0` → `harness`. **harness is the toolchain**:
+Each child directory here is one Claude Code plugin, named exactly its CURRENT plugin name —
+no version suffix, no spaces (ADR-0007, 2026-07-21, superseding ADR-0006's frozen-dir rule:
+dirs align with `.claude-plugin/plugin.json` names; a plugin rename renames its dir in the
+same change). The version lives in the manifest and the README footer ledger, never in the
+path. **harness is the toolchain**:
 its commands and standards govern work on every plugin in this workspace, including harness itself.
 Work on a plugin happens in its directory; decisions that span plugins happen here.
 
@@ -25,7 +22,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | A user reports a bug | docs: `/file-bug` — never raw `/fork` for bug work (it drops the report on exit). In THIS workspace the record lands as a GitHub Issue (ADR-0002); `/file-bug` and `/file-feature` detect this row natively |
 | Scattered docs in an existing repo to organize into the canonical layout | docs: `/tidy-docs` (one approval gate, git mv, never rewrites prose) |
 | A feature idea to capture, or a feature to build | docs: `/file-feature` (pure intake → sized ticket/doc/corpus) · teamwork: `/build-feature` (record-first build — runs the intake when no record exists) |
-| Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | docs (folded in, not a separate plugin) — browse `scribe 0.1.0/README.md`'s artifact table |
+| Research methods, rubrics, knowledge/reference docs, llms.txt, vision memos, markdown↔markup | docs (folded in, not a separate plugin) — browse `docs/README.md`'s artifact table |
 | A2UI or A2A knowledge — protocol / renderer / catalog / agent design / isolation proofs / training corpora | `agent-protocols` (the A2UI four + the A2A four) |
 | Color science, palette design, contrast/CVD verification | `color` |
 | Typography system design, pairing, tokens | `typography` |
@@ -44,16 +41,16 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 No installed harness required; every check is a plain script. Run from the workspace root, and
 quote plugin paths (the version suffix contains a space).
 
-- **Prove a script's own counters:** `python3 "forge 1.14.0/scripts/skill_lint.py" selftest`
+- **Prove a script's own counters:** `python3 harness/scripts/skill_lint.py selftest`
   (same pattern for `release_gate.py`, `eval_check.py`, `docs_check.py`, `corpus_check.py`, and
-  `scribe 0.1.0/scripts/doc_lint.py`).
-- **Full pre-ship gate for a plugin:** `python3 "forge 1.14.0/scripts/release_gate.py"
-  "scribe 0.1.0" [--package]` — plugin-agnostic (works on harness or docs or any future plugin);
+  `docs/scripts/doc_lint.py`).
+- **Full pre-ship gate for a plugin:** `python3 harness/scripts/release_gate.py
+  docs [--package]` — plugin-agnostic (works on harness or docs or any future plugin);
   runs manifest/structure checks, the full lint sweep, bundled selftests, a phantom-`[[handle]]`
   sweep, eval-suite validation, and docs-freshness (G10), in that order; `--package` additionally
   writes `<plugin>/dist/<name>-<version>.plugin`.
 - **Lint one file by hand** (what the PostToolUse hook runs automatically on every `Write`/`Edit`):
-  `python3 "forge 1.14.0/scripts/skill_lint.py" <path-to-SKILL.md-or-agent.md-or-hooks.json>`.
+  `python3 harness/scripts/skill_lint.py <path-to-SKILL.md-or-agent.md-or-hooks.json>`.
 - Once a plugin is installed, prefer its slash commands over raw script calls inside a session:
   `/ship-plugin`, `/check-routing`, `/check-everything`. The commands above are for scripting, CI, or
   a plugin that isn't installed yet.
