@@ -6,10 +6,11 @@
       "adapter": "git-native (gh CLI, no MCP/Linear adapter shipped yet)",
       "mechanism": "on-demand gh issue list / gh pr list (no polling interval or MCP subscription configured yet -- REQ-002's entry-mode choice has not been made for this repo)",
       "status": "reachable",
-      "last_successful_check_at": "2026-07-18T17:33:02Z",
+      "last_successful_check_at": "2026-07-21T08:10:49Z",
       "bootstrap_note": "First-ever firing -- no prior checkpoint existed. Treated as discovering everything currently open plus full closed history for classification/dedup context (16 issues, 20 PRs, gh issue/pr list --state all, 2026-07-18). The checkpoint below is the discovery high-water mark going forward: the next firing's window is 'changed since this timestamp', not 'since repo creation' again.",
-      "issues_checkpoint": "2026-07-18T17:33:02Z",
-      "prs_checkpoint": "2026-07-18T17:33:02Z"
+      "last_firing_note": "2026-07-21T08:10:49Z firing (scheduled cloud routine, unattended): first successful checkpoint advance since bootstrap -- the checkpoint had not moved since 2026-07-18T17:33:02Z despite the routine firing hourly in between, because those earlier firings stalled on an unauthorized Write prompt (Issue #33, fixed by PR #42's settings.json permission grant, merged 2026-07-18T20:40:28Z). This firing's sandbox had no gh binary on PATH (gh: command not found) -- discovery used the session's connected read-only GitHub MCP server tools (list_issues/list_pull_requests) instead, covering the same read-only discover surface REQ-001-003 specify. 8 issues and 19 PRs found changed since the prior checkpoint (2026-07-18T17:33:02Z through this firing), all authored by the already-trusted maintainer (kimgranlund) -- see the firing report for the full accounting. Nothing held, nothing minted: the one open issue (#58) was already a complete resident record filed directly by the maintainer through the git-native backend.",
+      "issues_checkpoint": "2026-07-21T08:10:49Z",
+      "prs_checkpoint": "2026-07-21T08:10:49Z"
     }
   }
 }
