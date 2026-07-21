@@ -88,7 +88,7 @@ Lock (same change): DESIGN.md gains "shell: productivity-shell (ruled <date>)" a
 | component-forge (ui) | API shape / variant set when the charter leaves both legal | after the API-surface and composition drafts, before geometry is realized | the component's contract card (`rulings` entry) |
 | flow-decompose (ui) | journey shape (linear wizard vs hub-and-spoke) when both machines pass | DESIGN mode: after the task inventory, before the card is written | the .flow.json card (+ a DESIGN.md line for area-wide rulings) |
 | make-palette (color) | anchor negotiation / temperature direction | at anchor negotiation, artifact-escalated (palette strips) | ramp provenance + the BrandSchema/UISchema anchor |
-| typography-system-design (typography) | territory point: the brief names two live references, or none it can name | at the named-reference push-back, artifact-escalated (type specimens) | the per-voice decision doc |
+| pick-fonts (typography) | territory point: the brief names two live references, or none it can name | at the named-reference push-back, artifact-escalated (type specimens) | the per-voice decision doc |
 
 Cross-plugin consumers (color, typography) cite this file as "ui's layout-decompose
 references/taste-elicitation.md, where installed" and carry their one gate block locally — the

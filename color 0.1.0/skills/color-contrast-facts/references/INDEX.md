@@ -33,7 +33,7 @@ the computational, appearance-science, and physical/naming corpora respectively.
 
 No file in this pack is exclusive to this axis — it is a consult lens over the contrast-standards
 files above (APCA L^c tiers and WCAG thresholds ARE the readable-color-choice guidance), read
-through a low-vision lens rather than a general-legibility one. `typography-lettering`'s
+through a low-vision lens rather than a general-legibility one. `lettering-facts`'s
 low-vision reference shares this axis and cites
 [APCA L^c Formula](techniques/apca-lc-formula.md) here rather than duplicating it.
 

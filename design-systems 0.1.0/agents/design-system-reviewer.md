@@ -76,7 +76,7 @@ it is not a review.
 | a claimed Material (M3) alignment | material-design-color-tokens · material-design-geometry-tokens · material-design-typography-tokens |
 | a harmony or mood judgment (does this palette read as the named world) | color-theory-facts |
 | ramp quality, or a fill/on pair needing a full ColorProof | make-palette · check-colors |
-| type pairing or letterform anatomy | typography-lettering |
+| type pairing or letterform anatomy | lettering-facts |
 | whole-product or genre-conformance context | ui-audit · ui-genres · ui-patterns |
 
 ## Boundaries

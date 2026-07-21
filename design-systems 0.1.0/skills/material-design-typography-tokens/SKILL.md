@@ -12,8 +12,8 @@ description: >
   (material-design-geometry-tokens' `--md-sys-size-{step}-font`, which composes FROM this skill's
   `ui-control` voice — read here for what drives it); NOT for color (material-design-color-tokens);
   NOT for radius/spacing (material-design-geometry-tokens); NOT for kits on the default `--type-*`
-  grammar (typography plugin's typography-tokens); NOT for DESIGNING a type scale
-  (typography-lettering); NOT for motion easing/duration (material-design-motion-tokens).
+  grammar (typography plugin's font-token-rules); NOT for DESIGNING a type scale
+  (lettering-facts); NOT for motion easing/duration (material-design-motion-tokens).
 disable-model-invocation: false
 user-invocable: false
 ---

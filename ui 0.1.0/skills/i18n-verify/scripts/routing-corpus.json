@@ -1,12 +1,12 @@
 {
   "skill": "i18n-verify",
-  "_note": "Deep-review corpus (excellence campaign batch 3; sibling re-aimed 2026-07-06 for the color-*-facts split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-space-facts, not accessibility). Positives span imperative / diagnostic / symptom / indirect phrasings over the charter: RTL-bidi, dir-lang, Intl formatting, expansion, mirroring, script metrics. Negatives drawn adversarially from verifier siblings (check-colors, focus-verify, perf-verify, safety-verify), typography-lettering (world-scripts overlap), component-forge, ui-audit, flow-decompose.",
+  "_note": "Deep-review corpus (excellence campaign batch 3; sibling re-aimed 2026-07-06 for the color-*-facts split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-space-facts, not accessibility). Positives span imperative / diagnostic / symptom / indirect phrasings over the charter: RTL-bidi, dir-lang, Intl formatting, expansion, mirroring, script metrics. Negatives drawn adversarially from verifier siblings (check-colors, focus-verify, perf-verify, safety-verify), lettering-facts (world-scripts overlap), component-forge, ui-audit, flow-decompose.",
   "siblings": [
     "check-colors",
     "focus-verify",
     "perf-verify",
     "safety-verify",
-    "typography-lettering",
+    "lettering-facts",
     "ui-audit",
     "component-forge",
     "flow-decompose",

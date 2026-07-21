@@ -77,7 +77,7 @@ try { css = readFileSync(exportPath, "utf8"); }
 catch { console.error(`✗ cannot read export: ${exportPath}`); process.exit(2); }
 
 if (!/--md-sys-typescale-/.test(css)) {
-  console.error(`✗ ${exportPath} defines no --md-sys-typescale-* tokens — is this the right export? (a --type-* kit is the plugin typography-tokens skill's job)`);
+  console.error(`✗ ${exportPath} defines no --md-sys-typescale-* tokens — is this the right export? (a --type-* kit is the plugin font-token-rules skill's job)`);
   process.exit(1);
 }
 

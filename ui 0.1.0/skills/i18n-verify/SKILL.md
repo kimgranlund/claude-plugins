@@ -6,7 +6,7 @@ description: >-
   locale-sensitive number/date/currency Intl formatting, pluralization, encoding/collation,
   and text-expansion budgets (German expansion): RTL support, dir/lang on text surfaces, icon mirroring,
   hardcoded/untranslated strings, or translation-expansion headroom across scripts and locales. NOT for
-  choosing/pairing type or script anatomy (typography-lettering); NOT for text/background contrast, palette,
+  choosing/pairing type or script anatomy (lettering-facts); NOT for text/background contrast, palette,
   or color-blind safety (check-colors); NOT for focus order, keyboard nav, hit-targets, or focus rings
   (focus-verify); NOT for loading skeleton/spinner, CLS, or latency budgets (perf-verify); NOT for
   undo/type-to-confirm or audit-trail UX (safety-verify); NOT for color-space theory or palette math
@@ -130,7 +130,7 @@ mirroring, and isolation actually hold.
 | `assets/mirroring/icon-policies.json` | mirroring-policy table for common icon types |
 | `assets/formatting/intl-surfaces.json` | the surfaces that must route through `Intl.*` |
 | `assets/bidi/isolation-points.json` | slot types that require bidi isolation |
-| [[typography-lettering]] | script-metrics ground truth behind the bands |
+| [[lettering-facts]] | script-metrics ground truth behind the bands |
 | [[component-forge]] | fix owner for surface/markup findings — dir/lang wiring, logical-axis CSS, truncation affordances land there |
 | scribe's `doc-forge` (where installed) | fix owner for the posture — `declared_posture` is a spec/PRD decision, not a UI patch |
 | [[ui-audit]] | the set-scoped sweep that composes this verifier |
