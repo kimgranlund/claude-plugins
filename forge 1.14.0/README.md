@@ -118,7 +118,14 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-v1.41.0 · assembled 2026-07-20 · 1.41.0: eval-run converted command species → procedural
+v1.42.0 · assembled 2026-07-21 · 1.42.0: ADR-0006 Phase 0 — the standards flip that precedes
+every rename PR: naming-rules becomes the estate's naming canon (agent-authoring-standards
+§Naming carries the dated supersession note; skill-authoring-standards' scope line repoints its
+naming-grammar pointer from corpus Vol 2 to naming-rules); skill_lint W5's KNOWLEDGE_NOUNS gains
+`facts` + `rules` with two new selftest fixtures (a `-facts` head with user-invocable true warns,
+a model-only `-writing-rules` passes clean) so the ~40 knowledge renames keep their model-only
+check on arrival; root CLAUDE.md's Naming invariant gains the canon pointer and the Decision-7
+term-of-art shelf exception (color/llm) · v1.41.0 · assembled 2026-07-20 · 1.41.0: eval-run converted command species → procedural
 (disable-model-invocation: true → false, per explicit user direction — the 1.24.0 skill-forge
 precedent): description rewritten from slash-menu documentation into a real trigger contract
 ("prove the routing after a description edit", "did my description change break routing", the

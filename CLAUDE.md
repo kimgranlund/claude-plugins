@@ -72,9 +72,11 @@ quote plugin paths (the version suffix contains a space).
   Cross-plugin handoffs are named mentions that degrade gracefully when the other plugin isn't
   installed; an agent preload or script path crossing plugins is a defect (plugin-decompose's `surface_map.py check`
   kills it).
-- **Naming:** plugin names are distribution-scoped, disjoint from member domain prefixes (no
-  `/ui:ui-review` stutter), and never contain `claude` or `anthropic` anywhere in a skill name or
-  directory — the install rejects it and the whole plugin fails to load.
+- **Naming:** the canon is forge's `naming-rules` (ADR-0006, 2026-07-21). Plugin names are
+  distribution-scoped, disjoint from member domain prefixes (no `/ui:ui-review` stutter) — with
+  the recorded term-of-art shelf exception for `color` and `llm` (ADR-0006 Decision 7) — and
+  never contain `claude` or `anthropic` anywhere in a skill name or directory — the install
+  rejects it and the whole plugin fails to load.
 - **Docs and ledgers:** functional documents follow scribe's type contracts and mutability classes
   (the accepted-ADR append-only rule is hook-enforced — doc_lint T4; supersede, never edit).
   `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted

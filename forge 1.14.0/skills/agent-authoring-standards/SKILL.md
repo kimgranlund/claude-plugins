@@ -95,6 +95,8 @@ implicit.
 
 ## Naming
 
+**Superseded as canon 2026-07-21 (ADR-0006 Phase 0):** the estate's naming canon is `naming-rules` (this plugin) — its agent shape (noun + person-word: `x-checker`, `x-sorter`, `x-lead`) is the agentive rule below restated in the simple paradigm's vocabulary. This section keeps describing the legacy grammar that governs names the campaign has not yet renamed.
+
 Agentive head — `-er`/`-or` or a function-role noun that encodes a verb: `x-reviewer`, `x-auditor`, `x-migrator`. The name reconstructs the procedure it preloads (`skill-review` → `skill-auditor`); a name that maps to no procedure is a fat agent hiding knowledge in its prompt, or seniority theater (`guru`, `wizard`) predicting nothing. Skills take the verb form; agents take the agentive form — the `-er` is a type marker doing real work.
 
 ## The body — cold-start language

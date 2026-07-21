@@ -15,7 +15,7 @@ user-invocable: false
 
 A skill is a behavior delta, not documentation. Every line either changes what Claude does or spends context teaching Claude what it already knows. The **description is the API** — the only text that controls triggering; the **body is the payload** — standing instructions that persist for the session; the **numbers are the physics** — budgets that decide what survives. This document is the standard `/skill-forge` authors against, `skill-review` audits against, and `skill-postwrite-invocation-lint` enforces the checkable slice of.
 
-Scope: skill-specific standards only. Language techniques → the `linguistic-techniques` skill (this plugin). Naming grammar, document contracts, and primitive routing → the Agentic Harness corpus (Vols 2, 3, and 1 §16 — external project knowledge, when present; the checkable slice of the naming grammar is enforced by `skill_lint.py` regardless). Reference those; this file restates none of them.
+Scope: skill-specific standards only. Language techniques → the `linguistic-techniques` skill (this plugin). Naming grammar → `naming-rules` (this plugin), the estate's canon since ADR-0006 Phase 0 (2026-07-21; it supersedes corpus Vol 2's grammar — the checkable slice stays enforced by `skill_lint.py`, whose W5 noun set gained `facts`/`rules` the same day). Document contracts and primitive routing → the Agentic Harness corpus (Vols 3 and 1 §16 — external project knowledge, when present). Reference those; this file restates none of them.
 
 ## The physics — verified 2026-07, Claude Code 2.1.20x [drift-prone]
 
