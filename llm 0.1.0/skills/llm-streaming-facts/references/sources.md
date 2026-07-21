@@ -42,7 +42,7 @@ This pack answers streaming/validation technique; it does not restate its neighb
 provider-adapter seam this streaming logic lives behind, the secret trust boundary, and the
 conversation/session model are [[llm-gateway-facts]]. `@agent-ui/a2ui`'s OWN system, documented
 as that repo's actual shipped behavior (dated, exhaustive, cited against a single snapshot) rather
-than a portable pattern, is the `agentic-ui` plugin's `a2ui-conversational-agent` pack
+than a portable pattern, is the `agent-protocols` plugin's `a2ui-chat-agent-facts` pack
 (`produce-loop.md`, `anthropic-sse-wire-contract.md`) — when the worked example and that pack
 disagree, that pack's citation-verified snapshot of the real repo wins; this pack's job is to have
 correctly generalized from it, not to duplicate it.

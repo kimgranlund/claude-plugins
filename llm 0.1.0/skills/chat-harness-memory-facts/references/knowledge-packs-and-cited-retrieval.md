@@ -4,7 +4,7 @@
 > wholesale into context. Grounded in this workspace's own knowledge-pack skill convention —
 > forge's `pack-authoring-standards` + `skill-authoring-standards` (retired 2026-07-19 from
 > scribe's `knowledge-forge`, folded into forge as the estate-wide factory), this very skill
-> family as a live instance, and `agentic-ui`'s `a2ui-training-corpus` as a heavier variant —
+> family as a live instance, and `agent-protocols`'s `a2ui-training-facts` as a heavier variant —
 > cited as worked instances of the pattern, not as its only valid shape.
 
 ## The core distinction — dump vs. retrieve
@@ -86,13 +86,13 @@ generator-vs-memory distinction on the persistence side).
 **Claim — when the "knowledge" being built is itself a growing, admitted, judged dataset rather
 than a fixed set of reference facts, the retrieval-by-search shape above is necessary but not
 sufficient; the corpus needs an admission gate, deduplication, and a judge/verdict adapter
-deciding what enters at all.** **Worked instance:** `agentic-ui`'s `a2ui-training-corpus` pack
+deciding what enters at all.** **Worked instance:** `agent-protocols`'s `a2ui-training-facts` pack
 documents exactly this heavier architecture over `@agent-ui/a2ui`'s real corpus subsystem — an
 11-stage admission pipeline (`admit.ts:5-9`: heal, schema/field, facet gate, pin check, tier-1
 deterministic validation, pointer resolution, leak gate, canonical hash, dedup, tier-2 rubric
 judgment, write), a closed, form-only healer that repairs formatting defects but never semantic
 ones ("an over-eager healer would launder invalidity into a corpus whose whole point is provable
-validity", `a2ui-training-corpus/references/admission-gate-and-healing.md`), and an injected judge
+validity", `a2ui-training-facts/references/admission-gate-and-healing.md`), and an injected judge
 seam that fails closed when absent rather than silently skipping quality grading
 (`admit.ts:176-177`, ADR-0060 Decision clause 1). **The distinction that matters:** a reference
 pack like this one or its siblings needs only citation discipline — the facts are already true,
@@ -110,5 +110,5 @@ task's in-session state (the sibling durable-memory-vs-ephemeral-task-state refe
 this same skill) · the per-file reference-document standard itself (`reference-forge`, a scribe
 skill) · routing a live request to the right capability (a distinct harness concern this skill
 does not own) · the concrete rubric a training corpus's judge scores against
-(`a2ui-training-corpus`'s own `judge-and-verdict-adapter.md`, cited above as an instance, not
+(`a2ui-training-facts`'s own `judge-and-verdict-adapter.md`, cited above as an instance, not
 restated here).

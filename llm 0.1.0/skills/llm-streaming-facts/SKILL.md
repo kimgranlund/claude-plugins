@@ -11,7 +11,7 @@ description: >-
   validate-then-stream (bounded self-correct, halt-and-report). Grounded in the SSE spec, Anthropic's
   docs, and a shipped example. ANSWERS from a cited corpus; does not build. NOT for the
   provider/trust-boundary/session pattern this sits behind (llm-gateway-facts); NOT for the
-  A2UI wire MESSAGE shape (agentic-ui); NOT for a vendor's contract beyond Anthropic.
+  A2UI wire MESSAGE shape (agent-protocols); NOT for a vendor's contract beyond Anthropic.
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -82,9 +82,9 @@ presented as if every SSE-streaming vendor shares it verbatim.
   registry, or the conversation/session model** → [[llm-gateway-facts]] (the sibling pack in
   this plugin).
 - **The A2UI wire MESSAGE shape** (what a `createSurface`/`updateComponents` line actually
-  contains, as opposed to how the bytes carrying it were streamed) → the `agentic-ui` plugin's
-  `a2ui-protocol` pack; that repo's own produce-loop implementation, documented as a dated,
-  exhaustive answer about THAT system → `a2ui-conversational-agent`'s `produce-loop.md` and
+  contains, as opposed to how the bytes carrying it were streamed) → the `agent-protocols` plugin's
+  `a2ui-protocol-facts` pack; that repo's own produce-loop implementation, documented as a dated,
+  exhaustive answer about THAT system → `a2ui-chat-agent-facts`'s `produce-loop.md` and
   `anthropic-sse-wire-contract.md`.
 
 ## Extending this pack

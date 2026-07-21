@@ -47,7 +47,7 @@ A genuine, inspectable measurement history from this workspace's own skill corpu
 the routing-accuracy discipline works in practice, not as a universal template every project must
 copy verbatim.
 
-- **`agentic-ui` plugin, `skills/a2ui-conversational-agent/evals/evals.json`, its `"note"` field**
+- **`agent-protocols` plugin, `skills/a2ui-chat-agent-facts/evals/evals.json`, its `"note"` field**
   — read and quoted in full in routing-accuracy-evals.md. A real, dated record (2026-07-09 blind
   run and estate-wide run, both 33/36) distinguishing judge noise, a real fixable regression, and a
   structural leak — three outcomes a routing-accuracy measurement must be able to tell apart.

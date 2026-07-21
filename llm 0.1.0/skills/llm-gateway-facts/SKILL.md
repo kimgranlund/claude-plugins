@@ -10,7 +10,7 @@ description: >-
   analogues), and the stateless-proxy/session/turn-reducer model. Grounded in a shipped
   implementation (`@agent-ui/a2ui`), cited as a worked example not sole authority. ANSWERS from a
   cited corpus; does not build. NOT for the wire format streamed (llm-streaming-facts); NOT for a
-  vendor's contract beyond the worked example; NOT for A2UI-specific concerns (agentic-ui).
+  vendor's contract beyond the worked example; NOT for A2UI-specific concerns (agent-protocols).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -81,8 +81,8 @@ is presented as a universal requirement rather than one valid implementation of 
   validate-then-stream)** → [[llm-streaming-facts]] (the sibling pack in this plugin).
 - **A2UI-specific concerns** (the wire protocol, catalog design, the training corpus, or
   `@agent-ui/a2ui`'s OWN shipped implementation as a repo-specific answer pack rather than a
-  worked example) → the `agentic-ui` plugin's own packs, especially
-  `a2ui-conversational-agent` (which documents that repo's actual system, dated and detailed,
+  worked example) → the `agent-protocols` plugin's own packs, especially
+  `a2ui-chat-agent-facts` (which documents that repo's actual system, dated and detailed,
   where this pack teaches the pattern generally).
 
 ## Extending this pack
