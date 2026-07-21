@@ -1,0 +1,52 @@
+# design — color, typography, and design-system exports
+
+One plugin for the visual-design layer: color science and OKLCH palettes, the 11-voice
+typography system, Material Design's token grammar, and the export bundles a generative design
+agent consumes (Claude Design/DESIGN.md, Figma Make, Google Stitch). Formed 2026-07-21 by
+merging the `design-kits`, `color`, and `typography` plugins (ADR-0008) — the trio carried 48
+cross-plugin mentions, the workspace's highest-coupling seam after the ui merge precedent.
+Legacy per-plugin ledgers: `legacy/README-{design-kits,color,typography}.md`.
+
+## Map
+
+| Artifact | Type | Invocation | What it carries |
+|---|---|---|---|
+| `skills/make-palette` | Procedural | both | OKLCH ramps + semantic role mapping from brand anchors; every ramp verified by `check-colors` |
+| `skills/check-colors` | Procedural | both | Palette/pair verification — contrast, hue stability, evenness, CVD-safety → ColorProof |
+| `skills/color-contrast-facts` | Knowledge | model-only | APCA vs WCAG, luminance, CVD simulation and safe pairs |
+| `skills/color-perception-facts` | Knowledge | model-only | Vision/appearance science — chroma vs saturation, opponent process, CIECAM02 |
+| `skills/color-space-facts` | Knowledge | model-only | Space conversions, gamut mapping, gradients, CSS color, libraries (project files: `color-science-project-files/`) |
+| `skills/color-theory-facts` | Knowledge | model-only | Harmony, meaning, history — schemes, 60-30-10, palette mood |
+| `skills/physical-color-facts` | Knowledge | model-only | Pigment/print physical color — Kubelka-Munk, ICC, iridescence, color naming (was `color-material-facts`) |
+| `skills/pick-fonts` | Procedural | both | Design an 11-voice typography system from a brand brief; craft verification |
+| `skills/font-token-rules` | Knowledge | model-only | The `--type-*` token grammar — voice × step, leading, concrete font per slot |
+| `skills/lettering-facts` | Knowledge | model-only | The cited type corpus — anatomy, classification, scripts, OpenType, text a11y |
+| `skills/make-design-system` | Procedural | both | The export hub: full design-system bundle across platforms (was `make-design-kit`) |
+| `skills/make-dscard-kit` | Procedural | both | Claude Design / Claude Code bundle (DESIGN.md + tokens.json + @dsCard previews) |
+| `skills/make-figma-make-kit` | Procedural | both | Figma Make guidelines/ folder export |
+| `skills/make-stitch-kit` | Procedural | both | Google Stitch DESIGN.md export |
+| `skills/design-md-rules` | Knowledge | model-only | The DESIGN.md format contract (term-of-art name, ADR-0008) |
+| `skills/icon-rules` | Knowledge | model-only | Icon sizing/mirroring/set discipline (Phosphor house default) |
+| `skills/figma-plugin-facts` | Knowledge | model-only | Figma plugin API facts |
+| `skills/material-color-facts` | Knowledge | model-only | Material `--md-sys-color-*` consumption guide |
+| `skills/material-type-facts` | Knowledge | model-only | Material typescale consumption guide (15 voices) |
+| `skills/material-shape-facts` | Knowledge | model-only | Material geometry — control ramp, radius, space ladder |
+| `skills/material-motion-facts` | Knowledge | model-only | Material `--md-sys-motion-*` tokens |
+| `skills/material-token-facts` | Knowledge | model-only | The `--md-sys-*` token glossary across the three domains |
+| `agents/token-builder.md` | Agent | dispatched | Realizes palettes/dimensions as project token layers |
+| `agents/font-choice-checker.md` | Agent | dispatched | Grades ONE typography system against pick-fonts' rubric |
+| `agents/design-system-checker.md` | Agent | dispatched | Grades ONE export bundle against the owning sibling's rubric (was `design-kit-checker`) |
+
+## ADR-0008 transition table (merged 2026-07-21)
+
+Three plugins merged into `design`; three members renamed. Old handles remain greppable only in
+ledgers, CHANGELOGs, ADRs, and the legacy READMEs.
+
+| Old | New |
+|---|---|
+| `design-kits` / `color` / `typography` (plugins) | `design` |
+| `make-design-kit` | `make-design-system` |
+| `color-material-facts` | `physical-color-facts` |
+| `design-kit-checker` (agent) | `design-system-checker` |
+
+v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0008 — design-kits 1.0.6 + color 1.0.6 + typography 1.0.6 merge into `design` (coupling evidence: 48 intra-trio mentions; plan-plugin-split merge tests PASS). Three renames ride along (table above): the hub returns to the real term of art make-design-system (member-level term-of-art stutter exception, ADR-0008, extending ADR-0006 Decision 7), physical-color-facts frees "material" to mean only Material Design inside the plugin, design-system-checker follows its hub. Source ledgers preserved under legacy/. Baseline floors carried from the ADR-0006 measured runs (508/515 union); post-merge re-measure on the 22-skill union menu: 3 blind-judge rounds (515→488 raw, 524→507, 524→515 = 98.3% vs 98.6% baseline), ADR-0008 Decision 5 seams fenced — 22 ordered context splits, 8 thief-side description fences, 9 reciprocal no-trigger cases; material-token n07 recorded known-ambiguous (3/3 rounds); parity evidence on PR #73 ·

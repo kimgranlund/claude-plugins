@@ -50,11 +50,11 @@ principle instead of copied by eye from whichever system is open in another tab.
     / 2`), the six-step comfortable ramp, and the separate compact/dense two-band system. That
     file's "Composed padding" section is the worked EXAMPLE of the nesting principle
     `composable-spacing.md` states generally — read the principle here, see it applied there.
-  - `material-shape-facts` (design-kits plugin, where installed) — the *consumption*
+  - `material-shape-facts` (design plugin, where installed) — the *consumption*
     guide for a project already bound to Material's own specified scale (control ramp, radius
     scale, space ladder). This pack explains why a scale like that has the shape it does; that
     skill verifies a specific export carries it.
-- **Realizing a scale as project tokens** is the color plugin's `token-builder` seat (where
+- **Realizing a scale as project tokens** is the design plugin's `token-builder` seat (where
   installed) or `make-component`'s own build step — this pack supplies the rationale they realize.
 - **Page-region layout** (where a sidebar or header sits) → [[break-down-layout]]; **raw CSS
   box-model/flow mechanics** (why a margin collapsed, what a BFC does) → [[dom-layout-facts]];

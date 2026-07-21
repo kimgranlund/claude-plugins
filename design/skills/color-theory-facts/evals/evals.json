@@ -1,0 +1,131 @@
+{
+  "skill": "color-theory-facts",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Deep-review corpus (excellence campaign batch 4, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives span imperative/diagnostic/symptom/indirect. Negatives drawn adversarially from neighbors' trigger vocabulary: color-perception-facts, color-space-facts, color-contrast-facts, make-palette, check-colors, ui-pattern-facts, make-pack.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "explain why complementary color schemes are supposed to work",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "tell me the history of the color wheel",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "why do these two colors clash when they sit next to each other",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "does this palette read as calm and trustworthy",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "my brand colors feel garish together",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "the accent color feels off against the dominant color",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "what mood does a pale muted palette communicate",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "was Itten right about the seven contrasts",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "what does the color red communicate in an interface",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "should I use a triadic scheme for my poster",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "how do I split dominant and accent colors, the 60-30-10 rule",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "what was Gerstner's designing programmes approach to color",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "convert this color from sRGB to OKLCH",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "does this text pass WCAG AA contrast",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "simulate deuteranopia on this palette",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "extract a palette from this image",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "build a 13-step ramp from my brand anchor",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "derive the dark scheme for my palette",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "map semantic roles for danger and success colors",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "verify this palette and emit a ColorProof",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "check every fg/bg pair for APCA pass-fail",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "what states does a dashboard screen need",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "master-detail or list-detail for this screen",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "build an expert knowledge pack on typography",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "add a new axis to this reference pack",
+      "expect": "no-trigger"
+    }
+  ]
+}

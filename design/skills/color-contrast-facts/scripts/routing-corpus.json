@@ -1,0 +1,44 @@
+{
+  "skill": "color-contrast-facts",
+  "_note": "Re-derived 2026-07-06 for the color-contrast-facts extraction (T4 of the color-science split; see .claude/docs/color-science-extraction-plan.md). Positives span four phrasing classes: APCA/WCAG picks, contrast ratios/relative luminance, low-vision/readable color choices, CVD simulation/safe pairs; each class also carries an imperative/diagnostic/symptom/indirect mix. Negatives drawn adversarially from live neighbors: check-colors (verify/prove asks MUST NOT land here), check-focus (focus-ring contrast), color-space-facts (space/gamut math), color-perception-facts (vision science beyond CVD), physical-color-facts (pigment/print), make-palette (building), color-theory-facts (harmony).",
+  "siblings_in_repo": [
+    "check-colors",
+    "check-focus",
+    "color-space-facts",
+    "color-perception-facts",
+    "physical-color-facts",
+    "make-palette",
+    "color-theory-facts"
+  ],
+  "positives": [
+    "should I use APCA or WCAG 2.2 for our contrast requirement",
+    "which contrast standard should our design system cite, APCA or WCAG",
+    "is WCAG 2.2 still the legal floor for accessibility, or should we design to APCA instead",
+    "what's the relative luminance of this background hex value",
+    "calculate the WCAG contrast ratio between these two colors",
+    "our danger red on white doesn't feel legible enough - what's the actual Lc value",
+    "what colors are hardest to read for someone with low vision",
+    "pick text colors that stay legible for aging eyes and low-contrast sensitivity",
+    "how much contrast does small body text need to stay readable",
+    "simulate deuteranopia on this palette and tell me what changes",
+    "which two colors look identical to a colorblind user",
+    "give me a CVD-safe pair for error and success states",
+    "what's the difference between Brettel and Machado CVD simulation",
+    "our accessibility audit flagged low contrast - explain APCA vs WCAG so I can argue for the better standard"
+  ],
+  "negatives": [
+    "verify this palette and emit a ColorProof",
+    "check every fg/bg pair against our contrast budget and report pass/fail",
+    "does this whole theme pass across light and dark schemes",
+    "check if the focus ring is visible enough in dark mode",
+    "audit tab order and keyboard navigation for this modal",
+    "convert this color from sRGB to OKLCH",
+    "build a gradient that stays perceptually even instead of turning muddy",
+    "explain the difference between chroma and saturation",
+    "why does JPEG throw away so much color information",
+    "why does my print proof look duller than the screen mockup",
+    "build a 13-step ramp from our brand anchor",
+    "derive the dark scheme from our light palette",
+    "why do complementary colors clash, and what's a better harmony scheme"
+  ]
+}

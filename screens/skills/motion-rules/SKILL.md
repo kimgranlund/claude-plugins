@@ -29,7 +29,7 @@ from a cited, dated corpus, so motion decisions reason from evidence instead of 
 | "How do these move together?" — transition patterns, stagger, z-space, interruptibility, what never animates | `references/choreography.md` |
 | "Who does this hurt?" — WCAG floor, `prefers-reduced-motion`, vestibular triggers, substitutions | `references/reduced-motion.md` |
 | "Just give me the value" — the ratified house point per knob (press scale, bounce, asymmetry, stagger, hover onset) + the frequency gate | `references/house-locks.md` |
-| "Fill the Motion section of a DESIGN.md" — durations, easings, what never animates, reduced-motion policy | all five references, in table order — house-locks.md supplies the ratified values the section states (the section's contract is design-md-rules's, design-kits plugin) |
+| "Fill the Motion section of a DESIGN.md" — durations, easings, what never animates, reduced-motion policy | all five references, in table order — house-locks.md supplies the ratified values the section states (the section's contract is design-md-rules's, design plugin) |
 | Provenance and the unverified edges | `references/sources.md` |
 
 ## Consult procedure
@@ -68,9 +68,9 @@ outside every seam — nothing trades it away.
   live → [[check-ui-change]]; screen-state grammar (what an empty/loading state contains, not how
   it moves) → [[ui-pattern-facts]].
 - Material's `md.sys.motion.*` token table and its pairing laws → `material-motion-facts`
-  (design-kits plugin, where installed; otherwise cite the equivalent values from
+  (design plugin, where installed; otherwise cite the equivalent values from
   `easing.md`'s cross-reference row).
-- Realizing motion constants as project tokens is the color plugin's `token-builder` seat (where
+- Realizing motion constants as project tokens is the design plugin's `token-builder` seat (where
   installed) — this pack supplies the values and rationale it realizes.
 - The WCAG *verification* of a shipped surface: focus → [[check-focus]]; flash/seizure limits
   (2.3.1) have **no verifier seat in the estate yet** — say so in the answer rather than

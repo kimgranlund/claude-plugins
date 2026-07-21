@@ -257,11 +257,11 @@ def gate(root: Path, package: bool = False):
              # -run suffix from check-routing); "selftest-patterns" is a references file:
              "hand-run", "selftest-patterns",
              # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
-             # "scale-theory" are references files (ui-pattern-facts, size-and-shape-rules); "design-kits"
+             # "scale-theory" are references files (ui-pattern-facts, size-and-shape-rules); "design"
              # is the sibling PLUGIN's name, caught by size-and-shape-rules' own "-systems" suffix;
              # "box-model-and-flow" is a references file (dom-layout-facts); "mid-flow" is prose
              # ("mid-flow" in the hook skills), caught once dom-layout-facts added the -flow suffix:
-             "container-patterns", "scale-theory", "design-kits", "box-model-and-flow",
+             "container-patterns", "scale-theory", "design", "box-model-and-flow",
              # prose compounds newly caught by the same two suffixes (-flow, -systems):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
              # a2a-protocol-facts's references file (2026-07-15) — the estate's last standing G8 warn:
@@ -330,15 +330,15 @@ def gate(root: Path, package: bool = False):
              # query / property), "tonal-palette" is Material's own term — pre-existing prose
              # newly caught, the standing false-positive class. "github-facts" and
              # "material-color-facts" are naming-rules' illustrative shape-table examples —
-             # phantom until the llm/design-kits rename PRs mint them for real (remove from this
+             # phantom until the llm/design rename PRs mint them for real (remove from this
              # set then):
              "forced-colors", "font-palette", "tonal-palette",
              # github-facts pruned 2026-07-21: the harness rename made it a real skill.
-             # material-color-facts removed 2026-07-21: the design-kits rename made it a real skill.
+             # material-color-facts removed 2026-07-21: the design rename made it a real skill.
              # ADR-0006 screens rename (2026-07-21): the plugin + 15 members add the -ui /
              # -component / -change / -focus suffixes and the *-facts tails to the inventory,
              # flagging three standing false-positive classes. (a) pre-existing prose compounds:
-             # "font-ui" (the ui FONT-role compound in typography/design-kits), "agent-ui"
+             # "font-ui" (the ui FONT-role compound in typography/design), "agent-ui"
              # (a2ui-world prose + the historical component-builder agent mention), "shadcn-ui"
              # (external library), "per-component"/"one-mark-per-component"/"cross-component"/
              # "multi-component" (per-unit prose), "version-change"/"background-change"/
@@ -386,6 +386,11 @@ def gate(root: Path, package: bool = False):
              # path-tokenizer artifacts of "…/references/rubric.md" citations inside the make-*
              # skills ("llms.txt by `make-llms-txt/references/rubric.md`" etc.):
              "rubric-llms-txt", "rubric-reference", "rubric-rubric",
+             # ADR-0008 design merge (2026-07-21): make-design-system adds the -system suffix
+             # to the inventory, flagging pre-existing prose compounds — the standing class
+             # ("design-system" itself is the bare prose noun, e.g. "a design-system export"):
+             "design-system", "icon-system", "per-system", "scorable-system", "cross-system",
+             "geometry-system", "shipped-system",
              # "llms-txt" is the FILE format (llms.txt) named in naming-rules' shapes table,
              # not a phantom sibling of make-llms-txt:
              "llms-txt",
@@ -394,7 +399,7 @@ def gate(root: Path, package: bool = False):
              # over the renamed -facts members: catalog-facts/chat-agent-facts/protocol-facts/
              # training-facts are the tails of full a2a-/a2ui- names, not phantom siblings:
              "catalog-facts", "chat-agent-facts", "protocol-facts", "training-facts",
-             # ADR-0006 design-kits rename (2026-07-21): the -kit and -isolation suffixes joined
+             # ADR-0006 design rename (2026-07-21): the -kit and -isolation suffixes joined
              # the inventory — "bidi-isolation" is the Unicode/CSS term of art in check-translations's
              # prose, "adia-ui-kit" cites an external package in pack-writing-rules; the
              # standing false-positive class:

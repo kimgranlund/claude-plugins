@@ -55,7 +55,7 @@ stated rules instead of a remembered screenshot of some other app.
   - Icon construction and sizing (SF Symbols weights, grid, sizing) → [[icon-rules]] — already
     covers SF Symbols in its per-system construction table; this pack covers HIG's *button* and
     *navigation* vocabulary, not icon geometry.
-- **Android/Material's equivalent guidance** → `material-design-*-tokens` (design-kits plugin,
+- **Android/Material's equivalent guidance** → `material-design-*-tokens` (design plugin,
   where installed) — a different platform's own stated rules; this pack is Apple-specific.
 - **Building the actual component** → [[make-component]] — this pack cites HIG's rule; it never
   emits a wireframe or component code.

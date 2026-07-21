@@ -83,6 +83,11 @@ concept earns a new verb only when no registry verb fits.
   skill-writing-rules' F8 row).
 - **Term-of-art exception**: a term users type verbatim outranks the shape grammar — `llms-txt`,
   `a2a`, `ui` stay as-typed (rule owned by skill-writing-rules, 2026-07-15 amendment).
+- **Term-of-art stutter exception** (ADR-0008, extending ADR-0006 Decision 7 to members): a
+  member name may contain its plugin's word when that name IS the real-world term —
+  `design:make-design-system` (the artifact is a design system), `design:design-md-rules`
+  (DESIGN.md is the filename). Decorative repetition of the plugin word is still a
+  test-2/no-stutter failure.
 
 ## Worked contrast — illustrative
 

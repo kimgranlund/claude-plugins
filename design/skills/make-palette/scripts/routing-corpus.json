@@ -1,0 +1,32 @@
+{
+  "skill": "make-palette",
+  "_note": "Deep-review corpus (excellence campaign batch 2, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from the neighborhood's trigger vocabulary: check-colors (verify/contrast/CVD), color-space-facts (spaces/conversion), color-contrast-facts (APCA/CVD), color-theory-facts (harmony/meaning/mood), token-builder agent (token layer edits), make-component (color-picker component), brand/art-direction, and (added 2026-07-04) make-design-system — the whole-bundle ask must NOT grab this color-only skill; 'design the color system for this app' (positive) vs 'author our Claude Design design system bundle' (negative) is the boundary the reciprocal fence protects.",
+  "siblings_in_repo": ["check-colors", "color-space-facts", "color-contrast-facts", "color-theory-facts", "make-component"],
+  "global_peers": ["token-builder (agent)", "make-design-system"],
+  "positives": [
+    "build an OKLCH ramp from our brand anchor",
+    "extend our palette to the full 13-step scale",
+    "design the color system for this app",
+    "map the semantic color roles onto ramp steps",
+    "derive the dark scheme from the light palette",
+    "our accent ramp looks muddy in the middle steps - redesign the chroma arc",
+    "the brand purple washes out at the light steps, rebuild the ramp",
+    "we have one brand color and no shades - we need the full scale",
+    "choose distinct hues for danger, warning, success and info",
+    "which ramp step should the border token map to"
+  ],
+  "negatives": [
+    "verify this palette against WCAG",
+    "does this palette pass contrast AA",
+    "check color-blind CVD safety across light and dark themes",
+    "emit a ColorProof for the current theme",
+    "convert this sRGB color to OKLCH",
+    "explain saturation vs chroma",
+    "why do these two colors clash",
+    "what mood does a pale muted palette communicate",
+    "add a hover state token to the repo token layer",
+    "build a color-picker web component",
+    "define the brand's vibe and mood direction",
+    "author our Claude Design design system bundle"
+  ]
+}

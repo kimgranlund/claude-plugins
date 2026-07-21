@@ -1,0 +1,122 @@
+{
+  "skill": "material-color-facts",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-color consumption queries. Negatives drawn adversarially from the two sibling md-sys skills (type/geometry — incl. the control-text-size boundary), the ultimate-tokens --c-* twin, and the design/verify/science peers. Reciprocal added 2026-07-08: generic {prefix}-{family}-{slot} grammar questions belong to design-md-rules (which reciprocally no-triggers on --md-sys-* role semantics, owned here). Motion fence added 2026-07-09 (reciprocal to new sibling material-motion-facts). t11 adopted 2026-07-09 from design-md-rules's reassigned t06 (two blind runs routed it here).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "which color should this button use",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what token for this text background",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "add hover and disabled colors to this control",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "make these md-sys colors work in dark mode",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "why is this the wrong color",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what color role for this card surface",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "wire the theme colors",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "which token for a danger button fill",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "the on-color for a warning fill",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "what color for a disabled input border",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "what font size for this button",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "what type token for this heading",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "how tall should this control be",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "what padding for this card",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "which type voice for this label",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "design a new color palette from scratch",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "verify this palette's contrast ratios",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "convert this oklch value to hex",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "our tokens are plain --c-primary not md-sys",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "how do I name tokens in the {prefix}-{family}-{slot} grammar?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "what easing token should this color crossfade use",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "what is the pairing law for on-colors?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "which scrim strength should this drawer overlay use",
+      "expect": "trigger",
+      "note": "reciprocal of token-semantics n08 — the choosing ask lands on consumption"
+    }
+  ]
+}

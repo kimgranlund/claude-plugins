@@ -1,15 +1,21 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the harness/docs authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design-kits, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the harness/docs authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
   "owner": {
     "name": "Kim Granlund"
   },
   "plugins": [
     {
-      "name": "harness",
-      "displayName": "Harness",
-      "source": "./harness",
-      "description": "The foundational authoring plugin, self-contained: maker/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (prompt-wording-rules), intent extraction, and two-plane decomposition; /check-everything as the recurring outer loop."
+      "name": "agent-protocols",
+      "displayName": "Agentic UI",
+      "source": "./agent-protocols",
+      "description": "A2UI knowledge packs \u2014 wire protocol/renderer, catalog design, the live conversational agent, and the training corpus \u2014 answering how @agent-ui/a2ui works from a cited repo corpus; named agent-protocols (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
+    },
+    {
+      "name": "design",
+      "displayName": "Design",
+      "source": "./design",
+      "description": "The design plugin \u2014 color science and OKLCH palettes, the 11-voice typography system, Material Design token grammar, and the design-system export bundles (Claude Design/DESIGN.md, Figma Make, Google Stitch) a generative design agent consumes."
     },
     {
       "name": "docs",
@@ -18,34 +24,16 @@
       "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK \u2014 standards, maker, review, validator, eight type templates, and file-bug (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, make-rubric), markdown\u2194markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (make-reference, make-llms-txt, make-vision-memo \u2014 knowledge-pack authoring lives in harness's make-pack), and a fresh-context doc-checker agent alongside the experiment-runner agent."
     },
     {
-      "name": "agent-protocols",
-      "displayName": "Agentic UI",
-      "source": "./agent-protocols",
-      "description": "A2UI knowledge packs \u2014 wire protocol/renderer, catalog design, the live conversational agent, and the training corpus \u2014 answering how @agent-ui/a2ui works from a cited repo corpus; named agent-protocols (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
+      "name": "harness",
+      "displayName": "Harness",
+      "source": "./harness",
+      "description": "The foundational authoring plugin, self-contained: maker/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (prompt-wording-rules), intent extraction, and two-plane decomposition; /check-everything as the recurring outer loop."
     },
     {
       "name": "llm",
       "displayName": "LLM",
       "source": "./llm",
       "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, and the six-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack."
-    },
-    {
-      "name": "color",
-      "displayName": "Color",
-      "source": "./color",
-      "description": "Explain color science (accessibility, materials, perception, spaces, theory), build an OKLCH palette, and verify its contrast and CVD-safety."
-    },
-    {
-      "name": "typography",
-      "displayName": "Typography",
-      "source": "./typography",
-      "description": "Choose, pair, and tokenize typography: design an 11-voice typography system from a brand brief, realize it as bound --type-*/--font-* tokens, and answer type-anatomy and lettering questions from a cited corpus."
-    },
-    {
-      "name": "design-kits",
-      "displayName": "Design Systems",
-      "source": "./design-kits",
-      "description": "Author and regenerate design-system export bundles for Claude Design/Claude Code, Figma Make, and Google Stitch, plus the Material Design token grammar they can extend."
     },
     {
       "name": "screens",

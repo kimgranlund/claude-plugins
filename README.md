@@ -21,9 +21,7 @@ these plugins rather than just installing them.
 | [`docs`](<docs/README.md>) | Author functional documents (ADR/PRD/SPEC/LLD/PLAN/ROADMAP/TICKET/TASK), capture bug reports durably before dispatching an investigation, research methods & rubrics, markdown↔markup conversion, knowledge/reference authoring. |
 | [`agent-protocols`](<agent-protocols/README.md>) | Knowledge packs for the A2UI wire protocol, renderer, catalog design, and training corpus. |
 | [`llm`](<llm/README.md>) | Portable LLM-integration knowledge (the swappable-provider gateway pattern, streaming structured output safely) plus a six-layer mini/portable chat-agent-harness family (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). |
-| [`color`](<color/README.md>) | Color science (accessibility, materials, perception, spaces), OKLCH palette design, contrast/CVD verification. |
-| [`typography`](<typography/README.md>) | Typography systems, pairing, tokens, lettering knowledge. |
-| [`design-kits`](<design-kits/README.md>) | Design-system export bundles (Claude Design, Figma Make, Google Stitch) and the Material Design token grammar. |
+| [`design`](<design/README.md>) | Color science and OKLCH palettes, the 11-voice typography system, Material Design tokens, and the design-system export bundles (Claude Design/Figma Make/Google Stitch). |
 | [`screens`](<screens/README.md>) | UI structure (layouts, flows, components, patterns), the design/UI knowledge layer (spacing-scale theory, CSS box-model/flow mechanics, Apple HIG semantics, motion), and non-functional verification (focus, i18n, perf, safety, live-artifact checks). |
 | [`teamwork`](<teamwork/README.md>) | Decision-deriving, composition/continuation design, and a multi-agent feature-delivery team (planner, builder, coordinator, reviewers). |
 

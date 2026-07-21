@@ -1,0 +1,126 @@
+{
+  "skill": "make-figma-make-kit",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Routing corpus of record for this skill's description. Positives cover the invocation families (imperative create / file-first / evaluate / regenerate / symptom). Negatives are drawn adversarially from the platform-sibling family (make-dscard-kit, make-stitch-kit, the make-design-system hub) plus near-miss peers (make-palette, check-colors, make-component, token-builder, check-whole-ui, design-system-checker). Re-derive when the sibling family changes. routing_eval measures lexical overlap only \u2014 paraphrase misses are a proxy limit, not a defect; the pass condition is a human read of named misses/grabs.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "create Figma Make design system guidelines for our brand",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "author the guidelines folder for our Make kit",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "write Guidelines.md for Figma Make",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "make kit guidelines folder from our tokens",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "add a component file to our Make guidelines",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "our Figma Make output ignores the design system, fix the guidelines",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "check this guidelines folder before we ship the kit",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "regenerate the Make guidelines after the palette changed",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "port our design tokens into Figma Make guidelines",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "evaluate our figma make guidelines against the gates",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "set up foundations and components guidelines for figma make",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "write the color.md token tables for our Make guidelines",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "author our Claude Design design system bundle",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "write the DESIGN.md spine and tokens.json for Claude Design",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "create a Google Stitch DESIGN.md for this theme",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "lint my Stitch DESIGN.md frontmatter",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "which platforms should our design system target",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "plan the cross-platform design system strategy",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "design a color ramp for our brand",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "verify this palette's contrast ratios",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "build a button web component",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n10",
+      "prompt": "add hover tokens to the project token layer",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "audit the whole product UI for consistency",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "grade this design system export someone else generated",
+      "expect": "no-trigger"
+    }
+  ]
+}
