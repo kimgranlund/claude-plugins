@@ -25,7 +25,7 @@ Focus indicators must be:
 This is the SC that kills 1px focus rings against the wrong neighbor.
 
 ### SC 2.5.8 — Target Size (Minimum) — Level AA
-**24×24 CSS px minimum** target size for pointer inputs, with documented exceptions (inline targets, user-agent control sizes, essential-to-information targets, equivalent UI elsewhere). See [`focus-verify`](../../../focus-verify/SKILL.md) for the design recipe.
+**24×24 CSS px minimum** target size for pointer inputs, with documented exceptions (inline targets, user-agent control sizes, essential-to-information targets, equivalent UI elsewhere). See [`check-focus`](../../../check-focus/SKILL.md) for the design recipe.
 
 ## What carries over from 2.1 (unchanged)
 

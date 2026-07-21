@@ -79,7 +79,7 @@ The proven loop — four batches, 400+ ledger rows, standard revisions v1→v2.2
    dispositioned into the standard's five classes.
 5. **Ledger every finding:** `campaign/batch-N/<skill>.findings.jsonl`, rows
    `{skill, dim, tier, finding, fix, status: open|fixed|filed|wontfix}`. Diff passes with the
-   `ui` plugin's `ui-audit/scripts/audit-diff.py --ledger`, where installed.
+   `screens` plugin's `check-whole-ui/scripts/audit-diff.py --ledger`, where installed.
 6. **Fix wave, severity-ordered:** N/M gates → S2 boundaries → A3 drift → other A/L → polish;
    a template defect escalates one band and mandates the family sweep. The MAKER applies fixes
    (`skill-authoring-standards`/`skill-forge` and the finding's owner) — this skill never edits

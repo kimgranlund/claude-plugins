@@ -1,0 +1,29 @@
+{
+ "skill": "break-down-layout",
+ "positives": [
+  "decompose this UI screenshot into regions",
+  "name these regions in the mockup",
+  "is this layout right",
+  "what shell is this app using",
+  "critique this dashboard layout",
+  "design an app shell for a code review tool",
+  "wireframe a marketing landing page",
+  "wireframe a mobile app with bottom tabs",
+  "the screen looks clean but none of the panels actually do anything",
+  "every action works but the page is one giant stacked column",
+  "which archetype fits this admin tool"
+ ],
+ "negatives": [
+  "map the checkout flow",
+  "where does the signup journey dead-end",
+  "audit this whole app's UX before launch",
+  "how consistent is this UI across all screens",
+  "build a tooltip web component",
+  "design this component's API and anatomy",
+  "what's the common layout for a settings page",
+  "when is a modal wrong",
+  "decompose this technical architecture into parts",
+  "break down this project plan",
+  "pick an accessible color palette for the dashboard"
+ ]
+}

@@ -1,0 +1,29 @@
+{
+  "skill": "ui-genre-facts",
+  "_note": "Review-time corpus, batch-4 deep review 2026-07-03. Positives span imperative / diagnostic / symptom / indirect. Negatives drawn adversarially from the derived neighborhood's trigger vocabulary: ui-pattern-facts, break-down-layout, check-whole-ui, pack-forge — including shared-token traps (dashboard, travel, modules).",
+  "siblings_in_repo": ["ui-pattern-facts", "break-down-layout", "check-whole-ui", "pack-forge"],
+  "positives": [
+    "name the genre conventions for a habit tracking app",
+    "list what users expect from a fintech onboarding flow",
+    "what genre is this app",
+    "which patterns does this product category demand",
+    "is this convention violation acceptable for a marketplace",
+    "our streak reset makes users quit — is that normal for habit apps",
+    "this feels wrong for a monitoring dashboard product — what does the category expect",
+    "what do users expect in an AI chat app",
+    "does a two-sided marketplace need a supply-side home surface",
+    "what conventions does a collab tool category owe its users"
+  ],
+  "negatives": [
+    "what pattern is this screen",
+    "how should a data table behave",
+    "master-detail or list-detail for this screen",
+    "what states does a screen need",
+    "decompose this UI into regions",
+    "design an app shell and wireframe a dashboard",
+    "audit the whole app's UX before launch",
+    "sweep this product for accessibility issues",
+    "build an expert knowledge pack on travel UX",
+    "what modules does a dashboard need"
+  ]
+}

@@ -10,8 +10,8 @@ description: >-
   inconsistent", "fill the Iconography section of a DESIGN.md". Carries the per-system
   construction table (Material/SF/Carbon/Atlassian/Fluent), Material Symbols axes, WCAG floors,
   NN/g's labels doctrine, the mirror/never-mirror taxonomy. ANSWERS only. NOT for
-  building an icon component (component-forge, ui); NOT for verifying mirroring on a shipped
-  surface (i18n-verify, ui); NOT for icon-size tokens in --md-sys kits
+  building an icon component (make-component, screens); NOT for verifying mirroring on a shipped
+  surface (check-translations, screens); NOT for icon-size tokens in --md-sys kits
   (material-shape-facts); NOT for contrast verification (check-colors).
 user-invocable: false
 disable-model-invocation: false
@@ -65,13 +65,13 @@ apply — a deviation with no named failing rationale is drift.
 ## Boundaries
 
 - **This skill answers; it does not generate.** No SVG paths, no components, no token files —
-  cite the spec, hand the making off: build the icon/button component → `component-forge` (ui
+  cite the spec, hand the making off: build the icon/button component → `make-component` (ui
   plugin, where installed); realize icon sizes as tokens in an `--md-sys` kit →
   [[material-shape-facts]] (its `--md-sys-size-{step}-icon` field); export bundles
   that carry an Iconography section → [[make-design-kit]] and the platform authors.
 - **Verification is the ui/color plugins' seats** (where installed): mirroring/bidi on a shipped
-  surface → `i18n-verify`; icon contrast measurement → `check-colors`; focus/hit-targets →
-  `focus-verify`. This pack owns the policy they check against.
+  surface → `check-translations`; icon contrast measurement → `check-colors`; focus/hit-targets →
+  `check-focus`. This pack owns the policy they check against.
 - The DESIGN.md **format** (what sections exist, the token grammar) → [[design-md-rules]];
   this pack owns what a good Iconography section *says*.
 

@@ -70,7 +70,7 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   judges whether honest triggers *could* carry the stem — if not, rename).
 - **N5 Registry uniqueness + species.** No skill handle equals an agent name; actor=agent,
   action=skill, consulted-corpus=pack; singular stem unless the unit of work is the set (pack noun
-  plurality follows the content, e.g. `ui-patterns`).
+  plurality follows the content, e.g. `ui-pattern-facts`).
 
 ## A · Artifact depth
 
@@ -123,10 +123,10 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   | Species | Template | Shape (all organs required or argued) |
   |---|---|---|
   | maker (`-author`/`-design`/`-compose`) | `skill-authoring-standards` | one artifact · create/evaluate/improve/update on ONE rubric · conditional reference depth (no filler mandate) · Update = re-derive from the changed source, never patch prose (for doc-family makers the family-sync section IS the Update organ; for write-once artifacts, argue re-dispatch-not-edit) · gen≠crit organ (route-reality is S5's) |
-  | verifier (`-verify`) | `focus-verify` | card (typed, elicit fallback, judgment-tier boundary stated) → checker gates → judgment → Invariants(numbers) → Detection catalog → Mechanism table (skipped-not-passed · necessary-not-sufficient) · a **posture collapse** where a pre-mature artifact would otherwise emit 2×N red lines (declare-once → one design-decision gate) |
-  | two-axis binding (`-decompose`) | `layout-decompose` | axes A/B with gates+reviews · defect quadrant · modes · report template · Verify Target · card+checker where the artifact admits one, else exception argued (the SPINE instantiates these as manifest+coverage-gate and plan/strict modes — same organs, machine-shaped) |
-  | knowledge pack (noun) | `ui-patterns` | ANSWERS-only · consult table · Grep-first discipline · worked consult · **answer contract** (base form: claim + cited file + failure-mode/caveat; pattern-packs add name/anatomy/when-it-fits) · **deviation doctrine** (a default with a rationale; contested-knowledge packs may carry it as "name the camp/system when systems disagree") · **typed index scaled to corpus size** (research-wave scale ships INDEX; a consult table suffices hand-authored) · provenance in one of the two sanctioned forms — the `**Source:/Date:/URL:**` block (researched) or `curated:` frontmatter + INDEX provenance + CHANGELOG triangulation (harvested); the pack declares which · boundaries route ALL making · factory + corpus-of-record routes · **declared-hybrid variant** (2026-07-04): a pack that ALSO carries an execution spine + a run rubric — `linguistic-techniques`, `research-methods` — where the answers are runnable protocols, not only consulted facts; legal only when the hybridity is DECLARED in a species paragraph AND the running is delegated to a named actor seat (the pack answers *which method / run how / judged by what*; the seat runs it), never a pack silently executing |
-  | orchestrator (set verbs: `-audit`/`-refactor`) | `ui-audit` | composes instruments, never restates them · inventory/ledger spine (recurring sweeps: baseline + diff ledger; one-shot mutations: a persisted inventory reconciled at the prove step) · findings route to owners · three-valued verdicts · **post-pass fold-back** — the pass's lessons re-derive the skill's own anchors in the same change (an orchestrator's governed reality moves with every pass it runs) |
+  | verifier (`-verify`) | `check-focus` | card (typed, elicit fallback, judgment-tier boundary stated) → checker gates → judgment → Invariants(numbers) → Detection catalog → Mechanism table (skipped-not-passed · necessary-not-sufficient) · a **posture collapse** where a pre-mature artifact would otherwise emit 2×N red lines (declare-once → one design-decision gate) |
+  | two-axis binding (`-decompose`) | `break-down-layout` | axes A/B with gates+reviews · defect quadrant · modes · report template · Verify Target · card+checker where the artifact admits one, else exception argued (the SPINE instantiates these as manifest+coverage-gate and plan/strict modes — same organs, machine-shaped) |
+  | knowledge pack (noun) | `ui-pattern-facts` | ANSWERS-only · consult table · Grep-first discipline · worked consult · **answer contract** (base form: claim + cited file + failure-mode/caveat; pattern-packs add name/anatomy/when-it-fits) · **deviation doctrine** (a default with a rationale; contested-knowledge packs may carry it as "name the camp/system when systems disagree") · **typed index scaled to corpus size** (research-wave scale ships INDEX; a consult table suffices hand-authored) · provenance in one of the two sanctioned forms — the `**Source:/Date:/URL:**` block (researched) or `curated:` frontmatter + INDEX provenance + CHANGELOG triangulation (harvested); the pack declares which · boundaries route ALL making · factory + corpus-of-record routes · **declared-hybrid variant** (2026-07-04): a pack that ALSO carries an execution spine + a run rubric — `linguistic-techniques`, `research-methods` — where the answers are runnable protocols, not only consulted facts; legal only when the hybridity is DECLARED in a species paragraph AND the running is delegated to a named actor seat (the pack answers *which method / run how / judged by what*; the seat runs it), never a pack silently executing |
+  | orchestrator (set verbs: `-audit`/`-refactor`) | `check-whole-ui` | composes instruments, never restates them · inventory/ledger spine (recurring sweeps: baseline + diff ledger; one-shot mutations: a persisted inventory reconciled at the prove step) · findings route to owners · three-valued verdicts · **post-pass fold-back** — the pass's lessons re-derive the skill's own anchors in the same change (an orchestrator's governed reality moves with every pass it runs) |
   | transform (`x-to-y`) | `html-to-markdown` | mapping + round-trip validation via its inverse — the round-trip diff IS the species' A4 answer, and the named inverse is its critic (S5's inverse-as-critic) |
 - **S2 Place in the graph.** Charter unique (no capability twin at any scope); **boundary
   reciprocity at DESCRIPTION altitude** — fences live where routing happens: every NOT-clause names
@@ -161,7 +161,7 @@ template rises one severity band (stamping multiplies it) and mandates a family-
   implied · **inverse-as-critic** for transforms (the round-trip through the named inverse) ·
   **composite-critic** for a multi-layer artifact whose rubric spans owners (ref:
   `make-design-kit` v1, 2026-07-04 — checker for the mechanical dims, `linguistics-reviewer`
-  for potency, `component-reviewer` per preview, `doc-reviewer` for the spine's document slice; that
+  for potency, `component-checker` per preview, `doc-reviewer` for the spine's document slice; that
   charter now lives in `make-dscard-kit`, whose rubric keeps the
   checker/potency/document demarcation): legal ONLY when the
   rubric **demarcates which dimensions each critic scores** so every dimension has exactly one
@@ -183,4 +183,4 @@ Portfolio: KEEP|MERGE|SPLIT|RETIRE|RE-CHARTER — <one sentence of set-level why
 
 The campaign ledger is sharded per batch — `skills-audit/campaign/batch-N/<skill>.findings.jsonl` —
 each row `{skill, dim, tier: gate|review, finding, fix, status: open|fixed|filed|wontfix}`;
-`ui-audit/scripts/audit-diff.py --ledger` diffs passes (mapping skill→id, dim→checker, tier→gate).
+`check-whole-ui/scripts/audit-diff.py --ledger` diffs passes (mapping skill→id, dim→checker, tier→gate).

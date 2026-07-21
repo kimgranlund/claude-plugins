@@ -12,7 +12,7 @@ description: >-
   metric/x-height compatibility of CHOSEN fonts — or choosing fonts for a brand
   (pick-fonts); NOT for
   generating a type scale or design tokens (font-token-rules); NOT for building components
-  (component-forge); NOT for locale date/number formatting (i18n-verify). ANSWERS, does not generate.
+  (make-component); NOT for locale date/number formatting (check-translations). ANSWERS, does not generate.
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -87,8 +87,8 @@ the contested-knowledge form of the same rule.
   file still answers the typographic question inline — which ratio, why neutral vs. distinctive,
   what a script needs — from `references/techniques/modular-scale.md` and `references/voice/`;
   font-token-rules owns turning that answer into bound `--type-*` tokens.
-- **Building components** → [[component-forge]].
-- **Locale formatting, bidi, Intl, pluralization** → [[i18n-verify]] — script *metrics and
+- **Building components** → [[make-component]].
+- **Locale formatting, bidi, Intl, pluralization** → [[check-translations]] — script *metrics and
   typographic norms* stay here.
 - **Color pairing and contrast math** → [[color-contrast-facts]].
 - **Measure, legibility, and readability questions stay here** — answered from

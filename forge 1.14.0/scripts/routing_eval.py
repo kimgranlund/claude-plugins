@@ -75,9 +75,9 @@ def tokenize(text):
 # HARDENED 2026-07-04: only the DELIBERATE house forms parse as fence markers. Bare "does not" was
 # removed from the set — it matched ordinary prose anywhere in a description ("it grades, it does
 # not build"; "ANSWERS…, it does not generate") and silently truncated the positive zone at that
-# point, fencing every trigger that followed. Proven live: component-reviewer's F1 measured 0.375
+# point, fencing every trigger that followed. Proven live: component-checker's F1 measured 0.375
 # solely because its own role sentence tripped the marker; two more instances found corpus-wide
-# (ui-genres, ui-patterns). A fence is a deliberate act in the house grammar, never a side effect
+# (ui-genre-facts, ui-pattern-facts). A fence is a deliberate act in the house grammar, never a side effect
 # of natural prose.
 _FENCE_MARKERS = re.compile(
     r"(?i)\b(?:not\s+for|not\s+when|do(?:es)?\s*n['’]?ot\s+trigger|don['’]?t\s+trigger|never\s+for)\b"
@@ -338,7 +338,7 @@ def selftest():
         errs.append("B1: fenced fixture not detected as carrying a fence")
 
     # 7. FENCE-MARKER HARDENING (2026-07-04) — ordinary "does not" prose must NOT truncate the
-    #    positive zone (the component-reviewer regression: F1 0.375 from its own role sentence).
+    #    positive zone (the component-checker regression: F1 0.375 from its own role sentence).
     prose_desc = (
         "Grade the routing surface of a skill; it grades, it does not build. Triggers on: "
         "grade this description, score the routing precision and recall, build a routing corpus. "

@@ -75,13 +75,13 @@ grid + one fine pass only).
   monotonically 0.99→0.60 as t rises; P rises 0.675→0.934; F1 peaks mid-range. Narrow
   optimal plateau (width 0.02–0.03); meaningful degradation outside [0.30, 0.40].
 - Per-pair optima are BIMODAL: a recall-driven cluster wants t=0.10 (vision-memo-forge,
-  prd-author, i18n-verify, safety-verify, focus-verify, research-methods, token-builder —
+  prd-author, check-translations, check-safety, check-focus, research-methods, token-builder —
   mostly paraphrase positives the lexical proxy can't see, a measurement artifact the module
   docstring flags), and a precision-driven cluster wants t≥0.35 (system-builder, color-theory-facts,
-  spec-author, code-reviewer, component-reviewer@0.55). 0.34 is the balance point between them
+  spec-author, code-reviewer, component-checker@0.55). 0.34 is the balance point between them
   — exactly why a single global knob peaks in the middle.
 - Outlier (below tripwire at 0.34): orchestration-reviewer (agent), F1=0.545. Its own curve
   caps at 0.57 at EVERY threshold — no knob value rescues it. This is a description/corpus
   quality defect, NOT a threshold issue → route to the agent's owner.
-- Outlier (wants higher t): component-reviewer (agent), individual optimum t=0.55, but not
+- Outlier (wants higher t): component-checker (agent), individual optimum t=0.55, but not
   below tripwire at 0.34 — mild precision preference, no action.

@@ -1,6 +1,6 @@
 ---
 name: check-colors
-description: Verify a candidate OKLCH palette or semantic color mapping against contrast, hue stability, perceptual evenness, and CVD-safety, emitting a ColorProof. Use when asked "verify this palette", "does this palette pass", "check the contrast ratio of this text on this background", "is this color scheme safe for color-blind users", or to check contrast ratios, WCAG AA/AAA or APCA pass-fail, color-blind (CVD) safety, or alpha/translucent colors composited over a backdrop — every fg/bg pair across theme/scheme/contrast. NOT for building a ramp or dark scheme (make-palette); NOT for which contrast standard or CVD theory (color-contrast-facts); NOT for focus rings (focus-verify), RTL/locale (i18n-verify), latency (perf-verify), or destructive-action UX (safety-verify); NOT for color-space math or converting between color spaces (color-space-facts); NOT for harmony/meaning (color-theory-facts); NOT for a color-picker component (component-forge).
+description: Verify a candidate OKLCH palette or semantic color mapping against contrast, hue stability, perceptual evenness, and CVD-safety, emitting a ColorProof. Use when asked "verify this palette", "does this palette pass", "check the contrast ratio of this text on this background", "is this color scheme safe for color-blind users", or to check contrast ratios, WCAG AA/AAA or APCA pass-fail, color-blind (CVD) safety, or alpha/translucent colors composited over a backdrop — every fg/bg pair across theme/scheme/contrast. NOT for building a ramp or dark scheme (make-palette); NOT for which contrast standard or CVD theory (color-contrast-facts); NOT for focus rings (check-focus), RTL/locale (check-translations), latency (check-speed), or destructive-action UX (check-safety); NOT for color-space math or converting between color spaces (color-space-facts); NOT for harmony/meaning (color-theory-facts); NOT for a color-picker component (make-component).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -127,7 +127,7 @@ selection per scheme, the composited-outline inversion (α ≈ 0.35 black: 21:1 
 **necessary, not sufficient** — a clean run proves the arithmetic floor holds; step 3 proves the
 palette safe.
 
-## Family mechanics (canon: ui's ui-audit `references/verify-mechanics.md`, where installed — the verify-species discipline, degraded inline: rule-ID'd findings, scope-matched checks, post-fix same-scope re-run with none new, the narrowest-control waiver ladder with its anti-sycophancy clause, armed mode, symptom index)
+## Family mechanics (canon: ui's check-whole-ui `references/verify-mechanics.md`, where installed — the verify-species discipline, degraded inline: rule-ID'd findings, scope-matched checks, post-fix same-scope re-run with none new, the narrowest-control waiver ladder with its anti-sycophancy clause, armed mode, symptom index)
 
 - **Findings format:** `pair/token — [RULE_ID] finding → fix` — checker names above for
   mechanical; judgment findings take the slugs `color.cvd-collapse` (intent pairs
@@ -153,9 +153,9 @@ palette safe.
 | [[make-palette]] | builds/extends ramps and mappings; every failing ramp routes back to it |
 | [[color-contrast-facts]] | the perceptual theory under these constraints (APCA/WCAG math, CVD models) |
 | [[color-space-facts]] | gamut math under these constraints (peak chroma, C-only reduction) |
-| [[focus-verify]] | **owns focus-ring contrast** — the `--focus-ring` pairs were removed from `contrast-pairs.json`; route every focus-ring pair there |
+| [[check-focus]] | **owns focus-ring contrast** — the `--focus-ring` pairs were removed from `contrast-pairs.json`; route every focus-ring pair there |
 | `token-builder` agent | realizes verified palettes as token layers in a repo |
-| [[ui-audit]] | the set-scoped sweep that composes this verifier |
+| [[check-whole-ui]] | the set-scoped sweep that composes this verifier |
 
 **Done** = the contrast gate passes on every card + the full (theme × scheme × contrast) sweep
 passes + CVD safety judged; **NOT done** = a green contrast-check alone, or a card omitting pairs

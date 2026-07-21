@@ -1,7 +1,7 @@
-# ui — design, critique, and verify UI structure
+# screens — design, critique, and verify UI structure
 
 Sibling plugin to forge (which authors the harness) and scribe (which authors functional
-documents); ui authors and reviews UI structure — layouts, flows, components, patterns — and
+documents); screens authors and reviews UI structure — layouts, flows, components, patterns — and
 verifies it against the non-functional bars every surface owes (focus, i18n, perf, safety).
 Merges what plugin-decompose surfaced as two candidate clusters (ui-architecture and ui-verify)
 into one plugin on explicit direction: 13 cross-mentions between them was the single
@@ -11,31 +11,58 @@ highest-coupling boundary found in the analysis.
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/layout-decompose` | Procedural skill | both (`/layout-decompose`) | Two-axis (outside-in space x inside-out behavior) layout decomposition/grading method; `references/decomposition-method.md`, `references/walkthrough.md`; four archetypes consumed from `ui-patterns` |
-| `skills/flow-decompose` | Procedural skill | both (`/flow-decompose`) | Cross-screen flow decomposition (task->journey x transitions->whole); `scripts/flow-check.py` — reachability, dead-end, exit-truth, recovery gates; `references/one-time-pay.flow.json` |
-| `skills/component-forge` | Procedural skill | both (`/component-forge`) | Compose x Realize two-axis component method; `references/` — api-policy, attributes-as-api, composition-patterns, decomposition-method, family-controls, family-overlays, geometry-system, platform-baseline; `scripts/` — component-contract-check.py, composition-check.py, geometry-check.py |
-| `skills/ui-patterns` | Declarative skill | model-only | Macro/micro/container UI pattern catalog (page templates, module catalog, container Header·Body·Footer anatomy, screen-state grammar); `references/` — macro-patterns, micro-patterns, container-patterns, state-patterns, sources, four archetype-*.md files consumed by `layout-decompose` |
-| `skills/geometry-systems` | Declarative skill | model-only | Sizing/spacing SCALE theory — base-unit rationale, the dense-then-sparse progression shape, composable-spacing/nesting rules, density scaling, cross-system comparison (Material/Tailwind/Carbon/Apple); cites `component-forge`'s geometry-system.md and design-kits' `material-shape-facts` as worked instances rather than restating them; `references/` — scale-theory, composable-spacing, sources |
-| `skills/dom-block-flow` | Declarative skill | model-only | HTML/CSS layout-mechanics world model — box model + margin collapse, normal flow, Block Formatting Context triggers, stacking-context creation/nesting, containing-block resolution by position value, flex/grid sizing algorithms and gotchas (min-width:auto, auto-fill/auto-fit); cited against MDN + the CSS specs; `references/` — box-model-and-flow, formatting-contexts, stacking-contexts, flex-and-grid-mechanics, sources |
-| `skills/mobile-hig-patterns` | Declarative skill | model-only | Apple HIG world model — its own navigation-model guidance (tab bar vs nav stack, nav-bar/toolbar/search placement), modality/sheet-detent behavior, alert/action-sheet/sheet escalation, button-style vocabulary, list/swipe-action conventions; fences page-shell regions to `ui-patterns`, animation timing to `motion-design`, icon sizing to `icon-rules`; `references/` — navigation, modality-and-sheets, components, sources |
-| `skills/ui-genres` | Declarative skill | model-only | Product-genre world model — which patterns a category expects; `references/INDEX.md` + `references/genres/` — thirteen genre files (dashboards-analytics through travel) |
-| `skills/motion-design` | Declarative skill | model-only | Motion world model answered from a cited corpus — duration ladders + Nielsen limits, Apple-spring easing (house default) with CSS realizations, choreography/stagger/what-never-animates, reduced-motion policy + WCAG floor; `references/` — durations, easing, choreography, reduced-motion, sources |
-| `skills/ui-audit` | Procedural skill | both (`/ui-audit`) | Whole-product UI sweep composing the other nine members over a set of screens/flows; `scripts/` — inventory-scan.py, audit-diff.py, ui-probe.mjs (live DOM probe) |
-| `skills/ui-change-verify` | Procedural skill | both | Drives a UI change against the running artifact (launch, interact, screenshot before/after, console check, perf trace) before it's reported done — the live-artifact half of what `focus-verify`/`i18n-verify`/`perf-verify`/`safety-verify` reason about in the abstract |
-| `skills/focus-verify` | Procedural skill | both (`/focus-verify`) | Focus-ring, keyboard affordance, and hit-target verification; `scripts/focus-check.py`; `assets/focus-ring/recipes.json`, `assets/keyboard/affordances.json`, `assets/offsets/per-surface.json`, `assets/targets/minimums.json` |
-| `skills/i18n-verify` | Procedural skill | both (`/i18n-verify`) | RTL/bidi, locale Intl formatting, and text-expansion verification; `scripts/i18n-check.py`; `assets/bidi/isolation-points.json`, `assets/formatting/intl-surfaces.json`, `assets/locales/expansion-factors.json`, `assets/locales/script-metrics.json`, `assets/mirroring/icon-policies.json` |
-| `skills/perf-verify` | Procedural skill | both (`/perf-verify`) | Perceived-latency and Core Web Vitals verification; `scripts/budget-check.py`; `assets/cancellation/contract.json`, `assets/cls/budget.json`, `assets/decisions/skeleton-vs-spinner.json`, `assets/optimistic/eligibility.json`, `assets/streaming/posture.json`, `assets/thresholds/perception.json` |
-| `skills/safety-verify` | Procedural skill | both (`/safety-verify`) | Blast-radius, reversibility, and friction verification for destructive UI actions; `scripts/safety-check.py`; `assets/audit/event-schema.json`, `assets/blast-reversibility/matrix.json`, `assets/defaults/confirm-posture.json`, `assets/friction/recipes.json`, `assets/permissions/error-ux.json`, `assets/recall/windows.json` |
-| `agents/layout-reviewer.md` | Subagent (fresh-context critic) | dispatched (Task tool, model `fable`) | Grades ONE layout against `layout-decompose`'s two-axis rubric; preloads `layout-decompose` only |
-| `agents/flow-reviewer.md` | Subagent (fresh-context critic) | dispatched (Task tool, model `fable`) | Grades ONE cross-screen flow against `flow-decompose`'s two-axis rubric and its `flow-check.py` gate; preloads `flow-decompose` only |
-| `agents/component-reviewer.md` | Subagent (adversarial critic) | dispatched (Task tool, model `fable`) | Grades ONE component/composition against `component-forge`'s Compose x Realize method and its three checkers; preloads `component-forge` only |
+| `skills/break-down-layout` | Procedural skill | both (`/break-down-layout`) | Two-axis (outside-in space x inside-out behavior) layout decomposition/grading method; `references/decomposition-method.md`, `references/walkthrough.md`; four archetypes consumed from `ui-pattern-facts` |
+| `skills/break-down-flow` | Procedural skill | both (`/break-down-flow`) | Cross-screen flow decomposition (task->journey x transitions->whole); `scripts/flow-check.py` — reachability, dead-end, exit-truth, recovery gates; `references/one-time-pay.flow.json` |
+| `skills/make-component` | Procedural skill | both (`/make-component`) | Compose x Realize two-axis component method; `references/` — api-policy, attributes-as-api, composition-patterns, decomposition-method, family-controls, family-overlays, geometry-system, platform-baseline; `scripts/` — component-contract-check.py, composition-check.py, geometry-check.py |
+| `skills/ui-pattern-facts` | Declarative skill | model-only | Macro/micro/container UI pattern catalog (page templates, module catalog, container Header·Body·Footer anatomy, screen-state grammar); `references/` — macro-patterns, micro-patterns, container-patterns, state-patterns, sources, four archetype-*.md files consumed by `break-down-layout` |
+| `skills/size-and-shape-rules` | Declarative skill | model-only | Sizing/spacing SCALE theory — base-unit rationale, the dense-then-sparse progression shape, composable-spacing/nesting rules, density scaling, cross-system comparison (Material/Tailwind/Carbon/Apple); cites `make-component`'s geometry-system.md and design-kits' `material-shape-facts` as worked instances rather than restating them; `references/` — scale-theory, composable-spacing, sources |
+| `skills/dom-layout-facts` | Declarative skill | model-only | HTML/CSS layout-mechanics world model — box model + margin collapse, normal flow, Block Formatting Context triggers, stacking-context creation/nesting, containing-block resolution by position value, flex/grid sizing algorithms and gotchas (min-width:auto, auto-fill/auto-fit); cited against MDN + the CSS specs; `references/` — box-model-and-flow, formatting-contexts, stacking-contexts, flex-and-grid-mechanics, sources |
+| `skills/apple-mobile-facts` | Declarative skill | model-only | Apple HIG world model — its own navigation-model guidance (tab bar vs nav stack, nav-bar/toolbar/search placement), modality/sheet-detent behavior, alert/action-sheet/sheet escalation, button-style vocabulary, list/swipe-action conventions; fences page-shell regions to `ui-pattern-facts`, animation timing to `motion-rules`, icon sizing to `icon-rules`; `references/` — navigation, modality-and-sheets, components, sources |
+| `skills/ui-genre-facts` | Declarative skill | model-only | Product-genre world model — which patterns a category expects; `references/INDEX.md` + `references/genres/` — thirteen genre files (dashboards-analytics through travel) |
+| `skills/motion-rules` | Declarative skill | model-only | Motion world model answered from a cited corpus — duration ladders + Nielsen limits, Apple-spring easing (house default) with CSS realizations, choreography/stagger/what-never-animates, reduced-motion policy + WCAG floor; `references/` — durations, easing, choreography, reduced-motion, sources |
+| `skills/check-whole-ui` | Procedural skill | both (`/check-whole-ui`) | Whole-product UI sweep composing the other nine members over a set of screens/flows; `scripts/` — inventory-scan.py, audit-diff.py, ui-probe.mjs (live DOM probe) |
+| `skills/check-ui-change` | Procedural skill | both | Drives a UI change against the running artifact (launch, interact, screenshot before/after, console check, perf trace) before it's reported done — the live-artifact half of what `check-focus`/`check-translations`/`check-speed`/`check-safety` reason about in the abstract |
+| `skills/check-focus` | Procedural skill | both (`/check-focus`) | Focus-ring, keyboard affordance, and hit-target verification; `scripts/focus-check.py`; `assets/focus-ring/recipes.json`, `assets/keyboard/affordances.json`, `assets/offsets/per-surface.json`, `assets/targets/minimums.json` |
+| `skills/check-translations` | Procedural skill | both (`/check-translations`) | RTL/bidi, locale Intl formatting, and text-expansion verification; `scripts/i18n-check.py`; `assets/bidi/isolation-points.json`, `assets/formatting/intl-surfaces.json`, `assets/locales/expansion-factors.json`, `assets/locales/script-metrics.json`, `assets/mirroring/icon-policies.json` |
+| `skills/check-speed` | Procedural skill | both (`/check-speed`) | Perceived-latency and Core Web Vitals verification; `scripts/budget-check.py`; `assets/cancellation/contract.json`, `assets/cls/budget.json`, `assets/decisions/skeleton-vs-spinner.json`, `assets/optimistic/eligibility.json`, `assets/streaming/posture.json`, `assets/thresholds/perception.json` |
+| `skills/check-safety` | Procedural skill | both (`/check-safety`) | Blast-radius, reversibility, and friction verification for destructive UI actions; `scripts/safety-check.py`; `assets/audit/event-schema.json`, `assets/blast-reversibility/matrix.json`, `assets/defaults/confirm-posture.json`, `assets/friction/recipes.json`, `assets/permissions/error-ux.json`, `assets/recall/windows.json` |
+| `agents/layout-checker.md` | Subagent (fresh-context critic) | dispatched (Task tool, model `fable`) | Grades ONE layout against `break-down-layout`'s two-axis rubric; preloads `break-down-layout` only |
+| `agents/flow-checker.md` | Subagent (fresh-context critic) | dispatched (Task tool, model `fable`) | Grades ONE cross-screen flow against `break-down-flow`'s two-axis rubric and its `flow-check.py` gate; preloads `break-down-flow` only |
+| `agents/component-checker.md` | Subagent (adversarial critic) | dispatched (Task tool, model `fable`) | Grades ONE component/composition against `make-component`'s Compose x Realize method and its three checkers; preloads `make-component` only |
 
 Cross-plugin seam (soft, by design): all three reviewer agents return through forge's
 `handoff-compose` block where forge is installed, and fall back inline
 (Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action)
 when it is not — no hard preload crosses the plugin boundary.
 
-v0.9.7 · assembled 2026-07-21 · 0.9.7: ADR-0006 design-kits-rename sweep — live references rewritten; pointer updates only · v0.9.6 · assembled 2026-07-21 · 0.9.6: ADR-0006 typography-rename sweep — live references to typography's old member handles rewritten (layout-decompose fence, suites); pointer updates only · v0.9.5 · assembled 2026-07-21 · 0.9.5: ADR-0006 color-rename sweep — every live reference to color's old member handles rewritten (description fences, eval suites, routing corpora, verify-mechanics, ui-probe.mjs's sibling script path); pointer updates only · v0.9.4 · assembled 2026-07-20 · 0.9.4: ui-change-verify's NOT-for fence completed — a `plugin-decompose`
+## ADR-0006 transition table (renamed 2026-07-21)
+
+The PLUGIN renamed: `ui` → `screens` (new install identity; the directory `ui 0.1.0/` keeps its
+frozen path — see the workspace CLAUDE.md alias table). Old handles remain greppable only in
+ledgers, CHANGELOGs, ADRs, and attics.
+
+| Old name | New name |
+|---|---|
+| `component-forge` | `make-component` |
+| `layout-decompose` | `break-down-layout` |
+| `flow-decompose` | `break-down-flow` |
+| `focus-verify` | `check-focus` |
+| `i18n-verify` | `check-translations` |
+| `perf-verify` | `check-speed` |
+| `safety-verify` | `check-safety` |
+| `ui-audit` | `check-whole-ui` |
+| `ui-change-verify` | `check-ui-change` |
+| `ui-genres` | `ui-genre-facts` |
+| `ui-patterns` | `ui-pattern-facts` |
+| `dom-block-flow` | `dom-layout-facts` |
+| `geometry-systems` | `size-and-shape-rules` |
+| `mobile-hig-patterns` | `apple-mobile-facts` |
+| `motion-design` | `motion-rules` |
+| `component-reviewer` (agent) | `component-checker` |
+| `flow-reviewer` (agent) | `flow-checker` |
+| `layout-reviewer` (agent) | `layout-checker` |
+
+v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 6/9 — the PLUGIN renames ui → screens and all fifteen members + the three reviewer agents take the simple paradigm (transition table above). MAJOR bump — names are APIs and this is breaking. Workspace sweep (129 files + a hand pass on the bare `ui` plugin token, ledger history + forging evidence excluded); baseline = the color/typography/design-kits-wave results for 11 suites + a fresh 78-case blind run for dom-layout-facts / break-down-flow / apple-mobile-facts / ui-genre-facts; post-rename re-measure in the campaign PR · v0.9.7 · assembled 2026-07-21 · 0.9.7: ADR-0006 design-kits-rename sweep — live references rewritten; pointer updates only · v0.9.6 · assembled 2026-07-21 · 0.9.6: ADR-0006 typography-rename sweep — live references to typography's old member handles rewritten (layout-decompose fence, suites); pointer updates only · v0.9.5 · assembled 2026-07-21 · 0.9.5: ADR-0006 color-rename sweep — every live reference to color's old member handles rewritten (description fences, eval suites, routing corpora, verify-mechanics, ui-probe.mjs's sibling script path); pointer updates only · v0.9.4 · assembled 2026-07-20 · 0.9.4: ui-change-verify's NOT-for fence completed — a `plugin-decompose`
 gap analysis of the color-verify/ui-verify family (kept no-partition; hard preload edge on
 color-verify's side, soft co-occurrence kill on ui's) found every sibling except ui-change-verify
 already named color-verify as the peer it drives live-artifact work for (focus/i18n/perf/safety-verify

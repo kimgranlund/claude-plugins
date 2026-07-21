@@ -6,8 +6,8 @@
 > downstream PRD/SPEC/LLD as a verified manifest. This adapter deliberately carries no archetype
 > catalog, wireframes, or leveled per-domain grading — grade against the generic `rubric.md`. For
 > live UI design/critique (a screenshot, mockup, or wireframe to grade, not a manifest to feed
-> forward), route to `ui:layout-decompose` instead — its archetype library, leveled A1-B5 rubric,
-> and dedicated `layout-reviewer` critic are a different mechanism serving a different consumer,
+> forward), route to `ui:break-down-layout` instead — its archetype library, leveled A1-B5 rubric,
+> and dedicated `layout-checker` critic are a different mechanism serving a different consumer,
 > not a deeper version of this one (corrected 2026-07-19: this line previously called that pack
 > "retired," which was stale — it is alive and is the deliberate landing spot for that need).
 > Method depth in `method.md` (`scripts/coverage_check.py` runs the gate). · 2026-07-06

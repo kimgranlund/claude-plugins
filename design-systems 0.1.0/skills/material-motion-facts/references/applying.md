@@ -41,7 +41,7 @@ drift.
 | Fade | short–medium (100–350 ms) | `standard.decelerate` in, `standard.accelerate` out | `spring.fast.effects` |
 
 Pattern anatomy and when each fits (spatial-claim reasoning) is platform-agnostic knowledge —
-`motion-design` (ui plugin) owns it; this file owns only the Material token realization.
+`motion-rules` (screens plugin) owns it; this file owns only the Material token realization.
 
 ## Web realization notes
 
@@ -51,4 +51,4 @@ Pattern anatomy and when each fits (spatial-claim reasoning) is platform-agnosti
   stiffness/damping (values in `tokens.md`) into a CSS `linear()` stop list or a Web Animations
   API curve.
 - Respect `prefers-reduced-motion` at the consumption site: swap spatial patterns to fades, keep
-  effects springs (policy: `motion-design`'s reduced-motion reference, where installed).
+  effects springs (policy: `motion-rules`'s reduced-motion reference, where installed).

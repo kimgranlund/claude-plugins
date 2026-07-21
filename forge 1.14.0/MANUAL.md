@@ -36,7 +36,7 @@ Install, then `/reload-plugins`. Everything below is invoked as `/forge:<name>` 
 > `/skill-refactor split-manifest.json` — always after the decision skill's checker runs clean
 
 **`/pack-forge [skill-dir | new pack: domain]`** — mint or grow a knowledge pack's reference corpus through question-led research waves: ratified question set, dated gathering, ask-shaped distillation with confidence markers, INDEX/evals registration, corpus_check validation. One axis per wave.
-> `/pack-forge skills/ui-patterns` · `/pack-forge "new pack: design tokens"`
+> `/pack-forge skills/ui-pattern-facts` · `/pack-forge "new pack: design tokens"`
 
 **`/plugin-release [plugin-root]`** — release through the full gate: version bump on approval, `release_gate.py` (structure, manifest, full lint, bundled selftests, phantom sweep, eval validation), package to `dist/`.
 > `/plugin-release` · run `python3 scripts/release_gate.py . ` alone for a dry gate

@@ -9,7 +9,7 @@ description: >-
   "review this document against its own rubric" or "score this PRD / SPEC / LLD / ADR / vision memo". It
   reports the gap-map; the maker applies the fix. NOT for authoring these (the matching *-author skills);
   NOT for SKILL.md files (skill-reviewer), subagent definitions (agent-reviewer), wording potency alone
-  (linguistics-reviewer), or UI artifacts (component-/layout-reviewer); NOT for a code change or diff
+  (linguistics-reviewer), or UI artifacts (component-/layout-checker); NOT for a code change or diff
   (code-reviewer); NOT for explaining what a rubric says (answer inline from the owning skill).
 tools: Read, Grep, Glob, Bash
 model: fable

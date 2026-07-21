@@ -10,7 +10,7 @@ description: >
   decelerate, exits accelerate; speed by scope), the platform-drift map (material-web has NO
   spring tokens). Never hardcode a ms value or bezier in a Material project. NOT for
   platform-agnostic motion science — how long an animation should be in general, Apple springs,
-  choreography, reduced-motion policy (motion-design, ui plugin); NOT for color/geometry/type
+  choreography, reduced-motion policy (motion-rules, screens plugin); NOT for color/geometry/type
   (the material-design-* siblings); NOT for DESIGNING a motion system.
 disable-model-invocation: false
 user-invocable: false
@@ -70,7 +70,7 @@ animation sits on the project's one system — springs XOR duration+easing.
 ## Boundaries
 
 - Platform-agnostic motion questions — how long *should* something take, why springs, stagger,
-  what never animates, `prefers-reduced-motion` policy — belong to `motion-design` (ui plugin,
+  what never animates, `prefers-reduced-motion` policy — belong to `motion-rules` (screens plugin,
   where installed); this pack owns only the Material realization.
 - Color/sizing/type tokens: the three sibling packs. Designing a new motion system: not this pack.
 

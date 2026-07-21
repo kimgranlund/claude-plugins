@@ -36,7 +36,7 @@ export default [
   {
     // ui-probe drives a real browser via playwright — its page.evaluate() callbacks execute in
     // the PAGE, where browser globals are the environment, not an error.
-    files: ["**/ui-audit/scripts/ui-probe.mjs"],
+    files: ["**/check-whole-ui/scripts/ui-probe.mjs"],
     languageOptions: {
       globals: {
         window: "readonly", document: "readonly", performance: "readonly",

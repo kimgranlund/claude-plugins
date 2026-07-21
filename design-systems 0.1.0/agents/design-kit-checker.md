@@ -11,7 +11,7 @@ description: >-
   to "review this design system export", "grade our Stitch DESIGN.md", "is this Make guidelines
   folder ready to ship", "audit our claude design bundle before upload", or "did our exports
   drift apart". It reports a gap-map; the maker applies the fix. NOT for ONE component preview's
-  internals (component-reviewer); NOT for a screen or shell layout (layout-reviewer); NOT for the
+  internals (component-checker); NOT for a screen or shell layout (layout-checker); NOT for the
   wording layer alone (linguistics-reviewer); NOT for APPLYING token fixes (token-builder — this
   seat reports findings, builders fix); NOT for a code change or diff (code-reviewer); NOT for
   authoring or fixing an export (the make-design-kit hub and its platform siblings); NOT for
@@ -77,7 +77,7 @@ it is not a review.
 | a harmony or mood judgment (does this palette read as the named world) | color-theory-facts |
 | ramp quality, or a fill/on pair needing a full ColorProof | make-palette · check-colors |
 | type pairing or letterform anatomy | lettering-facts |
-| whole-product or genre-conformance context | ui-audit · ui-genres · ui-patterns |
+| whole-product or genre-conformance context | check-whole-ui · ui-genre-facts · ui-pattern-facts |
 
 ## Boundaries
 
@@ -85,7 +85,7 @@ it is not a review.
   set; not the estate's whole export history.
 - **Grade only; the maker fixes.** Token-level fixes route to token-builder; export repairs route
   to the owning make-design-kit sibling; one preview component's internals hand to
-  component-reviewer; a screen/shell to layout-reviewer; the wording layer alone to
+  component-checker; a screen/shell to layout-checker; the wording layer alone to
   linguistics-reviewer; a code diff to code-reviewer.
 - **The receipt is a claim, not evidence** — a checker-clean export still owes the judgment
   dimensions and the standing-rules sweep.

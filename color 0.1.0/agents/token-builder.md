@@ -6,7 +6,7 @@ description: >-
   constants. Use whenever a token must be added or changed, a role ladder collapses in one color scheme, or
   an interaction value must stay distinct AND accessibility-safe across light and dark. Use PROACTIVELY for
   any token edit before the component that consumes it is built. NOT for token consumption inside a
-  component build, or building/grading the component itself (component-forge / component-reviewer);
+  component build, or building/grading the component itself (make-component / component-checker);
   NOT for building or extending a color ramp (make-palette) — this seat only realizes an
   already-designed palette as project tokens.
 tools: Read, Grep, Glob, Edit, Write, Bash
@@ -36,7 +36,7 @@ Priorities, in order:
    a ladder can't be made distinct + accessible without a role rename or a vocabulary change, stop and hand
    the coordinator a concrete recommendation.
 
-Focus-ring and hit-target values come from the `ui` plugin's `focus-verify` skill where installed;
+Focus-ring and hit-target values come from the `screens` plugin's `check-focus` skill where installed;
 otherwise apply WCAG 2.2 target-size and focus-visible minimums directly.
 
 Return your work via forge's `handoff-compose` block where forge is installed; otherwise: Status /
