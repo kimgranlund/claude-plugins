@@ -256,6 +256,10 @@ def gate(root: Path, package: bool = False):
              # the mechanization pair (2026-07-14): "hand-run" is prose ("a hand-run check",
              # -run suffix from check-routing); "selftest-patterns" is a references file:
              "hand-run", "selftest-patterns",
+             # the #78 ship-leg capture (2026-07-21): "parallel-session pulls" is prose in
+             # big-change-git-rules' re-budgeted description; "writing-rules" is the
+             # *-writing-rules family glob (successor of the *-authoring-standards form):
+             "parallel-session", "writing-rules",
              # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
              # "scale-theory" are references files (ui-pattern-facts, size-and-shape-rules); "design"
              # is the sibling PLUGIN's name, caught by size-and-shape-rules' own "-systems" suffix;
