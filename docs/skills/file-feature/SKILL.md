@@ -1,5 +1,5 @@
 ---
-name: feature
+name: file-feature
 description: >-
   Capture a feature idea — however vague — as a durable, scope-appropriate record BEFORE any
   building starts: a `kind: feature` record, the design docs the change earns (PRD/SPEC/LLD via

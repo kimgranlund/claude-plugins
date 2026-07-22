@@ -400,7 +400,11 @@ def lint_claude_md_text(text):
 
 
 def classify(path):
-    p = Path(path)
+    # Absolutize before keying on parent names: a bare relative filename has no
+    # parent to match, so `cd agents && lint x.md` misclassified agent files as
+    # skills (#83, 2026-07-21). absolute() not resolve() — following a symlink
+    # would reclassify a linked member by its target's directory.
+    p = Path(path).absolute()
     if p.name == "SKILL.md":
         return "skill"
     if p.suffix == ".md" and p.parent.name == "agents":
@@ -593,6 +597,23 @@ def selftest():
     assert classify("x/CLAUDE.md") == "claude_md"
     assert classify("x/skills/demo/SKILL.md") == "skill"
     assert classify("x/notes.md") is None
+    # #83 regression — classification is invocation-invariant: a bare relative
+    # filename linted from inside an agents/ dir classifies as agent, identical
+    # to its absolute path
+    import os as _os
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as _td:
+        _adir = Path(_td) / "agents"
+        _adir.mkdir()
+        _af = _adir / "probe.md"
+        _af.write_text("---\nname: probe\n---\n")
+        _cwd = _os.getcwd()
+        try:
+            _os.chdir(_adir)
+            assert classify("probe.md") == "agent", "bare relative agent path must classify as agent"
+            assert classify(str(_af)) == "agent", "absolute agent path must classify as agent"
+        finally:
+            _os.chdir(_cwd)
     print(f"{HOOK_NAME} selftest · PASS · skills bad={sorted(bad)} · agents bad={sorted(bad_agent)}")
     return 0
 

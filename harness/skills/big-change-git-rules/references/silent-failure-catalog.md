@@ -57,9 +57,9 @@ treats everything else as not-there; no usage error, no warning. The run failed 
 because the worktree's branch happened to be deleted remotely — against a live branch it would
 have quarantined and pulled the wrong repo while reporting success. **The general form:** a
 script's silent acceptance of your arguments is itself a CLAIM ("I understood the invocation");
-a git-mutating script must reject unknown argv tokens loudly before touching state. Fix tracked
-in Issue #74 (reject-unknown-args + selftest fixture); until it ships, re-read the script's own
-banner line (`sync_main · <root>`) and verify the target it names is the one you meant.
+a git-mutating script must reject unknown argv tokens loudly before touching state. Fixed same
+day in `sync_main.py`'s strict `parse_cli` (harness 2.0.5, PR #86, closing Issue #74): any
+unknown or malformed argv token exits with usage text before any git operation, selftest-proven.
 
 ## The general pattern, stated once
 
