@@ -1,17 +1,11 @@
 ---
 name: agent-residency-facts
 description: >-
-  Classifies a conversational agent as a Resident Agent (a CLI harness like Claude Code — a
-  persistent filesystem/git/shell host) or an Ephemeral Agent (a hosted chatbot — a per-conversation
-  sandbox with a function-calling tool surface), and routes to which existing skill owns each
-  tier's guidance. Use when the user asks "what's the difference between a CLI agent and a hosted
-  chatbot", "is this a Resident Agent or an Ephemeral Agent", "does this guidance apply to a hosted
-  chat agent or a CLI harness like Claude Code", "am I building for a CLI tool or a customer-facing
-  chatbot", "which agent tier does this pattern belong to", or before writing agent-authoring
-  knowledge into a knowledge-pack. NOT for Ephemeral guardrail content
-  (llm:chat-harness-guardrail-facts); NOT for Resident authoring/orchestration patterns
-  (harness:agent-writing-rules, teamwork:parallel-work-rules); NOT for building either
-  agent kind from scratch (route to the owning tier's authoring skill).
+  Classifies an agent as a Resident Agent (CLI harness, e.g. Claude Code) or Ephemeral Agent
+  (hosted chatbot), and routes to the skill owning each tier's guidance. Use for "CLI vs hosted
+  chatbot", "Resident or Ephemeral", "transfer across tiers", "which agent tier". NOT for
+  Ephemeral guardrails (chat-harness-guardrail-facts); NOT for Resident dispatch once tiered
+  (parallel-work-rules, team-or-solo-rules); NOT for subagent preload (agent-writing-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

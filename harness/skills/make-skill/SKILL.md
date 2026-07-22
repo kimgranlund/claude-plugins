@@ -1,15 +1,11 @@
 ---
 name: make-skill
 description: >-
-  Forge a Claude Code skill end-to-end through six gated phases: route check, intent interview,
-  evals-first, species-template draft, language pass, lint + fresh-context audit + behavioral
-  validation. Use when the user wants to build, create, author, or scaffold a NEW skill from an
-  intent — "build a skill for X", "make a skill that does Y", "I want a reusable capability for Z",
-  "turn this workflow into a skill", "write me a new skill for migrations", "add this as something
-  the model can invoke on its own". Human-timed; writes files; interviews before minting. NOT for
-  auditing an EXISTING skill without changes (check-skill); NOT for deciding whether a corpus
-  should split (plan-skill-split) or merge (plan-skill-merge); NOT an agent (make-agent), a hook
-  (make-hook), or CLAUDE.md (check-entry-file) — different primitives.
+  Forge a Claude Code skill end-to-end: intake interview, evals-first draft, and audit. Use when
+  the user wants to build, make, author, write, or scaffold a new skill — a reusable capability,
+  turning a workflow into a skill, or adding something the model can invoke on its own. NOT for
+  auditing an EXISTING skill (check-skill); NOT for deciding whether a corpus should split
+  (plan-skill-split) or merge (plan-skill-merge).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[skill-name or one-line intent]"

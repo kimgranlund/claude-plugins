@@ -1,17 +1,11 @@
 ---
 name: script-writing-rules
 description: >-
-  Standards for bundled scripts — the deterministic tier: every check, gate, or derivation that
-  can be code instead of prose, shipped as scripts/taskname.py|mjs with a selftest that proves it.
-  Use when the user asks how a bundled script should be structured, what a selftest mode needs
-  (fixtures, the negative control that bites), the exit-code contract (0 pass / 1 fail / 2 skip),
-  whether a script lives in a skill's scripts/ or the plugin's, python or js for a given check,
-  what release_gate's G4 sweep actually runs, or whether something is mechanizable at all — the
-  arithmetic-not-judgment boundary. NOT for authoring the script through the gated workflow
-  (make-script); NOT for event-fired enforcement or hooks.json (hook-writing-rules); NOT
-  for the SKILL.md that calls the script (skill-writing-rules); NOT for directly executing
-  a script — "run the release gate on docs" just runs it, no standards question asked. Verified
-  gate semantics (July 2026).
+  Standards for bundled scripts — code instead of prose, shipped as scripts/taskname.py|mjs
+  with a selftest that proves it. Covers structure, skill- vs plugin-level scripts/, python vs
+  js, negative controls, the exit-code contract (0/1/2), and whether something is
+  mechanizable. NOT for the authoring workflow (make-script); NOT for hooks.json
+  (hook-writing-rules); NOT for the calling SKILL.md (skill-writing-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

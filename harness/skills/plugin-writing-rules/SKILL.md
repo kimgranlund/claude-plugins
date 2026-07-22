@@ -1,15 +1,11 @@
 ---
 name: plugin-writing-rules
 description: >-
-  Standards for authoring and releasing Claude Code plugins — the distribution unit. Use when the
-  user asks how to structure a plugin, write plugin.json, package or release a plugin, version it,
-  ship hooks or agents or MCP servers in one, why an INSTALLED plugin fails to load, why an update
-  isn't picked up, where a plugin's state or config lives, or how plugin namespacing and trust
-  work. NOT for RUNNING a release — "release the plugin now" (ship-plugin, a
-  command); NOT for declaring a plugin/marketplace in settings.json so it's installable in the first
-  place, or a just-declared plugin not yet appearing in /plugin (adopt-plugin). Carries the
-  verified load, reload, and versioning semantics (July 2026), including the three load-failure
-  classes this plugin hit.
+  Standards for authoring and releasing Claude Code plugins. Use when asking how to structure a
+  plugin, what goes in plugin.json, why a plugin fails to load, why an update isn't picked up,
+  where plugin state lives, or how namespacing works. NOT for RUNNING a release (ship-plugin);
+  NOT for partitioning skills and hooks into plugins (plan-plugin-split); NOT for declaring a
+  plugin/marketplace in settings.json (adopt-plugin).
 disable-model-invocation: false
 user-invocable: false
 ---

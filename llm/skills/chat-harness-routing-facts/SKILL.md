@@ -1,18 +1,13 @@
 ---
 name: chat-harness-routing-facts
 description: >-
-  How a chat-agent harness exposes capabilities as discoverable, load-on-demand "skills" instead of
-  hardcoded features. Use for "should this be a skill or hardcode it", "model-invoked vs
-  user-invoked skill", "what does disable-model-invocation do", "why doesn't my skill ever
-  trigger", "why did the wrong skill fire", "why does this always-on instruction cost context on
-  every single turn". Covers skill-vs-hardcode tradeoffs, the
-  model-invoked/user-invoked dial, and routing a request to the right skill/tool/subagent via a
-  measured, adversarial eval corpus. Grounded in Claude Code's own skill-loading mechanics and this
-  workspace's routing-corpus + evals convention, cited as a worked instance. ANSWERS from a cited
-  corpus; does not build. NOT for instruction-layering/guardrails across a harness
-  (chat-harness-guardrail-facts); NOT for multi-agent composition
-  (chat-harness-workflow-facts); NOT for a repo's skill-authoring structural standard
-  (skill-writing-rules).
+  How a chat-agent harness exposes capabilities as load-on-demand skills vs. an always-on cost,
+  and how a request finds the right one. Use for skill-vs-hardcode, model- vs user-invoked
+  (auto-trigger vs slash-only, user-invocable), what disable-model-invocation does incl. its
+  preload interaction, a skill that won't trigger, wrong skill firing, and testing that a
+  description actually routes — the measured, adversarial eval corpus. Grounded in Claude Code's mechanics. ANSWERS; does not build. NOT for guardrails
+  (chat-harness-guardrail-facts); NOT for multi-agent composition (chat-harness-workflow-facts);
+  NOT for a tool catalog's loading (chat-harness-tool-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

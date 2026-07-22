@@ -1,15 +1,12 @@
 ---
 name: make-vision-memo
 description: >-
-  Use when the user asks to author — or improve — a vision memo: the class of document that argues
-  *how to think* about a problem, not what to build: manifestos, reframe essays, strategic case-for
-  pieces, and synthesis memos. Triggers: "write a vision memo / manifesto / strategic brief / position
-  paper / think piece", "make the first-principles case for", "reframe this decision", "crystallize
-  this thinking into a shareable doc", "synthesize these competing positions", "tighten this drafted
-  memo's argument", or when conversation-thinking should become a standalone
-  argument. Picks the archetype, locates the thesis, drafts in an opinionated compressed voice;
-  doc-checker grades it. NOT for a PRD, SPEC, LLD, or ADR
-  (make-doc), or a reference doc (make-reference) — those describe what to build or document; NOT for scoring or reviewing a finished memo against its rubric (check-doc); NOT for marketing copy, a tutorial, or a neutral balanced survey — a vision memo takes a stake and argues one thesis.
+  Use when the user asks to author or improve a vision memo — argues how to think about a
+  problem, not what to build. Triggers: "write a vision memo/manifesto/strategic brief/position
+  paper/think piece", "make the case for X", "reframe this decision", "crystallize this into a
+  doc", "synthesize competing positions", or "tighten this memo's argument". NOT a
+  PRD/SPEC/LLD/ADR (make-doc); NOT reviewing a finished memo (check-doc); NOT marketing, tutorial,
+  or balanced-survey copy.
 disable-model-invocation: false
 user-invocable: true
 ---

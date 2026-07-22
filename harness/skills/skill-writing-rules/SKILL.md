@@ -2,11 +2,10 @@
 name: skill-writing-rules
 description: >-
   Standards for writing Claude Code skills that change behavior instead of documenting it. Use
-  when the user asks how to write, structure, review, or fix a SKILL.md; how to choose invocation
+  when the user asks how to write, structure, review, or fix a SKILL.md; choosing invocation
   flags (disable-model-invocation, user-invocable) or skill species (procedural, knowledge,
-  command); why a skill never triggers, misfires, or stops influencing behavior; how long a body
-  should be; what belongs in the description vs the body vs references/. Carries the verified
-  context budgets and frontmatter semantics (July 2026).
+  command); why a skill never triggers, misfires, or stops influencing behavior; body length; or
+  what belongs in description vs body vs references/.
 disable-model-invocation: false
 user-invocable: false
 ---

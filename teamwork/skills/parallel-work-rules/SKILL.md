@@ -1,21 +1,13 @@
 ---
 name: parallel-work-rules
-description: >
-  Decide whether concurrent sessions/subagents touching one repo need
-  git-tree isolation, and what to do when they collide anyway. Use
-  whenever actors may mutate the same tree with overlapping scope: "should
-  I work in a worktree for this", "set up this repo so sessions don't
-  collide", "another session has uncommitted changes to files I need",
-  "should this subagent use isolation: worktree", "two builders touching
-  the same files", "should I commit before this risky move", "my build
-  collided with another session's edits". NOT dispatch shape/cost — solo
-  vs. team, how many subagents (team-or-solo-rules); this skill only
-  decides whether the shape's targets overlap enough to need isolation,
-  and owns cross-session collision entirely. NOT when the next turn fires
-  — /goal, /loop, Stop hooks (loop-rules). NOT hook/agent/entry-file
-  mechanics once a rule is decided (hook-writing-rules /
-  agent-writing-rules / entry-file-rules, harness). NOT wrapping
-  up THIS session's worktree before ending (close-session).
+description: >-
+  Decide whether concurrent sessions/subagents need git-tree isolation, and what to do
+  on collision. Use when overlapping actors may mutate the same tree — "should I work
+  in a worktree for this", "should this subagent use isolation: worktree", uncommitted
+  shared-file changes, two builders on the same files, a collided build, or committing
+  before a risky move. NOT dispatch shape/cost (team-or-solo-rules); NOT next-turn
+  timing — /goal, /loop (loop-rules); NOT closing out THIS session's worktree
+  (close-session).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -1,16 +1,13 @@
 ---
 name: make-rubric
-description: >
-  Author, evaluate, improve, or update a rubric so it produces consistent,
-  actionable judgments, against the bundled rubric-for-rubrics. Use whenever
-  building, scoring, fixing, or re-syncing a scoring rubric, eval criteria, a
-  quality checklist, or a /goal completion condition: "write a rubric", "is this
-  rubric any good", "my reviewers score differently", "tighten these anchors",
-  "turn this into eval criteria", "which dimensions should gate promotion and
-  at what threshold", "re-anchor this rubric — the artifact standard changed",
-  "the level descriptors are vague — fix the anchors". NOT for the skill/agent
-  carrying the rubric (harness's make-skill / make-agent) nor the /goal loop itself
-  (loop-rules — this skill owns only the completion condition's quality).
+description: >-
+  Author, evaluate, improve, or update a rubric for consistent judgments. Use when
+  building, scoring, fixing, or re-syncing a scoring rubric, eval criteria, checklist,
+  or /goal completion condition — "write a rubric", reviewers scoring the same
+  artifact differently, vague anchors two readers won't converge, "which dimensions
+  should gate promotion", or "re-anchor this rubric — the artifact standard changed".
+  NOT for the skill/agent carrying the rubric (make-skill / make-agent), nor the /goal
+  loop itself (loop-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

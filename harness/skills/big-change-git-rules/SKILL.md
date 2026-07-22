@@ -1,18 +1,14 @@
 ---
 name: big-change-git-rules
 description: >-
-  How this workspace runs a git worktree campaign safely — placement, merge/branch-delete
-  verification, parallel-session pulls, the solo-vs-campaign decision — from a dated incident
-  corpus. Use for "gh reports a post-merge checkout error", "did the remote branch actually get
-  deleted", "pull without clobbering a parallel session's work", "a git command said it worked
-  but nothing changed", "solo commit or a full campaign", "resolve a stash-pop conflict safely",
-  "was requiring PRs on main ever considered here", "push or PR-create Blocked by classifier in
-  a subagent". Covers discard safety, merge semantics (ten-branch delete-failure class, CI as
-  gate), the ship-leg split (who pushes, who merges), the silent-failure catalog, the reconcile
-  protocol, the ADR-0002 decision tree. ANSWERS; never performs a git op on request — "delete
-  this branch", "pull the latest" — plain git/gh does that. NOT for authoring/reviewing
-  skills/agents/hooks/plugins (the *-writing-rules family); NOT running a campaign end-to-end
-  (CLAUDE.md).
+  This workspace's git-worktree campaign safety rules. Use for "gh reports a post-merge checkout
+  error", "did the remote branch actually get deleted", "pull without clobbering a parallel
+  session's work", "a git command said it worked but nothing changed", "solo commit or a full
+  campaign", "resolve a stash-pop conflict safely", "was requiring PRs on main ever considered
+  here", "push or PR-create Blocked by classifier in a subagent". Covers placement, discard
+  safety, ten-branch delete-failures, the ship-leg split (who pushes, who merges), the ADR-0002
+  decision tree. ANSWERS only; NOT authoring/reviewing skills/agents/hooks/plugins
+  (*-writing-rules) or full campaigns (CLAUDE.md).
 disable-model-invocation: false
 user-invocable: false
 ---

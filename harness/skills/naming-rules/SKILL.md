@@ -1,15 +1,11 @@
 ---
 name: naming-rules
 description: >-
-  The simple naming paradigm for harness artifacts — plugins, skills, commands, agents. Use when
-  naming something new ("what should we name this skill/plugin/agent", "what should I call it"),
-  simplifying a name ("is this name too vague", "name this so it reads like plain English",
-  "a name a five-year-old would understand"), reviewing names for simplicity, or naming a
-  skill↔agent pair. NOT for the legacy estate grammar, or why the EXISTING estate's names are
-  structured the way they are (agent-writing-rules §Naming; skill_lint's checkable slice);
-  NOT for executing renames across an estate
-  (big-change-git-rules — names are APIs); NOT for plugin partitioning (plan-plugin-split);
-  NOT for code identifiers — variables, functions (general engineering).
+  Simple naming paradigm for plugins, skills, commands, agents. Use when naming something new
+  ("what should we name this skill", "what should I call it"), simplifying a name ("too vague",
+  "plain English", "five-year-old simple"), reviewing names, contrasting similar siblings, or a
+  skill↔agent pair. NOT for legacy estate grammar (agent-writing-rules); NOT for executing
+  renames (big-change-git-rules); NOT for plugin partitioning (plan-plugin-split).
 disable-model-invocation: false
 user-invocable: false
 ---

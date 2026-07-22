@@ -2,17 +2,12 @@
 name: chat-harness-workflow-facts
 description: >-
   How a chat-agent harness composes MULTIPLE agents for work too large for one context —
-  project-agnostic. Use for "decompose this across a team of agents", "who plans vs builds vs
-  reviews", "chain of command for a multi-agent build", "a subagent hands work to its
-  coordinator", "what fields go in a hand-off", "make hand-offs verifiable, not trusted",
-  "run this as a deterministic pipeline, not step-by-step dispatch", "fan out and fan back in",
-  "parallel vs pipeline", "scripted workflow or ad hoc dispatch". Covers a coordinator/planner/
-  builder/reviewer chain with an escalation loop; the typed hand-off (status/summary/files-
-  changed/tests/evidence/risks/next-action) checked, not re-read; and a scripted pipeline
-  (agent/parallel/pipeline — barrier vs none) vs turn-by-turn dispatch. Grounded in this
-  harness's own Agent/Workflow mechanics + a shipped multi-agent team, as worked examples. NOT
-  single-skill routing (chat-harness-routing-facts); NOT run measurement
-  (chat-harness-logging-facts); NOT feature-building.
+  project-agnostic. Use for chain-of-command decomposition (plan vs build vs review, escalate a
+  discovered constraint), when work earns a team of agents instead of staying inline, a typed hand-off a coordinator can
+  verify, not trusted prose — what fields a subagent hands back when it finishes, and
+  scripted pipelines (parallel/barrier) vs turn-by-turn dispatch. Grounded in this harness's own
+  mechanics + a shipped team; answers, no build. NOT one skill's routing
+  (chat-harness-routing-facts); NOT measuring a run (chat-harness-logging-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

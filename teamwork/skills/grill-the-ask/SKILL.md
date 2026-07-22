@@ -1,16 +1,12 @@
 ---
 name: grill-the-ask
 description: >-
-  Proactively DERIVE the load-bearing design decisions for a greenfield system, component family, or
-  feature whose decision space is mostly unmade. Use when designing or planning something new and largely
-  open; when the user says "grill me", "plan this", "design this family", "what do we need to decide
-  here", "walk me through the choices", or "interrogate the design space"; before running
-  break-down-problem or drafting a PRD/SPEC/LLD on a fresh domain — grill the decisions out of TWO
-  reasoning axes (Structural / outside-in and Mechanism / inside-out) across cascading rounds, where each
-  round's answers reshape the next, grounding every option in the actual codebase and constraints, until
-  the surface is settled enough to decompose. NOT for sharpening one already-given ask (find-the-ask);
-  NOT for the decomposition itself (break-down-problem); NOT for authoring the PRD/SPEC/LLD documents
-  (docs' `make-doc`, governed by `doc-writing-rules`).
+  DERIVE the load-bearing design decisions for a greenfield system, component family, or feature
+  whose decision space is mostly unmade. Use for "grill me on the design", "plan this new
+  feature, nothing is decided yet", "what do we need to decide here", or "walk me through the
+  choices round by round" — grounded, cascading rounds until settled. NOT for sharpening a given
+  ask (find-the-ask), decomposing it (break-down-problem), or authoring the PRD/SPEC/LLD
+  (make-doc).
 disable-model-invocation: false
 user-invocable: true
 ---

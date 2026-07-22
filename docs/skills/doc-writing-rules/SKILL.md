@@ -2,11 +2,10 @@
 name: doc-writing-rules
 description: >-
   Standards for authoring functional documents — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK.
-  Use when the user asks which document type a situation needs, what sections or frontmatter a type
-  requires, whether a document can be edited (mutability classes — why an accepted ADR is
-  append-only), how documents should reference each other (the ID spine), how plans track status,
-  or why a doc failed doc_lint. Carries the type contract table the templates and validator
-  enforce. NOT for drafting a document (make-doc); NOT for reviewing one (check-doc).
+  Use when asking which document type fits, what sections/frontmatter a type requires, whether a
+  document can be edited (why an accepted ADR is append-only), how documents reference each other
+  (the ID spine), how plans track status, or why doc_lint failed. NOT for drafting one (make-doc);
+  NOT for reviewing one (check-doc).
 disable-model-invocation: false
 user-invocable: false
 ---

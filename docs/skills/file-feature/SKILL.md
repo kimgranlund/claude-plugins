@@ -1,18 +1,11 @@
 ---
 name: file-feature
 description: >-
-  Capture a feature idea — however vague — as a durable, scope-appropriate record BEFORE any
-  building starts: a `kind: feature` record, the design docs the change earns (PRD/SPEC/LLD via
-  make-doc, never the bundle), or a reference corpus when the "feature" is really knowledge to
-  encode. Use when the user proposes a new capability, pitches an idea, or asks "can we add X" —
-  "can we add a dark mode", "what if we supported CSV export". Pure intake: sizes and records,
-  never builds. Runs find-the-ask (one round max), a
-  dedup sweep, and break-down-problem, then records by shape — the TICKET file by default, or the
-  workspace's ruled backend (git-native, or a named external adapter). Also runs via /file-feature [raw
-  idea, or a TKT-/#issue/adapter id]. Writes one record set, then stops — building is /build-feature's
-  job. NOT for bug-shaped
-  reports (file-bug); NOT for generic chores/follow-ups/tasks needing no sizing (file-task); NOT
-  for dispatching or performing the build (/build-feature); NOT for other document types (make-doc).
+  Capture a feature idea as a durable record: a ticket, design docs, or a reference corpus when
+  it's really knowledge to encode. Use when the user proposes a new capability or pitches an
+  idea — "can we add a dark mode", "what if we supported CSV export". Intake only, never builds.
+  /file-feature [idea, or a TKT-/#issue/adapter id] resumes. NOT for bugs (file-bug); NOT for
+  chores (file-task); NOT for authoring docs (make-doc).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw feature idea, or a TKT-/#issue/adapter-native id to resume]"

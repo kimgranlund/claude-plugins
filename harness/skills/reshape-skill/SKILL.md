@@ -1,15 +1,11 @@
 ---
 name: reshape-skill
 description: >-
-  Execute an already-decided skill-corpus refactor from its validated manifest: the split a
-  plan-skill-split verdict designed, the merge a plan-skill-merge verdict designed, or a simple
-  rename (a one-pack manifest). Moves every file, retires old entry surfaces to a timestamped attic
-  (never deletes — merges are not git-reversible), rewrites every referrer from the repair map, and
-  proves the sweep: zero live references to any retired handle. Run /reshape-skill
-  [manifest.json]. Human-timed; writes and moves files on approval only. NOT for deciding whether
-  to split (plan-skill-split) or merge (plan-skill-merge) — this skill takes their finished
-  manifests; NOT for authoring the resulting packs' content (make-skill and downstream pack
-  authoring).
+  Execute an already-decided skill-corpus split, merge, or rename from its validated manifest.
+  Moves files, retires old surfaces to a timestamped attic, rewrites every referrer, and proves
+  the sweep clean. Run /reshape-skill [manifest.json]. Writes on approval only. NOT for deciding
+  whether to split (plan-skill-split) or merge (plan-skill-merge); NOT for authoring the
+  resulting packs' content (make-skill).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[manifest.json]"

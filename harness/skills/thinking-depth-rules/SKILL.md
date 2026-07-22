@@ -1,17 +1,11 @@
 ---
 name: thinking-depth-rules
 description: >-
-  The n-order reasoning spectrum, operationalized for decision and refactor work: which order a
-  decision actually demands, the question each order asks, when to escalate, and the rent rule
-  that keeps higher-order claims honest. Use when a verdict feels like tidying rather than
-  improvement, when the same finding class recurs despite fixes, when tests conflict, when asked to
-  "push the reasoning further", "question the rules themselves", "apply higher-order reasoning",
-  "check whether we're at a local maximum", or "how do I know if this improvement claim is real
-  or just relabeling" — and when any skill's output would merely reorganize what exists. NOT the
-  wording layer (prompt-wording-rules); NOT a structural breakdown (break-down-problem); NOT
-  extracting what's being asked (find-the-ask); NOT running a measured experiment against a
-  scorer to find out empirically (docs' research-methods) — this governs the judgment call of
-  what order of claim is being made, not the measurement itself.
+  The n-order reasoning spectrum for decision and refactor work — a recurring finding despite
+  fixes, a verdict that's just tidying. Use for "push the reasoning further", "question the rules
+  themselves", "apply higher-order reasoning", "are we at a local maximum", or "is this
+  improvement real or just relabeling". NOT the wording layer (prompt-wording-rules); NOT a
+  structural breakdown (break-down-problem); NOT extracting the ask (find-the-ask).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -1,18 +1,11 @@
 ---
 name: file-task
 description: >-
-  Capture ANY work item — a chore, follow-up, research item, debt, or task that is neither
-  bug-shaped nor a feature idea — as a durable, labeled record, and drive that record's whole
-  lifecycle: resume by id, fold new detail, append dated Findings, advance status. Use when the
-  user asks to log a follow-up, track a chore or debt item, note something down for later, or
-  file a generic task — "note this down as a follow-up", "log this technical debt", "track this
-  for later", "file a task for X". Records land on the workspace's ruled backend — a `kind: task`
-  TICKET file by default, a GitHub Issue where the entry file rules git-native, or a named
-  external adapter's own record where it rules Option C. Also runs via /file-task [raw item, or an
-  id/adapter id to resume]. Writes one record set, then stops. NOT for bug-shaped
-  reports (file-bug); NOT for feature
-  ideas needing sizing into docs (file-feature); NOT for building anything (/build-feature); NOT for other
-  document types (make-doc).
+  Capture a work item that's neither bug- nor feature-shaped — a chore, follow-up, or debt —
+  as a durable record, then resume by id, fold new detail, append dated Findings, or advance
+  status. Use for "note this down as a follow-up", "log this technical debt", "track this for
+  later", "file a task for X", or /file-task #NN / tkt-#### to resume. NOT for bug-shaped
+  reports (file-bug); NOT for feature ideas (file-feature).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw work item, or a #NN / TKT-#### / adapter-native id to resume]"

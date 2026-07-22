@@ -1,16 +1,11 @@
 ---
 name: make-plugin
 description: >-
-  Forge a whole plugin from a domain intent: "create a plugin with all the skills related to UI
-  design", "build me a plugin for our API review workflow", "turn this domain into a skill family".
-  Charter interview, family design via the four decomposition tests run forward (question types,
-  projected ask co-occurrence, vocabulary separability, per-member cost) with a rejected-members
-  ledger, plugin scaffold, a /make-skill pass per member, fence-graph closure, /check-routing routing
-  proof, /ship-plugin ship. Run /make-plugin [domain or one-line charter]. Human-timed; writes
-  a new plugin directory. NOT for one artifact (make-skill / make-agent / make-hook); NOT for
-  splitting an existing corpus into a family (plan-skill-split — this is greenfield); NOT for
-  partitioning an existing surface into plugins (plan-plugin-split runs on inventories, this on
-  projections); NOT for releasing an already-built plugin (ship-plugin).
+  Forge a whole plugin from a domain intent — "create a plugin with all the skills related to
+  X". Charter interview, family design via the four decomposition tests, a rejected-members
+  ledger, scaffold, a make-skill pass per member, routing proof, ship. NOT for splitting a
+  corpus (plan-skill-split, greenfield here); NOT for partitioning a surface
+  (plan-plugin-split); NOT releasing a built plugin (ship-plugin).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[domain or one-line charter]"

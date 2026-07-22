@@ -1,17 +1,12 @@
 ---
 name: plan-skill-split
 description: >-
-  Decide whether a sprawling knowledge corpus should split into a family of knowledge skills, and
-  into which ones. Use when a pack outgrows one entry surface: "this skill has gotten huge, break it
-  up", "turn this reference dump into several packs", "is one entry surface still enough for all
-  these reference files", "we're loading way too much context for one simple question, split this
-  pack". Runs four evidence tests (sizing, ask co-occurrence, vocabulary separability, cost ledger)
-  — keeping a cohesive cluster unified — to produce a reconciled file-mapping manifest, per-child
-  descriptions, and a referrer repair map; or a no-split verdict when the corpus doesn't earn one.
-  NOT for authoring a single skill or growing one reference file (make-skill); NOT for executing an
-  already-decided split or rename (reshape-skill executes; this skill decides and designs); NOT a
-  UI/technical-architecture/goal breakdown (break-down-problem); NOT consolidating several
-  already-separate skills into one (plan-skill-merge).
+  Decide whether a sprawling knowledge corpus splits into a family of knowledge skills, and into
+  which ones. Use for "this skill has gotten huge, break it up", "one entry surface enough for
+  these reference files", or "split this pack, too much context for one question". Tests sizing,
+  co-occurrence, vocabulary, cost, then a file-mapping manifest, or a no-split verdict. NOT
+  authoring a skill (make-skill); NOT executing a decided split (reshape-skill); NOT a UI/goal
+  breakdown (break-down-problem).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[corpus-path]"

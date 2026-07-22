@@ -1,17 +1,11 @@
 ---
 name: research-methods
 description: >-
-  Use whenever a *scorable* system (code, config, prompt, pipeline, skill, agent) needs a measured
-  investigation — optimizing, debugging, stress-testing via the library of six methods. Triggers:
-  "improve the score", "why did it regress / find the root cause", "which parts actually matter",
-  "what's the best value for X", "what breaks this", "tune these parameters", "it used to work,
-  now it doesn't", or a technique by name (autoresearch, ablation, bisect, hill-climb, sweep,
-  adversarial probe). Each method's protocol/rubric live here; `experiment-runner` runs one. NOT for
-  looking up facts/prior art (web search, no method); NOT reviewing a finished artifact against
-  its rubric (*-reviewer agents); NOT building the artifact (*-forge / builder); NOT
-  wording effectiveness with no scorer (prompt-wording-rules), rubric anchors (make-rubric), or
-  loop stopping rules (loop-rules); NOT judging whether a claim is a genuine higher-order gain or
-  just relabeling, with no scorer to run (harness's thinking-depth-rules).
+  Use for a measured investigation of a scorable system — six methods: autoresearch, hill-climb,
+  ablation, sweep, bisect, adversarial. Triggers: "improve the score", "find the root cause of
+  this regression", "which parts actually matter", "what's the best value for X", "tune these
+  parameters", "what breaks this", "it used to work, now it doesn't". NOT lookup (web search); NOT
+  artifact review (*-checker agents); NOT authoring/building (*-forge/builder).
 disable-model-invocation: false
 user-invocable: false
 ---

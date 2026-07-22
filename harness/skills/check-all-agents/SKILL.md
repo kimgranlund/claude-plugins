@@ -1,16 +1,11 @@
 ---
 name: check-all-agents
 description: >-
-  Audit a whole agents/ team as ONE team. Use whenever the target is the TEAM, not one agent — two modes.
-  CORPUS pass: four cross-cutting properties no single-agent review can see (naming coherence, linguistic
-  potency, front-matter as an auto-delegation interface, global-skill leverage): "review all my agents",
-  "audit the agent team", "are my agent names consistent", "do my agents leverage the right skills", "map
-  the agent-to-skill preload graph", "which agents are duplicates". CAMPAIGN: the deep-review loop against
-  the agents standard of excellence — role-family templates, measured delegation, composition-edge probes,
-  portfolio verdicts: "review this agent against the standard of excellence". Owns
-  references/standard-of-excellence.md and the campaign/ ledger. NOT for a single agent's definition or why
-  it won't auto-delegate (agent-writing-rules / make-agent); NOT for the skills corpus
-  (check-all-skills); NOT for a product's UI (check-whole-ui); NOT for wiring decisions — subagent or team
+  Audit a whole agents/ team as ONE system — naming coherence, delegation front-matter, skill
+  leverage: "review all my agents", "audit the agent team", "which agents are duplicates". Also
+  runs the deep-review campaign against the standard of excellence (role-family templates,
+  measured delegation, portfolio verdicts). NOT one agent's definition
+  (agent-writing-rules/make-agent); NOT the skills corpus (check-all-skills); NOT wiring decisions
   (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true

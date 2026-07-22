@@ -1,17 +1,11 @@
 ---
 name: plan-skill-merge
 description: >-
-  Decide whether several already-separate, thin, overlapping, or porous knowledge skills should
-  consolidate into one comprehensive, context-efficient pack. Use when: "these skills all overlap,
-  combine them", "we're loading too many packs for one kind of question, merge them", "we have three
-  thin packs that should really be a single skill", "this corpus is porous, gaps across the
-  siblings". The formal inverse of plan-skill-split: runs the inverse test battery
-  (redundancy/overlap, shared vocabulary, thin-corpus detection, a quantified efficiency delta),
-  produces a consolidation manifest and a referrer repair map; or a keep-separate verdict when the
-  candidates don't earn a merge. NOT for authoring a single skill or growing one reference file
-  (make-skill); NOT for executing an already-decided merge (reshape-skill executes; this skill decides and designs);
-  NOT splitting one corpus into a family (plan-skill-split); NOT the corpus-wide sweep surfacing
-  merge candidates (check-everything).
+  Decide whether several thin, overlapping, or porous knowledge skills should merge into one
+  context-efficient pack — packs that step on each other's routing, or scattered siblings with
+  gaps. Runs the inverse test battery into a consolidation manifest. NOT for authoring a
+  single skill (make-skill); NOT for executing an already-decided merge (reshape-skill); NOT
+  for splitting a corpus into a family (plan-skill-split).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[candidate-skill-paths]"

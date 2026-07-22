@@ -1,18 +1,11 @@
 ---
 name: find-open-questions
 description: >-
-  Clears a session's backlog of unresolved items — an unanswered question, an unconfirmed
-  assumption, a stray idea floated but left undecided — into one batched AskUserQuestion round
-  instead of a prose dump nobody actually resolves. Use when the user asks "before we wrap up, is
-  there anything still open", "anything still pending", "any decisions still open before we
-  close this out", or "wrap up any loose ends"; also fires on its own at a natural closing point
-  in an interactive session where items like this have piled up — never on an unattended or
-  scheduled firing with no one to answer. NOT for resolving ambiguity before
-  starting a task (find-the-ask); NOT for a scheduled/interval reminder (loop-rules / `/loop`);
-  NOT for querying, tracking, or filing work items in an external tracker (issue-sorter); NOT for
-  producing a persisted decision record or ticket afterward (a separate, heavier ask); NOT for a
-  git worktree's own uncommitted state, findings, or knowledge capture before a session ends
-  (teamwork's close-session — a different axis: repo state, not conversation loose ends).
+  Clears a session's backlog of unresolved items — an open question, unconfirmed assumption, or
+  undecided idea — into one batched AskUserQuestion round. Use for "anything still open", "still
+  pending", "close this out", "loose ends", or "left hanging"; fires at a natural close, never
+  unattended. NOT pre-task ambiguity (find-the-ask); NOT filing/tracking work items (issue-sorter);
+  NOT worktree state before session end (close-session).
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -3,11 +3,9 @@ name: entry-file-rules
 description: >-
   Standards for CLAUDE.md and .claude/rules/ — the harness's most expensive real estate. Use when
   the user asks what belongs in CLAUDE.md, how to write, trim, restructure, or optimize it, why
-  Claude ignores an instruction that's "right there in CLAUDE.md", how big CLAUDE.md itself
-  should be, when to use path-scoped rules, or how entry-file content routes to hooks and skills.
-  The
-  judgment criteria /check-entry-file applies. NOT for running that audit (the /check-entry-file
-  command executes it; this skill only carries the standard it audits against).
+  Claude ignores an instruction that's "right there in CLAUDE.md", how big it should be, or when
+  to use path-scoped rules instead. NOT for running the /check-entry-file audit itself (this
+  skill only carries the standard it applies).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -1,41 +1,181 @@
 {
  "skill": "chat-harness-routing-facts",
- "note": "Routing corpus of record (minted 2026-07-13; reciprocal negatives against tools-resources-and-services/knowledge-and-memory/observability added 2026-07-13 per independent audit, since those three siblings each explicitly name this skill as their own near-neighbor). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (skill vs hardcoded feature, model-invoked vs user-invoked species, routing + adversarial evals). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-guardrail-facts (general instruction-layering/guardrails, not skill-authoring/routing mechanics), chat-harness-workflow-facts (multi-AGENT composition/hand-offs, distinct from single-skill routing), chat-harness-tool-facts (deferring a TOOL catalog's loading shares the 'load on demand' shape but a different mechanism than a skill's own routing), chat-harness-memory-facts (persisting a fact across sessions, not routing a live request to a capability), chat-harness-logging-facts (measuring routing accuracy AFTER the fact, not the routing mechanism itself), plus a genuine build/implement ask (this pack answers, it does not build).",
+ "note": "Routing corpus of record (minted 2026-07-13; reciprocal negatives against tools-resources-and-services/knowledge-and-memory/observability added 2026-07-13 per independent audit, since those three siblings each explicitly name this skill as their own near-neighbor). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (skill vs hardcoded feature, model-invoked vs user-invoked species, routing + adversarial evals). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-guardrail-facts (general instruction-layering/guardrails, not skill-authoring/routing mechanics), chat-harness-workflow-facts (multi-AGENT composition/hand-offs, distinct from single-skill routing), chat-harness-tool-facts (deferring a TOOL catalog's loading shares the 'load on demand' shape but a different mechanism than a skill's own routing), chat-harness-memory-facts (persisting a fact across sessions, not routing a live request to a capability), chat-harness-logging-facts (measuring routing accuracy AFTER the fact, not the routing mechanism itself), plus a genuine build/implement ask (this pack answers, it does not build). Noted 2026-07-22 (the #79 diet re-judge, full 98-skill estate menu): t08/t11/t13/t14/t15/t16 are full-menu twins — every one is a first-person 'my skill' ask that harness's skill-writing-rules or check-routing legitimately owns when both menus are present; this suite was calibrated against the llm-only menu, where those siblings are absent. t06/t10 healed with restored dial/preload vocabulary in the same campaign. At floor; a per-plugin (llm-only) judge run remains the suite's own calibration context.",
  "cases": [
-  { "id": "t01", "prompt": "should this capability be a skill or just hardcoded into the system prompt", "expect": "trigger" },
-  { "id": "t02", "prompt": "why does this always-on instruction cost context on every single turn", "expect": "trigger" },
-  { "id": "t03", "prompt": "when should I bake a feature directly into the harness instead of making it a skill", "expect": "trigger" },
-  { "id": "t04", "prompt": "does this capability need a slash command or should it just be a standing instruction", "expect": "trigger" },
-  { "id": "t05", "prompt": "should this go in CLAUDE.md or become its own skill", "expect": "trigger" },
-  { "id": "t06", "prompt": "should this skill auto-trigger or only run via a slash command", "expect": "trigger" },
-  { "id": "t07", "prompt": "what does disable-model-invocation actually do", "expect": "trigger" },
-  { "id": "t08", "prompt": "why does my skill only work when I type the slash command", "expect": "trigger" },
-  { "id": "t09", "prompt": "when should a skill be user-invoked instead of model-invoked", "expect": "trigger" },
-  { "id": "t10", "prompt": "can a skill be preloaded into a subagent if model invocation is disabled", "expect": "trigger" },
-  { "id": "t11", "prompt": "is user-invocable true the right setting for this workflow skill", "expect": "trigger" },
-  { "id": "t12", "prompt": "why did the wrong skill fire for this request", "expect": "trigger" },
-  { "id": "t13", "prompt": "how do I test that my skill's description actually routes correctly", "expect": "trigger" },
-  { "id": "t14", "prompt": "write an adversarial eval corpus for this skill's routing", "expect": "trigger" },
-  { "id": "t15", "prompt": "two of my skills keep getting confused for the same prompt", "expect": "trigger" },
-  { "id": "t16", "prompt": "how do I measure whether a skill's trigger phrasing actually works", "expect": "trigger" },
-  { "id": "t17", "prompt": "how does the assistant decide which skill or subagent to route a request to", "expect": "trigger" },
-  { "id": "n01", "prompt": "how should I layer instructions and safety guardrails across this whole harness", "expect": "no-trigger" },
-  { "id": "n02", "prompt": "write the standing safety rules that apply no matter what skill is active", "expect": "no-trigger" },
-  { "id": "n03", "prompt": "how do I structure CLAUDE.md's guardrail section", "expect": "no-trigger" },
-  { "id": "n04", "prompt": "what's the right way to enforce a hard constraint across every turn", "expect": "no-trigger" },
-  { "id": "n05", "prompt": "design a multi-agent workflow where three subagents hand off work in sequence", "expect": "no-trigger" },
-  { "id": "n06", "prompt": "how should the orchestrator coordinate a team of subagents on this task", "expect": "no-trigger" },
-  { "id": "n07", "prompt": "what's the right way to compose several agents into one pipeline", "expect": "no-trigger" },
-  { "id": "n08", "prompt": "how do I set up a review gate between a builder agent and a reviewer agent", "expect": "no-trigger" },
-  { "id": "n09", "prompt": "implement the routing logic for our custom chat harness in Python", "expect": "no-trigger" },
-  { "id": "n10", "prompt": "build a new slash command that runs our deploy script", "expect": "no-trigger" },
-  { "id": "n11", "prompt": "write the code that loads a skill's SKILL.md file at runtime", "expect": "no-trigger" },
-  { "id": "n12", "prompt": "add a new hook that fires before every tool call", "expect": "no-trigger" },
-  { "id": "n13", "prompt": "should this be a tool or a skill", "expect": "no-trigger" },
-  { "id": "n14", "prompt": "defer loading this large tool catalog's full schemas until needed", "expect": "no-trigger" },
-  { "id": "n15", "prompt": "remember this user's preference across future sessions", "expect": "no-trigger" },
-  { "id": "n16", "prompt": "persist this fact to memory so I don't have to re-derive it next time", "expect": "no-trigger" },
-  { "id": "n17", "prompt": "set up monitoring for how often the wrong skill fires", "expect": "no-trigger" },
-  { "id": "n18", "prompt": "measure our routing accuracy over the last month of real traffic", "expect": "no-trigger" }
+  {
+   "id": "t01",
+   "prompt": "should this capability be a skill or just hardcoded into the system prompt",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "why does this always-on instruction cost context on every single turn",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "when should I bake a feature directly into the harness instead of making it a skill",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "does this capability need a slash command or should it just be a standing instruction",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "should this go in CLAUDE.md or become its own skill",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "should this skill auto-trigger or only run via a slash command",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "what does disable-model-invocation actually do",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "why does my skill only work when I type the slash command",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "when should a skill be user-invoked instead of model-invoked",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "can a skill be preloaded into a subagent if model invocation is disabled",
+   "expect": "trigger"
+  },
+  {
+   "id": "t11",
+   "prompt": "is user-invocable true the right setting for this workflow skill",
+   "expect": "trigger"
+  },
+  {
+   "id": "t12",
+   "prompt": "why did the wrong skill fire for this request",
+   "expect": "trigger"
+  },
+  {
+   "id": "t13",
+   "prompt": "how do I test that my skill's description actually routes correctly",
+   "expect": "trigger"
+  },
+  {
+   "id": "t14",
+   "prompt": "write an adversarial eval corpus for this skill's routing",
+   "expect": "trigger"
+  },
+  {
+   "id": "t15",
+   "prompt": "two of my skills keep getting confused for the same prompt",
+   "expect": "trigger"
+  },
+  {
+   "id": "t16",
+   "prompt": "how do I measure whether a skill's trigger phrasing actually works",
+   "expect": "trigger"
+  },
+  {
+   "id": "t17",
+   "prompt": "how does the assistant decide which skill or subagent to route a request to",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "how should I layer instructions and safety guardrails across this whole harness",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "write the standing safety rules that apply no matter what skill is active",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "how do I structure CLAUDE.md's guardrail section",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "what's the right way to enforce a hard constraint across every turn",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "design a multi-agent workflow where three subagents hand off work in sequence",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "how should the orchestrator coordinate a team of subagents on this task",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "what's the right way to compose several agents into one pipeline",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "how do I set up a review gate between a builder agent and a reviewer agent",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n09",
+   "prompt": "implement the routing logic for our custom chat harness in Python",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n10",
+   "prompt": "build a new slash command that runs our deploy script",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n11",
+   "prompt": "write the code that loads a skill's SKILL.md file at runtime",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n12",
+   "prompt": "add a new hook that fires before every tool call",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n13",
+   "prompt": "should this be a tool or a skill",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n14",
+   "prompt": "defer loading this large tool catalog's full schemas until needed",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n15",
+   "prompt": "remember this user's preference across future sessions",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n16",
+   "prompt": "persist this fact to memory so I don't have to re-derive it next time",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n17",
+   "prompt": "set up monitoring for how often the wrong skill fires",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n18",
+   "prompt": "measure our routing accuracy over the last month of real traffic",
+   "expect": "no-trigger"
+  }
  ]
 }

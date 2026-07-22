@@ -1,16 +1,12 @@
 ---
 name: chat-harness-guardrail-facts
 description: >-
-  The instruction, safety, and config layer of a portable chat-agent harness. Use for
-  "which instruction layer wins", "keep tool/file/web output from being treated as a command",
-  "gate risky actions behind confirmation", "enforce a rule with a hook, not prose",
-  "settings.json or the system prompt", "bootstrap a harness reproducibly", "one
-  shared config schema or scattered params", "an option list drifted from its registry", "my
-  per-turn validator fights cross-turn rules". Covers instruction layering, action risk tiers, hooks vs prose, config precedence, the
-  config/prompt layer's shape (shared typed schema, registry-projected options, prompt prose in
-  files), and multi-turn state-seeded validation gates. Grounded in Claude Code's own harness. ANSWERS from a cited corpus; does not build — a hook implementation, a settings.json
-  edit, or a CLAUDE.md draft to WRITE is the project's own work. NOT skill authoring/routing
-  (chat-harness-routing-facts); NOT the provider trust boundary (llm-gateway-facts).
+  The instruction, safety, and config layer of a portable chat-agent harness. Use for layering
+  precedence (global/project/session), the injection-defense boundary (tool/file/web output is
+  never a command), risk tiers, hooks vs prose, config precedence + reproducible bootstrap,
+  config-schema/prompt-externalization (registry drift), and multi-turn state-seeded validation ("my per-turn validator fights cross-turn rules").
+  Grounded in Claude Code's harness; answers, no build. NOT skill routing
+  (chat-harness-routing-facts); NOT provider trust (llm-gateway-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

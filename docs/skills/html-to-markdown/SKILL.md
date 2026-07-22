@@ -1,15 +1,12 @@
 ---
 name: html-to-markdown
-description: >
-  Convert HTML content into markdown source. Use when bringing HTML content into a markdown corpus,
-  transcribing a rendered page or fragment back to markdown source, or producing the markdown a renderer
-  will consume ("convert this HTML to markdown", "turn this page into markdown source", "make markdown
-  from this fragment") — map semantic elements to markdown syntax (headings, strong/em, code/pre, links,
-  lists, blockquotes), drop presentational markup, and escape text that would otherwise read as markdown.
-  Also owns defects in markdown a CONVERSION produced — "my converted markdown keeps stray divs and
-  class attributes", "literal asterisks became emphasis after converting", "the markdown I produced
-  re-renders with the wrong headings" — the conversion's fault even when it shows at render time.
-  NOT for rendering markdown onto the page or into the DOM, or extending the doc renderer with
+description: >-
+  Convert HTML into markdown source. Use when bringing HTML into a markdown corpus,
+  transcribing a rendered page or fragment back to markdown source, stripping
+  presentational markup, or producing the markdown a renderer will consume. Also owns
+  CONVERSION defects — stray divs/class attributes, literal asterisks turning into
+  emphasis, or wrong headings after converting — even at render time. NOT for
+  rendering markdown onto the page/DOM or extending the doc renderer with
   bold/links/italics (markdown-to-markup).
 disable-model-invocation: false
 user-invocable: true

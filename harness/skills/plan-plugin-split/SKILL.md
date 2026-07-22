@@ -1,17 +1,12 @@
 ---
 name: plan-plugin-split
 description: >-
-  Analyze an existing harness surface — a folder of skills (plus agents, hooks, scripts), one
-  oversized plugin, or several scattered ones — decide how it partitions into 1–5 manageable,
-  portable, composable plugins. Use when: "which plugins should these skills become",
-  "partition our .claude folder into plugins", "should this mega-plugin be several smaller ones",
-  "group this grab-bag into installable units", "what is missing from this plugin corpus", "run a
-  gap analysis on this plugin family". Direction-agnostic: fewer plugins is a merge verdict, more
-  is a split, same tests either way. Frontmatter + structure suffices (surface_map.py extracts the
-  dependency graph). NOT for one corpus splitting into packs (plan-skill-split); NOT greenfield
-  family design — "create a plugin with all the skills related to X" builds new, not partitions
-  existing (make-plugin); NOT releasing/structuring a single plugin (ship-plugin /
-  plugin-writing-rules); NOT a periodic health sweep — "audit the harness" (check-everything).
+  Analyze an existing harness surface — skills/agents/hooks/scripts, one oversized plugin, or
+  scattered ones. Use for deciding how it partitions into 1–5 portable, composable plugins, or a
+  gap analysis on what's missing. Direction-agnostic: fewer plugins is a merge verdict, more is a
+  split, same tests either way. NOT one corpus splitting into packs (plan-skill-split); NOT
+  greenfield family design (make-plugin); NOT releasing a single plugin
+  (ship-plugin/plugin-writing-rules).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[surface-root]"

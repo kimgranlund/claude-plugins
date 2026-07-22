@@ -1,18 +1,12 @@
 ---
 name: github-facts
 description: >-
-  Answers what GitHub's Issue, PR, Discussion, and Projects v2 primitives actually ARE and how
-  they behave — a cited corpus grounded 2026-07-17, not recalled knowledge. Use for
-  "issue vs. discussion", "native issue types", "sub-issue vs task-list checkbox", "Closes #N with
-  squash merge", "draft PR reviewers", "is Projects v2 a real backend", "sub-issue nesting depth",
-  "when a linked PR closes its issue". Covers Issue Types/Fields vs. labels; sub-issues vs. the
-  retired tasklist-block; the nine closing keywords and the merge-strategy gap GitHub's docs leave
-  open; draft-PR/review/CODEOWNERS/required-checks/merge-queue; Projects v2's GraphQL-only
-  structure. NOT this workspace's OWN git
-  worktree/merge/campaign mechanics (`big-change-git-rules`); NOT the TICKET/ADR/SPEC contract
-  (docs' `doc-writing-rules`); NOT deciding — "should this repo use a git-native or local
-  ticketing backend" — states facts a future ADR cites, never decides; NOT filing/closing a
-  work item (`file-bug`/`file-feature`/`file-task`, docs).
+  Answers what GitHub's Issue, PR, Discussion, and Projects v2 primitives actually ARE (verified
+  2026-07). Use for issue vs. discussion, native issue types vs. labels, sub-issues vs. task-list
+  checkboxes and nesting depth, closing keywords, squash-merge behavior, draft-PR/CODEOWNERS/
+  merge-queue, or Projects v2 GraphQL fields. NOT our own git mechanics (`big-change-git-rules`);
+  NOT the TICKET/ADR/SPEC contract (`doc-writing-rules`); NOT filing a work item
+  (`file-bug`/`file-feature`/`file-task`).
 disable-model-invocation: false
 user-invocable: false
 ---

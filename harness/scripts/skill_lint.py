@@ -22,6 +22,7 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
   F8 no reserved words in the skill's name field or directory ("claude", "anthropic")
      — the platform rejects the skill (and fails the plugin load) at install time
   W1 description <= 1024 chars (Agent Skills portability cap)
+  W8 model-invocable description <= 700 chars (the #79 resident-listing budget)
   W2 model-invocable description carries trigger phrasing ("use when ...")
   W3 name <= 64 chars, kebab-case
   W4 agentive head (-er/-or) on a skill name (cross-type ambiguity with agents)
@@ -187,6 +188,11 @@ def lint_text(text, skill_dir_name):
                              f"description is {len(desc)} chars -> <=1024 keeps it portable "
                              "across the Agent Skills standard"))
         dmi = fields.get("disable-model-invocation", ("false", 0))[0].lower()
+        if dmi != "true" and 700 < len(desc) <= 1024:
+            findings.append(("WARN", desc_line, "W8",
+                             f"description is {len(desc)} chars -> the resident listing budget "
+                             "(issue #79, diet 2026-07-22) holds model-invocable descriptions "
+                             "<=700; trim to suite-keyed triggers + <=3 fences"))
         if dmi != "true" and not TRIGGER_RE.search(desc + " " + wtu):
             findings.append(("WARN", desc_line, "W2",
                              "model-invocable but no trigger phrasing -> add 'Use when the user "
@@ -596,6 +602,13 @@ def selftest():
     assert classify("x/hooks/hooks.json") == "hooks"
     assert classify("x/CLAUDE.md") == "claude_md"
     assert classify("x/skills/demo/SKILL.md") == "skill"
+    # W8 budget ratchet (issue #79): a model-invocable description over 700 chars warns;
+    # the same text under disable-model-invocation stays silent (menu-only, never resident)
+    longdesc = "---\nname: demo-pack\ndescription: " + "Use when the user asks to x. " * 30 + "\ndisable-model-invocation: false\nuser-invocable: false\n---\nbody\n"
+    w8 = {f[2] for f in lint_text(longdesc, "demo-pack")}
+    assert "W8" in w8, f"expected W8 on a {30*29}-char model-invocable description"
+    longcmd = longdesc.replace("disable-model-invocation: false", "disable-model-invocation: true")
+    assert "W8" not in {f[2] for f in lint_text(longcmd, "demo-pack")}, "W8 must not fire on a command"
     assert classify("x/notes.md") is None
     # #83 regression — classification is invocation-invariant: a bare relative
     # filename linted from inside an agents/ dir classifies as agent, identical

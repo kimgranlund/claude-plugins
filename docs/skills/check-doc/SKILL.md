@@ -1,12 +1,11 @@
 ---
 name: check-doc
 description: >-
-  Review an existing functional document (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK)
-  against the standards and its type template: mechanical pass via doc_lint first, then judgment —
-  requirements that can't fail, missing non-goals, restated substrate, broken ID spine, class
-  violations. Verdict-first findings report. Use when asked to review, audit, critique, or score a
-  document, or when a doc "feels off". NOT for drafting one (make-doc); NOT the rules themselves
-  (doc-writing-rules).
+  Review an existing functional document (ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK): a
+  mechanical doc_lint pass, then judgment — unfalsifiable requirements, missing non-goals,
+  restated substrate, broken ID spine, class violations, verdict-first. Use it to review,
+  audit, critique, or score a document, or when a doc "feels off". NOT for drafting one
+  (make-doc); NOT the rules themselves (doc-writing-rules).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[path-to-document]"

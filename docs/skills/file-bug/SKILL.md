@@ -1,18 +1,11 @@
 ---
 name: file-bug
 description: >-
-  Capture a user-reported bug — functional, structural, visual, or subjective — as a durable
-  bug-shaped record before any investigation starts, then dispatch under a mandatory write-back
-  contract. Use when the user reports something broken,
-  gives a repro or wrong output, or flags a regression — "the export button does nothing on
-  Safari", "this crashes when I click X", "this used to work and now it doesn't". Runs
-  find-the-ask and break-down-problem during capture, then
-  records — make-doc's TICKET path by default, or the workspace's ruled backend (git-native, or a
-  named external adapter) — and dispatches with the record as context. Also runs via /file-bug
-  [raw report, or a TKT-/#issue/adapter id]. Writes one record, then one investigation. NOT for
-  a feature idea or build request (file-feature / teamwork's build-feature); NOT for a generic
-  chore/follow-up/task (file-task); NOT for non-bug documents (make-doc); NOT for reviewing a doc
-  (check-doc); NOT for intent extraction outside a bug (find-the-ask).
+  Capture a user-reported bug as a durable record, then dispatch the investigation. Use when the
+  user reports something broken, gives a repro or wrong output, flags a regression, or phrases it
+  as "file a github issue for this crash" / "open an issue about this bug". /file-bug [raw
+  report, or a TKT-/#issue/adapter id] resumes. NOT for a feature idea (file-feature); NOT for a
+  chore/task (file-task); NOT for platform questions (github-facts).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id to resume]"

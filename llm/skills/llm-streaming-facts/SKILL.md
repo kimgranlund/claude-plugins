@@ -1,17 +1,12 @@
 ---
 name: llm-streaming-facts
 description: >-
-  Streaming structured output from an LLM safely — project-agnostic. Use for "parse a chunked SSE
-  stream correctly", "why my SSE parser drops or duplicates text", "the Anthropic Messages API's
-  exact streaming event contract", "stream JSON output without rendering an invalid partial",
-  "what is validate-then-stream", "bound a self-correct retry loop against invalid model output",
-  "signal a mid-stream error without throwing inside a generator", "is an empty model response the
-  same as an invalid one". Covers SSE chunk-buffering (partial-frame handling, event-boundary
-  framing), the Anthropic SSE contract as a worked instance, an error-sentinel technique, and
-  validate-then-stream (bounded self-correct, halt-and-report). Grounded in the SSE spec, Anthropic's
-  docs, and a shipped example. ANSWERS from a cited corpus; does not build. NOT for the
-  provider/trust-boundary/session pattern this sits behind (llm-gateway-facts); NOT for the
-  A2UI wire MESSAGE shape (agent-protocols); NOT for a vendor's contract beyond Anthropic.
+  Streaming structured output from an LLM — project-agnostic. Use for chunked SSE parsing (no
+  dropped/corrupted frames), the Anthropic event contract (content_block_delta), and
+  validate-then-stream: bounded self-correct retries, never an invalid partial, a mid-stream
+  error without throwing in a generator. Grounded in the SSE spec + Anthropic's docs; answers,
+  no build. NOT the provider/trust-boundary seam (llm-gateway-facts); NOT the A2UI wire shape
+  (agent-protocols).
 disable-model-invocation: false
 user-invocable: false
 ---

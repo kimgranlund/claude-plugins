@@ -1,13 +1,11 @@
 ---
 name: make-pack
 description: >-
-  Mint or grow a knowledge pack's reference corpus through question-led research waves: wave
-  charter, question set first, dated gathering, ask-shaped distillation with confidence markers,
-  INDEX/consult-table/eval registration, corpus_check validation. Run /make-pack [skill-dir or
-  "new pack: domain"] — one axis per wave. Human-timed; writes references/ content and may use
-  web search. NOT for the pack's SKILL.md surface (make-skill); NOT for deciding whether a corpus
-  splits or merges (plan-skill-split / plan-skill-merge); NOT the rules themselves
-  (pack-writing-rules carries them).
+  Mint or grow a knowledge pack's reference corpus via question-led research waves: charter an
+  axis, write the question set, gather dated sources, distill ask-shaped files, then register
+  and validate. Run /make-pack [skill-dir or "new pack: domain"], one axis per wave. NOT the
+  SKILL.md surface (make-skill); NOT a split/merge decision (plan-skill-split/plan-skill-merge);
+  NOT the rules themselves (pack-writing-rules).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[skill-dir | new pack: domain]"
