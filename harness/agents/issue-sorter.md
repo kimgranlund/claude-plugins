@@ -14,49 +14,6 @@ description: |
   (`repo-cleaner`, a distinct seat); NOT for instruction-tree or corpus drift (`/clean-repo`);
   NOT for the whole-family sweep with a rolled-up queue (`chore-lead`) or prioritizing
   what to tackle first across the ops backlog (`chore-planner`).
-
-  <example>
-  Context: The hourly cloud-routine firing for the ticketing-watch routine.
-  user: "[scheduled] run the issue-sorter intake sweep"
-  assistant: "Dispatching issue-sorter — discovers items since the last checkpoint, classifies,
-  trust-checks, and routes or holds each one, then commits its state files and reports."
-  <commentary>
-  This is the primary deployment shape: unattended, bounded, idempotent per firing.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A maintainer wants an immediate check outside the schedule.
-  user: "has anyone filed anything against this repo we haven't triaged yet?"
-  assistant: "Dispatching issue-sorter for an on-demand intake sweep."
-  <commentary>
-  Same agent, same procedure — the schedule is a trigger, not a different code path.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A maintainer reviewed held-items.md and wants to act on one entry.
-  user: "approve the item from @newcontributor in held-items.md — it's legit"
-  assistant: "Dispatching issue-sorter carrying that approval: mints the record and grows
-  friendlies.json for that author."
-  <commentary>
-  The human decision is external to any firing; this dispatch executes an ALREADY-MADE decision,
-  it does not make one.
-  </commentary>
-  </example>
-
-  <example>
-  Context: The very first interactive firing against a newly onboarded, GitHub-backed repo.
-  user: "run the issue-sorter sweep for the first time on this repo"
-  assistant: "Dispatching issue-sorter — it'll seed the friendlies allow-list from evidence AND, as a
-  separate one-time question, ask whether you want a read-only GitHub MCP server declared for
-  richer session browsing."
-  <commentary>
-  Two distinct first-firing questions (REQ-011's roster, REQ-013's MCP offer), asked once each,
-  never re-asked on a later firing once a decision is on record — REQ-013's offer may re-surface
-  (not re-ask as new) on a subsequent firing if no dispatch yet carried the human's choice.
-  </commentary>
-  </example>
 model: sonnet
 effort: high
 color: blue
@@ -210,3 +167,50 @@ silently dropped, an unknown author's item is auto-created or self-approved, an 
 source's checkpoint advances anyway, a source's unreachability goes unreported, or step 8 ran and
 its outcome goes unnamed in the report (a later firing silently repeating the same surfaced offer
 with no report trail is exactly this state).
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: The hourly cloud-routine firing for the ticketing-watch routine.
+user: "[scheduled] run the issue-sorter intake sweep"
+assistant: "Dispatching issue-sorter — discovers items since the last checkpoint, classifies,
+trust-checks, and routes or holds each one, then commits its state files and reports."
+<commentary>
+This is the primary deployment shape: unattended, bounded, idempotent per firing.
+</commentary>
+</example>
+
+<example>
+Context: A maintainer wants an immediate check outside the schedule.
+user: "has anyone filed anything against this repo we haven't triaged yet?"
+assistant: "Dispatching issue-sorter for an on-demand intake sweep."
+<commentary>
+Same agent, same procedure — the schedule is a trigger, not a different code path.
+</commentary>
+</example>
+
+<example>
+Context: A maintainer reviewed held-items.md and wants to act on one entry.
+user: "approve the item from @newcontributor in held-items.md — it's legit"
+assistant: "Dispatching issue-sorter carrying that approval: mints the record and grows
+friendlies.json for that author."
+<commentary>
+The human decision is external to any firing; this dispatch executes an ALREADY-MADE decision,
+it does not make one.
+</commentary>
+</example>
+
+<example>
+Context: The very first interactive firing against a newly onboarded, GitHub-backed repo.
+user: "run the issue-sorter sweep for the first time on this repo"
+assistant: "Dispatching issue-sorter — it'll seed the friendlies allow-list from evidence AND, as a
+separate one-time question, ask whether you want a read-only GitHub MCP server declared for
+richer session browsing."
+<commentary>
+Two distinct first-firing questions (REQ-011's roster, REQ-013's MCP offer), asked once each,
+never re-asked on a later firing once a decision is on record — REQ-013's offer may re-surface
+(not re-ask as new) on a subsequent firing if no dispatch yet carried the human's choice.
+</commentary>
+</example>

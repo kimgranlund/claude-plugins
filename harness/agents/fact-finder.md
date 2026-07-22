@@ -6,15 +6,6 @@ description: |
   CANNOT edit corpus files or run code — the allowlist enforces the gather≠distill phase boundary
   (interleaving them is how literature-shaped files happen). Preloads pack-writing-rules so
   the grounding rules travel with every dispatch. Dispatch-only; do not auto-delegate.
-
-  <example>
-  Context: /make-pack Phase 3, wave 2 of the naming axis.
-  user: "/make-pack skills/color-science"
-  assistant: "Dispatching fact-finder agents, one per question cluster, ledgers under references/."
-  <commentary>
-  Parallel gathering, serial distillation: the researchers write ledgers; the main loop distills.
-  </commentary>
-  </example>
 model: haiku
 tools: ["WebSearch", "WebFetch", "Read", "Write"]
 skills:
@@ -41,3 +32,16 @@ Rules:
   an empty answer honestly recorded beats a plausible one invented.
 - End by listing: questions answered / partially answered / unanswerable, and any source the
   distiller should re-fetch in full.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: /make-pack Phase 3, wave 2 of the naming axis.
+user: "/make-pack skills/color-science"
+assistant: "Dispatching fact-finder agents, one per question cluster, ledgers under references/."
+<commentary>
+Parallel gathering, serial distillation: the researchers write ledgers; the main loop distills.
+</commentary>
+</example>

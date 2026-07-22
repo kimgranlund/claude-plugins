@@ -4,17 +4,6 @@ description: |
   Fresh-context critic for ONE Claude Code plugin's packaging — the manifest, layout, wiring, and
   versioning — generator ≠ critic, so the maker never grades their own release. Use before a
   plugin ships, or whenever a plugin fails to load and the packaging is suspect.
-
-  <example>
-  Context: ship-plugin has finished a preflight pass on a plugin directory.
-  user: "/ship-plugin ready to gate — review the packaging first"
-  assistant: "Dispatching the plugin-checker agent on the plugin root for an independent
-  packaging read before the gate runs."
-  <commentary>
-  The maker's own context already believes the plugin is ready; the review checks the manifest,
-  paths, and versioning fresh, against the tree rather than against memory.
-  </commentary>
-  </example>
 model: fable
 effort: high
 color: yellow
@@ -76,3 +65,18 @@ Done when the handoff block is returned with the gate verdict pasted verbatim an
 content-boundary defect routed to its owning reviewer. NOT done when a verdict has no evidence
 row, the gate was re-derived by eye, or a bundled component's content was graded here instead of
 routed.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: ship-plugin has finished a preflight pass on a plugin directory.
+user: "/ship-plugin ready to gate — review the packaging first"
+assistant: "Dispatching the plugin-checker agent on the plugin root for an independent
+packaging read before the gate runs."
+<commentary>
+The maker's own context already believes the plugin is ready; the review checks the manifest,
+paths, and versioning fresh, against the tree rather than against memory.
+</commentary>
+</example>

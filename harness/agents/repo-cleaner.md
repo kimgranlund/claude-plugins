@@ -18,25 +18,6 @@ description: |
   instruction-tree or corpus drift (`/clean-repo`); NOT for the whole-family sweep with a
   rolled-up queue (`chore-lead`) or prioritizing what to tackle first across the ops
   backlog (`chore-planner`).
-
-  <example>
-  Context: A CronCreate firing for the repo-hygiene routine, bounded to this session.
-  user: "[scheduled] run the repo-cleaner hygiene sweep"
-  assistant: "Dispatching repo-cleaner — surveys worktrees/branches/PRs, runs campaign_close only on
-  independently-verified-merged PRs, reports everything else as a proposed plan."
-  <commentary>
-  Session-scoped and idempotent per firing — mutation is narrow because the underlying scripts are.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A maintainer suspects the repo has accumulated cruft after a busy week.
-  user: "this repo feels messy — old worktrees, branches nobody cleaned up — can you sort it out?"
-  assistant: "Dispatching repo-cleaner for a full inventory and triage before touching anything."
-  <commentary>
-  Same agent, same procedure — an ad hoc mess and a scheduled sweep run the identical gate logic.
-  </commentary>
-  </example>
 model: sonnet
 effort: high
 color: orange
@@ -142,3 +123,26 @@ appropriate, and the firing's report exists naming every proposed-only action ex
 refusal is overridden, a worktree or local branch is removed directly instead of proposed,
 `sync_main.py` runs against a scheduled firing's dirty tree, or a stale ticket claim is reclaimed
 directly instead of proposed.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: A CronCreate firing for the repo-hygiene routine, bounded to this session.
+user: "[scheduled] run the repo-cleaner hygiene sweep"
+assistant: "Dispatching repo-cleaner — surveys worktrees/branches/PRs, runs campaign_close only on
+independently-verified-merged PRs, reports everything else as a proposed plan."
+<commentary>
+Session-scoped and idempotent per firing — mutation is narrow because the underlying scripts are.
+</commentary>
+</example>
+
+<example>
+Context: A maintainer suspects the repo has accumulated cruft after a busy week.
+user: "this repo feels messy — old worktrees, branches nobody cleaned up — can you sort it out?"
+assistant: "Dispatching repo-cleaner for a full inventory and triage before touching anything."
+<commentary>
+Same agent, same procedure — an ad hoc mess and a scheduled sweep run the identical gate logic.
+</commentary>
+</example>

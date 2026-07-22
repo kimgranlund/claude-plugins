@@ -4,17 +4,6 @@ description: |
   Fresh-context critic for ONE Claude Code hook — the registration entry plus the script or
   prompt it points at — generator ≠ critic, so the maker never grades their own hook. Use right
   after a hook is authored or edited, or when auditing a hooks.json before it ships.
-
-  <example>
-  Context: make-hook has finished registering a new PreToolUse hook.
-  user: "/make-hook finished — validate it before I commit"
-  assistant: "Dispatching the hook-checker agent on the hooks.json and its script for a
-  fresh-context, security-first read."
-  <commentary>
-  A hook runs with the user's privileges on every matching event; severity runs security-first,
-  and the author's own context is the wrong place to catch an injection it wrote past.
-  </commentary>
-  </example>
 model: fable
 effort: high
 color: yellow
@@ -81,3 +70,18 @@ NOT for a general code diff (`code-checker`, when installed alongside); NOT for 
 Done when the handoff block is returned with real gate + probe evidence for every scored
 dimension. NOT done when a verdict has no evidence row, the gate was re-derived by eye, or the H5
 injection trace was skipped.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: make-hook has finished registering a new PreToolUse hook.
+user: "/make-hook finished — validate it before I commit"
+assistant: "Dispatching the hook-checker agent on the hooks.json and its script for a
+fresh-context, security-first read."
+<commentary>
+A hook runs with the user's privileges on every matching event; severity runs security-first,
+and the author's own context is the wrong place to catch an injection it wrote past.
+</commentary>
+</example>
