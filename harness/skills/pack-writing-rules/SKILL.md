@@ -1,15 +1,11 @@
 ---
 name: pack-writing-rules
 description: >-
-  Standards for authoring knowledge-pack corpora — the references/ content behind a knowledge
-  skill: retrieval axes, the INDEX file, load discipline, citation and grounding rules, research
-  waves, and snapshot freshness. Use when the user asks how to structure a reference corpus or
-  INDEX, how many axes or files a pack should have, how to ground or cite reference content, how to
-  run a research wave to fill a corpus, why retrieval from a pack feels muddy, or how to keep
-  corpus snapshots from going stale. NOT for the pack's SKILL.md surface, description, or dials
-  (skill-writing-rules); NOT for deciding a split or merge (plan-skill-split /
-  plan-skill-merge); NOT the workflow that executes a research wave (make-pack runs it; this
-  carries the rules it runs under).
+  Standards for authoring a knowledge skill's references/ corpus. Use when structuring a corpus
+  or INDEX, sizing axes, citing/grounding reference content, how to run a research wave, muddy
+  retrieval, or keeping snapshots from going stale. NOT for the pack's SKILL.md surface
+  (skill-writing-rules); NOT for a split/merge decision (plan-skill-split / plan-skill-merge);
+  NOT for executing a research wave (make-pack).
 disable-model-invocation: false
 user-invocable: false
 ---

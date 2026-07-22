@@ -1,18 +1,12 @@
 ---
 name: break-down-problem
-description: >
-  Decompose any problem along two crossing planes — OUTSIDE-IN (whole → parts) and
-  INSIDE-OUT (actions → surfaces) — then verify they cover each other: the node
-  tree hosts the action set. Use when breaking down a
-  technical or UX architecture, a goal
-  or plan, or any system into parts; when a breakdown feels lopsided — structure
-  with no behavior, actions with no home, needs that have nowhere to live,
-  acceptance criteria that don't map to any task; or before authoring a PRD/SPEC/LLD
-  that needs a decomposition first. Domain how-to lives in references/
-  (layout, components, technical-architecture, ux-architecture, goals). NOT for
-  authoring the resulting PRD/SPEC/LLD documents — decomposition feeds them; NOT
-  for authoring skills (make-skill); and NOT deciding whether a knowledge skill
-  should split into a family or merge with siblings (plan-skill-split / plan-skill-merge).
+description: >-
+  Decompose a problem along two crossing planes — OUTSIDE-IN (whole → parts) and
+  INSIDE-OUT (actions → surfaces) — then cross-checked. Use when breaking down a
+  technical or UX architecture, goal, or system into parts, or when a breakdown feels
+  lopsided — structure with no behavior — or acceptance criteria don't map to any
+  task. NOT for authoring PRD/SPEC/LLD; NOT authoring skills (make-skill); NOT a
+  knowledge skill's split/merge (plan-skill-split / plan-skill-merge).
 disable-model-invocation: false
 user-invocable: true
 ---

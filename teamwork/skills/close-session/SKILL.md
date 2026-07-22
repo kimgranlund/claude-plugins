@@ -1,16 +1,11 @@
 ---
 name: close-session
 description: >-
-  Wraps up a session's own work in a git worktree before it ends: captures a real finding as an
-  Issue, gets in-progress work to a PR (or updates the existing one), triggers save-lessons's
-  detection pass for a durable lesson worth keeping, verifies every write landed, and states one
-  clear verdict. Use for "wrap up this session", "close this out", "prepare to close this
-  session", "clean up before ending", "make sure nothing's left hanging in the worktree before I
-  go", or "before you exit, check for anything left to capture" — also fires at a natural closing point with real
-  work behind it. NOT for a PEER session's worktree (parallel-work-rules); NOT for unresolved
-  conversational questions — "anything still open between us" (find-open-questions); NOT for the removal mechanics themselves
-  (ExitWorktree); NOT for a repo-wide hygiene sweep (harness's repo-cleaner); NOT for authoring
-  knowledge once confirmed (save-lessons owns authoring, this only triggers its detection).
+  Wraps up a session before it ends: captures a real finding, verifies writes landed, states one
+  verdict. Use for "wrap up this session", "close this out", or "nothing's left hanging in the
+  worktree before I go" — also fires at a natural closing point with real work behind it. NOT for
+  a peer session's worktree (parallel-work-rules), unresolved conversational questions
+  (find-open-questions), or removal mechanics (ExitWorktree).
 disable-model-invocation: false
 user-invocable: true
 ---

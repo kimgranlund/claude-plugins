@@ -1,16 +1,11 @@
 ---
 name: check-routing
 description: >-
-  Run a plugin's trigger-eval suites as a blind, fresh-context routing simulation: static
-  validation via eval_check.py, one no-tools judge per suite picking from the description menu
-  alone, then a routing matrix with per-failure tuning targets (stolen/leaked/dead). Use when the
-  user asks to run or rerun the evals, prove routing after a description or fence edit, check
-  whether a new skill's description routes correctly, "did my description change break routing",
-  "do these prompts route to the right skill", "run a routing simulation" — and as the
-  wave-boundary check a batch of description edits owes. Read-only; writes only the report. NOT
-  for authoring or fixing a suite's cases (skill-writing-rules); NOT for judging a skill's
-  content or body (check-skill); NOT for the release gate (ship-plugin / release_gate.py);
-  NOT for live "why won't my skill trigger" debugging (skill-writing-rules).
+  Run a plugin's trigger-eval suites as a blind routing simulation: a no-tools judge picks
+  from the description menu, then a routing matrix with tuning targets
+  (stolen/leaked/dead). Use to rerun the evals, or prove routing after a description edit. NOT
+  for authoring a suite's cases or live trigger debugging (skill-writing-rules); NOT for
+  judging a skill's content (check-skill); NOT for the release gate (ship-plugin).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[plugin-root]"

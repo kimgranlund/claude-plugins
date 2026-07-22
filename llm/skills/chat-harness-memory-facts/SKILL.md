@@ -1,17 +1,14 @@
 ---
 name: chat-harness-memory-facts
 description: >-
-  How a chat-agent harness gives itself durable, citable domain knowledge instead of dumping it
-  into context, and persists facts across sessions apart from in-session task state —
-  project-agnostic. Use for "build a knowledge base my agent retrieves by search", "remember a
-  user preference across sessions", "memory vs. a task list or plan", "four memory types:
-  user/feedback/project/reference", "convert a relative date before saving a memory". Covers a
-  cited retrieval corpus (axis decomposition, Grep-then-Read, answers-not-generates) and durable
-  memory vs. ephemeral state (memory types, verify-before-trusting a recalled memory, the exclude
-  list, why Plan/Task are not memory). Grounded in Claude Code's own memory mechanics and this
-  workspace's knowledge-pack convention. ANSWERS from a cited corpus; does not build. NOT for
-  routing a request (chat-harness-routing-facts); NOT for a streaming wire format
-  (llm-streaming-facts).
+  How a chat-agent harness gets durable, citable knowledge and persists facts across
+  sessions, not task state — project-agnostic. Use for a searchable
+  knowledge base, organizing a reference corpus into retrieval axes (one topic per file), the
+  Grep-then-Read consult discipline, a pack that answers instead of generating, when a knowledge
+  base needs an admission gate and judge, a saved preference across conversations, memory vs. a
+  task list, four memory types, relative-date conversion, verify-before-trusting. Grounded in Claude Code's mechanics. ANSWERS;
+  does not build. NOT for routing (chat-harness-routing-facts); NOT for streaming
+  (llm-streaming-facts); NOT for vendor-swap (llm-gateway-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

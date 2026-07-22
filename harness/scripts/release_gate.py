@@ -260,6 +260,8 @@ def gate(root: Path, package: bool = False):
              # big-change-git-rules' re-budgeted description; "writing-rules" is the
              # *-writing-rules family glob (successor of the *-authoring-standards form):
              "parallel-session", "writing-rules",
+             # the #79 description diet (2026-07-22): trimmed-description prose compounds:
+             "pre-task", "squash-merge",
              # the four UI/design knowledge skills (2026-07-15): "container-patterns" and
              # "scale-theory" are references files (ui-pattern-facts, size-and-shape-rules); "design"
              # is the sibling PLUGIN's name, caught by size-and-shape-rules' own "-systems" suffix;

@@ -1,16 +1,11 @@
 ---
 name: build
 description: >-
-  Build a feature from its durable record — and when no record exists yet, run the /file-feature
-  intake first (docs, where installed; its discipline inline otherwise), THEN build. The
-  momentum half of the intake/build-feature pair: /file-feature records and stops; /build-feature guarantees a record
-  exists, sizes the dispatch by the solo-first floors, and drives it under a mandatory Findings
-  write-back contract. Run /build-feature [what to build, or a TKT- id], e.g. "/build-feature a calculator" or
-  "/build-feature TKT-0042". Small work → the host builds inline or one sealed fork; big work → the
-  planning/execution seats (planner/builder/code-checker) sized by their own
-  floors. NOT for pure intake with no build intended (/file-feature, docs); NOT for bug
-  investigation (file-bug, docs); NOT for deciding subagent-vs-team in the abstract
-  (team-or-solo-rules).
+  Builds a feature from its durable record, running the /file-feature intake first when none
+  exists, then building. /file-feature records and stops; /build-feature guarantees a record
+  exists, sizes the dispatch (solo-first), and drives it under a mandatory Findings write-back
+  contract. Run /build-feature [what to build, or a TKT- id]. NOT for pure intake with no build
+  intended (/file-feature); NOT for bug investigation (file-bug).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[what to build, or an existing TKT- id]"

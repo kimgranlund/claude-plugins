@@ -1,12 +1,11 @@
 ---
-name: issue-sorter
+name: sort-issues
 description: >-
-  Run the standing intake/triage seat (agents/issue-sorter.md) on demand against this repo — a plain
-  sweep, or a specific instruction (approve/deny a held item, answer the first-run roster or
-  GitHub-MCP-offer interview). States the agent's own operating contract as a fixed banner before
-  the first CONFIRMED-roster dispatch, and — since the agent itself cannot ask a question — runs
-  the REQ-011/REQ-013 interview here, in this command's own session, when the agent's report
-  surfaces one pending. Run /sort-issues [blank, or an instruction].
+  Runs the standing issue-sorter agent on demand against this repo — a plain intake sweep, or a
+  specific instruction (approve/deny a held item, answer the first-run roster or GitHub-MCP-offer
+  interview). Shows the agent's operating-contract banner before the first confirmed dispatch and
+  runs the REQ-011/REQ-013 interview here when the agent's report surfaces one pending. Run
+  /sort-issues [blank, or an instruction].
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a sweep | an approve/deny instruction | an interview answer]"

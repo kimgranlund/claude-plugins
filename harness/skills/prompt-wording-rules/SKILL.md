@@ -1,16 +1,11 @@
 ---
 name: prompt-wording-rules
 description: >-
-  Sharpen the language of any prompt-carrying artifact so it *instantiates* the target behavior
-  instead of describing it. Use whenever wording must drive behavior reliably — a skill body,
-  agent/system prompt, tool description, sub-agent dispatch, or output contract: "the model
-  ignores this instruction", "make this prompt/agent/skill more effective", "audit or harden this
-  prompt's language", "why doesn't it follow X", "rewrite this so it actually works", or when
-  authoring or reviewing any instruction the model must obey. The cross-cutting language layer
-  beneath the artifact authors — NOT for sharpening WHAT is being asked, the ask/brief/intent
-  itself (find-the-ask) — this skill sharpens instructions the model must obey; NOT for the artifact's structure, standard, or frontmatter
-  (make-skill / skill-writing-rules): the SKILL.md, agent, or CLAUDE.md itself, why a skill
-  isn't triggering, or why an agent won't auto-delegate — only the language inside it.
+  Sharpen the language of a prompt-carrying artifact so it *instantiates* target behavior, not
+  merely describes it — a skill, agent, or tool prompt: the model ignores an instruction, a
+  prompt isn't effective, harden a description, rewrite so it works. NOT for sharpening WHAT
+  is asked (find-the-ask); NOT for structure or why a skill isn't triggering
+  (skill-writing-rules) — only the language inside it.
 disable-model-invocation: false
 user-invocable: false
 ---

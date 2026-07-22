@@ -1,13 +1,11 @@
 ---
 name: hook-writing-rules
 description: >-
-  Standards for writing Claude Code hooks — the enforced, zero-token tier. Use when the user asks
-  how to write, structure, review, or fix a hook or hooks.json; which lifecycle event or matcher
-  to use; how exit codes and JSON decisions work; why a hook fires never, twice, or silently fails
-  to register; whether a rule belongs in a hook or a skill; how a hook's message should read. NOT for
-  authoring the skill itself — "write a skill that runs on every edit" (make-skill); NOT for
-  FORGING the hook end to end (make-hook, a command).
-  Carries verified event and output semantics (July 2026).
+  Standards for writing Claude Code hooks — the enforced, zero-token tier. Use when writing,
+  structuring, or fixing a hook; picking an event or matcher; how exit codes work; why a hook
+  fires never, twice, or silently fails to register; whether a rule belongs in a hook or a
+  skill; or how its message should read. NOT for authoring the skill itself (make-skill); NOT
+  for forging the hook end to end (make-hook, a command).
 disable-model-invocation: false
 user-invocable: false
 ---

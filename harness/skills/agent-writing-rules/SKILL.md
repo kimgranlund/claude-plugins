@@ -4,8 +4,8 @@ description: >-
   Standards for writing Claude Code subagent files that stay thin and enforce structurally. Use
   when the user asks how to write, structure, review, or fix an agent; how the skills preload or
   tool allowlist works; why an agent is fat, drifts from a skill, returns unusable output, or
-  fails to load; what belongs in an agent file vs a preloaded skill; whether a task needs an agent
-  at all or just context: fork. Carries verified preload and frontmatter semantics (July 2026).
+  fails to load; what belongs in an agent file vs a preloaded skill; or whether a task needs an
+  agent at all or just context: fork.
 disable-model-invocation: false
 user-invocable: false
 ---

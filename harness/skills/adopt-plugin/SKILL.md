@@ -1,17 +1,11 @@
 ---
 name: adopt-plugin
 description: >-
-  Declares an external Claude Code plugin or plugin marketplace in a repo's
-  .claude/settings.json so any contributor who trusts the repo is prompted to install it — no
-  operator-local assumption. Use when the user asks to add a plugin repo so contributors can
-  install it, declare a plugin marketplace in settings.json, set up extraKnownMarketplaces, wire
-  up a list of skill/plugin URLs as installable dependencies, or asks why a plugin they just
-  added to `enabledPlugins`/a marketplace declaration isn't showing up in /plugin. NOT for
-  general settings.json edits with no plugin/marketplace object — permissions, env vars, model
-  choice, hooks (`update-config`, where installed). NOT authoring a NEW plugin's manifest, or why
-  an ALREADY-DECLARED plugin fails to load once Claude Code tries to read it
-  (plugin-writing-rules). NOT building a plugin's skill/agent content (make-plugin). NOT
-  deciding how an existing local surface should partition (plan-plugin-split).
+  Declares an external Claude Code plugin or marketplace in a repo's settings.json so
+  contributors who trust the repo can install it. Use to add a plugin repo, declare a
+  marketplace, set up extraKnownMarketplaces, or diagnose why enabledPlugins isn't showing in
+  /plugin. NOT for settings.json edits with no plugin object (update-config); NOT a NEW
+  manifest (plugin-writing-rules); NOT a plugin's content (make-plugin).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[plugin/marketplace URL or list of URLs]"

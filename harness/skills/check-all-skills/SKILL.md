@@ -1,16 +1,11 @@
 ---
 name: check-all-skills
 description: >-
-  Audit a whole skills/ corpus as ONE system. Use whenever the target is the SET, not one skill — two modes.
-  CORPUS pass: four cross-cutting axes no single-skill review can see (naming grammar, linguistic potency,
-  front-matter routing, peer composition): "review all my skills", "audit the skill corpus", "are my skill
-  names consistent", "do my skills actually compose", "which skills should reference each other", "score my
-  skills for naming / language / frontmatter". CAMPAIGN: the deep-review loop against the standard of
-  excellence — themed batches, measured routing, portfolio verdicts: "run a deep-review campaign batch",
-  "review this skill against the standard of excellence". Owns references/standard-of-excellence.md and the
-  campaign/ ledger. NOT for reviewing one skill against its own rubric (skill-writing-rules);
-  NOT for executing the restructures it verdicts (reshape-skill); NOT for the agents estate
-  (check-all-agents); NOT for frontmatter wiring decisions (team-or-solo-rules).
+  Audit a whole skills/ corpus as ONE system, not one skill. CORPUS pass: naming, language,
+  routing, peer composition — are names consistent, do skills compose. CAMPAIGN: the
+  deep-review loop against the standard of excellence — themed batches, portfolio verdicts.
+  NOT for reviewing one skill's rubric (skill-writing-rules); NOT for the agents estate
+  (check-all-agents); NOT for executing the restructures (reshape-skill).
 disable-model-invocation: true
 user-invocable: true
 ---

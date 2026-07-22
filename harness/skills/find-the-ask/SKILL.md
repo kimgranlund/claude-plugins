@@ -1,15 +1,11 @@
 ---
 name: find-the-ask
 description: >-
-  Extract the ROOT intent behind a task, instruction, or artifact before acting on it. Use when a
-  request is vague, underspecified, or readable multiple ways; when the wording and the apparent goal
-  diverge; before a high-stakes or hard-to-reverse action; or when asked to "figure out what they really
-  want", "what's the actual intent", "clarify this", "what am I really asking for", or "improve this
-  prompt / brief / spec" — separate the literal ask from the underlying goal, surface ambiguities,
-  conflicting signals, category mismatches, and unstated assumptions, then resolve them with low-effort
-  multiple-choice questions and restate the task 10x sharper. NOT for deriving a greenfield's open
-  design decisions (for a new skill, /make-skill's interview covers that); NOT for authoring the
-  PRD or SPEC document itself — sharpening the ask is this skill; authoring is downstream.
+  Extract the ROOT intent behind a task or brief before acting. Use when a request is vague
+  or the wording and goal diverge — "what am I really asking for", "figure out what they
+  actually want", "clarify this before we build it". Resolve gaps with multiple-choice
+  questions. NOT for a new skill's interview (make-skill); NOT decomposing a system
+  (break-down-problem); NOT a session's open questions (find-open-questions).
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -1,16 +1,11 @@
 ---
 name: lead-team
 description: >-
-  Make THIS host session itself operate under the team-lead agent's own contract
-  for one stated charter — never a separately dispatched agent; the host adopts the routing/
-  gating/budget/rollup discipline directly for the charter's duration. Deliberately overrides
-  team-or-solo-rules's solo-first default: invoking this IS the choice to force team-shaped
-  delegation regardless of task size — every unit of real work is dispatched via Task/Agent to
-  planner / builder / docs-writer / doc-checker / code-checker, never done by the
-  host directly, while the charter stays open. Run /lead-team [charter]. NOT for a
-  task one context can hold (team-or-solo-rules's solo-first default governs there, no command
-  needed); NOT for reviewing one artifact directly (dispatch the reviewer that owns its rubric);
-  NOT for deciding subagent-vs-team in the abstract (team-or-solo-rules's own rubric).
+  Makes this host session run under the team-lead agent's own contract for one stated charter,
+  never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
+  directly, dispatching every unit of real work while the charter stays open. Run /lead-team
+  [charter]. NOT for a task one context can hold (team-or-solo-rules); NOT for reviewing one
+  artifact directly (dispatch the owning reviewer).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[charter — the plan/build-feature/review work needing a team]"

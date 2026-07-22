@@ -1,5 +1,5 @@
 ---
-name: chore-planner
+name: plan-chores
 description: >-
   Run the standing chore-planner seat (agents/chore-planner.md) on demand — standalone, it plans from
   durable .claude/ops state plus live gh evidence and rewrites the prioritized action queue at

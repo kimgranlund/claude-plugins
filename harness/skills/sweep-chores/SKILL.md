@@ -1,5 +1,5 @@
 ---
-name: chore-lead
+name: sweep-chores
 description: >-
   Run one ops-family sweep on demand against this repo — dispatches the standing chore-lead
   agent (agents/chore-lead.md), which fans out decision-watcher + issue-sorter + repo-cleaner in parallel

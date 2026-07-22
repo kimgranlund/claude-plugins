@@ -1,18 +1,15 @@
 ---
 name: team-or-solo-rules
-description: >
-  Design or review orchestration — how skills, subagents, and agent teams
-  discover and compose, and the YAML frontmatter that wires them — scoring
-  against the bundled rubric. Use whenever deciding skill vs subagent vs team,
-  wiring capabilities, planning a subagent fan-out, choosing skills: preloads,
-  or auditing an agent system's integration: "should this be a subagent or a
-  team", "how do my skills and agents connect", "is this fan-out worth its
-  token cost", "should this agent preload the skill", "review my
-  wiring/integration frontmatter". NOT for a whole-corpus or team audit —
-  "audit the agent team for duplicates", "do my agents leverage the right skills"
-  (check-all-skills / check-all-agents); NOT for a single agent definition
-  (harness's make-agent / agent-writing-rules); NOT for when the next turn fires — /goal, Stop hooks,
-  continuation (loop-rules).
+description: >-
+  Design or review orchestration — how skills, subagents, and teams compose, and their
+  wiring frontmatter. Use when deciding skill vs subagent vs team, wiring
+  capabilities, planning a fan-out worth its token cost, skills: preloads, or auditing
+  an agent system's wiring — "should this be a subagent or a team", "how do my skills
+  and agents connect". NOT a whole-corpus/team audit — "audit the agent team
+  for duplicates", "do my agents leverage the right skills" (check-all-agents /
+  check-all-skills);
+  NOT a single agent definition (make-agent / agent-writing-rules); NOT next-turn
+  timing (loop-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

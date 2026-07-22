@@ -1,15 +1,11 @@
 ---
 name: checking-rules
 description: >-
-  Cross-cutting discipline for HOW a review gets conducted, not what it checks — evidentiary
-  symmetry for dismissals, verifying a "fixed/shipped" claim against the runtime artifact instead
-  of a changelog, and a steelman self-review pass before filing. Use when reviewing a diff for real
-  bugs and not just the happy path, before filing a review to steelman what the author would say
-  back, when checking whether a dismissal was too fast, or when grading a review before it ships.
-  NOT for the return-block format a reviewer hands back (harness:write-handoff); NOT for one
-  artifact type's own rubric — a component's anatomy, a layout's structure, a document's ID spine
-  (the bound *-reviewer/*-auditor agent's own preloaded standard); NOT for portfolio/DEEP-tier
-  campaign scoring across a whole corpus (check-all-agents/check-all-skills).
+  Discipline for how a review runs: evidentiary rigor for dismissals, runtime checks over claims
+  not a changelog, and steelmanning before filing. Use when reviewing a diff for real bugs, a
+  too-fast dismissal, confirming a claim, or grading a review pre-ship. NOT for the return-block
+  (write-handoff); NOT for a bound rubric (reviewer/auditor); NOT for DEEP-tier campaign scoring
+  (check-all-agents/check-all-skills).
 disable-model-invocation: false
 user-invocable: true
 ---

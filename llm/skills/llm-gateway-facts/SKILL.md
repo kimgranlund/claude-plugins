@@ -1,16 +1,11 @@
 ---
 name: llm-gateway-facts
 description: >-
-  The swappable multi-LLM-provider gateway pattern — project-agnostic. Use for "support multiple
-  LLM providers behind one interface", "keep an API key off the client / out of a static build",
-  "design a dev-time proxy for an LLM call from a browser app", "why does my key end up in the
-  built JS bundle", "one config as both a picker AND a server allowlist", "keep a multi-turn LLM
-  conversation stateless server-side". Covers the provider-adapter seam, registry + trust-boundary
-  validation, the dev-proxy pattern, the bundler env-inlining footgun (Vite's `VITE_*` and
-  analogues), and the stateless-proxy/session/turn-reducer model. Grounded in a shipped
-  implementation (`@agent-ui/a2ui`), cited as a worked example not sole authority. ANSWERS from a
-  cited corpus; does not build. NOT for the wire format streamed (llm-streaming-facts); NOT for a
-  vendor's contract beyond the worked example; NOT for A2UI-specific concerns (agent-protocols).
+  The swappable multi-LLM-provider gateway pattern — project-agnostic. Use for multiple providers
+  behind one interface, an API key off the client, a dev-time proxy for browser LLM calls, a key
+  leaking into the bundle, one config as picker AND allowlist, a stateless conversation. Grounded
+  in a shipped implementation (`@agent-ui/a2ui`). ANSWERS; does not build. NOT for the streamed
+  wire format (llm-streaming-facts); NOT for A2UI-specific concerns (agent-protocols plugin).
 disable-model-invocation: false
 user-invocable: false
 ---

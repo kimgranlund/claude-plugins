@@ -1,18 +1,11 @@
 ---
 name: tidy-docs
 description: >-
-  Align an existing repo's scattered documents to the canonical docs/ layout — inventory what
-  document reality the repo actually has (rfcs/, design-docs/, NOTES.md, spec-shaped README
-  sections, near-miss dirs like docs/specs/), classify each artifact by the question it answers,
-  propose ONE batched migration plan, and on approval execute it with git mv (history preserved),
-  minimal frontmatter, link repair, and the project-docs index installed at the end. Run
-  /tidy-docs [optional: a subtree to scope the sweep]. Human-timed; one approval gate for the
-  whole plan; migration only — content is never rewritten. NOT for authoring a document
-  (make-doc); NOT for reviewing content quality (check-doc); NOT for capturing a new idea or
-  bug (/file-feature, /file-bug); NOT for repos with no documents (the index bootstrap alone is
-  /file-feature's Phase 6); NOT for whole-harness drift — entry files, dead
-  automation, corpus liveness (clean-repo, harness — it decides a repo's grammar; this
-  command executes the canonical-map case).
+  Align an existing repo's scattered documents (rfcs/, NOTES.md, near-miss dirs) to the canonical
+  docs/ layout: inventory, classify, propose one migration plan, execute on approval with git mv
+  (history preserved), frontmatter, and link repair. Run /tidy-docs [optional subtree]. One
+  approval gate; migration only — content is never rewritten. NOT authoring a document (make-doc);
+  NOT reviewing content quality (check-doc); NOT whole-harness drift (clean-repo).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[optional subtree to scope the sweep]"

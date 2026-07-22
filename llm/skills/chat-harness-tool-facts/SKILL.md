@@ -1,18 +1,12 @@
 ---
 name: chat-harness-tool-facts
 description: >-
-  How a chat-agent harness reaches outside its context window — typed tools, deferred
-  tool-catalog loading, read-only resources, external services behind a swappable seam. Use for
-  "tool vs skill vs resource", "design a typed tool schema", "defer a huge tool catalog so it
-  doesn't tax every turn", "a tool call fails before it's loaded", "read-only access without an
-  action", "MCP resources vs tools", "external API trust boundary". Covers typed tool contracts
-  (JSON-Schema params, vs. a skill's prose or resource's inert data), search-to-load catalogs,
-  read-only resources (MCP's application-driven capability), and external-service shape —
-  LLM-provider specifics route to llm-gateway-facts. Grounded in this harness's live
-  ToolSearch mechanics + the MCP spec. Answers from a cited corpus, no build. NOT the
-  LLM-provider pattern (llm-gateway-facts); NOT skill routing/memory
-  (chat-harness-routing-facts / chat-harness-memory-facts); NOT a wire format
-  (llm-streaming-facts); NOT implementing any of this.
+  How a chat-agent harness reaches outside its context window. Use for typed tools (JSON-Schema
+  contracts), deferred/search-to-load tool catalogs (don't tax every turn), read-only MCP
+  resources (application- vs model-controlled) vs tools, and external-service integration
+  behind a swappable seam. Grounded in this harness's live ToolSearch mechanics + the MCP spec;
+  answers, no build. NOT the LLM-provider pattern (llm-gateway-facts); NOT skill routing
+  (chat-harness-routing-facts); NOT memory (chat-harness-memory-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

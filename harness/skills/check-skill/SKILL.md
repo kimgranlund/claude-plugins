@@ -1,12 +1,11 @@
 ---
 name: check-skill
 description: >-
-  Audit a SKILL.md against skill-writing-rules and return a schema'd findings report. Use
-  when the user asks to review, audit, critique, score, or fix a skill; when a skill never
-  triggers, misfires, or seems to restate what the model already knows. Judgment tier only — the
-  mechanical checks belong to skill_lint.py, which runs first. NOT for authoring a new skill
-  (make-skill); NOT for a bare "why does my skill never trigger" question with no review asked
-  (skill-writing-rules).
+  Audits a SKILL.md against skill-writing-rules and returns a findings report. Use when the user
+  asks to review, audit, critique, score, or fix a skill, or when a skill never triggers,
+  misfires, or restates what the model knows. Judgment tier; skill_lint.py checks mechanics
+  first. NOT authoring a new skill (make-skill); NOT a bare "why does my skill never trigger"
+  question with no review asked (skill-writing-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
