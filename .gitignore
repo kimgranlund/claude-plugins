@@ -5,7 +5,6 @@
 dist/
 
 # Personal/local Claude Code settings — not shared
-.claude/settings.local.json
 harness-audit-*/
 
 # Harness-managed git worktrees (EnterWorktree) — in-repo by design, never committed (ruled 2026-07-15)
