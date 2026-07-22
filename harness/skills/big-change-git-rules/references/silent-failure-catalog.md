@@ -47,6 +47,20 @@ stash list's length and top-entry label BEFORE the push, and after, confirm the 
 exactly one AND the new top entry carries the expected label — the state is re-read and checked
 against a specific, falsifiable expectation, not inferred from the push command's exit code.
 
+## An unknown CLI flag is silently discarded and the script runs against the wrong target
+
+[incident, 2026-07-21, Issue #74 — benign outcome only by luck] `sync_main.py` invoked with
+`--repo-dir /path/to/target` (the real flag is `--repo-root`) silently ignored the unknown token
+and ran its quarantine/pull sequence against cwd — which was a session worktree, not the intended
+main checkout. The hand-rolled parser (`if "--repo-root" in args`) probes for known flags and
+treats everything else as not-there; no usage error, no warning. The run failed harmlessly only
+because the worktree's branch happened to be deleted remotely — against a live branch it would
+have quarantined and pulled the wrong repo while reporting success. **The general form:** a
+script's silent acceptance of your arguments is itself a CLAIM ("I understood the invocation");
+a git-mutating script must reject unknown argv tokens loudly before touching state. Fixed same
+day in `sync_main.py`'s strict `parse_cli` (harness 2.0.5, PR #86, closing Issue #74): any
+unknown or malformed argv token exits with usage text before any git operation, selftest-proven.
+
 ## The general pattern, stated once
 
 Every incident above has the same shape: **command reports success (exit 0, no exception, clean

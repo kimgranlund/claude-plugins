@@ -134,7 +134,10 @@ re-run until clean; never hand off an unreconciled partition.
 `partition` (1–5 plugins, named) or `no-partition`, with the ledger either way. Handoff:
 `/make-plugin` scaffolds each new plugin and runs its member, fence-closure, and release phases;
 each plugin's own release gate (G5/G8 sweeps, `/check-routing`) is the proof that no retired grouping
-leaks. This skill's job ends at the validated manifest.
+leaks. This skill's job ends at the validated manifest. A MERGE verdict's executor additionally
+owes a post-merge routing re-measure — the union menu creates seams the source plugins' green
+baselines cannot predict; the measured method (ordered context splits, thief-side fences,
+reciprocal cases, noise calibration) is `references/merge-seam-remeasure.md`.
 
 ## Boundaries
 
@@ -149,6 +152,7 @@ leaks. This skill's job ends at the validated manifest.
 
 **Done** = graph extracted and cited, all four tests run in order with evidence from it, 1–5
 plugins (or a defended no-partition), rejected ledger present, the escalation ladder climbed with rent paid (or 1st-order sufficiency stated honestly), refactor opportunities routed to owners, negative space examined with each confirmed gap carrying evidence and a build owner (and each matrix hole either confirmed or defended as correctly absent), every seam justified,
-`surface_map.py check` clean, handoff names `/make-plugin`. **NOT done** = a grouping proposed
+`surface_map.py check` clean, handoff names `/make-plugin` — and, on a merge verdict, the
+re-measure obligation (`references/merge-seam-remeasure.md`). **NOT done** = a grouping proposed
 from topic resemblance without the graph, a hard edge crossing a cut, an orphan artifact, a
 missing rejected ledger, a partition isomorphic to the input folder structure presented as a refactor, or a benefit stated as an adjective.

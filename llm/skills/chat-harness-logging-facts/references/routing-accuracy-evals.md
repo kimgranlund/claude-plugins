@@ -63,6 +63,19 @@ able to tell apart, and conflating any two of them wastes effort:
   human or a routing layer reads the skill's boundary prose and redirects to the agent), not by
   trying to make a skill description win a router decision it structurally cannot win.
 
+**A fourth outcome, added from a later measured run [2026-07-21, this workspace's ADR-0008 design
+merge, PR #73]: the menu-scope collision.** When plugins merge, a case can fail with NO description
+change and NO judge noise — the *menu itself* changed. A grammar-bare prompt ("what type token for
+this heading") that routed correctly inside its source plugin's small menu collides in the merged
+union menu, where a sibling legitimately claims the same phrasing and only ambient project context
+(which a blind judge lacks) disambiguates. **Discipline:** heal the *prompt*, not the descriptions
+— an ordered context split restores the marker the plugin-scoped menu used to carry ("what md-sys
+type token for this heading"); both descriptions were already correct. The same run calibrated
+single-judge noise at ~1.5% per ~520-case round and hardened the first-strike rule into "passes
+2 of 3 rounds = noise, record and stop; fails 3 of 3 with a verbatim fence in place =
+known-ambiguous, annotate and stop." Method detail: harness's
+`plan-plugin-split/references/merge-seam-remeasure.md`, where installed.
+
 ## The blind judge — the measurer must see only what the real router sees
 
 **Claim — the judge that scores a routing-accuracy suite must not see more than the router sees
