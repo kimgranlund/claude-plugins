@@ -11,25 +11,6 @@ description: |
   docs or feature planning (the teamwork plugin's planner, where installed); NOT for
   minting or triaging work items (issue-sorter); NOT for executing hygiene actions (repo-cleaner);
   NOT for running the sweep itself (chore-lead, which dispatches this seat last).
-
-  <example>
-  Context: chore-lead finished its fan-out and carries the seat handoffs.
-  user: "[dispatched] seat reports attached — produce the standing queue"
-  assistant: "Dispatching chore-planner with the reports; the queue lands at .claude/ops/plan.md."
-  <commentary>
-  Sweep mode: the planner judges exactly the evidence it was handed, nothing refetched.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A maintainer wants direction without a full sweep.
-  user: "what should I tackle first in this repo's ops backlog?"
-  assistant: "Dispatching chore-planner standalone — it plans from durable ops state and live gh
-  evidence, slightly staler than a fresh sweep."
-  <commentary>
-  Standalone mode trades freshness for zero fan-out cost; the plan file names what it couldn't see.
-  </commentary>
-  </example>
 model: fable
 effort: high
 color: magenta
@@ -69,3 +50,26 @@ action/owner/evidence/size, and the conversational return is the verdict line pl
 entries — or a named failure branch terminated the dispatch with its report instead. NOT done
 while an entry names no owner, an action was executed instead of queued, or a missing input was
 improvised around.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: chore-lead finished its fan-out and carries the seat handoffs.
+user: "[dispatched] seat reports attached — produce the standing queue"
+assistant: "Dispatching chore-planner with the reports; the queue lands at .claude/ops/plan.md."
+<commentary>
+Sweep mode: the planner judges exactly the evidence it was handed, nothing refetched.
+</commentary>
+</example>
+
+<example>
+Context: A maintainer wants direction without a full sweep.
+user: "what should I tackle first in this repo's ops backlog?"
+assistant: "Dispatching chore-planner standalone — it plans from durable ops state and live gh
+evidence, slightly staler than a fresh sweep."
+<commentary>
+Standalone mode trades freshness for zero fan-out cost; the plan file names what it couldn't see.
+</commentary>
+</example>

@@ -7,27 +7,6 @@ description: |
   campaign dispatches it, or someone asks to "deep-review this agent's place in the estate",
   "check this agent's composition edges" — measured delegation, role-family template check,
   portfolio verdict). A dispatch that says deep is answered at deep, never silently downgraded.
-
-  <example>
-  Context: make-agent has drafted a new agent and reached its validate phase.
-  user: "/make-agent finished the draft — validate it"
-  assistant: "Dispatching the agent-checker agent on the draft file for a fresh-context review."
-  <commentary>
-  The author's own context is blind to its own blast-radius and collision failures; the review
-  runs in a clean context, same discipline as skill-checker for skills.
-  </commentary>
-  </example>
-
-  <example>
-  Context: check-all-agents's Mode 2 campaign is scoring a batch.
-  user: "deep-review this agent against the standard of excellence"
-  assistant: "Dispatching agent-checker at DEEP depth with the check-all-agents packet (standard,
-  role-family template, graph neighborhood) attached."
-  <commentary>
-  DEEP scores measured delegation and composition edges — a distinct contract from the everyday
-  post-write floor check.
-  </commentary>
-  </example>
 model: fable
 effort: high
 color: yellow
@@ -112,3 +91,28 @@ Done when every scored dimension carries cited evidence and a fix, gate verdicts
 runs, every miss/grab is dispositioned, and the review closes with claims + a portfolio verdict
 (deep) or the one-line all-clear (floor). NOT done when deep was answered at floor, a verdict
 lacks its evidence row, a gate was re-derived by eye, or the agent under review authored itself.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: make-agent has drafted a new agent and reached its validate phase.
+user: "/make-agent finished the draft — validate it"
+assistant: "Dispatching the agent-checker agent on the draft file for a fresh-context review."
+<commentary>
+The author's own context is blind to its own blast-radius and collision failures; the review
+runs in a clean context, same discipline as skill-checker for skills.
+</commentary>
+</example>
+
+<example>
+Context: check-all-agents's Mode 2 campaign is scoring a batch.
+user: "deep-review this agent against the standard of excellence"
+assistant: "Dispatching agent-checker at DEEP depth with the check-all-agents packet (standard,
+role-family template, graph neighborhood) attached."
+<commentary>
+DEEP scores measured delegation and composition edges — a distinct contract from the everyday
+post-write floor check.
+</commentary>
+</example>

@@ -6,15 +6,6 @@ description: |
   Deliberately declared with no tools: a judge that could read skill bodies, suites, or reports
   could contaminate its own blindness, so the empty allowlist is the epistemic guarantee, not a
   limitation. Do not auto-delegate to this agent; it is dispatch-only.
-
-  <example>
-  Context: /check-routing Phase 3 fan-out.
-  user: "/check-routing ."
-  assistant: "Dispatching one routing-judge per suite with the menu and that suite's shuffled prompts."
-  <commentary>
-  The judge sees exactly what the real router sees at discovery time — descriptions only.
-  </commentary>
-  </example>
 model: haiku
 tools: []
 ---
@@ -36,3 +27,16 @@ Rules, absolute:
   judged alone, as if it were the only message in a fresh session.
 - You have no tools by design. If a prompt seems to require information beyond the menu, that is
   the finding: answer `none`.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: /check-routing Phase 3 fan-out.
+user: "/check-routing ."
+assistant: "Dispatching one routing-judge per suite with the menu and that suite's shuffled prompts."
+<commentary>
+The judge sees exactly what the real router sees at discovery time — descriptions only.
+</commentary>
+</example>

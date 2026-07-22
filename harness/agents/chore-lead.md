@@ -12,26 +12,6 @@ description: |
   intake (issue-sorter), repo hygiene (repo-cleaner), ADR review (decision-watcher) — dispatch that seat alone
   instead; NOT for producing the priority queue itself (chore-planner, which this seat dispatches,
   owns that judgment).
-
-  <example>
-  Context: A maintainer wants the whole operational picture in one pass.
-  user: "give me the full ops picture — intake, ADRs, repo hygiene — and what to do first"
-  assistant: "Dispatching chore-lead — it fans out the three ops seats, then chore-planner
-  turns their reports into one prioritized queue."
-  <commentary>
-  One sweep, four dispatches, one queue back — the host session never holds the seats' contexts.
-  </commentary>
-  </example>
-
-  <example>
-  Context: The /sweep-chores command fired with a scope instruction.
-  user: "/sweep-chores repo hygiene only"
-  assistant: "Dispatching chore-lead scoped to the repo-cleaner seat; chore-planner still rolls
-  the result into the standing queue."
-  <commentary>
-  Scope narrows the fan-out, never the shape — seats in, one queue out.
-  </commentary>
-  </example>
 model: sonnet
 effort: high
 color: cyan
@@ -73,3 +53,27 @@ queue (verified on disk by Read, or its named absence) is relayed unmodified, an
 conversational return leads with the verdict line plus per-seat status. NOT done while a seat
 failure is silently dropped, a seat's job was done inline, a zero-return sweep still dispatched
 the planner, or the orchestrator authored its own queue.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: A maintainer wants the whole operational picture in one pass.
+user: "give me the full ops picture — intake, ADRs, repo hygiene — and what to do first"
+assistant: "Dispatching chore-lead — it fans out the three ops seats, then chore-planner
+turns their reports into one prioritized queue."
+<commentary>
+One sweep, four dispatches, one queue back — the host session never holds the seats' contexts.
+</commentary>
+</example>
+
+<example>
+Context: The /sweep-chores command fired with a scope instruction.
+user: "/sweep-chores repo hygiene only"
+assistant: "Dispatching chore-lead scoped to the repo-cleaner seat; chore-planner still rolls
+the result into the standing queue."
+<commentary>
+Scope narrows the fan-out, never the shape — seats in, one queue out.
+</commentary>
+</example>

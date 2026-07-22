@@ -17,41 +17,6 @@ description: |
   (`save-lessons`'s own frequency/impact detectors cover that ground directly); NOT for the
   whole-family sweep with a rolled-up queue (`chore-lead`) or prioritizing what to tackle
   first across the ops backlog (`chore-planner`).
-
-  <example>
-  Context: A session-scoped CronCreate firing for the ADR-review routine.
-  user: "[scheduled] run the decision-watcher sweep"
-  assistant: "Dispatching decision-watcher — diffs the ADR corpus against its checkpoint, judges the
-  new/changed delta against save-lessons's bar, queues candidates, and reports; a batch confirm
-  only happens if a human is in the loop to run it."
-  <commentary>
-  Same shape as issue-sorter' hourly firing: unattended, bounded, idempotent per run — the checkpoint
-  is what keeps the cost proportional to what changed, not to how many ADRs exist.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A maintainer is in a live session and wants to clear the backlog.
-  user: "anything queued from the ADR sweeps I should look at?"
-  assistant: "Dispatching decision-watcher for its pending-queue report, then running one batched
-  AskUserQuestion round over everything queued."
-  <commentary>
-  The queue exists precisely so this confirm never has to happen per-candidate, per-firing — one
-  round covers however many candidates accumulated since the last time a human was available.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A maintainer just ratified a new ADR that supersedes an older one.
-  user: "ADR-0009 just got ratified — it supersedes ADR-0003, check if anything downstream cites the old one"
-  assistant: "Dispatching decision-watcher for an on-demand sweep — the supersession will surface as a
-  newly_superseded finding, and any pack entry citing ADR-0003 gets named for save-lessons's
-  own Phase 6 staleness check."
-  <commentary>
-  Same agent, same procedure — supersession detection doesn't need the schedule to fire, only the
-  ADR frontmatter to say so.
-  </commentary>
-  </example>
 model: sonnet
 effort: high
 color: teal
@@ -178,3 +143,42 @@ succeeded), state changes are committed, and the firing's report exists — nami
 if a human is present, or deferring it plainly if not. NOT done while an ADR's delta goes unjudged,
 a candidate is queued twice, a stale citation is found but not named, the checkpoint advances before
 its delta was queued, or this agent writes to any knowledge-pack path itself.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: A session-scoped CronCreate firing for the ADR-review routine.
+user: "[scheduled] run the decision-watcher sweep"
+assistant: "Dispatching decision-watcher — diffs the ADR corpus against its checkpoint, judges the
+new/changed delta against save-lessons's bar, queues candidates, and reports; a batch confirm
+only happens if a human is in the loop to run it."
+<commentary>
+Same shape as issue-sorter' hourly firing: unattended, bounded, idempotent per run — the checkpoint
+is what keeps the cost proportional to what changed, not to how many ADRs exist.
+</commentary>
+</example>
+
+<example>
+Context: A maintainer is in a live session and wants to clear the backlog.
+user: "anything queued from the ADR sweeps I should look at?"
+assistant: "Dispatching decision-watcher for its pending-queue report, then running one batched
+AskUserQuestion round over everything queued."
+<commentary>
+The queue exists precisely so this confirm never has to happen per-candidate, per-firing — one
+round covers however many candidates accumulated since the last time a human was available.
+</commentary>
+</example>
+
+<example>
+Context: A maintainer just ratified a new ADR that supersedes an older one.
+user: "ADR-0009 just got ratified — it supersedes ADR-0003, check if anything downstream cites the old one"
+assistant: "Dispatching decision-watcher for an on-demand sweep — the supersession will surface as a
+newly_superseded finding, and any pack entry citing ADR-0003 gets named for save-lessons's
+own Phase 6 staleness check."
+<commentary>
+Same agent, same procedure — supersession detection doesn't need the schedule to fire, only the
+ADR frontmatter to say so.
+</commentary>
+</example>

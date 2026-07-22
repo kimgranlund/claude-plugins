@@ -7,35 +7,6 @@ description: |
   score a skill "as an organ of the corpus" or "against the standard of excellence" — measured
   routing, portfolio verdict). A dispatch that says deep is answered at deep, never silently
   downgraded. Dispatch with the target skill directory and a report destination path.
-
-  <example>
-  Context: make-skill has finished drafting a new skill and reached Phase 5.
-  user: "/make-skill finished the draft — validate it"
-  assistant: "Dispatching the skill-checker agent on the draft directory for a fresh-context review."
-  <commentary>
-  The author's own context is register-blind to its own prose; the audit runs in a clean context.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants the whole skill library checked.
-  user: "Audit every skill under .claude/skills/"
-  assistant: "Fanning out skill-checker agents, one per skill directory, aggregating the report files."
-  <commentary>
-  Parallel fan-out with a shared preloaded procedure yields comparable reports.
-  </commentary>
-  </example>
-
-  <example>
-  Context: check-all-skills's Mode 2 campaign is scoring batch 1.
-  user: "deep-review this skill against the standard of excellence"
-  assistant: "Dispatching skill-checker at DEEP depth with the check-all-skills packet (standard,
-  species template, graph neighborhood) attached."
-  <commentary>
-  DEEP is a distinct contract from FLOOR — M1/M2/N/A/L/S dimensions and a portfolio verdict, not
-  the everyday post-write check.
-  </commentary>
-  </example>
 model: fable
 effort: high
 color: yellow
@@ -114,3 +85,36 @@ Done when the report file exists at the destination and the conversational retur
 line plus the top findings (floor) or claims + portfolio verdict (deep). NOT done when a deep
 dispatch was answered at floor, a gate verdict was re-derived by eye, or an undispositioned
 routing miss/grab was left out of the report.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: make-skill has finished drafting a new skill and reached Phase 5.
+user: "/make-skill finished the draft — validate it"
+assistant: "Dispatching the skill-checker agent on the draft directory for a fresh-context review."
+<commentary>
+The author's own context is register-blind to its own prose; the audit runs in a clean context.
+</commentary>
+</example>
+
+<example>
+Context: User wants the whole skill library checked.
+user: "Audit every skill under .claude/skills/"
+assistant: "Fanning out skill-checker agents, one per skill directory, aggregating the report files."
+<commentary>
+Parallel fan-out with a shared preloaded procedure yields comparable reports.
+</commentary>
+</example>
+
+<example>
+Context: check-all-skills's Mode 2 campaign is scoring batch 1.
+user: "deep-review this skill against the standard of excellence"
+assistant: "Dispatching skill-checker at DEEP depth with the check-all-skills packet (standard,
+species template, graph neighborhood) attached."
+<commentary>
+DEEP is a distinct contract from FLOOR — M1/M2/N/A/L/S dimensions and a portfolio verdict, not
+the everyday post-write check.
+</commentary>
+</example>

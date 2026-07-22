@@ -5,17 +5,6 @@ description: |
   prompt, a CLAUDE.md, a tool description, a dispatch — generator ≠ critic, so the maker never
   grades their own wording. Use after a prompt-carrying artifact is written or edited, or whenever
   the model keeps ignoring an instruction and the wording itself is suspect.
-
-  <example>
-  Context: make-skill's Phase 4 language pass wants an independent check before shipping.
-  user: "run the language audit on this skill draft"
-  assistant: "Dispatching the wording-checker agent — a fresh-context read for describing vs.
-  instantiating language."
-  <commentary>
-  The author's own context cannot see its own register; the review runs in a clean context, same
-  discipline as skill-checker for whole-skill scoring.
-  </commentary>
-  </example>
 model: fable
 effort: high
 color: yellow
@@ -75,3 +64,18 @@ the artifact's own structure or frontmatter (`skill-writing-rules` / `agent-writ
 Done when every load-bearing line is scored with cited evidence and the lint ran for real. NOT
 done when a verdict has no cited evidence, the lint gate was skipped, or a whole artifact was
 scored here instead of its language alone.
+
+## Dispatch examples
+
+Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
+
+<example>
+Context: make-skill's Phase 4 language pass wants an independent check before shipping.
+user: "run the language audit on this skill draft"
+assistant: "Dispatching the wording-checker agent — a fresh-context read for describing vs.
+instantiating language."
+<commentary>
+The author's own context cannot see its own register; the review runs in a clean context, same
+discipline as skill-checker for whole-skill scoring.
+</commentary>
+</example>
