@@ -8,9 +8,9 @@
       "status": "reachable",
       "last_successful_check_at": "2026-07-22T00:09:39Z",
       "bootstrap_note": "First-ever firing -- no prior checkpoint existed. Treated as discovering everything currently open plus full closed history for classification/dedup context (16 issues, 20 PRs, gh issue/pr list --state all, 2026-07-18). The checkpoint below is the discovery high-water mark going forward: the next firing's window is 'changed since this timestamp', not 'since repo creation' again.",
-      "last_firing_note": "2026-07-22T00:09:39Z firing (scheduled cloud routine, unattended): 11 issues (#84, #81, #77, #80, #82, #76, #58, #79, #83, #78, #74) and 15 PRs (#85, #75, #73, #72, #71, #70, #69, #68, #67, #66, #65, #64, #63, #62, #61) found changed since the prior checkpoint (2026-07-21T08:10:49Z through this firing), all authored by the already-trusted maintainer (kimgranlund). This sandbox again had no gh binary on PATH -- discovery used the session's connected read-only GitHub MCP server tools (list_issues/list_pull_requests) instead. Nothing held, nothing minted: every open issue discovered was already a complete resident record filed directly by the maintainer through the git-native backend; PRs are code changes, not ticket records this seat mints. See the firing report for the full accounting.",
-      "issues_checkpoint": "2026-07-22T00:09:39Z",
-      "prs_checkpoint": "2026-07-22T00:09:39Z"
+      "last_firing_note": "2026-07-22T02:09:37Z firing (scheduled cloud routine, unattended): 3 issues (#81, #83, #74) and 2 PRs (#75, #86) found changed since the prior checkpoint (2026-07-22T00:09:39Z through this firing), all authored by the already-trusted maintainer (kimgranlund). The 3 issues are already-resident records from a prior firing that transitioned to closed (no re-mint); PR #86 is genuinely new (created 2026-07-22T01:05:50Z), PR #75 merged -- both are code changes, not ticket records this seat mints. This sandbox again had no gh binary on PATH -- discovery used the session's connected read-only GitHub MCP server tools (list_issues/list_pull_requests) instead. Nothing held, nothing minted. See the firing report for the full accounting.",
+      "issues_checkpoint": "2026-07-22T02:09:37Z",
+      "prs_checkpoint": "2026-07-22T02:09:37Z"
     }
   }
 }
