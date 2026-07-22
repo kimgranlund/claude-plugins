@@ -128,6 +128,21 @@ def run(root="."):
     return 0 if ok else 1
 
 
+def parse_cli(args):
+    """Strict CLI parse for a git-mutating entry point: returns the repo root,
+    or None on ANY unknown or malformed token — a typo'd flag must become a
+    usage error, never a silent wrong-directory run (#74, 2026-07-21)."""
+    root = "."
+    i = 0
+    while i < len(args):
+        if args[i] == "--repo-root" and i + 1 < len(args):
+            root = args[i + 1]
+            i += 2
+        else:
+            return None
+    return root
+
+
 def selftest():
     # S1 — the pure classifier, every shape
     c = classify_overlap({"a.py", "b.py"}, {"b.py", "c.py"})
@@ -169,8 +184,16 @@ def selftest():
                                          label="sync_main quarantine")
     assert ok and ref == "stash@{0}", "a genuine one-entry grow carrying our label must pass"
 
+    # S5 — #74 regression: the CLI contract rejects unknown tokens instead of
+    # silently running the quarantine/pull sequence against cwd
+    assert parse_cli([]) == "."
+    assert parse_cli(["--repo-root", "/x"]) == "/x"
+    assert parse_cli(["--repo-dir", "/x"]) is None, "the incident's typo'd flag must be rejected"
+    assert parse_cli(["--repo-root"]) is None, "a flag missing its value must be rejected"
+
     print("sync_main selftest · PASS · overlap/foreign classification correct on all shapes, "
-          "the HEAD-mismatch and foreign-stash negative controls both fire")
+          "the HEAD-mismatch and foreign-stash negative controls both fire, "
+          "unknown CLI tokens rejected before any git operation")
     return 0
 
 
@@ -178,7 +201,9 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     if args and args[0] == "selftest":
         sys.exit(selftest())
-    root = "."
-    if "--repo-root" in args:
-        root = args[args.index("--repo-root") + 1]
+    root = parse_cli(args)
+    if root is None:
+        print("sync_main · usage error: unknown or malformed argument\n"
+              "usage: sync_main.py [selftest | --repo-root <path>]", file=sys.stderr)
+        sys.exit(1)
     sys.exit(run(root))
