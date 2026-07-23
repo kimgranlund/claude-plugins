@@ -85,6 +85,24 @@ concept earns a new verb only when no registry verb fits.
   (DESIGN.md is the filename). Decorative repetition of the plugin word is still a
   test-2/no-stutter failure.
 
+## The symmetry hardline — normative, mechanically enforced
+
+A name exists in three places at once — frontmatter `name:`, the directory (or agent
+filename), and every doc/fence/routing-table reference — and the frontmatter copy is the only
+one the harness registers. Any drift ships an unreachable command that looks documented
+(2026-07-21/23: six commands shipped this way — file-feature, file-task, sort-issues,
+sweep-chores, plan-chores, build-feature — each found late, by a routing re-measure or in
+passing, never by a gate).
+
+- **Skill frontmatter `name:` equals its directory name; agent `name:` equals its file stem.**
+  Not a convention — `skill_lint` F9/A6 FAIL on drift, at write time (the PostToolUse hook) and
+  at ship time (the gate composes the lint). A rename is complete only when frontmatter, path,
+  and references move in the SAME change — F9/A6 police the first two; references stay on the
+  reviewer and the gate's G8 sweep.
+- The incident mechanism to watch: three of the six drifted precisely because frontmatter still
+  carried a retired same-name twin pairing. The Twins refinement above (command = verb, seat =
+  role noun) is what a rename moves the frontmatter TO; F9/A6 catch the copy that lags behind.
+
 ## Worked contrast — illustrative
 
 Naming the issue-triage pair (a scheduled triage seat plus its on-demand dispatcher):

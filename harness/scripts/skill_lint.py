@@ -21,6 +21,7 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
   F7 no persona opener in body ("You are a ...", "You're ...")
   F8 no reserved words in the skill's name field or directory ("claude", "anthropic")
      — the platform rejects the skill (and fails the plugin load) at install time
+  F9 frontmatter name == directory name (the naming-symmetry hardline)
   W1 description <= 1024 chars (Agent Skills portability cap)
   W8 model-invocable description <= 700 chars (the #79 resident-listing budget)
   W2 model-invocable description carries trigger phrasing ("use when ...")
@@ -30,7 +31,7 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
   W6 hedge describers in prose ("please", "try to", "be careful", "make sure") > 3
   W7 salience inflation: caps NEVER/CRITICAL/IMPORTANT > 5 outside code fences
 
-Agent files (agents/*.md) get a focused rule set:
+Agent files (agents/*.md) get a focused rule set (incl. A6 name == file stem):
   A1 frontmatter block present
   A2 frontmatter is YAML-shaped: every column-0 line is a `key:` or a comment;
      bare <example> blocks and other multi-line description content must be
@@ -207,6 +208,11 @@ def lint_text(text, skill_dir_name):
                                  "the platform rejects it at install and the whole plugin fails "
                                  "to load"))
                 break
+        if skill_dir_name and name != skill_dir_name:
+            findings.append(("FAIL", name_line, "F9",
+                             f"name '{name}' != directory '{skill_dir_name}' -> the name is the "
+                             "routing/registration surface; align them (the naming-symmetry "
+                             "hardline, 2026-07-21/23: six commands shipped unreachable this way)"))
         if len(name) > 64 or not KEBAB_RE.match(name):
             findings.append(("WARN", name_line, "W3",
                              "name -> kebab-case, <=64 chars"))
@@ -251,7 +257,7 @@ def lint_text(text, skill_dir_name):
     return findings
 
 
-def lint_agent_text(text):
+def lint_agent_text(text, agent_file_stem=None):
     """Focused checks for agents/*.md — the failure class is frontmatter that a
     strict YAML parser rejects, which kills the whole plugin load."""
     lines = text.splitlines()
@@ -262,6 +268,12 @@ def lint_agent_text(text):
                          "no frontmatter block -> open the file with `---`, fields, `---`"))
         return findings
     fm_start, fm_end = span
+    a_name, a_name_line = fields.get("name", ("", fm_start))
+    if agent_file_stem and a_name and a_name != agent_file_stem:
+        findings.append(("FAIL", a_name_line, "A6",
+                         f"name '{a_name}' != file '{agent_file_stem}.md' -> the name is the "
+                         "dispatch/registration surface; align them (the naming-symmetry "
+                         "hardline, 2026-07-21/23: six commands shipped unreachable this way)"))
     for i in range(fm_start, fm_end):
         line = lines[i]
         if not line.strip() or line.startswith("#"):
@@ -439,13 +451,14 @@ def render(path, findings):
 
 
 def lint_path(path):
-    p = Path(path)
+    # absolute() for dir/stem identity checks on bare relative invocations (#83 class)
+    p = Path(path).absolute()
     if not p.is_file():
         return f"{HOOK_NAME} · missing file · {path}", True
     kind = classify(path) or "skill"
     text = p.read_text(encoding="utf-8", errors="replace")
     if kind == "agent":
-        return render(path, lint_agent_text(text))
+        return render(path, lint_agent_text(text, p.stem))
     if kind == "hooks":
         return render(path, lint_hooks_text(text))
     if kind == "claude_md":
@@ -567,6 +580,12 @@ def selftest():
     assert any(f[2] == "F8" for f in lint_text(reserved, "claude-md-audit")), "reserved word must fail F8"
     assert any(f[2] == "F8" for f in lint_text(GOOD_FIXTURE, "anthropic-helper")), "reserved dir must fail F8"
     assert not any(f[2] == "F8" for f in lint_text(GOOD_FIXTURE, "demo-review")), "clean name must not trip F8"
+    # naming-symmetry hardline (2026-07-23): name != dir/stem is a FAIL — six commands
+    # shipped unreachable because frontmatter kept a retired name while dir/docs moved
+    assert any(f[2] == "F9" for f in lint_text(GOOD_FIXTURE, "wrong-dir")), "name != dir must fail F9"
+    assert not any(f[2] == "F9" for f in lint_text(GOOD_FIXTURE, "demo-review")), "name == dir must not trip F9"
+    assert any(f[2] == "A6" for f in lint_agent_text(GOOD_AGENT_FIXTURE, "wrong-stem")), "agent name != stem must fail A6"
+    assert not any(f[2] == "A6" for f in lint_agent_text(GOOD_AGENT_FIXTURE, "demo-auditor")), "agent name == stem must not trip A6"
     verb_head = GOOD_FIXTURE.replace("name: demo-review", "name: demo-refactor")
     assert not any(f[2] == "W4" for f in lint_text(verb_head, "demo-refactor")), "verb head 'refactor' must not trip W4 (ADR-0001 allowlist)"
     facts_ui = GOOD_FIXTURE.replace("name: demo-review", "name: demo-facts")

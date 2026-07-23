@@ -1,5 +1,5 @@
 ---
-name: build
+name: build-feature
 description: >-
   Builds a feature from its durable record, running the /file-feature intake first when none
   exists, then building. /file-feature records and stops; /build-feature guarantees a record
