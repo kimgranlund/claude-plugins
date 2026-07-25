@@ -7,7 +7,11 @@
     "collaborator_rule": "hold-first-filing",
     "confirmed_by": "kimgranlund",
     "confirmed_at": "2026-07-18T17:45:56Z",
-    "note": "REQ-011 bootstrap interview (interactive AskUserQuestion, 2026-07-18): private repo, both approved collaborators offered as candidates. Owner confirmed the roster as kimgranlund only -- mgrabovskyi deliberately NOT pre-seeded; their first filing is held per REQ-007 and approval adds them per REQ-008. Standing rule for future collaborators: hold-first-filing (repo access alone never auto-lists an author). Allow-list membership affects only hold-vs-mint (REQ-012): no PR, issue, or ticket is ever auto-actioned for any author."
+    "note": "REQ-011 bootstrap interview (interactive AskUserQuestion, 2026-07-18): private repo, both approved collaborators offered as candidates. Owner confirmed the roster as kimgranlund only -- mgrabovskyi deliberately NOT pre-seeded; their first filing is held per REQ-007 and approval adds them per REQ-008. Standing rule for future collaborators: hold-first-filing (repo access alone never auto-lists an author). Allow-list membership affects only hold-vs-mint (REQ-012): no PR, issue, or ticket is ever auto-actioned for any author.",
+    "github_mcp_offer": "declined",
+    "github_mcp_offer_confirmed_by": "kimgranlund",
+    "github_mcp_offer_confirmed_at": "2026-07-25T16:22:00Z",
+    "github_mcp_offer_note": "REQ-013 offer (surfaced-but-pending since bootstrap per every prior unattended firing's own gate) resolved via an interactive dispatch carrying the owner's already-made decision, 2026-07-25: declined. gh CLI remains the sole GitHub surface -- no project-scoped .mcp.json entry written, no read-only-scoped fine-grained PAT requested. Per REQ-013 (spec-ticketing-watch-triage.md) and its failure-branch contract in harness/agents/issue-sorter.md, this decision is terminal -- revoking or re-offering a declined REQ-013 decision is out of scope; no later firing, attended or not, re-offers or re-asks."
   },
   "friendlies": [
     {
