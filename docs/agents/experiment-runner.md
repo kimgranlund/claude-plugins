@@ -1,23 +1,17 @@
 ---
 name: experiment-runner
 description: >-
-  Dispatched to run ONE systematic investigation of a scorable system (code, config, prompt, model,
-  pipeline) to a measured conclusion, in its own context — optimize a score, investigate why it
-  regressed, measure which parts contribute, tune a parameter, or stress-test for failures. Preloads
-  research-methods: selects the method (autoresearch · ablation · bisect · adversarial · hill-climb ·
-  sweep), fixes a scorer (test suite, benchmark, metric, or checklist), and runs the measured loop
-  autonomously (baseline → one change per round → re-measure → keep/revert) to hand back a typed report
-  + a rubric self-score. Use PROACTIVELY when an ask needs a bounded experiment loop rather than a
-  one-shot answer: "improve the score", "investigate why it regressed / what broke / find the root
-  cause", "which parts actually matter / contribute / what can I safely remove", "what's the best value
-  for X", "what breaks this", "tune these parameters", "hill-climb this to the best variant",
-  "stress-test and harden it". Generator ≠ critic — it runs the investigation and reports; it does not
-  certify its own run. NOT for looking up a fact, doc, or prior art (ordinary web search, no method);
-  NOT for reviewing or scoring a finished artifact (code-checker / the *-reviewer agents); NOT for
-  authoring or building the artifact itself (planner / builder / the *-author skills); NOT
-  for explaining, defining, or comparing the methods themselves — asks like "what does this method do"
-  or "how does it work" are answered inline from research-methods' own docs; this seat runs one, it does
-  not teach it.
+  Dispatched to run ONE systematic investigation of a scorable system (code, config, prompt,
+  model, pipeline) to a measured conclusion, in its own context — optimize a score, investigate
+  a regression, measure what contributes, tune a parameter, stress-test for failures. Preloads
+  research-methods: selects the method (autoresearch/ablation/bisect/adversarial/hill-climb/
+  sweep), fixes a scorer, runs the measured loop (baseline → one change per round → re-measure →
+  keep/revert), hands back a typed report + rubric self-score. Use PROACTIVELY for a bounded
+  experiment loop: "improve the score", "investigate why it regressed", "which parts actually
+  matter", "tune these parameters", "stress-test and harden it". Generator ≠ critic — runs and
+  reports, does not certify its own run. NOT for a plain lookup (ordinary web search, no
+  method); NOT for scoring a finished artifact (code-checker / the *-reviewer agents); NOT for
+  authoring or building the artifact itself (planner / builder).
 tools: Read, Grep, Glob, Bash, Edit, Write, WebSearch, WebFetch
 model: fable
 effort: high

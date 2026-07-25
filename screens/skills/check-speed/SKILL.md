@@ -1,18 +1,13 @@
 ---
 name: check-speed
 description: >-
-  Reason about and verify perceived latency. Use when auditing loading UX against a performance budget —
-  the invariants an async surface must satisfy: latency feedback windows, skeleton vs spinner vs optimistic
-  decisions, streaming UX, Core Web Vitals (CWV) and CLS budgets, layout shift / jank, image-dimension
-  reservation, and cancellation of long-running operations — "the page feels slow even
-  though the API is fast", "the layout jumps around while images load", when CLS is eroding trust, or
-  streaming needs coherent presentation. NOT for contrast/palette/color-blind safety
-  (check-colors); NOT for focus order, keyboard nav, or hit-targets (check-focus); NOT for
-  RTL/bidi/Intl/text-expansion (check-translations); NOT for undo/type-to-confirm or
-  audit-trail UX (check-safety); NOT for color-space math (color-space-facts); NOT for
-  wire latency or bundle-size; NOT for a spinner/skeleton-loader component (make-component);
-  NOT for animation duration/easing/choreography — sluggish by design, not by load
-  (motion-rules).
+  Reason about and verify perceived latency. Use when auditing loading UX against a performance
+  budget — the invariants an async surface must satisfy: latency feedback windows, skeleton vs
+  spinner vs optimistic decisions, streaming UX, Core Web Vitals (CWV) and CLS budgets, layout
+  shift/jank, image-dimension reservation, cancellation of long-running operations — "the page
+  feels slow even though the API is fast", "the layout jumps around while images load". NOT for
+  a spinner/skeleton-loader component (make-component); NOT for animation duration/easing —
+  sluggish by design, not by load (motion-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

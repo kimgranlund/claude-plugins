@@ -1,18 +1,14 @@
 ---
 name: make-design-system
 description: >-
-  The cross-platform hub for design-system files LLM agents consume — Claude Design,
-  Stitch, Figma Make. Use for any ask spanning platforms or naming none: "which design
-  tool should get our design system", "port our design system to Claude, Stitch, and
-  Make", "our exports drifted apart — restore carrier equality", "add a platform
-  profile", "make our generation prompts better", "our design agent output is generic —
-  fix the context", "what belongs in the spine so generation stays on-brand", "teach the
-  design agent our token naming grammar". Owns core+profiles architecture and doctrines
-  (prose-over-tokens, terminal values). NOT for a single-platform export
-  (make-dscard-kit / -google-stitch / -figma-make) — and ONE DESIGN.md/bundle from
-  source material (css, brand deck, Figma exports) with no platform named defaults to dscard;
-  NOT for grading an export you didn't author (design-system-checker); NOT for the
-  palette (make-palette), token layer (token-builder), or a PRD/SPEC (docs' make-doc).
+  The cross-platform hub for design-system files LLM agents consume — Claude Design, Stitch,
+  Figma Make. Use for any ask spanning platforms or naming none: "which design tool should get
+  our design system", "port our design system to Claude, Stitch, and Make", "our exports
+  drifted apart", "add a platform profile", "our design agent output is generic — fix the
+  context". Owns core+profiles architecture and doctrines. NOT for a single-platform export
+  with no platform named (defaults to make-dscard-kit); NOT for grading an export you didn't
+  author (design-system-checker); NOT for the palette (make-palette) or token layer
+  (token-builder).
 disable-model-invocation: false
 user-invocable: true
 ---

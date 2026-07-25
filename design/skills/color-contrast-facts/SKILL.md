@@ -2,15 +2,11 @@
 name: color-contrast-facts
 description: >-
   Answers color-accessibility questions — contrast standards and color-vision deficiency (CVD).
-  Use for APCA vs WCAG 2.2 (the modern design standard vs the legal compliance floor, APCA's Lc
-  contrast value), contrast ratios and relative luminance, readable and legible text for low
-  vision and reduced contrast sensitivity, color-blindness simulation (simulate protanopia and
-  deuteranopia; Brettel/Viénot/Machado), CVD-safe pairs (e.g. error vs. success state colors), and
-  "which colors look identical to a colorblind user". NOT for checking or verifying the contrast,
-  floor, or CVD-safety of a GIVEN pair, scheme, or palette — measurement asks (check-colors); NOT for focus rings or hit targets (check-focus); NOT
+  Use for APCA vs WCAG 2.2, contrast ratios and relative luminance, low-vision legibility,
+  color-blindness simulation (protanopia/deuteranopia), CVD-safe pairs, "which colors look
+  identical to a colorblind user". NOT for verifying a GIVEN pair/palette (check-colors); NOT
   for space-conversion or gamut math (color-space-facts); NOT for vision science beyond CVD
-  (color-perception-facts); NOT for building palettes (make-palette). ANSWERS, does not
-  generate.
+  (color-perception-facts). ANSWERS, does not generate.
 disable-model-invocation: false
 user-invocable: false
 ---

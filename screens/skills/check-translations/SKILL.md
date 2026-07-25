@@ -1,16 +1,13 @@
 ---
 name: check-translations
 description: >-
-  Reason about and verify the locale-shaped primitives a UI system must absorb. Use when auditing a UI for
-  i18n — RTL/bidirectionality, logical-vs-physical CSS axes, script metrics (line-height — Arabic, CJK),
-  locale-sensitive number/date/currency Intl formatting, pluralization, encoding/collation,
-  and text-expansion budgets (German expansion): RTL support, dir/lang on text surfaces, icon mirroring,
-  hardcoded/untranslated strings, or translation-expansion headroom across scripts and locales. NOT for
-  choosing/pairing type or script anatomy (lettering-facts); NOT for text/background contrast, palette,
-  or color-blind safety (check-colors); NOT for focus order, keyboard nav, hit-targets, or focus rings
-  (check-focus); NOT for loading skeleton/spinner, CLS, or latency budgets (check-speed); NOT for
-  undo/type-to-confirm or audit-trail UX (check-safety); NOT for color-space theory or palette math
-  (color-space-facts); NOT for building a date-picker or language-switcher component (make-component).
+  Reason about and verify the locale-shaped primitives a UI system must absorb. Use when
+  auditing a UI for i18n — RTL/bidirectionality, logical-vs-physical CSS axes, script metrics
+  (line-height — Arabic, CJK), locale-sensitive number/date/currency Intl formatting,
+  pluralization, encoding/collation, text-expansion budgets (German expansion): RTL support,
+  dir/lang on text surfaces, icon mirroring, hardcoded/untranslated strings. NOT for
+  choosing/pairing type or script anatomy (lettering-facts); NOT for building a date-picker or
+  language-switcher component (make-component).
 disable-model-invocation: false
 user-invocable: true
 ---

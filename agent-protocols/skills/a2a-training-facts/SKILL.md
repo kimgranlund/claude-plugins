@@ -2,14 +2,12 @@
 name: a2a-training-facts
 description: >-
   Answers how the A2A concept/demo teaching corpus is structured, cited, and admitted
-  (@agent-ui/a2a's corpus shards — the a2ui-training-facts sibling for the agent-to-agent layer).
-  Use for "what does an A2A corpus record contain", "how do I add a concept record", "what makes a
-  record admissible", "why was this record rejected", "how do citations work" (HV rows + repo
-  paths), "how does the concepts page derive from the shard", "what facets exist" (concept vs
-  demo), "why is authoring order load-bearing" (shard line order IS the teaching order). ANSWERS
-  from the cited corpus; it does not curate. NOT for the A2UI exemplar corpus — seeds, admission,
-  judging (a2ui-training-facts); NOT for protocol facts the records teach (a2a-protocol-facts); NOT for
-  running an actual import/admission (the repo's tools + the repo-local curation seat).
+  (@agent-ui/a2a's corpus shards — the a2ui-training-facts sibling for the agent-to-agent
+  layer). Use for "what does an A2A corpus record contain", "how do I add a concept record",
+  "what makes a record admissible", "why was this record rejected", "how do citations work",
+  "why is authoring order load-bearing". ANSWERS from the cited corpus; does not curate. NOT
+  for the A2UI exemplar corpus (a2ui-training-facts); NOT for protocol facts the records teach
+  (a2a-protocol-facts); NOT for running an import/admission (the repo-local curation seat).
 disable-model-invocation: false
 user-invocable: false
 ---

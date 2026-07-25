@@ -2,15 +2,13 @@
 name: check-a2a-isolation
 description: >-
   Prove that two (or more) agents interact ONLY over the declared wire — no shared context, no
-  prompt leakage, no side-channel. Use for "prove no cross-contamination", "are these agents really
-  isolated", "verify the seats can't see each other's context", "audit this multi-agent setup for
-  leakage", "make the isolation claim testable". Emits an isolation proof: per-seat canaries +
-  wire-origin audit + closed message schemas + provenance whitelist + byte-complete boundary
-  recording + committed NEGATIVE CONTROLS proving every instrument bites. The method generalizes to
-  any multi-agent system claiming context separation — A2A is the transport it was minted on, not a
-  precondition. NOT for protocol facts (a2a-protocol-facts); NOT for building the agents themselves
-  (make-a2a-agent); NOT for payload-content security — catalog allowlists, callableFrom
-  (a2ui-catalog-facts). VERIFIES and reports; it does not build the system under test.
+  prompt leakage, no side-channel. Use for "prove no cross-contamination", "are these agents
+  really isolated", "verify the seats can't see each other's context", "make the isolation
+  claim testable". Emits an isolation proof: per-seat canaries, wire-origin audit, closed
+  message schemas, byte-complete boundary recording, negative controls. Generalizes to any
+  multi-agent system claiming context separation. NOT for protocol facts (a2a-protocol-facts);
+  NOT for building the agents (make-a2a-agent). VERIFIES and reports; does not build the system
+  under test.
 disable-model-invocation: false
 user-invocable: true
 ---

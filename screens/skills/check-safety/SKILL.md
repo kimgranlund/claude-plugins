@@ -1,6 +1,13 @@
 ---
 name: check-safety
-description: Reason about and verify blast radius, reversibility, and friction for every destructive or high-consequence action a UI exposes — the UI safety layer. Use for destructive verbs a product ships (delete/send/publish/revoke), "the delete button is silently disabled when you lack permission" — undo over confirm, type-to-confirm, bulk dry-run, audit-trail UX, recall windows, re-auth, two-person approval — when dialogs proliferate or recovery is missing. NOT for the whole-product sweep (check-whole-ui); NOT for cross-screen recovery (break-down-flow); NOT for contrast, palette, or color-blind safety (check-colors); NOT for focus order, keyboard nav, or hit-targets (check-focus); NOT for RTL/bidi, locale formatting, or text-expansion (check-translations); NOT for loading skeleton/spinner, CLS, latency budgets, or optimistic-UI vs pending-commit decisions (check-speed); NOT for color-space or palette math (color-space-facts); NOT for prompt-injection/authz design; NOT for a confirm-dialog component (make-component).
+description: >-
+  Reason about and verify blast radius, reversibility, and friction for every destructive or
+  high-consequence action a UI exposes — the UI safety layer. Use for destructive verbs a
+  product ships (delete/send/publish/revoke), "the delete button is silently disabled when you
+  lack permission" — undo over confirm, type-to-confirm, bulk dry-run, audit-trail UX, recall
+  windows, re-auth, two-person approval — when dialogs proliferate or recovery is missing. NOT
+  for the whole-product sweep (check-whole-ui); NOT for cross-screen recovery
+  (break-down-flow); NOT for a confirm-dialog component (make-component).
 disable-model-invocation: false
 user-invocable: true
 ---

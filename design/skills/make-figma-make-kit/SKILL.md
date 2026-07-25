@@ -1,19 +1,13 @@
 ---
 name: make-figma-make-kit
 description: >-
-  Author, evaluate, or regenerate a Figma Make design-system guidelines/ folder for any
-  theme or brand. Use whenever a Make kit needs the routed markdown tree (Guidelines.md
-  entry + foundations/ + components/) it reads to generate on-brand UI, or when asked to
-  "create/author Figma Make design system guidelines", "make kit guidelines folder",
-  "write Guidelines.md for Figma Make", "add a component file to our Make guidelines",
-  "Make output ignores our design system — fix the guidelines", or "check this guidelines
-  folder before shipping". Covers the routed-folder shape, the imperative register, the
-  React + Tailwind + shadcn/ui flavor, the --{prefix}-{family}-{slot} naming grammar, and
-  the gates — Make validates nothing, so this is the gate. NOT for Claude Design
-  (make-dscard-kit); NOT for Google Stitch
-  (make-stitch-kit); NOT for cross-platform strategy
-  (make-design-system); NOT for grading (design-system-checker); NOT for palette/tokens
-  (make-palette / token-builder).
+  Author, evaluate, or regenerate a Figma Make design-system guidelines/ folder for any theme or
+  brand. Use for "create Figma Make design system guidelines", "write Guidelines.md for Figma
+  Make", "Make output ignores our design system — fix the guidelines", "check this guidelines
+  folder before shipping". Covers the routed-folder shape (Guidelines.md + foundations/ +
+  components/), the React+Tailwind+shadcn/ui flavor, the naming grammar — Make validates
+  nothing, so this is the gate. NOT for Claude Design (make-dscard-kit); NOT for Google Stitch
+  (make-stitch-kit); NOT for cross-platform strategy (make-design-system).
 disable-model-invocation: false
 user-invocable: true
 ---

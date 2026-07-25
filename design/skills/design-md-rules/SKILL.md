@@ -1,17 +1,14 @@
 ---
 name: design-md-rules
 description: >-
-  Ground-truth knowledge of the DESIGN.md design-system spec format consumed by Claude Design and
-  Claude Code. Use when reading, explaining, extending, or validating a DESIGN.md (or "design spec",
-  "design system file"): file anatomy, "explain the frontmatter schema" (the YAML token layer), the --{prefix}-{family}-{slot}
-  grammar, light/-dark scheme pairing, the pairing law, prose spine sections, Root Brand Architecture,
-  @dsCard preview cards, disclosure-over-correction. Also loads as the knowledge substrate when
-  creating a design system from a corpus of design files/css/descriptions. NOT for the end-to-end
-  authoring workflow (make-dscard-kit); NOT for --md-sys-* role semantics
-  (material-design-*-tokens); NOT for Stitch exports/lint (make-stitch-kit);
-  NOT for grading a bundle someone else authored (design-system-checker agent); NOT for consuming
-  a finished design system to build UI (the brand's own skill). Never framework-prescriptive;
-  accessibility is disclosed, never enforced.
+  Ground-truth knowledge of the DESIGN.md design-system spec format consumed by Claude Design
+  and Claude Code. Use when reading, explaining, extending, or validating a DESIGN.md ("design
+  spec", "design system file"): file anatomy, the frontmatter schema, the
+  --{prefix}-{family}-{slot} grammar, light/dark scheme pairing, @dsCard preview cards,
+  disclosure-over-correction. Also the knowledge substrate for creating a design system from a
+  corpus of design files. NOT for the end-to-end authoring workflow (make-dscard-kit); NOT for
+  grading a bundle someone else authored (design-system-checker agent). Never
+  framework-prescriptive; accessibility is disclosed, never enforced.
 disable-model-invocation: false
 user-invocable: true
 ---

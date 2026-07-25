@@ -2,14 +2,12 @@
 name: font-choice-checker
 description: >-
   Independent critic for ONE typography system design — pick-fonts's per-voice font decision —
-  scored against its rubric (generator≠critic). Use PROACTIVELY after a typography system is designed, and
-  whenever someone asks to "review this typography system", "grade the font choices for our brand", "is this
-  type system ready to ship", "does it read as one coherent voice or a grab-bag", or "check this pairing's
-  metric compatibility". Runs `typeface-check.py` for metric/axis-apart gates, judging territory, per-voice
-  rationale, coherence, expressiveness — a cited gap-map; the maker fixes it. NOT for realizing a decision
-  as tokens (font-token-rules); NOT for a no-token typography question (lettering-facts); NOT for
-  Material's typescale (material-type-facts); NOT for building a component (make-component);
-  NOT for a PRD/SPEC document (doc-checker); NOT for a design-system export or a DESIGN.md
+  scored against its rubric. Use PROACTIVELY after a typography system is designed, and whenever
+  asked to "review this typography system", "grade the font choices for our brand", "is this
+  type system ready to ship", "does it read as one coherent voice or a grab-bag", "check this
+  pairing's metric compatibility". Runs `typeface-check.py` for metric/axis-apart gates, judging
+  territory, per-voice rationale, coherence, expressiveness. NOT for realizing a decision as
+  tokens (font-token-rules); NOT for a design-system export or DESIGN.md
   (design-system-checker); NOT for designing a new system (pick-fonts).
 tools: Read, Grep, Glob, Bash
 model: fable

@@ -1,14 +1,13 @@
 ---
 name: token-builder
 description: >-
-  The design-token seat — owns a project's color and dimension token layer: the role-named token ladders,
-  the interaction-state roles (hover/active/focus/disabled), the focus-ring, and the density/motion
-  constants. Use whenever a token must be added or changed, a role ladder collapses in one color scheme, or
-  an interaction value must stay distinct AND accessibility-safe across light and dark. Use PROACTIVELY for
-  any token edit before the component that consumes it is built. NOT for token consumption inside a
-  component build, or building/grading the component itself (make-component / component-checker);
-  NOT for building or extending a color ramp (make-palette) — this seat only realizes an
-  already-designed palette as project tokens.
+  The design-token seat — owns a project's color and dimension token layer: the role-named token
+  ladders, the interaction-state roles (hover/active/focus/disabled), the focus-ring, and the
+  density/motion constants. Use whenever a token must be added or changed, a role ladder
+  collapses in one color scheme, or an interaction value must stay distinct AND
+  accessibility-safe across light and dark. Use PROACTIVELY for any token edit before the
+  component that consumes it is built. NOT for token consumption inside a component build
+  (make-component / component-checker); NOT for building a color ramp (make-palette).
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: opus
 effort: xhigh

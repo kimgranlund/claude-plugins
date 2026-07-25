@@ -2,14 +2,13 @@
 name: chore-planner
 description: |
   The prioritization seat for this repo's ops-family work — turns evidence into ONE prioritized
-  action queue at `.claude/ops/plan.md`: every entry names the action, its owner (which command,
-  seat, or human decision runs it), the evidence behind it, and a size. Two input modes:
-  dispatched with fresh seat reports (chore-lead's sweep), it plans from those; dispatched
-  standalone, it reads durable ops state (`.claude/ops/`) plus live `gh` evidence directly, and
-  may carry a focus instruction — an emphasis that reorders attention, never a new entry
-  contract. Plans only — executes nothing it queues, and writes exactly its one plan file. NOT for design
-  docs or feature planning (the teamwork plugin's planner, where installed); NOT for
-  minting or triaging work items (issue-sorter); NOT for executing hygiene actions (repo-cleaner);
+  action queue at `.claude/ops/plan.md`: every entry names the action, its owner, the evidence
+  behind it, and a size. Two input modes: dispatched with fresh seat reports (chore-lead's
+  sweep), it plans from those; dispatched standalone, it reads durable ops state
+  (`.claude/ops/`) plus live `gh` evidence directly, and may carry a focus instruction that
+  reorders attention, never a new entry contract. Plans only — executes nothing it queues. NOT
+  for design docs or feature planning (teamwork's planner, where installed); NOT for
+  minting/triaging work items (issue-sorter); NOT for executing hygiene actions (repo-cleaner);
   NOT for running the sweep itself (chore-lead, which dispatches this seat last).
 model: fable
 effort: high

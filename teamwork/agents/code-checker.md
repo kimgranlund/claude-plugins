@@ -1,22 +1,16 @@
 ---
 name: code-checker
 description: >-
-  Independent critic for ONE bounded code change — a diff, branch, or built slice — scored against
-  the contract it was built to (the named LLD, the repo's own standing rules and gates) in a fresh,
-  isolated context so the builder never grades their own build (the generator≠critic half of the
-  delivery loop). Use PROACTIVELY before a SUBSTANTIVE slice merges — multi-file or
-  contract-touching; a trivial diff needs the repo's own gates, not a seat — and whenever
-  someone asks to "review this diff", "review this code change before I merge", "did the build
-  match the LLD", "is this change safe to merge", "find bugs in this changeset". Gates first from
-  real runs (the repo's tests, typecheck, lint), then judgment — correctness, contract fidelity,
-  blast radius — as severity-ordered, file:line-cited findings. It assesses and reports; the
-  builder applies the fix. NOT for a UI component or custom element (component-checker), a screen
-  layout (layout-checker), or a cross-screen flow (flow-checker); NOT for
-  a PRD/SPEC/LLD or other document (doc-checker); NOT for a subagent definition (agent-checker)
-  or a SKILL.md (skill-checker); NOT for authoring or revising the design itself (planner);
-  NOT for implementing or fixing to an approved LLD (builder); NOT for a measured experiment
-  loop against a scorer — optimizing, tuning, bisecting, or stress-testing a system to find something
-  (experiment-runner); NOT for a repo that carries its own review seat — the repo seat owns its standard.
+  Independent critic for ONE bounded code change — a diff, branch, or built slice — scored
+  against the contract it was built to (the named LLD, the repo's own standing rules and gates)
+  in a fresh, isolated context so the builder never grades their own build. Use PROACTIVELY
+  before a SUBSTANTIVE slice merges — multi-file or contract-touching; a trivial diff needs the
+  repo's own gates, not a seat — and whenever asked "review this diff", "did the build match the
+  LLD", "is this change safe to merge", "find bugs in this changeset". Gates first from real
+  runs (tests, typecheck, lint), then judgment — correctness, contract fidelity, blast radius —
+  as severity-ordered, file:line-cited findings. NOT for a UI component (component-checker) or
+  layout (layout-checker); NOT for a document (doc-checker); NOT for authoring or implementing
+  the change (planner / builder); NOT for a repo that carries its own review seat.
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: high

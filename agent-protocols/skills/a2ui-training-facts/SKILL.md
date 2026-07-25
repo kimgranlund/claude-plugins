@@ -2,18 +2,12 @@
 name: a2ui-training-facts
 description: >-
   The A2UI training-corpus subsystem in @agent-ui/a2ui — the curated store conditioning and
-  measuring generation. Use for "how do I curate/admit a corpus record", "why was this
-  record quarantined/rejected", "what error code does admission raise" (E_SCHEMA, E_PIN, E_DUP,
-  E_LEAK …), "how does retrieval pick exemplars", "what does the healer fix",
-  "what happens on a catalog/protocol version change". Covers the record schema (ADR-0063), two sub-corpora + no-leak
-  invariant, canonicalization+dedup, the two-tier admission gate + form-only
-  healer, the judge adapter (qualityScore = min) + quarantine, top-k retrieval +
-  export, version-change repair. ANSWERS from a cited corpus; it does not build.
-  NOT for the wire protocol (a2ui-protocol-facts); NOT for catalog design / coverage
-  (a2ui-catalog-facts); NOT for the live demo's retrieval use (a2ui-chat-agent-facts);
-  NOT for RUNNING curation — importing, back-scoring, quarantining
-  (a2ui-corpus-curate); NOT for pipeline SOURCE (a2ui-builder) or judging a record
-  (a2ui-reviewer).
+  measuring generation. Use for "how do I curate/admit a corpus record", "why was this record
+  quarantined/rejected", "what error code does admission raise", "how does retrieval pick
+  exemplars", "what does the healer fix". Covers the record schema, sub-corpora + no-leak
+  invariant, dedup, the admission gate + healer, the judge adapter, retrieval + export. ANSWERS
+  from a cited corpus; does not build. NOT for the wire protocol (a2ui-protocol-facts); NOT for
+  catalog design (a2ui-catalog-facts); NOT for the live demo's retrieval use (a2ui-chat-agent-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

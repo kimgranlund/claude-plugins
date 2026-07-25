@@ -2,16 +2,13 @@
 name: break-down-flow
 description: >-
   Decompose, evaluate, and design ONE cross-screen user flow — a journey declared as a state
-  machine. Use when walking or grading a journey: "walk this flow", "trace what happens from X to
-  Y", "is this journey right", "map the checkout / signup / payment flow", "where does this flow
-  dead-end", "the user is stranded / has no way back", "can the user recover /
-  resume", "design the flow for X" — OUTSIDE-IN (task → journey: entry, stage coverage, ordering,
-  effort shape) crossed with INSIDE-OUT (transitions → whole: transition inventory, exit truth,
-  recovery, resume, cross-flow coherence), backed by a *.flow.json card whose mechanical gates
-  (reachability, dead ends, exit truth, recovery) run in scripts/flow-check.py. NOT for
-  within-screen layout (break-down-layout — this skill owns between-screen); NOT for the
-  whole-product sweep (check-whole-ui — which composes this per flow); NOT for perceived latency of a
-  single async step (check-speed) or destructive-action friction (check-safety).
+  machine. Use when walking or grading a journey: "walk this flow", "trace what happens from X
+  to Y", "is this journey right", "map the checkout/signup/payment flow", "where does this flow
+  dead-end", "the user is stranded / has no way back", "design the flow for X" — OUTSIDE-IN
+  (task → journey) crossed with INSIDE-OUT (transitions → whole), backed by a *.flow.json card
+  whose mechanical gates run in scripts/flow-check.py. NOT for within-screen layout
+  (break-down-layout — this skill owns between-screen); NOT for the whole-product sweep
+  (check-whole-ui).
 disable-model-invocation: false
 user-invocable: true
 ---

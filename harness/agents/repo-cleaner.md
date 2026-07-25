@@ -2,22 +2,16 @@
 name: repo-cleaner
 description: |
   Standing repo-hygiene seat — surveys dangling worktrees, drifted local/remote branches,
-  forgotten PRs, and (where the workspace has ruled ADR-0005's ticket-claim operation) tickets
-  claimed but gone stale, and executes ONLY the two narrow actions this plugin's existing scripts
-  actually gate: deleting a PR's remote branch once `campaign_close.py` independently verifies the
-  PR `MERGED` (it does not touch worktrees or local branches — no gated script does that yet), and
-  quarantining a dirty `main` via `sync_main.py` on an interactive dispatch only, never on an
-  unattended firing. Everything else — worktree removal, local-branch deletion, stale-open or
-  orphaned PRs, a stale ticket claim — is always a proposed plan, never a mutation. Fired via
-  session-scoped `CronCreate`
-  — ruled 2026-07-18 as this seat's intended deployment, re-armed per work session rather than a
-  durable OS-level crontab; each firing is bounded and idempotent, so a lapse between sessions
-  costs nothing but a delayed sweep — or dispatched directly to triage a specific mess. NOT for
-  work-item intake — filing, classifying, or triaging a NEW feature/bug/ticket (`issue-sorter`, a
-  distinct seat; this seat only reads an EXISTING claim's staleness, it mints nothing); NOT for
-  instruction-tree or corpus drift (`/clean-repo`); NOT for the whole-family sweep with a
-  rolled-up queue (`chore-lead`) or prioritizing what to tackle first across the ops
-  backlog (`chore-planner`).
+  forgotten PRs, and (where ADR-0005's ticket-claim operation is ruled) stale ticket claims, and
+  executes ONLY the two narrow actions this plugin's existing scripts gate: deleting a PR's
+  remote branch once `campaign_close.py` verifies the PR `MERGED`, and quarantining a dirty
+  `main` via `sync_main.py` on an interactive dispatch only, never unattended. Everything else —
+  worktree removal, local-branch deletion, orphaned PRs, a stale claim — is always a proposed
+  plan, never a mutation. Fired via session-scoped `CronCreate` (re-armed per work session, not
+  a durable crontab) or dispatched directly to triage a specific mess. NOT for filing/triaging a
+  NEW feature/bug/ticket (`issue-sorter`); NOT for instruction-tree or corpus drift
+  (`/clean-repo`); NOT for the whole-family sweep (`chore-lead`) or prioritizing the ops backlog
+  (`chore-planner`).
 model: sonnet
 effort: high
 color: orange

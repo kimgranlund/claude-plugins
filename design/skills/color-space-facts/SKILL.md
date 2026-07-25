@@ -1,17 +1,13 @@
 ---
 name: color-space-facts
 description: >-
-  Answers computational-color questions — spaces and math. Use when converting or comparing
-  color spaces (OKLCH, OKLab, sRGB, HSL, CIELAB, CAM16/HCT, XYZ), gamut mapping + peak chroma,
-  gradients/ramps that stay perceptually even (muddy blue-to-yellow gradients that turn gray), ΔE
-  color difference, white points + chromatic adaptation, HDR + tone mapping (PQ, HLG, Jzazbz), CSS
-  color syntax (color-mix, relative color, light-dark, Baseline status), extracting an image
-  palette, quantization, dithering, sorting, generative palettes, picking a library (Culori/Color.js),
-  or "show me a live demo / where's the implementation" (the library + demos live in
-  color-science-project-files). NOT for contrast, CVD, or legibility (color-contrast-facts);
-  NOT for vision mechanics (color-perception-facts); NOT for pigment, print, or color naming
-  (physical-color-facts); NOT for harmony or meaning (color-theory-facts); NOT for a color ramp or
-  semantic tokens (make-palette; token-builder). ANSWERS, does not generate.
+  Answers computational-color questions — spaces and math. Use for converting or comparing color
+  spaces (OKLCH, OKLab, sRGB, HSL, CIELAB, CAM16/HCT, XYZ), gamut mapping + peak chroma,
+  perceptually even gradients/ramps, ΔE color difference, white points, HDR tone mapping, CSS
+  color syntax (color-mix, relative color, light-dark), extracting a palette from an image,
+  quantization, picking a library. NOT for contrast/CVD/legibility (color-contrast-facts); NOT for vision
+  mechanics (color-perception-facts); NOT for harmony/meaning (color-theory-facts); NOT for a
+  color ramp or semantic tokens (make-palette; token-builder). ANSWERS, does not generate.
 disable-model-invocation: false
 user-invocable: false
 ---

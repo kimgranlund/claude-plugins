@@ -1,6 +1,13 @@
 ---
 name: check-colors
-description: Verify a candidate OKLCH palette or semantic color mapping against contrast, hue stability, perceptual evenness, and CVD-safety, emitting a ColorProof. Use when asked "verify this palette", "does this palette pass", "check the contrast ratio of this text on this background", "is this color scheme safe for color-blind users", "this text looks too faint — does it meet the contrast floor", or to check contrast ratios, WCAG AA/AAA or APCA pass-fail, color-blind (CVD) safety, or alpha/translucent colors composited over a backdrop — every fg/bg pair across theme/scheme/contrast. NOT for building a ramp or dark scheme (make-palette); NOT for which contrast standard or CVD theory (color-contrast-facts); NOT for focus rings (check-focus), RTL/locale (check-translations), latency (check-speed), or destructive-action UX (check-safety); NOT for color-space math or converting between color spaces (color-space-facts); NOT for harmony/meaning (color-theory-facts); NOT for a color-picker component (make-component).
+description: >-
+  Verify a candidate OKLCH palette or semantic color mapping against contrast, hue stability,
+  perceptual evenness, and CVD-safety, emitting a ColorProof. Use for "verify this palette",
+  "does this palette pass", "check the contrast ratio of this text on this background", "is
+  this color scheme safe for color-blind users", or any WCAG AA/AAA or APCA pass-fail check
+  across every fg/bg pair. NOT for building a ramp or dark scheme (make-palette); NOT for
+  contrast/CVD theory (color-contrast-facts); NOT for color-space math (color-space-facts); NOT
+  for harmony/meaning (color-theory-facts).
 disable-model-invocation: false
 user-invocable: true
 ---

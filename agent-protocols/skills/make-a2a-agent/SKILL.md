@@ -1,17 +1,14 @@
 ---
 name: make-a2a-agent
 description: >-
-  Design and build an A2A-conformant agent — server or client side. Use for "make two agents talk",
-  "build an A2A server", "write the AgentCard", "expose my agent over A2A", "consume a remote A2A
-  agent", "wire the task lifecycle", "add SSE streaming to my agent", "my agent fails the other
-  side's validation". Method: outside-in from the card's advertised capabilities (what the agent
-  CLAIMS), inside-out from the Message/Task state machine (what the runtime must honor), reconciled
-  before code; conformance is a gate (validator-clean card + fixtures). Uses the
-  estate's shipped patterns as reference implementations: the referee/seat pair, the pure RPC core
-  behind a thin socket shell, fail-fast card validation at construction. NOT for protocol facts —
-  what a field means, which method, which state (a2a-protocol-facts answers; this skill builds); NOT for
-  proving two built agents are isolated (check-a2a-isolation); NOT for the payload an agent RENDERS
-  (a2ui-* siblings); NOT for corpus records (a2a-training-facts).
+  Design and build an A2A-conformant agent — server or client side. Use for "make two agents
+  talk", "build an A2A server", "write the AgentCard", "expose my agent over A2A", "wire the
+  task lifecycle", "add SSE streaming to my agent", "my agent fails the other side's
+  validation". Method: outside-in from the card's advertised capabilities, inside-out from the
+  Message/Task state machine, reconciled before code; conformance is a gate. NOT for protocol
+  facts — what a field means, which method, which state (a2a-protocol-facts answers; this skill
+  builds); NOT for proving two built agents are isolated (check-a2a-isolation); NOT for the
+  payload an agent RENDERS (a2ui-* siblings).
 disable-model-invocation: false
 user-invocable: true
 ---

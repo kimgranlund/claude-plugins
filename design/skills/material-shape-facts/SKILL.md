@@ -1,19 +1,14 @@
 ---
 name: material-shape-facts
-description: >
+description: >-
   Use when SIZING or SPACING any UI whose dimension tokens use the Material `--md-sys-size-*` /
-  `--md-sys-radius-*` / `--md-sys-space-*` naming — a
-  control's height/padding/radius, a card's inset, gaps, icon sizes, focus rings, borders
-  ("what size/spacing token", "what icon size token", "the border/focus-ring token", "how tall
-  should this control be", "what padding/gap/radius", "make the layout denser"). Consumption
-  guide for the dimensional layer of Material 3: the control ramp, corner scale, space/inset/gap
-  ladders; the centering law; four pads by anatomy × density. A CONTROL's own text-SIZE is this skill's
-  `--md-sys-size-{step}-font` field — "what font size for this button" lands HERE. Never
-  hardcode px. NOT for color (material-color-facts); NOT for NON-control text
-  type/voices (material-type-facts); NOT for motion
-  easing/duration (material-motion-facts); NOT for icon grid/style
-  (icon-rules); NOT for the default `--size-*`/`--space-*` grammar; NOT for DESIGNING the
-  dimensional system.
+  `--md-sys-radius-*` / `--md-sys-space-*` naming — a control's height/padding/radius, a card's
+  inset, gaps, icon sizes, focus rings, borders ("what size/spacing token", "how tall should
+  this control be", "make the layout denser"). Consumption guide for Material 3's dimensional
+  layer: the control ramp, corner scale, space/inset/gap ladders, the centering law. A control's
+  own text-SIZE is this skill's `--md-sys-size-{step}-font` field. Never hardcode px. NOT for
+  color (material-color-facts); NOT for non-control text (material-type-facts); NOT for motion
+  (material-motion-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

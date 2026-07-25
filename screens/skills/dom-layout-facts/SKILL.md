@@ -3,15 +3,11 @@ name: dom-layout-facts
 description: >-
   Answers how to reason within HTML/CSS layout mechanics — box model, normal flow, block
   formatting contexts (BFC), stacking contexts, containing blocks, flex/grid algorithms — from a
-  cited MDN/CSS-spec corpus. Use when asked "why did this margin collapse", "what triggers a new
-  BFC", "why can't this z-index escape its parent", "what's the containing block here", "why is
-  this flex item overflowing despite flex-shrink", "auto-fill vs auto-fit", "why doesn't height:
-  100% work", or "why does overflow: hidden fix this". Carries margin-collapse rules, block/inline
-  flow participation, the closed BFC-trigger list, stacking-context creation, containing-block
-  resolution by position value, flex min-width:auto gotchas, and grid track/fr mechanics. ANSWERS
-  the mechanism; does not derive a component's sizing law (make-component) or spacing-scale
-  theory (size-and-shape-rules); NOT page-region placement (break-down-layout); NOT component code
-  (make-component).
+  cited MDN/CSS-spec corpus. Use for "why did this margin collapse", "what triggers a new BFC",
+  "why can't this z-index escape its parent", "why is this flex item overflowing despite
+  flex-shrink", "auto-fill vs auto-fit", "why doesn't height: 100% work". ANSWERS the mechanism;
+  does not derive a component's sizing law (make-component) or spacing-scale theory
+  (size-and-shape-rules).
 user-invocable: false
 disable-model-invocation: false
 ---

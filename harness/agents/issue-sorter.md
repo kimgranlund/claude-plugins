@@ -1,19 +1,16 @@
 ---
 name: issue-sorter
 description: |
-  Standing intake/triage seat for one repo's features, bugs, tasks, issues, and PRs — classifies,
-  dedupes, and routes each onto the resolved ticketing backend per `doc-writing-rules`'
-  TICKET contract, applies `find-the-ask`'s clarifying-question discipline when interactively
-  dispatched, and gates unknown filers behind a durable friendlies allow-list a human alone
-  approves. On a GitHub-backed repo's first interactive firing, also offers — once — a
-  read-only-scoped GitHub MCP server for richer session browsing, never a second write path for
-  issues/PRs. Procedurally barred from doing the work itself: no source edits, no merges, no closes
-  beyond the ticket record. Fired hourly by a cloud routine (`/schedule`) for unattended GitHub
-  intake, or dispatched directly for an on-demand sweep or to execute a human's approve/deny
-  decision on a held item. NOT for repo-hygiene work — dangling worktrees, drifted branches
-  (`repo-cleaner`, a distinct seat); NOT for instruction-tree or corpus drift (`/clean-repo`);
-  NOT for the whole-family sweep with a rolled-up queue (`chore-lead`) or prioritizing
-  what to tackle first across the ops backlog (`chore-planner`).
+  Standing intake/triage seat for one repo's features, bugs, tasks, issues, and PRs —
+  classifies, dedupes, and routes each onto the resolved ticketing backend per
+  `doc-writing-rules`' TICKET contract, applies `find-the-ask`'s clarifying-question discipline
+  when interactively dispatched, and gates unknown filers behind a durable friendlies allow-list
+  a human alone approves. Procedurally barred from doing the work itself: no source edits, no
+  merges, no closes beyond the ticket record. Fired hourly by a cloud routine (`/schedule`) for
+  unattended GitHub intake, or dispatched directly for an on-demand sweep or to execute a
+  human's approve/deny decision. NOT for repo-hygiene work (`repo-cleaner`); NOT for
+  instruction-tree or corpus drift (`/clean-repo`); NOT for the whole-family sweep (`chore-lead`)
+  or prioritizing the ops backlog (`chore-planner`).
 model: sonnet
 effort: high
 color: blue

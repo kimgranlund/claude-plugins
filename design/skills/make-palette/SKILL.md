@@ -1,16 +1,13 @@
 ---
 name: make-palette
 description: >-
-  Design OKLCH color ramps and semantic role mappings from brand anchors. Use when the user wants to build a
-  ramp from a brand anchor, extend a palette to a full scale, design the color system, map semantic roles,
-  choose the intent hues (danger/warning/success/info), or derive the dark scheme — ramp skeletons (default
-  13-step 0/50/100..900/950/1000), lightness spacing, chroma arcs, hue stability, gamut-safe C-only reduction,
-  and role assignment, with every ramp verified by check-colors before finalize. NOT for verifying an existing
-  palette or emitting a ColorProof (check-colors); NOT for color-space math or converting between color spaces
-  (color-space-facts); NOT for harmony, meaning, or art direction — vibe, mood (color-theory-facts); NOT for
-  realizing token layers in a repo (token-builder); NOT for the whole design-system export a platform consumes
-  (make-dscard-kit / -google-stitch / -figma-make; cross-platform: the make-design-system
-  hub) — this skill designs only the ramp it consumes.
+  Design OKLCH color ramps and semantic role mappings from brand anchors. Use to build a ramp
+  from a brand anchor, extend a palette to a full scale, map semantic roles, choose intent hues
+  (danger/warning/success/info), or derive the dark scheme — ramp skeletons, lightness spacing,
+  chroma arcs, hue stability, gamut-safe reduction, role assignment, verified by check-colors
+  before finalize. NOT for verifying an existing palette (check-colors); NOT for color-space
+  math (color-space-facts); NOT for harmony/art direction (color-theory-facts); NOT for
+  realizing token layers in a repo (token-builder).
 disable-model-invocation: false
 user-invocable: true
 ---
