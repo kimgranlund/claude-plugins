@@ -1,0 +1,18 @@
+{
+  "candidates": [
+    {
+      "adr_id": "adr-0006",
+      "evidence": "6 README.md files carry an 'ADR-0006 transition table' section claiming the plugin dir 'keeps its frozen path \u2014 see the workspace CLAUDE.md alias table': docs/README.md:51, harness/README.md:124, screens/README.md:41, agent-protocols/README.md:41, teamwork/README.md:79, design/legacy/README-design-kits.md:38. Both claims are now false: ADR-0007 (2026-07-21) retired the CLAUDE.md alias table (Decision 3) and every dir was renamed to match its plugin name (verified: docs/, harness/, screens/, agent-protocols/, teamwork/, design/ are the live paths, no frozen '<name> <version>' dirs remain).",
+      "kind": "stale-citation",
+      "plan": "save-lessons Phase 6: fix-or-retire each of the 6 sentences (drop the alias-table pointer + frozen-path claim, or replace with ADR-0007's actual rule) \u2014 AskUserQuestion gate per its own contract.",
+      "queued_at": "2026-07-25T16:23:04Z"
+    },
+    {
+      "adr_id": "adr-0006",
+      "evidence": "naming-rules/SKILL.md:7-8 explicitly routes 'executing renames' to big-change-git-rules, and ADR-0007 Decision 2 requires a future rename follow 'the same sweep discipline ADR-0006 used' \u2014 but ADR-0006 Decisions 2-4's per-PR rename contract (standards-flip-first, leaf-first PR order, baseline blind eval-run before the rename commit, same-change reference rewrite, reciprocal-fence reclose, full blind eval-run re-measure, release_gate CLEAN, major version bump + ledger) has zero presence in big-change-git-rules (grep -i rename across its SKILL.md + all references/*.md: no hits). The routing pointer leads nowhere for the next rename.",
+      "kind": "harvest",
+      "plan": "/make-pack harness/skills/big-change-git-rules \u2014 new references/rename-execution-playbook.md capturing ADR-0006 Decisions 2-4 as a reusable per-PR checklist, cited to adr-0006.",
+      "queued_at": "2026-07-25T16:23:04Z"
+    }
+  ]
+}
