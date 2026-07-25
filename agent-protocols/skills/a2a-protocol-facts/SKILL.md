@@ -1,18 +1,13 @@
 ---
 name: a2a-protocol-facts
 description: >-
-  Explains the A2A (Agent2Agent) wire protocol + this estate's zero-dependency implementation
-  (@agent-ui/a2a, pinned spec v0.3.0). Use when the user asks "what is an AgentCard / where does
-  discovery
-  look", "Message vs Task vs Artifact — when is a task minted", "which TaskState transitions are
-  legal", "what goes in a TextPart / DataPart / FilePart", "which JSON-RPC method sends a message /
-  polls a task", "how does SSE streaming work", "how do A2A extensions negotiate", "how is A2UI
-  carried over A2A", "why does the v1.0 spec break our wire" (the PascalCase method rename — version
-  drift is wire-breaking), "why did validateA2a reject this". ANSWERS from a cited, host-verified
-  corpus (the HV ledger); it does not build. NOT for rendering payload content — surfaces, catalogs,
-  bindings (a2ui-protocol-facts / a2ui-catalog-facts); NOT for building an A2A server or client
-  (make-a2a-agent); NOT for proving agent-vs-agent isolation (check-a2a-isolation); NOT for
-  corpus record format or admission (a2a-training-facts).
+  Explains the A2A (Agent2Agent) wire protocol + this estate's zero-dep implementation
+  (@agent-ui/a2a, spec v0.3.0). Use for "what is an AgentCard", "Message vs Task vs Artifact",
+  "which TaskState transitions are legal", "what goes in a TextPart/DataPart/FilePart", "which
+  JSON-RPC method sends/polls", "how does SSE streaming work", "why does v1.0 break our wire".
+  ANSWERS from a cited corpus; does not build. NOT for rendering payload content
+  (a2ui-protocol-facts); NOT for building an agent (make-a2a-agent); NOT for isolation proofs
+  (check-a2a-isolation); NOT for corpus record format (a2a-training-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -4,14 +4,10 @@ description: >-
   Answers UI motion questions from a cited corpus — durations, easing and springs, choreography,
   reduced-motion policy. Use when timing or shaping animation: "how long should this
   transition/animation be", "what easing curve", "spring vs ease-in-out", "stagger these list
-  items", "what transition between these screens", "this animation feels sluggish / janky / too
-  bouncy", "make it snappier", "should this bounce", "what should never animate", "reduced motion
-  / prefers-reduced-motion policy", "fill the Motion section of a DESIGN.md". Carries Nielsen's
-  limits, the duration ladders, Apple's spring model (the house default) with the CSS
-  realizations (keyword beziers, linear(), spring() status), Material's transition patterns,
-  stagger values, vestibular triggers + the WCAG floor. ANSWERS only: building the animated
-  component is make-component; perceived-latency/skeleton/CWV verification is check-speed;
-  driving a live change is check-ui-change; the md.sys.motion token table is
+  items", "this animation feels sluggish/janky/too bouncy", "make it snappier", "reduced motion
+  / prefers-reduced-motion policy". Carries Nielsen's limits, the duration ladders, Apple's
+  spring model with CSS realizations, stagger values, vestibular triggers + the WCAG floor.
+  ANSWERS only — building the component is make-component; the md.sys.motion token table is
   material-motion-facts.
 user-invocable: false
 disable-model-invocation: false

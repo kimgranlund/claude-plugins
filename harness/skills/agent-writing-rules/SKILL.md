@@ -42,8 +42,18 @@ Route here only when the task needs a property `context: fork` on a skill cannot
 
 `name` (kebab, 3–50 chars), `description`, `model` (`inherit` default), `color`, `tools` (the allowlist), `skills` (preload list), plus `disallowedTools`, `maxTurns`, `effort`, `memory`, `hooks` where needed [drift-prone].
 
-- **Multi-line descriptions are block scalars.** `<example>` blocks live indented under `description: |` — bare at column 0 they are parsed as YAML keys, the parse fails, and the *whole plugin* fails to load (incident 2026-07-06; lint rule A2 blocks the class at write time).
-- The description carries dispatch conditions with 1–2 `<example>` blocks: when the lead should delegate here, in the phrasings tasks actually surface.
+- **Multi-line descriptions are block scalars.** A description spanning several lines lives
+  indented under `description: |` or `description: >-` — bare content at column 0 is parsed as a
+  YAML key, the parse fails, and the *whole plugin* fails to load (incident 2026-07-06; lint
+  rule A2 blocks the class at write time).
+- **`<example>` blocks belong in the body, never the description** (ADR/#80, 2026-07-21: agent
+  descriptions are always resident in every host session's Agent-tool listing, so example
+  galleries there cost context on every turn regardless of dispatch). Put worked examples under
+  a `## Dispatch examples` body heading instead — loaded only when the agent is actually
+  dispatched. The description itself carries just the routing contract: what it's for, when to
+  use PROACTIVELY, and the 2–3 sharpest NOT-for boundaries; an exhaustive NOT-for inventory that
+  is genuinely load-bearing (disambiguating a tightly-coupled sibling family) can move to the
+  body too rather than bloat the resident description.
 - Declare `tools` explicitly, always — an agent without an allowlist runs with everything (A5 warns). A reporting agent that must land a file takes `Write` plus a body line scoping it: writes exactly one file, the report at the dispatched destination.
 
 ## Model tiering — the seat ladder
@@ -117,7 +127,8 @@ The dispatch prompt and the body together are a fresh distribution's entire earl
 |---|---|---|
 | Fat agent prompt | Knowledge restated → drifts from the skill it copies | Thin shell + `skills:` preload |
 | Preload expects a command | `disable-model-invocation: true` blocks `skills:` | Preloads are model-only knowledge/procedural skills |
-| Bare `<example>` in frontmatter | YAML parse fails; plugin load fails silently-then-loudly | Block scalar (`description: \|`), indented; lint A2 |
+| Bare `<example>` in frontmatter | YAML parse fails; plugin load fails silently-then-loudly | Move it to a `## Dispatch examples` body heading; lint A2 |
+| `<example>` blocks left in the description | Always-resident Agent-tool listing pays their cost every turn, dispatched or not | Move to the body; description keeps only the routing contract |
 | No tool allowlist | Structural guarantee forfeited; agent can do anything | Declare `tools`, least privilege; `Write` only with single-write discipline |
 | Casual dispatch prompt | Sub-agent cold-starts on a peer message | Treat every dispatch as a system prompt; contract + context explicit |
 | Improvised report format | Aggregator parses prose by inference | Spawner declares the schema; worker returns by file |

@@ -1,15 +1,13 @@
 ---
 name: check-ui-change
 description: >-
-  Verify a UI change end-to-end against the running artifact before declaring it done — start the
-  app, interact with the change directly, screenshot before/after, check the console, and audit
-  performance. Use when the user asks to verify, check, or confirm a UI change — a new control, a
-  layout edit, a style change, "is this button working", "did that fix the layout", "verify this
-  UI change" — or whenever about to report a frontend change complete. NOT for reasoning about a
-  UI's properties in the abstract with no
-  live artifact to drive (check-colors, check-focus, check-translations, check-speed, check-safety —
-  this skill drives what they reason about); NOT for launching the app itself (the `run` skill,
-  where installed); NOT for the whole-product sweep (check-whole-ui).
+  Verify a UI change end-to-end against the running artifact before declaring it done — start
+  the app, interact with the change directly, screenshot before/after, check the console, audit
+  performance. Use when asked to verify, check, or confirm a UI change — a new control, a layout
+  edit, a style change, "is this button working", "did that fix the layout" — or whenever about
+  to report a frontend change complete. NOT for reasoning in the abstract with no live artifact
+  (check-colors/check-focus/check-safety siblings — this skill drives what they reason about);
+  NOT for the whole-product sweep (check-whole-ui).
 disable-model-invocation: false
 user-invocable: true
 ---

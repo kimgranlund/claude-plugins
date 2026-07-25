@@ -1,16 +1,13 @@
 ---
 name: a2ui-catalog-facts
 description: >-
-  Answers how an A2UI catalog is designed and extended in @agent-ui/a2ui. Use for "how do I add a
-  component to the catalog", "why is this control uncatalogued", "what is our coverage policy", "why did this payload fail CATALOG", "what should
-  this bindable prop be named". Covers the catalog row contract (typed properties + mapsTo, the
-  {prop,event} mark, child model), the factory/resolution pattern (type → ui-* widget), the naming law (a bindable prop takes the control's own prop name), two-tier
-  extensibility + the callableFrom clientOnly floor, security allowlist + conformance, and
-  COVERAGE POLICY (whole-fleet vs subset, drift gates, seed-and-drain). NOT for
-  the wire shape a component renders (a2ui-protocol-facts); NOT for corpus exemplars
-  (a2ui-training-facts); NOT for system-prompt derivation (a2ui-chat-agent-facts); NOT for
-  composing a payload (a2ui-composer) or catalog/renderer/factory SOURCE (a2ui-builder); NOT for
-  grading a catalog row (a2ui-reviewer). ANSWERS from the cited repo corpus; it does not build.
+  Answers how an A2UI catalog is designed and extended in @agent-ui/a2ui. Use for "how do I add
+  a component to the catalog", "why is this control uncatalogued", "what is our coverage
+  policy", "why did this payload fail CATALOG", "what should this bindable prop be named".
+  Covers the catalog row contract, the factory/resolution pattern, the naming law, two-tier
+  extensibility, security allowlist + conformance, coverage policy. ANSWERS from the cited
+  corpus; does not build. NOT for the wire shape a component renders (a2ui-protocol-facts); NOT
+  for corpus exemplars (a2ui-training-facts); NOT for catalog/renderer SOURCE (a2ui-builder).
 disable-model-invocation: false
 user-invocable: false
 ---

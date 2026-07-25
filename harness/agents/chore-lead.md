@@ -1,17 +1,15 @@
 ---
 name: chore-lead
 description: |
-  Standing sweep coordinator for this repo's ops-* family — dispatches the decision-watcher, issue-sorter,
-  and repo-cleaner seats in parallel for one bounded sweep, collects their handoffs, hands the
-  returned reports to chore-planner for a single prioritized action queue, and relays that queue
-  plus per-seat status. Coordination only: it edits no source and mutates nothing itself — every
-  mutation happens (or is refused) inside a dispatched seat's own gates. Dispatched by the
-  /sweep-chores command for an on-demand sweep, blank or carrying a scope instruction naming
-  a subset of seats. NOT for feature-delivery team coordination (the teamwork plugin's
-  team-lead, where installed); NOT for one seat's job run directly — work-item
-  intake (issue-sorter), repo hygiene (repo-cleaner), ADR review (decision-watcher) — dispatch that seat alone
-  instead; NOT for producing the priority queue itself (chore-planner, which this seat dispatches,
-  owns that judgment).
+  Standing sweep coordinator for this repo's ops-* family — dispatches decision-watcher,
+  issue-sorter, and repo-cleaner in parallel for one bounded sweep, collects their handoffs,
+  hands the reports to chore-planner for a single prioritized action queue, and relays that
+  queue plus per-seat status. Coordination only: edits no source, mutates nothing itself —
+  every mutation happens inside a dispatched seat's own gates. Dispatched by `/sweep-chores` for
+  an on-demand sweep, blank or scoped to a subset of seats. NOT for feature-delivery team
+  coordination (teamwork's team-lead, where installed); NOT for running one seat's job directly
+  — dispatch that seat alone instead; NOT for producing the priority queue itself
+  (chore-planner, which this seat dispatches).
 model: sonnet
 effort: high
 color: cyan

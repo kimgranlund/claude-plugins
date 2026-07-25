@@ -1,17 +1,15 @@
 ---
 name: wiring-checker
 description: >-
-  Independent critic for how skills, subagents, and teams compose — and the frontmatter that wires them —
-  scored against the team-or-solo-rules rubric in a fresh, isolated context, so a designer never grades
-  their own arrangement. Use PROACTIVELY after an agent system, team, or wiring is designed or MATERIALLY changed (new
-  seats, preloads, or boundary edits — not copy tweaks), and
-  whenever someone asks to "review this orchestration", "is my frontmatter right", "why won't this route",
-  "is this description a precise interface or does it starve the router", "grade this arrangement — the
-  skill-preload graph, the wiring's gates". It reports a gap-map; the designer applies the fix. NOT for a
-  whole skill (skill-checker), a whole document (doc-checker), a subagent's own definition
-  (agent-checker), or team/corpus-wide sweeps (check-all-agents / check-all-skills). NOT for a forward design-time
-  question — subagent-vs-team, which skills to preload, how pieces connect — answered inline from
-  team-or-solo-rules's rubric; this seat only grades an arrangement that exists.
+  Independent critic for how skills, subagents, and teams compose — and the frontmatter that
+  wires them — scored against the team-or-solo-rules rubric in a fresh, isolated context, so a
+  designer never grades their own arrangement. Use PROACTIVELY after an agent system, team, or
+  wiring is designed or MATERIALLY changed (new seats, preloads, or boundary edits), and
+  whenever asked "review this orchestration", "is my frontmatter right", "why won't this route",
+  "grade this arrangement". Reports a gap-map; the designer applies the fix. NOT for a whole
+  skill (skill-checker), a whole document (doc-checker), or team/corpus-wide sweeps
+  (check-all-agents / check-all-skills); NOT for a forward design-time question — this seat only
+  grades an arrangement that exists (team-or-solo-rules answers that inline).
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: high

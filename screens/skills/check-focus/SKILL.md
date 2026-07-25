@@ -1,6 +1,13 @@
 ---
 name: check-focus
-description: Verify focus-ring recipes, hit-target minimums, focus order, and keyboard affordances — and prescribe compliant values where missing. Use when checking focus order / tab sequence, keyboard navigation and traps, modal/dialog focus trap and restore, Escape and arrow keys per role, which keys a menu / tabs / listbox answers (APG), focus management on route change, focus-ring tokens that clear 3:1 under every surface, "the focus ring is invisible in dark mode", or hit-area expansions for small interactive elements. NOT for general text/background contrast, palette, or color-blind safety (check-colors) — owns only focus-ring contrast; NOT for RTL/bidi, dir/lang, locale Intl formatting, or text-expansion (check-translations); NOT for loading skeleton/spinner, CLS, or perceived-latency budgets (check-speed); NOT for destructive-action undo/type-to-confirm or audit-trail UX (check-safety); NOT for color-space theory or palette math (color-space-facts); NOT for building a tab-list or menu component (make-component).
+description: >-
+  Verify focus-ring recipes, hit-target minimums, focus order, and keyboard affordances — and
+  prescribe compliant values where missing. Use when checking focus order/tab sequence,
+  keyboard navigation and traps, modal/dialog focus trap and restore, Escape and arrow keys per
+  role, focus management on route change, focus-ring tokens that clear 3:1 under every surface,
+  "the focus ring is invisible in dark mode", or hit-area expansions for small interactive
+  elements. NOT for general text/background contrast or color-blind safety (check-colors) —
+  owns only focus-ring contrast; NOT for building a tab-list or menu component (make-component).
 disable-model-invocation: false
 user-invocable: true
 ---

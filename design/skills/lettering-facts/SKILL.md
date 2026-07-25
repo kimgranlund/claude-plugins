@@ -1,18 +1,13 @@
 ---
 name: lettering-facts
 description: >-
-  Answers typography and lettering questions. Use when
-  comparing, explaining, classifying, or specifying type — "my headings jump when the webfont swaps
-  in", "does OpenDyslexic actually help", "why does this font look boring / generic": type anatomy
-  (x-height, cap-height), classification (Vox-ATypI, humanist/geometric, grotesque),
-  metric-compatible fallback stacks (font-size-adjust), font personality (neutral vs. distinctive),
-  world scripts (Arabic, Devanagari, Hebrew niqqud, CJK), OpenType features, variable-font axes (wght, wdth,
-  opsz), CSS text surface (text-wrap, leading-trim), measure, text accessibility (dyslexic,
-  low-vision). NOT for designing, picking, or verifying a brand's font pairing — including
-  metric/x-height compatibility of CHOSEN fonts — or choosing fonts for a brand
-  (pick-fonts); NOT for
-  generating a type scale or design tokens (font-token-rules); NOT for building components
-  (make-component); NOT for locale date/number formatting (check-translations). ANSWERS, does not generate.
+  Answers typography and lettering questions. Use for comparing, explaining, classifying, or
+  specifying type — "my headings jump when the webfont swaps in", "does OpenDyslexic actually
+  help", "why does this font look boring/generic": type anatomy, classification (Vox-ATypI,
+  humanist/geometric/grotesque), metric-compatible fallback stacks, font personality, world
+  scripts, OpenType features, variable-font axes, text accessibility. NOT for choosing a brand's
+  font pairing (pick-fonts); NOT for generating a type scale or tokens (font-token-rules); NOT
+  for building components (make-component). ANSWERS, does not generate.
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -1,18 +1,15 @@
 ---
 name: planner
 description: >-
-  The design seat for a build team. Use to decompose a problem across both planes and author or maintain
-  its design docs — PRD, SPEC, LLD, and the ADRs (decision records) that ratify a change. Owns the
-  decomposition that precedes authoring and reports design status to the coordinator. Use PROACTIVELY when a
-  feature EARNS a design doc — it spans multiple components or sessions, changes a contract, or a
-  decision needs ratifying — and whenever a design doc must be written or revised — e.g. "decompose this
-  system before we spec it", "revise the LLD once a constraint surfaces", or "kick off the design phase
-  before authoring anything". NOT for a bugfix, a small or single-file change, or work one context can hold — the host
-  handles those inline, no doc, no seat; NOT for independently reviewing or scoring an existing PRD/SPEC/LLD/ADR
-  (doc-checker — this seat authors and maintains, it never grades its own docs);
-  NOT for implementing to an approved LLD (builder); NOT for reviewing a built change
-  against the LLD (code-checker); NOT for explaining what docs' `doc-writing-rules` or
-  harness's `break-down-problem` teach in the abstract (answer inline from the named skill, where installed).
+  The design seat for a build team. Use to decompose a problem across both planes and author or
+  maintain its design docs — PRD, SPEC, LLD, and the ADRs that ratify a change. Owns the
+  decomposition that precedes authoring and reports design status to the coordinator. Use
+  PROACTIVELY when a feature EARNS a design doc — it spans multiple components or sessions,
+  changes a contract, or a decision needs ratifying — e.g. "decompose this system before we spec
+  it", "revise the LLD once a constraint surfaces". NOT for a bugfix or single-file change — the
+  host handles those inline, no doc, no seat; NOT for independently reviewing an existing
+  PRD/SPEC/LLD/ADR (doc-checker — this seat authors, it never grades its own docs); NOT for
+  implementing to an approved LLD (builder); NOT for reviewing a built change (code-checker).
 tools: Read, Grep, Glob, Write, Edit, Bash
 model: fable
 effort: high

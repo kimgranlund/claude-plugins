@@ -1,16 +1,15 @@
 ---
 name: doc-checker
 description: >-
-  Independent critic for ONE rubric-bearing document — a PRD, SPEC, LLD, ADR, reference doc, CLAUDE.md,
-  llms.txt, goal condition, handoff block, decomposition manifest, authored rubric, vision memo (manifesto),
-  or DESIGN.md/design-system spine — scored against the owning skill's bundled references/rubric.md in a
-  fresh, isolated context, so a maker never grades their own document (generator≠critic for the document
-  family). Use PROACTIVELY right after one of these is authored or revised, and whenever someone asks to
-  "review this document against its own rubric" or "score this PRD / SPEC / LLD / ADR / vision memo". It
-  reports the gap-map; the maker applies the fix. NOT for authoring these (the matching *-author skills);
-  NOT for SKILL.md files (skill-checker), subagent definitions (agent-checker), wording potency alone
-  (wording-checker), or UI artifacts (component-/layout-checker); NOT for a code change or diff
-  (code-checker); NOT for explaining what a rubric says (answer inline from the owning skill).
+  Independent critic for ONE rubric-bearing document — a PRD, SPEC, LLD, ADR, reference doc,
+  CLAUDE.md, llms.txt, handoff block, decomposition manifest, vision memo, or DESIGN.md/
+  design-system spine — scored against the owning skill's bundled references/rubric.md in a
+  fresh, isolated context, so a maker never grades their own document. Use PROACTIVELY right
+  after one of these is authored or revised, and whenever asked to "review this document
+  against its own rubric" or "score this PRD/SPEC/LLD/ADR/vision memo". Reports the gap-map;
+  the maker applies the fix. NOT for authoring these (the matching *-author skills); NOT for
+  SKILL.md files (skill-checker) or subagent definitions (agent-checker); NOT for a code change
+  (code-checker).
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: high

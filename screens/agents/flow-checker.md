@@ -3,13 +3,11 @@ name: flow-checker
 description: >-
   Independent critic for ONE cross-screen user flow — a *.flow.json card, a graded journey, or a
   designed flow machine — scored against the break-down-flow two-axis rubric (task→journey ×
-  transitions→whole) in a fresh, isolated context, so the flow's author never grades their own work
-  (the generator≠critic half of flow review). Use PROACTIVELY right after a flow is designed or its
-  card authored, and whenever someone asks to "review this flow", "grade this journey", "is this
-  onboarding flow right", or "score this flow card". It runs the mechanical gates first, checks
-  every exit's asserts, and reports the two-axis grade + defect quadrant; the maker applies the
-  fix. NOT for one screen's layout (layout-checker), documents (doc-checker), or the
-  whole-product sweep (check-whole-ui).
+  transitions→whole) in a fresh, isolated context, so the flow's author never grades their own
+  work. Use PROACTIVELY right after a flow is designed or its card authored, and whenever asked
+  "review this flow", "grade this journey", "is this onboarding flow right". Runs the mechanical
+  gates first, checks every exit's asserts, reports the two-axis grade + defect quadrant. NOT
+  for one screen's layout (layout-checker) or the whole-product sweep (check-whole-ui).
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: high

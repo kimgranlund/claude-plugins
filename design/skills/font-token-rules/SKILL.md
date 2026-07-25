@@ -1,17 +1,14 @@
 ---
 name: font-token-rules
-description: >
+description: >-
   Use when setting the TYPE of any UI on the default `--type-*` token grammar (not Material's
   `--md-sys-typescale-*`) — font/size/weight/leading/tracking for a heading, body, label, button,
   caption, code, or kicker ("what type token for this", "which voice/step for this text", "size
-  this heading", "what font should this use"). Eleven-voice scale (voice=function x step=rank,
-  size derived): bind `--type-*`/`--font-*` (prefix configurable), pick VOICE by job (READ prose
-  vs. OPERATE chrome) and STEP by rank, apply the baked leading/paragraph rhythm, pick a concrete
-  font per family slot — distinctive vs. neutral, by voice. Never hardcode a px size, line-height,
-  tracking, or font family. TYPE only. NOT for Material's `--md-sys-typescale-*`
-  (material-type-facts); NOT for a no-token typography question
-  (lettering-facts); NOT for building/placing a component (make-component); NOT for locale
-  number/date/currency formatting (check-translations).
+  this heading"). Eleven-voice scale: bind `--type-*`/`--font-*`, pick VOICE by job and STEP by
+  rank, apply the baked leading/rhythm, pick a concrete font per family slot. Never hardcode a
+  px size, line-height, tracking, or font family. NOT for Material's typescale
+  (material-type-facts); NOT for a no-token typography question (lettering-facts); NOT for
+  building/placing a component (make-component).
 disable-model-invocation: false
 user-invocable: false
 ---

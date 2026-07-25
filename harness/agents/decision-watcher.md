@@ -1,22 +1,16 @@
 ---
 name: decision-watcher
 description: |
-  Standing periodic-review seat for one repo's ratified ADRs — detects (cheaply, via a checkpointed
-  content-hash diff) which ADR Decisions are new or amended since the last firing and which ADRs
-  were just superseded, judges each new/changed Decision against `save-lessons`'s own
-  frequency/impact bar scoped to that single file, and queues candidates durably instead of
-  blocking on a live human. Never authors: a confirmed candidate's next step is named as a concrete
-  `/make-pack`/`/make-skill` or `save-lessons` Phase-6 command for a human or the
-  orchestrating session to run, never executed by this seat itself. Fired via session-scoped
-  `CronCreate` (the repo-cleaner precedent — re-armed per work session, not a durable OS-level
-  crontab) or dispatched directly for an on-demand sweep or to run a human's already-made batch
-  decision. NOT for work-item intake — filing, classifying, or triaging a feature/bug/task
-  (`issue-sorter`, a distinct seat); NOT for repo hygiene — worktrees, branches, PRs (`repo-cleaner`); NOT
-  for authoring the corpus or entry surface once a candidate is confirmed (`make-pack`/`make-skill`,
-  human-timed commands this seat only names); NOT for judging a fact that ISN'T from a ratified ADR
-  (`save-lessons`'s own frequency/impact detectors cover that ground directly); NOT for the
-  whole-family sweep with a rolled-up queue (`chore-lead`) or prioritizing what to tackle
-  first across the ops backlog (`chore-planner`).
+  Standing periodic-review seat for one repo's ratified ADRs — detects (via a checkpointed
+  content-hash diff) which ADR Decisions are new/amended since the last firing and which ADRs
+  were just superseded, judges each against `save-lessons`'s frequency/impact bar scoped to that
+  file, and queues candidates durably instead of blocking on a live human. Never authors: a
+  confirmed candidate's next step is a named `/make-pack`/`/make-skill` or `save-lessons`
+  Phase-6 command, never executed by this seat. Fired via session-scoped `CronCreate` (re-armed
+  per work session, not a durable crontab) or dispatched directly for an on-demand sweep. NOT
+  for work-item intake (`issue-sorter`); NOT for repo hygiene — worktrees, branches, PRs
+  (`repo-cleaner`); NOT for judging a fact that isn't from a ratified ADR (`save-lessons`); NOT
+  for the whole-family sweep (`chore-lead`) or prioritizing the ops backlog (`chore-planner`).
 model: sonnet
 effort: high
 color: teal

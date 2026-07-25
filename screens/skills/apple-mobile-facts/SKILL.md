@@ -2,16 +2,12 @@
 name: apple-mobile-facts
 description: >-
   Answers Apple Human Interface Guidelines (HIG) questions — its own navigation, modality, and
-  component vocabulary — from a cited corpus. Use when asked "tab bar vs navigation stack", "sheet
-  vs modal vs popover — which does HIG say to use", "what sheet detent heights does HIG define",
-  "alert vs action sheet for this confirmation", "HIG's button style guidance", "grouped vs plain
-  list", "swipe action conventions", "what belongs in a nav bar vs a toolbar", or "where should
-  search live in this navigation hierarchy". Carries HIG's stated navigation-model guidance,
-  modality/sheet-detent behavior, alert/action-sheet/sheet escalation, button-style vocabulary,
-  list/swipe conventions, and nav-bar/toolbar/search placement — cited to specific HIG pages.
-  ANSWERS HIG's semantics; does not name page-shell regions (ui-pattern-facts), animation timing
-  (motion-rules), or icon sizing (icon-rules). NOT Android/Material guidance
-  (material-design-*-tokens); NOT building the component (make-component).
+  component vocabulary — from a cited corpus. Use for "tab bar vs navigation stack", "sheet vs
+  modal vs popover — which does HIG say to use", "what sheet detent heights does HIG define",
+  "alert vs action sheet for this confirmation", "grouped vs plain list", "swipe action
+  conventions", "where should search live in this navigation hierarchy". Cited to specific HIG
+  pages. ANSWERS HIG's semantics; does not name page-shell regions (ui-pattern-facts). NOT
+  Android/Material guidance (material-*-facts); NOT building the component (make-component).
 user-invocable: false
 disable-model-invocation: false
 ---

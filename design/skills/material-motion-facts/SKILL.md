@@ -1,17 +1,13 @@
 ---
 name: material-motion-facts
-description: >
+description: >-
   Use when ANIMATING any UI whose motion tokens use the Material `--md-sys-motion-*` naming, or
-  when the M3 motion token table is the question ("what md.sys.motion easing/duration token for
-  this dialog", "which spring token — fast or slow, spatial or effects", "emphasized or standard
-  easing here", "what duration tier for this transition"). Carries the verified table — 10 easing
-  cubic-beziers, the 16-step duration ladder (50–1000ms), the M3 Expressive spring tokens
-  (spatial/effects × fast/default/slow + stiffness/damping) — the pairing laws (entrances
-  decelerate, exits accelerate; speed by scope), the platform-drift map (material-web has NO
-  spring tokens). Never hardcode a ms value or bezier in a Material project. NOT for
-  platform-agnostic motion science — how long an animation should be in general, Apple springs,
-  choreography, reduced-motion policy (motion-rules, screens plugin); NOT for color/geometry/type
-  (the material-design-* siblings); NOT for DESIGNING a motion system.
+  when the M3 motion token table is the question ("what easing/duration token for this dialog",
+  "which spring token — fast or slow, spatial or effects", "emphasized or standard easing here").
+  Carries the verified table — 10 easing cubic-beziers, the 16-step duration ladder, the M3
+  Expressive spring tokens — the pairing laws (entrances decelerate, exits accelerate), the
+  platform-drift map. Never hardcode a ms value or bezier. NOT for platform-agnostic motion
+  science (motion-rules, screens plugin); NOT for color/geometry/type (the material-* siblings).
 disable-model-invocation: false
 user-invocable: false
 ---

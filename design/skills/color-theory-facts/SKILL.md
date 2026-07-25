@@ -1,17 +1,13 @@
 ---
 name: color-theory-facts
 description: >-
-  Answers questions about color theory — harmony, meaning, and history: whether a color choice reads as
-  intended, and why. Use when asked about color harmony ("why do these colors clash", complementary
-  / triadic / analogous schemes, 60-30-10 dominant/accent proportion), the color wheel and its
-  history (Newton, Goethe, Itten's seven contrasts, Albers, Ostwald, RYB vs CMY), what a color
-  communicates (symbolism, palette mood / feel / vibe, pale-muted-vivid character), or designers'
-  colour programmes (Gerstner, Reilly). NOT for perceptual mechanisms — vision science
-  (color-perception-facts); NOT for color-space math, OKLCH, or gamut (color-space-facts);
-  NOT for contrast/APCA/WCAG or CVD (color-contrast-facts); NOT for pigment physics
-  (physical-color-facts); NOT for building a ramp, theme, or semantic mapping (make-palette);
-  NOT for verifying a palette (check-colors). ANSWERS aesthetic-judgment questions; it does not
-  generate palettes.
+  Answers questions about color theory — harmony, meaning, and history: whether a color choice
+  reads as intended, and why. Use for color harmony ("why do these colors clash", complementary
+  /triadic/analogous schemes, 60-30-10 proportion), the color wheel and its history, what a
+  color communicates (symbolism, mood, pale-muted-vivid character). NOT for vision science
+  (color-perception-facts); NOT for color-space math (color-space-facts); NOT for
+  contrast/APCA/WCAG/CVD (color-contrast-facts); NOT for building a ramp (make-palette). ANSWERS
+  aesthetic-judgment questions; does not generate palettes.
 disable-model-invocation: false
 user-invocable: false
 ---

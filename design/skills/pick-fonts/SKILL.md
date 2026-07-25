@@ -1,16 +1,13 @@
 ---
 name: pick-fonts
 description: >-
-  Design an opinionated 11-voice typography system from a brand brief. Use when the user wants to design a typography system, pick or design a font pairing
-  ("pick a body and display pairing"), verify a chosen pairing's craft ("is this pairing
-  metric-compatible", "verify the x-height compatibility of the fonts we picked"), choose fonts for a
-  brand, decide which typeface fills each voice (display, heading, body, ui, code), turn "modern and
-  clean" into a specific point in design space, or make the distinctive-vs-neutral call per voice: territory, rationale, coherence, craft verification
-  (metric compatibility, accessibility floor) — font-token-rules realizes it. NOT for color ramps (make-palette); NOT for
-  realizing a decided system as tokens, or which font/voice an existing system's token already
-  binds (font-token-rules); NOT for type-history knowledge (lettering-facts); NOT for
-  Material's typescale (material-type-facts); NOT for a component (make-component)
-  or the export bundle (make-design-system).
+  Design an opinionated 11-voice typography system from a brand brief. Use to design a
+  typography system, pick a font pairing ("pick a body and display pairing"), verify a chosen
+  pairing's craft ("is this pairing metric-compatible"), decide which typeface fills each voice,
+  or turn "modern and clean" into a specific point in design space: territory, rationale,
+  coherence, craft verification — font-token-rules realizes it. NOT for color ramps
+  (make-palette); NOT for realizing a decided system as tokens (font-token-rules); NOT for
+  type-history knowledge (lettering-facts); NOT for Material's typescale (material-type-facts).
 disable-model-invocation: false
 user-invocable: true
 ---

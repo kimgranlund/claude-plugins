@@ -1,18 +1,13 @@
 ---
 name: a2ui-protocol-facts
 description: >-
-  The A2UI wire protocol + this repo's zero-dependency renderer (@agent-ui/a2ui). Use
-  when the user asks "why did this payload fail validation", "what does a binding / action / check look like on
-  the wire", "how do dynamic lists render", "action vs function call", "which error code and why",
-  "what does wantResponse / sendDataModel / callableFrom do". Covers the message lifecycle
-  (createSurface / updateComponents / updateDataModel / deleteSurface / actionResponse), the
-  Binding union, dynamic-list templates, two-way input binding, DynamicString interpolation,
-  checks, the callFunction RPC, the two-code error taxonomy
-  (VALIDATION_FAILED / INVALID_FUNCTION_CALL), version pinning. ANSWERS from a cited corpus;
-  it does not build. NOT for a NEW catalog type or coverage policy (a2ui-catalog-facts);
-  NOT for corpus record format or admission (a2ui-training-facts); NOT for the
-  session/provider/turn model (a2ui-chat-agent-facts); NOT for composing a payload
-  (a2ui-composer) or renderer/catalog source (a2ui-builder).
+  The A2UI wire protocol + this repo's zero-dep renderer (@agent-ui/a2ui). Use for "why did this
+  payload fail validation", "what does a binding/action/check look like on the wire", "how do
+  dynamic lists render", "action vs function call", "which error code and why". Covers the
+  message lifecycle, the Binding union, dynamic-list templates, DynamicString interpolation, the
+  callFunction RPC, the error taxonomy, version pinning. ANSWERS from a cited corpus; does not
+  build. NOT for catalog design (a2ui-catalog-facts); NOT for corpus records
+  (a2ui-training-facts); NOT for the session/turn model (a2ui-chat-agent-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

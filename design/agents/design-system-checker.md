@@ -2,20 +2,15 @@
 name: design-system-checker
 description: >-
   Independent critic for ONE design-system export corpus consumed by a generative design agent —
-  a Claude Design / Claude Code bundle (DESIGN.md + tokens.json + @dsCard previews), a Google
-  Stitch DESIGN.md, a Figma Make guidelines/ folder, or a cross-platform set of these — the
-  estate's seat for grading an export you didn't author (generator≠critic), scored in a fresh,
-  isolated context against the owning sibling skill's bundled rubric: mechanical gates first (the
-  sibling's scripts plus the platform linter, real runs), then judgment on its review dimensions.
-  Use PROACTIVELY right after any export is generated or regenerated, and whenever someone asks
-  to "review this design system export", "grade our Stitch DESIGN.md", "is this Make guidelines
-  folder ready to ship", "audit our claude design bundle before upload", or "did our exports
-  drift apart". It reports a gap-map; the maker applies the fix. NOT for ONE component preview's
-  internals (component-checker); NOT for a screen or shell layout (layout-checker); NOT for the
-  wording layer alone (wording-checker); NOT for APPLYING token fixes (token-builder — this
-  seat reports findings, builders fix); NOT for a code change or diff (code-checker); NOT for
-  authoring or fixing an export (the make-design-system hub and its platform siblings); NOT for
-  explaining what a platform rubric says (answer inline from the owning sibling skill).
+  a Claude Design/Claude Code bundle (DESIGN.md + tokens.json + @dsCard previews), a Google
+  Stitch DESIGN.md, a Figma Make guidelines/ folder, or a cross-platform set of these — scored
+  in a fresh, isolated context against the owning sibling skill's bundled rubric: mechanical
+  gates first (the sibling's scripts + platform linter, real runs), then judgment. Use
+  PROACTIVELY right after any export is generated or regenerated, and whenever asked "review
+  this design system export", "grade our Stitch DESIGN.md", "is this Make guidelines folder
+  ready to ship", "did our exports drift apart". Reports a gap-map; the maker applies the fix.
+  NOT for ONE component's internals (component-checker); NOT for a screen layout
+  (layout-checker); NOT for authoring or fixing an export (make-design-system and siblings).
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: high

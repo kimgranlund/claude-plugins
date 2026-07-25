@@ -2,18 +2,12 @@
 name: ui-genre-facts
 description: >-
   Answers which patterns, modules, and conventions a product CATEGORY expects — the genre world
-  model behind "is this the right pattern for THIS kind of product". Use when identifying or
-  judging genre fit: "what genre is this app", "what do users expect in a dashboard / collab tool /
-  habit tracker / AI chat app", "which patterns does this category demand", "genre conventions for
-  X", "is this convention-violation acceptable here", "does a marketplace / this kind of product
-  need a [surface]". Covers the genres: dashboards/analytics,
-  collaboration, productivity, single-purpose utilities, content consumption, social
-  media, AI-native apps, games, tracking/quantified-self, health,
-  finance/fintech, marketplaces, and
-  travel/booking. ANSWERS genre expectations, never applies or builds them — NOT for which modules a
-  page, screen, or dashboard needs — "what modules does a dashboard need" (ui-pattern-facts);
-  pattern naming: ui-pattern-facts; applying to a layout: break-down-layout; whole-product
-  sweep: check-whole-ui.
+  model behind "is this the right pattern for THIS kind of product". Use for "what genre is this
+  app", "what do users expect in a dashboard/collab tool/habit tracker/AI chat app", "which
+  patterns does this category demand", "is this convention-violation acceptable here". Covers
+  dashboards, collaboration, productivity, utilities, social media, AI-native apps, games,
+  health, fintech, marketplaces, travel. ANSWERS genre expectations, never applies or builds
+  them — NOT for which modules a page needs (ui-pattern-facts).
 user-invocable: false
 disable-model-invocation: false
 ---

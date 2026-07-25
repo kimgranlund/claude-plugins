@@ -1,17 +1,14 @@
 ---
 name: material-color-facts
-description: >
-  Use when choosing the COLOR of any UI whose color tokens use the Material `--md-sys-color-*` naming —
-  the color/role for a button, control, text, card, modal, nav, toast, border, or state ("which
-  color should this button use", "what token for this background/text", "add hover/disabled colors", "wire the
-  theme", "make it work in dark mode", "why is this the wrong color"). Consumption guide for the
-  59-role semantic layer extending Material 3: binding palettes, M3 baseline vs. extensions
-  (state families, tonal variants, surface/scrim ladders, intents as palettes), pairing laws keeping fg on
-  a legal bg, per-surface role maps. Never guess a hex or raw stop. NOT for type/font/weight
-  (material-type-facts); NOT for radius/spacing/density (material-shape-facts);
-  NOT for the default `--c-*` grammar (`color-tokens`); NOT for designing or verifying a palette
-  (make-palette / check-colors); NOT for color-space math (color-space-facts); NOT for motion
-  easing/duration (material-motion-facts).
+description: >-
+  Use when choosing the COLOR of any UI whose color tokens use the Material `--md-sys-color-*`
+  naming — the color/role for a button, control, text, card, modal, nav, toast, border, or state
+  ("which color should this button use", "what token for this background/text", "add
+  hover/disabled colors", "make it work in dark mode"). Consumption guide for the 59-role
+  semantic layer extending Material 3: binding palettes, M3 baseline vs. extensions, pairing
+  laws, per-surface role maps. Never guess a hex or raw stop. NOT for type (material-type-facts);
+  NOT for shape (material-shape-facts); NOT for designing/verifying a palette (make-palette /
+  check-colors); NOT for motion (material-motion-facts).
 disable-model-invocation: false
 user-invocable: false
 ---
