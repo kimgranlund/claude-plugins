@@ -2,11 +2,25 @@
 """adr_checkpoint — cheap, deterministic diff of an ADR corpus against its last-scanned state.
 
 Usage:
-  adr_checkpoint.py classify <adr-dir> [--checkpoint <path>]   report the delta; never writes
-  adr_checkpoint.py advance <adr-dir> [--checkpoint <path>]    write the checkpoint to the
-                                                                current tree — run ONLY after
-                                                                classify's delta has been judged
-  adr_checkpoint.py selftest                                   prove the classifier on fixtures
+  adr_checkpoint.py classify <adr-source> [--checkpoint <path>]  report the delta; never writes
+  adr_checkpoint.py advance <adr-source> [--checkpoint <path>]   write the checkpoint to the
+                                                                  current tree — run ONLY after
+                                                                  classify's delta has been judged
+  adr_checkpoint.py selftest                                     prove the classifier on fixtures
+
+<adr-source> is either a DIRECTORY of one-ADR-per-file `*.md` (each carrying `doc-type: adr` /
+`id:` / `status:` / `supersedes:` frontmatter) or a single markdown FILE whose ADRs are `##`
+sections — auto-detected via `Path.is_file()`. A section's id comes from its heading
+(`## ADR-NNN — Title`, case-insensitive `ADR-`); a heading annotation containing the word
+"superseded" (e.g. `(SUPERSEDED — see ADR-011)`) sets that ADR's own status to `superseded`
+directly — the single-file corpus this mode was built for records supersession on the
+superseded ADR's own heading, not always as a forward `supersedes:` declaration on the
+announcer, so self-status is the primary signal and a `(supersedes ADR-XXX[, ADR-YYY])`
+annotation (never `complements`/other verbs) is read as the secondary, forward-declaring one —
+same shape as frontmatter's `supersedes:` field, and reuses the same `superseded_ids()`
+extraction. Each section is bounded by the next `##` heading of ANY kind (not just ADR
+headings), so trailing non-ADR content (an appendix, a "quick map") never bleeds into the last
+ADR's hash.
 
 The economic contract this script exists to hold: judgment (a real model asking "does this
 Decision cross the harvest bar") is expensive and must run ONLY on what changed. This script's
@@ -37,6 +51,10 @@ FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)\s*$", re.MULTILINE)
 ADR_ID_RE = re.compile(r"adr-\d+")
 
+HEADING_RE = re.compile(r"^## .*$", re.MULTILINE)
+ADR_HEADING_ID_RE = re.compile(r"^## (ADR-\d+)\b", re.IGNORECASE)
+SUPERSEDES_ANNOTATION_RE = re.compile(r"(?i)\bsupersedes\s+([A-Za-z0-9,\s-]*ADR-\d+[A-Za-z0-9,\s-]*)")
+
 
 def superseded_ids(supersedes_value):
     """Extract adr-NNNN token(s) out of a `supersedes:` field value, ignoring any trailing
@@ -66,6 +84,36 @@ def parse_frontmatter(text):
 def hash_adr(content):
     """sha256 of the full file content — pure, deterministic."""
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+
+def parse_single_file_sections(text):
+    """Split one markdown file into `## ADR-NNN ...` sections and return the same shape
+    scan_dir does — pure, no I/O, so selftest can exercise it directly on fixture strings.
+
+    Each section runs from its heading to the next `## ` heading of ANY kind (or EOF), so a
+    trailing non-ADR heading never bleeds into the last ADR's hash. A non-ADR `##` section
+    (e.g. an appendix) is skipped entirely — it never becomes a checkpoint entry."""
+    bounds = [m.start() for m in HEADING_RE.finditer(text)] + [len(text)]
+    current = {}
+    for start, end in zip(bounds, bounds[1:]):
+        section_text = text[start:end]
+        heading_line = section_text.splitlines()[0]
+        id_match = ADR_HEADING_ID_RE.match(heading_line)
+        if not id_match:
+            continue
+        adr_id = id_match.group(1).lower()
+        status = "superseded" if "superseded" in heading_line.lower() else "accepted"
+        sup_match = SUPERSEDES_ANNOTATION_RE.search(heading_line)
+        supersedes = None
+        if sup_match:
+            ids = [tok.lower() for tok in ADR_ID_RE.findall(sup_match.group(1).lower())]
+            supersedes = ", ".join(ids) if ids else None
+        current[adr_id] = {
+            "hash": hash_adr(section_text),
+            "status": status,
+            "supersedes": supersedes,
+        }
+    return current
 
 
 def classify_delta(old_checkpoint, current):
@@ -141,15 +189,28 @@ def scan_dir(adr_dir):
     return current
 
 
-def run_classify(adr_dir, checkpoint_path):
+def scan_single_file(adr_file):
+    """Read one markdown file and hash its `## ADR-NNN` sections. Thin I/O wrapper around the
+    pure `parse_single_file_sections` — mirrors scan_dir's split from parse_frontmatter."""
+    text = Path(adr_file).read_text(encoding="utf-8", errors="replace")
+    return parse_single_file_sections(text)
+
+
+def scan_source(adr_source):
+    """Auto-detect: a directory scans as one-ADR-per-file frontmatter, a file scans as
+    `## ADR-NNN` sections. The caller never has to know which shape a repo's corpus uses."""
+    return scan_single_file(adr_source) if Path(adr_source).is_file() else scan_dir(adr_source)
+
+
+def run_classify(adr_source, checkpoint_path):
     """Report the delta only — never writes the checkpoint. A caller that dies mid-judgment
     leaves the checkpoint untouched, so the unjudged delta reappears next firing instead of
     silently reading as 'unchanged' forever."""
     old = load_checkpoint(checkpoint_path)
-    current = scan_dir(adr_dir)
+    current = scan_source(adr_source)
     delta = classify_delta(old, current)
 
-    print(f"adr_checkpoint classify · {adr_dir}")
+    print(f"adr_checkpoint classify · {adr_source}")
     print(f"  {len(current)} ADR(s) scanned against checkpoint ({len(old)} previously known)")
     for kind in ("new", "amended", "newly_superseded"):
         if delta[kind]:
@@ -160,10 +221,10 @@ def run_classify(adr_dir, checkpoint_path):
     return 0
 
 
-def run_advance(adr_dir, checkpoint_path):
+def run_advance(adr_source, checkpoint_path):
     """Write the checkpoint to reflect the CURRENT tree — call only after the delta a prior
     `classify` reported has actually been judged and queued, never before."""
-    current = scan_dir(adr_dir)
+    current = scan_source(adr_source)
     save_checkpoint(checkpoint_path, {
         adr_id: {"hash": rec["hash"], "status": rec["status"]}
         for adr_id, rec in current.items()
@@ -299,9 +360,48 @@ def selftest():
     assert d7["newly_superseded"] == [], \
         f"a partial supersession must not re-fire every run after advance: {d7}"
 
+    # parse_single_file_sections — the real shape a monolithic decision-records.md ships:
+    # heading-only ids, self-status from a "superseded" annotation, forward supersedes from a
+    # "(supersedes ADR-NNN)" annotation, non-ADR headings skipped, no section bleed.
+    single_file_text = (
+        "# Decision records\n\n"
+        "## ADR-001 — First decision\n"
+        "- **Status.** DECIDED.\n\n"
+        "## ADR-002 — Second decision  **(SUPERSEDED — see ADR-003)**\n"
+        "- **Status.** DECIDED.\n\n"
+        "## ADR-003 — Third decision  (supersedes ADR-002)\n"
+        "- **Status.** DECIDED.\n\n"
+        "## ADR-004 — Fourth decision  (complements ADR-003)\n"
+        "- **Status.** DECIDED.\n\n"
+        "## Quick map: things not to touch\n"
+        "This trailer must never bleed into ADR-004's hash.\n"
+    )
+    sections = parse_single_file_sections(single_file_text)
+    assert set(sections) == {"adr-001", "adr-002", "adr-003", "adr-004"}, sections
+    assert sections["adr-001"]["status"] == "accepted", sections["adr-001"]
+    assert sections["adr-002"]["status"] == "superseded", sections["adr-002"]
+    assert sections["adr-003"]["status"] == "accepted", sections["adr-003"]
+    assert sections["adr-003"]["supersedes"] == "adr-002", sections["adr-003"]
+    # "complements" is not "supersedes" — must never be read as a supersession
+    assert sections["adr-004"]["supersedes"] is None, sections["adr-004"]
+    adr004_hash = hash_adr(
+        single_file_text[
+            single_file_text.index("## ADR-004"):single_file_text.index("## Quick map")
+        ]
+    )
+    assert sections["adr-004"]["hash"] == adr004_hash, "trailing non-ADR heading bled into the hash"
+
+    # case-insensitive heading id + a real single-file classify_delta round-trip: ADR-002's own
+    # status flip to superseded fires newly_superseded on first sight (self-status), same as the
+    # frontmatter-mode self-superseding path already proves above
+    single_file_delta = classify_delta({}, sections)
+    assert "adr-002" in single_file_delta["newly_superseded"], single_file_delta
+
     print("adr_checkpoint selftest · PASS · frontmatter parse, hashing, all four delta shapes, "
-          "and annotated-supersedes extraction correct (incl. already-recorded-supersession, "
-          "corpus-size, no-adr-token, and post-advance forever-refire negative controls)")
+          "annotated-supersedes extraction (incl. already-recorded-supersession, corpus-size, "
+          "no-adr-token, and post-advance forever-refire negative controls), and single-file "
+          "section parsing (self-status, forward-supersedes, complements-is-not-supersedes, "
+          "no section bleed)")
     return 0
 
 
