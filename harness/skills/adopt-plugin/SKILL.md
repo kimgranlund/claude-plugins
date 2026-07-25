@@ -44,10 +44,19 @@ installable by every contributor who trusts the project, portable past the autho
      "sparsePaths": ["sub/dir"]
    }
    ```
-   Other `source.source` values: `"git"` (needs `url`), `"directory"` (needs `path`, local
-   only). There is no `"source": "settings"` inline-marketplace type — a marketplace's plugin
-   list always lives in a real `marketplace.json` file at a real address, never inlined into
-   `settings.json` itself.
+   Other `source.source` values: `"git"` (needs `url` — prefer the SSH form
+   `git@host:owner/repo.git` over `https://`; this workspace hit repeated HTTPS push failures
+   the SSH form doesn't, 2026-07-22/25, and the same host flakiness affects marketplace
+   fetches), `"directory"` (needs `path`, local only). There is no `"source": "settings"`
+   inline-marketplace type — a marketplace's plugin list always lives in a real
+   `marketplace.json` file at a real address, never inlined into `settings.json` itself.
+
+   A single-plugin repo distributed via npm instead of git uses `"source": "npm"` inside its
+   OWN `plugin.json`-adjacent marketplace entry (verified against code.claude.com/docs
+   2026-07-25) — `{"source": "npm", "package": "<name-or-@scope/name>", "version"?: "<semver>",
+   "registry"?: "<url>"}`. This is a plugin-level source (step 3's wrapper catalog), never a
+   marketplace-level one — `extraKnownMarketplaces` always resolves a real `marketplace.json`
+   file over git/directory/github; there is no npm-hosted marketplace catalog type.
 
 3. **Single-plugin repos → wrap, never reference directly.** `extraKnownMarketplaces` cannot
    point at a bare plugin repo. Add the repo as one more entry in **one shared** self-hosted

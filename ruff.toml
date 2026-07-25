@@ -6,7 +6,13 @@
 extend-exclude = ["*/dist"]
 
 [lint]
-# Ruff defaults (E4, E7, E9, F) minus two deliberate house idioms:
+# Ruff defaults (E4, E7, E9, F) minus two deliberate house idioms. `select` is the actual
+# scoping mechanism — `ignore` alone (the pre-2026-07-25 state of this file) removes only the
+# two named codes from ruff's FULL rule set, so each ruff release that default-enables a new
+# preview category (FURB/ISC/EXE/PLW/RUF/SIM/PIE/PERF, hit 2026-07-25 via unpinned `uvx ruff`
+# 0.16.0: 207 findings, zero of them E4/E7/E9/F) silently blows the gate with no code change on
+# our side. The comment always claimed this scope; now the config does too.
+select = ["E4", "E7", "E9", "F"]
 #   E702 (semicolon one-liners) — the compact `fails.append(code); lines.append(...)` style
 #         these scripts use on purpose; flagging it fights the idiom, catches nothing real.
 #   E731 (lambda assignment)    — `ok = lambda m: ...` helper style, same reasoning.

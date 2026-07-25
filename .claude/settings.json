@@ -6,7 +6,7 @@
     "nonoun-plugins": {
       "source": {
         "source": "git",
-        "url": "https://github.com/kimgranlund/claude-plugins.git"
+        "url": "git@github.com:kimgranlund/claude-plugins.git"
       },
       "autoUpdate": true
     }
