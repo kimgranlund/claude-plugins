@@ -55,6 +55,7 @@ The plugin name (`harness`, distribution taxonomy) is deliberately disjoint from
 | `scripts/corpus_check.py` | Script | CLI + selftest + hook (INDEX writes) + gate G9 | K1–K5: INDEX↔tree both directions, load budgets, grounding coverage, axis count |
 | `skills/plan-plugin-split` | Procedural | both (`/plan-plugin-split`) | Distribution-layer partitioning: jobs-to-be-done clustering, hard/soft dependency edges, namespace separability, lifecycle ledger → 1–5 plugin manifest for /make-plugin; `surface_map.py` extracts the graph, kills hard-edge cuts, and surfaces negative space (`gaps`: dangling references + family matrix) |
 | `skills/thinking-depth-rules` | Declarative skill | model-only | The n-order spectrum operationalized: escalation triggers, forge-scale worked cases per order, the rent rule (higher-order claims pay in checks and numbers), anti-pattern table (order cosplay, tidying-as-transformation) |
+| `skills/checking-rules` | Declarative skill | model-only | Discipline for how a review actually runs: evidentiary rigor for dismissals, runtime checks over claims (not a changelog), steelmanning before filing a finding |
 | `agents/routing-judge` | Agent | dispatch-only (/check-routing) | Blind routing judge; empty tool allowlist as the epistemic guarantee — cannot read what it must not see |
 | `agents/fact-finder` | Agent | dispatch-only (/make-pack) | Gather-phase researcher; WebSearch/WebFetch/Read/Write only, preloads pack-writing-rules; the allowlist enforces gather≠distill |
 | `skills/write-handoff` | Declarative skill (hybrid) | both | The team-report layer beneath every agent dispatch: Status·Summary·Files changed·Tests/checks run·Evidence·Risks·Open questions·Recommended next action, `handoff_check.py` as the mechanical gate; every reviewer agent below returns through it |
@@ -118,26 +119,9 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
-## ADR-0006 transition table (renamed 2026-07-21)
+Directories align with plugin names (ADR-0007).
 
-The PLUGIN renamed: `forge` → `harness` (new install identity; the directory `harness/`
-keeps its frozen path — see the workspace CLAUDE.md alias table). Old handles remain greppable
-only in ledgers, CHANGELOGs, ADRs, and attics. naming-rules keeps its name — it IS the paradigm.
-
-| Old name | New name |
-|---|---|
-| skill-forge / agent-forge / hook-forge / plugin-forge / pack-forge / script-forge | make-skill / make-agent / make-hook / make-plugin / make-pack / make-script |
-| skill-review / skills-audit / agents-audit / harness-audit / entry-file-audit / eval-run | check-skill / check-all-skills / check-all-agents / check-everything / check-entry-file / check-routing |
-| skill-decompose / skill-synthesize / plugin-decompose / skill-refactor | plan-skill-split / plan-skill-merge / plan-plugin-split / reshape-skill |
-| plugin-release / repo-alignment / plugin-onboard | ship-plugin / clean-repo / adopt-plugin |
-| system-decompose / intent-extract / knowledge-harvest / handoff-compose / open-questions-sweep | break-down-problem / find-the-ask / save-lessons / write-handoff / find-open-questions |
-| ops-issues / ops-planner / ops-orchestrator (commands) | sort-issues / plan-chores / sweep-chores |
-| *-authoring-standards (skill/agent/hook/pack/plugin/script) | *-writing-rules |
-| entry-file-standards / linguistic-techniques / reasoning-orders / reviewer-discipline / git-campaign-workflows / github-issue-pr-primitives | entry-file-rules / prompt-wording-rules / thinking-depth-rules / checking-rules / big-change-git-rules / github-facts |
-| skill-auditor / agent-reviewer / hook-reviewer / plugin-reviewer / linguistics-reviewer / eval-judge / pack-researcher (agents) | skill-checker / agent-checker / hook-checker / plugin-checker / wording-checker / routing-judge / fact-finder |
-| ops-repo / ops-adr / ops-issues / ops-planner / ops-orchestrator (agents) | repo-cleaner / decision-watcher / issue-sorter / chore-planner / chore-lead |
-
-v2.0.11 · assembled 2026-07-25 · 2.0.11: adopt-plugin's marketplace-source guidance corrected and completed. Prefer the SSH git URL form (`git@host:owner/repo.git`) over `https://` — this workspace hit repeated HTTPS push/fetch failures the SSH form didn't, 2026-07-22/25; the checked-in project settings.json's own marketplace entry switched to it in the same change. The skill previously documented only `git`/`directory` — `npm` was a real, cited gap (verified against code.claude.com/docs 2026-07-25): `{"source": "npm", "package": …, "version"?, "registry"?}`, a plugin-level source (inside a wrapper catalog's `plugins[]`), never a marketplace-level one — there is no npm-hosted marketplace catalog type. Found in
+v2.0.12 · assembled 2026-07-25 · 2.0.12: two fixes. `adr_checkpoint.py`'s `classify_delta` compared a `supersedes` field's whole annotated string (not the bare `adr-\d+` token) against checkpoint keys, so ADR-0007's own annotated partial-supersession value (`adr-0006 (the frozen-dir clause of its install-identity decision only)`) never matched and the delta was re-derived from every current record regardless of change, making `newly_superseded` fire forever, even after `advance`; fixed by extracting the token via a new `superseded_ids()` and deriving `newly_superseded` only from records that are new/amended this round. Selftest gains the annotated-extraction fixture, a no-adr-token negative control, and a post-advance re-classify proving the forever-refire is actually gone. Also retired the stale ADR-0006 transition-table section — dead since ADR-0007 renamed every plugin dir to its plugin name and retired the workspace CLAUDE.md alias table it pointed to; replaced with the one true line, directories align with plugin names (ADR-0007) · v2.0.11 · assembled 2026-07-25 · 2.0.11: adopt-plugin's marketplace-source guidance corrected and completed. Prefer the SSH git URL form (`git@host:owner/repo.git`) over `https://` — this workspace hit repeated HTTPS push/fetch failures the SSH form didn't, 2026-07-22/25; the checked-in project settings.json's own marketplace entry switched to it in the same change. The skill previously documented only `git`/`directory` — `npm` was a real, cited gap (verified against code.claude.com/docs 2026-07-25): `{"source": "npm", "package": …, "version"?, "registry"?}`, a plugin-level source (inside a wrapper catalog's `plugins[]`), never a marketplace-level one — there is no npm-hosted marketplace catalog type. Found in
 passing: G11 was FAILing estate-wide (207 findings, harness alone) — `ruff.toml`'s comment
 claimed scope to E4/E7/E9/F but the config only `ignore`d two codes from ruff's FULL set, so
 unpinned `uvx ruff` 0.16.0's newly-default preview categories (FURB/ISC/EXE/PLW/RUF/SIM/PIE/PERF)

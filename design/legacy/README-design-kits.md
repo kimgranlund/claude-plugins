@@ -32,27 +32,7 @@ inline checklist or fallback report shape when harness isn't installed. No hard 
 literal script paths) cross the plugin boundary; every same-plugin script/rubric reference among
 the four `make-design-kit*` skills and the agent resolves via `${CLAUDE_PLUGIN_ROOT}`.
 
-## ADR-0006 transition table (renamed 2026-07-21)
-
-The PLUGIN renamed: `design-systems` → `design-kits` (new install identity; the directory
-`design-kits/` keeps its frozen path — see the workspace CLAUDE.md alias table). Old
-handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
-
-| Old name | New name |
-|---|---|
-| `design-system-hub` | `make-design-kit` |
-| `design-system-author-dscard` | `make-dscard-kit` |
-| `design-system-author-figma-make` | `make-figma-make-kit` |
-| `design-system-author-google-stitch` | `make-stitch-kit` |
-| `design-md-format` | `design-md-rules` |
-| `iconography` | `icon-rules` |
-| `figma-plugin-api` | `figma-plugin-facts` |
-| `material-design-color-tokens` | `material-color-facts` |
-| `material-design-geometry-tokens` | `material-shape-facts` |
-| `material-design-motion-tokens` | `material-motion-facts` |
-| `material-design-typography-tokens` | `material-type-facts` |
-| `material-design-token-semantics` | `material-token-facts` |
-| `design-system-reviewer` (agent) | `design-kit-checker` |
+Directories align with plugin names (ADR-0007).
 
 v1.0.5 · assembled 2026-07-21 · 1.0.5: ADR-0007 dir alignment — the plugin's directory renamed to its plain plugin name (was the frozen `design-systems 0.1.0`); version-suffixed, space-bearing paths retired estate-wide; pointer updates only · v1.0.4 · assembled 2026-07-21 · 1.0.4: ADR-0006 harness-rename sweep — live references rewritten; pointer updates only · v1.0.3 · assembled 2026-07-21 · 1.0.3: ADR-0006 docs-rename sweep — live references rewritten (make-doc fences, docs plugin mentions); pointer updates only · v1.0.2 · assembled 2026-07-21 · 1.0.2: ADR-0006 teamwork-rename sweep — design-kit-checker's code-checker fence repointed; pointer updates only · v1.0.1 · assembled 2026-07-21 · 1.0.1: ADR-0006 screens-rename sweep — live references rewritten (icon-rules + material-motion-facts fences now name the screens plugin, suites); pointer updates only · v1.0.0 · assembled 2026-07-21 · 1.0.0: ADR-0006 rename PR 5/9 — the PLUGIN renames design-systems → design-kits and all twelve members + the reviewer agent take the simple paradigm (transition table above). MAJOR bump — breaking. Workspace sweep (79 files, ledger history + forging evidence excluded; one historical suite-note corruption caught and restored with the true two-rename lineage); baseline = color/typography-wave results for 6 suites + a fresh 111-case run for the other 6; post-rename re-measure in the campaign PR · v0.10.3 · assembled 2026-07-21 · 0.10.3: ADR-0006 typography-rename sweep — live references rewritten (material-design-typography-tokens fence, platform-author references); pointer updates only · v0.10.2 · assembled 2026-07-21 · 0.10.2: ADR-0006 color-rename sweep — live references to color's old member handles rewritten (design-system-reviewer, platform-author fences and references, suites); pointer updates only · v0.10.1 · assembled 2026-07-19 · 0.10.1: knowledge-pack factory-route convention repointed from scribe's
 retired `knowledge-forge` to forge's `pack-forge` (workspace-wide rename campaign) —
