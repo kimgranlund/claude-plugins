@@ -51,6 +51,18 @@
       "id": "n04",
       "prompt": "partition these skills and hooks into separate plugins",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "what are all the ways a Claude Code plugin can be installed",
+      "expect": "no-trigger",
+      "note": "plugin-install-facts (fence closed 2026-07-25)"
+    },
+    {
+      "id": "n06",
+      "prompt": "my installed plugin never received the latest update",
+      "expect": "no-trigger",
+      "note": "plugin-install-facts owns the person-side lifecycle ask (M1 fence, 2026-07-25)"
     }
   ]
 }

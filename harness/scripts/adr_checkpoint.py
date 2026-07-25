@@ -35,6 +35,18 @@ from pathlib import Path
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)\s*$", re.MULTILINE)
+ADR_ID_RE = re.compile(r"adr-\d+")
+
+
+def superseded_ids(supersedes_value):
+    """Extract adr-NNNN token(s) out of a `supersedes:` field value, ignoring any trailing
+    annotation. A field can be a bare id ('adr-0006'), an annotated partial-supersession
+    ('adr-0006 (the frozen-dir clause of its install-identity decision only)'), or list more
+    than one id — the annotation text itself never matches a checkpoint key, so it must never
+    be compared as-is."""
+    if not supersedes_value:
+        return []
+    return ADR_ID_RE.findall(supersedes_value)
 
 
 def parse_frontmatter(text):
@@ -73,8 +85,20 @@ def classify_delta(old_checkpoint, current):
         else:
             unchanged.append(adr_id)
 
-    superseded_now = {rec["supersedes"] for rec in current.values() if rec.get("supersedes")}
-    superseded_now |= {adr_id for adr_id, rec in current.items() if rec.get("status") == "superseded"}
+    # newly_superseded is derived ONLY from records whose content changed this round (new or
+    # amended) — never from unchanged ones. A full supersession flips the superseded ADR's own
+    # `status:` to "superseded", which IS a hash change, so it always shows up here. But a
+    # PARTIAL/annotated supersession (e.g. "adr-0006 (the frozen-dir clause ... only)") never
+    # flips the target's own status — it stays legitimately "accepted" forever — so there is no
+    # persisted signal except "did the announcing ADR's content change since last checkpoint".
+    # Deriving from every current record (changed or not) is exactly the bug this guards: once
+    # advanced, the announcing ADR becomes unchanged next run, and without this restriction its
+    # supersedes claim would be re-read and re-flagged as newly_superseded forever.
+    changed_ids = set(new) | set(amended)
+    superseded_now = set()
+    for adr_id in changed_ids:
+        superseded_now |= set(superseded_ids(current[adr_id].get("supersedes")))
+    superseded_now |= {adr_id for adr_id in changed_ids if current[adr_id].get("status") == "superseded"}
     newly_superseded = sorted(
         adr_id for adr_id in superseded_now
         if old_checkpoint.get(adr_id, {}).get("status") != "superseded"
@@ -222,8 +246,62 @@ def selftest():
     assert len(d5["unchanged"]) == 500, d5
     assert d5["amended"] == [] and d5["newly_superseded"] == [], d5
 
-    print("adr_checkpoint selftest · PASS · frontmatter parse, hashing, and all four delta "
-          "shapes correct (incl. the already-recorded-supersession and corpus-size negative controls)")
+    # superseded_ids — the annotated-value bug this script was fixed for: a `supersedes:` field
+    # naming a partial supersession in prose must still extract the bare adr id
+    assert superseded_ids("adr-0006") == ["adr-0006"]
+    assert superseded_ids(
+        "adr-0006 (the frozen-dir clause of its install-identity decision only)"
+    ) == ["adr-0006"]
+    assert superseded_ids(None) == []
+
+    # negative control: a supersedes value with no adr-\d+ token must match nothing at all —
+    # proves the extraction doesn't fall back to treating the raw string as an id
+    assert superseded_ids("the old informal design, no ADR filed") == []
+
+    # end-to-end: an annotated partial-supersession value must classify adr-0006 as
+    # newly_superseded exactly once, driven off the extracted id, not the raw string. adr-0007
+    # (the announcer) is absent from the old checkpoint — i.e. genuinely new this round — since
+    # that's the real-world trigger: the announcing ADR's own content is new/amended.
+    old6 = {"adr-0006": {"hash": "h6", "status": "accepted"}}
+    current6 = {
+        "adr-0006": {"hash": "h6", "status": "accepted", "supersedes": None},
+        "adr-0007": {
+            "hash": "h7",
+            "status": "accepted",
+            "supersedes": "adr-0006 (the frozen-dir clause of its install-identity decision only)",
+        },
+    }
+    d6 = classify_delta(old6, current6)
+    assert d6["newly_superseded"] == ["adr-0006"], d6
+    assert d6["newly_superseded"].count("adr-0006") == 1, d6
+
+    # negative control on the same shape: a supersedes value with no adr token must not
+    # spuriously mark anything superseded
+    current6b = {
+        "adr-0006": {"hash": "h6", "status": "accepted", "supersedes": None},
+        "adr-0007": {
+            "hash": "h7", "status": "accepted", "supersedes": "an earlier informal draft",
+        },
+    }
+    d6b = classify_delta(old6, current6b)
+    assert d6b["newly_superseded"] == [], d6b
+
+    # the "forever" bug this script was fixed for: after advance persists adr-0007's own status
+    # ("accepted" — a partial supersession never flips it) verbatim, a SECOND classify against the
+    # advanced checkpoint must NOT re-report adr-0006, even though adr-0006's own checkpoint
+    # status is still (correctly) "accepted", not "superseded" — because adr-0007 is now
+    # unchanged and carries no new information.
+    old7_after_advance = {
+        adr_id: {"hash": rec["hash"], "status": rec["status"]} for adr_id, rec in current6.items()
+    }
+    assert old7_after_advance["adr-0006"]["status"] == "accepted", old7_after_advance
+    d7 = classify_delta(old7_after_advance, current6)
+    assert d7["newly_superseded"] == [], \
+        f"a partial supersession must not re-fire every run after advance: {d7}"
+
+    print("adr_checkpoint selftest · PASS · frontmatter parse, hashing, all four delta shapes, "
+          "and annotated-supersedes extraction correct (incl. already-recorded-supersession, "
+          "corpus-size, no-adr-token, and post-advance forever-refire negative controls)")
     return 0
 
 

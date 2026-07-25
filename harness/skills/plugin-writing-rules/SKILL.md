@@ -2,8 +2,8 @@
 name: plugin-writing-rules
 description: >-
   Standards for authoring and releasing Claude Code plugins. Use when asking how to structure a
-  plugin, what goes in plugin.json, why a plugin fails to load, why an update isn't picked up,
-  where plugin state lives, or how namespacing works. NOT for RUNNING a release (ship-plugin);
+  plugin, what goes in plugin.json, why a plugin fails to load, why the update you SHIPPED
+  isn't picked up by users, where plugin state lives, or how namespacing works. NOT for RUNNING a release (ship-plugin);
   NOT for partitioning skills and hooks into plugins (plan-plugin-split); NOT for declaring a
   plugin/marketplace in settings.json (adopt-plugin).
 disable-model-invocation: false

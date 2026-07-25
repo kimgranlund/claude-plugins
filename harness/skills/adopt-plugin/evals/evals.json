@@ -77,6 +77,18 @@
       "prompt": "should our .claude folder be split into two plugins instead of one",
       "expect": "no-trigger",
       "true_owner": "plan-plugin-split"
+    },
+    {
+      "id": "n07",
+      "prompt": "how do I install this plugin",
+      "expect": "no-trigger",
+      "note": "plugin-install-facts (person-side install instructions; fence closed 2026-07-25)"
+    },
+    {
+      "id": "n08",
+      "prompt": "write the install section for this plugin README",
+      "expect": "no-trigger",
+      "note": "plugin-install-facts (fence closed 2026-07-25)"
     }
   ]
 }

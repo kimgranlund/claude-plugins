@@ -1,28 +1,123 @@
 {
   "skill": "naming-rules",
-  "note": "Trigger-routing suite. expect=trigger: fires in a fresh session; expect=no-trigger: near-miss owned elsewhere (owner in comment). This skill owns FORWARD naming under the simple paradigm — naming something new, simplifying a proposed name. Questions about the legacy estate grammar or executing renames route to their owners.",
+  "note": "Trigger-routing suite. expect=trigger: fires in a fresh session; expect=no-trigger: near-miss owned elsewhere (owner in comment). This skill owns FORWARD naming under the simple paradigm — naming something new, simplifying a proposed name. Questions about the legacy estate grammar or executing renames route to their owners. | Dated finding 2026-07-25 (plugin-install-facts wave boundary run): n05 leaked to naming-rules in a blind judge (philosophical why-question read as a naming review). naming-rules description and this suite were UNTOUCHED by that wave and no baseline exists to confirm pre-existing — recorded so a future run diffs instead of rediscovering; fence not weakened (issue #58 accepted-leak discipline).",
   "cases": [
-    { "id": "t01", "prompt": "What should we name this new skill?", "expect": "trigger" },
-    { "id": "t02", "prompt": "Propose a simple name for this plugin.", "expect": "trigger" },
-    { "id": "t03", "prompt": "Is this skill name too vague?", "expect": "trigger" },
-    { "id": "t04", "prompt": "Create a naming paradigm that is fisher-price level simple.", "expect": "trigger" },
-    { "id": "t05", "prompt": "Give this agent a name a five-year-old would understand.", "expect": "trigger" },
-    { "id": "t06", "prompt": "Name this command so it reads like plain English.", "expect": "trigger" },
-    { "id": "t07", "prompt": "Review these skill names for simplicity.", "expect": "trigger" },
-    { "id": "t08", "prompt": "I'm creating a new plugin — what should I call it?", "expect": "trigger" },
-    { "id": "t09", "prompt": "Should this be called doc-rules or something clearer?", "expect": "trigger" },
-    { "id": "t10", "prompt": "Pick a name for the agent that sorts incoming issues.", "expect": "trigger" },
-    { "id": "t11", "prompt": "These two skills have confusingly similar names — propose better ones.", "expect": "trigger" },
-    { "id": "t12", "prompt": "We're naming a skill and its companion agent — should the names match?", "expect": "trigger" },
-    { "id": "t13", "prompt": "Before I mint this skill, sanity-check the name.", "expect": "trigger" },
-    { "id": "t14", "prompt": "What's a good name for a knowledge skill about our font token rules?", "expect": "trigger" },
-    { "id": "t15", "prompt": "Our command names don't read as verbs — fix the pattern.", "expect": "trigger" },
-    { "id": "n01", "prompt": "Why won't my skill trigger even though it's installed?", "expect": "no-trigger", "comment": "owner: skill-authoring-standards" },
-    { "id": "n02", "prompt": "Rename this variable to something clearer.", "expect": "no-trigger", "comment": "owner: none — code identifiers, general engineering" },
-    { "id": "n03", "prompt": "Run the rename campaign across all plugins.", "expect": "no-trigger", "comment": "owner: git-campaign-workflows / repo-alignment — execution, not naming" },
-    { "id": "n04", "prompt": "Which plugins should these skills become?", "expect": "no-trigger", "comment": "owner: plugin-decompose" },
-    { "id": "n05", "prompt": "Why are our existing naming conventions structured the way they are?", "expect": "no-trigger", "comment": "owner: plugin-authoring-standards / skill-authoring-standards — legacy grammar" },
-    { "id": "n06", "prompt": "Write the description for this skill.", "expect": "no-trigger", "comment": "owner: skill-authoring-standards" },
-    { "id": "n07", "prompt": "What sections does an ADR need?", "expect": "no-trigger", "comment": "owner: scribe doc-authoring-standards" }
+    {
+      "id": "t01",
+      "prompt": "What should we name this new skill?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Propose a simple name for this plugin.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Is this skill name too vague?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Create a naming paradigm that is fisher-price level simple.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Give this agent a name a five-year-old would understand.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Name this command so it reads like plain English.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "Review these skill names for simplicity.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "I'm creating a new plugin — what should I call it?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "Should this be called doc-rules or something clearer?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "Pick a name for the agent that sorts incoming issues.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "These two skills have confusingly similar names — propose better ones.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "We're naming a skill and its companion agent — should the names match?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "Before I mint this skill, sanity-check the name.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t14",
+      "prompt": "What's a good name for a knowledge skill about our font token rules?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t15",
+      "prompt": "Our command names don't read as verbs — fix the pattern.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Why won't my skill trigger even though it's installed?",
+      "expect": "no-trigger",
+      "comment": "owner: skill-authoring-standards"
+    },
+    {
+      "id": "n02",
+      "prompt": "Rename this variable to something clearer.",
+      "expect": "no-trigger",
+      "comment": "owner: none — code identifiers, general engineering"
+    },
+    {
+      "id": "n03",
+      "prompt": "Run the rename campaign across all plugins.",
+      "expect": "no-trigger",
+      "comment": "owner: git-campaign-workflows / repo-alignment — execution, not naming"
+    },
+    {
+      "id": "n04",
+      "prompt": "Which plugins should these skills become?",
+      "expect": "no-trigger",
+      "comment": "owner: plugin-decompose"
+    },
+    {
+      "id": "n05",
+      "prompt": "Why are our existing naming conventions structured the way they are?",
+      "expect": "no-trigger",
+      "comment": "owner: plugin-authoring-standards / skill-authoring-standards — legacy grammar"
+    },
+    {
+      "id": "n06",
+      "prompt": "Write the description for this skill.",
+      "expect": "no-trigger",
+      "comment": "owner: skill-authoring-standards"
+    },
+    {
+      "id": "n07",
+      "prompt": "What sections does an ADR need?",
+      "expect": "no-trigger",
+      "comment": "owner: scribe doc-authoring-standards"
+    }
   ]
 }

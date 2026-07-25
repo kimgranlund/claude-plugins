@@ -19,6 +19,18 @@
     "adr-0005": {
       "hash": "7dbb04f29acdb3d17922e2f1b56219a5bb0ba5143840f77ddc159b2efe6c6186",
       "status": "accepted"
+    },
+    "adr-0006": {
+      "hash": "4b24aaf9e06dc8d0d51306d76f48a3c4d234a26ae5c2cc35388b1f383fdaf818",
+      "status": "accepted"
+    },
+    "adr-0007": {
+      "hash": "74250be093e427f2921579d7006cda59fb8251786d94017f78e4501426099559",
+      "status": "accepted"
+    },
+    "adr-0008": {
+      "hash": "285cf1b6aed0b26bc90fab36b6cd8e7459490b39d7ca77fba0aaa8c1f38016bf",
+      "status": "accepted"
     }
   }
 }
