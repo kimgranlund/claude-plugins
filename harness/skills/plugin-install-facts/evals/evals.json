@@ -1,0 +1,149 @@
+{
+  "skill": "plugin-install-facts",
+  "note": "Trigger-routing suite, authored evals-first 2026-07-25 (make-skill Phase 2, before any body existed). Contested boundaries: adopt-plugin (declaring a plugin/marketplace in settings.json so CONTRIBUTORS can install — repo-side wiring; this skill owns the person-side HOW-to-install and the README install copy), plugin-writing-rules (authoring/shipping the plugin itself), update-config (settings.json edits with no plugin object).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "how do I install this plugin",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what's the command to install a Claude Code plugin from a GitHub repo",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "give me install instructions for the harness plugin",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "can Claude Code plugins be installed via npx or npm",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "install this plugin from a local path",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "install the plugin straight from git@github.com:owner/repo.git",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "write the install section for this plugin's README",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what are all the ways a Claude Code plugin can be installed",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "how do users install our plugin marketplace",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "which install method should I use for a plugin in a private repo",
+      "expect": "trigger"
+    },
+    {
+      "id": "t11",
+      "prompt": "the plugin install command isn't working, what's the right syntax",
+      "expect": "trigger"
+    },
+    {
+      "id": "t12",
+      "prompt": "how do I run a plugin from a local checkout while I'm developing it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t13",
+      "prompt": "what do contributors run to install the plugins this repo declares",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "add this plugin repo to our settings so contributors can install it",
+      "expect": "no-trigger",
+      "note": "adopt-plugin's t01 — repo-side declaration, not person-side instructions"
+    },
+    {
+      "id": "n02",
+      "prompt": "how do I set up extraKnownMarketplaces",
+      "expect": "no-trigger",
+      "note": "adopt-plugin"
+    },
+    {
+      "id": "n03",
+      "prompt": "why doesn't this plugin show up in /plugin after I added it to enabledPlugins",
+      "expect": "no-trigger",
+      "note": "adopt-plugin owns the diagnosis"
+    },
+    {
+      "id": "n04",
+      "prompt": "write the plugin.json manifest for my new plugin",
+      "expect": "no-trigger",
+      "note": "plugin-writing-rules"
+    },
+    {
+      "id": "n05",
+      "prompt": "ship the docs plugin",
+      "expect": "no-trigger",
+      "note": "ship-plugin"
+    },
+    {
+      "id": "n06",
+      "prompt": "npm install keeps failing in my node app",
+      "expect": "no-trigger",
+      "note": "generic npm, no Claude plugin involved"
+    },
+    {
+      "id": "n07",
+      "prompt": "allow npm commands in my settings",
+      "expect": "no-trigger",
+      "note": "update-config"
+    },
+    {
+      "id": "n08",
+      "prompt": "install the Python dependencies for this repo",
+      "expect": "no-trigger",
+      "note": "generic dependency install"
+    },
+    {
+      "id": "t14",
+      "prompt": "my installed plugin never got the update after the marketplace shipped one",
+      "expect": "trigger",
+      "note": "M1/M2 fix 2026-07-25: person-side lifecycle ask"
+    },
+    {
+      "id": "t15",
+      "prompt": "how do I uninstall a plugin without losing its data",
+      "expect": "trigger",
+      "note": "M2 fix: lifecycle axis"
+    },
+    {
+      "id": "t16",
+      "prompt": "does a plugin install land at user or project scope",
+      "expect": "trigger",
+      "note": "M2 fix: lifecycle axis"
+    },
+    {
+      "id": "t17",
+      "prompt": "does autoUpdate work for a third-party marketplace",
+      "expect": "trigger",
+      "note": "M2 fix: lifecycle axis"
+    },
+    {
+      "id": "n09",
+      "prompt": "why isn't my re-shipped plugin update being picked up by users",
+      "expect": "no-trigger",
+      "note": "M1 fix: AUTHOR-side ask, plugin-writing-rules owns it"
+    }
+  ]
+}
