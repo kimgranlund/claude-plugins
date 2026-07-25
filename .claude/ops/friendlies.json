@@ -8,10 +8,12 @@
     "confirmed_by": "kimgranlund",
     "confirmed_at": "2026-07-18T17:45:56Z",
     "note": "REQ-011 bootstrap interview (interactive AskUserQuestion, 2026-07-18): private repo, both approved collaborators offered as candidates. Owner confirmed the roster as kimgranlund only -- mgrabovskyi deliberately NOT pre-seeded; their first filing is held per REQ-007 and approval adds them per REQ-008. Standing rule for future collaborators: hold-first-filing (repo access alone never auto-lists an author). Allow-list membership affects only hold-vs-mint (REQ-012): no PR, issue, or ticket is ever auto-actioned for any author.",
-    "github_mcp_offer": "declined",
+    "github_mcp_offer": "accepted",
     "github_mcp_offer_confirmed_by": "kimgranlund",
     "github_mcp_offer_confirmed_at": "2026-07-25T16:22:00Z",
-    "github_mcp_offer_note": "REQ-013 offer (surfaced-but-pending since bootstrap per every prior unattended firing's own gate) resolved via an interactive dispatch carrying the owner's already-made decision, 2026-07-25: declined. gh CLI remains the sole GitHub surface -- no project-scoped .mcp.json entry written, no read-only-scoped fine-grained PAT requested. Per REQ-013 (spec-ticketing-watch-triage.md) and its failure-branch contract in harness/agents/issue-sorter.md, this decision is terminal -- revoking or re-offering a declined REQ-013 decision is out of scope; no later firing, attended or not, re-offers or re-asks."
+    "github_mcp_offer_overridden_by": "kimgranlund",
+    "github_mcp_offer_overridden_at": "2026-07-25T17:00:00+03:00",
+    "github_mcp_offer_note": "REQ-013 offer originally resolved 2026-07-25 as declined (commit 873f064), and documented there as terminal per spec-ticketing-watch-triage.md -- no later firing was meant to re-offer or re-ask. The owner explicitly overrode that in a later same-day interactive session: decision flipped to accepted. A project-scoped, read-only-scoped GitHub MCP server may now be offered/wired for this repo; gh CLI remains available alongside it, not replaced. This entry is the override record -- if REQ-013's terminal-decision contract is read literally, this override is itself the exception the spec didn't anticipate, and is recorded here rather than silently applied."
   },
   "friendlies": [
     {
