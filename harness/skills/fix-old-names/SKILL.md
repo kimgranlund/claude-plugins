@@ -72,24 +72,24 @@ does not re-verify has not finished. Report what changed AND what was deliberate
 - **Anything outside `.claude/`, `CLAUDE.md`, `docs/`, `AGENTS.md`, `.github/`** — source code
   referencing a plugin handle is out of scope by design.
 
-## Phase 4 — Offer the runtime guard
+## Phase 4 — The runtime guard is already on
 
-The sweep fixes what is written in files. It cannot reach a name the model composes at runtime,
-a file outside the scan scope, or a repo nobody swept. `scripts/alias_guard.py` is a
-`PreToolUse` hook that catches those at dispatch:
+The sweep fixes what is written in files. It cannot reach a name the model composes at runtime, a
+file outside the scan scope, or a repo nobody swept. `scripts/alias_guard.py` covers those, and it
+needs **no installation step**: this plugin registers it in its own `hooks/hooks.json` as a
+`PreToolUse` guard on `Task|Skill`, so it is live in every repo where harness is installed. Nothing
+to paste into a consumer repo's `settings.json` — and `${CLAUDE_PLUGIN_ROOT}` only resolves inside
+a plugin's own hook registration anyway, which is why a paste-it-yourself snippet was the wrong
+shape (corrected 2026-07-26).
 
-```json
-{"hooks": {"PreToolUse": [{"matcher": "Task|Skill", "hooks": [{"type": "command",
-  "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/alias_guard.py\" --manifest \"${CLAUDE_PLUGIN_ROOT}/renames.json\"",
-  "timeout": 10, "statusMessage": "retired-name-guard"}]}]}}
-```
+It **denies** a retired dispatch and names the replacement — it cannot silently resolve one,
+because a `PreToolUse` hook returns `allow|deny|ask` and never rewrites tool input. That is the
+whole alias story: the silent failure becomes a loud, actionable one. A stub skill per retired name
+*would* resolve transparently and is rejected — 288 stub descriptions against a resident listing
+budget this estate has already breached four times.
 
-Offer it once, after the sweep; installing it edits the user's `settings.json`, so it earns a
-knowing yes. It **denies** a retired dispatch and names the replacement — it cannot silently
-resolve one, because a `PreToolUse` hook returns `allow|deny|ask` and never rewrites tool input.
-That is the whole alias story: the silent failure becomes a loud, actionable one. A stub
-skill per retired name *would* resolve transparently and is rejected — 288 stub descriptions
-against a resident listing budget this estate has already breached four times.
+If a dispatch is denied and the user insists the old name is correct, the manifest is wrong, not
+the caller: regenerate it with `derive` rather than working around the guard.
 
 ## Wiring it as a gate
 

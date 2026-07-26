@@ -12,6 +12,19 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Task|Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/alias_guard.py\" --manifest \"${CLAUDE_PLUGIN_ROOT}/renames.json\"",
+            "timeout": 10,
+            "statusMessage": "retired-name-guard"
+          }
+        ]
+      }
     ]
   }
 }
