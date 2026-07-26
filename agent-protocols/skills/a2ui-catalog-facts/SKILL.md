@@ -7,7 +7,8 @@ description: >-
   Covers the catalog row contract, the factory/resolution pattern, the naming law, two-tier
   extensibility, security allowlist + conformance, coverage policy. ANSWERS from the cited
   corpus; does not build. NOT for the wire shape a component renders (a2ui-protocol-facts); NOT
-  for corpus exemplars (a2ui-training-facts); NOT for catalog/renderer SOURCE (a2ui-builder).
+  for corpus exemplars (a2ui-training-facts); NOT for the dev-proxy PAIR allowlist (a2ui-chat-agent-facts); NOT for
+  catalog/renderer SOURCE (a2ui-builder).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -1,6 +1,6 @@
 {
   "skill": "a2ui-protocol-facts",
-  "note": "Deep-review corpus for the a2ui-protocol-facts knowledge pack. Positives: imperative / diagnostic / symptom phrasings of wire-protocol + renderer-mechanics asks across the six axes (lifecycle, bindings, lists, actions/input, functions/checks, errors/versions). Negatives drawn adversarially from the dangerous near-neighbors: a2ui-composer (compose a payload), a2ui-builder (build renderer/catalog source), a2ui-reviewer (grade), and the future sibling packs a2ui-catalog-facts / a2ui-training-facts / a2ui-chat-agent-facts; plus generic component/design neighbors.",
+  "note": "Deep-review corpus for the a2ui-protocol-facts knowledge pack. Positives: imperative / diagnostic / symptom phrasings of wire-protocol + renderer-mechanics asks across the six axes (lifecycle, bindings, lists, actions/input, functions/checks, errors/versions). Negatives drawn adversarially from the dangerous near-neighbors: a2ui-composer (compose a payload), a2ui-builder (build renderer/catalog source), a2ui-reviewer (grade), and the future sibling packs a2ui-catalog-facts / a2ui-training-facts / a2ui-chat-agent-facts; plus generic component/design neighbors. n90 added 2026-07-26 (issue #106): validate-then-stream fenced to a2ui-chat-agent-facts.",
   "cases": [
     {
       "id": "t01",
@@ -79,7 +79,7 @@
     },
     {
       "id": "t16",
-      "prompt": "VALIDATION_FAILED vs INVALID_FUNCTION_CALL \u2014 when do I get each",
+      "prompt": "VALIDATION_FAILED vs INVALID_FUNCTION_CALL — when do I get each",
       "expect": "trigger"
     },
     {
@@ -201,6 +201,12 @@
       "id": "n18",
       "prompt": "pick an accessible contrast ratio for this text",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n90",
+      "prompt": "what is validate-then-stream and why does nothing invalid ever render",
+      "expect": "no-trigger",
+      "comment": "owner: a2ui-chat-agent-facts — reciprocal fence, issue #106 (stolen in #94's re-measure)"
     }
   ]
 }
