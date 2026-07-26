@@ -28,6 +28,8 @@ What it asserts:
   L3 [ ok ] a HISTORICAL reference (ADR body, changelog, ledger, dated record) -> left byte-identical
   L4 [warn] a retired name appearing as a FILENAME or path component -> reported, never rewritten;
             the consumer repo's own file was not renamed, so a rewrite points at nothing
+  L5 [warn] a retired name on a DATED line -> reported for a human; a date proves neither
+            direction, and measurement showed guessing is wrong about half the time
 
 The LIVE/HISTORICAL split is the whole safety story. A record of what WAS true must keep saying
 what it said; only a pointer that must still RESOLVE gets rewritten. When the two are ambiguous
@@ -52,7 +54,39 @@ TEXT_SUFFIXES = {".md", ".markdown", ".json", ".yaml", ".yml", ".toml", ".txt"}
 HISTORICAL_PATH_PARTS = ("adr", "adrs", "decisions", ".refactor-attic", "dist", ".git",
                          "archive", "archives", "attic", "legacy", "snapshots", "retros",
                          "decompositions", "tickets", "reports", "sessions")
-HISTORICAL_NAME_RE = re.compile(r"^(changelog|history)", re.I)
+# A record can also be a standalone FILE sitting outside any record directory. Incident
+# 2026-07-26 (this very repo): `docs/skills/*/evals/audit-report.md` and `intent.md` are dated
+# critic and forging records, and a sweep rewrote the seat names inside them — restamping a
+# 2026-07-18 audit with a seat that did not exist on that date.
+HISTORICAL_NAME_RE = re.compile(
+    r"^(changelog|history|intent|audit-report|retro)|-(report|audit|retro)\.[a-z]+$", re.I)
+
+# LINE-level record signals, for records that live inside an otherwise-live file with no heading
+# to bound them. Both shapes are from the same 2026-07-26 incident:
+#   - a README footer ledger is one 5,800-char wrapped block at the foot of the file, under no
+#     heading at all, so HISTORICAL_HEADING_RE never fires on it;
+#   - prose that explicitly says a name USED to be something ("then named `ops-adr`") inverts its
+#     own meaning when rewritten — the sentence ends up claiming the new name was the old one.
+HISTORICAL_LINE_RE = re.compile(
+    r"\b(then|previously|formerly|originally|once)\s+"
+    r"(named|called|known as)\b"                        # "then named X", "formerly called X"
+    r"|\bwas\s+(named|called|renamed)\b"
+    r"|\brenamed\s+\S+\s+to\b"
+    r"|^\s*Auditor:\s"                                  # a dated attribution header
+    , re.I)
+
+# A bare ISO date is NOT proof either way, and guessing costs both directions. Measured on real
+# data (agent-ui, 2026-07-26): of four dated lines carrying a retired name, two were records
+# ("Codified 2026-07-12 (repo-alignment Phase 3)") and one was a plain live pointer that merely
+# ends with a date ("the component-author skill, which points here. Distilled 2026-06-27"). So a
+# dated line is REPORTED for a human, never silently rewritten and never silently hidden.
+DATED_LINE_RE = re.compile(r"\b20\d\d-\d\d-\d\d\b")
+
+# A version-ledger line OPENS a run: this estate's README ledgers are a single logical run that
+# soft-wraps over dozens of physical lines with no heading anywhere, so matching the line that
+# carries the version marker protects only the first of them (measured: 39 of 43 survivors were
+# ledger continuation lines). The run closes at the next markdown heading, or end of file.
+LEDGER_OPEN_RE = re.compile(r"\bv\d+\.\d+\.\d+\s*·\s*assembled\b", re.I)
 
 # A heading that opens a block of historical content inside an otherwise-live file
 # (README footer ledgers, a ticket's Findings log, a transition table).
@@ -104,14 +138,19 @@ def is_historical_path(rel: Path, extra_globs=()) -> bool:
         return True
     if any(rel.match(g) for g in extra_globs):
         return True
-    return bool(HISTORICAL_NAME_RE.match(rel.name))
+    return bool(HISTORICAL_NAME_RE.search(rel.name))
 
 
 def historical_lines(text: str) -> set:
-    """Line indices (0-based) inside a historical block or carrying a freeze marker."""
-    out, open_level = set(), None
+    """Line indices (0-based) inside a historical block, carrying a freeze marker, or that
+    declare themselves a record (a version ledger, an explicit was-named claim)."""
+    out, open_level, ledger = set(), None, False
     for i, line in enumerate(text.splitlines()):
-        if FREEZE_RE.search(line):
+        if re.match(r"^#{1,6}\s", line):
+            ledger = False
+        elif LEDGER_OPEN_RE.search(line):
+            ledger = True
+        if ledger or FREEZE_RE.search(line) or HISTORICAL_LINE_RE.search(line):
             out.add(i)
         m = re.match(r"^(#{1,6})\s", line)
         if m:
@@ -205,6 +244,10 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             path_note = ("a filename or path component, not a handle — a rewrite here would "
                          "point at a file that does not exist")
 
+            is_dated = not historical and DATED_LINE_RE.search(line)
+            dated_note = ("a dated line — a record of what was, or a live pointer that happens "
+                          "to carry a date. You decide; this one is not guessed")
+
             # A `oldplugin:` immediately before the name makes the reference QUALIFIED —
             # unambiguous, and the only way a plugin-PREFIX-only rename is visible at all
             # (the name never changed; only which plugin owns it did).
@@ -212,10 +255,11 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             if pm:
                 qual = [e for e in entries if e["old_plugin"] == pm.group(1)]
                 if qual:
-                    if is_path:
+                    if is_path or is_dated:
                         hits.append(Hit(rel, i + 1, start, old_name, None,
-                                        "historical" if historical else "path", path_note,
-                                        (start, end)))
+                                        "historical" if historical else
+                                        ("path" if is_path else "dated"),
+                                        path_note if is_path else dated_note, (start, end)))
                         continue
                     e = qual[0]
                     new_txt = f'{e["new_plugin"]}:{e["new"]}'
@@ -232,9 +276,10 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             safe = [e for e in entries if e["match"] == "token"]
             if not safe:
                 continue
-            if is_path:
+            if is_path or is_dated:
                 hits.append(Hit(rel, i + 1, start, old_name, None,
-                                "historical" if historical else "path", path_note, (start, end)))
+                                "historical" if historical else ("path" if is_path else "dated"),
+                                path_note if is_path else dated_note, (start, end)))
                 continue
             if any(e["_ambiguous"] for e in safe):
                 typed = [e for e in safe if e["kind"] == kind_hint] if kind_hint else []
@@ -321,19 +366,21 @@ def run(root: Path, manifest_path: Path, write: bool, include_memory: bool, as_j
     amb = [h for h in all_hits if h.status == "ambiguous"]
     hist = [h for h in all_hits if h.status == "historical"]
     paths = [h for h in all_hits if h.status == "path"]
+    dated = [h for h in all_hits if h.status == "dated"]
 
     if as_json:
         print(json.dumps({
             "live": [{"file": str(h.path), "line": h.line, "old": h.old, "new": h.new} for h in live],
             "ambiguous": [{"file": str(h.path), "line": h.line, "old": h.old, "note": h.note} for h in amb],
             "paths": [{"file": str(h.path), "line": h.line, "old": h.old} for h in paths],
+            "dated": [{"file": str(h.path), "line": h.line, "old": h.old} for h in dated],
             "historical_left": len(hist),
             "changed_files": [str(c) for c in changed],
         }, indent=2))
     else:
         verdict = ("rewritten" if write and live else
-                   "FAIL" if live else ("warn" if (amb or paths) else "clean"))
-        print(f"fix_old_names · {verdict} · {len(live)} fail / {len(amb) + len(paths)} warn")
+                   "FAIL" if live else ("warn" if (amb or paths or dated) else "clean"))
+        print(f"fix_old_names · {verdict} · {len(live)} fail / {len(amb) + len(paths) + len(dated)} warn")
         for h in live:
             arrow = f"{h.old} -> {h.new}"
             print(f"  {'FIXED' if write else 'FOUND'} L1  {h.path}:{h.line}  {arrow}  [{h.note}]")
@@ -341,6 +388,8 @@ def run(root: Path, manifest_path: Path, write: bool, include_memory: bool, as_j
             print(f"  WARN  L2  {h.path}:{h.line}  {h.old}  {h.note}")
         for h in paths:
             print(f"  WARN  L4  {h.path}:{h.line}  {h.old}  {h.note}")
+        for h in dated:
+            print(f"  WARN  L5  {h.path}:{h.line}  {h.old}  {h.note}")
         print(f"  ok    L3  {len(hist)} historical reference(s) left byte-identical "
               f"(ADR bodies, ledgers, changelogs, dated records)")
         if changed:
@@ -546,6 +595,48 @@ def selftest():
     assert all(x.status == "path" for x in scan("x.md", "the intent-extract.json config\n")), \
         "an EXTENSION after the name proves a filename"
 
+    # L3 RECORD-LINE controls (2026-07-26 incident, this repo). Three shapes of dated record
+    # that sit inside otherwise-live files with no heading to bound them. All three were
+    # rewritten by a live --write run; every fixture below is a verbatim line from that damage.
+    ledger = ("v1.0.8 · assembled 2026-07-25 · 1.0.8: description diet — duplicated forge's "
+              "`intent-extract` end to end\n")
+    hl = scan("README.md", ledger)
+    assert hl and all(x.status == "historical" for x in hl), \
+        f"a footer LEDGER run has no heading above it and must still be a record: {hl}"
+    assert rewrite(ledger, hl) == ledger, "the ledger must survive verbatim"
+
+    thennamed = "the 2026-07-20 plan's entry 7 (then named `intent-extract`), never executed.\n"
+    ht = scan("plan.md", thennamed)
+    assert ht and all(x.status == "historical" for x in ht), \
+        f"'then named X' states what the name USED to be — rewriting inverts it: {ht}"
+    assert rewrite(thennamed, ht) == thennamed, \
+        "the live damage read '(then named `decision-watcher`)' — self-contradicting nonsense"
+
+    auditor = "Auditor: intent-extract seat (FLOOR depth) · 2026-07-18\n"
+    ha = scan("x.md", auditor)
+    assert ha and all(x.status == "historical" for x in ha), \
+        f"a dated attribution must not be restamped with a seat that did not exist then: {ha}"
+
+    # record-shaped FILENAMES, outside any record directory
+    for rec in ("docs/skills/file-bug/evals/audit-report.md", "docs/skills/file-bug/intent.md",
+                "notes/2026-retro.md", "x/build-report.md"):
+        h = scan(rec, "graded by `intent-extract`\n")
+        assert h and all(x.status == "historical" for x in h), f"{rec} is a record file: {h}"
+
+    # L5 DATED-LINE control. Both real shapes from agent-ui, 2026-07-26 — a record and a live
+    # pointer, lexically indistinguishable apart from meaning. Neither may be guessed.
+    for dated in ("Codified 2026-07-12 (intent-extract Phase 3) from observed practice\n",
+                  "the `intent-extract` skill, which points here. Distilled 2026-06-27.\n"):
+        hd = scan("notes.md", dated)
+        assert hd and all(x.status == "dated" for x in hd), f"a dated line is reported: {hd}"
+        assert rewrite(dated, hd) == dated, "a dated line is never silently rewritten"
+
+    # REVERSE control — an ordinary live line in an ordinary live file still rewrites, or these
+    # signals have simply switched the tool off.
+    hlive = scan("README.md", "Route via `intent-extract` before acting.\n")
+    assert [x for x in hlive if x.status == "live"], f"a plain pointer must still be live: {hlive}"
+    assert "find-the-ask" in rewrite("Route via `intent-extract` before acting.\n", hlive)
+
     # L2 ambiguity — same retired name became a command AND an agent. Free prose: report only.
     t7 = "The ops-issues seat handles intake.\n"
     h7 = scan("x.md", t7)
@@ -589,7 +680,7 @@ def selftest():
 
     print("fix_old_names selftest · PASS · live rewrite + prefix-only catch, qualified-only "
           "never touches bare prose, ADR/ledger/freeze left byte-identical, ambiguity reported "
-          "not guessed, typed slots resolve, filenames/paths never rewritten (the 2026-07-26 "
+          "not guessed, typed slots resolve, ledgers/record-files/was-named prose protected, dated lines reported not guessed, filenames/paths never rewritten (the 2026-07-26 "
           "broken-link incident), sweep idempotent to zero")
     return 0
 
