@@ -26,6 +26,8 @@ What it asserts:
   L2 [warn] an AMBIGUOUS retired name in free prose -> reported with both candidates, never
             rewritten; only a typed slot (a `skills:` item, a subagent_type, a /command) picks
   L3 [ ok ] a HISTORICAL reference (ADR body, changelog, ledger, dated record) -> left byte-identical
+  L4 [warn] a retired name appearing as a FILENAME or path component -> reported, never rewritten;
+            the consumer repo's own file was not renamed, so a rewrite points at nothing
 
 The LIVE/HISTORICAL split is the whole safety story. A record of what WAS true must keep saying
 what it said; only a pointer that must still RESOLVE gets rewritten. When the two are ambiguous
@@ -128,6 +130,19 @@ def historical_lines(text: str) -> set:
 SLOT_SKILL_RE = re.compile(r"^\s*-\s|^\s*skills\s*:|/(?P<cmd>[a-z][a-z0-9-]*)\b")
 SLOT_AGENT_RE = re.compile(r"subagent_type|agent[s]?\s*:|Task\(|Agent\(", re.I)
 
+# A retired skill name is ALSO, in some consumer repo, the name of a file. Rewriting it there
+# breaks a working link and points at nothing — strictly worse than the stale prose it was
+# fixing. Incident 2026-07-26 (agent-ui, live): `a2ui-training-corpus` is a retired skill AND
+# `.claude/docs/spec/a2ui-training-corpus.spec.md` on disk; the first real sweep rewrote both
+# markdown link targets to a file that does not exist. Two lexical shapes prove a path:
+FILE_EXT_AFTER_RE = re.compile(r"^\.[A-Za-z0-9]{1,6}\b")   # name.md, name.spec.md, name.json
+PATH_SEP_BEFORE_RE = re.compile(r"[/\\]$")                  # dir/name, ../spec/name
+
+
+def looks_like_path(line: str, start: int, end: int) -> bool:
+    """True when this match is a filename or path component rather than a handle."""
+    return bool(FILE_EXT_AFTER_RE.match(line[end:]) or PATH_SEP_BEFORE_RE.search(line[:start]))
+
 
 def slot_kind(line: str, in_skills_block: bool):
     """Which kind does this line's SHAPE prove? None when only prose context is available."""
@@ -184,6 +199,12 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             entries = idx.by_old[old_name]
             start, end = m.start(1), m.end(1)
 
+            # Computed here, applied only where the match would OTHERWISE be acted on — a name
+            # this sweep was never going to touch is not worth a warning line.
+            is_path = looks_like_path(line, start, end)
+            path_note = ("a filename or path component, not a handle — a rewrite here would "
+                         "point at a file that does not exist")
+
             # A `oldplugin:` immediately before the name makes the reference QUALIFIED —
             # unambiguous, and the only way a plugin-PREFIX-only rename is visible at all
             # (the name never changed; only which plugin owns it did).
@@ -191,6 +212,11 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             if pm:
                 qual = [e for e in entries if e["old_plugin"] == pm.group(1)]
                 if qual:
+                    if is_path:
+                        hits.append(Hit(rel, i + 1, start, old_name, None,
+                                        "historical" if historical else "path", path_note,
+                                        (start, end)))
+                        continue
                     e = qual[0]
                     new_txt = f'{e["new_plugin"]}:{e["new"]}'
                     old_txt = line[pm.start(1):end]
@@ -205,6 +231,10 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             # Bare form — only entries the manifest marks token-safe may match unqualified.
             safe = [e for e in entries if e["match"] == "token"]
             if not safe:
+                continue
+            if is_path:
+                hits.append(Hit(rel, i + 1, start, old_name, None,
+                                "historical" if historical else "path", path_note, (start, end)))
                 continue
             if any(e["_ambiguous"] for e in safe):
                 typed = [e for e in safe if e["kind"] == kind_hint] if kind_hint else []
@@ -290,23 +320,27 @@ def run(root: Path, manifest_path: Path, write: bool, include_memory: bool, as_j
     live = [h for h in all_hits if h.status == "live"]
     amb = [h for h in all_hits if h.status == "ambiguous"]
     hist = [h for h in all_hits if h.status == "historical"]
+    paths = [h for h in all_hits if h.status == "path"]
 
     if as_json:
         print(json.dumps({
             "live": [{"file": str(h.path), "line": h.line, "old": h.old, "new": h.new} for h in live],
             "ambiguous": [{"file": str(h.path), "line": h.line, "old": h.old, "note": h.note} for h in amb],
+            "paths": [{"file": str(h.path), "line": h.line, "old": h.old} for h in paths],
             "historical_left": len(hist),
             "changed_files": [str(c) for c in changed],
         }, indent=2))
     else:
         verdict = ("rewritten" if write and live else
-                   "FAIL" if live else ("warn" if amb else "clean"))
-        print(f"fix_old_names · {verdict} · {len(live)} fail / {len(amb)} warn")
+                   "FAIL" if live else ("warn" if (amb or paths) else "clean"))
+        print(f"fix_old_names · {verdict} · {len(live)} fail / {len(amb) + len(paths)} warn")
         for h in live:
             arrow = f"{h.old} -> {h.new}"
             print(f"  {'FIXED' if write else 'FOUND'} L1  {h.path}:{h.line}  {arrow}  [{h.note}]")
         for h in amb:
             print(f"  WARN  L2  {h.path}:{h.line}  {h.old}  {h.note}")
+        for h in paths:
+            print(f"  WARN  L4  {h.path}:{h.line}  {h.old}  {h.note}")
         print(f"  ok    L3  {len(hist)} historical reference(s) left byte-identical "
               f"(ADR bodies, ledgers, changelogs, dated records)")
         if changed:
@@ -489,6 +523,29 @@ def selftest():
     h6 = scan("x.md", t6)
     assert all(x.status == "historical" for x in h6), f"freeze marker must protect: {h6}"
 
+    # L4 PATH guard — the live incident, 2026-07-26 (agent-ui). `intent-extract` stands in for
+    # `a2ui-training-corpus`: a retired skill name that is ALSO a real file on disk in the
+    # consumer repo. The first sweep rewrote both markdown link targets to a file that does not
+    # exist — a broken link is strictly worse than the stale prose it replaced.
+    incident = ("> Implements: [`../spec/intent-extract.spec.md`](../spec/intent-extract.spec.md)\n"
+                "and `specs/intent-extract.spec.md` (R10-R12).\n")
+    hi = scan("x.md", incident)
+    assert hi and all(x.status == "path" for x in hi), \
+        f"every hit inside a path/filename must be status=path, got {[(x.old, x.status) for x in hi]}"
+    assert rewrite(incident, hi) == incident, \
+        "the exact incident repro: a filename must come back byte-identical"
+
+    # ...and the reverse control — a bare handle on the SAME name must still be rewritten, or the
+    # guard has simply disabled the check.
+    hr = scan("x.md", "Ambiguous ask -> `intent-extract` before acting.\n")
+    assert [x for x in hr if x.status == "live"], f"a real handle must still be live: {hr}"
+
+    # both path shapes independently
+    assert all(x.status == "path" for x in scan("x.md", "see docs/intent-extract for more\n")), \
+        "a path SEPARATOR before the name proves a path"
+    assert all(x.status == "path" for x in scan("x.md", "the intent-extract.json config\n")), \
+        "an EXTENSION after the name proves a filename"
+
     # L2 ambiguity — same retired name became a command AND an agent. Free prose: report only.
     t7 = "The ops-issues seat handles intake.\n"
     h7 = scan("x.md", t7)
@@ -532,7 +589,8 @@ def selftest():
 
     print("fix_old_names selftest · PASS · live rewrite + prefix-only catch, qualified-only "
           "never touches bare prose, ADR/ledger/freeze left byte-identical, ambiguity reported "
-          "not guessed, typed slots resolve, sweep idempotent to zero")
+          "not guessed, typed slots resolve, filenames/paths never rewritten (the 2026-07-26 "
+          "broken-link incident), sweep idempotent to zero")
     return 0
 
 

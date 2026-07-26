@@ -31,7 +31,7 @@ evidence of the rename — a worse outcome than the stale pointer you were fixin
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/fix_old_names.py" <root>
 ```
 
-Report-only is the default and exits 1 when live stale names remain. Three buckets come back:
+Report-only is the default and exits 1 when live stale names remain. Four buckets come back:
 
 - **L1 live** — a reference that must resolve: a frontmatter `skills:` preload, a dispatch name,
   a seat map, a doctrine pointer. These are the silent failures.
@@ -39,6 +39,10 @@ Report-only is the default and exits 1 when live stale names remain. Three bucke
   `sort-issues` or `issue-sorter`). Reported with both candidates, never rewritten from prose;
   only a typed slot resolves it. **These need a human — bring them to the user as a choice.**
 - **L3 historical** — ADR bodies, ledgers, changelogs, dated records. Counted, never touched.
+- **L4 path** — the retired name appearing as a *filename* or path component. The consumer repo's
+  own file was never renamed, so rewriting the reference points it at nothing. Reported, never
+  rewritten. Found the hard way on the first live sweep: `a2ui-training-corpus` is both a retired
+  skill and a real `.spec.md` on disk, and the sweep broke two working markdown links.
 
 ## Phase 2 — Read the report before writing
 
