@@ -1,14 +1,14 @@
 ---
 name: a2ui-chat-agent-facts
 description: >-
-  The A2UI LIVE-AGENT in @agent-ui/a2ui — a real LLM emitting A2UI over the wire. Use for "swap
-  recorded → live transport", "how does a UI click become a chat turn", "wire a new provider",
-  "the produce() self-correct loop", "how is the system prompt built", "why did every click
-  trigger a turn". Covers the AgentTransport seam, Turn/Session + reducer, the produce() loop,
-  the provider seam, the Anthropic SSE contract, the conversational channel. ANSWERS from a
-  cited corpus; does not build. NOT for the wire shape/renderer (a2ui-protocol-facts); NOT for
-  catalog design (a2ui-catalog-facts); NOT for corpus records (a2ui-training-facts); NOT for
-  live-agent SOURCE (a2ui-builder).
+  The A2UI LIVE-AGENT in @agent-ui/a2ui — a real LLM emitting A2UI. Use for "swap
+  recorded → live transport", "how does a UI click become a chat turn", "wire a new provider / add a model",
+  "the produce() self-correct loop", "what is validate-then-stream", "the dev-proxy / PAIR
+  trust boundary", "why can't the agent explain its choice". Covers the AgentTransport seam,
+  Turn/Session + reducer, the provider seam + dev-proxy, the Anthropic SSE contract, the
+  conversational channel (ADR-0088). ANSWERS; does not build. NOT for the wire shape/renderer
+  (a2ui-protocol-facts), catalog design (a2ui-catalog-facts), corpus records
+  (a2ui-training-facts), or live-agent SOURCE (a2ui-builder).
 disable-model-invocation: false
 user-invocable: false
 ---

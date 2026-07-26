@@ -4,10 +4,11 @@ description: >-
   The A2UI wire protocol + this repo's zero-dep renderer (@agent-ui/a2ui). Use for "why did this
   payload fail validation", "what does a binding/action/check look like on the wire", "how do
   dynamic lists render", "action vs function call", "which error code and why". Covers the
-  message lifecycle, the Binding union, dynamic-list templates, DynamicString interpolation, the
+  message lifecycle, the Binding union, data-model updates, dynamic-list templates, DynamicString interpolation, the
   callFunction RPC, the error taxonomy, version pinning. ANSWERS from a cited corpus; does not
   build. NOT for catalog design (a2ui-catalog-facts); NOT for corpus records
-  (a2ui-training-facts); NOT for the session/turn model (a2ui-chat-agent-facts).
+  (a2ui-training-facts); NOT for the session/turn model or the live agent's validate-then-stream
+  pipeline (a2ui-chat-agent-facts).
 disable-model-invocation: false
 user-invocable: false
 ---
