@@ -199,12 +199,11 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             entries = idx.by_old[old_name]
             start, end = m.start(1), m.end(1)
 
-            if looks_like_path(line, start, end):
-                hits.append(Hit(rel, i + 1, start, old_name, None,
-                                "historical" if historical else "path",
-                                "a filename or path component, not a handle — a rewrite here "
-                                "would point at a file that does not exist", (start, end)))
-                continue
+            # Computed here, applied only where the match would OTHERWISE be acted on — a name
+            # this sweep was never going to touch is not worth a warning line.
+            is_path = looks_like_path(line, start, end)
+            path_note = ("a filename or path component, not a handle — a rewrite here would "
+                         "point at a file that does not exist")
 
             # A `oldplugin:` immediately before the name makes the reference QUALIFIED —
             # unambiguous, and the only way a plugin-PREFIX-only rename is visible at all
@@ -213,6 +212,11 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             if pm:
                 qual = [e for e in entries if e["old_plugin"] == pm.group(1)]
                 if qual:
+                    if is_path:
+                        hits.append(Hit(rel, i + 1, start, old_name, None,
+                                        "historical" if historical else "path", path_note,
+                                        (start, end)))
+                        continue
                     e = qual[0]
                     new_txt = f'{e["new_plugin"]}:{e["new"]}'
                     old_txt = line[pm.start(1):end]
@@ -227,6 +231,10 @@ def scan_text(rel: Path, text: str, idx: Index, hist_globs=()):
             # Bare form — only entries the manifest marks token-safe may match unqualified.
             safe = [e for e in entries if e["match"] == "token"]
             if not safe:
+                continue
+            if is_path:
+                hits.append(Hit(rel, i + 1, start, old_name, None,
+                                "historical" if historical else "path", path_note, (start, end)))
                 continue
             if any(e["_ambiguous"] for e in safe):
                 typed = [e for e in safe if e["kind"] == kind_hint] if kind_hint else []
