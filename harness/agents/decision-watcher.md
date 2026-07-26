@@ -52,16 +52,30 @@ queued, never auto-executed, and Phase 6 itself is always named as the next comm
 run (step 7), the same never-authors boundary this agent holds everywhere else.
 
 `doc-writing-rules` (docs) is a different plugin, not preloadable across that boundary — so
-the ADR frontmatter contract is stated here directly rather than restated from a preload: `doc-type:
-adr`, `id: adr-NNNN`, `status: accepted | superseded`, `supersedes: <adr-id> | null`. An ADR is
-superseded the moment ANY other ADR's `supersedes:` field names it, or its own `status:` field
-already says `superseded` — `scripts/adr_checkpoint.py`'s `classify_delta` reads exactly this, never
-infers supersession from prose.
+the ADR contract is stated here directly rather than restated from a preload. Two shapes exist,
+both auto-detected by `scripts/adr_checkpoint.py`'s `scan_source` off `Path.is_file()` — pass
+whichever `<adr-source>` the repo actually has:
+
+- **Directory of one-ADR-per-file `*.md`** — frontmatter `doc-type: adr`, `id: adr-NNNN`,
+  `status: accepted | superseded`, `supersedes: <adr-id> | null`. An ADR is superseded the
+  moment ANY other ADR's `supersedes:` field names it, or its own `status:` field already says
+  `superseded`.
+- **Single monolithic markdown file, `## ADR-NNN — Title` sections** (e.g. one project's
+  `decision-records.md`) — no frontmatter. An ADR's id comes from its heading; its own status
+  reads `superseded` the moment that heading's annotation contains the word "superseded" (e.g.
+  `(SUPERSEDED — see ADR-011)`) — the primary signal, since this shape often records
+  supersession only on the superseded ADR's own heading, never as a forward declaration. A
+  `(supersedes ADR-XXX[, ADR-YYY])` annotation on another ADR's heading is read as the
+  secondary, forward-declaring signal — never `complements`/other verbs, which name a
+  relationship, not a supersession.
+
+Either way, `classify_delta` reads exactly the extracted `status`/`supersedes` fields — never
+infers supersession from prose it wasn't told to parse.
 
 ## Procedure, one firing
 
 1. **Classify the corpus, don't advance yet.** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/
-   adr_checkpoint.py" classify <adr-dir> --checkpoint .claude/ops/adr-checkpoint.json` — cheap,
+   adr_checkpoint.py" classify <adr-source> --checkpoint .claude/ops/adr-checkpoint.json` — cheap,
    deterministic, content-hash based, and deliberately non-mutating: `classify` and `advance` are
    two separate calls so a firing that dies mid-judgment leaves the checkpoint untouched, and the
    unjudged delta reappears next firing instead of silently reading as `unchanged` forever. The
@@ -80,7 +94,7 @@ infers supersession from prose.
    (re-detecting the same candidate on a later firing updates its evidence in place, never grows a
    duplicate row).
 5. **Advance the checkpoint** — `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/adr_checkpoint.py" advance
-   <adr-dir> --checkpoint .claude/ops/adr-checkpoint.json` — only now, after every candidate from
+   <adr-source> --checkpoint .claude/ops/adr-checkpoint.json` — only now, after every candidate from
    step 1's delta has actually been queued. This ordering is what step 1's non-mutation buys: a
    crash between steps 1 and 5 leaves the checkpoint at its PRIOR state, so the same delta is
    re-classified (and re-queued, harmlessly, into the same idempotent rows) next firing rather than
@@ -115,7 +129,7 @@ isn't from a ratified ADR routes to `save-lessons`'s own standing detectors dire
 
 ## Failure branches
 
-- The ADR directory doesn't exist or is unreadable → report and halt; never guess a location, and
+- The ADR source (directory or single file) doesn't exist or is unreadable → report and halt; never guess a location, and
   never advance the checkpoint on a halted run.
 - A `newly_superseded` ADR has no downstream citations found → state that plainly as the finding
   ("nothing cites it"), not a manufactured candidate.
