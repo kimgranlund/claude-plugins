@@ -72,24 +72,32 @@ does not re-verify has not finished. Report what changed AND what was deliberate
 - **Anything outside `.claude/`, `CLAUDE.md`, `docs/`, `AGENTS.md`, `.github/`** — source code
   referencing a plugin handle is out of scope by design.
 
-## Phase 4 — The runtime guard is already on
+## There is no runtime alias — the sweep is the whole mechanism
 
-The sweep fixes what is written in files. It cannot reach a name the model composes at runtime, a
-file outside the scan scope, or a repo nobody swept. `scripts/alias_guard.py` covers those, and it
-needs **no installation step**: this plugin registers it in its own `hooks/hooks.json` as a
-`PreToolUse` guard on `Task|Skill`, so it is live in every repo where harness is installed. Nothing
-to paste into a consumer repo's `settings.json` — and `${CLAUDE_PLUGIN_ROOT}` only resolves inside
-a plugin's own hook registration anyway, which is why a paste-it-yourself snippet was the wrong
-shape (corrected 2026-07-26).
+Do not propose a hook, a shim, or an alias layer to catch what this sweep misses. It was built,
+shipped, and retired inside one day (2026-07-26); the finding is recorded here so the next reader
+does not spend the day again.
 
-It **denies** a retired dispatch and names the replacement — it cannot silently resolve one,
-because a `PreToolUse` hook returns `allow|deny|ask` and never rewrites tool input. That is the
-whole alias story: the silent failure becomes a loud, actionable one. A stub skill per retired name
-*would* resolve transparently and is rejected — 288 stub descriptions against a resident listing
-budget this estate has already breached four times.
+**Proven, by running it:** both `Task` and `Skill` validate the requested name against their
+registry *before* `PreToolUse` fires. A retired name never reaches a hook, so a hook cannot
+translate it.
 
-If a dispatch is denied and the user insists the old name is correct, the manifest is wrong, not
-the caller: regenerate it with `derive` rather than working around the guard.
+```
+Agent type 'ops-planner' not found. Available agents: …
+Unknown skill: intent-extract
+```
+
+Two consequences worth keeping straight:
+
+- **A retired dispatch does not fail silently.** The platform already errors and lists the valid
+  names. The premise that motivated an alias layer was wrong for the dispatch path — what it
+  cannot tell you is what the old name *became*, and no hook can add that.
+- **A stub skill or agent per retired name would work**, and is still rejected: 288 stub
+  descriptions against a resident listing budget this estate has already breached four times.
+
+What *does* still fail silently is the case this skill exists for — a **description** or doctrine
+pointer citing a retired name, which mis-routes with no error at all. Files are the only surface
+where the failure is invisible, which is why a file sweep is the only mechanism that pays.
 
 ## Wiring it as a gate
 
