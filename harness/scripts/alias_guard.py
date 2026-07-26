@@ -33,13 +33,24 @@ from pathlib import Path
 
 
 def build_lookup(manifest: dict):
-    """old bare name -> list of (kind, new_plugin, new). Qualified-only entries are indexed
-    under both the bare and the `plugin:name` form; a bare hit on a qualified-only entry is
-    still worth DENYING even though the sweep would not rewrite it — at dispatch time the name
-    either resolves or it does not, and the manifest says it does not."""
+    """old name -> list of (kind, new_plugin, new).
+
+    The manifest's `match` field is load-bearing here, not decoration. Most CURRENT names in
+    this estate were ALSO old names: a plugin-prefix-only rename (`forge:skill-checker` ->
+    `harness:skill-checker`) leaves the bare name completely valid. Indexing those under the
+    bare key denies live dispatches — a first cut of this function did exactly that, and the
+    smoke test before registering the hook caught `skill-checker`, a real current agent, being
+    refused with "use harness:skill-checker instead" (2026-07-26). A guard that denies working
+    names is far worse than the silent failure it was built to replace.
+
+    So: only `match == "token"` entries are reachable bare. Everything else must arrive
+    qualified, where the old plugin prefix is what proves the reference is actually stale."""
     by_name = {}
     for e in manifest["renames"]:
-        for key in (e["old"], f'{e["old_plugin"]}:{e["old"]}'):
+        keys = [f'{e["old_plugin"]}:{e["old"]}']
+        if e.get("match") == "token":
+            keys.append(e["old"])
+        for key in keys:
             by_name.setdefault(key, []).append((e["kind"], e["new_plugin"], e["new"]))
     return by_name
 
@@ -101,6 +112,12 @@ FIXTURE = {
          "old_plugin": "forge", "new_plugin": "harness", "match": "token"},
         {"old": "token-builder", "new": "token-builder", "kind": "agent",
          "old_plugin": "color", "new_plugin": "design", "match": "qualified"},
+        # The identity class the first cut got wrong: a name that is BOTH a former old name and
+        # a current live one. Without this row the fixture cannot see the bug (the original
+        # fixture had no such entry, which is precisely why the selftest stayed green while the
+        # real 288-entry manifest denied working dispatches).
+        {"old": "skill-checker", "new": "skill-checker", "kind": "agent",
+         "old_plugin": "forge", "new_plugin": "harness", "match": "qualified"},
     ],
 }
 
@@ -126,6 +143,16 @@ def selftest():
         assert verdict({"tool_name": "Task", "tool_input": {"subagent_type": good}}, by) is None, \
             f"a live name must never be denied: {good}"
 
+    # THE NEAR-MISS CONTROL (2026-07-26): `skill-checker` is a current agent AND a former old
+    # name under forge:. Bare, it must pass silently; qualified with the retired plugin, it must
+    # still deny. Registering the hook with this backwards would have refused most dispatches in
+    # the estate.
+    assert verdict({"tool_name": "Task", "tool_input": {"subagent_type": "skill-checker"}}, by) is None, \
+        "a CURRENT name that was also an old name must dispatch freely — the guard is not a wall"
+    rq = verdict({"tool_name": "Task", "tool_input": {"subagent_type": "forge:skill-checker"}}, by)
+    assert rq and "harness:skill-checker" in rq, \
+        f"the same name QUALIFIED by the retired plugin is genuinely stale and must deny: {rq}"
+
     # unrelated tools are none of this guard's business
     assert verdict({"tool_name": "Bash", "tool_input": {"command": "ops-issues"}}, by) is None, \
         "only the dispatch slots are guarded — not every mention of a retired word"
@@ -141,9 +168,31 @@ def selftest():
     finally:
         sys.stdin = saved
 
+    # REAL-MANIFEST control. The fixture above proves the rule; this proves the SHIPPED data
+    # obeys it. Scoped to this plugin's own members, which always sit beside this script (a
+    # sibling-plugin sweep would be flaky from an installed cache). Had this existed first, the
+    # near-miss would have been caught by the gate rather than by a hand smoke test.
+    root = Path(__file__).resolve().parent.parent
+    mf = root / "renames.json"
+    if mf.is_file():
+        real = build_lookup(json.loads(mf.read_text(encoding="utf-8")))
+        denied = []
+        for a in sorted((root / "agents").glob("*.md")):
+            if verdict({"tool_name": "Task", "tool_input": {"subagent_type": a.stem}}, real):
+                denied.append(f"agent {a.stem}")
+        for s in sorted((root / "skills").glob("*/SKILL.md")):
+            if verdict({"tool_name": "Skill", "tool_input": {"skill": s.parent.name}}, real):
+                denied.append(f"skill {s.parent.name}")
+        assert not denied, ("the SHIPPED manifest denies currently-live names — this guard is "
+                            f"registered globally and would block real dispatches: {denied}")
+        checked = len(list((root / "agents").glob("*.md"))) + len(list((root / "skills").glob("*/SKILL.md")))
+    else:
+        checked = 0
+
     print("alias_guard selftest · PASS · retired dispatch denied with the replacement named, "
-          "slot picks the right kind, prefix-only class caught, live names pass silently, "
-          "fail-open on a bad manifest")
+          "slot picks the right kind, prefix-only class caught, a CURRENT name that was also an "
+          "old name dispatches freely (bare) yet denies when qualified by its retired plugin, "
+          f"fail-open on a bad manifest, {checked} shipped names verified against the real manifest")
     return 0
 
 
