@@ -19,9 +19,10 @@ guarded replacements, ledger history untouched, insertion audit"].
   [verified, ADR-0006 Decision 3, quoted]. A dependency renamed before its consumers strands
   live references mid-campaign.
 
-## The per-rename same-change contract — seven things land together
+## The per-rename same-change contract — eight things land together
 
-Every rename PR carries ALL of these in the one change [verified, ADR-0006 Decision 4]:
+Every rename PR carries ALL of these in the one change [verified, ADR-0006 Decision 4; item 8
+added 2026-07-26, issue #97]:
 
 1. **Frontmatter + path alignment** — skill `name:` = directory name, agent `name:` = file
    stem, moved together; F9/A6 lint FAILs the copy that lags [verified, naming-rules
@@ -39,6 +40,31 @@ Every rename PR carries ALL of these in the one change [verified, ADR-0006 Decis
    record; the bump marks that copy forward-aware [verified, teamwork v1.0.1/v1.0.2 pattern].
 7. **`release_gate.py` CLEAN** (0 fail / 0 warn) on the renamed plugin and every touched
    sibling, plus CI green on the PR — CI is the merge gate, not a courtesy [verified, ADR-0002].
+8. **Rename manifest regenerated** — `python3 harness/scripts/fix_old_names.py derive .`, and the
+   resulting `harness/renames.json` committed in the same PR. Items 1–7 all stop at this repo's
+   boundary; item 8 is the only one that reaches a repo that merely INSTALLS these plugins.
+   Regenerate, never hand-edit: the manifest is derived from git rename detection, so a rename
+   git recorded cannot be forgotten, and a hand-typed entry can be wrong in a way nothing
+   catches.
+
+## Downstream is not covered by items 1–7
+
+The campaign order above sequences consumers *inside this repo*. A repo that installs these
+plugins is invisible to every one of those steps, and its stale handles fail SILENTLY — a
+retired agent name errors only at dispatch, a description citing a retired skill mis-routes with
+no diagnostic. `fix-old-names` is the consumer-side half; this file is the producer-side half.
+
+Two findings from the first real consumer sweep [verified, agent-ui, 2026-07-26, issue #97]:
+
+- **A plugin-prefix-only rename is invisible to a name-to-name map.** `color:token-builder` →
+  `design:token-builder` changed no name at all — only which plugin owns it. It survived an
+  automated pass for exactly this reason. The manifest carries `old_plugin`/`new_plugin` per
+  entry so the class is representable; a rename wave that merges plugins (ADR-0008) generates
+  this class in bulk.
+- **Prose is not a durable source for the map.** The per-plugin transition tables were retired
+  as stale in the 2026-07-25 v1.0.5 sweep, and `naming-rules`' `estate-rename-map.md` records
+  the *planned* 2026-07-20 mapping — execution later drifted from it in three plugin rows. Only
+  git's rename records match what shipped, which is why item 8 says derive.
 
 ## Routing safety is measured, not asserted
 

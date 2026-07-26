@@ -181,6 +181,12 @@
       "prompt": "how do we prove routing did not break after the rename",
       "expect": "trigger",
       "note": "rename-execution-playbook axis, wave 2026-07-25"
+    },
+    {
+      "id": "n90",
+      "prompt": "our other repo still references the retired skill names — sweep and fix them",
+      "expect": "no-trigger",
+      "comment": "owner: fix-old-names — reciprocal fence, wave 2026-07-26 (issue #97). This skill owns the PRODUCER side (executing a rename here); fix-old-names owns the CONSUMER side (repairing a repo that merely installs the plugins)."
     }
   ]
 }

@@ -1,0 +1,2322 @@
+{
+  "schema": "renames/v1",
+  "generated_by": "harness/scripts/fix_old_names.py derive",
+  "source": "git rename detection over */SKILL.md and */agents/*.md, chained to final",
+  "plugins": {
+    "agentic-ui": "agent-protocols",
+    "color": "design",
+    "design-kits": "design",
+    "design-systems": "design",
+    "forge": "harness",
+    "orchestration": "teamwork",
+    "scribe": "docs",
+    "typography": "design",
+    "ui": "screens"
+  },
+  "renames": [
+    {
+      "old": "a2a-agent-design",
+      "new": "make-a2a-agent",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2a-isolation-verify",
+      "new": "check-a2a-isolation",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2a-protocol",
+      "new": "a2a-protocol-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2a-protocol-facts",
+      "new": "a2a-protocol-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "a2a-training-corpus",
+      "new": "a2a-training-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2a-training-facts",
+      "new": "a2a-training-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "a2ui-catalog-design",
+      "new": "a2ui-catalog-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2ui-catalog-facts",
+      "new": "a2ui-catalog-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "a2ui-chat-agent-facts",
+      "new": "a2ui-chat-agent-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "a2ui-conversational-agent",
+      "new": "a2ui-chat-agent-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2ui-protocol",
+      "new": "a2ui-protocol-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2ui-protocol-facts",
+      "new": "a2ui-protocol-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "a2ui-training-corpus",
+      "new": "a2ui-training-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "token"
+    },
+    {
+      "old": "a2ui-training-facts",
+      "new": "a2ui-training-facts",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "check-a2a-isolation",
+      "new": "check-a2a-isolation",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "make-a2a-agent",
+      "new": "make-a2a-agent",
+      "kind": "skill",
+      "old_plugin": "agentic-ui",
+      "new_plugin": "agent-protocols",
+      "match": "qualified"
+    },
+    {
+      "old": "token-builder",
+      "new": "token-builder",
+      "kind": "agent",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "check-colors",
+      "new": "check-colors",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "color-contrast-facts",
+      "new": "color-contrast-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "color-material-facts",
+      "new": "physical-color-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "color-perception-facts",
+      "new": "color-perception-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "color-science-accessibility",
+      "new": "color-contrast-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "color-science-materials",
+      "new": "physical-color-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "color-science-perception",
+      "new": "color-perception-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "color-science-spaces",
+      "new": "color-space-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "color-space-facts",
+      "new": "color-space-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "color-theory",
+      "new": "color-theory-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "color-theory-facts",
+      "new": "color-theory-facts",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "color-verify",
+      "new": "check-colors",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "make-palette",
+      "new": "make-palette",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "palette-design",
+      "new": "make-palette",
+      "kind": "skill",
+      "old_plugin": "color",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-kit-checker",
+      "new": "design-system-checker",
+      "kind": "agent",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-md-rules",
+      "new": "design-md-rules",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "figma-plugin-facts",
+      "new": "figma-plugin-facts",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "icon-rules",
+      "new": "icon-rules",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "make-design-kit",
+      "new": "make-design-system",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "make-dscard-kit",
+      "new": "make-dscard-kit",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "make-figma-make-kit",
+      "new": "make-figma-make-kit",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "make-stitch-kit",
+      "new": "make-stitch-kit",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-color-facts",
+      "new": "material-color-facts",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-motion-facts",
+      "new": "material-motion-facts",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-shape-facts",
+      "new": "material-shape-facts",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-token-facts",
+      "new": "material-token-facts",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-type-facts",
+      "new": "material-type-facts",
+      "kind": "skill",
+      "old_plugin": "design-kits",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "design-kit-checker",
+      "new": "design-system-checker",
+      "kind": "agent",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-system-reviewer",
+      "new": "design-system-checker",
+      "kind": "agent",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-md-format",
+      "new": "design-md-rules",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-md-rules",
+      "new": "design-md-rules",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "design-system-author",
+      "new": "make-design-system",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-system-author-dscard",
+      "new": "make-dscard-kit",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-system-author-figma-make",
+      "new": "make-figma-make-kit",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-system-author-google-stitch",
+      "new": "make-stitch-kit",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "design-system-hub",
+      "new": "make-design-system",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "figma-plugin-api",
+      "new": "figma-plugin-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "figma-plugin-facts",
+      "new": "figma-plugin-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "icon-rules",
+      "new": "icon-rules",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "iconography",
+      "new": "icon-rules",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "make-design-kit",
+      "new": "make-design-system",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "make-dscard-kit",
+      "new": "make-dscard-kit",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "make-figma-make-kit",
+      "new": "make-figma-make-kit",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "make-stitch-kit",
+      "new": "make-stitch-kit",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-color-facts",
+      "new": "material-color-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-design-color-tokens",
+      "new": "material-color-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "material-design-geometry-tokens",
+      "new": "material-shape-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "material-design-motion-tokens",
+      "new": "material-motion-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "material-design-token-semantics",
+      "new": "material-token-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "material-design-typography-tokens",
+      "new": "material-type-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "material-motion-facts",
+      "new": "material-motion-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-shape-facts",
+      "new": "material-shape-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-token-facts",
+      "new": "material-token-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "material-type-facts",
+      "new": "material-type-facts",
+      "kind": "skill",
+      "old_plugin": "design-systems",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "agent-checker",
+      "new": "agent-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "agent-reviewer",
+      "new": "agent-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "chore-lead",
+      "new": "chore-lead",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "chore-planner",
+      "new": "chore-planner",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "decision-watcher",
+      "new": "decision-watcher",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "eval-judge",
+      "new": "routing-judge",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "fact-finder",
+      "new": "fact-finder",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "hook-checker",
+      "new": "hook-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "hook-reviewer",
+      "new": "hook-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "issue-sorter",
+      "new": "issue-sorter",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "linguistics-reviewer",
+      "new": "wording-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-adr",
+      "new": "decision-watcher",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-issues",
+      "new": "issue-sorter",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-orchestrator",
+      "new": "chore-lead",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-planner",
+      "new": "chore-planner",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-repo",
+      "new": "repo-cleaner",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "pack-researcher",
+      "new": "fact-finder",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "plugin-checker",
+      "new": "plugin-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "plugin-reviewer",
+      "new": "plugin-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "repo-cleaner",
+      "new": "repo-cleaner",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "routing-judge",
+      "new": "routing-judge",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "skill-auditor",
+      "new": "skill-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-checker",
+      "new": "skill-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "wording-checker",
+      "new": "wording-checker",
+      "kind": "agent",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "adopt-plugin",
+      "new": "adopt-plugin",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "agent-authoring-standards",
+      "new": "agent-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "agent-forge",
+      "new": "make-agent",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "agent-writing-rules",
+      "new": "agent-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "agents-audit",
+      "new": "check-all-agents",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "big-change-git-rules",
+      "new": "big-change-git-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "break-down-problem",
+      "new": "break-down-problem",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "check-all-agents",
+      "new": "check-all-agents",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "check-all-skills",
+      "new": "check-all-skills",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "check-entry-file",
+      "new": "check-entry-file",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "check-everything",
+      "new": "check-everything",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "check-routing",
+      "new": "check-routing",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "check-skill",
+      "new": "check-skill",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "checking-rules",
+      "new": "checking-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "clean-repo",
+      "new": "clean-repo",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "entry-file-audit",
+      "new": "check-entry-file",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "entry-file-rules",
+      "new": "entry-file-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "entry-file-standards",
+      "new": "entry-file-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "eval-run",
+      "new": "check-routing",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "find-open-questions",
+      "new": "find-open-questions",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "find-the-ask",
+      "new": "find-the-ask",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "git-campaign-workflows",
+      "new": "big-change-git-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "github-facts",
+      "new": "github-facts",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "github-issue-pr-primitives",
+      "new": "github-facts",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "handoff-compose",
+      "new": "write-handoff",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "harness-audit",
+      "new": "check-everything",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "hook-authoring-standards",
+      "new": "hook-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "hook-forge",
+      "new": "make-hook",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "hook-writing-rules",
+      "new": "hook-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "intent-extract",
+      "new": "find-the-ask",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "knowledge-harvest",
+      "new": "save-lessons",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "linguistic-techniques",
+      "new": "prompt-wording-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "make-agent",
+      "new": "make-agent",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "make-hook",
+      "new": "make-hook",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "make-pack",
+      "new": "make-pack",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "make-plugin",
+      "new": "make-plugin",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "make-script",
+      "new": "make-script",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "make-skill",
+      "new": "make-skill",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "naming-rules",
+      "new": "naming-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "open-questions-sweep",
+      "new": "find-open-questions",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-issues",
+      "new": "sort-issues",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-orchestrator",
+      "new": "sweep-chores",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "ops-planner",
+      "new": "plan-chores",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "pack-authoring-standards",
+      "new": "pack-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "pack-forge",
+      "new": "make-pack",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "pack-writing-rules",
+      "new": "pack-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "plan-chores",
+      "new": "plan-chores",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "plan-plugin-split",
+      "new": "plan-plugin-split",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "plan-skill-merge",
+      "new": "plan-skill-merge",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "plan-skill-split",
+      "new": "plan-skill-split",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "plugin-authoring-standards",
+      "new": "plugin-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "plugin-decompose",
+      "new": "plan-plugin-split",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "plugin-forge",
+      "new": "make-plugin",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "plugin-onboard",
+      "new": "adopt-plugin",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "plugin-release",
+      "new": "ship-plugin",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "plugin-writing-rules",
+      "new": "plugin-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "prompt-wording-rules",
+      "new": "prompt-wording-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "reasoning-orders",
+      "new": "thinking-depth-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "repo-alignment",
+      "new": "clean-repo",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "reshape-skill",
+      "new": "reshape-skill",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "reviewer-discipline",
+      "new": "checking-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "save-lessons",
+      "new": "save-lessons",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "script-authoring-standards",
+      "new": "script-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "script-forge",
+      "new": "make-script",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "script-writing-rules",
+      "new": "script-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "ship-plugin",
+      "new": "ship-plugin",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "skill-authoring-standards",
+      "new": "skill-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-decompose",
+      "new": "plan-skill-split",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-forge",
+      "new": "make-skill",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-refactor",
+      "new": "reshape-skill",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-review",
+      "new": "check-skill",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-synthesize",
+      "new": "plan-skill-merge",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "skill-writing-rules",
+      "new": "skill-writing-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "skills-audit",
+      "new": "check-all-skills",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "sort-issues",
+      "new": "sort-issues",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "sweep-chores",
+      "new": "sweep-chores",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "system-decompose",
+      "new": "break-down-problem",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "token"
+    },
+    {
+      "old": "thinking-depth-rules",
+      "new": "thinking-depth-rules",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "write-handoff",
+      "new": "write-handoff",
+      "kind": "skill",
+      "old_plugin": "forge",
+      "new_plugin": "harness",
+      "match": "qualified"
+    },
+    {
+      "old": "agent-residency-taxonomy",
+      "new": "agent-residency-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "chat-harness-instructions-and-guardrails",
+      "new": "chat-harness-guardrail-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "chat-harness-knowledge-and-memory",
+      "new": "chat-harness-memory-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "chat-harness-observability",
+      "new": "chat-harness-logging-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "chat-harness-orchestration-and-workflows",
+      "new": "chat-harness-workflow-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "chat-harness-skills-and-routing",
+      "new": "chat-harness-routing-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "chat-harness-tools-resources-and-services",
+      "new": "chat-harness-tool-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "llm-jsonl-streaming",
+      "new": "llm-streaming-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "llm-provider-gateway",
+      "new": "llm-gateway-facts",
+      "kind": "skill",
+      "old_plugin": "llm",
+      "new_plugin": "llm",
+      "match": "token"
+    },
+    {
+      "old": "builder",
+      "new": "builder",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "code-checker",
+      "new": "code-checker",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "code-reviewer",
+      "new": "code-checker",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "docs-writer",
+      "new": "docs-writer",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "orchestration-coordinator",
+      "new": "team-lead",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "orchestration-reviewer",
+      "new": "wiring-checker",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "planner",
+      "new": "planner",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "system-builder",
+      "new": "builder",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "system-planner",
+      "new": "planner",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "team-lead",
+      "new": "team-lead",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "wiring-checker",
+      "new": "wiring-checker",
+      "kind": "agent",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "build",
+      "new": "build-feature",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "build-feature",
+      "new": "build-feature",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "close-session",
+      "new": "close-session",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "concurrency-design",
+      "new": "parallel-work-rules",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "grill-the-ask",
+      "new": "grill-the-ask",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "intent-grill",
+      "new": "grill-the-ask",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "lead-team",
+      "new": "lead-team",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "loop-design",
+      "new": "loop-rules",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "loop-rules",
+      "new": "loop-rules",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "orchestration-coordinator",
+      "new": "lead-team",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "orchestration-design",
+      "new": "team-or-solo-rules",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "parallel-work-rules",
+      "new": "parallel-work-rules",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "session-close",
+      "new": "close-session",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "team-or-solo-rules",
+      "new": "team-or-solo-rules",
+      "kind": "skill",
+      "old_plugin": "orchestration",
+      "new_plugin": "teamwork",
+      "match": "qualified"
+    },
+    {
+      "old": "doc-checker",
+      "new": "doc-checker",
+      "kind": "agent",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "doc-reviewer",
+      "new": "doc-checker",
+      "kind": "agent",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "experiment-runner",
+      "new": "experiment-runner",
+      "kind": "agent",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "researcher",
+      "new": "experiment-runner",
+      "kind": "agent",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "bug-report",
+      "new": "file-bug",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "check-doc",
+      "new": "check-doc",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "doc-authoring-standards",
+      "new": "doc-writing-rules",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "doc-forge",
+      "new": "make-doc",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "doc-review",
+      "new": "check-doc",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "doc-writing-rules",
+      "new": "doc-writing-rules",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "docs-align",
+      "new": "tidy-docs",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "docs-alignment",
+      "new": "tidy-docs",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "feature",
+      "new": "file-feature",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "file-bug",
+      "new": "file-bug",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "file-feature",
+      "new": "file-feature",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "file-task",
+      "new": "file-task",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "html-to-markdown",
+      "new": "html-to-markdown",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "issue",
+      "new": "file-task",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "llms-txt-author",
+      "new": "make-llms-txt",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "llms-txt-forge",
+      "new": "make-llms-txt",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "make-doc",
+      "new": "make-doc",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "make-llms-txt",
+      "new": "make-llms-txt",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "make-reference",
+      "new": "make-reference",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "make-rubric",
+      "new": "make-rubric",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "make-vision-memo",
+      "new": "make-vision-memo",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "markdown-to-markup",
+      "new": "markdown-to-markup",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "reference-author",
+      "new": "make-reference",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "reference-forge",
+      "new": "make-reference",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "research-methods",
+      "new": "research-methods",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "rubric-author",
+      "new": "make-rubric",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "rubric-forge",
+      "new": "make-rubric",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "tidy-docs",
+      "new": "tidy-docs",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "qualified"
+    },
+    {
+      "old": "vision-memo-author",
+      "new": "make-vision-memo",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "vision-memo-forge",
+      "new": "make-vision-memo",
+      "kind": "skill",
+      "old_plugin": "scribe",
+      "new_plugin": "docs",
+      "match": "token"
+    },
+    {
+      "old": "font-choice-checker",
+      "new": "font-choice-checker",
+      "kind": "agent",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "typography-system-reviewer",
+      "new": "font-choice-checker",
+      "kind": "agent",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "font-token-rules",
+      "new": "font-token-rules",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "lettering-facts",
+      "new": "lettering-facts",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "pick-fonts",
+      "new": "pick-fonts",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "qualified"
+    },
+    {
+      "old": "typography-lettering",
+      "new": "lettering-facts",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "typography-system-author",
+      "new": "pick-fonts",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "typography-system-design",
+      "new": "pick-fonts",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "typography-tokens",
+      "new": "font-token-rules",
+      "kind": "skill",
+      "old_plugin": "typography",
+      "new_plugin": "design",
+      "match": "token"
+    },
+    {
+      "old": "component-checker",
+      "new": "component-checker",
+      "kind": "agent",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "component-reviewer",
+      "new": "component-checker",
+      "kind": "agent",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "flow-checker",
+      "new": "flow-checker",
+      "kind": "agent",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "flow-reviewer",
+      "new": "flow-checker",
+      "kind": "agent",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "layout-checker",
+      "new": "layout-checker",
+      "kind": "agent",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "layout-reviewer",
+      "new": "layout-checker",
+      "kind": "agent",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "apple-mobile-facts",
+      "new": "apple-mobile-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "break-down-flow",
+      "new": "break-down-flow",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "break-down-layout",
+      "new": "break-down-layout",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "check-focus",
+      "new": "check-focus",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "check-safety",
+      "new": "check-safety",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "check-speed",
+      "new": "check-speed",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "check-translations",
+      "new": "check-translations",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "check-ui-change",
+      "new": "check-ui-change",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "check-whole-ui",
+      "new": "check-whole-ui",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "component-author",
+      "new": "make-component",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "component-forge",
+      "new": "make-component",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "dom-block-flow",
+      "new": "dom-layout-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "dom-layout-facts",
+      "new": "dom-layout-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "flow-decompose",
+      "new": "break-down-flow",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "focus-verify",
+      "new": "check-focus",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "geometry-systems",
+      "new": "size-and-shape-rules",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "i18n-verify",
+      "new": "check-translations",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "layout-decompose",
+      "new": "break-down-layout",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "make-component",
+      "new": "make-component",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "mobile-hig-patterns",
+      "new": "apple-mobile-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "motion-design",
+      "new": "motion-rules",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "motion-rules",
+      "new": "motion-rules",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "perf-verify",
+      "new": "check-speed",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "safety-verify",
+      "new": "check-safety",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "size-and-shape-rules",
+      "new": "size-and-shape-rules",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "ui-audit",
+      "new": "check-whole-ui",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "ui-change-verify",
+      "new": "check-ui-change",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "ui-genre-facts",
+      "new": "ui-genre-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "ui-genres",
+      "new": "ui-genre-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    },
+    {
+      "old": "ui-pattern-facts",
+      "new": "ui-pattern-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "qualified"
+    },
+    {
+      "old": "ui-patterns",
+      "new": "ui-pattern-facts",
+      "kind": "skill",
+      "old_plugin": "ui",
+      "new_plugin": "screens",
+      "match": "token"
+    }
+  ]
+}
