@@ -118,6 +118,12 @@
       "prompt": "What sections does an ADR need?",
       "expect": "no-trigger",
       "comment": "owner: scribe doc-authoring-standards"
+    },
+    {
+      "id": "n90",
+      "prompt": "this repo still points at the old plugin names — update every reference",
+      "expect": "no-trigger",
+      "comment": "owner: fix-old-names — reciprocal fence, wave 2026-07-26 (issue #97). This skill CHOOSES a name; fix-old-names repairs references to one already retired."
     }
   ]
 }

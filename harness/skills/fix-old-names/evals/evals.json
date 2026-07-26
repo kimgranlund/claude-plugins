@@ -1,0 +1,25 @@
+{
+  "skill": "fix-old-names",
+  "note": "Trigger-routing suite, minted 2026-07-26 with the skill (issue #97). expect=trigger: a CONSUMER repo holds references to retired plugin/skill/agent/command names and wants them found or fixed. expect=no-trigger: near-misses owned elsewhere — choosing a new name (naming-rules), executing a rename inside the plugin repo (big-change-git-rules), general repo drift (clean-repo), and the routing/description tier (check-routing). The dangerous confusion this suite exists to measure is fix-old-names vs big-change-git-rules: both are about renames, but one runs in the repo that PERFORMED the rename and the other in a repo that merely CONSUMES it.",
+  "cases": [
+    { "id": "t01", "prompt": "My agent dispatch fails with 'no such agent' after updating the plugins.", "expect": "trigger" },
+    { "id": "t02", "prompt": "These skill names in my .claude directory look like the old ones — can you update them?", "expect": "trigger" },
+    { "id": "t03", "prompt": "Migrate this repo to the new plugin names.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Did the rename wave break anything in this repo?", "expect": "trigger" },
+    { "id": "t05", "prompt": "Find every reference to a retired skill name in here.", "expect": "trigger" },
+    { "id": "t06", "prompt": "I want a CI check that fails when our config references a renamed agent.", "expect": "trigger" },
+    { "id": "t07", "prompt": "Our CLAUDE.md still points at forge and scribe. Fix the pointers.", "expect": "trigger" },
+    { "id": "t08", "prompt": "Sweep .claude/ for stale plugin handles but don't change my ADRs.", "expect": "trigger" },
+    { "id": "t09", "prompt": "The seat map skill lists agent names that don't exist anymore.", "expect": "trigger" },
+    { "id": "t10", "prompt": "Check whether this project is still on retired plugin names before I ship.", "expect": "trigger" },
+
+    { "id": "n01", "prompt": "What should I call this new skill?", "expect": "no-trigger", "comment": "naming-rules — picking a name, not repairing references to an old one" },
+    { "id": "n02", "prompt": "Is 'orchestration-coordinator' too vague a name?", "expect": "no-trigger", "comment": "naming-rules — judging a name" },
+    { "id": "n03", "prompt": "How do I execute this rename safely across the plugin repo?", "expect": "no-trigger", "comment": "big-change-git-rules — producer side, the rename campaign itself" },
+    { "id": "n04", "prompt": "What must land in the same change as a rename?", "expect": "no-trigger", "comment": "big-change-git-rules — the rename contract" },
+    { "id": "n05", "prompt": "This repo has duplicated instruction trees and dead automation.", "expect": "no-trigger", "comment": "clean-repo — general drift, not retired names" },
+    { "id": "n06", "prompt": "Prove routing still works after I edited these descriptions.", "expect": "no-trigger", "comment": "check-routing — the blind judge simulation" },
+    { "id": "n07", "prompt": "Rename this variable across the TypeScript codebase.", "expect": "no-trigger", "comment": "no skill — ordinary source refactor, explicitly out of scope" },
+    { "id": "n08", "prompt": "Why does my skill never trigger?", "expect": "no-trigger", "comment": "skill-writing-rules — trigger debugging" }
+  ]
+}

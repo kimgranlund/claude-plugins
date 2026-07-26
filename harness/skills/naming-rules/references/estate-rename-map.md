@@ -1,5 +1,13 @@
 # Estate rename map — the paradigm applied at scale (worked example, 2026-07-20)
 
+> **Amendment, 2026-07-26 (issue #97):** this is the map as PLANNED, and execution later drifted
+> from it — ADR-0008 merged color, typography and design-systems into `design` (this file still
+> says "keep color", "keep typography", `design-kits`), and three member names landed differently
+> (`make-design-kit` shipped as `make-design-system`, `design-kit-checker` as
+> `design-system-checker`). Treat this file as the historical record of the DECISION, not as a
+> lookup table for what shipped. The executed mapping is `harness/renames.json`, derived from git
+> rename detection by `fix_old_names.py derive`.
+
 Status: **fully ruled 2026-07-20; ratification pending ADR-0006.** This is the full-estate
 review that motivated `naming-rules` — 9 plugins, ~130 members, mapped from the legacy grammar
 to the simple paradigm. Every row has a human ruling (the four originally-open rows were ruled

@@ -410,6 +410,12 @@ def gate(root: Path, package: bool = False):
              # prose, "adia-ui-kit" cites an external package in pack-writing-rules; the
              # standing false-positive class:
              "bidi-isolation", "adia-ui-kit",
+             # fix-old-names (2026-07-26, issue #97): this skill's subject matter IS retired
+             # names, so it necessarily cites them in prose. G8 is right that `ops-issues`
+             # matches no installed skill — that is precisely the point being illustrated.
+             # A structural exemption is wrong here (the skill should still be policed for
+             # phantom LIVE siblings), so the retired names it quotes are named one by one:
+             "ops-issues",
              # the new issue-sorter COMMAND skill (2026-07-20) added the "-issues" suffix to this
              # plugin's own inventory for the first time: "sub-issues" is github-facts'
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real
