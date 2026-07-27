@@ -19,6 +19,9 @@ brought every shipped plugin and member onto it, so a new name conforms and an e
 already does. Shipped names remain APIs; changing one is still a deprecation campaign (ADR +
 branch + PR), not an effect of this skill.
 
+The no-lore test (below) is Dieter Rams' "as little design as possible" applied to naming: a
+name earns every syllable it spends, nothing decorative, nothing added to sound important.
+
 ## The five tests — normative
 
 A proposed name passes all five or gets reworked; the test that fails names the fix.
