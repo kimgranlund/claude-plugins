@@ -2,14 +2,13 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "extraKnownMarketplaces": {
-    "nonoun-plugins": {
-      "source": {
-        "source": "git",
-        "url": "git@github.com:kimgranlund/claude-plugins.git"
-      },
-      "autoUpdate": true
-    }
+  "permissions": {
+    "allow": [
+      "Write(.claude/ops/watch-checkpoint.json)",
+      "Write(.claude/ops/friendlies.json)",
+      "Write(.claude/ops/held-items.md)",
+      "Write(.claude/ops/reports/*.md)"
+    ]
   },
   "enabledPlugins": {
     "llm@nonoun-plugins": false,
@@ -19,15 +18,16 @@
     "screens@nonoun-plugins": false,
     "agent-protocols@nonoun-plugins": false,
     "design@nonoun-plugins": false,
-    "figma@claude-plugins-official": false,
+    "figma@claude-plugins-official": true,
     "cloudflare@claude-plugins-official": false
   },
-  "permissions": {
-    "allow": [
-      "Write(.claude/ops/watch-checkpoint.json)",
-      "Write(.claude/ops/friendlies.json)",
-      "Write(.claude/ops/held-items.md)",
-      "Write(.claude/ops/reports/*.md)"
-    ]
+  "extraKnownMarketplaces": {
+    "nonoun-plugins": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:kimgranlund/claude-plugins.git"
+      },
+      "autoUpdate": true
+    }
   }
 }
