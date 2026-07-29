@@ -26,11 +26,11 @@ reader arrives with, not a chronological log.
 |---|---|
 | Worktree placement, the post-merge checkout error, discard safety | `references/worktree-mechanics.md` |
 | Squash safety, the ten-branch delete-failure class, CI as the gate, auth-path consistency | `references/merge-semantics.md` |
-| "A command said it worked but nothing changed" — the general pattern + three dated instances | `references/silent-failure-catalog.md` |
+| "A command said it worked but nothing changed" — the general pattern + five dated instances | `references/silent-failure-catalog.md` |
 | Pulling onto a checkout a parallel session is using; classification, quarantine, conflict resolution | `references/parallel-session-reconcile.md` |
 | Solo-main-direct vs. campaign; the branch-protection rejection; the close sequence in order | `references/campaign-decision-tree.md` |
 | A seat's push/PR-create "Blocked by classifier"; who pushes, who opens the PR, who merges; scoping a dispatch brief's ship leg | `references/who-ships-what.md` |
-| Executing a rename campaign — PR order, the seven-part per-rename contract, the blind eval-run parity gate, the rename incident catalog | `references/rename-execution-playbook.md` |
+| Executing a rename campaign — PR order, the eight-part per-rename contract, the blind eval-run parity gate, the rename incident catalog | `references/rename-execution-playbook.md` |
 
 Seven files, flat, no subdirectories — at the 3–7 axis band's ceiling, so this table IS the
 retrieval map (no separate INDEX.md; the enumerability ruling, `pack-writing-rules`).
@@ -54,12 +54,13 @@ retrieval map (no separate INDEX.md; the enumerability ruling, `pack-writing-rul
 run-the-check ask is routed to the matching script. **NOT done** while a claim ships with no
 incident or contract behind it, or a script's job is described instead of pointed at.
 
-## The core invariant (why all six files exist)
+## The core invariant (why all seven files exist)
 
 **A command's own report of success is a claim, not evidence — the state it claims to have
 produced must be independently re-read before the session proceeds as if the claim were true.**
 Three of the seven files instantiate this at a different layer (a shell pipe, a text-edit call,
-a git subcommand's quiet-success case); two (worktree placement, the decision tree) are the
+a git subcommand's quiet-success case, a hand-rolled argv parser, and `git status` itself
+under skip-worktree); two (worktree placement, the decision tree) are the
 operational context the doctrine gets applied inside; who-ships-what bounds who may attempt the
 ship operations in the first place; and the rename playbook applies it at campaign scale — the
 blind re-measure, not the executor's care, is what proves a rename landed.
@@ -82,7 +83,7 @@ blind re-measure, not the executor's care, is what proves a rename landed.
 ## Extending this pack
 
 A new dated incident that generalizes past this one workspace, a stale citation (a cited script
-path or commit that moved), or a sixth axis genuinely distinct from the five above — route to
+path or commit that moved), or an eighth axis genuinely distinct from the seven above — route to
 `make-pack` where installed; otherwise apply the discipline inline: one file
 per question type, every claim dated and sourced, register a new axis in this table in the same
 change that adds the file.
