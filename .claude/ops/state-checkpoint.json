@@ -1,7 +1,6 @@
 {
   "snapshot": {
     "branches": [
-      "fix/trim-skill-agent-descriptions",
       "main"
     ],
     "worktrees": [
