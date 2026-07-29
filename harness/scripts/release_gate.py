@@ -272,6 +272,11 @@ def gate(root: Path, package: bool = False):
              "mid-flow", "cross-flow", "self-orchestrated-looping-agentic-systems",
              # a2a-protocol-facts's references file (2026-07-15) — the estate's last standing G8 warn:
              "transport-and-streaming",
+             # check-state joining the estate added the -state suffix (2026-07-29) — all four
+             # are prose compounds, the 1.25.1 class: "work-state" (check-state's own subject),
+             # "tri-state" (the exit-code doctrine), "world-state" (stopping predicates),
+             # "dead-state" (thinking-depth prose):
+             "work-state", "tri-state", "world-state", "dead-state",
              # verify-family judgment rule-ID slugs (2026-07-16, Issue #8) — findings
              # vocabulary, not skill names:
              "order-vs-task-flow",

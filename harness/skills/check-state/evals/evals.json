@@ -1,0 +1,26 @@
+{
+  "skill": "check-state",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    { "id": "t01", "prompt": "What's the state of the project?", "expect": "trigger" },
+    { "id": "t02", "prompt": "Where are we? Give me a status overview of everything in flight.", "expect": "trigger" },
+    { "id": "t03", "prompt": "What's blocked on me right now?", "expect": "trigger" },
+    { "id": "t04", "prompt": "Give me a project state report", "expect": "trigger" },
+    { "id": "t05", "prompt": "Review all roadmap, plan, and backlog items and the open tickets", "expect": "trigger" },
+    { "id": "t06", "prompt": "Which branches and worktrees can be merged, deleted, or closed?", "expect": "trigger" },
+    { "id": "t07", "prompt": "What changed since I last checked in on this repo?", "expect": "trigger" },
+    { "id": "t08", "prompt": "Are there any open PRs waiting on my review or failing CI?", "expect": "trigger" },
+    { "id": "t09", "prompt": "Do our plan docs still match the open issues, or have they drifted?", "expect": "trigger" },
+    { "id": "t10", "prompt": "I'm back after a week off — catch me up on where this repo stands.", "expect": "trigger" },
+    { "id": "n01", "prompt": "What should I work on next? Prioritize the backlog for me.", "expect": "no-trigger", "comment": "owner: chore-planner (action queue, not a report)" },
+    { "id": "n02", "prompt": "Clean up the stale branches and remove the dead worktrees.", "expect": "no-trigger", "comment": "owner: repo-cleaner (executes; check-state only proposes)" },
+    { "id": "n03", "prompt": "Is the plugin estate healthy? Run the health sweep.", "expect": "no-trigger", "comment": "owner: /check-everything (plugin health, not work state)" },
+    { "id": "n04", "prompt": "File this as a follow-up task so we don't lose it.", "expect": "no-trigger", "comment": "owner: file-task" },
+    { "id": "n05", "prompt": "Run the whole ops sweep — dispatch all the standing seats.", "expect": "no-trigger", "comment": "owner: /sweep-chores (chore-lead)" },
+    { "id": "n06", "prompt": "Triage the new issues that came in overnight.", "expect": "no-trigger", "comment": "owner: issue-sorter" },
+    { "id": "n07", "prompt": "What's the status of this one PR — is #42 ready to merge?", "expect": "no-trigger", "comment": "single-item question; plain gh lookup, no report needed" },
+    { "id": "n08", "prompt": "Write the release report artifact for this session.", "expect": "no-trigger", "comment": "owner: session-review-artifact" },
+    { "id": "n09", "prompt": "Wrap up this session — anything left hanging in the worktree?", "expect": "no-trigger", "comment": "owner: teamwork close-session" },
+    { "id": "n10", "prompt": "Anything still open or unanswered from our conversation?", "expect": "no-trigger", "comment": "owner: find-open-questions (session backlog, not repo state)" }
+  ]
+}
