@@ -1,5 +1,5 @@
 # intent — check-state
-status: forging
+status: shipped          # PR #111, harness 2.5.0, gate CLEAN 0/0, 2026-07-29
 species: procedural
 dials: { disable-model-invocation: false, user-invocable: true }
 freedom: low (collectors) / medium (cross-reference pass)
