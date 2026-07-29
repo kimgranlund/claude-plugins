@@ -1,0 +1,20 @@
+{
+  "snapshot": {
+    "branches": [
+      "fix/trim-skill-agent-descriptions",
+      "main"
+    ],
+    "worktrees": [
+      "/Users/kimba/Projects/nonoun/plugins"
+    ],
+    "stashes": [],
+    "issues": [
+      96
+    ],
+    "prs": [
+      109
+    ],
+    "docs": []
+  },
+  "unmeasured": []
+}
