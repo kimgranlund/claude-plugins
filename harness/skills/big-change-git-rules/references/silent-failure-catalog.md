@@ -2,9 +2,11 @@
 
 The single doctrine every entry below instantiates: **a command's own stdout/exit-code report is
 a CLAIM, not evidence.** The state it claims to have produced must be independently re-read
-before the session proceeds as if the claim were true. Three real, dated instances of the same
-mechanism, at three different layers (a shell pipe, a `str.replace` call, and a git subcommand's
-own quiet-success behavior) — proof this is a class, not a one-off.
+before the session proceeds as if the claim were true. Five real, dated instances of the same
+mechanism, at five different layers (a shell pipe, a `str.replace` call, a git subcommand's own
+quiet-success behavior, a hand-rolled argv parser, and git's own `status` under skip-worktree) —
+proof this is a class, not a one-off. Count amended 2026-07-29: it read "three" while four entries
+were already present, the fourth having landed without updating this line.
 
 ## A truncated pipe swallows a command's real exit state
 
@@ -61,13 +63,38 @@ a git-mutating script must reject unknown argv tokens loudly before touching sta
 day in `sync_main.py`'s strict `parse_cli` (harness 2.0.5, PR #86, closing Issue #74): any
 unknown or malformed argv token exits with usage text before any git operation, selftest-proven.
 
+## `git status` reports a clean tree while tracked files are absent from disk — skip-worktree hides the difference
+
+[incident, 2026-07-29, `~/.claude`; the only entry here whose false claim came from git's own
+STATUS report rather than from a mutating command] A sparse-checkout cone was set to
+`plugins/marketplaces/.../packages/plugins` — a path that repo never tracked at all — so the cone
+matched nothing and git set **skip-worktree** on every tracked file. skip-worktree instructs git
+to treat the index as authoritative and stop comparing against disk, so for the whole affected
+tree `git status` reported clean while the files were simply not there. Three whole skills
+(`accounting-studio`, `port-zombie-sweep`, `session-review-artifact`) plus
+`adhd-output/references/audit-report.md` were absent from disk and never once appeared as deleted. Two further symptoms compounded it: `git add <newfile>` in that
+tree refused with a sparse-checkout advisory rather than staging (needing `--sparse`), and a
+`UserPromptSubmit` hook broke because its `compact-contract.md` was among the missing files. The
+cause was mis-diagnosed TWICE — first as "a stray `.zip` in the skills dir", then as "`/plugin
+update` pruned them" — before `git ls-files -v | grep ^S` revealed the `S` flag. Worse, the
+missing hook file was rebuilt by hand from conversation context when `git show
+HEAD:<path>` had the original all along (the reconstruction happened to be byte-identical —
+luck, not method). **The general form:** `git status`'s silence is a claim like any other, and
+skip-worktree/sparse-checkout is the one configuration that makes it a lie *by design*. Before
+concluding a tracked file was deleted — and always before reconstructing one — run `git ls-files
+-v` for `S`/`h` flags and `git cat-file -e HEAD:<path>` to ask whether git still holds it. Fixed
+by `git sparse-checkout disable` (verified first that no on-disk file differed from its indexed
+copy, so materializing could clobber nothing).
+
 ## The general pattern, stated once
 
-Every incident above has the same shape: **command reports success (exit 0, no exception, clean
-stdout) → state did not change as expected → session proceeds on the false premise.** The
-counter-pattern, applied identically in every fix: capture the relevant state BEFORE the
-operation, perform the operation, capture the state AFTER, and assert the delta matches what was
-actually intended — never the operation's own self-report.
+Every incident above has the same shape: **a git or shell operation reports success (exit 0, no
+exception, clean stdout — or, in the skip-worktree case, a clean `status`) → state is not what the
+report implies → session proceeds on the false premise.** The counter-pattern, applied identically
+in every fix: capture the relevant state BEFORE the operation, perform the operation, capture the
+state AFTER, and assert the delta matches what was actually intended — never the operation's own
+self-report. The skip-worktree entry extends the doctrine one step: where no operation ran at all,
+the *absence* of a reported difference is still a claim, and configuration can make it false.
 
 ## Failure catalog
 
@@ -76,3 +103,5 @@ actually intended — never the operation's own self-report.
 | A diagnosis session works from stale data for several steps before catching the error | a pull/fetch aborted silently under a filtering pipe | never filter a state-changing command's output without checking its exit code separately |
 | A gate keeps warning after an edit that "succeeded" | a `str.replace`/regex edit silently matched nothing (whitespace, quoting, or content drift from what was read) | re-read the file after every programmatic edit and assert the expected content is present |
 | A script reports it quarantined/created/moved something that isn't actually there | the underlying command's "no-op success" case wasn't distinguished from its "real work done" case | capture before/after state and assert the specific expected delta, not just the exit code |
+| A git-mutating script runs against the wrong repo while reporting success | a hand-rolled argv parser probed for known flags and silently discarded an unknown one (`--repo-dir` for `--repo-root`) | reject unknown argv tokens with usage text before touching state; never infer "understood" from "didn't complain" |
+| Tracked files are missing from disk but `git status` says clean; `git add` refuses a new file in that tree | skip-worktree set on the whole tree (usually by a sparse-checkout cone that matches nothing) tells git to stop comparing index against disk | `git ls-files -v` and look for `S`/`h` flags; `git cat-file -e HEAD:<path>` before ever concluding a file is gone or rebuilding it by hand |
