@@ -4,23 +4,26 @@ description: >-
   Audit and slim CLAUDE.md (and .claude/rules/) by classifying every line against the residency
   test and migrating evictions to their proper tier — checks to hooks, procedures to skills,
   subtree truths to rules — with a landing artifact for every behavior removed. Run
-  /check-entry-file [path, default ./CLAUDE.md]. Human-timed; edits files on approval only.
+  /check-entry-file [path, default ./CLAUDE.md]; add --strict for the bare-minimum pass
+  (burden of proof inverts: every KEEP must justify itself). Human-timed; edits files on
+  approval only.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[path to CLAUDE.md]"
+argument-hint: "[path to CLAUDE.md] [--strict]"
 ---
 
 # check-entry-file
 
-check-entry-file slims an entry file without losing a single behavior: every evicted line gets a landing artifact before the prose is cut. Target: `$ARGUMENTS` (default `./CLAUDE.md`, plus `.claude/rules/` if present).
+check-entry-file slims an entry file without losing a single behavior: every evicted line gets a landing artifact before the prose is cut. Target: `$ARGUMENTS` (default `./CLAUDE.md`, plus `.claude/rules/` if present). A missing target file → report that and stop; there is nothing to audit.
 
 Invoke `entry-file-rules` now — its routing table is the classifier; it is not restated here.
 
 ## Phase 1 — Inventory and classify
 
 1. `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/skill_lint.py" <path>` — the C-rules give the mechanical smells (length, checks-in-prose density) as the report's header.
-2. Read the file; classify **every line or coherent block** into exactly one class from the standards' routing table: `KEEP` (passes the residency test) · `→HOOK` · `→SKILL` · `→RULE` · `CUT-stale` · `CUT-known` (restates model knowledge). Staleness is checked first and against the repo, not memory — a line referencing a path, tool, or decision is verified with Grep/Glob before it may KEEP.
-3. Emit the migration table, verdict first:
+2. Read the file; classify **every line or coherent block** into exactly one class from the standards' routing table: `KEEP` (passes the residency test) · `→HOOK` · `→SKILL` · `→RULE` · `CUT-stale` · `CUT-known` (restates model knowledge). Staleness is checked first and against the repo, not memory — a line referencing a path, tool, or decision is verified with Grep/Glob before it may KEEP. Classification follows the standards' mechanize-first ordering — a checkable line never lands as prose; the hook or `/make-script` script is named in the row.
+3. **`--strict` (the bare-minimum pass):** the burden of proof inverts — every line is evicted unless its KEEP row carries a one-line residency justification, and the projected file targets the standards' seed class. Default mode trims to the standard; strict mode trims to the minimum its seed demonstrates.
+4. Emit the migration table, verdict first (in `--strict`, KEEP rows carry their justification in the Destination column):
 
 ```
 check-entry-file · <path> · N lines → keep K · hooks H · skills S · rules R · cut C
@@ -40,7 +43,7 @@ Present the table and the projected file (KEEP lines + pointers). This phase end
 Per approved row, landing artifact first:
 
 - `→HOOK` — draft via `/make-hook` (or extend an existing script); the prose is cut only after the hook's selftest passes and it is registered.
-- `→SKILL` — route to `/make-skill` for a new skill, or land the lines in the owning skill's body; cut after the skill lints clean. A one-line pointer may replace the block when discoverability warrants it.
+- `→SKILL` — route to `/make-skill` for a new skill, or land the lines in the owning skill's body; cut after the skill lints clean. Landing skills take the standards' pinned eviction dials unless the row argues human timing; steps a script could run land as the skill's `scripts/` script, not prose. A one-line pointer may replace the block when discoverability warrants it.
 - `→RULE` — move to `.claude/rules/<scope>.md` with its path filter; cut the global copy.
 - `CUT-*` — remove; `CUT-stale` rows are listed in the report (they were false presuppositions the whole time — worth knowing).
 
@@ -50,7 +53,7 @@ If a landing artifact cannot be completed this session → its prose **stays** a
 
 ## Phase 4 — Verify and report
 
-1. Re-run the lint: C1 under threshold or the remaining length justified line-by-line in the report.
+1. Re-run the lint: C1 under threshold or the remaining length justified line-by-line in the report. In `--strict`, additionally: the surviving file is within the standards' seed class, or every line beyond it carries its KEEP justification in the report — a strict run that merely passes the default criterion has not verified strict.
 2. The residency read: each surviving line passes "true every turn, needed before task content" — read it as a fresh session would.
 3. Final report: before/after line counts, the migration table with dispositions, DEFERRED rows with blockers, and the reminder that this audit recurs — the growing dotfile grows back.
 

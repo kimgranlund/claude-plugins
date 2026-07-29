@@ -30,6 +30,11 @@ Short, always-true, identity-grade facts in declarative register: what the codeb
 | Restated model knowledge | Deletion test fails: output identical without it | **Cut** |
 | Stale fact | Refers to retired code, tools, decisions | **Cut** (false presupposition: the model absorbs it as ground truth) |
 
+Two rules bind the table's application:
+
+- **Mechanize-first ordering.** When a line qualifies for more than one destination, the mechanized tier wins: procedural-and-checkable routes to a hook or a bundled script (`/make-script`) before prose-as-skill is considered — prose a program could enforce is the eviction half-done.
+- **Eviction landings default to model-only** (`user-invocable: false`) — for reference content that is its species' normal form, and for procedures as a deliberate narrowing of the species table's procedural default (`skill-writing-rules` owns the dial mechanics): entry-file content was standing context, never human-timed, so the landing preserves model-routed availability at zero resident cost. A slash or command surface is added later on demand, not by default.
+
 The last row is the deadliest: a stale entry-file line is not ignored, it is *believed* — read as world-state, built around, producing fluent wrongness that passes review.
 
 ## The physics
@@ -63,7 +68,7 @@ Good (residency + pointer):           Deploys are human-timed: /deploy (never ru
 
 ## Shipped seed — the worked example
 
-`assets/engineering-operating-contract.md` is a ready-to-install global `~/.claude/CLAUDE.md` that passes this standard (~20 lines: loop identity, four standing convictions in declarative register, a pointer block to the estate's doctrine skills). For a new setup, copy it in and adapt. The asset is the canonical seed — installed copies refresh *from* it, never the reverse (distilled 2026-07-12 from the standard's first full audit of a live 49-line contract). Its pointer block presupposes the harness/docs/teamwork plugins; trim any pointer whose owner isn't installed.
+`assets/engineering-operating-contract.md` is a ready-to-install global `~/.claude/CLAUDE.md` that passes this standard (~20 lines: loop identity, four standing convictions in declarative register, a pointer block to the estate's doctrine skills). **The seed class** — identity, invariants, commands, pointers, ~20–40 lines — is the bare-minimum target `/check-entry-file --strict` trims to; a project file inside the class needs no justification column, one beyond it justifies every extra line. For a new setup, copy it in and adapt. The asset is the canonical seed — installed copies refresh *from* it, never the reverse (distilled 2026-07-12 from the standard's first full audit of a live 49-line contract). Its pointer block presupposes the harness/docs/teamwork plugins; trim any pointer whose owner isn't installed.
 
 ## Provenance
 

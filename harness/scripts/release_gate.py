@@ -277,6 +277,9 @@ def gate(root: Path, package: bool = False):
              # "tri-state" (the exit-code doctrine), "world-state" (stopping predicates),
              # "dead-state" (thinking-depth prose):
              "work-state", "tri-state", "world-state", "dead-state",
+             # entry-file-rules' mechanize-first bullet (2026-07-29): prose compound,
+             # "before prose-as-skill is considered" — not a sibling name:
+             "prose-as-skill",
              # verify-family judgment rule-ID slugs (2026-07-16, Issue #8) — findings
              # vocabulary, not skill names:
              "order-vs-task-flow",
