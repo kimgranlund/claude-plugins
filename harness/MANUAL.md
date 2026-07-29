@@ -26,6 +26,9 @@ Install, then `/reload-plugins`. Everything below is invoked as `/harness:<name>
 **`/check-everything [root]`** — the recurring outer loop: lint sweep, standards-preloading fresh-context reviews of every artifact, triage table routing each finding to a fix, a decision, or permanent infrastructure.
 > `/check-everything` · `/check-everything ~/projects/monorepo`
 
+**`/check-state [repo-root] [--artifact]`** — the read-only work-state report: four bundled collectors sweep git (branches/worktrees/stashes), tickets and PRs (via `gh`; Linear/Jira a disclosed gap), and ROADMAP/PLAN/TICKET docs, then a cross-reference pass reports Blocked-on-you → Ready-to-close → Drift → Delta-since-last-run → Counts, every finding naming the command that acts on it. Mutates nothing but its own checkpoint (`.claude/ops/state-checkpoint.json`). Also model-invocable: "what's the state of the project", "what's blocked on me", "catch me up" fire it without the slash.
+> `/check-state` · `/check-state . --artifact` — plugin health is `/check-everything`'s job; this is work state
+
 **`/clean-repo [repo path] [--phases 0-6 | audit-only]`** — the committing campaign for a drifted repo (where `/check-everything` only reports): phased inventory → unify duplicates → orphan manifest → schema + standing guards → audit verdicts → work-package execution → lessons distillation; human-checkpointed at every destructive step.
 > `/clean-repo .` · `/clean-repo ~/projects/app audit-only`
 
