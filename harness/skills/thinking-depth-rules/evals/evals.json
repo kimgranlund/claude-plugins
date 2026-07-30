@@ -1,6 +1,6 @@
 {
   "skill": "thinking-depth-rules",
-  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Boundaries: prompt-wording-rules (wording), break-down-problem (structure), find-the-ask (the ask).",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Boundaries: prompt-wording-rules (wording), break-down-problem (structure), find-intent (the ask).",
   "cases": [
     {
       "id": "t01",

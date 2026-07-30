@@ -153,7 +153,7 @@ change available. The journal and disposition live in `CHANGELOG.md`.
 ## Composition
 
 - **`experiment-runner`** runs one method in isolation and hands back the typed report above.
-- **[[find-the-ask]]** / **[[grill-the-ask]]** sharpen a fuzzy "make it better" into a scorable
+- **[[find-intent]]** / **[[grill-the-ask]]** sharpen a fuzzy "make it better" into a scorable
   question + a defined scorer *before* a method runs — the R1 precondition.
 - **[[make-rubric]]** owns `references/rubric.md`'s shape; harness's `make-pack` owns adding or
   revising a method file (axis decomposition, grounded research, index discipline) — never bolt an

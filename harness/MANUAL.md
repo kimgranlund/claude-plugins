@@ -66,8 +66,8 @@ Install, then `/reload-plugins`. Everything below is invoked as `/harness:<name>
 **`check-skill`** — audit an existing SKILL.md against the standards; verdict-first findings report. The mechanical half runs first via `skill_lint.py`.
 > "review this skill" · "this skill misfires constantly — what's wrong with it"
 
-**`find-the-ask`** — separate the literal ask from the root goal before acting: surface ambiguities and conflicting signals, resolve them with low-effort multiple-choice questions, restate the task sharper.
-> "figure out what this ticket is actually asking for" · "improve this prompt brief" · `/find-the-ask`
+**`find-intent`** — separate the literal ask from the root goal before acting: surface ambiguities and conflicting signals, resolve them with low-effort multiple-choice questions, restate the task sharper.
+> "figure out what this ticket is actually asking for" · "improve this prompt brief" · `/find-intent`
 
 **`find-open-questions`** — clears a session's backlog of unresolved items (an unanswered question, an unconfirmed assumption, a stray idea left undecided) into one batched AskUserQuestion round, instead of a prose dump nobody actually resolves. Fires on its own at a session's natural closing point; also invocable directly.
 > "before we wrap up, is there anything still open" · "any decisions still open before we close this out" · `/find-open-questions`

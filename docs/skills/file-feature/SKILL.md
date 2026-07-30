@@ -43,7 +43,7 @@ a record existed.
 
 ## Phase 2 — Extract
 
-Invoke find-the-ask (harness, where installed; apply its discipline inline otherwise): root goal
+Invoke find-intent (harness, where installed; apply its discipline inline otherwise): root goal
 vs literal ask, the delta taxonomy, ONE batched clarifying round maximum — and only when a human
 is actually present to answer (a sibling redirect, a subagent dispatch, or a scheduled/unattended
 firing has no one to ask — skip straight to capture-with-gaps). A still-vague idea after that

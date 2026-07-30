@@ -1,5 +1,5 @@
 {
-  "skill": "find-the-ask",
+  "skill": "find-intent",
   "_note": "Deep-review corpus, excellence campaign batch 4 (2026-07-03). Positives: imperative / diagnostic / symptom / indirect. Negatives adversarial from neighborhood: grill-the-ask, prd-author, spec-author, break-down-problem.",
   "positives": [
     "figure out what they really want before you start",

@@ -50,7 +50,7 @@
   both-planes check trivial: a design with no `[M]` decisions (or no `[S]`) failed to grill one plane.
 - **Recommend-with-tradeoff.** Lead every option set with "(recommended) … — tradeoff: …". The author
   decides by *editing* a recommendation faster than by composing from scratch (shared with
-  `find-the-ask`'s closed-question discipline).
+  `find-intent`'s closed-question discipline).
 
 ## The validation loop
 
@@ -65,4 +65,4 @@ defaulted?), **grounding** (every option concrete, traceable to a codebase fact?
 Sources: [Design space exploration](https://en.wikipedia.org/wiki/Design_space_exploration) ·
 [Architecture Decision Records](https://adr.github.io/) ·
 [Rolling-wave / progressive elaboration (PMI)](https://www.pmi.org/learning/library/rolling-wave-planning-progressive-elaboration-6822) ·
-companion: `.claude/skills/find-the-ask/`
+companion: `.claude/skills/find-intent/`

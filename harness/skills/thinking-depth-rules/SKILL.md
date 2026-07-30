@@ -5,7 +5,7 @@ description: >-
   fixes, a verdict that's just tidying. Use for "push the reasoning further", "question the rules
   themselves", "apply higher-order reasoning", "are we at a local maximum", or "is this
   improvement real or just relabeling". NOT the wording layer (prompt-wording-rules); NOT a
-  structural breakdown (break-down-problem); NOT extracting the ask (find-the-ask).
+  structural breakdown (break-down-problem); NOT extracting the ask (find-intent).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -72,5 +72,5 @@ Every claim above 2nd order pays rent in the currency of the order below it:
 ## Routing
 
 Language of the artifact → `prompt-wording-rules`. Structure of the problem →
-`break-down-problem`. What's actually being asked → `find-the-ask`. Whether decisions earned their
+`break-down-problem`. What's actually being asked → `find-intent`. Whether decisions earned their
 verdicts → the decision skills' own tests; this skill governs how high those tests must reach.

@@ -30,7 +30,7 @@ IDs — say so and forge them in dependency order.
 
 One batched round covering the type's load-bearing slots: for a SPEC, the testable requirements
 and the non-goals; for an ADR, the alternatives actually considered; for a PLAN, each step's
-done-when; for a TICKET, what it traces to. Where the harness plugin's find-the-ask and
+done-when; for a TICKET, what it traces to. Where the harness plugin's find-intent and
 break-down-problem are installed, use them here; where not, apply their discipline inline —
 ambiguities surfaced as multiple-choice, structure before prose.
 

@@ -47,9 +47,9 @@ never proceed as if an unresolved id already had a record behind it.
 
 ## Phase 2 — Capture
 
-Invoke find-the-ask on the raw report: separate the literal complaint from the root cause, and
+Invoke find-intent on the raw report: separate the literal complaint from the root cause, and
 produce a repro (or the explicit statement "no fixed repro" for an intermittent or subjective
-report). Where find-the-ask is not installed, apply its discipline inline — one batched round of
+report). Where find-intent is not installed, apply its discipline inline — one batched round of
 clarifying questions, never more, and only when a human is actually present to answer (a sibling
 redirect, a subagent dispatch, or a scheduled/unattended firing has no one to ask — skip straight
 to capture-with-gaps). Missing detail after the round, or no round at all, does not block capture:

@@ -10,7 +10,7 @@ shipped through the harness release gate.
 | `skills/make-doc` | Procedural | both (`/make-doc`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
 | `skills/check-doc` | Procedural | both (`/check-doc`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
 | `skills/file-bug` | Procedural (orchestrator) | both (`/file-bug`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
-| `skills/file-feature` | Procedural skill | both (`/file-feature`) | Feature intake, the file-bug mirror: find-the-ask → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → make-reference / harness's make-pack) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build-feature` (orchestration) is the momentum half |
+| `skills/file-feature` | Procedural skill | both (`/file-feature`) | Feature intake, the file-bug mirror: find-intent → three-surface dedup → size (materiality floor) + shape (work → `kind: feature` ticket ± earned docs; knowledge → make-reference / harness's make-pack) → lint-clean record placed into existing ROADMAP/PLAN; never builds — `/build-feature` (orchestration) is the momentum half |
 | `skills/file-task` | Procedural skill | both (`/file-task`) | The generic third sibling: any work item that is neither bug- nor feature-shaped (chore, follow-up, research item, debt) — shape-gate → dedup → `kind: task` record on the ruled backend (`task` label + optional size), plus the full resume surface: fold detail, dated Findings, status verbs (done/doing/wontfix) with the Findings-first close |
 | `skills/tidy-docs` | Command skill | user-only (`/tidy-docs`) | Migrate an existing repo's scattered docs to the canonical directory-per-type map: three-surface inventory (canonical dirs, near-miss locations, loose files/README extractions) → ONE batched plan approval → git mv + minimal frontmatter (doc-type/id/status) + basename-first link repair + doc_lint → project-docs index installed; prose never rewritten, never commits |
 | `skills/research-methods` | Declarative skill | model-only | Six measured-investigation methods (autoresearch, ablation, bisect, adversarial, hill-climb, sweep); the Phase −1/0/1/2 spine + investigation rubric; the `experiment-runner` agent runs one method in isolation |
@@ -42,7 +42,7 @@ plan/roadmap family (same tests); a ninth BUG type (bugs are TICKET-shaped work 
 types beyond bugs (Vol 3 covers them — flagged as the next wave, not built without demand).
 
 Cross-plugin seams (soft, by design): docs uses the harness plugin's cross-cutting layer —
-find-the-ask, break-down-problem, prompt-wording-rules, thinking-depth-rules — when installed, and
+find-intent, break-down-problem, prompt-wording-rules, thinking-depth-rules — when installed, and
 degrades to inline judgment when not. No hard edges cross the boundary.
 
 Directories align with plugin names (ADR-0007).
