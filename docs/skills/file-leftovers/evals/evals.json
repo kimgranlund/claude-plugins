@@ -1,0 +1,26 @@
+{
+  "skill": "file-leftovers",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline.",
+  "cases": [
+    { "id": "t01", "prompt": "Sweep this chat for leftover work", "expect": "trigger" },
+    { "id": "t02", "prompt": "Ticket everything we didn't get to today", "expect": "trigger" },
+    { "id": "t03", "prompt": "Did we drop anything this session? Turn it into tickets.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Roll up everything we mentioned but never did into workable tickets", "expect": "trigger" },
+    { "id": "t05", "prompt": "File the leftovers from this conversation", "expect": "trigger" },
+    { "id": "t06", "prompt": "We covered a lot — capture all the bugs and ideas we talked about but never acted on", "expect": "trigger" },
+    { "id": "t07", "prompt": "Before I go, make tickets for all the loose work from this chat", "expect": "trigger" },
+    { "id": "t08", "prompt": "Go back through this session and file everything that fell through the cracks", "expect": "trigger" },
+    { "id": "t09", "prompt": "Turn the stuff we mentioned in passing into a backlog I can actually work", "expect": "trigger" },
+    { "id": "t10", "prompt": "Harvest this conversation for unfinished work and open issues for each item", "expect": "trigger" },
+    { "id": "n01", "prompt": "Anything still open or unanswered from our conversation?", "expect": "no-trigger", "comment": "owner: find-open-questions (decisions resolved conversationally, no tickets)" },
+    { "id": "n02", "prompt": "File a github issue for this crash, it breaks on paste", "expect": "no-trigger", "comment": "owner: file-bug (one known item)" },
+    { "id": "n03", "prompt": "Can we add a dark mode?", "expect": "no-trigger", "comment": "owner: file-feature" },
+    { "id": "n04", "prompt": "Note this down as a follow-up for later", "expect": "no-trigger", "comment": "owner: file-task (one known item)" },
+    { "id": "n05", "prompt": "What should I work on next? Prioritize the backlog.", "expect": "no-trigger", "comment": "owner: chore-planner" },
+    { "id": "n06", "prompt": "Wrap up this session — nothing left hanging in the worktree before I go?", "expect": "no-trigger", "comment": "owner: teamwork close-session" },
+    { "id": "n07", "prompt": "What's the state of the project? What's blocked on me?", "expect": "no-trigger", "comment": "owner: harness check-state (repo evidence, not conversation)" },
+    { "id": "n08", "prompt": "Triage the new issues that came in overnight", "expect": "no-trigger", "comment": "owner: issue-sorter (items already filed)" },
+    { "id": "n09", "prompt": "Summarize what we did today", "expect": "no-trigger", "comment": "recap, not intake; no ticket minting asked" },
+    { "id": "n10", "prompt": "Scan our docs folder for knowledge we haven't captured as a skill yet", "expect": "no-trigger", "comment": "owner: harness save-lessons (knowledge, not work items)" }
+  ]
+}

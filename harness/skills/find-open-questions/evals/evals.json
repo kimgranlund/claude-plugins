@@ -44,7 +44,7 @@
     },
     {
       "id": "t09",
-      "prompt": "Let's do a final pass — what's still unresolved between us?",
+      "prompt": "Let's do a final pass \u2014 what's still unresolved between us?",
       "expect": "trigger"
     },
     {
@@ -59,7 +59,7 @@
     },
     {
       "id": "t12",
-      "prompt": "We're about to end the session — anything you still need from me first?",
+      "prompt": "We're about to end the session \u2014 anything you still need from me first?",
       "expect": "trigger"
     },
     {
@@ -114,8 +114,14 @@
     },
     {
       "id": "n11",
-      "prompt": "Wrap up this session — make sure nothing's left hanging in the worktree before you go.",
+      "prompt": "Wrap up this session \u2014 make sure nothing's left hanging in the worktree before you go.",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "Sweep this chat for leftover work and ticket everything we didn't get to",
+      "expect": "no-trigger",
+      "comment": "owner: docs file-leftovers (work items -> tickets; this skill owns ticketless decisions)"
     }
   ]
 }

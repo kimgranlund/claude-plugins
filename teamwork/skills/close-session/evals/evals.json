@@ -23,6 +23,7 @@
     { "id": "n09", "prompt": "What's still open in the issue tracker?", "expect": "no-trigger" },
     { "id": "n10", "prompt": "Commit this change.", "expect": "no-trigger" },
     { "id": "n11", "prompt": "Open a PR for this fix.", "expect": "no-trigger" },
-    { "id": "n12", "prompt": "Review this PR before we merge it.", "expect": "no-trigger" }
+    { "id": "n12", "prompt": "Review this PR before we merge it.", "expect": "no-trigger" },
+    {"id": "n13", "prompt": "Did we drop anything this session? Turn it into tickets.", "expect": "no-trigger", "comment": "owner: docs file-leftovers (ticket minting; this skill verifies and closes)"}
   ]
 }
