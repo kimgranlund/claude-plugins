@@ -29,6 +29,9 @@ Install, then `/reload-plugins`. Everything below is invoked as `/harness:<name>
 **`/check-state [repo-root] [--artifact]`** — the read-only work-state report: four bundled collectors sweep git (branches/worktrees/stashes), tickets and PRs (via `gh`; Linear/Jira a disclosed gap), and ROADMAP/PLAN/TICKET docs, then a cross-reference pass reports Blocked-on-you → Ready-to-close → Drift → Delta-since-last-run → Counts, every finding naming the command that acts on it. Mutates nothing but its own checkpoint (`.claude/ops/state-checkpoint.json`). Also model-invocable: "what's the state of the project", "what's blocked on me", "catch me up" fire it without the slash.
 > `/check-state` · `/check-state . --artifact` — plugin health is `/check-everything`'s job; this is work state
 
+**`/what-shipped [window]`** — the windowed activity report: bundled `collect_github.py` sweeps PRs merged/opened/open-now and issues for a UTC date window (release-bot noise counted but excluded, saturation guarded, `## OK` trailer = completeness), the resolved ticket backend adds records updated in the window, and the report groups real work into ≤5 owner-named workstreams with the ticket↔PR join's residue — tickets with no PR — called out. Windows: bare = today, `yesterday`, `this week`, `36h`, `YYYY-MM-DD[..YYYY-MM-DD]`. Also model-invocable: "what shipped today", "standup summary", "what landed in the last 24 hours".
+> `/what-shipped` · `/what-shipped this week` — current work-state (branches, blocked-on-you) is `/check-state`'s job; this is a window of activity
+
 **`/clean-repo [repo path] [--phases 0-6 | audit-only]`** — the committing campaign for a drifted repo (where `/check-everything` only reports): phased inventory → unify duplicates → orphan manifest → schema + standing guards → audit verdicts → work-package execution → lessons distillation; human-checkpointed at every destructive step.
 > `/clean-repo .` · `/clean-repo ~/projects/app audit-only`
 

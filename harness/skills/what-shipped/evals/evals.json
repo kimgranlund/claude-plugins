@@ -1,0 +1,126 @@
+{
+ "skill": "what-shipped",
+ "note": "Trigger-routing suite, carried over from the skill's adiav2 origin (2026-07-25) at elevation into harness (2026-07-30). Positives are verbatim or near-verbatim asks from the authoring session (t01/t02 are the literal user asks that motivated the skill; t16 is the explicit slash-command path). Negatives are near misses this skill must not steal: in a host repo they are typically owned by project siblings (PR creation, ticket pickup, CI diagnosis, code review, single-artifact summaries); in a bare install they are simply unowned \u2014 either way, no-trigger. t15 names Linear as a phrasing users actually type; the skill itself is ticket-backend-agnostic (doc-writing-rules' backend resolver).",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "summarize PR's merged today",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "summarize tickets, issues and PRs created and merged today",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "what shipped today",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "what did we ship this week",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "what landed in the last 24 hours",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "what changed yesterday",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "give me a standup summary",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "what merged on 2026-07-24",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "summarize the last 24hrs of activity",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "what work got done today",
+   "expect": "trigger"
+  },
+  {
+   "id": "t11",
+   "prompt": "recap today's PRs and tickets",
+   "expect": "trigger"
+  },
+  {
+   "id": "t12",
+   "prompt": "which tickets closed this week",
+   "expect": "trigger"
+  },
+  {
+   "id": "t13",
+   "prompt": "what's the activity summary for 2026-07-20..2026-07-25",
+   "expect": "trigger"
+  },
+  {
+   "id": "t14",
+   "prompt": "run down what the team shipped since Monday",
+   "expect": "trigger"
+  },
+  {
+   "id": "t15",
+   "prompt": "daily summary of merged PRs and Linear tickets",
+   "expect": "trigger"
+  },
+  {
+   "id": "t16",
+   "prompt": "/what-shipped",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "create a PR for this branch",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "start work on ADIA2-6628",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "why is this check failing on my PR",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "make an artifact of this session",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "what does PR 7906 change",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "review the changes on my branch",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "summarize this file for me",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n08",
+   "prompt": "rebase this PR onto main",
+   "expect": "no-trigger"
+  }
+ ]
+}

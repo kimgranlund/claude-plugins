@@ -8,7 +8,7 @@
     { "id": "t04", "prompt": "Give me a project state report", "expect": "trigger" },
     { "id": "t05", "prompt": "Review all roadmap, plan, and backlog items and the open tickets", "expect": "trigger" },
     { "id": "t06", "prompt": "Which branches and worktrees can be merged, deleted, or closed?", "expect": "trigger" },
-    { "id": "t07", "prompt": "What changed since I last checked in on this repo?", "expect": "trigger" },
+    { "id": "t07", "prompt": "What changed since I last checked in on this repo?", "expect": "no-trigger", "comment": "owner: what-shipped since 3.1.0 — ceded 2026-07-30: 'changed since I last checked' is a window-of-activity ask; check-state keeps the checkpoint-delta vocabulary via t04/t02 (blind-judged in PR #121)" },
     { "id": "t08", "prompt": "Are there any open PRs waiting on my review or failing CI?", "expect": "trigger" },
     { "id": "t09", "prompt": "Do our plan docs still match the open issues, or have they drifted?", "expect": "trigger" },
     { "id": "t10", "prompt": "I'm back after a week off — catch me up on where this repo stands.", "expect": "trigger" },
@@ -18,10 +18,11 @@
     { "id": "n04", "prompt": "File this as a follow-up task so we don't lose it.", "expect": "no-trigger", "comment": "owner: file-task" },
     { "id": "n05", "prompt": "Run the whole ops sweep — dispatch all the standing seats.", "expect": "no-trigger", "comment": "owner: /sweep-chores (chore-lead)" },
     { "id": "n06", "prompt": "Triage the new issues that came in overnight.", "expect": "no-trigger", "comment": "owner: issue-sorter" },
-    { "id": "n07", "prompt": "What's the status of this one PR — is #42 ready to merge?", "expect": "no-trigger", "comment": "single-item question; plain gh lookup, no report needed" },
+    { "id": "n07", "prompt": "What's the status of this one PR — is #42 ready to merge?", "expect": "no-trigger", "comment": "single-item question; plain gh lookup, no report needed. Accepted mild-leak class (PR #121 judge chose check-state): the report does carry PR status; not worth a description fence" },
     { "id": "n08", "prompt": "Write the release report artifact for this session.", "expect": "no-trigger", "comment": "owner: session-review-artifact" },
     { "id": "n09", "prompt": "Wrap up this session — anything left hanging in the worktree?", "expect": "no-trigger", "comment": "owner: teamwork close-session" },
     { "id": "n10", "prompt": "Anything still open or unanswered from our conversation?", "expect": "no-trigger", "comment": "owner: find-open-questions (session backlog, not repo state)" },
-    {"id": "n11", "prompt": "Sweep this chat for leftover work", "expect": "no-trigger", "comment": "owner: docs file-leftovers (conversation evidence, not repo state)"}
+    {"id": "n11", "prompt": "Sweep this chat for leftover work", "expect": "no-trigger", "comment": "owner: docs file-leftovers (conversation evidence, not repo state)"},
+    {"id": "n12", "prompt": "What shipped today? Summarize the PRs that merged.", "expect": "no-trigger", "comment": "owner: what-shipped (window of activity; this skill is the point-in-time work-state snapshot)"}
   ]
 }
