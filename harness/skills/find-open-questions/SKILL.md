@@ -4,8 +4,8 @@ description: >-
   Clears a session's backlog of unresolved items — an open question, unconfirmed assumption, or
   undecided idea — into one batched AskUserQuestion round. Use for "anything still open", "still
   pending", "close this out", "loose ends", or "left hanging"; fires at a natural close, never
-  unattended. NOT pre-task ambiguity (find-intent); NOT filing/tracking work items (issue-sorter);
-  NOT worktree state before session end (close-session).
+  unattended. NOT pre-task ambiguity (find-intent); NOT sweeping the session's dropped work into
+  tickets (docs' file-leftovers); NOT worktree state before session end (close-session).
 disable-model-invocation: false
 user-invocable: true
 ---

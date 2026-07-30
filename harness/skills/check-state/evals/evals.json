@@ -21,6 +21,8 @@
     { "id": "n07", "prompt": "What's the status of this one PR — is #42 ready to merge?", "expect": "no-trigger", "comment": "single-item question; plain gh lookup, no report needed" },
     { "id": "n08", "prompt": "Write the release report artifact for this session.", "expect": "no-trigger", "comment": "owner: session-review-artifact" },
     { "id": "n09", "prompt": "Wrap up this session — anything left hanging in the worktree?", "expect": "no-trigger", "comment": "owner: teamwork close-session" },
-    { "id": "n10", "prompt": "Anything still open or unanswered from our conversation?", "expect": "no-trigger", "comment": "owner: find-open-questions (session backlog, not repo state)" }
+    { "id": "n10", "prompt": "Anything still open or unanswered from our conversation?", "expect": "no-trigger", "comment": "owner: find-open-questions (session backlog, not repo state)" },
+    {"id": "n11", "prompt": "Sweep this chat for leftover work", "expect": "no-trigger", "comment": "owner: docs file-leftovers (conversation evidence, not repo state)"},
+    {"id": "n12", "prompt": "What shipped today? Summarize the PRs that merged.", "expect": "no-trigger", "comment": "owner: what-shipped (window of activity; this skill is the point-in-time work-state snapshot)"}
   ]
 }

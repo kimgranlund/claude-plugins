@@ -82,6 +82,12 @@
    "prompt": "Before we wrap up, is there anything still open?",
    "expect": "no-trigger",
    "comment": "owner: harness's find-open-questions \u2014 closes a session's already-raised loose ends, not a new feature proposal"
-  }
+  },
+    {
+      "id": "n10",
+      "prompt": "Roll up everything we mentioned but never did into tickets",
+      "expect": "no-trigger",
+      "comment": "owner: file-leftovers (session sweep; this skill takes one pitched idea)"
+    }
  ]
 }
