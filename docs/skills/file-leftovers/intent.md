@@ -1,5 +1,5 @@
 # intent — file-leftovers
-status: forging
+status: shipped          # PR #120-era, docs 1.1.0, judged 44/44, 2026-07-30
 species: procedural
 dials: { disable-model-invocation: false, user-invocable: true }
 freedom: medium (sweep is judgment over the transcript; minting is delegated to the file-* siblings)
