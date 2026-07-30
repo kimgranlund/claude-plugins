@@ -1,5 +1,5 @@
 ---
-name: find-the-ask
+name: find-intent
 description: >-
   Extract the ROOT intent behind a task or brief before acting. Use when a request is vague
   or the wording and goal diverge — "what am I really asking for", "figure out what they

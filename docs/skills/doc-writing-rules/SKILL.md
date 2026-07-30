@@ -164,5 +164,5 @@ handoffs and rubric/report types beyond bugs, which this plugin does not yet tem
 reports route through TICKET's `kind: bug` convention above). Drafting workflow:
 `make-doc`. Judgment: `check-doc`. Method dependencies (sharpening the ask, structural
 decomposition, wording, reasoning depth) are the harness plugin's cross-cutting layer —
-`find-the-ask`, `break-down-problem`, `prompt-wording-rules`, `thinking-depth-rules` — used when
+`find-intent`, `break-down-problem`, `prompt-wording-rules`, `thinking-depth-rules` — used when
 installed, degraded to inline judgment when not.

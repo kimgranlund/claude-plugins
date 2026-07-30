@@ -277,6 +277,9 @@ def gate(root: Path, package: bool = False):
              # "tri-state" (the exit-code doctrine), "world-state" (stopping predicates),
              # "dead-state" (thinking-depth prose):
              "work-state", "tri-state", "world-state", "dead-state",
+             # same class, sibling plugins' first re-gate after check-state (2026-07-30):
+             # "end-state" (loop-rules/file-bug prose), "living-state" (doc lifecycle prose):
+             "end-state", "living-state",
              # entry-file-rules' mechanize-first bullet (2026-07-29): prose compound,
              # "before prose-as-skill is considered" — not a sibling name:
              "prose-as-skill",

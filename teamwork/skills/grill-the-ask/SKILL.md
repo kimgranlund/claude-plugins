@@ -5,7 +5,7 @@ description: >-
   whose decision space is mostly unmade. Use for "grill me on the design", "plan this new
   feature, nothing is decided yet", "what do we need to decide here", or "walk me through the
   choices round by round" — grounded, cascading rounds until settled. NOT for sharpening a given
-  ask (find-the-ask), decomposing it (break-down-problem), or authoring the PRD/SPEC/LLD
+  ask (find-intent), decomposing it (break-down-problem), or authoring the PRD/SPEC/LLD
   (make-doc).
 disable-model-invocation: false
 user-invocable: true
@@ -15,7 +15,7 @@ user-invocable: true
 
 Derive the design decisions a greenfield *needs* before it can be decomposed — by interrogating two
 reasoning axes across cascading rounds until the decision surface settles. Where
-[[find-the-ask]] *minimizes* questions for one given ask, grilling *derives* the questions a
+[[find-intent]] *minimizes* questions for one given ask, grilling *derives* the questions a
 mostly-unmade design implies.
 
 ## When to use / when not
@@ -24,9 +24,9 @@ mostly-unmade design implies.
   component family, or feature where most decisions are unmade — and before running
   `break-down-problem` or authoring a PRD/SPEC/LLD on that fresh domain. Triggers: "grill me", "plan
   this", "what do we need to decide".
-- **Skip** when the decision space is small or already mostly settled — that is `find-the-ask`'s
+- **Skip** when the decision space is small or already mostly settled — that is `find-intent`'s
   job (resolve only the gaps in a given ask). And skip when a ratified design already exists.
-- **The pipeline.** `find-the-ask` sharpens *a given* intent → `grill-the-ask` *derives* the
+- **The pipeline.** `find-intent` sharpens *a given* intent → `grill-the-ask` *derives* the
   design decisions → both hand off to `[[break-down-problem]]`. Extraction is **reactive, minimize** (one
   ask, one batched round, ask only what you must). Grilling is **proactive, derive** (a whole space,
   cascading rounds, derive what must be decided). Same closed-question discipline; opposite posture.
@@ -65,9 +65,9 @@ ones whose answers cascade into the rest.
    `make-doc` (governed by `doc-writing-rules`) — where installed; otherwise draft each
    document type's minimum contract inline.
 
-## AskUserQuestion discipline (per [[find-the-ask]] — the deltas only)
+## AskUserQuestion discipline (per [[find-intent]] — the deltas only)
 
-The closed-question mechanics are MCQ discipline per [[find-the-ask]], applied verbatim — batching,
+The closed-question mechanics are MCQ discipline per [[find-intent]], applied verbatim — batching,
 question/option counts, header chips, "(recommended)"-first, the automatic "Other" escape, previews
 where an option is a concrete artifact. That skill is the canon; don't re-derive it here. Grilling
 changes exactly this:

@@ -47,7 +47,7 @@ A verdict block, always: either the captured-items list or the single clean line
 
 - Dispatched in an unattended or scheduled context (no interactive user to answer an
   AskUserQuestion-gated confirm) → step 2's own capture skills (file-bug/feature run
-  find-the-ask's interactive round) and step 3's save-lessons confirm gate are both named as
+  find-intent's interactive round) and step 3's save-lessons confirm gate are both named as
   deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own.
 - Not inside a git repo at all → the single clean-verdict shape applies, with the reason stated
   ("nothing to capture — no git context here"); this is not a second verdict shape, just the

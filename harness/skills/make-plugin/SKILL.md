@@ -26,7 +26,7 @@ plugin needing a ship → `/ship-plugin`. Greenfield domain → proceed.
 
 ## Phase 1 — Charter
 
-Run the `find-the-ask` discipline on the domain: audience, the asks the plugin must answer,
+Run the `find-intent` discipline on the domain: audience, the asks the plugin must answer,
 explicit non-goals, and the plugin's name — distribution-scoped, disjoint from every member's
 domain prefix (the stutter rule), no reserved words. One batched multiple-choice round; the
 charter is written before any member is named.

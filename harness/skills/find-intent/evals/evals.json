@@ -1,5 +1,5 @@
 {
-  "skill": "find-the-ask",
+  "skill": "find-intent",
   "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. t04 rephrased 2026-07-09: 'Improve this prompt brief' was itself the ambiguity — 'prompt' reads as an instruction artifact (prompt-wording-rules' territory) in 3 of 4 blind runs; the case now tests the ask-sharpening reading it was written for.",
   "cases": [
     {

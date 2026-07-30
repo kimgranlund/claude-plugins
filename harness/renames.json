@@ -936,11 +936,11 @@
     },
     {
       "old": "find-the-ask",
-      "new": "find-the-ask",
+      "new": "find-intent",
       "kind": "skill",
       "old_plugin": "forge",
       "new_plugin": "harness",
-      "match": "qualified"
+      "match": "token"
     },
     {
       "old": "git-campaign-workflows",
@@ -1008,7 +1008,7 @@
     },
     {
       "old": "intent-extract",
-      "new": "find-the-ask",
+      "new": "find-intent",
       "kind": "skill",
       "old_plugin": "forge",
       "new_plugin": "harness",
@@ -1405,6 +1405,14 @@
       "old_plugin": "forge",
       "new_plugin": "harness",
       "match": "qualified"
+    },
+    {
+      "old": "find-the-ask",
+      "new": "find-intent",
+      "kind": "skill",
+      "old_plugin": "harness",
+      "new_plugin": "harness",
+      "match": "token"
     },
     {
       "old": "agent-residency-taxonomy",

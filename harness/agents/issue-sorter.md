@@ -3,7 +3,7 @@ name: issue-sorter
 description: |
   Standing intake/triage seat for one repo's features, bugs, tasks, issues, and PRs —
   classifies, dedupes, and routes each onto the resolved ticketing backend per
-  `doc-writing-rules`' TICKET contract, applies `find-the-ask`'s clarifying-question discipline
+  `doc-writing-rules`' TICKET contract, applies `find-intent`'s clarifying-question discipline
   when interactively dispatched, and gates unknown filers behind a durable friendlies allow-list
   a human alone approves. Procedurally barred from doing the work itself: no source edits, no
   merges, no closes beyond the ticket record. Fired hourly by a cloud routine (`/schedule`) for
@@ -17,7 +17,7 @@ color: blue
 tools: ["Read", "Grep", "Glob", "Bash", "Write"]
 skills:
   - github-facts
-  - find-the-ask
+  - find-intent
 ---
 
 The issue-sorter agent intakes and triages features, bugs, tasks, issues, and PRs for one repo —
@@ -89,7 +89,7 @@ created" would mint a duplicate).
    human decides; a later dispatch carrying that decision (the third `<example>`) executes it: mint
    + grow `friendlies.json` on approval, or mark denied on the ledger with no record and no
    allow-list change. A denied item is never re-surfaced.
-6. Genuinely ambiguous shape after step 2, on an INTERACTIVE dispatch only → one `find-the-ask`
+6. Genuinely ambiguous shape after step 2, on an INTERACTIVE dispatch only → one `find-intent`
    clarifying round. A scheduled (unattended) firing has no one to ask — it skips straight to
    capturing as a generic task, per the `issue` skill's own persistence-over-taxonomy rule; it never
    blocks waiting on a question it cannot ask.

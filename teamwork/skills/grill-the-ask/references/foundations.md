@@ -6,7 +6,7 @@
 
 ## Reactive vs proactive elicitation
 
-`find-the-ask` is **reactive**: a request already exists; you recover the goal under its words and
+`find-intent` is **reactive**: a request already exists; you recover the goal under its words and
 resolve only the gaps that change the output. **Intent grilling is proactive**: little has been asked
 yet, but a design *must* be settled. You cannot wait for an ambiguous ask to react to — you **derive**
 the decisions the thing-being-designed implies. Reactive elicitation minimizes questions; proactive
