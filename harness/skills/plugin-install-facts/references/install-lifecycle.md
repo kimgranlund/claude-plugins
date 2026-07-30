@@ -14,10 +14,23 @@ plugin-writing-rules/adopt-plugin. All claims [verified] 2026-07-25 unless marke
 | `local` | `.claude/settings.local.json` | Personal, this repo, gitignored |
 | `managed` | Managed settings | IT-deployed, read-only |
 
-Precedence: Managed > Local > Project > User. Enablement (`enabledPlugins`, key form
-`"<plugin-name>@<marketplace-id>": true`) is read from ALL four scopes; `pluginConfigs` is read
-ONLY from user settings, `--settings` flag, and managed — project/local entries are ignored for
-it. [verified] plugins-reference §User configuration.
+Precedence: Managed > Local > Project > User — for settings generally. Enablement
+(`enabledPlugins`, key form `"<plugin-name>@<marketplace-id>": true`) is read from ALL four
+scopes, but does NOT follow that strict override chain in practice: observed 2026-07-29
+(Claude Code v2.x, two independent plugins on one machine), an **enable in any scope beats a
+disable in another** — a user-scope-installed plugin with user `true` stayed enabled against a
+project-scope `false`, while another plugin with user `false` was enabled by a project/local
+`true`. To disable a plugin, remove or flip the entry in the scope that holds the `true`
+(`/plugin disable <plugin> -s <scope>`); a `false` added in a different scope is not sufficient.
+[verified — observed behavior 2026-07-29; contradicts a plain reading of plugins-reference
+§User configuration, which orders scopes without stating enablement merge semantics]
+`pluginConfigs` is unchanged: read ONLY from user settings, `--settings` flag, and managed —
+project/local entries are ignored for it. [verified] plugins-reference §User configuration.
+
+Related tell: an `enabledPlugins` entry naming a marketplace absent from
+`known_marketplaces.json` degrades to the unexplained "1 error during load" in
+`/reload-plugins` — check for dangling `@<marketplace>` suffixes before chasing deeper.
+[verified 2026-07-29]
 
 ## Trust — the gates that fire
 
