@@ -52,14 +52,25 @@ queued, never auto-executed, and Phase 6 itself is always named as the next comm
 run (step 7), the same never-authors boundary this agent holds everywhere else.
 
 `doc-writing-rules` (docs) is a different plugin, not preloadable across that boundary — so
-the ADR contract is stated here directly rather than restated from a preload. Two shapes exist,
-both auto-detected by `scripts/adr_checkpoint.py`'s `scan_source` off `Path.is_file()` — pass
-whichever `<adr-source>` the repo actually has:
+the ADR contract is stated here directly rather than restated from a preload. Three shapes exist,
+all auto-detected by `scripts/adr_checkpoint.py` (directory vs. single file off `Path.is_file()`,
+then dialect per file) — pass whichever `<adr-source>` the repo actually has:
 
-- **Directory of one-ADR-per-file `*.md`** — frontmatter `doc-type: adr`, `id: adr-NNNN`,
+- **Directory of one-ADR-per-file `*.md`, YAML frontmatter** — `doc-type: adr`, `id: adr-NNNN`,
   `status: accepted | superseded`, `supersedes: <adr-id> | null`. An ADR is superseded the
   moment ANY other ADR's `supersedes:` field names it, or its own `status:` field already says
-  `superseded`.
+  `superseded`. Hash basis is the whole file.
+- **Directory of one-ADR-per-file `*.md`, H1 + blockquote status table** — no frontmatter at all:
+  an `# ADR-NNNN — Title` heading plus rows `> | **Status** | accepted |` and
+  `> | **Supersedes / Superseded by** | … |` (agent-ui's dialect). Status is that cell's first
+  bare keyword, so a cell trailing a prose gloss still reads. Hash basis is the status plus the
+  `## Decision` / `## Amendment*` / `## Supersession*` sections ONLY — a Context or Consequences
+  copy-edit is deliberately NOT an amended decision, while a ratification or supersession (which
+  flips only the Status cell) still registers. A forward supersession reads ONLY from the
+  active-voice `supersedes ADR-NNNN`: `Extends` / `Relates` / `Amended by` / `Superseded by` name
+  relationships, never supersessions, and a prose parenthetical after the id never drags in the
+  ADR it merely cites — branding a live accepted decision as superseded is the worse of the two
+  failure directions, so extraction is deliberately conservative.
 - **Single monolithic markdown file, `## ADR-NNN — Title` sections** (e.g. one project's
   `decision-records.md`) — no frontmatter. An ADR's id comes from its heading; its own status
   reads `superseded` the moment that heading's annotation contains the word "superseded" (e.g.
@@ -69,8 +80,16 @@ whichever `<adr-source>` the repo actually has:
   secondary, forward-declaring signal — never `complements`/other verbs, which name a
   relationship, not a supersession.
 
-Either way, `classify_delta` reads exactly the extracted `status`/`supersedes` fields — never
-infers supersession from prose it wasn't told to parse.
+Whichever the shape, `classify_delta` reads exactly the extracted `status`/`supersedes` fields —
+never infers supersession from prose it wasn't told to parse.
+
+**A 0-ADR scan is a FAILURE, never a quiet run.** If `classify` exits 1 with "unsupported shape",
+the corpus is in a dialect the script cannot read: report that as 🔴 blocked and stop, never treat
+it as "nothing new". Do NOT advance the checkpoint, and do not hand-substitute your own reading of
+the files for the script's — a dialect worth scanning is worth teaching the script, since a
+hand-read corpus silently stops being cheap the next firing. This guard exists because the earlier
+version returned a clean empty delta on an unparseable corpus, so this seat reported "nothing new"
+against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonoun-plugins`).
 
 ## Procedure, one firing
 

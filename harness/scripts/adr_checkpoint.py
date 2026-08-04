@@ -8,9 +8,32 @@ Usage:
                                                                   classify's delta has been judged
   adr_checkpoint.py selftest                                     prove the classifier on fixtures
 
-<adr-source> is either a DIRECTORY of one-ADR-per-file `*.md` (each carrying `doc-type: adr` /
-`id:` / `status:` / `supersedes:` frontmatter) or a single markdown FILE whose ADRs are `##`
-sections — auto-detected via `Path.is_file()`. A section's id comes from its heading
+<adr-source> is either a DIRECTORY of one-ADR-per-file `*.md` or a single markdown FILE whose
+ADRs are `##` sections — auto-detected via `Path.is_file()`.
+
+A DIRECTORY's files are parsed in either of two dialects, tried per file in this order:
+
+1. **YAML frontmatter** — `doc-type: adr` / `id:` / `status:` / `supersedes:`. Hash basis is the
+   WHOLE file, unchanged since this script's first version, so existing checkpoints stay valid.
+2. **H1 + blockquote status table** — an `# ADR-NNNN — Title` heading plus a leading blockquote
+   table whose rows read `> | **Status** | accepted |` and
+   `> | **Supersedes / Superseded by** | ... |` (agent-ui's dialect, which never adopted
+   `doc-type:` frontmatter). Status is the first bare keyword in the cell, so a cell trailing
+   prose after it still reads. Hash basis is the STATUS plus the `## Decision` / `## Amendment*` /
+   `## Supersession*` sections only — NOT the whole file: this dialect's ADRs carry long
+   Context/Consequences prose whose copy-edits are not decisions, and the status is folded in
+   because a ratification or supersession flips only that one table cell and must still register
+   as a change. A forward supersession is read ONLY from the active-voice `supersedes ADR-NNNN`;
+   `Extends` / `Relates` / `Amended by` / `Superseded by` name relationships this script must
+   never misread as a supersession — the row's own `**Supersedes / Superseded by**` label
+   included.
+
+A file matching neither dialect is skipped, as before. But a source whose non-empty input yields
+ZERO parsed ADRs now FAILS LOUDLY (exit 1, "unsupported shape") instead of reporting a clean empty
+delta: a silent 0-ADR scan reads to its caller as "nothing changed" forever, which is the one
+failure mode this script's whole purpose cannot survive.
+
+A section's id comes from its heading
 (`## ADR-NNN — Title`, case-insensitive `ADR-`); a heading annotation containing the word
 "superseded" (e.g. `(SUPERSEDED — see ADR-011)`) sets that ADR's own status to `superseded`
 directly — the single-file corpus this mode was built for records supersession on the
@@ -40,11 +63,14 @@ ADR's `supersedes:` field names it (ADR-0002/0003/0004/0005's own convention), o
 detected — a caller that advances the checkpoint after acting on it won't see the same ADR twice.
 
 Checkpoint schema: {"adrs": {"<adr-id>": {"hash": "<sha256>", "status": "<accepted|superseded>"}}}
+
+Exit codes: 0 clean · 1 unsupported shape (no ADR parsed from non-empty input) · 2 usage error.
 """
 import hashlib
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
@@ -54,6 +80,29 @@ ADR_ID_RE = re.compile(r"adr-\d+")
 HEADING_RE = re.compile(r"^## .*$", re.MULTILINE)
 ADR_HEADING_ID_RE = re.compile(r"^## (ADR-\d+)\b", re.IGNORECASE)
 SUPERSEDES_ANNOTATION_RE = re.compile(r"(?i)\bsupersedes\s+([A-Za-z0-9,\s-]*ADR-\d+[A-Za-z0-9,\s-]*)")
+
+H1_LINE_RE = re.compile(r"^#\s+(.+?)\s*$", re.MULTILINE)
+H1_ADR_ID_RE = re.compile(r"^(ADR-\d+)\b", re.IGNORECASE)
+CELL_SPLIT_RE = re.compile(r"(?<!\\)\|")
+STATUS_KEYWORD_RE = re.compile(r"[A-Za-z]+")
+# Active voice ONLY: `supersedes` never matches `superseded`/`superseding`, so "Superseded by
+# ADR-0033" (this ADR is the victim, and its own Status cell already says so) and the row's own
+# "Supersedes / Superseded by" label both fall through. After the keyword, only emphasis noise,
+# commas, "and", and a markdown link TAIL may separate the ids — the first real prose word ends the
+# run, so "Supersedes ADR-0017 cl.3 in part" yields adr-0017 and nothing else. The link tail is
+# spelled `](no-spaces)` deliberately: it admits `[ADR-0002](./0002-x.md), [ADR-0003](...)` while
+# still refusing a prose parenthetical, which always contains spaces — so "Supersedes ADR-0002 (the
+# frozen-dir clause of ADR-0006 only)" can never over-capture ADR-0006. Over-capture is the worse
+# failure here: it would brand a live, accepted decision as superseded.
+TABLE_SUPERSEDES_RE = re.compile(
+    r"(?i)\bsupersedes\b[:\s]*((?:(?:\]\([^)\s]*\)|[*`\[\]\s,]|\band\b)*ADR-\d+)+)"
+)
+# The sections whose content IS the decision — everything else in a table-dialect ADR is context.
+HASH_SECTION_PREFIXES = ("decision", "amendment", "supersession")
+
+
+class UnsupportedAdrShape(Exception):
+    """Raised when non-empty input yields zero parsed ADRs — never a clean empty report."""
 
 
 def superseded_ids(supersedes_value):
@@ -81,9 +130,111 @@ def parse_frontmatter(text):
     }
 
 
+def table_row_cells(line):
+    """Split one blockquote table row into its cells, honoring `\\|` escapes. Returns [] for any
+    line that isn't a table row. Pure."""
+    body = line.strip()
+    if body.startswith(">"):
+        body = body[1:].strip()
+    if not body.startswith("|"):
+        return []
+    body = body[1:].rstrip()
+    if body.endswith("|") and not body.endswith("\\|"):
+        body = body[:-1]
+    return [cell.strip() for cell in CELL_SPLIT_RE.split(body)]
+
+
+def table_field_name(cell):
+    """Normalize a table row's label cell to a bare lowercase field name — `**Status**` -> status."""
+    return cell.strip().strip("*`_ ").lower()
+
+
+def table_superseded_ids(cell_value):
+    """Extract the adr ids this ADR actively SUPERSEDES from its `Supersedes / Superseded by` cell.
+    Pure. Returns a comma-joined string (the same shape frontmatter's `supersedes:` field carries,
+    so `superseded_ids()` consumes it unchanged) or None."""
+    if not cell_value:
+        return None
+    ids = []
+    for m in TABLE_SUPERSEDES_RE.finditer(cell_value):
+        for token in ADR_ID_RE.findall(m.group(1).lower()):
+            if token not in ids:
+                ids.append(token)
+    return ", ".join(ids) if ids else None
+
+
+def parse_status_table(text):
+    """Extract id/status/supersedes from an H1 + blockquote-status-table ADR. Pure — no I/O.
+    Returns None when the text isn't this dialect (no `# ADR-NNNN` title, or no Status row), so a
+    README or a `# ADR-NNNN — <title>` TEMPLATE (literal NNNN, no digits) is skipped naturally."""
+    title = H1_LINE_RE.search(text)
+    if not title:
+        return None
+    id_match = H1_ADR_ID_RE.match(title.group(1).strip())
+    if not id_match:
+        return None
+
+    status, supersedes = None, None
+    for line in text.splitlines():
+        cells = table_row_cells(line)
+        if len(cells) < 2:
+            continue
+        field = table_field_name(cells[0])
+        if field == "status" and status is None:
+            # The bare leading keyword only: the template's cell trails a prose gloss after it.
+            keyword = STATUS_KEYWORD_RE.search(cells[1].strip("*`_ "))
+            if keyword:
+                status = keyword.group(0).lower()
+        elif "supersedes" in field and supersedes is None:
+            supersedes = table_superseded_ids(cells[1])
+    if status is None:
+        return None
+    return {"id": id_match.group(1).lower(), "status": status, "supersedes": supersedes}
+
+
+def decision_content(text):
+    """The hash basis for a table-dialect ADR: its `## Decision` / `## Amendment*` /
+    `## Supersession*` sections, concatenated, so Context/Consequences copy-edits never read as an
+    amended decision. Falls back to the WHOLE text when no such section exists — never to an empty
+    string, which would make every section-less ADR hash alike and hide real edits. Pure."""
+    bounds = [m.start() for m in HEADING_RE.finditer(text)] + [len(text)]
+    chunks = []
+    for start, end in zip(bounds, bounds[1:]):
+        section = text[start:end]
+        heading = section.splitlines()[0][2:].strip().strip("*`# ").lower()
+        if heading.startswith(HASH_SECTION_PREFIXES):
+            chunks.append(section)
+    return "".join(chunks) if chunks else text
+
+
 def hash_adr(content):
     """sha256 of the full file content — pure, deterministic."""
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+
+def parse_adr_file(text):
+    """Parse one ADR file in whichever dialect it ships, frontmatter first. Returns a record
+    {"id", "hash", "status", "supersedes"} or None when neither dialect matches. Pure."""
+    fm = parse_frontmatter(text)
+    if fm and fm["id"]:
+        # Whole-file hash, unchanged — existing frontmatter checkpoints stay valid.
+        return {
+            "id": fm["id"],
+            "hash": hash_adr(text),
+            "status": fm["status"],
+            "supersedes": fm["supersedes"],
+        }
+    table = parse_status_table(text)
+    if table:
+        # Status is folded into the basis: ratification and supersession flip ONLY that one cell,
+        # and a status flip that left the hash untouched would never surface as a delta at all.
+        return {
+            "id": table["id"],
+            "hash": hash_adr(table["status"] + "\n" + decision_content(text)),
+            "status": table["status"],
+            "supersedes": table["supersedes"],
+        }
+    return None
 
 
 def parse_single_file_sections(text):
@@ -173,27 +324,52 @@ def save_checkpoint(path, current):
     )
 
 
+def unsupported_shape(source, skipped):
+    """The loud failure: non-empty input, zero ADRs parsed. Names the dialects understood and
+    samples the files that matched none, so an operator can tell an unsupported dialect apart from
+    a corpus that genuinely holds no ADRs yet."""
+    return UnsupportedAdrShape(
+        "{} non-empty file(s) under {} but 0 parsed as an ADR — unsupported shape.\n"
+        "  Dialects understood: (a) YAML frontmatter `doc-type: adr` + `id:` + `status:`; "
+        "(b) an `# ADR-NNNN — Title` H1 plus a blockquote row `> | **Status** | accepted |`; "
+        "(c) a single file of `## ADR-NNN — Title` sections.\n"
+        "  Matched none: {}".format(
+            len(skipped), source, ", ".join(skipped[:5]) + (" ..." if len(skipped) > 5 else "")
+        )
+    )
+
+
 def scan_dir(adr_dir):
-    """Read every *.md in adr_dir, parse frontmatter + hash. Skips files with no adr frontmatter."""
+    """Read every *.md in adr_dir and parse it in either dialect (see parse_adr_file). Skips files
+    matching neither — but raises UnsupportedAdrShape when EVERY non-empty file is skipped."""
     current = {}
+    skipped = []
     for f in sorted(Path(adr_dir).glob("*.md")):
         text = f.read_text(encoding="utf-8", errors="replace")
-        fm = parse_frontmatter(text)
-        if not fm or not fm["id"]:
+        rec = parse_adr_file(text)
+        if rec is None:
+            if text.strip():
+                skipped.append(f.name)
             continue
-        current[fm["id"]] = {
-            "hash": hash_adr(text),
-            "status": fm["status"],
-            "supersedes": fm["supersedes"],
+        current[rec["id"]] = {
+            "hash": rec["hash"],
+            "status": rec["status"],
+            "supersedes": rec["supersedes"],
         }
+    if not current and skipped:
+        raise unsupported_shape(adr_dir, skipped)
     return current
 
 
 def scan_single_file(adr_file):
     """Read one markdown file and hash its `## ADR-NNN` sections. Thin I/O wrapper around the
-    pure `parse_single_file_sections` — mirrors scan_dir's split from parse_frontmatter."""
+    pure `parse_single_file_sections` — mirrors scan_dir's split from parse_frontmatter, and shares
+    its loud failure on non-empty input that yields nothing."""
     text = Path(adr_file).read_text(encoding="utf-8", errors="replace")
-    return parse_single_file_sections(text)
+    sections = parse_single_file_sections(text)
+    if not sections and text.strip():
+        raise unsupported_shape(adr_file, [Path(adr_file).name])
+    return sections
 
 
 def scan_source(adr_source):
@@ -397,11 +573,149 @@ def selftest():
     single_file_delta = classify_delta({}, sections)
     assert "adr-002" in single_file_delta["newly_superseded"], single_file_delta
 
+    # ---- the H1 + blockquote-status-table dialect (agent-ui's, 169 real files) ----------------
+    table_adr = (
+        "# ADR-0168 — Integrations become a manifest registry\n\n"
+        "> Source: agent-ui ADR log. Log + lifecycle: [`README.md`](./README.md). · 2026-08-04\n"
+        ">\n"
+        "> | Field | Value |\n"
+        "> |---|---|\n"
+        "> | **Status** | accepted |\n"
+        "> | **Date** | 2026-08-04 |\n"
+        "> | **Ratified by** | kimgranlund (repo owner), 2026-08-04 |\n"
+        "> | **Supersedes / Superseded by** | **Extends** [ADR-0137](./0137-a.md) (the shell law) "
+        "· **Relates** [ADR-0091](./0091-b.md) · **Amended by ADR-0014** (the variant) "
+        "· **Supersedes ADR-0017 cl.3 in part** (the dismissable clause only) "
+        "· Font/glyph leg superseded by **ADR-0033** |\n\n"
+        "## Context\n\nLong prose that is emphatically not a decision.\n\n"
+        "## Decision\n\nEvery dispatch is validated against the declared schema.\n\n"
+        "## Consequences\n\nMore prose nobody needs to re-judge.\n"
+    )
+    t = parse_status_table(table_adr)
+    assert t == {"id": "adr-0168", "status": "accepted", "supersedes": "adr-0017"}, t
+
+    # the direction/verb negative control that must bite: every OTHER relation verb in that same
+    # cell names a relationship, never a supersession — and "Superseded by X" makes THIS ADR the
+    # victim (its own Status cell says so), so X must never be reported as newly superseded
+    assert table_superseded_ids(
+        "**Extends** ADR-0137 · **Relates** ADR-0091 · **Amended by ADR-0014** "
+        "· Font/glyph leg superseded by **ADR-0033** · **Extended by ADR-0032**"
+    ) is None, "a non-supersedes relation verb was misread as a supersession"
+    # ...including the row's OWN label, which contains the word "Supersedes" verbatim
+    assert table_superseded_ids("Supersedes / Superseded by") is None
+    assert table_field_name("**Supersedes / Superseded by**") == "supersedes / superseded by"
+    # multiple ids after one keyword, emphasis/link noise and "and" between them
+    assert table_superseded_ids("**Supersedes** [ADR-0002](./x.md), ADR-0003 and ADR-0004 in full") \
+        == "adr-0002, adr-0003, adr-0004"
+    # over-capture control: a prose parenthetical after the id must NOT drag in the ADR it cites —
+    # branding a live accepted decision as superseded is the worse of the two failures
+    assert table_superseded_ids(
+        "**Supersedes** ADR-0002 (the frozen-dir clause of ADR-0006's install identity only)"
+    ) == "adr-0002"
+
+    # escaped pipes inside a cell must not split it — the real template's Status cell does this
+    template_status_row = (
+        "> | **Status** | proposed *(one bare keyword only: `proposed` \\| `accepted` \\| "
+        "`superseded` — never trailing prose)* |"
+    )
+    cells = table_row_cells(template_status_row)
+    assert len(cells) == 2, cells
+    assert cells[1].startswith("proposed"), cells
+
+    # the hash basis: Decision only (+ status), so a Context copy-edit is NOT an amended decision
+    assert decision_content(table_adr).startswith("## Decision"), decision_content(table_adr)
+    assert "Long prose" not in decision_content(table_adr)
+    assert "More prose" not in decision_content(table_adr)
+    rec = parse_adr_file(table_adr)
+    assert rec["id"] == "adr-0168" and rec["status"] == "accepted", rec
+    context_edited = table_adr.replace("emphatically not a decision", "certainly not a decision")
+    assert parse_adr_file(context_edited)["hash"] == rec["hash"], \
+        "a Context copy-edit must not read as an amended decision"
+    # reverse control: a real Decision edit MUST move the hash
+    decision_edited = table_adr.replace("validated against the declared schema", "dispatched raw")
+    assert parse_adr_file(decision_edited)["hash"] != rec["hash"], \
+        "a real Decision edit must move the hash"
+
+    # a ratification/supersession flips ONLY the Status cell — folding status into the basis is
+    # what makes that flip visible at all, and newly_superseded then fires off self-status
+    flipped = table_adr.replace("| **Status** | accepted |", "| **Status** | superseded |")
+    flipped_rec = parse_adr_file(flipped)
+    assert flipped_rec["status"] == "superseded", flipped_rec
+    assert flipped_rec["hash"] != rec["hash"], "a status-only flip must register as a change"
+    d8 = classify_delta(
+        {"adr-0168": {"hash": rec["hash"], "status": "accepted"}},
+        {"adr-0168": {k: flipped_rec[k] for k in ("hash", "status", "supersedes")}},
+    )
+    assert d8["amended"] == ["adr-0168"], d8
+    # adr-0168 fires off its own flipped status; adr-0017 off the forward declaration it still
+    # carries — both are legitimately newly superseded on this round
+    assert d8["newly_superseded"] == ["adr-0017", "adr-0168"], d8
+
+    # an amendment section counts as decision content; a section-less ADR falls back to the WHOLE
+    # text, so two different section-less ADRs never collide into one hash
+    amended_adr = table_adr + "\n## Amendment 1 — 2026-08-05 — the key resolves server-side\n"
+    assert parse_adr_file(amended_adr)["hash"] != rec["hash"], "an appended Amendment must be seen"
+    bare_a = "# ADR-0900 — Bare\n\n> | **Status** | accepted |\n\nNo decision section here, A.\n"
+    bare_b = "# ADR-0901 — Bare\n\n> | **Status** | accepted |\n\nNo decision section here, B.\n"
+    assert decision_content(bare_a) == bare_a, "section-less fallback must be the whole text"
+    assert parse_adr_file(bare_a)["hash"] != parse_adr_file(bare_b)["hash"], \
+        "section-less ADRs must not hash alike"
+
+    # non-ADR neighbours in a real ADR directory are skipped by shape alone, no name special-case:
+    # the template's H1 is a literal `ADR-NNNN` (no digits) and the log README has no ADR H1
+    assert parse_status_table("# ADR-NNNN — <short decision title>\n\n> | **Status** | proposed |\n") \
+        is None, "the template must not be scanned as a real ADR"
+    assert parse_status_table("# agent-ui — Architecture Decision Records (ADR log)\n\nprose\n") is None
+    # an ADR H1 with no Status row at all is not this dialect
+    assert parse_status_table("# ADR-0500 — No status row\n\n## Decision\n\nx\n") is None
+
+    # ---- end-to-end: one directory, BOTH dialects, plus the loud 0-parsed failure -------------
+    with tempfile.TemporaryDirectory() as tmp:
+        d = Path(tmp)
+        (d / "0000-template.md").write_text(
+            "# ADR-NNNN — <short decision title>\n\n> | **Status** | proposed |\n", encoding="utf-8"
+        )
+        (d / "README.md").write_text("# The ADR log\n\nindex prose\n", encoding="utf-8")
+        (d / "0168-table.md").write_text(table_adr, encoding="utf-8")
+        (d / "0003-frontmatter.md").write_text(
+            "---\ndoc-type: adr\nid: adr-0003\nstatus: accepted\nsupersedes: null\n---\n# body\n",
+            encoding="utf-8",
+        )
+        scanned = scan_dir(d)
+        assert set(scanned) == {"adr-0003", "adr-0168"}, scanned
+        assert scanned["adr-0168"]["supersedes"] == "adr-0017", scanned["adr-0168"]
+        assert scanned["adr-0003"]["status"] == "accepted", scanned["adr-0003"]
+        # both dialects feed one delta, keyed the same way
+        mixed = classify_delta({}, scanned)
+        assert mixed["new"] == ["adr-0003", "adr-0168"], mixed
+        assert mixed["newly_superseded"] == ["adr-0017"], mixed
+
+    # the negative control this fix exists for: a directory of files in NO understood dialect must
+    # fail loudly, never report a clean empty delta (the silent false-quiet, gh nonoun-plugins#42)
+    with tempfile.TemporaryDirectory() as tmp:
+        d = Path(tmp)
+        (d / "README.md").write_text("# index\n\nprose\n", encoding="utf-8")
+        (d / "0001-mystery.md").write_text("# Some Other Dialect\n\nStatus: accepted\n", encoding="utf-8")
+        try:
+            scan_dir(d)
+            raise AssertionError("0 parsed ADRs from non-empty input must raise, not return {}")
+        except UnsupportedAdrShape as exc:
+            assert "unsupported shape" in str(exc), exc
+            assert "0001-mystery.md" in str(exc), exc
+
+    # ...but a genuinely EMPTY corpus is not a shape failure — nothing was skipped
+    with tempfile.TemporaryDirectory() as tmp:
+        assert scan_dir(Path(tmp)) == {}, "an empty directory must not raise"
+
     print("adr_checkpoint selftest · PASS · frontmatter parse, hashing, all four delta shapes, "
           "annotated-supersedes extraction (incl. already-recorded-supersession, corpus-size, "
-          "no-adr-token, and post-advance forever-refire negative controls), and single-file "
+          "no-adr-token, and post-advance forever-refire negative controls), single-file "
           "section parsing (self-status, forward-supersedes, complements-is-not-supersedes, "
-          "no section bleed)")
+          "no section bleed), and the H1+status-table dialect (bare-keyword status, "
+          "escaped-pipe cells, active-voice-only supersedes vs Extends/Relates/Amended-by/"
+          "Superseded-by + its own row label, Decision-scoped hash with status folded in, "
+          "section-less fallback, template/README skipped by shape, mixed-dialect directory, "
+          "and the loud 0-parsed unsupported-shape failure vs an empty corpus)")
     return 0
 
 
@@ -416,6 +730,11 @@ if __name__ == "__main__":
     checkpoint_path = ".claude/ops/adr-checkpoint.json"
     if "--checkpoint" in rest:
         checkpoint_path = rest[rest.index("--checkpoint") + 1]
-    if cmd == "classify":
-        sys.exit(run_classify(adr_dir, checkpoint_path))
-    sys.exit(run_advance(adr_dir, checkpoint_path))
+    try:
+        if cmd == "classify":
+            sys.exit(run_classify(adr_dir, checkpoint_path))
+        sys.exit(run_advance(adr_dir, checkpoint_path))
+    except UnsupportedAdrShape as exc:
+        print("adr_checkpoint · FAIL · unsupported shape · 1 fail / 0 warn", file=sys.stderr)
+        print("  {}".format(exc), file=sys.stderr)
+        sys.exit(1)
