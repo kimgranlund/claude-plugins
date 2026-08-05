@@ -26,7 +26,7 @@ reader arrives with, not a chronological log.
 |---|---|
 | Worktree placement, the post-merge checkout error, discard safety | `references/worktree-mechanics.md` |
 | Squash safety, the ten-branch delete-failure class, CI as the gate, auth-path consistency | `references/merge-semantics.md` |
-| "A command said it worked but nothing changed" — the general pattern + five dated instances | `references/silent-failure-catalog.md` |
+| "A command said it worked but nothing changed" — the general pattern + six dated instances | `references/silent-failure-catalog.md` |
 | Pulling onto a checkout a parallel session is using; classification, quarantine, conflict resolution | `references/parallel-session-reconcile.md` |
 | Solo-main-direct vs. campaign; the branch-protection rejection; the close sequence in order | `references/campaign-decision-tree.md` |
 | A seat's push/PR-create "Blocked by classifier"; who pushes, who opens the PR, who merges; scoping a dispatch brief's ship leg | `references/who-ships-what.md` |
@@ -59,8 +59,8 @@ incident or contract behind it, or a script's job is described instead of pointe
 **A command's own report of success is a claim, not evidence — the state it claims to have
 produced must be independently re-read before the session proceeds as if the claim were true.**
 Three of the seven files instantiate this at a different layer (a shell pipe, a text-edit call,
-a git subcommand's quiet-success case, a hand-rolled argv parser, and `git status` itself
-under skip-worktree); two (worktree placement, the decision tree) are the
+a git subcommand's quiet-success case, a hand-rolled argv parser, `git status` itself
+under skip-worktree, and a dispatch sandbox's write redirection); two (worktree placement, the decision tree) are the
 operational context the doctrine gets applied inside; who-ships-what bounds who may attempt the
 ship operations in the first place; and the rename playbook applies it at campaign scale — the
 blind re-measure, not the executor's care, is what proves a rename landed.
