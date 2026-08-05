@@ -40,6 +40,9 @@ Agent files (agents/*.md) get a focused rule set (incl. A6 name == file stem):
   A4 body <= 60 lines — <= 75 for -reviewer/-auditor seats, the dual-depth allowance
      (thin-shell law: knowledge belongs in skills: preloads)
   A5 tools declared (an agent without an allowlist runs with everything)
+  A7 model declared and not `inherit` (agent-writing-rules' seat ladder — an unpinned seat
+     silently rides whatever model dispatched it, cheap-planning-dispatches-expensive-execution
+     class)
 
 hooks.json files get:
   H1 valid JSON
@@ -306,6 +309,17 @@ def lint_agent_text(text, agent_file_stem=None):
         findings.append(("WARN", fm_end + 1, "A5",
                          "no `tools` allowlist -> the agent runs with everything; declare "
                          "least privilege"))
+    model_val = fields.get("model", ("", 0))[0].strip()
+    if not model_val or model_val == "inherit":
+        findings.append(("WARN", fm_end + 1, "A7",
+                         "`model` is missing or `inherit` -> the seat silently rides whatever "
+                         "model dispatched it (a Fable planning/orchestration session ships "
+                         "Fable-priced execution work this way — the exact failure that made "
+                         "this check exist, 2026-08-05). State an explicit row from "
+                         "agent-writing-rules' seat ladder (planning/review -> fable+high, "
+                         "coding/execution -> opus+xhigh with sonnet/haiku step-downs, "
+                         "orchestration -> sonnet+high, mechanical -> haiku); `inherit` is only "
+                         "for a seat that deliberately means to ride the session."))
     return findings
 
 
@@ -529,7 +543,8 @@ description: |
   user: "validate the draft"
   assistant: "Dispatching demo-auditor."
   </example>
-model: inherit
+model: fable
+effort: high
 tools: ["Read"]
 ---
 The demo-auditor writes one report file and nothing else.
@@ -558,6 +573,14 @@ def selftest():
     assert not [f for f in good_agent if f[0] == "FAIL"], f"good agent failed: {good_agent}"
     bad_agent = {f[2] for f in lint_agent_text(BAD_AGENT_FIXTURE)}
     assert "A2" in bad_agent, f"expected A2 in {bad_agent}"
+    # A7 (issue: Fable planning/orchestration dispatching Fable-priced execution via `inherit`,
+    # 2026-08-05): inherit and missing both warn; an explicit non-inherit row stays clean.
+    assert "A7" in bad_agent, f"expected A7 (model: inherit) in {bad_agent}"
+    assert not any(f[2] == "A7" for f in lint_agent_text(GOOD_AGENT_FIXTURE)), \
+        "explicit non-inherit model must not trip A7"
+    no_model_fm = re.sub(r"(?m)^model: .*\n", "", GOOD_AGENT_FIXTURE)
+    assert any(f[2] == "A7" for f in lint_agent_text(no_model_fm)), \
+        "a missing model field must still warn A7 (silent inherit is not neutral)"
     body70 = "\n".join(f"line {i}" for i in range(70))
     import re as _re
     fm = GOOD_AGENT_FIXTURE.split("---")[1]
