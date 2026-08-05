@@ -1,12 +1,14 @@
 # The silent-failure catalog — verify by re-reading, never by a command's print
 
 The single doctrine every entry below instantiates: **a command's own stdout/exit-code report is
-a CLAIM, not evidence.** The state it claims to have produced must be independently re-read
-before the session proceeds as if the claim were true. Five real, dated instances of the same
-mechanism, at five different layers (a shell pipe, a `str.replace` call, a git subcommand's own
-quiet-success behavior, a hand-rolled argv parser, and git's own `status` under skip-worktree) —
-proof this is a class, not a one-off. Count amended 2026-07-29: it read "three" while four entries
-were already present, the fourth having landed without updating this line.
+a CLAIM, not evidence.** The state it claims to have produced must be independently re-read — from
+the vantage that will next consume it, not just the vantage that produced it — before the session
+proceeds as if the claim were true. Six real, dated instances of the same
+mechanism, at six different layers (a shell pipe, a `str.replace` call, a git subcommand's own
+quiet-success behavior, a hand-rolled argv parser, git's own `status` under skip-worktree, and an
+agent-dispatch sandbox) — proof this is a class, not a one-off. Count amended 2026-07-29: it read
+"three" while four entries were already present, the fourth having landed without updating this
+line.
 
 ## A truncated pipe swallows a command's real exit state
 
@@ -86,6 +88,32 @@ concluding a tracked file was deleted — and always before reconstructing one �
 by `git sparse-checkout disable` (verified first that no on-disk file differed from its indexed
 copy, so materializing could clobber nothing).
 
+## A dispatched agent's `Write` reports success while the state lands in the WRONG worktree
+
+[incident, 2026-08-04/05, agent-ui — three consecutive firings, hand-rescued with `cp` each time
+before the class was fixed; issue #125, PR #126] The ops-family standing agents
+(`decision-watcher`, `issue-sorter`, `repo-cleaner`, `chore-planner`) each `Write` durable state to
+a shared-checkout path (`.claude/ops/adr-checkpoint.json`, `friendlies.json`, `plan.md`, and
+their own report files) from inside a dispatched sub-agent. The `Write` tool call itself reports
+success — no error, the expected content, the expected path — but a dispatch sandbox silently
+redirects that write into the COORDINATING session's own isolated worktree rather than the shared
+main checkout the agent's contract assumed it was writing to. State strands on a branch the main
+checkout never merges into; the next firing reads the real path, sees no change, and re-derives the
+same delta from scratch, or — worse — the coordinating session hand-rescues it with `cp` and moves
+on without anyone naming the failure as a *class*. **The general form:** a subagent's own tool
+report ("wrote file X") is exactly as much a claim as any shell command's exit code — it proves the
+write call succeeded from the subagent's vantage point, not that the write landed in the checkout
+the DISPATCHING session (or a human) will next read. **The fix pattern used successfully here:**
+seats-report/host-writes — the four agents no longer `Write` `.claude/ops/...` at all (`tools`
+frontmatter dropped `Write` entirely); every mutating script call runs against a scratch copy, and
+the mutated content comes back in the agent's own report as a fenced, target-pathed block. The
+DISPATCHING session (`chore-lead`, which gained `Write` for exactly this) applies the write itself,
+so the "did this land in the right checkout" question is answered by the one session that actually
+knows which checkout is real — never assumed by the sandboxed writer. See `parallel-work-rules`
+(teamwork) for the isolation-decision doctrine this incident's fix sits downstream of: isolating a
+dispatch was itself the right call (concurrent sweep firings genuinely can collide); the bug was
+trusting the isolated writer's own success report instead of routing the write back out.
+
 ## The general pattern, stated once
 
 Every incident above has the same shape: **a git or shell operation reports success (exit 0, no
@@ -94,7 +122,11 @@ report implies → session proceeds on the false premise.** The counter-pattern,
 in every fix: capture the relevant state BEFORE the operation, perform the operation, capture the
 state AFTER, and assert the delta matches what was actually intended — never the operation's own
 self-report. The skip-worktree entry extends the doctrine one step: where no operation ran at all,
-the *absence* of a reported difference is still a claim, and configuration can make it false.
+the *absence* of a reported difference is still a claim, and configuration can make it false. The
+dispatch-sandbox entry extends it a second step: the report can be perfectly true (the write really
+did succeed) and the failure still happens, because "succeeded" and "landed where the reader will
+next look" are two different claims — the fix there is not a re-read at all, but never handing the
+write to a party that can't confirm which checkout is real in the first place.
 
 ## Failure catalog
 
@@ -105,3 +137,4 @@ the *absence* of a reported difference is still a claim, and configuration can m
 | A script reports it quarantined/created/moved something that isn't actually there | the underlying command's "no-op success" case wasn't distinguished from its "real work done" case | capture before/after state and assert the specific expected delta, not just the exit code |
 | A git-mutating script runs against the wrong repo while reporting success | a hand-rolled argv parser probed for known flags and silently discarded an unknown one (`--repo-dir` for `--repo-root`) | reject unknown argv tokens with usage text before touching state; never infer "understood" from "didn't complain" |
 | Tracked files are missing from disk but `git status` says clean; `git add` refuses a new file in that tree | skip-worktree set on the whole tree (usually by a sparse-checkout cone that matches nothing) tells git to stop comparing index against disk | `git ls-files -v` and look for `S`/`h` flags; `git cat-file -e HEAD:<path>` before ever concluding a file is gone or rebuilding it by hand |
+| A dispatched agent's state file shows no change firing after firing, or gets hand-rescued with `cp` | a dispatch sandbox redirected the subagent's `Write` into the coordinating session's own isolated worktree, not the shared checkout — the tool call itself reported success | never let a dispatched seat `Write` shared state directly; it returns the computed content as a target-pathed payload, and the DISPATCHING session (the one that knows which checkout is real) performs the write |

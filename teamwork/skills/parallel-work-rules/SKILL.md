@@ -118,6 +118,7 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-rules` (harness) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
 | `hook-writing-rules` (harness) | The decision should become a mechanically-enforced guard (e.g. blocking a specific unsafe edit), not just guidance |
+| `big-change-git-rules`' silent-failure-catalog (harness) | A dispatched subagent's own `Write`/tool-report of success isn't proof its state landed in the checkout you'll next read — the dispatch-sandbox-redirect entry (issue #125) is this failure at the isolation layer specifically |
 
 ## Worked example (the incident this skill was minted from)
 
