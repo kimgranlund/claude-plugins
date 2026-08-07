@@ -24,6 +24,7 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
 - Static vs dynamic wiring: `skills:` preload hard-wires standing expertise; leave the rest to discovery.
 - Composition is planes, not a pipeline: authority flows down, artifacts flow up, verdicts flow sideways — a failed verdict routes to the plane that caused it (loop mechanics live in `[[loop-rules]]`).
 - Every dispatch is a sealed contract: charter + enumerated inputs + budget + typed return (`references/best-practices.md` "The dispatch is a sealed contract"); the worker never sees the host's deliberation or sibling transcripts.
+- The return channel is session-bound, durable state isn't: a completion notification reaches only the live session that made that dispatch, and dies with it. A durable-effect dispatch (PR, branch, ticket) must be discoverable from that state alone by a later session — never solely from having witnessed the notification (`references/best-practices.md` "The return channel doesn't survive the session").
 
 ## Design
 1. **Solo-first — the host inline is the null unit and wins by default.** A seat must buy
@@ -65,5 +66,6 @@ Top issues: 1) … — fix: …
 | `references/foundations.md` | When a finding turns on a shared model (discovery vs continuation) |
 | `[[write-handoff]]` | The return contract a composed agent hands back — the other half of composition |
 | `[[loop-rules]]` | Continuation mechanics (`/goal`, `/loop`, hooks) and loop discipline — owns the self-orchestrated-looping canon (budgets, locus escalation, durable state) |
+| `[[parallel-work-rules]]` | A relayed report needs the same independent-verification discipline as a self-report — this skill's "verify independently" rule extends to any intermediary, including your own dispatcher |
 
 **Done** when every unit matches its task shape (the null unit respected — no seat doing host-inline work), every description is a precise fenced interface, frontmatter is verified against the build, dispatches are sealed and typed, both gate dimensions (D2, D4) score ≥ 3, and a high-stakes arrangement carries its independent wiring-checker pass. **NOT done** while any description starves the router, a fence is one-way, a dispatch leaks history or lacks a budget, planes are conflated — or the only score the arrangement has is its designer's.

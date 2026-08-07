@@ -75,9 +75,13 @@ rest of the decision even starts.
    the classify → verify → escalate steps below — treat a read-then-write operation on those files
    as unsafe until the classification below clears it.
 2. **Classify the other actor** (table above) before deciding what "verify" even means for it.
-3. **Verify independently — never act on either side's self-report.** Run `git status`/`git diff`/
-   file mtimes yourself; a report that a task is "done" (from a peer's teammate-message or from your
-   own dispatched subagent) is a claim, not ground truth, until you've checked it against the tree.
+3. **Verify independently — never act on either side's self-report, and never on a relay of one.**
+   Run `git status`/`git diff`/file mtimes yourself; a report that a task is "done" (from a peer's
+   teammate-message or from your own dispatched subagent) is a claim, not ground truth, until you've
+   checked it against the tree. This extends to relays: a THIRD party — including your own
+   dispatcher — summarizing or even verbatim-copying another agent's report is still not your own
+   direct completion for a worker you spawned. Only a completion landing in your own transcript,
+   attributed to your own dispatch of that specific worker, counts as ground truth for it.
 4. **Escalate by actor type**, not uniformly:
    - Subagent you spawned → resolve directly (you own its brief).
    - Named teammate → `SendMessage` it; ask whether it's finished, and whether the content should
@@ -143,6 +147,19 @@ later in the same task WAS a named teammate (a `<teammate-message>` sender) — 
 The reusable lesson isn't "worktrees would have prevented this" (true, but retrospective) — it's
 that the stop → classify → verify-independently → escalate-by-type sequence is the same regardless
 of whether isolation was set up in advance, and it degrades gracefully when it wasn't.
+
+**A third worked example (a relay mistaken for ground truth):** a coordinating session dispatched
+`chore-lead`, which itself dispatched three seats in parallel. Those seats' genuine reports also
+broadcast, team-wide, to the coordinating session (not `chore-lead` specifically) — a harness
+broadcast behavior, not malice. The coordinating session relayed that content to `chore-lead`,
+first paraphrased, then verbatim, each time coaching it to act ("apply this payload," "per your
+own procedure step 3"). `chore-lead` refused both times: no completion attributed to ITS OWN
+dispatch of those three seats had landed in its own transcript, so a well-formed, even accurate,
+secondhand account did not qualify — and it named the relay as a discrepancy in its own report
+rather than silently complying. This is the same discipline as the collision-response case above,
+applied to report trust instead of file state: verification means checking against YOUR OWN
+ground truth (the tree, or your own dispatch's own completion), never against how convincing
+someone else's account of it sounds.
 
 **A second worked example (async sequencing, no live collision at all):** a repo-orchestrator
 session surveyed four open PRs and found three independently bumping the same plugin's version

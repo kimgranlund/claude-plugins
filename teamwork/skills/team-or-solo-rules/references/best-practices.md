@@ -50,6 +50,44 @@ Consequences:
 - **`model` in frontmatter is the default, not the routing.** Route by the task's type at dispatch — mechanical checks and extraction to a fast model, novel design to a strong one — overriding the role default when the task class differs.
 - **Planes, not a pipeline.** Authority flows down (the host authorizes), artifacts flow up (workers return), verdicts flow sideways (verifiers judge without the maker's framing) — and a failed verdict routes to the plane that caused it: the artifact, the spec that permitted it, or the plan that mis-cut it. Loop mechanics — hierarchical budgets, locus escalation, durable state — are owned by `loop-rules` and its self-orchestrated-looping canon.
 
+## The return channel doesn't survive the session
+
+"Artifacts flow up" (the dispatch-is-a-sealed-contract model, above) describes what SHOULD happen,
+not what's guaranteed to. A background dispatch's completion notification reaches exactly the
+session that made that specific dispatch call — automatic, but only while that session is still
+alive to receive it. Close the host session, start a new conversation, or run the dispatch
+unattended overnight, and the notification has nowhere to land. The work still happened — a branch
+pushed, a PR opened, a file written — the conversational link to it is just gone.
+
+This is a design constraint, not an edge case to patch around per-dispatch: **any dispatch whose
+effect is durable (a PR, a branch, a ticket, a committed file) must be discoverable from that
+durable state alone, never solely from the return channel.** Design the system so a *later,
+unrelated* session can reconstruct "what's still open, unreviewed, or dangling" by reading the
+actual state (`git worktree list`, `gh pr list`, a ticket backend's own status field) — not by
+having witnessed the original dispatch's notification. The state is the source of truth; the
+notification is a convenience that happens to arrive when everything lines up.
+
+The proven mitigation pattern is a **standing ground-truth sweep**, not tighter notification
+plumbing: a seat (`repo-cleaner`/`chore-lead` in this estate) that periodically diffs actual
+git/platform state against expectations, independent of whether any notification ever fired for
+the dispatches that created that state. A one-off session-scoped cron re-armed by hand each
+session narrows the gap only for the session that armed it — the durable form is a scheduled
+routine that survives session boundaries, or a checked-in habit ("sweep before starting," per
+`close-session`'s own pre-flight) rather than a background job nobody re-arms.
+
+A second, sharper failure mode compounds this: a message that CLAIMS to relay another agent's
+report — paraphrased or even verbatim-copied by a well-meaning coordinator — is not itself
+evidence a dispatcher can act on for its OWN dispatched worker. `parallel-work-rules`' "verify
+independently, never act on either side's self-report" extends one layer further here: a relay
+through ANY intermediary, including your own dispatcher, is still not your own direct completion.
+Observed live (2026-08-05): a coordinating session relayed sub-agent reports — sourced from a
+team-wide broadcast channel, genuinely accurate — to a `chore-lead` dispatch that owned those same
+sub-agents directly. `chore-lead` correctly refused to write from the relay, holding for its own
+direct task-notification instead, and named the discrepancy in its final report rather than
+silently trusting a well-formed but secondhand account. That refusal is the correct behavior, not
+excess caution — a dispatcher's contract is with the worker it spawned, not with whoever else
+happens to be listening on the same channel.
+
 ## Executing a parallel build: the disjoint same-tree fan-out
 
 When an agent team's job is to BUILD — apply many edits across one repository — the default execution model is a **disjoint same-tree fan-out**: dispatch file- and import-disjoint slices CONCURRENTLY into ONE working tree, with no merge step. Proven on the doctrine-hardening build (~18 concurrent slices, zero collisions, no integration merge).
@@ -86,6 +124,8 @@ Frontmatter is the integration contract. Treat each field as load-bearing.
 - Match the unit to the task: subagent for results, team for collaboration, skill for procedures.
 - Dispatch sealed: enumerate the inputs, state the budget, name the typed return — never leak history or sibling output.
 - For a parallel build, fan file-disjoint slices into one tree; let each worker self-gate its own path and the host gate the whole tree at the wave boundary.
+- Design a durable-effect dispatch (opens a PR, pushes a branch, mints a ticket) so its state is
+  discoverable by a later, unrelated session — a ground-truth sweep, not just the return channel.
 
 ## Don't
 
@@ -98,6 +138,9 @@ Frontmatter is the integration contract. Treat each field as load-bearing.
 - Nest delegation past host → specialist without justification — depth is a smell of under-decomposition.
 - Conflate discovery with continuation (see foundations).
 - Spin up a worktree per slice for a file-disjoint fan-out — it adds merge cost for no isolation gain; worktrees are the overlap-only fallback.
+- Assume a background dispatch's completion notification will reach someone — design for the
+  session ending before it fires, and never treat a relayed report (even accurate, even verbatim)
+  as your own direct completion for a worker you dispatched.
 
 ## Best-in-class example
 
