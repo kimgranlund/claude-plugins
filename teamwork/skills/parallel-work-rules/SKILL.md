@@ -84,7 +84,11 @@ rest of the decision even starts.
      travel with your operation (e.g. a `git mv` correctly carries a peer's uncommitted edits along
      — losing them is a bug in HOW you resolve, not a reason to avoid resolving).
    - Opaque session → ask the human. Present what you found (which files, whose edits, how old);
-     let them confirm sequencing, and proceed once — and only once — they have.
+     let them confirm sequencing, and proceed once — and only once — they have. In an UNATTENDED
+     run (no human to ask), `references/unattended-collision-protocol.md` is the governing branch:
+     probe-twice liveness deltas, zero-salvage stand-down on duplicate lanes, the frozen-lane
+     adoption bar (clean tree + no holders + quiet past the peer's cadence, then re-gate +
+     independent re-review), and the write-fence until one of those verdicts lands.
    - Opaque session whose work lives on a branch/PR/Issue → post a comment there naming the
      dependency, blocker, or finding (e.g. "this PR's version bump collides with #45/#46, land
      first" or "found gap X here, flagging rather than pushing to your branch") — this is in
@@ -109,6 +113,7 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | Tool / doc | Use when |
 |---|---|
 | `Agent` tool, `isolation:"worktree"` | Dispatching subagents that mutate files in parallel and could conflict |
+| `references/unattended-collision-protocol.md` | No human is reachable (a /goal or scheduled run) and an opaque lane must be judged live vs. dead — liveness deltas, duplicate stand-down, the adoption bar, the write-fence |
 | `EnterWorktree` / `ExitWorktree` | Isolating the whole session — requires an explicit trigger (user or CLAUDE.md), never assumed |
 | `SendMessage` | The other actor is a named teammate (surfaced a `<teammate-message>`), not silence |
 | `gh pr comment` / `gh issue comment` | The other actor's work lives on a branch/PR/Issue but no live `SendMessage` channel reaches it — async, durable, git-native coordination |
