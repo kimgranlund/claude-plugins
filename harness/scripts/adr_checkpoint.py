@@ -11,7 +11,7 @@ Usage:
 <adr-source> is either a DIRECTORY of one-ADR-per-file `*.md` or a single markdown FILE whose
 ADRs are `##` sections — auto-detected via `Path.is_file()`.
 
-A DIRECTORY's files are parsed in either of two dialects, tried per file in this order:
+A DIRECTORY's files are parsed in either of three dialects, tried per file in this order:
 
 1. **YAML frontmatter** — `doc-type: adr` / `id:` / `status:` / `supersedes:`. Hash basis is the
    WHOLE file, unchanged since this script's first version, so existing checkpoints stay valid.
@@ -27,6 +27,16 @@ A DIRECTORY's files are parsed in either of two dialects, tried per file in this
    `Extends` / `Relates` / `Amended by` / `Superseded by` name relationships this script must
    never misread as a supersession — the row's own `**Supersedes / Superseded by**` label
    included.
+3. **H1 + bold metadata block** — an `# ADR-NNN: Title` (or `— Title`) heading followed by plain
+   `**Status:** <value>` / `**Supersedes:** <value>` lines (no blockquote table at all —
+   adiav2's `docs/adr/` dialect). Status is the first bare keyword after the label, same
+   extraction as dialect 2's table cell. Hash basis is the WHOLE file, same as frontmatter: this
+   dialect's real corpus (a PoC findings report, an outbox design doc) uses ad hoc section names
+   with no reliable `## Decision` heading to scope to, so — unlike dialect 2 — there is no safe
+   narrower basis; any edit anywhere reads as amended, which is coarser but never silently misses
+   a real change. `**Supersedes:**` values that don't resolve to a bare `adr-\d+` token (e.g. a
+   pre-numbering external id like `ADR-Outbox-01`) correctly extract to nothing — this script
+   only tracks numbered ADRs it can key a checkpoint entry on.
 
 A file matching neither dialect is skipped, as before. But a source whose non-empty input yields
 ZERO parsed ADRs now FAILS LOUDLY (exit 1, "unsupported shape") instead of reporting a clean empty
@@ -99,6 +109,12 @@ TABLE_SUPERSEDES_RE = re.compile(
 )
 # The sections whose content IS the decision — everything else in a table-dialect ADR is context.
 HASH_SECTION_PREFIXES = ("decision", "amendment", "supersession")
+
+# Dialect 3 — H1 + bold `**Field:**` metadata lines, no blockquote table (adiav2's docs/adr/).
+# The trailing `:?` before AND after the closing `**` tolerates either colon placement
+# (`**Status:**` or `**Status**:`) without needing two separate patterns.
+BOLD_STATUS_RE = re.compile(r"^\*\*Status:?\*\*:?\s*(.+?)\s*$", re.MULTILINE | re.IGNORECASE)
+BOLD_SUPERSEDES_RE = re.compile(r"^\*\*Supersedes:?\*\*:?\s*(.+?)\s*$", re.MULTILINE | re.IGNORECASE)
 
 
 class UnsupportedAdrShape(Exception):
@@ -192,6 +208,31 @@ def parse_status_table(text):
     return {"id": id_match.group(1).lower(), "status": status, "supersedes": supersedes}
 
 
+def parse_bold_metadata(text):
+    """Extract id/status/supersedes from an H1 + bold `**Field:**` metadata-block ADR (no
+    blockquote table). Pure — no I/O. Returns None when the text isn't this dialect (no
+    `# ADR-NNN` title, or no `**Status:**` line), so a file already claimed by the table dialect
+    — or a non-ADR doc — is skipped naturally."""
+    title = H1_LINE_RE.search(text)
+    if not title:
+        return None
+    id_match = H1_ADR_ID_RE.match(title.group(1).strip())
+    if not id_match:
+        return None
+    status_match = BOLD_STATUS_RE.search(text)
+    if not status_match:
+        return None
+    keyword = STATUS_KEYWORD_RE.search(status_match.group(1).strip("*`_ "))
+    if not keyword:
+        return None
+    supersedes = None
+    sup_match = BOLD_SUPERSEDES_RE.search(text)
+    if sup_match:
+        ids = ADR_ID_RE.findall(sup_match.group(1).lower())
+        supersedes = ", ".join(ids) if ids else None
+    return {"id": id_match.group(1).lower(), "status": keyword.group(0).lower(), "supersedes": supersedes}
+
+
 def decision_content(text):
     """The hash basis for a table-dialect ADR: its `## Decision` / `## Amendment*` /
     `## Supersession*` sections, concatenated, so Context/Consequences copy-edits never read as an
@@ -233,6 +274,16 @@ def parse_adr_file(text):
             "hash": hash_adr(table["status"] + "\n" + decision_content(text)),
             "status": table["status"],
             "supersedes": table["supersedes"],
+        }
+    bold = parse_bold_metadata(text)
+    if bold:
+        # Whole-file hash, same rationale as frontmatter — no reliable Decision-scoped section
+        # to narrow to in this dialect's real corpus.
+        return {
+            "id": bold["id"],
+            "hash": hash_adr(text),
+            "status": bold["status"],
+            "supersedes": bold["supersedes"],
         }
     return None
 
@@ -332,7 +383,8 @@ def unsupported_shape(source, skipped):
         "{} non-empty file(s) under {} but 0 parsed as an ADR — unsupported shape.\n"
         "  Dialects understood: (a) YAML frontmatter `doc-type: adr` + `id:` + `status:`; "
         "(b) an `# ADR-NNNN — Title` H1 plus a blockquote row `> | **Status** | accepted |`; "
-        "(c) a single file of `## ADR-NNN — Title` sections.\n"
+        "(c) an `# ADR-NNN: Title` H1 plus a bare `**Status:** value` line, no table; "
+        "(d) a single file of `## ADR-NNN — Title` sections.\n"
         "  Matched none: {}".format(
             len(skipped), source, ", ".join(skipped[:5]) + (" ..." if len(skipped) > 5 else "")
         )
@@ -669,7 +721,52 @@ def selftest():
     # an ADR H1 with no Status row at all is not this dialect
     assert parse_status_table("# ADR-0500 — No status row\n\n## Decision\n\nx\n") is None
 
-    # ---- end-to-end: one directory, BOTH dialects, plus the loud 0-parsed failure -------------
+    # ---- the H1 + bold metadata-block dialect (adiav2's docs/adr/, no blockquote table) --------
+    bold_adr = (
+        "# ADR-202: Transactional Outbox for Correctness-Critical Kafka Events\n\n"
+        "**Date:** 2026-07-26\n"
+        "**Status:** Proposed\n"
+        "**Author:** Alex Meshkin\n"
+        "**Linear:** ADIA2-6712\n"
+        "**Supersedes:** ADR-Outbox-01 (Factory Retry-Coordinator \"transactional produce over "
+        "outbox relay\")\n"
+        "**Related:** ADR-200 (relational SoR + durable outbox projection)\n\n"
+        "---\n\n## Context\n\nLong prose.\n"
+    )
+    b = parse_bold_metadata(bold_adr)
+    # ADR-Outbox-01 carries no adr-\d+ token — a pre-numbering external id never resolves to a
+    # checkpoint key, so it correctly extracts to no supersedes at all.
+    assert b == {"id": "adr-202", "status": "proposed", "supersedes": None}, b
+
+    # colon-outside-bold variant (`**Status**:` instead of `**Status:**`) must parse the same
+    bold_adr_alt_colon = bold_adr.replace("**Status:** Proposed", "**Status**: Proposed")
+    assert parse_bold_metadata(bold_adr_alt_colon)["status"] == "proposed"
+
+    # a real numbered supersedes value must extract, same shape as the other two dialects
+    bold_adr_numbered = bold_adr.replace(
+        "**Supersedes:** ADR-Outbox-01 (Factory Retry-Coordinator \"transactional produce over "
+        "outbox relay\")",
+        "**Supersedes:** ADR-0006",
+    )
+    assert parse_bold_metadata(bold_adr_numbered)["supersedes"] == "adr-0006"
+
+    # whole-file hash basis: a Context copy-edit as much as a Status flip must move the hash —
+    # no Decision-scoped narrowing exists for this dialect
+    bold_rec = parse_adr_file(bold_adr)
+    assert bold_rec["id"] == "adr-202" and bold_rec["status"] == "proposed", bold_rec
+    context_edited_bold = bold_adr.replace("Long prose.", "Different prose.")
+    assert parse_adr_file(context_edited_bold)["hash"] != bold_rec["hash"], \
+        "whole-file hash must see a Context edit too — this dialect has no narrower basis"
+
+    # this dialect's H1 uses a colon, not the table dialect's em-dash — must never cross-match
+    # dialect 2's table parser (no blockquote row present, so parse_status_table must decline)
+    assert parse_status_table(bold_adr) is None, \
+        "a bold-metadata ADR with no blockquote table must not be read as the table dialect"
+
+    # a bare `# ADR-NNN: Title` H1 with no **Status:** line at all is not this dialect either
+    assert parse_bold_metadata("# ADR-0500: No status line\n\nJust prose.\n") is None
+
+    # ---- end-to-end: one directory, ALL THREE dialects, plus the loud 0-parsed failure ---------
     with tempfile.TemporaryDirectory() as tmp:
         d = Path(tmp)
         (d / "0000-template.md").write_text(
@@ -681,13 +778,15 @@ def selftest():
             "---\ndoc-type: adr\nid: adr-0003\nstatus: accepted\nsupersedes: null\n---\n# body\n",
             encoding="utf-8",
         )
+        (d / "0202-bold.md").write_text(bold_adr, encoding="utf-8")
         scanned = scan_dir(d)
-        assert set(scanned) == {"adr-0003", "adr-0168"}, scanned
+        assert set(scanned) == {"adr-0003", "adr-0168", "adr-202"}, scanned
         assert scanned["adr-0168"]["supersedes"] == "adr-0017", scanned["adr-0168"]
         assert scanned["adr-0003"]["status"] == "accepted", scanned["adr-0003"]
-        # both dialects feed one delta, keyed the same way
+        assert scanned["adr-202"]["status"] == "proposed", scanned["adr-202"]
+        # all three dialects feed one delta, keyed the same way
         mixed = classify_delta({}, scanned)
-        assert mixed["new"] == ["adr-0003", "adr-0168"], mixed
+        assert mixed["new"] == ["adr-0003", "adr-0168", "adr-202"], mixed
         assert mixed["newly_superseded"] == ["adr-0017"], mixed
 
     # the negative control this fix exists for: a directory of files in NO understood dialect must
@@ -711,11 +810,13 @@ def selftest():
           "annotated-supersedes extraction (incl. already-recorded-supersession, corpus-size, "
           "no-adr-token, and post-advance forever-refire negative controls), single-file "
           "section parsing (self-status, forward-supersedes, complements-is-not-supersedes, "
-          "no section bleed), and the H1+status-table dialect (bare-keyword status, "
+          "no section bleed), the H1+status-table dialect (bare-keyword status, "
           "escaped-pipe cells, active-voice-only supersedes vs Extends/Relates/Amended-by/"
           "Superseded-by + its own row label, Decision-scoped hash with status folded in, "
-          "section-less fallback, template/README skipped by shape, mixed-dialect directory, "
-          "and the loud 0-parsed unsupported-shape failure vs an empty corpus)")
+          "section-less fallback, template/README skipped by shape), the H1+bold-metadata "
+          "dialect (either colon placement, non-numeric supersedes ids resolving to nothing, "
+          "whole-file hash basis, no cross-match with the table dialect), a three-dialect mixed "
+          "directory, and the loud 0-parsed unsupported-shape failure vs an empty corpus)")
     return 0
 
 
