@@ -15,7 +15,7 @@ mirrored in `validate.ts:42` (`MESSAGE_KINDS`):
 
 | envelope key | body | effect |
 |---|---|---|
-| `createSurface` | `{surfaceId, catalogId, surfaceProperties?, theme?, sendDataModel?}` | stand up a surface |
+| `createSurface` | `{surfaceId, catalogId, surfaceProperties?, theme?, sendDataModel?}` — the two optional style fields are worked-instance tolerances only: upstream v1.0-RC removed `surfaceProperties` and the v0.9.1 machine schema defines neither (SPEC-R7 re-sync 2026-08-05; the drop is ruled, agent-ui GH #477) | stand up a surface |
 | `updateComponents` | `{surfaceId, components: A2uiComponent[]}` | buffer/patch the component tree |
 | `updateDataModel` | `{surfaceId, path?, value?}` | upsert the data model (see bindings-and-data-model) |
 | `deleteSurface` | `{surfaceId}` | release the surface |

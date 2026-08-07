@@ -85,9 +85,15 @@ versions are routable (SPEC-N6). Every inbound message's `version` is gated agai
   `dispatch.ts:76-78`) — it never reaches a handler. On the wire this maps to `VALIDATION_FAILED`
   (the two-code enum offers no "capability" bucket — ADR-0031 records it as a forced mapping, as with
   `CATALOG_UNKNOWN`).
-- **Version drives semantics** (SPEC-R13 AC1): v1.0 uses `surfaceProperties`; v0.9.x uses `theme`.
-  The `version` is threaded to each handler so it can apply version-specific semantics
-  (`dispatch.ts:48-49`).
+- **Version drives semantics** (SPEC-R13 AC1): the `version` is threaded to each handler so it can
+  apply version-specific semantics (`dispatch.ts:48-49`). **Correction (2026-08-05, SPEC-R7 re-sync,
+  agent-ui's `a2ui-ecosystem-alignment.spec.md`):** this line previously claimed "v1.0 uses
+  `surfaceProperties`; v0.9.x uses `theme`" — STALE against upstream. Upstream's v1.0-RC **removed
+  `surfaceProperties` entirely** ("Decoupled Branding"), and the v0.9.1 machine schema
+  (`specification/v0_9_1/json/common_types.json`, a2ui-project/a2ui@main, fetched 2026-08-04/05)
+  defines neither field. The worked instance (agent-ui `protocol.ts`) still tolerates
+  `surfaceProperties` inbound today, but the drop is ruled (agent-ui GH #477, Kim 2026-08-05) and
+  executes in that repo's M-E slice — this pack's field citations retire with it.
 
 **Caveat — versioning here is a defect-shaped concern, not a full migration story.** The pack answers
 "which versions are accepted and what happens to an unsupported one," not "how do I migrate a v0.9
