@@ -5,7 +5,9 @@ description: >-
   exists, then building. /file-feature records and stops; /build-feature guarantees a record
   exists, sizes the dispatch (solo-first), and drives it under a mandatory Findings write-back
   contract. Run /build-feature [what to build, or a TKT- id]. NOT for pure intake with no build
-  intended (/file-feature); NOT for bug investigation (file-bug).
+  intended (/file-feature); NOT for bug investigation (file-bug); NOT for finding and
+  batch-confirming which open tickets to build in the first place (mobilize-chores) — this command
+  always takes one already-known target.
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[what to build, or an existing TKT- id]"

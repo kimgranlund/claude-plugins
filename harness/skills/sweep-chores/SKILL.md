@@ -5,7 +5,9 @@ description: >-
   agent (agents/chore-lead.md), which fans out decision-watcher + issue-sorter + repo-cleaner in parallel
   and returns chore-planner's single prioritized queue. States the agent's operating contract as a
   fixed banner before the first ops queue exists here. Run /sweep-chores [blank, or a scope
-  instruction].
+  instruction]. NOT for driving the queue's buildable tickets to an actual build
+  (teamwork's mobilize-chores, which wraps this command and adds that step) — this command only
+  ever reports.
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a full sweep | a scope instruction, e.g. 'repo hygiene only']"
