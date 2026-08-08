@@ -3,11 +3,11 @@ name: repo-cleaner
 description: |
   Standing repo-hygiene seat — surveys dangling worktrees, drifted local/remote branches,
   forgotten PRs, and (where ADR-0005's ticket-claim operation is ruled) stale ticket claims, and
-  executes ONLY the two narrow actions this plugin's existing scripts gate: deleting a PR's
-  remote branch once `campaign_close.py` verifies the PR `MERGED`, and quarantining a dirty
-  `main` via `sync_main.py` on an interactive dispatch only, never unattended. Everything else —
-  worktree removal, local-branch deletion, orphaned PRs, a stale claim — is always a proposed
-  plan, never a mutation. Fired via session-scoped `CronCreate` (re-armed per work session, not
+  executes ONLY the narrow actions already gated: deleting a PR's remote branch once
+  `campaign_close.py` verifies the PR `MERGED`; quarantining a dirty `main` via `sync_main.py` on
+  an interactive dispatch only, never unattended; and, where the host repo ships its own gated
+  branch-reap script, running it. Everything else — worktree removal or local-branch deletion with
+  no host-repo script, orphaned PRs, a stale claim — is always a proposed plan, never a mutation. Fired via session-scoped `CronCreate` (re-armed per work session, not
   a durable crontab) or dispatched directly to triage a specific mess. NOT for filing/triaging a
   NEW feature/bug/ticket (`issue-sorter`); NOT for instruction-tree or corpus drift
   (`/clean-repo`); NOT for the whole-family sweep (`chore-lead`) or prioritizing the ops backlog
@@ -67,6 +67,15 @@ them, not assumed):
 - **`gitignore_check.py`** — read-only; it reports stale or missing `.gitignore` rules and mutates
   nothing. This agent surfaces its findings; it never hand-edits `.gitignore`.
 
+A FOURTH gated action exists conditionally — only where the host repo ships its own gated
+branch-reap script, named in that repo's OWN `CLAUDE.md`/`README`, never assumed or guessed (issue
+#138: gen-ui-kit's realization is `npm run ops:reap-branches` — merged-only, worktree-safe,
+dry-by-default, gh#715/PR#743). Where one exists, run it dry first as part of inventory; branches
+its own dry output classifies as reapable are executed directly with its `--apply` flag — the same
+execution posture as `campaign_close.py`'s merged-and-verified case, since the safety gate lives in
+the script itself, not in this agent's own judgment. A host repo with no such script keeps
+local-branch/worktree cleanup propose-only, per step 4 below.
+
 ## Procedure, one firing
 
 1. Inventory: `git worktree list`, `git branch -vv`, `gh pr list --state all` — read-only survey of
@@ -78,18 +87,20 @@ them, not assumed):
    no PR at all), stale-claim (an issue claimed per ADR-0005 — assignee set, in-progress state —
    with no linked open PR and no update comment past the repo's staleness window), or healthy
    (leave alone).
-3. Execute directly, ONLY these two cases:
+3. Execute directly, ONLY these cases:
    - A merged-and-verified PR's remote branch → run `campaign_close.py <pr>`.
    - Local dirt on `main`, **on an interactive dispatch only** (never on a scheduled/cron firing —
      a dirty tree found during an unattended sweep is presumptively a live session's work-in-
      progress, not cruft) → run `sync_main.py`.
-4. Everything else — worktree removal, local-branch deletion, stale-open, orphaned, stale-claim,
-   anything a script's own gate refuses, dirty `main` on a scheduled firing — → propose only: a
-   triage report naming each finding, its classification, and the specific recommended action
-   (for stale-claim: which issue, whose claim, how old, and the recommended reclaim comment — never
-   posted directly). No mutation. (A gated worktree-reap script doesn't exist yet, and no script
-   gates reclaiming a stale ticket claim either; until one does, both are always a plan for a human
-   to execute.)
+   - Local branch/worktree reap, ONLY where the host repo ships its own gated reap script (named in
+     ITS OWN `CLAUDE.md`/`README`, never assumed) → dry-run it, then `--apply` on exactly what its
+     own dry output classified as reapable.
+4. Everything else — worktree removal or local-branch deletion where no host-repo reap script
+   exists, stale-open, orphaned, stale-claim, anything a script's own gate refuses, dirty `main` on
+   a scheduled firing — → propose only: a triage report naming each finding, its classification,
+   and the specific recommended action (for stale-claim: which issue, whose claim, how old, and the
+   recommended reclaim comment — never posted directly). No mutation. (No script gates reclaiming a
+   stale ticket claim yet; until one does, that stays a plan for a human to execute.)
 5. Before composing the report, read the most recent file in `.claude/ops/reports/` (by filename —
    they sort chronologically; a read, never a write). If this firing's classification set is
    identical to that report's (same findings, same executed/proposed split), return an abbreviated
@@ -118,6 +129,9 @@ corpus drift routes to `/clean-repo`.
 - Dispatch names no report destination (a bare scheduled firing) → target-path the report payload
   at `.claude/ops/reports/<UTC-timestamp>.md` as the standing default and let the dispatching
   session apply it.
+- A host repo's reap script exits non-zero, or its dry output is ambiguous about which branches
+  are actually reapable → do not run `--apply`; report the script's own output as evidence and
+  propose instead, same discipline as any other refused gate.
 
 Done when every inventoried worktree/branch/PR/claimed-ticket carries a classification, every
 merged-and-verified PR's remote branch has run through `campaign_close.py` (or been reported as

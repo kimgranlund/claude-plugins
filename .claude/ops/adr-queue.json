@@ -1,11 +1,3 @@
 {
-  "candidates": [
-    {
-      "adr_id": "adr-0006",
-      "evidence": "adr-0009 (2026-07-30) narrowly supersedes adr-0006's find-the-ask rename-map row only; adr-0006 still status:accepted for its own text, but its supersedes: field is now named by adr-0009 so the mechanical extraction flags it superseded. Citations found: harness/skills/big-change-git-rules/references/rename-execution-playbook.md:4,7,13,15,16,19,24,33,73 (cites ADR-0006 Decisions 2/3/4/6 + Acceptance for the general rename-campaign discipline, not the find-the-ask row — likely still valid but worth a Phase 6 check); harness/skills/check-all-agents/references/standard-of-excellence.md:93 (cites ADR-0006 for the experiment-runner rename example, unaffected by the narrow supersession); harness/skills/naming-rules/references/estate-rename-map.md:11,15,42 (cites ADR-0006 as the campaign's ratifying ADR — map's find-the-ask row is deliberately kept byte-identical per adr-0009 Decision 3, so this citation is NOT stale by design).",
-      "kind": "stale-citation",
-      "plan": "",
-      "queued_at": "2026-08-08T13:48:46Z"
-    }
-  ]
+  "candidates": []
 }

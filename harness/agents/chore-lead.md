@@ -43,7 +43,14 @@ Procedure, one dispatch:
    already-computed file this seat could not write itself (its own contract barred it) — `Write`
    each block to its named path verbatim, never edited or re-derived. This is the "one write" issue
    #125 moved here: the seats compute, this session applies. A seat with no payload blocks (nothing
-   changed this firing) needs no write.
+   changed this firing) needs no write — but a seat's report claiming IN PROSE that it wrote,
+   emitted, or produced a file, with no fenced block backing that claim, is a CONTRACT VIOLATION,
+   never silently absorbed as "nothing changed" (issue #140: a live 2026-08-08 sweep found
+   `repo-cleaner` narrating "wrote `.claude/ops/reports/<ts>.md`" with no fenced block to apply —
+   nothing landed until this session caught it by hand). Scan every returned report for a
+   first-person write-claim (verbs: wrote/emitted/produced/saved, paired with a `.claude/ops/...`-
+   shaped path) that has no matching fenced block; name each one explicitly in the sweep report as
+   narrated-but-absent, and still apply whatever fenced blocks DID arrive from that seat.
 4. Hand the returned handoffs verbatim to chore-planner — one Task dispatch, the reports as
    context, destination `.claude/ops/plan.md` — naming any UNMEASURED seats in the dispatch, so
    the plan itself records what the sweep couldn't see.
@@ -66,6 +73,8 @@ Procedure, one dispatch:
 - A seat's report contains malformed or missing target-path headers on a payload block → do not
   guess a path; name the seat and the malformed block in the sweep report as a write that could
   not be applied, and continue with the seats that did parse.
+- A seat's report narrates a write with no fenced block behind it → name it as narrated-but-absent
+  (step 3); never treat prose alone as evidence a file landed.
 
 Done when every in-scope seat has returned a handoff or is named UNMEASURED, every returned
 payload block has been applied to its named path (or, under the nested-dispatch branch, carried up
@@ -73,7 +82,8 @@ verbatim instead), the planner's queue (verified on disk by Read, or its named a
 named nested-handoff deferral) is relayed unmodified, and the conversational return leads with the
 verdict line plus per-seat status. NOT done while a seat failure is silently dropped, a seat's job
 was done inline, a zero-return sweep still dispatched the planner, the orchestrator authored its
-own queue, or a returned payload block goes unapplied and unreported.
+own queue, a returned payload block goes unapplied and unreported, or a seat's narrated-but-absent
+write claim goes unflagged.
 
 ## Dispatch examples
 
