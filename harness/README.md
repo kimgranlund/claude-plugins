@@ -127,7 +127,14 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
-v3.1.5 · assembled 2026-08-07 · 3.1.5: sweep-chores' description gains a one-line
+v3.1.6 · assembled 2026-08-08 · 3.1.6: adr_checkpoint gains a third directory dialect — an
+`# ADR-NNN: Title` H1 followed by plain bold `**Status:**`/`**Supersedes:**` metadata lines, no
+blockquote table (adiav2's `docs/adr/` shape, verified against its real 2-file corpus). Whole-file
+hash basis, same as frontmatter — this dialect's real corpus (a PoC findings report, an outbox
+design doc) has no reliable `## Decision` heading to scope to. Unblocks decision-watcher, which
+hard-failed with "unsupported shape" on both files across two consecutive sweeps. Merged fix
+landed same-day as commit 88f9d51; this bump is the update-cache key per the 3.1.1 precedent —
+unbumped, installed caches keep running the pre-fix parser. · v3.1.5 · assembled 2026-08-07 · 3.1.5: sweep-chores' description gains a one-line
 discoverability pointer to teamwork's new `/mobilize-chores` (which wraps this command and adds
 a human-gated build step) — sweep-chores itself stays report-only, unchanged behavior. No suite
 re-judge owed (`disable-model-invocation: true`, command-only, zero model-routing collision
