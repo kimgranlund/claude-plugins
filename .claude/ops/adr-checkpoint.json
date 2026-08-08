@@ -1,36 +1,13 @@
 {
   "adrs": {
-    "adr-0001": {
-      "hash": "f2c77841fb457a0b3cc90656e6030618e8b4f354553f667d626f1dbd8a5b4000",
-      "status": "accepted"
-    },
-    "adr-0002": {
-      "hash": "c1ebf743dcca0f3a32f2bf10cd9f169e13a5a0a1de4300d132ad3cafaaaa911c",
-      "status": "accepted"
-    },
-    "adr-0003": {
-      "hash": "e057e6fdfce87872558fd2a8e722d2988ad60d461b92a962ee37c9215d9e154c",
-      "status": "accepted"
-    },
-    "adr-0004": {
-      "hash": "d834b028ebe318f11c24df99590b5da7601dd6744dd56b1c1b99e066e50a3fd1",
-      "status": "accepted"
-    },
-    "adr-0005": {
-      "hash": "7dbb04f29acdb3d17922e2f1b56219a5bb0ba5143840f77ddc159b2efe6c6186",
-      "status": "accepted"
-    },
-    "adr-0006": {
-      "hash": "4b24aaf9e06dc8d0d51306d76f48a3c4d234a26ae5c2cc35388b1f383fdaf818",
-      "status": "accepted"
-    },
-    "adr-0007": {
-      "hash": "74250be093e427f2921579d7006cda59fb8251786d94017f78e4501426099559",
-      "status": "accepted"
-    },
-    "adr-0008": {
-      "hash": "285cf1b6aed0b26bc90fab36b6cd8e7459490b39d7ca77fba0aaa8c1f38016bf",
-      "status": "accepted"
-    }
+    "adr-0001": {"hash": "f2c77841fb457a0b3cc90656e6030618e8b4f354553f667d626f1dbd8a5b4000", "status": "accepted"},
+    "adr-0002": {"hash": "c1ebf743dcca0f3a32f2bf10cd9f169e13a5a0a1de4300d132ad3cafaaaa911c", "status": "accepted"},
+    "adr-0003": {"hash": "e057e6fdfce87872558fd2a8e722d2988ad60d461b92a962ee37c9215d9e154c", "status": "accepted"},
+    "adr-0004": {"hash": "d834b028ebe318f11c24df99590b5da7601dd6744dd56b1c1b99e066e50a3fd1", "status": "accepted"},
+    "adr-0005": {"hash": "7dbb04f29acdb3d17922e2f1b56219a5bb0ba5143840f77ddc159b2efe6c6186", "status": "accepted"},
+    "adr-0006": {"hash": "4b24aaf9e06dc8d0d51306d76f48a3c4d234a26ae5c2cc35388b1f383fdaf818", "status": "accepted"},
+    "adr-0007": {"hash": "74250be093e427f2921579d7006cda59fb8251786d94017f78e4501426099559", "status": "accepted"},
+    "adr-0008": {"hash": "285cf1b6aed0b26bc90fab36b6cd8e7459490b39d7ca77fba0aaa8c1f38016bf", "status": "accepted"},
+    "adr-0009": {"hash": "1abe92b834bb4a15764b7c21bf46b5e9ce00897cdc09e6f0d5fe71c9107a3af5", "status": "accepted"}
   }
 }
