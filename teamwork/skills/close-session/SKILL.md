@@ -23,6 +23,19 @@ what isn't, and account for every finding in a stated verdict.
    already-open PR from this session exists and needs finishing. Clean on all three → skip step 2
    (there's no git-side capture to make); steps 3-5 still run — a read-only session can still carry
    a repeated correction or a ratified decision worth the save-lessons scan.
+   **A multi-seat session's own residue is a fourth axis, not covered by the three above:** a
+   session that spawned worktree seats leaves other local branches (task branches, per-agent
+   placeholder branches), merged-PRs' remote branches still undeleted, and extra worktrees — none of which
+   `git status`/current-branch/open-PR checks ever see (found live, 2026-08-08: a session verdicted
+   "clean on all three" while 19 merge-verified-but-undeleted local branches and a stale remote
+   branch from its own seats sat unaccounted for). Where the host repo ships a gated reaper script
+   (e.g. `scripts/ops/reap-branches.mjs --dry`, exit-coded, dry-run first), run it and list its
+   REAP rows in the verdict as residue, not silently captured. Where no such script exists, fall
+   back to `git worktree list` (extra worktrees beyond the primary) and `git branch --merged`
+   (merged-but-undeleted local branches) — plain counts, reported the same way. This axis is
+   ALWAYS checked and ALWAYS named in the verdict (residue found, or explicitly "no session-spawned
+   branch/worktree residue") — never silently folded into the three-axis "clean" claim, since the
+   verdict's own hard gate is only as true as what was actually verified.
 2. **Judge what's real.** A genuine bug or follow-up found this session goes through
    `file-bug`/`feature`/`issue` (Skill tool) — their own dedup sweep and payload contract apply
    as-is, so route through them rather than a raw `gh issue create`. In-progress work that's
@@ -41,14 +54,21 @@ what isn't, and account for every finding in a stated verdict.
 
 ## Output contract
 
-A verdict block, always: either the captured-items list or the single clean line from step 5.
+A verdict block, always: either the captured-items list or the single clean line from step 5,
+PLUS step 1's branch/worktree residue line (found residue, named; or explicitly none found) —
+never omitted, even on an otherwise-clean verdict.
 
 ## Failure branches
 
 - Dispatched in an unattended or scheduled context (no interactive user to answer an
   AskUserQuestion-gated confirm) → step 2's own capture skills (file-bug/feature run
   find-intent's interactive round) and step 3's save-lessons confirm gate are both named as
-  deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own.
+  deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own — the
+  residue axis is read-only (a reaper script's `--dry` flag, plain `git` reads) and never blocked
+  by the absence of a human, so it always runs and reports even here.
+- No gated reaper script exists AND `git worktree list`/`git branch --merged` themselves fail
+  (not a git repo, detached state) → the residue axis reports UNMEASURED with the reason, same
+  discipline as any other unreachable check; never silently omitted from the verdict.
 - Not inside a git repo at all → the single clean-verdict shape applies, with the reason stated
   ("nothing to capture — no git context here"); this is not a second verdict shape, just the
   existing one with its reason filled in.
@@ -60,9 +80,11 @@ A verdict block, always: either the captured-items list or the single clean line
 
 Done when the verdict block has been stated: a "nothing to capture" line on a genuinely clean
 session counts exactly as much as a full captured-items list on a busy one. It is NOT done while
-the skill exits with no verdict at all, a real finding goes unmentioned, or a write is claimed
-without step 4's read-back confirming it landed — the one hard gate this skill enforces: a verdict
-is only as true as what step 4 actually verified.
+the skill exits with no verdict at all, a real finding goes unmentioned, a write is claimed
+without step 4's read-back confirming it landed, or a "clean" verdict is stated without step 1's
+branch/worktree residue axis actually having been checked — the one hard gate this skill enforces:
+a verdict is only as true as what was actually verified, and "clean" now covers four axes, not
+three.
 
 ## Example
 
@@ -84,4 +106,5 @@ actually checked or captured.
 | `file-bug` / `feature` / `issue` (docs) | Step 2's own dedup, payload contract, and record mechanics — invoked, not restated |
 | `save-lessons` (harness) | Step 3's detection pass and its own confirm-before-mint gate |
 | `parallel-work-rules` (this plugin) | The question is a PEER session's worktree, not this session's own close-out |
+| `repo-cleaner` (harness), or a host repo's own gated reaper script | Step 1's own branch/worktree residue axis — its dry-run/exit-coded pattern is the model when a host repo has no reaper script of its own |
 | `ExitWorktree` | The actual removal step, once this skill's verdict says it's safe |
