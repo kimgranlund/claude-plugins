@@ -117,7 +117,15 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
 3. **For each `newly_superseded` ADR**, grep the existing knowledge-pack corpus
    (`skills/*/references/*.md`) for a citation of that ADR id. A hit is a stale-citation candidate
    (the citing file + line); no hit means nothing downstream depends on the superseded Decision —
-   name that explicitly, don't manufacture a candidate.
+   name that explicitly, don't manufacture a candidate. **Before queueing, re-read the superseding
+   ADR's own Decision/Consequences text directly — never queue from this agent's own derived
+   summary of what it says.** Queued evidence is a claim, never verified fact, until confirmed
+   against the ADR's own literal words — this agent's own extraction can be wrong, and two firings
+   disagreeing about the same candidate is a signal to distrust both until re-derived from the
+   primary source (`gh issue view 144`), not to defer to whichever fired last. If that re-read
+   shows the superseding ADR's own text sanctions the citation as-is, that is a no-candidate
+   finding stated plainly — same as the no-hit branch above — never a silently dropped or
+   self-declined row.
 4. **Queue every candidate — against a scratch copy.** Copy `.claude/ops/adr-queue.json` to a
    scratch path first (`cp .claude/ops/adr-queue.json /tmp/decision-watcher-adr-queue.json`, or
    equivalent), then `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/adr_queue.py" add <scratch-path>
