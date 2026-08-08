@@ -7,9 +7,9 @@ partitioned out of a legacy personal skill/agent corpus (61 skills, 19 agents) v
 `break-down-problem` (distilled from `@agent-ui/a2ui`'s live-agent implementation, generalized as
 portable technique).
 
-Directory names carry a version suffix (`harness`, `docs`, ...) — quote the path, it
-contains a space. See `CLAUDE.md` for the workspace's own operating rules if you're working *on*
-these plugins rather than just installing them.
+Directory names align with each plugin's current name, no version suffix, no spaces (ADR-0007) —
+see `CLAUDE.md` for the workspace's own operating rules if you're working *on* these plugins
+rather than just installing them.
 
 [MIT licensed](LICENSE).
 

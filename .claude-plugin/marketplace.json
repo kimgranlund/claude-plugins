@@ -1,6 +1,6 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the harness/docs authoring toolchain, and seven domain plugins (agent-protocols, llm, color, typography, design, ui, orchestration) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the harness/docs authoring toolchain, and five domain plugins (agent-protocols, llm, design, screens, teamwork) partitioned from a legacy personal skill/agent corpus.",
   "owner": {
     "name": "Kim Granlund"
   },

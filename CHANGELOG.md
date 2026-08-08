@@ -1,8 +1,41 @@
 # Changelog
 
 Repo-level milestones only. Each plugin's own `README.md` footer carries its full, dated version
-ledger — this file exists to show how the nine plugins came to exist relative to each other, not
+ledger — this file exists to show how the seven plugins came to exist relative to each other, not
 to duplicate their per-version detail.
+
+> **Gap disclosed, 2026-08-08:** this file has no entries between 2026-07-20 and 2026-08-08 —
+> a 19-day span covering ADR-0006 (the simple-naming rename campaign across the whole estate),
+> ADR-0007 (directory names dropped their version suffix and align with each plugin's current
+> name), ADR-0008 (color/typography/ui-adjacent members merged into `design`, dropping the
+> plugin count from nine to seven), and ADR-0009 (`find-the-ask` renamed `find-intent`). Each of
+> those is independently verifiable from its own ADR file at `.claude/docs/adr/` and from every
+> touched plugin's own README ledger — not backfilled here to avoid restating detail from memory
+> that the ADRs themselves already carry as the source of record.
+
+## 2026-08-08 — the ops-write sandbox split matures: seats-report/host-writes, model-tiering enforcement, and mobilize-chores
+
+A cross-cutting arc, not one feature: closing gaps found by actually RUNNING the ops-family
+agents against live repo state, not just authoring them. `harness`'s four ops-* agents
+(`decision-watcher`, `issue-sorter`, `repo-cleaner`, `chore-planner`) stopped writing
+`.claude/ops/...` directly — a dispatch sandbox was found to redirect that write into the
+coordinating session's own isolated worktree, stranding state on an unmergeable branch (issue
+#125); every seat now returns computed state as fenced, target-pathed report payload, and
+`chore-lead` (the one seat with reach into the real checkout) applies it. `chore-lead` also
+gained a narrated-but-absent check (issue #140, live incident: `repo-cleaner` claimed in prose to
+have written a report that never actually landed) and `repo-cleaner` gained a fourth
+conditionally-gated action — a host repo's own gated branch-reap script, run dry-then-apply
+(issue #138). Separately, `skill_lint` gained rule A7: an agent's `model` field missing or set to
+`inherit` now warns, mechanizing a doctrine that used to be prose-only after tracing a live report
+of Fable-model sessions dispatching Fable-priced execution work through an `inherit`-pinned seat
+in a different installed plugin. `teamwork` gained two doctrine sections grounded in a live
+incident the same day (a coordinator relaying broadcast sub-agent reports to a nested dispatch,
+correctly refused) — "the return channel doesn't survive the session" and an extended
+"verify independently" rule covering relays, not just self-reports. New capability: `teamwork`'s
+`/mobilize-chores` closes the "queued but nobody acts on it" gap `/sweep-chores` always had —
+sweeps, then drives buildable bug/feature/task tickets to their own dispatch after one batched
+human confirm, later extended to `kind: task` tickets via a `find-intent`-then-`Agent`-dispatch
+path. (`harness` 3.1.1 → 3.1.8; `teamwork` 1.0.10 → 1.2.0)
 
 ## 2026-07-20 — naming-rules: the simple naming paradigm lands in forge (1.40.0)
 
