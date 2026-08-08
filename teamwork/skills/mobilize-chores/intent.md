@@ -17,8 +17,14 @@ gap: after the sweep, it reads the queue, filters to genuinely mobilizable ticke
 batched human confirm, then drives each confirmed item through its OWN kind's dispatch —
 `kind: feature` -> `/build-feature <id>`; `kind: bug` -> `/file-bug <id>` (resuming an existing
 bug record dispatches its investigation, per file-bug's own contract; build-feature explicitly
-redirects bug-kind tickets away, it does not build them). Everything else (`kind: task`, any
-ops/hygiene action, any human-decision item) is out of scope and reports as skipped.
+redirects bug-kind tickets away, it does not build them); `kind: task` -> `find-intent` clarifies
+the confirmed ticket first (one round max, only if genuinely ambiguous), then an Agent-tool
+dispatch (`general-purpose` as the default null case, a named agent only when tool restriction/
+parallelism/multi-skill preload is actually needed) executes it under the same Findings-write-back
+contract file-bug's own investigation dispatch uses (2026-08-08 addition — tasks have no fixed
+execution verb the way features/bugs do, so clarify-then-dispatch is the shape, never a blind
+dispatch on an unclarified brief). Any ops/hygiene action or human-decision item stays out of
+scope and reports as skipped.
 
 ## fences
 - NOT for just checking the queue/report (`sweep-chores`)
@@ -33,12 +39,16 @@ ops/hygiene action, any human-decision item) is out of scope and reports as skip
    skipped-and-why.
 2. No dispatch (`build-feature` or `file-bug`) fires without one batched human confirm round
    first — never per-item confirms, never a silent auto-build.
-3. A queue item mobilizes ONLY if it's a filed `kind: bug`/`kind: feature` ticket, routed to its
-   OWN kind's dispatch (`feature` -> `build-feature`, `bug` -> `file-bug`, never crossed) — never
-   an ops/hygiene action (agent dispatch, config edit) or a human-decision item, even one a
-   reasonable ad hoc read would call "low-risk enough to just do." Every non-ticket item is
-   reported as skipped, with the reason.
+3. A queue item mobilizes ONLY if it's a filed `kind: bug`/`kind: feature`/`kind: task` ticket,
+   routed to its OWN kind's dispatch (`feature` -> `build-feature`, `bug` -> `file-bug`, `task` ->
+   find-intent-clarify-then-Agent-dispatch, never crossed) — never an ops/hygiene action
+   (agent dispatch, config edit) or a human-decision item, even one a reasonable ad hoc read would
+   call "low-risk enough to just do." Every non-ticket item is reported as skipped, with the
+   reason.
 4. The report names which dispatches succeeded, failed, or are still in flight.
+5. A `kind: task` ticket that's STILL too vague to act on after find-intent's one clarifying round
+   is never dispatched blindly — it's reported skipped, with the gap named, exactly like an
+   unconfirmed or in-flight item.
 
 ## gates
 P0 route:      PASS — 2026-08-07 — primitive=skill, command species (real side effects: can
@@ -55,8 +65,8 @@ P3 draft:      PASS — 2026-08-07 — SKILL.md drafted from the Command skeleto
 P4 language:   PASS — 2026-08-07 — self-audited against the instantiation/affirmative-framing/
                 numeric-anchor/contracts-in-head criteria; matches sweep-chores' own established
                 Done/NOT-done pattern (an accepted house convention, not a hedge).
-P5 validate:   PASS — 2026-08-07 — lint clean. Fresh-context skill-checker audit (FLOOR) found one
-                blocking finding (R1): step 2's `linkedBranches`/`linked:<id>` mechanics were
+P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checker audit (FLOOR) found
+                one blocking finding (R1): step 2's `linkedBranches`/`linked:<id>` mechanics were
                 fictional against real `gh` — fixed with the auditor's verified fields, then
                 RE-verified live against this repo's own real data (`gh api graphql` querying
                 `closedByPullRequestsReferences{state}` — the flattened `gh issue view --json`
@@ -69,6 +79,19 @@ P5 validate:   PASS — 2026-08-07 — lint clean. Fresh-context skill-checker a
                 discoverability — no eval-suite reciprocity needed, all three siblings are
                 disable-model-invocation: true (command-only, zero model-routing collision
                 possible).
+                RE-OPENED 2026-08-08 for the task-kind addition, RE-PASSED same day — lint clean.
+                Fresh-context skill-checker re-audit (FLOOR) verdict PASS, no blocking findings;
+                every gh CLI/tool reference in the new task branch verified against real behavior
+                (including a live re-check of the closedByPullRequestsReferences state-field
+                gotcha against issue #131). One major + three minor findings, all fixed same-pass:
+                the fork-vs-agent purge had missed intent.md (delta + assertion 3 still said
+                "fork/agent" after SKILL.md was already corrected to a concrete Agent-tool
+                description — stale living-spec text, fixed); `gh issue close` was missing from
+                allowed-tools (step 5 needs it to close done/wontfix tickets, distinct from
+                `gh issue edit`); a null-unit-reasoning citation pointed at agent-writing-rules
+                instead of team-or-solo-rules (this plugin's own solo-first doctrine); a
+                misquote of file-task's scope ("chores, follow-ups, docs, decisions" vs. its real
+                "chores, follow-ups, research items, debts") in both SKILL.md and intent.md.
 
 ## rulings
 - 2026-08-07: considered folding this into `chore-lead`/`sweep-chores` directly instead of a new
@@ -86,3 +109,14 @@ P5 validate:   PASS — 2026-08-07 — lint clean. Fresh-context skill-checker a
   (`build-feature`, `team-lead`) already lives. Cross-plugin calls to `harness:sweep-chores` are a
   soft, named mention (dispatched as a command), never a `skills:` preload — plugin boundaries stay
   hard for preloads, soft for mentions, per this workspace's CLAUDE.md invariant.
+- 2026-08-08: task-kind mobilization added (Kim's explicit request, after first live run surfaced
+  #138-140 as reported-skipped). Considered three shapes: (a) dispatch a general-purpose agent per
+  task blind, (b) restrict to `size:small` tasks only, (c) run `find-intent` per confirmed task
+  first, then dispatch based on what that clarifies. Kim chose (c) — tasks are deliberately
+  heterogeneous (`file-task`'s own scope: chores, follow-ups, research items, debts), so no single fixed
+  dispatch verb fits them the way `build-feature`/`file-bug` fit features/bugs; blind dispatch (a)
+  risks executing a genuinely unclear brief, and size-gating (b) excludes big tasks that may be the
+  most valuable to mobilize. Clarification runs ONLY on CONFIRMED tasks (after step 4's batched
+  confirm, right before dispatch) — never on every discovered task — so no human attention is
+  spent clarifying items that end up not selected. A task still vague after find-intent's one
+  round is reported skipped rather than dispatched on an unclear brief (new assertion 5).
