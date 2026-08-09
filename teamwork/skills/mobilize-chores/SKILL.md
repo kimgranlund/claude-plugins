@@ -3,15 +3,15 @@ name: mobilize-chores
 description: >-
   Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
-  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm. A bug ticket dispatches to /file-bug's own investigation; a feature
-  ticket is named as the next /build-feature command for the human (build-feature is unreachable
-  programmatically); a task ticket runs find-intent to clarify it, then an
-  Agent dispatch executes it under a Findings write-back contract. Everything else (ops/hygiene
-  actions, human-decision items) is skipped, never mobilized. Run /mobilize-chores [blank, or a
-  scope instruction]. NOT for just checking the queue (/sweep-chores); NOT for building one
-  specific, already-known ticket (/build-feature or /file-bug directly); NOT for filing a new bug
-  or feature (/file-bug, /file-feature); NOT for the hygiene execution (repo-cleaner, already run
-  inside the sweep this wraps).
+  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm. A
+  bug ticket dispatches to /file-bug's own investigation; a feature ticket dispatches to the
+  feature-lead agent (build-feature's own procedure, reached programmatically); a task ticket
+  runs find-intent to clarify it, then an Agent dispatch executes it under a Findings write-back
+  contract. Everything else (ops/hygiene actions, human-decision items) is skipped, never
+  mobilized. Run /mobilize-chores [blank, or a scope instruction]. NOT for just checking the queue
+  (/sweep-chores); NOT for building one specific, already-known ticket (/build-feature or
+  /file-bug directly); NOT for filing a new bug or feature (/file-bug, /file-feature); NOT for the
+  hygiene execution (repo-cleaner, already run inside the sweep this wraps).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a full sweep-and-mobilize | a scope instruction for the underlying sweep]"
@@ -80,13 +80,15 @@ sweep surfaced that's actually buildable.
    - `kind: bug` → `Skill(docs:file-bug)` carrying the ticket id (`file-bug` is
      `disable-model-invocation: false` — reachable via the Skill tool, verified live 2026-08-08);
      its own resume path dispatches investigation.
-   - `kind: feature` → **KNOWN LIMITATION (tracked separately, not fixed by this change):**
-     `build-feature` is ALSO `disable-model-invocation: true` — the same unreachable-via-Skill-tool
-     problem step 1 had, but `build-feature` has no single wrapped agent to dispatch instead
-     (unlike `chore-lead`, it is itself a multi-phase procedure that sizes and routes at dispatch
-     time). Until that's resolved, report the confirmed feature ticket ids in the final report and
-     name `/build-feature <id>` as the exact next command for the human to run — never silently
-     fail, and never guess an invocation mechanism this skill hasn't verified works.
+   - `kind: feature` → `Agent(subagent_type: "teamwork:feature-lead")` carrying the confirmed
+     ticket id (issue #135's own fix: `build-feature` remains `disable-model-invocation: true` and
+     stays unreachable via the Skill tool or preload, but its procedure now lives in a separate
+     skill, `dispatch-feature`, that `feature-lead` preloads — the same `chore-lead`/`sweep-chores`
+     shape step 1 already uses). `feature-lead` returns the same typed result a human running
+     `/build-feature <id>` would see (path/URL, status, what shipped, or a recorded blocker) —
+     relay it as this ticket's mobilized outcome. Its own unattended failure branch (an ambiguous
+     record match reports as a blocker, never guessed at) applies automatically, since this
+     dispatch never has an interactive user.
    - `kind: task` → **clarify, then dispatch — never blind.** Tasks carry no fixed execution verb
      the way features/bugs do (`file-task`'s own scope is deliberately heterogeneous: chores,
      follow-ups, research items, debts), so run `Skill(harness:find-intent)` on the confirmed
@@ -144,8 +146,8 @@ sweep surfaced that's actually buildable.
 Done when `/sweep-chores` has run (via the direct `chore-lead` dispatch step 1 names, not a failed
 Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight has been
 considered, the human's one batched confirm gated every dispatch, and the final report names
-every considered ticket's outcome — a mobilized bug/task ticket's dispatch outcome, a confirmed
-feature ticket's named next command, or a skip-and-why. NOT done while a dispatch fires before the
+every considered ticket's outcome — a mobilized bug/task/feature ticket's dispatch outcome, or a
+skip-and-why. NOT done while a dispatch fires before the
 confirm round, an unlabeled item is mobilized, a bug ticket is routed to `build-feature` instead
 of `file-bug`, a task ticket is dispatched without a `find-intent` pass first (or dispatched
 anyway after that pass left it still unclear), a ticket already in flight is dispatched again, a
