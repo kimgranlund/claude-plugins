@@ -2,16 +2,16 @@
 name: mobilize-chores
 description: >-
   Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
-  open GitHub issues labeled feature, bug, or task with no build in flight yet — after one
-  batched human confirm. A bug ticket dispatches to /file-bug's own investigation; a feature
+  open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
+  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm. A bug ticket dispatches to /file-bug's own investigation; a feature
   ticket is named as the next /build-feature command for the human (build-feature is unreachable
-  programmatically — tracked separately); a task ticket runs find-intent to clarify it, then an
+  programmatically); a task ticket runs find-intent to clarify it, then an
   Agent dispatch executes it under a Findings write-back contract. Everything else (ops/hygiene
   actions, human-decision items) is skipped, never mobilized. Run /mobilize-chores [blank, or a
   scope instruction]. NOT for just checking the queue (/sweep-chores); NOT for building one
   specific, already-known ticket (/build-feature or /file-bug directly); NOT for filing a new bug
-  or feature (/file-bug, /file-feature); NOT for the hygiene execution itself (repo-cleaner,
-  already run inside the sweep this wraps).
+  or feature (/file-bug, /file-feature); NOT for the hygiene execution (repo-cleaner, already run
+  inside the sweep this wraps).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a full sweep-and-mobilize | a scope instruction for the underlying sweep]"
@@ -35,21 +35,38 @@ sweep surfaced that's actually buildable.
    that dispatch directly — the agent, not the command — with the identical contract: banner check
    first when the plan file is absent, `$ARGUMENTS` passed through, the report relayed as this
    step's own findings. This IS running `/sweep-chores`, mechanically, not a workaround.
-2. **Find mobilizable tickets.** `gh issue list --state open --label feature --json
-   number,title,labels`, the same for `--label bug`, and the same for `--label task`. For each
-   candidate, check whether an open PR already references it via `gh api graphql` querying
-   `closedByPullRequestsReferences { nodes { number state } }` for that issue (owner/repo from
-   `gh repo view --json nameWithOwner`) — any node with `state: OPEN` means a PR is already in
-   flight for it, exclude. **The flattened `gh issue view --json closedByPullRequestsReferences`
-   form does NOT carry a `state` field at all** (verified 2026-08-07: it silently returns exit 0
-   with no state key present, reading as "never in flight" regardless of the truth) — the GraphQL
-   form is the only one that actually works; do not substitute the flattened form. A ticket is
-   mobilizable only if: labeled exactly ONE of `feature`/`bug`/`task` (never unlabeled, and a
-   ticket carrying more than one of these three is ambiguous — exclude it, per the failure branch
-   below), AND no `closedByPullRequestsReferences` node reads `OPEN`. Cross-check `plan.md`'s own
-   queue for the same ids; a ticket the sweep already flagged as a human-decision item or a
-   blocker is excluded even if it carries a mobilizable label — the sweep's own judgment on THAT
-   item stands.
+2. **Find mobilizable tickets.** Resolve this repo's ticket backend once (`doc-writing-rules`'
+   backend resolver, `references/backend-resolver.md`, where `docs` is installed; not installed,
+   or no ruling → git-native, this workspace's own ADR-0002 instance, unchanged from before this
+   resolver call). Then discover per the resolved backend:
+   - **Git-native (Option B):** `gh issue list --state open --label feature --json
+     number,title,labels`, the same for `--label bug`, and the same for `--label task`. For each
+     candidate, check whether an open PR already references it via `gh api graphql` querying
+     `closedByPullRequestsReferences { nodes { number state } }` for that issue (owner/repo from
+     `gh repo view --json nameWithOwner`) — any node with `state: OPEN` means a PR is already in
+     flight for it, exclude. **The flattened `gh issue view --json closedByPullRequestsReferences`
+     form does NOT carry a `state` field at all** (verified 2026-08-07: it silently returns exit 0
+     with no state key present, reading as "never in flight" regardless of the truth) — the
+     GraphQL form is the only one that actually works; do not substitute the flattened form.
+   - **Local (Option A):** `Glob` `docs/tickets/*.md`, `Read` each file's frontmatter. A candidate
+     carries `status: open` and a `kind` of `bug`/`feature`/`task` (the same convention
+     `file-bug`/`file-feature`/`file-task` write under this option — `doc-writing-rules` SKILL.md's
+     TICKET section). **No in-flight-PR check exists for local tickets** — there is no established
+     local convention linking a TICKET file to an open PR, so a local ticket already being worked
+     cannot be excluded this way. This is a disclosed limitation, not a silent gap: name it in the
+     step-6 report rather than skipping the check unremarked.
+   - **External adapter / Option C (e.g. Linear):** the seven-operation adapter interface
+     (`backend-resolver.md`) has no "list open records filtered by kind" primitive today —
+     ticket-discovery for this backend is **not yet supported**. Report it UNMEASURED, naming the
+     resolved adapter, exactly like the `gh issue list` unreachable failure branch below; never
+     silently return zero tickets found.
+
+   Regardless of backend, a ticket is mobilizable only if: labeled/kinded exactly ONE of
+   `feature`/`bug`/`task` (never unlabeled, and one carrying more than one of these three is
+   ambiguous — exclude it, per the failure branch below), AND (git-native only) no
+   `closedByPullRequestsReferences` node reads `OPEN`. Cross-check `plan.md`'s own queue for the
+   same ids; a ticket the sweep already flagged as a human-decision item or a blocker is excluded
+   even if it carries a mobilizable label/kind — the sweep's own judgment on THAT item stands.
 3. **Nothing mobilizable → stop here.** Report the sweep's own findings (step 1) plus "0 tickets
    mobilizable this run" and why (no open feature/bug/task tickets, or all already in flight). No
    confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
@@ -83,15 +100,20 @@ sweep surfaced that's actually buildable.
      keep); reach for a specific named agent only when the clarified brief genuinely needs one of
      those three properties. The
      dispatch prompt carries the clarified brief plus the SAME Findings-write-back contract
-     `file-bug`'s own investigation dispatch uses (its Phase 5/6): it names the record (the issue
-     number, `gh issue comment` as the write-back verb) and must leave a dated Findings-equivalent
-     comment at each significant result — the stopping predicate includes at least one such entry
-     before the work counts as done. Read the record back on return (`gh issue view --comments`);
-     a Findings entry landed → advance status (`doing` label; `done` — close via `gh issue close`
-     once genuinely finished; `wontfix` — add the label, comment the reason, then close, matching
-     `file-bug`'s own Phase 6 status verbs) and report it as mobilized; no entry landed → one re-dispatch with the contract quoted, then
-     a recorded loss on the ticket if still nothing — same discipline as `file-bug`'s own Phase 6
-     failure branch.
+     `file-bug`'s own investigation dispatch uses (its Phase 5/6): it names the record and the
+     write-back verb **per the backend resolved in step 2** (git-native: the issue number,
+     `gh issue comment`; local: the TICKET file's path, editing its `## Findings` section
+     directly; Option C: the resolved adapter's `update` operation) and must leave a dated
+     Findings-equivalent entry at each significant result — the stopping predicate includes at
+     least one such entry before the work counts as done. Read the record back on return
+     (git-native: `gh issue view --comments`; local: re-`Read` the file; Option C: the adapter's
+     `read` operation); a Findings entry landed → advance status (`doing` label / frontmatter
+     `open`→`doing` / the adapter's mapped state; `done` — close via `gh issue close` / frontmatter
+     `status: done` / the adapter's close operation once genuinely finished; `wontfix` — add the
+     label or set the equivalent status, comment the reason, then close — matching `file-bug`'s own
+     Phase 6 status verbs for that same backend) and report it as mobilized; no entry landed → one
+     re-dispatch with the contract quoted, then a recorded loss on the ticket if still nothing —
+     same discipline as `file-bug`'s own Phase 6 failure branch.
 
    Every dispatch is independent; one failing never blocks the others.
 6. **Report.** Verdict-first: the sweep's own findings, then a table of every ticket CONSIDERED
@@ -103,8 +125,12 @@ sweep surfaced that's actually buildable.
 
 - `/sweep-chores` itself fails to return → report that failure plainly; never run steps 2–6
   against a sweep that didn't happen.
-- `gh issue list` unreachable → report ticket-discovery as UNMEASURED for this run; the sweep's
-  own report still stands on its own.
+- The resolved backend's own listing call is unreachable (`gh issue list` fails on git-native; a
+  Glob/Read error on local; the adapter call errors on Option C) → report ticket-discovery as
+  UNMEASURED for this run; the sweep's own report still stands on its own.
+- Option C is resolved but the seven-operation adapter interface carries no listing primitive
+  (today's state, per step 2) → report ticket-discovery UNMEASURED for that backend, naming the
+  adapter; not a failure to fix here, a documented gap to close in the adapter interface later.
 - A ticket's label or in-flight state is ambiguous (e.g. `linkedBranches` present but that branch
   has no open PR) → exclude it from the mobilizable set; ambiguity is never a license to dispatch.
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
