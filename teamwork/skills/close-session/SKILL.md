@@ -36,12 +36,18 @@ what isn't, and account for every finding in a stated verdict.
    ALWAYS checked and ALWAYS named in the verdict (residue found, or explicitly "no session-spawned
    branch/worktree residue") — never silently folded into the three-axis "clean" claim, since the
    verdict's own hard gate is only as true as what was actually verified.
-2. **Judge what's real.** A genuine bug or follow-up found this session goes through
-   `file-bug`/`feature`/`issue` (Skill tool) — their own dedup sweep and payload contract apply
-   as-is, so route through them rather than a raw `gh issue create`. In-progress work that's
-   gate-clean earns a push and a PR — the existing open one, updated, when there is one, so the
-   count of open PRs from this session stays one. Work that's genuinely unfinished gets named as
-   such, plainly, rather than forced into a premature PR.
+2. **Judge what's real — via `file-leftovers`' systematic sweep.** Invoke `file-leftovers` (Skill
+   tool) to sweep the session for everything raised but left unadvanced — bugs, feature ideas,
+   feedback, chores, unanswered questions — rather than relying on this step's own ad hoc read
+   alone. Its own contract already covers what this step used to do by hand: an evidence-quoted
+   candidate table, one batched clarification round for `needs-input`/contested rows, then each
+   approved row minted through its owning intake skill (`file-bug`/`file-feature`/`file-task`,
+   which supply their own dedup sweep and payload contract) — no separate
+   `file-bug`/`feature`/`issue` call is needed here. Its minted ids feed step 5's verdict as
+   captured items. In-progress work that's gate-clean still earns a push and a PR from this step
+   directly (the existing open one, updated, when there is one, so the count of open PRs from this
+   session stays one) — `file-leftovers` tickets ideas and defects, it does not push code. Work
+   that's genuinely unfinished gets named as such, plainly, rather than forced into a premature PR.
 3. **Scan for durable knowledge.** A correction repeated, a ratified decision never captured, a
    high-impact convention this session surfaced → hand off to `save-lessons` (Skill tool) for
    its own detection pass, confirm gate, and placement judgment — this step's job ends at
@@ -61,11 +67,13 @@ never omitted, even on an otherwise-clean verdict.
 ## Failure branches
 
 - Dispatched in an unattended or scheduled context (no interactive user to answer an
-  AskUserQuestion-gated confirm) → step 2's own capture skills (file-bug/feature run
-  find-intent's interactive round) and step 3's save-lessons confirm gate are both named as
-  deferred in the verdict rather than attempted; steps 1, 4, and 5 still run on their own — the
-  residue axis is read-only (a reaper script's `--dry` flag, plain `git` reads) and never blocked
-  by the absence of a human, so it always runs and reports even here.
+  AskUserQuestion-gated confirm) → step 2's own capture skill (`file-leftovers`, whose
+  clarification round AND mint gate both require an interactive user — its own contract: no
+  interactive channel → deliver the candidate table as the report and stop, minting waits) and
+  step 3's save-lessons confirm gate are both named as deferred in the verdict rather than
+  attempted; steps 1, 4, and 5 still run on their own — the residue axis is read-only (a reaper
+  script's `--dry` flag, plain `git` reads) and never blocked by the absence of a human, so it
+  always runs and reports even here.
 - No gated reaper script exists AND `git worktree list`/`git branch --merged` themselves fail
   (not a git repo, detached state) → the residue axis reports UNMEASURED with the reason, same
   discipline as any other unreachable check; never silently omitted from the verdict.
@@ -103,7 +111,8 @@ actually checked or captured.
 
 | Path | Use when |
 |---|---|
-| `file-bug` / `feature` / `issue` (docs) | Step 2's own dedup, payload contract, and record mechanics — invoked, not restated |
+| `file-leftovers` (docs) | Step 2's own systematic sweep — candidate table, clarification round, mint-on-approval — invoked, not restated |
+| `file-bug` / `feature` / `issue` (docs) | Invoked indirectly, via `file-leftovers`' own Phase 4 mint step — not called directly by this skill |
 | `save-lessons` (harness) | Step 3's detection pass and its own confirm-before-mint gate |
 | `parallel-work-rules` (this plugin) | The question is a PEER session's worktree, not this session's own close-out |
 | `repo-cleaner` (harness), or a host repo's own gated reaper script | Step 1's own branch/worktree residue axis — its dry-run/exit-coded pattern is the model when a host repo has no reaper script of its own |
