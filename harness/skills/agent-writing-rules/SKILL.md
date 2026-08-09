@@ -38,6 +38,26 @@ Route here only when the task needs a property `context: fork` on a skill cannot
 - `disable-model-invocation: true` on a skill **blocks its preload**. Preloadable modules are model-only skills (`user-invocable: false`); commands cannot be preloaded.
 - Subagents inherit CLAUDE.md (except built-in `Explore`/`Plan`, which skip it) and nothing from the parent conversation. Context the agent needs beyond preloads is passed in the dispatch or read from disk.
 
+**The fix pattern, when a command needs a programmatic entry point too.** A command skill
+(`disable-model-invocation: true`) is unreachable via the Skill tool *and* unpreloadable — the same
+flag blocks both. When something else needs to run that command's logic without a human typing it
+(a sibling command's own procedure, a dispatched agent), two shapes exist, in order of preference:
+
+- **Two-piece (logic lives wholly in the agent):** the command shell (unchanged,
+  `disable-model-invocation: true`) dispatches an agent directly via the `Agent` tool; the agent's
+  own body carries the procedure. Fine when only the agent ever needs that logic. Live instance:
+  `harness/skills/sweep-chores` → `harness/agents/chore-lead.md`.
+- **Three-piece (logic factored out, both entry points share it):** when the command shell ALSO
+  needs the same logic — not just the agent — factor it into (1) the command shell, unchanged,
+  now a thin delegator; (2) a new procedure skill, `disable-model-invocation: false`, carrying the
+  actual logic, invoked by the command shell via the Skill tool; (3) a thin wrapper agent that
+  preloads the procedure skill (`skills:` names it). Live instance:
+  `teamwork/skills/build-feature` → `teamwork/skills/dispatch-feature/SKILL.md` →
+  `teamwork/agents/feature-lead.md` (2026-08-09, issue #135 — built by generalizing the two-piece
+  shape once the command shell itself needed the logic too, not just the agent).
+
+Reach for one of these before re-deriving the split from scratch.
+
 ## Frontmatter
 
 `name` (kebab, 3–50 chars), `description`, `model` (`inherit` default), `color`, `tools` (the allowlist), `skills` (preload list), plus `disallowedTools`, `maxTurns`, `effort`, `memory`, `hooks` where needed [drift-prone].
