@@ -42,5 +42,8 @@ inside that agent's already-isolated context (no live user either way, so forkin
 only add a needless third hop with nothing to buy).
 
 `dispatch-ticket`'s own body is the authoritative phase-by-phase contract (find-or-make record,
-size solo-first, dispatch under contract, close the loop) and its own failure branches — not
-duplicated here, so the two entry points can never drift apart.
+kind branch, size solo-first, dispatch under contract, close the loop) and its own failure
+branches — not duplicated here, so the two entry points can never drift apart. Since ADR-0010
+that engine branches by kind: handed a task-kind id, this command runs the clarify-then-dispatch
+path; handed a bug-kind id, it hands over to `file-bug` and reports the read-back — the
+feature-flavored name marks this command's charter, not the engine's limit.

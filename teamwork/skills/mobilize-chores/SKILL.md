@@ -4,10 +4,10 @@ description: >-
   Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
   adapter) labeled feature, bug, or task with no build in flight — after one batched confirm.
-  Every confirmed ticket, regardless of kind, dispatches to the build-lead agent (ADR-0010),
-  whose preloaded dispatch-ticket procedure branches by kind: feature builds, task
-  clarify-then-dispatch, bug hand-off to file-bug. Everything else (ops/hygiene actions,
-  human-decision items) is skipped, never mobilized. Run /mobilize-chores [blank, or a scope
+  Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
+  (ADR-0010), whose preloaded dispatch-ticket procedure owns the kind branch; an
+  under-specified task comes back SKIPPED — no clarify round runs unattended. Everything else
+  (ops/hygiene actions, human-decision items) is skipped, never mobilized. Run /mobilize-chores [blank, or a scope
   instruction]. NOT for just checking the queue (/sweep-chores); NOT for building one specific,
   already-known ticket (/build-feature or /file-bug directly); NOT for filing a new bug or
   feature (/file-bug, /file-feature); NOT for the hygiene execution (repo-cleaner, already run
@@ -15,7 +15,7 @@ description: >-
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a full sweep-and-mobilize | a scope instruction for the underlying sweep]"
-allowed-tools: ["Read", "Glob", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Agent", "AskUserQuestion"]
+allowed-tools: ["Read", "Glob", "Edit", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Agent", "AskUserQuestion"]
 ---
 
 # mobilize-chores
@@ -72,18 +72,20 @@ sweep surfaced that's actually buildable.
    confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
 4. **One batched confirm.** List every mobilizable ticket found (id, title, kind) in ONE
    `AskUserQuestion` round — never per-ticket, never split by kind. The human picks which to
-   mobilize now, all, some, or none. Nothing dispatches before this round returns — including
-   `dispatch-ticket`'s own task-clarifying round, which runs inside step 5's dispatches, strictly
-   AFTER this confirm: clarifying a task nobody chose to mobilize wastes the human's attention on
-   something that ends up skipped anyway.
+   mobilize now, all, some, or none. Nothing dispatches before this round returns. A disclosed
+   limitation of the uniform dispatch, stated here because this round is the one place to act on
+   it: `dispatch-ticket`'s task-clarifying round requires an interactive user and `build-lead`
+   is an unattended seat, so NO clarify round runs inside step 5's dispatches — an
+   under-specified task comes back SKIPPED, and clarifying it means the human re-runs the named
+   command interactively afterwards. Flag visibly under-specified task tickets IN this confirm
+   round (one line each), so the human can decline them here instead of paying a dispatch that
+   will skip.
 5. **Dispatch every confirmed ticket, uniformly.** Each confirmed ticket, regardless of kind →
    `Agent(subagent_type: "teamwork:build-lead")` carrying the confirmed ticket id. `build-lead`'s
-   preloaded `dispatch-ticket` procedure (ADR-0010) owns the kind branch — feature → the
-   find-or-make/size/dispatch/close-loop build path; task → clarify-then-dispatch under the
-   Findings write-back contract, backend-aware status verbs included; bug → hand-off to
-   `file-bug` with the `[redirected-from:]` marker — and its unattended failure branches (an
-   ambiguous record match reports as a named blocker; a task still unclear after its round
-   reports SKIPPED, never guessed at) apply automatically, since this dispatch never has an
+   preloaded `dispatch-ticket` procedure (ADR-0010) owns the kind branch — its own body is the
+   authoritative map, not restated here — and its unattended failure branches (an ambiguous
+   record match reports as a named blocker; an under-specified task reports SKIPPED with no
+   clarify round, never guessed at) apply automatically, since this dispatch never has an
    interactive user. Relay each returned typed result (path/URL, status, what shipped, a
    recorded blocker, or a SKIPPED gap) as that ticket's mobilized outcome — the same output a
    human running `/build-feature <id>` would see. This is the same
@@ -91,11 +93,16 @@ sweep surfaced that's actually buildable.
    `disable-model-invocation: true`, the agent carries the reachable procedure (issue
    #134/#135's shared fix pattern).
 
-   Every dispatch is independent; one failing never blocks the others.
+   Every dispatch is independent — one failing never blocks the others — but independence is
+   not a parallelism license: mutating dispatches share this one checkout, so run them
+   SERIALLY, or give each `isolation: "worktree"` on the Agent call per `parallel-work-rules`'
+   own overlap test. The bug path (a hand-off, no tree mutation) is safe to overlap; anything
+   that builds is not.
 6. **Report.** Verdict-first: the sweep's own findings, then a table of every ticket CONSIDERED
    this run — mobilized (dispatch + outcome: succeeded / failed / still in flight), or
-   skipped-and-why (not confirmed, in flight already, wrong/ambiguous label, still too vague after
-   clarification, or excluded by the sweep's own judgment).
+   skipped-and-why (not confirmed, in flight already, wrong/ambiguous label, too vague to build
+   unattended — the seat SKIPPED, no clarify round available on this path — or excluded by the
+   sweep's own judgment).
 
 ## Failure branches
 
@@ -111,7 +118,8 @@ sweep surfaced that's actually buildable.
   has no open PR) → exclude it from the mobilizable set; ambiguity is never a license to dispatch.
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
-- `build-lead` returns a SKIPPED (task unclear after its round) or a named blocker → relay it as
+- `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
+  unattended dispatch) or a named blocker → relay it as
   that ticket's outcome in the step-6 table; the skip/blocker discipline itself lives in
   `dispatch-ticket`'s own failure branches, not re-litigated here.
 - `build-lead` returns with no Findings-equivalent entry visible on the ticket read-back → one

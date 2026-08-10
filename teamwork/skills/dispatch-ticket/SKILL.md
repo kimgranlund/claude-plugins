@@ -54,24 +54,35 @@ here — report that routing and stop; docs' seats own it.
 - **`kind: bug`** → this is `file-bug`'s work: invoke it via the Skill tool carrying the ticket
   id, seed prefixed `[redirected-from:dispatch-ticket]` (file-bug's own marker protocol — the
   round budget was already spent here, and file-bug's forked run has no other way to know).
-  Relay file-bug's result as this skill's own; Phases 3–5 never run for a bug.
+  The RECORD is the return channel, not the fork's transcript: `file-bug` runs `context: fork`,
+  and whether a fork invoked from inside an agent dispatch returns synchronously is an
+  unverified platform assumption (the same flagged class as file-task Phase 2's) — so after the
+  hand-off, read the ticket back (Phase 5's verbs) and report "handed to `file-bug`; read-back
+  shows <state/Findings>". A conversational result that did arrive is a bonus to relay, never
+  the thing waited on. Phases 3–5 never run for a bug.
 - **`kind: task`** → **clarify, then dispatch — never blind.** Tasks carry no fixed execution
   verb the way features do (`file-task`'s own scope is deliberately heterogeneous: chores,
   follow-ups, research items, debts), so run `find-intent` (harness, where installed; its
   discipline inline otherwise) on the ticket's full body first — ONE batched clarifying round
   maximum, and only when something is genuinely ambiguous AND an interactive user is present
-  (the same test Phase 3's ambiguity branch uses; a `build-lead` dispatch has no one to ask —
-  a ticket that's already clear proceeds with zero rounds either way). Still not concretely
-  actionable (no clear "what would done look like") → report SKIPPED with the named gap, never
-  dispatch on an unclear brief. Otherwise dispatch via the `Agent` tool —
-  `subagent_type: general-purpose` as the default (`team-or-solo-rules`' solo-first/null-unit
-  reasoning: a generic task needs no tool restriction, parallelism, or multi-skill preload); a
-  specific named agent only when the clarified brief genuinely needs one of those three
-  properties. The dispatch prompt is sealed per Phase 4's contract — the record, the write-back
-  verb per the resolved backend, a dated Findings-equivalent entry at each significant result.
-  Then close the loop per Phase 5, including its status verbs (`doing`/`done`+close/
+  (the same interactive-user test the Phase 1 ambiguous-match failure branch applies; a
+  `build-lead` dispatch has no one to ask — a ticket that's already clear proceeds with zero
+  rounds either way). Still not concretely actionable (no clear "what would done look like") →
+  report SKIPPED with the named gap, never dispatch on an unclear brief. Otherwise dispatch via
+  the `Agent` tool — `subagent_type: general-purpose` as the default (`team-or-solo-rules`'
+  solo-first/null-unit reasoning: a generic task needs no tool restriction, parallelism, or
+  multi-skill preload); a specific named agent only when the clarified brief genuinely needs one
+  of those three properties. The dispatch prompt is sealed per Phase 4's contract — the
+  CLARIFIED BRIEF (the round's answers travel in the seal; the dispatched agent cannot see the
+  clarify conversation), the record, the write-back verb per the resolved backend, a dated
+  Findings-equivalent entry at each significant result. A task is ONE sealed dispatch — Phase
+  4's `/goal` try-cap wrapper is the feature path's, not inherited here (matching the absorbed
+  original). Then close the loop per Phase 5, including its status verbs (`doing`/`done`+close/
   `wontfix`+close, per the backend) and its one-re-dispatch rule.
-- **`kind: feature`** (and a record minted fresh in Phase 1) → continue: Phases 3–5.
+- **`kind: feature`**, a record minted fresh in Phase 1, and the default arm — a pre-existing
+  record carrying no kind, or an unrecognized one → continue: Phases 3–5 (the pre-ADR-0010
+  behavior: anything neither bug- nor task-kinded nor closed takes the feature path — `/build-feature`
+  can be handed any id, and an unlabeled issue builds rather than falls through undefined).
 
 ## Phase 3 — Size the dispatch (solo-first, feature path)
 
@@ -90,7 +101,9 @@ carry, applied from the caller's side:
   depth ≤ 2 — named justification, not an accident: the fork isolates the CALLER's session
   (`context: fork` on `/build-feature`), the coordinator isolates the multi-seat delivery chain
   (planner/builder/code-checker each need their own turn) — two different things being kept
-  separate, not one dispatch nested inside another for no reason.
+  separate, not one dispatch nested inside another for no reason. The same justification holds
+  on a `build-lead` dispatch — the agent context takes the fork's place as the layer isolating
+  the caller; host→agent→coordinator→seats is the identical shape.
 
 ## Phase 4 — Dispatch under contract
 

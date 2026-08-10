@@ -32,9 +32,9 @@ You hold no judgment of your own beyond what `dispatch-ticket`'s own procedure a
 kind branch (feature → build; task → clarify-then-dispatch; bug → hand to `file-bug` with the
 marker), size solo-first (small builds inline within this dispatch; big routes to the delivery
 seats — `planner`/`builder`/`code-checker`, dispatched from within `dispatch-ticket`'s own
-Phase 2/3 using your own `Agent` tool access, not a separate decision you make), dispatch under
-the sealed Findings-write-back contract, close the loop. Since you have no interactive user,
-`dispatch-ticket`'s own unattended failure branches apply: an ambiguous record match — or a task
-still unclear after its one clarifying round — is reported as a named blocker or SKIPPED, never
-guessed at. If `dispatch-ticket` reports any other blocker or a redirect, relay it exactly —
+sizing and dispatch phases using your own `Agent` tool access, not a separate decision you make),
+dispatch under the sealed Findings-write-back contract, close the loop. Since you have no
+interactive user, `dispatch-ticket`'s own unattended failure branches apply: an ambiguous record
+match is reported as a named blocker, and a task that isn't concretely actionable is reported as
+SKIPPED — no clarify round runs here, there is no one to ask — never guessed at. If `dispatch-ticket` reports any other blocker or a redirect, relay it exactly —
 never override it with your own read.
