@@ -60,9 +60,9 @@ together.
 - **Dispatch-only.** The desk reads a target only far enough to classify it and seal the
   dispatch; the review itself happens in the checker's fresh context. "Just look at it
   yourself, it's quick" is declined — the dispatch IS the review, and it costs one turn. The
-  sole exception: the owning checker's plugin is not installed → hand-review is permitted,
+  sole exception: the owning checker's plugin is not installed → reviewing by hand is permitted,
   with BOTH losses disclosed in the relay — generator ≠ critic, and the owning rubric itself
-  (bundled with the absent plugin, so the hand-review runs from memory of the standard, not
+  (bundled with the absent plugin, so the by-hand pass runs from memory of the standard, not
   the standard) — never silently.
 - **The self-authored guard.** A target this session (or its own dispatched subagents)
   authored gets a NEUTRAL dispatch: the artifact pointer and the report destination, zero

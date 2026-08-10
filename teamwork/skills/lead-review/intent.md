@@ -40,7 +40,7 @@ the dispatch prompt. The guard: a target this session (or its own subagents) aut
 NEUTRAL dispatch — artifact pointer + rubric owner only, zero rationale, zero framing, zero
 self-defense — and the authorship is disclosed in the relay alongside the verdict.
 
-**Degradation rule (lead-team's precedent):** the owning checker's plugin absent → hand-review
+**Degradation rule (lead-team's precedent):** the owning checker's plugin absent → reviewing by hand
 against the owning rubric inline is permitted ONLY then, with the generator≠critic loss
 disclosed in the relay — never silently.
 
