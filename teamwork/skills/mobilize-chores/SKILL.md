@@ -3,19 +3,19 @@ name: mobilize-chores
 description: >-
   Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
-  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm. A
-  bug ticket dispatches to /file-bug's own investigation; a feature ticket dispatches to the
-  feature-lead agent (build-feature's own procedure, reached programmatically); a task ticket
-  runs find-intent to clarify it, then an Agent dispatch executes it under a Findings write-back
-  contract. Everything else (ops/hygiene actions, human-decision items) is skipped, never
-  mobilized. Run /mobilize-chores [blank, or a scope instruction]. NOT for just checking the queue
-  (/sweep-chores); NOT for building one specific, already-known ticket (/build-feature or
-  /file-bug directly); NOT for filing a new bug or feature (/file-bug, /file-feature); NOT for the
-  hygiene execution (repo-cleaner, already run inside the sweep this wraps).
+  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm.
+  Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
+  (ADR-0010), whose preloaded dispatch-ticket procedure owns the kind branch; an
+  under-specified task comes back SKIPPED — no clarify round runs unattended. Everything else
+  (ops/hygiene actions, human-decision items) is skipped, never mobilized. Run /mobilize-chores [blank, or a scope
+  instruction]. NOT for just checking the queue (/sweep-chores); NOT for building one specific,
+  already-known ticket (/build-feature or /file-bug directly); NOT for filing a new bug or
+  feature (/file-bug, /file-feature); NOT for the hygiene execution (repo-cleaner, already run
+  inside the sweep this wraps).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a full sweep-and-mobilize | a scope instruction for the underlying sweep]"
-allowed-tools: ["Read", "Glob", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh issue edit *)", "Bash(gh issue close *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Skill", "Agent", "AskUserQuestion"]
+allowed-tools: ["Read", "Glob", "Edit", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Agent", "AskUserQuestion"]
 ---
 
 # mobilize-chores
@@ -72,56 +72,37 @@ sweep surfaced that's actually buildable.
    confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
 4. **One batched confirm.** List every mobilizable ticket found (id, title, kind) in ONE
    `AskUserQuestion` round — never per-ticket, never split by kind. The human picks which to
-   mobilize now, all, some, or none. Nothing dispatches before this round returns — including
-   step 5's own `find-intent` clarifying round for tasks, which runs strictly AFTER this confirm,
-   never before: clarifying a task nobody chose to mobilize wastes the human's attention on
-   something that ends up skipped anyway.
-5. **Dispatch by kind, per the confirmed selection only.**
-   - `kind: bug` → `Skill(docs:file-bug)` carrying the ticket id (`file-bug` is
-     `disable-model-invocation: false` — reachable via the Skill tool, verified live 2026-08-08);
-     its own resume path dispatches investigation.
-   - `kind: feature` → `Agent(subagent_type: "teamwork:feature-lead")` carrying the confirmed
-     ticket id (issue #135's own fix: `build-feature` remains `disable-model-invocation: true` and
-     stays unreachable via the Skill tool or preload, but its procedure now lives in a separate
-     skill, `dispatch-feature`, that `feature-lead` preloads — the same `chore-lead`/`sweep-chores`
-     shape step 1 already uses). `feature-lead` returns the same typed result a human running
-     `/build-feature <id>` would see (path/URL, status, what shipped, or a recorded blocker) —
-     relay it as this ticket's mobilized outcome. Its own unattended failure branch (an ambiguous
-     record match reports as a blocker, never guessed at) applies automatically, since this
-     dispatch never has an interactive user.
-   - `kind: task` → **clarify, then dispatch — never blind.** Tasks carry no fixed execution verb
-     the way features/bugs do (`file-task`'s own scope is deliberately heterogeneous: chores,
-     follow-ups, research items, debts), so run `Skill(harness:find-intent)` on the confirmed
-     ticket's full body first — its own contract caps this at ONE batched clarifying round, and
-     only fires that round when something is genuinely ambiguous; a ticket that's already clear
-     proceeds with zero rounds. Still not concretely actionable after that round (no clear "what
-     would done look like") → report SKIPPED, name the gap, never dispatch on an unclear brief.
-     Otherwise, dispatch via the `Agent` tool — `subagent_type: general-purpose` is the default
-     (`team-or-solo-rules`' own solo-first/null-unit reasoning: no tool restriction, parallelism,
-     or multi-skill preload is needed for a generic task, so no purpose-built agent earns its
-     keep); reach for a specific named agent only when the clarified brief genuinely needs one of
-     those three properties. The
-     dispatch prompt carries the clarified brief plus the SAME Findings-write-back contract
-     `file-bug`'s own investigation dispatch uses (its Phase 5/6): it names the record and the
-     write-back verb **per the backend resolved in step 2** (git-native: the issue number,
-     `gh issue comment`; local: the TICKET file's path, editing its `## Findings` section
-     directly; Option C: the resolved adapter's `update` operation) and must leave a dated
-     Findings-equivalent entry at each significant result — the stopping predicate includes at
-     least one such entry before the work counts as done. Read the record back on return
-     (git-native: `gh issue view --comments`; local: re-`Read` the file; Option C: the adapter's
-     `read` operation); a Findings entry landed → advance status (`doing` label / frontmatter
-     `open`→`doing` / the adapter's mapped state; `done` — close via `gh issue close` / frontmatter
-     `status: done` / the adapter's close operation once genuinely finished; `wontfix` — add the
-     label or set the equivalent status, comment the reason, then close — matching `file-bug`'s own
-     Phase 6 status verbs for that same backend) and report it as mobilized; no entry landed → one
-     re-dispatch with the contract quoted, then a recorded loss on the ticket if still nothing —
-     same discipline as `file-bug`'s own Phase 6 failure branch.
+   mobilize now, all, some, or none. Nothing dispatches before this round returns. A disclosed
+   limitation of the uniform dispatch, stated here because this round is the one place to act on
+   it: `dispatch-ticket`'s task-clarifying round requires an interactive user and `build-lead`
+   is an unattended seat, so NO clarify round runs inside step 5's dispatches — an
+   under-specified task comes back SKIPPED, and clarifying it means the human re-runs the named
+   command interactively afterwards. Flag visibly under-specified task tickets IN this confirm
+   round (one line each), so the human can decline them here instead of paying a dispatch that
+   will skip.
+5. **Dispatch every confirmed ticket, uniformly.** Each confirmed ticket, regardless of kind →
+   `Agent(subagent_type: "teamwork:build-lead")` carrying the confirmed ticket id. `build-lead`'s
+   preloaded `dispatch-ticket` procedure (ADR-0010) owns the kind branch — its own body is the
+   authoritative map, not restated here — and its unattended failure branches (an ambiguous
+   record match reports as a named blocker; an under-specified task reports SKIPPED with no
+   clarify round, never guessed at) apply automatically, since this dispatch never has an
+   interactive user. Relay each returned typed result (path/URL, status, what shipped, a
+   recorded blocker, or a SKIPPED gap) as that ticket's mobilized outcome — the same output a
+   human running `/build-feature <id>` would see. This is the same
+   `chore-lead`/`sweep-chores` shape step 1 already uses: the command stays
+   `disable-model-invocation: true`, the agent carries the reachable procedure (issue
+   #134/#135's shared fix pattern).
 
-   Every dispatch is independent; one failing never blocks the others.
+   Every dispatch is independent — one failing never blocks the others — but independence is
+   not a parallelism license: mutating dispatches share this one checkout, so run them
+   SERIALLY, or give each `isolation: "worktree"` on the Agent call per `parallel-work-rules`'
+   own overlap test. The bug path (a hand-off, no tree mutation) is safe to overlap; anything
+   that builds is not.
 6. **Report.** Verdict-first: the sweep's own findings, then a table of every ticket CONSIDERED
    this run — mobilized (dispatch + outcome: succeeded / failed / still in flight), or
-   skipped-and-why (not confirmed, in flight already, wrong/ambiguous label, still too vague after
-   clarification, or excluded by the sweep's own judgment).
+   skipped-and-why (not confirmed, in flight already, wrong/ambiguous label, too vague to build
+   unattended — the seat SKIPPED, no clarify round available on this path — or excluded by the
+   sweep's own judgment).
 
 ## Failure branches
 
@@ -137,19 +118,22 @@ sweep surfaced that's actually buildable.
   has no open PR) → exclude it from the mobilizable set; ambiguity is never a license to dispatch.
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
-- A confirmed task's `find-intent` round still leaves the brief unclear → report SKIPPED with the
-  named gap; never dispatch on an unclear brief hoping the agent figures it out.
-- A confirmed task's Agent dispatch returns with no Findings-equivalent comment on the ticket →
-  one re-dispatch, the write-back contract quoted, before recording the loss — same discipline as
-  `file-bug`'s own Phase 6 failure branch.
+- `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
+  unattended dispatch) or a named blocker → relay it as
+  that ticket's outcome in the step-6 table; the skip/blocker discipline itself lives in
+  `dispatch-ticket`'s own failure branches, not re-litigated here.
+- `build-lead` returns with no Findings-equivalent entry visible on the ticket read-back → one
+  re-dispatch of the SAME seat with `dispatch-ticket`'s contract quoted, then a recorded loss on
+  the ticket if still nothing — the caller-side check that the seat's own write-back contract
+  actually landed.
 
 Done when `/sweep-chores` has run (via the direct `chore-lead` dispatch step 1 names, not a failed
 Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight has been
 considered, the human's one batched confirm gated every dispatch, and the final report names
-every considered ticket's outcome — a mobilized bug/task/feature ticket's dispatch outcome, or a
-skip-and-why. NOT done while a dispatch fires before the
-confirm round, an unlabeled item is mobilized, a bug ticket is routed to `build-feature` instead
-of `file-bug`, a task ticket is dispatched without a `find-intent` pass first (or dispatched
-anyway after that pass left it still unclear), a ticket already in flight is dispatched again, a
-task dispatch leaves no Findings-equivalent entry unnoticed, or step 1 is attempted via the Skill
-tool instead of the direct `chore-lead` dispatch.
+every considered ticket's outcome — a mobilized ticket's relayed `build-lead` result, or a
+skip-and-why. NOT done while a dispatch fires before the confirm round, an unlabeled item is
+mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the per-kind routing that
+once lived here belongs to `dispatch-ticket` now — re-growing it here is the regression), a
+ticket already in flight is dispatched again, a dispatch leaving no Findings-equivalent entry
+goes unnoticed, or step 1 is attempted via the Skill tool instead of the direct `chore-lead`
+dispatch.

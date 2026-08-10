@@ -129,8 +129,9 @@ exist** — never mint living-state docs unprompted (both backends; queue docs s
 
 The record is durable but not yet DISCOVERABLE: a fresh session finds `docs/` only if told.
 Direct entry only — the seed carries no `[redirected-from:X]` and no `[nested-intake]`
-(`dispatch-feature`'s marker when it runs this skill's intake as part of `/build-feature`'s
-pipeline): a nested run already owes `dispatch-feature`'s own ambiguity question and this skill's
+(`dispatch-ticket`'s marker — teamwork, renamed from `dispatch-feature` per ADR-0010 — when it
+runs this skill's intake as part of `/build-feature`'s
+pipeline): a nested run already owes `dispatch-ticket`'s own ambiguity question and this skill's
 own Phase 2 round, and a third `AskUserQuestion` from one background run is one too many — skip
 straight to the pointer line below on either marker. When `.claude/skills/project-docs/SKILL.md`
 is absent from the project AND a live user backs the run (file-bug's Phase 2 test, shared) AND

@@ -52,9 +52,10 @@ flag blocks both. When something else needs to run that command's logic without 
   now a thin delegator; (2) a new procedure skill, `disable-model-invocation: false`, carrying the
   actual logic, invoked by the command shell via the Skill tool; (3) a thin wrapper agent that
   preloads the procedure skill (`skills:` names it). Live instance:
-  `teamwork/skills/build-feature` → `teamwork/skills/dispatch-feature/SKILL.md` →
-  `teamwork/agents/feature-lead.md` (2026-08-09, issue #135 — built by generalizing the two-piece
-  shape once the command shell itself needed the logic too, not just the agent).
+  `teamwork/skills/build-feature` → `teamwork/skills/dispatch-ticket/SKILL.md` →
+  `teamwork/agents/build-lead.md` (2026-08-09, issue #135 — built as
+  `dispatch-feature`/`feature-lead` by generalizing the two-piece shape once the command shell
+  itself needed the logic too, not just the agent; renamed 2026-08-10, ADR-0010).
 
 Reach for one of these before re-deriving the split from scratch.
 
