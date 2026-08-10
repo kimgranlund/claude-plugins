@@ -439,11 +439,13 @@ def classify(path):
     p = Path(path).absolute()
     if p.name == "SKILL.md":
         return "skill"
-    if p.name.endswith(".intent.md") and p.parent.name in ("agents", "intents"):
-        # make-agent's forge record — a dated record, not an agent definition. Canonical home
-        # is agents/intents/ (2026-08-10, second incident same day: the PLATFORM's agent
-        # loader also globs agents/*.md and registered a flat intent record as a dispatchable
-        # all-tools agent — the flat form stays excluded here for repos that predate the move)
+    if p.name.endswith(".intent.md"):
+        # make-agent's forge record — a dated record, never lintable as agent or skill.
+        # Suffix-only on purpose (2026-08-10, three incidents in one day, same file): the
+        # PLATFORM's agent loader globs agents/ RECURSIVELY, so both the flat and the
+        # agents/intents/ forms registered as phantom all-tools agents — the canonical home is
+        # now OUTSIDE agents/ entirely (<plugin>/agent-intents/), and this exclusion follows
+        # the suffix wherever the record lives
         return None
     if p.suffix == ".md" and p.parent.name == "agents":
         return "agent"
@@ -475,7 +477,7 @@ def lint_path(path):
     p = Path(path).absolute()
     if not p.is_file():
         return f"{HOOK_NAME} · missing file · {path}", True
-    if p.name.endswith(".intent.md") and p.parent.name in ("agents", "intents"):
+    if p.name.endswith(".intent.md"):
         # forge record, not an agent definition (see classify) — disclosed skip, never linted
         return f"{HOOK_NAME} · skip (agent intent record) · {path}", False
     kind = classify(path) or "skill"
@@ -647,16 +649,17 @@ def selftest():
     # proves a plain agents/*.md still classifies agent
     assert classify("x/agents/demo.intent.md") is None, "agent intent record must not classify as agent"
     assert classify("x/agents/intents/demo.intent.md") is None, "intents/ record must not classify"
+    assert classify("x/agent-intents/demo.intent.md") is None, "canonical-home record must not classify"
     import tempfile as _tf
     with _tf.TemporaryDirectory() as _d:
         _adir = Path(_d) / "agents"; _adir.mkdir()
         (_adir / "demo.intent.md").write_text("# forge record, no frontmatter\n")
         _line, _failed = lint_path(str(_adir / "demo.intent.md"))
         assert not _failed and "skip (agent intent record)" in _line, f"intent record must skip clean, got: {_line}"
-        _idir = _adir / "intents"; _idir.mkdir()
+        _idir = Path(_d) / "agent-intents"; _idir.mkdir()
         (_idir / "demo.intent.md").write_text("# forge record, canonical home\n")
         _line3, _failed3 = lint_path(str(_idir / "demo.intent.md"))
-        assert not _failed3 and "skip (agent intent record)" in _line3, f"intents/ record must skip clean, got: {_line3}"
+        assert not _failed3 and "skip (agent intent record)" in _line3, f"agent-intents/ record must skip clean, got: {_line3}"
         (_adir / "demo.md").write_text("# no frontmatter\n")
         _line2, _failed2 = lint_path(str(_adir / "demo.md"))
         assert _failed2, "a real agents/*.md without frontmatter must still FAIL (negative control)"
