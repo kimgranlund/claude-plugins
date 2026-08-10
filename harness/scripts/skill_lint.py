@@ -439,6 +439,11 @@ def classify(path):
     p = Path(path).absolute()
     if p.name == "SKILL.md":
         return "skill"
+    if p.name.endswith(".intent.md") and p.parent.name == "agents":
+        # make-agent's forge record lands next to the agent file (<name>.intent.md);
+        # it is a dated record, not an agent definition — linting it as one is the
+        # false-positive class hit the day the first agent was forged (2026-08-10)
+        return None
     if p.suffix == ".md" and p.parent.name == "agents":
         return "agent"
     if p.name == "hooks.json":
@@ -469,6 +474,9 @@ def lint_path(path):
     p = Path(path).absolute()
     if not p.is_file():
         return f"{HOOK_NAME} · missing file · {path}", True
+    if p.name.endswith(".intent.md") and p.parent.name == "agents":
+        # forge record, not an agent definition (see classify) — disclosed skip, never linted
+        return f"{HOOK_NAME} · skip (agent intent record) · {path}", False
     kind = classify(path) or "skill"
     text = p.read_text(encoding="utf-8", errors="replace")
     if kind == "agent":
@@ -633,6 +641,19 @@ def selftest():
     md_rules = {f[2] for f in lint_claude_md_text(long_md)}
     assert {"C1", "C2"} <= md_rules, f"expected C1+C2 in {md_rules}"
     assert classify("x/agents/demo.md") == "agent"
+    # forge intent records (make-agent) are dated records beside the agent file, never linted
+    # as agent definitions (false-positive class, 2026-08-10); the negative control right above
+    # proves a plain agents/*.md still classifies agent
+    assert classify("x/agents/demo.intent.md") is None, "agent intent record must not classify as agent"
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as _d:
+        _adir = Path(_d) / "agents"; _adir.mkdir()
+        (_adir / "demo.intent.md").write_text("# forge record, no frontmatter\n")
+        _line, _failed = lint_path(str(_adir / "demo.intent.md"))
+        assert not _failed and "skip (agent intent record)" in _line, f"intent record must skip clean, got: {_line}"
+        (_adir / "demo.md").write_text("# no frontmatter\n")
+        _line2, _failed2 = lint_path(str(_adir / "demo.md"))
+        assert _failed2, "a real agents/*.md without frontmatter must still FAIL (negative control)"
     assert not [f for f in lint_plugin_json_text('{"name": "demo-plugin", "version": "1.2.3"}') if f[0] == "FAIL"]
     p_bad = {f[2] for f in lint_plugin_json_text('{"name": "Demo Plugin"}')}
     assert {"P2", "P3"} <= p_bad, f"expected P2+P3 in {p_bad}"

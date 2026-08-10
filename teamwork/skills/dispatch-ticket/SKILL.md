@@ -54,12 +54,13 @@ here — report that routing and stop; docs' seats own it.
 - **`kind: bug`** → this is `file-bug`'s work: invoke it via the Skill tool carrying the ticket
   id, seed prefixed `[redirected-from:dispatch-ticket]` (file-bug's own marker protocol — the
   round budget was already spent here, and file-bug's forked run has no other way to know).
-  The RECORD is the return channel, not the fork's transcript: `file-bug` runs `context: fork`,
-  and whether a fork invoked from inside an agent dispatch returns synchronously is an
-  unverified platform assumption (the same flagged class as file-task Phase 2's) — so after the
-  hand-off, read the ticket back (Phase 5's verbs) and report "handed to `file-bug`; read-back
-  shows <state/Findings>". A conversational result that did arrive is a bonus to relay, never
-  the thing waited on. Phases 3–5 never run for a bug.
+  The RECORD is the return channel, not the fork's transcript — VERIFIED, no longer an
+  assumption (A4 smoke test, 2026-08-10): a `context: fork` skill invoked from inside an agent
+  dispatch runs as a background fork, and its completion notification routes to the ROOT
+  session, not the invoking seat — a seat that waits on the fork's return strands idle forever.
+  So after the hand-off, read the ticket back (Phase 5's verbs) and report "handed to
+  `file-bug`; read-back shows <state/Findings>"; never wait on the fork's transcript. Phases
+  3–5 never run for a bug.
 - **`kind: task`** → **clarify, then dispatch — never blind.** Tasks carry no fixed execution
   verb the way features do (`file-task`'s own scope is deliberately heterogeneous: chores,
   follow-ups, research items, debts), so run `find-intent` (harness, where installed; its
