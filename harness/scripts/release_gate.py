@@ -237,7 +237,8 @@ def gate(root: Path, package: bool = False):
         inventory |= {p.parent.name for p in sib.parent.parent.glob("skills/*/SKILL.md")}
     suffixes = {n.rsplit("-", 1)[-1] for n in inventory}
     # verified prose-compound false positives (hyphenated phrases sharing a real suffix)
-    allow = {"per-ticket", "feature-ticket",  # prose compounds sharing dispatch-ticket's suffix (ADR-0010)
+    allow = {"nested-intake",  # the [nested-intake] seed-marker literal (docs/teamwork protocol), suffix went live with lead-intake
+             "per-ticket", "feature-ticket",  # prose compounds sharing dispatch-ticket's suffix (ADR-0010)
              # dispatch-feature: ADR-0010's retired name, kept only in dated rename annotations —
              # fix_old_names.py's manifest (L1) still catches any LIVE typed-slot use of it
              "dispatch-feature",
