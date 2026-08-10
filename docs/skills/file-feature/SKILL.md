@@ -8,6 +8,7 @@ description: >-
   chores (file-task); NOT for authoring docs (make-doc).
 disable-model-invocation: false
 user-invocable: true
+context: fork
 argument-hint: "[raw feature idea, or a TKT-/#issue/adapter-native id to resume]"
 ---
 
@@ -15,7 +16,8 @@ argument-hint: "[raw feature idea, or a TKT-/#issue/adapter-native id to resume]
 
 Turns a raw feature idea into the smallest durable record that fully carries it, before anyone
 spends build effort — the same loss-window fix `file-bug` made for bugs: an idea that lives
-only in chat context vanishes with it. Seed: `$ARGUMENTS`.
+only in chat context vanishes with it. Runs as a background fork (`context: fork`) by default: the
+fork sees no conversation history — `$ARGUMENTS` is the only channel in. Seed: `$ARGUMENTS`.
 
 **Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
 (`references/backend-resolver.md`) once; it returns Option A (local — the file backend, make-doc's
@@ -44,11 +46,16 @@ a record existed.
 ## Phase 2 — Extract
 
 Invoke find-intent (harness, where installed; apply its discipline inline otherwise): root goal
-vs literal ask, the delta taxonomy, ONE batched clarifying round maximum — and only when a human
-is actually present to answer (a sibling redirect, a subagent dispatch, or a scheduled/unattended
-firing has no one to ask — skip straight to capture-with-gaps). A still-vague idea after that
-round, or no round at all, is captured anyway — the named gaps go into the record's Scope/Open
-section; vagueness is a note, never a blocker to persistence.
+vs literal ask, the delta taxonomy, ONE batched clarifying round maximum — asked via
+`AskUserQuestion`. A live user is the default assumption — running forked (`context: fork`) does
+not change it: forking relieves the caller's session, it does not remove the person. Skip straight
+to capture-with-gaps only when the seed carries `[redirected-from:X]` (the round budget was
+already spent upstream) or `[unattended]` (no live user backs the run at all) — the shared marker
+protocol, canonical statement `file-task`'s Phase 2. A seed that references context the fork
+cannot see ("the idea we discussed", "what I just described") is itself a gap, not a reason to
+guess: ask for the actual idea via the same round — `$ARGUMENTS` carries no conversation history.
+A still-vague idea after that round, or no round at all, is captured anyway — the named gaps go
+into the record's Scope/Open section; vagueness is a note, never a blocker to persistence.
 
 ## Phase 3 — Dedup: it may already exist
 
@@ -67,7 +74,7 @@ Before minting anything, sweep three surfaces and report what's found:
 Invoke break-down-problem (harness, where installed; its two-plane lens inline otherwise) and decide
 TWO things:
 
-**Size** (the materiality floor, same law as orchestration's seats): **small** = one context can
+**Size** (the materiality floor, same law as teamwork's seats): **small** = one context can
 hold it, no contract change · **big** = multi-component, contract-changing, or
 decision-ratifying.
 
@@ -120,11 +127,15 @@ exist** — never mint living-state docs unprompted (both backends; queue docs s
 
 ## Phase 6 — Bootstrap the project index (opt-in, when absent)
 
-The record is durable but not yet DISCOVERABLE: a fresh session finds `docs/` only if told. When
-`.claude/skills/project-docs/SKILL.md` is absent from the project AND a human is actually present
-to answer (never on a sibling redirect, a subagent dispatch, or a scheduled/unattended firing —
-skip straight to the pointer line below on any of those), offer — once, via ONE
-AskUserQuestion — to install the project-docs index skill from this skill's
+The record is durable but not yet DISCOVERABLE: a fresh session finds `docs/` only if told.
+Direct entry only — the seed carries no `[redirected-from:X]` and no `[nested-intake]`
+(`dispatch-feature`'s marker when it runs this skill's intake as part of `/build-feature`'s
+pipeline): a nested run already owes `dispatch-feature`'s own ambiguity question and this skill's
+own Phase 2 round, and a third `AskUserQuestion` from one background run is one too many — skip
+straight to the pointer line below on either marker. When `.claude/skills/project-docs/SKILL.md`
+is absent from the project AND a live user backs the run (file-bug's Phase 2 test, shared) AND
+entry is direct, offer — once, via ONE AskUserQuestion — to install the project-docs index skill
+from this skill's
 `assets/project-docs-skill-template.md` (fill `{{PROJECT_NAME}}` from the repo directory name,
 or the project manifest's name field where one exists), so doc-shaped asks ("what are the
 requirements for X", "which tickets are open") route to the corpus in every future session.
@@ -133,25 +144,27 @@ path. Declined → one pointer line in the close-out report ("index skill not in
 /file-feature run can add it; a scattered existing corpus is /tidy-docs's job"), no re-ask this session, no marker files — which is why the option is
 "not now", never "never": with no durable record of a refusal, a standing no cannot be honored,
 so it is not offered. This step is opt-in by design: writing into `.claude/skills/` changes the
-project's routing surface, and that earns a knowing yes whenever a human is actually present to
-give one. The skill already present → skip silently.
+project's routing surface, and that earns a knowing yes from the live user backing the run. The
+skill already present → skip silently.
 
 ## Failure branches
 
 - Idea too vague after one round → capture with gaps named (Phase 2); never stall persistence.
 - Dedup finds it shipped → report location, stop; found queued → resume, not re-mint.
 - `doc_lint.py` fails → fix and re-run (file backend).
-- On the FIRST classification only, the ask is actually bug-shaped ("X is broken") → invoke
-  `file-bug` directly via the Skill tool, carrying the seed; report which sibling was invoked
-  and why. Don't force a feature ticket onto a defect. One hop only (the siblings' shared
-  redirect rule, `file-task`'s SKILL.md); file-feature ends there — Phases 5–6 never run for a redirected
-  seed.
+- On the FIRST classification only (the seed carries no `[redirected-from:X]` marker yet), the ask
+  is actually bug-shaped ("X is broken") → invoke `file-bug` directly via the Skill tool, carrying
+  the seed prefixed `[redirected-from:file-feature]`; report which sibling was invoked and why.
+  Don't force a feature ticket onto a defect. One hop only (the siblings' shared redirect rule,
+  `file-task`'s SKILL.md); file-feature ends there — Phases 5–6 never run for a redirected seed.
 - Same, first classification only, for a generic chore/follow-up with nothing to size or shape →
-  invoke `issue` via the Skill tool, same one-hop rule and stop.
-- A seed arrives HERE already redirected from a sibling → captured regardless of fit: `kind:
-  feature` with the mismatch named in Scope/Open, per this skill's own named fallback in the
-  shared rule (Phase 2's capture-anyway rule already covers the mechanics). This skill's own
-  redirect (above) never fires on a seed it did not originate the classification for.
+  invoke `file-task` via the Skill tool, seed prefixed `[redirected-from:file-feature]`, same
+  one-hop rule and stop.
+- A seed already carrying a `[redirected-from:X]` marker (naming a DIFFERENT sibling) → captured
+  regardless of fit: `kind: feature` with the mismatch named in Scope/Open, per this skill's own
+  named fallback in the shared rule (Phase 2's capture-anyway rule already covers the mechanics).
+  This skill's own redirect (above) never fires on a seed that already carries the marker — one
+  hop only, detected from the seed itself, not from history the fork doesn't have.
 - Index bootstrap declined → the pointer line, nothing else this session.
 - Workspace rules git-native but `gh` fails partway through a run → fall back to the file backend for THIS
   record, say so, and note the migration in the record — never leave the idea uncaptured because
@@ -166,9 +179,9 @@ Done when a `kind: feature` record exists — a lint-clean file on disk, a label
 URL reported), or an Option-C adapter's record (its native id reported) — sized and shaped
 correctly, linked into whatever queue docs exist, with
 every extraction gap named, the index offer's disposition reported (installed path, pointer line,
-or already-present skip) — and NO build was dispatched BY THIS SKILL (that is `/build-feature`'s
-contract, orchestration plugin, where installed) — OR the seed was redirected to
-`file-bug`/`issue` under the one-hop rule (first classification only) and the sibling
+already-present skip, or skipped-nested) — and NO build was dispatched BY THIS SKILL (that is
+`/build-feature`'s contract, teamwork plugin, where installed) — OR the seed was redirected to
+`file-bug`/`file-task` under the one-hop rule (first classification only) and the sibling
 invocation was reported; no feature record is owed on a redirected seed, and a sibling reached by
 redirect runs its own contract, including its own build/no-build rule and its own investigation
 dispatch where that applies.
