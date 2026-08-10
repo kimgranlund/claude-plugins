@@ -1959,6 +1959,22 @@
       "match": "token"
     },
     {
+      "old": "feature-lead",
+      "new": "build-lead",
+      "kind": "agent",
+      "old_plugin": "teamwork",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
+      "old": "dispatch-feature",
+      "new": "dispatch-ticket",
+      "kind": "skill",
+      "old_plugin": "teamwork",
+      "new_plugin": "teamwork",
+      "match": "token"
+    },
+    {
       "old": "font-choice-checker",
       "new": "font-choice-checker",
       "kind": "agent",
