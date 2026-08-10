@@ -8,6 +8,7 @@ description: >-
   chore/task (file-task); NOT for platform questions (github-facts).
 disable-model-invocation: false
 user-invocable: true
+context: fork
 argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id to resume]"
 ---
 
@@ -15,7 +16,12 @@ argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id to resume]"
 
 file-bug turns a raw bug report into a durable, classified record before any investigation
 begins, and supersedes ad hoc `/fork bug-name ...` for bug work — a fork that carries the report
-and its findings and nothing else is exactly the failure this replaces. Seed: `$ARGUMENTS`.
+and its findings and nothing else is exactly the failure this replaces. Runs as a background fork
+(`context: fork`) by default: the whole flow below executes off the caller's session, and the
+record — not the fork's transcript — is what the report and findings live in, so this stays the
+fix `/fork bug-name` lacked even though the skill itself now runs forked. The fork sees no
+conversation history — `$ARGUMENTS` is the only channel in; Phase 2 covers what a thin seed owes.
+Seed: `$ARGUMENTS`.
 
 **Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
 (`references/backend-resolver.md`) once; it returns Option A (local — the file backend, make-doc's
@@ -50,11 +56,18 @@ never proceed as if an unresolved id already had a record behind it.
 Invoke find-intent on the raw report: separate the literal complaint from the root cause, and
 produce a repro (or the explicit statement "no fixed repro" for an intermittent or subjective
 report). Where find-intent is not installed, apply its discipline inline — one batched round of
-clarifying questions, never more, and only when a human is actually present to answer (a sibling
-redirect, a subagent dispatch, or a scheduled/unattended firing has no one to ask — skip straight
-to capture-with-gaps). Missing detail after the round, or no round at all, does not block capture:
-write the ticket with what is known and name the gap in Classification, rather than delaying
-persistence for completeness.
+clarifying questions, never more, asked via `AskUserQuestion`. A live user is the default
+assumption — running forked (`context: fork`) does not change it: forking relieves the caller's
+session, it does not remove the person, and the fork still reaches the user directly. Skip
+straight to capture-with-gaps only when the seed itself carries one of the two shared markers
+(canonical statement: `file-task`'s Phase 2): `[redirected-from:X]` — the one-batched-round
+budget was already spent upstream; a live user may well still be present, this only means don't
+ask twice — or `[unattended]` — no live user backs the run at all. A seed that references context
+the fork cannot see ("the crash above", "that test", "what we discussed") is itself a gap, not a
+reason to guess: ask for the actual evidence via the same round — `$ARGUMENTS` is the fork's only
+channel in, it carries no conversation history. Missing detail after the round, or no round at
+all, does not block capture: write the ticket with what is known and name the gap in
+Classification, rather than delaying persistence for completeness.
 
 ## Phase 3 — Classify
 
@@ -63,14 +76,17 @@ the bug lands on — functional, structural, visual, subjective, or another name
 specific component or plane it implicates. This is not a fixed enum: name the real axis: do not
 force-fit one of the four examples.
 
-On the FIRST classification only, the capture reveals no defect at all — a capability request
-("it should also do X"), or a generic chore/follow-up with nothing to reproduce → invoke `feature`
-or `issue` respectively via the Skill tool, carrying the seed; report which sibling was invoked
-and why; file-bug ends there — Phases 4–6 never run for a redirected seed. One hop only (the
-siblings' shared redirect rule, `file-task`'s SKILL.md): a seed that arrives HERE already redirected
-from a sibling is captured regardless of fit — mint the `kind: bug` record anyway, naming the
-shape mismatch in Classification, per this skill's own named fallback in the shared rule. This
-skill's own redirect (above) never fires on a seed it did not originate the classification for.
+On the FIRST classification only (the seed carries no `[redirected-from:X]` marker yet), the
+capture reveals no defect at all — a capability request ("it should also do X"), or a generic
+chore/follow-up with nothing to reproduce → invoke `file-feature` or `file-task` respectively via
+the Skill tool, carrying the seed prefixed `[redirected-from:file-bug]`; report which sibling was
+invoked and why; file-bug ends there — Phases 4–6 never run for a redirected seed. One hop only
+(the siblings' shared redirect rule, `file-task`'s SKILL.md): a seed that already carries a
+`[redirected-from:X]` marker (naming a DIFFERENT sibling) is captured regardless of fit — mint the
+`kind: bug` record anyway, naming the shape mismatch in Classification, per this skill's own named
+fallback in the shared rule. This skill's own redirect (above) never fires on a seed that already
+carries the marker — one hop only, detected from the seed itself, not from history the fork
+doesn't have.
 
 ## Phase 4 — Record
 
@@ -121,7 +137,7 @@ the write-back verb — and requires a dated `## Findings` entry (file section, 
 fork killed mid-investigation has still left something behind. Its stopping predicate includes at
 least one such entry before the work counts as done.
 
-Where `orchestration`'s `loop-rules` is installed, run this dispatch under `/goal` rather than an
+Where teamwork's `loop-rules` is installed, run this dispatch under `/goal` rather than an
 open-ended fork — "a dated Findings entry exists" is exactly the verifiable end-state a goal needs,
 and a turn cap (5 tries, per loop-rules's own recipe) turns a stuck investigation into a reported
 blocker instead of a silently abandoned one. Where loop-rules is not installed, apply its
@@ -174,7 +190,7 @@ Done when a `kind: bug` record exists — a `doc-type: ticket` file on disk, a l
 or an Option-C adapter's record (its native id reported) — carrying the report and classification,
 and either file-bug's own
 inline fix or the dispatched investigation has left at least one dated `## Findings` entry (file
-section or issue comment) — OR the seed was redirected to `feature`/`issue` under the one-hop rule
+section or issue comment) — OR the seed was redirected to `file-feature`/`file-task` under the one-hop rule
 (first classification only) and the sibling invocation was reported; no bug record is owed on a
 redirected seed, and no build is dispatched BY THIS SKILL either way — a sibling reached by
 redirect runs its own contract, including its own build/no-build rule.

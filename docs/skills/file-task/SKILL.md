@@ -8,16 +8,18 @@ description: >-
   reports (file-bug); NOT for feature ideas (file-feature).
 disable-model-invocation: false
 user-invocable: true
+context: fork
 argument-hint: "[raw work item, or a #NN / TKT-#### / adapter-native id to resume]"
 ---
 
 # issue — the generic work-item record, minted or resumed
 
 Turns any work item into the smallest durable record that carries it — the sibling of
-`file-bug` (defects) and `feature` (sized ideas) for everything those two fence out: chores,
+`file-bug` (defects) and `file-feature` (sized ideas) for everything those two fence out: chores,
 follow-ups, research items, debts. One capture replaces the hand-rolled `gh issue create` whose
 measured variance (missing labels, drifting section sets, no dedup, contractless closes) is this
-skill's baseline evidence. Seed: `$ARGUMENTS`.
+skill's baseline evidence. Runs as a background fork (`context: fork`) by default: the fork sees
+no conversation history — `$ARGUMENTS` is the only channel in. Seed: `$ARGUMENTS`.
 
 **Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
 (`references/backend-resolver.md`) once; it returns Option A (local — the file backend, make-doc's
@@ -63,19 +65,23 @@ only `tkt-####` resolves; under Option C only the resolved adapter's own native 
 
 ## Phase 2 — Classify the shape (the routing gate)
 
-On the FIRST classification only: a defect ("X is broken", a repro, a wrong output) → invoke
-`file-bug` directly via the Skill tool, carrying the seed verbatim; report which sibling was
-invoked and why, never leave the user to type the command themselves. A feature idea (new
-capability, needs sizing or may earn docs) → same move, invoke `feature`. Neither — the generic
-remainder — continues here. When genuinely ambiguous AND a human is present to ask, ONE
-clarifying question; no interactive channel (a sibling redirect, a subagent dispatch, a
-scheduled/unattended firing) or still ambiguous after asking → capture here as `task` with the
-ambiguity named in Scope/Open (persistence beats taxonomy, and a question nobody can answer is
-not a gate).
+On the FIRST classification only (the seed carries no `[redirected-from:X]` marker yet): a defect
+("X is broken", a repro, a wrong output) → invoke `file-bug` directly via the Skill tool, carrying
+the seed prefixed `[redirected-from:file-task]`; report which sibling was invoked and why, never
+leave the user to type the command themselves. A feature idea (new capability, needs sizing or may
+earn docs) → same move, invoke `file-feature`. Neither — the generic remainder — continues here.
+When genuinely ambiguous, ONE clarifying question via `AskUserQuestion` — a live user is the
+default assumption, and running forked (`context: fork`) does not change it: forking relieves the
+caller's session, it does not remove the person. Skip straight to capture-with-gaps only when the
+seed carries `[redirected-from:X]` (the round budget was already spent upstream) or `[unattended]`
+(no live user backs the run at all) — the shared marker protocol below — or still ambiguous after
+asking → capture here as `task` with the ambiguity named in Scope/Open (persistence beats
+taxonomy, and a question nobody can answer is not a gate).
 
-A seed arrives HERE already redirected from a sibling → captured regardless of fit: `task` with
-the mismatch named in Scope/Open, per this skill's own named fallback below. This skill's own
-redirect (above) never fires on a seed it did not originate the classification for.
+A seed carrying a `[redirected-from:X]` marker (naming a DIFFERENT sibling) → captured regardless
+of fit: `task` with the mismatch named in Scope/Open, per this skill's own named fallback below.
+This skill's own redirect (above) never fires on a seed that already carries the marker — one hop
+only, detected from the seed itself, not from history the fork doesn't have.
 
 **The one-hop-only redirect rule (shared by all three siblings):** a sibling reached by redirect
 never redirects again — its own classification finding a poor fit is not license to bounce a
@@ -84,6 +90,28 @@ ambiguity in Scope/Open; **`file-bug`**, `kind: bug` with the shape gap named in
 Classification; **`file-feature`**, `kind: feature` with the gap named in Scope/Open. One hop resolves
 genuine mis-routing; a second hop is thrash, not routing — the receiving skill always ends in a
 captured record, never a second redirect.
+
+**Redirect detection, now that all three siblings run forked (`context: fork`):** a forked
+receiver carries no conversation history, so it cannot infer "reached by redirect" from context —
+the redirecting skill says so in the seed itself. Every redirect invocation prefixes the seed
+`[redirected-from:<the redirecting skill's name>]` before the verbatim seed; every genuinely
+unattended caller (no live user backing the run at all — a scheduled/cron firing, an agent
+dispatch with no interactive channel back to a person) prefixes `[unattended]`. The two markers
+answer different questions and never substitute for each other: `[redirected-from:X]` means the
+one-clarifying-round budget was already spent upstream — skip re-asking, capture regardless of
+fit — while a live user may still very much be present (an inline `/file-task`→`/file-bug`
+redirect mid-conversation has the same user throughout, which is why the redirect skip was never
+really about user-absence). `[unattended]` means no live user backs the run at all, full stop —
+the one case where a clarifying round truly has nowhere to land. A seed carrying neither marker
+gets the default: a live user is assumed, and the clarifying round proceeds normally.
+
+**Unverified assumption, flagged (2026-08-09):** this whole design rests on `AskUserQuestion`
+actually reaching the live user from a `context: fork` run — asserted per skill-writing-rules'
+documented `context: fork` behavior, not confirmed by a live test in this environment (three
+attempts to register a throwaway forked test skill via `/reload-plugins` failed to register it at
+all, for reasons unrelated to this question — inconclusive, not negative). Treat the first real
+forked clarifying round as the actual proof: if a question silently never reaches the user, that
+is the signal this assumption needs a harder look, not evidence the skill is simply slow.
 
 ## Phase 3 — Dedup: it may already exist
 
@@ -146,7 +174,7 @@ TICKET on disk, or an Option-C adapter's record with its native id reported) car
 payload contract — or a resume acted on the existing record
 (detail folded, Findings appended, or status advanced with its Findings-first close rule) — the
 dedup sweep ran, and NO build was dispatched (/build-feature's contract, where installed) — OR the seed
-was redirected to `file-bug`/`feature` under the one-hop rule and the sibling invocation was
+was redirected to `file-bug`/`file-feature` under the one-hop rule and the sibling invocation was
 reported; no task record is owed on a redirected seed. NOT done while a close leaves Findings
 empty, a duplicate was minted over a dedup hit, or a bug/feature shape was filed here instead of
 routed.
