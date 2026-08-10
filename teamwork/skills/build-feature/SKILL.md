@@ -21,26 +21,26 @@ minting it first when it doesn't exist — and ends at shipped work with the rec
 carrying the evidence. Runs as a background fork (`context: fork`) by default: the whole
 find-or-make/size/dispatch/close-loop chain below executes off the caller's session; only the
 final ticket status and what shipped reach the caller. Forking does not remove the human — a
-clarifying question raised in this fork's own turn (including `dispatch-feature` running inline
-in it) still reaches the live user directly via `AskUserQuestion`, per `dispatch-feature`'s own
+clarifying question raised in this fork's own turn (including `dispatch-ticket` running inline
+in it) still reaches the live user directly via `AskUserQuestion`, per `dispatch-ticket`'s own
 Phase 1 test. Seed: $ARGUMENTS.
 
 Empty `$ARGUMENTS` is a precondition failure, not an assumption to fill from conversation history
 the fork no longer carries: ask via `AskUserQuestion` what to build before invoking
-`dispatch-feature` at all.
+`dispatch-ticket` at all.
 
 This command is the human-typed entry point only. The actual find-record/size/dispatch/close-loop
-procedure lives in `dispatch-feature` (this plugin) — a `disable-model-invocation: true` skill like
+procedure lives in `dispatch-ticket` (this plugin) — a `disable-model-invocation: true` skill like
 this one can't be Skill-tool-invoked or preloaded by anything else (issue #134/#135's shared
-defect class), so `dispatch-feature` carries the procedure and `feature-lead` (agent) reaches the
-identical logic for a programmatic caller (`mobilize-chores`). Invoke `dispatch-feature` (Skill
+defect class), so `dispatch-ticket` carries the procedure and `build-lead` (agent) reaches the
+identical logic for a programmatic caller (`mobilize-chores`). Invoke `dispatch-ticket` (Skill
 tool) carrying `$ARGUMENTS` verbatim as its own seed, and relay its result as this command's own
-output — this IS running the procedure, mechanically, not a restatement of it. `dispatch-feature`
+output — this IS running the procedure, mechanically, not a restatement of it. `dispatch-ticket`
 itself stays un-forked (its own frontmatter carries no `context: fork`): invoked from here it runs
-inline inside this command's own fork (no double hop); invoked from `feature-lead` it runs inline
+inline inside this command's own fork (no double hop); invoked from `build-lead` it runs inline
 inside that agent's already-isolated context (no live user either way, so forking again would
 only add a needless third hop with nothing to buy).
 
-`dispatch-feature`'s own body is the authoritative phase-by-phase contract (find-or-make record,
+`dispatch-ticket`'s own body is the authoritative phase-by-phase contract (find-or-make record,
 size solo-first, dispatch under contract, close the loop) and its own failure branches — not
 duplicated here, so the two entry points can never drift apart.
