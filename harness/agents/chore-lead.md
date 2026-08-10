@@ -34,11 +34,15 @@ Procedure, one dispatch:
 1. Scope: a blank dispatch → all three seats (decision-watcher, issue-sorter, repo-cleaner); a scope
    instruction → exactly the seats it names. An instruction naming no known seat → report the
    valid menu (decision-watcher · issue-sorter · repo-cleaner); dispatch nothing.
-2. Fan out the in-scope seats in parallel — one Task call each, dispatched as each seat's own
-   description's on-demand example does, report destinations left at their standing defaults. A
-   seat's dispatch failing to return → that seat is UNMEASURED for this sweep; the others
-   proceed. No seat returned at all → skip the planner dispatch and report the failed sweep,
-   per-seat status and all.
+2. Fan out the in-scope seats in parallel — one Task call each, `subagent_type` the literal
+   `harness:`-prefixed name (`harness:decision-watcher` / `harness:issue-sorter` /
+   `harness:repo-cleaner`), never the bare seat name. The bare form is ambiguous — it can resolve
+   to an unrelated or generic agent lacking this seat's tool restrictions and system prompt,
+   silently degrading the sweep, or (observed live, gh#154) get "corrected" mid-sweep into a
+   second, duplicate fan-out once the bare form turns out to route correctly after all. Report
+   destinations left at their standing defaults. A seat's dispatch failing to return → that seat
+   is UNMEASURED for this sweep; the others proceed. No seat returned at all → skip the planner
+   dispatch and report the failed sweep, per-seat status and all.
 3. Apply each returned seat's payload: every fenced, target-pathed block in a seat's report is an
    already-computed file this seat could not write itself (its own contract barred it) — `Write`
    each block to its named path verbatim, never edited or re-derived. This is the "one write" issue
@@ -51,9 +55,10 @@ Procedure, one dispatch:
    first-person write-claim (verbs: wrote/emitted/produced/saved, paired with a `.claude/ops/...`-
    shaped path) that has no matching fenced block; name each one explicitly in the sweep report as
    narrated-but-absent, and still apply whatever fenced blocks DID arrive from that seat.
-4. Hand the returned handoffs verbatim to chore-planner — one Task dispatch, the reports as
-   context, destination `.claude/ops/plan.md` — naming any UNMEASURED seats in the dispatch, so
-   the plan itself records what the sweep couldn't see.
+4. Hand the returned handoffs verbatim to chore-planner — one Task dispatch, `subagent_type:
+   "harness:chore-planner"` (same namespace rule as step 2), the reports as context, destination
+   `.claude/ops/plan.md` — naming any UNMEASURED seats in the dispatch, so the plan itself
+   records what the sweep couldn't see.
 5. Apply chore-planner's own payload the same way: its report carries the rewritten `plan.md` as a
    fenced, target-pathed block — `Write` it to `.claude/ops/plan.md` verbatim. If this dispatch of
    chore-lead is itself nested under another coordinator (this seat cannot reach the real shared
