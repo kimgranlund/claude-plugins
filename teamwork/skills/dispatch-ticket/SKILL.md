@@ -1,22 +1,21 @@
 ---
 name: dispatch-ticket
 description: >-
-  Use when invoked by name from /build-feature's own body or the build-lead agent — never from a
-  direct user ask. Given one already-known ticket id of any kind, finds or mints its record, then
-  branches by kind: feature → size solo-first and build under a mandatory Findings write-back
-  contract; task → clarify with one find-intent round, then dispatch under the same contract;
-  bug → hand to file-bug with the redirect marker. One shared procedure for all callers
-  (ADR-0010, generalized from dispatch-feature). NOT a trigger for a
-  raw "build this" ask (/build-feature or /file-feature own that); NOT for finding or
-  batch-confirming which tickets to build (mobilize-chores).
+  Use when invoked by name from /build-feature's body, the build-lead agent, or a /lead-build
+  session driving its targets — never model-routed from a raw ask. Finds or mints the target's
+  record, then branches by kind: feature → size solo-first and build under a mandatory Findings
+  write-back contract; task → clarify with one find-intent round, then dispatch under the same
+  contract; bug → hand to file-bug with the redirect marker. One shared procedure for all
+  callers (ADR-0010). NOT a trigger for a raw "build this" ask (/build-feature or /file-feature
+  own that); NOT for finding or batch-confirming which tickets to build (mobilize-chores).
 disable-model-invocation: false
 user-invocable: false
 ---
 
 # dispatch-ticket
 
-The procedure behind `/build-feature` and the `build-lead` agent, factored out so it has two
-reachable entry points instead of one. `/build-feature` itself is `disable-model-invocation:
+The procedure behind `/build-feature`, the `build-lead` agent, and a `/lead-build` session's
+standing seat — one engine, three reachable entries. `/build-feature` itself is `disable-model-invocation:
 true` — command-only, unreachable via the Skill tool or agent preload (issue #134/#135's shared
 defect class: a flag meant to keep a command human-typed also blocks every programmatic path to
 the same logic). This skill carries the actual procedure; `/build-feature`'s body and the
