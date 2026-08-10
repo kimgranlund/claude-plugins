@@ -156,6 +156,7 @@ The dispatch prompt and the body together are a fresh distribution's entire earl
 | Agent where fork suffices | Spawn overhead, extra artifact, no unique property used | `context: fork` on the skill; delete the agent |
 | Status-noun name | `x-expert` predicts no tools, no output | Function role; name reconstructs the preloaded procedure |
 | No teammate-mode delivery clause | Plain-text final vanishes in `name:`-dispatched (mailbox) mode; only `SendMessage` delivers | Body states the standing delivery line explicitly (item 3, cold-start language) |
+| Coordinator dispatches a sibling by bare name | Procedure says "dispatch as its own example shows" but the sibling's on-demand examples are prose narration with no literal `subagent_type` anywhere; bare names can resolve ambiguously and get "corrected" mid-run into a duplicate fan-out (gh#154) | The coordinator's own procedure step names the full `plugin:agent-name` `subagent_type` literally, never a pointer to another agent's prose |
 
 ## Provenance
 
