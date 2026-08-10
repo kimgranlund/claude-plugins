@@ -24,10 +24,11 @@ An agent survives only for what `context: fork` cannot express. Ask, in order: t
 
 ## Phase 1 — Dispatch interview
 
-One question per turn; the record lands at `agents/intents/<name>.intent.md` — NEVER flat in
-`agents/` itself: the platform's agent loader globs `agents/*.md` and registers a flat intent
-record as a dispatchable all-tools "agent" (observed live 2026-08-10, the first forge's own
-record; the subdirectory dodges the loader and the lint alike). Slots:
+One question per turn; the record lands at `<plugin>/agent-intents/<name>.intent.md` — NEVER
+anywhere under `agents/`, at any depth: the platform's agent loader globs `agents/` RECURSIVELY
+and registers any `.md` it finds as a dispatchable all-tools "agent" (measured live 2026-08-10,
+three incidents in one day with the first forge's own record — the flat form AND the
+`agents/intents/` subdirectory both produced phantom agents; only full eviction works). Slots:
 
 - **Job + report contract** — what one bounded task, and the exact schema of what comes back. No contract yet → draft it here first; the contract precedes the agent.
 - **Tool walls** — the least-privilege `tools` list. Reporting agents get `Write` plus the single-write discipline line.
