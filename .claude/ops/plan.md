@@ -1,153 +1,139 @@
+# .claude/ops/plan.md
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-10 (06:23:59Z window close),
-local main @ cf8acb7 (origin @ 0827b72 — 2 ahead, PR #155). Evidence: the three seat
+Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-10 (23:50Z window close),
+main @ eb3a27f, in sync with origin/main, working tree clean. Evidence: the three seat
 reports attached to this dispatch (decision-watcher, issue-sorter, repo-cleaner — none
-UNMEASURED), plus the prior plan (2026-08-09, 13:44Z sweep) read as carry-forward source.
-Nothing refetched. Two prior entries RESOLVED, four carried forward, three new (plus the
-recurring per-firing artifact commit).
+UNMEASURED), plus the prior plan (2026-08-10, 06:23:59Z sweep) read as carry-forward
+source. Nothing refetched. Six prior entries RESOLVED, two carried forward, four new
+(including the recurring per-firing artifact commit).
 
 ## Queue
 
 **Class 1 — gated mutations verified safe:**
 
-### 1. Delete the merged local branch `fix/154-chore-lead-dispatch-namespace`
-- **Action:** `git branch -d fix/154-chore-lead-dispatch-namespace` from the main
-  worktree at /Users/kimba/Projects/nonoun/plugins — AFTER entry 3's sync, because local
-  main (cf8acb7) does not yet contain PR #155's merge commit, so `-d`'s own merged-check
-  will refuse until main catches up. That refusal is a second gate, not a bug; do not
-  escalate to `-D`.
-- **Owner:** chore-lead (the dispatching session), else human — repo-cleaner is
-  propose-only here by contract (no host-repo reap script exists; re-searched all
-  CLAUDE.md/README.md + package.json this firing).
-- **Evidence:** repo-cleaner this sweep — verified merged via PR #155 (MERGED, merge
-  commit = origin/main HEAD), remote branch already deleted and reverified gone. Same
-  class as the three prior firings' now-resolved branch reaps.
-- **Size:** ~1 min (after entry 3).
-
-### 2. Commit this firing's applied ops artifacts to main
-- **Action:** Stage ONLY the ops paths — `git add .claude/ops/watch-checkpoint.json
-  .claude/ops/reports/2026-08-10T06-23-59Z-issue-sorter.md
-  .claude/ops/reports/2026-08-10T06-23-59Z-repo-cleaner.md .claude/ops/plan.md` — the
-  working tree also carries 9 files of unrelated live authoring (entry 3); a bare
-  `git add -A` would sweep that in. Read the status output first, then commit as a
-  separate step (gate ≠ commit). The adr payloads are byte-identical to committed state
-  (decision-watcher: no-op) — nothing to stage there. Push only after entry 3's sync —
-  local main is 2 behind and the push will be rejected until then.
+### 1. Commit this firing's applied ops artifacts to main
+- **Action:** Stage exactly the five ops paths —
+  `git add .claude/ops/plan.md .claude/ops/watch-checkpoint.json
+  .claude/ops/adr-checkpoint.json .claude/ops/adr-queue.json
+  .claude/ops/reports/2026-08-10T23-50-17Z-repo-cleaner.md` — read the status output,
+  then commit as a separate step (gate ≠ commit), then push. Safe as a plain sequence
+  this firing: the tree was clean before the sweep and main is in sync with origin, so
+  no quarantine or `sync_main.py` step is needed.
 - **Owner:** chore-lead (the dispatching session), else human.
-- **Evidence:** issue-sorter — watch-checkpoint.json advanced to 2026-08-10T06:23:59Z,
-  applied; chore-lead notes — both seat reports written (seat-name-suffixed) and applied
-  to disk; this plan.md rewritten by this dispatch.
+- **Evidence:** repo-cleaner this sweep — main @ eb3a27f in sync, tree clean;
+  chore-lead — all four seat payloads applied to disk this sweep (checkpoints, queue,
+  report), plus this plan rewrite.
 - **Size:** ~2 min.
 
 **Class 2 — items blocking other work:**
 
-### 3. Disposition the dirty main, then sync the 2-behind checkout (NEW)
-- **Action:** Human reviews the 9 uncommitted files (163+/75−) across docs/ (plugin.json,
-  README.md, file-bug/file-feature/file-task SKILL.md) and teamwork/ (plugin.json,
-  README.md, build-feature/dispatch-feature SKILL.md) — sampled diff reads as live
-  in-progress authoring (new `context: fork` frontmatter, rewritten clarifying-questions
-  section), so the owning session should commit it to a campaign branch or stash it
-  deliberately; then run `sync_main.py` to pull PR #155's two commits (it quarantines any
-  remaining dirt as a named stash, `--ff-only` pulls, reverifies HEAD by SHA). Blocks
-  entry 1 (branch `-d` refuses against stale main) and the push in entry 2.
-- **Owner:** human (repo-cleaner explicitly withheld `sync_main.py` this firing —
-  substantive uncommitted work must not be auto-quarantined without review).
-- **Evidence:** repo-cleaner this sweep — local main @ cf8acb7, origin @ 0827b72, tree
-  DIRTY with the file list above; "reads as live authoring, not cruft."
-- **Size:** ~15 min (review + disposition) + ~2 min (sync).
-
-### 4. Fix the stale cloud-routine prompt AND verify the schedule is armed (carry-forward, 8th appearance)
+### 2. Fix the stale cloud-routine prompt AND verify the schedule is armed (carry-forward, 9th appearance)
 - **Action:** Edit the scheduled issue-sorter cloud routine's prompt to name
   `harness/agents/issue-sorter.md` (post ADR-0006/0007 rename), and verify the schedule
   is still armed — sweep dispatches advance `watch-checkpoint.json` themselves, so a
-  checkpoint gap cannot prove the routine dead. Eighth consecutive plan appearance: if
+  checkpoint gap cannot prove the routine dead. Ninth consecutive plan appearance: if
   this is a deliberate no, record that instead so this entry can retire.
 - **Owner:** human (`CronUpdate` / routine config edit — the routine cannot edit itself).
-- **Evidence:** carry-forward from the prior plan's entry 3; no seat this sweep reported
-  the prompt fixed (issue-sorter ran on-demand, not from the routine). Blocks unattended
-  issue intake between sweeps while dead.
+- **Evidence:** carry-forward from the prior plan's entry 4; no seat this sweep reported
+  the prompt fixed (issue-sorter again ran as a sweep dispatch, not from the routine).
+  Blocks unattended issue intake between sweeps while dead.
 - **Size:** ~5–10 min.
 
 **Class 3 — human decisions:**
 
-### 5. Decide the build route for tickets #149–#152 (NEW)
-- **Action:** Four fully-formed, size:small, kind-labeled task issues sit open,
-  unassigned, zero comments (created 2026-08-09 by a prior capture-skill pass). Decide:
-  batch them through `/mobilize-chores` (the named route for driving buildable tickets
-  to build, one confirm), pick them up individually, or explicitly defer with a note.
-  Precedent: prior plan's #135 entry resolved exactly this way (built as PR #148).
+### 3. Batched confirm on the adr-0010 harvest candidate — one queue row, TWO separable asks (NEW)
+- **Action:** Run the save-lessons Phase 3 confirm over the single pending
+  `adr-queue.json` row for adr-0010, treating it as two independent accept/override/skip
+  decisions (the merged row is a schema accommodation, not one ask): (a) a worked
+  cross-plugin-boundary example of naming-rules' test-5 loud-contrast rule — ADR-0010's
+  rejected "chores-lead" vs shipped "chore-lead"; (b) the surplus-side anti-matrix rule
+  for plan-plugin-split — two seats built for the same job, per ADR-0010's Rejected
+  Alternative #2. On accept: author inline via save-lessons Phase 4 as reference-file
+  extends (escalate to `/make-pack` only if scope grows), run `release_gate.py harness`,
+  land, then `python3 harness/scripts/adr_queue.py clear --ids adr-0010:harvest`. This
+  confirm doubles as the second reader the solo firing lacked.
+- **Owner:** human (the confirm and any override); the accepted halves then author via
+  save-lessons Phase 4 in a normal session.
+- **Evidence:** decision-watcher this sweep — both gaps grep-verified as zero-hit in the
+  corpus; ADR text at `.claude/docs/adr/0010-generalize-feature-lead-to-build-lead.md:17-18,54-59`;
+  the already-harvested rename mechanics deliberately NOT re-queued
+  (`harness/skills/agent-writing-rules/SKILL.md:57` citation confirmed).
+- **Size:** ~5 min (confirm) + ~30–45 min (authoring + gate, if accepted).
+
+### 4. Decide the build route for the four open issues — #157 first (NEW, succeeds prior entry 5)
+- **Action:** The full open roster is #167, #157, #156, #151 — all unassigned, no stale
+  claims. Decide: batch through `/mobilize-chores`, pick up individually, or defer with
+  a dated note. Rank #157 first (bug + major: dispatched seats' SendMessage reports
+  default to the root session instead of chore-lead — systematic ~100% across 3+ sweeps,
+  a real recurring cost to every future sweep; workaround exists, hence major not
+  blocker). #156 is bug + minor (teammate_id labeling/documentation gap, same dispatch
+  mechanics). #151 is the last survivor of the prior #149–#152 set (its three siblings
+  closed between firings). #167's content is not in this sweep's evidence — read it
+  before routing it.
 - **Owner:** human (the confirm gate is the human's by design).
-- **Evidence:** issue-sorter + repo-cleaner this sweep — #149, #150, #151, #152 all open,
-  triage-complete, unassigned, no stale claims.
-- **Size:** ~5 min (the decision; builds are separately sized by their tickets).
+- **Evidence:** issue-sorter this sweep — #157 and #156 resumed and now fully labeled
+  (https://github.com/kimgranlund/claude-plugins/issues/157, /156); repo-cleaner —
+  open-issue inventory in `.claude/ops/reports/2026-08-10T23-50-17Z-repo-cleaner.md`.
+- **Size:** ~10 min (the decision incl. reading #167; builds sized by their tickets).
 
-### 6. Apply or rescind the standing `github_mcp_offer:accepted` decision (carry-forward)
-- **Action:** Either write the merged `.mcp.json` entry the accepted offer describes
-  (read-only-scoped, `${GITHUB_MCP_PAT}`), or amend the `friendlies.json` record with a
-  dated rescinding note. Issue-sorter's step-8 gate correctly stayed silent again this
-  firing ("accepted" recorded) — no future firing will resurface this on its own.
-- **Owner:** human (the decision and the write — outside any seat's charter).
-- **Evidence:** issue-sorter this sweep — step 8 not applicable, offer terminal
-  "accepted"; still no `.mcp.json` write in evidence since 2026-07-25.
-- **Size:** ~10 min.
-
-### 7. Sanity-check the not-queued adr-0009 harvest call (carry-forward)
+### 5. Sanity-check the not-queued adr-0009 harvest call (carry-forward)
 - **Action:** Human yes/no: does adr-0009 deserve a harvest candidate for the
   "narrow-supersession, prose-scoped `supersedes:` beats mechanical extraction" pattern?
-  A "no" fully clears the decision-watcher surface (its queue is empty).
-- **Owner:** human (yes → `/make-pack` or `/save-lessons` route; no → done, no record
-  change).
-- **Evidence:** carry-forward from the prior plan's entry 5; decision-watcher this sweep
-  made no new judgments (0/0/0 delta across all 9 ADRs, `adr-queue.json` pending 0),
-  leaving the call standing.
+  Fold into the same sitting as entry 3 — one save-lessons pass can settle both. Note
+  the prior plan's "a no fully clears the decision-watcher surface" no longer holds:
+  the queue now carries the adr-0010 row regardless.
+- **Owner:** human (yes → save-lessons/`/make-pack` route; no → done, no record change).
+- **Evidence:** carry-forward from the prior plan's entry 7; decision-watcher this sweep
+  judged only the new adr-0010 delta, leaving the adr-0009 call standing.
 - **Size:** ~5 min.
 
 **Class 4 — hygiene debt:**
 
-### 8. Disposition issue #139 — platform-level gap, not actionable from this repo (carry-forward)
-- **Action:** Decide: keep #139 open as a tracking marker for the upstream platform gap
-  (the cd-into-primary compound-command escape of the git-only worktree guard), or close
-  it with a pointer to wherever the gap is actually actionable. Either outcome is fine;
-  the debt is that it sits in the open roster looking like local work.
-- **Owner:** human.
-- **Evidence:** carry-forward from the prior plan's entry 6; repo-cleaner this sweep —
-  open, unassigned, owner comment 2026-08-08 ("not repo-actionable"), unchanged across
-  every prior firing.
-- **Size:** ~5 min.
-
-### 9. Harden the seat report-filename convention against collisions (NEW)
-- **Action:** Two seats fired in the same second and computed the identical default
-  report path `.claude/ops/reports/2026-08-10T06-23-59Z.md`; chore-lead had to
-  disambiguate by hand (seat-name suffixes). Make the suffix the contract: file it via
-  docs' `/file-bug` (lands as a GitHub Issue per ADR-0002), fix = each ops seat's agent
-  file names its report `<timestamp>-<seat-name>.md` by default.
-- **Owner:** human (files the issue; the fix is a small harness agent-file edit that
-  rides the normal gate).
-- **Evidence:** chore-lead notes this sweep — collision observed and hand-resolved this
-  firing; both suffixed reports already applied to disk.
-- **Size:** ~10 min (file) + ~15 min (fix, when picked up).
+### 6. Configure org Issue Types, or record a deliberate no (NEW)
+- **Action:** `gh issue edit <id> --type Bug` failed identically on both resumes this
+  firing — the org has no Issue Types schema configured, so every future mint/resume
+  will retry and fail until it is. Either configure Issue Types at the org level on
+  GitHub (Issue Types are org-level config — see harness `github-facts`,
+  `references/issue-types-and-labels.md`), or record a deliberate labels-only decision
+  so issue-sorter can stop attempting the native call. Cosmetic only — labels already
+  carry kind + severity.
+- **Owner:** human (org admin either way; the labels-only decision would then drive a
+  small issue-sorter agent-file edit through the normal gate).
+- **Evidence:** issue-sorter this sweep — identical `--type` failures on #156 and #157,
+  labels applied and verified as the fallback.
+- **Size:** ~10 min (configure) or ~2 min (record the no).
 
 ## Not queued (checked, found clean this sweep)
 
-- ADR review: quiescent — 9/9 ADRs classified, zero delta (0 new / 0 amended / 0
-  newly-superseded), no harvest or stale-citation candidates, queue pending 0, checkpoint
-  payload byte-identical (decision-watcher).
-- Issue intake: quiescent — the window since 13:44:32Z returned #154 (filed and resolved
-  same day, closed via PR #155's merge), #149–#152 (already fully-formed — entry 5), and
-  merged PRs #153/#155, all by the trusted author; nothing held, 0
-  `needs-triage-approval` repo-wide (issue-sorter).
-- PRs: 95 total, all 95 MERGED, zero open, no orphans (repo-cleaner).
-- The two `.gitignore` WARN lines (`dist/`, `harness-audit-*/`) — re-reviewed again,
+- PRs: 105 total, all 105 MERGED, zero open, zero surviving remote branches — no reap
+  candidates (repo-cleaner).
+- Local branches/worktrees: clean — the prior plan's `fix/154-...` orphan is gone, no
+  successors (repo-cleaner).
+- Issue-intake trust: every discovered item by the trusted author, nothing newly held,
+  0 `needs-triage-approval` repo-wide; `friendlies.json` and `held-items.md` unchanged
+  (issue-sorter).
+- ADR-0010's rename mechanics and three-piece agent shape: already harvested — correctly
+  NOT re-queued (decision-watcher).
+- The two `.gitignore` WARN lines (`dist/`, `harness-audit-*/`): long-standing,
   on-demand-generated paths, deliberately kept, no edit (repo-cleaner).
 
-## Resolved since the prior plan (2026-08-09, 13:44Z sweep)
+## Resolved since the prior plan (2026-08-10, 06:23:59Z sweep)
 
-- Prior entry 1 (delete `mobilize-chores-feature-dispatch`) — RESOLVED: gone between
-  firings; repo-cleaner's full branch scan this sweep reports exactly one orphaned local
-  branch, and it is the new `fix/154-...` (entry 1's successor).
-- Prior entry 2 (commit the 13:44Z firing's applied artifacts) — RESOLVED: repo-cleaner's
-  dirty-file list this firing contains no `.claude/ops/` path (all 9 dirty files are
-  docs/ and teamwork/ authoring); the ops state sits committed on main @ cf8acb7.
-  Succeeded by entry 2 for this firing's own artifacts.
-- Prior entries 3, 4, 5, 6 — carried forward as entries 4, 6, 7, and 8 respectively.
+- Prior entry 1 (delete merged local `fix/154-...`) — RESOLVED: repo-cleaner reports the
+  previously-orphaned local branch already cleaned up; zero orphans this firing.
+- Prior entry 2 (commit the 06:23Z firing's artifacts) — RESOLVED: tree clean, main
+  @ eb3a27f in sync; those ops paths sit committed.
+- Prior entry 3 (disposition dirty main + sync) — RESOLVED: repo-cleaner explicitly
+  names the dirty tree resolved; the docs/teamwork authoring landed within the
+  PR #158–#170 window.
+- Prior entry 5 (route #149–#152) — MOSTLY RESOLVED: #149, #150, #152 no longer in the
+  open roster; #151 carries into entry 4.
+- Prior entry 6 (apply/rescind the MCP offer) — RESOLVED: issue-sorter confirmed
+  `.mcp.json` matches the recorded accepted decision.
+- Prior entry 8 (disposition #139) — RESOLVED: closed between firings; absent from the
+  open roster.
+- Prior entry 9 (report-filename suffix) — RESOLVED: repo-cleaner itself computed the
+  seat-suffixed path this firing (`2026-08-10T23-50-17Z-repo-cleaner.md`); note the
+  collision case itself went untested (single report this firing).
+- Prior entries 4 and 7 — carried forward as entries 2 and 5.

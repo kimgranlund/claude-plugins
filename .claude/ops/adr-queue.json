@@ -1,3 +1,11 @@
 {
-  "candidates": []
+  "candidates": [
+    {
+      "adr_id": "adr-0010",
+      "evidence": "Two worked-example gaps in ADR-0010's Decision/Rejected-Alternatives, neither covered by existing corpus text: (1) Rejected Alt #1 rejects 'chores-lead' as one letter from harness's shipped 'chore-lead' -- naming-rules test-5 (loud-contrast) firing ACROSS a plugin boundary, not within one plugin's sibling set; naming-rules/SKILL.md's only test-5 worked example (check-skill/check-all-skills) is same-plugin, and grep for 'cross-plugin'/'chores-lead' across naming-rules/SKILL.md + references/estate-rename-map.md finds zero hits. (2) Rejected Alt #2 rejects 'a new build-lead agent alongside feature-lead' on 'the anti-matrix rule requires a boundary answer before a new agent is built beside an existing one doing the same work' -- plan-plugin-split/SKILL.md's anti-matrix guard only states the ABSENCE side (empty cell needs job evidence); grep for 'surplus'/'duplicat'/'beside'/'same work' across plan-plugin-split/SKILL.md + agent-writing-rules/SKILL.md finds no statement of the SURPLUS side (two seats filling one job) as a standing check -- agent-writing-rules/SKILL.md:57 already cites ADR-0010 for the resulting three-piece SHAPE but not for this prior duplication judgment. Source: .claude/docs/adr/0010-generalize-feature-lead-to-build-lead.md:17-18,54-59.",
+      "kind": "harvest",
+      "plan": "Two extend-reference moves, both new-content-fits-existing-skill (no new skill warranted): (a) harness/skills/naming-rules/SKILL.md -- add a cross-plugin worked example beside the existing 'Worked contrast' section, citing ADR-0010's chores-lead/chore-lead collision to show test-5 spans plugin boundaries; (b) harness/skills/agent-writing-rules/SKILL.md -- extend the 'reach for one of these before re-deriving the split from scratch' passage (or a new preceding line) with the precondition check: before proposing a new agent, grep for an existing agent already doing the same job; if found, generalize/rename it (the general seat subsumes the narrow one) rather than build a duplicate beside it -- citing ADR-0010 Rejected Alternatives #2. Both via save-lessons Phase 2-4 (or /make-pack if either grows past a single reference-file edit); human runs it, this agent only names it.",
+      "queued_at": "2026-08-10T23:52:36Z"
+    }
+  ]
 }
