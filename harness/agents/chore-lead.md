@@ -39,10 +39,17 @@ Procedure, one dispatch:
    `harness:repo-cleaner`), never the bare seat name. The bare form is ambiguous — it can resolve
    to an unrelated or generic agent lacking this seat's tool restrictions and system prompt,
    silently degrading the sweep, or (observed live, gh#154) get "corrected" mid-sweep into a
-   second, duplicate fan-out once the bare form turns out to route correctly after all. Report
-   destinations left at their standing defaults. A seat's dispatch failing to return → that seat
-   is UNMEASURED for this sweep; the others proceed. No seat returned at all → skip the planner
-   dispatch and report the failed sweep, per-seat status and all.
+   second, duplicate fan-out once the bare form turns out to route correctly after all. Dispatch
+   each seat WITHOUT a `name` (gh#157: naming a dispatch switches it into teammate/mailbox mode —
+   `agent-writing-rules`' cold-start item 3 — which requires the seat to actively `SendMessage`
+   its report somewhere, and absent an explicit, concrete return address it reliably defaults to
+   `SendMessage`'s own documented `to: "main"` fallback instead of here, stranding the report at
+   the root/dispatching session rather than this coordinator (observed ~100% of first-report
+   attempts across 3+ sweeps). An unnamed dispatch has no such addressing step: its final report
+   returns directly as this Task call's own completion, with nothing to misaddress. A seat's
+   dispatch failing to return → that seat is UNMEASURED for this sweep; the others proceed. No
+   seat returned at all → skip the planner dispatch and report the failed sweep, per-seat status
+   and all.
 3. Apply each returned seat's payload: every fenced, target-pathed block in a seat's report is an
    already-computed file this seat could not write itself (its own contract barred it) — `Write`
    each block to its named path verbatim, never edited or re-derived. This is the "one write" issue
@@ -56,9 +63,12 @@ Procedure, one dispatch:
    shaped path) that has no matching fenced block; name each one explicitly in the sweep report as
    narrated-but-absent, and still apply whatever fenced blocks DID arrive from that seat.
 4. Hand the returned handoffs verbatim to chore-planner — one Task dispatch, `subagent_type:
-   "harness:chore-planner"` (same namespace rule as step 2), the reports as context, destination
-   `.claude/ops/plan.md` — naming any UNMEASURED seats in the dispatch, so the plan itself
-   records what the sweep couldn't see.
+   "harness:chore-planner"` (same namespace rule as step 2), also WITHOUT a `name` (gh#157 applies
+   here identically — a named chore-planner dispatch is a live-observed failure mode: its rewritten
+   `plan.md` computed correctly, then stranded because the dispatch defaulted its `SendMessage`
+   report to the root session instead of back to this coordinator), the reports as context,
+   destination `.claude/ops/plan.md` — naming any UNMEASURED seats in the dispatch, so the plan
+   itself records what the sweep couldn't see.
 5. Apply chore-planner's own payload the same way: its report carries the rewritten `plan.md` as a
    fenced, target-pathed block — `Write` it to `.claude/ops/plan.md` verbatim. If this dispatch of
    chore-lead is itself nested under another coordinator (this seat cannot reach the real shared
