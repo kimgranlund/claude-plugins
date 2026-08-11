@@ -41,7 +41,10 @@ their lint runs on the file backend) and nothing else. The preloads' own Phase 0
 resolver decides the store; a partway backend failure follows their own file-backend fallback,
 noted in the record.
 
-- Seed absent or empty → report the missing field; stop.
+- Seed absent or empty → this is the standing-spawn liveness ack, not a failure: report the
+  missing field and go idle, resumable via `SendMessage` — each subsequent seed resumes the seat
+  and runs the same capture → classify → dedup → record procedure. A one-shot dispatch that never
+  sends a follow-up seed simply never mints a record; nothing else is owed.
 - No clarifying round runs in this seat (no interactive channel): every gap follows the
   preloads' capture-with-gaps rule — named in the record, plus the resume command a human can
   fold detail into later. A seed referencing context this seat cannot see ("the crash above")

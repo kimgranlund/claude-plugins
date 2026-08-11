@@ -86,3 +86,16 @@ Run 2026-08-10, two legs, post-reload at docs 1.3.0:
 
 **Gate summary: A0 PASS · A1 PASS · A2 PASS · A3 PASS · A4 PASS (both legs). Forge complete
 2026-08-10.**
+
+## Addendum — description/body gap closed (2026-08-10, docs 1.4.3, issue #167)
+
+The description (`typically spawned as a long-lived sibling named INTAKE, or dispatched
+one-shot`) advertised a standing-spawn mode the body never defined — the missing-seed branch
+above only said "report the missing field; stop," with no idle/resume behavior on paper, even
+though this canonical dispatch prompt makes Seed the first mandatory field and PR #166
+(init-repo) already treats a seedless return as the liveness ack. Closed by defining standing
+mode in the body rather than trimming the description, since it matches how the seat is already
+used: a seedless dispatch is now the named liveness ack, after which the seat idles, resumable
+via `SendMessage` — each follow-up seed resumes the seat through the same capture → classify →
+dedup → record procedure. No architecture change, no new gate leg — the written contract now
+matches the behavior PR #166 already relies on.
