@@ -3,18 +3,19 @@ name: mobilize-chores
 description: >-
   Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
-  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm.
+  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm (a
+  leading `auto` argument skips it, for /goal loops and scheduled runs).
   Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
-  (ADR-0010), whose preloaded dispatch-ticket procedure owns the kind branch; an
+  (ADR-0010), whose dispatch-ticket procedure owns the kind branch; an
   under-specified task comes back SKIPPED — no clarify round runs unattended. Everything else
-  (ops/hygiene actions, human-decision items) is skipped, never mobilized. Run /mobilize-chores [blank, or a scope
-  instruction]. NOT for just checking the queue (/sweep-chores); NOT for building one specific,
+  (ops/hygiene actions, human-decision items) is skipped, never mobilized.
+  NOT for just checking the queue (/sweep-chores); NOT for building one specific,
   already-known ticket (/build-feature or /file-bug directly); NOT for filing a new bug or
   feature (/file-bug, /file-feature); NOT for the hygiene execution (repo-cleaner, already run
   inside the sweep this wraps).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[blank for a full sweep-and-mobilize | a scope instruction for the underlying sweep]"
+argument-hint: "[blank for a full sweep-and-mobilize | 'auto' to skip the confirm round for unattended/loop use | a scope instruction, optionally prefixed with 'auto ']"
 allowed-tools: ["Read", "Glob", "Edit", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Agent", "AskUserQuestion"]
 ---
 
@@ -26,15 +27,26 @@ sweep surfaced that's actually buildable.
 
 ## Procedure
 
+0. **Parse `$ARGUMENTS` for the unattended flag.** If `$ARGUMENTS` starts with the literal
+   whitespace-delimited token `auto` (case-sensitive) — bare `auto`, or `auto <scope
+   instruction>` — this run is UNATTENDED: strip that leading token and carry only the remainder
+   forward as the scope instruction in step 1 (empty remainder → full sweep, same as blank
+   `$ARGUMENTS` today). Skip step 4's `AskUserQuestion` entirely; see step 4's UNATTENDED branch.
+   No leading `auto` token → this run is INTERACTIVE, today's existing behavior, completely
+   unchanged: `$ARGUMENTS` forwards whole, step 4 runs as written. This is the literal entry point
+   a `/goal` loop or scheduled routine calls (`/mobilize-chores auto`) to get a confirm-free pass —
+   never inferred from "no human appears to be watching," always this explicit token, so the same
+   invocation behaves identically whether a human or a loop types it.
 1. **Sweep.** `/sweep-chores` is `disable-model-invocation: true` — command-only, unreachable via
    the Skill tool from inside another skill's procedure (verified 2026-08-08, issue #134: every
    attempt fails immediately with "cannot be used with Skill tool due to disable-model-invocation").
    `/sweep-chores`' own body names exactly what it wraps: it dispatches the `chore-lead` agent
-   (Agent tool, `subagent_type: "harness:chore-lead"`), carrying `$ARGUMENTS` verbatim, then shows
-   the banner (if `.claude/ops/plan.md` doesn't exist yet) and relays the report unmodified. Do
-   that dispatch directly — the agent, not the command — with the identical contract: banner check
-   first when the plan file is absent, `$ARGUMENTS` passed through, the report relayed as this
-   step's own findings. This IS running `/sweep-chores`, mechanically, not a workaround.
+   (Agent tool, `subagent_type: "harness:chore-lead"`), carrying the scope instruction from step 0
+   verbatim, then shows the banner (if `.claude/ops/plan.md` doesn't exist yet) and relays the
+   report unmodified. Do that dispatch directly — the agent, not the command — with the identical
+   contract: banner check first when the plan file is absent, the step-0 scope instruction passed
+   through, the report relayed as this step's own findings. This IS running `/sweep-chores`,
+   mechanically, not a workaround.
 2. **Find mobilizable tickets.** Resolve this repo's ticket backend once (`doc-writing-rules`'
    backend resolver, `references/backend-resolver.md`, where `docs` is installed; not installed,
    or no ruling → git-native, this workspace's own ADR-0002 instance, unchanged from before this
@@ -70,16 +82,32 @@ sweep surfaced that's actually buildable.
 3. **Nothing mobilizable → stop here.** Report the sweep's own findings (step 1) plus "0 tickets
    mobilizable this run" and why (no open feature/bug/task tickets, or all already in flight). No
    confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
-4. **One batched confirm.** List every mobilizable ticket found (id, title, kind) in ONE
-   `AskUserQuestion` round — never per-ticket, never split by kind. The human picks which to
-   mobilize now, all, some, or none. Nothing dispatches before this round returns. A disclosed
-   limitation of the uniform dispatch, stated here because this round is the one place to act on
-   it: `dispatch-ticket`'s task-clarifying round requires an interactive user and `build-lead`
-   is an unattended seat, so NO clarify round runs inside step 5's dispatches — an
-   under-specified task comes back SKIPPED, and clarifying it means the human re-runs the named
-   command interactively afterwards. Flag visibly under-specified task tickets IN this confirm
-   round (one line each), so the human can decline them here instead of paying a dispatch that
-   will skip.
+4. **One batched confirm — INTERACTIVE only (step 0 found no `auto` token).** List every
+   mobilizable ticket found (id, title, kind) in ONE `AskUserQuestion` round — never per-ticket,
+   never split by kind. The human picks which to mobilize now, all, some, or none. Nothing
+   dispatches before this round returns. A disclosed limitation of the uniform dispatch, stated
+   here because this round is the one place to act on it: `dispatch-ticket`'s task-clarifying
+   round requires an interactive user and `build-lead` is an unattended seat, so NO clarify round
+   runs inside step 5's dispatches — an under-specified task comes back SKIPPED, and clarifying it
+   means the human re-runs the named command interactively afterwards. Flag visibly
+   under-specified task tickets IN this confirm round (one line each), so the human can decline
+   them here instead of paying a dispatch that will skip.
+
+   **UNATTENDED (step 0 found a leading `auto` token): skip `AskUserQuestion` entirely.** Every
+   ticket step 2 found mobilizable is auto-confirmed — step 2's own filtering (label ambiguity
+   excluded on every backend; on git-native, in-flight PRs also excluded via the GraphQL check;
+   the sweep's own human-decision/blocker items excluded on every backend) is the actual
+   correctness gate, not this step, on either branch — this step was never the gate even for a
+   human, only a selection point over an already-filtered set. **Option A (local tickets) has no
+   in-flight-PR check at all — step 2's own disclosed limitation.** On that backend, UNATTENDED
+   dispatches without the one guard INTERACTIVE mode also never had (the confirm round showed only
+   id/title/kind, never in-flight state) — name that specific gap per ticket in the step-6 report
+   rather than letting the summary imply a check that doesn't run there. An unattended dispatch's
+   ceiling is PR-opened, never merged — merging stays a human act (ADR-0002's merge gate); nothing
+   in this mode, or in `build-lead`/`dispatch-ticket`, attempts a merge or review on its own. Still
+   name every visibly under-specified task ticket in the step-6 report exactly as the interactive
+   branch would have flagged it in the confirm round — it comes back SKIPPED from `build-lead` (no
+   clarify round runs unattended either way), never silently dispatched on a guess.
 5. **Dispatch every confirmed ticket, uniformly.** Each confirmed ticket, regardless of kind →
    `Agent(subagent_type: "teamwork:build-lead")` carrying the confirmed ticket id. `build-lead`'s
    preloaded `dispatch-ticket` procedure (ADR-0010) owns the kind branch — its own body is the
@@ -98,11 +126,13 @@ sweep surfaced that's actually buildable.
    SERIALLY, or give each `isolation: "worktree"` on the Agent call per `parallel-work-rules`'
    own overlap test. The bug path (a hand-off, no tree mutation) is safe to overlap; anything
    that builds is not.
-6. **Report.** Verdict-first: the sweep's own findings, then a table of every ticket CONSIDERED
-   this run — mobilized (dispatch + outcome: succeeded / failed / still in flight), or
-   skipped-and-why (not confirmed, in flight already, wrong/ambiguous label, too vague to build
-   unattended — the seat SKIPPED, no clarify round available on this path — or excluded by the
-   sweep's own judgment).
+6. **Report.** Verdict-first: name which branch ran — INTERACTIVE, or UNATTENDED with the exact
+   `auto`-prefixed argument as parsed in step 0 — so a step-0 misparse (a scope instruction that
+   happens to start with the literal word "auto") is observable in the artifact of record, never
+   silent. Then the sweep's own findings, then a table of every ticket CONSIDERED this run —
+   mobilized (dispatch + outcome: succeeded / failed / still in flight), or skipped-and-why (not
+   confirmed, in flight already, wrong/ambiguous label, too vague to build unattended — the seat
+   SKIPPED, no clarify round available on this path — or excluded by the sweep's own judgment).
 
 ## Failure branches
 
@@ -126,14 +156,20 @@ sweep surfaced that's actually buildable.
   re-dispatch of the SAME seat with `dispatch-ticket`'s contract quoted, then a recorded loss on
   the ticket if still nothing — the caller-side check that the seat's own write-back contract
   actually landed.
+- UNATTENDED run auto-confirms a ticket step 2 flagged as visibly under-specified (no human was
+  there to decline it) → dispatch it anyway; it returns SKIPPED from `build-lead` per that seat's
+  own unattended contract, the identical outcome a human declining it in step 4 would have
+  produced — never treated as an error unique to the unattended path.
 
 Done when `/sweep-chores` has run (via the direct `chore-lead` dispatch step 1 names, not a failed
 Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight has been
-considered, the human's one batched confirm gated every dispatch, and the final report names
-every considered ticket's outcome — a mobilized ticket's relayed `build-lead` result, or a
-skip-and-why. NOT done while a dispatch fires before the confirm round, an unlabeled item is
-mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the per-kind routing that
-once lived here belongs to `dispatch-ticket` now — re-growing it here is the regression), a
-ticket already in flight is dispatched again, a dispatch leaving no Findings-equivalent entry
-goes unnoticed, or step 1 is attempted via the Skill tool instead of the direct `chore-lead`
-dispatch.
+considered, every dispatch was gated by the human's one batched confirm (INTERACTIVE) or by step
+2's own filtering under the explicit `auto` token (UNATTENDED) — never by neither — and the final
+report names every considered ticket's outcome — a mobilized ticket's relayed `build-lead` result,
+or a skip-and-why. NOT done while a dispatch fires before the confirm round on an INTERACTIVE run,
+an unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the
+per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
+regression), a ticket already in flight is dispatched again, a dispatch leaving no
+Findings-equivalent entry goes unnoticed, step 1 is attempted via the Skill tool instead of the
+direct `chore-lead` dispatch, or an UNATTENDED run is inferred from context rather than the
+explicit `auto` token.

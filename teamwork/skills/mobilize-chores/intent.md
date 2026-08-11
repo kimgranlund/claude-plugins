@@ -14,17 +14,17 @@ Today `/sweep-chores` produces `.claude/ops/plan.md` (a prioritized queue via ch
 chore-planner) and stops — nothing acts on it. A human must separately read the queue, judge
 what's build-ready, and manually invoke the right dispatch per item. `mobilize-chores` closes that
 gap: after the sweep, it reads the queue, filters to genuinely mobilizable tickets, gets one
-batched human confirm, then drives each confirmed item through its OWN kind's dispatch —
-`kind: feature` -> `/build-feature <id>`; `kind: bug` -> `/file-bug <id>` (resuming an existing
-bug record dispatches its investigation, per file-bug's own contract; build-feature explicitly
-redirects bug-kind tickets away, it does not build them); `kind: task` -> `find-intent` clarifies
-the confirmed ticket first (one round max, only if genuinely ambiguous), then an Agent-tool
-dispatch (`general-purpose` as the default null case, a named agent only when tool restriction/
-parallelism/multi-skill preload is actually needed) executes it under the same Findings-write-back
-contract file-bug's own investigation dispatch uses (2026-08-08 addition — tasks have no fixed
-execution verb the way features/bugs do, so clarify-then-dispatch is the shape, never a blind
-dispatch on an unclarified brief). Any ops/hygiene action or human-decision item stays out of
-scope and reports as skipped.
+batched confirm — a human `AskUserQuestion` round (interactive), or, with a leading `auto` token
+in `$ARGUMENTS`, step 2's own filtering stands in as the gate instead (unattended, 2026-08-11
+addition, for `/goal` loops and scheduled routines) — then dispatches every confirmed ticket
+uniformly to `build-lead` (ADR-0010; renamed from the original `feature-lead`, 2026-08-10), whose
+preloaded `dispatch-ticket` procedure owns the per-kind branch: `feature` keeps the
+find-or-make/size/dispatch/close-loop path; `bug` hands off to `file-bug`'s investigation (never
+built inline); `task` runs `find-intent`'s clarify round FIRST, inside `dispatch-ticket` itself —
+but that round requires an interactive user, and a `build-lead` dispatch never has one (it's
+always an `Agent`-tool call, whether mobilize-chores itself ran interactive or `auto`), so a task
+still too vague to act on comes back SKIPPED, never guessed at. Any ops/hygiene action or
+human-decision item stays out of scope and reports as skipped.
 
 ## fences
 - NOT for just checking the queue/report (`sweep-chores`)
@@ -37,18 +37,22 @@ scope and reports as skipped.
 ## assertions
 1. The final report names every queue item considered, each with a verdict: mobilized, or
    skipped-and-why.
-2. No dispatch (`build-feature` or `file-bug`) fires without one batched human confirm round
-   first — never per-item confirms, never a silent auto-build.
+2. No dispatch (`Agent(teamwork:build-lead)`) fires without one batched confirm first — a human
+   `AskUserQuestion` round, or, on an explicit leading `auto` token in `$ARGUMENTS`, step 2's own
+   filtering standing in as the gate (2026-08-11 exception, an unattended mode a `/goal` loop or
+   scheduled routine invokes deliberately, never inferred from context) — never per-item confirms,
+   never a silent auto-build on either branch.
 3. A queue item mobilizes ONLY if it's a filed `kind: bug`/`kind: feature`/`kind: task` ticket,
-   routed to its OWN kind's dispatch (`feature` -> `build-feature`, `bug` -> `file-bug`, `task` ->
-   find-intent-clarify-then-Agent-dispatch, never crossed) — never an ops/hygiene action
-   (agent dispatch, config edit) or a human-decision item, even one a reasonable ad hoc read would
-   call "low-risk enough to just do." Every non-ticket item is reported as skipped, with the
-   reason.
+   routed UNIFORMLY to `build-lead` (ADR-0010) regardless of kind — its own preloaded
+   `dispatch-ticket` procedure owns the per-kind branch, never re-implemented here — and never an
+   ops/hygiene action (agent dispatch, config edit) or a human-decision item, even one a
+   reasonable ad hoc read would call "low-risk enough to just do." Every non-ticket item is
+   reported as skipped, with the reason.
 4. The report names which dispatches succeeded, failed, or are still in flight.
-5. A `kind: task` ticket that's STILL too vague to act on after find-intent's one clarifying round
-   is never dispatched blindly — it's reported skipped, with the gap named, exactly like an
-   unconfirmed or in-flight item.
+5. A `kind: task` ticket `dispatch-ticket` finds still too vague to act on is never dispatched
+   blindly — no clarify round runs on that dispatch regardless of which confirm branch mobilized
+   it (an `Agent`-tool call has no interactive user either way); it's reported SKIPPED, with the
+   gap named, exactly like an unconfirmed or in-flight item.
 
 ## gates
 P0 route:      PASS — 2026-08-07 — primitive=skill, command species (real side effects: can
@@ -92,6 +96,26 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
                 instead of team-or-solo-rules (this plugin's own solo-first doctrine); a
                 misquote of file-task's scope ("chores, follow-ups, docs, decisions" vs. its real
                 "chores, follow-ups, research items, debts") in both SKILL.md and intent.md.
+                RE-OPENED 2026-08-11 for the `auto` unattended-mode addition, RE-PASSED same day —
+                lint clean. Fresh-context skill-checker FLOOR audit: PASS, no blocking findings;
+                2 major + 1 minor + 1 nit, all fixed same-pass: (major) the UNATTENDED branch
+                claimed "in-flight PRs excluded... on both branches" while step 2 discloses no
+                such check exists for Option A (local tickets) — qualified to git-native and gave
+                UNATTENDED an Option-A caveat naming the gap per ticket instead of implying a
+                check that doesn't run; (major) intent.md's own delta/assertions 2/3/5 still
+                described the pre-ADR-0010 per-kind routing (`build-feature`/`file-bug` direct,
+                a find-intent clarify round inside the dispatch) after SKILL.md had long since
+                moved to uniform `build-lead` dispatch with no clarify round ever — same stale
+                living-spec class the 2026-08-08 audit already caught once, fixed here as this
+                entry; (major) the "unattended dispatches never reach merge" ceiling was
+                environmental (this workspace's permission classifier + ADR-0002's merge gate),
+                not skill-text-borne, and `dispatch-ticket` itself names "merged" as an expected
+                milestone — pinned with a one-line reference in SKILL.md step 4's UNATTENDED
+                branch rather than restated; (minor) step 6 named no confirm-branch, so a scope
+                instruction that happens to start with the literal word "auto" ("auto label
+                tickets first") would silently flip a run unattended with nothing in the report
+                to notice by — step 6 now opens by naming which branch ran and the token as
+                parsed.
 
 ## rulings
 - 2026-08-07: considered folding this into `chore-lead`/`sweep-chores` directly instead of a new
@@ -120,3 +144,15 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
   confirm, right before dispatch) — never on every discovered task — so no human attention is
   spent clarifying items that end up not selected. A task still vague after find-intent's one
   round is reported skipped rather than dispatched on an unclear brief (new assertion 5).
+- 2026-08-11: `auto` unattended mode added (Kim's explicit request — a `/goal` loop needs to drain
+  the ops queue overnight with no human to answer step 4's `AskUserQuestion`). Considered
+  inferring unattended-ness from context (no interactive user detectable) vs. requiring an
+  explicit token; chose the explicit token — inference is exactly the class of ambiguity
+  `chore-lead`'s own `teammate_id="team-lead"` incident (gh#156) and its SendMessage-default
+  incident (gh#157) both trace to (silently assuming a mode from context instead of being told
+  it), and this workspace's standing doctrine reserves PR merge/review for a human in unattended
+  runs regardless (`auto-mode-gh-permissions`) — this mode only ever reaches "built + PR opened,"
+  never merge, so the blast radius the confirm round was guarding is unchanged; only which gate
+  performs the filtering moves from a human glance to step 2's existing, already-safe criteria.
+  Step 0 added as the single parse point so steps 1 and 4 both read one already-resolved flag
+  rather than each re-deriving it from `$ARGUMENTS`.
