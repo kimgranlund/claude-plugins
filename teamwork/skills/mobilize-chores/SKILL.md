@@ -134,6 +134,42 @@ sweep surfaced that's actually buildable.
    confirmed, in flight already, wrong/ambiguous label, too vague to build unattended — the seat
    SKIPPED, no clarify round available on this path — or excluded by the sweep's own judgment).
 
+   **Blocker breakdown.** Every ticket whose outcome is a named blocker (`dispatch-ticket`'s own
+   distinct outcome, not a plain SKIPPED) gets one paragraph, not just a table row: the ticket id
+   and title, what's actually blocking it (`build-lead`'s own stated reason, quoted or
+   paraphrased — never re-derived from scratch), which shape it is (name the shape in the
+   paragraph, not just internally), and a proposed action that fits that shape. Classify before
+   proposing — never propose a build attempt for any of these, and never blend two shapes into
+   one paragraph:
+   - **A judgment call** only a live conversation resolves → propose having it, and what happens
+     on either answer.
+   - **A protocol/ratification action** only a real human utterance satisfies (an ADR ratify
+     comment, a sign-off) → describe what it unblocks once posted, but don't inline the command
+     itself here (bad: "run `gh issue comment 142 --body 'ratified'`" — good: "post a ratify
+     comment on ADR-0012's issue; once posted, the two citing skills unblock" — the verbatim
+     command is the follow-up pass's job, below).
+   - **Concurrent or in-flight work someone else owns** → name whose it is; propose checking in or
+     waiting, never touching it directly.
+   - **A mechanical human action** — a permission grant, a missing credential, a tool install —
+     only a human can perform → name the exact action in plain language (still no inline command
+     here; that's the follow-up pass).
+   - **An external dependency with no lever here** (an upstream repo, a pending signature) → name
+     what it's waiting on; the honest proposal is "nothing to do but watch."
+   - **Fits none of the five cleanly** → say so plainly and propose the nearest honest action;
+     never force a real blocker into the wrong bucket just to keep the list closed.
+
+   Prose only in this pass, even where a command exists — end with one offer to do legwork that
+   spares the human a file open or a terminal (e.g. reading a linked doc so they can decide
+   without opening it themselves).
+
+   **On request ("give commands" or equivalent) — a follow-up, commands-only pass.** For each
+   blocker from the breakdown: a real, copy-pasteable command if the proposed action has one
+   (verbatim, plus any caveat on what it does and doesn't unblock by itself) — or state plainly
+   "nothing to run" if it doesn't, naming the one status-check command that inspects the
+   external/concurrent state where one exists. Never invent a command that wouldn't actually do
+   anything just to look complete — an honest "nothing to run except watching" beats a busywork
+   command.
+
 ## Failure branches
 
 - `/sweep-chores` itself fails to return → report that failure plainly; never run steps 2–6
@@ -149,9 +185,10 @@ sweep surfaced that's actually buildable.
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
 - `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
-  unattended dispatch) or a named blocker → relay it as
-  that ticket's outcome in the step-6 table; the skip/blocker discipline itself lives in
-  `dispatch-ticket`'s own failure branches, not re-litigated here.
+  unattended dispatch) → relay it as that ticket's outcome in the step-6 table; the skip
+  discipline itself lives in `dispatch-ticket`'s own failure branches, not re-litigated here.
+  A named blocker gets more than a table row — step 6's blocker-breakdown paragraph, not just
+  the row.
 - `build-lead` returns with no Findings-equivalent entry visible on the ticket read-back → one
   re-dispatch of the SAME seat with `dispatch-ticket`'s contract quoted, then a recorded loss on
   the ticket if still nothing — the caller-side check that the seat's own write-back contract
@@ -166,10 +203,13 @@ Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flig
 considered, every dispatch was gated by the human's one batched confirm (INTERACTIVE) or by step
 2's own filtering under the explicit `auto` token (UNATTENDED) — never by neither — and the final
 report names every considered ticket's outcome — a mobilized ticket's relayed `build-lead` result,
-or a skip-and-why. NOT done while a dispatch fires before the confirm round on an INTERACTIVE run,
-an unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the
-per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
-regression), a ticket already in flight is dispatched again, a dispatch leaving no
+a skip-and-why, or (for a named blocker) the classified breakdown paragraph, never just a table
+row. NOT done while a dispatch fires before the confirm round on an INTERACTIVE run, a named
+blocker gets only a table row with no classified paragraph, a blocker breakdown proposes a build
+attempt instead of the shape its category actually calls for, an unlabeled item is mobilized, a
+confirmed ticket is dispatched anywhere but `build-lead` (the per-kind routing that once lived
+here belongs to `dispatch-ticket` now — re-growing it here is the regression), a ticket already
+in flight is dispatched again, a dispatch leaving no
 Findings-equivalent entry goes unnoticed, step 1 is attempted via the Skill tool instead of the
 direct `chore-lead` dispatch, or an UNATTENDED run is inferred from context rather than the
 explicit `auto` token.

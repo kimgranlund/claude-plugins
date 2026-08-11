@@ -81,7 +81,25 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.4.0 · assembled 2026-08-11 · 2.4.0: `mobilize-chores` gains an explicit `auto` unattended mode — a
+v2.5.0 · assembled 2026-08-11 · 2.5.0: `mobilize-chores` step 6 gains a blocker breakdown — Kim's
+explicit request after seeing the shape land well in a different repo's session (a per-blocker
+paragraph naming what's blocking it and a proposed action, then commands only on request). Every
+ticket that comes back as a named blocker (not a plain SKIPPED, which has no blocking reason to
+break down) now gets one classified paragraph instead of a table row: `build-lead`'s own stated
+cause quoted or paraphrased, which of six shapes it is (judgment call needing a live conversation
+/ protocol ratification only a human utterance satisfies / someone else's in-flight work / a
+mechanical human action — permission, credential, tool install / an external dependency with no
+lever here / or an explicit "fits none" escape), and a proposed action fitted to that shape —
+never a build attempt, on any of the six. Prose only in this pass, even where a command exists; a
+documented follow-up convention ("give commands" or equivalent) switches to a commands-only pass
+— a real verbatim command where one exists, an honest "nothing to run" where it doesn't.
+`intent.md` gains assertions 6/7 and a dated ruling. Independent `skill-checker` FLOOR audit: PASS
+after fixing 1 major (the original four-shape taxonomy had no escape hatch, and a real fifth
+shape — a mechanical human action like a permission grant — existed that would have been misfiled
+as "external dependency, nothing to do but watch" when a one-line grant is actually the lever;
+added the fifth shape plus an explicit escape) + 1 minor (assertion 6 required the paragraph to
+name its shape; the SKILL.md spec didn't say so) + 1 nit (a labeled bad/good pair closing the last
+inline-command temptation in the ratification shape). · v2.4.0 · assembled 2026-08-11 · 2.4.0: `mobilize-chores` gains an explicit `auto` unattended mode — a
 `/goal` loop draining the ops queue overnight has no one to answer step 4's `AskUserQuestion`, and
 until now that made the skill structurally unable to run without a human in the room. New step 0
 parses `$ARGUMENTS` for a leading, literal `auto` token (never inferred from "no user is watching"

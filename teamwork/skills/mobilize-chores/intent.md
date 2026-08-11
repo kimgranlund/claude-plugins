@@ -53,6 +53,17 @@ human-decision item stays out of scope and reports as skipped.
    blindly — no clarify round runs on that dispatch regardless of which confirm branch mobilized
    it (an `Agent`-tool call has no interactive user either way); it's reported SKIPPED, with the
    gap named, exactly like an unconfirmed or in-flight item.
+6. A ticket returned as a named blocker (2026-08-11 addition) gets a classified breakdown
+   paragraph, never just a table row: what's actually blocking it (quoted/paraphrased from
+   `build-lead`, never re-derived), which shape it is — named in the paragraph, not just decided
+   internally — from judgment call / protocol ratification / someone else's in-flight work /
+   mechanical human action (permission, credential, tool install) / external dependency with no
+   lever here / or an explicit "fits none, here's the nearest honest action" escape, and a
+   proposed action that fits that shape — never a build attempt, on any of the six. Prose only;
+   no raw commands in this pass, even for the ratification/mechanical shapes where one exists.
+7. On a follow-up ask for commands, each blocker gets either a real, verbatim, copy-pasteable
+   command, or an explicit "nothing to run" (naming a status-check command if one exists) — never
+   an invented command that wouldn't actually do anything.
 
 ## gates
 P0 route:      PASS — 2026-08-07 — primitive=skill, command species (real side effects: can
@@ -116,6 +127,19 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
                 tickets first") would silently flip a run unattended with nothing in the report
                 to notice by — step 6 now opens by naming which branch ran and the token as
                 parsed.
+                RE-OPENED 2026-08-11 for the blocker-breakdown addition, RE-PASSED same day — lint
+                clean. Fresh-context skill-checker FLOOR audit: PASS, no blocking findings; 1
+                major + 1 minor + 1 nit, all fixed same-pass: (major) the original four-shape
+                taxonomy had no escape hatch, and a real fifth shape exists — a mechanical human
+                action (permission grant, missing credential, tool install) that `build-lead`'s
+                open-ended "relay any other blocker" channel can genuinely return, which fit none
+                of the four cleanly and would have been misfiled as "external dependency, nothing
+                to do but watch" when a one-line grant is actually the lever — added as a fifth
+                shape plus an explicit "fits none, propose the nearest honest action" escape so
+                the list never forces a real blocker into the wrong bucket; (minor) assertion 6
+                required the paragraph to name its shape but the SKILL.md paragraph-contents spec
+                didn't say so — added; (nit) shape 2's "name the exact mechanism" pulled toward
+                inlining a command despite the prose-only rule — added a labeled bad/good pair.
 
 ## rulings
 - 2026-08-07: considered folding this into `chore-lead`/`sweep-chores` directly instead of a new
@@ -156,3 +180,13 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
   performs the filtering moves from a human glance to step 2's existing, already-safe criteria.
   Step 0 added as the single parse point so steps 1 and 4 both read one already-resolved flag
   rather than each re-deriving it from `$ARGUMENTS`.
+- 2026-08-11: blocker breakdown format added (Kim's explicit request, after seeing a live example
+  in a different repo's session — a per-blocker paragraph naming what's blocking it and a
+  proposed action, classified into one of four shapes so the proposal never drifts into "just try
+  to build it anyway," plus a commands-only follow-up pass on request). A plain SKIPPED (an
+  under-specified task, no clarify round available) stays a table row — it has no "blocking
+  reason" to break down, just an absent one; only a named blocker, which by definition carries a
+  stated cause, earns the paragraph. The commands-only pass is a documented follow-up convention,
+  not a new procedure step — mobilize-chores' own species is `disable-model-invocation: true`
+  (command-only), so there's no re-invocation to hang a new step on; the body stays loaded for
+  the rest of the conversation, so the convention still fires when asked.
