@@ -52,21 +52,30 @@ sweep surfaced that's actually buildable.
    or no ruling → git-native, this workspace's own ADR-0002 instance, unchanged from before this
    resolver call). Then discover per the resolved backend:
    - **Git-native (Option B):** `gh issue list --state open --label feature --json
-     number,title,labels`, the same for `--label bug`, and the same for `--label task`. For each
-     candidate, check whether an open PR already references it via `gh api graphql` querying
-     `closedByPullRequestsReferences { nodes { number state } }` for that issue (owner/repo from
-     `gh repo view --json nameWithOwner`) — any node with `state: OPEN` means a PR is already in
-     flight for it, exclude. **The flattened `gh issue view --json closedByPullRequestsReferences`
-     form does NOT carry a `state` field at all** (verified 2026-08-07: it silently returns exit 0
-     with no state key present, reading as "never in flight" regardless of the truth) — the
-     GraphQL form is the only one that actually works; do not substitute the flattened form.
+     number,title,labels,assignees`, the same for `--label bug`, and the same for `--label task`.
+     For each candidate, check whether an open PR already references it via `gh api graphql`
+     querying `closedByPullRequestsReferences { nodes { number state } }` for that issue
+     (owner/repo from `gh repo view --json nameWithOwner`) — any node with `state: OPEN` means a
+     PR is already in flight for it, exclude. **The flattened `gh issue view --json
+     closedByPullRequestsReferences` form does NOT carry a `state` field at all** (verified
+     2026-08-07: it silently returns exit 0 with no state key present, reading as "never in
+     flight" regardless of the truth) — the GraphQL form is the only one that actually works; do
+     not substitute the flattened form. **Also exclude a ticket carrying a non-empty `assignees`
+     array** (2026-08-12, #184) — `dispatch-ticket`'s own Phase 3 now takes ADR-0005's `claim`
+     operation (assignee + a timestamped comment) before any build effort starts, closing the
+     window this check used to miss entirely: a ticket claimed but not yet PR-open was invisible
+     to the old open-PR-only check, so two concurrent mobilize runs (or a mobilize run plus a
+     human pickup) could double-dispatch it (staleness handling: Failure branches, below).
    - **Local (Option A):** `Glob` `docs/tickets/*.md`, `Read` each file's frontmatter. A candidate
      carries `status: open` and a `kind` of `bug`/`feature`/`task` (the same convention
      `file-bug`/`file-feature`/`file-task` write under this option — `doc-writing-rules` SKILL.md's
-     TICKET section). **No in-flight-PR check exists for local tickets** — there is no established
-     local convention linking a TICKET file to an open PR, so a local ticket already being worked
-     cannot be excluded this way. This is a disclosed limitation, not a silent gap: name it in the
-     step-6 report rather than skipping the check unremarked.
+     TICKET section). **Also exclude a candidate carrying `claimed-by` frontmatter** (2026-08-12,
+     #184) — `dispatch-ticket`'s Phase 3 realizes ADR-0005's `claim` on this backend via that same
+     pair. **No in-flight-PR check exists for local tickets** — there is no established local
+     convention linking a TICKET file to an open PR, so a local ticket already being worked cannot
+     be excluded that way (the claim check above narrows, but does not close, this gap: a claim
+     only appears once a dispatch has actually started). This is a disclosed limitation, not a
+     silent gap: name it in the step-6 report rather than skipping the check unremarked.
    - **External adapter / Option C (e.g. Linear):** the seven-operation adapter interface
      (`backend-resolver.md`) has no "list open records filtered by kind" primitive today —
      ticket-discovery for this backend is **not yet supported**. Report it UNMEASURED, naming the
@@ -75,7 +84,8 @@ sweep surfaced that's actually buildable.
 
    Regardless of backend, a ticket is mobilizable only if: labeled/kinded exactly ONE of
    `feature`/`bug`/`task` (never unlabeled, and one carrying more than one of these three is
-   ambiguous — exclude it, per the failure branch below), AND (git-native only) no
+   ambiguous — exclude it, per the failure branch below), AND carries no active claim (git-native:
+   empty `assignees`; local: no `claimed-by`), AND (git-native only) no
    `closedByPullRequestsReferences` node reads `OPEN`. Cross-check `plan.md`'s own queue for the
    same ids; a ticket the sweep already flagged as a human-decision item or a blocker is excluded
    even if it carries a mobilizable label/kind — the sweep's own judgment on THAT item stands.
@@ -121,46 +131,46 @@ sweep surfaced that's actually buildable.
    `disable-model-invocation: true`, the agent carries the reachable procedure (issue
    #134/#135's shared fix pattern).
 
-   Every dispatch is independent — one failing never blocks the others — but independence is
-   not a parallelism license. **2+ mutating dispatches running concurrently always take
-   `isolation: "worktree"`, one each, with no exception for a stated-disjoint path** —
-   `team-or-solo-rules`' own disjoint-same-tree-fan-out default is safe there because the HOST
-   owns git while workers only edit files; a `build-lead` dispatch is a different shape entirely —
-   `dispatch-ticket` drives its OWN branch/commit/PR lifecycle per ticket, so two dispatches
-   sharing one checkout race on the shared index/HEAD regardless of whether their target files
-   overlap. This applies to bug-kind too: `dispatch-ticket`'s bug branch usually hands off to
-   `file-bug`'s investigation, but `file-bug`'s own Phase 5 can fix a root-cause-evident bug
-   INLINE — real tree mutation, not merely a hand-off — so no kind is exempt from isolation once
-   two dispatches are concurrent. Bug-kind's inline-fix path runs a `context: fork` Skill call
-   into `file-bug`; fork-cwd containment is MEASURED (2026-08-11 live probe: a `context: fork`
-   skill invoked from inside a worktree-isolated agent executed entirely inside that agent's
-   worktree — pwd, `git rev-parse --show-toplevel`, and a probe marker write all landed in the
-   worktree, never the root checkout), so a worktree genuinely contains the fork's writes and
-   bug-kind takes the same rules as feature/task: isolated when concurrent, parallel when a named
-   path licenses it.
+   Every dispatch is independent — one failing never blocks the others. **Isolation is no longer
+   this step's decision** (2026-08-12, #183 — incident and rationale in this skill's own
+   `intent.md`, not restated here): `dispatch-ticket`'s own Phase 3 now puts EVERY dispatch that
+   can mutate the tree — a lone serial one included, and the bug-kind hand-off into `file-bug`
+   too, since `file-bug`'s own Phase 5 can fix a root-cause-evident bug INLINE — inside its own
+   git worktree, unconditionally, before any effort starts. This is structural inside
+   `dispatch-ticket` now (its Phase 3 isolates before the bug hand-off itself, precisely because
+   `file-bug`'s own body carries no worktree mechanics of its own to rely on), not a call this
+   step makes per dispatch or per kind.
 
-   What a named target path actually decides is PARALLEL-vs-SERIAL, never isolation-vs-none: if
-   each confirmed feature/task-kind ticket's own body already names a concrete edit target (the
-   actual file(s) or leaf directory the change will touch — a doc-citation `## Links` section
-   doesn't count, nor does a bare plugin-level directory) and those targets neither overlap nor
-   contain one another, state that claimed ownership in the step-6 report and dispatch both
-   concurrently, each isolated — real parallel time, no expected merge conflict. Two tickets with
-   no such named target on both sides, or overlapping ones — the common case, since a ticket's
-   real footprint usually isn't known until `dispatch-ticket`'s own size/plan step actually runs,
-   which hasn't happened yet at THIS dispatch point — run SERIALLY instead: isolation buys nothing
-   extra when only one dispatch mutates the tree at a time, and serial avoids manufacturing a
-   guaranteed conflict from an unconfirmed overlap. Each serial dispatch starts from a clean `main`
-   HEAD — a predecessor that left the tree dirty or on its own feature branch is the NEXT
-   dispatch's named blocker, never silently inherited. Never assume disjointness without a named,
-   non-overlapping target on both sides — `parallel-work-rules`' own rule holds here too:
-   unconfirmed disjointness routes to the safer default, not to an assumption.
+   What a named target path still decides — the one thing per-dispatch worktree isolation does
+   NOT solve on its own — is PARALLEL-vs-SERIAL **timing**, never isolation-vs-none: two dispatches
+   editing the SAME files in separate worktrees still build cleanly each, then produce two
+   branches that conflict at PR/merge time. If each confirmed feature/task-kind ticket's own body
+   already names a concrete edit target (the actual file(s) or leaf directory the change will
+   touch — a doc-citation `## Links` section doesn't count, nor does a bare plugin-level
+   directory) and those targets neither overlap nor contain one another, state that claimed
+   ownership in the step-6 report and dispatch both concurrently — real parallel time, no expected
+   merge conflict. Two tickets with no such named target on both sides, or overlapping ones — the
+   common case, since a ticket's real footprint usually isn't known until `dispatch-ticket`'s own
+   Phase 4 size/plan step actually runs, which hasn't happened yet at THIS dispatch point — run
+   SERIALLY instead: this choice is purely about avoiding a self-inflicted, foreseeable merge
+   conflict, not about tree-mutation safety, which per-dispatch isolation already guarantees on
+   either branch. Each serial dispatch starts from a clean `main` HEAD — a predecessor that left
+   the tree dirty or on its own feature branch is the NEXT dispatch's named blocker, never
+   silently inherited (should no longer happen for a feature/task predecessor post-#183, since
+   each retires its own worktree/branch per its own Phase 5 stage 3 — a bug-kind predecessor never
+   reaches Phase 5 at all, so this is checked regardless of kind, never assumed clean either way).
+   Never assume
+   disjointness without a named, non-overlapping target on both sides — `parallel-work-rules`' own
+   rule holds here too: unconfirmed disjointness routes to the safer (serial) default, not to an
+   assumption.
 6. **Report.** Verdict-first: name which branch ran — INTERACTIVE, or UNATTENDED with the exact
    `auto`-prefixed argument as parsed in step 0 — so a step-0 misparse (a scope instruction that
    happens to start with the literal word "auto") is observable in the artifact of record, never
    silent. Then the sweep's own findings, then a table of every ticket CONSIDERED this run —
    mobilized (dispatch + outcome: succeeded / failed / still in flight), or skipped-and-why (not
-   confirmed, in flight already, wrong/ambiguous label, too vague to build unattended — the seat
-   SKIPPED, no clarify round available on this path — or excluded by the sweep's own judgment).
+   confirmed, in flight already — an open PR, or a claim with no PR open yet (#184) —
+   wrong/ambiguous label, too vague to build unattended — the seat SKIPPED, no clarify round
+   available on this path — or excluded by the sweep's own judgment).
 
    **Blocker breakdown.** Every ticket whose outcome is a named blocker (`dispatch-ticket`'s own
    distinct outcome, not a plain SKIPPED) gets one paragraph, not just a table row: the ticket id
@@ -210,6 +220,11 @@ sweep surfaced that's actually buildable.
   adapter; not a failure to fix here, a documented gap to close in the adapter interface later.
 - A ticket's label or in-flight state is ambiguous (e.g. `linkedBranches` present but that branch
   has no open PR) → exclude it from the mobilizable set; ambiguity is never a license to dispatch.
+- A ticket carries an active claim (non-empty `assignees`/`claimed-by`, per ADR-0005) with no open
+  PR yet (2026-08-12, #184) → exclude it from the mobilizable set exactly like an open in-flight
+  PR; report it as "in flight already" in step 6, not as a fresh candidate. A claim past its
+  staleness window with no linked PR is `repo-cleaner`'s stale-claim finding to raise (ADR-0005
+  Decision 6) — this step only excludes on the claim's presence, it never reclaims one.
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
 - `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
@@ -227,19 +242,20 @@ sweep surfaced that's actually buildable.
   produced — never treated as an error unique to the unattended path.
 
 Done when `/sweep-chores` has run (via the direct `chore-lead` dispatch step 1 names, not a failed
-Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight has been
-considered, every dispatch was gated by the human's one batched confirm (INTERACTIVE) or by step
-2's own filtering under the explicit `auto` token (UNATTENDED) — never by neither — and the final
-report names every considered ticket's outcome — a mobilized ticket's relayed `build-lead` result,
-a skip-and-why, or (for a named blocker) the classified breakdown paragraph, never just a table
-row. NOT done while a dispatch fires before the confirm round on an INTERACTIVE run, a named
-blocker gets only a table row with no classified paragraph, a blocker breakdown proposes a build
-attempt instead of the shape its category actually calls for, an unlabeled item is mobilized, a
-confirmed ticket is dispatched anywhere but `build-lead` (the per-kind routing that once lived
-here belongs to `dispatch-ticket` now — re-growing it here is the regression), a ticket already
-in flight is dispatched again, two mutating dispatches run concurrently with no
-`isolation: "worktree"` on each (a named path licenses parallel timing, never dropping
-isolation), a dispatch leaving no
-Findings-equivalent entry goes unnoticed, step 1 is attempted via the Skill tool instead of the
-direct `chore-lead` dispatch, or an UNATTENDED run is inferred from context rather than the
-explicit `auto` token.
+Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight AND no active
+claim has been considered, every dispatch was gated by the human's one batched confirm
+(INTERACTIVE) or by step 2's own filtering under the explicit `auto` token (UNATTENDED) — never by
+neither — and the final report names every considered ticket's outcome — a mobilized ticket's
+relayed `build-lead` result, a skip-and-why, or (for a named blocker) the classified breakdown
+paragraph, never just a table row. NOT done while a dispatch fires before the confirm round on an
+INTERACTIVE run, a named blocker gets only a table row with no classified paragraph, a blocker
+breakdown proposes a build attempt instead of the shape its category actually calls for, an
+unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the
+per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
+regression), a ticket already in flight OR already claimed is dispatched again, two concurrent
+feature/task dispatches with overlapping or unstated edit targets are pushed to run in parallel
+instead of the safer serial default (isolation itself is no longer this step's call — that's
+`dispatch-ticket`'s own unconditional Phase 3, per #183 — but a foreseeable merge conflict from
+overlapping targets still is), a dispatch leaving no Findings-equivalent entry goes unnoticed, step
+1 is attempted via the Skill tool instead of the direct `chore-lead` dispatch, or an UNATTENDED run
+is inferred from context rather than the explicit `auto` token.

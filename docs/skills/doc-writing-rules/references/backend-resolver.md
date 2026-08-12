@@ -59,11 +59,15 @@ a capture skill's own call sequence never branches on which backend is active:
 | **discover** | List records created or updated since a checkpoint — the primitive `spec-ticketing-watch-triage`'s watch loop calls; distinct from dedup-search (matches one candidate, not "everything since X") | `docs/tickets/` mtimes since checkpoint | `gh issue list --search "updated:>=<checkpoint>"` |
 | **read** (REQ-010) | Resolve one already-known native id to its current record + full Findings/comment trail — what a resume-by-id branch, a post-dispatch Findings check, and `claim`'s own re-read step all need | Read the TICKET file directly | `gh issue view --comments` |
 
-**`claim` has no caller today.** ADR-0005 defines the primitive because `PARALLEL-AGENTS-PLAYBOOK.md`
-needs it and nothing in this workspace prevented the near-duplicate-work incident that ADR
-documents; it does not require `file-bug`/`feature`/`issue` (capture-only, they never execute a
-ticket) to call it. Whatever eventually plays the "discover an open ticket and build it" role is
-the operation's first real caller.
+**`claim` has its first real caller (2026-08-12, teamwork's `dispatch-ticket` Phase 3 — issue
+#183/#184).** ADR-0005 defined the primitive because `PARALLEL-AGENTS-PLAYBOOK.md` needs it and
+nothing in this workspace prevented the near-duplicate-work incident that ADR documents, but named
+no caller of its own — it does not require `file-bug`/`feature`/`issue` (capture-only, they never
+execute a ticket) to call it. `dispatch-ticket`'s build path is the "discover an open ticket and
+build it" role ADR-0005 anticipated: it takes `claim` (git-native: assignee + timestamped comment;
+file: `claimed-by`/`claimed-at`) before any build effort starts, re-reads to confirm the race
+wasn't lost, and releases it on a mid-flight abandonment — the shape this row already specified,
+unchanged by adopting it.
 
 Linear's realization of all seven lives in `references/linear-adapter.md`; a bring-your-own
 Option-C adapter documents its own realization the same way, in its own workspace.

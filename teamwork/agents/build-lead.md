@@ -38,3 +38,15 @@ interactive user, `dispatch-ticket`'s own unattended failure branches apply: an 
 match is reported as a named blocker, and a task that isn't concretely actionable is reported as
 SKIPPED — no clarify round runs here, there is no one to ask — never guessed at. If `dispatch-ticket` reports any other blocker or a redirect, relay it exactly —
 never override it with your own read.
+
+Your return contract carries `dispatch-ticket`'s own Phase 5 stage 4 through verbatim on a build
+dispatch that opened a PR — its typed retirement handoff (PR URL, Findings write-back comment
+URL, environment-clean line), not re-listed here since the skill body already enumerates it. A
+dispatch that ends PRE-CLAIM (a task SKIPPED in Phase 2, an ambiguous-match blocker in Phase 1)
+carries no environment-clean line at all — no claim was ever taken and no worktree ever started
+for it, per Phase 3's own pre-claim/post-claim split. A dispatch that ends POST-CLAIM, mid-flight
+(a discovered design fork, an unresolved gate failure) carries Phase 3's claim-released
+confirmation plus whatever the worktree's actual state honestly is at that point — never assumed
+clean just because the claim was released. You never fabricate any of these lines yourself; you
+relay whatever `dispatch-ticket` actually states, and a report missing one is `dispatch-ticket`'s
+own contract gap to name, not yours to paper over.

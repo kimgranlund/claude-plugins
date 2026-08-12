@@ -82,7 +82,52 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.7.3 · assembled 2026-08-12 · 2.7.3: README Map gains the missing `skills/mobilize-chores` row —
+v2.8.0 · assembled 2026-08-12 · 2.8.0: build-dispatch lifecycle redesign (issues #183/#184,
+mobilize-chores confirm round) — a build-lead/dispatch-ticket dispatch now owns its full
+execution lifecycle end to end, not just the code change. Evidence: the #180/PR #182 dispatch ran
+in the HOST checkout with no worktree at all and left its feature branch checked out; the
+coordinator repaired it by hand, because isolation was mobilize-chores' own instruction,
+conditioned on "2+ concurrent" — a bar a solo serial dispatch never clears. `dispatch-ticket`
+gains a new Phase 3 ("Claim, then isolate"), renumbering the phases after it (old 3/4/5 → 4/5/6):
+**claim** takes ADR-0005's ratified `claim` backend operation (assignee + timestamped comment,
+git-native; `claimed-by`/`claimed-at`, file) before any build effort starts — this dispatch is
+that operation's first real caller, closing the gap ADR-0005 itself named as open, not a new
+mechanism invented here (`docs` 1.4.5 repairs `backend-resolver.md`'s now-stale "claim has no
+caller today" line in the same spirit); re-reads to confirm the claim wasn't outraced, abandons on
+a lost race. **Isolate** is unconditional by default for every tree-mutating path, including the
+bug hand-off (which runs isolate — never claim, `file-bug` owns its own record lifecycle — before
+invoking `file-bug`, since that skill's own body carries no worktree mechanics of its own to rely
+on). Release-on-abandonment is post-claim-only (a mid-flight design fork or unresolved gate
+failure) — a pre-claim exit (task SKIPPED, an ambiguous-match blocker) never claimed, so never
+releases. Phase 5 ("Dispatch under contract") now enumerates the four lifecycle stages by name:
+isolated execution, branch+commits+PR-opened per ADR-0002 (with an integration-notes line that
+adopts another PR's already-defined shared field wording rather than minting a competing one),
+verified-clean retirement (worktree/branch/host-checkout state, each stated, never assumed), and a
+typed retirement handoff (PR URL + Findings comment URL + an explicit environment-clean line).
+`build-lead`'s return contract (`agents/build-lead.md`) now carries that handoff through verbatim,
+with the pre-claim/post-claim split named so it never fabricates an environment-clean line for a
+dispatch that never started one. `mobilize-chores` step 2 gains a claim check (non-empty
+`assignees`/`claimed-by`) alongside its existing open-PR check, closing the dispatch-to-PR-open
+window a claim-blind check couldn't see (#184, folded into this same campaign per Kim's ruling);
+step 5 drops its own "2+ concurrent → isolation" instruction entirely (isolation is now
+`dispatch-ticket`'s own structural default) and keeps only the PARALLEL-vs-SERIAL timing call — a
+named, non-overlapping edit target avoids a foreseeable merge conflict, a risk per-dispatch
+isolation alone doesn't remove. `intent.md` gains assertions 8/9 and a dated ruling recording the
+redesign, including a self-caught regression: step 5's first draft claimed bug-kind isolation
+"inherits… regardless of kind" via the OLD fork-containment reasoning, while the same edit had
+just removed the instruction that reasoning depended on — bug-kind was briefly left with NO
+isolation layer at all, caught by a fresh-context skill-checker re-audit before ship and root-fixed
+in `dispatch-ticket` itself (its bug branch now isolates before handing off). Four fresh-context
+critic passes total (skill-checker ×2 initial + ×2 re-audit on dispatch-ticket/mobilize-chores,
+agent-checker ×1 on build-lead): one blocking finding (the bug-kind regression above), one major
+(a release-trigger enumeration listing two branches — task SKIPPED, an ambiguous-match blocker —
+that can never actually hold a claim since both occur before Phase 3 ever runs), one major (the
+isolate bullet's "create" case presupposed a claimed branch name the claim-free bug path never
+has), all fixed pre-ship; minors/nits (try-cap scoping, duplicated stale-claim prose, incident
+narration moved to `intent.md`, an overclaim about bug-kind retiring a worktree it never reaches)
+fixed the same passes. `docs` 1.4.5 companion change: `backend-resolver.md`'s `claim` row names its
+first real caller instead of "no caller today" — the only cross-plugin repair this campaign made,
+disclosed here since the edit surface was otherwise teamwork-scoped · v2.7.3 · assembled 2026-08-12 · 2.7.3: README Map gains the missing `skills/mobilize-chores` row —
 the plugin's most-shipped member (2.4.0 auto mode, 2.5.0 blocker breakdown, 2.6.x/2.7.1
 concurrency rules) had no Map row at all; the gate's mention-based docs check passed because
 sibling rows name it. Found by the repo-docs freshness sweep; README-only, no behavior change · v2.7.2 · assembled 2026-08-11 · 2.7.2: one-word reword in 2.7.1's measurement prose ("marker-file

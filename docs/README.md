@@ -50,7 +50,14 @@ degrades to inline judgment when not. No hard edges cross the boundary.
 
 Directories align with plugin names (ADR-0007).
 
-v1.4.4 · assembled 2026-08-11 · 1.4.4: two fixes from the first /check-everything estate audit,
+v1.4.5 · assembled 2026-08-12 · 1.4.5: `references/backend-resolver.md`'s `claim` operation row
+gains its first real caller (teamwork's `dispatch-ticket` Phase 3, issue #183/#184) — the row
+previously read "claim has no caller today," which a fresh-context skill-checker auditing that
+teamwork change flagged as now-false (stale context is a defect, repaired in the same change per
+this workspace's own invariant, even though the maker's edit surface was teamwork-scoped). Corrected
+to name the caller and confirm the adopted shape (assignee + timestamped comment, git-native;
+`claimed-by`/`claimed-at`, file) matches what this row already specified — ADR-0005's own
+primitive, unchanged by being adopted. Pointer-only; no operation shape changed · v1.4.4 · assembled 2026-08-11 · 1.4.4: two fixes from the first /check-everything estate audit,
 both checker-prescribed. `intake-lead` gains the cold-start item-7 line its 1.4.3 edit made
 load-bearing: making inbound `SendMessage` a first-class channel (standing-spawn resume) put the
 seat in exactly the class agent-writing-rules' item 7 covers, and the fresh-context agent-checker

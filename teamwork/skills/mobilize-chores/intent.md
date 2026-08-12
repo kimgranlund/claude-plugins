@@ -64,20 +64,26 @@ human-decision item stays out of scope and reports as skipped.
 7. On a follow-up ask for commands, each blocker gets either a real, verbatim, copy-pasteable
    command, or an explicit "nothing to run" (naming a status-check command if one exists) — never
    an invented command that wouldn't actually do anything.
-8. 2+ mutating dispatches running concurrently ALWAYS take `isolation: "worktree"`, one each,
-   regardless of kind or stated path (2026-08-11 addition) — `build-lead`/`dispatch-ticket` drives
-   its own branch/commit/PR lifecycle per dispatch, unlike `team-or-solo-rules`' host-owned-git
-   fan-out this was originally modeled on too loosely; two concurrent dispatches race on the
-   shared index/HEAD regardless of file overlap, and bug-kind is not exempt (`file-bug`'s own
-   Phase 5 can fix a root-cause-evident bug inline) — bug-kind's `context: fork` path into
-   `file-bug` has MEASURED fork-cwd containment (2026-08-11 live probe: the fork executes inside
-   the invoking agent's worktree), so bug-kind takes the same isolation/parallel rules as the
-   other kinds. A named, non-overlapping target path in each
-   confirmed feature/task-kind ticket's own body (the actual edit target, not a `## Links` doc
-   citation or a bare plugin-level directory) decides PARALLEL-isolated vs. SERIAL, never
-   isolation-vs-none — absent such a path on both sides, the default is SERIAL, not a coin flip on
-   isolation. Each serial dispatch starts from a clean `main` HEAD; a dirty predecessor is the next
-   dispatch's named blocker, never silently inherited.
+8. Isolation is no longer this skill's decision to make (2026-08-12, superseding the 2026-08-11
+   "2+ concurrent" conditional recorded below) — `dispatch-ticket`'s own Phase 3 puts EVERY
+   dispatch that can mutate the tree, a lone serial one included, inside its own git worktree
+   unconditionally before any effort starts; the #180/PR #182 defect (a solo serial dispatch that
+   ran in the HOST checkout) was exactly the gap the old "2+ concurrent" condition left open,
+   since a single dispatch never clears that bar. Bug-kind is isolated the same way, structurally,
+   because `dispatch-ticket`'s own Phase 2 bug branch now runs Phase 3's isolate bullet BEFORE
+   handing off to `file-bug` (whose own body carries no worktree mechanics of its own to rely
+   on) — not an inherited property of the fork alone. What a named, non-overlapping target path in
+   each confirmed feature/task-kind ticket's own body still decides is PARALLEL-vs-SERIAL
+   **timing** only, never isolation-vs-none: two dispatches editing the same files in separate
+   worktrees still build cleanly each, then conflict at PR/merge time. Absent such a path on both
+   sides, the default is SERIAL, not a coin flip.
+9. A ticket carrying an active claim (2026-08-12, #184) — non-empty `assignees` (git-native) or
+   `claimed-by` (local), ADR-0005's `claim` operation, which `dispatch-ticket`'s Phase 3 now takes
+   before any build effort starts — is excluded from the mobilizable set exactly like an open
+   in-flight PR, closing the dispatch-to-PR-open window the old open-PR-only check couldn't see.
+   Reported in step 6 as "in flight already," not as a fresh candidate. A stale claim past its
+   staleness window with no linked PR is `repo-cleaner`'s finding to raise (ADR-0005 Decision 6),
+   never this skill's to reclaim.
 
 ## gates
 P0 route:      PASS — 2026-08-07 — primitive=skill, command species (real side effects: can
@@ -154,6 +160,22 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
                 required the paragraph to name its shape but the SKILL.md paragraph-contents spec
                 didn't say so — added; (nit) shape 2's "name the exact mechanism" pulled toward
                 inlining a command despite the prose-only rule — added a labeled bad/good pair.
+                RE-OPENED 2026-08-12 for the #183/#184 isolation-ownership move + claim-check
+                addition, RE-PASSED same day — lint clean. Fresh-context skill-checker FLOOR
+                re-audit (cross-checked against dispatch-ticket's own live text, not just this
+                skill's self-description): FAILED once, BLOCKING — step 5's first draft claimed
+                bug-kind "inherits the same per-dispatch isolation regardless of kind" via the OLD
+                fork-containment reasoning, while simultaneously removing the very instruction
+                (isolation on the outer `Agent(build-lead)` dispatch) that reasoning depended on —
+                bug-kind was left with NO isolation layer at all, a real regression from the #183
+                fix this change exists to make. Root-fixed in `dispatch-ticket` itself (its Phase 2
+                bug branch now runs Phase 3's isolate bullet before handing off to `file-bug`,
+                since `file-bug`'s own body carries no worktree mechanics to rely on), then this
+                skill's text corrected to describe that mechanism accurately. RE-AUDIT (fresh
+                context): PASS, 1 minor + 1 nit, both fixed same-pass — a "every dispatch now
+                retires its own worktree/branch" line overclaimed for bug-kind (which never reaches
+                the retiring phase at all), narrowed to feature/task explicitly; this gate-ledger
+                entry itself was the nit (no RE-OPENED line existed yet for this change).
 
 ## rulings
 - 2026-08-07: considered folding this into `chore-lead`/`sweep-chores` directly instead of a new
@@ -247,3 +269,24 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
   The probe also re-confirmed in passing that a fork's completion notification routes to the
   ROOT session (the invoking agent saw only the launch acknowledgment), consistent with the A4
   record and gh#157.
+- 2026-08-12 (#183/#184): a live incident (2026-08-12, #180/PR #182) showed the 2026-08-11
+  isolation rule's real gap — a SOLO SERIAL dispatch, not a concurrent one, ran in the host
+  checkout and left its feature branch checked out, because isolation here was conditioned on
+  "2+ concurrent," a bar a lone dispatch never meets. Considered patching this step's own
+  condition (drop the "2+" threshold, isolate every dispatch from here) vs. moving ownership of
+  isolation into `dispatch-ticket` itself so the guarantee holds regardless of which caller
+  dispatches it (`build-lead`, `/lead-build`, a future caller not yet written) — chose the
+  latter: this step no longer instructs isolation at all; `dispatch-ticket`'s own Phase 3 makes
+  it unconditional and structural. What survives here is only the PARALLEL-vs-SERIAL timing
+  decision, reframed — its real job was always avoiding a foreseeable merge conflict from two
+  dispatches editing the same files, a risk per-dispatch isolation does not remove on its own,
+  not the shared-index/HEAD race isolation itself was targeting. Folded in the same redesign
+  (#184, ruled onto #183's campaign the same confirm round): step 2 gains a claim check
+  (non-empty `assignees`/`claimed-by`) alongside the existing open-PR check, closing the
+  dispatch-to-PR-open window where a ticket was claimed but invisible to the old check. The claim
+  mechanism adopted is ADR-0005's own ratified `claim` operation (assignee + a timestamped
+  comment, git-native; `claimed-by`/`claimed-at`, local) — already fully specified in
+  `doc-writing-rules`' `references/backend-resolver.md` with no caller until now — rather than a
+  new in-flight label invented for this change; `dispatch-ticket`'s Phase 3 is that operation's
+  first real caller, exactly the gap ADR-0005 itself named as open. Assertions 8/9 replace and
+  extend the retired 2026-08-11 text.

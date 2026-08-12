@@ -50,16 +50,25 @@ here — report that routing and stop; docs' seats own it.
 
 ## Phase 2 — Branch by kind
 
-- **`kind: bug`** → this is `file-bug`'s work: invoke it via the Skill tool carrying the ticket
-  id, seed prefixed `[redirected-from:dispatch-ticket]` (file-bug's own marker protocol — the
-  round budget was already spent here, and file-bug's forked run has no other way to know).
+- **`kind: bug`** → this is `file-bug`'s work, but isolate BEFORE handing off — `file-bug`'s own
+  body carries no worktree mechanics of its own, and its Phase 5 can fix a root-cause-evident bug
+  inline (real tree mutation), so this dispatch is what has to guarantee containment, not the
+  skill it hands off to: run Phase 3's isolate bullet now (no claim — `file-bug` owns its own
+  record lifecycle, so none is taken here on its behalf), THEN invoke `file-bug` via the Skill
+  tool carrying the ticket id, seed prefixed `[redirected-from:dispatch-ticket]` (file-bug's own
+  marker protocol — the round budget was already spent here, and file-bug's forked run has no
+  other way to know). This is what makes the inline-fix path safe: MEASURED (2026-08-11 live
+  probe) that a `context: fork` skill invoked from inside a worktree-isolated context executes
+  entirely inside that worktree, never escaping to the host checkout — so the isolation just
+  established contains whatever `file-bug`'s own fork does next.
   The RECORD is the return channel, not the fork's transcript — VERIFIED (A4 smoke test,
   2026-08-10): a `context: fork` skill invoked from inside an agent
   dispatch runs as a background fork, and its completion notification routes to the ROOT
   session, not the invoking seat — a seat that waits on the fork's return strands idle forever.
-  So after the hand-off, read the ticket back (Phase 5's verbs) and report "handed to
-  `file-bug`; read-back shows <state/Findings>"; never wait on the fork's transcript. Phases
-  3–5 never run for a bug.
+  So after the hand-off, read the ticket back (Phase 6's verbs) and report "handed to
+  `file-bug`; read-back shows <state/Findings>"; never wait on the fork's transcript. Phase 3's
+  claim, Phase 4's sizing, and Phases 5–6 never run for a bug — only Phase 3's isolate bullet
+  does, and only right here.
 - **`kind: task`** → **clarify, then dispatch — never blind.** Tasks carry no fixed execution
   verb the way features do (`file-task`'s own scope is deliberately heterogeneous: chores,
   follow-ups, research items, debts), so run `find-intent` (harness, where installed; its
@@ -68,23 +77,78 @@ here — report that routing and stop; docs' seats own it.
   (the same interactive-user test the Phase 1 ambiguous-match failure branch applies; a
   `build-lead` dispatch has no one to ask — a ticket that's already clear proceeds with zero
   rounds either way). Still not concretely actionable (no clear "what would done look like") →
-  report SKIPPED with the named gap, never dispatch on an unclear brief. Otherwise dispatch via
-  the `Agent` tool — `subagent_type: general-purpose` as the default (`team-or-solo-rules`'
-  solo-first/null-unit reasoning: a generic task needs no tool restriction, parallelism, or
-  multi-skill preload); a specific named agent only when the clarified brief genuinely needs one
-  of those three properties. The dispatch prompt is sealed per Phase 4's contract — the
-  CLARIFIED BRIEF (the round's answers travel in the seal; the dispatched agent cannot see the
-  clarify conversation), the record, the write-back verb per the resolved backend, a dated
-  Findings-equivalent entry at each significant result. A task is ONE sealed dispatch — Phase
-  4's `/goal` try-cap wrapper is the feature path's, not inherited here (matching the absorbed
-  original). Then close the loop per Phase 5, including its status verbs (`doing`/`done`+close/
-  `wontfix`+close, per the backend) and its one-re-dispatch rule.
+  report SKIPPED with the named gap, never dispatch on an unclear brief — no claim is taken on a
+  SKIPPED task, since no build effort was ever going to start. Otherwise run Phase 3 (claim, then
+  isolate) first, then dispatch via the `Agent` tool — `subagent_type: general-purpose` as the
+  default (`team-or-solo-rules`' solo-first/null-unit reasoning: a generic task needs no tool
+  restriction, parallelism, or multi-skill preload); a specific named agent only when the
+  clarified brief genuinely needs one of those three properties. The dispatch prompt is sealed
+  per Phase 5's contract — the CLARIFIED BRIEF (the round's answers travel in the seal; the
+  dispatched agent cannot see the clarify conversation), the record, the write-back verb per the
+  resolved backend, a dated Findings-equivalent entry at each significant result. A task is ONE
+  sealed dispatch — Phase 5's `/goal` try-cap wrapper is the feature path's, not inherited here
+  (matching the absorbed original). Then close the loop per Phase 6, including its status verbs
+  (`doing`/`done`+close/`wontfix`+close, per the backend) and its one-re-dispatch rule.
 - **`kind: feature`**, a record minted fresh in Phase 1, and the default arm — a pre-existing
-  record carrying no kind, or an unrecognized one → continue: Phases 3–5 (the pre-ADR-0010
+  record carrying no kind, or an unrecognized one → continue: Phases 3–6 (the pre-ADR-0010
   behavior: anything neither bug- nor task-kinded nor closed takes the feature path — `/build-feature`
   can be handed any id, and an unlabeled issue builds rather than falls through undefined).
 
-## Phase 3 — Size the dispatch (solo-first, feature path)
+## Phase 3 — Claim, then isolate
+
+Runs once Phase 2 resolves to real tree-mutating effort — never for a Phase 1 stop
+(closed/shipped-elsewhere/knowledge-routed: no build effort is about to start, so there is
+nothing to claim or isolate). Its two bullets have different scopes: **claim** is the build
+path's own — the feature path (fresh-minted or pre-existing, before Phase 4's sizing) and task's
+actionable branch (after `find-intent`'s round, once concretely actionable, before its Agent
+dispatch) — never for the bug hand-off, since `file-bug` owns its own record lifecycle and takes
+whatever claim it needs on its own terms, not this skill's to take on its behalf. **Isolate** is
+broader: every tree-mutating path runs it, including the bug hand-off in Phase 2 above —
+`file-bug`'s own body carries no worktree mechanics of its own, so this phase is what actually
+contains its inline-fix path, not an assumption that the hand-off target handles it.
+
+- **Claim first.** Decide the branch name now — an issue-mapped name (`<id>-<short-slug>`, or this
+  repo's own `<domain>/<id>-<slug>` convention where one is established) — then take ADR-0005's
+  `claim` operation (`doc-writing-rules`' `references/backend-resolver.md`, its seventh operation;
+  this dispatch is its first real caller, not a new mechanism invented here): git-native — `gh
+  issue edit --add-assignee @me` plus a `gh issue comment` naming the claimant
+  (`build-lead`/`dispatch-ticket`), a UTC timestamp, and the decided branch name; file backend —
+  the record's `claimed-by`/`claimed-at` frontmatter pair; an adapter — its own realization.
+  **Re-read the record** (Phase 6's `read` verb) before proceeding: a claim comment timestamped
+  earlier than this one, from a run that isn't this one, means this caller lost the race (tie-break
+  per ADR-0005: lower identity string wins on an exact timestamp tie) — abandon immediately, no
+  worktree created, no release needed (this claim never landed), and report the loss as a named
+  blocker (someone else's in-flight work) rather than guessing which claim is real.
+- **Isolate second.** Check whether the current working directory is already inside a dedicated
+  git worktree (this repo's own convention: under `.claude/worktrees/`) before creating a new
+  one — a `build-lead` agent already dispatched into its own worktree, or a `/lead-build` session
+  already isolated, reuses that isolation and simply checks out the working branch inside it. Not
+  already isolated → create one now (`git worktree add`, off a clean `main` HEAD) and run every
+  remaining step inside it. The branch it checks out to depends on whether a claim just landed:
+  the claim bullet's own decided name, when one ran (feature/task) — or, when isolate runs alone
+  with no claim before it (the bug hand-off), a lightweight name of its own (`bug/<id>` or
+  whatever `file-bug`'s own convention names, decided here since no claim bullet named one).
+  **Isolation itself is
+  unconditional — even for a single serial dispatch with no concurrent sibling** — worktree
+  *creation* is the only conditional part (reuse vs. create). This is the fix for the #180/PR
+  #182 defect (2026-08-12: that build ran in the HOST checkout with no worktree at all and left
+  its feature branch checked out on return; the coordinator repaired it by hand). Never build in
+  the host's shared checkout, regardless of how many other dispatches are running.
+- **Release on abandonment — post-claim exits only.** Only a failure that happens AFTER this
+  claim landed can have anything to release: a discovered design fork routed back to planner, or
+  a gate failure recorded but unresolved (both mid-flight, per the Failure branches below) — either
+  releases the claim before returning: git-native — `gh issue edit --remove-assignee @me` plus a
+  `gh issue comment` naming the release and why; file backend — clear
+  `claimed-by`/`claimed-at`; an adapter — its own release realization. A **pre-claim** exit has
+  nothing to release, because Phase 3 never ran for it: a task SKIPPED in Phase 2 (no claim taken
+  on an inactionable task, per Phase 2's own text) and an ambiguous-match blocker in Phase 1 (the
+  record was never even confirmed) both end the dispatch before this phase starts. A **lost claim
+  race** (above) also has nothing to release — that claim never landed either. Post-claim release
+  is what keeps a mid-flight abandonment from permanently blocking the ticket for the next sweep —
+  `mobilize-chores` step 2 excludes on an active claim the same way it already excludes on an
+  open in-flight PR.
+
+## Phase 4 — Size the dispatch (solo-first, feature path)
 
 The record's Size class picks the machinery — the same materiality floors the seats themselves
 carry, applied from the caller's side:
@@ -110,29 +174,58 @@ carry, applied from the caller's side:
   on a `build-lead` dispatch — the agent context takes the fork's place as the layer isolating
   the caller; host→agent→coordinator→seats is the identical shape.
 
-## Phase 4 — Dispatch under contract
+## Phase 5 — Dispatch under contract: the four lifecycle stages
 
-Every dispatch is sealed: the ticket path + enumerated inputs + budget + the typed return — and a
-**mandatory dated `## Findings` write-back at each significant result** (slice built, gate green,
-merged), not only at the end, so an interrupted build still left evidence. The write-back verb
-follows the resolved backend: git-native — the issue number, `gh issue comment`; file backend —
-the TICKET file's path, editing its `## Findings` section; an external adapter — its `update`
-operation. Run under `/goal` with a try-cap (5, per loop-rules's feature-ticket recipe): named
-stopping predicate, capped tries, escalate on the same failure twice.
+Every build dispatch — feature or task alike — owns its full execution lifecycle end to end, not
+merely the code change (the #183 fix: a dispatch that stops at "code written" leaves the caller to
+discover and repair branch/worktree residue by hand):
 
-## Phase 5 — Close the loop
+1. **Isolated execution by default** — Phase 3's claim-then-isolate, already done before this
+   phase starts.
+2. **Branch + commits + PR opened**, per ADR-0002. Commit meaningfully as work lands (not one
+   giant commit at the end), push the claimed branch, and open exactly one PR against `main`
+   carrying `Closes #<id>` (every id this dispatch closes, on a folded campaign), a plain
+   what/why, the gate output for every touched plugin, and an integration-notes line naming any
+   known overlap with other open PRs — adopt another PR's already-defined shared field wording
+   where one owns it, never mint a competing definition.
+3. **Verified-clean retirement before the seat retires** — never assumed. State the result on
+   three axes explicitly: the worktree's own git status (clean, nothing uncommitted left behind),
+   the local feature branch (pushed and named — this seat never merges its own PR, per ADR-0002's
+   human-gated merge), and the host checkout (untouched — Phase 3's isolation makes this the
+   normal case, not a hoped-for one; still stated, never inferred from "no error happened").
+4. **A typed retirement handoff proving each step**, not just an outcome: the PR URL, the
+   Findings write-back's own comment URL on the resolved backend (below), and one explicit
+   environment-clean line naming stage 3's three axes by result — never a silent "done".
+   `build-lead`'s own return contract (`agents/build-lead.md`) carries this line through
+   verbatim to whatever dispatched it.
+
+Every dispatch is also sealed under the write-back contract already in force: the ticket path +
+enumerated inputs + budget + the typed return, and a **mandatory dated `## Findings` write-back
+at each significant result** (slice built, gate green, PR opened), not only at the end, so an
+interrupted build still left evidence. The write-back verb follows the resolved backend:
+git-native — the issue number, `gh issue comment`; file backend — the TICKET file's path, editing
+its `## Findings` section; an external adapter — its `update` operation. Run under `/goal` with a
+try-cap (5, per loop-rules's feature-ticket recipe — the feature path only; task's single sealed
+dispatch, per Phase 2's own text, carries no try-cap wrapper): named stopping predicate, capped
+tries, escalate on the same failure twice.
+
+## Phase 6 — Close the loop
 
 Read the ticket back (git-native: `gh issue view --comments`; file backend: re-read the file; an
 adapter: its `read` operation). Findings gained entries and the work shipped → advance status
 (`open`→`doing`→`done`; git-native `done` closes the issue, `wontfix` closes with the label and a
 reason comment — matching `file-bug`'s own Phase 6 status verbs) and report path + status + what
-shipped. An agent that returned without its Findings entry → one re-dispatch with the contract
-quoted, then record the loss with a dated entry and say so plainly; a fork no longer addressable
-skips straight to recording — it cannot be re-dispatched into. A conversational summary never
-substitutes for the entry the record was owed.
+shipped, plus Phase 5's environment-clean line — stated, never inferred from silence. An agent
+that returned without its Findings entry → one re-dispatch with the contract quoted, then record
+the loss with a dated entry and say so plainly; a fork no longer addressable skips straight to
+recording — it cannot be re-dispatched into. A conversational summary never substitutes for the
+entry the record was owed.
 
 ## Failure branches
 
+- Claim lost the race in Phase 3 (an earlier-timestamped competing claim found on re-read) →
+  report as a named blocker (someone else's in-flight work) and stop; never overwrite the winning
+  claim, never guess which run owns the ticket.
 - Ambiguous match in Phase 1 (two plausible records) → **with an interactive user present**, ask
   which, one question, then proceed. A `/build-feature`-initiated call counts as having an
   interactive user present even though it runs inside that command's fork (`context: fork`) —
@@ -144,7 +237,9 @@ substitutes for the entry the record was owed.
   same discipline as this plugin's other unattended failure branches (`close-session`,
   `mobilize-chores`); never guess which record was meant.
 - A raw (recordless) seed that is bug-shaped → `file-bug` (docs) owns it from intake, not a
-  build; the Phase 2 bug branch covers a ticket that already exists.
+  build; the Phase 2 bug branch covers a ticket that already exists. This dispatch never invokes
+  `file-bug` directly for a recordless seed itself (Phase 1's nested-intake hand-off does, ahead
+  of any kind branch) — no isolate call is owed here on top of it.
 - A task's clarify round exhausts without a clear brief → SKIPPED with the named gap (Phase 2);
   a skipped task is a reported outcome, not a failure.
 - Build blocked mid-flight by a discovered design fork → escalate to the record (a dated Findings
@@ -154,6 +249,9 @@ substitutes for the entry the record was owed.
   stays `doing` with the failure recorded.
 
 Done when the record's `## Findings` carries dated evidence of the shipped work (or the recorded
-blocker/skip), status reflects reality, and no build effort was spent before the record existed —
-or the bug branch handed over with the redirect marker and the read-back snapshot (state/Findings
-as of hand-off) relayed; the fork's own outcome is never something this seat waits on.
+blocker/skip), status reflects reality, a PR this dispatch opened carries an explicit
+environment-clean line proving worktree/branch/host-checkout state, an abandoned claim was
+released rather than left standing, and no build effort was spent before the record existed —
+or the bug branch isolated first and then handed over with the redirect marker and the read-back
+snapshot (state/Findings as of hand-off) relayed; the fork's own outcome is never something this
+seat waits on.
