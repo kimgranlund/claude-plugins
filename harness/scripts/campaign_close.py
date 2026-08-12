@@ -2,8 +2,12 @@
 """campaign_close — verify a worktree campaign's PR actually closed clean, mechanically.
 
 Usage:
-  campaign_close.py <pr-number> [--repo <owner/repo>] [--gate <plugin-root> ...]
+  campaign_close.py <pr-number> [--repo <owner/repo>] [--gate <plugin-root>]...
   campaign_close.py selftest
+
+--gate takes exactly ONE plugin root and is repeatable: `--gate teamwork --gate docs`.
+Any unrecognized token is a hard error (exit 2) — issue #188: `--gate teamwork docs`
+used to drop `docs` silently and skip that gate while still exiting 0.
 
 The ritual this replaces (run ~8 times by hand across 2026-07-16..17, with a real silent-failure
 incident on every one of them — ten stale remote branches accumulated before anyone checked):
@@ -101,6 +105,31 @@ def _remote_branch_exists(branch: str, repo: str = None) -> bool:
     return bool(r.stdout.strip())
 
 
+def parse_args(args):
+    """Parse the CLI arg vector (after the script name). Returns (pr_number, repo, gate_roots).
+    Raises ValueError on any unrecognized token or a flag missing its value — silent argument
+    swallowing is the defect class this parser rejects (issue #188: `--gate teamwork docs`
+    dropped `docs`, skipped that plugin's gate, and still exited 0). Pure — the selftest
+    feeds it arg vectors directly, including the live-repro one as the negative control."""
+    pr_number = args[0]
+    repo = None
+    gate_roots = []
+    i = 1
+    while i < len(args):
+        flag = args[i]
+        if flag not in ("--repo", "--gate"):
+            raise ValueError(f"unrecognized argument: {flag!r} "
+                             "(--gate takes one root and is repeatable: --gate a --gate b)")
+        if i + 1 >= len(args):
+            raise ValueError(f"{flag} requires a value")
+        if flag == "--repo":
+            repo = args[i + 1]
+        else:
+            gate_roots.append(args[i + 1])
+        i += 2
+    return pr_number, repo, gate_roots
+
+
 def run(pr_number: str, repo=None, gate_roots=None):
     findings = []
     ok_all = True
@@ -185,6 +214,25 @@ def selftest():
     exists, obs = poll_until_gone(lambda: False, sleep=boom)
     assert not exists and obs == 1
 
+    # Parser — the #188 negative control: the exact live-repro arg vector must be REJECTED,
+    # never silently swallowed (a dropped --gate root means a release gate that never ran).
+    pr, repo, roots = parse_args(["187", "--repo", "o/r", "--gate", "teamwork", "--gate", "docs"])
+    assert (pr, repo, roots) == ("187", "o/r", ["teamwork", "docs"]), \
+        "repeated --gate flags must each contribute a root"
+    try:
+        parse_args(["187", "--repo", "o/r", "--gate", "teamwork", "docs"])
+        raise AssertionError("the #188 arg vector (`--gate teamwork docs`) must be rejected, "
+                             "not silently swallowed")
+    except ValueError as e:
+        assert "docs" in str(e), f"the rejection must name the swallowed token: {e}"
+    try:
+        parse_args(["187", "--gate"])
+        raise AssertionError("a flag missing its value must be a clean error, not an IndexError")
+    except ValueError as e:
+        assert "--gate" in str(e)
+    pr, repo, roots = parse_args(["42"])
+    assert (pr, repo, roots) == ("42", None, []), "a bare PR number must parse with no flags"
+
     # C3
     ok, msg = verify_gate_clean(1, "screens")
     assert not ok and "not release_gate-clean" in msg, "a red gate must be named, not swallowed"
@@ -192,8 +240,9 @@ def selftest():
     assert ok, "a clean gate must pass"
 
     print("campaign_close selftest · PASS · merge/delete/gate checks bite, incl. the ten-branch "
-          "silent-delete-failure negative control and the #102 async-propagation race (lag "
-          "resolves ok and is disclosed; a stranded branch still fails after the window)")
+          "silent-delete-failure negative control, the #102 async-propagation race (lag "
+          "resolves ok and is disclosed; a stranded branch still fails after the window), and "
+          "the #188 parser controls (unknown token and dangling flag rejected, never swallowed)")
     return 0
 
 
@@ -203,15 +252,10 @@ if __name__ == "__main__":
         print(__doc__); sys.exit(2)
     if args[0] == "selftest":
         sys.exit(selftest())
-    pr_number = args[0]
-    repo = None
-    gate_roots = []
-    i = 1
-    while i < len(args):
-        if args[i] == "--repo":
-            repo = args[i + 1]; i += 2
-        elif args[i] == "--gate":
-            gate_roots.append(args[i + 1]); i += 2
-        else:
-            i += 1
+    try:
+        pr_number, repo, gate_roots = parse_args(args)
+    except ValueError as e:
+        print(f"campaign_close: {e}", file=sys.stderr)
+        print(__doc__, file=sys.stderr)
+        sys.exit(2)
     sys.exit(run(pr_number, repo, gate_roots))

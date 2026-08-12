@@ -127,7 +127,16 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
-v3.2.0 · assembled 2026-08-12 · 3.2.0: `check-routing` gains a multi-judge voting round for
+v3.2.1 · assembled 2026-08-12 · 3.2.1: `campaign_close.py` arg parsing hardened (issue #188) —
+the hand-rolled `__main__` parser advanced past any unrecognized token with `else: i += 1`, so
+`--gate teamwork docs` silently dropped `docs`, skipped that plugin's release gate, and exited 0
+(live repro 2026-08-12; the silent-failure class this very script exists to catch, reincarnated
+in its own CLI). Parsing extracted into a pure `parse_args()` that hard-errors (exit 2 + usage)
+on any unrecognized token — the defect class, not just the instance — and on a flag missing its
+value (previously a raw IndexError); usage line corrected to match real behavior (`--gate` takes
+one root and is repeatable: `--gate teamwork --gate docs`, was `[--gate <plugin-root> ...]`).
+Selftest gains the parser fixtures the original never had, incl. the negative control replaying
+the exact live-repro arg vector and asserting REJECTION ·
 contested eval cases (issue #180) — the structural fix for the single-judge noise the 3.1.28–3.1.31
 re-judges above kept measuring by hand: three consecutive live audits on 2026-08-12 found marginal
 cases flip run-to-run (stolen one pass, clean the next) while load-bearing cases held steady, plus
