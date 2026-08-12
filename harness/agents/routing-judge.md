@@ -1,11 +1,13 @@
 ---
 name: routing-judge
 description: |
-  Blind routing judge for /check-routing. Dispatched only by that command, one judge per eval suite,
-  with the description menu and the shuffled, expectation-stripped prompts as its ENTIRE world.
-  Deliberately declared with no tools: a judge that could read skill bodies, suites, or reports
-  could contaminate its own blindness, so the empty allowlist is the epistemic guarantee, not a
-  limitation. Do not auto-delegate to this agent; it is dispatch-only.
+  Blind routing judge for /check-routing. Dispatched only by that command — one judge per eval suite
+  for the initial pass, plus two more per suite scoped to that suite's contested ids (previously
+  flipped, single-judge-failed, or skipped) for a majority-vote round — with the description menu
+  and the shuffled, expectation-stripped prompts (full suite, or just the contested subset) as its
+  ENTIRE world. Deliberately declared with no tools: a judge that could read skill bodies, suites,
+  or reports could contaminate its own blindness, so the empty allowlist is the epistemic
+  guarantee, not a limitation. Do not auto-delegate to this agent; it is dispatch-only.
 model: haiku
 tools: []
 ---

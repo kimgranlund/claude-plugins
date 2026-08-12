@@ -29,7 +29,7 @@ One `routing-judge` agent per suite, ≤5 concurrent (the check-everything ceili
 
 > For each prompt, answer with exactly one menu entry — the skill whose description you would invoke, or `none`. There are exactly N prompts; return exactly N answers, one per id, no id skipped — count your answers before returning. Output only `id → choice`, one per line. Do not explain, do not hedge with two names, do not infer a theme from the prompt set.
 
-(The answer-count clause is metabolized incident 2026-07-09: without it, judges skipped ~1.2% of ids, and every skipped id reads as a false routing failure.)
+(The answer-count clause is metabolized incident 2026-07-09: without it, judges skipped ~1.2% of ids, and every skipped id reads as a false routing failure. A skipped id is not resumed by hand — Phase 4 folds it straight into the contested set below, since a judge that couldn't answer is the same failure mode as a judge that answered wrong.)
 
 The judge never sees expectations (an answer key in context is a leading question), and never sees which skill's suite it is scoring — the suite's own no-trigger cases must be free to route to their true owners.
 
@@ -40,7 +40,15 @@ Rejoin choices to expectations mechanically, not by rereading:
 - `expect: trigger` → pass iff choice = the suite's skill.
 - `expect: no-trigger` → pass iff choice ≠ the suite's skill (`none` and sibling owners both pass; record which).
 
-Build the routing matrix: suite × chosen-skill counts. Every failure is one of three tunable shapes — **stolen** (a sibling won a trigger case: this description is underspecified or the sibling's overreaches), **leaked** (this skill won another suite's no-trigger case: this description overreaches), **dead** (`none` won a trigger case: the prompt's phrasing appears in no description — add it verbatim).
+**Contested-case voting round.** Single-judge routing carries measured noise — three consecutive audits on 2026-08-12 found marginal cases flip run-to-run (stolen one pass, clean the next) while load-bearing cases held steady across all three. Before any case's verdict is final, check whether it is contested — any of:
+
+- it failed under the Phase 3 judge just dispatched (a pass/fail per the rules above),
+- its evals.json entry already carries a note recording a prior flip (the estate's existing re-judge annotation convention — a note containing wording like "re-judged" or "single-judge noise", e.g. big-change-git-rules t15),
+- the Phase 3 judge skipped it outright (the count-miss class, folded in per the Phase 3 note above).
+
+A clean, never-flipped case never gets a second look — voting is scoped to the contested ids only, never the whole suite. Every contested id needs three verdicts before it can be voted, not just two more dispatches: if a Phase 3 verdict exists for it (the first two bullets), dispatch two more `routing-judge` agents against the Phase 2 menu and just the contested ids, same blind contract as Phase 3 (fresh shuffle, expectations stripped) — that Phase 3 verdict plus these two make three. If no Phase 3 verdict exists (the skip bullet — there is nothing to combine with), dispatch three fresh judges for it instead. If a vote-round judge itself skips a contested id, re-dispatch once for that id alone; a second skip stops the wait and the id logs hung with whatever verdicts it has. Once three verdicts exist, the majority (2-of-3) is the case's final choice; if all three differ, log it as a **hung** vote (its own shape, below).
+
+Build the routing matrix: suite × chosen-skill counts, using each case's final (post-vote, where voted) choice. Every failure is one of four tunable shapes — **stolen** (a sibling won a trigger case: this description is underspecified or the sibling's overreaches), **leaked** (this skill won another suite's no-trigger case: this description overreaches), **dead** (`none` won a trigger case: the prompt's phrasing appears in no description — add it verbatim), **hung** (a contested case's three judges split three ways: report it, do not resolve it by fiat — it is evidence the case itself is ambiguous, not a description gap to tune).
 
 ## Phase 5 — Report
 
@@ -48,10 +56,10 @@ Build the routing matrix: suite × chosen-skill counts. Every failure is one of 
 check-routing · <root> · <passed>/<total> cases · <n> suites clean
 Static: <clean | findings carried>   Coverage: <gaps or none>
 Matrix: <suite × winner counts, failures only>
-Failures: <id · prompt · expected · got · shape (stolen/leaked/dead)>
+Failures: <id · prompt · expected · got · shape (stolen/leaked/dead/hung)> — a voted case marks its tally (e.g. "2-of-3")
 Tuning: <per shape: the phrasing to add, or the description whose scope to cut — pointed at a file>
 ```
 
-Every tuning line names the file and the edit direction; recommendations without a target are the report equivalent of a phantom reference. Done when the matrix is printed and each failure carries a shape and a target. NOT done on a summary sentence — the matrix is the deliverable; a prose "mostly routed fine" hides exactly the confusion pairs this command exists to expose.
+Every tuning line names the file and the edit direction; recommendations without a target are the report equivalent of a phantom reference. Hung votes carry no tuning line — there is no file to point at for a 3-way split — report it and stop; chasing it with a description edit is exactly the single-judge-noise-chasing this voting round exists to contain. Done when the matrix is printed and each failure carries a shape, plus a target for every shape but hung. NOT done on a summary sentence — the matrix is the deliverable; a prose "mostly routed fine" hides exactly the confusion pairs this command exists to expose.
 
 Judgment boundary: this skill owns *running* evals. Authoring them is `skill-writing-rules` (the suite conventions live there); a failing suite that needs its skill redesigned routes to `check-skill`.
