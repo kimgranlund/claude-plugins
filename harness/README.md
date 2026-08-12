@@ -127,6 +127,19 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.29 · assembled 2026-08-12 · 3.1.29: skill-writing-rules' `evals/evals.json` re-judged for
+t01 (issue #177, closing the 2026-08-12 check-routing steal — row t01, "How should I write the
+description for this skill?" stolen by prompt-wording-rules, "a real adjacency between authoring
+a description and hardening one"). One fresh blind routing-judge over the suite's 15 cases, menu
+rebuilt from CURRENT frontmatter rather than the audited snapshot (`check-state` and `make-script`
+had each gained a `NOT for` fence since that run — v3.1.27/a prior wave — so the stale menu.txt
+would have judged against a menu the router no longer sees): t01 scored skill-writing-rules,
+15/15 pass, the steal did not reproduce. Per the ticket's own branch, single-judge noise gets
+annotated and stops there — no verbatim phrase added to the SKILL.md description, so none of the
+boundary tier it would have owed (evals + a second routing-judge proof + a fresh-context
+skill-checker FLOOR pass) applies. t01's case gains a `comment` naming the ticket and the
+re-judge result; the suite's top-level note gains a matching dated finding. Suite-data-only edit,
+no SKILL.md touched, no checker pass owed ·
 v3.1.28 · assembled 2026-08-12 · 3.1.28: naming-rules' `evals/evals.json` annotated for n02
 (issue #176, closing the 2026-08-12 check-routing leak — row n02, "Rename this variable to
 something clearer" — marginal: code identifiers are already out of scope, per n02's own

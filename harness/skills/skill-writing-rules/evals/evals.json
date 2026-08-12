@@ -1,11 +1,12 @@
 {
   "skill": "skill-writing-rules",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (check-routing 2026-07-09): cases whose true owner is a user-only command leak to this standards skill on a model-only menu — the standards loading as background for a forge-shaped ask is benign (the model then suggests the command). Do not tune the description to chase these.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. Known accepted-leak class (check-routing 2026-07-09): cases whose true owner is a user-only command leak to this standards skill on a model-only menu — the standards loading as background for a forge-shaped ask is benign (the model then suggests the command). Do not tune the description to chase these. | Dated finding 2026-08-12 (ticket #177, re-judging check-routing 2026-08-12's row t01 \"stolen by prompt-wording-rules\"): one fresh blind routing-judge, menu rebuilt from current frontmatter (check-state and make-script had each gained a fence since the audited run), scored t01 → skill-writing-rules — the steal did not reproduce. Recorded as single-judge noise on this suite; no description edit made, evals unchanged besides this note. A second reproduction on a future run should re-open, not be waved off as the same noise.",
   "cases": [
     {
       "id": "t01",
       "prompt": "How should I write the description for this skill?",
-      "expect": "trigger"
+      "expect": "trigger",
+      "comment": "re-judged 2026-08-12 (ticket #177): passed (chose skill-writing-rules) — prior stolen-by-prompt-wording-rules result did not reproduce on this single re-judge"
     },
     {
       "id": "t02",
