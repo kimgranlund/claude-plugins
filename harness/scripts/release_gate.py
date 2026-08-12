@@ -324,6 +324,15 @@ def gate(root: Path, package: bool = False):
              # references/best-practices.md phrase about corpus load pressure) newly caught by
              # the same suffix — the standing false-positive class, same shape as -flow/-systems:
              "self-review", "load-discipline",
+             # the 2026-08-11 check-everything sweep, four standing G8 warns triaged — all the
+             # established classes: "custom-state" is the web-components CustomStateSet term of
+             # art (make-component's platform-baseline row); "screen-state" is motion-rules
+             # prose ("screen-state grammar"); "fill-as-state" is icon-rules' named design
+             # concept (filled variant signals selection); the two long tokens are references
+             # FILES (turn-session-and-input-intent.md, durable-memory-vs-ephemeral-task-state.md),
+             # the merge-semantics/transport-and-streaming class:
+             "custom-state", "screen-state", "fill-as-state",
+             "turn-session-and-input-intent", "durable-memory-vs-ephemeral-task-state",
              # pack-writing-rules (2026-07-19): "knowledge-forge" is a deliberate historical
              # citation of a now-retired scribe skill (folded into this plugin's own make-pack),
              # not rename drift — the sentence explains provenance, it doesn't point at a live sibling:
