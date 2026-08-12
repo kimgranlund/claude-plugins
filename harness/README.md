@@ -127,6 +127,21 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.25 · assembled 2026-08-12 · 3.1.25: check-state's description gains a NOT-clause fencing
+out single-PR/single-issue status questions (issue #173, closing the 2026-08-12 check-routing
+leak — row n07, "What's the status of this one PR — is #42 ready to merge?" — deferred at the
+time to the next natural description edit; this was that edit). `evals/evals.json`'s n07 comment
+updated to record the fence instead of the old accepted-mild-leak note. A first draft phrased the
+fence as "NOT choosing…, executing…, or one PR/issue's status" — lint-clean and within the
+700-char W8 budget, but a fresh-context skill-checker FLOOR pass caught that it doesn't match
+`routing_eval.py`'s parseable `NOT for <thing> (<owner>)` fence grammar, so the tool-measured
+surface saw zero fenced tokens and the un-fenced n07 vocabulary (`status`, `issue`) landed in the
+POSITIVE set instead of repelling — reworded to one `NOT for` clause covering all four exclusions,
+same 695 chars, fence now parses and `fenced_tokens()` carries `status`/`issue`. Proof: one blind
+`routing-judge` dispatch (menu = harness's 30 model-invocable descriptions + none, the check-state
+suite's 22 prompts stripped of `expect` and shuffled) run before AND after the fence-grammar fix —
+both runs score 22/22, and n07 specifically resolves to `none` on both (was `check-state` in the
+2026-08-11 audit) — substituting for a full `/check-routing` wave that ran the day before ·
 v3.1.24 · assembled 2026-08-12 · 3.1.24: 3.1.23's labeled-counterexample exemption dated
 precisely — an independent fresh-context skill-checker pass (issue #171) found both new passages
 elided "found," so "restored by hand the same day" read as if the ADR-0006 sweep itself ran on

@@ -7,9 +7,9 @@ description: >-
   every finding naming its owning command. Use for "what's the state of the project",
   "where are we", "what's blocked on me", "give me a project state report", "what can be
   merged or deleted", "catch me up on this repo", or reviewing all roadmap/plan/backlog
-  items and open tickets. NOT for choosing what to do next (chore-planner); NOT for
-  executing cleanup (repo-cleaner, campaign_close.py); NOT for plugin health
-  (/check-everything).
+  items and open tickets. NOT for choosing next work (chore-planner), executing cleanup
+  (repo-cleaner), plugin health (/check-everything), or one PR/issue's status (plain gh
+  lookup).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[repo-root] [--artifact]"
