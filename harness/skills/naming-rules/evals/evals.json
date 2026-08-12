@@ -1,6 +1,6 @@
 {
   "skill": "naming-rules",
-  "note": "Trigger-routing suite. expect=trigger: fires in a fresh session; expect=no-trigger: near-miss owned elsewhere (owner in comment). This skill owns FORWARD naming under the simple paradigm — naming something new, simplifying a proposed name. Questions about the legacy estate grammar or executing renames route to their owners. | Dated finding 2026-07-25 (plugin-install-facts wave boundary run): n05 leaked to naming-rules in a blind judge (philosophical why-question read as a naming review). naming-rules description and this suite were UNTOUCHED by that wave and no baseline exists to confirm pre-existing — recorded so a future run diffs instead of rediscovering; fence not weakened (issue #58 accepted-leak discipline).",
+  "note": "Trigger-routing suite. expect=trigger: fires in a fresh session; expect=no-trigger: near-miss owned elsewhere (owner in comment). This skill owns FORWARD naming under the simple paradigm — naming something new, simplifying a proposed name. Questions about the legacy estate grammar or executing renames route to their owners. | Dated finding 2026-07-25 (plugin-install-facts wave boundary run): n05 leaked to naming-rules in a blind judge (philosophical why-question read as a naming review). naming-rules description and this suite were UNTOUCHED by that wave and no baseline exists to confirm pre-existing — recorded so a future run diffs instead of rediscovering; fence not weakened (issue #58 accepted-leak discipline). | Known accepted-leak class (check-routing 2026-08-12, harness-audit-2026-08-11/routing/report.md row n02, ticket #176): n02's true owner is none (code identifiers, general engineering) — marginal leak, left unfenced on purpose; do not tune the description to chase it.",
   "cases": [
     {
       "id": "t01",
@@ -87,7 +87,7 @@
       "id": "n02",
       "prompt": "Rename this variable to something clearer.",
       "expect": "no-trigger",
-      "comment": "owner: none — code identifiers, general engineering"
+      "comment": "owner: none — code identifiers, general engineering — accepted leak (check-routing 2026-08-12, harness-audit-2026-08-11/routing/report.md row n02, ticket #176): marginal, description left unfenced on purpose; do not tune the description to chase it"
     },
     {
       "id": "n03",

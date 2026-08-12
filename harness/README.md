@@ -127,6 +127,18 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.28 · assembled 2026-08-12 · 3.1.28: naming-rules' `evals/evals.json` annotated for n02
+(issue #176, closing the 2026-08-12 check-routing leak — row n02, "Rename this variable to
+something clearer" — marginal: code identifiers are already out of scope, per n02's own
+"owner: none — code identifiers, general engineering" comment, but the description left them
+unfenced). The report offered two remedies — annotate as accepted, or fence the description with
+a same-change evals update, a blind routing-judge proof, and a fresh-context skill-checker FLOOR
+pass. Picked annotate: the leak is already out-of-scope-noted and marginal, and the fence route's
+full boundary-tier cost (proof + checker pass) is disproportionate to closing one benign leak —
+matching find-open-questions' own n11 precedent (v3.1.26). n02's case gains a
+`comment` update naming the ticket and the accepted-leak class; the suite's top-level note gains
+a matching "Known accepted-leak class" sentence. Suite-data-only edit, no SKILL.md touched, no
+checker pass owed ·
 v3.1.27 · assembled 2026-08-12 · 3.1.27: make-script's description gains a `NOT for` fence for
 one-off/throwaway scripts (issue #175, closing the 2026-08-12 check-routing leak — row n06,
 "Write me a quick one-off script to rename these files" — a real gap, no owning skill, so the
