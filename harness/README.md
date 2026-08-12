@@ -127,7 +127,27 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
-v3.1.20 · assembled 2026-08-11 · 3.1.20: the first /check-everything estate audit's harness fixes,
+v3.1.21 · assembled 2026-08-12 · 3.1.21: the adr-0010 harvest lands (both asks Kim-confirmed in one
+batched round; queue row cleared) plus the labels-only ruling — three semantic edits, each ridden
+by its own fresh-context checker per the semantic-edit invariant, all PASS. `naming-rules`: the
+test-5 row gains the real cross-plugin example (ADR-0010's rejected `chores-lead` one letter from
+harness's shipped `chore-lead`; rule cell now states the flat-menu fact — a plugin boundary mutes
+nothing) — and the checker's out-of-delta major exposed that the ADR-0006 rename sweep had
+REWRITTEN the retired names inside rows 1/3/4's labeled `Bad:` cells, collapsing them to Bad==Good
+(the sweep ate its own counterexamples): restored from git history (`skill-forge`,
+`docs-alignment`, `forge`/`scribe`) with "(retired)" annotations, G8 allow-set gains the two
+hyphenated tokens under the knowledge-forge deliberate-historical-citation class, and the
+sweep-exemption discipline (labeled counterexamples are record, never live references) is filed as
+its own follow-up task. `plan-plugin-split`: the anti-matrix guard gains its surplus side — two
+members OWNING the same procedure = defect, the general subsumes the narrow (ADR-0010 Rejected
+Alt #2), with the checker's carve-out applied same-pass (distinct entry surfaces sharing ONE
+engine are not a surplus — ADR-0010 itself kept `/build-feature` beside the seat) and MANUAL.md's
+guard one-liner repaired as the drift pair. `issue-sorter`: the native `--type` attempt retired
+(Kim's labels-only ruling, scoped to this seat on this personal-account repo — Issue Types is
+org-scoped so no schema is possible here; the docs intake skills' portable ADR-0004 two-call
+design stands unchanged, failing soft here by construction; reversal path named). adr-0009's
+narrow-supersession harvest candidate retired with a recorded no (decision-watcher's not-queuing
+call confirmed right — single occurrence, frequency bar unmet) · v3.1.20 · assembled 2026-08-11 · 3.1.20: the first /check-everything estate audit's harness fixes,
 every one prescribed by a fresh-context checker rather than self-graded. `agent-writing-rules`:
 the 3.1.18/3.1.19 capability growth was routing-invisible — description gains the new-vocabulary
 trigger clause (teammate report never arrived / team-lead-labeled sender / name a fan-out

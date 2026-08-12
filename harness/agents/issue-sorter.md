@@ -75,14 +75,16 @@ clear (`file-task`'s default — unsized is legal for tasks). A missing label is
 same fallback `file-task`'s SKILL.md documents explicitly; `file-bug` and `file-feature` don't document a
 missing-label path themselves, so this agent's own create calls own the fallback rather than
 assuming those two self-heal it too. Those skills are the canonical source of truth for the record
-shape; this agent only carries the minimum it needs to mint correctly. Two separate calls, never
-combined: the create call is unchanged by ADR-0004; once the issue exists, a second call —
-`gh issue edit <id> --type Bug`/`Feature`/`Task` — attempts the matching native Issue Type. If
-that edit fails (the org's type schema rejects it, or `gh` doesn't recognize `--type`), the
-already-created issue is simply left with the label alone, noted as a skipped type in the sweep
-report — never re-run the create over a type failure (a combined `gh issue create --type` was
-found to create the issue and only then fail the type step, so treating that error as "nothing
-created" would mint a duplicate).
+shape; this agent only carries the minimum it needs to mint correctly. Labels are the ruled
+carrier for kind and severity — **no native Issue Type call is attempted** (ruled labels-only
+2026-08-12, scoped to THIS seat on THIS repo: the repo is personal-account-owned and Issue Types
+is organization-scoped — the preloaded pack's dated probe — so no type schema is possible here
+and every `gh issue edit --type` attempt failed identically across firings, while labels already
+carry the full kind+severity contract. The docs intake skills' portable two-call design (ADR-0004)
+stands unchanged — on a personal repo it fails soft by its own construction. If this repo ever
+moves to an org with Issue Types configured, reversal is one ruling plus restoring the second
+edit call — the historical two-call discipline and its duplicate-prevention lesson live in this
+file's git history at this line).
 
 ## Procedure, one firing
 

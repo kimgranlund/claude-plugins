@@ -43,7 +43,13 @@ source. Nothing refetched. Six prior entries RESOLVED, two carried forward, four
 
 **Class 3 — human decisions:**
 
-### 3. Batched confirm on the adr-0010 harvest candidate — one queue row, TWO separable asks (NEW)
+### 3. Batched confirm on the adr-0010 harvest candidate — one queue row, TWO separable asks (NEW) — RESOLVED 2026-08-12 (between firings)
+- **Movement:** both asks confirmed ACCEPT by Kim in one batched round; (a) landed as
+  naming-rules' test-5 row rewrite (real cross-plugin example, flat-menu clause), (b) landed as
+  plan-plugin-split's anti-matrix surplus side — in its canonical home rather than the queue
+  plan's suggested agent-writing-rules passage, since the anti-matrix rule itself lives there
+  (workspace CLAUDE.md's own citation). Queue row cleared (`adr_queue.py clear`), gates green,
+  each edit rode its own fresh-context checker per the semantic-edit invariant.
 - **Action:** Run the save-lessons Phase 3 confirm over the single pending
   `adr-queue.json` row for adr-0010, treating it as two independent accept/override/skip
   decisions (the merged row is a schema accommodation, not one ask): (a) a worked
@@ -82,7 +88,10 @@ source. Nothing refetched. Six prior entries RESOLVED, two carried forward, four
   open-issue inventory in `.claude/ops/reports/2026-08-10T23-50-17Z-repo-cleaner.md`.
 - **Size:** ~10 min (the decision incl. reading #167; builds sized by their tickets).
 
-### 5. Sanity-check the not-queued adr-0009 harvest call (carry-forward)
+### 5. Sanity-check the not-queued adr-0009 harvest call (carry-forward) — RESOLVED 2026-08-12 (between firings)
+- **Movement:** Kim ruled NO — decision-watcher's not-queuing call was right (single occurrence,
+  save-lessons' frequency bar unmet; the pattern lives in ADR-0009 itself if a second occurrence
+  arrives). Entry retires permanently.
 - **Action:** Human yes/no: does adr-0009 deserve a harvest candidate for the
   "narrow-supersession, prose-scoped `supersedes:` beats mechanical extraction" pattern?
   Fold into the same sitting as entry 3 — one save-lessons pass can settle both. Note
@@ -95,7 +104,11 @@ source. Nothing refetched. Six prior entries RESOLVED, two carried forward, four
 
 **Class 4 — hygiene debt:**
 
-### 6. Configure org Issue Types, or record a deliberate no (NEW)
+### 6. Configure org Issue Types, or record a deliberate no (NEW) — RESOLVED 2026-08-12 (between firings)
+- **Movement:** Kim ruled labels-only. issue-sorter's `--type` attempt retired from the agent
+  body with the ruling dated in place and the reversal path named (restore the second edit call
+  if the org ever configures Issue Types); labels stay the kind+severity carrier. Landed in the
+  same harness version as entry 3's harvests.
 - **Action:** `gh issue edit <id> --type Bug` failed identically on both resumes this
   firing — the org has no Issue Types schema configured, so every future mint/resume
   will retry and fail until it is. Either configure Issue Types at the org level on

@@ -87,7 +87,14 @@ Then the judgment, under the anti-matrix guard: **an absence is a gap only with 
 dangling handoff, an ask no member's suite can answer, a charter line with no owner. Template
 asymmetry alone is a question, never an answer; most matrix holes are *correct* absences (a
 cross-cutting knowledge layer needs no command; a family whose checks live in a shared lint needs
-no private script) and the verdict says so explicitly. For a hypothetical corpus — a charter with
+no private script) and the verdict says so explicitly. The guard has a surplus side too: **two
+members OWNING the same procedure with adjacent charters is a defect the same way an
+evidence-free gap is** — the GENERAL one subsumes the narrow one (rename/generalize, never keep
+both; distinct entry surfaces sharing ONE engine are not a surplus — ADR-0010 itself kept
+`/build-feature` beside the generalized seat), because two seats preloading the same procedure
+drift apart the day one is edited (ADR-0010, 2026-08-10: a planned `build-lead` agent beside the
+shipped `feature-lead` would have preloaded the identical dispatch procedure — resolved by
+generalizing the existing seat, not adding a twin). For a hypothetical corpus — a charter with
 no tree yet — this phase runs as a charter-vs-members diff and hands the result to
 `/make-plugin`'s rejected-members ledger, which owns the greenfield version of this question.
 Confirmed gaps join the manifest as `gap_candidates`, each with its evidence and its build owner

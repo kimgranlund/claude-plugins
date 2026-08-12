@@ -337,6 +337,11 @@ def gate(root: Path, package: bool = False):
              # citation of a now-retired scribe skill (folded into this plugin's own make-pack),
              # not rename drift — the sentence explains provenance, it doesn't point at a live sibling:
              "knowledge-forge",
+             # naming-rules tests table (2026-08-12): the labeled Bad: counterexamples restored
+             # after the ADR-0006 rename sweep was found to have rewritten retired names INSIDE
+             # the counterexample cells, collapsing them to Bad==Good (check-everything follow-up
+             # audit) — same deliberate-historical-citation class as knowledge-forge above:
+             "skill-forge", "docs-alignment",
              # naming-rules (2026-07-20) added the `-rules` suffix to the estate inventory: the
              # skill's own illustrative paradigm names are deliberate examples, not phantom
              # siblings (doc-rules is its labeled counter-example; doc-writing-rules,

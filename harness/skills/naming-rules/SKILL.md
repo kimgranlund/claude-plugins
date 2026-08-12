@@ -28,11 +28,11 @@ A proposed name passes all five or gets reworked; the test that fails names the 
 
 | # | Test | Rule (as world-state) | Contrast (bad side labeled) |
 |---|---|---|---|
-| 1 | says-the-job | An invocable name completes "I want to ___" read aloud | Bad: `make-skill` → Good: `make-skill` |
+| 1 | says-the-job | An invocable name completes "I want to ___" read aloud | Bad: `skill-forge` (retired name, kept as the counterexample) → Good: `make-skill` |
 | 2 | kind-audible | The shape alone identifies the kind (table below) | Bad: `feature` (verb-less runnable) → Good: `file-feature` |
-| 3 | registry-verb | The verb comes from the registry — one verb per concept, kindergarten vocabulary | Bad: `tidy-docs` → Good: `tidy-docs` |
-| 4 | no-lore | Zero metaphor, mythology, or seniority theater; a shelf noun says what the shelf holds | Bad: `harness`, `docs` → Good: `harness`, `docs` |
-| 5 | loud-contrast | Siblings differ by a whole word; a suffix or number as the only difference is a test-5 failure | Bad: `check-skill` + `check-all-skills` coexisting → Good: `check-skill` + `check-all-skills` |
+| 3 | registry-verb | The verb comes from the registry — one verb per concept, kindergarten vocabulary | Bad: `docs-alignment` (retired) → Good: `tidy-docs` |
+| 4 | no-lore | Zero metaphor, mythology, or seniority theater; a shelf noun says what the shelf holds | Bad: `forge`, `scribe` (retired) → Good: `harness`, `docs` |
+| 5 | loud-contrast | Siblings differ by a whole word; a suffix or number as the only difference is a test-5 failure — and "sibling" means the whole installed estate, not one plugin: every name shares one flat menu, so a plugin boundary mutes nothing | Bad: `chores-lead` proposed while harness ships `chore-lead` — one letter apart across a plugin boundary, rejected live (ADR-0010, 2026-08-10) → Good: `build-lead` |
 
 ## Shapes by kind — normative
 
