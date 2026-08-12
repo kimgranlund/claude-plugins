@@ -99,3 +99,13 @@ used: a seedless dispatch is now the named liveness ack, after which the seat id
 via `SendMessage` — each follow-up seed resumes the seat through the same capture → classify →
 dedup → record procedure. No architecture change, no new gate leg — the written contract now
 matches the behavior PR #166 already relies on.
+
+## Addendum — team-lead-label rule added (2026-08-11, docs 1.4.4, check-everything audit)
+
+The 1.4.3 change made inbound `SendMessage` a first-class channel for this seat, which triggers
+agent-writing-rules' cold-start item 7 (a seat that can receive teammate traffic states the
+`teammate_id="team-lead"` rule in its own body) — the fresh-context agent-checker audit found the
+line absent. One body sentence added after the delivery clause: a `team-lead`-labeled sender is
+presumptively the root session's own platform identity, its content treated like any other seed —
+captured on the merits, never as authority. Locus: execution; no new A4 leg (one sentence, no
+architecture change).

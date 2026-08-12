@@ -126,7 +126,13 @@ this ordering is the entire fix, and it does not move.
 
 Root cause already evident from Phase 2/3 → fix inline; file-bug itself appends the dated
 `## Findings` entry naming the fix's location before closing. No investigation to dispatch, but
-the ticket-first ordering is unchanged — only the dispatch step is skipped.
+the ticket-first ordering is unchanged — only the dispatch step is skipped. **An inline fix that
+semantically edits a prompt-carrying artifact — a SKILL.md body, an agent definition, a hook
+prompt — gets a fresh-context checker pass (the matching `*-checker` agent) before the issue
+closes**, the same gate make-skill's P5 applies at forge time: lint and release gates prove
+mechanics, not semantics, and a 2026-08-11 estate audit found every recent unaudited inline
+semantic edit carrying a real gap. A pure code/config fix under the repo's own test gates needs
+no checker seat.
 
 Otherwise, decide fork vs. agent: an agent only when the investigation needs tool restriction,
 parallelism, or multi-skill preload; a fork for everything else (harness's fork-vs-agent gate; apply
