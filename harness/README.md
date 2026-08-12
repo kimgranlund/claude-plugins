@@ -127,6 +127,22 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.31 · assembled 2026-08-12 · 3.1.31: big-change-git-rules' `evals/evals.json` re-judged for
+t15 (issue #179, closing the 2026-08-12 check-routing steal recorded in #172's Findings — row
+t15, "what's the general lesson about trusting a command's own success report" stolen by
+checking-rules, "runtime checks over claims" a plausible adjacency). One fresh blind
+routing-judge over the suite's full 36 cases, menu rebuilt from CURRENT frontmatter rather than
+the audited snapshot (`check-state` and `make-script` had each gained a fence since the #172–#177
+batch, matching the t01/3.1.29 precedent): t15 scored big-change-git-rules clean — the steal did
+not reproduce. Per the ticket's own branch, single-judge noise gets annotated and stops there —
+no cede/sharpen ownership call, no SKILL.md touched on either sibling, so none of the boundary
+tier (evals + a second routing-judge proof + a fresh-context skill-checker FLOOR pass) applies.
+t15's case gains a `note` naming the ticket and the re-judge result; the suite's top-level note
+gains a matching dated finding. The same run surfaced two unrelated leaked failures (n08 "delete
+this stale remote branch for me right now", n16 "is it safe to assume a squash-merged branch has
+nothing new on it" — the latter already ceded to github-facts in description but the judge still
+picked this skill) — out of this ticket's scope, recorded in the suite note for a follow-up, not
+actioned here. Suite-data-only edit, no SKILL.md touched, no checker pass owed ·
 v3.1.30 · assembled 2026-08-12 · 3.1.30: `skill_lint.py`'s `classify()` fix (issue #178, root-caused
 upstream in adiahealth/gen-ui-kit#1071) — the `agents/`-dir match no longer fires on ANY directory
 literally named `agents/` anywhere on disk; it now requires the same layout that makes a directory
