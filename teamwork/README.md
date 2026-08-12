@@ -81,7 +81,18 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.6.0 · assembled 2026-08-11 · 2.6.0: `mobilize-chores` step 5 gains a disjoint-fan-out check —
+v2.6.1 · assembled 2026-08-11 · 2.6.1: `team-or-solo-rules` step 5 + its best-practices fan-out
+section now NAME the host-owns-git precondition they previously only implied — save-lessons
+harvest of 2.6.0's own incident, landed in the doctrine that owns it: the disjoint same-tree
+fan-out is safe because workers only edit files while the HOST alone gates-and-commits; a worker
+that drives its own branch/commit/PR lifecycle per dispatch (`build-lead`/`dispatch-ticket`, a
+release cutter) races siblings on the shared index/HEAD regardless of file disjointness, so for
+that worker shape file-disjointness decides PARALLEL-vs-SERIAL only and concurrency always takes
+per-worker worktree isolation. The 2.6.0 re-audit explicitly noted `mobilize-chores` had become
+more explicit about this than the owning doctrine itself — that inversion is the drift this entry
+retires; `wiring-checker` preloads this skill, so the checker inherits the sharpened rule for
+free. Body+reference only, no description edit, no suite re-judge owed; the precondition's factual
+claims were source-verified by 2.6.0's own re-audit the same day. · v2.6.0 · assembled 2026-08-11 · 2.6.0: `mobilize-chores` step 5 gains a disjoint-fan-out check —
 Kim's explicit request after reviewing this skill's alignment with `team-or-solo-rules`' "match
 ceremony to the task" doctrine (step 5's default was blanket serial/isolation for every mutating
 dispatch, never offering the disjoint-fan-out shortcut that doctrine sanctions elsewhere). FIRST

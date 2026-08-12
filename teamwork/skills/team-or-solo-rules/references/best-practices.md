@@ -101,6 +101,8 @@ It works because the slices are disjoint by construction — that is the decompo
 
 **Worktrees are the fallback, not the default.** Reach for git-worktree isolation ONLY when slices genuinely must mutate overlapping files and cannot be made disjoint. For a properly file-disjoint fan-out, a worktree per slice adds merge cost for no isolation benefit — one tree is correct.
 
+**The whole model presupposes workers that only edit files — the host alone touches git.** That is what the two bullets above quietly encode (workers self-gate, the HOST gates-and-commits), and it is a precondition, not a stylistic detail: a worker that drives its own branch/commit/PR lifecycle per dispatch (a `build-lead`/`dispatch-ticket` seat, a release cutter, anything whose contract ends at "PR opened") races its siblings on the shared `.git` index and HEAD no matter how disjoint their files are — worker A's `git checkout -b` mid-worker-B's edits puts B's changes on A's branch. For that worker shape, file-disjointness decides PARALLEL-vs-SERIAL only; concurrency always takes per-worker worktree isolation. (Incident, 2026-08-11: a sibling skill copied this section's conclusion without this precondition and shipped a blocking same-tree race — caught by its FLOOR audit, fixed same day.)
+
 This pairs with `break-down-problem`, which owns the decomposition side: the file-disjoint slicing test (single writer per file; shared edits deferred) and the serial-PREP pattern that make this execution model safe. This skill owns the execution model; that skill owns the slicing that feeds it.
 
 ## Frontmatter: productive expressions
