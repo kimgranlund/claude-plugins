@@ -81,7 +81,20 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.7.0 · assembled 2026-08-11 · 2.7.0: the first /check-everything estate audit's teamwork fixes,
+v2.7.1 · assembled 2026-08-11 · 2.7.1: fork-cwd containment MEASURED, the serial-bug-kind guard
+retired — 2.6.0's one disclosed UNVERIFIED settled by a live probe the same week it was flagged: a
+purpose-built `context: fork` skill invoked from inside a worktree-isolated general-purpose agent
+executed entirely inside the agent's worktree (pwd, `git rev-parse --show-toplevel`, and a
+marker-file write all at `.claude/worktrees/agent-<id>`, never the root checkout; probe deleted
+after the measurement). A worktree genuinely contains a fork's cwd, so `mobilize-chores`' bug-kind
+dispatches now take the same isolation/parallel rules as feature/task instead of the
+mandatory-serial fallback. The probe re-confirmed in passing that a fork's completion notification
+routes to the ROOT session (the invoking agent saw only the launch ack) — consistent with the A4
+record and gh#157. The prior UNVERIFIED text stays in the intent record as dated history with the
+MEASURED supersession appended. Semantic edit rode with its critic per the new workspace
+invariant: fresh-context skill-checker delta audit PASS, no findings owed (the one steelmanned
+concern — cwd-relative vs. absolute-path writes — dismissed against the guard's own stated
+question, which was cwd escape specifically) · v2.7.0 · assembled 2026-08-11 · 2.7.0: the first /check-everything estate audit's teamwork fixes,
 all checker-prescribed. `dispatch-ticket`: the Done predicate's bug arm required relaying
 "file-bug's own result" — a thing the body's own VERIFIED finding says never reaches this seat
 (fork completions route to ROOT), so satisfying it literally meant the exact wait the never-wait

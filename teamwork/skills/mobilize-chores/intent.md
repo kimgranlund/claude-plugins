@@ -69,9 +69,10 @@ human-decision item stays out of scope and reports as skipped.
    its own branch/commit/PR lifecycle per dispatch, unlike `team-or-solo-rules`' host-owned-git
    fan-out this was originally modeled on too loosely; two concurrent dispatches race on the
    shared index/HEAD regardless of file overlap, and bug-kind is not exempt (`file-bug`'s own
-   Phase 5 can fix a root-cause-evident bug inline) — moreover bug-kind's `context: fork` path into
-   `file-bug` has UNVERIFIED fork-cwd containment, so concurrent bug-kind dispatches stay SERIAL
-   even under a named path until that's measured. A named, non-overlapping target path in each
+   Phase 5 can fix a root-cause-evident bug inline) — bug-kind's `context: fork` path into
+   `file-bug` has MEASURED fork-cwd containment (2026-08-11 live probe: the fork executes inside
+   the invoking agent's worktree), so bug-kind takes the same isolation/parallel rules as the
+   other kinds. A named, non-overlapping target path in each
    confirmed feature/task-kind ticket's own body (the actual edit target, not a `## Links` doc
    citation or a bare plugin-level directory) decides PARALLEL-isolated vs. SERIAL, never
    isolation-vs-none — absent such a path on both sides, the default is SERIAL, not a coin flip on
@@ -238,3 +239,11 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
   contain the fork's writes provides no isolation at all, so concurrent bug-kind dispatches stay
   SERIAL even under a named path until that's measured live; stated as an open, disclosed
   limitation rather than assumed either way.
+  MEASURED 2026-08-11, same day: a purpose-built `context: fork` probe skill invoked from inside
+  a worktree-isolated general-purpose agent executed entirely inside the agent's worktree (pwd,
+  `git rev-parse --show-toplevel`, and a marker write all at
+  `.claude/worktrees/agent-<id>`, never the root checkout) — containment HOLDS. The serial-
+  bug-kind guard is retired; bug-kind takes the same isolation/parallel rules as feature/task.
+  The probe also re-confirmed in passing that a fork's completion notification routes to the
+  ROOT session (the invoking agent saw only the launch acknowledgment), consistent with the A4
+  record and gh#157.

@@ -131,12 +131,13 @@ sweep surfaced that's actually buildable.
    overlap. This applies to bug-kind too: `dispatch-ticket`'s bug branch usually hands off to
    `file-bug`'s investigation, but `file-bug`'s own Phase 5 can fix a root-cause-evident bug
    INLINE — real tree mutation, not merely a hand-off — so no kind is exempt from isolation once
-   two dispatches are concurrent. **Bug-kind's inline-fix path runs a `context: fork` Skill call
-   into `file-bug`; whether that fork executes inside the dispatching agent's own worktree or
-   escapes back to the root checkout is UNVERIFIED against this platform's actual fork mechanics**
-   — until measured, run concurrent bug-kind dispatches SERIAL even when a named path would
-   otherwise license parallel, since a worktree that doesn't actually contain the fork's writes
-   provides no isolation at all.
+   two dispatches are concurrent. Bug-kind's inline-fix path runs a `context: fork` Skill call
+   into `file-bug`; fork-cwd containment is MEASURED (2026-08-11 live probe: a `context: fork`
+   skill invoked from inside a worktree-isolated agent executed entirely inside that agent's
+   worktree — pwd, `git rev-parse --show-toplevel`, and a marker-file write all landed in the
+   worktree, never the root checkout), so a worktree genuinely contains the fork's writes and
+   bug-kind takes the same rules as feature/task: isolated when concurrent, parallel when a named
+   path licenses it.
 
    What a named target path actually decides is PARALLEL-vs-SERIAL, never isolation-vs-none: if
    each confirmed feature/task-kind ticket's own body already names a concrete edit target (the
