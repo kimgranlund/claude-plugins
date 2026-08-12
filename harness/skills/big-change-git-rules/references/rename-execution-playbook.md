@@ -29,8 +29,11 @@ added 2026-07-26, issue #97]:
    symmetry-hardline].
 2. **Live reference rewrite, grep-proven** — descriptions, fences, `skills:` preloads, sibling
    suites' `skill:` fields, READMEs/MANUAL/root routing table, cross-plugin soft mentions.
-   Ledger history and `.claude/ops` records are EXCLUDED — old names stay greppable in
-   CHANGELOGs, ADRs, `.refactor-attic/` [verified, ADR-0006 Decisions 4+6].
+   Ledger history, `.claude/ops` records, and a **labeled counterexample** (a `Bad:` table cell,
+   a "retired name kept as the counterexample" annotation) are all EXCLUDED — each is a record
+   of what a name USED TO BE, never a live reference the sweep must resolve; old names stay
+   greppable in CHANGELOGs, ADRs, `.refactor-attic/`, and inside these cells [verified, ADR-0006
+   Decisions 4+6].
 3. **Reciprocal fence re-closure** — every sibling suite whose fenced vocabulary moved gets its
    return case updated in the same change.
 4. **Blind eval-run, before AND after** — baseline as control pre-rename, full re-measure of
@@ -90,9 +93,15 @@ verbatims into existing fences [verified, teamwork README v1.0.0 ledger].
   shortened verbatim fence markers, so fences stopped matching and leaked on re-eval. Grounds:
   after ANY description edit, verify suite fences still match verbatim; a modified fence
   re-judges its reciprocal suites [verified, teamwork v1.0.4 repair record].
+- **Labeled counterexample rewritten** [incident, 2026-08-12, issue #171] — the ADR-0006 sweep
+  rewrote naming-rules' own `Bad:` cells, collapsing three rows to degenerate Bad==Good pairs;
+  restored by hand the same day (harness 3.1.21). Grounds: contract item 2's labeled-
+  counterexample exclusion; `skill_lint`'s W9 now flags the collapse signature — a backticked
+  token shared by both sides of a `Bad: ... -> Good: ...` cell.
 
-All three were caught by the eval-run re-measure — none by inspection. The measure, not the
-care, is the safety mechanism.
+The first three were caught by the eval-run re-measure, the fourth by a fresh-context audit —
+none by the sweep's own inspection. A measure external to the sweep, not the executor's care,
+is the safety mechanism.
 
 ## Scope of this file
 

@@ -127,6 +127,16 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.23 · assembled 2026-08-12 · 3.1.23: rename sweeps stop eating their own counterexamples
+(issue #171) — `fix-old-names` and `big-change-git-rules`' rename-execution-playbook both gain an
+explicit exemption: text inside a labeled counterexample (a `Bad:` table cell, a "retired name
+kept as the counterexample" annotation) is a record, never a live reference; a sweep rewrites
+live references only. Grounds the ADR-0006 incident where the mechanical rename sweep rewrote
+naming-rules' own `Bad:` cells, collapsing three rows to degenerate Bad==Good pairs (restored by
+hand, harness 3.1.21). Mechanical guard shipped rather than descoped: `skill_lint` gains W9 — it
+flags the exact collapse signature (a backticked token shared by both sides of a `Bad: ... ->
+Good: ...` cell), a static invariant needing no diff or git history, proven against both the
+live naming-rules corpus (clean) and reproduced fixtures of the original damage (fires) ·
 v3.1.22 · assembled 2026-08-12 · 3.1.22: README Map artifact-name repair — three ops-family agent
 rows carried names that never existed on disk (`agents/sort-issues`/`agents/sweep-chores`/
 `agents/plan-chores` → the real `agents/issue-sorter`/`agents/chore-lead`/`agents/chore-planner`;

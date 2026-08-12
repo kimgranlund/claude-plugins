@@ -25,6 +25,14 @@ The one rule everything else serves: **a pointer gets fixed, a record gets left 
 saying "we renamed X to Y" must keep saying exactly that. Rewriting it destroys the only
 evidence of the rename — a worse outcome than the stale pointer you were fixing.
 
+A `Bad:`-labeled counterexample is the same record, in miniature: the retired name it quotes is
+quoted on purpose — text inside a labeled counterexample (a `Bad:` table cell, a "retired name
+kept as the counterexample" annotation) is record, never a live reference, and a sweep rewrites
+live references only. The ADR-0006 sweep rewrote naming-rules' own `Bad:` cells this way,
+collapsing three rows to degenerate Bad==Good pairs — restored by hand the same day (issue #171,
+2026-08-12). Freeze such a cell with `<!-- fix-old-names: keep -->` if the classifier ever reads
+it as a pointer.
+
 ## Phase 1 — Report first, always
 
 ```

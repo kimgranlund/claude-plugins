@@ -30,6 +30,10 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
   W5 knowledge-noun head with user-invocable left true
   W6 hedge describers in prose ("please", "try to", "be careful", "make sure") > 3
   W7 salience inflation: caps NEVER/CRITICAL/IMPORTANT > 5 outside code fences
+  W9 a `Bad: ... -> Good: ...` labeled counterexample names the same backticked token on
+     both sides — the signature a rename sweep leaves when it rewrites its own counterexample
+     instead of exempting it (issue #171: the ADR-0006 sweep collapsed naming-rules' Bad:
+     cells to degenerate Bad==Good pairs)
 
 Agent files (agents/*.md) get a focused rule set (incl. A6 name == file stem):
   A1 frontmatter block present
@@ -99,6 +103,14 @@ TRIGGER_RE = re.compile(
     re.IGNORECASE)
 HEDGE_RE = re.compile(r"\b(please|try to|be careful|make sure)\b", re.IGNORECASE)
 SALIENCE_RE = re.compile(r"\b(NEVER|CRITICAL|IMPORTANT)\b")
+# A labeled counterexample cell (naming-rules' tests table and its kin): "Bad: `x` ... -> Good:
+# `y`". The retired name on the Bad: side is a RECORD, never a live reference (issue #171) — a
+# rename sweep must exempt it. The signature the 2026-08-12 incident left when it didn't: the
+# Bad: side's retired name got rewritten to the same current name already sitting on the Good:
+# side, collapsing the row to a degenerate Bad==Good pair. Checking for that shared token is a
+# static invariant (no diff or git history needed) and reproduces the incident exactly.
+BADGOOD_RE = re.compile(r"\bBad:\s*(.+?)\s*(?:→|->)\s*Good:\s*(.+?)(?=\s*\|\s*$|\s*$)")
+BACKTICK_TOKEN_RE = re.compile(r"`([^`]+)`")
 PERSONA_RE = re.compile(r"^\s*(You are an?\b|You're\b)")
 KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 
@@ -148,6 +160,21 @@ def prose_lines(lines, body_start):
             out.append((idx + 1, ""))
             continue
         out.append((idx + 1, "" if fenced else INLINE_CODE_RE.sub("", line)))
+    return out
+
+
+def fenced_blanked_lines(lines, body_start):
+    """Body lines with fenced code blocks blanked, inline backticks left INTACT — unlike
+    prose_lines, which strips inline code spans. W9's signal lives inside the backticks, so it
+    needs this instead of prose_lines."""
+    out, fenced = [], False
+    for idx in range(body_start, len(lines)):
+        line = lines[idx]
+        if line.lstrip().startswith("```"):
+            fenced = not fenced
+            out.append((idx + 1, ""))
+            continue
+        out.append((idx + 1, "" if fenced else line))
     return out
 
 
@@ -256,6 +283,18 @@ def lint_text(text, skill_dir_name):
         findings.append(("WARN", salience[0], "W7",
                          f"{len(salience)} hard-emphasis markers -> budget <=3 hard gates; "
                          "emphasis inflates"))
+
+    for ln, line in fenced_blanked_lines(lines, fm_end + 1):
+        for m in BADGOOD_RE.finditer(line):
+            bad_tokens = set(BACKTICK_TOKEN_RE.findall(m.group(1)))
+            good_tokens = set(BACKTICK_TOKEN_RE.findall(m.group(2)))
+            overlap = bad_tokens & good_tokens
+            if overlap:
+                findings.append(("WARN", ln, "W9",
+                                 f"Bad:/Good: counterexample names {sorted(overlap)} on both "
+                                 "sides -> a rename sweep likely rewrote the retired name inside "
+                                 "the Bad: cell too; restore it — a labeled counterexample is a "
+                                 "record, never a live reference (issue #171)"))
 
     return findings
 
@@ -681,6 +720,36 @@ def selftest():
     assert "W8" in w8, f"expected W8 on a {30*29}-char model-invocable description"
     longcmd = longdesc.replace("disable-model-invocation: false", "disable-model-invocation: true")
     assert "W8" not in {f[2] for f in lint_text(longcmd, "demo-pack")}, "W8 must not fire on a command"
+    # W9 — the issue #171 incident, reproduced. A correct labeled counterexample (Bad: side
+    # names the RETIRED name, Good: side the current one) must stay clean...
+    goodpair = GOOD_FIXTURE + (
+        "\n| 1 | says-the-job | rule text | Bad: `skill-forge` (retired, kept as the "
+        "counterexample) -> Good: `make-skill` |\n"
+        "| 4 | no-lore | rule text | Bad: `forge`, `scribe` (retired) -> Good: `harness`, "
+        "`docs` |\n")
+    assert not any(f[2] == "W9" for f in lint_text(goodpair, "demo-review")), \
+        "a correct Bad!=Good counterexample must not warn W9"
+    # ...but the exact damage the sweep left — the Bad: side rewritten to the SAME name
+    # already on the Good: side — must fire, both for a single-name row and a multi-name row.
+    badpair1 = GOOD_FIXTURE + (
+        "\n| 1 | says-the-job | rule text | Bad: `make-skill` (retired, kept as the "
+        "counterexample) -> Good: `make-skill` |\n")
+    assert any(f[2] == "W9" for f in lint_text(badpair1, "demo-review")), \
+        "a collapsed single-name Bad==Good pair must warn W9 (the skill-forge->make-skill class)"
+    badpair4 = GOOD_FIXTURE + (
+        "\n| 4 | no-lore | rule text | Bad: `harness`, `docs` (retired) -> Good: `harness`, "
+        "`docs` |\n")
+    assert any(f[2] == "W9" for f in lint_text(badpair4, "demo-review")), \
+        "a collapsed multi-name Bad==Good pair must warn W9 (the forge/scribe->harness/docs class)"
+    # a template placeholder row (make-skill's own templates.md shape) must never false-positive
+    template_row = GOOD_FIXTURE + "\n| <handle> | <rule> | Bad: `<labeled>` -> Good: `<form>` |\n"
+    assert not any(f[2] == "W9" for f in lint_text(template_row, "demo-review")), \
+        "a placeholder template row must not trip W9"
+    # a Bad:/Good: mention INSIDE a fenced code block must not fire — fences are quoted example
+    # material, the same posture prose_lines already takes for other checks
+    fenced_pair = GOOD_FIXTURE + "\n```\nBad: `x` -> Good: `x`\n```\n"
+    assert not any(f[2] == "W9" for f in lint_text(fenced_pair, "demo-review")), \
+        "a Bad:/Good: pair inside a fenced code block must not trip W9"
     assert classify("x/notes.md") is None
     # #83 regression — classification is invocation-invariant: a bare relative
     # filename linted from inside an agents/ dir classifies as agent, identical
