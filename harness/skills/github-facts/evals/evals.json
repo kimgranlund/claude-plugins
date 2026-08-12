@@ -17,6 +17,7 @@
     {"id": "t13", "prompt": "does our kind:bug label convention duplicate a feature github already ships natively", "expect": "trigger"},
     {"id": "t14", "prompt": "does projects v2 use rest or graphql", "expect": "trigger"},
     {"id": "t15", "prompt": "are markdown tasklist blocks still a supported github feature", "expect": "trigger"},
+    {"id": "t16", "prompt": "is it safe to assume a squash-merged branch has nothing new on it", "expect": "trigger", "comment": "ceded from big-change-git-rules t12, 2026-08-12 (issue #172, ownership ruling) — squash-merge behavior is this pack's own verbatim territory."},
     {"id": "n01", "prompt": "why does gh report a checkout error right after a squash merge from a worktree", "expect": "no-trigger"},
     {"id": "n02", "prompt": "did the remote branch actually get deleted after that merge", "expect": "no-trigger"},
     {"id": "n03", "prompt": "what sections does a TICKET need in its frontmatter", "expect": "no-trigger"},

@@ -11,6 +11,7 @@
     { "id": "t07", "prompt": "Do these prompts route to the right skills?", "expect": "trigger" },
     { "id": "t08", "prompt": "We batched several fence edits — run the wave-boundary routing check.", "expect": "trigger" },
     { "id": "t09", "prompt": "Blind-judge the routing for these suites.", "expect": "trigger" },
+    { "id": "t10", "prompt": "how do we prove routing did not break after the rename", "expect": "trigger", "comment": "ceded from big-change-git-rules t20, 2026-08-12 (issue #172, ownership ruling) — running the routing proof is this suite's own charter even in a rename context." },
     { "id": "n01", "prompt": "Add a no-trigger case to this suite.", "expect": "no-trigger", "comment": "owner: skill-writing-rules — suite conventions" },
     { "id": "n02", "prompt": "Why won't my skill trigger even though it's installed?", "expect": "no-trigger", "comment": "owner: skill-writing-rules — live trigger debugging" },
     { "id": "n03", "prompt": "Run the release gate on docs.", "expect": "no-trigger", "comment": "owner: ship-plugin (command, off-menu) / direct script run — accepted-leak class if a standards sibling wins" },
