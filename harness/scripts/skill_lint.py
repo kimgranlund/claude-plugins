@@ -470,6 +470,20 @@ def lint_claude_md_text(text):
     return findings
 
 
+def _agents_dir_is_plugin_owned(agents_dir):
+    # classify()'s agents-dir branch used to match ANY directory literally named
+    # agents/ anywhere on disk — no anchor to a real plugin tree. A plain report
+    # .md written to a scratch job path (e.g. jobs/tmp/.../agents/summary.md)
+    # misfired the PostToolUse hook with agent-frontmatter rules meant for a real
+    # agent definition (#178, 2026-08-12). Require the same layout that makes a
+    # directory a plugin: a sibling `.claude-plugin/plugin.json`, or at least one
+    # of `skills/`/`commands/` beside the `agents/` dir itself.
+    plugin_root = agents_dir.parent
+    if (plugin_root / ".claude-plugin" / "plugin.json").is_file():
+        return True
+    return (plugin_root / "skills").is_dir() or (plugin_root / "commands").is_dir()
+
+
 def classify(path):
     # Absolutize before keying on parent names: a bare relative filename has no
     # parent to match, so `cd agents && lint x.md` misclassified agent files as
@@ -486,7 +500,7 @@ def classify(path):
         # now OUTSIDE agents/ entirely (<plugin>/agent-intents/), and this exclusion follows
         # the suffix wherever the record lives
         return None
-    if p.suffix == ".md" and p.parent.name == "agents":
+    if p.suffix == ".md" and p.parent.name == "agents" and _agents_dir_is_plugin_owned(p.parent):
         return "agent"
     if p.name == "hooks.json":
         return "hooks"
@@ -682,15 +696,36 @@ def selftest():
     long_md = "\n".join(f"line {i}: always run the linter" for i in range(220))
     md_rules = {f[2] for f in lint_claude_md_text(long_md)}
     assert {"C1", "C2"} <= md_rules, f"expected C1+C2 in {md_rules}"
-    assert classify("x/agents/demo.md") == "agent"
-    # forge intent records (make-agent) are dated records beside the agent file, never linted
-    # as agent definitions (false-positive class, 2026-08-10); the negative control right above
-    # proves a plain agents/*.md still classifies agent
-    assert classify("x/agents/demo.intent.md") is None, "agent intent record must not classify as agent"
-    assert classify("x/agents/intents/demo.intent.md") is None, "intents/ record must not classify"
-    assert classify("x/agent-intents/demo.intent.md") is None, "canonical-home record must not classify"
+    import tempfile as _tf0
+    with _tf0.TemporaryDirectory() as _pd:
+        _proot = Path(_pd) / "demo-plugin"
+        (_proot / ".claude-plugin").mkdir(parents=True)
+        (_proot / ".claude-plugin" / "plugin.json").write_text("{}")
+        _pagents = _proot / "agents"
+        _pagents.mkdir()
+        (_pagents / "demo.md").write_text("---\nname: demo\n---\n")
+        assert classify(str(_pagents / "demo.md")) == "agent", \
+            "a real agents/*.md beside .claude-plugin/plugin.json must classify as agent"
+        # forge intent records (make-agent) are dated records beside the agent file, never linted
+        # as agent definitions (false-positive class, 2026-08-10); the positive control right
+        # above proves a plain agents/*.md in a REAL plugin tree still classifies agent
+        assert classify(str(_pagents / "demo.intent.md")) is None, "agent intent record must not classify as agent"
+        assert classify(str(_pagents / "intents" / "demo.intent.md")) is None, "intents/ record must not classify"
+        assert classify(str(_proot / "agent-intents" / "demo.intent.md")) is None, \
+            "canonical-home record must not classify"
+        # #178 — a scratch agents/ dir with NO plugin layout (no .claude-plugin/plugin.json,
+        # no skills/ or commands/ sibling) must NOT classify as an agent definition: a report
+        # .md written to a tmp job's .../agents/ path is not a plugin's agent, and must never
+        # trip the agent-frontmatter rules meant for a real one. Negative control for #178.
+        _scratch = Path(_pd) / "jobs" / "tmp" / "agents"
+        _scratch.mkdir(parents=True)
+        (_scratch / "summary.md").write_text("# audit summary, no frontmatter\n")
+        assert classify(str(_scratch / "summary.md")) is None, \
+            "a .md in a non-plugin agents/ scratch path must classify as None (negative control, #178)"
     import tempfile as _tf
     with _tf.TemporaryDirectory() as _d:
+        (Path(_d) / ".claude-plugin").mkdir()
+        (Path(_d) / ".claude-plugin" / "plugin.json").write_text("{}")
         _adir = Path(_d) / "agents"; _adir.mkdir()
         (_adir / "demo.intent.md").write_text("# forge record, no frontmatter\n")
         _line, _failed = lint_path(str(_adir / "demo.intent.md"))
@@ -757,6 +792,8 @@ def selftest():
     import os as _os
     import tempfile as _tf
     with _tf.TemporaryDirectory() as _td:
+        (Path(_td) / ".claude-plugin").mkdir()
+        (Path(_td) / ".claude-plugin" / "plugin.json").write_text("{}")
         _adir = Path(_td) / "agents"
         _adir.mkdir()
         _af = _adir / "probe.md"

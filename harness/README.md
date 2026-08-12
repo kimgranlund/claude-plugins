@@ -127,7 +127,19 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
-v3.1.29 · assembled 2026-08-12 · 3.1.29: skill-writing-rules' `evals/evals.json` re-judged for
+v3.1.30 · assembled 2026-08-12 · 3.1.30: `skill_lint.py`'s `classify()` fix (issue #178, root-caused
+upstream in adiahealth/gen-ui-kit#1071) — the `agents/`-dir match no longer fires on ANY directory
+literally named `agents/` anywhere on disk; it now requires the same layout that makes a directory
+a plugin (a sibling `.claude-plugin/plugin.json`, or a `skills/`/`commands/` sibling), via the new
+`_agents_dir_is_plugin_owned()` helper. Closes the false-positive class where a plain report `.md`
+written to a scratch job path (e.g. `jobs/tmp/.../agents/summary.md`) misfired the PostToolUse
+hook with agent-frontmatter rules meant for a real agent definition — `main_hook`'s
+`classify(...) is None` early-return now genuinely skips it. Selftest gains the negative-control
+fixture the ticket asked for (`classify()` on a non-plugin scratch `agents/` path returns `None`)
+alongside a real plugin-layout positive control; the three pre-existing intent-record exclusions
+(3.1.13/3.1.15/3.1.16) and the W9/#83 bare-relative-path controls were re-anchored onto real
+`.claude-plugin/plugin.json`-bearing tempdirs so they keep proving the SAME invariants under the
+new filesystem-anchored check, not weakened · v3.1.29 · assembled 2026-08-12 · 3.1.29: skill-writing-rules' `evals/evals.json` re-judged for
 t01 (issue #177, closing the 2026-08-12 check-routing steal — row t01, "How should I write the
 description for this skill?" stolen by prompt-wording-rules, "a real adjacency between authoring
 a description and hardening one"). One fresh blind routing-judge over the suite's 15 cases, menu
