@@ -127,6 +127,13 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.24 · assembled 2026-08-12 · 3.1.24: 3.1.23's labeled-counterexample exemption dated
+precisely — an independent fresh-context skill-checker pass (issue #171) found both new passages
+elided "found," so "restored by hand the same day" read as if the ADR-0006 sweep itself ran on
+2026-08-12 (the discovery date) rather than during the July rename wave; `fix-old-names/SKILL.md`
+and the rename-execution-playbook's incident-catalog entry both now say "found 2026-08-12 by a
+fresh-context audit and restored by hand the same day" — a dated fact repaired in the same skill
+whose core rule is record fidelity ·
 v3.1.23 · assembled 2026-08-12 · 3.1.23: rename sweeps stop eating their own counterexamples
 (issue #171) — `fix-old-names` and `big-change-git-rules`' rename-execution-playbook both gain an
 explicit exemption: text inside a labeled counterexample (a `Bad:` table cell, a "retired name

@@ -93,11 +93,12 @@ verbatims into existing fences [verified, teamwork README v1.0.0 ledger].
   shortened verbatim fence markers, so fences stopped matching and leaked on re-eval. Grounds:
   after ANY description edit, verify suite fences still match verbatim; a modified fence
   re-judges its reciprocal suites [verified, teamwork v1.0.4 repair record].
-- **Labeled counterexample rewritten** [incident, 2026-08-12, issue #171] — the ADR-0006 sweep
-  rewrote naming-rules' own `Bad:` cells, collapsing three rows to degenerate Bad==Good pairs;
-  restored by hand the same day (harness 3.1.21). Grounds: contract item 2's labeled-
-  counterexample exclusion; `skill_lint`'s W9 now flags the collapse signature — a backticked
-  token shared by both sides of a `Bad: ... -> Good: ...` cell.
+- **Labeled counterexample rewritten** [incident, ADR-0006 sweep; found 2026-08-12, issue #171]
+  — the ADR-0006 sweep rewrote naming-rules' own `Bad:` cells, collapsing three rows to
+  degenerate Bad==Good pairs; found by a fresh-context audit and restored by hand the same day
+  (harness 3.1.21). Grounds: contract item 2's labeled-counterexample exclusion; `skill_lint`'s
+  W9 now flags the collapse signature — a backticked token shared by both sides of a
+  `Bad: ... -> Good: ...` cell.
 
 The first three were caught by the eval-run re-measure, the fourth by a fresh-context audit —
 none by the sweep's own inspection. A measure external to the sweep, not the executor's care,

@@ -29,9 +29,9 @@ A `Bad:`-labeled counterexample is the same record, in miniature: the retired na
 quoted on purpose — text inside a labeled counterexample (a `Bad:` table cell, a "retired name
 kept as the counterexample" annotation) is record, never a live reference, and a sweep rewrites
 live references only. The ADR-0006 sweep rewrote naming-rules' own `Bad:` cells this way,
-collapsing three rows to degenerate Bad==Good pairs — restored by hand the same day (issue #171,
-2026-08-12). Freeze such a cell with `<!-- fix-old-names: keep -->` if the classifier ever reads
-it as a pointer.
+collapsing three rows to degenerate Bad==Good pairs — found 2026-08-12 by a fresh-context audit
+and restored by hand the same day (issue #171 / harness 3.1.21). Freeze such a cell with
+`<!-- fix-old-names: keep -->` if the classifier ever reads it as a pointer.
 
 ## Phase 1 — Report first, always
 
