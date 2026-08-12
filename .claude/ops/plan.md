@@ -29,7 +29,11 @@ forward, four new (including the recurring per-firing artifact commit).
 
 **Class 2 — items blocking other work:**
 
-### 2. Fix the stale cloud-routine prompt AND verify the schedule is armed (carry-forward, 10th appearance)
+### 2. Fix the stale cloud-routine prompt AND verify the schedule is armed (carry-forward, 10th appearance) — RESOLVED 2026-08-12: deliberate NO (between firings)
+- **Movement:** Kim ruled deliberate-no in the 2026-08-12 mobilize-chores confirm round: sweeps
+  already run issue-sorter on demand and advance `watch-checkpoint.json` themselves; the
+  unattended between-sweep intake gap is accepted. The stale routine is abandoned, not repaired —
+  this entry retires permanently after ten appearances.
 - **Action:** Edit the scheduled issue-sorter cloud routine's prompt to name
   `harness/agents/issue-sorter.md` (post ADR-0006/0007 rename), and verify the schedule
   is still armed — sweep dispatches advance `watch-checkpoint.json` themselves, so a
@@ -69,7 +73,11 @@ forward, four new (including the recurring per-firing artifact commit).
   (#172–#175 postdate it), caught and corrected by the seat.
 - **Size:** ~10 min (the routing decision); builds sized by their tickets.
 
-### 5. Open question: is a broader /clean-repo corpus/automation sweep warranted? (NEW)
+### 5. Open question: is a broader /clean-repo corpus/automation sweep warranted? (NEW) — RESOLVED 2026-08-12: deliberate NO (between firings)
+- **Movement:** Kim ruled no in the 2026-08-12 mobilize-chores confirm round — no drift evidence
+  anywhere (repo-cleaner's own 7-plugin README/ledger spot-check clean), and the same day's
+  repo-docs sweep had just repaired the root-level surfaces (seven-count, CHANGELOG catch-up,
+  Map rows). Question retires with this dated record.
 - **Action:** Human yes/no. repo-cleaner's charter is git-surface + ADR-0005 claim
   hygiene only; the broader "duplicated instruction trees / stale corpus / dead
   automation" sweep was NOT attempted this firing or any prior one. Yes → dispatch
