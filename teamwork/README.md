@@ -81,7 +81,27 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.5.0 · assembled 2026-08-11 · 2.5.0: `mobilize-chores` step 6 gains a blocker breakdown — Kim's
+v2.6.0 · assembled 2026-08-11 · 2.6.0: `mobilize-chores` step 5 gains a disjoint-fan-out check —
+Kim's explicit request after reviewing this skill's alignment with `team-or-solo-rules`' "match
+ceremony to the task" doctrine (step 5's default was blanket serial/isolation for every mutating
+dispatch, never offering the disjoint-fan-out shortcut that doctrine sanctions elsewhere). FIRST
+DRAFT copied that doctrine's permissive conclusion too literally and FAILED its own FLOOR audit
+with 2 blocking findings: `team-or-solo-rules`' fan-out is safe because the HOST owns git while
+workers only edit files, but a `build-lead` dispatch drives its OWN branch/commit/PR lifecycle per
+ticket — two concurrent dispatches race on the shared git index/HEAD regardless of file overlap,
+so "disjoint path → skip isolation" was false; the draft's "bug-kind always safe to overlap, no
+tree mutation" claim was also false (`file-bug`'s own Phase 5 can fix a root-cause-evident bug
+INLINE). Corrected model, RE-AUDITED PASS same day: `isolation: "worktree"` is now UNCONDITIONAL
+for 2+ concurrent mutating dispatches of any kind; a named, non-overlapping edit-target path in a
+confirmed ticket's own body (explicitly excluding a `## Links` doc-citation or a bare
+plugin-level directory) only decides PARALLEL-isolated vs. SERIAL, never isolation-vs-none — no
+such path on either side stays SERIAL, the pre-existing default. Two more findings closed same
+re-audit pass: a serial dispatch now explicitly starts from a clean `main` HEAD (a dirty
+predecessor is the next dispatch's named blocker, never silently inherited), and bug-kind's
+`context: fork` hand-off into `file-bug` has UNVERIFIED fork-cwd containment against this
+platform's real mechanics — disclosed plainly, with concurrent bug-kind dispatches staying SERIAL
+until that's measured live. `intent.md` gains assertion 8 and a dated ruling recording the failed
+first draft honestly, not just the fix. · v2.5.0 · assembled 2026-08-11 · 2.5.0: `mobilize-chores` step 6 gains a blocker breakdown — Kim's
 explicit request after seeing the shape land well in a different repo's session (a per-blocker
 paragraph naming what's blocking it and a proposed action, then commands only on request). Every
 ticket that comes back as a named blocker (not a plain SKIPPED, which has no blocking reason to

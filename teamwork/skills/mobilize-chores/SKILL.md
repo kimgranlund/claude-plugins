@@ -122,10 +122,37 @@ sweep surfaced that's actually buildable.
    #134/#135's shared fix pattern).
 
    Every dispatch is independent — one failing never blocks the others — but independence is
-   not a parallelism license: mutating dispatches share this one checkout, so run them
-   SERIALLY, or give each `isolation: "worktree"` on the Agent call per `parallel-work-rules`'
-   own overlap test. The bug path (a hand-off, no tree mutation) is safe to overlap; anything
-   that builds is not.
+   not a parallelism license. **2+ mutating dispatches running concurrently always take
+   `isolation: "worktree"`, one each, with no exception for a stated-disjoint path** —
+   `team-or-solo-rules`' own disjoint-same-tree-fan-out default is safe there because the HOST
+   owns git while workers only edit files; a `build-lead` dispatch is a different shape entirely —
+   `dispatch-ticket` drives its OWN branch/commit/PR lifecycle per ticket, so two dispatches
+   sharing one checkout race on the shared index/HEAD regardless of whether their target files
+   overlap. This applies to bug-kind too: `dispatch-ticket`'s bug branch usually hands off to
+   `file-bug`'s investigation, but `file-bug`'s own Phase 5 can fix a root-cause-evident bug
+   INLINE — real tree mutation, not merely a hand-off — so no kind is exempt from isolation once
+   two dispatches are concurrent. **Bug-kind's inline-fix path runs a `context: fork` Skill call
+   into `file-bug`; whether that fork executes inside the dispatching agent's own worktree or
+   escapes back to the root checkout is UNVERIFIED against this platform's actual fork mechanics**
+   — until measured, run concurrent bug-kind dispatches SERIAL even when a named path would
+   otherwise license parallel, since a worktree that doesn't actually contain the fork's writes
+   provides no isolation at all.
+
+   What a named target path actually decides is PARALLEL-vs-SERIAL, never isolation-vs-none: if
+   each confirmed feature/task-kind ticket's own body already names a concrete edit target (the
+   actual file(s) or leaf directory the change will touch — a doc-citation `## Links` section
+   doesn't count, nor does a bare plugin-level directory) and those targets neither overlap nor
+   contain one another, state that claimed ownership in the step-6 report and dispatch both
+   concurrently, each isolated — real parallel time, no expected merge conflict. Two tickets with
+   no such named target on both sides, or overlapping ones — the common case, since a ticket's
+   real footprint usually isn't known until `dispatch-ticket`'s own size/plan step actually runs,
+   which hasn't happened yet at THIS dispatch point — run SERIALLY instead: isolation buys nothing
+   extra when only one dispatch mutates the tree at a time, and serial avoids manufacturing a
+   guaranteed conflict from an unconfirmed overlap. Each serial dispatch starts from a clean `main`
+   HEAD — a predecessor that left the tree dirty or on its own feature branch is the NEXT
+   dispatch's named blocker, never silently inherited. Never assume disjointness without a named,
+   non-overlapping target on both sides — `parallel-work-rules`' own rule holds here too:
+   unconfirmed disjointness routes to the safer default, not to an assumption.
 6. **Report.** Verdict-first: name which branch ran — INTERACTIVE, or UNATTENDED with the exact
    `auto`-prefixed argument as parsed in step 0 — so a step-0 misparse (a scope instruction that
    happens to start with the literal word "auto") is observable in the artifact of record, never
@@ -209,7 +236,9 @@ blocker gets only a table row with no classified paragraph, a blocker breakdown 
 attempt instead of the shape its category actually calls for, an unlabeled item is mobilized, a
 confirmed ticket is dispatched anywhere but `build-lead` (the per-kind routing that once lived
 here belongs to `dispatch-ticket` now — re-growing it here is the regression), a ticket already
-in flight is dispatched again, a dispatch leaving no
+in flight is dispatched again, two mutating dispatches run concurrently with no
+`isolation: "worktree"` on each (a named path licenses parallel timing, never dropping
+isolation), a dispatch leaving no
 Findings-equivalent entry goes unnoticed, step 1 is attempted via the Skill tool instead of the
 direct `chore-lead` dispatch, or an UNATTENDED run is inferred from context rather than the
 explicit `auto` token.

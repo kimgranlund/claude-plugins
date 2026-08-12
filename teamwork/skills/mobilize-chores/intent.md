@@ -64,6 +64,19 @@ human-decision item stays out of scope and reports as skipped.
 7. On a follow-up ask for commands, each blocker gets either a real, verbatim, copy-pasteable
    command, or an explicit "nothing to run" (naming a status-check command if one exists) — never
    an invented command that wouldn't actually do anything.
+8. 2+ mutating dispatches running concurrently ALWAYS take `isolation: "worktree"`, one each,
+   regardless of kind or stated path (2026-08-11 addition) — `build-lead`/`dispatch-ticket` drives
+   its own branch/commit/PR lifecycle per dispatch, unlike `team-or-solo-rules`' host-owned-git
+   fan-out this was originally modeled on too loosely; two concurrent dispatches race on the
+   shared index/HEAD regardless of file overlap, and bug-kind is not exempt (`file-bug`'s own
+   Phase 5 can fix a root-cause-evident bug inline) — moreover bug-kind's `context: fork` path into
+   `file-bug` has UNVERIFIED fork-cwd containment, so concurrent bug-kind dispatches stay SERIAL
+   even under a named path until that's measured. A named, non-overlapping target path in each
+   confirmed feature/task-kind ticket's own body (the actual edit target, not a `## Links` doc
+   citation or a bare plugin-level directory) decides PARALLEL-isolated vs. SERIAL, never
+   isolation-vs-none — absent such a path on both sides, the default is SERIAL, not a coin flip on
+   isolation. Each serial dispatch starts from a clean `main` HEAD; a dirty predecessor is the next
+   dispatch's named blocker, never silently inherited.
 
 ## gates
 P0 route:      PASS — 2026-08-07 — primitive=skill, command species (real side effects: can
@@ -190,3 +203,38 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
   not a new procedure step — mobilize-chores' own species is `disable-model-invocation: true`
   (command-only), so there's no re-invocation to hang a new step on; the body stays loaded for
   the rest of the conversation, so the convention still fires when asked.
+- 2026-08-11: disjoint-fan-out check added to step 5 (Kim's explicit request, after reviewing this
+  skill's alignment with `team-or-solo-rules`' "match ceremony to the task" doctrine). FIRST DRAFT
+  copied that doctrine's conclusion too literally ("disjoint path → no isolation needed") and
+  shipped with two blocking findings from the FLOOR audit below, fixed same-pass before landing:
+  `team-or-solo-rules`' disjoint-same-tree-fan-out is safe because the HOST owns git while workers
+  only edit files; a `build-lead` dispatch is a different shape — `dispatch-ticket` drives its OWN
+  branch/commit/PR lifecycle per ticket, so two concurrent dispatches race on the shared index/HEAD
+  regardless of file overlap, and the drafted "bug-kind is always safe to overlap, no tree mutation
+  happens" claim was also false (`file-bug`'s own Phase 5 can fix a root-cause-evident bug INLINE).
+  Corrected model: `isolation: "worktree"` is now unconditional for 2+ concurrent mutating
+  dispatches of ANY kind; a named, non-overlapping target path only decides PARALLEL-isolated vs.
+  SERIAL, never isolation-vs-none. Considered inferring disjointness from the ticket's kind or
+  label alone (rejected — a `feature`/`task` label says nothing about which files it'll touch) vs.
+  requiring an actual named EDIT-target path in the ticket's own body (chosen, and narrowed further
+  post-audit: a `## Links` section conventionally carries doc citations, not build targets, and a
+  bare plugin-level directory doesn't count as a concrete path either) — the real footprint
+  usually isn't known until `dispatch-ticket`'s own size/plan step runs, which hasn't happened yet
+  at this dispatch point, so an unscoped ticket still defaults to SERIAL exactly as before. Fresh-
+  context `skill-checker` FLOOR audit: initial FAIL (2 blocking + 2 major), all fixed same-pass —
+  the isolation-dropping claim (blocking), the false bug-kind exemption (blocking), an undefined
+  "concrete target path" that a `## Links` doc-citation or bare directory could satisfy (major),
+  and the inline doctrine summary quoting team-or-solo-rules' permissive half while dropping the
+  host-owns-git precondition that makes it safe there (major) — RE-AUDIT owed before ship. New
+  assertion 8.
+  RE-AUDIT (fresh context, all four findings re-verified against dispatch-ticket/team-or-solo-
+  rules/file-bug source text, not the fix's own summary): PASS, ship-eligible. Two new findings,
+  both applied same-pass rather than deferred: (minor) "isolation buys nothing extra when only one
+  dispatch mutates at a time" didn't account for a serial predecessor leaving the tree dirty or on
+  its own branch — added the clean-`main`-HEAD clause, a dirty inheritance is now the next
+  dispatch's named blocker; (minor, UNVERIFIED) whether bug-kind's `context: fork` hand-off into
+  `file-bug` actually executes inside the dispatching agent's OWN worktree, or escapes to the root
+  checkout, is unmeasured against this platform's real fork mechanics — a worktree that doesn't
+  contain the fork's writes provides no isolation at all, so concurrent bug-kind dispatches stay
+  SERIAL even under a named path until that's measured live; stated as an open, disclosed
+  limitation rather than assumed either way.
