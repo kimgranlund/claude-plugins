@@ -53,8 +53,8 @@ here — report that routing and stop; docs' seats own it.
 - **`kind: bug`** → this is `file-bug`'s work: invoke it via the Skill tool carrying the ticket
   id, seed prefixed `[redirected-from:dispatch-ticket]` (file-bug's own marker protocol — the
   round budget was already spent here, and file-bug's forked run has no other way to know).
-  The RECORD is the return channel, not the fork's transcript — VERIFIED, no longer an
-  assumption (A4 smoke test, 2026-08-10): a `context: fork` skill invoked from inside an agent
+  The RECORD is the return channel, not the fork's transcript — VERIFIED (A4 smoke test,
+  2026-08-10): a `context: fork` skill invoked from inside an agent
   dispatch runs as a background fork, and its completion notification routes to the ROOT
   session, not the invoking seat — a seat that waits on the fork's return strands idle forever.
   So after the hand-off, read the ticket back (Phase 5's verbs) and report "handed to
@@ -92,7 +92,12 @@ carry, applied from the caller's side:
 - **small** — the host builds it inline, or one sealed fork/agent when isolation or tooling
   demands it — an agent only for tool restriction, parallelism, or multi-skill preload; a fork
   for everything else (harness's fork-vs-agent gate, applied inline where harness is absent). No planner, no
-  coordinator, no team: a task one context can hold is the host's own.
+  coordinator, no team: a task one context can hold is the host's own. A small build that
+  semantically edits a prompt-carrying artifact (a SKILL.md body, an agent definition, a hook
+  prompt) still gets a fresh-context checker pass (the matching `*-checker` agent) before the
+  loop closes — lint and gates prove mechanics, not semantics (the 2026-08-11 estate audit found
+  every recent unaudited semantic edit carrying a real gap); pure code/config under the repo's
+  own test gates needs no checker seat.
 - **big** — the delivery seats, each already floored: `planner` authors what the change
   earns (the record's Links may already carry the docs — don't re-author), `builder`
   implements to the approved LLD, `code-checker` grades the slice before merge. The coordinator
@@ -150,4 +155,5 @@ substitutes for the entry the record was owed.
 
 Done when the record's `## Findings` carries dated evidence of the shipped work (or the recorded
 blocker/skip), status reflects reality, and no build effort was spent before the record existed —
-or the bug branch handed over and `file-bug`'s own result was relayed.
+or the bug branch handed over with the redirect marker and the read-back snapshot (state/Findings
+as of hand-off) relayed; the fork's own outcome is never something this seat waits on.

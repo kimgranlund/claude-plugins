@@ -81,7 +81,25 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.6.1 · assembled 2026-08-11 · 2.6.1: `team-or-solo-rules` step 5 + its best-practices fan-out
+v2.7.0 · assembled 2026-08-11 · 2.7.0: the first /check-everything estate audit's teamwork fixes,
+all checker-prescribed. `dispatch-ticket`: the Done predicate's bug arm required relaying
+"file-bug's own result" — a thing the body's own VERIFIED finding says never reaches this seat
+(fork completions route to ROOT), so satisfying it literally meant the exact wait the never-wait
+rule forbids; the arm now names the read-back snapshot (state/Findings as of hand-off) as the
+checkable done-state, with the fork's outcome explicitly never this seat's to wait on; the ":57
+no longer an assumption" editorial trimmed; and Phase 3's small path gains the three-strikes
+contract line (a small build that semantically edits a prompt-carrying artifact gets a
+fresh-context checker pass before the loop closes — the audit found every recent unaudited
+semantic edit carrying a real gap; docs 1.4.4 lands the same clause on file-bug's fix-inline
+branch). `worktree_prebash_guard`: hook-checker's live probes found three undisclosed silent
+bypasses — `pushd` and `command`/`builtin cd` are now RECOGNIZED (fixtures 10–11 prove they
+bite), and `sh -c` wrapper strings join the disclosed-blind-spots list honestly (fixture 12 pins
+the fail-open); `session_end_worktree_check`: committed-but-never-pushed work in a repo WITH a
+remote but no upstream logged nothing — the exact campaign-loss case the hook exists for — now
+counted via `rev-list HEAD --not --remotes` gated on a remote existing (fixture 5; a fresh local
+repo with no remote stays silent), and the unset-CLAUDE_PLUGIN_DATA fallback moves from /tmp
+(silently defeating "durable, discoverable") to `~/.claude/plugins/data/teamwork`. Both selftests
+green, 12/12 and 5/5. Hook changes bite after reload · v2.6.1 · assembled 2026-08-11 · 2.6.1: `team-or-solo-rules` step 5 + its best-practices fan-out
 section now NAME the host-owns-git precondition they previously only implied — save-lessons
 harvest of 2.6.0's own incident, landed in the doctrine that owns it: the disjoint same-tree
 fan-out is safe because workers only edit files while the HOST alone gates-and-commits; a worker

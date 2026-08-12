@@ -26,6 +26,12 @@ Known blind spots (disclosed, not silently papered over):
     plain git commands cd'd into primary).
   - No nested-subshell paren tracking; a `(cd /x && ...)` is scanned the same as a flat
     compound, which is usually right but not guaranteed for deeply nested forms.
+  - A shell-wrapper string (`sh -c "cd ... && ..."`, `bash -c`, `zsh -c`) is a single opaque
+    token to the segment splitter — its inner cd is not scanned and passes silently (the
+    dynamic-target class: resolving it means executing the shell).
+  - `pushd` and `command cd`/`builtin cd` ARE recognized (added 2026-08-11 after a live
+    hook-checker probe found all three bypassing silently); `popd`/`dirs` stack tricks
+    beyond the first pushd are not tracked.
 
 Modes:
   worktree_prebash_guard.py --hook   PreToolUse(Bash) hook: reads event JSON on stdin;
@@ -89,12 +95,17 @@ def split_segments(command):
 
 
 def parse_cd_target(segment):
-    """Return the raw cd argument for a `cd ...` segment, '~' for bare `cd`, else None."""
+    """Return the raw cd/pushd argument for a `cd ...`/`pushd ...` segment, '~' for bare cd, else None."""
     try:
         tokens = shlex.split(segment)
     except ValueError:
         return None
-    if not tokens or tokens[0] != "cd":
+    if not tokens:
+        return None
+    # `command cd ...` / `builtin cd ...` are the same escape wearing a prefix
+    if tokens[0] in ("command", "builtin") and len(tokens) > 1:
+        tokens = tokens[1:]
+    if tokens[0] not in ("cd", "pushd"):
         return None
     return tokens[1] if len(tokens) > 1 else "~"
 
@@ -276,6 +287,27 @@ def selftest():
         (
             "fixture9_dash_C_numeric_not_path",
             "rg -C 3 foo",
+            "/repo/.claude/worktrees/seat1",
+            False,
+        ),
+        # pushd is cd wearing a stack (undisclosed bypass, hook-checker probe 2026-08-11)
+        (
+            "fixture10_pushd_escape",
+            "pushd /repo && node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # `command cd` prefix is the same escape wearing a builtin-bypass prefix (same probe)
+        (
+            "fixture11_command_cd_prefix",
+            "command cd /repo && node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # sh -c wrapping stays a DISCLOSED blind spot: inner cd is one opaque token (fail open)
+        (
+            "fixture12_sh_c_wrap_disclosed_blind",
+            'sh -c "cd /repo && node scripts/build/components.mjs"',
             "/repo/.claude/worktrees/seat1",
             False,
         ),

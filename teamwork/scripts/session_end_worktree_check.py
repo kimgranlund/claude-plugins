@@ -55,6 +55,16 @@ def check_worktree_state(cwd):
         code, out, _ = run(["rev-list", "@{u}..", "--count"])
         if code == 0 and out.isdigit():
             ahead = int(out)
+    else:
+        # No upstream but the repo HAS a remote: committed-but-never-pushed work would
+        # otherwise log nothing — the exact loss case this hook exists for. A repo with
+        # no remote at all stays silent (fresh local repos would false-positive on every
+        # session end).
+        code, out, _ = run(["remote"])
+        if code == 0 and out.strip():
+            code, out, _ = run(["rev-list", "--count", "HEAD", "--not", "--remotes"])
+            if code == 0 and out.isdigit():
+                ahead = int(out)
 
     return {"is_git": True, "dirty": dirty, "ahead": ahead, "has_upstream": has_upstream}
 
@@ -86,7 +96,10 @@ def run_hook():
 
     state = check_worktree_state(cwd)
     if should_log(state):
-        data_dir = os.environ.get("CLAUDE_PLUGIN_DATA", tempfile.gettempdir())
+        # Durable fallback when CLAUDE_PLUGIN_DATA is unset — /tmp silently defeats
+        # "durable, discoverable" (hook-checker probe, 2026-08-11):
+        default_dir = os.path.expanduser(os.path.join("~", ".claude", "plugins", "data", "teamwork"))
+        data_dir = os.environ.get("CLAUDE_PLUGIN_DATA", default_dir)
         os.makedirs(data_dir, exist_ok=True)
         log_path = os.path.join(data_dir, "session-close-warnings.log")
         with open(log_path, "a") as f:
@@ -152,6 +165,28 @@ def selftest():
             fails += 1
         else:
             print("ok    fixture4 (log line format)")
+
+        # Fixture 5: repo WITH a remote, committed but never pushed, no upstream — the
+        # campaign-loss case (hook-checker 2026-08-11): must log. Remote is a local bare
+        # repo; no branch is pushed, so HEAD has no upstream and --remotes is empty.
+        bare = os.path.join(tmp, "origin.git")
+        subprocess.run(["git", "init", "-q", "--bare", bare], check=True)
+        unpushed = os.path.join(tmp, "unpushed-repo")
+        os.makedirs(unpushed)
+        subprocess.run(["git", "init", "-q"], cwd=unpushed, check=True)
+        subprocess.run(["git", "config", "user.email", "t@example.com"], cwd=unpushed, check=True)
+        subprocess.run(["git", "config", "user.name", "t"], cwd=unpushed, check=True)
+        subprocess.run(["git", "remote", "add", "origin", bare], cwd=unpushed, check=True)
+        with open(os.path.join(unpushed, "f.txt"), "w") as f:
+            f.write("x")
+        subprocess.run(["git", "add", "."], cwd=unpushed, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "local-only"], cwd=unpushed, check=True)
+        state = check_worktree_state(unpushed)
+        if should_log(state) is not True or state["ahead"] < 1:
+            print(f"FAIL fixture5 (committed-never-pushed with remote should log; state={state})")
+            fails += 1
+        else:
+            print("ok    fixture5 (unpushed commits, remote, no upstream -> logs)")
 
     if fails:
         print(f"-- {fails} fixture(s) failed --")
