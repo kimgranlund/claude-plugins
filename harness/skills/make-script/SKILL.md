@@ -4,8 +4,10 @@ description: >-
   Mechanize a check, gate, or derivation as a bundled scripts/taskname.py|mjs — qualify, plan,
   confirm, author, validate (selftest green, negative control bites, wired to its caller and the
   gate). Use for "turn this checklist into a script", "mechanize this check", "add a selftest to
-  this script", or "script this verification". NOT the standard or the bare "can this check be code" mechanizability question (script-writing-rules); NOT
-  event-fired enforcement (make-hook); NOT a whole new skill (make-skill).
+  this script", or "script this verification". NOT for the standard or the bare "can this check
+  be code" mechanizability question (script-writing-rules), event-fired enforcement (make-hook),
+  a whole new skill (make-skill), or a one-off/throwaway script (session-local — write it inline,
+  ship nothing).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[the check or procedure to mechanize, or a script path to retrofit]"

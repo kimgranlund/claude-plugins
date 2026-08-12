@@ -127,6 +127,27 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.27 · assembled 2026-08-12 · 3.1.27: make-script's description gains a `NOT for` fence for
+one-off/throwaway scripts (issue #175, closing the 2026-08-12 check-routing leak — row n06,
+"Write me a quick one-off script to rename these files" — a real gap, no owning skill, so the
+fence names the disposition instead: "session-local — write it inline, ship nothing"). The same
+ticket's other finding, t04 ("Add a selftest to this script — it ships unproven" stolen by
+script-writing-rules despite make-script's description carrying the phrase verbatim), was flagged
+single-judge-noise, re-judge-once-before-tuning; it did not reproduce, so no t04 tuning shipped.
+The new fence had to be MERGED into the description's existing three `NOT` clauses
+(script-writing-rules, make-hook, make-skill) rather than appended as a fourth standalone
+sentence — none of the original three literally contained "NOT for" (they read "NOT the
+standard…", "NOT event-fired enforcement…"), so `routing_eval.py`'s parseable
+`NOT for <thing> (<owner or plain text>)` fence grammar (only `not for`/`not when`/`does(n't)
+trigger`/`never for` parse as a deliberate marker; a prior ticket's first draft on this exact
+grammar, #173, shipped a fence that didn't parse) would have found zero fence at all. Reworded to
+one `NOT for` clause covering all four exclusions (582 chars, well under the 1,024 warn). A first
+edit dropped "the standard" from the script-writing-rules fence while merging — caught by a
+fresh-context skill-checker FLOOR pass, restored. Proof: one blind `routing-judge` dispatch (menu
+= harness's 30 model-invocable descriptions + none, make-script's 14 prompts stripped of `expect`
+and shuffled) against the fixed description — 14/14 clean, t04 resolves to `make-script` (trigger
+holds, no steal) and n06 resolves to `none` (fence works) — standing in for a full `/check-routing`
+wave ·
 v3.1.26 · assembled 2026-08-12 · 3.1.26: find-open-questions' `evals/evals.json` annotated for
 n11 (issue #174, closing the 2026-08-12 check-routing leak — row n11, "Wrap up this session —
 nothing left hanging in the worktree" leaking off-menu on a harness-scoped run because its true

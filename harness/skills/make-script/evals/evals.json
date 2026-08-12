@@ -1,6 +1,6 @@
 {
   "skill": "make-script",
-  "note": "Procedural maker: mechanize a check/procedure as a bundled script with a proven selftest. Fences: script-writing-rules carries the rules; make-hook owns event-fired enforcement; make-skill owns whole new skills; save-lessons owns prose knowledge capture.",
+  "note": "Procedural maker: mechanize a check/procedure as a bundled script with a proven selftest. Fences: script-writing-rules carries the rules; make-hook owns event-fired enforcement; make-skill owns whole new skills; save-lessons owns prose knowledge capture; no owning skill covers a one-off/throwaway script (session-local, write it inline).",
   "cases": [
     {
       "id": "t01",
@@ -71,7 +71,7 @@
       "id": "n06",
       "prompt": "Write me a quick one-off script to rename these files",
       "expect": "no-trigger",
-      "note": "session-local scratchpad work — the Phase 1 ephemeral escape hatch; no shipped script, no workflow"
+      "note": "session-local scratchpad work — the Phase 1 ephemeral escape hatch; no shipped script, no workflow. Fenced 2026-08-12 (#175) with a NOT-for one-off/throwaway-script clause on the description, per the 2026-08-12 check-routing leak (row n06, harness-audit-2026-08-11/routing/report.md)"
     },
     {
       "id": "n07",
