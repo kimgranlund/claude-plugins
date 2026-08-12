@@ -29,7 +29,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Multi-agent feature-delivery team (plan → build → review → coordinate), composition/continuation design | `teamwork` |
 | Routing proof after description edits | `/check-routing <plugin>` |
 | Periodic health sweep | `/check-everything` (read-only; proposes) |
-| Sweep the ops queue AND drive buildable tickets to an actual build, gated by one confirm | teamwork: `/mobilize-chores` (wraps harness's `/sweep-chores`, never reimplements it; `/sweep-chores` alone stays report-only) |
+| Sweep the ops queue AND drive buildable tickets to an actual build | teamwork: `/mobilize-chores` (wraps harness's `/sweep-chores`, never reimplements it; `/sweep-chores` alone stays report-only). Gated by one batched confirm — or unattended via `/mobilize-chores auto` (2026-08-11: the explicit token, never inferred; ceiling PR-opened, never merge), the entry point a `/goal` loop calls to drain the queue overnight |
 | Periodic ADR review — surface ratified Decisions worth a knowledge-pack entry, or stale citations of a superseded ADR | harness: `decision-watcher` agent (scheduled via `CronCreate` or on-demand) — checkpointed, never authors; queues candidates for one batched confirm, names the `/make-pack`/`/make-skill` command a human runs next |
 | A drifted repo — duplicated instruction trees, stale corpus, dead automation: the committing campaign | harness: `/clean-repo` |
 | A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs the release gates on it; solo single-file fixes may still commit to main. EnterWorktree worktrees live in-repo at `.claude/worktrees/` (gitignored); a change that retires a path a `.gitignore` rule names repairs the rule in the same change (rulings + history: ADR-0002, the git-native memory, harness's clean-repo razor). **Close it with `campaign_close.py <pr-number> --repo <owner/repo> --gate <plugin-root>...`** — verifies MERGED, deletes the remote branch and REVERIFIES it's gone (the ten-branch silent-delete-failure class, 2026-07-16), gates the touched plugins. **A dirty main before pulling parallel-session work: `sync_main.py`** — quarantines local dirt as a named stash, `--ff-only` pulls, reverifies HEAD by SHA (never trust a command's print alone) |
@@ -66,6 +66,13 @@ No installed harness required; every check is a plain script. Run from the works
 - **Descriptions are the routing surface.** Any model-invocable description edit updates its
   `evals/evals.json` in the same change, closes reciprocal fences in sibling suites, and gets an
   `/check-routing` after boundary changes.
+- **A semantic edit rides with a critic.** A semantic edit to a prompt-carrying artifact (a
+  SKILL.md body, an agent definition, a hook prompt) gets a fresh-context `*-checker` pass before
+  its loop closes, whichever flow applied it — inline fix, unattended dispatch, or a host session.
+  Lint and gates prove mechanics, not semantics (2026-08-11 audit: every recent unaudited semantic
+  edit carried a real gap). The contract is encoded where those flows live — `file-bug`'s
+  fix-inline branch, `dispatch-ticket`'s build path, `make-skill`'s P5. Pure code/config under the
+  repo's own test gates is exempt.
 - **Plugin boundaries are hard for preloads and `${CLAUDE_PLUGIN_ROOT}` paths, soft for mentions.**
   Cross-plugin handoffs are named mentions that degrade gracefully when the other plugin isn't
   installed; an agent preload or script path crossing plugins is a defect (plan-plugin-split's `surface_map.py check`

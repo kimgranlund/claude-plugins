@@ -12,8 +12,9 @@ source. Nothing refetched. Six prior entries RESOLVED, two carried forward, four
 
 **Class 1 — gated mutations verified safe:**
 
-### 1. Commit this firing's applied ops artifacts to main
-- **Action:** Stage exactly the five ops paths —
+### 1. Commit this firing's applied ops artifacts to main — RESOLVED 2026-08-10 (between firings)
+- **Movement:** committed as `1b7ccc4` ("ops: sweep #27") and pushed, exactly the five named paths.
+- **Action (as queued):** Stage exactly the five ops paths —
   `git add .claude/ops/plan.md .claude/ops/watch-checkpoint.json
   .claude/ops/adr-checkpoint.json .claude/ops/adr-queue.json
   .claude/ops/reports/2026-08-10T23-50-17Z-repo-cleaner.md` — read the status output,
@@ -61,8 +62,12 @@ source. Nothing refetched. Six prior entries RESOLVED, two carried forward, four
   (`harness/skills/agent-writing-rules/SKILL.md:57` citation confirmed).
 - **Size:** ~5 min (confirm) + ~30–45 min (authoring + gate, if accepted).
 
-### 4. Decide the build route for the four open issues — #157 first (NEW, succeeds prior entry 5)
-- **Action:** The full open roster is #167, #157, #156, #151 — all unassigned, no stale
+### 4. Decide the build route for the four open issues — #157 first (NEW, succeeds prior entry 5) — RESOLVED 2026-08-11 (between firings)
+- **Movement:** routed through `/mobilize-chores` with a batched confirm, all four dispatched to
+  `build-lead`: #167 built + closed (docs 1.4.3), #156 fixed + closed (harness 3.1.18), #157
+  root-caused + fixed + closed (harness 3.1.19 — shared mechanism with #156), #151 correctly
+  SKIPPED (its own body defers it until a real feature ticket exists; stays open by design).
+- **Action (as queued):** The full open roster is #167, #157, #156, #151 — all unassigned, no stale
   claims. Decide: batch through `/mobilize-chores`, pick up individually, or defer with
   a dated note. Rank #157 first (bug + major: dispatched seats' SendMessage reports
   default to the root session instead of chore-lead — systematic ~100% across 3+ sweeps,
