@@ -13,6 +13,55 @@ to duplicate their per-version detail.
 > touched plugin's own README ledger — not backfilled here to avoid restating detail from memory
 > that the ADRs themselves already carry as the source of record.
 
+## 2026-08-11/12 — the queue runs itself: mobilize-chores goes autonomous, the first full estate audit, and the semantic-edit invariant
+
+The arc that turned the ops queue from human-driven to loop-driven, then audited the machinery
+doing it. `mobilize-chores` gained an explicit `auto` unattended mode (teamwork 2.4.0 — the
+literal token, never inferred; ceiling PR-opened, never merge), a classified per-blocker
+breakdown (2.5.0 — six shapes, prose-first, commands on request), and measured concurrency rules
+(2.6.0/2.7.1): the first draft of the disjoint-fan-out shortcut FAILED its own fresh-context
+audit with two blocking findings — `team-or-solo-rules`' same-tree fan-out is safe because the
+host owns git, but a `build-lead` dispatch drives its own branch/commit/PR lifecycle, so
+file-disjointness licenses parallel timing only, never isolation-dropping — and the owning
+doctrine gained the previously-implicit host-owns-git precondition (2.6.1). The one disclosed
+UNVERIFIED (fork-cwd containment under worktree isolation) was settled by a purpose-built live
+probe the same week: containment HOLDS, the serial-bug-kind guard retired. The first
+`/check-everything` estate audit (158 artifacts, deterministic tier + a sliced judgment fan-out)
+found no blockers but a three-strikes pattern — every recent semantic edit shipped through an
+inline/unattended flow with gates green and no fresh-context audit carried a real gap — ratified
+as the workspace's new invariant: **a semantic edit to a prompt-carrying artifact rides with a
+critic**, encoded in `file-bug`'s fix-inline branch, `dispatch-ticket`'s build path, and the
+workspace CLAUDE.md (harness 3.1.20, docs 1.4.4, teamwork 2.7.0). The audit's own follow-through
+closed the loop: the adr-0010 harvest landed (naming-rules' real cross-plugin test-5 example —
+restoring, in passing, three counterexample cells the ADR-0006 rename sweep had eaten;
+plan-plugin-split's anti-matrix surplus side), issue-sorter went labels-only (personal repo, no
+Issue Types schema possible), and a full `/check-routing harness` re-judge (30 suites, 557
+cases, blind judges) scored 547/557 with agent-writing-rules' widened description proven — reach
+without overreach (harness 3.1.21). Repo-level firsts: the overnight `/goal` loop drained the
+backlog to zero open issues, and gh#171 (rename sweeps must not rewrite labeled counterexamples)
+is the one item deliberately left open.
+
+## 2026-08-09/10 — ADR-0010 and the /lead-* family: one build seat for every ticket kind, and the fork that relieves the session
+
+`feature-lead` became **`build-lead`** and `dispatch-feature` became **`dispatch-ticket`**
+(ADR-0010, teamwork 2.0.0 BREAKING): one seat drives any confirmed ticket kind — feature builds,
+task clarify-then-dispatch, bug hand-off — with `mobilize-chores` collapsing to a uniform
+dispatch and the anti-matrix rule resolving the duplication a planned second seat would have
+been. The `/lead-*` session-priming family completed around it: `/lead-intake`, `/lead-build`,
+`/lead-review` (deliberately agent-less — the estate's eleven checkers ARE the review capacity),
+and `/init-repo` composing them into one session-arming command (teamwork 2.1.0–2.3.0), plus
+docs' `intake-lead` standing intake seat — whose forge produced the estate's first empirical
+fork-from-agent data (a `context: fork` skill invoked inside an agent runs as a background fork
+whose completion routes to the ROOT session) and a three-incidents-in-one-day lesson about the
+agent loader globbing `agents/` recursively (the intent record's canonical home is now
+`<plugin>/agent-intents/`, outside the loader's reach — harness 3.1.13/15/16, docs 1.4.0–1.4.2).
+The intake trio + `/build-feature` went forked-by-default (`context: fork` — filing and building
+no longer block the caller's session; docs 1.2.0, teamwork 1.4.0). Live gen-ui-kit incidents
+closed as infrastructure: gh#154 (bare-name seat dispatch), gh#156 (the platform's
+`teammate_id="team-lead"` label mistaken for a real coordinator), gh#157 (named fan-out seats
+defaulting their reports to the root session — `chore-lead` now dispatches its seats unnamed,
+harness 3.1.18/19).
+
 ## 2026-08-08 — the ops-write sandbox split matures: seats-report/host-writes, model-tiering enforcement, and mobilize-chores
 
 A cross-cutting arc, not one feature: closing gaps found by actually RUNNING the ops-family

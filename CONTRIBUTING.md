@@ -1,6 +1,6 @@
 # Contributing
 
-This repo hosts nine Claude Code plugins. Read the root [`CLAUDE.md`](CLAUDE.md) first — it's
+This repo hosts seven Claude Code plugins. Read the root [`CLAUDE.md`](CLAUDE.md) first — it's
 the routing table for which command owns which job, and the operating rules for working *on*
 these plugins rather than just installing them. Each plugin's own `CLAUDE.md` and README footer
 ledger carry its per-plugin invariants and version history.

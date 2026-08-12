@@ -1,11 +1,12 @@
 # nonoun-plugins
 
-Nine Claude Code plugins: `harness` and `docs` are the authoring toolchain — they build and
-validate everything else, including each other. The other seven are domain plugins; six were
+Seven Claude Code plugins: `harness` and `docs` are the authoring toolchain — they build and
+validate everything else, including each other. The other five are domain plugins; most were
 partitioned out of a legacy personal skill/agent corpus (61 skills, 19 agents) via a
-`plan-plugin-split` analysis run by `harness` itself, and `llm` was authored fresh via
-`break-down-problem` (distilled from `@agent-ui/a2ui`'s live-agent implementation, generalized as
-portable technique).
+`plan-plugin-split` analysis run by `harness` itself (six at first, consolidated to five when
+ADR-0008 merged the color/typography/design-kit members into `design`), and `llm` was authored
+fresh via `break-down-problem` (distilled from `@agent-ui/a2ui`'s live-agent implementation,
+generalized as portable technique).
 
 Directory names align with each plugin's current name, no version suffix, no spaces (ADR-0007) —
 see `CLAUDE.md` for the workspace's own operating rules if you're working *on* these plugins
@@ -36,7 +37,7 @@ As a marketplace (recommended — lets you install only the plugins you want):
 claude plugin marketplace add kimgranlund/claude-plugins
 claude plugin install harness@nonoun-plugins
 claude plugin install docs@nonoun-plugins
-# ...and so on for any of the nine
+# ...and so on for any of the seven
 ```
 
 For local development against a working copy instead:
