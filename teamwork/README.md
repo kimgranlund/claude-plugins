@@ -81,7 +81,11 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.7.1 · assembled 2026-08-11 · 2.7.1: fork-cwd containment MEASURED, the serial-bug-kind guard
+v2.7.2 · assembled 2026-08-11 · 2.7.2: one-word reword in 2.7.1's measurement prose ("marker-file
+write" → "probe marker write") — the phrase tripped G8's phantom-name check via the `-file`
+suffix; reworded rather than allowlisted, and bumped rather than folded into 2.7.1 (the bump-every-
+change invariant is unconditional; a first attempt to skip the bump on a no-reload-between
+rationalization was itself the defect this entry corrects) · v2.7.1 · assembled 2026-08-11 · 2.7.1: fork-cwd containment MEASURED, the serial-bug-kind guard
 retired — 2.6.0's one disclosed UNVERIFIED settled by a live probe the same week it was flagged: a
 purpose-built `context: fork` skill invoked from inside a worktree-isolated general-purpose agent
 executed entirely inside the agent's worktree (pwd, `git rev-parse --show-toplevel`, and a
