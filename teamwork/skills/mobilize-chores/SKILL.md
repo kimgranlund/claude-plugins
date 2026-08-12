@@ -134,7 +134,7 @@ sweep surfaced that's actually buildable.
    two dispatches are concurrent. Bug-kind's inline-fix path runs a `context: fork` Skill call
    into `file-bug`; fork-cwd containment is MEASURED (2026-08-11 live probe: a `context: fork`
    skill invoked from inside a worktree-isolated agent executed entirely inside that agent's
-   worktree — pwd, `git rev-parse --show-toplevel`, and a marker-file write all landed in the
+   worktree — pwd, `git rev-parse --show-toplevel`, and a probe marker write all landed in the
    worktree, never the root checkout), so a worktree genuinely contains the fork's writes and
    bug-kind takes the same rules as feature/task: isolated when concurrent, parallel when a named
    path licenses it.
