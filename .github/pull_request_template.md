@@ -20,6 +20,14 @@ python3 harness/scripts/release_gate.py <plugin-root>
 - [ ] Version bumped and logged in each touched plugin's README footer ledger
 - [ ] `evals/evals.json` updated if this PR changes any model-invocable description
 
+## Integration notes
+
+<!-- Known overlap with other open PRs: which PRs touch the same files/contracts, and what order matters. "None" is a fine answer. -->
+
+## Cleanup performed
+
+<!-- Branch/worktree state at handoff: what you created, and what state it's left in. -->
+
 ## Notes
 
 <!-- Anything a reviewer needs that isn't obvious from the diff. -->
