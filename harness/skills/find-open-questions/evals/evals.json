@@ -1,6 +1,6 @@
 {
   "skill": "find-open-questions",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n09 -> issue-sorter; n03/n06 -> find-intent; n04/n08 -> loop-rules/`/loop`; n05 -> docs doc-authoring; n11 -> teamwork's close-session; n02/n07/n10 -> ordinary model behavior, no sweep owner.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). n01/n09 -> issue-sorter; n03/n06 -> find-intent; n04/n08 -> loop-rules/`/loop`; n05 -> docs doc-authoring; n02/n07/n10 -> ordinary model behavior, no sweep owner. Known accepted-leak class (check-routing 2026-08-12, harness-audit-2026-08-11/routing/report.md row n11): n11's true owner is teamwork's close-session, off-menu on this harness-scoped run — benign; do not tune the description to chase it.",
   "cases": [
     {
       "id": "t01",
@@ -115,7 +115,8 @@
     {
       "id": "n11",
       "prompt": "Wrap up this session \u2014 make sure nothing's left hanging in the worktree before you go.",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: teamwork's close-session, off-menu on this harness-scoped run \u2014 accepted off-menu-owner leak (check-routing 2026-08-12), not a description defect; do not tune the description to chase it"
     },
     {
       "id": "n12",

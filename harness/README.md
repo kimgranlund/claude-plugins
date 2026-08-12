@@ -127,6 +127,14 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.1.26 · assembled 2026-08-12 · 3.1.26: find-open-questions' `evals/evals.json` annotated for
+n11 (issue #174, closing the 2026-08-12 check-routing leak — row n11, "Wrap up this session —
+nothing left hanging in the worktree" leaking off-menu on a harness-scoped run because its true
+owner, teamwork's close-session, isn't on that menu). The report's verdict was annotate-only, no
+description change: the suite's top-level note gains a "Known accepted-leak class" sentence
+naming the owner and the benign class, mirroring agent-writing-rules' own accepted-leak-class
+note; n11's case gains a matching `comment` field so the annotation travels with the case itself,
+not only the suite header. Suite-data-only edit, no SKILL.md touched, no checker pass owed ·
 v3.1.25 · assembled 2026-08-12 · 3.1.25: check-state's description gains a NOT-clause fencing
 out single-PR/single-issue status questions (issue #173, closing the 2026-08-12 check-routing
 leak — row n07, "What's the status of this one PR — is #42 ready to merge?" — deferred at the
