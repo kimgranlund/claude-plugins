@@ -1,0 +1,17 @@
+{
+  "skill": "rename-planning",
+  "note": "This skill owns PLANNING one rename (target name + full blast radius) before any mutation — the fix-side hand-off naming-audit's own procedure names. Executing a plan is rename-execute's command surface, not this skill; auditing for the violation in the first place is naming-audit. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "cases": [
+    {"id": "t01", "prompt": "Plan the rename for this naming violation.", "expect": "trigger"},
+    {"id": "t02", "prompt": "Propose a conforming target name for this artifact and its blast radius.", "expect": "trigger"},
+    {"id": "t03", "prompt": "What would renaming this skill touch across the whole estate?", "expect": "trigger"},
+    {"id": "t04", "prompt": "Enumerate every reference a rename of this command would need to update.", "expect": "trigger"},
+    {"id": "t05", "prompt": "Draft a rename plan for this exempt artifact before we execute it.", "expect": "trigger"},
+    {"id": "t06", "prompt": "This artifact name violates the grammar — plan its fix.", "expect": "trigger"},
+    {"id": "t07", "prompt": "What's the full blast radius of renaming this agent?", "expect": "trigger"},
+    {"id": "n01", "prompt": "Apply this already-approved rename plan now.", "expect": "no-trigger", "comment": "owner: rename-execute (command) — this skill only plans, never mutates"},
+    {"id": "n02", "prompt": "Audit this estate for naming violations in the first place.", "expect": "no-trigger", "comment": "owner: naming-audit"},
+    {"id": "n03", "prompt": "Seed the manifest for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
+    {"id": "n04", "prompt": "What does the grammar say about command name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"}
+  ]
+}
