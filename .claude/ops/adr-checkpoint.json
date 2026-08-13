@@ -39,6 +39,10 @@
     "adr-0010": {
       "hash": "68c26dde6b3e070aa5668a6bce739c647561ca41813ee8b2db947f2f0e6d31e5",
       "status": "accepted"
+    },
+    "adr-0011": {
+      "hash": "271fc5c5445ffa96b7002f7dd5de4078eaf337646bdfc9b95d84c5eff21f7ae4",
+      "status": "proposed"
     }
   }
 }
