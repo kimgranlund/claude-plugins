@@ -440,6 +440,10 @@ def gate(root: Path, package: bool = False):
              # prose, "adia-ui-kit" cites an external package in pack-writing-rules; the
              # standing false-positive class:
              "bidi-isolation", "adia-ui-kit",
+            # gen-ui-kit (2026-08-13, PR #201 follow-up): dispatch-ticket/file-bug's teardown
+            # doctrine cites the adiahealth/gen-ui-kit host repo by name — same external-package
+            # false-positive class as adia-ui-kit above:
+            "gen-ui-kit",
              # fix-old-names (2026-07-26, issue #97): this skill's subject matter IS retired
              # names, so it necessarily cites them in prose. G8 is right that `ops-issues`
              # matches no installed skill — that is precisely the point being illustrated.
