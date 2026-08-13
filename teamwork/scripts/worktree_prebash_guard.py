@@ -1,29 +1,36 @@
 #!/usr/bin/env python3
 """worktree-prebash-guard — flags a Bash command that cd's (or -C/--prefix's) out of a
-worktree cwd into the PRIMARY checkout and then runs a further command in the same call.
+worktree cwd into the PRIMARY checkout, or across into a SIBLING worktree, and then runs a
+further command in the same call.
 
-Repo-side mitigation for issue #139: a dispatched worktree seat ran
-`cd <primary-checkout> && node scripts/build/components.mjs` and the platform's git-only
-worktree-isolation guard didn't bind it (it binds git commands, not arbitrary compound
-commands that cd into the shared checkout). This hook is deliberately ASK, never BLOCK
-(hook-writing-rules: judgment-shaped rules are wrong often and unoverridable always as a
-hard block) — it flags for confirmation, it does not enforce isolation on its own.
+Repo-side mitigation for issue #139 (worktree -> primary direction): a dispatched worktree
+seat ran `cd <primary-checkout> && node scripts/build/components.mjs` and the platform's
+git-only worktree-isolation guard didn't bind it (it binds git commands, not arbitrary
+compound commands that cd into the shared checkout). Extended for issue #198 (worktree ->
+SIBLING worktree direction): a session pinned to worktree A writing into worktree B is the
+same escape wearing a different target (field evidence from issue #189, external and
+CLI-tracked; this ticket is the estate-side lever). Both directions are deliberately ASK,
+never BLOCK (hook-writing-rules: judgment-shaped rules are wrong often and unoverridable
+always as a hard block) — the hook flags for confirmation, it does not enforce isolation on
+its own.
 
-Detection is possible without any external knowledge of "the primary checkout path" because
-EnterWorktree worktrees always live IN-REPO at <primary-root>/.claude/worktrees/<name>
-(this workspace's own convention, CLAUDE.md). The primary root is therefore always a
-deterministic string-prefix of the worktree cwd handed to every hook event — no config, no
-external lookup.
+Detection is possible without any external knowledge of "the primary checkout path" or "the
+sibling worktree names" because EnterWorktree worktrees always live IN-REPO at
+<primary-root>/.claude/worktrees/<name> (this workspace's own convention, CLAUDE.md). The
+primary root is therefore always a deterministic string-prefix of the worktree cwd handed to
+every hook event — no config, no external lookup — and the session's OWN worktree name is
+just the first path segment after that marker. Any OTHER first-segment name resolved by a
+cd/-C/--prefix target under .claude/worktrees/ is a sibling escape by the same construction.
 
-Known blind spots (disclosed, not silently papered over):
+Known blind spots (disclosed, not silently papered over — identical for both directions):
   - Dynamic cd targets ($(...), `...`, $VAR) cannot be resolved without executing the
     shell — such segments are treated as unknown and pass silently (fail open, not fail
     closed: a hard block on an unprovable case is the judgment-in-a-hook antipattern).
   - Only `cd`, `-C`, and `--prefix` path-target forms are recognized; other path-bearing
     flags (`-w`, `--cwd`, tool-specific flags) are not scanned.
-  - A bare `cd <primary>` with no chained command in the same Bash call is out of scope —
-    the disclosed gap is specifically the COMPOUND escape (git-only guard already binds
-    plain git commands cd'd into primary).
+  - A bare `cd <target>` with no chained command in the same Bash call is out of scope for
+    the cd-based check — the disclosed gap is specifically the COMPOUND escape (git-only
+    guard already binds plain git commands cd'd into primary or a sibling).
   - No nested-subshell paren tracking; a `(cd /x && ...)` is scanned the same as a flat
     compound, which is usually right but not guaranteed for deeply nested forms.
   - A shell-wrapper string (`sh -c "cd ... && ..."`, `bash -c`, `zsh -c`) is a single opaque
@@ -56,6 +63,30 @@ def find_primary_root(cwd):
         return None
     root = cwd.split(WORKTREE_MARKER, 1)[0]
     return root or None
+
+
+def find_own_worktree_name(cwd):
+    """Return this session's own worktree name (first path segment after the marker), else None."""
+    if not cwd or WORKTREE_MARKER not in cwd:
+        return None
+    remainder = cwd.split(WORKTREE_MARKER, 1)[1]
+    return remainder.split("/", 1)[0] if remainder else None
+
+
+def worktree_name_of(path, worktrees_root):
+    """Return the immediate child dir name under worktrees_root if path resolves inside it, else None.
+
+    Comparing exact path segments (not a raw string prefix) is what keeps a name like
+    `seat1` from false-positiving against a sibling `seat10` — the boundary this mirrors
+    from find_primary_root's own prefix-boundary discipline (fixture3).
+    """
+    if path is None or worktrees_root is None:
+        return None
+    prefix = worktrees_root.rstrip("/") + "/"
+    if not path.startswith(prefix):
+        return None
+    remainder = path[len(prefix) :]
+    return remainder.split("/", 1)[0] if remainder else None
 
 
 def split_segments(command):
@@ -142,11 +173,18 @@ def is_within(path, root):
 
 
 def analyze_command(command, cwd):
-    """Return a list of (kind, resolved_path, segment) hits, or [] if not applicable / no hit."""
+    """Return a list of (kind, resolved_path, segment) hits, or [] if not applicable / no hit.
+
+    kind is "cd"/"flag" for a worktree -> PRIMARY-checkout escape (issue #139), or
+    "cd-sibling"/"flag-sibling" for a worktree -> SIBLING-worktree escape (issue #198) —
+    the same construction, just compared against a different other-worktree name instead
+    of the primary root.
+    """
     primary_root = find_primary_root(cwd)
     if primary_root is None:
         return []
     worktrees_root = os.path.join(primary_root, ".claude", "worktrees")
+    own_name = find_own_worktree_name(cwd)
 
     segments = split_segments(command)
     hits = []
@@ -160,26 +198,43 @@ def analyze_command(command, cwd):
                 continue
             current_dir = resolved
             escapes_primary = is_within(resolved, primary_root) and not is_within(resolved, worktrees_root)
+            sibling_name = worktree_name_of(resolved, worktrees_root)
+            escapes_sibling = sibling_name is not None and sibling_name != own_name
             has_follow_on = i < len(segments) - 1
             if escapes_primary and has_follow_on:
                 hits.append(("cd", resolved, segments[i + 1]))
+            if escapes_sibling and has_follow_on:
+                hits.append(("cd-sibling", resolved, segments[i + 1]))
             continue
         for flag_target in scan_path_flags(seg):
             resolved = resolve_target(flag_target, current_dir or cwd)
+            sibling_name = worktree_name_of(resolved, worktrees_root)
             if is_within(resolved, primary_root) and not is_within(resolved, worktrees_root):
                 hits.append(("flag", resolved, seg))
+            if sibling_name is not None and sibling_name != own_name:
+                hits.append(("flag-sibling", resolved, seg))
     return hits
 
 
-def format_reason(primary_root, hits):
+def format_reason(primary_root, own_name, hits):
+    """Build the ASK message. Sibling hits name BOTH worktrees — the session's own and the
+    target sibling — not just a raw resolved path, so the reviewer sees exactly which two
+    checkouts are involved without re-deriving it from the path.
+    """
+    worktrees_root = os.path.join(primary_root, ".claude", "worktrees")
     lines = [
-        f"{HOOK_NAME} · compound command reaches into the primary checkout from a worktree session",
+        f"{HOOK_NAME} · compound command reaches outside this session's own worktree",
         f"primary checkout: {primary_root}",
+        f"this session's worktree: {own_name or '(none — primary checkout)'}",
     ]
     for kind, resolved, seg in hits:
-        via = "cd" if kind == "cd" else "-C/--prefix"
-        lines.append(f"  via {via} -> {resolved} · then: {seg.strip()}")
-    lines.append("If intentional, proceed. If not, cd back into the worktree checkout first.")
+        via = "cd" if kind.startswith("cd") else "-C/--prefix"
+        if kind.endswith("-sibling"):
+            sibling = worktree_name_of(resolved, worktrees_root) or "?"
+            lines.append(f"  via {via} -> sibling worktree '{sibling}' ({resolved}) · then: {seg.strip()}")
+        else:
+            lines.append(f"  via {via} -> primary checkout ({resolved}) · then: {seg.strip()}")
+    lines.append("If intentional, proceed. If not, cd back into your own worktree checkout first.")
     return "\n".join(lines)
 
 
@@ -196,6 +251,7 @@ def run_hook():
         return 0
 
     primary_root = find_primary_root(cwd)
+    own_name = find_own_worktree_name(cwd)
     hits = analyze_command(command, cwd)
     if not hits:
         return 0
@@ -206,7 +262,7 @@ def run_hook():
                 "hookSpecificOutput": {
                     "hookEventName": "PreToolUse",
                     "permissionDecision": "ask",
-                    "permissionDecisionReason": format_reason(primary_root, hits),
+                    "permissionDecisionReason": format_reason(primary_root, own_name, hits),
                 }
             }
         )
@@ -311,10 +367,61 @@ def selftest():
             "/repo/.claude/worktrees/seat1",
             False,
         ),
+        # sibling positive: issue #198 — seat1 cd's into seat2's tree and runs a follow-on
+        (
+            "fixture13_sibling_escape",
+            "cd /repo/.claude/worktrees/seat2/sub && node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # negative control: a relative cd that resolves back into the session's OWN
+        # worktree must not false-positive the new sibling-comparison logic
+        (
+            "fixture14_relative_cd_stays_in_own_worktree",
+            "cd ../seat1/sub && node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            False,
+        ),
+        # boundary control for the new direction: seat1 vs seat10 must not false-positive
+        # (mirrors fixture3_prefix_boundary's discipline, one level down at the name segment)
+        (
+            "fixture15_sibling_prefix_boundary",
+            "cd /repo/.claude/worktrees/seat10/sub && node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,  # seat10 IS a real sibling of seat1 — this proves it still hits, just correctly
+        ),
     ]
     for name, command, cwd, expect_hit in cases:
         if not check(name, command, cwd, expect_hit):
             fails += 1
+
+    # fixture16: seat1 itself must NOT be mistaken for a sibling of seat10 (the actual
+    # boundary bite — a naive string-prefix compare of "seat1" against "seat10" would
+    # wrongly treat seat1's own cwd as outside itself; worktree_name_of's exact-segment
+    # compare must return "seat1", matching own_name, so no hit)
+    no_bite_hits = analyze_command(
+        "cd /repo/.claude/worktrees/seat1/sub && node scripts/build/components.mjs",
+        "/repo/.claude/worktrees/seat1",
+    )
+    if no_bite_hits:
+        print(f"FAIL fixture16_own_name_not_shadowed_by_prefix (expected no hit, got {no_bite_hits})")
+        fails += 1
+    else:
+        print("ok    fixture16_own_name_not_shadowed_by_prefix (hit=False)")
+
+    # fixture17: the ASK message for a sibling hit must name BOTH worktrees by identifier,
+    # not just a raw resolved path — mechanizes the "names both worktrees" requirement
+    # instead of leaving it as an unverified prose claim
+    reason = format_reason(
+        "/repo",
+        "seat1",
+        [("cd-sibling", "/repo/.claude/worktrees/seat2/sub", "node scripts/build/components.mjs")],
+    )
+    if "seat1" in reason and "seat2" in reason:
+        print("ok    fixture17_message_names_both_worktrees")
+    else:
+        print(f"FAIL fixture17_message_names_both_worktrees (reason={reason!r})")
+        fails += 1
 
     if fails:
         print(f"-- {fails} fixture(s) failed --")
