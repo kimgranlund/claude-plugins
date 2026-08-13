@@ -12,6 +12,9 @@ Rules (the checkable slice; description *accuracy* stays with /ship-plugin and /
   R4 [WARN] CLAUDE.md's stated skill count matches the tree (skipped if no CLAUDE.md — it
             doesn't ship in the artifact)
   R5 [WARN] every scripts/*.py is mentioned in README.md
+  R6 [WARN] footer ledger entries stay one physical line each (plugin-writing-rules' cap,
+            issue #203: no more than one `vX.Y.Z · date ·` marker per line, no line past
+            600 chars — the unbounded-paragraph-append shape caught once at 157 KB)
 
 Exit 0 clean/warnings, 1 on any FAIL.
 """
@@ -61,6 +64,18 @@ def check(root: Path):
     for sc in sorted(root.glob("scripts/*.py")):
         if sc.name not in rd:
             findings.append(("WARN", "R5", f"scripts/{sc.name} is not mentioned in README.md"))
+
+    ledger_marker = re.compile(r"v\d+\.\d+\.\d+ · \d{4}-\d{2}-\d{2} · ")
+    for line in rd.splitlines():
+        hits = len(ledger_marker.findall(line))
+        if hits >= 2:
+            findings.append(("WARN", "R6",
+                              f"{hits} ledger entries blobbed onto one line -> split to one entry per line "
+                              f"({line[:60]}...)"))
+        elif hits == 1 and len(line) > 600:
+            findings.append(("WARN", "R6",
+                              f"ledger entry line is {len(line)} chars -> compress to one-line-per-version "
+                              f"(plugin-writing-rules' cap, issue #203) ({line[:60]}...)"))
     return findings
 
 
@@ -94,7 +109,27 @@ def selftest():
         (r / "README.md").write_text("map: demo-review demo-forge demo_check.py\n\nv1.1.0 · ledger\n")
         (r / "MANUAL.md").write_text("demo-review demo-forge\n")
         assert any(f[1] == "R3" for f in check(r)), "version mismatch must fail R3"
-    print("docs_check selftest · PASS · coverage both docs, version ledger, stale count, script mentions")
+
+        # R6: one-line-per-version ledger cap (issue #203) — negative control first.
+        good_line = "v1.2.0 · 2026-08-13 · a compact one-line summary of the bump\n"
+        (r / "README.md").write_text(
+            "map: demo-review demo-forge demo_check.py\n\nv1.2.0 · ledger\n\n" + good_line
+        )
+        (r / "MANUAL.md").write_text("demo-review demo-forge\n")
+        assert not any(f[1] == "R6" for f in check(r)), "a clean one-liner must not fire R6"
+        blobbed = (
+            "v1.2.0 · 2026-08-13 · first entry · v1.1.0 · 2026-08-12 · second entry blobbed onto the same line\n"
+        )
+        (r / "README.md").write_text(
+            "map: demo-review demo-forge demo_check.py\n\nv1.2.0 · ledger\n\n" + blobbed
+        )
+        assert any(f[1] == "R6" for f in check(r)), "two markers on one line must fire R6"
+        overlong = "v1.2.0 · 2026-08-13 · " + ("padding " * 90) + "\n"
+        (r / "README.md").write_text(
+            "map: demo-review demo-forge demo_check.py\n\nv1.2.0 · ledger\n\n" + overlong
+        )
+        assert any(f[1] == "R6" for f in check(r)), "a >600-char single entry must fire R6"
+    print("docs_check selftest · PASS · coverage both docs, version ledger, stale count, script mentions, ledger one-liner cap")
     return 0
 
 

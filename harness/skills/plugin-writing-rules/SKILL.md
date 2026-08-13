@@ -70,7 +70,7 @@ Every release runs the same gate, in order — `scripts/release_gate.py <plugin-
 5. Phantom sweep: `[[handle]]` references in live markdown are unresolved routing — warned, counted, and read.
 6. Package: `dist/<name>-<version>.plugin`, excluding `dist/` itself and OS litter.
 
-Gate clean → bump recorded in the README footer (the human-readable ledger) → ship → `/reload-plugins` on the consuming side.
+Gate clean → bump recorded in the README footer (the human-readable ledger) → ship → `/reload-plugins` on the consuming side. **Footer ledger entries are capped at one physical line each, roughly ≤200 chars** — `version · date · one-line summary`, never a paragraph of rationale (the unbounded-append shape that grew `harness/README.md` to 157 KB and `docs/README.md` to 48 KB before this cap, issue #203, 2026-08-13). Compress, never delete: an entry that's grown long gets folded to its one-line essence the next time that plugin ships — git history already carries the full rationale, so nothing is lost by shrinking the footer to an index of it. `docs_check.py`'s R6 (part of the gate's G10) mechanizes the floor of this: it warns on a line carrying two or more `vX.Y.Z · date ·` markers (entries blobbed together) or past 600 chars — a document-only rule doesn't bind, so the check exists precisely because this incident shipped once already.
 
 ## Failure catalog
 
@@ -84,6 +84,7 @@ Gate clean → bump recorded in the README footer (the human-readable ledger) �
 | Plugin name = domain prefix | `/ui:ui-review` stutter; packaging becomes a rename | Distribution taxonomy ≠ domain taxonomy |
 | Unpinned third-party plugin | Every update is unreviewed code on your machine | SHA pinning; re-vet on update |
 | Manual release ritual | Steps skipped under time pressure; the skipped one ships the incident | `/ship-plugin` runs the gate; humans approve, scripts check |
+| Ledger entry grows into a changelog paragraph | Append-only footer, no cap, no rotation | One-line-per-version cap; compress (never delete) on the next ship; `docs_check.py` R6 warns past the line/char floor |
 
 ## Provenance
 
