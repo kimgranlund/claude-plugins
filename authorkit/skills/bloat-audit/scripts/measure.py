@@ -9,8 +9,10 @@ bloat or load-bearing content) belongs to the bloat-audit skill, not here.
 
 Usage:
   measure.py --target PATH [--json]
+  measure.py selftest              prove the counters bite
 
-Exit codes: 0 no flags above threshold, 1 flags found, 2 no files discovered.
+Exit codes: 0 no flags above threshold, 1 flags found, 2 no files discovered
+or no args.
 """
 
 import argparse
@@ -144,21 +146,17 @@ def rel(path: Path, target: Path):
         return str(path)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--target", required=True)
-    ap.add_argument("--json", action="store_true")
-    args = ap.parse_args()
-
-    target = Path(args.target).resolve()
+def analyze(target: Path):
+    """Core measurement logic over an already-resolved target. Returns the
+    result dict, or None if the target doesn't exist or has no markdown to
+    scan. Pure of argv/exit-code concerns so it is directly callable from
+    both main() and selftest()."""
     if not target.exists():
-        print(f"bloat-audit: target not found: {target}")
-        sys.exit(2)
+        return None
 
     artifacts = list(discover(target))
     if not artifacts:
-        print(f"bloat-audit: no markdown files discovered under {target}")
-        sys.exit(2)
+        return None
 
     measurements = []
     all_paragraphs = []
@@ -227,7 +225,7 @@ def main():
     )
     recoverable += sum(min(len(d["snippet_a"]), len(d["snippet_b"])) * 8 for d in duplicates)
 
-    result = {
+    return {
         "target": str(target),
         "files_scanned": len(measurements),
         "measurements": measurements,
@@ -239,20 +237,94 @@ def main():
         },
     }
 
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--target", required=True)
+    ap.add_argument("--json", action="store_true")
+    args = ap.parse_args()
+
+    target = Path(args.target).resolve()
+    result = analyze(target)
+    if result is None:
+        print(f"bloat-audit: target not found or no markdown discovered: {target}")
+        sys.exit(2)
+
+    flagged = result["totals"]["flagged_files"]
+    duplicates = result["totals"]["duplicate_pairs"]
+
     if args.json:
         print(json.dumps(result, indent=2))
     else:
-        print(f"bloat-audit measure — {len(measurements)} files @ {target}")
-        for m in measurements:
+        print(f"bloat-audit measure — {result['files_scanned']} files @ {target}")
+        for m in result["measurements"]:
             if m["flags"]:
                 print(f"  [FLAG] {m['path']}: {', '.join(m['flags'])}")
-        for d in duplicates:
+        for d in result["duplicates"]:
             print(f"  [DUPE {d['similarity']}] {d['file_a']} <-> {d['file_b']}: {d['snippet_a']}")
-        print(f"  flagged={len(flagged)} duplicate_pairs={len(duplicates)} "
-              f"est_recoverable_chars={recoverable}")
+        print(f"  flagged={flagged} duplicate_pairs={duplicates} "
+              f"est_recoverable_chars={result['totals']['estimated_recoverable_chars']}")
 
     sys.exit(1 if (flagged or duplicates) else 0)
 
 
+def selftest():
+    """Prove analyze()'s counters bite: a clean small file passes (reverse
+    control); a phase-heavy file with an oversized Failure section is CAUGHT
+    (negative control); a genuine cross-file duplicate paragraph is CAUGHT;
+    a target with no markdown returns None (the usage-error case)."""
+    import tempfile
+
+    # Reverse control: a small, unflagged file must come back clean.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "clean-skill").mkdir(parents=True)
+        (r / "skills" / "clean-skill" / "SKILL.md").write_text(
+            "---\nname: clean-skill\ndescription: short\n---\n# clean-skill\n\nShort body.\n")
+        result = analyze(r)
+        assert result is not None
+        assert result["totals"]["flagged_files"] == 0, "a short clean file must not be flagged"
+
+    # Inversion fixture: phase-heavy + oversized Failure section must be CAUGHT.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "bloated-skill").mkdir(parents=True)
+        phases = "\n".join(f"1. **Step {i}** — do the thing, at length, every single time.\n"
+                           f"   More words padding this out to look load-bearing.\n" for i in range(6))
+        failure = "x " * 500
+        body = (f"---\nname: bloated-skill\ndescription: short\n---\n# bloated-skill\n\n"
+                f"{phases}\n\n## Failure branches\n\n{failure}\n")
+        (r / "skills" / "bloated-skill" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        flags = result["measurements"][0]["flags"]
+        assert any("phase-heavy" in f for f in flags), "phase-heavy file must be flagged"
+        assert any("large-failure-section" in f for f in flags), "oversized Failure section must be flagged"
+
+    # Inversion fixture: a near-identical paragraph repeated across two files must be CAUGHT.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "a").mkdir(parents=True)
+        (r / "skills" / "b").mkdir(parents=True)
+        para = ("This is a long restated paragraph that shows up nearly verbatim in two "
+                "different files, which is exactly the kind of cross-file duplication this "
+                "measurer exists to catch and report as a finding worth citing.")
+        (r / "skills" / "a" / "SKILL.md").write_text(f"---\nname: a\ndescription: x\n---\n{para}\n")
+        (r / "skills" / "b" / "SKILL.md").write_text(f"---\nname: b\ndescription: x\n---\n{para}\n")
+        result = analyze(r)
+        assert result["duplicates"], "a duplicated paragraph across files must be caught"
+
+    # Usage-error case: no markdown discovered -> None, never a silent pass.
+    with tempfile.TemporaryDirectory() as td:
+        assert analyze(Path(td)) is None, "an empty target must return None"
+
+    print("bloat-audit measure selftest · PASS · flag/duplicate/empty-target counters bite")
+    return 0
+
+
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        print(__doc__)
+        sys.exit(2)
+    if sys.argv[1] == "selftest":
+        sys.exit(selftest())
     main()
