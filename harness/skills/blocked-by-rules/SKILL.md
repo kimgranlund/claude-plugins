@@ -44,9 +44,10 @@ issue view <NN> --json state`; batch these, never re-fetch one already resolved 
   blocker is itself in this plan; wherever it sits, its own action/owner line ALSO names the open
   dependency inline (e.g. "blocked by #196 (open) — do not start before it closes") so a human
   scanning `plan.md` never has to cross-reference to see why something sits where it does.
-- **A named blocker isn't itself in this plan** (already closed, or simply not ops-family work) —
-  name it in the entry's own line regardless; nothing here re-derives whether it's actually done,
-  that is exactly the `state` check above, already run.
+- **A still-OPEN named blocker isn't itself in this plan** (simply not ops-family work) — name it
+  in the entry's own line regardless, same as the bullet above; there's just no blocker entry to
+  queue behind. A CLOSED blocker never reaches this bullet — the first bullet above already
+  covers it (nothing to name, nothing changes).
 
 A named blocker's `state` fails to resolve (deleted issue, a reference into another repo, `gh` unreachable)
 → treat it as OPEN (the safer default) and say so in the entry's own line (e.g. "blocked by #NN

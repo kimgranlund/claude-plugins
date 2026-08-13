@@ -245,9 +245,11 @@ sweep surfaced that's actually buildable.
   PR; report it as "in flight already" in step 6, not as a fresh candidate. A claim past its
   staleness window with no linked PR is `repo-cleaner`'s stale-claim finding to raise (ADR-0005
   Decision 6) — this step only excludes on the claim's presence, it never reclaims one.
-- A ticket's `Blocked-by:` line names an id that doesn't resolve (deleted issue, typo) → ambiguous,
-  exclude per the label/in-flight ambiguity discipline above; never guess which ticket was meant.
-  All named blockers already closed → not blocking; the candidate proceeds normally (#193).
+- A ticket's `Blocked-by:` line names an id that doesn't resolve (deleted issue, typo, `gh`
+  unreachable for that lookup) → treat as OPEN, the same fail-closed default
+  `blocked-by-rules` uses on its own read side, and exclude — reported in step 6 as "blocked —
+  #NN unresolvable, treated as open," never guessed at or silently dropped. All named blockers
+  already closed → not blocking; the candidate proceeds normally (#193).
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
 - `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
