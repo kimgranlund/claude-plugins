@@ -83,7 +83,16 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.9.2 · assembled 2026-08-13 · 2.9.2: `dispatch-ticket` Phase 3 gains a verified teardown path
+v2.9.3 · assembled 2026-08-13 · 2.9.3: `agents/build-lead.md` compression (issue #192) — the
+verbatim-relay rule was stated four times across a ~27-line body (opening job statement, a
+blocker/redirect restatement, the Phase-5 handoff's own "through verbatim" wording, and a closing
+"you relay whatever `dispatch-ticket` actually states" clause) — flagged by PR #187's build-time
+`agent-checker` critic and deferred as "compress on next touch." Now stated once, in the opening
+paragraph, covering every phase and branch below by explicit reference rather than restatement;
+the PRE-CLAIM/POST-CLAIM retirement-handoff distinctions and the no-fabrication rule on a missing
+handoff line are unchanged in substance, just no longer re-deriving the relay rule to state them.
+No frontmatter edit, no behavior change to the seat's contract. Fresh-context `agent-checker`
+FLOOR audit: PASS, no blocking findings · v2.9.2 · assembled 2026-08-13 · 2.9.2: `dispatch-ticket` Phase 3 gains a verified teardown path
 (issue #190, tracked from gen-ui-kit#1151) — the two cases where this skill retires a scratch
 branch/worktree (a post-claim abandonment once released, or the bug hand-off's own worktree once
 `file-bug`'s hand-off shows a terminal read-back) never delete with a raw `git branch -D` plus
