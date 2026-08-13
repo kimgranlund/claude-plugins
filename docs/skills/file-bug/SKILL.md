@@ -150,6 +150,25 @@ blocker instead of a silently abandoned one. Where loop-rules is not installed, 
 discipline inline: name the stopping predicate, cap the tries, escalate on the same check failing
 twice.
 
+**Retiring a scratch branch this step used — verified, never raw.** `dispatch-ticket`'s Phase 3
+owns teardown for the branch it creates when it isolates ahead of a hand-off here — file-bug
+creates no isolation of its own for that case. This clause covers only a branch file-bug itself
+is responsible for retiring: the inline fix above, once its PR is gone (merged or closed) and the
+branch is no longer needed, or a dispatched fork/agent's own investigation branch once abandoned
+with nothing landed. Either way, never delete it with a raw `git branch -D` plus worktree removal
+— that force-deletes work with no proof it's safe to lose. Feature-detect the host repo's own
+gated reap script (the reference shape: gen-ui-kit's `scripts/ops/reap-branches.mjs
+--verify-branch <name>`). Order matters: `git worktree remove` first — a branch still checked out
+in a worktree reads as KEPT regardless of merge state, so removing the worktree first is what
+makes the merge check meaningful, and the removal itself refuses on a dirty tree, so nothing is
+lost even on a wrong call — THEN `--verify-branch`, THEN, only on exit 0 (provably merged: a
+merge-base ancestor of `origin/main`, or an exactly-matching MERGED PR), `git branch -d` (never
+`-D`, even after a verified 0). Exit 1 (KEPT/PROPOSED), or either verb refusing outright, → leave
+the branch standing and report why, never escalate to a force flag. Exit 2 is a usage error, not
+a keep/delete verdict — report it rather than guessing. Where the host repo ships no such script
+at that path, fall back to an unverified `git worktree remove` then `git branch -d`, but never
+silently — name in the close-out exactly what went unverified.
+
 ## Phase 6 — Close the loop
 
 Read the record back on return (`gh issue view --comments` on the git-native backend; the resolved
