@@ -26,7 +26,8 @@ Blocked-by: #196, #201
 
 - Case-insensitive key (`blocked-by:`, `Blocked-by:`, `BLOCKED-BY:` all match).
 - Each value is `#` followed by digits — an issue number on this workspace's git-native backend
-  (ADR-0002).
+  (ADR-0002). On the local backend (Option A), the same `#NN` form cross-references a git-native
+  issue; a `TKT-####` form is also accepted where the blocker is itself a local TICKET file.
 - Recommended placement: its own `## Blocked-by` section, so a human skimming the issue sees the
   dependency as a first-class fact rather than a phrase buried in `Scope/Open` prose. Not a
   machine requirement — a line living anywhere in the body still greps and still resolves; the
@@ -45,15 +46,11 @@ Blocked-by: #196, #201
 
 ## The two named consumers (no others, per #193's own scope)
 
-1. **`mobilize-chores` step 2** (this skill) — a candidate ticket carrying a `Blocked-by:` line
-   where ANY named blocker is still open excludes it from that run's mobilizable set, reported in
-   step 6 as blocked-and-why — never silently dropped. A THIRD, independent exclusion: the
-   `in-flight` label pre-filter (#199) and the claim/GraphQL open-PR checks (#184) stay
-   authoritative for their own concerns; this convention changes or subsumes neither.
-2. **`chore-planner`** (harness) — orders `.claude/ops/plan.md` so a blocked entry queues behind
-   its own blocker's entry, or — when the blocker isn't itself in the queue — names the
-   dependency inline instead of silently reordering around it. The operational read/order steps
-   live in harness's preloaded `blocked-by-rules` skill, cited there against this same format.
+1. **`mobilize-chores` step 2** (this skill) — exclusion semantics: that skill's own step 2, above.
+2. **`chore-planner`** (harness) — ordering semantics: harness's preloaded `blocked-by-rules`
+   skill.
+
+Both cite this file for the format; neither's own read/exclude/order logic is restated here.
 
 ## Non-goals (explicit, per #193's own Scope/Open)
 

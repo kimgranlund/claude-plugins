@@ -93,21 +93,21 @@ sweep surfaced that's actually buildable.
    `feature`/`bug`/`task` (never unlabeled, and one carrying more than one of these three is
    ambiguous — exclude it, per the failure branch below), AND carries no active claim (git-native:
    empty `assignees`; local: no `claimed-by`), AND (git-native only) no
-   `closedByPullRequestsReferences` node reads `OPEN`. Cross-check `plan.md`'s own queue for the
-   same ids; a ticket the sweep already flagged as a human-decision item or a blocker is excluded
-   even if it carries a mobilizable label/kind — the sweep's own judgment on THAT item stands.
+   `closedByPullRequestsReferences` node reads `OPEN`, **AND carries no open `Blocked-by:`
+   dependency (#193)** — a THIRD, independent exclusion alongside the `in-flight` label pre-filter
+   (#199) and the open-PR check just named; neither changes or subsumes this one. Cross-check
+   `plan.md`'s own queue for the same ids; a ticket the sweep already flagged as a human-decision
+   item or a blocker is excluded even if it carries a mobilizable label/kind — the sweep's own
+   judgment on THAT item stands.
 
-   **AND carries no open `Blocked-by:` dependency (#193)** — a THIRD, independent exclusion,
-   alongside the `in-flight` label pre-filter (#199) and the claim/GraphQL open-PR checks above;
-   neither of those changes or subsumes this one. Format and per-backend realization:
-   `references/blocked-by-convention.md` (this skill's own canonical definition, cited rather than
-   restated here — the same file harness's `chore-planner` cites for its own ordering rule). Read
-   the candidate's body for a `Blocked-by: #NN[, #NN...]` line (git-native: `gh issue view <id>
-   --json body`; local: `Read` the TICKET file), then `gh issue view <NN> --json state` (git-native)
-   or resolve the local record's own status per named blocker. ANY named blocker still open
-   excludes the candidate this run — reported in step 6 as blocked-and-why, never silently
-   dropped. All named blockers closed, or no line present → this exclusion doesn't apply; the
-   candidate proceeds through the rest of this step's checks normally.
+   **Reading the `Blocked-by:` dependency** — format and per-backend realization live once,
+   canonically, in `references/blocked-by-convention.md` (this skill's own definition, cited here
+   rather than restated — the same file harness's `chore-planner` cites for its own ordering
+   rule): resolve each candidate's own `Blocked-by:` line and its named blockers' state per that
+   file's realization table. ANY named blocker still open excludes the candidate this run —
+   reported in step 6 as blocked-and-why, never silently dropped. All named blockers closed, or no
+   line present → the exclusion doesn't apply; the candidate proceeds through the rest of this
+   step's checks normally.
 3. **Nothing mobilizable → stop here.** Report the sweep's own findings (step 1) plus "0 tickets
    mobilizable this run" and why (no open feature/bug/task tickets, or all already in flight). No
    confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
