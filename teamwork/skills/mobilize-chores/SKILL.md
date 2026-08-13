@@ -3,8 +3,9 @@ name: mobilize-chores
 description: >-
   Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
-  adapter) labeled feature, bug, or task with no build in flight — after one batched confirm (a
-  leading `auto` argument skips it, for /goal loops and scheduled runs).
+  adapter) labeled feature, bug, or task with no build in flight and no open `Blocked-by:`
+  dependency (#193) — after one batched confirm (a leading `auto` argument skips it, for /goal
+  loops and scheduled runs).
   Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
   (ADR-0010), whose dispatch-ticket procedure owns the kind branch; an
   under-specified task comes back SKIPPED — no clarify round runs unattended. Everything else
@@ -95,6 +96,18 @@ sweep surfaced that's actually buildable.
    `closedByPullRequestsReferences` node reads `OPEN`. Cross-check `plan.md`'s own queue for the
    same ids; a ticket the sweep already flagged as a human-decision item or a blocker is excluded
    even if it carries a mobilizable label/kind — the sweep's own judgment on THAT item stands.
+
+   **AND carries no open `Blocked-by:` dependency (#193)** — a THIRD, independent exclusion,
+   alongside the `in-flight` label pre-filter (#199) and the claim/GraphQL open-PR checks above;
+   neither of those changes or subsumes this one. Format and per-backend realization:
+   `references/blocked-by-convention.md` (this skill's own canonical definition, cited rather than
+   restated here — the same file harness's `chore-planner` cites for its own ordering rule). Read
+   the candidate's body for a `Blocked-by: #NN[, #NN...]` line (git-native: `gh issue view <id>
+   --json body`; local: `Read` the TICKET file), then `gh issue view <NN> --json state` (git-native)
+   or resolve the local record's own status per named blocker. ANY named blocker still open
+   excludes the candidate this run — reported in step 6 as blocked-and-why, never silently
+   dropped. All named blockers closed, or no line present → this exclusion doesn't apply; the
+   candidate proceeds through the rest of this step's checks normally.
 3. **Nothing mobilizable → stop here.** Report the sweep's own findings (step 1) plus "0 tickets
    mobilizable this run" and why (no open feature/bug/task tickets, or all already in flight). No
    confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
@@ -174,7 +187,8 @@ sweep surfaced that's actually buildable.
    happens to start with the literal word "auto") is observable in the artifact of record, never
    silent. Then the sweep's own findings, then a table of every ticket CONSIDERED this run —
    mobilized (dispatch + outcome: succeeded / failed / still in flight), or skipped-and-why (not
-   confirmed, in flight already — an open PR, or a claim with no PR open yet (#184) —
+   confirmed, in flight already — an open PR, or a claim with no PR open yet (#184) — blocked by
+   an open `Blocked-by:` dependency (#193, naming the still-open blocker id) —
    wrong/ambiguous label, too vague to build unattended — the seat SKIPPED, no clarify round
    available on this path — or excluded by the sweep's own judgment).
 
@@ -231,6 +245,9 @@ sweep surfaced that's actually buildable.
   PR; report it as "in flight already" in step 6, not as a fresh candidate. A claim past its
   staleness window with no linked PR is `repo-cleaner`'s stale-claim finding to raise (ADR-0005
   Decision 6) — this step only excludes on the claim's presence, it never reclaims one.
+- A ticket's `Blocked-by:` line names an id that doesn't resolve (deleted issue, typo) → ambiguous,
+  exclude per the label/in-flight ambiguity discipline above; never guess which ticket was meant.
+  All named blockers already closed → not blocking; the candidate proceeds normally (#193).
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
 - `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
@@ -248,8 +265,9 @@ sweep surfaced that's actually buildable.
   produced — never treated as an error unique to the unattended path.
 
 Done when `/sweep-chores` has run (via the direct `chore-lead` dispatch step 1 names, not a failed
-Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight AND no active
-claim has been considered, every dispatch was gated by the human's one batched confirm
+Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight, no active
+claim, AND no open `Blocked-by:` dependency (#193) has been considered, every dispatch was gated
+by the human's one batched confirm
 (INTERACTIVE) or by step 2's own filtering under the explicit `auto` token (UNATTENDED) — never by
 neither — and the final report names every considered ticket's outcome — a mobilized ticket's
 relayed `build-lead` result, a skip-and-why, or (for a named blocker) the classified breakdown
@@ -258,7 +276,8 @@ INTERACTIVE run, a named blocker gets only a table row with no classified paragr
 breakdown proposes a build attempt instead of the shape its category actually calls for, an
 unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the
 per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
-regression), a ticket already in flight OR already claimed is dispatched again, two concurrent
+regression), a ticket already in flight OR already claimed OR carrying an open `Blocked-by:`
+dependency is dispatched anyway, two concurrent
 feature/task dispatches with overlapping or unstated edit targets are pushed to run in parallel
 instead of the safer serial default (isolation itself is no longer this step's call — that's
 `dispatch-ticket`'s own unconditional Phase 3, per #183 — but a foreseeable merge conflict from
