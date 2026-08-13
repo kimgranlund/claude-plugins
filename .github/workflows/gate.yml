@@ -35,7 +35,7 @@ jobs:
           set -e
           fail=0
           for p in harness docs agent-protocols llm \
-                   design screens teamwork; do
+                   design screens teamwork authorkit; do
             echo "::group::$p"
             python3 harness/scripts/release_gate.py "$p" || fail=1
             echo "::endgroup::"

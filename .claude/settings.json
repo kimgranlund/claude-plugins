@@ -29,7 +29,8 @@
     "screens@nonoun-plugins": false,
     "agent-protocols@nonoun-plugins": false,
     "llm@nonoun-plugins": false,
-    "design@nonoun-plugins": false
+    "design@nonoun-plugins": false,
+    "authorkit@nonoun-plugins": false
   },
   "extraKnownMarketplaces": {
     "nonoun-plugins": {
