@@ -103,6 +103,42 @@ rest of the decision even starts.
 5. Once cleared, re-verify the result — diff before/after to confirm nothing the other actor owned
    was silently dropped, not just that your own change landed.
 
+## Recovery: a live agent's worktree vanished mid-dispatch (#207)
+
+A parent seat idling on a nested dispatch anchored to its OWN worktree can have that worktree
+auto-reaped by the harness's idle-unchanged-worktree cleanup while the child is still live in
+it — deterministic, not a race: any parent-waits-on-child-in-same-worktree pattern with zero
+interim changes triggers it (#207, confirmed live during the #198 build).
+
+1. The child stops and reports rather than self-authorizing into the shared checkout — its
+   refusal ("working directory no longer exists... Refusing to run there") is the correct guard
+   firing, not a bug to route around.
+2. The host recreates the worktree at the EXACT same path on the claimed branch —
+   `git worktree add <same-path> <claimed-branch>` (the branch survives the reap; it was created
+   at claim time) — falling back to `-b` off `main` only if the claimed branch is gone too.
+3. The host verifies clean + correct HEAD before anything else touches it: `git status --short`
+   (expect empty) and `git rev-parse HEAD` (expect the claimed branch's own tip).
+4. The host then `SendMessage`s the child to resume with an explicit cd-per-Bash-call instruction,
+   since its pinned cwd may still be stale even though the path exists again.
+
+Step 2's claimed-branch path is validated recovery (#207 exercised exactly this — the branch
+existed from the claim step); the `-b`-off-`main` fallback is untested defensive coverage for the
+branch-also-gone case, not something #207 itself exercised — cite #207 for the former only.
+
+## Standing mitigation: cwd races across sibling sessions (#189)
+
+Sibling agent sessions launched from one background job can share host cwd state racily — even
+plain Edit/Bash calls from one sibling can intermittently land in a different sibling's worktree
+(#189, measured across parallel sessions from one job).
+
+- Serialize writers strictly across siblings of the same job — one sibling writing at a time.
+- Verify with `cd <path> && pwd && git status` before every write, not only at task start — the
+  only check that catches a silent cwd swap after the fact.
+- `worktree-prebash-guard` (teamwork 2.9.4, #198) now flags both directions it can see —
+  worktree→primary and sibling→sibling — but its own disclosed blind spots (dynamic `$(...)`
+  targets, `sh -c`/`bash -c` wrappers) still pass silently, so the discipline above is
+  belt-and-suspenders on top of the guard, never made redundant by it.
+
 ## Output contract (when reporting a decision or a collision)
 
 ```
@@ -123,6 +159,9 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | `gh pr comment` / `gh issue comment` | The other actor's work lives on a branch/PR/Issue but no live `SendMessage` channel reaches it — async, durable, git-native coordination |
 | A project's ticket status vocabulary (e.g. `open`/`doing`/`done`) | Cheap pre-flight check before claiming scope — see the project's own doc-writing-rules, where one exists |
 | docs' backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
+| The Recovery section above | A nested child's worktree got auto-reaped while the parent idled on it (#207) |
+| The Standing-mitigation section above | Sibling sessions from one background job share host cwd state racily (#189) |
+| `worktree_prebash_guard.py` (teamwork `scripts/`) | Mechanical catch for worktree→primary and sibling→sibling cd escapes — still blind to dynamic/wrapped targets, per its own header |
 | [[team-or-solo-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-rules` (harness) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
@@ -173,6 +212,8 @@ sessions can resolve async once the dependency is named where both can see it.
 
 **Done** when a concurrency-touching task states its posture (isolated or knowingly shared) before
 starting, and — if a collision surfaces — names the actor type, the independent verification, and
-the matching response, in that order. **NOT done** while "another session might be touching this"
-is discovered by surprise mid-edit with no plan for it, or a collision is resolved by trusting a
-self-report (yours, a subagent's, or a peer's) instead of checking the tree.
+the matching response, in that order; and — if a worktree vanished mid-dispatch or siblings raced
+on cwd — the recreate/verify/resume sequence or the serialize/verify-per-write discipline ran, not
+skipped. **NOT done** while "another session might be touching this" is discovered by surprise
+mid-edit with no plan for it, or a collision is resolved by trusting a self-report (yours, a
+subagent's, or a peer's) instead of checking the tree.
