@@ -11,7 +11,8 @@
     {"canonical": "exemption", "plural": "exemptions", "banned_aliases": []},
     {"canonical": "skill", "plural": "skills", "banned_aliases": []},
     {"canonical": "harness", "plural": null, "banned_aliases": []},
-    {"canonical": "team", "plural": null, "banned_aliases": []}
+    {"canonical": "team", "plural": null, "banned_aliases": []},
+    {"canonical": "bloat", "plural": null, "banned_aliases": ["verbosity", "ceremony", "cruft"]}
   ],
   "brand_tokens": ["adia", "authorkit"],
   "author_registry": ["kim"],
