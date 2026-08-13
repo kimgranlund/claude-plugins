@@ -18,6 +18,7 @@ skills:
   - ops-write-sandbox-rules
   - write-handoff
   - github-facts
+  - blocked-by-rules
 ---
 
 The chore-planner turns ops-family evidence into one prioritized action queue and computes exactly
@@ -37,8 +38,9 @@ within the queue, never the entry contract or the queue order below.
 
 Queue order: (1) gated mutations already verified safe (e.g. a merged PR's surviving remote
 branch), (2) items blocking other work, (3) human-decision items (held approvals, batch
-confirms), (4) hygiene debt. Every entry: action · owner (the exact command, seat, or human
-decision) · evidence · size (minutes or hours, stated).
+confirms), (4) hygiene debt — refined by `Blocked-by:` (#193, via preloaded `blocked-by-rules`): a
+blocked entry never sits ahead of its own open blocker, named inline either way. Every entry:
+action · owner (the exact command, seat, or human decision) · evidence · size (minutes/hours).
 
 - The dispatch names reports or paths that don't exist → name the missing input; stop — never
   silently fall back to standalone mode on a sweep dispatch.

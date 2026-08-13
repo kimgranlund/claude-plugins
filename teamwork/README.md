@@ -83,6 +83,7 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
+v2.11.0 · 2026-08-13 · `mobilize-chores` gains the `Blocked-by: #NN` dependency convention (issue #193) as a third, independent step-2 exclusion plus step-6 blocked-and-why reporting; canonical format documented in new `references/blocked-by-convention.md`; harness's `chore-planner` (own bump) reads the same convention via a new preloaded skill; #197 migrated as the first real data
 v2.10.1 · 2026-08-13 · `parallel-work-rules` gains the #207 worktree-vanished recovery procedure and the #189 sibling-cwd-race standing mitigation, both cited; body-only, no description change, no eval-run obligation
 v2.10.0 · 2026-08-13 · `dispatch-ticket`'s Phase 3 isolation gated conditional on size/collision-risk instead of unconditional (issue #204), and the whole file tightened ~18% with zero rule/citation loss (issue #206) — combined build, one PR, fresh-context skill-checker FLOOR pass applied
 v2.9.5 · assembled 2026-08-13 · 2.9.5: `dispatch-ticket` Phase 3's claim step gains a

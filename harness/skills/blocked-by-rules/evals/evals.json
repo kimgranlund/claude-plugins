@@ -1,0 +1,17 @@
+{
+  "skill": "blocked-by-rules",
+  "note": "New 2026-08-13 (issue #193) — the operational half of the Blocked-by convention, preloaded by chore-planner. Negatives: the convention's own format/backend-realization (teamwork's mobilize-chores owns that), mobilize-chores' own step-2 exclusion (a different consumer of the same convention), and anything about the ops-family write-sandbox mechanism (ops-write-sandbox-rules).",
+  "cases": [
+    { "id": "t01", "prompt": "why does this ticket sit behind another one in the ops queue", "expect": "trigger" },
+    { "id": "t02", "prompt": "how does chore-planner order tickets that are blocked by another issue", "expect": "trigger" },
+    { "id": "t03", "prompt": "what happens in plan.md when a ticket's Blocked-by blocker is still open", "expect": "trigger" },
+    { "id": "t04", "prompt": "how should chore-planner read a Blocked-by line on a ticket", "expect": "trigger" },
+    { "id": "t05", "prompt": "the blocker issue for this ticket got closed, does its plan.md entry move", "expect": "trigger" },
+    { "id": "t06", "prompt": "what does chore-planner do if the blocked-by issue number doesn't resolve", "expect": "trigger" },
+    { "id": "n01", "prompt": "what's the exact format of a Blocked-by line, and how do I write one", "expect": "no-trigger", "comment": "owner: teamwork's mobilize-chores, references/blocked-by-convention.md" },
+    { "id": "n02", "prompt": "should mobilize-chores mobilize a ticket that's blocked by an open issue", "expect": "no-trigger", "comment": "owner: mobilize-chores step 2 — a different consumer of the same convention" },
+    { "id": "n03", "prompt": "why can't chore-planner write .claude/ops/plan.md directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules" },
+    { "id": "n04", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: sweep-chores / chore-lead" },
+    { "id": "n05", "prompt": "walk me through decision-watcher's per-firing ADR classification steps", "expect": "no-trigger", "comment": "owner: watch-adrs" }
+  ]
+}
