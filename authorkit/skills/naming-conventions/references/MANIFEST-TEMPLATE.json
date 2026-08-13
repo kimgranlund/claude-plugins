@@ -1,0 +1,14 @@
+{
+  "$schema_note": "Seed manifest for a target estate. Copy to the estate root or .claude/, then: populate author_registry, adjust lexicons by PR, register your ObjectVocab, and enumerate exemptions from the first audit run. The exemptions array may only shrink.",
+  "verb_lex": ["create", "execute", "retire", "lint", "run", "mint", "sweep", "seed"],
+  "process_lex": ["audit", "planning", "authoring", "triage", "review", "migration"],
+  "role_lex": ["leader", "orchestrator", "coordinator"],
+  "object_vocab": [
+    {"canonical": "skill", "plural": "skills", "banned_aliases": []},
+    {"canonical": "harness", "plural": null, "banned_aliases": []}
+  ],
+  "brand_tokens": [],
+  "author_registry": [],
+  "mutating_no_confirm_allowlist": [],
+  "exemptions": []
+}

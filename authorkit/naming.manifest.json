@@ -1,0 +1,20 @@
+{
+  "$schema_note": "authorkit naming manifest — the estate-local governance file. Lexicons are closed (change by PR); object_vocab grows by registration; exemptions may only shrink.",
+  "verb_lex": ["create", "execute", "retire", "lint", "run", "mint", "sweep", "seed"],
+  "process_lex": ["audit", "planning", "authoring", "triage", "review", "migration"],
+  "role_lex": ["leader", "orchestrator", "coordinator"],
+  "object_vocab": [
+    {"canonical": "naming", "plural": null, "banned_aliases": ["names"]},
+    {"canonical": "conventions", "plural": null, "banned_aliases": ["convention", "standards"]},
+    {"canonical": "rename", "plural": "renames", "banned_aliases": []},
+    {"canonical": "manifest", "plural": "manifests", "banned_aliases": []},
+    {"canonical": "exemption", "plural": "exemptions", "banned_aliases": []},
+    {"canonical": "skill", "plural": "skills", "banned_aliases": []},
+    {"canonical": "harness", "plural": null, "banned_aliases": []},
+    {"canonical": "team", "plural": null, "banned_aliases": []}
+  ],
+  "brand_tokens": ["adia", "authorkit"],
+  "author_registry": ["kim"],
+  "mutating_no_confirm_allowlist": [],
+  "exemptions": []
+}
