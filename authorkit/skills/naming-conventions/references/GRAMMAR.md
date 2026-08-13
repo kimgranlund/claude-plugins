@@ -59,6 +59,9 @@ object); RoleLex stays ≤ 4 entries.
 **Disjointness invariant:** VerbLex ∩ ProcessLex = ∅. Position plus membership
 decides kind; a token in both would break that. ObjectVocab entries register
 canonical form, plural, and banned aliases (`pr`, never `pull-request`).
+`banned_aliases` scopes to artifact NAMES only — it governs what token a
+command/skill/agent name may use, never general prose, documentation, or
+conversational wording, which may still say "pull request" freely.
 Brand tokens (`adia`, `authorkit`) are banned from local names — the
 marketplace prefix supplies the namespace; embedding brand double-prefixes.
 

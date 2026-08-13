@@ -30,7 +30,7 @@ consults its references is body content, not metadata.
 Graph checks: every endpoint exists; `performs` arithmetic holds; `wraps`
 targets a model-invocable skill; `requires` graph is acyclic.
 
-## Invocation policy and tool grants (agents; mutating commands)
+## Invocation policy and tool grants (agents; mutating commands; skills)
 
 ```yaml
 # agents
@@ -45,6 +45,13 @@ allowed-tools:
   - Read
   - Edit
   - Bash(git mv *)
+
+# skills — the Claude Code invocation dials, both mandatory, always explicit
+disable-model-invocation: false   # true blocks agent preloading outright — verify
+                                   # nothing cites this skill before setting it true
+user-invocable: false              # true if a user may type this skill's name directly;
+                                   # false is the norm here — a `wraps:` command is the
+                                   # deliberate user-facing surface instead
 ```
 
 Rules (all validated):

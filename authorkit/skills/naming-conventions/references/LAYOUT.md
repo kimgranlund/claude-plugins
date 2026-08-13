@@ -8,11 +8,12 @@ skills/{name}/
   references/       # passive matter: read into context, never executed
   scripts/          # executable matter: code the procedure invokes
   assets/           # inert payload: addressed by path, neither read nor run
+  evals/            # evals.json — the trigger-eval suite, model-invocable skills only
 ```
 
-Four top-level entries, nothing else. Partition axis: how content
-participates at run time — context, computation, or payload. Deterministic
-logic belongs in scripts/, never re-derived in prose.
+Five top-level entries, nothing else. Partition axis: how content
+participates at run time — context, computation, payload, or regression
+proof. Deterministic logic belongs in scripts/, never re-derived in prose.
 
 Boundary validation (and no deeper): SKILL.md exists; no stray top-level
 entries; nothing in scripts/ referenced from outside the skill; **no nested

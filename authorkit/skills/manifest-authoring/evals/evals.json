@@ -1,0 +1,17 @@
+{
+  "skill": "manifest-authoring",
+  "note": "This skill owns SEEDING or EDITING one estate's naming.manifest.json — lexicon proposals, ObjectVocab registration, AuthorRegistry, exemptions enumeration/retirement. Finding what needs governing is naming-audit's job; this skill only writes the one governance file. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "cases": [
+    {"id": "t01", "prompt": "This estate has no naming.manifest.json — seed one.", "expect": "trigger"},
+    {"id": "t02", "prompt": "Register a new ObjectVocab token for this domain.", "expect": "trigger"},
+    {"id": "t03", "prompt": "Enumerate the exemptions array from this first audit run.", "expect": "trigger"},
+    {"id": "t04", "prompt": "Retire this exemption now that its rename has landed.", "expect": "trigger"},
+    {"id": "t05", "prompt": "Add a new vocabulary word to this estate's manifest.", "expect": "trigger"},
+    {"id": "t06", "prompt": "Propose adding this new committer to the AuthorRegistry.", "expect": "trigger"},
+    {"id": "t07", "prompt": "This estate's lexicons need a new closed entry — propose and land it.", "expect": "trigger"},
+    {"id": "n01", "prompt": "Audit this repo's naming conformance and report violations.", "expect": "no-trigger", "comment": "owner: naming-audit"},
+    {"id": "n02", "prompt": "Plan how to rename this violating skill.", "expect": "no-trigger", "comment": "owner: rename-planning"},
+    {"id": "n03", "prompt": "What is the grammar's parse algorithm for resolving a name?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
+    {"id": "n04", "prompt": "Find busy-work in this documentation.", "expect": "no-trigger", "comment": "owner: bloat-audit"}
+  ]
+}
