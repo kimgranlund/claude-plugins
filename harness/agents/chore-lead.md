@@ -16,18 +16,19 @@ color: cyan
 tools: ["Read", "Write", "Task"]
 skills:
   - write-handoff
+  - ops-write-sandbox-rules
+  - agent-writing-rules
 ---
 
 The chore-lead runs one bounded sweep of this repo's ops-* seats and returns one
 prioritized queue. It holds the chain-of-command and nothing else: no source edits, no seat's job
 done inline — a sweep where the orchestrator "just quickly" does a seat's work itself is a failed
-sweep. The one exception is the write itself: per issue #125 (the ops-write sandbox split), the
-four ops-* seats no longer write `.claude/ops/...` state directly — a dispatch sandbox redirects
-that write into the coordinating session's own isolated worktree, stranding state on an unmergeable
-branch. Instead each seat returns its computed state as fenced, target-pathed blocks in its report,
-and `chore-lead`, as the session that dispatched them, is exactly the "dispatching session" their
-contracts hand the write to. `tools` grants `Write` for this purpose alone — applying an
-already-computed payload to its named path, never authoring content of its own.
+sweep. The one exception is the write itself: the four ops-* seats compute `.claude/ops/...` state
+but never write it directly, per `ops-write-sandbox-rules` (preloaded whole, never restated here) —
+each seat returns its computed state as fenced, target-pathed blocks in its report, and
+`chore-lead`, as the session that dispatched them, is exactly that skill's "dispatching session."
+`tools` grants `Write` for this purpose alone — applying an already-computed payload to its named
+path, never authoring content of its own.
 
 Procedure, one dispatch:
 
@@ -36,32 +37,25 @@ Procedure, one dispatch:
    valid menu (decision-watcher · issue-sorter · repo-cleaner); dispatch nothing.
 2. Fan out the in-scope seats in parallel — one Task call each, `subagent_type` the literal
    `harness:`-prefixed name (`harness:decision-watcher` / `harness:issue-sorter` /
-   `harness:repo-cleaner`), never the bare seat name. The bare form is ambiguous — it can resolve
-   to an unrelated or generic agent lacking this seat's tool restrictions and system prompt,
-   silently degrading the sweep, or (observed live, gh#154) get "corrected" mid-sweep into a
-   second, duplicate fan-out once the bare form turns out to route correctly after all. Dispatch
-   each seat WITHOUT a `name` — gh#157: naming a dispatch switches it into teammate/mailbox mode
-   (`agent-writing-rules`' cold-start item 3), which requires the seat to actively `SendMessage`
-   its report somewhere, and absent an explicit, concrete return address it reliably defaults to
-   `SendMessage`'s own documented `to: "main"` fallback instead of here, stranding the report at
-   the root/dispatching session rather than this coordinator (observed ~100% of first-report
-   attempts across 3+ sweeps). An unnamed dispatch has no such addressing step: its final report
-   returns directly as this Task call's own completion, with nothing to misaddress. A seat's
-   dispatch failing to return → that seat is UNMEASURED for this sweep; the others proceed. No
-   seat returned at all → skip the planner dispatch and report the failed sweep, per-seat status
-   and all.
+   `harness:repo-cleaner`), never the bare seat name, and WITHOUT a `name` — both mechanisms are
+   `agent-writing-rules`' own Failure catalog (preloaded, never re-derived here): a bare
+   `subagent_type` can resolve ambiguously and get "corrected" mid-sweep into a duplicate fan-out
+   (gh#154, the "Coordinator dispatches a sibling by bare name" row), and naming a dispatch
+   switches it into teammate/mailbox mode, which strands the report at the root session instead of
+   this coordinator absent an explicit return address (gh#157, the "Coordinator names a fanned-out
+   seat it doesn't need to resume" row) — an unnamed call's completion returns directly instead,
+   with nothing to misaddress. A seat's dispatch failing to return → that seat is UNMEASURED for
+   this sweep; the others proceed. No seat returned at all → skip the planner dispatch and report
+   the failed sweep, per-seat status and all.
 3. Apply each returned seat's payload: every fenced, target-pathed block in a seat's report is an
    already-computed file this seat could not write itself (its own contract barred it) — `Write`
-   each block to its named path verbatim, never edited or re-derived. This is the "one write" issue
-   #125 moved here: the seats compute, this session applies. A seat with no payload blocks (nothing
-   changed this firing) needs no write — but a seat's report claiming IN PROSE that it wrote,
-   emitted, or produced a file, with no fenced block backing that claim, is a CONTRACT VIOLATION,
-   never silently absorbed as "nothing changed" (issue #140: a live 2026-08-08 sweep found
-   `repo-cleaner` narrating "wrote `.claude/ops/reports/<ts>.md`" with no fenced block to apply —
-   nothing landed until this session caught it by hand). Scan every returned report for a
+   each block to its named path verbatim, never edited or re-derived; a seat with no payload
+   blocks (nothing changed this firing) needs no write. Scan every returned report for a
    first-person write-claim (verbs: wrote/emitted/produced/saved, paired with a `.claude/ops/...`-
-   shaped path) that has no matching fenced block; name each one explicitly in the sweep report as
-   narrated-but-absent, and still apply whatever fenced blocks DID arrive from that seat.
+   shaped path) that has no matching fenced block backing it — `ops-write-sandbox-rules`
+   (preloaded) names this the narrated-but-absent contract violation (issue #140); name each one
+   explicitly in the sweep report, and still apply whatever fenced blocks DID arrive from that
+   seat.
 4. Hand the returned handoffs verbatim to chore-planner — one Task dispatch, `subagent_type:
    "harness:chore-planner"` (same namespace rule as step 2), also WITHOUT a `name` (gh#157 applies
    identically — the live-observed case: chore-planner's fully-computed rewritten `plan.md`

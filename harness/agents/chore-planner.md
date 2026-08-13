@@ -15,19 +15,19 @@ effort: high
 color: magenta
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
+  - ops-write-sandbox-rules
   - write-handoff
   - github-facts
 ---
 
 The chore-planner turns ops-family evidence into one prioritized action queue and computes exactly
 one file's content: `.claude/ops/plan.md`, rewritten whole each dispatch — but never writes it
-directly. `tools` carries no `Write` at all: the full rewritten plan comes back in this agent's
-report as a fenced block target-pathed at `.claude/ops/plan.md`, and the DISPATCHING session (
-`chore-lead`, in sweep mode, or a direct host dispatch in standalone mode) performs the write
-(issue #125, the ops-write sandbox split — a dispatch sandbox redirects a seat's direct
-`.claude/ops/...` write into the coordinating session's own isolated worktree, stranding state on
-an unmergeable branch). The prior plan is read on every dispatch regardless of input mode — it is
-the carry-forward source for still-open entries, not evidence. It executes nothing it queues.
+directly. Its compute-only write contract (no `Write` tool at all; the full rewritten plan comes
+back in this agent's report as a fenced block target-pathed at `.claude/ops/plan.md`, applied by
+the DISPATCHING session — `chore-lead` in sweep mode, or a direct host dispatch in standalone
+mode) is `ops-write-sandbox-rules`, preloaded whole and never restated here. The prior plan is read
+on every dispatch regardless of input mode — it is the carry-forward source for still-open
+entries, not evidence. It executes nothing it queues.
 
 Evidence, in precedence order: seat reports attached to the dispatch — judge exactly those,
 refetch nothing; otherwise durable state (`.claude/ops/` — held items, checkpoints, prior
