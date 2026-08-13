@@ -156,6 +156,28 @@ contains its inline-fix path, not an assumption that the hand-off target handles
   is what keeps a mid-flight abandonment from permanently blocking the ticket for the next sweep —
   `mobilize-chores` step 2 excludes on an active claim the same way it already excludes on an
   open in-flight PR.
+- **Tear down a no-longer-needed scratch branch/worktree — verified, never raw.** Two cases reach
+  this: the abandonment bullet above (a design fork or unresolved gate failure, once the claim is
+  already released), and Phase 2's bug hand-off — and there ONLY once the post-hand-off read-back
+  (Phase 6's verbs) shows a terminal state: the issue closed, or a `file-bug` Findings entry marking
+  its own run done, with nothing landed on the branch this dispatch created for it. Short of that
+  observable, the worktree stays standing, reported as residue — never torn down while `file-bug`'s
+  own fork may still be live inside it (Phase 2's own text: never wait on that fork, but never guess
+  it has finished either). Either case: never retire the branch with a raw `git branch -D` plus
+  worktree removal — that force-deletes work on nothing more than this seat's own say-so. Feature-
+  detect the host repo's own gated reap script (the reference shape: gen-ui-kit's exact path
+  `scripts/ops/reap-branches.mjs --verify-branch <name>` — a differently-located script counts only
+  if the host repo's own docs declare the same 0/1/2 contract) and gate the delete on its exit code
+  alone, never on this skill's own judgment. Order matters: `git worktree remove` first (it refuses
+  on a dirty tree, so nothing is lost even on a wrong call), THEN `--verify-branch`, THEN — only on
+  exit 0 (provably merged: a merge-base ancestor of `origin/main`, or an exactly-matching MERGED
+  PR) — `git branch -d` (never `-D`, even after a verified 0). Exit 1 (KEPT/PROPOSED), or either
+  verb refusing outright (a dirty worktree, an unmerged `-d`), → leave the branch standing and
+  report why, never escalate to a force flag. Exit 2 is a usage error, not a keep/delete verdict —
+  report it rather than treating either guess as the answer. Where the host repo ships no such
+  script at that path, fall back to an unverified `git worktree remove` then `git branch -d`, but
+  never silently — name in the report exactly what went unverified (no merge-base or MERGED-PR
+  check ran before this delete).
 
 ## Phase 4 — Size the dispatch (solo-first, feature path)
 

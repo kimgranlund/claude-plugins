@@ -83,7 +83,22 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.9.1 · assembled 2026-08-13 · 2.9.1: `dispatch-ticket` Phase 3's "Isolate second" reuse check
+v2.9.2 · assembled 2026-08-13 · 2.9.2: `dispatch-ticket` Phase 3 gains a verified teardown path
+(issue #190, tracked from gen-ui-kit#1151) — the two cases where this skill retires a scratch
+branch/worktree (a post-claim abandonment once released, or the bug hand-off's own worktree once
+`file-bug`'s hand-off shows a terminal read-back) never delete with a raw `git branch -D` plus
+worktree removal anymore. Feature-detects the host repo's own gated reap script (gen-ui-kit's
+`scripts/ops/reap-branches.mjs --verify-branch <name>` is the reference shape) and gates the
+delete on its exit code alone — exit 0 (a merge-base ancestor of `origin/main`, or an
+exactly-matching MERGED PR) → `git worktree remove` then `git branch -d` (never `-D`, even
+post-verify); exit 1 (KEPT/PROPOSED) or either verb refusing outright → leave standing, report
+why; exit 2 (usage error) → report it, never treat as a verdict. No script at that path → an
+unverified fallback, but always with a named warning, never silent. Independent `skill-checker`
+FLOOR audit: PASS, one blocker + one major fixed same-pass (the bug-case trigger had no named
+observable and could fire on a still-live fork; the delete verbs' own dirty-tree/unmerged
+refusals had nowhere named to land) plus two minors (fallback op order, exact-path pinning).
+Body-only, no description edit, no suite re-judge owed (Phase 3 carries no eval-suite-relevant
+routing surface). Docs' sibling fix: docs 1.4.6 · v2.9.1 · assembled 2026-08-13 · 2.9.1: `dispatch-ticket` Phase 3's "Isolate second" reuse check
 (issue #191) keyed off PATH SHAPE — "cwd is anywhere under `.claude/worktrees/`" — rather than
 IDENTITY, so a nested `build-lead` dispatch invoked from inside an unrelated caller's own
 long-lived worktree (`mobilize-chores`'s own, say) reused that caller's tree instead of creating
