@@ -65,7 +65,13 @@ sweep surfaced that's actually buildable.
      operation (assignee + a timestamped comment) before any build effort starts, closing the
      window this check used to miss entirely: a ticket claimed but not yet PR-open was invisible
      to the old open-PR-only check, so two concurrent mobilize runs (or a mobilize run plus a
-     human pickup) could double-dispatch it (staleness handling: Failure branches, below).
+     human pickup) could double-dispatch it (staleness handling: Failure branches, below). **The
+     `in-flight` label (`gh issue list --label in-flight`, #199) may ride along as a cheap
+     pre-filter on top of this** — labels are exactly one `gh issue edit` away from being wrong, so
+     this step still trusts the `assignees` array (and the GraphQL PR check above) as the actual
+     correctness gate. A ticket the label flags still gets that confirmation before being excluded
+     — the label only ever changes the order candidates get checked in, never the answer, so a
+     stale hand-applied label can't silently drop a real candidate on its own.
    - **Local (Option A):** `Glob` `docs/tickets/*.md`, `Read` each file's frontmatter. A candidate
      carries `status: open` and a `kind` of `bug`/`feature`/`task` (the same convention
      `file-bug`/`file-feature`/`file-task` write under this option — `doc-writing-rules` SKILL.md's
