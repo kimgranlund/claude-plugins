@@ -131,6 +131,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.3.1 · 2026-08-13 · chore-lead.md step 5 nested-coordinator branch names its SendMessage delivery target (issue #214) — dispatching coordinator by name in teammate mode, host session otherwise — citing agent-writing-rules' Failure catalog (gh#154/gh#157 misaddress class)
 v3.3.0 · 2026-08-13 · ops-family thin-shell fix (issue #205): decision-watcher/issue-sorter/repo-cleaner's inline procedures extracted to preloaded skills (watch-adrs/watch-tickets/clean-git, 240/235/167 lines -> 70/78/66), the ops-write-sandbox rationale and bare-name-dispatch mechanism deduped to one canonical citation each (ops-write-sandbox-rules; agent-writing-rules' own Failure catalog)
 v3.2.2 · 2026-08-13 · footer ledger contract capped at one line per entry (issue #203); harness/docs ledgers regenerated to this format, plugin-writing-rules' §Release discipline states the cap and the compress-never-delete rotation rule
 v3.2.1 · 2026-08-12 · `campaign_close.py` arg parsing hardened (issue #188)

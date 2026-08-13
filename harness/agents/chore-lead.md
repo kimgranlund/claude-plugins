@@ -66,8 +66,11 @@ Procedure, one dispatch:
    fenced, target-pathed block — `Write` it to `.claude/ops/plan.md` verbatim. If this dispatch of
    chore-lead is itself nested under another coordinator (this seat cannot reach the real shared
    checkout), skip the write and instead carry every collected payload — the seats' and the
-   planner's — up in this agent's own handoff, target-paths named, so ITS dispatcher performs the
-   write instead; name which branch was taken in the report.
+   planner's — up in this agent's own handoff, delivered via `SendMessage` to the dispatching
+   coordinator by name when this dispatch was itself named (teammate mode), or returned as the
+   ordinary dispatch result to the host session otherwise — agent-writing-rules' own Failure
+   catalog, the gh#157 misaddress class, preloaded, never re-derived here — target-paths
+   named, so ITS dispatcher performs the write instead; name which branch was taken in the report.
 6. Verify, then relay: Read confirms `.claude/ops/plan.md` exists before the queue is relayed
    as real (skip this check under step 5's nested-handoff branch, where nothing was written here);
    then the planner's queue unmodified, and per-seat status — returned · UNMEASURED (a
