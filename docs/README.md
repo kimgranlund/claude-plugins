@@ -50,7 +50,24 @@ degrades to inline judgment when not. No hard edges cross the boundary.
 
 Directories align with plugin names (ADR-0007).
 
-v1.4.5 · assembled 2026-08-12 · 1.4.5: `references/backend-resolver.md`'s `claim` operation row
+v1.4.6 · assembled 2026-08-13 · 1.4.6: `file-bug` Phase 5 gains a verified teardown clause (issue
+#190, tracked from gen-ui-kit#1151) — the scratch branch file-bug itself is responsible for
+retiring (the inline fix once its PR is gone, or a dispatched fork/agent's own abandoned
+investigation branch) never gets deleted with a raw `git branch -D` plus worktree removal
+anymore; `dispatch-ticket`'s own Phase 3 keeps owning teardown for the hand-off case's worktree,
+unchanged here. Feature-detects the host repo's own gated reap script (gen-ui-kit's
+`scripts/ops/reap-branches.mjs --verify-branch <name>` is the reference shape): `git worktree
+remove` first (a branch still checked out in a worktree reads KEPT regardless of merge state, and
+the removal itself refuses on a dirty tree, so nothing is lost even on a wrong call), then
+`--verify-branch`, then — only on exit 0 (provably merged) — `git branch -d` (never `-D`). Exit 1,
+or either verb refusing outright, leaves the branch standing with the reason reported; exit 2 is
+a usage error, reported rather than guessed. No script at that path → an unverified fallback,
+always with a named warning. Independent `skill-checker` FLOOR audit: PASS, one major fixed
+same-pass (the exit-0 path was unreachable as first drafted whenever a worktree still held the
+branch — verified against gen-ui-kit's real script logic) plus two minors (the ownership-scope
+sentence narrowed so it doesn't contradict the `git worktree remove` it prescribes; the fallback's
+op order corrected to match the verified path). Body-only, no description edit, no suite re-judge
+owed. Teamwork's sibling fix: teamwork 2.9.2 · v1.4.5 · assembled 2026-08-12 · 1.4.5: `references/backend-resolver.md`'s `claim` operation row
 gains its first real caller (teamwork's `dispatch-ticket` Phase 3, issue #183/#184) — the row
 previously read "claim has no caller today," which a fresh-context skill-checker auditing that
 teamwork change flagged as now-false (stale context is a defect, repaired in the same change per
