@@ -28,6 +28,7 @@ reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/sk
 | `skills/lead-team` | Command skill | user-only (`/lead-team`) | Makes THIS host session adopt `agents/team-lead.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides team-or-solo-rules's solo-first default for the charter's duration; paired with the seat it imports per ADR-0006's species split — command = verb form (`/lead-team`), agent = role noun (`team-lead`); like harness's `issue-sorter` pairing, inverted (host adopts, never dispatches) |
 | `agents/lead-team` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
 | `agents/planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
+| `skills/lead-planning` | Command skill | user-only (`/lead-planning`) | Makes THIS session adopt `agents/planner.md`'s own contract directly for one named planning charter — fifth `/lead-*` member, paired per ADR-0006's species split (command = verb form `lead-planning`, agent = role noun `planner`). Write discipline INVERTS relative to `/lead-team`: authoring the PRD/SPEC/LLD/ADR the charter earns is this seat's own deliverable, so the host writes them directly — but never grades one it wrote: every authored/revised doc rides to `docs:doc-checker` fresh-context, review-by-hand against `doc-writing-rules`' rubric where docs isn't installed. Roll-up audience is the invoking human; closes on a named `loop-rules` decision |
 | `agents/builder` | Subagent | dispatch-only | The build seat: implements an approved LLD's build sequence, runs mechanical checks, escalates design conflicts rather than editing the contract |
 | `agents/docs-writer` | Subagent | dispatch-only | Owns a documentation site: derives pages from their canonical source, makes drift a failing gate, reports soft drift a static check can't see |
 | `agents/code-checker` | Subagent | dispatch-only | Independent critic for one bounded code change, scored against the contract it was built to; generator ≠ critic for the delivery loop |
@@ -81,6 +82,28 @@ library's `scripts/routing-corpus.json` positives/negatives, `close-session`'s a
 mint.
 
 Directories align with plugin names (ADR-0007).
+
+v2.9.0 · assembled 2026-08-13 · 2.9.0: `/lead-planning` (issue #194) — the fifth `/lead-*` member,
+new command surface pairing with the existing, UNTOUCHED `agents/planner.md`: the host adopts the
+design seat's own contract directly for one named planning charter, mirroring `lead-build`/
+`lead-review`/`lead-team`'s four-phase shape (bind charter → adopt contract by reading the agent
+file, never restating → run the loop → close on a named `loop-rules` decision). Two deltas from
+`lead-team`'s host-adoption precedent: write discipline INVERTS (authoring the PRD/SPEC/LLD/ADR
+the charter earns is this seat's own deliverable, so the host writes them directly — but never
+grades one it wrote; every authored/revised doc rides to `docs:doc-checker` fresh-context, or the
+disclosed by-hand fallback against `doc-writing-rules`' rubric where docs isn't installed) and
+roll-up audience (the invoking human, not a dispatching coordinator). Failure branches mirror
+`lead-team`'s: blank charter reports what a charter looks like rather than inventing one;
+re-invocation while a prior charter is open checks records rather than merging state silently; a
+doc-checker verdict failing twice indicts the doc's own intent capture, not the checker.
+`disable-model-invocation: true` exempts it from the routing-eval coverage sweep (`eval_check.py`'s
+E6 check skips every dmi:true skill outright) — matching `lead-build`/`lead-review`'s own
+precedent of shipping no `evals/evals.json`; `evals/assertions.md` added for the behavioral
+contract. Fresh-context `skill-checker` FLOOR audit: PASS, two minors fixed pre-ship (the Phase 2
+priority gloss trimmed to heads-only rather than clause detail, closing the exact drift-pair
+surface lead-team's own audit report flagged as a MAJOR at birth; reciprocal `/lead-planning`
+NOT-for fences added to `lead-team` and `lead-build`'s menu descriptions, both dmi:true so no
+evals.json obligation follows). `agents/planner.md` untouched, per the ticket's own constraint.
 
 v2.8.0 · assembled 2026-08-12 · 2.8.0: build-dispatch lifecycle redesign (issues #183/#184,
 mobilize-chores confirm round) — a build-lead/dispatch-ticket dispatch now owns its full
