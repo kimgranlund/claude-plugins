@@ -50,11 +50,11 @@ here — report that routing and stop; docs' seats own it.
 
 ## Phase 2 — Branch by kind
 
-- **`kind: bug`** → this is `file-bug`'s work, but isolate BEFORE handing off — `file-bug`'s own
-  body carries no worktree mechanics of its own, and its Phase 5 can fix a root-cause-evident bug
-  inline (real tree mutation), so this dispatch is what has to guarantee containment, not the
-  skill it hands off to: run Phase 3's isolate bullet now (no claim — `file-bug` owns its own
-  record lifecycle, so none is taken here on its behalf), THEN invoke `file-bug` via the Skill
+- **`kind: bug`** → this is `file-bug`'s work, but isolate BEFORE handing off (per Phase 3's own
+  scoping below) — its Phase 5 can fix a root-cause-evident bug inline (real tree mutation), so
+  this dispatch is what has to guarantee containment, not the skill it hands off to: run Phase 3's
+  isolate bullet now (no claim — `file-bug` owns its own record lifecycle, so none is taken here
+  on its behalf), THEN invoke `file-bug` via the Skill
   tool carrying the ticket id, seed prefixed `[redirected-from:dispatch-ticket]` (file-bug's own
   marker protocol — the round budget was already spent here, and file-bug's forked run has no
   other way to know). This is what makes the inline-fix path safe: MEASURED (2026-08-11 live
@@ -119,21 +119,30 @@ contains its inline-fix path, not an assumption that the hand-off target handles
   per ADR-0005: lower identity string wins on an exact timestamp tie) — abandon immediately, no
   worktree created, no release needed (this claim never landed), and report the loss as a named
   blocker (someone else's in-flight work) rather than guessing which claim is real.
-- **Isolate second.** Check whether the current working directory is already inside a dedicated
-  git worktree (this repo's own convention: under `.claude/worktrees/`) before creating a new
-  one — a `build-lead` agent already dispatched into its own worktree, or a `/lead-build` session
-  already isolated, reuses that isolation and simply checks out the working branch inside it. Not
-  already isolated → create one now (`git worktree add`, off a clean `main` HEAD) and run every
-  remaining step inside it. The branch it checks out to depends on whether a claim just landed:
-  the claim bullet's own decided name, when one ran (feature/task) — or, when isolate runs alone
-  with no claim before it (the bug hand-off), a lightweight name of its own (`bug/<id>` or
-  whatever `file-bug`'s own convention names, decided here since no claim bullet named one).
-  **Isolation itself is
+- **Isolate second.** Decide the branch name FIRST: the claim bullet's own decided name, when one
+  ran (feature/task) — or, when isolate runs alone with no claim before it (the bug hand-off), a
+  lightweight name of its own (`bug/<id>`, decided here since no claim bullet named one). Only
+  then check reuse, and key it off IDENTITY, never path shape, on BOTH of these conjuncts — either
+  one missing means create, never reuse: (1) the cwd is a linked worktree, not this repo's primary
+  checkout (the #180/#182 residue this file already cites below is exactly a stale branch left
+  checked out IN the primary checkout — a decided-name match there must never license reuse, since
+  reusing the primary checkout for a build is the very failure Phase 5's environment-clean line
+  exists to catch); AND (2) that linked worktree's already-checked-out branch matches the name
+  just decided (a resumed `build-lead`/`lead-build` re-entering its own isolation for the same
+  ticket — the decided name embeds this ticket's own id, so a branch match against it is identity,
+  not path shape). A bare "cwd sits somewhere under `.claude/worktrees/`" is NEITHER conjunct and
+  is never sufficient by itself — the #191 fix: a caller's own long-lived worktree for an unrelated
+  purpose (`mobilize-chores`'s own dedicated worktree, say) also matches that path shape, and a
+  nested dispatch that reuses it on path shape alone checks the wrong ticket's branch out on top of
+  the caller's own tree. Either conjunct fails → create one now (`git worktree add`,
+  off a clean `main` HEAD) and run every remaining step inside it. **Isolation itself is
   unconditional — even for a single serial dispatch with no concurrent sibling** — worktree
   *creation* is the only conditional part (reuse vs. create). This is the fix for the #180/PR
   #182 defect (2026-08-12: that build ran in the HOST checkout with no worktree at all and left
   its feature branch checked out on return; the coordinator repaired it by hand). Never build in
-  the host's shared checkout, regardless of how many other dispatches are running.
+  the host's shared checkout, regardless of how many other dispatches are running — and never reuse
+  an unrelated worktree standing in for one, regardless of how deeply nested the dispatch is
+  (#191).
 - **Release on abandonment — post-claim exits only.** Only a failure that happens AFTER this
   claim landed can have anything to release: a discovered design fork routed back to planner, or
   a gate failure recorded but unresolved (both mid-flight, per the Failure branches below) — either

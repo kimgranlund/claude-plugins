@@ -83,6 +83,23 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
+v2.9.1 · assembled 2026-08-13 · 2.9.1: `dispatch-ticket` Phase 3's "Isolate second" reuse check
+(issue #191) keyed off PATH SHAPE — "cwd is anywhere under `.claude/worktrees/`" — rather than
+IDENTITY, so a nested `build-lead` dispatch invoked from inside an unrelated caller's own
+long-lived worktree (`mobilize-chores`'s own, say) reused that caller's tree instead of creating
+its own, checking the target ticket's branch out on top of the caller's uncommitted state.
+Reuse now requires BOTH conjuncts: the cwd is a linked worktree (never the primary checkout — the
+#180/#182 residue this same bullet already cited is exactly a stale branch left checked out IN
+the primary checkout) AND that worktree's checked-out branch matches the name the claim bullet
+(or the bug hand-off's own naming) just decided for THIS ticket — the decided name embeds the
+ticket's own id, so a branch match against it is identity, not path shape. Fresh-context
+`skill-checker` FLOOR audit: 2 majors fixed pre-ship (the reuse condition didn't exclude the
+primary checkout, reproducing the exact #180 residue it cites; a proposed marker-based reuse path
+read a marker nothing in the skill ever writes — dropped in favor of the branch-match conjunct
+alone, which the audit confirmed already carries full identity since the decided name embeds the
+ticket id) plus 2 minors (a dead pointer at a `file-bug` branch-naming convention that doesn't
+exist; a near-verbatim sentence deduped between Phase 2 and Phase 3).
+
 v2.9.0 · assembled 2026-08-13 · 2.9.0: `/lead-planning` (issue #194) — the fifth `/lead-*` member,
 new command surface pairing with the existing, UNTOUCHED `agents/planner.md`: the host adopts the
 design seat's own contract directly for one named planning charter, mirroring `lead-build`/
