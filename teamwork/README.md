@@ -83,7 +83,31 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.9.4 · assembled 2026-08-13 · 2.9.4: `worktree_prebash_guard.py` gains sibling→sibling
+v2.9.5 · assembled 2026-08-13 · 2.9.5: `dispatch-ticket` Phase 3's claim step gains a
+list-visible `in-flight` label lifecycle (issue #199, Kim's own report: "I cannot tell that
+Issues are claimed or in some kind of 'doing' state" — the claim comment alone is invisible in
+the GitHub issue LIST view). Applied only after the claim wins Phase 3's own race-check, removed
+at every terminal outcome — Phase 5 stage 2 the moment a PR opens, the Release-on-abandonment
+bullet on a mid-flight abandon, and Phase 6's recorded-loss ending, all three naming the label
+alongside the pre-existing assignee release, none left stale. Label = display, comment = record,
+stated explicitly: `mobilize-chores` step 2 gains one sentence naming the label as a cheap,
+optional pre-filter over its existing `assignees`+GraphQL correctness gate, never a substitute for
+either. Correction to the ticket's own premise, investigated and deliberately NOT executed as
+literally asked: #199 characterized this repo's pre-existing `doing` label as a stray duplicate
+BUILD-192 minted and asked for its deletion — a grep across `file-bug`/`file-task`/
+`parallel-work-rules`/this skill's own Phase 6 shows `doing` is the established, load-bearing
+git-native status-vocabulary label (`open`→`doing`→`done`, `backend-resolver.md`'s `update`
+operation), unrelated to claiming; deleting it would have broken that contract across three other
+skills for one ticket's mistaken premise. The two labels legitimately coexist on one issue at
+once — this PR documents the distinction instead of deleting either. Assignee stays required,
+unchanged (ADR-0005/`backend-resolver.md`'s own ratified claim operation, a docs-plugin file
+outside this ticket's target list) — the real gap #192 evidenced (assignee and label both left
+stale after close) is closed by the new terminal-outcome release paths, not by dropping assignee.
+Two fresh-context `skill-checker` FLOOR passes per edited file (`dispatch-ticket`: one major plus
+five minor/nit findings, all closed across two follow-up rounds; `mobilize-chores`: one minor,
+closed) — every finding applied before this PR opened. Incidental cleanup: removed the stale
+`in-flight` label (and, on #192, the stale assignee) from #192/#198/#190 — all three closed, all
+three evidencing the exact defect this ticket fixes; `doing` left untouched on all three · v2.9.4 · assembled 2026-08-13 · 2.9.4: `worktree_prebash_guard.py` gains sibling→sibling
 detection (issue #198, composes with #139's worktree→primary fix without regressing it) — a
 session pinned to one worktree cd/pushd/-C/--prefix'ing into a DIFFERENT worktree under
 `.claude/worktrees/` now also flags, via the same ASK-only `hookSpecificOutput` pattern the

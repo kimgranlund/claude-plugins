@@ -119,6 +119,45 @@ contains its inline-fix path, not an assumption that the hand-off target handles
   per ADR-0005: lower identity string wins on an exact timestamp tie) — abandon immediately, no
   worktree created, no release needed (this claim never landed), and report the loss as a named
   blocker (someone else's in-flight work) rather than guessing which claim is real.
+- **Once the claim wins the race, make it LIST-VISIBLE too (#199).** The claim comment above is
+  durable but invisible in the GitHub issue LIST view — Kim's own report: "I cannot tell that
+  Issues are claimed or in some kind of 'doing' state." Git-native only: `gh issue edit --add-label
+  in-flight`. This repo's own `in-flight` already carries `FBCA04` — the same hex `doing` uses, a
+  coincidence from when it was created, not a signal the two labels are related; never treat a
+  shared color as evidence two labels mean the same thing. A repo that doesn't carry `in-flight`
+  yet creates it with that exact name, but a hex distinct from whatever its own `doing`-equivalent
+  already uses — never invent a different NAME, and never pick a color collision fresh when one
+  isn't already load-bearing. This is additive to the assignee+comment claim mechanic
+  above, not a replacement for it: assignee stays required exactly as ADR-0005 already ratifies it
+  (`backend-resolver.md`) — this skill's own addition sits deliberately outside that operation,
+  since #199's own ask is list-visibility, which the label now supplies, not a redesign of the
+  claim operation itself.
+  **`in-flight` is the ONE canonical claim label — never mint a synonym.** `doing` is a DIFFERENT,
+  pre-existing, load-bearing label: the git-native status vocabulary `file-bug`/`file-task`/this
+  skill's own Phase 6 already use for the `open`→`doing`→`done` status verb (`backend-resolver.md`'s
+  `update` operation), unrelated to claiming — a live incident (#192) shows the confusion this
+  invites: that dispatch applied `doing` alongside `in-flight` mid-claim, which read like an
+  accidental duplicate but wasn't. The two legitimately coexist on one issue at once — "is this
+  claimed" and "what lifecycle stage is this at" are different questions — so `doing` is never
+  deleted, never reused as a claim signal, and no label is ever minted to duplicate what
+  `in-flight` already says.
+  **Label = display, comment = record — never the reverse.** `in-flight` is hand-editable and
+  therefore NEVER the correctness gate on its own: `mobilize-chores` step 2 (below) may read it as
+  a cheap pre-filter, but the claim comment — plus, once a PR exists, `mobilize-chores` step 2's
+  own GraphQL PR-linkage check — stays the authoritative source of whether a ticket is actually
+  claimed. **Removed on every
+  terminal outcome, never left stale:** Phase 5 stage 2 removes it the moment a PR opens (the open
+  PR becomes the visible signal instead — see that stage; on a task or big-feature dispatch this
+  is one more line the sealed prompt names, since the seat opening the PR never loaded this
+  SKILL.md itself); the Release-on-abandonment bullet below removes it on a mid-flight abandon,
+  and on the recorded-loss ending too (Phase 6: a dispatched agent that never returns its Findings
+  and can't be re-dispatched — that dead end releases the same way an abandonment does, since
+  nothing else ever will). A task SKIPPED in Phase 2 never reaches this bullet at all
+  (no claim is taken on an inactionable task), so it never had the label applied and owes no
+  removal either — the same pre-claim/post-claim split Phase 3's own scoping already draws. Cheap,
+  optional, not this skill's to manage: a coordinator running a serial chain (`mobilize-chores`)
+  may also carry the pre-existing `queued` label (`C5DEF5`) to mark a ticket's place in that chain
+  ahead of its own claim — nothing here touches `queued`'s lifecycle, only leaves it alone.
 - **Isolate second.** Decide the branch name FIRST: the claim bullet's own decided name, when one
   ran (feature/task) — or, when isolate runs alone with no claim before it (the bug hand-off), a
   lightweight name of its own (`bug/<id>`, decided here since no claim bullet named one). Only
@@ -144,11 +183,19 @@ contains its inline-fix path, not an assumption that the hand-off target handles
   an unrelated worktree standing in for one, regardless of how deeply nested the dispatch is
   (#191).
 - **Release on abandonment — post-claim exits only.** Only a failure that happens AFTER this
-  claim landed can have anything to release: a discovered design fork routed back to planner, or
-  a gate failure recorded but unresolved (both mid-flight, per the Failure branches below) — either
-  releases the claim before returning: git-native — `gh issue edit --remove-assignee @me` plus a
-  `gh issue comment` naming the release and why; file backend — clear
-  `claimed-by`/`claimed-at`; an adapter — its own release realization. A **pre-claim** exit has
+  claim landed can have anything to release: a discovered design fork routed back to planner, a
+  gate failure recorded but unresolved (both mid-flight, per the Failure branches below), or
+  Phase 6's recorded-loss ending (a dispatched agent that returned with no Findings entry, the
+  one re-dispatch also came back empty, and the loss gets recorded rather than chased further —
+  nothing is ever coming back to open a PR, so this is exactly as dead as a mid-flight abandonment)
+  — every one of these releases the claim before returning: git-native — `gh issue edit
+  --remove-assignee @me --remove-label in-flight` plus a `gh issue comment` naming the release and
+  why; file backend —
+  clear `claimed-by`/`claimed-at`; an adapter — its own release realization. **The label release is
+  not optional** — a dead dispatch must never leave a stale `in-flight` label behind (#199 extends
+  #184's release-discipline to the label the same way it already covers the assignee and comment;
+  a label left standing after abandonment reads as still-claimed to both a human scanning the issue
+  list and `mobilize-chores` step 2's own pre-filter). A **pre-claim** exit has
   nothing to release, because Phase 3 never ran for it: a task SKIPPED in Phase 2 (no claim taken
   on an inactionable task, per Phase 2's own text) and an ambiguous-match blocker in Phase 1 (the
   record was never even confirmed) both end the dispatch before this phase starts. A **lost claim
@@ -218,7 +265,13 @@ discover and repair branch/worktree residue by hand):
    carrying `Closes #<id>` (every id this dispatch closes, on a folded campaign), a plain
    what/why, the gate output for every touched plugin, and an integration-notes line naming any
    known overlap with other open PRs — adopt another PR's already-defined shared field wording
-   where one owns it, never mint a competing definition.
+   where one owns it, never mint a competing definition. **The moment the PR opens (git-native
+   only), remove the `in-flight` claim label** — `gh issue edit --remove-label in-flight` — the
+   open PR itself is now the visible in-progress signal, so the claim label's job is done; leaving
+   it on past this point is exactly the stale-display defect #199 exists to close (#192 is the live
+   example: its PR merged and closed the issue with `in-flight` still sitting on it, because this
+   step didn't exist yet). The claim comment and assignee stay untouched here — this is a display
+   change only, not a release; nothing about the ticket's ownership record changes.
 3. **Verified-clean retirement before the seat retires** — never assumed. State the result on
    three axes explicitly: the worktree's own git status (clean, nothing uncommitted left behind),
    the local feature branch (pushed and named — this seat never merges its own PR, per ADR-0002's
@@ -231,7 +284,10 @@ discover and repair branch/worktree residue by hand):
    verbatim to whatever dispatched it.
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
-enumerated inputs + budget + the typed return, and a **mandatory dated `## Findings` write-back
+enumerated inputs + budget + the typed return + stage 2's own `--remove-label in-flight` call at
+the moment the PR opens (the sealed prompt names this explicitly on a task or big-feature
+dispatch, since the dispatched agent/seat opening the PR never loaded this SKILL.md itself and has
+no other way to know the label needs clearing), and a **mandatory dated `## Findings` write-back
 at each significant result** (slice built, gate green, PR opened), not only at the end, so an
 interrupted build still left evidence. The write-back verb follows the resolved backend:
 git-native — the issue number, `gh issue comment`; file backend — the TICKET file's path, editing
@@ -249,14 +305,19 @@ reason comment — matching `file-bug`'s own Phase 6 status verbs) and report pa
 shipped, plus Phase 5's environment-clean line — stated, never inferred from silence. An agent
 that returned without its Findings entry → one re-dispatch with the contract quoted, then record
 the loss with a dated entry and say so plainly; a fork no longer addressable skips straight to
-recording — it cannot be re-dispatched into. A conversational summary never substitutes for the
-entry the record was owed.
+recording — it cannot be re-dispatched into. Either way, recording the loss is itself a terminal
+outcome with nothing left to come back and open a PR, so it releases the claim right there — the
+Release-on-abandonment bullet's own full release (Phase 3: `--remove-assignee @me --remove-label
+in-flight`, PLUS the release comment naming why — never just the flags with no comment, since
+comment stays the durable record even when the label is what a human notices first). A
+conversational summary never substitutes for the entry the record was owed.
 
 ## Failure branches
 
 - Claim lost the race in Phase 3 (an earlier-timestamped competing claim found on re-read) →
   report as a named blocker (someone else's in-flight work) and stop; never overwrite the winning
-  claim, never guess which run owns the ticket.
+  claim, never guess which run owns the ticket. The `in-flight` label is only ever applied AFTER
+  the race check confirms a win, so a losing claim never had one to remove.
 - Ambiguous match in Phase 1 (two plausible records) → **with an interactive user present**, ask
   which, one question, then proceed. A `/build-feature`-initiated call counts as having an
   interactive user present even though it runs inside that command's fork (`context: fork`) —
