@@ -83,7 +83,21 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
-v2.9.3 · assembled 2026-08-13 · 2.9.3: `agents/build-lead.md` compression (issue #192) — the
+v2.9.4 · assembled 2026-08-13 · 2.9.4: `worktree_prebash_guard.py` gains sibling→sibling
+detection (issue #198, composes with #139's worktree→primary fix without regressing it) — a
+session pinned to one worktree cd/pushd/-C/--prefix'ing into a DIFFERENT worktree under
+`.claude/worktrees/` now also flags, via the same ASK-only `hookSpecificOutput` pattern the
+existing direction already uses. Correction to the ticket's literal wording: the issue text
+called for a hard block (exit 2); the shipped fix does NOT introduce one — this hook stays
+deliberately ASK, never BLOCK (hook-writing-rules: judgment-shaped rules are wrong often and
+unoverridable always as a hard block), same as the pre-existing direction. The ASK message now
+names BOTH worktrees involved (the session's own and the sibling target), not just a raw
+resolved path. Five new selftest fixtures (13–17: sibling positive, own-worktree relative-cd
+negative, seat1/seat10 boundary control, an own-name-not-shadowed-by-prefix control, and a
+mechanized check that the message actually names both worktrees) bring the suite to 17, all
+green. Pure code change — no hook MESSAGE prompt text materially changed beyond the ASK reason
+string, so no separate `hook-checker` critic pass required per this repo's critic-seat
+invariant · v2.9.3 · assembled 2026-08-13 · 2.9.3: `agents/build-lead.md` compression (issue #192) — the
 verbatim-relay rule was stated four times across a ~27-line body (opening job statement, a
 blocker/redirect restatement, the Phase-5 handoff's own "through verbatim" wording, and a closing
 "you relay whatever `dispatch-ticket` actually states" clause) — flagged by PR #187's build-time
