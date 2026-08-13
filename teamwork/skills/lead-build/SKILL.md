@@ -7,7 +7,8 @@ description: >-
   unattended agent cannot ask) — and holds that discipline until the session ends. Run
   /lead-build [optional repo root]. NOT the dispatched sibling seat (build-lead, Agent tool);
   NOT one forked build of a single ticket (/build-feature); NOT batch find-and-confirm
-  (/mobilize-chores); NOT a generic coordination charter (/lead-team).
+  (/mobilize-chores); NOT a generic coordination charter (/lead-team); NOT a design/decomposition
+  charter (/lead-planning).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[optional target repo root — defaults to the current working directory]"

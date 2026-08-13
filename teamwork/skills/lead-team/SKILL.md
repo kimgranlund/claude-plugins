@@ -5,7 +5,8 @@ description: >-
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
   directly, dispatching every unit of real work while the charter stays open. Run /lead-team
   [charter]. NOT for a task one context can hold (team-or-solo-rules); NOT for reviewing one
-  artifact directly (dispatch the owning reviewer).
+  artifact directly (dispatch the owning reviewer); NOT a solo design/decomposition charter where
+  the host authors the docs itself (/lead-planning).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[charter — the plan/build-feature/review work needing a team]"
