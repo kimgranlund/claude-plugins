@@ -7,7 +7,19 @@
       "Write(.claude/ops/watch-checkpoint.json)",
       "Write(.claude/ops/friendlies.json)",
       "Write(.claude/ops/held-items.md)",
-      "Write(.claude/ops/reports/*.md)"
+      "Write(.claude/ops/reports/*.md)",
+      "Bash(python3 harness/scripts/skill_lint.py *)",
+      "Bash(python3 harness/scripts/release_gate.py *)",
+      "Bash(python3 harness/scripts/eval_check.py *)",
+      "Bash(python3 harness/scripts/docs_check.py *)",
+      "Bash(python3 harness/scripts/corpus_check.py *)",
+      "Bash(python3 docs/scripts/doc_lint.py *)",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__find",
+      "mcp__claude-in-chrome__read_console_messages",
+      "mcp__claude-in-chrome__read_network_requests",
+      "mcp__plugin_figma_figma__get_screenshot",
+      "mcp__plugin_figma_figma__get_metadata"
     ]
   },
   "enabledPlugins": {
