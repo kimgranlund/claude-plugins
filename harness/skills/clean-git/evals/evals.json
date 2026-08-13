@@ -1,0 +1,16 @@
+{
+  "skill": "clean-git",
+  "note": "New 2026-08-13 (issue #205) — repo-cleaner's per-firing inventory/classify/execute procedure, extracted out of the 167-line agent body into a preloaded skill. Negatives: the write-sandbox mechanism (ops-write-sandbox-rules), running the seat (dispatch repo-cleaner directly), and instruction-tree/corpus drift (/clean-repo, a different command).",
+  "cases": [
+    { "id": "t01", "prompt": "exactly what does campaign_close.py verify before it deletes a PR's remote branch", "expect": "trigger" },
+    { "id": "t02", "prompt": "when is repo-cleaner allowed to run sync_main.py vs just propose it", "expect": "trigger" },
+    { "id": "t03", "prompt": "how does repo-cleaner classify a finding as stale-open vs orphaned vs healthy", "expect": "trigger" },
+    { "id": "t04", "prompt": "what does repo-cleaner do when a host repo ships its own gated branch-reap script", "expect": "trigger" },
+    { "id": "t05", "prompt": "what happens when campaign_close.py refuses because the PR isn't actually merged", "expect": "trigger" },
+    { "id": "t06", "prompt": "walk me through repo-cleaner's inventory-classify-execute procedure for one firing", "expect": "trigger" },
+    { "id": "n01", "prompt": "why doesn't repo-cleaner just write its own report file", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules" },
+    { "id": "n02", "prompt": "run the repo-cleaner hygiene sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, not a skill trigger" },
+    { "id": "n03", "prompt": "clean up the duplicated instruction trees and stale corpus in this repo", "expect": "no-trigger", "comment": "owner: /clean-repo — instruction-tree/corpus drift, not git-surface hygiene" },
+    { "id": "n04", "prompt": "how does issue-sorter classify a filed item's shape", "expect": "no-trigger", "comment": "owner: watch-tickets" }
+  ]
+}
