@@ -1,0 +1,16 @@
+{
+  "skill": "watch-adrs",
+  "note": "New 2026-08-13 (issue #205) — decision-watcher's per-firing procedure, extracted out of the 240-line agent body into a preloaded skill. Negatives: the write-sandbox mechanism (ops-write-sandbox-rules), and actually running the seat (dispatch decision-watcher directly, no skill trigger).",
+  "cases": [
+    { "id": "t01", "prompt": "how does decision-watcher tell a ratification from a supersession", "expect": "trigger" },
+    { "id": "t02", "prompt": "what are the three ADR corpus dialects decision-watcher's checkpoint script supports", "expect": "trigger" },
+    { "id": "t03", "prompt": "walk me through decision-watcher's per-firing classify/judge/queue steps", "expect": "trigger" },
+    { "id": "t04", "prompt": "what happens when decision-watcher's classify script exits 1 with an unsupported shape", "expect": "trigger" },
+    { "id": "t05", "prompt": "how does decision-watcher decide a newly superseded ADR has a stale citation somewhere", "expect": "trigger" },
+    { "id": "t06", "prompt": "what does decision-watcher do differently on an unattended scheduled firing vs an interactive one", "expect": "trigger" },
+    { "id": "n01", "prompt": "why doesn't decision-watcher just write its checkpoint file directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules" },
+    { "id": "n02", "prompt": "run the decision-watcher sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, not a skill trigger" },
+    { "id": "n03", "prompt": "how does issue-sorter classify a filed item's shape", "expect": "no-trigger", "comment": "owner: watch-tickets" },
+    { "id": "n04", "prompt": "which repo-cleaner scripts are gated to run directly vs propose-only", "expect": "no-trigger", "comment": "owner: clean-git" }
+  ]
+}
