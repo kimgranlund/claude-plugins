@@ -7,9 +7,10 @@ interpretation, report narrative) belongs to the naming-audit skill, not here.
 
 Usage:
   validate.py --target PATH [--manifest PATH] [--json] [--hook]
+  validate.py selftest                        prove the counters bite
 
-Exit codes: 0 clean (warnings allowed), 1 errors found, 2 no manifest
-(--hook mode exits 0 on missing manifest: governance is opt-in per estate).
+Exit codes: 0 clean (warnings allowed), 1 errors found, 2 no manifest or no
+args (--hook mode exits 0 on missing manifest: governance is opt-in per estate).
 """
 
 import argparse
@@ -183,7 +184,8 @@ COMMON_REQUIRED = ["name", "kind", "description", "author", "created", "last_upd
 COMMON_OPTIONAL = ["review_after"]
 FIELDS = {
     "skill":   {"required": COMMON_REQUIRED,
-                "optional": COMMON_OPTIONAL + ["requires", "allowed-tools"]},
+                "optional": COMMON_OPTIONAL + ["requires", "allowed-tools",
+                                                "disable-model-invocation", "user-invocable"]},
     "command": {"required": COMMON_REQUIRED,
                 "optional": COMMON_OPTIONAL + ["requires", "wraps", "mutates",
                                                 "confirm", "allowed-tools",
@@ -251,7 +253,7 @@ def provenance_checks(fm, grammar):
 
 # ----------------------------------------------------------- layout & indexes
 
-ALLOWED_SKILL_ENTRIES = {"SKILL.md", "references", "scripts", "assets"}
+ALLOWED_SKILL_ENTRIES = {"SKILL.md", "references", "scripts", "assets", "evals"}
 
 
 def layout_checks(skill_dir):
@@ -317,33 +319,11 @@ def discover(target: Path):
                 yield "skill", p.name, p, True
 
 
-def main():
+def run(target: Path, manifest: dict) -> dict:
+    """Core check logic over an already-resolved target and already-loaded
+    manifest dict. Pure of argv/exit-code concerns so it is directly callable
+    from both main() and selftest()."""
     global _grammar
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--target", required=True)
-    ap.add_argument("--manifest")
-    ap.add_argument("--json", action="store_true")
-    ap.add_argument("--hook", action="store_true",
-                    help="no-op cleanly when target has no manifest")
-    args = ap.parse_args()
-
-    target = Path(args.target).resolve()
-    mpath = Path(args.manifest) if args.manifest else None
-    if mpath is None:
-        for cand in (target / "naming.manifest.json",
-                     target / ".claude" / "naming.manifest.json"):
-            if cand.is_file():
-                mpath = cand
-                break
-    if mpath is None or not mpath.is_file():
-        msg = "no naming.manifest.json found — estate is ungoverned"
-        if args.hook:
-            print(f"authorkit: {msg}; skipping (governance is opt-in)")
-            sys.exit(0)
-        print(f"authorkit: {msg}. Seed one via manifest-authoring.")
-        sys.exit(2)
-
-    manifest = json.loads(mpath.read_text())
     _grammar = g = Grammar(manifest)
 
     artifacts = list(discover(target))
@@ -398,13 +378,17 @@ def main():
 
         # 6: policy & grants
         pe, pw = policy_checks(kind, fm, name)
-        for e in pe: E(e)
-        for w in pw: W(w)
+        for e in pe:
+            E(e)
+        for w in pw:
+            W(w)
 
         # 7: provenance
         ve, vw = provenance_checks(fm, g)
-        for e in ve: E(e)
-        for w in vw: W(w)
+        for e in ve:
+            E(e)
+        for w in vw:
+            W(w)
 
     # 5: relation graph
     names = set(fms)
@@ -448,22 +432,125 @@ def main():
     warns = [f for f in findings if f[1] == "warn"]
     exemption_notes = [f for f in findings if f[1] == "exempt-note"]
 
+    return {
+        "artifacts": len(artifacts), "findings": findings,
+        "errors": errors, "warnings": warns,
+        "exemption_burndown": {"count": len(g.exemptions), "notes": exemption_notes},
+    }
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--target", required=True)
+    ap.add_argument("--manifest")
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--hook", action="store_true",
+                    help="no-op cleanly when target has no manifest")
+    args = ap.parse_args()
+
+    target = Path(args.target).resolve()
+    mpath = Path(args.manifest) if args.manifest else None
+    if mpath is None:
+        for cand in (target / "naming.manifest.json",
+                     target / ".claude" / "naming.manifest.json"):
+            if cand.is_file():
+                mpath = cand
+                break
+    if mpath is None or not mpath.is_file():
+        msg = "no naming.manifest.json found — estate is ungoverned"
+        if args.hook:
+            print(f"authorkit: {msg}; skipping (governance is opt-in)")
+            sys.exit(0)
+        print(f"authorkit: {msg}. Seed one via manifest-authoring.")
+        sys.exit(2)
+
+    manifest = json.loads(mpath.read_text())
+    result = run(target, manifest)
+
     if args.json:
         print(json.dumps({
             "target": str(target), "manifest": str(mpath),
-            "artifacts": len(artifacts), "errors": errors, "warnings": warns,
-            "exemption_burndown": {"count": len(g.exemptions),
-                                    "notes": exemption_notes},
+            "artifacts": result["artifacts"], "errors": result["errors"],
+            "warnings": result["warnings"],
+            "exemption_burndown": result["exemption_burndown"],
         }, indent=2))
     else:
-        print(f"authorkit validate — {len(artifacts)} artifacts @ {target}")
-        for name, lvl, msg in findings:
+        print(f"authorkit validate — {result['artifacts']} artifacts @ {target}")
+        for name, lvl, msg in result["findings"]:
             tag = {"error": "ERROR", "warn": "WARN ", "exempt-note": "EXMPT"}[lvl]
             print(f"  [{tag}] {name}: {msg}")
-        print(f"  errors={len(errors)} warnings={len(warns)} "
-              f"exemptions={len(g.exemptions)}")
-    sys.exit(1 if errors else 0)
+        print(f"  errors={len(result['errors'])} warnings={len(result['warnings'])} "
+              f"exemptions={result['exemption_burndown']['count']}")
+    sys.exit(1 if result["errors"] else 0)
+
+
+def selftest():
+    """Prove run()'s counters bite: a clean mini-estate passes; a deliberately
+    broken one is caught (name/folder mismatch, schema-outside field, banned
+    alias, lexicon-disjointness violation); the two invocation dials this
+    ticket adds to the schema are accepted, not flagged as outside-schema."""
+    import tempfile
+
+    manifest = {
+        "verb_lex": ["audit"], "process_lex": ["review"], "role_lex": [],
+        "object_vocab": [{"canonical": "demo", "plural": None, "banned_aliases": ["sample"]}],
+        "brand_tokens": [], "author_registry": ["kim"],
+        "mutating_no_confirm_allowlist": [], "exemptions": [],
+    }
+
+    def skill_md(name, extra_fm=""):
+        return (f"---\nname: {name}\nkind: skill\ndescription: demo\n"
+                f"author: kim\ncreated: 2026-08-13\nlast_updated: 2026-08-13\n"
+                f"disable-model-invocation: false\nuser-invocable: false\n{extra_fm}---\nbody\n")
+
+    # Reverse control: a clean estate must validate with zero errors, and the
+    # two dials this ticket adds to the schema must not fire "outside schema".
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, manifest)
+        assert not result["errors"], f"clean estate must validate error-free: {result['errors']}"
+        assert not any("disable-model-invocation" in e[2] or "user-invocable" in e[2]
+                       for e in result["errors"]), "invocation dials must be schema-accepted"
+
+    # Inversion fixture 1: frontmatter name != folder name must be CAUGHT.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("wrong-name"))
+        result = run(r, manifest)
+        assert any("!= folder" in e[2] for e in result["errors"]), \
+            "name/folder mismatch must be caught"
+
+    # Inversion fixture 2: a field outside the kind's schema must be CAUGHT.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(
+            skill_md("demo-review", extra_fm="bogus_field: x\n"))
+        result = run(r, manifest)
+        assert any("outside schema" in e[2] for e in result["errors"]), \
+            "unschema'd field must be caught"
+
+    # Inversion fixture 3: VerbLex/ProcessLex disjointness violation must be CAUGHT.
+    bad_manifest = dict(manifest, verb_lex=["review"], process_lex=["review"])
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, bad_manifest)
+        assert any("disjointness" in e[2] for e in result["errors"]), \
+            "lexicon disjointness violation must be caught"
+
+    print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite")
+    return 0
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        print(__doc__)
+        sys.exit(2)
+    if sys.argv[1] == "selftest":
+        sys.exit(selftest())
     main()

@@ -11,6 +11,8 @@ description: >
 author: kim
 created: 2026-08-13
 last_updated: 2026-08-13
+disable-model-invocation: false
+user-invocable: false
 allowed-tools:
   - Read
   - Glob
