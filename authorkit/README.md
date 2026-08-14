@@ -60,6 +60,18 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.6.1 · 2026-08-14 · `naming-conventions` gains the reciprocal NOT-for fence against
+`overhaul-planning` (issue #231): the description's "planning a migration" phrase is narrowed to
+"resolving one artifact's rename/migration rule (exemptions array, grandfather-with-ratchet,
+rename sequencing)" plus an explicit `NOT for planning or generating an estate-wide
+overhaul/reshape/merge/split campaign across many members (overhaul-planning)`. `evals.json`'s
+t06 ("How should I sequence renames when migrating a legacy, ungoverned estate?") — the exact
+prompt PR #230's mandatory `/check-routing` measured as a 3-of-3 cross-suite steal to
+`overhaul-planning` — is reclassified `n06`, no-trigger, owner `overhaul-planning`. Fresh-context
+`harness:skill-checker` (FLOOR) passed clean; a full `/check-routing authorkit` re-run (94 cases,
+all 7 suites) shows `naming-conventions` 13/13 and `overhaul-planning` 16/16, both clean — the
+steal is dead. One unrelated pre-existing failure (`fix-old-names` t10 vs `naming-audit`, noted
+in PR #230 as deferred) is untouched by this change and stays open as its own follow-up.
 v0.6.0 · 2026-08-14 · `overhaul-planning` gains merge/split-candidate nomination + procedure-vs-knowledge
 context-tier classification (issue #229), completing all four reorganization axes: Phase 1's
 per-member kill-switch adds question 4 (MERGE/SPLIT CANDIDATE? — names a candidate set and

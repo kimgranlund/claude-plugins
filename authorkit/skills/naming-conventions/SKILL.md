@@ -5,7 +5,10 @@ description: >
   The harness artifact naming convention — grammar, frontmatter schema, folder
   layout, and migration rules for .claude/ estates. Consult when parsing or
   judging any artifact name, authoring frontmatter, deciding where content
-  lives inside a skill folder, or planning a migration. This is the single
+  lives inside a skill folder, or resolving one artifact's rename/migration
+  rule (exemptions array, grandfather-with-ratchet, rename sequencing). NOT
+  for planning or generating an estate-wide overhaul/reshape/merge/split
+  campaign across many members (overhaul-planning). This is the single
   authority the authorkit skills cite; do not restate its rules from memory.
 author: kim
 created: 2026-08-13
