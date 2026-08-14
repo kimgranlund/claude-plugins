@@ -1,167 +1,115 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-14 ~00:03Z window (UTC),
-main at `de21cbd`, tree clean except this sweep's own ops writes. Evidence: the three
-seat reports attached to this dispatch (decision-watcher checkpoint-only zero-delta;
-issue-sorter 3 open issues / 0 open PRs, checkpoint 2026-08-14T00:01:27Z; repo-cleaner
-full report at `.claude/ops/reports/2026-08-14T00-03-07Z-repo-cleaner.md`), the prior
-plan (2026-08-13 ~16:39Z) as carry-forward source, plus dispatcher-authorized live
-corroboration (git worktree/branch/status, gh issue/pr list, ADR-0011 frontmatter +
-line 179, spec-dir listing, root-manifest absence — all consistent with the seats).
-Overnight since the prior plan: 9 PRs merged (#209–#213, #215–#218), #196 closed,
-open issues 7 → 3, remote branch estate fully reaped except one LOCAL remnant.
+Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-14 ~02:42Z window (UTC),
+main at `b4d1137`, tree clean except this sweep's own ops writes. Evidence: the three
+seat reports attached to this dispatch (decision-watcher: sole delta adr-0011
+proposed→accepted @ `65efbf2`, deliverables verified landed, queue empty; issue-sorter:
+3 open issues / 0 open PRs, no state mutation; repo-cleaner: full report at
+`.claude/ops/reports/2026-08-14T02-42-04Z-repo-cleaner.md`), with the prior plan
+(2026-08-14 ~00:03Z) plus its appended session rulings as carry-forward source.
+Clean, uneventful sweep: since the prior plan, ADR-0011 ratified and its whole
+deliverable chain landed via #197 / merged PR #222 (branch 404-verified gone), the
+orphaned worktree was removed, and the checkpoint-bypass question was ruled. Six of
+the prior eight entries close below; the queue shrinks 8 → 3.
 
 ## Human-decision call-outs — nothing below executes autonomously next sweep
 
-Four items only Kim advances; each is a queue entry, named here distinctly:
-1. **Orphaned worktree removal** (entry 1) — verified safe, but no gated reap script
-   exists; the command is human-run.
-2. **ADR-0011 `supersedes: null` gap** (inside entry 4) — must be wired AT ratification
-   or supersession of ADR-0001/0006's grammar halves never mechanically fires.
-3. **#197's satisfied blocker** (entry 6) — `Blocked-by: #196` cleared; only Kim's own
-   reopen trigger advances it.
-4. **Checkpoint-bypass hygiene note** (entry 8) — decide guard-or-accept.
+1. **#221 scheduling** (entry 2) — unassigned backlog task; only Kim assigns or
+   batches it into a mobilize round.
+2. **Ops commit** (entry 1) — human-run if the dispatching session lacks Bash.
 
 ## Queue
 
 **Class 1 — gated mutations verified safe:**
 
-### 1. Remove PR #209's orphaned local worktree + branch
-- **Action:** `git worktree unlock .claude/worktrees/declarative-wondering-scroll &&
-  git worktree remove .claude/worktrees/declarative-wondering-scroll &&
-  git branch -d worktree-declarative-wondering-scroll`
-- **Owner:** human (Kim) — no gated reap script exists in this repo; removal is
-  copy-paste of the sequence above, propose-only from the seat.
-- **Evidence:** repo-cleaner — #209 MERGED (mergeCommit `cf86dbd8`), remote branch 404,
-  worktree lock names pid 66795 confirmed not running. Planner live-verified: worktree
-  present + locked at `efc49b5`, branch upstream `gone`.
-- **Size:** ~2 min.
-
-### 2. Commit this firing's ops artifacts — explicit pathspec only
-- **Action:** Stage exactly `git add .claude/ops/plan.md .claude/ops/watch-checkpoint.json
-  .claude/ops/reports/2026-08-14T00-03-07Z-repo-cleaner.md`; read the status output,
-  then commit as a separate step (gate ≠ commit), then push. `adr-checkpoint.json` is
-  NOT part of this firing's delta (checkpoint-only, zero-delta; `git status` confirms
-  unmodified). Never `git add -A`, even on a clean tree.
-- **Owner:** the dispatching session if Bash-capable, else human. Carried note:
+### 1. Commit this firing's ops artifacts — explicit pathspec only
+- **Action:** Read `git status --porcelain` first, then stage exactly
+  `git add .claude/ops/plan.md .claude/ops/adr-checkpoint.json
+  .claude/ops/reports/2026-08-14T02-42-04Z-repo-cleaner.md`, read the status output,
+  commit as a separate step (gate ≠ commit), push. `adr-checkpoint.json` IS part of
+  this firing's delta (adr-0011 hash + status advanced, applied by chore-lead);
+  issue-sorter reports no `watch-checkpoint.json` mutation — confirm via the status
+  read, stage only what changed. Never `git add -A`.
+- **Owner:** the dispatching session if Bash-capable, else human (Kim). Carried note:
   chore-lead's own grant is Read/Write/Task — no Bash/git — so this routes past it.
-- **Evidence:** `git status --porcelain` at planner runtime — `watch-checkpoint.json`
-  modified, repo-cleaner report untracked, plus this plan rewrite once applied.
+- **Evidence:** seat reports this sweep — chore-lead applied the checkpoint delta,
+  repo-cleaner wrote a new report file, this plan rewrite once applied.
 - **Size:** ~2 min.
-
-### 3. Fix ADR-0011's step-2 cited spec path (carried; landing vehicle changed)
-- **Action:** In `.claude/docs/adr/0011-adopt-naming-convention-spec.md:179`, change
-  `.claude/docs/spec/naming-convention-spec.md` → `.claude/docs/spec/spec-naming-convention.md`
-  (the file that actually landed, matching the dir's `spec-{topic}` convention). The
-  ADR is committed on main now but still `status: proposed` — mutable class; this MUST
-  land before entry 4 flips it append-only. Single-file fix may commit direct to main
-  per workspace convention.
-- **Owner:** human (Kim), or one dispatched build seat under a batched confirm.
-- **Evidence:** live grep this dispatch — line 179 still stale; spec dir carries
-  `spec-naming-convention.md`. Carried from prior plan entry 1: its #196-PR landing
-  vehicle merged (#218) WITHOUT the fix.
-- **Size:** ~5 min.
 
 **Class 2 — items blocking other work:**
 
-### 4. Ratify ADR-0011 — with the `supersedes:` wiring, in the same act
-- **Action:** After entry 3: flip frontmatter `status: accepted` + `ratified: <date>`
-  AND set `supersedes:` to the partial-supersession strings naming the grammar halves
-  of ADR-0001 and ADR-0006 (the string convention ADR-0007/0009 already use).
-  Ratification checklist item, not optional: supersession detection reads ONLY that
-  field — left `null`, the D7–D9 supersession never mechanically fires and downstream
-  citations of ADR-0001/0006's naming-grammar rulings are never flagged stale.
-  Ratification unblocks chain steps 2–6 and decision-watcher's harvest queue
-  (re-review fires automatically once ratified).
-- **Owner:** human — the formal act is the maintainer's alone.
-- **Evidence:** decision-watcher this sweep (the supersedes gap); planner live-verified
-  frontmatter `status: proposed` / `ratified: null` / `supersedes: null` (lines 4–8).
-- **Size:** ~15 min.
-
-### 5. Author the estate-wide root `naming.manifest.json` (carried)
-- **Action:** Create `naming.manifest.json` at the repo root covering the estate per
-  ADR-0011 step 2/D10. NOT satisfied by `authorkit/naming.manifest.json` (self-scoped,
-  different deliverable). Sequence after entry 4; track via entry 7's step-2 record.
-  Step-3 validator and step-6 burn-down metric both consume this file.
-- **Owner:** human or a build seat, once entry 7's step-2 record exists to claim.
-- **Evidence:** planner live-verified root manifest still absent this dispatch;
-  prior-sweep triple confirmation carried.
-- **Size:** hours (estate-wide inventory), sized properly inside its own record.
+(none this firing — the ADR-0011 chain that occupied this class ratified and landed
+via #197 / PR #222.)
 
 **Class 3 — human decisions:**
 
-### 6. Rule #197's next state — its blocker is now satisfied
-- **Action:** #197 (authorkit absorbs the authoring family, deferred) had
-  `Blocked-by: #196`; #196 closed via merged PR #218 overnight. Kim decides: activate
-  the option-3 boundary refactor, re-defer with a NEW named reopen trigger (the old
-  trigger is spent — leaving it trigger-less recreates the silent-stall risk prior
-  sweeps flagged), or close. The seat correctly did not touch it.
-- **Owner:** human (Kim) — by design, only Kim's own trigger advances #197.
-- **Evidence:** issue-sorter this sweep; planner live-confirmed #197 open, unassigned.
-- **Size:** ~5 min.
-
-### 7. Rule filing timing, then file the four chain-step records (carried, half-resolved)
-- **Action:** The prior open question was "file now, or hold until #196 lands AND
-  ADR-0011 ratifies" — the #196 half is now satisfied; only entry 4 remains. Rule
-  now-vs-after-ratification, then file one record each for steps 2, 3, 4, 6, content
-  as specified in the 2026-08-13 plan (step-2 estate-manifest scope distinct from
-  authorkit's; step-3 repo-own gate wiring — authorkit ships DISABLED here; step-4
-  supersession note in harness:naming-rules, split from #197 — entry 4's `supersedes:`
-  wiring covers mechanical detection but the skill's own prose note is still owed;
-  step-6 exemption burn-down metric, pure gap).
-- **Owner:** human (the ruling); filing via docs' file-task path or issue-sorter.
-- **Evidence:** issue-sorter this sweep — exactly 3 open issues (#189, #197, #207),
-  none tracking steps 2/3/4/6.
-- **Size:** ~5 min (ruling) + ~15 min (filing).
-
-### 8. Rule the adr-checkpoint bypass: guard or accepted one-off
-- **Action:** Something wrote an `adr-0011` entry directly to
-  `.claude/ops/adr-checkpoint.json` outside decision-watcher's own classify/advance
-  calls. Harmless this time (content was unratified) but it bypasses the seat's
-  integrity path. Decide: file an issue per the incident→infrastructure invariant
-  (a guard on checkpoint writers), or record as an accepted one-off here. Either way
-  the ruling gets recorded so it stops resurfacing.
-- **Owner:** human (Kim).
-- **Evidence:** decision-watcher this sweep (attention item, elevated to a
-  decision-shaped entry per dispatch).
-- **Size:** ~5 min.
+### 2. Schedule or assign #221 — watch-adrs supersession gap
+- **Action:** #221 (task, backlog, size:small, unassigned) is the only open work item
+  with no owner. Kim decides: assign it, fold it into the next mobilize batch, or
+  leave it in backlog with that choice recorded here so it stops resurfacing as a
+  question. No urgency signal from any seat — it blocks nothing.
+- **Owner:** human (Kim) — assignment is the decision; execution then routes to a
+  build seat under the normal batched confirm.
+- **Evidence:** issue-sorter this sweep — #221 open, unassigned, `backlog` +
+  `size:small`, matches expected state; repo-cleaner independently noted it unclaimed
+  and routed it to triage.
+- **Size:** ~2 min (the ruling); the task itself is size:small per its label.
 
 **Class 4 — hygiene debt:**
 
-(none this firing — the only hygiene item, entry 1, graduated to class 1 as a
-verified-safe mutation.)
+### 3. Close out chain step 6 (exemption burn-down metric) — status UNMEASURED
+- **Action:** The prior plan's entry 7 tracked ADR-0011 chain steps 2/3/4/6.
+  Steps 2/3/4 (estate manifest, validator, naming-rules supersession note) are
+  verified landed via PR #222 per decision-watcher. Step 6 (the exemption burn-down
+  metric) was NOT in that verified list — UNMEASURED this sweep, not confirmed
+  landed, not confirmed missing. Check PR #222's diff (or the spec's step-6 section)
+  once; if landed, this entry closes on sight, if not, file its record via the
+  file-task path.
+- **Owner:** human (Kim) or the next sweep's decision-watcher firing with step-6
+  named in its dispatch.
+- **Evidence:** decision-watcher this sweep enumerated four landed deliverables;
+  step 6 absent from the enumeration. Carried residue of prior entry 7, all other
+  halves of which resolved.
+- **Size:** ~5 min (the check); filing, if needed, ~10 min.
 
 ## Not queued (checked, found clean or deliberately left)
 
-- **#207 / #189:** deliberately-open CLI-level tracking records per explicit in-thread
-  ruling; the only two ADR-0005 claims outstanding, both healthy (claimed 22:38Z,
-  linked to merged #216). Untouched.
-- **8 of 9 overnight PR branches (#210–#218):** zero remnant — remote branches
-  independently verified gone (404 each); nothing for `campaign_close.py` to close.
-- **Main:** clean, in sync with origin — no `sync_main.py`.
-- **`.gitignore` G1 WARNs** (`dist/`, `harness-audit-*/`): fifth consecutive review,
-  legitimate on/off generated paths. Recorded judgment, not a task.
-- **Friendlies allowlist:** all authors already allow-listed; no gating.
-- **`watch-checkpoint.json` @ 2026-08-14T00:01:27Z:** current state — do not redo.
-- **decision-watcher harvest queue:** deliberately empty until entry 4 ratifies;
-  re-review fires automatically then.
-- **Chain step 5** (adia-ui-kit rename wave): other repo, out of this queue's scope.
+- **#207 / #189:** deliberately-open CLI-level tracking records per the standing
+  ruling; estate-side work marked complete in latest comments, both healthy per
+  issue-sorter. Untouched.
+- **PR estate:** zero open PRs; #219, #220, #222 (new since prior plan) plus
+  #209–#218 all MERGED with remote branches independently 404-verified. Nothing for
+  `campaign_close.py`.
+- **Orphaned worktree (prior entry 1):** confirmed resolved between firings —
+  one worktree (primary), one local branch (main), one remote (origin/main).
+- **Main:** clean, in sync with origin @ `b4d1137` — no `sync_main.py`.
+- **`.gitignore` G1 WARNs** (`dist/`, `harness-audit-*/`): repeat, reviewed and
+  accepted every firing. Recorded judgment, not a task.
+- **Friendlies allowlist:** current — single author kimgranlund, allow-listed; no
+  `needs-triage-approval` items.
+- **decision-watcher harvest queue (`adr-queue.json`):** empty and CORRECTLY so —
+  ADR-0011's ratification fired the impact detector, but its deliverable is already
+  executed (PR #222) and D9 rules the spec non-routable; no candidate owed.
+- **Checkpoint-bypass (prior entry 8):** ruled ACCEPTED AS ONE-OFF by Kim
+  (2026-08-14 mobilize round); re-litigate only on recurrence. Recorded, closed.
 
-## Resolved since the prior plan (2026-08-13, ~16:39Z sweep)
+## Resolved since the prior plan (2026-08-14, ~00:03Z sweep)
 
-- Prior entry 2 (commit that firing's ops artifacts) — RESOLVED: only this firing's
-  own writes remain uncommitted.
-- Prior entry 1 (ADR-0011 path fix) — NOT resolved; carried as entry 3 with a changed
-  landing vehicle (#196's PR merged without it).
-- Prior entries 3/4/5 — carried as entries 4/5/7, each updated: entry 4 gains the
-  `supersedes:` wiring requirement; entry 7's timing question is half-answered by
-  #196 landing.
-- #196 closed via merged PR #218; open issues 7 → 3; 9 PRs merged overnight, remote
-  estate fully reaped bar #209's local remnant (entry 1).
-
-## Session rulings appended (2026-08-14, Kim via mobilize round)
-
-- Entry 6 (checkpoint-bypass): ACCEPTED AS ONE-OFF — likely the overnight ops commit; re-litigate only on recurrence.
-- Entry 1 (orphaned worktree): DONE — removed + branch deleted, verified.
-- Entry 3 (ADR-0011 stale path): DONE — fixed at 6bcbfbe while still proposed.
-- Entries 4/5 (ratify ADR-0011, naming.manifest.json): ride inside #197's campaign, now MOBILIZED — plan-plugin-split analysis dispatched; ratification is Kim's explicit word at the campaign's design gate.
+- Prior entry 1 (orphaned worktree + branch) — DONE per session ruling; repo-cleaner
+  independently confirmed the estate clean this firing.
+- Prior entry 2 (commit that firing's ops artifacts) — RESOLVED: main clean/in-sync;
+  only this firing's own writes remain (entry 1 above).
+- Prior entry 3 (ADR-0011 stale spec path) — DONE at `6bcbfbe` while still proposed.
+- Prior entry 4 (ratify ADR-0011 + supersedes wiring) — RESOLVED: accepted at
+  `65efbf2`; naming-rules carries the dated supersession note (verified by
+  decision-watcher).
+- Prior entry 5 (estate `naming.manifest.json`) — RESOLVED: exists, landed via
+  #197 / PR #222 (verified by decision-watcher).
+- Prior entry 6 (#197 next state) — RESOLVED: Kim mobilized it; campaign executed
+  and merged as PR #222; #197 no longer open.
+- Prior entry 7 (chain-step records) — MOSTLY RESOLVED: steps 2/3/4 landed inside
+  PR #222 without separate records (acceptable — the work is the record's purpose);
+  step 6 carried as entry 3 above, UNMEASURED.
+- Prior entry 8 (checkpoint-bypass ruling) — RESOLVED: accepted one-off.
+- New since prior plan: issue #221 opened (queued as entry 2); PRs #219/#220/#222
+  merged and reaped clean.
