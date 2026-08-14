@@ -16,6 +16,12 @@ move, no shared-script dependency) but is, for the same reason, temporarily **un
 this workspace**: authorkit's own routing surface (including `fix-old-names`) only activates
 once `enabledPlugins` flips, which this ticket does not do.
 
+All six original skills stay model-invocable, none user-invocable (issue #196's shipped
+dials) — a user's on-demand surface goes exclusively through the thin identical-name command
+wrappers in `commands/` (issue #235: the last two, `manifest-authoring` and `rename-planning`,
+gained theirs 2026-08-14, closing the gap left after #227's `overhaul-planning` wrapper —
+every one of the six now has a wrapper).
+
 ## Map
 
 | Artifact | Type | Invocation | What it carries |
@@ -31,6 +37,8 @@ once `enabledPlugins` flips, which this ticket does not do.
 | `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
 | `commands/bloat-audit` | Command | user-only (`/bloat-audit`) | Thin user-invocable wrapper over `skills/bloat-audit`, same reason |
 | `commands/overhaul-planning` | Command | user-only (`/overhaul-planning`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-planning` — this one writes the plan doc + ticket-seed list to disk, so it gates on confirmation before writing, unlike the two read-only audit wrappers above |
+| `commands/manifest-authoring` | Command | user-only (`/manifest-authoring`), `confirm: required` | Thin user-invocable wrapper over `skills/manifest-authoring` — mutating (seeds/edits the target estate's `naming.manifest.json`), so it gates on confirmation before writing, same posture as `rename-execute` |
+| `commands/rename-planning` | Command | user-only (`/rename-planning`) | Thin user-invocable wrapper over `skills/rename-planning` — plan-only, never executes, same read-only posture as `naming-audit`/`bloat-audit` above |
 | `commands/rename-execute` | Command | user-only (`/rename-execute`) | The estate's single mutation point — applies one `rename-planning` plan atomically (`confirm: required`), verifies via the validator, reverts whole on any new error |
 | `commands/exemption-retire` | Command | user-only (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched |
 | `skills/fix-old-names` | Command skill | both (`/fix-old-names`) | Moved from harness 2026-08-14 (issue #197, ADR-0011/D9). Consumer-side rename migration: sweeps a repo that INSTALLS these plugins for references to retired names and rewrites the live ones, from the derived `renames.json`. Report-first, historical records left byte-identical, ambiguous names escalated to a human, filenames never rewritten |
@@ -42,10 +50,13 @@ once `enabledPlugins` flips, which this ticket does not do.
 ## Invocation dials
 
 The five original skills are all model-invocable (`disable-model-invocation: false`) and none
-are user-invocable (`user-invocable: false`) — `commands/naming-audit` and `commands/bloat-audit`
-are the deliberate user-facing wrappers for the two that need one; `rename-planning` and
-`manifest-authoring` are consulted by the model, mid-workflow, via `naming-audit`'s own
-hand-off step, never invoked directly by a user typing a skill name. `fix-old-names` (moved in
+are user-invocable (`user-invocable: false`) — every one of the five now carries a thin
+identical-name command wrapper as its user-facing surface: `commands/naming-audit` and
+`commands/bloat-audit` were the original two; `commands/manifest-authoring` and
+`commands/rename-planning` (issue #235, 2026-08-14) close the gap for the remaining pair,
+which until then were consulted only by the model, mid-workflow, via `naming-audit`'s own
+hand-off step (or, for `rename-planning`, `rename-execute`'s own precondition step) — never
+invocable directly by a user typing a skill name. `fix-old-names` (moved in
 2026-08-14, issue #197) is the one exception — both dials `true`, since it carries its own
 `/fix-old-names` invocation directly rather than through a thin wrapper command, unchanged from
 its harness incarnation. `naming-audit-agent` and `bloat-audit-agent` each cite their matching
@@ -60,6 +71,25 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.7.0 · 2026-08-14 · New user surface (issue #235): `commands/manifest-authoring` (mutating —
+`mutates: true` + `confirm: required`, same posture as `rename-execute`, since it writes the
+target estate's `naming.manifest.json`) and `commands/rename-planning` (plan-only — `mutates:
+false` + `confirm: none`, matching `naming-audit`/`bloat-audit`'s read-only posture, since the
+wrapped skill carries no `Write`/`Edit` tool and never touches disk) — the identical-name wrapper
+pattern (`naming-audit`'s own template; the validator's wrapper-production exception, PR #227's
+precedent) applied to the last two of the six skills with no user-invocable surface. No SKILL.md
+body or dial changes: both wrapped skills stay `disable-model-invocation: false` /
+`user-invocable: false`, unchanged since #196. No description edits to either skill, so no eval
+suite re-run is owed; `evals/evals.json` for both is untouched. `release_gate authorkit` CLEAN (0
+fail / 1 warn, the warn pre-existing and unrelated — G8 prose-sibling names in `bloat-audit`/
+`overhaul-planning`/`rename-planning`); naming grammar clean (`--scope grammar`, both new names
+resolve via the wrapper-production exception, no new `ObjectVocab` registration needed — `rename`
+and `manifest` were already registered). `harness:skill-checker` does not apply to `commands/*.md`
+in this estate's convention — confirmed against all five pre-existing command wrappers, which
+fail the same generic `skill_lint` invocation-lint identically (it expects a SKILL.md-shaped
+dial/directory pair no command file carries); `release_gate`'s own G3 lint sweep already excludes
+`commands/` from its targets, so this is a pre-existing, accepted gap, not a new one. README's Map
+table and Invocation-dials section updated to match.
 v0.6.2 · 2026-08-14 · `naming-audit` gains the reciprocal NOT-for fence against `fix-old-names`
 (issue #233), killing the last routing steal in the plugin: `fix-old-names`' t10 ("Check whether
 this project is still on retired plugin names before I ship.") scored 19/20 across PR #230's
