@@ -113,3 +113,8 @@ via #197 / PR #222.)
 - Prior entry 8 (checkpoint-bypass ruling) — RESOLVED: accepted one-off.
 - New since prior plan: issue #221 opened (queued as entry 2); PRs #219/#220/#222
   merged and reaped clean.
+
+## Session verification appended (2026-08-14, mobilize round)
+
+- Entry 3 (ADR-0011 chain step 6): VERIFIED LANDED — validate.py emits exemption_burndown {count, notes} in --json output (validate.py:458), per-run count in human output (line 515), documented in authorkit/README.md. No gap.
+- Entry 1 (ops artifacts): DONE — committed 7dbacf5.
