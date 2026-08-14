@@ -60,6 +60,22 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.6.2 · 2026-08-14 · `naming-audit` gains the reciprocal NOT-for fence against `fix-old-names`
+(issue #233), killing the last routing steal in the plugin: `fix-old-names`' t10 ("Check whether
+this project is still on retired plugin names before I ship.") scored 19/20 across PR #230's
+first measurement and PR #232's re-run, the only non-clean case left. Ruling: `fix-old-names`
+owns it — the prompt asks whether a repo still references RETIRED names (its sweep-and-rewrite
+Phase 1 "report first" domain), not whether current names conform to the grammar (`naming-audit`'s
+read-only domain). The description's fence is the tight boundary axis only; `naming-audit`'s
+`evals.json` gains n05, `fix-old-names`' t10 prompt verbatim as a no-trigger twin naming the real
+owner — the measuring prompt becomes the regression case, per PR #232's own pattern. Mirror-check
+on `fix-old-names`' own suite found nothing open (it already correctly owned t10; the leak ran the
+other way). Fresh-context `harness:skill-checker` (FLOOR) passed clean. A full `/check-routing
+authorkit` re-run (95 cases, all 7 suites, single-judge pass, no contested cases) shows
+`fix-old-names` 20/20 (t10 now routes home) and `naming-audit` 12/12 (n05 passes) — every other
+suite (`bloat-audit` 11/11, `manifest-authoring` 11/11, `naming-conventions` 13/13,
+`overhaul-planning` 16/16, `rename-planning` 12/12) stays clean, no new leak anywhere. The plugin's
+deferred steal from PR #230 is closed.
 v0.6.1 · 2026-08-14 · `naming-conventions` gains the reciprocal NOT-for fence against
 `overhaul-planning` (issue #231): the description's "planning a migration" phrase is narrowed to
 "resolving one artifact's rename/migration rule (exemptions array, grandfather-with-ratchet,

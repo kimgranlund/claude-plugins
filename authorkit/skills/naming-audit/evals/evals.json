@@ -1,6 +1,6 @@
 {
   "skill": "naming-audit",
-  "note": "This skill owns RUNNING the conformance check (validate.py) and judging its findings — asking, checking, verifying naming conformance. Parsing grammar itself routes to naming-conventions; fixing a found violation routes to rename-planning; seeding governance routes to manifest-authoring; a busy-work/bloat ask routes to bloat-audit. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "note": "This skill owns RUNNING the conformance check (validate.py) and judging its findings — asking, checking, verifying naming conformance. Parsing grammar itself routes to naming-conventions; fixing a found violation routes to rename-planning; seeding governance routes to manifest-authoring; a busy-work/bloat ask routes to bloat-audit. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history. Amended 2026-08-14 (issue #233): n05 added — the exact prompt fix-old-names' own evals.json carries as t10, confirmed as a cross-suite steal during PR #230's and #232's full check-routing runs (fix-old-names scored 19/20, this the only non-clean case in the plugin). Ruling: fix-old-names owns it — the prompt asks whether a repo still references RETIRED names (a sweep-and-rewrite ask), not whether current names conform to the grammar (this skill's read-only domain). The description gained the reciprocal NOT-for fence in the same change.",
   "cases": [
     {"id": "t01", "prompt": "Audit this plugin for naming conformance.", "expect": "trigger"},
     {"id": "t02", "prompt": "Check whether this estate's skills follow the naming convention.", "expect": "trigger"},
@@ -12,6 +12,7 @@
     {"id": "n01", "prompt": "What does the grammar say about how agent names are formed?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
     {"id": "n02", "prompt": "Plan the rename for this artifact that's violating the grammar.", "expect": "no-trigger", "comment": "owner: rename-planning"},
     {"id": "n03", "prompt": "Seed a manifest for this new, ungoverned estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
-    {"id": "n04", "prompt": "Audit this skill for busy-work and ceremony instead of naming.", "expect": "no-trigger", "comment": "owner: bloat-audit"}
+    {"id": "n04", "prompt": "Audit this skill for busy-work and ceremony instead of naming.", "expect": "no-trigger", "comment": "owner: bloat-audit"},
+    {"id": "n05", "prompt": "Check whether this project is still on retired plugin names before I ship.", "expect": "no-trigger", "comment": "owner: fix-old-names (fix-old-names' suite's t10) — retired-name reference sweep, not grammar conformance; confirmed 2-of-2 cross-suite steal in PR #230/#232's check-routing runs, fenced here by the NOT-for boundary (issue #233)"}
   ]
 }
