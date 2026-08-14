@@ -30,6 +30,9 @@ Gate order (plugin-writing-rules §Release discipline):
       in --scope grammar over a repo-root naming.manifest.json; gates naming-grammar findings
       only, structural (schema/provenance) findings stay informational; no manifest or no
       validator on this checkout -> not applicable
+  G13 marketplace coverage (2026-08-14): when the workspace root carries
+      .claude-plugin/marketplace.json, the gated plugin must appear in its plugins list
+      (the authorkit-invisible-in-/plugin incident); no manifest -> not applicable
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -545,6 +548,24 @@ def gate(root: Path, package: bool = False):
         warn("G12", "naming.manifest.json present but authorkit's validator is not on this checkout "
                     "-> naming-grammar gate unproven locally")
 
+    # G13 marketplace coverage (2026-08-14: authorkit shipped through the gate, landed on main,
+    # and was invisible in /plugin for a day — the root marketplace.json enumerates plugins
+    # explicitly, exactly like gate.yml's loop, and nothing checked it; the same
+    # hardcoded-list-goes-stale class REVIEW-209 caught in CI). Feature-detected: no root
+    # marketplace manifest -> not applicable (a standalone plugin repo), never a failure.
+    mkt = ws / ".claude-plugin" / "marketplace.json"
+    if mkt.is_file() and name:
+        try:
+            listed = [p.get("name") for p in json.loads(mkt.read_text()).get("plugins", [])]
+        except (json.JSONDecodeError, ValueError) as e:
+            fail("G13", f"root marketplace.json unparseable ({e}) -> the marketplace serves nothing")
+        else:
+            if name in listed:
+                ok(f"marketplace.json lists {name} ({len(listed)} plugins listed)")
+            else:
+                fail("G13", f"{name} missing from root marketplace.json -> installed users never "
+                            "see it in /plugin; add its entry (name/displayName/source/description)")
+
     # G6 package
     artifact = None
     if package and name and version and not fails:
@@ -684,6 +705,22 @@ def selftest():
         (r.parent / "authorkit" / "skills").rmdir()
         (r.parent / "authorkit").rmdir()
         naming_mf.unlink()
+        # G13 marketplace-coverage leg: a root marketplace.json that omits the plugin must
+        # FAIL (the 2026-08-14 authorkit-invisible-in-/plugin incident); listing it restores
+        # clean; removing the manifest restores not-applicable — the negative control.
+        mkt_dir = r.parent / ".claude-plugin"
+        mkt_dir.mkdir()
+        mkt = mkt_dir / "marketplace.json"
+        mkt.write_text('{"name": "demo-market", "plugins": [{"name": "other-plugin"}]}')
+        code, _ = gate(r)
+        assert code == 1, "plugin absent from root marketplace.json must FAIL G13"
+        mkt.write_text('{"name": "demo-market", "plugins": [{"name": "other-plugin"}, {"name": "demo-plugin"}]}')
+        code, _ = gate(r)
+        assert code == 0, "plugin listed in root marketplace.json must pass G13"
+        mkt.unlink()
+        mkt_dir.rmdir()
+        code, _ = gate(r)
+        assert code == 0, "no root marketplace.json -> G13 not applicable, gate stays clean"
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)
