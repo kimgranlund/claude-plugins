@@ -1,6 +1,6 @@
 {
   "skill": "rename-planning",
-  "note": "This skill owns PLANNING one rename (target name + full blast radius) before any mutation — the fix-side hand-off naming-audit's own procedure names. Executing a plan is rename-execute's command surface, not this skill; auditing for the violation in the first place is naming-audit. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "note": "This skill owns PLANNING one rename (target name + full blast radius) before any mutation — the fix-side hand-off naming-audit's own procedure names. Executing a plan is rename-execute's command surface, not this skill; auditing for the violation in the first place is naming-audit; a phased campaign spanning many members with its own kill-switch is overhaul-planning, which composes this skill rather than replacing it (2026-08-14, issue #225). Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
   "cases": [
     {"id": "t01", "prompt": "Plan the rename for this naming violation.", "expect": "trigger"},
     {"id": "t02", "prompt": "Propose a conforming target name for this artifact and its blast radius.", "expect": "trigger"},
@@ -12,6 +12,7 @@
     {"id": "n01", "prompt": "Apply this already-approved rename plan now.", "expect": "no-trigger", "comment": "owner: rename-execute (command) — this skill only plans, never mutates"},
     {"id": "n02", "prompt": "Audit this estate for naming violations in the first place.", "expect": "no-trigger", "comment": "owner: naming-audit"},
     {"id": "n03", "prompt": "Seed the manifest for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
-    {"id": "n04", "prompt": "What does the grammar say about command name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"}
+    {"id": "n04", "prompt": "What does the grammar say about command name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
+    {"id": "n05", "prompt": "Plan a phased rename/reshape campaign across the whole estate, with a per-member kill-switch.", "expect": "no-trigger", "comment": "owner: overhaul-planning (estate-scale, many members) — 2026-08-14, issue #225"}
   ]
 }
