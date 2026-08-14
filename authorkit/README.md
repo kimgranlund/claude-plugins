@@ -25,10 +25,12 @@ once `enabledPlugins` flips, which this ticket does not do.
 | `skills/rename-planning` | Procedural skill | model-only | Plans one artifact rename: proposes the conforming target name and enumerates the full blast radius (invocation strings, relations, hooks, workflow configs). Produces a typed plan; never executes |
 | `skills/manifest-authoring` | Procedural skill | model-only | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement |
 | `skills/bloat-audit` | Procedural skill | model-only | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites. Wrapped for user-invocation by `commands/bloat-audit` |
+| `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0, soft-mentioned where harness isn't installed), a per-member kill-switch design doc (Phase 1 — a member can come back "no move", #197's precedent), waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
 | `agents/naming-audit-agent` | Subagent | dispatch-only | Batch conformance sweeps across N estates/plugins in an isolated context, one aggregated report |
 | `agents/bloat-audit-agent` | Subagent | dispatch-only | Batch busy-work sweeps across N skills/plugins/corpuses in an isolated context, one aggregated report |
 | `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
 | `commands/bloat-audit` | Command | user-only (`/bloat-audit`) | Thin user-invocable wrapper over `skills/bloat-audit`, same reason |
+| `commands/overhaul-planning` | Command | user-only (`/overhaul-planning`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-planning` — this one writes the plan doc + ticket-seed list to disk, so it gates on confirmation before writing, unlike the two read-only audit wrappers above |
 | `commands/rename-execute` | Command | user-only (`/rename-execute`) | The estate's single mutation point — applies one `rename-planning` plan atomically (`confirm: required`), verifies via the validator, reverts whole on any new error |
 | `commands/exemption-retire` | Command | user-only (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched |
 | `skills/fix-old-names` | Command skill | both (`/fix-old-names`) | Moved from harness 2026-08-14 (issue #197, ADR-0011/D9). Consumer-side rename migration: sweeps a repo that INSTALLS these plugins for references to retired names and rewrites the live ones, from the derived `renames.json`. Report-first, historical records left byte-identical, ambiguous names escalated to a human, filenames never rewritten |
@@ -50,10 +52,24 @@ its harness incarnation. `naming-audit-agent` and `bloat-audit-agent` each cite 
 skill via `requires:` (authorkit's own
 existence-edge convention, not the `skills:` preload field) — both matching skills therefore
 carry `disable-model-invocation: false`, since that dial blocks preloading outright wherever it
-IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain).
+IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain). `overhaul-planning`
+(2026-08-14, issue #225) follows the same wrapper pattern as `naming-audit`/`bloat-audit`:
+model-invocable, not user-invocable, with `commands/overhaul-planning` as its identical-name
+wrapper (the validator's wrapper-production exception — no VerbLex terminal required when a
+command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.5.0 · 2026-08-14 · `overhaul-planning` (issue #225): a new skill + command generating a
+phased estate-overhaul plan (measure-first, per-member kill-switch design doc, waved ticket
+seeds) — the estate-scale sibling above `rename-planning`'s per-member blast radius, encoding
+the #197 campaign's proven method. `overhaul` registered in the repo-root
+`naming.manifest.json`'s ObjectVocab (object=overhaul + process=planning, same production as
+`rename-planning`). Ticket seeds are generated as a plan-doc list, never auto-minted as
+Issues — this estate's capture, confirm, then build discipline. Command wraps the skill under
+the identical-name wrapper production (`naming-audit`/`bloat-audit`'s own pattern);
+`mutates: true` / `confirm: required` since it writes the plan doc + seed list, unlike the two
+read-only audit commands.
 v0.4.0 · 2026-08-14 · ADR-0011 execution (issue #197): repo-root `naming.manifest.json` seeded (169 exemptions, D8); `validate.py` gains `--scope {full,grammar}` (the full schema fails hundreds of pre-existing structural findings estate-wide — grammar-only gating proved necessary) + a `-agent`-head fixture (W4 successor); `fix-old-names`/`fix_old_names.py`/`renames.json` moved in from harness, still unreachable here (authorkit disabled).
 v0.3.0 · 2026-08-13 · Gate-clean (issue #196, REVIEW-209 follow-ups): both invocation dials declared on all 5 SKILL.md files; validate.py's schema/layout closed-set both gain the dials and `evals/` as accepted (else this ticket's own additions break its dogfooding); 4 ruff E701 fixes; both scripts gain `selftest` (argparse's required `--target` no longer swallows a bare call first); `evals/evals.json` for all 5 skills; a GRAMMAR.md line scoping `banned_aliases` to names only; this README; `gate.yml` now gates authorkit in CI.
 v0.2.0 · 2026-08-13 · Initial land (issue #196): 4 skills (naming-conventions, naming-audit, rename-planning, manifest-authoring), plus bloat-audit as a fifth skill for busy-work/over-specification auditing; 2 agents, 4 commands, a PostToolUse validation hook, `naming.manifest.json`. Kept disabled in this workspace's `enabledPlugins`; ADR-0011 (status: proposed) and its companion spec doc committed alongside.

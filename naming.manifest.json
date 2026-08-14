@@ -272,6 +272,11 @@
       "canonical": "site-docs",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "overhaul",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
