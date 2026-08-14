@@ -1,15 +1,15 @@
 ---
 doc-type: adr
 id: adr-0011
-status: proposed
-ratified: null
+status: accepted
+ratified: by Kim, 2026-08-13 (in-session, session "PLUGINS")
 date: 2026-08-13
 owner: kim.granlund
 supersedes: null
 ---
 # ADR-0011 — Adopt the harness naming-convention spec as estate-wide naming canon
 
-> PROPOSED — live conversation capture (session "PLAN", 2026-08-13). The headline
+> ACCEPTED — ratified by Kim 2026-08-13. Originally a live conversation capture (session "PLAN", 2026-08-13). The headline
 > ruling (D7) was made in-session by Kim and REVERSES this session's own earlier
 > rulings (recorded in Context for the audit trail). All open rulings were closed
 > in-session 2026-08-13; nothing in this ADR awaits a decision — only acceptance.
