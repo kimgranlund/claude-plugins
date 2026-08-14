@@ -1,6 +1,6 @@
 {
   "skill": "overhaul-planning",
-  "note": "This skill owns GENERATING a phased estate-overhaul plan (measure-first, per-member kill-switch design doc, waved ticket seeds) for a target spanning many members. Composes naming-audit/bloat-audit/check-routing/plan-plugin-split rather than re-running any single one of them for its own sake; planning ONE artifact's rename routes to rename-planning; auditing without a plan ask routes to naming-audit/bloat-audit directly; executing a plan routes to rename-execute/build-lead, never here. Authored fresh at mint (2026-08-14, issue #225) — no prior eval history.",
+  "note": "This skill owns GENERATING a phased estate-overhaul plan (measure-first, per-member kill-switch design doc, waved ticket seeds) for a target spanning many members. Composes naming-audit/bloat-audit/check-routing/plan-plugin-split rather than re-running any single one of them for its own sake; planning ONE artifact's rename routes to rename-planning; auditing without a plan ask routes to naming-audit/bloat-audit directly; executing a plan routes to rename-execute/build-lead, never here. Authored fresh at mint (2026-08-14, issue #225) — no prior eval history. Extended 2026-08-14 (issue #229): Phase 1 gained merge/split-candidate nomination and procedure-vs-knowledge context-tier classification; this skill still only NOMINATES a merge/split candidate set (never runs plan-skill-merge's/plan-skill-split's own tests) and still only NAMES a knowledge tier (never runs make-pack itself) — t07/n08/n09 added to prove that boundary holds after the description edit.",
   "cases": [
     {"id": "t01", "prompt": "Plan a phased overhaul of this whole estate's naming and structure.", "expect": "trigger"},
     {"id": "t02", "prompt": "What would it take to reshape this plugin set the way the #197 campaign did?", "expect": "trigger"},
@@ -8,12 +8,15 @@
     {"id": "t04", "prompt": "I want a measure-first plan for restructuring this repo's skills and agents, with a kill-switch per member.", "expect": "trigger"},
     {"id": "t05", "prompt": "Produce waved tickets for a big rename/reshape campaign across this plugin family.", "expect": "trigger"},
     {"id": "t06", "prompt": "Run the overhaul-planning method against this named member list.", "expect": "trigger"},
+    {"id": "t07", "prompt": "Plan this plugin's overhaul and also tell me which skills should roll up or split apart, and what's knowledge vs procedure across the whole set.", "expect": "trigger"},
     {"id": "n01", "prompt": "Audit this plugin for naming conformance.", "expect": "no-trigger", "comment": "owner: naming-audit"},
     {"id": "n02", "prompt": "Audit this skill for busy-work and ceremony.", "expect": "no-trigger", "comment": "owner: bloat-audit"},
     {"id": "n03", "prompt": "Plan the rename for this one artifact that's violating the grammar.", "expect": "no-trigger", "comment": "owner: rename-planning (single-member scope, not estate-wide)"},
     {"id": "n04", "prompt": "Apply the rename plan we already approved.", "expect": "no-trigger", "comment": "owner: rename-execute — this skill never executes"},
     {"id": "n05", "prompt": "Decide how this oversized plugin partitions into smaller ones.", "expect": "no-trigger", "comment": "owner: plan-plugin-split — this skill composes it, doesn't replace it"},
     {"id": "n06", "prompt": "Seed a naming manifest for this new, ungoverned estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
-    {"id": "n07", "prompt": "Build the feature described in ticket #225.", "expect": "no-trigger", "comment": "owner: build-lead/dispatch-ticket — this skill generates plans, never builds"}
+    {"id": "n07", "prompt": "Build the feature described in ticket #225.", "expect": "no-trigger", "comment": "owner: build-lead/dispatch-ticket — this skill generates plans, never builds"},
+    {"id": "n08", "prompt": "Should these two specific skills merge into one pack?", "expect": "no-trigger", "comment": "owner: plan-skill-merge — a single-pair decision, not an estate-wide plan"},
+    {"id": "n09", "prompt": "This one skill's reference corpus has grown huge — decide how it splits into a family.", "expect": "no-trigger", "comment": "owner: plan-skill-split — a single-corpus decision, not an estate-wide plan"}
   ]
 }

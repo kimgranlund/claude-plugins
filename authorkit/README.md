@@ -25,7 +25,7 @@ once `enabledPlugins` flips, which this ticket does not do.
 | `skills/rename-planning` | Procedural skill | model-only | Plans one artifact rename: proposes the conforming target name and enumerates the full blast radius (invocation strings, relations, hooks, workflow configs). Produces a typed plan; never executes |
 | `skills/manifest-authoring` | Procedural skill | model-only | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement |
 | `skills/bloat-audit` | Procedural skill | model-only | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites. Wrapped for user-invocation by `commands/bloat-audit` |
-| `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0, soft-mentioned where harness isn't installed), a per-member kill-switch design doc (Phase 1 — a member can come back "no move", #197's precedent), waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
+| `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0, soft-mentioned where harness isn't installed), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
 | `agents/naming-audit-agent` | Subagent | dispatch-only | Batch conformance sweeps across N estates/plugins in an isolated context, one aggregated report |
 | `agents/bloat-audit-agent` | Subagent | dispatch-only | Batch busy-work sweeps across N skills/plugins/corpuses in an isolated context, one aggregated report |
 | `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
@@ -60,6 +60,22 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.6.0 · 2026-08-14 · `overhaul-planning` gains merge/split-candidate nomination + procedure-vs-knowledge
+context-tier classification (issue #229), completing all four reorganization axes: Phase 1's
+per-member kill-switch adds question 4 (MERGE/SPLIT CANDIDATE? — names a candidate set and
+soft-mentions `harness:plan-skill-merge`/`harness:plan-skill-split`, executed later only via
+`/reshape-skill`; nominates, never re-derives their own tests) and question 5 (PROCEDURE or
+KNOWLEDGE? — classified per `harness:pack-writing-rules`, with a context-optimization tier —
+`keep-inline`/`move-to-references`/`extract-to-pack`/`retire` — anchored to `bloat-audit`'s own
+measured `chars`/flags/`duplicates` output, never a vibe). Both axes sit under the existing
+kill-switch discipline (evidence can veto a nomination or a tier exactly like a move).
+`PLAN-TEMPLATE.md`'s Phase 1 table gains the two columns; Phase 2 gains a Wave 0
+(merge/split-nomination tickets, ordered before Waves 1–3 since a roll-up/break-up can change
+which members even reach a rename ticket). `evals.json` gains t07 (both new axes in one ask)
+and n08/n09 (a single-pair merge/split decision still routes to `plan-skill-merge`/
+`plan-skill-split`, not here) since the description changed to name the new capability.
+Contract-extending, backward compatible (no existing Phase 1 answer or ticket-seed shape
+changed) — minor bump.
 v0.5.1 · 2026-08-14 · `schema_scope` manifest flag (issue #226, executing #224's ruling b):
 `validate.py` reads an optional `schema_scope: "grammar" | "full"` field off the estate's
 own `naming.manifest.json` as the default operating scope when `--scope` is omitted (absent

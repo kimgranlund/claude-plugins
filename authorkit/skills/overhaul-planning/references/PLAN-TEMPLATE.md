@@ -11,23 +11,28 @@
 
 ## Phase 1 — Per-member kill-switch
 
-| Member | Where it lives | Species | Blast radius (summary) | Verdict |
-|---|---|---|---|---|
-| <name> | <job-evidence citation, or "no move — absence is correctly absent"> | command/skill/agent/dual | <invocation strings, relations, hooks touched> | MOVE / NO MOVE (reason) |
+| Member | Where it lives | Species | Blast radius (summary) | Merge/Split candidate? | Knowledge tier | Verdict |
+|---|---|---|---|---|---|---|
+| <name> | <job-evidence citation, or "no move — absence is correctly absent"> | command/skill/agent/dual | <invocation strings, relations, hooks touched> | <MERGE with {set} → plan-skill-merge / SPLIT into {set} → plan-skill-split / NO — reason, evidence cited> | <PROCEDURE — keep-inline (always) / KNOWLEDGE · keep-inline\|move-to-references\|extract-to-pack\|retire — bloat-audit number cited> | MOVE / NO MOVE (reason) |
 
-State every "no move" with its reason cited against Phase 0 evidence — a falsifiable plan
-never asserts a kill without a cause.
+State every "no move", every "NO" merge/split verdict, and every knowledge-tier verdict with
+its reason cited against Phase 0 evidence — a falsifiable plan never asserts a kill, a
+nomination, or a tier without a cause.
 
 ## Phase 2 — Waved ticket seeds (not yet minted)
 
+### Wave 0 — merge/split nominations (route to plan-skill-merge / plan-skill-split, executed via /reshape-skill)
+- [ ] MERGE: <candidate set> → seed for `harness:plan-skill-merge` (Blocked-by: none)
+- [ ] SPLIT: <member> → seed for `harness:plan-skill-split` (Blocked-by: none)
+
 ### Wave 1 — mechanically-clean moves
-- [ ] <member> → <target name> (Blocked-by: none)
+- [ ] <member> → <target name> (Blocked-by: <wave-0 seed id, if this member was also nominated>)
 
 ### Wave 2 — species changes (semantic — critic pass + eval rewrite required)
-- [ ] <member> → <target name> (Blocked-by: <wave-1 seed ids this depends on>)
+- [ ] <member> → <target name> (Blocked-by: <wave-0 seed id if nominated, plus any wave-1 seed ids this depends on>) — knowledge tier: <move-to-references/extract-to-pack/retire, if that's this seed's reason>
 
 ### Wave 3 — contested
-- [ ] <member> — open question: <what's unresolved>
+- [ ] <member> — open question: <what's unresolved> (Blocked-by: <any wave-0/1/2 seed ids this depends on, or none>)
 
 ### Grandfathered (can't move cleanly — ADR-0011 D8 ratchet)
 - <member> — exemption retained; reason: <why no wave moves it cleanly>
