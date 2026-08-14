@@ -4,12 +4,12 @@ kind: skill
 description: >
   Generate a phased estate-overhaul plan for a target (estate, plugin set, or member list):
   measure first, one design doc with a per-member kill-switch (can return "no move") that also
-  nominates merge/split candidates and tiers each member procedure-vs-knowledge for context
-  cost, then waved ticket seeds with Blocked-by edges. Use for a rename/reshape/merge/split
-  campaign across many members. Plan-only: writes the doc and seeds, never executes. NOT for
-  one artifact rename (rename-planning); NOT for a plain audit (naming-audit, bloat-audit);
-  NOT for a single-pair merge/split test (plan-skill-merge/plan-skill-split); NOT for
-  executing an approved plan (rename-execute, build-lead).
+  nominates merge/split candidates and tiers each member procedure-vs-knowledge cost, then
+  waved ticket seeds with Blocked-by edges. Use for a rename/reshape/merge/split campaign
+  across many members. Plan-only: writes the doc and seeds, never executes. NOT for one
+  artifact rename (rename-planning); NOT for a plain audit (naming-audit, bloat-audit); NOT
+  for a single-pair merge/split (plan-skill-merge/plan-skill-split); NOT for executing or
+  driving the campaign (rename-execute, /overhaul-execute).
 author: kim
 created: 2026-08-14
 last_updated: 2026-08-14
@@ -30,8 +30,9 @@ allowed-tools:
 
 The estate-scale sibling above `rename-planning`'s per-member blast radius — proven live by
 the #197 campaign, where the design phase killed 7 of 8 proposed moves. **Hard boundary: this
-skill GENERATES only.** No move is executed here — `rename-execute`, `build-lead`, and the
-human's own ratify/merge own execution, always in a later, separate step.
+skill GENERATES only.** No move is executed here — `rename-execute`, `/overhaul-execute`
+(which drives the whole campaign, composing `rename-execute` and `build-lead` per approved
+wave), and the human's own ratify/merge own execution, always in a later, separate step.
 
 ## Phase 0 — Measure first, never re-derive
 

@@ -28,4 +28,4 @@ Before writing the plan doc and ticket-seed list to disk, present the full Phase
 measurements and the Phase 1 kill-switch table and wait for explicit confirmation —
 `confirm: required` is the contract, not a suggestion. This command GENERATES only: it never
 executes a move, a rename, or a build, and it never mints ticket Issues on its own — the
-seed list it writes is what a human reviews and approves next.
+seed list it writes is what a human reviews and approves next (that's `/overhaul-execute`).
