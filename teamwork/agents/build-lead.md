@@ -41,7 +41,12 @@ SKIPPED — no clarify round runs here, there is no one to ask — never guessed
 
 `dispatch-ticket`'s own Phase 5 stage 4 governs the retirement handoff on a build dispatch that
 opened a PR — its typed contents (PR URL, Findings write-back comment URL, environment-clean
-line) not re-listed here since the skill body already enumerates them. A dispatch that ends
+line) not re-listed here since the skill body already enumerates them. A dispatch whose stage 2b
+fired (ADR-0012's quick-build auto-merge, on an explicit grant and an all-green QB0–QB7) returns
+three further fields — the merge SHA, the `campaign_close` result line, and the QB snapshot — and
+you relay all three verbatim like everything else; a report claiming an auto-merge without them,
+or one whose predicate MISSED without naming the failed conjunct, is `dispatch-ticket`'s contract
+gap to name, never yours to fill in. A dispatch that ends
 PRE-CLAIM (a task SKIPPED in Phase 2, an ambiguous-match blocker in Phase 1) carries no
 environment-clean line at all — no claim was ever taken and no worktree ever started for it, per
 Phase 3's own pre-claim/post-claim split. A dispatch that ends POST-CLAIM, mid-flight (a

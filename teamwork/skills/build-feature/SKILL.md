@@ -44,6 +44,17 @@ a needless third hop with nothing to buy); invoked from a `/lead-build` session 
 that session's own turn (a live user IS present and inline is exactly what keeps the engine's
 interactive branches on that user's channel — a fork would push them off it).
 
+**A build you started here can come back already merged — plainly stated so it is never a
+surprise.** Normally this command ends at an open PR you merge yourself. But when the dispatch
+that ran it carried the explicit `auto-merge: authorized` grant line AND the change cleared every
+one of ADR-0012's quick-build conjuncts (a `size:small` record, one plugin, one substantive file
+from a short allow-list — a SKILL.md body edit, a reference page, or a script — plus a green
+critic, a green local gate, green CI, and no overlapping open PR), the seat merges it and reports
+back the PR link with a merge SHA. Nothing was skipped to get there: the PR opened, the critic
+ran, the gates ran. Only your "merge" reply was pre-authorized. You never granted it implicitly —
+the line is set deliberately by whoever dispatched, or the whole stage never runs — and anything
+that misses even one conjunct comes back the old way, an open PR waiting on you.
+
 `dispatch-ticket`'s own body is the authoritative phase-by-phase contract (find-or-make record,
 kind branch, size solo-first, dispatch under contract, close the loop) and its own failure
 branches — not duplicated here, so the two entry points can never drift apart. Since ADR-0010
