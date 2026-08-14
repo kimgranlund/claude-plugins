@@ -6,10 +6,12 @@ description: >
   .claude/ folder or a plugin root). Use when asked to audit, validate, or
   check naming, review an estate or plugin for conformance, report the
   exemption burn-down, or verify after a rename. Read-only: reports, never
-  renames.
+  renames. NOT for sweeping a repo for stale references to RETIRED names and
+  rewriting them (fix-old-names) — that checks whether OLD handles are still
+  referenced, not whether current names conform to the grammar.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-13
+last_updated: 2026-08-14
 requires: [naming-conventions]
 disable-model-invocation: false
 user-invocable: false
