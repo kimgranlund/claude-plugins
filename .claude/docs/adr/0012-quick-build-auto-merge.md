@@ -118,6 +118,11 @@ independent `docs:doc-checker` review before any implementation).
   fail-safe before that rule exists, and inert.
 - Reverting a quick-build is an ordinary PR revert; the D1 Findings snapshot makes post-hoc
   auditing a grep (`qb-snapshot` comments against the actual diffs).
+- **Accepted risk — QB7's TOCTOU window:** the no-overlapping-PR check runs once, before the
+  bounded CI watch (up to 15 minutes); a second PR touching the same plugin opened during that
+  window still merges. Blast radius is low (same-plugin overlap → a same-plugin merge conflict a
+  human resolves on the second PR, same as any two concurrent PRs today) — accepted rather than
+  re-checked, since re-running a conjunct after the watch reopens the TOCTOU one level up.
 - The build that ships this decision is itself ineligible for the path it creates — `size:big`,
   multi-file, multi-plugin, contract-changing, touching an ADR and a CLAUDE.md. It fails QB1,
   QB2, QB3, and QB4 independently. Kim merging that PR is the ratification act that flips this

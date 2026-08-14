@@ -227,8 +227,11 @@ discover and repair branch/worktree residue by hand):
    stage does not exist**: skip it silently, change nothing, go to stage 3 as written. Never infer
    the grant from "unattended", from a `size:small` label, or from a coordinator's tone — the
    coordinator sets that field deliberately or it is not set (same doctrine as `mobilize-chores`'
-   own `auto` token). Present → evaluate all eight conjuncts, every one a command with an exit
-   code, none a judgment call:
+   own `auto` token). **The grant names ONE dispatch — never copied forward into a nested
+   dispatch's own sealed prompt** (same non-inheritance rule as #207's host-checkout
+   authorization): a seat that received the grant does not pass it to a child it spawns; the
+   child earns its own grant or gets none. Present → evaluate all eight conjuncts, every one a
+   command with an exit code, none a judgment call:
    - **QB0 grant** — the literal line, above.
    - **QB1 `size:small`** — `gh issue view <id> --json labels` carries it (file backend: the Size
      field reads `small`). Phase 4's existing materiality floor, reused; no new size taxonomy.
@@ -244,8 +247,13 @@ discover and repair branch/worktree residue by hand):
    - **QB4 no contract change — an ALLOW-list, fail-closed BY CONSTRUCTION.** The substantive file
      must MATCH one of exactly three classes: (a) `<plugin>/skills/*/SKILL.md` with no changed hunk
      inside the frontmatter block (first line through the closing `---`) — a body-only edit;
-     (b) `<plugin>/skills/*/references/*.md`; (c) `<plugin>/scripts/*.{py,mjs,js}`, implementation
-     and/or its `selftest`. **Anything that does not match is ineligible because it is unlisted** —
+     (b) `<plugin>/skills/*/references/*.md`; (c) `<plugin>/skills/*/scripts/*.{py,mjs,js}`
+     (a SKILL's own bundled scripts, implementation and/or `selftest`) — **never
+     `harness/scripts/*` or any script this stage's own merge sequence invokes or trusts**
+     (`release_gate.py`, `campaign_close.py`, `skill_lint.py`, `eval_check.py`, `docs_check.py`,
+     `corpus_check.py`): a quick-build editing the gate would be graded by the gate it just
+     edited, both locally and in CI (the PR branch's own copy), letting QB6 self-certify — the
+     exact contract change class (c) exists to exclude. **Anything that does not match is ineligible because it is unlisted** —
      never because a list of forbidden things happens to name it. Orienting examples only, never
      the rule: `hooks/` (ANY file in it, not just `hooks.json`), `commands/*.md`, `agents/*.md`,
      any `evals.json`, anything under `.claude-plugin/`, any `CLAUDE.md`, anything under
@@ -257,6 +265,9 @@ discover and repair branch/worktree residue by hand):
      No recorded verdict → out; a remembered one is not a recorded one.
    - **QB6 gate green twice** — `release_gate.py <plugin>` exit 0 locally, AND CI green on the PR
      per the bounded watch below. Local green alone never suffices; CI is ADR-0002's own layer.
+     **The CI half of this conjunct is not observed here — it is PROVEN by the merge sequence's
+     own step 1 below**, so evaluating the eight conjuncts once, then running the bounded watch
+     once, checks CI green exactly once total, never twice.
    - **QB7 no overlapping open PR** — no other OPEN PR touches the same plugin (`gh pr list
      --state open --json number,files`). Overlap → a human merges.
 
