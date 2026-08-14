@@ -60,6 +60,17 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.5.1 · 2026-08-14 · `schema_scope` manifest flag (issue #226, executing #224's ruling b):
+`validate.py` reads an optional `schema_scope: "grammar" | "full"` field off the estate's
+own `naming.manifest.json` as the default operating scope when `--scope` is omitted (absent
+-> `full`, back-compat); under `"grammar"`, structural findings for artifacts outside
+authorkit's own tree are dropped entirely (not just non-gated) — authorkit keeps dogfooding
+`"full"` on itself regardless. This estate's own manifest now sets `schema_scope: "grammar"`:
+full estate audit goes from 2,111 structural findings (measured pre-change) to 9, all inside
+authorkit. `--scope` CLI override, the PostToolUse hook, and `release_gate.py`'s G12 (which
+always passes `--scope grammar` explicitly) are unaffected and re-verified green.
+`manifest-authoring`'s consulted reference (`naming-conventions/references/MIGRATION.md`) and
+`MANIFEST-TEMPLATE.json` document/carry the field.
 v0.5.0 · 2026-08-14 · `overhaul-planning` (issue #225): a new skill + command generating a
 phased estate-overhaul plan (measure-first, per-member kill-switch design doc, waved ticket
 seeds) — the estate-scale sibling above `rename-planning`'s per-member blast radius, encoding

@@ -1,5 +1,6 @@
 {
   "$schema_note": "nonoun-plugins repo-root naming manifest (ADR-0011, D8: grandfather + ratchet). Every name shipped before this manifest's seeding date (2026-08-14) is EXEMPT verbatim -- no rename campaign runs against this estate (D8). New mints conform in full from day one. The array may only shrink, never grow (CI-checked). Lexicons seed from naming-rules' own ratified verb registry + manifest-authoring's template defaults + ADR-0011 D10's seed list (shared starter vocabulary across the estates this convention spans).",
+  "schema_scope": "grammar",
   "verb_lex": [
     "break-down",
     "check",
