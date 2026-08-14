@@ -176,7 +176,7 @@ seat economy, by ruling.
 All rulings are closed; what remains is execution, in dependency order:
 
 1. Ratify this ADR (status → accepted).
-2. Land the spec at `.claude/docs/spec/naming-convention-spec.md` + seed
+2. Land the spec at `.claude/docs/spec/spec-naming-convention.md` + seed
    `naming.manifest.json` at the nonoun-plugins repo root (lexicons per D10's
    seed list; exemptions enumerated from the live three-estate inventory).
 3. Build the greenfield validator (spec §11); wire it into the PostToolUse hook
