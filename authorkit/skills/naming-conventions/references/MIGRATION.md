@@ -33,3 +33,31 @@ manifest-authoring, enumerate the exemptions array from the first audit's
 violation list. Governance is opt-in per estate, activated by the manifest's
 existence — the hook no-ops without one, so installing authorkit never
 bricks a legacy repo.
+
+## schema_scope — the structural channel is opt-in per estate
+
+`naming.manifest.json` may carry `"schema_scope": "grammar" | "full"` (2026-08-14,
+issue #226, executing #224's ruling b). The four provenance fields
+(`kind`/`author`/`created`/`last_updated`) are authorkit-internal convention, not
+estate law — nothing outside authorkit reads them, so gating an estate that never
+adopted that schema on hundreds of structural findings is unmade-adoption noise,
+not a real defect.
+
+- **`"full"`** (the default when the field is absent — back-compat, an existing
+  manifest with no opinion behaves exactly as before): every finding gates —
+  grammar and structural alike. Authorkit's own `naming.manifest.json` runs this
+  way; it dogfoods the full schema on itself.
+- **`"grammar"`**: only naming-grammar findings gate; structural findings for
+  artifacts OUTSIDE authorkit's own tree are dropped entirely from the run (not
+  merely non-gated) — the load-bearing half (name production, lexicon
+  disjointness, the reserved `-agent` head) stays fully policed everywhere,
+  regardless of this field. Artifacts INSIDE authorkit's own tree still get the
+  full structural check even when the estate's own tier is `"grammar"` —
+  authorkit keeps dogfooding `"full"` on itself.
+- **One field, one manifest per estate** — never a hardcoded per-consumer plugin
+  list (the stale-list defect class that recurred 3x this week: `gate.yml`,
+  `marketplace.json`, the hook loop). Any caller that omits `--scope` inherits
+  this field's choice; an explicit `--scope` flag on the CLI always overrides it
+  (the PostToolUse hook and `release_gate.py`'s G12 both keep their own existing
+  call patterns — G12 always passes `--scope grammar` explicitly, so this field
+  never changes its behavior).

@@ -26,6 +26,25 @@ existing estate. --scope grammar restricts the exit-code/gating decision to
 under `structural_errors`) so nothing goes silently unmeasured, they just do not fail
 the run. Every finding is tagged in `--json` output; `grammar_errors`/`structural_errors`
 partition `errors` exhaustively.
+
+schema_scope (2026-08-14, issue #226, executing #224's ruling b): the four provenance
+fields (kind/author/created/last_updated) are authorkit-internal convention, not estate
+law — nothing outside authorkit reads them, so counting them as findings across an estate
+that never adopted the schema is unmade-adoption noise (2,115 findings estate-wide, all
+outside authorkit). Rather than every caller passing --scope by hand, the ESTATE's own
+naming.manifest.json now carries an optional `schema_scope: "grammar" | "full"` field —
+the manifest declares its own tier, in ONE file, never a hardcoded per-caller plugin list
+(the stale-list defect class that recurred 3x: gate.yml, marketplace.json, the hook loop).
+Precedence: an explicit --scope flag always wins (the PostToolUse hook's own case, and
+release_gate's G12, both keep calling it exactly as before); with no --scope, the
+manifest's schema_scope picks the default (absent field -> "full", so an existing
+manifest/consumer with no opinion behaves unchanged). Independent of scope: when the
+effective scope is "grammar", the structural channel is computed only for artifacts
+INSIDE this validator's own plugin tree (authorkit dogfoods "full" on itself regardless
+of the estate's declared tier — its own ~13 structural findings stay visible); artifacts
+OUTSIDE that tree have their structural findings dropped entirely, not merely
+non-gated — this is what actually collapses the estate-wide count, not just the gate
+decision --scope already made non-blocking.
 """
 
 import argparse
@@ -317,6 +336,15 @@ def index_checks(skill_dir, body):
 
 _grammar = None
 
+# This validator's own plugin root (.../authorkit), derived from its own file
+# location — never a hardcoded plugin-name string, so it never joins the
+# stale-list defect class a maintained roster would. Used only to decide
+# whether an artifact is "authorkit's own tree" for schema_scope's own-tree
+# carve-out (module docstring, schema_scope section). run() accepts an
+# own_root override so selftest can simulate the carve-out without depending
+# on this real checkout's own content.
+_OWN_PLUGIN_ROOT = Path(__file__).resolve().parents[3]
+
 
 def discover(target: Path):
     """Yield (kind, name, path, is_dir_artifact). Supports a plugin root or a
@@ -334,22 +362,40 @@ def discover(target: Path):
                 yield "skill", p.name, p, True
 
 
-def run(target: Path, manifest: dict) -> dict:
+def run(target: Path, manifest: dict, scope: str = "full", own_root: Path = None) -> dict:
     """Core check logic over an already-resolved target and already-loaded
     manifest dict. Pure of argv/exit-code concerns so it is directly callable
-    from both main() and selftest()."""
+    from both main() and selftest().
+
+    scope: "full" counts every finding; "grammar" additionally drops (not
+    merely non-gates) structural findings for artifacts outside own_root —
+    the schema_scope carve-out (module docstring). own_root defaults to this
+    validator's own plugin root; selftest overrides it to simulate the
+    carve-out on a tempdir fixture."""
     global _grammar
     _grammar = g = Grammar(manifest)
+    if own_root is None:
+        own_root = _OWN_PLUGIN_ROOT
+
+    def _is_own(path: Path) -> bool:
+        try:
+            path.resolve().relative_to(own_root.resolve())
+            return True
+        except ValueError:
+            return False
 
     artifacts = list(discover(target))
     skills = {n for k, n, _, _ in artifacts if k == "skill"}
     findings = []          # (name, level, message, category) — category ∈ {grammar, structural}
     fms = {}               # name -> (kind, fm)
+    paths = {}             # name -> Path, for the relation/acyclicity passes below
 
     for msg in g.lexicon_errors:
         findings.append(("manifest", "error", msg, "grammar"))
 
     for kind, name, path, is_dir in artifacts:
+        paths[name] = path
+        skip_structural = scope == "grammar" and not _is_own(path)
         md = path / "SKILL.md" if is_dir else path
         text = md.read_text() if md.is_file() else ""
         fm, fmerr = parse_frontmatter(text)
@@ -357,8 +403,14 @@ def run(target: Path, manifest: dict) -> dict:
         fms[name] = (kind, fm)
         exempt = name in g.exemptions
 
-        def E(m, cat="structural"): findings.append((name, "error", m, cat))
-        def W(m, cat="structural"): findings.append((name, "warn", m, cat))
+        def E(m, cat="structural"):
+            if cat == "structural" and skip_structural:
+                return
+            findings.append((name, "error", m, cat))
+        def W(m, cat="structural"):
+            if cat == "structural" and skip_structural:
+                return
+            findings.append((name, "warn", m, cat))
         def X(m, cat="structural"): findings.append((name, "exempt-note", m, cat))
 
         # 1–2: grammar (exemptions skip; recorded for burn-down)
@@ -410,7 +462,11 @@ def run(target: Path, manifest: dict) -> dict:
     # the name-production grammar above; not what D8's exemptions grandfather)
     names = set(fms)
     for name, (kind, fm) in fms.items():
-        def E(m): findings.append((name, "error", m, "structural"))
+        skip_structural = scope == "grammar" and not _is_own(paths[name])
+        def E(m):
+            if skip_structural:
+                return
+            findings.append((name, "error", m, "structural"))
         if kind == "agent":
             perf = fm.get("performs")
             if perf and name.endswith("-agent") and perf != name[:-6]:
@@ -437,7 +493,8 @@ def run(target: Path, manifest: dict) -> dict:
         state[n] = 1
         for m in edges.get(n, []):
             if state.get(m) == 1:
-                findings.append((n, "error", f"requires cycle: {' -> '.join(trail + [m])}", "structural"))
+                if not (scope == "grammar" and n in paths and not _is_own(paths[n])):
+                    findings.append((n, "error", f"requires cycle: {' -> '.join(trail + [m])}", "structural"))
             elif state.get(m, 0) == 0 and m in edges:
                 dfs(m, trail + [m])
         state[n] = 2
@@ -466,12 +523,14 @@ def main():
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--hook", action="store_true",
                     help="no-op cleanly when target has no manifest")
-    ap.add_argument("--scope", choices=["full", "grammar"], default="full",
-                    help="full (default): gate on every finding, authorkit's own "
-                         "dogfooding contract. grammar: gate only on naming-grammar "
-                         "findings; structural (schema/provenance/policy) findings still "
-                         "print but never fail the run — for an estate that hasn't "
-                         "adopted the full frontmatter schema (see module docstring)")
+    ap.add_argument("--scope", choices=["full", "grammar"], default=None,
+                    help="full: gate on every finding, authorkit's own dogfooding "
+                         "contract. grammar: gate only on naming-grammar findings, "
+                         "and drop (not just non-gate) structural findings outside "
+                         "authorkit's own tree. Explicit --scope always wins over the "
+                         "manifest. Omitted: the default comes from the manifest's own "
+                         "schema_scope field (absent -> full, back-compat) — see "
+                         "module docstring")
     args = ap.parse_args()
 
     target = Path(args.target).resolve()
@@ -491,12 +550,18 @@ def main():
         sys.exit(2)
 
     manifest = json.loads(mpath.read_text())
-    result = run(target, manifest)
-    gating_errors = result["errors"] if args.scope == "full" else result["grammar_errors"]
+    if args.scope is not None:
+        scope = args.scope
+    else:
+        scope = manifest.get("schema_scope", "full")
+        if scope not in ("full", "grammar"):
+            scope = "full"  # unrecognized value -> back-compat default, never crash
+    result = run(target, manifest, scope=scope)
+    gating_errors = result["errors"] if scope == "full" else result["grammar_errors"]
 
     if args.json:
         print(json.dumps({
-            "target": str(target), "manifest": str(mpath), "scope": args.scope,
+            "target": str(target), "manifest": str(mpath), "scope": scope,
             "artifacts": result["artifacts"], "errors": result["errors"],
             "warnings": result["warnings"],
             "grammar_errors": result["grammar_errors"],
@@ -504,11 +569,11 @@ def main():
             "exemption_burndown": result["exemption_burndown"],
         }, indent=2))
     else:
-        print(f"authorkit validate — {result['artifacts']} artifacts @ {target} (scope={args.scope})")
+        print(f"authorkit validate — {result['artifacts']} artifacts @ {target} (scope={scope})")
         for name, lvl, msg, cat in result["findings"]:
             tag = {"error": "ERROR", "warn": "WARN ", "exempt-note": "EXMPT"}[lvl]
             demoted = " [structural, non-blocking in --scope grammar]" if (
-                args.scope == "grammar" and lvl == "error" and cat == "structural") else ""
+                scope == "grammar" and lvl == "error" and cat == "structural") else ""
             print(f"  [{tag}] {name}: {msg}{demoted}")
         print(f"  errors={len(result['errors'])} "
               f"(grammar={len(result['grammar_errors'])} structural={len(result['structural_errors'])}) "
@@ -626,8 +691,65 @@ def selftest():
                                    "--scope", "grammar"])
         assert grammar.returncode == 0, "--scope grammar must pass a structural-only fixture"
 
+    # schema_scope (issue #226, #224 ruling b): the manifest's own field picks the
+    # default scope when --scope is omitted; an explicit --scope still overrides it.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(no_author)
+
+        # Negative control: schema_scope ABSENT -> defaults to full (back-compat) —
+        # a manifest with no opinion behaves exactly as it did before this field existed.
+        mf_absent = r / "naming.manifest.json"
+        mf_absent.write_text(json.dumps(manifest))
+        absent = subprocess.run([sys.executable, __file__, "--target", str(r),
+                                  "--manifest", str(mf_absent)])
+        assert absent.returncode == 1, \
+            "schema_scope absent must default to full (back-compat negative control)"
+
+        # schema_scope: "grammar" in the manifest, no --scope flag -> the manifest's
+        # own tier picks the default; a structural-only fixture must now pass.
+        mf_grammar = dict(manifest, schema_scope="grammar")
+        mf_grammar_path = r / "naming.manifest.grammar.json"
+        mf_grammar_path.write_text(json.dumps(mf_grammar))
+        grammar_default = subprocess.run([sys.executable, __file__, "--target", str(r),
+                                           "--manifest", str(mf_grammar_path)])
+        assert grammar_default.returncode == 0, \
+            "schema_scope: grammar in the manifest must default the run to grammar scope"
+
+        # Explicit --scope still overrides the manifest's own schema_scope.
+        override = subprocess.run([sys.executable, __file__, "--target", str(r),
+                                    "--manifest", str(mf_grammar_path), "--scope", "full"])
+        assert override.returncode == 1, \
+            "explicit --scope full must override a manifest schema_scope: grammar"
+
+    # schema_scope own-tree carve-out (issue #226): under scope=grammar, structural
+    # findings for artifacts OUTSIDE own_root are dropped entirely (not just
+    # non-gated); artifacts INSIDE own_root still count — authorkit dogfoods full
+    # on itself regardless of the estate's declared tier.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(no_author)
+        own = r / "own-plugin"
+        (own / "skills" / "demo-review").mkdir(parents=True)
+        (own / "skills" / "demo-review" / "SKILL.md").write_text(no_author)
+
+        foreign_result = run(r, manifest, scope="grammar", own_root=own)
+        assert not foreign_result["structural_errors"], \
+            "grammar scope must drop structural findings for artifacts outside own_root"
+
+        own_result = run(own, manifest, scope="grammar", own_root=own)
+        assert own_result["structural_errors"], \
+            "grammar scope must still count structural findings for own_root's own artifacts"
+
+        full_result = run(r, manifest, scope="full", own_root=own)
+        assert full_result["structural_errors"], \
+            "full scope must count structural findings regardless of own_root"
+
     print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite, "
-          "--scope grammar/full partition proven")
+          "--scope grammar/full partition proven, schema_scope manifest default + "
+          "own-tree carve-out proven")
     return 0
 
 
