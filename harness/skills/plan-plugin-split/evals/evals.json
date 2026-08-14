@@ -1,6 +1,6 @@
 {
   "skill": "plan-plugin-split",
-  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Contested boundaries: plan-skill-split (content vs distribution partitioning), make-plugin (inventory vs greenfield). Known accepted-leak class (check-routing 2026-07-09): cases whose true owner is a user-only command leak to this skill on a model-only menu — benign; do not tune the description to chase them.",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Contested boundaries: plan-skill-split (content vs distribution partitioning), make-plugin (inventory vs greenfield). Known accepted-leak class (check-routing 2026-07-09): cases whose true owner is a user-only command leak to this skill on a model-only menu — benign; do not tune the description to chase them. Mirror case added 2026-08-14 (issue #245) — n08, closing the reciprocal side of authorkit:overhaul-planning's own n05 fence (that suite's n05 was measured STOLEN 3-of-3 during #243's check-routing re-run; this skill is n05's true owner for a SINGLE oversized plugin's partition, but never for an estate-wide, many-member overhaul campaign with a kill-switch doc and waved tickets — that's overhaul-planning's job, this skill only a Phase 0/1 instrument it composes). No steal measured in this direction and no description change made here; the case only closes the boundary evidence on this suite's side, per the routing invariant that a reciprocal fence closes in sibling suites.",
   "cases": [
     {
       "id": "t01",
@@ -82,6 +82,12 @@
       "prompt": "Is this skill name too vague?",
       "expect": "no-trigger",
       "comment": "owner: naming-rules — forward naming under the simple paradigm"
+    },
+    {
+      "id": "n08",
+      "prompt": "Generate a phased overhaul plan for this whole estate, with a per-member kill-switch and waved ticket seeds.",
+      "expect": "no-trigger",
+      "comment": "owner: authorkit:overhaul-planning (where installed) — an estate-wide, many-member campaign plan, not a single oversized plugin's partition; reciprocal fence closing #245's mirror"
     }
   ]
 }
