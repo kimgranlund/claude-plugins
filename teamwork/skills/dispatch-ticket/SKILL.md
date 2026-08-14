@@ -313,7 +313,11 @@ Read the ticket back (git-native: `gh issue view --comments`; file backend: re-r
 adapter: its `read` operation). Findings gained entries and the work shipped → advance status
 (`open`→`doing`→`done`; git-native `done` closes the issue, `wontfix` closes with the label and a
 reason comment — matching `file-bug`'s own Phase 6 verbs) and report path + status + what shipped,
-plus Phase 5's environment-clean line — stated, never inferred from silence. An agent that
+plus Phase 5's environment-clean line — stated, never inferred from silence. **When stage 2b
+merged the PR, `Closes #<id>` already closed the record**: the read-back CONFIRMS that closure
+rather than performing it — a closed issue here is the expected end state, not Phase 1's
+stop-and-report condition (which reads state at INTAKE, before any work) — and stage 2b's QB
+snapshot is the shipped-work evidence. An agent that
 returned without its Findings entry → one re-dispatch with the contract quoted, then record the
 loss with a dated entry and say so plainly; a fork no longer addressable skips straight to
 recording — it cannot be re-dispatched into. Either way, recording the loss is a terminal outcome
