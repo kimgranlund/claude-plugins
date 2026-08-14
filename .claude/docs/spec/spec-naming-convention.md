@@ -322,3 +322,43 @@ Grammar and relation failures block the mint/merge; staleness warns.
 2. Enumerate the full `exemptions` array from the live inventory.
 3. Backfill frontmatter (relations, invocation policy, provenance) across the existing estate — exempt names still carry full frontmatter (§11 check 1).
 4. Set the default staleness review window and the mutating-command allowlist.
+
+---
+
+## 14. Amendments
+
+### 14.1 Reverse-wrapper skill names (2026-08-14, issue #241, Sign-off ratified on #241)
+
+**Ruling:** a skill MAY carry an object-verb name (terminal token drawn from `VerbLex`, not
+`ProcessLex`) **IFF** an identically-named command exists in the same plugin root and wraps it
+(§7's wrapper relation, read in reverse — a command normally wraps a skill for user access; this
+production licenses the skill's own name shape off that same sibling's existence). Absent that
+wrapper, an object-verb skill name is illegal exactly as §3.2/§5 already specify — this amendment
+adds one narrow production, it does not relax the `VerbLex ∩ ProcessLex = ∅` disjointness
+invariant (§4) or license a verb-terminal skill name standing alone.
+
+**Why:** issue #238's design phase established the `overhaul-planning` → `overhaul-execute`
+naming symmetry the estate wants, mirroring the existing `rename-planning` → `rename-execute`
+precedent pair. `rename-execute` ships command-only today (no skill counterpart) because, before
+this amendment, no legal skill-grammar production existed for a verb-terminal name at all —
+confirmed empirically during #238's build: `rename-execute`/`exemption-retire` are command-only
+files with zero skill siblings, not "grandfathered exemptions" as an earlier, incorrect claim on
+that issue's thread asserted. `overhaul-execute` needs to be **both** model-invocable (so an
+orchestrating skill or command can dispatch it without a human typing the slash command) **and**
+user-invocable (the existing host-run command, unchanged in its confirm-gated mutation posture).
+One procedure, two surfaces, is exactly the wrapper pattern (§7) — just applied to a name shape
+§3.2 didn't previously admit. Kim's Sign-off on #241 is this ruling's authority; no future seat
+needs to trust a mid-build comment for it.
+
+**Validator change:** `naming-audit/scripts/validate.py`'s skill-grammar production gains one new
+branch: if the terminal token resolves in `VerbLex` (not `ProcessLex`) AND a command file of the
+identical name exists in the same plugin root, the object prefix must still resolve against
+`ObjectVocab` exactly as the object-process production already requires — the wrapper's existence
+is the license, not a bypass of object resolution. A verb-terminal skill name with no
+identically-named command sibling still fails exactly as before this amendment (the negative
+control the validator's own selftest fixtures alongside the positive and regression controls).
+
+**Non-goal:** this amendment does not touch command grammar (§3.1), agent grammar (§3.3), or the
+`VerbLex`/`ProcessLex` disjointness invariant (§4) — a token still lives in exactly one lexicon;
+this amendment only adds a second *skill* production that may legally consume a `VerbLex` token
+under the stated precondition.

@@ -1,6 +1,6 @@
 {
   "name": "authorkit",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Harness artifact governance: naming grammar, frontmatter contracts, folder layout, migration tooling, and busy-work/over-specification audits for .claude/ estates and plugins. Dogfoods its own spec — this plugin validates clean against its own validator with an empty exemptions array.",
   "author": {"name": "kim"}
 }
