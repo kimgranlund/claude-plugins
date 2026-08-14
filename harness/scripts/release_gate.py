@@ -451,6 +451,12 @@ def gate(root: Path, package: bool = False):
             # doctrine cites the adiahealth/gen-ui-kit host repo by name — same external-package
             # false-positive class as adia-ui-kit above:
             "gen-ui-kit",
+            # ADR-0012 quick-build auto-merge (2026-08-14, issue #244): "auto-merge" is the
+            # feature's own name AND the literal grant line `auto-merge: authorized` that
+            # dispatch-ticket stage 2b greps for — unrenameable prose tripping the `-merge`
+            # suffix plan-skill-merge owns; "quick-build" is ADR-0012's own name tripping the
+            # `-build` suffix lead-build owns. Same standing false-positive class:
+            "auto-merge", "quick-build",
              # fix-old-names (2026-07-26, issue #97): this skill's subject matter IS retired
              # names, so it necessarily cites them in prose. G8 is right that `ops-issues`
              # matches no installed skill — that is precisely the point being illustrated.

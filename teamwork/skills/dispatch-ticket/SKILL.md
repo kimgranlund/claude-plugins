@@ -222,15 +222,96 @@ discover and repair branch/worktree residue by hand):
    visible in-progress signal (#192: its PR once merged and closed the issue with `in-flight`
    still on it, before this step existed — the stale-display defect #199 closes). Claim comment and
    assignee stay untouched — display change only, not a release.
+   **2b. Quick-build auto-merge — only on an explicit grant and an all-green predicate (ADR-0012).**
+   Read the sealed dispatch prompt for the literal line `auto-merge: authorized`. **Absent → this
+   stage does not exist**: skip it silently, change nothing, go to stage 3 as written. Never infer
+   the grant from "unattended", from a `size:small` label, or from a coordinator's tone — the
+   coordinator sets that field deliberately or it is not set (same doctrine as `mobilize-chores`'
+   own `auto` token). **The grant names ONE dispatch — never copied forward into a nested
+   dispatch's own sealed prompt** (same non-inheritance rule as #207's host-checkout
+   authorization): a seat that received the grant does not pass it to a child it spawns; the
+   child earns its own grant or gets none. Present → evaluate all eight conjuncts, every one a
+   command with an exit code, none a judgment call:
+   - **QB0 grant** — the literal line, above.
+   - **QB1 `size:small`** — `gh issue view <id> --json labels` carries it (file backend: the Size
+     field reads `small`). Phase 4's existing materiality floor, reused; no new size taxonomy.
+   - **QB2 one plugin** — every path in `git diff --name-only origin/main...HEAD` sits under ONE
+     top-level plugin directory. A repo-root path, anything under `.claude/docs/` or `.github/`,
+     or a second plugin → out.
+   - **QB3 one substantive file** — with R = {`<plugin>/.claude-plugin/plugin.json`,
+     `<plugin>/README.md`} (the mandatory version-bump + ledger ride-alongs), `changed \ R` has
+     exactly ONE member. Diff-check the ride-alongs too: the `plugin.json` diff's changed lines
+     all match `"version"`, and **every changed hunk in `README.md` starts at or below the
+     version-ledger heading** (`git diff -U0 … -- <plugin>/README.md`, hunk start line vs. that
+     heading's line number). A hunk above it, or no ledger heading found, is indeterminate → out.
+   - **QB4 no contract change — an ALLOW-list, fail-closed BY CONSTRUCTION.** The substantive file
+     must MATCH one of exactly three classes: (a) `<plugin>/skills/*/SKILL.md` with no changed hunk
+     inside the frontmatter block (first line through the closing `---`) — a body-only edit;
+     (b) `<plugin>/skills/*/references/*.md`; (c) `<plugin>/skills/*/scripts/*.{py,mjs,js}`
+     (a SKILL's own bundled scripts, implementation and/or `selftest`) — **never
+     `harness/scripts/*` or any script this stage's own merge sequence invokes or trusts**
+     (`release_gate.py`, `campaign_close.py`, `skill_lint.py`, `eval_check.py`, `docs_check.py`,
+     `corpus_check.py`): a quick-build editing the gate would be graded by the gate it just
+     edited, both locally and in CI (the PR branch's own copy), letting QB6 self-certify — the
+     exact contract change class (c) exists to exclude. **Anything that does not match is ineligible because it is unlisted** —
+     never because a list of forbidden things happens to name it. Orienting examples only, never
+     the rule: `hooks/` (ANY file in it, not just `hooks.json`), `commands/*.md`, `agents/*.md`,
+     any `evals.json`, anything under `.claude-plugin/`, any `CLAUDE.md`, anything under
+     `.claude/docs/`, and any file carrying a frontmatter block outside class (a). An artifact kind
+     invented tomorrow is ineligible the day it appears, with no edit here.
+   - **QB5 critic green** — a fresh-context checker ran on THIS change inside THIS dispatch and
+     returned zero blocker/major findings. Deliberately stricter than the baseline semantic-edit
+     invariant (pure code normally rides its own test gates): auto-merge always pays for a critic.
+     No recorded verdict → out; a remembered one is not a recorded one.
+   - **QB6 gate green twice** — `release_gate.py <plugin>` exit 0 locally, AND CI green on the PR
+     per the bounded watch below. Local green alone never suffices; CI is ADR-0002's own layer.
+     **The CI half of this conjunct is not observed here — it is PROVEN by the merge sequence's
+     own step 1 below**, so evaluating the eight conjuncts once, then running the bounded watch
+     once, checks CI green exactly once total, never twice.
+   - **QB7 no overlapping open PR** — no other OPEN PR touches the same plugin (`gh pr list
+     --state open --json number,files`). Overlap → a human merges.
+
+   **Any conjunct that fails, errors, times out, or is indeterminate → NOT eligible.** Name the
+   failed conjunct in the stage-4 handoff and continue to stage 3 exactly as today — PR open,
+   human merges, nothing else different. Never re-run a conjunct to chase a pass. All eight green
+   → run the merge sequence, one attempt each, in order: (1) a BOUNDED `gh pr checks <pr> --watch
+   --fail-fast` — the ceiling is a real wrapper with a real exit code, not a promise to watch the
+   clock, and the wrapper is **feature-detected, never assumed**: `timeout 900 …` where GNU
+   coreutils `timeout` is on PATH (`gtimeout 900 …` on a Homebrew macOS box), otherwise the
+   portable `perl -e 'alarm 900; exec @ARGV' gh pr checks <pr> --watch --fail-fast`. Stock macOS
+   carries NEITHER `timeout` nor `gtimeout` (measured 2026-08-14) — assuming the GNU spelling
+   would make this whole path silently inert. **Exit 0 is the only pass**; every other exit is
+   ineligible with no interpretation — 124 (GNU expiry), 142 (SIGALRM expiry), 127 (no wrapper
+   found, so the bound could not be ENFORCED — never run an unbounded watch in its place), or any
+   failing check. A timeout is NEVER read as an implicit pass; (2) `gh pr merge <pr> --squash`;
+   (3) verify by
+   re-query, never by trusting the merge command's own print — `gh pr view <pr> --json
+   state,mergeCommit` must show `MERGED` and a non-empty SHA; (4) `python3
+   harness/scripts/campaign_close.py <pr> --repo <owner/repo> --gate <plugin-root>`; (5) a dated
+   Findings write-back carrying the full QB0–QB7 snapshot (each conjunct's OBSERVED value — the
+   substantive file's path, the critic's verdict quoted, both gate results), the merge SHA, and
+   `campaign_close`'s summary line. A denial at step 2 (the unattended permission classifier still
+   blocks `gh pr merge` until Kim arms a scoped allow-rule) or any later failure → the named
+   blocker `auto-merge-denied` or `auto-merge-unverified` in the handoff, PR left standing for a
+   human, claim NOT re-released (an open linked PR is today's normal end state). Never force,
+   never retry past the first denial.
 3. **Verified-clean retirement before the seat retires** — never assumed. State three axes: the
    worktree's git status (clean, or N/A when Phase 3 took the host-checkout skip), the local
    feature branch (pushed and named — this seat never merges its own PR, per ADR-0002's
-   human-gated merge), and the host checkout (untouched when isolated; "built directly in host
-   checkout, skip preconditions met" when the #204 skip ran instead) — never silently omitted.
+   human-gated merge, **except under stage 2b's ADR-0012 quick-build predicate, when the sealed
+   dispatch carried the explicit grant and all eight conjuncts came back green**; on that branch
+   the axis reads "auto-merged at `<SHA>`, remote branch verified deleted (campaign_close)"), and
+   the host checkout (untouched when isolated; "built directly in host checkout, skip
+   preconditions met" when the #204 skip ran instead) — never silently omitted.
 4. **A typed retirement handoff proving each step**: the PR URL, the Findings write-back's own
    comment URL on the resolved backend (below), and one explicit environment-clean line naming
-   stage 3's three axes by result — never a silent "done". `build-lead`'s own return contract
-   (`agents/build-lead.md`) carries this line through verbatim to whatever dispatched it.
+   stage 3's three axes by result — never a silent "done". When stage 2b FIRED, three more fields
+   ride along: `merge-sha: <sha>` · `campaign-close: <its summary line>` · `qb-snapshot: <the
+   eight conjunct results>`. When stage 2b evaluated and MISSED, the handoff names the failed
+   conjunct and states the fallback plainly — PR opened, awaiting a human merge, today's behavior
+   unchanged. When no grant was present, the handoff says nothing about auto-merge at all.
+   `build-lead`'s own return contract (`agents/build-lead.md`) carries these lines through
+   verbatim to whatever dispatched it.
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
 enumerated inputs + budget + the typed return + stage 2's own `--remove-label in-flight` call at
@@ -250,7 +331,11 @@ Read the ticket back (git-native: `gh issue view --comments`; file backend: re-r
 adapter: its `read` operation). Findings gained entries and the work shipped → advance status
 (`open`→`doing`→`done`; git-native `done` closes the issue, `wontfix` closes with the label and a
 reason comment — matching `file-bug`'s own Phase 6 verbs) and report path + status + what shipped,
-plus Phase 5's environment-clean line — stated, never inferred from silence. An agent that
+plus Phase 5's environment-clean line — stated, never inferred from silence. **When stage 2b
+merged the PR, `Closes #<id>` already closed the record**: the read-back CONFIRMS that closure
+rather than performing it — a closed issue here is the expected end state, not Phase 1's
+stop-and-report condition (which reads state at INTAKE, before any work) — and stage 2b's QB
+snapshot is the shipped-work evidence. An agent that
 returned without its Findings entry → one re-dispatch with the contract quoted, then record the
 loss with a dated entry and say so plainly; a fork no longer addressable skips straight to
 recording — it cannot be re-dispatched into. Either way, recording the loss is a terminal outcome
@@ -284,6 +369,11 @@ conversational summary never substitutes for the entry the record was owed.
   entry naming the fork) and, for big work, back to planner — never silently edit the contract.
 - Gates fail at the wave boundary → the failure routes to the seat that caused it; the ticket
   stays `doing` with the failure recorded.
+- Stage 2b's predicate misses, or its merge sequence fails part-way (`auto-merge-denied` on a
+  blocked `gh pr merge`, `auto-merge-unverified` on a merge whose SHA never confirmed) → **not a
+  build failure**: the PR is open and linked, which is this dispatch's ordinary successful end
+  state. Name the failed conjunct or the blocker in the handoff, leave the PR for a human, keep
+  the claim as-is, and never retry the sequence or widen the predicate to get past it.
 
 Done when the record's `## Findings` carries dated evidence of the shipped work (or the recorded
 blocker/skip), status reflects reality, a PR this dispatch opened carries an explicit

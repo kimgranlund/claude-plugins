@@ -132,8 +132,14 @@ sweep surfaced that's actually buildable.
    dispatches without the one guard INTERACTIVE mode also never had (the confirm round showed only
    id/title/kind, never in-flight state) — name that specific gap per ticket in the step-6 report
    rather than letting the summary imply a check that doesn't run there. An unattended dispatch's
-   ceiling is PR-opened, never merged — merging stays a human act (ADR-0002's merge gate); nothing
-   in this mode, or in `build-lead`/`dispatch-ticket`, attempts a merge or review on its own. Still
+   ceiling is **PR-opened by default, with ONE carve-out**: a dispatch meeting ADR-0012's
+   quick-build predicate in full — the explicit `auto-merge: authorized` grant line this step
+   placed (step 5), plus `size:small`, one plugin, one substantive file inside QB4's allow-list, a
+   green critic, a green local gate, green CI, and no overlapping open PR — may land MERGED.
+   Everything else still waits for a human, and merging stays a human act (ADR-0002's merge gate,
+   unamended — the carve-out keeps the PR and every gate, it only pre-authorizes the click).
+   Review is never automated in any mode: nothing here, in `build-lead`, or in `dispatch-ticket`
+   approves or reviews a PR on its own. Still
    name every visibly under-specified task ticket in the step-6 report exactly as the interactive
    branch would have flagged it in the confirm round — it comes back SKIPPED from `build-lead` (no
    clarify round runs unattended either way), never silently dispatched on a guess.
@@ -149,6 +155,16 @@ sweep surfaced that's actually buildable.
    `chore-lead`/`sweep-chores` shape step 1 already uses: the command stays
    `disable-model-invocation: true`, the agent carries the reachable procedure (issue
    #134/#135's shared fix pattern).
+
+   **On the UNATTENDED branch only, write the grant line into each dispatch prompt** — the literal
+   text `auto-merge: authorized`, on its own line, typed out in the sealed prompt. It is a field
+   this step SETS, never a property the receiving seat infers: `dispatch-ticket`'s stage 2b reads
+   for that exact line and treats its absence as "this stage does not exist." Its authority traces
+   to the `auto` token Kim typed at step 0 — the same explicit-never-inferred doctrine — and
+   omitting the line is the entire revocation mechanism, needing no other edit. **The INTERACTIVE
+   branch never places it**: a human who just sat through the confirm round is present to merge.
+   The line authorizes only the merge CLICK on an all-green predicate; it grants nothing about
+   review, and skips no critic, gate, or PR.
 
    Every dispatch is independent — one failing never blocks the others. **Isolation is no longer
    this step's decision** (2026-08-12, #183 — incident and rationale in this skill's own

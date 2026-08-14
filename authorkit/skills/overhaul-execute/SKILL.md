@@ -110,8 +110,12 @@ Run only Gate-A-approved waves, in plan order. Per row kind:
 - **move/build** → mint the approved seed through its owning intake skill first (record before
   build: `docs:file-feature`/`docs:file-task` where docs is installed, a plain `gh issue create`
   otherwise), then dispatch `teamwork:build-lead` (Agent tool) with the ticket id — worktree
-  isolation is `dispatch-ticket`'s own unconditional step, the ceiling is PR-opened, merges stay
-  the human's. teamwork absent → emit the seed only and state plainly the wave will not build.
+  isolation is `dispatch-ticket`'s own call (conditional since #204, never this skill's to
+  decide), and the ceiling is PR-opened: merges stay the human's unless that dispatch clears
+  ADR-0012's quick-build predicate in full, which no overhaul row does — a wave spans many files
+  across more than one plugin and rewrites contracts by definition, so it never places the
+  `auto-merge: authorized` grant line and never becomes eligible. teamwork absent → emit the seed
+  only and state plainly the wave will not build.
 - **after every wave containing a rename** → a `fix-old-names` sweep (Skill tool).
 
 Two rows run in parallel only when both name concrete, non-overlapping edit targets

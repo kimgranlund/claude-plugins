@@ -290,3 +290,17 @@ P5 validate:   PASS (2026-08-07 ship) — lint clean. Fresh-context skill-checke
   new in-flight label invented for this change; `dispatch-ticket`'s Phase 3 is that operation's
   first real caller, exactly the gap ADR-0005 itself named as open. Assertions 8/9 replace and
   extend the retired 2026-08-11 text.
+- 2026-08-14 (#244, ADR-0012 — amends the 2026-08-11 `auto`-mode entry above, which stated the
+  ceiling as "built + PR opened, never merge"): that ceiling gains exactly ONE carve-out, and the
+  step-4 text now says so. A dispatch clearing ADR-0012's full quick-build predicate — the
+  explicit `auto-merge: authorized` grant line step 5 now writes into every unattended dispatch
+  prompt, plus `size:small`, one plugin, one substantive file inside an ALLOW-list of three
+  classes, a green critic, a green local gate, green CI, and no overlapping open PR — may land
+  MERGED. The reasoning the old entry rested on is not overturned so much as re-measured: Kim's
+  own #244 evidence showed the human "merge" reply took seconds while the critic and gate took
+  the wall-clock, so the confirm round's blast radius was never guarding the merge click — it was
+  guarding the change SHAPE, which the predicate now guards mechanically and fail-closed. Review
+  stays fully human in every mode; nothing here approves a PR. The permission classifier
+  (`auto-mode-gh-permissions`) still blocks `gh pr merge` until Kim arms a scoped allow-rule, so
+  this degrades to the old ceiling until then — a deployment prerequisite named in ADR-0012's
+  Consequences, not a design gap.
