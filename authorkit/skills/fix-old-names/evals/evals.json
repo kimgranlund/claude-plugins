@@ -1,6 +1,6 @@
 {
   "skill": "fix-old-names",
-  "note": "Trigger-routing suite, minted 2026-07-26 with the skill (issue #97). expect=trigger: a CONSUMER repo holds references to retired plugin/skill/agent/command names and wants them found or fixed. expect=no-trigger: near-misses owned elsewhere — choosing a new name (naming-rules), executing a rename inside the plugin repo (big-change-git-rules), general repo drift (clean-repo), and the routing/description tier (check-routing). The dangerous confusion this suite exists to measure is fix-old-names vs big-change-git-rules: both are about renames, but one runs in the repo that PERFORMED the rename and the other in a repo that merely CONSUMES it.",
+  "note": "Trigger-routing suite, minted 2026-07-26 with the skill (issue #97); moved to authorkit 2026-08-14 (issue #197, ADR-0011/D9) with the skill, unedited apart from this note and n03/n04/n09/n10 below. expect=trigger: a CONSUMER repo holds references to retired plugin/skill/agent/command names and wants them found or fixed. expect=no-trigger: near-misses owned elsewhere — choosing a brand-new name (naming-rules, harness), planning or executing a rename inside the plugin repo itself (rename-planning/rename-execute, this plugin; big-change-git-rules, harness), general repo drift (clean-repo), and the routing/description tier (check-routing). Two dangerous confusions this suite measures: fix-old-names vs big-change-git-rules (one runs in the repo that PERFORMED the rename, the other in a repo that merely CONSUMES it), and — new since the move — fix-old-names vs its own in-plugin siblings rename-planning/rename-execute (one repairs a stale REFERENCE post-rename in any installing repo; the other two PLAN/EXECUTE the rename itself, inside the governed estate).",
   "cases": [
     { "id": "t01", "prompt": "My agent dispatch fails with 'no such agent' after updating the plugins.", "expect": "trigger" },
     { "id": "t02", "prompt": "These skill names in my .claude directory look like the old ones — can you update them?", "expect": "trigger" },
@@ -20,6 +20,8 @@
     { "id": "n05", "prompt": "This repo has duplicated instruction trees and dead automation.", "expect": "no-trigger", "comment": "clean-repo — general drift, not retired names" },
     { "id": "n06", "prompt": "Prove routing still works after I edited these descriptions.", "expect": "no-trigger", "comment": "check-routing — the blind judge simulation" },
     { "id": "n07", "prompt": "Rename this variable across the TypeScript codebase.", "expect": "no-trigger", "comment": "no skill — ordinary source refactor, explicitly out of scope" },
-    { "id": "n08", "prompt": "Why does my skill never trigger?", "expect": "no-trigger", "comment": "skill-writing-rules — trigger debugging" }
+    { "id": "n08", "prompt": "Why does my skill never trigger?", "expect": "no-trigger", "comment": "skill-writing-rules — trigger debugging" },
+    { "id": "n09", "prompt": "Propose the conforming target name for this skill that's flagged as a naming violation.", "expect": "no-trigger", "comment": "rename-planning (this plugin, added 2026-08-14/#197) — proposes the target name and blast radius, never executes; the new same-plugin confusion this move creates" },
+    { "id": "n10", "prompt": "Apply this approved rename plan now.", "expect": "no-trigger", "comment": "rename-execute (this plugin, added 2026-08-14/#197) — the estate's single mutation point for an already-planned rename, not a stale-reference sweep of an installing repo" }
   ]
 }

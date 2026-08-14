@@ -484,7 +484,7 @@ def derive(repo: Path, out: Path):
 
     manifest = {
         "schema": "renames/v1",
-        "generated_by": "harness/scripts/fix_old_names.py derive",
+        "generated_by": "authorkit/scripts/fix_old_names.py derive",
         "source": "git rename detection over */SKILL.md and */agents/*.md, chained to final",
         "plugins": dict(sorted(plugins.items())),
         "renames": sorted(renames, key=lambda e: (e["old_plugin"], e["kind"], e["old"])),
@@ -712,7 +712,7 @@ def main(argv):
 
     if argv[0] == "derive":
         repo = Path(a.target).resolve()
-        out = Path(a.out).resolve() if a.out else repo / "harness" / "renames.json"
+        out = Path(a.out).resolve() if a.out else repo / "authorkit" / "renames.json"
         return derive(repo, out)
 
     root = Path(a.target).resolve()

@@ -5,9 +5,9 @@ description: >-
   wave and rewrite the live ones. Use for "my agent dispatch says no such agent", "these skill
   names look old", "did the rename break this repo", "migrate this repo to the new names", or
   "a CI check that fails when our config references a renamed agent" — that gate ships with it.
-  Reads a derived manifest, never guesses. NOT for choosing a new name (naming-rules); NOT for
-  executing a rename in the plugin repo itself (big-change-git-rules); NOT for mechanizing some
-  other check as a script (make-script); NOT for general repo drift (clean-repo).
+  Reads a derived manifest, never guesses. NOT for choosing a brand-new name (naming-rules); NOT
+  for planning or executing a rename inside the plugin repo itself (rename-planning/rename-
+  execute, this plugin; big-change-git-rules); NOT for general repo drift (clean-repo).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[repo-root, default .]"

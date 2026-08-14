@@ -6,11 +6,26 @@ relation graph, policy/capability coherence, provenance. Judgment (severity
 interpretation, report narrative) belongs to the naming-audit skill, not here.
 
 Usage:
-  validate.py --target PATH [--manifest PATH] [--json] [--hook]
+  validate.py --target PATH [--manifest PATH] [--json] [--hook] [--scope full|grammar]
   validate.py selftest                        prove the counters bite
 
 Exit codes: 0 clean (warnings allowed), 1 errors found, 2 no manifest or no
 args (--hook mode exits 0 on missing manifest: governance is opt-in per estate).
+
+--scope (2026-08-14, issue #197 wiring): this validator checks two genuinely different
+things under one name — naming GRAMMAR (name production, lexicon disjointness, the
+reserved -agent head; what ADR-0011 D8's grandfather+ratchet exemptions actually cover)
+and a broader STRUCTURAL schema (author/created/last_updated provenance, kind-declared
+policy grants, reference-index completeness). Measured empirically wiring this into
+nonoun-plugins (2026-08-14): running --scope full (the default, authorkit's own
+dogfooding contract) against an estate that never adopted the structural schema fails on
+hundreds of structural findings that have nothing to do with naming — a false blocking
+gate for anyone ADR-0011 never asked to backfill author/created/last_updated across an
+existing estate. --scope grammar restricts the exit-code/gating decision to
+`grammar_errors` only; structural findings still print (and appear in `--json` output
+under `structural_errors`) so nothing goes silently unmeasured, they just do not fail
+the run. Every finding is tagged in `--json` output; `grammar_errors`/`structural_errors`
+partition `errors` exhaustively.
 """
 
 import argparse
@@ -328,11 +343,11 @@ def run(target: Path, manifest: dict) -> dict:
 
     artifacts = list(discover(target))
     skills = {n for k, n, _, _ in artifacts if k == "skill"}
-    findings = []          # (name, level, message)
+    findings = []          # (name, level, message, category) — category ∈ {grammar, structural}
     fms = {}               # name -> (kind, fm)
 
     for msg in g.lexicon_errors:
-        findings.append(("manifest", "error", msg))
+        findings.append(("manifest", "error", msg, "grammar"))
 
     for kind, name, path, is_dir in artifacts:
         md = path / "SKILL.md" if is_dir else path
@@ -342,16 +357,17 @@ def run(target: Path, manifest: dict) -> dict:
         fms[name] = (kind, fm)
         exempt = name in g.exemptions
 
-        def E(m): findings.append((name, "error", m))
-        def W(m): findings.append((name, "warn", m))
-        def X(m): findings.append((name, "exempt-note", m))
+        def E(m, cat="structural"): findings.append((name, "error", m, cat))
+        def W(m, cat="structural"): findings.append((name, "warn", m, cat))
+        def X(m, cat="structural"): findings.append((name, "exempt-note", m, cat))
 
         # 1–2: grammar (exemptions skip; recorded for burn-down)
         errs = g.parse(kind, name, skills, wraps_target=fm.get("wraps"))
         for e in errs:
-            (X if exempt else E)(e)
+            (X if exempt else E)(e, "grammar")
 
-        # 3: folder/file == name; layout; index
+        # 3: folder/file == name; layout; index (structural — redundant with skill_lint
+        # F9/A6, which police this at write time; kept here as a second stack per D9)
         declared = fm.get("name")
         if declared != name:
             E(f"frontmatter name {declared!r} != {'folder' if is_dir else 'file'} name")
@@ -361,7 +377,7 @@ def run(target: Path, manifest: dict) -> dict:
             for e in index_checks(path, body):
                 E(e)
 
-        # 4: frontmatter schema
+        # 4: frontmatter schema (structural — provenance/schema, not naming grammar)
         if fmerr:
             E(fmerr)
             continue
@@ -376,24 +392,25 @@ def run(target: Path, manifest: dict) -> dict:
         if fm.get("kind") != kind:
             E(f"declared kind {fm.get('kind')!r} != decided kind {kind!r} (directory)")
 
-        # 6: policy & grants
+        # 6: policy & grants (structural)
         pe, pw = policy_checks(kind, fm, name)
         for e in pe:
             E(e)
         for w in pw:
             W(w)
 
-        # 7: provenance
+        # 7: provenance (structural)
         ve, vw = provenance_checks(fm, g)
         for e in ve:
             E(e)
         for w in vw:
             W(w)
 
-    # 5: relation graph
+    # 5: relation graph (structural — a real relation check, but a different concern than
+    # the name-production grammar above; not what D8's exemptions grandfather)
     names = set(fms)
     for name, (kind, fm) in fms.items():
-        def E(m): findings.append((name, "error", m))
+        def E(m): findings.append((name, "error", m, "structural"))
         if kind == "agent":
             perf = fm.get("performs")
             if perf and name.endswith("-agent") and perf != name[:-6]:
@@ -420,7 +437,7 @@ def run(target: Path, manifest: dict) -> dict:
         state[n] = 1
         for m in edges.get(n, []):
             if state.get(m) == 1:
-                findings.append((n, "error", f"requires cycle: {' -> '.join(trail + [m])}"))
+                findings.append((n, "error", f"requires cycle: {' -> '.join(trail + [m])}", "structural"))
             elif state.get(m, 0) == 0 and m in edges:
                 dfs(m, trail + [m])
         state[n] = 2
@@ -431,10 +448,13 @@ def run(target: Path, manifest: dict) -> dict:
     errors = [f for f in findings if f[1] == "error"]
     warns = [f for f in findings if f[1] == "warn"]
     exemption_notes = [f for f in findings if f[1] == "exempt-note"]
+    grammar_errors = [f for f in errors if f[3] == "grammar"]
+    structural_errors = [f for f in errors if f[3] == "structural"]
 
     return {
         "artifacts": len(artifacts), "findings": findings,
         "errors": errors, "warnings": warns,
+        "grammar_errors": grammar_errors, "structural_errors": structural_errors,
         "exemption_burndown": {"count": len(g.exemptions), "notes": exemption_notes},
     }
 
@@ -446,6 +466,12 @@ def main():
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--hook", action="store_true",
                     help="no-op cleanly when target has no manifest")
+    ap.add_argument("--scope", choices=["full", "grammar"], default="full",
+                    help="full (default): gate on every finding, authorkit's own "
+                         "dogfooding contract. grammar: gate only on naming-grammar "
+                         "findings; structural (schema/provenance/policy) findings still "
+                         "print but never fail the run — for an estate that hasn't "
+                         "adopted the full frontmatter schema (see module docstring)")
     args = ap.parse_args()
 
     target = Path(args.target).resolve()
@@ -466,22 +492,28 @@ def main():
 
     manifest = json.loads(mpath.read_text())
     result = run(target, manifest)
+    gating_errors = result["errors"] if args.scope == "full" else result["grammar_errors"]
 
     if args.json:
         print(json.dumps({
-            "target": str(target), "manifest": str(mpath),
+            "target": str(target), "manifest": str(mpath), "scope": args.scope,
             "artifacts": result["artifacts"], "errors": result["errors"],
             "warnings": result["warnings"],
+            "grammar_errors": result["grammar_errors"],
+            "structural_errors": result["structural_errors"],
             "exemption_burndown": result["exemption_burndown"],
         }, indent=2))
     else:
-        print(f"authorkit validate — {result['artifacts']} artifacts @ {target}")
-        for name, lvl, msg in result["findings"]:
+        print(f"authorkit validate — {result['artifacts']} artifacts @ {target} (scope={args.scope})")
+        for name, lvl, msg, cat in result["findings"]:
             tag = {"error": "ERROR", "warn": "WARN ", "exempt-note": "EXMPT"}[lvl]
-            print(f"  [{tag}] {name}: {msg}")
-        print(f"  errors={len(result['errors'])} warnings={len(result['warnings'])} "
-              f"exemptions={result['exemption_burndown']['count']}")
-    sys.exit(1 if result["errors"] else 0)
+            demoted = " [structural, non-blocking in --scope grammar]" if (
+                args.scope == "grammar" and lvl == "error" and cat == "structural") else ""
+            print(f"  [{tag}] {name}: {msg}{demoted}")
+        print(f"  errors={len(result['errors'])} "
+              f"(grammar={len(result['grammar_errors'])} structural={len(result['structural_errors'])}) "
+              f"warnings={len(result['warnings'])} exemptions={result['exemption_burndown']['count']}")
+    sys.exit(1 if gating_errors else 0)
 
 
 def selftest():
@@ -543,7 +575,59 @@ def selftest():
         assert any("disjointness" in e[2] for e in result["errors"]), \
             "lexicon disjointness violation must be caught"
 
-    print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite")
+    # --scope fixture (issue #197 wiring): a name-clean skill missing provenance fields
+    # is STRUCTURAL only — grammar_errors must stay empty even though errors does not.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        no_author = "---\nname: demo-review\nkind: skill\ndescription: demo\n" \
+                    "disable-model-invocation: false\nuser-invocable: false\n---\nbody\n"
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(no_author)
+        result = run(r, manifest)
+        assert result["errors"] and not result["grammar_errors"], \
+            "missing-provenance fixture must be structural-only, not grammar"
+        assert result["structural_errors"], "missing-provenance fixture must land in structural_errors"
+        # partition is exhaustive: every error is exactly one of the two buckets
+        assert len(result["grammar_errors"]) + len(result["structural_errors"]) == len(result["errors"]), \
+            "grammar_errors + structural_errors must exhaustively partition errors"
+
+    # Inverse: a genuine grammar violation (unresolvable object-process name) must land
+    # in grammar_errors even when every provenance field is present and clean.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-nonsense").mkdir(parents=True)
+        (r / "skills" / "demo-nonsense" / "SKILL.md").write_text(skill_md("demo-nonsense"))
+        result = run(r, manifest)
+        assert result["grammar_errors"], "unresolvable name must land in grammar_errors"
+
+    # Skill-lint's retired W4 successor (issue #197): a skill name ending in the reserved
+    # -agent head is a grammar violation, not a structural one — the cross-type-ambiguity
+    # concern W4 used to police, under this grammar's own terms.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-agent").mkdir(parents=True)
+        (r / "skills" / "demo-agent" / "SKILL.md").write_text(skill_md("demo-agent"))
+        result = run(r, manifest)
+        assert any("reserved head -agent on a skill" in e[2] for e in result["grammar_errors"]), \
+            "a skill named *-agent must be a grammar_errors hit (W4's successor concern)"
+
+    # CLI wiring: --scope grammar must exit 0 on a structural-only fixture that --scope
+    # full (default) fails; a genuine grammar violation must still exit 1 under either.
+    import subprocess
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(no_author)
+        mf = r / "naming.manifest.json"
+        mf.write_text(json.dumps(manifest))
+        full = subprocess.run([sys.executable, __file__, "--target", str(r), "--manifest", str(mf)])
+        assert full.returncode == 1, "--scope full (default) must fail the structural-only fixture"
+        grammar = subprocess.run([sys.executable, __file__, "--target", str(r), "--manifest", str(mf),
+                                   "--scope", "grammar"])
+        assert grammar.returncode == 0, "--scope grammar must pass a structural-only fixture"
+
+    print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite, "
+          "--scope grammar/full partition proven")
     return 0
 
 

@@ -26,6 +26,10 @@ Gate order (plugin-writing-rules §Release discipline):
      name-suffixes but match no installed skill -> WARN (rename drift, phantom prose siblings)
   G11 style lint (ADR-0002): ruff over .py / eslint over .mjs|.js, workspace-root configs;
       run when a runner is reachable, WARN when not (CI enforces); no config -> not applicable
+  G12 naming grammar (ADR-0011/D9, wired 2026-08-14): authorkit's naming-audit validator run
+      in --scope grammar over a repo-root naming.manifest.json; gates naming-grammar findings
+      only, structural (schema/provenance) findings stay informational; no manifest or no
+      validator on this checkout -> not applicable
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -505,6 +509,42 @@ def gate(root: Path, package: bool = False):
         else:
             warn("G11", "eslint.config.mjs present but no npx on PATH -> .mjs style lint unproven locally (CI enforces)")
 
+    # G12 naming grammar (ADR-0011/D9, wired 2026-08-14, issue #197) — authorkit's
+    # naming-audit validator, run in --scope grammar: gates ONLY naming-grammar findings
+    # (name production, lexicon disjointness, the reserved -agent head), the slice D8's
+    # grandfather+ratchet exemptions cover and skill_lint's retired W4/W5 used to police.
+    # Structural findings (author/date provenance, kind-declared policy, reference-index
+    # completeness) are a BROADER schema this estate never ratified adopting — measured
+    # empirically wiring this ticket: gating on them estate-wide fails hundreds of findings
+    # that are not naming issues at all. They print via the validator's own report and are
+    # counted here for visibility, never gated. Feature-detected: a plugin repo without the
+    # repo-root manifest or without authorkit installed skips this check entirely (same
+    # posture as G11's missing-config case) — not applicable, not a failure.
+    naming_manifest = ws / "naming.manifest.json"
+    naming_validator = ws / "authorkit" / "skills" / "naming-audit" / "scripts" / "validate.py"
+    if naming_manifest.is_file() and naming_validator.is_file():
+        r = subprocess.run(
+            [sys.executable, str(naming_validator), "--target", str(root),
+             "--manifest", str(naming_manifest), "--json", "--scope", "grammar"],
+            capture_output=True, text=True, cwd=ws, timeout=60)
+        try:
+            d = json.loads(r.stdout)
+        except (json.JSONDecodeError, ValueError):
+            fail("G12", f"naming-audit validator produced no parseable JSON -> {(r.stdout or r.stderr)[-300:]}")
+        else:
+            g_errs = d.get("grammar_errors", [])
+            s_count = len(d.get("structural_errors", []))
+            if g_errs:
+                detail = "; ".join(f"{n}: {m}" for n, _, m, _ in g_errs[:3])
+                fail("G12", f"{len(g_errs)} naming-grammar finding(s) -> {detail} "
+                            "-> run authorkit's naming-audit --scope grammar for the full list")
+            else:
+                ok(f"naming grammar clean (scope=grammar; {s_count} structural finding(s) "
+                   "tracked separately, informational-only pending estate-wide schema adoption)")
+    elif naming_manifest.is_file() and not naming_validator.is_file():
+        warn("G12", "naming.manifest.json present but authorkit's validator is not on this checkout "
+                    "-> naming-grammar gate unproven locally")
+
     # G6 package
     artifact = None
     if package and name and version and not fails:
@@ -614,6 +654,36 @@ def selftest():
             assert code == 0, "clean script must restore a clean G11"
             (lintdir / "demo_lint.py").unlink()
             ws_cfg.unlink()
+        # G12 naming-grammar leg: a workspace-root naming.manifest.json + a stub validator
+        # prove THIS gate's own wiring (JSON parse, fail/ok decision) — authorkit's own
+        # selftest proves the real validator's grammar/structural partition is correct.
+        naming_mf = r.parent / "naming.manifest.json"
+        naming_mf.write_text('{"exemptions": []}')
+        stub_dir = r.parent / "authorkit" / "skills" / "naming-audit" / "scripts"
+        stub_dir.mkdir(parents=True)
+        stub = stub_dir / "validate.py"
+        stub.write_text(
+            "import json, os, sys\n"
+            "target = sys.argv[sys.argv.index('--target') + 1]\n"
+            "bad = os.path.exists(os.path.join(target, 'TRIGGER'))\n"
+            "out = {'grammar_errors': [['x', 'error', 'stub grammar violation', 'grammar']] if bad else [],\n"
+            "       'structural_errors': []}\n"
+            "print(json.dumps(out))\n"
+        )
+        code, _ = gate(r)
+        assert code == 0, "clean G12 stub (no trigger file) must keep the gate clean"
+        (r / "TRIGGER").write_text("x")
+        code, _ = gate(r)
+        assert code == 1, "G12 stub grammar_errors must fail the gate"
+        (r / "TRIGGER").unlink()
+        code, _ = gate(r)
+        assert code == 0, "removing the trigger file restores a clean G12"
+        stub.unlink()
+        stub_dir.rmdir()
+        (r.parent / "authorkit" / "skills" / "naming-audit").rmdir()
+        (r.parent / "authorkit" / "skills").rmdir()
+        (r.parent / "authorkit").rmdir()
+        naming_mf.unlink()
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)
