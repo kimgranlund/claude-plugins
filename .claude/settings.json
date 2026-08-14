@@ -14,6 +14,7 @@
       "Bash(python3 harness/scripts/docs_check.py *)",
       "Bash(python3 harness/scripts/corpus_check.py *)",
       "Bash(python3 docs/scripts/doc_lint.py *)",
+      "Bash(python3 authorkit/skills/naming-audit/scripts/validate.py *)",
       "mcp__claude-in-chrome__tabs_context_mcp",
       "mcp__claude-in-chrome__find",
       "mcp__claude-in-chrome__read_console_messages",
@@ -40,5 +41,20 @@
       },
       "autoUpdate": true
     }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "for p in harness docs teamwork screens design agent-protocols llm authorkit; do out=$(python3 \"$CLAUDE_PROJECT_DIR/authorkit/skills/naming-audit/scripts/validate.py\" --target \"$CLAUDE_PROJECT_DIR/$p\" --manifest \"$CLAUDE_PROJECT_DIR/naming.manifest.json\" --hook --scope grammar 2>&1); rc=$?; if [ \"$rc\" -ne 0 ]; then echo \"$out\" >&2; exit 2; fi; done",
+            "timeout": 20,
+            "statusMessage": "naming-postwrite-grammar-gate"
+          }
+        ]
+      }
+    ]
   }
 }

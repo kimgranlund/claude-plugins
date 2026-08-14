@@ -5,8 +5,9 @@
 > says "keep color", "keep typography", `design-kits`), and three member names landed differently
 > (`make-design-kit` shipped as `make-design-system`, `design-kit-checker` as
 > `design-system-checker`). Treat this file as the historical record of the DECISION, not as a
-> lookup table for what shipped. The executed mapping is `harness/renames.json`, derived from git
-> rename detection by `fix_old_names.py derive`.
+> lookup table for what shipped. The executed mapping is `renames.json`, derived from git
+> rename detection by `fix_old_names.py derive` — moved from `harness/` to `authorkit/` 2026-08-14
+> (issue #197, ADR-0011/D9); this file's own citation predates that move.
 
 Status: **fully ruled 2026-07-20; ratification pending ADR-0006.** This is the full-estate
 review that motivated `naming-rules` — 9 plugins, ~130 members, mapped from the legacy grammar

@@ -26,8 +26,14 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
   W8 model-invocable description <= 700 chars (the #79 resident-listing budget)
   W2 model-invocable description carries trigger phrasing ("use when ...")
   W3 name <= 64 chars, kebab-case
-  W4 agentive head (-er/-or) on a skill name (cross-type ambiguity with agents)
-  W5 knowledge-noun head with user-invocable left true
+  (W4/W5 retired 2026-08-14, issue #197/ADR-0011: agentive-head and knowledge-noun-head
+   checks encoded ADR-0001/ADR-0006's now-superseded grammar; authorkit's naming-audit
+   validator owns naming-grammar conformance from here, `--scope grammar`, wired into
+   this repo's ship gate (release_gate.py G12) and workspace PostToolUse hook. W4's
+   cross-type-ambiguity concern has a direct successor under the new grammar — a skill
+   name ending in the reserved `-agent` head — proven by validate.py's own selftest.
+   W5's knowledge-noun/user-invocable correlation has no defined successor in the spec
+   as ratified; flagged as a named gap in issue #197's Findings, not fabricated here.)
   W6 hedge describers in prose ("please", "try to", "be careful", "make sure") > 3
   W7 salience inflation: caps NEVER/CRITICAL/IMPORTANT > 5 outside code fences
   W9 a `Bad: ... -> Good: ...` labeled counterexample names the same backticked token on
@@ -89,15 +95,6 @@ HOOK_NAME = "skill-postwrite-invocation-lint"
 CLOSING = ("If a finding seems wrong -> report it against "
            "skill-writing-rules; do not suppress it inline.")
 
-# Genuine verbs whose spelling ends in -er/-or: legal skill heads, never agentive
-# (ADR-0001, 2026-07-09: W4 false-positived on reshape-skill).
-VERB_HEADS = {"refactor", "render", "filter", "author"} - {"author"}  # author retired per ADR-0001
-KNOWLEDGE_NOUNS = {"patterns", "principles", "standards", "conventions",
-                   "context", "architecture", "catalog", "reference", "tokens",
-                   # ADR-0006 Phase 0 (2026-07-21): the simple paradigm's knowledge shapes —
-                   # `X-facts` (what is true) and `X-rules` (what must be followed) — join the
-                   # noun set so the ~40 renamed knowledge skills keep W5's model-only check.
-                   "facts", "rules"}
 TRIGGER_RE = re.compile(
     r"\buse\s+(when|whenever|this|it|for)\b|\bwhen\s+(the\s+user|you|asked|working|writing)\b",
     re.IGNORECASE)
@@ -246,16 +243,6 @@ def lint_text(text, skill_dir_name):
         if len(name) > 64 or not KEBAB_RE.match(name):
             findings.append(("WARN", name_line, "W3",
                              "name -> kebab-case, <=64 chars"))
-        head = name.split("-")[-1]
-        ui = fields.get("user-invocable", ("true", 0))[0].lower()
-        if len(head) >= 5 and (head.endswith("er") or head.endswith("or")) and head not in VERB_HEADS:
-            findings.append(("WARN", name_line, "W4",
-                             f"agentive head '{head}' on a skill -> agents take -er/-or; "
-                             "a skill takes the verb or knowledge-noun form"))
-        if head in KNOWLEDGE_NOUNS and ui != "false":
-            findings.append(("WARN", name_line, "W5",
-                             f"knowledge-noun head '{head}' with user-invocable left true -> "
-                             "knowledge species is model-only (`user-invocable: false`)"))
 
     body_len = len(lines) - fm_end - 1
     if body_len > 500:
@@ -673,17 +660,9 @@ def selftest():
     assert not any(f[2] == "F9" for f in lint_text(GOOD_FIXTURE, "demo-review")), "name == dir must not trip F9"
     assert any(f[2] == "A6" for f in lint_agent_text(GOOD_AGENT_FIXTURE, "wrong-stem")), "agent name != stem must fail A6"
     assert not any(f[2] == "A6" for f in lint_agent_text(GOOD_AGENT_FIXTURE, "demo-auditor")), "agent name == stem must not trip A6"
-    verb_head = GOOD_FIXTURE.replace("name: demo-review", "name: demo-refactor")
-    assert not any(f[2] == "W4" for f in lint_text(verb_head, "demo-refactor")), "verb head 'refactor' must not trip W4 (ADR-0001 allowlist)"
-    facts_ui = GOOD_FIXTURE.replace("name: demo-review", "name: demo-facts")
-    assert any(f[2] == "W5" for f in lint_text(facts_ui, "demo-facts")), \
-        "ADR-0006: '-facts' head with user-invocable true must warn W5"
-    rules_mo = (GOOD_FIXTURE.replace("name: demo-review", "name: demo-writing-rules")
-                            .replace("user-invocable: true", "user-invocable: false"))
-    assert not any(f[2] == "W5" for f in lint_text(rules_mo, "demo-writing-rules")), \
-        "ADR-0006: model-only '-rules' knowledge skill must pass W5 clean"
-    agentive = GOOD_FIXTURE.replace("name: demo-review", "name: demo-author")
-    assert any(f[2] == "W4" for f in lint_text(agentive, "demo-author")), "agentive head 'author' must still trip W4"
+    # W4/W5 retired 2026-08-14 (issue #197/ADR-0011) — their ADR-0001/ADR-0006 grammar is
+    # superseded. Naming-grammar conformance is authorkit's naming-audit validator's job
+    # now (its own selftest proves the reserved -agent head on a skill is still caught).
     good_hooks = ('{"hooks": {"PostToolUse": [{"matcher": "Write|Edit", "hooks": '
                   '[{"type": "command", "command": "python3 \\"${CLAUDE_PLUGIN_ROOT}/scripts/x.py\\" --hook"}]}]}}')
     assert not lint_hooks_text(good_hooks), "wrapped hooks.json must pass clean"

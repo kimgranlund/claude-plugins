@@ -77,7 +77,12 @@ No installed harness required; every check is a plain script. Run from the works
   Cross-plugin handoffs are named mentions that degrade gracefully when the other plugin isn't
   installed; an agent preload or script path crossing plugins is a defect (plan-plugin-split's `surface_map.py check`
   kills it).
-- **Naming:** the canon is harness's `naming-rules` (ADR-0006, 2026-07-21). Plugin names are
+- **Naming:** for names shipped through 2026-08-13, the canon is harness's `naming-rules`
+  (ADR-0006, 2026-07-21) — grandfathered verbatim, no rename campaign (ADR-0011 D8). For a
+  NEW name, the canon is the harness artifact naming convention spec (ADR-0011, accepted
+  2026-08-13): `.claude/docs/spec/spec-naming-convention.md`, checked by authorkit's
+  naming-audit validator (`--scope grammar`); `naming-rules` carries the dated supersession
+  note. Plugin names are
   distribution-scoped, disjoint from member domain prefixes (no `/ui:ui-review` stutter) — with
   the recorded term-of-art shelf exceptions: `llm` at plugin level (ADR-0006 Decision 7), and
   at member level a name containing the plugin word when it IS the term of art —

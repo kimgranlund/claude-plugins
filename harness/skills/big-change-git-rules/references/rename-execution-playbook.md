@@ -43,8 +43,9 @@ added 2026-07-26, issue #97]:
    record; the bump marks that copy forward-aware [verified, teamwork v1.0.1/v1.0.2 pattern].
 7. **`release_gate.py` CLEAN** (0 fail / 0 warn) on the renamed plugin and every touched
    sibling, plus CI green on the PR — CI is the merge gate, not a courtesy [verified, ADR-0002].
-8. **Rename manifest regenerated** — `python3 harness/scripts/fix_old_names.py derive .`, and the
-   resulting `harness/renames.json` committed in the same PR. Items 1–7 all stop at this repo's
+8. **Rename manifest regenerated** — `python3 authorkit/scripts/fix_old_names.py derive .` (moved
+   from harness 2026-08-14, issue #197), and the resulting `authorkit/renames.json` committed in
+   the same PR. Items 1–7 all stop at this repo's
    boundary; item 8 is the only one that reaches a repo that merely INSTALLS these plugins.
    Regenerate, never hand-edit: the manifest is derived from git rename detection, so a rename
    git recorded cannot be forgotten, and a hand-typed entry can be wrong in a way nothing

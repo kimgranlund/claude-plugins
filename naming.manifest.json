@@ -1,0 +1,456 @@
+{
+  "$schema_note": "nonoun-plugins repo-root naming manifest (ADR-0011, D8: grandfather + ratchet). Every name shipped before this manifest's seeding date (2026-08-14) is EXEMPT verbatim -- no rename campaign runs against this estate (D8). New mints conform in full from day one. The array may only shrink, never grow (CI-checked). Lexicons seed from naming-rules' own ratified verb registry + manifest-authoring's template defaults + ADR-0011 D10's seed list (shared starter vocabulary across the estates this convention spans).",
+  "verb_lex": [
+    "break-down",
+    "check",
+    "clean",
+    "create",
+    "execute",
+    "file",
+    "find",
+    "fix",
+    "lint",
+    "make",
+    "merge",
+    "mint",
+    "pick",
+    "plan",
+    "retire",
+    "run",
+    "save",
+    "seed",
+    "ship",
+    "sort",
+    "split",
+    "sweep",
+    "tidy",
+    "write"
+  ],
+  "process_lex": [
+    "audit",
+    "authoring",
+    "catalog",
+    "composition",
+    "deployment",
+    "facts",
+    "maintenance",
+    "migration",
+    "planning",
+    "qa",
+    "release",
+    "review",
+    "rules",
+    "scaffolding",
+    "selection",
+    "triage",
+    "wiring",
+    "writing"
+  ],
+  "role_lex": [
+    "leader",
+    "orchestrator",
+    "coordinator"
+  ],
+  "object_vocab": [
+    {
+      "canonical": "skill",
+      "plural": "skills",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "agent",
+      "plural": "agents",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "hook",
+      "plural": "hooks",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "plugin",
+      "plural": "plugins",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "pack",
+      "plural": "packs",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "doc",
+      "plural": "docs",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "script",
+      "plural": "scripts",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "repo",
+      "plural": "repos",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "issue",
+      "plural": "issues",
+      "banned_aliases": [
+        "sub-issue"
+      ]
+    },
+    {
+      "canonical": "ticket",
+      "plural": "tickets",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "feature",
+      "plural": "features",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "bug",
+      "plural": "bugs",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "task",
+      "plural": "tasks",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "chore",
+      "plural": "chores",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "harness",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "team",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "naming",
+      "plural": null,
+      "banned_aliases": [
+        "names"
+      ]
+    },
+    {
+      "canonical": "conventions",
+      "plural": null,
+      "banned_aliases": [
+        "convention",
+        "standards"
+      ]
+    },
+    {
+      "canonical": "rename",
+      "plural": "renames",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "manifest",
+      "plural": "manifests",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "exemption",
+      "plural": "exemptions",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "bloat",
+      "plural": null,
+      "banned_aliases": [
+        "verbosity",
+        "ceremony",
+        "cruft"
+      ]
+    },
+    {
+      "canonical": "a2ui",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "gen-ui",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "ssr",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "compatibility",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "primitive",
+      "plural": "primitives",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "demo",
+      "plural": "demos",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "screen",
+      "plural": "screens",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "shell",
+      "plural": "shells",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "host",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "site",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "package",
+      "plural": "packages",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "project",
+      "plural": "projects",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "app",
+      "plural": "apps",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "surface",
+      "plural": "surfaces",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "chart",
+      "plural": "charts",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "table",
+      "plural": "tables",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "token",
+      "plural": "tokens",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "pattern",
+      "plural": "patterns",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "llm-client",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "site-docs",
+      "plural": null,
+      "banned_aliases": []
+    }
+  ],
+  "brand_tokens": [
+    "claude",
+    "anthropic"
+  ],
+  "author_registry": [
+    "kim"
+  ],
+  "mutating_no_confirm_allowlist": [],
+  "exemptions": [
+    "a2a-protocol-facts",
+    "a2a-training-facts",
+    "a2ui-catalog-facts",
+    "a2ui-chat-agent-facts",
+    "a2ui-protocol-facts",
+    "a2ui-training-facts",
+    "adopt-plugin",
+    "agent-checker",
+    "agent-residency-facts",
+    "agent-writing-rules",
+    "apple-mobile-facts",
+    "big-change-git-rules",
+    "bloat-audit",
+    "bloat-audit-agent",
+    "blocked-by-rules",
+    "break-down-flow",
+    "break-down-layout",
+    "break-down-problem",
+    "build-feature",
+    "build-lead",
+    "builder",
+    "chat-harness-guardrail-facts",
+    "chat-harness-logging-facts",
+    "chat-harness-memory-facts",
+    "chat-harness-routing-facts",
+    "chat-harness-tool-facts",
+    "chat-harness-workflow-facts",
+    "check-a2a-isolation",
+    "check-all-agents",
+    "check-all-skills",
+    "check-colors",
+    "check-doc",
+    "check-entry-file",
+    "check-everything",
+    "check-focus",
+    "check-routing",
+    "check-safety",
+    "check-skill",
+    "check-speed",
+    "check-state",
+    "check-translations",
+    "check-ui-change",
+    "check-whole-ui",
+    "checking-rules",
+    "chore-lead",
+    "chore-planner",
+    "clean-git",
+    "clean-repo",
+    "close-session",
+    "code-checker",
+    "color-contrast-facts",
+    "color-perception-facts",
+    "color-space-facts",
+    "color-theory-facts",
+    "component-checker",
+    "decision-watcher",
+    "design-md-rules",
+    "design-system-checker",
+    "dispatch-ticket",
+    "doc-checker",
+    "doc-writing-rules",
+    "docs-writer",
+    "dom-layout-facts",
+    "entry-file-rules",
+    "exemption-retire",
+    "experiment-runner",
+    "fact-finder",
+    "figma-plugin-facts",
+    "file-bug",
+    "file-feature",
+    "file-leftovers",
+    "file-task",
+    "find-intent",
+    "find-open-questions",
+    "fix-old-names",
+    "flow-checker",
+    "font-choice-checker",
+    "font-token-rules",
+    "github-facts",
+    "grill-the-ask",
+    "hook-checker",
+    "hook-writing-rules",
+    "html-to-markdown",
+    "icon-rules",
+    "init-repo",
+    "intake-lead",
+    "issue-sorter",
+    "layout-checker",
+    "lead-build",
+    "lead-intake",
+    "lead-planning",
+    "lead-review",
+    "lead-team",
+    "lettering-facts",
+    "llm-gateway-facts",
+    "llm-streaming-facts",
+    "loop-rules",
+    "make-a2a-agent",
+    "make-agent",
+    "make-component",
+    "make-design-system",
+    "make-doc",
+    "make-dscard-kit",
+    "make-figma-make-kit",
+    "make-hook",
+    "make-llms-txt",
+    "make-pack",
+    "make-palette",
+    "make-plugin",
+    "make-reference",
+    "make-rubric",
+    "make-script",
+    "make-skill",
+    "make-stitch-kit",
+    "make-vision-memo",
+    "manifest-authoring",
+    "markdown-to-markup",
+    "material-color-facts",
+    "material-motion-facts",
+    "material-shape-facts",
+    "material-token-facts",
+    "material-type-facts",
+    "mobilize-chores",
+    "motion-rules",
+    "naming-audit",
+    "naming-audit-agent",
+    "naming-conventions",
+    "naming-rules",
+    "ops-write-sandbox-rules",
+    "pack-writing-rules",
+    "parallel-work-rules",
+    "physical-color-facts",
+    "pick-fonts",
+    "plan-chores",
+    "plan-plugin-split",
+    "plan-skill-merge",
+    "plan-skill-split",
+    "planner",
+    "plugin-checker",
+    "plugin-install-facts",
+    "plugin-writing-rules",
+    "prompt-wording-rules",
+    "rename-execute",
+    "rename-planning",
+    "repo-cleaner",
+    "research-methods",
+    "reshape-skill",
+    "routing-judge",
+    "save-lessons",
+    "script-writing-rules",
+    "ship-plugin",
+    "size-and-shape-rules",
+    "skill-checker",
+    "skill-writing-rules",
+    "sort-issues",
+    "sweep-chores",
+    "team-lead",
+    "team-or-solo-rules",
+    "thinking-depth-rules",
+    "tidy-docs",
+    "token-builder",
+    "ui-genre-facts",
+    "ui-pattern-facts",
+    "watch-adrs",
+    "watch-tickets",
+    "what-shipped",
+    "wiring-checker",
+    "wording-checker",
+    "write-handoff"
+  ]
+}

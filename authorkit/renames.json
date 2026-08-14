@@ -1,6 +1,6 @@
 {
   "schema": "renames/v1",
-  "generated_by": "harness/scripts/fix_old_names.py derive",
+  "generated_by": "authorkit/scripts/fix_old_names.py derive (moved from harness/ 2026-08-14, issue #197; this file's own entries predate the move)",
   "source": "git rename detection over */SKILL.md and */agents/*.md, chained to final",
   "plugins": {
     "agentic-ui": "agent-protocols",

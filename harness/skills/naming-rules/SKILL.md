@@ -14,17 +14,33 @@ user-invocable: false
 
 A name under this paradigm is understood on first sight by a reader who has seen no manual: it
 says what the thing does, in words a child knows, in a shape that announces its kind. The
-paradigm governs ALL names in this estate — ADR-0006's rename campaign (executed 2026-07-21)
-brought every shipped plugin and member onto it, so a new name conforms and an existing name
-already does. Shipped names remain APIs; changing one is still a deprecation campaign (ADR +
-branch + PR), not an effect of this skill.
+paradigm governed ALL names in this estate through 2026-08-13 — ADR-0006's rename campaign
+(executed 2026-07-21) brought every shipped plugin and member onto it — and every one of those
+names stays exactly this shape (see the supersession note below: grandfathered, not renamed).
+Shipped names remain APIs; changing one is still a deprecation campaign (ADR + branch + PR),
+not an effect of this skill.
 
 The no-lore test (below) is Dieter Rams' "as little design as possible" applied to naming: a
 name earns every syllable it spends, nothing decorative, nothing added to sound important.
 
-## The five tests — normative
+> **Supersession note (2026-08-14, ADR-0011 D9):** this skill's GRAMMAR — the five tests, the
+> shapes-by-kind table, the verb registry below — is superseded as estate-wide canon by the
+> harness artifact naming convention spec, ratified ADR-0011: `.claude/docs/spec/spec-naming-
+> convention.md` (a plain document, not a routable skill — reach it through the validator's
+> failures or the doc tree). Every name this estate shipped before 2026-08-14 is grandfathered
+> verbatim into `naming.manifest.json`'s `exemptions` array (D8: grandfather + ratchet, no
+> rename campaign) — nothing below is wrong about any name that already exists, and this file
+> stays the accurate historical record of the grammar those names were built to. A genuinely
+> NEW name conforms to the spec's grammar from day one, checked by authorkit's naming-audit
+> validator (`--scope grammar`), not by the tests below. **What this file's discipline still
+> governs, unchanged:** the symmetry hardline (frontmatter `name:` == directory/file stem,
+> `skill_lint` F9/A6, mechanically enforced at write time and ship time) and the general
+> practice of naming with intention — both survive the grammar swap intact.
 
-A proposed name passes all five or gets reworked; the test that fails names the fix.
+## The five tests — historical (the grammar this estate's ~155 existing names were built to)
+
+A name under this grammar passed all five or was reworked; the test that failed named the fix.
+A new name is checked against the spec instead (see the supersession note above).
 
 | # | Test | Rule (as world-state) | Contrast (bad side labeled) |
 |---|---|---|---|
@@ -34,7 +50,7 @@ A proposed name passes all five or gets reworked; the test that fails names the 
 | 4 | no-lore | Zero metaphor, mythology, or seniority theater; a shelf noun says what the shelf holds | Bad: `forge`, `scribe` (retired) → Good: `harness`, `docs` |
 | 5 | loud-contrast | Siblings differ by a whole word; a suffix or number as the only difference is a test-5 failure — and "sibling" means the whole installed estate, not one plugin: every name shares one flat menu, so a plugin boundary mutes nothing | Bad: `chores-lead` proposed while harness ships `chore-lead` — one letter apart across a plugin boundary, rejected live (ADR-0010, 2026-08-10) → Good: `build-lead` |
 
-## Shapes by kind — normative
+## Shapes by kind — historical
 
 | Kind | Shape | Examples |
 |---|---|---|
@@ -44,10 +60,11 @@ A proposed name passes all five or gets reworked; the test that fails names the 
 | Agent (a seat) | noun + person-word: `-checker`, `-builder`, `-sorter`, `-planner`, `-lead` | `skill-checker`, `issue-sorter`, `team-lead` |
 | Plugin (a shelf) | plain noun naming what the shelf holds | `harness`, `docs`, `teamwork`, `screens`, `color` |
 
-## The verb registry — normative
+## The verb registry — historical
 
-One concept, one verb. A retired synonym appearing in a new name is a test-3 failure; a new
-concept earns a new verb only when no registry verb fits.
+One concept, one verb, under this grammar. A retired synonym appearing in a name built to this
+grammar was a test-3 failure. A genuinely new name is not checked against this registry — see
+the supersession note above.
 
 | Verb | Concept | Retired synonyms |
 |---|---|---|
@@ -66,7 +83,12 @@ concept earns a new verb only when no registry verb fits.
 | `sort` | triage into buckets | triage, classify |
 | `pick` | choose among options | select, choose, decide |
 
-## Refinements — normative
+## Refinements — mixed (grammar rows historical; the escape-hatch pointers below stay live)
+
+The first four bullets are grammar detail for the historical shapes above (superseded for new
+names, same as the sections before them). The last two — reserved-word and term-of-art — are
+standing exceptions any grammar honors, spec included; skill-writing-rules and ADR-0008 own them
+regardless of which naming grammar is canon.
 
 - **`-rules` carries its activity** wherever the domain has more than one rule family:
   `doc-writing-rules`, never `doc-rules` — a bare `X-rules` reads as all rules about X.
