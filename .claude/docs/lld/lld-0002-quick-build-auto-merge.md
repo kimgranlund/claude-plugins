@@ -2,7 +2,7 @@
 doc-type: lld
 id: lld-0002-quick-build-auto-merge
 status: draft
-version: 0.2.0
+version: 0.2.1
 date: 2026-08-14
 owner: kim.granlund
 ticket: nonoun-plugins#244
@@ -14,7 +14,10 @@ adr: adr-0012 (proposed by this design — see Components C5)
 implementation: QB4 rebuilt as an ALLOW-list (was a deny-list — fail-open by construction);
 QB3's ledger-region check made mechanical; C5's T4 leg dropped as unsound (an appended addendum
 to an accepted ADR is class-legal) leaving the actor/mechanism fork to carry the ruling alone;
-I2 step 1's prose ceiling replaced with `timeout 900`. Risks 2 and 3 repaired to match.*
+I2 step 1's prose ceiling replaced with a real bounded wrapper. Risks 2 and 3 repaired to match.
+Second amendment the same day (v0.2.1), from the build: I2 step 1's wrapper is feature-detected,
+because GNU `timeout` is absent on the estate's own darwin host — the naive spelling would have
+left this path permanently inert.*
 
 **Verdict, head-first: NOT "skip the PR" — auto-merge on green.** Per Kim's binding
 design-narrowing comment on #244 (2026-08-14): every dispatch still opens a PR, the fresh-context
@@ -163,10 +166,22 @@ directly. dispatch-ticket treats its absence as "this stage does not exist."
 
 ### I2 — The merge sequence (runs only on QB0–QB7 all green)
 
-1. `timeout 900 gh pr checks <pr> --watch --fail-fast` — the ceiling is the `timeout` command
-   itself, not a prose promise. Exit 0 is the ONLY pass. Exit 124 (timed out) and any non-zero
-   check failure are both **ineligible** → report the exit code, fall through to human merge. A
-   timeout is never read as an implicit pass, and the watch is never re-run to chase a green.
+1. A **bounded** `gh pr checks <pr> --watch --fail-fast` — the ceiling is a real wrapper with a
+   real exit code, not a prose promise. Feature-detect the wrapper, because GNU `timeout` is NOT
+   present on a stock macOS box (measured 2026-08-14 on the estate's own darwin host: neither
+   `timeout` nor `gtimeout` on PATH — the naive `timeout 900 …` spelling would have made this
+   whole path permanently inert):
+   - `timeout 900 gh pr checks <pr> --watch --fail-fast` where GNU coreutils `timeout` is on PATH
+     (`gtimeout 900 …` on a Homebrew macOS box that has coreutils);
+   - otherwise the portable equivalent, verified to exit 142 on expiry:
+     `perl -e 'alarm 900; exec @ARGV' gh pr checks <pr> --watch --fail-fast`.
+
+   **Exit 0 is the ONLY pass.** Every other exit is ineligible, with no interpretation and no
+   exceptions: 124 (GNU timeout expiry), 142 (SIGALRM expiry), 127 (no wrapper found at all — the
+   bound could not be ENFORCED, so an unbounded watch must not run in its place), or any failing
+   check. Report the exit code and fall through to human merge. A timeout is never read as an
+   implicit pass, an unenforceable bound is never read as no bound needed, and the watch is never
+   re-run to chase a green.
 2. `gh pr merge <pr> --squash` — squash is the house shape for small single-file landings (the
    ledger-style one-liners with `(#NNN)` on main); campaign merge commits remain the big-change
    shape, unaffected.
@@ -232,9 +247,12 @@ nowhere except ADR/history contexts; dispatch-ticket's description byte-identica
    file in one plugin; the critic (QB5) is unconditional. Detection: post-hoc — every
    auto-merge carries the D1 snapshot, so an audit greps `qb-snapshot` comments against the
    actual diffs.
-3. **CI-watch flakiness or timeout stalls the dispatch.** Mitigation: the `timeout 900` wrapper
-   on I2 step 1 bounds it mechanically (exit 124 = ineligible), with fall-through to human
-   merge; the PR is already open, so nothing is lost — only the human wait returns.
+3. **CI-watch flakiness or timeout stalls the dispatch.** Mitigation: I2 step 1's bounded watch
+   caps it mechanically (any non-zero exit = ineligible), with fall-through to human merge; the
+   PR is already open, so nothing is lost — only the human wait returns. Note the wrapper is
+   feature-detected, not assumed: the first spelling of this step named GNU `timeout`, which the
+   estate's own darwin host does not carry (2026-08-14) — a bound that cannot be enforced is
+   itself an ineligible result, never a licence to watch unbounded.
 4. **Concurrent open PRs on the same plugin conflict at merge.** Mitigation: QB7 excludes
    overlap outright; serial chains (mobilize-chores' own conflict-avoidance step) remain the
    primary defense.

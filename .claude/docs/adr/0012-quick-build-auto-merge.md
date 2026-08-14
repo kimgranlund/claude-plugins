@@ -72,8 +72,11 @@ independent `docs:doc-checker` review before any implementation).
    integration-notes line all stand as today. Auto-merge ADDS a dated Findings comment carrying
    the full QB0–QB7 snapshot, the merge SHA, and the `campaign_close.py` result.
 
-6. **The merge sequence is verified, not trusted** (LLD I2): `timeout 900 gh pr checks --watch
-   --fail-fast` (exit 124 is ineligible, never an implicit pass) → `gh pr merge --squash` →
+6. **The merge sequence is verified, not trusted** (LLD I2): a bounded `gh pr checks --watch
+   --fail-fast` under a feature-detected 900-second wrapper (GNU `timeout`/`gtimeout` where
+   present, else a portable `perl -e 'alarm 900; exec @ARGV'` — stock macOS carries neither GNU
+   spelling, measured 2026-08-14; exit 0 is the only pass and every other exit, expiry and
+   missing-wrapper alike, is ineligible rather than an implicit pass) → `gh pr merge --squash` →
    confirm `MERGED` plus a non-empty merge SHA by re-query → `campaign_close.py`. One attempt;
    a denial or an unverified state is a named blocker, never a retry or a force.
 

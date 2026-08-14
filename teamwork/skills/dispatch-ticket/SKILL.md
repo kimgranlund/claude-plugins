@@ -263,10 +263,17 @@ discover and repair branch/worktree residue by hand):
    **Any conjunct that fails, errors, times out, or is indeterminate → NOT eligible.** Name the
    failed conjunct in the stage-4 handoff and continue to stage 3 exactly as today — PR open,
    human merges, nothing else different. Never re-run a conjunct to chase a pass. All eight green
-   → run the merge sequence, one attempt each, in order: (1) `timeout 900 gh pr checks <pr>
-   --watch --fail-fast` — the ceiling is the `timeout` command, not a promise to watch the clock;
-   exit 0 is the only pass, exit 124 (timed out) and any check failure are both ineligible, and a
-   timeout is NEVER read as an implicit pass; (2) `gh pr merge <pr> --squash`; (3) verify by
+   → run the merge sequence, one attempt each, in order: (1) a BOUNDED `gh pr checks <pr> --watch
+   --fail-fast` — the ceiling is a real wrapper with a real exit code, not a promise to watch the
+   clock, and the wrapper is **feature-detected, never assumed**: `timeout 900 …` where GNU
+   coreutils `timeout` is on PATH (`gtimeout 900 …` on a Homebrew macOS box), otherwise the
+   portable `perl -e 'alarm 900; exec @ARGV' gh pr checks <pr> --watch --fail-fast`. Stock macOS
+   carries NEITHER `timeout` nor `gtimeout` (measured 2026-08-14) — assuming the GNU spelling
+   would make this whole path silently inert. **Exit 0 is the only pass**; every other exit is
+   ineligible with no interpretation — 124 (GNU expiry), 142 (SIGALRM expiry), 127 (no wrapper
+   found, so the bound could not be ENFORCED — never run an unbounded watch in its place), or any
+   failing check. A timeout is NEVER read as an implicit pass; (2) `gh pr merge <pr> --squash`;
+   (3) verify by
    re-query, never by trusting the merge command's own print — `gh pr view <pr> --json
    state,mergeCommit` must show `MERGED` and a non-empty SHA; (4) `python3
    harness/scripts/campaign_close.py <pr> --repo <owner/repo> --gate <plugin-root>`; (5) a dated
