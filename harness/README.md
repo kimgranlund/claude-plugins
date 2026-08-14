@@ -128,6 +128,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.5.3 · 2026-08-14 · `plan-plugin-split`'s evals gain n08 (issue #245) — the reciprocal-fence mirror closing authorkit's `overhaul-planning` n05 steal from this suite's side; eval-only, no description change here (no steal measured in this direction)
 v3.5.2 · 2026-08-14 · release_gate gains G13 marketplace-coverage (the authorkit-invisible-in-/plugin incident: gated plugin must appear in the root marketplace.json when one exists; selftest fixtures prove fail/pass/not-applicable)
 v3.5.1 · 2026-08-14 · `watch-adrs`/`adr_checkpoint.py` gain a second supersession signal (issue #221): an accepted ADR's own body prose (active-voice `supersedes ADR-NNNN`/`the *scope* halves of ADR-NNNN`) fires `newly_superseded_edges` when frontmatter `supersedes:` is permanently null (ADR-0011's case, T4-hook-frozen) — scope carried through, never a bare id; selftest uses ADR-0011's real body as positive control
 v3.5.0 · 2026-08-14 · ADR-0011/D9 execution (issue #197): `fix-old-names` + `fix_old_names.py` + `renames.json` moved to `authorkit` (mechanically clean, no shared-script dependency); `skill_lint`'s retired W4/W5 naming-grammar checks removed (successor: authorkit's naming-audit validator, `--scope grammar`); `release_gate.py` gains G12 (naming grammar, feature-detected on the repo-root manifest); `naming-rules` carries an in-place supersession note

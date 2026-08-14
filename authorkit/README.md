@@ -78,6 +78,7 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.9.2 · 2026-08-14 · `overhaul-planning` gains the reciprocal NOT-for fence against harness's `plan-plugin-split` (issue #245): n05 was measured STOLEN 3-of-3 in #243's check-routing re-run (true owner not a menu entry on an authorkit-scoped run). Description re-trimmed to 699 chars (W8); evals.json n05/note updated; fresh-context skill-checker (FLOOR) clean. Mirror case n08 added to plan-plugin-split's own suite (harness), no description change there. Full /check-routing authorkit re-run: 114/114 cases, 8 suites clean, n05 now `none`.
 v0.9.1 · 2026-08-14 · `naming-conventions` evals t08 was measured DEAD in PR #242's full
 check-routing run (unanimous 3-judge none, issue #243). Ruled Branch A: the prompt ("explain
 the allowed-tools grant syntax for a mutating command") genuinely belongs here —
