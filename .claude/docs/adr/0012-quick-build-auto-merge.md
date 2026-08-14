@@ -1,7 +1,11 @@
 ---
 doc-type: adr
 id: adr-0012
-status: proposed
+status: accepted
+ratified: by Kim, 2026-08-14 (close-session ratification round — the mechanism was built,
+  gated, critic-passed (harness:skill-checker, one MAJOR found and repaired pre-merge), and
+  merged in PR #248; this ratification is the explicit word the design's own self-referential
+  note anticipated, given directly rather than inferred from the merge)
 date: 2026-08-14
 owner: kim.granlund
 ---
