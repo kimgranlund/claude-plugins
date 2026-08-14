@@ -2,13 +2,19 @@
 doc-type: lld
 id: lld-0002-quick-build-auto-merge
 status: draft
-version: 0.1.0
+version: 0.2.0
 date: 2026-08-14
 owner: kim.granlund
 ticket: nonoun-plugins#244
 adr: adr-0012 (proposed by this design — see Components C5)
 ---
 # LLD — Quick-build auto-merge: pre-authorized merge on green for small dispatches (#244)
+
+*Amended 2026-08-14 (v0.2.0) per docs:doc-checker's fix-then-ship review, before any
+implementation: QB4 rebuilt as an ALLOW-list (was a deny-list — fail-open by construction);
+QB3's ledger-region check made mechanical; C5's T4 leg dropped as unsound (an appended addendum
+to an accepted ADR is class-legal) leaving the actor/mechanism fork to carry the ruling alone;
+I2 step 1's prose ceiling replaced with `timeout 900`. Risks 2 and 3 repaired to match.*
 
 **Verdict, head-first: NOT "skip the PR" — auto-merge on green.** Per Kim's binding
 design-narrowing comment on #244 (2026-08-14): every dispatch still opens a PR, the fresh-context
@@ -51,8 +57,8 @@ into eligibility.
 | QB0 | **Explicit grant** | The sealed dispatch prompt contains the literal line `auto-merge: authorized`, placed by the caller (mobilize-chores `auto` step 5, a `/goal` wrapper, or Kim's own dispatch). Never inferred from "unattended" — same doctrine as mobilize-chores' own `auto` token (2026-08-11: explicit, never inferred). Absent → today's behavior, no QB evaluation at all. |
 | QB1 | **size:small** | The record carries the `size:small` label (`gh issue view <id> --json labels`); file backend: the ticket's Size field reads `small`. This is dispatch-ticket Phase 4's existing materiality floor, reused — no new size taxonomy. |
 | QB2 | **Single plugin context** | Every path in `git diff --name-only origin/main...HEAD` sits under ONE top-level plugin directory. Any path at repo root, under `.claude/docs/`, `.github/`, or a second plugin → ineligible. |
-| QB3 | **Single substantive file** | Let R = {`<plugin>/.claude-plugin/plugin.json`, `<plugin>/README.md`} (the mandatory version-bump + footer-ledger ride-alongs). `changed \ R` has exactly ONE member. The ride-alongs are themselves diff-checked: the plugin.json diff touches only the `version` field; the README diff touches only the footer ledger. |
-| QB4 | **No contract change** | The substantive file is NOT: `hooks/hooks.json`, any `evals/evals.json`, anything under `.claude-plugin/`, any CLAUDE.md, any doc under `.claude/docs/`. If it is a `SKILL.md` or `agents/*.md`: the diff must not touch the frontmatter block (between the opening and closing `---`) — `description`/`name`/`tools`/`model` edits are the routing/contract surface; body-only edits pass. Cross-plugin edges are already excluded by QB2. |
+| QB3 | **Single substantive file** | Let R = {`<plugin>/.claude-plugin/plugin.json`, `<plugin>/README.md`} (the mandatory version-bump + footer-ledger ride-alongs). `changed \ R` has exactly ONE member. The ride-alongs are themselves diff-checked, mechanically: the `plugin.json` diff's changed lines all match `"version"`; and **every changed hunk in `README.md` falls at or below the version-ledger heading** (`git diff -U0 origin/main...HEAD -- <plugin>/README.md`, compare each hunk's new-file start line against the ledger heading's line number). A hunk touching anything above that heading — or a README with no ledger heading found — is indeterminate → ineligible. |
+| QB4 | **No contract change — ALLOW-list, fail-closed by construction** | The substantive file must MATCH one of exactly three eligible classes; anything that does not match is ineligible **because it is unlisted**, not because a deny-list names it. The three classes: (a) `<plugin>/skills/*/SKILL.md` where no changed hunk falls inside the frontmatter block (first line through the closing `---`) — a body-only edit; (b) `<plugin>/skills/*/references/*.md`; (c) `<plugin>/scripts/*.{py,mjs,js}` — implementation and/or its `selftest`. Nothing else is eligible, ever, including classes no one thought to enumerate. Named here only to orient a reader, never as the rule: `hooks/` (ANY file in it, not just `hooks.json`), `commands/*.md`, `agents/*.md`, any `evals.json`, anything under `.claude-plugin/`, any `CLAUDE.md`, anything under `.claude/docs/`, and **any file carrying a frontmatter block outside class (a)** — all fall outside the allow-list and are therefore out. A new artifact kind added to the estate tomorrow is ineligible on the day it appears, with no edit to this predicate. Cross-plugin edges are already excluded by QB2. |
 | QB5 | **Critic green** | A fresh-context checker pass ran on this change within this dispatch and returned zero blocker/major findings — REQUIRED for auto-merge regardless of artifact class. Deliberately stricter than the baseline semantic-edit invariant (pure code normally rides its test gates alone): auto-merge always pays for a critic. Evidence: the checker verdict quoted in the Findings write-back. No recorded verdict → ineligible. |
 | QB6 | **Gate green, twice** | `release_gate.py <plugin>` exit 0 locally, AND every CI check on the PR green (`gh pr checks <pr> --watch`, bounded — see I2 step 1). Local green alone is not enough; CI is ADR-0002's own enforcement layer. |
 | QB7 | **No overlapping open PR** | No other OPEN PR's changed files touch the same plugin (`gh pr list --state open --json number,files`). Overlap → human merges (the integration-notes discipline already in Phase 5 stage 2 stays the arbiter). |
@@ -116,15 +122,27 @@ contract gap to name. No tool, model, or description change.
   mechanism KEEPS the PR and every gate. Different actor class + different mechanism = the
   precedent language does not cover it. Generalizing it is a new ruling, not a citation.
 
-**Therefore:** not an amendment inside ADR-0002 (its file is accepted → T4 append-only,
-hook-enforced; and nothing in its ratified text is being contradicted), and not a supersession
-(Decision 1 stands — arguably strengthened, since the quick path keeps the PR where the old
-precedent skipped it). It IS a real resolved fork earning a new ADR under the
-ADR-default-no test: genuine alternatives existed (skip the Issue / skip the PR / auto-merge /
-status quo), Kim's 2026-08-14 comment chose one, and the choice rewrites two previously-RULED
-operational lines (dispatch-ticket's "never merges its own PR"; mobilize-chores' "never merged"
-ceiling). Rewriting ruled lines with no decision record is exactly the "silent SKILL.md edit"
-#244's own Scope section warns against.
+**Kim's #244 comment asks to "size the ADR-0002 amendment accordingly." Answered directly: the
+right size is a NEW narrow ADR-0012, not an amendment to ADR-0002** — and it rests on one
+argument, not two.
+
+State plainly what is NOT being claimed: "ADR-0002 is accepted, so it cannot be touched" is not
+a reason. T4 is *append-only, supersede never edit* — a dated APPENDED addendum to an accepted
+ADR is class-legal, exactly what append-only permits. That leg is dropped; it never carried
+weight.
+
+The leg that stands alone is the fork itself, and it is enough. **Different actor class** — a
+dispatched agent merging under a pre-placed grant, not a solo human at a keyboard. **Different
+mechanism** — this path KEEPS the PR and every gate, where the cited precedent skips the PR
+entirely. And the choice **rewrites two previously-RULED operational lines**: dispatch-ticket
+stage 3's "this seat never merges its own PR" and mobilize-chores' 2026-08-11 "ceiling is
+PR-opened, never merged." Genuine alternatives existed (skip the Issue / skip the PR /
+auto-merge / status quo) and Kim's 2026-08-14 comment chose one. A resolved fork that rewrites
+ruled lines is precisely what passes the ADR-default-no test — and rewriting ruled lines with no
+decision record is exactly the "silent SKILL.md edit" #244's own Scope section warns against.
+
+Not a supersession either: ADR-0002 Decision 1 stands, arguably strengthened, since the quick
+path keeps the PR where the old precedent skipped it.
 
 **ADR-0012 (proposed)** — Context: #244 + Kim's comment + this LLD. Decision: the QB0–QB7
 predicate authorizes a dispatched seat to merge its own PR; PRs remain the merge gate for all
@@ -145,8 +163,10 @@ directly. dispatch-ticket treats its absence as "this stage does not exist."
 
 ### I2 — The merge sequence (runs only on QB0–QB7 all green)
 
-1. `gh pr checks <pr> --watch --fail-fast` — bounded wait (15 min ceiling); timeout or any
-   failing check → ineligible, report, fall through to human merge.
+1. `timeout 900 gh pr checks <pr> --watch --fail-fast` — the ceiling is the `timeout` command
+   itself, not a prose promise. Exit 0 is the ONLY pass. Exit 124 (timed out) and any non-zero
+   check failure are both **ineligible** → report the exit code, fall through to human merge. A
+   timeout is never read as an implicit pass, and the watch is never re-run to chase a green.
 2. `gh pr merge <pr> --squash` — squash is the house shape for small single-file landings (the
    ledger-style one-liners with `(#NNN)` on main); campaign merge commits remain the big-change
    shape, unaffected.
@@ -203,15 +223,18 @@ nowhere except ADR/history contexts; dispatch-ticket's description byte-identica
    allow-rule (scoped to `gh pr merge`, ideally to the goal context Kim arms); until Kim adds
    it, the fast path degrades gracefully to today's behavior via the `auto-merge-denied`
    branch. Fail-safe by construction.
-2. **Predicate misclassification lets a contract change slip.** Mitigation: QB4 is
-   deny-by-category (frontmatter block, hooks, evals, manifests, CLAUDE.md, `.claude/docs/`)
-   plus fail-closed on any indeterminate diff; QB2/QB3 bound blast radius to one substantive
+2. **Predicate misclassification lets a contract change slip.** Mitigation: QB4 is an
+   ALLOW-list of three classes, so an unanticipated artifact kind is ineligible by construction
+   rather than by someone remembering to deny it — the failure mode of a deny-list (a class
+   nobody listed slips through) cannot occur here; the worst case is a legitimate small change
+   falling back to human merge, which is today's behavior. Add fail-closed on any indeterminate
+   diff; QB2/QB3 bound blast radius to one substantive
    file in one plugin; the critic (QB5) is unconditional. Detection: post-hoc — every
    auto-merge carries the D1 snapshot, so an audit greps `qb-snapshot` comments against the
    actual diffs.
-3. **CI-watch flakiness or timeout stalls the dispatch.** Mitigation: the 15-min ceiling with
-   fall-through to human merge; the PR is already open, so nothing is lost — only the human
-   wait returns.
+3. **CI-watch flakiness or timeout stalls the dispatch.** Mitigation: the `timeout 900` wrapper
+   on I2 step 1 bounds it mechanically (exit 124 = ineligible), with fall-through to human
+   merge; the PR is already open, so nothing is lost — only the human wait returns.
 4. **Concurrent open PRs on the same plugin conflict at merge.** Mitigation: QB7 excludes
    overlap outright; serial chains (mobilize-chores' own conflict-avoidance step) remain the
    primary defense.
