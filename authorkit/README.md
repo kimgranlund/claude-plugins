@@ -41,6 +41,7 @@ every one of the six now has a wrapper).
 | `commands/rename-planning` | Command | user-only (`/rename-planning`) | Thin user-invocable wrapper over `skills/rename-planning` — plan-only, never executes, same read-only posture as `naming-audit`/`bloat-audit` above |
 | `commands/rename-execute` | Command | user-only (`/rename-execute`) | The estate's single mutation point — applies one `rename-planning` plan atomically (`confirm: required`), verifies via the validator, reverts whole on any new error |
 | `commands/exemption-retire` | Command | user-only (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched |
+| `commands/overhaul-execute` | Command | user-only (`/overhaul-execute`), `confirm: required` | Drives an approved estate overhaul end to end: discover+scope-confirm, measure, plan, gated wave execution (rename-planning/rename-execute, `reshape-skill`, `build-lead` dispatches, `fix-old-names` sweeps), prove+report — three live-user gates, never dispatched unattended. Standalone command (no companion skill — `execute` has no legal skill-grammar production; same shape as `rename-execute`/`exemption-retire`). The DRIVES counterpart to `overhaul-planning`'s GENERATES |
 | `skills/fix-old-names` | Command skill | both (`/fix-old-names`) | Moved from harness 2026-08-14 (issue #197, ADR-0011/D9). Consumer-side rename migration: sweeps a repo that INSTALLS these plugins for references to retired names and rewrites the live ones, from the derived `renames.json`. Report-first, historical records left byte-identical, ambiguous names escalated to a human, filenames never rewritten |
 | `hooks/hooks.json` (`PostToolUse`) | Hook | automatic | Runs `scripts/validate.py --hook` after every `Write`/`Edit`; no-ops cleanly when the target estate has no manifest (governance is opt-in per estate) |
 | `skills/naming-audit/scripts/validate.py` | Script | invoked by naming-audit | Deterministic checks only: name grammar, folder layout, frontmatter schema, relation graph, policy/capability coherence, provenance. `selftest` mode proves schema/grammar/lexicon counters bite. Gained `--scope {full,grammar}` 2026-08-14 (issue #197): `grammar` gates only naming-grammar findings, leaving the broader structural/provenance checks informational — how this validator wires into an estate (nonoun-plugins) that hasn't adopted the full frontmatter schema without failing on hundreds of non-naming findings |
@@ -71,6 +72,22 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.8.0 · 2026-08-14 · `commands/overhaul-execute` (issue #238): the DRIVES half of the
+`overhaul-planning` pair — discover+scope-confirm, measure, plan, then gated wave execution
+(rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits,
+`teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename
+wave) — under three live-user gates (scope, Gate A, Gate B), with emergent items batched to the
+next gate, each carrying a proposed solution. Shipped as a **standalone command, no companion
+skill** — `execute` is registered in `verb_lex`, not `process_lex`, so a same-named skill has no
+legal grammar production today (confirmed against the live manifest); the `rename-execute`/
+`exemption-retire` commands in this same plugin are the existing precedent for exactly this
+shape. `overhaul-planning`'s description gained the reciprocal NOT-for clause naming this
+command, plus two reciprocal eval cases (n10/n11) proving a drive-shaped prompt doesn't
+mis-route there; `commands/overhaul-planning`'s own body gained one pointer line for
+user-surface symmetry. A skill+wrapper form (matching `overhaul-planning`'s own shape) would
+need a real naming-grammar amendment — a decision left to a follow-up ticket with Kim's actual
+sign-off, never assumed here. `release_gate authorkit` CLEAN; `/check-routing authorkit` clean
+(no new suite — commands aren't model-routed, so this run only reproves the fenced side).
 v0.7.1 · 2026-08-14 · `naming-audit`'s `validate.py` grant parser now recognizes a SCOPED write
 grant (tool name + parenthesized scope, e.g. `Edit(**/naming.manifest.json)`) as that write tool
 for policy/grant-coherence checks — previously it read as write-less, a false-negative class
