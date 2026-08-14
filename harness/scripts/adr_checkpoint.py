@@ -15,6 +15,17 @@ A DIRECTORY's files are parsed in either of three dialects, tried per file in th
 
 1. **YAML frontmatter** — `doc-type: adr` / `id:` / `status:` / `supersedes:`. Hash basis is the
    WHOLE file, unchanged since this script's first version, so existing checkpoints stay valid.
+   **Second signal, body-clause supersession (issue #221):** when this field is `null` (unset, or
+   left permanently null — an accepted ADR's frontmatter can never be edited post-ratification
+   under this workspace's own T4 append-only hook) AND `status: accepted`, the ADR's own BODY
+   prose is scanned for an explicit forward clause — `supersedes ADR-NNNN` (full), or `supersedes
+   the *<scope>* halves? of ADR-NNNN[ and ADR-MMMM]` (partial, scope-carrying) — active voice
+   only, same "never `superseded`/`superseding`" discipline as dialect 2's table cell. This is the
+   ONLY place a ratified body-only supersession (ADR-0011's own case, over ADR-0001/ADR-0006's
+   grammar halves) can ever be detected, since the frontmatter field is structurally frozen. A
+   partial supersession's scope travels with its target id through to `newly_superseded_edges`
+   (`adr-0011 -> adr-0006 [grammar]`) rather than collapsing to a bare id — a boolean "superseded
+   or not" would lose exactly the information a partial supersession needs.
 2. **H1 + blockquote status table** — an `# ADR-NNNN — Title` heading plus a leading blockquote
    table whose rows read `> | **Status** | accepted |` and
    `> | **Supersedes / Superseded by** | ... |` (agent-ui's dialect, which never adopted
@@ -69,8 +80,12 @@ combined classify-and-advance call that half-completes is worse than two calls t
 
 Supersession is read from frontmatter, not inferred: an ADR is superseded the moment ANY other
 ADR's `supersedes:` field names it (ADR-0002/0003/0004/0005's own convention), or its own
-`status:` field already says `superseded`. `newly_superseded` fires once, the run it's first
-detected — a caller that advances the checkpoint after acting on it won't see the same ADR twice.
+`status:` field already says `superseded` — OR (issue #221) an accepted ADR whose own
+`supersedes:` field is null names it via the body-clause signal above. `newly_superseded` fires
+once, the run it's first detected — a caller that advances the checkpoint after acting on it
+won't see the same ADR twice. `newly_superseded_edges` carries the same information scope-first,
+one `"<announcer> -> <target>[ [<scope>]]"` string per edge — the frontmatter path's edges are
+always scope-less (a boolean field), the body-clause path's may name a scope.
 
 Checkpoint schema: {"adrs": {"<adr-id>": {"hash": "<sha256>", "status": "<accepted|superseded>"}}}
 
@@ -86,6 +101,19 @@ from pathlib import Path
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)\s*$", re.MULTILINE)
 ADR_ID_RE = re.compile(r"adr-\d+")
+
+# The second detection signal (issue #221): a forward supersession clause in an accepted ADR's
+# own BODY prose, read only when the frontmatter `supersedes:` field is null. Active voice only —
+# `supersedes` never matches `superseded`/`superseding`, same discipline as the table dialect's
+# TABLE_SUPERSEDES_RE below. The optional scope group captures an italicized noun phrase between
+# "the" and "of" ("supersedes the *grammar* halves of ADR-0001 and ADR-0006") for a PARTIAL
+# supersession; its absence ("supersedes ADR-0002") is a full one. One or more ids may follow,
+# joined by "," or "and".
+BODY_SUPERSEDES_RE = re.compile(
+    r"(?i)\bsupersedes\b\s+"
+    r"(?:the\s+\*(?P<scope>[^*]+)\*\s+\w+\s+of\s+)?"
+    r"(?P<ids>ADR-\d+(?:\s*(?:,|and)\s*ADR-\d+)*)"
+)
 
 HEADING_RE = re.compile(r"^## .*$", re.MULTILINE)
 ADR_HEADING_ID_RE = re.compile(r"^## (ADR-\d+)\b", re.IGNORECASE)
@@ -130,6 +158,23 @@ def superseded_ids(supersedes_value):
     if not supersedes_value:
         return []
     return ADR_ID_RE.findall(supersedes_value)
+
+
+def body_supersedes_ids(text):
+    """The second detection signal (issue #221): extract forward supersession clause(s) from an
+    ADR's own BODY prose — never the frontmatter block, which is handled separately by
+    `superseded_ids()`. Returns a list of (target_adr_id, scope|None) tuples, one per id named in
+    a matched clause: scope is the italicized noun phrase in a partial clause ("supersedes the
+    *grammar* halves of ADR-0006" -> ("adr-0006", "grammar")), or None for a bare full
+    supersession ("supersedes ADR-0002" -> ("adr-0002", None)). Active voice only — "superseded
+    by"/"supersessions" never match `\bsupersedes\b`. Pure — no I/O."""
+    edges = []
+    for m in BODY_SUPERSEDES_RE.finditer(text):
+        scope = m.group("scope")
+        scope = scope.strip() if scope else None
+        for tok in ADR_ID_RE.findall(m.group("ids").lower()):
+            edges.append((tok, scope))
+    return edges
 
 
 def parse_frontmatter(text):
@@ -255,15 +300,27 @@ def hash_adr(content):
 
 def parse_adr_file(text):
     """Parse one ADR file in whichever dialect it ships, frontmatter first. Returns a record
-    {"id", "hash", "status", "supersedes"} or None when neither dialect matches. Pure."""
+    {"id", "hash", "status", "supersedes", "body_supersedes"} or None when neither dialect
+    matches. Pure."""
     fm = parse_frontmatter(text)
     if fm and fm["id"]:
         # Whole-file hash, unchanged — existing frontmatter checkpoints stay valid.
+        body_supersedes = []
+        if fm["supersedes"] is None and fm["status"] == "accepted":
+            # The frontmatter field carries no forward declaration — either never set, or (issue
+            # #221's live case) permanently null post-acceptance under the T4 append-only hook.
+            # The body prose is the only place a ratified clause can ever land, so scan it —
+            # everything after the frontmatter block, never the block itself (its own literal
+            # `supersedes: null` line must never be mistaken for a body clause).
+            fm_match = FRONTMATTER_RE.match(text)
+            body_text = text[fm_match.end():] if fm_match else text
+            body_supersedes = body_supersedes_ids(body_text)
         return {
             "id": fm["id"],
             "hash": hash_adr(text),
             "status": fm["status"],
             "supersedes": fm["supersedes"],
+            "body_supersedes": body_supersedes,
         }
     table = parse_status_table(text)
     if table:
@@ -322,8 +379,11 @@ def classify_delta(old_checkpoint, current):
     """The whole classifier, pure — the unit selftest proves every shape.
 
     old_checkpoint: {adr_id: {"hash": str, "status": str}}
-    current:        {adr_id: {"hash": str, "status": str, "supersedes": str|None}}
-    returns:        {"new": [...], "amended": [...], "newly_superseded": [...], "unchanged": [...]}
+    current:        {adr_id: {"hash": str, "status": str, "supersedes": str|None,
+                     "body_supersedes": [(str, str|None), ...]}}
+    returns:        {"new": [...], "amended": [...], "newly_superseded": [...],
+                     "newly_superseded_edges": ["<announcer> -> <target>[ [<scope>]]", ...],
+                     "unchanged": [...]}
     """
     new, amended, unchanged = [], [], []
     for adr_id, rec in current.items():
@@ -338,25 +398,42 @@ def classify_delta(old_checkpoint, current):
     # newly_superseded is derived ONLY from records whose content changed this round (new or
     # amended) — never from unchanged ones. A full supersession flips the superseded ADR's own
     # `status:` to "superseded", which IS a hash change, so it always shows up here. But a
-    # PARTIAL/annotated supersession (e.g. "adr-0006 (the frozen-dir clause ... only)") never
-    # flips the target's own status — it stays legitimately "accepted" forever — so there is no
-    # persisted signal except "did the announcing ADR's content change since last checkpoint".
-    # Deriving from every current record (changed or not) is exactly the bug this guards: once
-    # advanced, the announcing ADR becomes unchanged next run, and without this restriction its
-    # supersedes claim would be re-read and re-flagged as newly_superseded forever.
+    # PARTIAL/annotated supersession (e.g. "adr-0006 (the frozen-dir clause ... only)", or issue
+    # #221's body-clause signal) never flips the target's own status — it stays legitimately
+    # "accepted" forever — so there is no persisted signal except "did the announcing ADR's
+    # content change since last checkpoint". Deriving from every current record (changed or not)
+    # is exactly the bug this guards: once advanced, the announcing ADR becomes unchanged next
+    # run, and without this restriction its supersedes claim would be re-read and re-flagged as
+    # newly_superseded forever.
     changed_ids = set(new) | set(amended)
     superseded_now = set()
+    edges = []  # (announcer_id, target_id, scope|None) — the scope-carrying representation
     for adr_id in changed_ids:
-        superseded_now |= set(superseded_ids(current[adr_id].get("supersedes")))
+        for target in superseded_ids(current[adr_id].get("supersedes")):
+            superseded_now.add(target)
+            edges.append((adr_id, target, None))
+        for target, scope in current[adr_id].get("body_supersedes", []):
+            superseded_now.add(target)
+            edges.append((adr_id, target, scope))
     superseded_now |= {adr_id for adr_id in changed_ids if current[adr_id].get("status") == "superseded"}
     newly_superseded = sorted(
         adr_id for adr_id in superseded_now
         if old_checkpoint.get(adr_id, {}).get("status") != "superseded"
     )
+    # newly_superseded_edges: one "<announcer> -> <target>[ [<scope>]]" string per (announcer,
+    # target) edge whose target actually fired newly_superseded this round — a bare
+    # self-status-flip target (no announcer, no edges entry) never appears here since it carries
+    # no forward-declaration relationship to represent.
+    newly_superseded_edges = sorted(
+        "{} -> {}{}".format(announcer, target, " [{}]".format(scope) if scope else "")
+        for (announcer, target, scope) in edges
+        if target in newly_superseded
+    )
 
     return {
         "new": sorted(new),
         "amended": sorted(amended),
+        "newly_superseded_edges": newly_superseded_edges,
         "newly_superseded": newly_superseded,
         "unchanged": sorted(unchanged),
     }
@@ -407,6 +484,7 @@ def scan_dir(adr_dir):
             "hash": rec["hash"],
             "status": rec["status"],
             "supersedes": rec["supersedes"],
+            "body_supersedes": rec.get("body_supersedes", []),
         }
     if not current and skipped:
         raise unsupported_shape(adr_dir, skipped)
@@ -443,6 +521,8 @@ def run_classify(adr_source, checkpoint_path):
     for kind in ("new", "amended", "newly_superseded"):
         if delta[kind]:
             print(f"  {kind}: {', '.join(delta[kind])}")
+    if delta["newly_superseded_edges"]:
+        print(f"  newly_superseded_edges: {', '.join(delta['newly_superseded_edges'])}")
     if not any(delta[k] for k in ("new", "amended", "newly_superseded")):
         print("  nothing changed since the last checkpoint")
     print("  checkpoint NOT advanced -> run `advance` once this delta has been judged/queued")
@@ -474,6 +554,92 @@ def selftest():
     assert fm2["supersedes"] == "adr-0002", fm2
 
     assert parse_frontmatter("no frontmatter here") is None
+
+    # body_supersedes_ids — the second detection signal (issue #221): ADR-0011's own REAL body
+    # text (frontmatter `supersedes: null`, permanently frozen post-acceptance under the T4
+    # append-only hook) as the MANDATORY positive control — a forward clause naming a partial
+    # supersession over two targets, sharing one scope.
+    adr_0011_text = (
+        "---\n"
+        "doc-type: adr\n"
+        "id: adr-0011\n"
+        "status: accepted\n"
+        "ratified: by Kim, 2026-08-13 (in-session, session \"PLUGINS\")\n"
+        "date: 2026-08-13\n"
+        "owner: kim.granlund\n"
+        "supersedes: null\n"
+        "---\n"
+        "# ADR-0011 — Adopt the harness naming-convention spec as estate-wide naming canon\n\n"
+        "> ACCEPTED — ratified by Kim 2026-08-13. Originally a live conversation capture "
+        "(session \"PLAN\", 2026-08-13). The headline\n"
+        "> ruling (D7) was made in-session by Kim and REVERSES this session's own earlier\n"
+        "> rulings (recorded in Context for the audit trail). All open rulings were closed\n"
+        "> in-session 2026-08-13; nothing in this ADR awaits a decision — only acceptance.\n"
+        "> On acceptance this ADR supersedes the *grammar* halves of ADR-0001 and ADR-0006;\n"
+        "> their enforcement discipline (symmetry, lint gates) carries forward.\n"
+    )
+    adr_0011_rec = parse_adr_file(adr_0011_text)
+    assert adr_0011_rec["id"] == "adr-0011", adr_0011_rec
+    assert adr_0011_rec["supersedes"] is None, \
+        "ADR-0011's frontmatter field is permanently null — the T4 hook's own live constraint"
+    assert adr_0011_rec["body_supersedes"] == [("adr-0001", "grammar"), ("adr-0006", "grammar")], \
+        adr_0011_rec["body_supersedes"]
+
+    # end-to-end: ADR-0011 (new/amended this round) fires newly_superseded for BOTH targets, with
+    # scope carried through as a dedicated edge string, never collapsed to a bare id
+    old_pre_0011 = {
+        "adr-0001": {"hash": "h1", "status": "accepted"},
+        "adr-0006": {"hash": "h6", "status": "accepted"},
+    }
+    current_0011 = {
+        "adr-0001": {"hash": "h1", "status": "accepted", "supersedes": None, "body_supersedes": []},
+        "adr-0006": {"hash": "h6", "status": "accepted", "supersedes": None, "body_supersedes": []},
+        "adr-0011": {
+            "hash": adr_0011_rec["hash"], "status": "accepted",
+            "supersedes": None, "body_supersedes": adr_0011_rec["body_supersedes"],
+        },
+    }
+    d_0011 = classify_delta(old_pre_0011, current_0011)
+    assert d_0011["new"] == ["adr-0011"], d_0011
+    assert d_0011["newly_superseded"] == ["adr-0001", "adr-0006"], d_0011
+    assert d_0011["newly_superseded_edges"] == [
+        "adr-0011 -> adr-0001 [grammar]", "adr-0011 -> adr-0006 [grammar]",
+    ], d_0011["newly_superseded_edges"]
+
+    # MANDATORY negative control: an ACCEPTED ADR with frontmatter `supersedes: null` and NO
+    # supersession clause anywhere in its body must never fire — proves the second signal doesn't
+    # spuriously invent an edge out of ordinary prose that merely discusses other ADRs
+    adr_no_clause_text = (
+        "---\ndoc-type: adr\nid: adr-0012\nstatus: accepted\nsupersedes: null\n---\n"
+        "# ADR-0012 — An unrelated ratified decision\n\n"
+        "## Context\n\nThis ADR relates to ADR-0006 and extends ADR-0002, but never supersedes "
+        "anything — it only cites them for background.\n\n"
+        "## Decision\n\nAdopt the new convention going forward.\n"
+    )
+    adr_no_clause_rec = parse_adr_file(adr_no_clause_text)
+    assert adr_no_clause_rec["supersedes"] is None, adr_no_clause_rec
+    assert adr_no_clause_rec["body_supersedes"] == [], \
+        f"an accepted ADR with no supersession clause must never fire: {adr_no_clause_rec}"
+
+    # a PROPOSED (not yet accepted) ADR whose body drafts a future supersession must NOT fire —
+    # only a ratified Decision is a real supersession; the gate is `status: accepted`, not merely
+    # the presence of a matching clause in prose
+    adr_proposed_text = (
+        "---\ndoc-type: adr\nid: adr-0013\nstatus: proposed\nsupersedes: null\n---\n"
+        "# ADR-0013 — A draft still under discussion\n\n"
+        "This draft, once ratified, supersedes ADR-0007 in full.\n"
+    )
+    adr_proposed_rec = parse_adr_file(adr_proposed_text)
+    assert adr_proposed_rec["body_supersedes"] == [], \
+        f"a non-accepted ADR's body clause must never fire: {adr_proposed_rec}"
+
+    # a bare full supersession (no italicized scope) must extract with scope=None
+    assert body_supersedes_ids("This supersedes ADR-0002 outright.") == [("adr-0002", None)]
+
+    # active-voice-only control, same discipline as the table dialect: "superseded by"/
+    # "supersessions" must never match
+    assert body_supersedes_ids("This was superseded by ADR-0009.") == []
+    assert body_supersedes_ids("No supersessions occurred here.") == []
 
     # hash_adr — deterministic, content-sensitive
     assert hash_adr("x") == hash_adr("x")
@@ -806,7 +972,10 @@ def selftest():
     with tempfile.TemporaryDirectory() as tmp:
         assert scan_dir(Path(tmp)) == {}, "an empty directory must not raise"
 
-    print("adr_checkpoint selftest · PASS · frontmatter parse, hashing, all four delta shapes, "
+    print("adr_checkpoint selftest · PASS · body-clause supersession signal (issue #221: ADR-0011's "
+          "real body text as positive control, scope-carrying edges, accepted-with-no-clause and "
+          "proposed-ADR negative controls, active-voice-only), frontmatter parse, hashing, all "
+          "four delta shapes, "
           "annotated-supersedes extraction (incl. already-recorded-supersession, corpus-size, "
           "no-adr-token, and post-advance forever-refire negative controls), single-file "
           "section parsing (self-status, forward-supersedes, complements-is-not-supersedes, "

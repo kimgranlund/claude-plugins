@@ -53,7 +53,22 @@ dialect per file) — pass whichever `<adr-source>` the repo actually has:
 - **Directory of one-ADR-per-file `*.md`, YAML frontmatter** — `doc-type: adr`, `id: adr-NNNN`,
   `status: accepted | superseded`, `supersedes: <adr-id> | null`. An ADR is superseded the moment
   ANY other ADR's `supersedes:` field names it, or its own `status:` field already says
-  `superseded`. Hash basis is the whole file.
+  `superseded`. Hash basis is the whole file. **Second signal (issue #221):** the frontmatter
+  field can only ever be set AT ratification — an accepted ADR's frontmatter is append-only (the
+  T4 hook blocks every edit, even a revert), so a supersession an ADR states only in its own
+  ACCEPTED body prose, never in frontmatter, would otherwise never mechanically fire (ADR-0011's
+  live case: `supersedes: null` forever, while its ratified body reads "supersedes the *grammar*
+  halves of ADR-0001 and ADR-0006"). `adr_checkpoint.py` scans that body for an explicit active-
+  voice clause — `supersedes ADR-NNNN` (full) or `supersedes the *<scope>* <any noun> of
+  ADR-NNNN[ and ADR-MMMM]` (partial — "halves"/"half"/"clause" all fire, since the noun itself
+  carries no meaning the classifier reads) — ONLY when the frontmatter field is null and status
+  is `accepted`; a proposed/draft ADR's prose never fires, since only a ratified Decision is a
+  real supersession. A partial clause's scope travels through to the report as a dedicated edge,
+  never collapsing to a bare id (`adr-0011 -> adr-0006 [grammar]`) — the design call this ticket
+  resolved in favor of body-clause parsing over a separately-recorded checkpoint edge, since the
+  other dialects below already forward-declare supersession from body/heading prose rather than a
+  frontmatter-only field, and a human-recorded edge would need its own write path this agent
+  structurally can't own (Boundaries, below).
 - **Directory of one-ADR-per-file `*.md`, H1 + blockquote status table** — no frontmatter at all:
   an `# ADR-NNNN — Title` heading plus rows `> | **Status** | accepted |` and `> | **Supersedes /
   Superseded by** | … |` (agent-ui's dialect). Status is that cell's first bare keyword, so a cell
@@ -74,8 +89,10 @@ dialect per file) — pass whichever `<adr-source>` the repo actually has:
   forward-declaring signal — never `complements`/other verbs, which name a relationship, not a
   supersession.
 
-Whichever the shape, `classify_delta` reads exactly the extracted `status`/`supersedes` fields —
-never infers supersession from prose it wasn't told to parse.
+Whichever the shape, `classify_delta` reads exactly the extracted `status`/`supersedes`/
+`body_supersedes` fields — never infers supersession from prose it wasn't told to parse (the
+frontmatter dialect's body-clause signal above is a NAMED, bounded exception — it parses one
+specific active-voice pattern under a stated gate, never open-ended prose).
 
 **A 0-ADR scan is a FAILURE, never a quiet run.** If `classify` exits 1 with "unsupported shape",
 the corpus is in a dialect the script cannot read: report that as 🔴 blocked and stop, never treat
@@ -92,7 +109,11 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
    deterministic, content-hash based, and deliberately non-mutating: `classify` and `advance` are
    two separate calls so a firing that dies mid-judgment leaves the checkpoint untouched, and the
    unjudged delta reappears next firing instead of silently reading as `unchanged` forever. The
-   report names every `new`, `amended`, and `newly_superseded` ADR id; everything `unchanged`
+   report names every `new`, `amended`, and `newly_superseded` ADR id, plus `newly_superseded_edges`
+   — each FORWARD-DECLARED supersession this round with its announcer and, for a partial one, its
+   scope (`adr-0011 -> adr-0006 [grammar]`); a self-status-flip target (its own `status:` cell
+   turned `superseded` directly, no announcing ADR) appears in `newly_superseded` with no matching
+   edge, since it names no forward-declaration relationship to represent. Everything `unchanged`
    costs nothing further. This is the whole economic contract: judgment below runs ONLY on this
    delta, never on the full corpus.
 2. **Judge each `new`/`amended` ADR's Decision** against `save-lessons`'s own Phase 1 bar, scoped
@@ -101,7 +122,10 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
 3. **For each `newly_superseded` ADR**, grep the existing knowledge-pack corpus
    (`skills/*/references/*.md`) for a citation of that ADR id. A hit is a stale-citation candidate
    (the citing file + line); no hit means nothing downstream depends on the superseded Decision —
-   name that explicitly, don't manufacture a candidate. **Before queueing, re-read the superseding
+   name that explicitly, don't manufacture a candidate. **A partial supersession's scope rides
+   into the queued evidence verbatim** — the matching `newly_superseded_edges` entry (e.g. "the
+   grammar half of adr-0006") — never flattened to "adr-0006 is superseded": a citation of
+   ADR-0006's OTHER half is not stale just because its grammar half now is. **Before queueing, re-read the superseding
    ADR's own Decision/Consequences text directly — never queue from this agent's own derived
    summary of what it says.** Queued evidence is a claim, never verified fact, until confirmed
    against the ADR's own literal words — this agent's own extraction can be wrong, and two firings
