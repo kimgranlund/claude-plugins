@@ -158,7 +158,7 @@ class Grammar:
         hits = [t for t in tokens if t in self.brand_tokens]
         return f"brand token(s) in local name: {hits}" if hits else None
 
-    def parse(self, kind, name, skills, wraps_target=None):
+    def parse(self, kind, name, skills, wraps_target=None, commands=None):
         """Returns list of grammar errors for this name."""
         errs = []
         tokens = name.split("-")
@@ -203,6 +203,12 @@ class Grammar:
             if len(tokens) >= 2 and tokens[-1] in self.process_lex:
                 ok, why = self.resolve_objects(tokens[:-1])
                 return errs if ok else errs + [f"skill object: {why}"]
+            # Reverse-wrapper amendment (spec-naming-convention.md §14.1, issue #241): an
+            # object-verb skill name is legal IFF an identically-named command exists in the
+            # same plugin root (the command wraps it) — never on the skill's say-so alone.
+            if len(tokens) >= 2 and tokens[-1] in self.verb_lex and name in (commands or ()):
+                ok, why = self.resolve_objects(tokens[:-1])
+                return errs if ok else errs + [f"skill object (reverse-wrapper): {why}"]
             ok, why = self.resolve_objects(tokens)  # nominal production
             if ok:
                 return errs
@@ -398,6 +404,7 @@ def run(target: Path, manifest: dict, scope: str = "full", own_root: Path = None
 
     artifacts = list(discover(target))
     skills = {n for k, n, _, _ in artifacts if k == "skill"}
+    commands = {n for k, n, _, _ in artifacts if k == "command"}
     findings = []          # (name, level, message, category) — category ∈ {grammar, structural}
     fms = {}               # name -> (kind, fm)
     paths = {}             # name -> Path, for the relation/acyclicity passes below
@@ -426,7 +433,7 @@ def run(target: Path, manifest: dict, scope: str = "full", own_root: Path = None
         def X(m, cat="structural"): findings.append((name, "exempt-note", m, cat))
 
         # 1–2: grammar (exemptions skip; recorded for burn-down)
-        errs = g.parse(kind, name, skills, wraps_target=fm.get("wraps"))
+        errs = g.parse(kind, name, skills, wraps_target=fm.get("wraps"), commands=commands)
         for e in errs:
             (X if exempt else E)(e, "grammar")
 
@@ -787,9 +794,57 @@ def selftest():
         assert full_result["structural_errors"], \
             "full scope must count structural findings regardless of own_root"
 
+    # Reverse-wrapper grammar amendment (spec-naming-convention.md §14.1, issue #241): a
+    # skill's object-verb name (terminal token in VerbLex, not ProcessLex) is legal IFF an
+    # identically-named command exists in the same plugin root. Three fixtures: positive
+    # (WITH the wrapper passes), negative (the SAME name WITHOUT one still fails — the
+    # amendment must not open the door to unwrapped verb-terminal skill names), and
+    # regression (existing nominal names are unaffected).
+    reverse_manifest = dict(manifest, verb_lex=["audit", "execute"])
+
+    def command_md(name, wraps=None):
+        extra = f"wraps: {wraps}\n" if wraps else ""
+        return (f"---\nname: {name}\nkind: command\ndescription: demo\n"
+                f"author: kim\ncreated: 2026-08-13\nlast_updated: 2026-08-13\n{extra}---\nbody\n")
+
+    # Positive control: verb-terminal skill name WITH an identically-named command wrapper
+    # passes grammar.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-execute").mkdir(parents=True)
+        (r / "skills" / "demo-execute" / "SKILL.md").write_text(skill_md("demo-execute"))
+        (r / "commands").mkdir(parents=True)
+        (r / "commands" / "demo-execute.md").write_text(command_md("demo-execute", wraps="demo-execute"))
+        result = run(r, reverse_manifest)
+        assert not result["grammar_errors"], \
+            f"verb-terminal skill WITH identical command wrapper must pass grammar: {result['grammar_errors']}"
+
+    # Negative control: the SAME verb-terminal skill name WITHOUT the wrapper still fails —
+    # the amendment must not open the door to an unwrapped verb-terminal skill name.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-execute").mkdir(parents=True)
+        (r / "skills" / "demo-execute" / "SKILL.md").write_text(skill_md("demo-execute"))
+        result = run(r, reverse_manifest)
+        assert result["grammar_errors"], \
+            "verb-terminal skill WITHOUT an identical command wrapper must still fail grammar"
+        assert any(n == "demo-execute" for n, _, _, _ in result["grammar_errors"]), \
+            "the failing grammar finding must name the unwrapped skill"
+
+    # Regression control: an existing nominal (object-process) skill name is unaffected by
+    # the amendment, even under a manifest whose VerbLex now carries the new verb token.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, reverse_manifest)
+        assert not result["grammar_errors"], \
+            f"existing nominal skill names must be unaffected by the reverse-wrapper amendment: {result['grammar_errors']}"
+
     print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite, "
           "--scope grammar/full partition proven, schema_scope manifest default + "
-          "own-tree carve-out proven")
+          "own-tree carve-out proven, reverse-wrapper skill-name amendment "
+          "(positive/negative/regression) proven")
     return 0
 
 
