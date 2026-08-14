@@ -71,6 +71,17 @@ command's name equals its wrapped skill's name).
 
 ## Version ledger
 
+v0.7.1 · 2026-08-14 · `naming-audit`'s `validate.py` grant parser now recognizes a SCOPED write
+grant (tool name + parenthesized scope, e.g. `Edit(**/naming.manifest.json)`) as that write tool
+for policy/grant-coherence checks — previously it read as write-less, a false-negative class
+found during #235's build (PR #236, issue #237). Fixes a real false positive on this plugin's own
+`commands/manifest-authoring` (`mutates: true` with only scoped Edit/Write grants used to fail
+"no write-capable tool granted"; now clean). Selftest gained three fixtures on `policy_checks`
+directly: a scoped-grant positive control, a bare-name regression control, and a read-only
+negative control. Estate-wide delta measured before/after across all 8 plugins: authorkit's own
+structural-error count drops 10 → 9 (the fixed false positive); every other plugin's count is
+unchanged — no new true positive surfaced elsewhere on this estate. `validate.py selftest` green;
+`release_gate authorkit` CLEAN.
 v0.7.0 · 2026-08-14 · New user surface (issue #235): `commands/manifest-authoring` (mutating —
 `mutates: true` + `confirm: required`, same posture as `rename-execute`, since it writes the
 target estate's `naming.manifest.json`) and `commands/rename-planning` (plan-only — `mutates:

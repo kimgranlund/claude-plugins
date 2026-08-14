@@ -238,11 +238,23 @@ def tool_list(fm):
     return [t for t in raw if t]
 
 
+def grant_tool_name(t):
+    """Strip a grant's parenthesized scope to its bare tool name — e.g.
+    'Edit(**/naming.manifest.json)' -> 'Edit'. A bare grant ('Edit') passes
+    through unchanged. Without this, a SCOPED write grant reads as
+    write-less to the policy/grant-coherence check below (#237, found
+    during #235/PR #236): WRITE_TOOLS intersected the raw grant strings
+    exactly, so 'Edit(...)' never matched 'Edit'."""
+    m = re.match(r"^([A-Za-z][A-Za-z0-9_]*)\(", t)
+    return m.group(1) if m else t
+
+
 def policy_checks(kind, fm, name):
     errs, warns = [], []
     tools = tool_list(fm)
+    granted = {grant_tool_name(t) for t in tools}
     unscoped_bash = any(t == "Bash" for t in tools)
-    writey = bool(WRITE_TOOLS & set(tools)) or unscoped_bash
+    writey = bool(WRITE_TOOLS & granted) or unscoped_bash
     for t in tools:
         if t == "Bash":
             errs.append("unscoped Bash grant — scope it: Bash(pattern)")
@@ -675,6 +687,34 @@ def selftest():
         result = run(r, manifest)
         assert any("reserved head -agent on a skill" in e[2] for e in result["grammar_errors"]), \
             "a skill named *-agent must be a grammar_errors hit (W4's successor concern)"
+
+    # Scoped write-grant detection (issue #237, found during #235/PR #236): the
+    # policy/grant-coherence check must recognize a SCOPED write grant (tool name
+    # + parenthesized scope, e.g. 'Edit(**/naming.manifest.json)') as that write
+    # tool, not read as write-less. Exercised directly against policy_checks —
+    # the grant-parsing unit under test — rather than through a full skill/agent
+    # fixture, since none of these three controls touch Grammar/_grammar state.
+
+    # Positive control: a scoped Edit grant must still be caught as write-capable.
+    scoped_fm = {"autonomous_write": False, "context": "isolated",
+                 "tools": ["Edit(**/naming.manifest.json)"]}
+    scoped_errs, _ = policy_checks("agent", scoped_fm, "demo-agent")
+    assert any("autonomous_write: false but write-capable tools granted" in e for e in scoped_errs), \
+        "a scoped Edit(...) grant must still read as write-carrying (#237)"
+
+    # Bare-name control (no regression): the un-scoped form that already worked
+    # before this fix must keep working exactly as before.
+    bare_fm = {"autonomous_write": False, "context": "isolated", "tools": ["Edit"]}
+    bare_errs, _ = policy_checks("agent", bare_fm, "demo-agent")
+    assert any("autonomous_write: false but write-capable tools granted" in e for e in bare_errs), \
+        "a bare Edit grant must read as write-carrying (regression control)"
+
+    # Negative control: a read-only grant, scoped or bare, must never read as write.
+    readonly_fm = {"autonomous_write": False, "context": "isolated",
+                    "tools": ["Read(**/*.md)", "Grep"]}
+    readonly_errs, _ = policy_checks("agent", readonly_fm, "demo-agent")
+    assert not any("write-capable tools granted" in e for e in readonly_errs), \
+        "a read-only grant (scoped or bare) must never read as write-carrying"
 
     # CLI wiring: --scope grammar must exit 0 on a structural-only fixture that --scope
     # full (default) fails; a genuine grammar violation must still exit 1 under either.
