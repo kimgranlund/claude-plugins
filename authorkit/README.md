@@ -78,6 +78,14 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.9.1 · 2026-08-14 · `naming-conventions` evals t08 was measured DEAD in PR #242's full
+check-routing run (unanimous 3-judge none, issue #243). Ruled Branch A: the prompt ("explain
+the allowed-tools grant syntax for a mutating command") genuinely belongs here —
+`TOOL-GRANTS.md` already existed and was already indexed in the body's References table — but
+the SKILL.md description never surfaced tool-grant/allowed-tools as a trigger phrase. Fixed by
+adding it to the description in the same change as the evals note update. Swept all seven
+sibling authorkit suites for the phrase: none claim it, so no reciprocal fence was needed.
+/check-routing authorkit re-run proves t08 now routes with nothing else broken (see PR).
 v0.9.0 · 2026-08-14 · Enforces #238's E1 sign-off, recorded on issue #241: (1) reverse-wrapper
 grammar amendment — a skill MAY carry an object-verb name IFF an identically-named command
 wraps it in the same plugin — dated section in `.claude/docs/spec/spec-naming-convention.md`
