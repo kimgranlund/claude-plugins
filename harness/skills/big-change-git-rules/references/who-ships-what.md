@@ -23,6 +23,18 @@ per-workspace configuration is an unruled-out confound. The prescription holds e
 treat merge authority as the human's, delegated per-instance by a live instruction, never
 assumed by a session because it authored the PR.
 
+[verified, observed directly in this workspace, 2026-08-14] The confound above resolves with a
+mechanism, not just a caveat: goal-scoped merge authority (an active `/goal` explicitly granting
+"merge as you go") attaches to the SESSION HOLDING THE GOAL, never to a dispatch that session
+spawns. Same-session evidence, same workspace: the coordinator's own `gh pr merge` succeeded
+cleanly twice under the active goal (PRs #247, #250); moments apart, a `teamwork:build-lead`
+dispatch was given explicit "merge the PR yourself" language in its own charter and the identical
+action was denied — "Blocked by classifier" — before any diff existed to judge. The denial fires
+on the delegation itself, not on the goal's absence or the action's shape; the coordinator
+re-ran the identical `gh pr merge` moments later and it succeeded. Extends the prescription above:
+a live instruction (or an active goal) authorizes the session that received it; it does not
+propagate through prompt text into an Agent-tool dispatch, however explicitly worded.
+
 ## The dispatch-brief convention this implies
 
 [inferred, derived 2026-07-21 from the two incidents above, twice-verified] Scope a build seat's brief to: commit locally
