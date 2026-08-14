@@ -32,6 +32,7 @@ every one of the six now has a wrapper).
 | `skills/manifest-authoring` | Procedural skill | model-only | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement |
 | `skills/bloat-audit` | Procedural skill | model-only | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites. Wrapped for user-invocation by `commands/bloat-audit` |
 | `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0, soft-mentioned where harness isn't installed), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
+| `skills/overhaul-execute` | Procedural skill | model-only | The DRIVES half of the `overhaul-planning` pair (issue #241, enforcing #238's E1 sign-off): discover+scope-confirm, measure, plan, then gated wave execution (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits, `teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename wave) — under three live-user gates (scope, Gate A, Gate B), never self-approving. Extracted 2026-08-14 out of what shipped in PR #240 as a standalone command; exists as a skill at all only because of the reverse-wrapper grammar amendment below. Wrapped for user-invocation by `commands/overhaul-execute` |
 | `agents/naming-audit-agent` | Subagent | dispatch-only | Batch conformance sweeps across N estates/plugins in an isolated context, one aggregated report |
 | `agents/bloat-audit-agent` | Subagent | dispatch-only | Batch busy-work sweeps across N skills/plugins/corpuses in an isolated context, one aggregated report |
 | `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
@@ -41,7 +42,7 @@ every one of the six now has a wrapper).
 | `commands/rename-planning` | Command | user-only (`/rename-planning`) | Thin user-invocable wrapper over `skills/rename-planning` — plan-only, never executes, same read-only posture as `naming-audit`/`bloat-audit` above |
 | `commands/rename-execute` | Command | user-only (`/rename-execute`) | The estate's single mutation point — applies one `rename-planning` plan atomically (`confirm: required`), verifies via the validator, reverts whole on any new error |
 | `commands/exemption-retire` | Command | user-only (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched |
-| `commands/overhaul-execute` | Command | user-only (`/overhaul-execute`), `confirm: required` | Drives an approved estate overhaul end to end: discover+scope-confirm, measure, plan, gated wave execution (rename-planning/rename-execute, `reshape-skill`, `build-lead` dispatches, `fix-old-names` sweeps), prove+report — three live-user gates, never dispatched unattended. Standalone command (no companion skill — `execute` has no legal skill-grammar production; same shape as `rename-execute`/`exemption-retire`). The DRIVES counterpart to `overhaul-planning`'s GENERATES |
+| `commands/overhaul-execute` | Command | user-only (`/overhaul-execute`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-execute` (issue #241 — was a standalone command through PR #240/v0.8.0; the reverse-wrapper grammar amendment let the procedure move into a skill, this command adds nothing). The DRIVES counterpart to `overhaul-planning`'s GENERATES |
 | `skills/fix-old-names` | Command skill | both (`/fix-old-names`) | Moved from harness 2026-08-14 (issue #197, ADR-0011/D9). Consumer-side rename migration: sweeps a repo that INSTALLS these plugins for references to retired names and rewrites the live ones, from the derived `renames.json`. Report-first, historical records left byte-identical, ambiguous names escalated to a human, filenames never rewritten |
 | `hooks/hooks.json` (`PostToolUse`) | Hook | automatic | Runs `scripts/validate.py --hook` after every `Write`/`Edit`; no-ops cleanly when the target estate has no manifest (governance is opt-in per estate) |
 | `skills/naming-audit/scripts/validate.py` | Script | invoked by naming-audit | Deterministic checks only: name grammar, folder layout, frontmatter schema, relation graph, policy/capability coherence, provenance. `selftest` mode proves schema/grammar/lexicon counters bite. Gained `--scope {full,grammar}` 2026-08-14 (issue #197): `grammar` gates only naming-grammar findings, leaving the broader structural/provenance checks informational — how this validator wires into an estate (nonoun-plugins) that hasn't adopted the full frontmatter schema without failing on hundreds of non-naming findings |
@@ -68,10 +69,32 @@ IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain). `ov
 (2026-08-14, issue #225) follows the same wrapper pattern as `naming-audit`/`bloat-audit`:
 model-invocable, not user-invocable, with `commands/overhaul-planning` as its identical-name
 wrapper (the validator's wrapper-production exception — no VerbLex terminal required when a
-command's name equals its wrapped skill's name).
+command's name equals its wrapped skill's name). `overhaul-execute` (2026-08-14, issue #241)
+joins the same dial pattern via a DIFFERENT grammar production — its terminal token (`execute`)
+lives in `VerbLex`, not `ProcessLex`, so the object-process wrapper exception above doesn't
+apply; the reverse-wrapper amendment (`.claude/docs/spec/spec-naming-convention.md` §14.1) is
+what licenses this specific name shape, and it applies only because `commands/overhaul-execute`
+exists in the same plugin root.
 
 ## Version ledger
 
+v0.9.0 · 2026-08-14 · Enforces #238's E1 sign-off, recorded on issue #241: (1) reverse-wrapper
+grammar amendment — a skill MAY carry an object-verb name IFF an identically-named command
+wraps it in the same plugin — dated section in `.claude/docs/spec/spec-naming-convention.md`
+§14.1 (companion doc, never the accepted ADR-0011 file), `validate.py`'s skill-grammar
+production gains the matching branch, selftest gains positive/negative/regression fixtures. (2)
+`overhaul-execute` extracted from v0.8.0's standalone command into `skills/overhaul-execute`
+(model-invocable, new evals suite) with `commands/overhaul-execute` reduced to the thin wrapper
+per house pattern — mutation posture (`mutates: true`/`confirm: required`, tool grants)
+unchanged from PR #240. `overhaul-planning`'s reciprocal fence (description + evals n10/n11)
+re-pointed from the command name to the skill — the routing-judge's real competitor was always
+going to be the skill, never the (non-model-invocable) command. Fresh-context
+`harness:skill-checker` passed on both the new skill and the `overhaul-planning` edit (minor
+findings applied). `release_gate authorkit` CLEAN (0 fail); G12 naming-grammar 0 errors,
+including the new skill — the amendment's first real production proof. `/check-routing
+authorkit`: 113/114 cases across 8 suites, no new steal/leak on any touched suite; one
+pre-existing, unrelated `naming-conventions` dead case (unanimous 3-of-3 vote, orthogonal to
+this ticket) reported, not fixed here.
 v0.8.0 · 2026-08-14 · `commands/overhaul-execute` (issue #238): the DRIVES half of the
 `overhaul-planning` pair — discover+scope-confirm, measure, plan, then gated wave execution
 (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits,
