@@ -35,12 +35,11 @@ The DRIVES half of the `overhaul-planning` pair: that skill generates the plan; 
 the campaign — discover, measure, plan, execute approved waves — composing the existing
 instruments and reimplementing none. Ships as a skill with an identically-named command wrapper
 (`/overhaul-execute`, `commands/overhaul-execute.md`) per the reverse-wrapper grammar amendment
-(`.claude/docs/spec/spec-naming-convention.md` §14.1, issue #241) — `execute` is a `VerbLex`
-token with no legal *nominal* skill production on its own, so this dual-access shape is what
-licenses the name at all. The three gates below all need a live user regardless of which surface
-invoked this procedure: a run where `AskUserQuestion` is unavailable, errors, or gets
-auto-answered under momentum counts as no live user — it stops at its first open gate and reports
-SKIPPED, leaving the decision to a human. This procedure is never run unattended for that reason.
+(`.claude/docs/spec/spec-naming-convention.md` §14.1, issue #241). The three gates below all need
+a live user regardless of which surface invoked this procedure: a run where `AskUserQuestion` is
+unavailable, errors, or gets auto-answered under momentum counts as no live user — it stops at
+its first open gate and reports SKIPPED, leaving the decision to a human. This procedure is
+never run unattended for that reason.
 
 ## Run ledger
 
@@ -101,10 +100,9 @@ Run only Gate-A-approved waves, in plan order. Per row kind:
 
 - **rename** → `rename-planning` (Skill tool) for the plan, then read
   `${CLAUDE_PLUGIN_ROOT}/commands/rename-execute.md` in full and follow its procedure exactly
-  — it is command-only (no companion skill; its own grammar-legality question is unrelated to
-  this ticket's amendment), invoked by reading and following its body rather than through the
-  Skill tool; its own touched-file confirm still runs, verifying the enumerated blast radius the
-  Gate-A decision already approved.
+  — it is command-only, no companion skill, invoked by reading and following its body rather
+  than through the Skill tool; its own touched-file confirm still runs, verifying the enumerated
+  blast radius the Gate-A decision already approved.
 - **merge/split (Wave 0 seeds)** → `harness:reshape-skill` where harness is installed and the
   command is Skill-tool-reachable; where it is `disable-model-invocation: true` or harness is
   absent, name the exact `/reshape-skill …` invocation for the human to run now and hold the
@@ -138,9 +136,9 @@ emergent queue since the last gate.
 ## Emergent items — throughout
 
 Anything off-plan — a bug, question, or finding — enters the run ledger's queue the moment it
-appears: evidence, a blocker shape per `mobilize-chores`' five (a judgment call / a protocol
-act / someone else's in-flight work / a mechanical human act / an external dependency, or an
-honest "fits none"), a PROPOSED SOLUTION (mandatory — every row reaches its gate carrying one), and
+appears: evidence, a blocker shape per `mobilize-chores`'s own five-shape taxonomy (that skill
+owns the enumeration; consult it rather than restating it here), a PROPOSED SOLUTION
+(mandatory — every row reaches its gate carrying one), and
 its owning intake route (`docs:file-bug`/`docs:file-task`/`docs:file-feature` where docs is
 installed; `gh issue create` otherwise). The queue is confirmed at the NEXT gate — Gate B if
 firing, else the next wave close, else Phase 6 — and approved rows are minted through their

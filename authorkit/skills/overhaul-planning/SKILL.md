@@ -30,10 +30,9 @@ allowed-tools:
 
 The estate-scale sibling above `rename-planning`'s per-member blast radius — proven live by
 the #197 campaign, where the design phase killed 7 of 8 proposed moves. **Hard boundary: this
-skill GENERATES only.** No move is executed here — `rename-execute`, `overhaul-execute`
-(the skill+`/overhaul-execute` command pair that drives the whole campaign, composing
-`rename-execute` and `build-lead` per approved wave), and the human's own ratify/merge own
-execution, always in a later, separate step.
+skill GENERATES only.** No move is executed here — `rename-execute`, `overhaul-execute` (the
+skill+`/overhaul-execute` command pair that drives the whole campaign), and the human's own
+ratify/merge own execution, always in a later, separate step.
 
 ## Phase 0 — Measure first, never re-derive
 
