@@ -1,19 +1,19 @@
 {
   "skill": "naming-conventions",
-  "note": "Reference-corpus suite. This skill owns the naming grammar itself — parsing/classifying a name, authoring frontmatter, folder layout, or planning a migration. Runs, audits, and manifest-editing are owned by sibling authorkit skills (naming-audit, rename-planning, manifest-authoring, bloat-audit) and fenced as no-trigger here. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "note": "Reference-corpus suite. This skill owns the naming grammar itself — parsing/classifying a name, authoring frontmatter, folder layout, or one artifact's migration rule. Runs, audits, and manifest-editing are owned by sibling authorkit skills (naming-audit, rename-planning, manifest-authoring, bloat-audit) and fenced as no-trigger here; estate-wide overhaul/campaign planning is owned by overhaul-planning and fenced the same way. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history. Amended 2026-08-14 (issue #231): t06 reclassified no-trigger (n06) — confirmed 3-of-3 cross-suite steal to overhaul-planning during #229/PR #230's mandatory check-routing run; the SKILL.md description gained the reciprocal NOT-for fence in the same change.",
   "cases": [
     {"id": "t01", "prompt": "What kind is this artifact — command, skill, or agent, by the grammar?", "expect": "trigger"},
     {"id": "t02", "prompt": "Where does this template file belong inside a skill folder?", "expect": "trigger"},
     {"id": "t03", "prompt": "Should this frontmatter field be required or optional for a skill?", "expect": "trigger"},
     {"id": "t04", "prompt": "Is this artifact name shaped like a command or a skill under the grammar?", "expect": "trigger"},
     {"id": "t05", "prompt": "What's the folder layout convention for a skill's references directory?", "expect": "trigger"},
-    {"id": "t06", "prompt": "How should I sequence renames when migrating a legacy, ungoverned estate?", "expect": "trigger"},
     {"id": "t07", "prompt": "What relations does an agent's frontmatter declare, and how are they checked?", "expect": "trigger"},
     {"id": "t08", "prompt": "Explain the allowed-tools grant syntax for a mutating command.", "expect": "trigger"},
     {"id": "n01", "prompt": "Audit this estate for naming violations and report the exemption burn-down.", "expect": "no-trigger", "comment": "owner: naming-audit"},
     {"id": "n02", "prompt": "Propose a conforming rename for this violating artifact and its blast radius.", "expect": "no-trigger", "comment": "owner: rename-planning"},
     {"id": "n03", "prompt": "Seed a naming.manifest.json for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
     {"id": "n04", "prompt": "Find busy-work and over-specification in this skill's body.", "expect": "no-trigger", "comment": "owner: bloat-audit"},
-    {"id": "n05", "prompt": "What should we name this brand-new plugin?", "expect": "no-trigger", "comment": "owner: harness:naming-rules — cross-plugin fence; authorkit is disabled here on purpose so this never actually collides live, but the suite states the boundary anyway"}
+    {"id": "n05", "prompt": "What should we name this brand-new plugin?", "expect": "no-trigger", "comment": "owner: harness:naming-rules — cross-plugin fence; authorkit is disabled here on purpose so this never actually collides live, but the suite states the boundary anyway"},
+    {"id": "n06", "prompt": "How should I sequence renames when migrating a legacy, ungoverned estate?", "expect": "no-trigger", "comment": "owner: overhaul-planning — estate-wide overhaul/campaign ask, not one artifact's migration rule; confirmed 3-of-3 steal during #229/PR #230's check-routing run, fenced here by the NOT-for boundary (issue #231)"}
   ]
 }
