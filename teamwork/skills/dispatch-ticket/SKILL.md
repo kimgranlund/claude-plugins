@@ -131,8 +131,9 @@ is what actually contains its inline-fix path.
   now); the host checkout is clean on `main` with nothing in flight (checked: `git status`); no
   isolation-forcing reason applies (a nested dispatch always forces it — #207: the child gets its
   own worktree, or an explicit host-checkout authorization the parent names as its own line in
-  Phase 5's sealed dispatch prompt, never an inherited skip). All four hold → build directly in the
-  claim/write-back contract stays mandatory regardless. Never a silent revert to pre-#183
+  Phase 5's sealed dispatch prompt, never an inherited skip). All four hold → build directly in
+  the host checkout; the claim/write-back contract stays mandatory regardless. Never a silent
+  revert to pre-#183
   behavior: the skip is its own named branch, and Phase 5 stage 3's environment-clean line states
   which branch was taken.
   **Otherwise, isolate** — check reuse first, keyed on IDENTITY never path shape, both conjuncts
