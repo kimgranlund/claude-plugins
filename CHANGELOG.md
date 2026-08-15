@@ -1,7 +1,7 @@
 # Changelog
 
 Repo-level milestones only. Each plugin's own `README.md` footer carries its full, dated version
-ledger — this file exists to show how the seven plugins came to exist relative to each other, not
+ledger — this file exists to show how the plugins came to exist relative to each other, not
 to duplicate their per-version detail.
 
 > **Gap disclosed, 2026-08-08:** this file has no entries between 2026-07-20 and 2026-08-08 —
@@ -12,6 +12,45 @@ to duplicate their per-version detail.
 > those is independently verifiable from its own ADR file at `.claude/docs/adr/` and from every
 > touched plugin's own README ledger — not backfilled here to avoid restating detail from memory
 > that the ADRs themselves already carry as the source of record.
+
+## 2026-08-13/15 — authorkit: the eighth plugin, two ratified ADRs, and the estate that overhauls estates
+
+The largest arc in the repo's history (~40 PRs merged across three days). **authorkit** landed as
+the eighth plugin — hand-authored in a parallel session around a naming-convention spec, ratified
+as **ADR-0011** (the spec's grammar supersedes ADR-0006's grammar half; existing names
+grandfathered under D8's ratchet, no rename campaign), then brought through the gate (#196) with
+the misses that trip found turned into permanent guards: authorkit was invisible to CI
+(`gate.yml`'s hardcoded loop → in) and to the marketplace (`marketplace.json` → in, plus new
+**G13** failing any gated plugin missing from the root manifest). The grammar went live as
+enforcement, not prose: a repo-root `naming.manifest.json` (169 grandfathered exemptions), the
+validator wired as a PostToolUse hook and gate **G12** (`--scope grammar` — the broader
+provenance schema was deliberately ruled authorkit-internal via a per-estate `schema_scope` flag,
+dropping 2,115 informational findings to 9 real ones). The overhaul toolchain completed
+member-by-member, each dogfooded before shipping: `naming-audit`, `bloat-audit`,
+`rename-planning`/`rename-execute`, `manifest-authoring`, `fix-old-names` (the one member the
+plan-plugin-split analysis found mechanically clean to move from harness — the analysis killed
+the other 7 of 8 proposed moves, the kill-switch working as designed), `overhaul-planning` (the
+four-axis per-member plan: placement / species / merge-split nomination / knowledge-tier), and
+`overhaul-execute` (the end-to-end driver: discovery scan → scope gate → audits → plan → Gate A
+with problems-plus-proposed-solutions → waved execution → routing proof). Its dual-access
+skill+command form required amending the ratified spec itself (§14.1, the reverse-wrapper rule —
+a skill may carry an object-verb name iff an identically-named command wraps it), legalizing the
+house pattern instead of exempting it forever. **ADR-0012** ratified quick-build auto-merge:
+`dispatch-ticket` Phase 5 gains stage 2b — on an explicit `auto-merge: authorized` grant plus an
+all-green fail-closed QB0–QB7 predicate, a dispatched seat may merge its own PR; the independent
+critic caught the predicate's one real hole pre-merge (the allow-list matched harness's own gate
+scripts — a quick-build editing the gate would be graded by the gate it just edited), and the
+mid-build discovery that GNU `timeout` doesn't exist on stock macOS saved the feature from
+shipping permanently inert while green. The same arc hardened the whole dispatch lifecycle from
+live incidents: claim-at-dispatch with list-visible `in-flight` labels, the `Blocked-by: #NN`
+dependency convention read by mobilize-chores and chore-planner, unconditional-then-conditional
+worktree isolation (#183 → #204, evidence-driven both times), identity-based worktree reuse
+(#191), verified branch teardown (#190), the worktree-reaped-mid-dispatch recovery doctrine
+(#207 — hit twice live, recovered both times), and the two CLI-level defects filed upstream as
+anthropics/claude-code#86584. `check-routing` gained estate-mode (#253) after authorkit's own
+first external dogfood run found it missing — that run's two findings (#252/#253) were both
+fixed the same day. (authorkit 0.1.0 → 0.9.x; harness 3.1.x → 3.6.0; teamwork 2.7.x → 2.12.1;
+docs 1.4.4 → 1.4.7; ADR-0011 + ADR-0012 accepted; LLD-0001 through LLD-0004 on record)
 
 ## 2026-08-11/12 — the queue runs itself: mobilize-chores goes autonomous, the first full estate audit, and the semantic-edit invariant
 
