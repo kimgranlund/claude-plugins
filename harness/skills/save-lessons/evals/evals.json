@@ -147,6 +147,12 @@
       "prompt": "Turn this manual checklist into a script so we stop doing it by hand",
       "expect": "no-trigger",
       "note": "make-script — mechanizing a procedure as code, not capturing prose knowledge"
+    },
+    {
+      "id": "n14",
+      "prompt": "Write a reference doc for this API's ground truth and structure it for retrieval.",
+      "expect": "no-trigger",
+      "note": "owner: docs make-reference — authoring the document itself; reciprocal fence, 2026-08-15 (attention-audit behavior run found the unfenced twin)"
     }
   ]
 }

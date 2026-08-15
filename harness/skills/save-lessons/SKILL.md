@@ -5,8 +5,9 @@ description: >-
   third time, a ratified decision, a convention worth keeping — into a knowledge-pack entry. Use
   for "skill or stay in the conversation", "knowledge or noise", "scan our docs for uncaptured
   knowledge", "did this citation go stale", "already a reference covering this". NOT authoring
-  (make-pack); NOT decomposition (break-down-problem); NOT gates (release_gate.py,
-  /check-routing).
+  (make-pack); NOT authoring or reviewing the reference document itself (docs make-reference —
+  this skill decides whether a fact EARNS an entry, never writes the doc); NOT decomposition
+  (break-down-problem); NOT gates (release_gate.py, /check-routing).
 disable-model-invocation: false
 user-invocable: true
 ---

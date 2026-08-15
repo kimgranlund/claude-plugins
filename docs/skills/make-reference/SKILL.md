@@ -2,13 +2,13 @@
 name: make-reference
 description: >
   Author or review a referential knowledge document (a skill references/ file,
-  an @-imported doc, or a Project Knowledge file) to production standard, scoring
-  it against the bundled rubric. Use whenever writing or evaluating knowledge /
-  ground-truth docs for an agent: "write a reference doc", "structure my project
-  knowledge", "name and organize the knowledge files", "is this retrievable",
-  "does this reference duplicate a source owned elsewhere", "audit our docs for
-  drift". NOT for a knowledge pack / corpus+index (harness's make-pack), NOT for a
-  docs index (make-llms-txt), NOT for CLAUDE.md standing context (harness's entry-file-rules).
+  an @-imported doc, or a Project Knowledge file) against the bundled rubric.
+  Use for "write a reference doc", "structure my project knowledge", "name and
+  organize the knowledge files", "is this retrievable", "does this reference
+  duplicate a source owned elsewhere", "audit our docs for drift". NOT for a knowledge pack / corpus+index (harness's make-pack); NOT for
+  whether a fact EARNS an entry at all (harness's save-lessons judges the bar,
+  this skill writes the doc); NOT for a docs index (make-llms-txt) or CLAUDE.md
+  standing context (harness's entry-file-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
