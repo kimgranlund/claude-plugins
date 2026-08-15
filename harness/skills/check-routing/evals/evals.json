@@ -1,6 +1,6 @@
 {
   "skill": "check-routing",
-  "note": "Trigger-routing suite, minted 2026-07-20 when check-routing flipped command -> procedural (per explicit user direction, the 1.24.0 make-skill precedent). expect=trigger: fires in a fresh session; expect=no-trigger: near-miss owned elsewhere (owner in comment). Known accepted-leak class: cases whose true owner is a user-only command (check-everything, ship-plugin) leak to model-only siblings on a model-only menu — benign, do not tune to chase.",
+  "note": "Trigger-routing suite, minted 2026-07-20 when check-routing flipped command -> procedural (per explicit user direction, the 1.24.0 make-skill precedent). expect=trigger: fires in a fresh session; expect=no-trigger: near-miss owned elsewhere (owner in comment). Known accepted-leak class: cases whose true owner is a user-only command (check-everything, ship-plugin) leak to model-only siblings on a model-only menu — benign, do not tune to chase. Estate-mode addendum (2026-08-15, issue #253): t11/t12 cover the new non-plugin project-estate target (`.claude/skills/*/evals/`, auto-detected) — same skill, same charter, just a different root convention; no new fence needed against plan-plugin-split (estate-wide OVERHAUL PLANNING, a different verb) or check-state (work state, not routing).",
   "cases": [
     { "id": "t01", "prompt": "Run the trigger evals for this plugin.", "expect": "trigger" },
     { "id": "t02", "prompt": "Prove the routing still works after that description change.", "expect": "trigger" },
@@ -12,6 +12,8 @@
     { "id": "t08", "prompt": "We batched several fence edits — run the wave-boundary routing check.", "expect": "trigger" },
     { "id": "t09", "prompt": "Blind-judge the routing for these suites.", "expect": "trigger" },
     { "id": "t10", "prompt": "how do we prove routing did not break after the rename", "expect": "trigger", "comment": "ceded from big-change-git-rules t20, 2026-08-12 (issue #172, ownership ruling) — running the routing proof is this suite's own charter even in a rename context." },
+    { "id": "t11", "prompt": "Prove the routing for this repo's own .claude skills — there's no plugin.json here, just a project estate.", "expect": "trigger", "comment": "estate-mode addendum, issue #253" },
+    { "id": "t12", "prompt": "Run a blind routing check against my project's skill set before I ship this description-trim campaign — it's not a plugin, just a .claude tree.", "expect": "trigger", "comment": "estate-mode addendum, issue #253" },
     { "id": "n01", "prompt": "Add a no-trigger case to this suite.", "expect": "no-trigger", "comment": "owner: skill-writing-rules — suite conventions" },
     { "id": "n02", "prompt": "Why won't my skill trigger even though it's installed?", "expect": "no-trigger", "comment": "owner: skill-writing-rules — live trigger debugging" },
     { "id": "n03", "prompt": "Run the release gate on docs.", "expect": "no-trigger", "comment": "owner: ship-plugin (command, off-menu) / direct script run — accepted-leak class if a standards sibling wins" },
