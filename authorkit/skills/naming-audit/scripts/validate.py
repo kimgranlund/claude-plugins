@@ -119,7 +119,29 @@ class Grammar:
         self.process_lex = set(manifest.get("process_lex", []))
         self.role_lex = set(manifest.get("role_lex", []))
         self.exemptions = set(manifest.get("exemptions", []))
-        self.authors = set(manifest.get("author_registry", []))
+        # author_registry must be a flat list of plain strings (MANIFEST-TEMPLATE.json's
+        # own contract). A structured entry (e.g. {"name": ..., "emails": [...]}) is not
+        # hashable and used to raise a raw, uncaught `TypeError: unhashable type: 'dict'`
+        # straight out of this constructor (issue #252) — found live by overhaul-execute's
+        # first real dogfood run, traced to manifest-authoring's own seeding step never
+        # stating the expected shape. Fail clean instead: skip the malformed entry (it
+        # cannot match any artifact's `author` field either way) and surface a named,
+        # actionable manifest_errors finding instead of a stack trace. Silently coercing a
+        # dict to some extracted key was considered and rejected — a structured entry
+        # (name + emails) has no single field that is obviously "the" author string, and
+        # guessing one would mask the real fix (correcting the manifest) behind output that
+        # looks like it worked.
+        self.manifest_errors = []
+        self.authors = set()
+        for entry in manifest.get("author_registry", []):
+            if isinstance(entry, str):
+                self.authors.add(entry)
+            else:
+                self.manifest_errors.append(
+                    f"author_registry entry must be a plain string, got "
+                    f"{type(entry).__name__}: {entry!r} — expected a flat list of "
+                    f"strings, e.g. [\"kim\", \"jane\"] (see MANIFEST-TEMPLATE.json)"
+                )
         self.brand_tokens = set(manifest.get("brand_tokens", []))
         self.mutation_allowlist = set(manifest.get("mutating_no_confirm_allowlist", []))
         self.objects = {}       # any acceptable surface form -> canonical
@@ -411,6 +433,8 @@ def run(target: Path, manifest: dict, scope: str = "full", own_root: Path = None
 
     for msg in g.lexicon_errors:
         findings.append(("manifest", "error", msg, "grammar"))
+    for msg in g.manifest_errors:
+        findings.append(("manifest", "error", msg, "structural"))
 
     for kind, name, path, is_dir in artifacts:
         paths[name] = path
@@ -841,10 +865,58 @@ def selftest():
         assert not result["grammar_errors"], \
             f"existing nominal skill names must be unaffected by the reverse-wrapper amendment: {result['grammar_errors']}"
 
+    # author_registry shape validation (issue #252): a structured entry (dict, not a plain
+    # string) used to raise a raw uncaught `TypeError: unhashable type: 'dict'` straight out
+    # of Grammar.__init__'s set(...) call. Three fixtures: the exact crash reproduced via a
+    # direct run() call (must not raise, must surface a clean, actionable manifest_errors
+    # finding instead), the same fixture through the CLI's own exit-code contract (must
+    # exit 1, never a traceback), and a normal plain string-list manifest as the regression
+    # control (must validate completely unaffected by the shape check).
+    structured_registry_manifest = dict(manifest, author_registry=[
+        {"name": "kim", "emails": ["kim@example.com"]}
+    ])
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        # direct run() call: must not raise, must report the shape problem cleanly.
+        result = run(r, structured_registry_manifest)
+        assert any(
+            "author_registry entry must be a plain string" in e[2] for e in result["errors"]
+        ), "a structured author_registry entry must surface a named, actionable finding, not crash"
+        assert not any(
+            "unhashable" in e[2] for e in result["errors"]
+        ), "the raw TypeError text must never leak into a finding message"
+
+        # CLI's own exit-code contract: same fixture, through main() via subprocess — must
+        # exit 1 (a clean gating error), never a Python traceback (which would exit via an
+        # unhandled exception, not this process's own sys.exit(1) contract).
+        mf = r / "naming.manifest.json"
+        mf.write_text(json.dumps(structured_registry_manifest))
+        cli = subprocess.run(
+            [sys.executable, __file__, "--target", str(r), "--manifest", str(mf)],
+            capture_output=True, text=True,
+        )
+        assert cli.returncode == 1, \
+            f"a structured author_registry entry must exit 1 cleanly, not crash: {cli.returncode}"
+        assert "Traceback" not in cli.stderr, \
+            f"a structured author_registry entry must never raise a raw traceback: {cli.stderr}"
+
+    # Regression control: a normal plain string-list author_registry (the shape every fixture
+    # in this selftest already uses) must validate completely unaffected by the shape check.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, manifest)
+        assert not any("author_registry entry must be a plain string" in e[2] for e in result["errors"]), \
+            "a normal plain string-list author_registry must never trip the shape check"
+
     print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite, "
           "--scope grammar/full partition proven, schema_scope manifest default + "
           "own-tree carve-out proven, reverse-wrapper skill-name amendment "
-          "(positive/negative/regression) proven")
+          "(positive/negative/regression) proven, author_registry shape validation "
+          "(issue #252: structured entry fails clean, never a raw TypeError) proven")
     return 0
 
 
