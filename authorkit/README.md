@@ -76,13 +76,14 @@ exists in the same plugin root.
 
 ## Version ledger
 
-v0.10.3 · 2026-08-15 · naming-audit `validate.py` gains the `hook` subcommand (issue #276): the PostToolUse hook derives its target from the write's own file_path, so worktree sessions validate their own tree (not the main checkout) and only the touched plugin; critic pass added wrong-shape fail-open guards + fixtures
+v0.10.3 · 2026-08-15 · naming-audit `validate.py` gains the `hook` subcommand (issue #276): the PostToolUse hook derives its target from the write's own file_path, so worktree sessions validate their own tree (not the main checkout) and only the touched plugin; the plugin's own shipped `hooks/hooks.json` rewired off its worktree-blind `--target ${CLAUDE_PROJECT_DIR}` form too; critic pass added wrong-shape fail-open guards + fixtures
 v0.10.2 · 2026-08-15 · `naming-audit-agent` and `bloat-audit-agent` gain an explicit
 `model: sonnet` pin (issue #283, the A7 defect-class follow-up deferred from #275's
 `attention-audit-agent` fix — PR #126's original A7 gap: a missing/`inherit` model field
 silently rides the dispatching session's model). `skill_lint` A7 passes clean on both agents.
 Shipped standalone (no imminent authorkit release in flight to ride along with, per this
-ticket's own Scope/Open note). Rebumped from 0.10.1 — that number shipped via PR #289 mid-flight.v0.10.1 · 2026-08-15 · reciprocal NOT-fences added closing the collision-baseline twins with harness (issue #282, PR #278's recipe): `naming-conventions` ↔ harness's `naming-rules` and `bloat-audit` ↔ harness's `check-skill`; each description gains a NOT-clause and a reciprocal eval case (bloat-audit n07 new; naming-conventions n05's existing case gains a dated owner-comment closing the loop); `naming-conventions`'s description also dieted (tool-grant parenthetical de-duped, exemptions detail trimmed) to stay under the W8 700-char budget with the new clause added
+ticket's own Scope/Open note). Rebumped from 0.10.1 — that number shipped via PR #289 mid-flight.
+v0.10.1 · 2026-08-15 · reciprocal NOT-fences added closing the collision-baseline twins with harness (issue #282, PR #278's recipe): `naming-conventions` ↔ harness's `naming-rules` and `bloat-audit` ↔ harness's `check-skill`; each description gains a NOT-clause and a reciprocal eval case (bloat-audit n07 new; naming-conventions n05's existing case gains a dated owner-comment closing the loop); `naming-conventions`'s description also dieted (tool-grant parenthetical de-duped, exemptions detail trimmed) to stay under the W8 700-char budget with the new clause added
 v0.10.0 · 2026-08-15 · attention-audit joins as the third audit axis (issues #259/#261/#264;
 the 2026-08-15 context-efficiency review): always-on menu rent (rent.py — dial-aware,
 skill/agent split, agents bill unconditionally), IDF-ranked description-collision detection

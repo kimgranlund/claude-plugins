@@ -6,7 +6,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/skills/naming-audit/scripts/validate.py\" --target \"${CLAUDE_PROJECT_DIR:-.}\" --hook"
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/skills/naming-audit/scripts/validate.py\" hook",
+            "timeout": 20,
+            "statusMessage": "naming-postwrite-grammar-gate"
           }
         ]
       }
