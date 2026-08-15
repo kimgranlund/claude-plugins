@@ -20,7 +20,7 @@ check-routing answers one question per suite: **do the descriptions alone route 
 Two target conventions, auto-detected from `<root>` — never a separate command, never a separate skill:
 
 - **Plugin** — `<root>/skills/*/evals/` (a `.claude-plugin/plugin.json` sibling is the usual signal but not required; the pre-existing behavior, unchanged).
-- **Project estate** — no `<root>/skills/` tree, but a project's own `.claude/skills/*/evals/` tree (the convention `overhaul-execute`/`overhaul-planning` rely on for a non-plugin repo, e.g. agent-ui's own `.claude/` — issue #253). Pass `--estate` to force this convention on a root that happens to carry both.
+- **Project estate** — no `<root>/skills/` tree, but a project's own `.claude/skills/*/evals/` tree (the convention `overhaul-execute`/`overhaul-planning` rely on for a repo that isn't a plugin, e.g. agent-ui's own `.claude/` — issue #253). Pass `--estate` to force this convention on a root that happens to carry both.
 
 Everything past Phase 1 is convention-blind: a menu of name+description pairs and a judge that never learns which tree they came from.
 
