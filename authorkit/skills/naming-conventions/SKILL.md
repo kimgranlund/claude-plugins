@@ -10,8 +10,8 @@ description: >
   rule. NOT for planning or generating an estate-wide
   overhaul/reshape/merge/split campaign across many members
   (overhaul-planning); NOT for naming something new or simplifying a name in
-  plain English, pre-ADR-0011 (harness's naming-rules). Single authority the
-  authorkit skills cite; never restate its rules from memory.
+  plain English (harness's naming-rules, the pre-ADR-0011 paradigm). Single
+  authority the authorkit skills cite; never restate its rules from memory.
 author: kim
 created: 2026-08-13
 last_updated: 2026-08-14
