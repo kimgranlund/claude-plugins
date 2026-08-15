@@ -19,6 +19,7 @@
     { "id": "n03", "prompt": "Run the release gate on docs.", "expect": "no-trigger", "comment": "owner: ship-plugin (command, off-menu) / direct script run — accepted-leak class if a standards sibling wins" },
     { "id": "n04", "prompt": "Review this skill and score it.", "expect": "no-trigger", "comment": "owner: check-skill" },
     { "id": "n05", "prompt": "Write trigger evals for my new skill.", "expect": "no-trigger", "comment": "owner: skill-writing-rules / make-skill Phase 2" },
-    { "id": "n06", "prompt": "Audit my whole harness.", "expect": "no-trigger", "comment": "owner: check-everything (command, off-menu) — accepted-leak class" }
+    { "id": "n06", "prompt": "Audit my whole harness.", "expect": "no-trigger", "comment": "owner: check-everything (command, off-menu) — accepted-leak class" },
+    { "id": "n07", "prompt": "Will these two descriptions collide in routing? Run the cheap deterministic overlap check before the eval wave.", "expect": "no-trigger", "comment": "owner: authorkit attention-audit (deterministic pre-lint tier upstream of this blind simulation) — reciprocal fence, 2026-08-15" }
   ]
 }

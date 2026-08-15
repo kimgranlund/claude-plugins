@@ -1,0 +1,26 @@
+{
+  "skill": "attention-audit",
+  "note": "This skill owns the attention/routing-economy axis — always-on menu rent, deterministic description-collision pre-detection, usage-telemetry cross-reference, and the per-plugin trend series — distinct from bloat-audit's prose-economy axis (inside bodies) and from harness /check-routing's LLM-judged blind routing simulation (this skill is the deterministic cheap tier upstream of it). Authored at mint (2026-08-15, issues #259/#261/#264 — the 2026-08-15 context-efficiency review); should-trigger phrasings t01–t02 are the seeding user's verbatim words from that session.",
+  "cases": [
+    {"id": "t01", "prompt": "Which of these skills and plugins tax Claude's performance the most?", "expect": "trigger"},
+    {"id": "t02", "prompt": "How can we optimize for smart attention and efficient routing across our estate?", "expect": "trigger"},
+    {"id": "t03", "prompt": "Audit our menu cost — how much context do all these skill descriptions burn every turn?", "expect": "trigger"},
+    {"id": "t04", "prompt": "Which skills never actually get used? Cross-check against real usage.", "expect": "trigger"},
+    {"id": "t05", "prompt": "Measure the always-on token rent of each plugin's descriptions.", "expect": "trigger"},
+    {"id": "t06", "prompt": "Are any of our skill descriptions so similar they'll collide in routing?", "expect": "trigger"},
+    {"id": "t07", "prompt": "Give me retire-or-merge candidates for the skill library, backed by usage data.", "expect": "trigger"},
+    {"id": "t08", "prompt": "Has our routing surface grown or shrunk since the last release? Show the trend.", "expect": "trigger"},
+    {"id": "t09", "prompt": "Check these two sibling descriptions for vocabulary overlap before I run the eval wave.", "expect": "trigger"},
+    {"id": "t10", "prompt": "What is our context overhead from installed skills and agents, per plugin?", "expect": "trigger"},
+    {"id": "n01", "prompt": "Why does my skill never trigger?", "expect": "no-trigger", "comment": "owner: harness skill-writing-rules — single-skill trigger debugging, not an estate economy audit"},
+    {"id": "n02", "prompt": "Rerun the routing evals for this plugin.", "expect": "no-trigger", "comment": "owner: harness check-routing — the LLM-judged blind simulation"},
+    {"id": "n03", "prompt": "Audit this skill for bloat and unnecessary ceremony.", "expect": "no-trigger", "comment": "owner: bloat-audit — prose economy inside bodies"},
+    {"id": "n04", "prompt": "Audit this estate for naming convention violations.", "expect": "no-trigger", "comment": "owner: naming-audit"},
+    {"id": "n05", "prompt": "Review this skill's content — is it actually any good?", "expect": "no-trigger", "comment": "owner: harness check-skill / skill-checker"},
+    {"id": "n06", "prompt": "Trim this description to fit the 1024-char cap.", "expect": "no-trigger", "comment": "owner: the owning plugin's edit + harness skill-writing-rules — this skill reports, never rewrites"},
+    {"id": "n07", "prompt": "Prove routing still works after my description edits.", "expect": "no-trigger", "comment": "owner: harness check-routing"},
+    {"id": "n08", "prompt": "Run a health sweep across all the plugins.", "expect": "no-trigger", "comment": "owner: harness check-everything"},
+    {"id": "n09", "prompt": "How do I reduce token usage in my Claude Code session right now?", "expect": "no-trigger", "comment": "owner: none here — platform usage question (claude-code-guide), not an estate audit"},
+    {"id": "n10", "prompt": "Plan a description diet wave for the design plugin.", "expect": "no-trigger", "comment": "contested boundary: this skill MEASURES and nominates; the wave itself is bloat-audit + check-routing work (#263) — attention-audit output feeds it"}
+  ]
+}

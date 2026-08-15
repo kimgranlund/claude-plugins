@@ -57,6 +57,12 @@
       "prompt": "Prove the routing still works after my description edit.",
       "expect": "no-trigger",
       "comment": "owner: check-routing"
+    },
+    {
+      "id": "n07",
+      "prompt": "Which skills tax Claude's performance the most? Audit the estate's menu rent and give retire-or-merge candidates.",
+      "expect": "no-trigger",
+      "comment": "owner: authorkit attention-audit (estate attention economy, not one skill's content) — reciprocal fence, 2026-08-15"
     }
   ]
 }

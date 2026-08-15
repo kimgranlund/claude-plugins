@@ -12,6 +12,8 @@
     {"id": "n01", "prompt": "Audit this estate for naming convention violations.", "expect": "no-trigger", "comment": "owner: naming-audit"},
     {"id": "n02", "prompt": "Plan a rename for this artifact.", "expect": "no-trigger", "comment": "owner: rename-planning"},
     {"id": "n03", "prompt": "Seed a naming manifest for this repo.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
-    {"id": "n04", "prompt": "What does the naming grammar say about skill name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"}
+    {"id": "n04", "prompt": "What does the naming grammar say about skill name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
+    {"id": "n05", "prompt": "Audit our menu cost — how much context do all these skill descriptions burn every turn?", "expect": "no-trigger", "comment": "owner: attention-audit (always-on menu rent, not prose economy inside bodies) — reciprocal fence, 2026-08-15"},
+    {"id": "n06", "prompt": "Which skills tax Claude's performance the most across the estate?", "expect": "no-trigger", "comment": "owner: attention-audit — reciprocal fence, 2026-08-15"}
   ]
 }

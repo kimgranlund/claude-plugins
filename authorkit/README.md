@@ -78,7 +78,21 @@ exists in the same plugin root.
 
 ## Version ledger
 
-v0.9.4 · 2026-08-14 · `validate.py`'s `Grammar.__init__` no longer crashes with a raw
+v0.10.0 · 2026-08-15 · attention-audit joins as the third audit axis (issues #259/#261/#264;
+the 2026-08-15 context-efficiency review): always-on menu rent (rent.py — dial-aware,
+skill/agent split, agents bill unconditionally), IDF-ranked description-collision detection
+(collide.py — per-artifact nearest-neighbors report after a fresh-critic FLOOR FAIL proved a
+global top-N window buries real twins at ranks 171/1000/1682; two measured LLM-tier limitation
+classes documented: common-words [check-skill↔bloat-audit, skill df=52] and crowded-commons
+[naming-rules↔naming-conventions, naming df=23]; `--against` write-time pre-lint), usage
+telemetry cross-reference (usage.py — lineage-aware + preload-aware by construction, both as
+selftest fixtures from the live baseline), and the per-release trend series (trend.py —
+separate columns, literal `absent`, no quotient ever). attention-audit-agent batch twin
+(sonnet). overhaul-execute Phases 1+6 wired for the axis in the same change (Kim's
+"open a project, run /overhaul-execute, all of authorkit unleashes" contract). Reciprocal
+fences closed in bloat-audit (n05/n06) and harness check-skill/check-routing (n07 each).
+Forge provenance in the skill's intent.md: P0–P5 gates PASS with the full critic exchange.
+· v0.9.4 · 2026-08-14 · `validate.py`'s `Grammar.__init__` no longer crashes with a raw
 `TypeError: unhashable type: 'dict'` when `naming.manifest.json`'s `author_registry` holds a
 structured entry (`{"name": ..., "emails": [...]}`) instead of a plain string (issue #252,
 found live by `overhaul-execute`'s first real dogfood run against agent-ui): malformed entries

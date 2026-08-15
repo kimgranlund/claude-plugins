@@ -68,10 +68,11 @@ tool) FIRST — governance before measurement.
 
 ## Phase 1 — MEASURE
 
-Per in-scope estate: `naming-audit` and `bloat-audit` (Skill tool). More than 3 estates in
-scope, or any single estate over 40 members, dispatches `naming-audit-agent` and
-`bloat-audit-agent` (Agent tool) with the batch instead. Record each estate's baseline in the
-run ledger — error count, exemption count — the Phase 6 burn-down starts here.
+Per in-scope estate: `naming-audit`, `bloat-audit`, and `attention-audit` (Skill tool). More
+than 3 estates in scope, or any single estate over 40 members, dispatches `naming-audit-agent`,
+`bloat-audit-agent`, and `attention-audit-agent` (Agent tool) with the batch instead. Record
+each estate's baseline in the run ledger — error count, exemption count, routable/agent
+description chars (attention-audit's rent figures) — the Phase 6 burn-down starts here.
 
 ## Phase 2 — PLAN
 
@@ -154,7 +155,10 @@ fires in between.
 1. `harness:check-routing` on every touched boundary (harness absent → routing proof reported
    UNMEASURED, named as such).
 2. Re-run `naming-audit` per estate: the burn-down scoreboard, baseline → now.
-3. Verdict-first roll-up: 🟢/🟡/🔴 per estate; waves run/killed/pending; PRs open awaiting the
+3. Re-run `attention-audit`'s rent measurement and append its trend row (trend.py) per estate:
+   the dated row IS the baseline → now evidence for the attention axis; a repo with no routing
+   report records those columns `absent`.
+4. Verdict-first roll-up: 🟢/🟡/🔴 per estate; waves run/killed/pending; PRs open awaiting the
    human's merge; emergent items minted (ids) or declined; every degraded or skipped step named
    with its reason; the run-ledger path.
 
