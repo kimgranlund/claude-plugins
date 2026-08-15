@@ -1,18 +1,15 @@
 ---
 name: icon-rules
 description: >-
-  Answers icon-system questions from a cited corpus — construction, sizing, style, metaphor,
-  accessibility, RTL. Use when designing or judging
-  icons: "what icon for settings / delete", "what size should this icon be", "what
-  stroke weight / grid", "which icon set/library", "can I mix filled and outlined / when filled vs
-  outlined", "should this icon mirror in RTL", "is an icon-only button okay", "is this icon big enough to tap",
-  "why is this icon blurry", "aria for a decorative icon", "emoji as icons?", "our icons look
-  inconsistent", "fill the Iconography section of a DESIGN.md". Carries the per-system
-  construction table (Material/SF/Carbon/Atlassian/Fluent), Material Symbols axes, WCAG floors,
-  NN/g's labels doctrine, the mirror/never-mirror taxonomy. ANSWERS only. NOT for
-  building an icon component (make-component, screens); NOT for verifying mirroring on a shipped
-  surface (check-translations, screens); NOT for icon-size tokens in --md-sys kits
-  (material-shape-facts); NOT for contrast verification (check-colors).
+  Answers icon-system questions from a cited corpus — construction, sizing, style,
+  metaphor, accessibility, RTL. Use when designing or judging icons: "what size/stroke
+  weight", "filled vs outlined", "should this mirror in RTL", "is an icon-only button
+  okay", "is this icon big enough to tap", "fill the Iconography section of a
+  DESIGN.md". Carries the per-system construction table
+  (Material/SF/Carbon/Atlassian/Fluent), Material Symbols axes, WCAG floors,
+  mirror/never-mirror taxonomy. ANSWERS only. NOT an icon build (make-component,
+  screens); NOT verifying mirroring shipped (check-translations, screens); NOT icon-size
+  tokens (material-shape-facts); NOT contrast verification (check-colors).
 user-invocable: false
 disable-model-invocation: false
 ---

@@ -1,18 +1,15 @@
 ---
 name: color-perception-facts
 description: >-
-  Answers vision and color-appearance science questions — what the eye and brain do with light. Use
-  when explaining chroma vs saturation, lightness vs brightness, colorfulness, or why two colors of
-  equal saturation aren't equally vivid; cones, opponent process, afterimages, simultaneous
-  contrast; metamerism — why two paints or swatches match under one light but not another;
-  color appearance models and viewing conditions (Fairchild, CIECAM02); MacAdam ellipses and
-  just-noticeable differences; warm/cool as a perceptual axis; tetrachromacy, OLO, color philosophy
-  and color education; why JPEG throws away color information via chroma subsampling with no visible
-  loss. Carries the textbook layer: the full David Briggs huevaluechroma scrape and
-  colorandcontrast.com. NOT for space-conversion math, gradients, or CSS (color-space-facts); NOT
-  for contrast standards or color-blindness checks (color-contrast-facts); NOT for pigment,
-  print, or naming (physical-color-facts); NOT for harmony, the color wheel, or meaning
-  (color-theory-facts). ANSWERS, does not generate.
+  Answers vision and color-appearance science — what the eye and brain do with light.
+  Use for chroma vs saturation, lightness vs brightness, why two colors of equal
+  saturation aren't equally vivid; cones, opponent process, afterimages, simultaneous
+  contrast; metamerism — swatches matching under one light but not another; appearance
+  models (Fairchild, CIECAM02); MacAdam ellipses; warm/cool as a perceptual axis,
+  tetrachromacy, OLO. NOT space-conversion math or CSS (color-space-facts); NOT contrast
+  or CVD checks (color-contrast-facts); NOT pigment, print, or naming
+  (physical-color-facts); NOT harmony or meaning (color-theory-facts). ANSWERS, does not
+  generate.
 disable-model-invocation: false
 user-invocable: false
 ---

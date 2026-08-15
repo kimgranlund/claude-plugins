@@ -1,18 +1,15 @@
 ---
 name: physical-color-facts
 description: >-
-  Answers physical-color and color-naming questions — pigment, print, and the standards that
-  catalog color. Use for paint mixing (Kubelka-Munk, why blue+yellow makes green while RGB
-  or opacity blending makes gray/mud; Spectral.js, Mixbox), pigment history and historical paint
-  datasets (manufacturer swatches, watercolours, skin tones), print-vs-screen mismatch (the print
-  proof duller than the mockup or monitor), ICC profiles, rendering intents, and color
-  management, iridescence and thin-film color (color that shifts with viewing angle), Pointer's
-  gamut of physically real surface colors (paint, dye, ink), and color naming (ISCC-NBS,
-  Munsell, Ridgway names, hex→name, naming across languages). NOT for space-conversion math or
-  gradients (color-space-facts); NOT for vision/appearance science, incl. metamerism — two
-  paints matching under one light but not another (color-perception-facts);
-  NOT for contrast or CVD (color-contrast-facts); NOT for palette mood or meaning
-  (color-theory-facts); NOT for building palettes (make-palette). ANSWERS, does not generate.
+  Answers physical-color and color-naming questions — pigment, print, and cataloging
+  standards. Use for paint mixing (Kubelka-Munk, why blue+yellow makes green while RGB
+  blending makes gray/mud; Spectral.js, Mixbox), pigment history, print-vs-screen
+  mismatch, ICC profiles, iridescence and thin-film color, Pointer's gamut of real
+  surface colors, and color naming (ISCC-NBS, Munsell, Ridgway, hex→name). NOT space-
+  conversion math (color-space-facts); NOT vision/appearance science, incl. metamerism
+  (color-perception-facts); NOT contrast or CVD (color-contrast-facts); NOT palette mood
+  (color-theory-facts); NOT building palettes (make-palette). ANSWERS, does not
+  generate.
 disable-model-invocation: false
 user-invocable: false
 ---

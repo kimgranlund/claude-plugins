@@ -1,6 +1,6 @@
 {
   "skill": "material-type-facts",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-typescale consumption queries, incl. the ui-territory nouns (menu item/table cell/badge). Negatives: the KEY control-text-size case belongs to geometry ('what font size for this button'), plus color, geometry, the --type-* twin, and lettering-facts. Motion fence added 2026-07-09 (reciprocal to new sibling material-motion-facts). Extended 2026-07-16 (t11): TKT-0008 re-sync vocabulary (ui-control/ui-widget, 15 voices); /check-routing owed at the next design wave boundary.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Checked-in routing corpus (test of record). Positives = md-sys-typescale consumption queries, incl. the ui-territory nouns (menu item/table cell/badge). Negatives: the KEY control-text-size case belongs to geometry ('what font size for this button'), plus color, geometry, the --type-* twin, and lettering-facts. Motion fence added 2026-07-09 (reciprocal to new sibling material-motion-facts). Extended 2026-07-16 (t11): TKT-0008 re-sync vocabulary (ui-control/ui-widget, 15 voices); /check-routing owed at the next design wave boundary. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
   "cases": [
     {
       "id": "t01",
@@ -54,7 +54,7 @@
     },
     {
       "id": "t11",
-      "prompt": "which typescale voice does a button's own text take — ui-control?",
+      "prompt": "which typescale voice does a button's own text take \u2014 ui-control?",
       "expect": "trigger"
     },
     {

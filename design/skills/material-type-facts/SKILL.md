@@ -1,19 +1,15 @@
 ---
 name: material-type-facts
 description: >
-  Use when setting the TYPE of any UI whose type tokens use the Material `--md-sys-typescale-*`
-  naming — font/size/weight/leading/tracking for a heading, body, label, button, input,
-  menu item, table cell, badge, kicker ("what type token for this", "which voice/level",
-  "why is this text the wrong size/weight"). Consumption guide for the
-  fifteen-voice scale extending Material 3: bind `--md-sys-typescale-*` + `--font-*`, pick VOICE (prose you READ vs chrome you
-  OPERATE — control text vs. static label vs. widget text) and LEVEL, apply the baked
-  leading/tracking rhythm. Never hardcode a
-  px size, line-height, tracking, or family. NOT for a control's own text-SIZE
-  (material-shape-facts' `--md-sys-size-{step}-font`, which composes FROM this skill's
-  `ui-control` voice — read here for what drives it); NOT for color (material-color-facts);
-  NOT for radius/spacing (material-shape-facts); NOT for kits on the default `--type-*`
-  grammar (design plugin's font-token-rules); NOT for DESIGNING a type scale
-  (lettering-facts); NOT for motion easing/duration (material-motion-facts).
+  Use when setting the TYPE of Material `--md-sys-typescale-*` tokens —
+  font/size/weight/leading/tracking for a heading, body, label, menu item, table cell,
+  or button ("which voice/level", "why is this text the wrong size/weight"). Bind
+  `--md-sys-typescale-*` + `--font-*` on the fifteen-voice scale extending M3: pick
+  VOICE (READ prose vs OPERATE chrome) and LEVEL, apply the baked leading/tracking
+  rhythm — never hardcode px, line-height, tracking, or family. NOT text-SIZE or
+  radius/spacing (material-shape-facts); NOT color (material-color-facts); NOT the
+  default `--type-*` grammar (font-token-rules); NOT DESIGNING a type scale
+  (lettering-facts); NOT motion tokens (material-motion-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

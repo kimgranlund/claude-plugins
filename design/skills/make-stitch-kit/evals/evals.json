@@ -1,6 +1,6 @@
 {
   "skill": "make-stitch-kit",
-  "note": "First suite (closed the estate's last E6 coverage gap, 2026-07-09). Positives from the description's own trigger phrasings; negatives are the family fences: dscard (Claude bundles), figma-make, the hub (cross-platform), design-md-rules (format Q&A), the reviewer agent (grading).",
+  "note": "First suite (closed the estate's last E6 coverage gap, 2026-07-09). Positives from the description's own trigger phrasings; negatives are the family fences: dscard (Claude bundles), figma-make, the hub (cross-platform), design-md-rules (format Q&A), the reviewer agent (grading). #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
   "cases": [
     {
       "id": "t01",
