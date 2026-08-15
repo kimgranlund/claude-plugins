@@ -16,6 +16,10 @@ Usage:
 
 Exit codes: 0 clean (warnings allowed), 1 errors found, 2 no manifest or no
 args (--hook mode exits 0 on missing manifest: governance is opt-in per estate).
+`hook` mode's own contract differs: exit 2 = grammar FINDINGS on the written
+file's plugin (the PostToolUse blocking convention); everything unexpected —
+malformed/wrong-shape event, no derivable root, unreadable manifest — exits 0
+silently (fail open, hook-writing-rules).
 
 `hook` mode (issue #276, 2026-08-15): a write-time PostToolUse hook that hardcodes
 `--target "$CLAUDE_PROJECT_DIR/$plugin"` for a fixed plugin roster is blind to
@@ -658,7 +662,18 @@ def main_hook_stdin():
         event = json.load(sys.stdin)
     except (json.JSONDecodeError, ValueError):
         return 0
-    file_path = (event.get("tool_input") or {}).get("file_path", "")
+    # Shape guards (code-checker finding, 2026-08-15): valid JSON is not necessarily a
+    # dict-shaped event — `[1,2]`, `{"tool_input":"oops"}`, and a non-str file_path all
+    # crashed here with traceback + exit 1, violating this function's own fail-open
+    # contract. Guard every shape before use.
+    if not isinstance(event, dict):
+        return 0
+    tool_input = event.get("tool_input")
+    if not isinstance(tool_input, dict):
+        return 0
+    file_path = tool_input.get("file_path", "")
+    if not isinstance(file_path, str) or not file_path:
+        return 0
     target, manifest_path = resolve_hook_target(file_path)
     if target is None:
         return 0  # nothing governed under this write — no manifest ancestor found
@@ -1145,6 +1160,22 @@ def selftest():
         [sys.executable, __file__, "hook"], input="not json", capture_output=True, text=True,
     )
     assert malformed.returncode == 0, f"a malformed hook event must fail open: {malformed.returncode}"
+
+    # Valid-JSON-but-wrong-shape events (code-checker finding, 2026-08-15): each of these
+    # three shapes crashed pre-guard with traceback + exit 1 — the exact fail-open breach
+    # the guards close. All must exit 0 with EMPTY stderr (a traceback would still print).
+    for shape_name, payload in (
+        ("bare-list event", "[1, 2]"),
+        ("non-dict tool_input", json.dumps({"tool_input": "oops"})),
+        ("non-str file_path", json.dumps({"tool_input": {"file_path": 3}})),
+    ):
+        wrong_shape = subprocess.run(
+            [sys.executable, __file__, "hook"], input=payload, capture_output=True, text=True,
+        )
+        assert wrong_shape.returncode == 0, \
+            f"{shape_name} must fail open, got exit {wrong_shape.returncode}"
+        assert "Traceback" not in wrong_shape.stderr, \
+            f"{shape_name} must not print a traceback: {wrong_shape.stderr}"
 
     with tempfile.TemporaryDirectory() as td:
         orphan = Path(td) / "somewhere" / "file.md"
