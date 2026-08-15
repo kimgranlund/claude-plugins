@@ -5,13 +5,13 @@ description: >
   The harness artifact naming convention — grammar, frontmatter schema (incl.
   the allowed-tools/tool-grant syntax), folder layout, and migration rules
   for .claude/ estates. Consult when parsing or judging any artifact name,
-  authoring frontmatter or explaining its tool-grant syntax, deciding where
-  content lives inside a skill folder, or resolving one artifact's
-  rename/migration rule (exemptions array, grandfather-with-ratchet, rename
-  sequencing). NOT for planning or generating an estate-wide
+  authoring frontmatter or its tool-grant syntax, deciding where content
+  lives in a skill folder, or resolving one artifact's rename/migration
+  rule. NOT for planning or generating an estate-wide
   overhaul/reshape/merge/split campaign across many members
-  (overhaul-planning). This is the single authority the authorkit skills
-  cite; do not restate its rules from memory.
+  (overhaul-planning); NOT for naming something new or simplifying a name in
+  plain English (harness's naming-rules, the pre-ADR-0011 paradigm). Single
+  authority the authorkit skills cite; never restate its rules from memory.
 author: kim
 created: 2026-08-13
 last_updated: 2026-08-14

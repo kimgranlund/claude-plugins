@@ -78,6 +78,7 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.10.1 · 2026-08-15 · reciprocal NOT-fences added closing the collision-baseline twins with harness (issue #282, PR #278's recipe): `naming-conventions` ↔ harness's `naming-rules` and `bloat-audit` ↔ harness's `check-skill`; each description gains a NOT-clause and a reciprocal eval case (bloat-audit n07 new; naming-conventions n05's existing case gains a dated owner-comment closing the loop); `naming-conventions`'s description also dieted (tool-grant parenthetical de-duped, exemptions detail trimmed) to stay under the W8 700-char budget with the new clause added
 v0.10.0 · 2026-08-15 · attention-audit joins as the third audit axis (issues #259/#261/#264;
 the 2026-08-15 context-efficiency review): always-on menu rent (rent.py — dial-aware,
 skill/agent split, agents bill unconditionally), IDF-ranked description-collision detection

@@ -61,6 +61,12 @@
       "id": "n07",
       "prompt": "is this fact worth turning into a knowledge-pack entry",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "Critique this dashboard's layout — name the regions and grade the shell.",
+      "expect": "no-trigger",
+      "comment": "owner: screens break-down-layout — concrete UI layout (screens, regions, wireframes), not domain-general system decomposition; reciprocal fence, 2026-08-15 (issue #282)"
     }
   ]
 }

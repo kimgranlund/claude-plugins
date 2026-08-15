@@ -124,6 +124,12 @@
       "prompt": "this repo still points at the old plugin names — update every reference",
       "expect": "no-trigger",
       "comment": "owner: fix-old-names — reciprocal fence, wave 2026-07-26 (issue #97). This skill CHOOSES a name; fix-old-names repairs references to one already retired."
+    },
+    {
+      "id": "n08",
+      "prompt": "Judge whether this artifact's frontmatter and folder layout conform to the estate's ADR-0011 naming grammar.",
+      "expect": "no-trigger",
+      "comment": "owner: authorkit naming-conventions — parsing/judging a name against the newer estate grammar, not this skill's plain-English forward-naming paradigm; reciprocal fence, 2026-08-15 (issue #282)"
     }
   ]
 }

@@ -100,7 +100,8 @@
     {
       "id": "n09",
       "prompt": "decompose this technical architecture into parts",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: harness break-down-problem — domain-general system decomposition, not this skill's concrete UI layout territory; reciprocal fence formalized 2026-08-15 (issue #282) — this eval case already existed and needed no new case, only the SKILL.md NOT-clause was missing"
     },
     {
       "id": "n10",

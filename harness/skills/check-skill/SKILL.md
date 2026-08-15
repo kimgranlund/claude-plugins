@@ -5,7 +5,8 @@ description: >-
   asks to review, audit, critique, score, or fix a skill, or when a skill never triggers,
   misfires, or restates what the model knows. Judgment tier; skill_lint.py checks mechanics
   first. NOT authoring a new skill (make-skill); NOT a bare "why does my skill never trigger"
-  question with no review asked (skill-writing-rules).
+  question with no review asked (skill-writing-rules); NOT judging a skill's length, verbosity,
+  or ceremony disproportionate to task size (authorkit's bloat-audit).
 disable-model-invocation: false
 user-invocable: true
 ---
