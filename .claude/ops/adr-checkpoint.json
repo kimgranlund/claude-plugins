@@ -43,6 +43,10 @@
     "adr-0011": {
       "hash": "f22908c4d919a2952c59ac871a304753eb8deab41de7af408babc495fa2cc72a",
       "status": "accepted"
+    },
+    "adr-0012": {
+      "hash": "c09ae2d53813f2ab59875fc1327e37aa521c0fa111512aeed3681857ab2c1abb",
+      "status": "accepted"
     }
   }
 }

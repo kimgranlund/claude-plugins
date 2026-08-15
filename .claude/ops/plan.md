@@ -1,22 +1,26 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-14 ~02:42Z window (UTC),
-main at `b4d1137`, tree clean except this sweep's own ops writes. Evidence: the three
-seat reports attached to this dispatch (decision-watcher: sole delta adr-0011
-proposed→accepted @ `65efbf2`, deliverables verified landed, queue empty; issue-sorter:
-3 open issues / 0 open PRs, no state mutation; repo-cleaner: full report at
-`.claude/ops/reports/2026-08-14T02-42-04Z-repo-cleaner.md`), with the prior plan
-(2026-08-14 ~00:03Z) plus its appended session rulings as carry-forward source.
-Clean, uneventful sweep: since the prior plan, ADR-0011 ratified and its whole
-deliverable chain landed via #197 / merged PR #222 (branch 404-verified gone), the
-orphaned worktree was removed, and the checkpoint-bypass question was ruled. Six of
-the prior eight entries close below; the queue shrinks 8 → 3.
+Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-15 ~21:15Z window (UTC),
+main at `99702e3`, sweep scope-weighted "authorkit hardening" (a lens, not a filter).
+Evidence: all three seat reports attached (none UNMEASURED) — decision-watcher (sole
+delta adr-0012 new; one harvest candidate queued in `adr-queue.json`), issue-sorter
+(20 open issues / 0 open PRs, all labeled and healthy, zero triage debt), repo-cleaner
+(full report at `.claude/ops/reports/2026-08-15T21-15-37Z-repo-cleaner.md`; PRs
+#279/#278/#275 all `campaign_close.py`-clean incl. the authorkit gate; zero stale
+branches/worktrees). Prior plan (2026-08-14 ~02:42Z) fully resolved — all three
+entries closed per its own appended session notes; nothing carries forward except
+standing rulings (see Not queued). Queue rebuilds 3 → 9.
+
+**Blocked-by (#193):** no `Blocked-by:` line appears in any evidence this sweep —
+issue-sorter read #265/#257/#282/#276/#283/#258 bodies in full and named no
+dependency edge. Ordering below is pure class ranking + the authorkit lens.
 
 ## Human-decision call-outs — nothing below executes autonomously next sweep
 
-1. **#221 scheduling** (entry 2) — unassigned backlog task; only Kim assigns or
-   batches it into a mobilize round.
-2. **Ops commit** (entry 1) — human-run if the dispatching session lacks Bash.
+1. **adr-0012 harvest confirm** (entry 3) — one AskUserQuestion round; only Kim
+   confirms before `/make-pack` touches `who-ships-what.md`.
+2. **#276 routing** (entry 2) — Kim picks solo-direct vs. next mobilize batch.
+3. **Ops commit** (entry 1) — human-run if the dispatching session lacks Bash.
 
 ## Queue
 
@@ -25,100 +29,133 @@ the prior eight entries close below; the queue shrinks 8 → 3.
 ### 1. Commit this firing's ops artifacts — explicit pathspec only
 - **Action:** Read `git status --porcelain` first, then stage exactly
   `git add .claude/ops/plan.md .claude/ops/adr-checkpoint.json
-  .claude/ops/reports/2026-08-14T02-42-04Z-repo-cleaner.md`, read the status output,
-  commit as a separate step (gate ≠ commit), push. `adr-checkpoint.json` IS part of
-  this firing's delta (adr-0011 hash + status advanced, applied by chore-lead);
-  issue-sorter reports no `watch-checkpoint.json` mutation — confirm via the status
-  read, stage only what changed. Never `git add -A`.
-- **Owner:** the dispatching session if Bash-capable, else human (Kim). Carried note:
-  chore-lead's own grant is Read/Write/Task — no Bash/git — so this routes past it.
-- **Evidence:** seat reports this sweep — chore-lead applied the checkpoint delta,
-  repo-cleaner wrote a new report file, this plan rewrite once applied.
+  .claude/ops/adr-queue.json .claude/ops/watch-checkpoint.json
+  .claude/ops/reports/2026-08-15T21-15-37Z-repo-cleaner.md`, read the status
+  output, commit as a separate step (gate ≠ commit), push. All five paths are this
+  firing's delta (applied by chore-lead per the write-sandbox contract). Never
+  `git add -A`.
+- **Owner:** the dispatching session if Bash-capable, else human (Kim).
+- **Evidence:** chore-lead applied all four seat payloads + this plan rewrite;
+  repo-cleaner confirms main otherwise clean and in sync.
 - **Size:** ~2 min.
+
+(No other class-1 work: repo-cleaner verified all three merged PRs' remote branches
+already gone — cache-prune only, nothing left to mutate.)
 
 **Class 2 — items blocking other work:**
 
-(none this firing — the ADR-0011 chain that occupied this class ratified and landed
-via #197 / PR #222.)
+### 2. #276 — naming-grammar PostToolUse hook blind to EnterWorktree sessions (bug, major)
+- **Action:** Fix the hook so it validates the session's actual checkout, not the
+  main one — EnterWorktree sessions currently bypass naming-grammar enforcement
+  entirely. Proven live during the attention-audit build (PR #275). Blocks safe
+  worktree-based hardening work generally (issue-sorter's judgment — no literal
+  `Blocked-by:` edge), which is why it leads every other work item this cycle.
+  Route as a `/mobilize-chores` build item or a solo-direct bug fix — Kim's call
+  (call-out 2).
+- **Owner:** build seat via teamwork `/mobilize-chores` (Kim's batched confirm),
+  or Kim solo-direct.
+- **Evidence:** issue-sorter this sweep — bug + major labels, body read in full,
+  named HIGHEST-relevance item in the 20-issue queue.
+- **Size:** hours.
 
 **Class 3 — human decisions:**
 
-### 2. Schedule or assign #221 — watch-adrs supersession gap
-- **Action:** #221 (task, backlog, size:small, unassigned) is the only open work item
-  with no owner. Kim decides: assign it, fold it into the next mobilize batch, or
-  leave it in backlog with that choice recorded here so it stops resurfacing as a
-  question. No urgency signal from any seat — it blocks nothing.
-- **Owner:** human (Kim) — assignment is the decision; execution then routes to a
-  build seat under the normal batched confirm.
-- **Evidence:** issue-sorter this sweep — #221 open, unassigned, `backlog` +
-  `size:small`, matches expected state; repo-cleaner independently noted it unclaimed
-  and routed it to triage.
-- **Size:** ~2 min (the ruling); the task itself is size:small per its label.
+### 3. Confirm or reject the adr-0012 harvest candidate
+- **Action:** One AskUserQuestion round on the single pending candidate in
+  `adr-queue.json`: extend `harness/skills/big-change-git-rules/references/`
+  `who-ships-what.md`, whose "who is allowed to merge" fact still reads as an
+  absolute human-only rule with no ADR-0012 quick-build exception noted. If
+  confirmed, `/make-pack` extends the pack (extend-in-place, not a new file);
+  target-file placement (who-ships-what.md vs. merge-semantics.md) is
+  decision-watcher's judgment — Kim may override at the gate. Run via the next
+  interactive decision-watcher firing, or directly: `adr_queue.py pending`.
+- **Owner:** human (Kim) — the confirm; then `/make-pack` executes.
+- **Evidence:** decision-watcher this sweep — adr-0012 ratified (PR #248, merged
+  2026-08-14), mechanism already threaded into teamwork's four artifacts, grep
+  confirmed zero QB/auto-merge/quick-build hits in big-change-git-rules.
+- **Size:** ~2 min (confirm); ~30–60 min (the harvest edit + checker pass).
 
-**Class 4 — hygiene debt:**
+**Class 4 — hygiene debt (authorkit-weighted first):**
 
-### 3. Close out chain step 6 (exemption burn-down metric) — status UNMEASURED
-- **Action:** The prior plan's entry 7 tracked ADR-0011 chain steps 2/3/4/6.
-  Steps 2/3/4 (estate manifest, validator, naming-rules supersession note) are
-  verified landed via PR #222 per decision-watcher. Step 6 (the exemption burn-down
-  metric) was NOT in that verified list — UNMEASURED this sweep, not confirmed
-  landed, not confirmed missing. Check PR #222's diff (or the spec's step-6 section)
-  once; if landed, this entry closes on sight, if not, file its record via the
-  file-task path.
-- **Owner:** human (Kim) or the next sweep's decision-watcher firing with step-6
-  named in its dispatch.
-- **Evidence:** decision-watcher this sweep enumerated four landed deliverables;
-  step 6 absent from the enumeration. Carried residue of prior entry 7, all other
-  halves of which resolved.
-- **Size:** ~5 min (the check); filing, if needed, ~10 min.
+### 4. #283 — model pins missing on naming-audit-agent and bloat-audit-agent (task, small)
+- **Action:** Pin models on both authorkit agents — the A7 defect class (PR #126's
+  pattern, `model: inherit` letting Fable dispatch Fable). Direct authorkit-agent
+  hardening; natural batch-mate for entry 2's mobilize round.
+- **Owner:** build seat via `/mobilize-chores`.
+- **Evidence:** issue-sorter this sweep — task + small, body read in full.
+- **Size:** ~30 min.
 
-## Not queued (checked, found clean or deliberately left)
+### 5. #282 — fence the three remaining baseline routing-collision pairs (task, big)
+- **Action:** Close reciprocal description fences on the three collision pairs, one
+  of which is harness `naming-rules` ↔ authorkit `naming-conventions`. Description
+  edits ⇒ same-change `evals.json` updates + `/check-routing` per invariant.
+- **Owner:** build seat via `/mobilize-chores`.
+- **Evidence:** issue-sorter this sweep — task + big, body read in full.
+- **Size:** hours.
 
-- **#207 / #189:** deliberately-open CLI-level tracking records per the standing
-  ruling; estate-side work marked complete in latest comments, both healthy per
-  issue-sorter. Untouched.
-- **PR estate:** zero open PRs; #219, #220, #222 (new since prior plan) plus
-  #209–#218 all MERGED with remote branches independently 404-verified. Nothing for
-  `campaign_close.py`.
-- **Orphaned worktree (prior entry 1):** confirmed resolved between firings —
-  one worktree (primary), one local branch (main), one remote (origin/main).
-- **Main:** clean, in sync with origin @ `b4d1137` — no `sync_main.py`.
+### 6. #280 — centralize two description-boilerplate families
+- **Action:** De-duplicate the `ops-write-sandbox-rules` and plan-plugin-split
+  NOT-clause boilerplate families across descriptions. Kind/size labels not
+  restated in this sweep's evidence (repo-cleaner surfaced it for visibility only)
+  — take sizing from the issue's own labels at pickup.
+- **Owner:** build seat via `/mobilize-chores`.
+- **Evidence:** repo-cleaner this sweep — named in the authorkit-relevant
+  visibility list; issue-sorter confirms it labeled and healthy (all 20 are).
+- **Size:** per its own labels (not in evidence this sweep — est. small-to-medium).
+
+### 7. #257 — authorkit-relevant open item, verified well-formed
+- **Action:** Include in the next mobilize round's candidate set. Spot-checked
+  directly by issue-sorter (well-formed, no unresolved placeholders — the earlier
+  repair holds); body detail beyond that not carried in this sweep's evidence.
+- **Owner:** build seat via `/mobilize-chores`.
+- **Evidence:** issue-sorter (spot-check) + repo-cleaner (visibility list), this
+  sweep.
+- **Size:** per its own labels (not in evidence this sweep).
+
+### 8. #258 — bloat-audit sweep of the four never-audited plugins (task, small) — DEFERRED BY RULING
+- **Action:** Run authorkit's `/bloat-audit` over screens/design/agent-protocols/llm
+  — in a FUTURE mobilize round. Kim's explicit 2026-08-15 ruling: defer; recorded
+  here so it stops resurfacing as a question. Do not start this cycle.
+- **Owner:** build seat via a future `/mobilize-chores` round (Kim batches it in).
+- **Evidence:** issue-sorter this sweep — task + small, ruling cited in its report.
+- **Size:** ~30–60 min when it runs.
+
+### 9. Remaining 14 open issues — healthy labeled backlog
+- **Action:** #256, #260, #262, #265, #266, #267, #268, #269, #271, #272, #273,
+  #274, #277, #281 — all correctly labeled (kind + size/severity), zero triage
+  debt, none stuck or held. Outside this sweep's authorkit lens; drain via future
+  `/mobilize-chores` rounds in normal priority order. No per-item entry owed until
+  a sweep's lens or a `Blocked-by:` edge elevates one.
+- **Owner:** Kim batches into mobilize rounds; issue-sorter re-triages each sweep.
+- **Evidence:** issue-sorter this sweep — full 20-issue enumeration, all labeled,
+  held-items.md empty, no needs-triage-approval.
+- **Size:** n/a (tracking entry; each item sized by its own label at pickup).
+
+## Not queued (checked, found clean or deliberately left — standing rulings carried)
+
+- **PR estate:** zero open; #279/#278/#275 MERGED, `campaign_close.py`-clean
+  (authorkit gate clean on #275), remote branches verified gone.
+- **Worktrees/branches:** one worktree (primary), no stale locals; 3 stale
+  remote-tracking refs pruned (metadata only).
+- **ADR-0005 ticket claims:** zero open (#207, #189 both now CLOSED — the prior
+  standing exception has fully retired).
 - **`.gitignore` G1 WARNs** (`dist/`, `harness-audit-*/`): repeat, reviewed and
   accepted every firing. Recorded judgment, not a task.
-- **Friendlies allowlist:** current — single author kimgranlund, allow-listed; no
-  `needs-triage-approval` items.
-- **decision-watcher harvest queue (`adr-queue.json`):** empty and CORRECTLY so —
-  ADR-0011's ratification fired the impact detector, but its deliverable is already
-  executed (PR #222) and D9 rules the spec non-routable; no candidate owed.
-- **Checkpoint-bypass (prior entry 8):** ruled ACCEPTED AS ONE-OFF by Kim
-  (2026-08-14 mobilize round); re-litigate only on recurrence. Recorded, closed.
+- **Friendlies/held items:** all 20 issues by kimgranlund (allow-listed);
+  held-items.md empty; no unknown authors.
+- **Root entry-file freshness CI gate:** deliberate NO (Kim, 2026-08-15) — manual
+  sweep is the accepted mechanism; do not re-propose (ruling carried from prior
+  plan).
+- **Checkpoint-bypass:** accepted one-off (Kim, 2026-08-14); re-litigate only on
+  recurrence (ruling carried).
 
-## Resolved since the prior plan (2026-08-14, ~00:03Z sweep)
+## Resolved since the prior plan (2026-08-14, ~02:42Z sweep)
 
-- Prior entry 1 (orphaned worktree + branch) — DONE per session ruling; repo-cleaner
-  independently confirmed the estate clean this firing.
-- Prior entry 2 (commit that firing's ops artifacts) — RESOLVED: main clean/in-sync;
-  only this firing's own writes remain (entry 1 above).
-- Prior entry 3 (ADR-0011 stale spec path) — DONE at `6bcbfbe` while still proposed.
-- Prior entry 4 (ratify ADR-0011 + supersedes wiring) — RESOLVED: accepted at
-  `65efbf2`; naming-rules carries the dated supersession note (verified by
-  decision-watcher).
-- Prior entry 5 (estate `naming.manifest.json`) — RESOLVED: exists, landed via
-  #197 / PR #222 (verified by decision-watcher).
-- Prior entry 6 (#197 next state) — RESOLVED: Kim mobilized it; campaign executed
-  and merged as PR #222; #197 no longer open.
-- Prior entry 7 (chain-step records) — MOSTLY RESOLVED: steps 2/3/4 landed inside
-  PR #222 without separate records (acceptable — the work is the record's purpose);
-  step 6 carried as entry 3 above, UNMEASURED.
-- Prior entry 8 (checkpoint-bypass ruling) — RESOLVED: accepted one-off.
-- New since prior plan: issue #221 opened (queued as entry 2); PRs #219/#220/#222
-  merged and reaped clean.
-
-## Session verification appended (2026-08-14, mobilize round)
-
-- Entry 3 (ADR-0011 chain step 6): VERIFIED LANDED — validate.py emits exemption_burndown {count, notes} in --json output (validate.py:458), per-run count in human output (line 515), documented in authorkit/README.md. No gap.
-- Entry 1 (ops artifacts): DONE — committed 7dbacf5.
-
-## Ruling appended (2026-08-15, Kim)
-
-- Root entry-file freshness (README/CHANGELOG/CONTRIBUTING plugin counts and rows): **deliberate NO to a CI gate** — the periodic manual sweep is the accepted mechanism. Drift was repaired 642c63f (seven→eight catch-up); do not re-propose a root-docs gate check.
+- Prior entry 1 (commit ops artifacts) — DONE, committed 7dbacf5 (session note).
+- Prior entry 2 (#221 scheduling) — RESOLVED: issue closed; the prior 3-open-issue
+  state fully cleared between sweeps.
+- Prior entry 3 (ADR-0011 chain step 6) — VERIFIED LANDED (validate.py
+  exemption_burndown, session verification 2026-08-14).
+- New since prior plan: ADR-0012 ratified (PR #248); issue queue grew to 20 open
+  (all healthy); PRs #275/#278/#279 merged and reaped clean; adr-0012 harvest
+  candidate queued (entry 3).
