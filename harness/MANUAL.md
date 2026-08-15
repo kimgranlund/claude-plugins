@@ -35,8 +35,8 @@ Install, then `/reload-plugins`. Everything below is invoked as `/harness:<name>
 **`/clean-repo [repo path] [--phases 0-6 | audit-only]`** — the committing campaign for a drifted repo (where `/check-everything` only reports): phased inventory → unify duplicates → orphan manifest → schema + standing guards → audit verdicts → work-package execution → lessons distillation; human-checkpointed at every destructive step.
 > `/clean-repo .` · `/clean-repo ~/projects/app audit-only`
 
-**`/check-routing [plugin-root]`** — run the trigger-eval suites as a blind routing simulation: judges pick a skill from the description menu alone; you get a routing matrix and per-failure tuning targets (stolen / leaked / dead). Also model-invocable (1.41.0): "prove the routing after that description change" fires it without the slash.
-> `/check-routing .` — worth running after any description edit
+**`/check-routing [root] [--estate]`** — run the trigger-eval suites as a blind routing simulation: judges pick a skill from the description menu alone; you get a routing matrix and per-failure tuning targets (stolen / leaked / dead). Auto-detects the target: a plugin root (`skills/*/evals/`) or a project ESTATE — a plain repo with its own `.claude/skills/*/evals/` tree and no plugin manifest at all (e.g. agent-ui's own `.claude/`) — pass `--estate` to force the estate convention when both trees coexist under one root (issue #253). Also model-invocable (1.41.0): "prove the routing after that description change" fires it without the slash.
+> `/check-routing .` — worth running after any description edit · `/check-routing ~/projects/agent-ui --estate` — same proof for a non-plugin project estate
 
 **`/reshape-skill [manifest.json]`** — execute a validated plan-skill-split or plan-skill-merge manifest: plan shown for approval, files moved, old surfaces retired to an attic (never deleted), referrers rewritten, sweep proven (zero live references to retired handles).
 > `/reshape-skill split-manifest.json` — always after the decision skill's checker runs clean

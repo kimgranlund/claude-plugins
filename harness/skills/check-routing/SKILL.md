@@ -1,27 +1,36 @@
 ---
 name: check-routing
 description: >-
-  Run a plugin's trigger-eval suites as a blind routing simulation: a no-tools judge picks
-  from the description menu, then a routing matrix with tuning targets
-  (stolen/leaked/dead). Use to rerun the evals, or prove routing after a description edit. NOT
-  for authoring a suite's cases or live trigger debugging (skill-writing-rules); NOT for
-  judging a skill's content (check-skill); NOT for the release gate (ship-plugin).
+  Run a plugin's trigger-eval suites, or a project ESTATE's (no plugin manifest — a bare
+  `.claude/skills/*/evals/` tree, auto-detected), as a blind routing simulation: a no-tools
+  judge picks from the description menu, then a routing matrix with tuning targets
+  (stolen/leaked/dead). Use to rerun the evals, or prove routing after a description edit,
+  in either a plugin or a project estate. NOT for authoring a suite's cases or live trigger
+  debugging (skill-writing-rules); NOT for judging a skill's content (check-skill); NOT for
+  the release gate (ship-plugin).
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[plugin-root]"
+argument-hint: "[root] [--estate]"
 ---
 
 # check-routing
 
-check-routing answers one question per suite: **do the descriptions alone route these prompts to the right skill?** It is a routing simulation, not a harness test — real trigger behavior also depends on the live session, the 1% listing budget, and competing skills outside this plugin, so a clean run here is necessary, never sufficient. What it does prove: routing *confusions inside the family*, which is where description tuning actually operates. Root: `$ARGUMENTS` (default `.`).
+check-routing answers one question per suite: **do the descriptions alone route these prompts to the right skill?** It is a routing simulation, not a harness test — real trigger behavior also depends on the live session, the 1% listing budget, and competing skills outside the detected root, so a clean run here is necessary, never sufficient. What it does prove: routing *confusions inside the family*, which is where description tuning actually operates. Root: `$ARGUMENTS` (default `.`).
+
+Two target conventions, auto-detected from `<root>` — never a separate command, never a separate skill:
+
+- **Plugin** — `<root>/skills/*/evals/` (a `.claude-plugin/plugin.json` sibling is the usual signal but not required; the pre-existing behavior, unchanged).
+- **Project estate** — no `<root>/skills/` tree, but a project's own `.claude/skills/*/evals/` tree (the convention `overhaul-execute`/`overhaul-planning` rely on for a repo that isn't a plugin, e.g. agent-ui's own `.claude/` — issue #253). Pass `--estate` to force this convention on a root that happens to carry both.
+
+Everything past Phase 1 is convention-blind: a menu of name+description pairs and a judge that never learns which tree they came from.
 
 ## Phase 1 — Static gate
 
-`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/eval_check.py" <every skills/*/evals/evals.json>` and `--coverage <root>`. Any FAIL stops the run — executing a malformed suite produces numbers that mean nothing. Coverage warns are carried into the report, not fixed here.
+`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/eval_check.py" <every evals.json under the detected skills root>` and `--coverage <root> [--estate]` — the script does the same plugin-vs-estate detection (`detect_skills_root`) so this phase and Phase 2 always agree on which tree they're reading. Any FAIL stops the run — executing a malformed suite produces numbers that mean nothing, and E7 (neither convention found under `<root>`) is exactly that. Coverage warns (E6) are carried into the report, not fixed here.
 
 ## Phase 2 — The menu
 
-Build the router's world: every model-invocable skill's `name` + `description`, verbatim, from frontmatter — plus the entry **`none — no skill fires`**. Nothing else: no bodies, no this-conversation context, no knowledge of which suite is under test. The menu is the *only* information a judge receives, because it is the only information the real router has at discovery time.
+Build the router's world: every model-invocable skill's `name` + `description`, verbatim, from frontmatter, under the same detected skills root as Phase 1 (`<root>/skills/` for a plugin, `<root>/.claude/skills/` for an estate) — plus the entry **`none — no skill fires`**. Nothing else: no bodies, no this-conversation context, no knowledge of which suite is under test. The menu is the *only* information a judge receives, because it is the only information the real router has at discovery time. An estate has no single plugin name to load a menu from — the menu IS the estate's own skill set, discovered the same way.
 
 ## Phase 3 — Blind fan-out
 

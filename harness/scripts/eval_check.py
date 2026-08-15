@@ -2,9 +2,14 @@
 """eval_check — mechanical validation of trigger-eval suites (evals/evals.json).
 
 Usage:
-  eval_check.py <path/to/evals.json> [...]   validate suite files
-  eval_check.py --coverage <plugin-root>     every model-invocable skill carries a suite
-  eval_check.py selftest                     prove the counters bite
+  eval_check.py <path/to/evals.json> [...]       validate suite files
+  eval_check.py --coverage <root> [--estate]     every model-invocable skill carries a suite
+  eval_check.py selftest                         prove the counters bite
+
+--coverage auto-detects the target's skills root: a PLUGIN (root/skills/ present) is checked
+there; a project ESTATE (no root/skills/, but a root/.claude/skills/ tree) is checked at
+root/.claude/skills/* instead — same suite schema, same rules below, just a different skills
+root. Pass --estate to force the estate convention when both trees happen to coexist.
 
 Rules:
   E1 valid JSON object with `skill` and non-empty `cases`
@@ -12,7 +17,9 @@ Rules:
   E3 `skill` matches the suite's parent skill directory (a copied suite lies about its owner)
   E4 duplicate prompts across cases (WARN — one behavior, one case)
   E5 case-mix floor: >=5 trigger and >=3 no-trigger (WARN — thin suites tune nothing)
-  Coverage (--coverage): model-invocable skill without evals/evals.json -> WARN, listed
+  E6 (coverage) model-invocable skill without evals/evals.json -> WARN, listed
+  E7 (coverage) neither a plugin manifest nor a .claude/skills/ tree under root -> FAIL,
+     nothing to check
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -55,9 +62,32 @@ def check_suite_text(text, skill_dir_name):
     return findings
 
 
-def check_coverage(root: Path):
+def detect_skills_root(root: Path, force_estate: bool = False):
+    """Pick the skills root under `root` and name which convention it is.
+
+    Plugin: root/skills/ exists -> that (the pre-existing, unconditional convention —
+    no plugin.json read required). Estate: no root/skills/, but root/.claude/skills/
+    exists -> that instead (agent-ui's own layout — the fixed convention
+    overhaul-execute/overhaul-planning rely on; issue #253). --estate forces the estate
+    path even when root/skills/ also exists. Neither found -> (None, None), caller
+    reports E7.
+    """
+    if force_estate:
+        return root / ".claude" / "skills", "estate"
+    if (root / "skills").is_dir():
+        return root / "skills", "plugin"
+    if (root / ".claude" / "skills").is_dir():
+        return root / ".claude" / "skills", "estate"
+    return None, None
+
+
+def check_coverage(root: Path, force_estate: bool = False):
+    skills_root, mode = detect_skills_root(root, force_estate)
+    if skills_root is None:
+        return [("FAIL", "E7", f"{root}: no skills/ (plugin) and no .claude/skills/ (estate) "
+                                "found -> nothing to check")]
     findings = []
-    for sk in sorted(root.glob("skills/*/SKILL.md")):
+    for sk in sorted(skills_root.glob("*/SKILL.md")):
         fm = sk.read_text(encoding="utf-8", errors="replace").split("---")[1] if "---" in sk.read_text(encoding="utf-8", errors="replace") else ""
         m = re.search(r"disable-model-invocation:\s*(\w+)", fm)
         if m and m.group(1) == "true":
@@ -98,9 +128,28 @@ def selftest():
         r = Path(td); (r / "skills" / "a").mkdir(parents=True)
         (r / "skills" / "a" / "SKILL.md").write_text("---\nname: a\ndescription: x\ndisable-model-invocation: false\nuser-invocable: true\n---\nbody")
         assert any(f[1] == "E6" for f in check_coverage(r)), "uncovered model-invocable skill must warn E6"
+        assert detect_skills_root(r)[1] == "plugin", "root/skills/ present -> plugin convention"
         (r / "skills" / "a" / "evals").mkdir(); (r / "skills" / "a" / "evals" / "evals.json").write_text(good.replace("demo-review", "a"))
         assert not check_coverage(r), "covered skill must be clean"
-    print("eval_check selftest · PASS · schema, identity, mix, and coverage counters bite")
+    # Estate convention (issue #253): no root/skills/, but root/.claude/skills/ — same
+    # E6/clean behavior, discovered at the estate path instead.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        assert detect_skills_root(r) == (None, None), "neither convention present -> nothing detected"
+        assert any(f[1] == "E7" for f in check_coverage(r)), "neither convention present must FAIL E7"
+        (r / ".claude" / "skills" / "b").mkdir(parents=True)
+        (r / ".claude" / "skills" / "b" / "SKILL.md").write_text("---\nname: b\ndescription: x\ndisable-model-invocation: false\nuser-invocable: true\n---\nbody")
+        skills_root, mode = detect_skills_root(r)
+        assert mode == "estate" and skills_root == r / ".claude" / "skills", "estate convention must be found under .claude/skills/"
+        assert any(f[1] == "E6" for f in check_coverage(r)), "uncovered model-invocable skill must warn E6 (estate)"
+        (r / ".claude" / "skills" / "b" / "evals").mkdir(); (r / ".claude" / "skills" / "b" / "evals" / "evals.json").write_text(good.replace("demo-review", "b"))
+        assert not check_coverage(r), "covered skill must be clean (estate)"
+        # --estate forces the estate path even if a root/skills/ also exists alongside it.
+        (r / "skills" / "c").mkdir(parents=True)
+        (r / "skills" / "c" / "SKILL.md").write_text("---\nname: c\ndescription: x\ndisable-model-invocation: false\nuser-invocable: true\n---\nbody")
+        assert detect_skills_root(r, force_estate=True)[1] == "estate", "--estate must force the estate convention"
+        assert not any(f[1] == "E6" and "c:" in f[2] for f in check_coverage(r, force_estate=True)), "--estate must not see the plugin-side skill"
+    print("eval_check selftest · PASS · schema, identity, mix, and coverage (plugin/estate/--estate/E7) counters bite")
     return 0
 
 
@@ -111,9 +160,14 @@ if __name__ == "__main__":
     if args[0] == "selftest":
         sys.exit(selftest())
     if args[0] == "--coverage":
-        fs = check_coverage(Path(args[1]).resolve())
-        print(f"eval_check coverage · {'warn' if fs else 'clean'} · {args[1]}")
+        rest = args[1:]
+        force_estate = "--estate" in rest
+        roots = [a for a in rest if a != "--estate"]
+        root_arg = roots[0] if roots else "."
+        fs = check_coverage(Path(root_arg).resolve(), force_estate)
+        verdict = "FAIL" if any(f[0] == "FAIL" for f in fs) else ("warn" if fs else "clean")
+        print(f"eval_check coverage · {verdict} · {root_arg}")
         for sev, code, msg in fs:
             print(f"  {sev:5} {code}  {msg}")
-        sys.exit(0)
+        sys.exit(1 if verdict == "FAIL" else 0)
     sys.exit(run(args))
