@@ -118,3 +118,7 @@ via #197 / PR #222.)
 
 - Entry 3 (ADR-0011 chain step 6): VERIFIED LANDED — validate.py emits exemption_burndown {count, notes} in --json output (validate.py:458), per-run count in human output (line 515), documented in authorkit/README.md. No gap.
 - Entry 1 (ops artifacts): DONE — committed 7dbacf5.
+
+## Ruling appended (2026-08-15, Kim)
+
+- Root entry-file freshness (README/CHANGELOG/CONTRIBUTING plugin counts and rows): **deliberate NO to a CI gate** — the periodic manual sweep is the accepted mechanism. Drift was repaired 642c63f (seven→eight catch-up); do not re-propose a root-docs gate check.
