@@ -128,6 +128,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.6.1 · 2026-08-15 · save-lessons gains the make-reference fence (NOT authoring/reviewing the reference doc itself — this skill judges the bar, docs make-reference writes the doc) + reciprocal eval n14; the unfenced cross-plugin twin was found by authorkit attention-audit's first live run (PR #275 behavior check, score 42.3) — the collision the per-plugin eval runs structurally can't see
 v3.6.0 · 2026-08-15 · `check-routing` gains estate-mode (issue #253): `eval_check.py`'s `detect_skills_root()` auto-detects a project ESTATE (`.claude/skills/*/evals/`, no plugin manifest — agent-ui's own layout) alongside the existing plugin convention, `--estate` forces it, new E7 (neither convention found); same skill, same phases 3-5, only root discovery is new
 v3.5.4 · 2026-08-14 · release_gate's G8 allow-set gains `auto-merge` and `quick-build` (issue #244, ADR-0012): both are prose terms of art in teamwork's new quick-build path — `auto-merge` is also the literal `auto-merge: authorized` grant line dispatch-ticket greps for, so neither is renameable; standing suffix false-positive class (`-merge`/`-build`)
 v3.5.3 · 2026-08-14 · `plan-plugin-split`'s evals gain n08 (issue #245) — the reciprocal-fence mirror closing authorkit's `overhaul-planning` n05 steal from this suite's side; eval-only, no description change here (no steal measured in this direction)

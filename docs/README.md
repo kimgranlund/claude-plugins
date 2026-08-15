@@ -50,6 +50,7 @@ degrades to inline judgment when not. No hard edges cross the boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v1.4.8 · 2026-08-15 · make-reference gains the save-lessons fence (NOT whether a fact EARNS an entry — save-lessons judges the bar, this skill writes the doc) + reciprocal eval n12, and a W8 description diet back under the 700-char budget (triggers preserved verbatim); twin found by authorkit attention-audit's first live run (PR #275)
 v1.4.7 · 2026-08-13 · footer ledger regenerated to one line per version (issue #203) — governed by harness's plugin-writing-rules cap; no docs-side contract change
 v1.4.6 · 2026-08-13 · `file-bug` Phase 5 gains a verified teardown clause (issue #190, tracked from gen-ui-kit#1151)
 v1.4.5 · 2026-08-12 · `references/backend-resolver.md`'s `claim` operation row gains its first real caller (teamwork's `dispatch-ticket` Phase 3, issue #183/#184)

@@ -116,6 +116,12 @@
       "id": "n11",
       "prompt": "score this standalone rubric's anchors",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "Is this fact knowledge worth keeping, or just conversation noise — does it earn a durable entry?",
+      "expect": "no-trigger",
+      "note": "owner: harness save-lessons — judging the bar, not writing the doc; reciprocal fence, 2026-08-15 (attention-audit behavior run found the unfenced twin)"
     }
   ]
 }
