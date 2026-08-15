@@ -27,11 +27,11 @@
     "harness@nonoun-plugins": true,
     "docs@nonoun-plugins": true,
     "teamwork@nonoun-plugins": true,
-    "screens@nonoun-plugins": false,
-    "agent-protocols@nonoun-plugins": false,
-    "llm@nonoun-plugins": false,
-    "design@nonoun-plugins": false,
-    "authorkit@nonoun-plugins": true
+    "authorkit@nonoun-plugins": true,
+    "screens@nonoun-plugins": true,
+    "agent-protocols@nonoun-plugins": true,
+    "llm@nonoun-plugins": true,
+    "design@nonoun-plugins": true
   },
   "extraKnownMarketplaces": {
     "nonoun-plugins": {

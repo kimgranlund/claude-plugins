@@ -15,7 +15,9 @@ in prose drifts the moment the file it's describing changes underneath it. **Wor
 verified directly, this session's real stack:** `/Users/kimba/.claude/settings.json` (global,
 user-scoped) sets `model: "fable"` (line 5) and `effortLevel: "high"` (line 60) and registers a
 `PreToolUse` hook matching `Read|Bash` (lines 7-18) that applies across every project this user
-opens. `/Users/kimba/Projects/nonoun/agent-ui/.claude/settings.json` (project-scoped, checked into
+opens. *(Amended 2026-08-15: that global hook registration has since been retired — the user file
+now carries `permissions.deny` Read rules for `.env`/credential paths instead, and no `hooks` key.
+The layering claim itself is unchanged; only this instance moved layers.)* `/Users/kimba/Projects/nonoun/agent-ui/.claude/settings.json` (project-scoped, checked into
 that one repo) registers its OWN `PreToolUse`/`PostToolUse` hooks (lines 2-32) that apply only
 inside that repo. `/Users/kimba/Projects/nonoun/agent-ui/.claude/settings.local.json` (this one
 contributor's personal, gitignored override, same repo) adds `env` vars
@@ -34,7 +36,9 @@ matches runs; nothing overrides" (`harness/skills/hook-writing-rules/SKILL.md:32
 cited fully in deterministic-rules-vs-prompted-guidance). Concretely, in the stack above: the
 global `dotenv-guard.py` (`Read|Bash`) and the project's `adr-status-guard.py`/`
 bundle-size-reminder.sh`/`css-comment-guard.py` (`Edit|Write`) ALL fire in that repo — none
-silently disables another — while a scalar like `model` takes whichever single value the narrowest
+silently disables another — *(amended 2026-08-15: `dotenv-guard.py` was retired that day in favor
+of user-scope `permissions.deny` Read rules, so the live worked instance is now the project-scope
+hooks alone; the additive-merge mechanism claim stands as quoted)* — while a scalar like `model` takes whichever single value the narrowest
 scope that sets it declares. **Platform fact (verify against Claude Code's current settings
 documentation, since this is exactly the kind of table that drifts across versions):** the
 documented precedence order for scalar values runs enterprise-managed policy > CLI arguments >
