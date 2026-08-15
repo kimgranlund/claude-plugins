@@ -166,6 +166,14 @@
       "banned_aliases": []
     },
     {
+      "canonical": "attention",
+      "plural": null,
+      "banned_aliases": [
+        "menu-rent",
+        "context-tax"
+      ]
+    },
+    {
       "canonical": "bloat",
       "plural": null,
       "banned_aliases": [

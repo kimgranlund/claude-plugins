@@ -1,0 +1,9 @@
+date,plugin,routable_skills,routable_chars,zero_rent_skills,zero_rent_chars,agents,agent_chars,dead,stolen,leaked
+2026-08-15,agent-protocols,8,5268,0,0,0,0,absent,absent,absent
+2026-08-15,authorkit,9,4960,0,0,3,722,absent,absent,absent
+2026-08-15,design,22,17248,0,0,3,2205,absent,absent,absent
+2026-08-15,docs,14,6788,2,1009,3,2487,absent,absent,absent
+2026-08-15,harness,34,17797,14,6299,12,7436,absent,absent,absent
+2026-08-15,llm,9,4984,0,0,0,0,absent,absent,absent
+2026-08-15,screens,15,10892,0,0,3,2076,absent,absent,absent
+2026-08-15,teamwork,6,3283,7,4906,7,5526,absent,absent,absent
