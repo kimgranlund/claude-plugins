@@ -1,6 +1,6 @@
 {
   "skill": "physical-color-facts",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Re-derived 2026-07-06 for the physical-color-facts pack (extracted from color-science). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's 4 topic groups: paint mixing, print-vs-screen/ICC, naming systems, iridescence/Pointer's gamut. Negatives drawn adversarially from the other three color-*-facts siblings plus color-theory-facts and make-palette.",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Re-derived 2026-07-06 for the physical-color-facts pack (extracted from color-science). Positives span imperative/diagnostic/symptom/indirect phrasing across the pack's 4 topic groups: paint mixing, print-vs-screen/ICC, naming systems, iridescence/Pointer's gamut. Negatives drawn adversarially from the other three color-*-facts siblings plus color-theory-facts and make-palette. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
   "cases": [
     {
       "id": "t01",

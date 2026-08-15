@@ -1,18 +1,15 @@
 ---
 name: material-token-facts
 description: >-
-  Answers what a `--md-sys-{color,typescale,size,radius,space,inset,gap,border,focus-ring}-*` token
-  MEANS and when to reach for it. Use when
-  the user asks "what's the difference between surface-lowest and surface-lower", "what is the kicker
-  voice for", "when do I use -dim vs -low", "what's inset-card vs inset-panel", "what's the difference
-  between the scrim strengths", or "what does on-surface-variant mean". Covers the full token vocabulary of the three
-  Material-namespaced consumption guides (color/typography/geometry) as a semantic glossary. ANSWERS
-  meaning — not the binding grammar, recipes, pairing laws, or bind-check procedure: for those, load
-  the matching material-{color,type,shape}-facts skill. NOT for a raw hex/px value — "what's the
-  actual value behind this token" (the owning consumption skill); NOT for M3-vs-extension history —
-  "is this token M3 baseline or one of our extensions", "is surface-container M3 baseline" (each
-  sibling's own "Foundation vs. extension" table, e.g. material-color-facts for surface roles);
-  NOT for a non-Material `--{prefix}-*` kit (no owner — decline).
+  Answers what a `--md-sys-{color,typescale,size,radius,space,inset,gap,border,focus-
+  ring}-*` token MEANS. Use when the user asks "what's surface-lowest vs surface-lower",
+  "when do I use -dim vs -low", "what's the difference between the scrim strengths" —
+  semantic glossary across the color/typography/geometry consumption guides. ANSWERS
+  meaning only — not binding grammar, recipes, pairing laws, or bind-check: load the
+  matching material-{color,type,shape}-facts skill. NOT for a raw hex/px value (the
+  owning consumption skill); NOT for M3-vs-extension history — "is this token M3
+  baseline" (each sibling's own extension table); NOT for a non-Material `--{prefix}-*`
+  kit (decline).
 disable-model-invocation: false
 user-invocable: false
 ---

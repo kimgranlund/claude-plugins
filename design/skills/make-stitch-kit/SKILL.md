@@ -1,22 +1,15 @@
 ---
 name: make-stitch-kit
 description: >
-  Author, evaluate, or regenerate a Google Stitch DESIGN.md (single file: YAML
-  frontmatter tokens + 8 canonical markdown sections) for any theme or brand.
-  Use when asked to "create/author a Google Stitch DESIGN.md", "write a stitch
-  design-md file", "lint my DESIGN.md", "port my design system / tokens to
-  Stitch", "my DESIGN.md fails lint", or "why all these orphan warnings".
-  Covers the alpha frontmatter schema and {path.to.token} refs, canonical
-  section order + aliases, unknown-content tolerance, the prose philosophy (a
-  specific reference beats adjectives), OKLCH values, dark schemes as -dark
-  siblings + the primary compat alias, the --{prefix}-{family}-{slot} naming
-  grammar, and the lint gate (npx @google/design.md lint — zero errors,
-  expected-warning reading). NOT for DESIGN.md format Q&A — schema, the
-  -dark pairing law, section anatomy (design-md-rules); NOT for Claude Design bundles
-  (make-dscard-kit); NOT for Figma Make guidelines
-  (make-figma-make-kit); NOT for cross-platform strategy
-  (make-design-system); NOT for grading an export you didn't
-  author (design-system-checker agent).
+  Author, evaluate, or regenerate a Google Stitch DESIGN.md — YAML frontmatter tokens +
+  8 canonical sections. Use for "create a Google Stitch DESIGN.md", "lint my DESIGN.md",
+  "port tokens to Stitch", "why all these orphan warnings". Covers the alpha frontmatter
+  schema, section order, OKLCH values, -dark scheme siblings, the
+  --{prefix}-{family}-{slot} naming grammar, and the lint gate (npx @google/design.md
+  lint, zero errors). NOT for DESIGN.md format Q&A (design-md-rules); NOT for Claude
+  Design bundles (make-dscard-kit); NOT for Figma Make guidelines (make-figma-make-kit);
+  NOT for cross-platform strategy (make-design-system); NOT for grading an export you
+  didn't author (design-system-checker).
 disable-model-invocation: false
 user-invocable: true
 ---

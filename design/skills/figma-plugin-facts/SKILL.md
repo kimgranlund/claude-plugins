@@ -1,18 +1,15 @@
 ---
 name: figma-plugin-facts
 description: >
-  Answers Figma Plugin-API questions from battle-tested practice — variables, styles, sandbox,
-  interchange. Use for: variable collections/modes and raw→semantic ALIASING ("alias variables",
-  "removing a mode threw", "find-or-create without duplicates"), styles bound to variables
-  ("setBoundVariableForPaint", "text style ends up Inter Regular 12", "loadFontAsync can't find
-  the face", "which text fields bind"), sandbox/VM failures ("parses in Node, fails in Figma",
-  "catch without a param", "networkAccess none", "unit-test plugin code"), token JSON shapes
-  ("UI3 import format", "com.figma.modeName", "aliasData", "moded plan"), and
-  pluginData/clientStorage. ANSWERS, does not generate. NOT for the nonoun color-tokens plugin's
-  own binder/apply cascade — "the binder skipped roles when applying" (its repo-local
-  maintaining-figma-plugins); NOT the DESIGN.md format
-  (design-md-rules); NOT --md-sys-* semantics (material-design-*-tokens); NOT the Figma MCP
-  tools; NOT the REST API, widgets, or scene-node/layer work (not covered).
+  Answers Figma Plugin-API questions from practice — variables, styles, sandbox,
+  interchange. Use for raw→semantic ALIASING ("alias variables", "removing a mode
+  threw"), styles bound to variables ("setBoundVariableForPaint", "loadFontAsync can't
+  find the face"), sandbox/VM failures ("parses in Node, fails in Figma", "unit-test
+  plugin code"), token JSON shapes ("UI3 import", "aliasData"), and pluginData/
+  clientStorage. ANSWERS, does not generate. NOT the nonoun color-tokens plugin's
+  binder/apply cascade (repo-local maintaining-figma-plugins); NOT the DESIGN.md format
+  (design-md-rules); NOT --md-sys-* semantics (material-*-facts); NOT the Figma MCP
+  tools; NOT the REST API or scene-node work.
 user-invocable: false
 disable-model-invocation: false
 ---

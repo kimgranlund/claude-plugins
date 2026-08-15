@@ -1,24 +1,96 @@
 {
   "skill": "make-dscard-kit",
-  "note": "First suite for this skill (it shipped without one — a standing G7 warn). Authored 2026-07-08 during the design-md-author synthesis merge: positives combine dscard's original bundle-authoring triggers with the corpus-intake phrasings absorbed from design-md-author (whose flagship 'based on these css files…' now routes here). Negatives are the family fences: format Q&A (design-md-rules), Stitch (google-stitch), Make (figma-make), cross-platform (the hub), grading (design-system-checker), Material role semantics (material-design-*), palette design and token realization (design plugin seats).",
+  "note": "First suite for this skill (it shipped without one \u2014 a standing G7 warn). Authored 2026-07-08 during the design-md-author synthesis merge: positives combine dscard's original bundle-authoring triggers with the corpus-intake phrasings absorbed from design-md-author (whose flagship 'based on these css files\u2026' now routes here). Negatives are the family fences: format Q&A (design-md-rules), Stitch (google-stitch), Make (figma-make), cross-platform (the hub), grading (design-system-checker), Material role semantics (material-design-*), palette design and token realization (design plugin seats). #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
   "cases": [
-    { "id": "t01", "prompt": "create a Claude Design design-system bundle for our brand", "expect": "trigger" },
-    { "id": "t02", "prompt": "based on these css files create a design system for use in claude design and claude code", "expect": "trigger" },
-    { "id": "t03", "prompt": "make a DESIGN.md + tokens.json for Claude from our token exports", "expect": "trigger" },
-    { "id": "t04", "prompt": "generate @dsCard previews for our design system", "expect": "trigger" },
-    { "id": "t05", "prompt": "export our design system for Claude Code", "expect": "trigger" },
-    { "id": "t06", "prompt": "fix the dark scheme and on-colors in my claude design bundle", "expect": "trigger" },
-    { "id": "t07", "prompt": "turn this brand deck and these Figma exports into a DESIGN.md", "expect": "trigger" },
-    { "id": "t08", "prompt": "we have nothing but a one-line brief — build us a design system bundle for Claude", "expect": "trigger" },
-    { "id": "t09", "prompt": "regenerate the bundle, the tokens changed upstream", "expect": "trigger" },
-    { "id": "n01", "prompt": "what is the pairing law for on-colors?", "expect": "no-trigger" },
-    { "id": "n02", "prompt": "how open-ended can a DESIGN.md be? can I add a motion section?", "expect": "no-trigger" },
-    { "id": "n03", "prompt": "write a Google Stitch DESIGN.md for our brand", "expect": "no-trigger" },
-    { "id": "n04", "prompt": "build the Figma Make guidelines folder", "expect": "no-trigger" },
-    { "id": "n05", "prompt": "port our design system to Claude, Stitch, and Make", "expect": "no-trigger" },
-    { "id": "n06", "prompt": "review the design system export the other team generated", "expect": "no-trigger" },
-    { "id": "n07", "prompt": "which --md-sys-color role should this button use?", "expect": "no-trigger" },
-    { "id": "n08", "prompt": "design an OKLCH ramp from our brand anchor", "expect": "no-trigger" },
-    { "id": "n09", "prompt": "add hover and focus state tokens to the repo's token layer", "expect": "no-trigger" }
+    {
+      "id": "t01",
+      "prompt": "create a Claude Design design-system bundle for our brand",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "based on these css files create a design system for use in claude design and claude code",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "make a DESIGN.md + tokens.json for Claude from our token exports",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "generate @dsCard previews for our design system",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "export our design system for Claude Code",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "fix the dark scheme and on-colors in my claude design bundle",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "turn this brand deck and these Figma exports into a DESIGN.md",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "we have nothing but a one-line brief \u2014 build us a design system bundle for Claude",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "regenerate the bundle, the tokens changed upstream",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "what is the pairing law for on-colors?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "how open-ended can a DESIGN.md be? can I add a motion section?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "write a Google Stitch DESIGN.md for our brand",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "build the Figma Make guidelines folder",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "port our design system to Claude, Stitch, and Make",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "review the design system export the other team generated",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "which --md-sys-color role should this button use?",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "design an OKLCH ramp from our brand anchor",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "add hover and focus state tokens to the repo's token layer",
+      "expect": "no-trigger"
+    }
   ]
 }

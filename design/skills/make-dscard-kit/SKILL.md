@@ -1,21 +1,15 @@
 ---
 name: make-dscard-kit
 description: >
-  Author, evaluate, or regenerate a Claude Design / Claude Code design-system export
-  bundle — DESIGN.md + tokens.json + @dsCard previews — from a corpus (css, tokens,
-  code, brand decks) or a brief. Use when asked to "create a Claude Design
-  design-system bundle", "based on these css files create a design system for use in
-  claude design and claude code", "make a DESIGN.md + tokens.json for Claude",
-  "generate @dsCard previews", "export our design system for Claude Code", or "fix
-  the dark scheme / on-colors in my Claude design bundle". Covers corpus census, Root
-  Brand Architecture, the universal dialect and token grammar, OKLCH frontmatter,
-  light-dark(), the reduction discipline, and gates with count-exact contrast
-  disclosure. NOT for format Q&A or extending a section of an existing
-  DESIGN.md (design-md-rules); NOT for
-  Stitch exports (make-stitch-kit); NOT for Make guidelines
-  (make-figma-make-kit); NOT for cross-platform strategy
-  (make-design-system); NOT for grading an export you didn't author
-  (design-system-checker).
+  Author, evaluate, or regenerate a Claude Design / Claude Code export bundle —
+  DESIGN.md + tokens.json + @dsCard previews — from a corpus (css, tokens, code, brand
+  decks). Use for "create a Claude Design design-system bundle", "based on these css
+  files create a design system for claude design and claude code", "fix the dark scheme
+  in my Claude design bundle". Covers corpus census, Root Brand Architecture, token
+  grammar, OKLCH, light-dark(), and contrast disclosure. NOT format Q&A (design-md-
+  rules); NOT Stitch exports (make-stitch-kit); NOT Make guidelines (make-figma-make-
+  kit); NOT cross-platform strategy (make-design-system); NOT grading an export you
+  didn't author (design-system-checker).
 disable-model-invocation: false
 user-invocable: true
 ---

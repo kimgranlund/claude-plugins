@@ -1,6 +1,6 @@
 {
   "skill": "material-token-facts",
-  "note": "Glossary skill: what a --md-sys-* token MEANS and when to reach for it. Fences: the three consumption siblings own binding/recipes/values for their axis (color/typography/geometry), motion-tokens owns easing/duration, raw values route to the owning consumption skill, non-Material prefixes have no owner here.",
+  "note": "Glossary skill: what a --md-sys-* token MEANS and when to reach for it. Fences: the three consumption siblings own binding/recipes/values for their axis (color/typography/geometry), motion-tokens owns easing/duration, raw values route to the owning consumption skill, non-Material prefixes have no owner here. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
   "cases": [
     {
       "id": "t01",
@@ -34,7 +34,7 @@
     },
     {
       "id": "t07",
-      "prompt": "What does --md-sys-color-on-primary-variant actually mean — when would I reach for it?",
+      "prompt": "What does --md-sys-color-on-primary-variant actually mean \u2014 when would I reach for it?",
       "expect": "trigger"
     },
     {
@@ -46,25 +46,25 @@
       "id": "n01",
       "prompt": "Which color token for this button's background?",
       "expect": "no-trigger",
-      "note": "material-color-facts — choosing a token for a concrete build, not asking what one means"
+      "note": "material-color-facts \u2014 choosing a token for a concrete build, not asking what one means"
     },
     {
       "id": "n02",
       "prompt": "What type token should this menu item use?",
       "expect": "no-trigger",
-      "note": "material-type-facts — consumption"
+      "note": "material-type-facts \u2014 consumption"
     },
     {
       "id": "n03",
       "prompt": "What padding token for a dense table row?",
       "expect": "no-trigger",
-      "note": "material-shape-facts — consumption"
+      "note": "material-shape-facts \u2014 consumption"
     },
     {
       "id": "n04",
       "prompt": "What's the actual value behind --md-sys-radius-card?",
       "expect": "no-trigger",
-      "note": "raw value — the owning consumption skill (geometry), per this skill's own fence"
+      "note": "raw value \u2014 the owning consumption skill (geometry), per this skill's own fence"
     },
     {
       "id": "n05",
@@ -76,7 +76,7 @@
       "id": "n06",
       "prompt": "What does --c-surface mean in our default kit?",
       "expect": "no-trigger",
-      "note": "non-Material prefix — no owner in this plugin (design plugin's color-tokens); decline per fence"
+      "note": "non-Material prefix \u2014 no owner in this plugin (design plugin's color-tokens); decline per fence"
     },
     {
       "id": "n07",
@@ -88,7 +88,7 @@
       "id": "n08",
       "prompt": "Which scrim strength for a drawer?",
       "expect": "no-trigger",
-      "note": "a choosing ask for a concrete surface — color-tokens' consumption territory (same grammar as n01); this glossary owns what the strengths MEAN (ruled 2026-07-14, check-routing round 1)"
+      "note": "a choosing ask for a concrete surface \u2014 color-tokens' consumption territory (same grammar as n01); this glossary owns what the strengths MEAN (ruled 2026-07-14, check-routing round 1)"
     }
   ]
 }
