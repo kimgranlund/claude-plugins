@@ -9,6 +9,7 @@
     {"canonical": "harness", "plural": null, "banned_aliases": []}
   ],
   "brand_tokens": [],
+  "author_registry_note": "Flat list of plain strings only, e.g. [\"kim.granlund\", \"jane\"] — one entry per estate committer, matching the value each artifact's own frontmatter `author` field carries. A structured entry (e.g. {\"name\": ..., \"emails\": [...]}) is NOT supported and fails the validator cleanly (issue #252) rather than silently guessing which field is the author.",
   "author_registry": [],
   "mutating_no_confirm_allowlist": [],
   "exemptions": []
