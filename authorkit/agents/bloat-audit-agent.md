@@ -4,11 +4,12 @@ kind: agent
 description: Batch busy-work sweeps — audits N skills, plugins, or corpuses in an isolated context and aggregates one cross-corpus report. Delegate to it when a sweep would pollute the working session's context. Read-only; reports, never rewrites.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-13
+last_updated: 2026-08-15
 performs: bloat-audit
 requires: [bloat-audit]
 autonomous_write: false
 context: isolated
+model: sonnet
 tools: Read, Glob, Grep, Bash(python3 */scripts/measure.py *)
 ---
 
