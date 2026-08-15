@@ -5,7 +5,9 @@ description: >-
   ("what should we name this skill", "what should I call it"), simplifying a name ("too vague",
   "plain English", "five-year-old simple"), reviewing names, contrasting similar siblings, or a
   skill↔agent pair. NOT for legacy estate grammar (agent-writing-rules); NOT for executing
-  renames (big-change-git-rules); NOT for plugin partitioning (plan-plugin-split).
+  renames (big-change-git-rules); NOT for plugin partitioning (plan-plugin-split); NOT for
+  judging a name against the estate's ADR-0011 grammar or frontmatter/tool-grant schema
+  (authorkit's naming-conventions).
 disable-model-invocation: false
 user-invocable: false
 ---

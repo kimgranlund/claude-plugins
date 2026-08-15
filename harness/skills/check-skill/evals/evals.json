@@ -63,6 +63,12 @@
       "prompt": "Which skills tax Claude's performance the most? Audit the estate's menu rent and give retire-or-merge candidates.",
       "expect": "no-trigger",
       "comment": "owner: authorkit attention-audit (estate attention economy, not one skill's content) — reciprocal fence, 2026-08-15"
+    },
+    {
+      "id": "n08",
+      "prompt": "Is this skill too long or over-specified for what it actually does?",
+      "expect": "no-trigger",
+      "comment": "owner: authorkit bloat-audit — length/ceremony proportionality, not content correctness or routing fidelity; reciprocal fence, 2026-08-15 (issue #282)"
     }
   ]
 }

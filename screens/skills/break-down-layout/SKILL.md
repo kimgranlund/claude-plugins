@@ -10,7 +10,8 @@ description: >-
   giant stacked column". NOT for visual or color design (the color-*-facts packs / lettering-facts), production
   CSS/component code, or copywriting — structure + interaction only; NOT for the cross-screen journey
   (break-down-flow — this owns within-screen); NOT for the whole-product sweep (check-whole-ui); NOT for naming a
-  pattern in the abstract (ui-pattern-facts — needs a concrete UI or intent).
+  pattern in the abstract (ui-pattern-facts — needs a concrete UI or intent); NOT for abstract system,
+  technical, or goal decomposition with no concrete screen (harness's break-down-problem).
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -7,7 +7,8 @@ description: >
   to task size, and prose that spends words without buying instruction-
   following value. Use when asked to audit or review a skill/agent/plugin
   for verbosity, bloat, heavy-handedness, "does this need to be this long",
-  or busy-work root causes. Read-only: reports, never rewrites.
+  or busy-work root causes. Read-only: reports, never rewrites. NOT for a skill's content
+  correctness, routing fidelity, or standards compliance (harness's check-skill).
 author: kim
 created: 2026-08-13
 last_updated: 2026-08-13

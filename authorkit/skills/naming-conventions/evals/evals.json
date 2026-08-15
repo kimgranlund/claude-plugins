@@ -13,7 +13,7 @@
     {"id": "n02", "prompt": "Propose a conforming rename for this violating artifact and its blast radius.", "expect": "no-trigger", "comment": "owner: rename-planning"},
     {"id": "n03", "prompt": "Seed a naming.manifest.json for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
     {"id": "n04", "prompt": "Find busy-work and over-specification in this skill's body.", "expect": "no-trigger", "comment": "owner: bloat-audit"},
-    {"id": "n05", "prompt": "What should we name this brand-new plugin?", "expect": "no-trigger", "comment": "owner: harness:naming-rules — cross-plugin fence; authorkit is disabled here on purpose so this never actually collides live, but the suite states the boundary anyway"},
+    {"id": "n05", "prompt": "What should we name this brand-new plugin?", "expect": "no-trigger", "comment": "owner: harness:naming-rules — cross-plugin fence; authorkit is disabled here on purpose so this never actually collides live, but the suite states the boundary anyway. Reciprocal fence formalized on the description surface 2026-08-15 (issue #282) — this eval case already existed and needed no new case, only the SKILL.md NOT-clause was missing."},
     {"id": "n06", "prompt": "How should I sequence renames when migrating a legacy, ungoverned estate?", "expect": "no-trigger", "comment": "owner: overhaul-planning — estate-wide overhaul/campaign ask, not one artifact's migration rule; confirmed 3-of-3 steal during #229/PR #230's check-routing run, fenced here by the NOT-for boundary (issue #231)"}
   ]
 }
