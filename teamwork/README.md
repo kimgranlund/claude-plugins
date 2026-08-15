@@ -83,6 +83,8 @@ mint.
 
 Directories align with plugin names (ADR-0007).
 
+## Version ledger
+
 v2.12.1 · 2026-08-14 · `dispatch-ticket` Phase 3's "Isolate second" bullet had a corrupted/truncated sentence (#249): "All four hold → build directly in the claim/write-back contract stays mandatory regardless" was missing its clause. Restored to "build directly in the host checkout; the claim/write-back contract stays mandatory regardless" — matches the phrase already used verbatim at Phase 5 stage 3. Grammar fix only, no behavior change, critic pass skipped per the ticket
 v2.12.0 · 2026-08-14 · quick-build auto-merge (#244, ADR-0012 proposed, lld-0002 v0.2.1): `dispatch-ticket` Phase 5 gains stage 2b — on an explicit `auto-merge: authorized` grant plus an all-green fail-closed QB0–QB7 predicate (QB4 an ALLOW-list, so an unlisted file class is ineligible by construction), the seat watches CI under a feature-detected 900s bound (GNU timeout is absent on darwin), squash-merges, SHA-verifies MERGED, runs `campaign_close.py`, then posts a dated QB snapshot; any miss falls back to PR-opened. Critic, gates, CI and the PR are never skipped
 v2.11.0 · 2026-08-13 · `mobilize-chores` gains the `Blocked-by: #NN` dependency convention (issue #193) as a third, independent step-2 exclusion plus step-6 blocked-and-why reporting; canonical format documented in new `references/blocked-by-convention.md`; harness's `chore-planner` (own bump) reads the same convention via a new preloaded skill; #197 migrated as the first real data
