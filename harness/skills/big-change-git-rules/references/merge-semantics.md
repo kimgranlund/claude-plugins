@@ -41,6 +41,31 @@ ten-branch incident's failure mode, reincarnated through an auth-path seam inste
 quirk. Fixed by routing both the existence check and the delete through the same authenticated
 path when `--repo` is supplied (forge 1.30.0, `ce05fcb`).
 
+## Squash-merging a parent with `--delete-branch` auto-closes its stacked children
+
+[incident, 2026-08-16, PR #437 auto-closed as child of #424, re-opened as PR #439] In a stacked
+PR chain (a child PR's base branch is the PARENT's campaign branch, not `main`), squash-merging
+the parent with `--delete-branch` makes GitHub auto-CLOSE every open child PR whose base was that
+now-deleted branch — and a PR closed this way, with its base branch gone, cannot be reopened
+cleanly; it must be re-created as a new PR number (#437 became #439). Squash-merge also orphans
+the child's own copy of the parent's commits (the parent's commits on the child branch are not
+the same commits as the one squashed commit now on `main`), so a base retarget alone is not
+enough — the child needs its history rebuilt against `main`, not just repointed at it.
+
+**The rule for closing out a stacked chain, in order:**
+
+1. Merge the parent (squash is fine).
+2. Retarget every open child PR's base to `main`.
+3. Rebase each child onto the parent's new squashed commit: `git rebase --onto origin/main
+   <parent-old-tip> <child-branch>` — this drops the child's now-duplicate copies of the
+   parent's commits and replays only the child's own commits on top of `main`.
+4. Only THEN delete the parent's branch (`campaign_close.py`'s C2, or `--delete-branch`) — deleting
+   it before step 2–3 is what triggers the auto-close.
+
+Skipping the retarget-and-rebase and merging/deleting the parent first is the failure mode; doing
+the rebase after the auto-close still recovers the work, but costs a PR renumbering and a lost
+PR-comment thread.
+
 ## Failure catalog
 
 | Symptom | Cause | Fix |
@@ -48,3 +73,4 @@ path when `--repo` is supplied (forge 1.30.0, `ce05fcb`).
 | A worktree campaign branch survives on the remote after a reported successful merge | `gh`'s delete step failed silently — the ten-branch class | `campaign_close.py <pr> [--repo ...]`; never trust the merge command's own report |
 | A branch check reports "already absent" but was never actually deleted | mismatched auth paths between the existence check and the delete (private repo, `--repo` invocation) | ensure both operations use the same authenticated client |
 | A merge looked clean locally but CI is red on the PR | local and CI environments/state diverged | CI is the gate — do not treat a local pass as sufficient |
+| A stacked chain's child PR auto-closes right after the parent merges, and can't be reopened | parent's branch (the child's base) got deleted before the child was retargeted+rebased | retarget child to `main` + `git rebase --onto origin/main <parent-old-tip>` BEFORE deleting the parent branch; if already closed, re-create as a new PR |

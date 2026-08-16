@@ -22,13 +22,23 @@ incident on every one of them — ten stale remote branches accumulated before a
             silent-failure class (incident 2026-07-26, issue #102: one instant read false-FAILed
             a deletion that had already succeeded, teaching the reader to shrug at C2)
   C3 [WARN] any named gate root (--gate, repeatable) is not release_gate-clean at HEAD
+  C4 [WARN] the branch about to be deleted has no other OPEN PR still using it as a base —
+            a stacked-PR incident (2026-08-16, PR #437 auto-closed as child of #424 the moment
+            its parent branch was deleted, re-opened as PR #439): GitHub auto-closes a child PR
+            the instant its base branch disappears, and a PR closed that way cannot be reopened
+            cleanly. The fix is retarget-the-child-to-main + `git rebase --onto origin/main
+            <parent-old-tip>` BEFORE the parent branch is deleted (harness's
+            `big-change-git-rules/references/merge-semantics.md` carries the full rule) — C4
+            only WARNS (never blocks the delete) because a false positive here must never strand
+            a branch that genuinely has no children left.
 
-The three checks are pure functions (`verify_*`) fed by real `gh`/`git` calls in `run()` —
+The four checks are pure functions (`verify_*`) fed by real `gh`/`git` calls in `run()` —
 selftest proves the checks bite on fixture inputs, never on live network state; the negative
 control is exactly C2's "still present after delete" case, the incident this script encodes.
 
-Exit 0 all clean, 1 on any FAIL (C3 warns, never fails — a red gate is the owner's call, not a
-reason to leave a branch dangling).
+Exit 0 all clean, 1 on any FAIL (C3 and C4 warn, never fail — a red gate is the owner's call, not
+a reason to leave a branch dangling, and an open child PR is the operator's call to retarget and
+rebase, not a reason to refuse a delete that may genuinely have no children left).
 """
 import json
 import subprocess
@@ -76,6 +86,19 @@ def verify_branch_deleted(existed_before: bool, exists_after: bool, branch: str,
     return True, f"{branch} deleted and reverified gone{lag}"
 
 
+def verify_no_open_children(child_prs: list, branch: str):
+    """child_prs: list of {'number': int, ...} from `gh pr list --base <branch> --state open
+    --json number`. Never fails the run — a false positive here (a stale base that no longer
+    actually matters) must never strand a branch; it only warns so the operator retargets+rebases
+    the children (merge-semantics.md's stacked-PR rule) before deleting the parent branch."""
+    if not child_prs:
+        return True, f"no open PR uses {branch} as its base"
+    numbers = ", ".join(f"#{p['number']}" for p in child_prs)
+    return False, (f"open PR(s) {numbers} still use {branch} as their base -> deleting it now "
+                    "auto-closes them (2026-08-16 incident, PR #437->#439); retarget each to "
+                    "main + `git rebase --onto origin/main <parent-old-tip>` BEFORE deleting")
+
+
 def verify_gate_clean(gate_output_returncode: int, root: str):
     if gate_output_returncode != 0:
         return False, f"{root} is not release_gate-clean at HEAD -> fix before the next campaign"
@@ -90,6 +113,19 @@ def _gh_json(args, repo=None):
     if r.returncode != 0:
         raise RuntimeError(f"gh {' '.join(args)} failed: {r.stderr.strip()}")
     return json.loads(r.stdout)
+
+
+def _open_child_prs(branch: str, repo: str = None) -> list:
+    cmd = ["gh", "pr", "list", "--base", branch, "--state", "open", "--json", "number"]
+    if repo:
+        cmd += ["--repo", repo]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        return []  # non-fatal: C4 is a warn-only check, never block C2's delete on a lookup failure
+    try:
+        return json.loads(r.stdout)
+    except (ValueError, TypeError):
+        return []
 
 
 def _remote_branch_exists(branch: str, repo: str = None) -> bool:
@@ -143,6 +179,9 @@ def run(pr_number: str, repo=None, gate_roots=None):
         return 1
 
     branch = pr["headRefName"]
+    ok, msg = verify_no_open_children(_open_child_prs(branch, repo), branch)
+    findings.append(("C4", ok, msg))  # C4 never flips ok_all — warn, never block the delete
+
     existed_before = _remote_branch_exists(branch, repo)
     if existed_before:
         del_cmd = ["gh", "api", "-X", "DELETE", f"repos/{repo}/git/refs/heads/{branch}"] if repo else \
@@ -169,10 +208,11 @@ def run(pr_number: str, repo=None, gate_roots=None):
 
 
 def _report(findings):
-    verdict = "FAIL" if any(not ok and code != "C3" for code, ok, _ in findings) else "clean"
+    warn_only = ("C3", "C4")
+    verdict = "FAIL" if any(not ok and code not in warn_only for code, ok, _ in findings) else "clean"
     print(f"campaign_close · {verdict}")
     for code, ok, msg in findings:
-        sev = "ok  " if ok else ("WARN" if code == "C3" else "FAIL")
+        sev = "ok  " if ok else ("WARN" if code in warn_only else "FAIL")
         print(f"  {sev} {code}  {msg}")
 
 
@@ -233,16 +273,25 @@ def selftest():
     pr, repo, roots = parse_args(["42"])
     assert (pr, repo, roots) == ("42", None, []), "a bare PR number must parse with no flags"
 
+    # C4 — the 2026-08-16 stacked-PR incident (#437 auto-closed as child of #424, re-opened as
+    # #439): an open child PR based on the branch about to be deleted must WARN, never FAIL.
+    ok, msg = verify_no_open_children([{"number": 437}], "campaign-branch")
+    assert not ok and "#437" in msg and "auto-closes" in msg, \
+        "an open child PR on this base must be named in the warning"
+    ok, msg = verify_no_open_children([], "campaign-branch")
+    assert ok, "no open children must pass cleanly"
+
     # C3
     ok, msg = verify_gate_clean(1, "screens")
     assert not ok and "not release_gate-clean" in msg, "a red gate must be named, not swallowed"
     ok, _ = verify_gate_clean(0, "screens")
     assert ok, "a clean gate must pass"
 
-    print("campaign_close selftest · PASS · merge/delete/gate checks bite, incl. the ten-branch "
-          "silent-delete-failure negative control, the #102 async-propagation race (lag "
-          "resolves ok and is disclosed; a stranded branch still fails after the window), and "
-          "the #188 parser controls (unknown token and dangling flag rejected, never swallowed)")
+    print("campaign_close selftest · PASS · merge/delete/gate/stacked-children checks bite, incl. "
+          "the ten-branch silent-delete-failure negative control, the #102 async-propagation race "
+          "(lag resolves ok and is disclosed; a stranded branch still fails after the window), "
+          "the #188 parser controls (unknown token and dangling flag rejected, never swallowed), "
+          "and the 2026-08-16 stacked-PR C4 warning (#437->#439)")
     return 0
 
 
