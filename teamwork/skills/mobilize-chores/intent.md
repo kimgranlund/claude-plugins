@@ -10,8 +10,8 @@ should:      ["/mobilize-chores", "sweep and build whatever's ready", "work the 
 should_not:  ["/sweep-chores", "what's in the ops queue?"]
 
 ## delta
-Today `/sweep-chores` produces `.claude/ops/plan.md` (a prioritized queue via chore-lead ->
-chore-planner) and stops — nothing acts on it. A human must separately read the queue, judge
+Today `/sweep-chores` produces `.claude/ops/plan.md` (a prioritized queue via its own fan-out ->
+chore-planner, issue #266) and stops — nothing acts on it. A human must separately read the queue, judge
 what's build-ready, and manually invoke the right dispatch per item. `mobilize-chores` closes that
 gap: after the sweep, it reads the queue, filters to genuinely mobilizable tickets, gets one
 batched confirm — a human `AskUserQuestion` round (interactive), or, with a leading `auto` token

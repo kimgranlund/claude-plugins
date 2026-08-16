@@ -35,10 +35,13 @@ its own bundled scripts) could technically reach the real `.claude/ops/...` path
 scratch-only rule is contract, not a tool wall, and binds regardless of what `Bash` alone would
 allow.
 
-**Dispatching session** (`chore-lead`, when a seat runs inside its sweep; a direct host dispatch,
-otherwise) — reads every fenced, target-pathed block in a returned report and `Write`s each one to
-its named path verbatim, never edited or re-derived. `chore-lead`'s own `tools` grants `Write` for
-exactly this purpose — applying an already-computed payload, never authoring content of its own.
+**Dispatching session** (`/sweep-chores`'s own procedure, when a seat runs inside its sweep — issue
+#266 retired the `chore-lead` coordinator agent that used to hold this role, porting its
+choreography into that skill directly, via `scripts/chore_sweep_apply.mjs`; a direct host
+dispatch, otherwise) — reads every fenced, target-pathed block in a returned report and writes
+each one to its named path verbatim, never edited or re-derived. `/sweep-chores`'s own
+`allowed-tools` grants `Write` (plus the scoped `Bash` call to that script) for exactly this
+purpose — applying an already-computed payload, never authoring content of its own.
 A report that claims IN PROSE to have written, emitted, or produced a `.claude/ops/...`-shaped
 path, with no matching fenced block backing the claim, is a **narrated-but-absent** write — a
 contract violation, not "nothing changed" (issue #140: a live sweep found a seat narrating a write

@@ -16,7 +16,7 @@
     { "id": "n02", "prompt": "Clean up the stale branches and remove the dead worktrees.", "expect": "no-trigger", "comment": "owner: repo-cleaner (executes; check-state only proposes)" },
     { "id": "n03", "prompt": "Is the plugin estate healthy? Run the health sweep.", "expect": "no-trigger", "comment": "owner: /check-everything (plugin health, not work state)" },
     { "id": "n04", "prompt": "File this as a follow-up task so we don't lose it.", "expect": "no-trigger", "comment": "owner: file-task" },
-    { "id": "n05", "prompt": "Run the whole ops sweep — dispatch all the standing seats.", "expect": "no-trigger", "comment": "owner: /sweep-chores (chore-lead)" },
+    { "id": "n05", "prompt": "Run the whole ops sweep — dispatch all the standing seats.", "expect": "no-trigger", "comment": "owner: /sweep-chores" },
     { "id": "n06", "prompt": "Triage the new issues that came in overnight.", "expect": "no-trigger", "comment": "owner: issue-sorter" },
     { "id": "n07", "prompt": "What's the status of this one PR — is #42 ready to merge?", "expect": "no-trigger", "comment": "single-item question; plain gh lookup, no report needed. Fenced 2026-08-12 (#173) with a NOT-single-PR/issue clause on the description, per the 2026-08-12 check-routing leak (row n07, harness-audit-2026-08-11/routing/report.md)" },
     { "id": "n08", "prompt": "Write the release report artifact for this session.", "expect": "no-trigger", "comment": "owner: session-review-artifact" },

@@ -1,0 +1,79 @@
+{
+  "skill": "sweep-chores",
+  "note": "New eval suite — issue #266 moved this skill from disable-model-invocation:true (command-only, no suite by definition) to a 'both' procedural skill (disable-model-invocation:false, user-invocable:true, matching check-state/what-shipped's own species) so it's directly Skill-tool-reachable cross-plugin by teamwork's mobilize-chores. Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Run the whole ops sweep — dispatch all the standing seats.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Sweep the ops queue for this repo — intake, ADR review, and repo hygiene.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Fan out decision-watcher, issue-sorter, and repo-cleaner and give me the prioritized queue.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Do a repo hygiene sweep only — skip the other two seats.",
+      "expect": "trigger",
+      "comment": "re-judged 2026-08-16 (coordinator boundary check, PR #307): flipped to none once, 2-of-3 vote held sweep-chores — single-judge noise; the scoped-ask Use-clause vs single-seat NOT-clause tension is the marginal edge, watch on future runs"
+    },
+    {
+      "id": "t05",
+      "prompt": "Run the ops-family sweep now.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Check for new ADR decisions, intake triage, and repo hygiene all at once and roll it into one queue.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Sweep the ops queue AND drive any buildable tickets to a real build.",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork mobilize-chores (adds the build step this skill deliberately never takes)"
+    },
+    {
+      "id": "n02",
+      "prompt": "What should I work on first in the ops backlog?",
+      "expect": "no-trigger",
+      "comment": "owner: chore-planner standalone (no fresh sweep, plans from durable state)"
+    },
+    {
+      "id": "n03",
+      "prompt": "Just check for any new ratified ADR decisions worth a knowledge-pack entry.",
+      "expect": "no-trigger",
+      "comment": "owner: decision-watcher direct — one seat's own job, no sweep intent"
+    },
+    {
+      "id": "n04",
+      "prompt": "Triage the new issues that came in overnight.",
+      "expect": "no-trigger",
+      "comment": "owner: issue-sorter / /sort-issues direct — one seat's own job"
+    },
+    {
+      "id": "n05",
+      "prompt": "Clean up the stale branches and remove the dead worktrees.",
+      "expect": "no-trigger",
+      "comment": "owner: repo-cleaner direct — one seat's own job, executes rather than reports"
+    },
+    {
+      "id": "n06",
+      "prompt": "What's the state of the project? Give me a status overview of everything in flight.",
+      "expect": "no-trigger",
+      "comment": "owner: check-state — point-in-time work-state report, not the ops-family sweep"
+    },
+    {
+      "id": "n07",
+      "prompt": "File this bug I just found.",
+      "expect": "no-trigger",
+      "comment": "owner: docs file-bug — single-item intake, no sweep intent"
+    }
+  ]
+}

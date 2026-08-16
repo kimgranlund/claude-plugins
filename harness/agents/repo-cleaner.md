@@ -10,7 +10,7 @@ description: |
   no host-repo script, orphaned PRs, a stale claim — is always a proposed plan, never a mutation. Fired via session-scoped `CronCreate` (re-armed per work session, not
   a durable crontab) or dispatched directly to triage a specific mess. NOT for filing/triaging a
   NEW feature/bug/ticket (`issue-sorter`); NOT for instruction-tree or corpus drift
-  (`/clean-repo`); NOT for the whole-family sweep (`chore-lead`) or prioritizing the ops backlog
+  (`/clean-repo`); NOT for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog
   (`chore-planner`).
 model: sonnet
 effort: high

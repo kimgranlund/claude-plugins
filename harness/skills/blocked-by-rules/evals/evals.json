@@ -11,7 +11,7 @@
     { "id": "n01", "prompt": "what's the exact format of a Blocked-by line, and how do I write one", "expect": "no-trigger", "comment": "owner: teamwork's mobilize-chores, references/blocked-by-convention.md" },
     { "id": "n02", "prompt": "should mobilize-chores mobilize a ticket that's blocked by an open issue", "expect": "no-trigger", "comment": "owner: mobilize-chores step 2 — a different consumer of the same convention" },
     { "id": "n03", "prompt": "why can't chore-planner write .claude/ops/plan.md directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules" },
-    { "id": "n04", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: sweep-chores / chore-lead" },
+    { "id": "n04", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: /sweep-chores" },
     { "id": "n05", "prompt": "walk me through decision-watcher's per-firing ADR classification steps", "expect": "no-trigger", "comment": "owner: watch-adrs" }
   ]
 }

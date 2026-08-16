@@ -47,8 +47,13 @@ flag blocks both. When something else needs to run that command's logic without 
 
 - **Two-piece (logic lives wholly in the agent):** the command shell (unchanged,
   `disable-model-invocation: true`) dispatches an agent directly via the `Agent` tool; the agent's
-  own body carries the procedure. Fine when only the agent ever needs that logic. Live instance:
-  `harness/skills/sweep-chores` → `harness/agents/chore-lead.md`.
+  own body carries the procedure. Fine when only the agent ever needs that logic. Former live
+  instance `harness/skills/sweep-chores` → `harness/agents/chore-lead.md` retired 2026-08-16
+  (issue #266): the choreography was fully deterministic, so it moved into `sweep-chores`'s own
+  procedure rather than staying an agent hop — a fourth shape (a `disable-model-invocation: false`
+  "both" skill, reachable as a command AND by Skill-tool name, carrying its own logic with no
+  agent at all) for the case where the logic needs zero judgment and no isolated context. Cite the
+  next genuine two-piece instance here when one exists.
 - **Three-piece (logic factored out, both entry points share it):** when the command shell ALSO
   needs the same logic — not just the agent — factor it into (1) the command shell, unchanged,
   now a thin delegator; (2) a new procedure skill, `disable-model-invocation: false`, carrying the
