@@ -6,8 +6,8 @@ description: >-
   (harvest or stale-citation), then advance the checkpoint. Use when asked how decision-watcher's
   ADR review actually works, what its three supported ADR-corpus dialects are, how it tells a
   ratification from a supersession, or what its failure branches are for an unreadable corpus or
-  an unattended firing. NOT for why it can't write its own checkpoint/queue files directly
-  (ops-write-sandbox-rules); NOT for running a sweep (dispatch the decision-watcher agent).
+  an unattended firing. NOT for the write-sandbox boundary (ops-write-sandbox-rules); NOT for
+  running a sweep (dispatch the decision-watcher agent).
 disable-model-invocation: false
 user-invocable: false
 ---

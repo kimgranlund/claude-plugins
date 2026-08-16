@@ -8,7 +8,7 @@
     { "id": "t04", "prompt": "how does issue-sorter classify a filed item's shape as bug vs feature vs task", "expect": "trigger" },
     { "id": "t05", "prompt": "what happens when one of issue-sorter's discovery sources is unreachable this firing", "expect": "trigger" },
     { "id": "t06", "prompt": "walk me through issue-sorter's discover/classify/trust-check/mint procedure", "expect": "trigger" },
-    { "id": "n01", "prompt": "why can't issue-sorter write friendlies.json directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules" },
+    { "id": "n01", "prompt": "why can't issue-sorter write friendlies.json directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules (2026-08-15, issue #280: description's NOT-clause trimmed to reference that skill by name only)" },
     { "id": "n02", "prompt": "run the issue-sorter intake sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, or /sort-issues, not a skill trigger" },
     { "id": "n03", "prompt": "how does decision-watcher tell a ratification from a supersession", "expect": "no-trigger", "comment": "owner: watch-adrs" },
     { "id": "n04", "prompt": "which repo-cleaner scripts are gated to run directly", "expect": "no-trigger", "comment": "owner: clean-git" }

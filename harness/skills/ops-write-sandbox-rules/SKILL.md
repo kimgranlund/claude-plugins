@@ -61,3 +61,15 @@ seat-specific and live in that seat's own preloaded procedure skill (`watch-adrs
 file's shape. A seat minting a real record via a platform API (e.g. `issue-sorter`'s `gh issue
 create`) is not a local filesystem write and is outside this sandbox's scope entirely — the
 sandbox problem is `.claude/ops/...` file writes, not API calls.
+
+## The shared description template — owned here, not restated
+
+Each per-firing-procedure sibling's own description carries these two shared fence clauses
+(seat-specific clauses, like clean-git's own `/clean-repo` fence, may follow): a short
+"NOT for the write-sandbox boundary (ops-write-sandbox-rules)" pointing here for WHY its seat
+can't write its own state directly, and a second "NOT for running a sweep (dispatch <agent>)"
+pointing at its own agent for actually firing it. The WHY lives entirely in this skill's own
+description above ("Use when asked why an ops-family seat can't write its own state file...") —
+a sibling never re-derives or restates that explanation inline; it names this skill and stops. This is the
+one canonical statement of that template, the same way the mechanism itself is canonical above —
+`watch-adrs`, `watch-tickets`, and `clean-git` reference it by name only.

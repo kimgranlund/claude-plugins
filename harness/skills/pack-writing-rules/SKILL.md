@@ -4,8 +4,8 @@ description: >-
   Standards for authoring a knowledge skill's references/ corpus. Use when structuring a corpus
   or INDEX, sizing axes, citing/grounding reference content, how to run a research wave, muddy
   retrieval, or keeping snapshots from going stale. NOT for the pack's SKILL.md surface
-  (skill-writing-rules); NOT for a split/merge decision (plan-skill-split / plan-skill-merge);
-  NOT for executing a research wave (make-pack).
+  (skill-writing-rules); NOT a split/merge decision (plan-skill-split); NOT for executing a
+  research wave (make-pack).
 disable-model-invocation: false
 user-invocable: false
 ---

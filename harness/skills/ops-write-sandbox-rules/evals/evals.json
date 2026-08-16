@@ -1,6 +1,6 @@
 {
   "skill": "ops-write-sandbox-rules",
-  "note": "New 2026-08-13 (issue #205) — extracted from the ~90-110 word explanation duplicated inline across decision-watcher/repo-cleaner/issue-sorter/chore-planner. Negatives: a seat's own per-firing procedure (watch-adrs/watch-tickets/clean-git own that), and dispatch-mechanics failures (agent-writing-rules owns bare-name-dispatch/named-teammate misaddress).",
+  "note": "New 2026-08-13 (issue #205) — extracted from the ~90-110 word explanation duplicated inline across decision-watcher/repo-cleaner/issue-sorter/chore-planner. Negatives: a seat's own per-firing procedure (watch-adrs/watch-tickets/clean-git own that), and dispatch-mechanics failures (agent-writing-rules owns bare-name-dispatch/named-teammate misaddress). 2026-08-15 (issue #280): this skill now also states the shared 'own per-firing procedure' description template (the short NOT-clause each sibling fences back with) as its own canonical statement — watch-adrs/watch-tickets/clean-git trimmed their own descriptions to reference it by name instead of restating why they can't write state directly; trigger surface unchanged.",
   "cases": [
     { "id": "t01", "prompt": "why can't decision-watcher just write its own checkpoint file", "expect": "trigger" },
     { "id": "t02", "prompt": "why does issue-sorter carry no Write tool", "expect": "trigger" },

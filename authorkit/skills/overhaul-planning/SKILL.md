@@ -7,9 +7,9 @@ description: >
   procedure-vs-knowledge tiers, then waved ticket seeds with Blocked-by edges (can return "no
   move"). Use for a rename/reshape/merge/split campaign across many members. Plan-only: writes
   the doc and seeds, never executes. NOT for one artifact rename (rename-planning); NOT for a
-  plain audit (naming-audit, bloat-audit); NOT for a single-pair/single-plugin
-  merge/split/partition (plan-skill-merge, plan-skill-split, plan-plugin-split — composed, not
-  replaced); NOT for executing or driving the campaign (rename-execute, overhaul-execute).
+  plain audit (naming-audit, bloat-audit); NOT a single-pair split/merge decision or
+  single-plugin partition (plan-skill-split, plan-plugin-split — composed, not replaced); NOT for
+  executing or driving the campaign (rename-execute, overhaul-execute).
 author: kim
 created: 2026-08-14
 last_updated: 2026-08-14

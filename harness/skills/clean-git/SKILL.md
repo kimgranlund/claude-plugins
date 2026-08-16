@@ -6,7 +6,7 @@ description: >-
   (campaign_close.py on a verified-merged PR, sync_main.py on an interactive dirty-main, a host
   repo's own gated branch-reap script), everything else proposed only. Use when asked what
   repo-cleaner executes directly vs proposes, what its three gated scripts verify, or its
-  failure branches for a refused gate. NOT for why it can't write its report directly
+  failure branches for a refused gate. NOT for the write-sandbox boundary
   (ops-write-sandbox-rules); NOT for running a sweep (dispatch repo-cleaner); NOT for
   instruction-tree or corpus drift (/clean-repo).
 disable-model-invocation: false
