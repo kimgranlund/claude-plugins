@@ -29,7 +29,7 @@ reader arrives with, not a chronological log.
 | "A command said it worked but nothing changed" — the general pattern + six dated instances | `references/silent-failure-catalog.md` |
 | Pulling onto a checkout a parallel session is using; classification, quarantine, conflict resolution | `references/parallel-session-reconcile.md` |
 | Solo-main-direct vs. campaign; the branch-protection rejection; the close sequence in order | `references/campaign-decision-tree.md` |
-| A seat's push/PR-create "Blocked by classifier"; who pushes, who opens the PR, who merges; scoping a dispatch brief's ship leg | `references/who-ships-what.md` |
+| A seat's push/PR-create "Blocked by classifier"; who pushes, who opens the PR, who merges; scoping a dispatch brief's ship leg; two PRs racing to claim the same plugin's next version | `references/who-ships-what.md` |
 | Executing a rename campaign — PR order, the eight-part per-rename contract, the blind eval-run parity gate, the rename incident catalog | `references/rename-execution-playbook.md` |
 
 Seven files, flat, no subdirectories — at the 3–7 axis band's ceiling, so this table IS the
@@ -47,8 +47,9 @@ retrieval map (no separate INDEX.md; the enumerability ruling, `pack-writing-rul
    workspace decision, e.g. ADR-0002) — never present one as if it carried a stronger class's
    weight.
 4. Route ANY ask to actually RUN a check to the mechanized scripts (same plugin,
-   `scripts/gitignore_check.py` · `campaign_close.py` · `sync_main.py`) — this pack answers what
-   the checks mean and why they exist; it does not execute them.
+   `scripts/gitignore_check.py` · `campaign_close.py` · `sync_main.py` ·
+   `version_claim_check.py`) — this pack answers what the checks mean and why they exist; it
+   does not execute them.
 
 **Done when** the answer carries the claim + its grounding + the failure mode, and any
 run-the-check ask is routed to the matching script. **NOT done** while a claim ships with no
@@ -70,8 +71,8 @@ blind re-measure, not the executor's care, is what proves a rename landed.
 - **Actually execute a worktree campaign** → the workspace's own CLAUDE.md routing table (branch
   + worktree + PR), not this pack.
 - **Run the mechanical checks this pack documents** → `scripts/gitignore_check.py` /
-  `campaign_close.py` / `sync_main.py` (same plugin, `harness`) — this pack cites their incidents
-  and design, it does not invoke them.
+  `campaign_close.py` / `sync_main.py` / `version_claim_check.py` (same plugin, `harness`) — this
+  pack cites their incidents and design, it does not invoke them.
 - **Author or review a skill/agent/hook/plugin** → the sibling `*-writing-rules` family
   (`skill-writing-rules`, `agent-writing-rules`, `hook-writing-rules`,
   `script-writing-rules`, `plugin-writing-rules`) — a distinct concern from git

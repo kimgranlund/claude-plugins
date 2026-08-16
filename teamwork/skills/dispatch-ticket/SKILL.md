@@ -127,6 +127,21 @@ is what actually contains its inline-fix path.
   identity string wins on an exact tie) — abandon immediately, no worktree created, no release
   needed (this claim never landed), report the loss as a named blocker rather than guessing which
   claim is real.
+  **A ticket claim is not a plugin-version claim — check the narrower resource too.** This
+  workspace's own convention bumps the target plugin's version on nearly every merge
+  (`CLAUDE.md`'s "never re-ship a version" rule), so two DIFFERENT tickets both landing on the
+  same plugin race on the version field even when neither's ticket claim collided (the #284/#285/
+  #290 cluster, each colliding with mid-flight-merged #289 or its authorkit sibling, 2026-08-16:
+  `harness/skills/big-change-git-rules/references/who-ships-what.md`'s "Cross-PR version-claim
+  coordination" section — one version-bumping build in flight per plugin at a time). Where
+  `harness` is installed, run its `version_claim_check.py` (this workspace: `harness/scripts/
+  version_claim_check.py <plugin-root>`) against every plugin this build is about to touch, right
+  after the ticket claim lands — a sibling open PR already claiming that plugin's next version
+  means rebase-and-rebump onto it rather than racing it, the same discipline as a lost
+  ticket-claim race above. Re-run it before the PR opens (Phase 5 stage 2) too, since a sibling
+  can appear mid-build. Where harness isn't installed, this check is skipped — named as such,
+  never silently assumed clean, with the manual equivalent named in its place: `gh pr list
+  --state open --json files` filtered to the plugin's own `.claude-plugin/plugin.json`.
 - **Once the claim wins, make it LIST-VISIBLE too (#199)** — the claim comment is durable but
   invisible in the LIST view (Kim: "I cannot tell that Issues are claimed"). Git-native only: `gh
   issue edit --add-label in-flight`. `in-flight` shares hex `FBCA04` with `doing` by coincidence,
