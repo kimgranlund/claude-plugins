@@ -13,7 +13,7 @@ description: >-
   (layout-checker); NOT for authoring or fixing an export (make-design-system and siblings).
 tools: Read, Grep, Glob, Bash
 model: fable
-effort: high
+effort: medium
 skills: [make-design-system]
 ---
 

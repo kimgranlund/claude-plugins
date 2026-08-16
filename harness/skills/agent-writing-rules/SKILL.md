@@ -97,7 +97,7 @@ simpler tier for a routine dispatch — happens at dispatch time, never by editi
 | Seat class | Frontmatter default | Effort range | Model step-downs |
 |---|---|---|---|
 | Planning & architecture | `fable` + `high` | high–xhigh | never below `fable` |
-| Review / hard-bug analysis | `fable` + `high` | low–xhigh | never below `fable` |
+| Review / hard-bug analysis | `fable` + `medium` | low–xhigh | never below `fable` |
 | Coding / execution | `opus` + `xhigh` | low–xhigh | `sonnet`, `haiku` |
 | Orchestration / coordination | `sonnet` + `high` | low–xhigh | — |
 | Mechanical / fully-specified | cheapest correct (`haiku`) | — | — |
@@ -106,10 +106,15 @@ simpler tier for a routine dispatch — happens at dispatch time, never by editi
   `high`) is the worked example. Planning sets the ceiling on everything downstream; it never
   steps below its row's floor.
 - **Review / hard-bug analysis** — scoring against a rubric, weighing severity, deciding a
-  portfolio verdict, root-causing a resistant defect → `fable` + `high`, guaranteed, never
-  downgraded. The estate's critic seats (`*-reviewer`, `skill-checker`, `doc-checker`,
-  `experiment-runner`) pin the row explicitly — a verdict must not depend on the caller's tier, so
-  `inherit` is reserved for the rare seat that *means* to ride the session.
+  portfolio verdict, root-causing a resistant defect → `fable` + `medium` as the standing default
+  (retiered high→medium 2026-08-16, Kim's ruling, issue #312: the 2026-08-15/16 rounds showed
+  medium-effort fable critics catching every real defect while xhigh-inherited review runs added
+  cost, not findings); the model floor is hard — never below `fable` — and effort adapts up per
+  the ceiling-ladder mechanics for a genuinely resistant defect. The estate's `*-checker` critic
+  seats pin the row explicitly — a verdict must not depend on the caller's tier, so `inherit` is
+  reserved for the rare seat that *means* to ride the session. (`experiment-runner` and
+  `chore-planner` deliberately hold `fable` + `high` — measured-loop and queue-synthesis seats,
+  not rubric critics.)
 - **Coding / execution** — implementing an approved plan (technical decisions, edge cases, no
   adversarial stance toward its own output): `opus` + `xhigh` is the ceiling (`builder`);
   a seat whose standing work is routine pins a step-down instead (`docs-writer`, `sonnet` +

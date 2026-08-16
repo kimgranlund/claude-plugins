@@ -11,7 +11,7 @@ description: >-
   (flow-checker); NOT for building or authoring a component (make-component).
 tools: Read, Grep, Glob, Bash
 model: fable
-effort: high
+effort: medium
 skills: [make-component]
 ---
 

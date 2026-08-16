@@ -8,7 +8,7 @@ description: |
   routing, portfolio verdict). A dispatch that says deep is answered at deep, never silently
   downgraded. Dispatch with the target skill directory and a report destination path.
 model: fable
-effort: high
+effort: medium
 color: yellow
 tools: ["Read", "Grep", "Glob", "Write", "Bash"]
 skills:

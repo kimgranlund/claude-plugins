@@ -11,7 +11,7 @@ description: >-
   (break-down-layout DESIGN mode) — this seat only judges an existing artifact.
 tools: Read, Grep, Glob
 model: fable
-effort: high
+effort: medium
 skills: [break-down-layout]
 ---
 

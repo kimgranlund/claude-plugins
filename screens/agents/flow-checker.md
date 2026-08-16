@@ -10,7 +10,7 @@ description: >-
   for one screen's layout (layout-checker) or the whole-product sweep (check-whole-ui).
 tools: Read, Grep, Glob, Bash
 model: fable
-effort: high
+effort: medium
 skills: [break-down-flow]
 ---
 

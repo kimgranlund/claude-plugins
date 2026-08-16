@@ -8,7 +8,7 @@ description: |
   "check this agent's composition edges" — measured delegation, role-family template check,
   portfolio verdict). A dispatch that says deep is answered at deep, never silently downgraded.
 model: fable
-effort: high
+effort: medium
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

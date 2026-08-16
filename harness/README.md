@@ -129,6 +129,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.1 · 2026-08-16 · checker retier (Kim's ruling): 5 *-checker agents move effort high→medium, model fable unchanged — review quality held at medium across the 2026-08-15/16 rounds while inherited-xhigh runs added cost, not findings; agent-writing-rules' seat-ladder review row updated with the dated ruling
 v3.8.0 · 2026-08-16 · `chore-lead` RETIRED (issue #266, nothing non-mechanical survived — #265 measured 1.92x tokens/3.6x wall-clock vs. solo); choreography ported into `sweep-chores` (now "both"-invocable, own eval suite), new `workflows/chore-sweep.js` + selftested `scripts/chore_sweep_apply.mjs`; every live `chore-lead` reference repointed estate-wide
 v3.7.5 · 2026-08-16 · `big-change-git-rules`' who-ships-what.md gains ADR-0013's harvest (batched confirm): dispatch-tier BLOCKED (measured), merge-tier still UNMEASURED for `autoMode.allow`; the stale ADR-0012 provenance citation is re-grounded in ADR-0013 with a dated amendment note
 v3.7.4 · 2026-08-16 · Delegation-Mechanics Review Gate v2 (issue #274): `skill_lint.py` mechanizes R1/R2/R3 with F1-F3 negative-control fixtures proven biting; `check-skill` gains judgment-tier DM-R4/DM-R5/DM-R6 (DM-R6 WARN-capped pending the F4 fixture); `make-skill`'s interview gains the fork self-sufficiency/background questions; `skill-writing-rules` gains the dated fact block. F4/F5 are named live-harness follow-up experiments, not run here

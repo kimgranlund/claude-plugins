@@ -11,7 +11,7 @@ description: >-
   (design-system-checker); NOT for designing a new system (pick-fonts).
 tools: Read, Grep, Glob, Bash
 model: fable
-effort: high
+effort: medium
 skills: [pick-fonts]
 ---
 

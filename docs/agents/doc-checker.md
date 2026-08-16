@@ -12,7 +12,7 @@ description: >-
   (code-checker).
 tools: Read, Grep, Glob, Bash
 model: fable
-effort: high
+effort: medium
 skills: [check-doc, doc-writing-rules]
 ---
 

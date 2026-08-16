@@ -5,7 +5,7 @@ description: |
   versioning — generator ≠ critic, so the maker never grades their own release. Use before a
   plugin ships, or whenever a plugin fails to load and the packaging is suspect.
 model: fable
-effort: high
+effort: medium
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
