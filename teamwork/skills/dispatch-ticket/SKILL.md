@@ -155,6 +155,16 @@ is what actually contains its inline-fix path.
   can appear mid-build. Where harness isn't installed, this check is skipped — named as such,
   never silently assumed clean, with the manual equivalent named in its place: `gh pr list
   --state open --json files` filtered to the plugin's own `.claude-plugin/plugin.json`.
+  **A second, distinct race survives even a clean `version_claim_check.py` result: the VALUE
+  race.** That check only catches a sibling OPEN PR claiming the same next version; it says
+  nothing about a version already MERGED to `origin/main` since this branch was cut (issue #445 —
+  two same-night PRs both shipped the same version because each bumped from its own stale
+  branch-cut number, with no competing open PR to catch it — G14's monotonicity check now
+  mechanizes this at the gate, but that fails LATE, at the gate, not before the PR is opened). So
+  the Phase 5 stage-2 re-run (below) does two things, not one: re-run `version_claim_check.py` for
+  the claim race, AND fetch + re-read every touched plugin's `plugin.json` straight off
+  `origin/main` and bump from THAT value — never from the branch-cut version — carrying its
+  README ledger line along with the same rebumped number.
 - **Once the claim wins, make it LIST-VISIBLE too (#199)** — the claim comment is durable but
   invisible in the LIST view (Kim: "I cannot tell that Issues are claimed"). Git-native only: `gh
   issue edit --add-label in-flight`. `in-flight` shares hex `FBCA04` with `doing` by coincidence,
@@ -268,14 +278,11 @@ discover and repair branch/worktree residue by hand):
 
 1. **Isolated execution by default, or the explicit host-checkout skip (#204)** — Phase 3's
    claim-then-isolate (or claim-then-skip), already done before this phase starts.
-2. **Branch + commits + PR opened**, per ADR-0002. **Immediately before opening the PR, re-read
-   every touched plugin's version straight off `origin/main`'s `plugin.json` (fetch first) and
-   bump from THAT value — never from the version the branch was cut against — carrying its
-   README ledger line along with the same rebumped number.** Two builds in
-   flight on the same plugin both bumping from a stale branch-cut version silently collide on the
-   same next version number (issue #445 — two same-night PRs both shipped the same version); the
-   `version_claim_check.py` discipline above catches an in-flight CLAIM race, this catches the
-   VALUE race that survives it. Commit meaningfully as work lands, push the
+2. **Branch + commits + PR opened**, per ADR-0002. **Immediately before opening the PR, run
+   Phase 3's version-collision re-checks — both of them**: re-run `version_claim_check.py` (the
+   CLAIM race) AND fetch + re-read every touched plugin's version off `origin/main` and bump from
+   THAT value (the VALUE race, #445) — see Phase 3 for why one check doesn't catch the other.
+   Commit meaningfully as work lands, push the
    claimed branch, and open exactly one PR against `main` carrying `Closes #<id>` (every id this
    dispatch closes, on a folded campaign), a plain what/why, the gate output for every touched
    plugin, an integration-notes line naming any known overlap with other open PRs (adopt
@@ -380,9 +387,10 @@ discover and repair branch/worktree residue by hand):
    verbatim to whatever dispatched it.
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
-enumerated inputs + budget + the typed return + stage 2's own `--remove-label in-flight` call and
-its **origin/main version re-read-and-rebump** at
-the moment the PR opens (both named explicitly on a task or big-feature dispatch, since the dispatched
+enumerated inputs + budget + the typed return + stage 2's own `--remove-label in-flight` call,
+its **`version_claim_check.py` re-run (the CLAIM race)**, and its **origin/main version
+re-read-and-rebump (the VALUE race)** at
+the moment the PR opens (all three named explicitly on a task or big-feature dispatch, since the dispatched
 agent/seat opening the PR never loaded this file), and a **mandatory dated `## Findings`
 write-back at each significant result** (slice built, gate green, PR opened), not only at the
 end, so an interrupted build still left evidence — the entry that closes the ticket
