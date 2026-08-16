@@ -41,6 +41,28 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
      instead of exempting it (issue #171: the ADR-0006 sweep collapsed naming-rules' Bad:
      cells to degenerate Bad==Good pairs)
 
+  Delegation-Mechanics Review Gate v2 (issue #274, spec dated 2026-08-15) — R1-R3 only; R4-R6
+  are judgment-tier and live in check-skill, not here. Scoped to a skill whose body mentions
+  subagents/delegation/parallelism/isolation/spawn/dispatch/fork, or whose frontmatter carries
+  `context: fork` — every other skill pays nothing for this tier.
+  R1 [WARN] invocation code in the body: an imperative line whose verb IS a pseudo-call
+     (`Run Agent(subagent_type: ..., ...)`) the model might parrot verbatim. Backticked
+     syntax, a parenthetical naming a tool in prose, and fenced blocks are exempt by
+     construction (this rule scans backtick-stripped, fence-blanked prose).
+  R2 [FAIL] dispatch topology matches skill species: a `context: fork` skill whose body
+     dispatches 2+ distinct named agents (orchestration) contradicts its own fork — the fork
+     would isolate the orchestrator from the conversation it steers. A skill with no
+     `context: fork` whose THIN body (<=12 non-blank prose lines — a real multi-phase
+     procedure that merely dispatches once along the way is not this species) dispatches
+     exactly one named agent, with no orchestration signal and no stated reason to keep
+     main-agent judgment in the loop, is FAILed the other way — pin `context: fork` +
+     `agent:`, or state the reason.
+  R3 [FAIL] fork requires a task: `context: fork` with zero actionable imperatives in the body
+     returns nothing — a forked guideline set gives the subagent no prompt. The fix
+     recommendation is GUARDED: `disable-model-invocation: true` also blocks subagent preloads,
+     so recommending a `skills:` preload route there would mint a dead skill — the message
+     recommends flipping the flag or inlining the content instead.
+
 Agent files (agents/*.md) get a focused rule set (incl. A6 name == file stem):
   A1 frontmatter block present
   A2 frontmatter is YAML-shaped: every column-0 line is a `key:` or a comment;
@@ -114,6 +136,49 @@ BADGOOD_RE = re.compile(r"\bBad:\s*(.+?)\s*(?:→|->)\s*Good:\s*(.+?)(?=\s*\|\s*
 BACKTICK_TOKEN_RE = re.compile(r"`([^`]+)`")
 PERSONA_RE = re.compile(r"^\s*(You are an?\b|You're\b)")
 KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+
+# Delegation-Mechanics Review Gate v2 (issue #274) — R1-R3 mechanization.
+DELEGATION_SCOPE_RE = re.compile(
+    r"\b(subagent|sub-agent|delegat\w*|parallel\w*|isolat\w*|spawn\w*|dispatch\w*|fork\w*)\b",
+    re.IGNORECASE)
+# R1: an imperative verb directly driving a call-shaped tool token — the literal invocation
+# syntax the model might copy. Quoted/backticked spans never reach this (prose is
+# backtick-stripped before matching); a bare parenthetical naming a tool ("the agent tool
+# (Task)") never matches either — no verb+kwargs immediately follows.
+R1_INVOCATION_RE = re.compile(
+    r"\b(Run|Call|Invoke|Execute|Dispatch|Fire)\s+"
+    r"((?:Agent|Skill|Task|Bash|Read|Write|Edit|Grep|Glob)\([^)\n]*\))")
+# R2: a body dispatching a named agent via "dispatch/invoke/spawn the X agent" phrasing —
+# the house-style dispatch idiom this repo's own skills use (measured against the estate,
+# 2026-08-16). 2+ distinct targets = orchestration; exactly 1 = single-handoff. A negative
+# lookahead excludes a generic article/pronoun standing in for a real name ("dispatch the
+# agent", "invoke an agent") — those name no target at all, positive or negative.
+R2_DISPATCH_TARGET_RE = re.compile(
+    r"\b(?:dispatch(?:es|ed|ing)?|invoke(?:s|d)?|spawn(?:s|ed)?)\s+(?:the\s+|an?\s+)?"
+    r"(?!(?:the|an?|this|that|its|your|my|our|their)\b)`?([a-z][\w-]*)`?\s+agent\b",
+    re.IGNORECASE)
+R2_JUSTIFY_RE = re.compile(
+    r"\b(keep(?:s|ing)?\s+(?:main-agent\s+)?judgment|needs?\s+(?:a\s+)?live\s+user|"
+    r"AskUserQuestion|stays?\s+in\s+the\s+loop|retains?\s+judgment|no\s+isolation\s+needed)\b",
+    re.IGNORECASE)
+# R3: a curated imperative-verb list, matched anywhere in the body (not sentence-initial only —
+# this house's own body style routes imperatives through arrows and bullet continuations
+# ("-> invoke file-bug", "**A status verb** — ... Advance the record:") as often as plain
+# sentence-initial ones; anchoring to sentence-start false-positived a real forked skill with an
+# extensive procedure, docs/file-task, on first measurement against the estate, 2026-08-16). A
+# body carrying NONE of these ~80 directive verbs anywhere is the actual reference/convention
+# signature the rule targets (skill-writing-rules' own "Knowledge... Zero imperatives" species).
+R3_IMPERATIVE_VERBS = (
+    "Run|Dispatch|Check|Read|Write|Verify|Confirm|Report|Build|Create|Open|Invoke|Call|"
+    "Execute|Apply|Return|Ensure|Cite|State|Draft|Compose|Review|Judge|Score|Grade|Audit|"
+    "Extract|Fix|Edit|Update|Generate|Produce|Compile|Test|Validate|Publish|Post|Send|"
+    "Summarize|Investigate|Diagnose|Resolve|Implement|Deploy|Merge|Commit|Push|Pull|"
+    "Search|Find|Locate|Gather|Collect|Analyze|Compare|Evaluate|Assess|Rank|Sort|Classify|"
+    "Route|Delegate|Forward|Escalate|Notify|Alert|Flag|Mark|Label|Tag|Record|Log|Track|"
+    "Reply|Respond|Answer|Ask|Prompt|Query|Sketch|Outline|Plan|Design|Scope|Sweep|Fold|Advance|"
+    "Isolate|Claim|Release|Retire|Close|Start|Begin|Stop|Halt|Pause|Resume|Continue"
+)
+R3_IMPERATIVE_RE = re.compile(rf"\b(?:{R3_IMPERATIVE_VERBS})\b", re.IGNORECASE)
 # A8 (issue #260): a dispatch-only agent's resident description has no selection job to do —
 # only a human glancing at the Agent-tool menu needs the one-sentence contract. Anything past
 # that is routing-style detail that belongs in the body instead.
@@ -260,6 +325,68 @@ def lint_text(text, skill_dir_name):
                          "one level deep"))
 
     prose = prose_lines(lines, fm_end + 1)
+    context_val = fields.get("context", ("", 0))[0].strip().lower()
+    body_prose_text = "\n".join(line for _, line in prose)
+    if context_val == "fork" or DELEGATION_SCOPE_RE.search(body_prose_text):
+        # R1 — no invocation code in the body [WARN]
+        for ln, line in prose:
+            m = R1_INVOCATION_RE.search(line)
+            if m:
+                findings.append(("WARN", ln, "R1",
+                                 f"invocation code in body: `{m.group(0)}` -> the model may "
+                                 "parrot this as a literal instruction; rewrite as prose intent "
+                                 "(\"delegate via the agent tool (Task)\") or frontmatter "
+                                 "dispatch (`context: fork` + `agent:`)"))
+                break
+
+        # R2 — dispatch topology matches skill species [FAIL]. Target names are usually
+        # backticked in body prose ("the `demo-reviewer` agent") — match against fence-blanked
+        # text with backticks INTACT, not the backtick-stripped `prose` used above for R1.
+        body_ticks_text = "\n".join(line for _, line in fenced_blanked_lines(lines, fm_end + 1))
+        targets = sorted(set(m.group(1).lower()
+                              for m in R2_DISPATCH_TARGET_RE.finditer(body_ticks_text)))
+        is_orchestration = len(targets) >= 2
+        if context_val == "fork" and is_orchestration:
+            findings.append(("FAIL", fm_end + 1, "R2",
+                             f"orchestration topology ({len(targets)} distinct dispatch "
+                             "targets) with `context: fork` -> the fork isolates the "
+                             "orchestrator from the conversation it is meant to steer; drop "
+                             "`context: fork` and keep prose orchestration, or split into "
+                             "single-handoff sub-skills each carrying its own `agent:` field"))
+        elif context_val != "fork" and len(targets) == 1 and not is_orchestration:
+            # Single-handoff-species detection needs a THIN body too — a multi-phase
+            # procedural skill that dispatches one named agent as ONE step among many is not
+            # "the body's core move is one task handed to one isolated context" (the spec's own
+            # species definition); only a body with little else going on reads as that species.
+            # Measured against the estate (2026-08-16): without this gate, six established
+            # multi-phase skills (agent-writing-rules, make-agent, make-skill, check-whole-ui,
+            # lead-planning, mobilize-chores) false-positived — none of them is single-handoff.
+            non_blank_prose_lines = sum(1 for _, prose_line in prose if prose_line.strip())
+            is_thin_body = non_blank_prose_lines <= 12
+            if is_thin_body and not R2_JUSTIFY_RE.search(body_prose_text):
+                findings.append(("FAIL", fm_end + 1, "R2",
+                                 f"single dispatch to '{targets[0]}' with no `context: fork` + "
+                                 "`agent:` pinning and no stated reason to keep main-agent "
+                                 f"judgment in the loop -> pin `context: fork` + `agent: "
+                                 f"{targets[0]}` in frontmatter, or state why this dispatch "
+                                 "needs live judgment (a decision point, AskUserQuestion, "
+                                 "human-in-the-loop)"))
+
+        # R3 — fork requires a task; the fix must not mint dead skills [FAIL]
+        if context_val == "fork" and not R3_IMPERATIVE_RE.search(body_prose_text):
+            dmi = fields.get("disable-model-invocation", ("false", 0))[0].strip().lower()
+            if dmi == "true":
+                fix = ("flip `disable-model-invocation` to `false`, or inline the content into "
+                       "the agent definition body -> the flag also blocks subagent preloading, "
+                       "so recommending a preload route here would mint a dead skill")
+            else:
+                fix = ("route the reference content to a subagent `skills:` preload, or "
+                       "convert the body into a real task carrying an actionable imperative")
+            findings.append(("FAIL", fm_end + 1, "R3",
+                             "`context: fork` with no actionable imperative in the body -> a "
+                             f"forked guideline set gives the subagent no prompt and returns "
+                             f"nothing; {fix}"))
+
     for ln, line in prose:
         if PERSONA_RE.match(line):
             findings.append(("FAIL", ln, "F7",
@@ -654,6 +781,118 @@ tools: []
 Body.
 """
 
+# Delegation-Mechanics Review Gate v2 (issue #274) — F1-F3 negative-control fixtures.
+# F1: R1 flags a pseudo-call imperative AND passes all three exemption classes (quoted
+# permission syntax, a house-style parenthetical, a fenced counterexample block).
+F1_R1_BAD_FIXTURE = """---
+name: demo-dispatcher
+description: >-
+  Dispatches a fresh-context review. Use when the user asks to review or audit a demo artifact
+  in isolation. NOT for authoring demos (demo-forge).
+disable-model-invocation: false
+user-invocable: true
+---
+# demo-dispatcher
+This skill delegates review work to an isolated context.
+Run Agent(subagent_type: "explore", prompt: "find the bug") to start the review.
+"""
+
+F1_R1_GOOD_FIXTURE = """---
+name: demo-dispatcher
+description: >-
+  Dispatches a fresh-context review. Use when the user asks to review or audit a demo artifact
+  in isolation. NOT for authoring demos (demo-forge).
+disable-model-invocation: false
+user-invocable: true
+---
+# demo-dispatcher
+This skill delegates review work to an isolated context.
+The `allowed-tools` field accepts patterns like `Skill(name *)` and `Agent(Explore)`.
+Delegate via the agent tool (Task) when the work needs isolation.
+```
+Counterexample — never write this as a literal instruction:
+Run Agent(subagent_type: "explore", prompt: "find the bug")
+```
+"""
+
+# F2: R3 detection — context: fork + zero imperatives is flagged; the same body plus one
+# imperative clears it.
+F2_R3_ZERO_IMPERATIVE_FIXTURE = """---
+name: demo-conventions
+description: >-
+  Naming conventions for demo artifacts. Use when the user asks how demo names should look.
+disable-model-invocation: false
+user-invocable: false
+context: fork
+agent: Explore
+---
+# demo-conventions
+A demo name is lowercase and hyphenated.
+The convention favors nouns over adjectives.
+Isolation between demos keeps naming collisions from spawning duplicate directories.
+"""
+
+F2_R3_ONE_IMPERATIVE_FIXTURE = F2_R3_ZERO_IMPERATIVE_FIXTURE.rstrip() + (
+    "\nCheck the target directory for an existing name before minting a new one.\n")
+
+# F3: R3's fix guard — the preload recommendation is suppressed under
+# disable-model-invocation: true (it would mint a dead skill) and present otherwise.
+F3_R3_DMI_TRUE_FIXTURE = """---
+name: demo-conventions-cmd
+description: Demo naming conventions, command form.
+disable-model-invocation: true
+user-invocable: true
+context: fork
+agent: Explore
+---
+# demo-conventions-cmd
+A demo name is lowercase and hyphenated.
+Isolation between demos keeps naming collisions from spawning duplicate directories.
+"""
+
+F3_R3_DMI_FALSE_FIXTURE = F3_R3_DMI_TRUE_FIXTURE.replace(
+    "disable-model-invocation: true", "disable-model-invocation: false")
+
+# R2 coverage (no dedicated fixture ID; the spec's fixture table only requires F1-F3 to bite).
+R2_FORK_ORCHESTRATION_FIXTURE = """---
+name: demo-orchestrator
+description: >-
+  Coordinates a demo review chain. Use when the user asks to run the full demo pipeline.
+disable-model-invocation: false
+user-invocable: true
+context: fork
+---
+# demo-orchestrator
+## Phase 1 — Review
+Dispatch the `demo-reviewer` agent to score the draft.
+## Phase 2 — Fix
+Dispatch the `demo-fixer` agent to apply the findings.
+"""
+
+R2_SINGLE_NOFORK_FIXTURE = """---
+name: demo-single
+description: >-
+  Reviews one demo artifact. Use when the user asks to review a demo.
+disable-model-invocation: false
+user-invocable: true
+---
+# demo-single
+Dispatch the `demo-reviewer` agent to score the draft in isolation.
+"""
+
+R2_SINGLE_JUSTIFIED_FIXTURE = """---
+name: demo-single-justified
+description: >-
+  Reviews one demo artifact with live confirmation. Use when the user asks to review a demo
+  interactively.
+disable-model-invocation: false
+user-invocable: true
+---
+# demo-single-justified
+Dispatch the `demo-reviewer` agent to score the draft in isolation. This skill needs a live
+user mid-review, so it keeps main-agent judgment in the loop rather than forking.
+"""
+
 
 def selftest():
     good = lint_text(GOOD_FIXTURE, "demo-review")
@@ -784,6 +1023,39 @@ def selftest():
     assert "W8" in w8, f"expected W8 on a {30*29}-char model-invocable description"
     longcmd = longdesc.replace("disable-model-invocation: false", "disable-model-invocation: true")
     assert "W8" not in {f[2] for f in lint_text(longcmd, "demo-pack")}, "W8 must not fire on a command"
+    # Delegation-Mechanics Review Gate v2 (issue #274) — F1-F3 must bite: fire on the positive,
+    # stay silent on the matched negative control.
+    f1_bad = {f[2] for f in lint_text(F1_R1_BAD_FIXTURE, "demo-dispatcher")}
+    assert "R1" in f1_bad, f"F1 positive: expected R1 in {f1_bad}"
+    f1_good = {f[2] for f in lint_text(F1_R1_GOOD_FIXTURE, "demo-dispatcher")}
+    assert "R1" not in f1_good, \
+        f"F1 negative control: quoted/parenthetical/fenced exemptions must stay silent, got {f1_good}"
+    f2_zero = {f[2] for f in lint_text(F2_R3_ZERO_IMPERATIVE_FIXTURE, "demo-conventions")}
+    assert "R3" in f2_zero, f"F2 positive: context: fork + zero imperatives expected R3 in {f2_zero}"
+    f2_one = {f[2] for f in lint_text(F2_R3_ONE_IMPERATIVE_FIXTURE, "demo-conventions")}
+    assert "R3" not in f2_one, f"F2 negative control: one imperative must clear R3, got {f2_one}"
+    f3_true_msgs = [f[3] for f in lint_text(F3_R3_DMI_TRUE_FIXTURE, "demo-conventions-cmd")
+                    if f[2] == "R3"]
+    assert f3_true_msgs, "F3 positive: expected an R3 finding under disable-model-invocation: true"
+    assert "route the reference content to a subagent" not in f3_true_msgs[0], \
+        f"F3 guard: preload recommendation must be suppressed under disable-model-invocation: true, got: {f3_true_msgs[0]}"
+    assert "flip" in f3_true_msgs[0], f"F3 guard: expected the flip-the-flag fix text, got: {f3_true_msgs[0]}"
+    f3_false_msgs = [f[3] for f in lint_text(F3_R3_DMI_FALSE_FIXTURE, "demo-conventions-cmd")
+                     if f[2] == "R3"]
+    assert f3_false_msgs, "F3 negative control: still expected an R3 finding under disable-model-invocation: false"
+    assert "route the reference content to a subagent" in f3_false_msgs[0], \
+        f"F3 guard: preload recommendation must appear under disable-model-invocation: false, got: {f3_false_msgs[0]}"
+    # R2 (no dedicated fixture id; spec's fixture table only requires F1-F3 to bite) — covered
+    # for completeness since the check ships in this same PR.
+    r2_orch = {f[2] for f in lint_text(R2_FORK_ORCHESTRATION_FIXTURE, "demo-orchestrator")}
+    assert "R2" in r2_orch, f"R2 orchestration+fork contradiction must FAIL, got {r2_orch}"
+    r2_single = {f[2] for f in lint_text(R2_SINGLE_NOFORK_FIXTURE, "demo-single")}
+    assert "R2" in r2_single, f"R2 single-handoff-without-fork must FAIL, got {r2_single}"
+    r2_justified = {f[2] for f in lint_text(R2_SINGLE_JUSTIFIED_FIXTURE, "demo-single-justified")}
+    assert "R2" not in r2_justified, f"R2 must not FAIL a justified single dispatch, got {r2_justified}"
+    # Out-of-scope skills (no delegation-scope words, no context: fork) never pay for this tier.
+    assert not any(f[2] in ("R1", "R2", "R3") for f in lint_text(GOOD_FIXTURE, "demo-review")), \
+        "an out-of-scope skill must never trip R1/R2/R3"
     # W9 — the issue #171 incident, reproduced. A correct labeled counterexample (Bad: side
     # names the RETIRED name, Good: side the current one) must stay clean...
     goodpair = GOOD_FIXTURE + (

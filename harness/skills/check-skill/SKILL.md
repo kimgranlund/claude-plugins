@@ -34,6 +34,16 @@ check-skill scores the judgment residue of a skill — everything `skill_lint.py
 
 Severity per finding, with routing consequence: `blocking` (ships broken behavior — fails the review) · `major` (weakens reliability) · `minor` · `nit` (never blocks).
 
+**Delegation-mechanics gate (v2, issue #274, spec dated 2026-08-15) — only when the skill under audit is in scope:** body mentions subagents, delegation, parallelism, isolation, spawn/dispatch/fork, or frontmatter carries `context: fork`. `skill_lint.py` already mechanizes the lint's own R1-R3 (invocation code in the body, dispatch-topology-matches-species, fork-requires-a-task) — read its verdict from step 1's lint line rather than re-deriving them. Score the judgment residue here:
+
+| ID | Criterion — pass condition | Verdict |
+|---|---|---|
+| DM-R4 | **Fork is hermetic**: a `context: fork` body — especially onto `agent: Explore`/`Plan`, which also skip CLAUDE.md and git status — carries every path, convention, and repo fact it assumes; nothing relies on context the fork will not see | PASS / FAIL |
+| DM-R5 | **Background semantics are deliberate**: a `context: fork` body that writes, or needs a tool outside the background-subagent set or a blocking result, either sets `background: false` or the body acknowledges the checkpoint escape (a note, or a git-revert step — `/rewind` does not undo a backgrounded fork's edits) | PASS / WARN / FAIL |
+| DM-R6 | **Model routing conflict**: if the skill's `model:` and its named `agent:`'s own model pin disagree, WARN — never FAIL | PASS / WARN |
+
+DM-R5 FAILs only on a genuine tool-set/blocking mismatch with `background: false` absent; a plain background write with no acknowledgment WARNs — do not infer misconfiguration from foreground behavior alone, check `skill-writing-rules`' foreground-exception list first (its Delegation mechanics section, the canonical copy). **DM-R6 is fixture-gated and WARN-capped, literally: never issue FAIL on a model routing conflict, however clear-cut it looks, until the precedence fixture (F4, named in the same section) exists and reports which side wins** — a reviewer escalating this past WARN is itself a finding against the review, not against the skill under audit. A DM finding files into the report contract's own severity ladder below like any other: a DM FAIL is blocking or major by its consequence, a DM WARN never blocking.
+
 ## Report contract
 
 Return by file when dispatched by an agent or orchestrator (destination given in the dispatch); inline otherwise. Verdict first — the head is the only part guaranteed to be read:

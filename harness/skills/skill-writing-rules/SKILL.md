@@ -49,6 +49,33 @@ Two design axes cut across species (both primary-sourced from Anthropic):
 - **Capability uplift** (Claude can't do it, or not consistently) vs **encoded preference** (Claude can do each piece; the skill sequences them your way). Uplift skills earn detail; preference skills earn brevity — state the sequence and stop.
 - **Degrees of freedom**: many valid approaches → prose intent (high); one preferred pattern → pseudocode or a parameterized script (medium); fragile, consistency-critical operation → an exact script, no parameters (low). "Solve, don't punt": a bundled script beats instructions to improvise one, and it removes a hallucination surface.
 
+## Delegation mechanics — verified 2026-08-15 against code.claude.com/docs/en/skills [drift-prone]
+
+Facts behind the Delegation-Mechanics Review Gate v2 (issue #274) — `skill_lint.py` mechanizes
+R1-R3, `check-skill`'s judgment tier scores R4-R6, `make-skill`'s interview phase asks R4-R6's
+self-sufficiency and background questions before minting a fork-species skill:
+
+| Fact | Consequence |
+|---|---|
+| `agent: Explore`/`Plan` skip CLAUDE.md and git status; a fork onto them sees only the SKILL.md body and the agent's own system prompt | A forked body assuming project conventions, paths, or repo state it neither carries nor injects (a `!command` line) returns work built on facts the subagent never had (R4) |
+| Forks default to `background: true` as of v2.1.218; earlier versions always blocked | A skill authored against older-version behavior may be wrong about whether its fork blocks the caller |
+| A backgrounded fork runs the narrower background-subagent tool set | A body needing a tool outside that set, or a blocking result, needs `background: false` explicitly (R5) |
+| A backgrounded fork's edits land outside session checkpoints; `/rewind` does not undo them — git is the revert path | A background write with no acknowledgment (a body note or a stated git-revert step) is a silent checkpoint gap (R5, WARN) |
+| Foreground exceptions to the background default: non-interactive (`-p` / Agent SDK), `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`, re-invoking a forked skill while a prior invocation of the same skill still runs, a scheduled task firing with the skill as its prompt | Do not infer misconfiguration from observed foreground behavior alone — check this list first |
+| With `context: fork`, the skill's `model:` sets the forked subagent's model instead of the session's; **not established by current docs:** which side wins when the skill's `model:` and the agent definition's own model pin conflict | WARN on any skill/agent model conflict; never FAIL or assert precedence until the precedence fixture (F4) exists and reports (R6 stays WARN-capped by construction, not by convention, in both `skill_lint.py` and `check-skill`'s DM-R6) |
+| `context: fork` with a reference/convention body carrying no actionable imperative gives the subagent no prompt and returns nothing | `skill_lint.py`'s R3; the guarded fix never recommends a `skills:` preload when `disable-model-invocation: true` — that flag also blocks preloads, so the unguarded fix would mint a dead skill |
+
+**Two follow-up experiments are named, not yet run** (a distinct empirical deliverable shape from
+the fixtures above — live-harness dispatches, not `skill_lint` selftest fixtures): F4 (dispatch a
+fork where the skill's `model:` and its agent's own pin disagree; record which model actually
+reports, to resolve the R6 precedence question) and F5 (invoke a fork under `-p`; assert the
+foreground-exception behavior actually holds). Until F4 reports, R6 stays WARN-capped everywhere
+it's checked.
+
+**Re-verify trigger:** re-check this table (against `/doctor`, the changelog, and the live docs
+page above) on every Claude Code minor-version bump — the background-default cliff at v2.1.218 is
+exactly the shape of fact this note exists to catch before it goes stale silently.
+
 ## Frontmatter discipline
 
 Runtime fields (Claude Code): `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`, `user-invocable`, `allowed-tools`, `disallowed-tools`, `model`, `effort`, `context`, `agent`, `hooks`, `paths`, `shell`. Portable core (Agent Skills standard, runs everywhere): `name`, `description`, body, `scripts/` `references/` `assets/`. Everything else couples the skill to Claude Code by exactly that much — author the portable core first, add coupling deliberately. Those three dirs plus the house `evals/` are the ONLY sanctioned skill subfolders (ruled 2026-07-15; `release_gate` G2 warns on any other): topical data lives under `assets/<topic>/`, worked examples and consulted corpora under `references/` — never as ad-hoc top-level dirs, and never a `resources/` twin of `references/`.
