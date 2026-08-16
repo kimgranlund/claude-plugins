@@ -85,6 +85,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.13.2 · 2026-08-16 · the no-nested-wait rule encoded structurally (issue #310, four measured `build-lead` stalls #257/#282/#269/#280): `dispatch-ticket` and `build-lead` both gain a standing rule — a nested seat builds inline, never via a further fork/named dispatch it then waits on for an unreachable callback. Matching harness `agent-writing-rules` row (own bump)
 v2.13.1 · 2026-08-16 · checker retier (Kim's ruling): 2 *-checker agents move effort high→medium, model fable unchanged — review quality held at medium across the 2026-08-15/16 rounds while inherited-xhigh runs added cost, not findings
 v2.13.0 · 2026-08-16 · `mobilize-chores` step 1 repointed (issue #266, harness-side): harness's `chore-lead` coordinator agent retired, so this step now calls the reclassified `Skill(harness:sweep-chores)` directly cross-plugin instead of dispatching the retired agent — same fan-out, no duplicated logic, no hard `${CLAUDE_PLUGIN_ROOT}` path; step 5's build-lead comparison and Done-when text updated to match
 v2.12.3 · 2026-08-16 · `team-or-solo-rules` gains the job-evidence test (#268), modeled on `plan-plugin-split`'s job-evidence rule: a NEW coordination seat/flow must record the concrete gap solo + one Explore/checker can't hold — step count alone never counts. New seats only, no retroactive re-justification. Documented-checklist form (no natural wiring-checker rubric anchor); Review gains a matching check. Body-only, no eval-run obligation

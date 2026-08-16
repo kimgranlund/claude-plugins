@@ -1,7 +1,7 @@
 {
   "name": "teamwork",
   "displayName": "Teamwork",
-  "version": "2.13.1",
+  "version": "2.13.2",
   "description": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end.",
   "license": "MIT",
   "author": {
