@@ -4,7 +4,8 @@ description: >-
   Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-agent` /
   `{repo}-reviewer` / `{repo}-planner` / `{repo}-product`): names the session, writes or verifies
   the seat's permission profile, prints the comms charter (peer roster + SendMessage-is-a-nudge
-  doctrine + durable-channel fallback), then adopts the matching lead-* contract. Run
+  doctrine + durable-channel fallback), then names the matching lead-* command for the human to
+  run next. Run
   /team-scaffolding, first argument agent, reviewer, planner, or product, then an optional
   charter — or bare with no role: asks one question offering only missing seats (or seeds a
   virgin repo's fleet manifest first), never re-asking once a role is bound. NOT a one-off
@@ -16,7 +17,7 @@ user-invocable: true
 argument-hint: "[agent|reviewer|planner|product [charter]] — bare asks which seat"
 ---
 
-# team-scaffolding — name the seat, wall it, brief it, then hand off to the lead-* contract
+# team-scaffolding — name the seat, wall it, brief it, then name the lead-* command
 
 Four standing sessions run one project: `{repo}-agent` (orchestrator), `{repo}-reviewer`
 (read-only review desk), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
@@ -147,12 +148,16 @@ State, as one standing block before any real work:
    contract-correctness review resumes once one does." A locked spec exists → state that plainly
    (`Locked spec found — full contract-correctness review in scope`) and proceed with no notice.
 
-## Phase 5 — Adopt the matching lead-* contract
+## Phase 5 — Name the matching lead-* command for the human
 
-Invoke via the Skill tool, passing the charter (the remainder of `$ARGUMENTS` after the role
-token) straight through:
+Every lead-* target carries `disable-model-invocation: true` by design (adoption is a human's
+session, never model-routed — see the rejected alternative below), so this phase can never invoke
+one via the Skill tool. Instead, print the exact command the HUMAN types next, with the charter
+(the remainder of `$ARGUMENTS` after the role token) appended verbatim, as the final bootstrap
+step — mirroring how `authorkit:overhaul-execute` hands a merge/split off as a command-only
+`/reshape-skill …` invocation for a human to run, never a Skill-tool call:
 
-| Role | Command | Home plugin |
+| Role | Command to print | Home plugin |
 |---|---|---|
 | `agent` | `/lead-team` | teamwork |
 | `reviewer` | `/lead-review` | teamwork |
@@ -162,8 +167,9 @@ token) straight through:
 `product`'s handoff is a soft cross-plugin mention — it degrades to "install docs to bootstrap
 the product seat" if `docs` isn't installed (Failure branches, below).
 
-From this point, this session runs under the adopted contract exactly as if invoked directly;
-`team-scaffolding`'s own discipline (Phases 1–4) has already run and does not repeat.
+This session does NOT adopt the contract itself. `team-scaffolding`'s own discipline (Phases 1–4)
+has already run and does not repeat; the printed command is what carries the session forward once
+the human types it.
 
 ## Failure branches
 
@@ -176,7 +182,7 @@ From this point, this session runs under the adopted contract exactly as if invo
 - **Phase 3's `settings.local.json` write or verification fails for `reviewer`** → stop at Phase 3;
   never silently downgrade to a stated-only wall.
 - **`docs` not installed and role is `product`** → name the gap plainly (Phases 1–4 still ran; only
-  Phase 5's adoption is blocked) and point at installing `docs`.
+  Phase 5's command names an uninstalled plugin) and point at installing `docs`.
 - **Re-invoked in a session that already bootstrapped a different role** → name the existing role
   and require an explicit close-or-switch decision from the human before re-running; never silently
   layer a second role's profile over the first.
@@ -184,5 +190,15 @@ From this point, this session runs under the adopted contract exactly as if invo
 ## Done
 
 Done when Phases 1–4 have completed for the bound role (profile verified where applicable, roster
-row appended, charter printed) and Phase 5 has handed the session to its adopted contract — never
-when only the adoption ran with the bootstrap layer skipped.
+row appended, charter printed) and Phase 5 has named the matching lead-* command for the human to
+run next — never when only the bootstrap layer ran with no command named, and never claiming the
+session itself adopted the contract (Skill-tool invocation is structurally impossible against a
+`disable-model-invocation` target).
+
+## Rejected alternatives
+
+Flipping the four lead-* skills' `disable-model-invocation` flag so Phase 5 could invoke them via
+the Skill tool was considered and rejected: command-only adoption is deliberate — a seat contract
+is adopted by a human's session, never model-routed (`lead-team`'s own body defends this flag for
+the same reason). The fix stays scoped to Phase 5's own false claim, not the target skills'
+invocation contract.
