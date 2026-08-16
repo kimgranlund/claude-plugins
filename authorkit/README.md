@@ -76,6 +76,7 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.10.4 · 2026-08-15 · `overhaul-planning`'s split/merge/partition NOT-clause is dieted (issue #280): now "a single-pair split/merge decision or single-plugin partition (plan-skill-split, plan-plugin-split — composed, not replaced)", dropping the separate `plan-skill-merge` name now that harness's `plan-skill-split` names `plan-skill-merge` as its own merge-direction sibling and is the stated canonical owner other skills fence back to by name only; n08/n09 gain dated owner-comments, no new cases (renumbered from 0.10.2 — that slot went to PR #285's rebump)
 v0.10.3 · 2026-08-15 · naming-audit `validate.py` gains the `hook` subcommand (issue #276): the PostToolUse hook derives its target from the write's own file_path, so worktree sessions validate their own tree (not the main checkout) and only the touched plugin; the plugin's own shipped `hooks/hooks.json` rewired off its worktree-blind `--target ${CLAUDE_PROJECT_DIR}` form too; critic pass added wrong-shape fail-open guards + fixtures
 v0.10.2 · 2026-08-15 · `naming-audit-agent` and `bloat-audit-agent` gain an explicit
 `model: sonnet` pin (issue #283, the A7 defect-class follow-up deferred from #275's

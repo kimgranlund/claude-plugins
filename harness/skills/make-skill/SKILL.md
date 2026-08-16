@@ -4,8 +4,7 @@ description: >-
   Forge a Claude Code skill end-to-end: intake interview, evals-first draft, and audit. Use when
   the user wants to build, make, author, write, or scaffold a new skill — a reusable capability,
   turning a workflow into a skill, or adding something the model can invoke on its own. NOT for
-  auditing an EXISTING skill (check-skill); NOT for deciding whether a corpus should split
-  (plan-skill-split) or merge (plan-skill-merge).
+  auditing an EXISTING skill (check-skill); NOT a split/merge decision (plan-skill-split).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[skill-name or one-line intent]"

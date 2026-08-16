@@ -6,9 +6,8 @@ description: >-
   mint or hold, and run the first-firing REQ-011 roster and REQ-013 GitHub-MCP-offer interviews.
   Use when asked how issue-sorter's watch/triage/trust flow actually works, what a held item is,
   how the friendlies allow-list bootstraps, or what its failure branches are for an unreachable
-  source or an ambiguous shape. NOT for why it can't write its own state files directly
-  (ops-write-sandbox-rules); NOT for running a sweep (dispatch the issue-sorter agent, or
-  /sort-issues).
+  source or an ambiguous shape. NOT for the write-sandbox boundary (ops-write-sandbox-rules); NOT
+  for running a sweep (dispatch the issue-sorter agent, or /sort-issues).
 disable-model-invocation: false
 user-invocable: false
 ---

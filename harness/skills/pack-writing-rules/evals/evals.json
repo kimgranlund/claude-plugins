@@ -1,6 +1,6 @@
 {
   "skill": "pack-writing-rules",
-  "note": "Trigger-routing suite, authored with the skill 2026-07-07. The contested boundary is corpus-vs-surface (skill-writing-rules owns SKILL.md/description; this owns references/INDEX/waves).",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-07. The contested boundary is corpus-vs-surface (skill-writing-rules owns SKILL.md/description; this owns references/INDEX/waves). 2026-08-15 (issue #280): the split/merge NOT-clause was dieted to a name-only reference to plan-skill-split (now the canonical owner of that fence's explanation); n03/n05 gain dated owner-comments, no new cases — the fenced boundary itself is unchanged.",
   "cases": [
     {
       "id": "t01",
@@ -50,7 +50,8 @@
     {
       "id": "n03",
       "prompt": "should this huge pack split into a family",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: plan-skill-split (issue #280: the canonical split/merge-decision owner this description now fences by name only)"
     },
     {
       "id": "n04",
@@ -60,7 +61,8 @@
     {
       "id": "n05",
       "prompt": "merge these thin packs into one",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: plan-skill-merge, reached via plan-skill-split's own merge-direction sibling note (issue #280)"
     }
   ]
 }

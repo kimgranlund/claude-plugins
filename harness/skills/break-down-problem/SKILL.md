@@ -5,9 +5,9 @@ description: >-
   INSIDE-OUT (actions → surfaces) — then cross-checked. Use when breaking down a
   technical or UX architecture, goal, or system into parts, or when a breakdown feels
   lopsided — structure with no behavior — or acceptance criteria don't map to any
-  task. NOT for authoring PRD/SPEC/LLD; NOT authoring skills (make-skill); NOT a
-  knowledge skill's split/merge (plan-skill-split / plan-skill-merge); NOT a concrete UI
-  layout — screens, regions, wireframes (screens' break-down-layout).
+  task. NOT for authoring PRD/SPEC/LLD; NOT authoring skills (make-skill); NOT a split/merge
+  decision (plan-skill-split); NOT a concrete UI layout — screens, regions, wireframes (screens'
+  break-down-layout).
 disable-model-invocation: false
 user-invocable: true
 ---

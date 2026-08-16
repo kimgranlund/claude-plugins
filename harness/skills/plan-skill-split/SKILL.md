@@ -2,11 +2,11 @@
 name: plan-skill-split
 description: >-
   Decide whether a sprawling knowledge corpus splits into a family of knowledge skills, and into
-  which ones. Use for "this skill has gotten huge, break it up", "one entry surface enough for
-  these reference files", or "split this pack, too much context for one question". Tests sizing,
-  co-occurrence, vocabulary, cost, then a file-mapping manifest, or a no-split verdict. NOT
-  authoring a skill (make-skill); NOT executing a decided split (reshape-skill); NOT a UI/goal
-  breakdown (break-down-problem).
+  which ones; the merge direction is plan-skill-merge. Use for "this skill has gotten
+  huge, break it up", "one entry surface enough for these reference files", or "split this pack,
+  too much context for one question". Tests sizing, co-occurrence, vocabulary, cost, then a
+  file-mapping manifest, or a no-split verdict. NOT authoring a skill (make-skill); NOT executing
+  a decided split (reshape-skill); NOT a UI/goal breakdown (break-down-problem).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[corpus-path]"
@@ -23,6 +23,15 @@ twice in one session on real packs: `color-science` (159 files) genuinely split 
 (`color-space-facts/-perception/-accessibility/-materials`); `color-theory-facts` (28 files) was tested
 against the identical four tests and **failed** every one — the honest answer was no-split. Both
 outcomes are correct uses of this skill; the second is not a lesser result.
+
+**This skill is the named owner of the "is this a split/merge sizing decision" fence.**
+`break-down-problem`, `make-skill`, `pack-writing-rules` (harness), and `overhaul-planning`
+(authorkit) each touch adjacent territory — decomposition, authoring, corpus standards, and
+estate-scale campaigns, respectively — and each fences back here by name only (e.g. "NOT a
+split/merge decision (plan-skill-split)"; `overhaul-planning`'s own variant reads "NOT a
+single-pair split/merge decision or single-plugin partition") rather than restating what a
+split/merge decision actually tests. That explanation lives once, in this skill's own
+description and the four tests below.
 
 ## The four tests, in order
 

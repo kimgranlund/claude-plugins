@@ -1,6 +1,6 @@
 {
   "skill": "plan-skill-split",
-  "note": "Converted 2026-07-07 from the source corpus's routing-corpus.json on import. expect=trigger: should fire fresh-session; expect=no-trigger: near-miss owned elsewhere. Runnable via /check-routing.",
+  "note": "Converted 2026-07-07 from the source corpus's routing-corpus.json on import. expect=trigger: should fire fresh-session; expect=no-trigger: near-miss owned elsewhere. Runnable via /check-routing. 2026-08-15 (issue #280): this skill's own description and body now state, once, that it is the canonical split/merge-decision owner break-down-problem/make-skill/pack-writing-rules (harness) and overhaul-planning (authorkit) fence back to by name only, and name plan-skill-merge as its merge-direction sibling; no change to this suite's own trigger/no-trigger scope.",
   "cases": [
     {
       "id": "t01",

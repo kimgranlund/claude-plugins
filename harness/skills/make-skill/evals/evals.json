@@ -1,6 +1,6 @@
 {
   "skill": "make-skill",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere. Minted 2026-07-14 when make-skill converted from command species to procedural species (disable-model-invocation: true -> false).",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere. Minted 2026-07-14 when make-skill converted from command species to procedural species (disable-model-invocation: true -> false). 2026-08-15 (issue #280): the split/merge NOT-clause was dieted to a name-only reference to plan-skill-split (now the canonical owner of that fence's explanation); n03/n04 gain dated owner-comments, no new cases — the fenced boundary itself is unchanged.",
   "cases": [
     {
       "id": "t01",
@@ -60,12 +60,14 @@
     {
       "id": "n03",
       "prompt": "should this sprawling skill split into a family of packs",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: plan-skill-split (issue #280: the canonical split/merge-decision owner this description now fences by name only)"
     },
     {
       "id": "n04",
       "prompt": "these three skills overlap, merge them into one",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: plan-skill-merge, reached via plan-skill-split's own merge-direction sibling note (issue #280)"
     },
     {
       "id": "n05",

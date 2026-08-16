@@ -8,7 +8,7 @@
     { "id": "t04", "prompt": "what happens when decision-watcher's classify script exits 1 with an unsupported shape", "expect": "trigger" },
     { "id": "t05", "prompt": "how does decision-watcher decide a newly superseded ADR has a stale citation somewhere", "expect": "trigger" },
     { "id": "t06", "prompt": "what does decision-watcher do differently on an unattended scheduled firing vs an interactive one", "expect": "trigger" },
-    { "id": "n01", "prompt": "why doesn't decision-watcher just write its checkpoint file directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules" },
+    { "id": "n01", "prompt": "why doesn't decision-watcher just write its checkpoint file directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules (2026-08-15, issue #280: description's NOT-clause trimmed to reference that skill by name only)" },
     { "id": "n02", "prompt": "run the decision-watcher sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, not a skill trigger" },
     { "id": "n03", "prompt": "how does issue-sorter classify a filed item's shape", "expect": "no-trigger", "comment": "owner: watch-tickets" },
     { "id": "n04", "prompt": "which repo-cleaner scripts are gated to run directly vs propose-only", "expect": "no-trigger", "comment": "owner: clean-git" }
