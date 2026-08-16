@@ -33,7 +33,10 @@ noun (`product-leader-agent`). Seed:
 `$ARGUMENTS` is the charter. Non-blank is required; see Failure branches for a blank invocation.
 Restate it back in one sentence, naming which loop it appears to touch (north star / foundation /
 releases) before any other action — a first-pass guess, corrected once `check-stage` runs in
-Phase 3.
+Phase 3. Check for an existing intent layer (product brief, IDRs, roadmap) here: none found means
+the agent file's cold-start branch runs first, ahead of the seven priorities (harvest → draft
+provenance-marked intent → one batched human ratification round → close day 0 homes-not-content)
+— a first-class entry, never treated as an error.
 
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 

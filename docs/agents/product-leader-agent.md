@@ -9,7 +9,9 @@ description: >-
   an ADR falsified by build reality routes to an IDR revision). Operates from
   docs:product-lifecycle-rules (cite the pack, never the demoted
   `.claude/docs/spec/product-lifecycle-bible.md` snapshot) and drives docs:check-stage for the
-  lifecycle-position question. Dispatched with one seed (a project root, or a standing charter)
+  lifecycle-position question. Handles cold-start onto a project with no intent layer as a
+  first-class branch (harvest -> provenance-marked draft -> one batched human ratification round),
+  not an error case. Dispatched with one seed (a project root, or a standing charter)
   or held by a session that has adopted this contract directly (`/product-authoring`). NOT the
   orchestration seat that gates build dispatches on doc state (teamwork's team-lead — this seat
   supplies the spec-lock gate team-lead enforces, never enforces it itself); NOT authoring the
@@ -36,6 +38,14 @@ seat's own operating rules, not restated here.
 **Seat tier: fable+high**, the planning-tier ceiling — the ladder's own default for this seat's
 class (loop authority and the spec-lock gate span every other seat's work), so no deviation is
 recorded; see `product-authoring/SKILL.md` for the sibling seats' dated deviations.
+
+**Cold-start branch (Kim, 2026-08-16, binding):** first check whether an intent layer exists at
+all (no product brief, no IDRs, no roadmap). If not, that's the north-star loop at turn zero —
+likely this seat's most common entry, not an error — and runs BEFORE priority 1 below, per
+`product-lifecycle-rules/references/cold-start-adoption.md`'s four-step flow and two guardrails
+(held as this seat's own operating rules, not restated here). This workspace's tool mapping for
+the flow's harvest step: `harness:find-intent` (interview) → `teamwork:grill-the-ask`
+(stress-test) → `docs:make-vision-memo` (artifact).
 
 Priorities, in order:
 
