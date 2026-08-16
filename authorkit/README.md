@@ -81,6 +81,18 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.12.1 · 2026-08-16 · Structural-hygiene fixes from the naming-audit's non-gating findings
+(issue #350). `validate.py`'s agent schema was missing `model` from its optional fields —
+`estate-audit-agent`'s deliberate sonnet pin (PR #328, per `agent-writing-rules`' seat ladder)
+is a legitimate estate-wide convention, not a violation, so the fix widened the schema rather
+than stripping the pin. `ALLOWED_SKILL_ENTRIES` was likewise missing `intent.md`, the
+`make-skill`-scaffolded intent file present across many skills estate-wide (`attention-audit`
+carries one); added to the closed set. The dispatch's other two items (missing frontmatter
+fields on `manifest-authoring`/`naming-audit`/`naming-conventions`/`rename-planning`; stray
+`.DS_Store` files) were already resolved by prior landed work — verified clean, no changes
+needed. `fix-old-names`' deliberate negative-test fixture (9 structural errors) is untouched
+by design. Structural errors: 11 -> 9 (the remaining 9 are all the `fix-old-names` fixture).
+
 v0.12.0 · 2026-08-15 · Merges the three single-instrument batch-audit agents
 (`naming-audit-agent`, `bloat-audit-agent`, `attention-audit-agent`) into one
 parameterized `estate-audit-agent` (issue #293), executing `agent-writing-rules`'
