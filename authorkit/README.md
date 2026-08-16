@@ -81,6 +81,27 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.15.0 · 2026-08-16 · `doctrine-audit` two-issue follow-up (#395, #396) on the v0.14.0
+instrument. **#395:** `doctrine.manifest.json` extended from 5 to the full 8 edges
+(D01–D08) — the 2026-08-16 team/coordination-surface review's source transcript surfaced
+findings 6–8, recovered verbatim: D06 (`verbatim-line`/require) catches make-agent's
+forge skeleton missing a `naming-rules` pointer (ADR-0006 supersession) — live-verified
+firing against current `harness/skills/make-agent/SKILL.md`; its companion judgment
+nuance (Gate A2's flat "≤ 60 lines" missing `agent-writing-rules`' 75-line
+`-reviewer`/`-auditor` allowance) is folded into D06's title rather than a ninth edge, to
+hold the manifest at the 8-edge acceptance. D07 (`judgment` → `teamwork:wiring-checker`):
+the job-evidence test has no rubric anchor. D08 (`judgment` → `harness:agent-checker`):
+team-lead's `sonnet` tier sits below its `opus`/`fable` subordinates with no recorded
+justification. `unrecovered_findings` note removed — the gap it declared is closed.
+**#396:** `sweep.py validate` now warns (never errors) when a `verbatim-line` dependent
+pattern carries a literal space between word characters — the #393 line-wrap-fragility
+class (a prose re-wrap silently breaks a require edge's match, or disarms a forbid
+edge) — suggesting `\s+` instead; existing fragile manifests still validate VALID.
+Selftest gains a positive control (fragile pattern warns), a negative control (a
+`\s+`-tolerant pattern warns nothing), and unit-level `check_pattern_fragility()`
+assertions. Minor bump — both are additive: more edges, one new advisory warning tier;
+no existing contract changed.
+
 v0.14.0 · 2026-08-16 · New capability (issue #379): `doctrine-audit`, a fifth estate-audit
 instrument for canon-to-dependent DOCTRINE-drift conformance — a rule stated canonically in
 one artifact (a standards skill, an ADR) violated, omitted, or paraphrased by a dependent (an
