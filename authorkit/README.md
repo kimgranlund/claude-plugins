@@ -30,7 +30,7 @@ every one of the six now has a wrapper).
 | `skills/manifest-authoring` | Procedural skill | model-only | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement |
 | `skills/bloat-audit` | Procedural skill | model-only | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites. Wrapped for user-invocation by `commands/bloat-audit` |
 | `skills/pattern-audit` | Procedural skill | model-only | Compiles a caller-supplied literal pattern or natural-language instruction into labeled probes, runs `scripts/scan.py`, and optionally judges each match (`verdict: hit \| false-positive`). Emits a flat, structured match dataset (`id`/`file`/`line`/`col`/`match`/`context`/`kind` + totals) for a downstream step to consume — review, bulk edit, migration, or overhaul-planning's Phase 0. Read-only — reports, never rewrites. Distinct from naming-audit's grammar axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis. Wrapped for user-invocation by `commands/pattern-audit` |
-| `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0, soft-mentioned where harness isn't installed), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
+| `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0 steps 1–2, always) + a conditional fifth `pattern-audit` sweep (Phase 0 step 3, only when the campaign's charter names a pattern none of the other four instruments owns — issue #286), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
 | `skills/overhaul-execute` | Procedural skill | model-only | The DRIVES half of the `overhaul-planning` pair (issue #241, enforcing #238's E1 sign-off): discover+scope-confirm, measure, plan, then gated wave execution (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits, `teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename wave) — under three live-user gates (scope, Gate A, Gate B), never self-approving. Extracted 2026-08-14 out of what shipped in PR #240 as a standalone command; exists as a skill at all only because of the reverse-wrapper grammar amendment below. Wrapped for user-invocation by `commands/overhaul-execute` |
 | `agents/naming-audit-agent` | Subagent | dispatch-only | Batch conformance sweeps across N estates/plugins in an isolated context, one aggregated report |
 | `agents/bloat-audit-agent` | Subagent | dispatch-only | Batch busy-work sweeps across N skills/plugins/corpuses in an isolated context, one aggregated report |
@@ -79,6 +79,26 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.11.4 · 2026-08-16 · `overhaul-planning`'s Phase 0 gains a conditional fifth instrument
+(issue #286, the deferred `lld-0004-pattern-audit.md` acceptance-predicate-8 follow-up from
+#257/PR #288): a new step 3 composes `authorkit:pattern-audit` when the campaign's charter names
+a pattern none of the four fixed-axis instruments owns — never replacing naming-audit,
+bloat-audit, check-routing, or `surface_map`, and never hand-authoring a one-off sweep script.
+`requires` gains `pattern-audit`; `allowed-tools` gains `Bash(python3 */scripts/scan.py *)`.
+**Resolves PR #288's deferred F2 finding** (the reviewer routed the compile-for-veto gap here as
+an LLD-amendment concern): pattern-audit's own procedure states its compiled probes so a live
+user can veto a bad translation before the scan runs, but a composed overhaul-planning call is
+frequently unattended with no one to veto — the substitute ruling states the compiled probes and
+the resulting verdict line in the plan doc's Phase 0 measurements instead, reviewed after the
+fact rather than vetoed before it. `lld-0004-pattern-audit.md` amended to v0.3.0 (dated note) to
+match: Risk 1's fallback gains the composed-call branch, and the Interfaces "Composition
+contract" section is marked realized rather than deferred. Reciprocal eval fences: n12 added to
+`overhaul-planning`'s suite (a raw sweep ask stays pattern-audit's own), n07 added to
+`pattern-audit`'s suite (a campaign-plan ask stays overhaul-planning's own) — neither
+skill's description changed, so no new `/check-routing` steal surface was opened, just proven
+clean. Fresh-context `wording-checker` pass on the Phase 0 body edit: PASS-with-fixes (three
+minor clarity nits — a dangling "instruction" antecedent, an unstated judgment-overlay
+precondition on the noisy-result branch, a singular/plural probe mismatch), applied.
 v0.11.3 · 2026-08-16 · `attention-audit` gains the structural-fix recommendation tier (issue
 #297): a collision or rent finding can now recommend ONE fix from a named category set —
 reciprocal fence (default) · demote-to-wiring · merge · centralize-boilerplate · retire —

@@ -2,13 +2,24 @@
 doc-type: lld
 id: lld-0004-pattern-audit
 status: draft
-version: 0.2.0
+version: 0.3.0
 date: 2026-08-15
 owner: kim.granlund
 spec: none — issue #257 (original body + 2026-08-15 design-refinement comment) is the upstream contract
 ticket: nonoun-plugins#257
 ---
 # LLD — pattern-audit: instructions in, structured match dataset out (issue #257)
+
+*Amended 2026-08-16 (v0.3.0), executing the deferred Composition-contract wiring (issue #286) —
+PR #288's review deferred a real gap here as its F2 finding: pattern-audit's own procedure step
+2 states its compiled probes so a live user can veto a bad translation before the scan runs, but
+an `overhaul-planning`-composed call is frequently unattended (a dispatched build, a batched
+drain) with no one to veto. Ruling: the composed call never pauses for a veto — it states the
+compiled probes and the resulting dataset's verdict line in the plan doc's own Phase 0
+measurements instead, so a human reviews the compilation there, after the fact, rather than
+vetoing it before the fact. Risk 1's fallback gains this composed-call branch below. The
+Interfaces "Composition contract with overhaul-planning" section is marked REALIZED — this build
+(issue #286) landed the (a)–(f) edit list this section had deferred.*
 
 **The four rulings, head-first:**
 
@@ -226,22 +237,26 @@ would flag the new names by the same mechanism that already flags `overhaul-*` t
 exemption entry needed; with the registration row, both names conform from day one under
 both manifests.
 
-### Composition contract with overhaul-planning (deferred — a separately FILED ticket, never this build)
+### Composition contract with overhaul-planning (REALIZED 2026-08-16, issue #286 — was deferred)
 
-Phase 0 gains a conditional step 3: *"When the campaign's charter names a pattern none of the
+Phase 0 gained a conditional step 3: *"When the campaign's charter names a pattern none of the
 four instruments owns (a superseded constant still cited, a deprecated frontmatter field, a
 banned phrase), run `authorkit:pattern-audit` with that instruction — never hand-author a
 one-off sweep script."* It replaces nothing: steps 1–2 keep their fixed axes
-(`overhaul-planning/SKILL.md` Phase 0 has exactly two numbered steps, four instruments). The
-wiring ticket's exact edit list, snapshot as of this doc's date (the ticket must re-read
-Phase 0 at execution time): (a) the Phase 0 step text; (b) `pattern-audit` added to
-overhaul-planning's `requires`; (c) `Bash(python3 */scripts/scan.py *)` added to its
-allowed-tools; (d) reciprocal fences — overhaul-planning's suite gains a raw-sweep n-case,
-pattern-audit's suite gains a campaign-planning n-case; (e) `/check-routing authorkit` after
-the description edits; (f) skill-checker pass on the semantic edit. Estimated blast radius:
-2 SKILL.md bodies, 2 eval suites, 0 scripts. Acceptance predicate 8 makes filing this ticket
-part of the build's own done-gate, so the deferral has a record (ADR-0002: work items are
-Issues).
+(`overhaul-planning/SKILL.md` Phase 0 has exactly two numbered steps, four instruments, before
+this build's step 3). The wiring ticket's edit list, as landed (a)–(f): (a) the Phase 0 step
+text — plus the composition-veto-substitute ruling this amendment's header names; (b)
+`pattern-audit` added to overhaul-planning's `requires`; (c) `Bash(python3 */scripts/scan.py *)`
+added to its allowed-tools; (d) reciprocal fences — overhaul-planning's suite gained n12 (a raw
+sweep ask stays pattern-audit's own), pattern-audit's suite gained n07 (a campaign-plan ask
+stays overhaul-planning's own); (e) `/check-routing authorkit` after — neither description
+changed, so this reproves no new steal opened, rather than proving a new one closed; (f)
+fresh-context `wording-checker` pass on the Phase 0 semantic edit (the invariant's actual
+checker for a prompt-carrying body edit, not `skill-checker` as this section's original text
+named — `wording-checker` is the language-of-a-prompt-carrying-artifact critic; `skill-checker`
+audits a whole SKILL.md's structure, a broader pass than this narrow body addition needed).
+Blast radius as landed: 2 SKILL.md bodies (`overhaul-planning`, this LLD itself), 2 eval suites,
+0 scripts — matching the estimate below exactly.
 
 ### Consumers
 
@@ -343,6 +358,12 @@ established pattern; the two non-decisions are recorded in Components).
    lld-0001 Risk 4). Detection: a judged dataset where false-positives outnumber hits.
    Fallback: the skill states its probe compilation before running so a bad translation is
    vetoed pre-scan; on a noisy result, recompile the probe — never hand-filter downstream.
+   **Composed-call branch (added 2026-08-16, issue #286):** when pattern-audit is invoked from
+   inside `overhaul-planning`'s Phase 0 step 3, the caller is frequently unattended and the
+   pre-scan veto has no one to answer it — the substitute states the compiled probes and the
+   resulting verdict line in the plan doc's Phase 0 measurements instead, so the veto becomes a
+   post-hoc plan-doc review rather than a pre-scan pause; a noisy result surfaces there as a
+   named finding, recompiled on the campaign's next pass rather than hand-filtered.
 2. **Routing steals against near neighbors** — fix-old-names ("Find every reference to a
    retired skill name" is its live t05 trigger), naming-audit, bloat-audit,
    plan-plugin-split. Detection: acceptance predicate 6's steal count goes nonzero, or a
