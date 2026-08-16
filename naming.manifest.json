@@ -379,6 +379,11 @@
       "canonical": "stage",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "product",
+      "plural": "products",
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
