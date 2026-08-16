@@ -17,6 +17,12 @@ M1 [FAIL/blocking] the PR never reaches OPEN + MERGEABLE + mergeStateStatus == C
                     poll budget -> refuse to merge, report the last observed state
 M2 [FAIL]          `gh pr merge` itself fails once M1 passes -> refuse, report gh's error
 
+The squash commit carries the PR body as its commit body (`gh pr merge --squash --body <text>`),
+not just the ledger-line title GitHub defaults to — the why/evidence a squash otherwise strands one
+indirection away in the (soon-deleted-branch) PR, per Beams/Google squash-merge practice (#377).
+An empty/unreadable PR body degrades to a bare `--squash` (title only) rather than failing the
+merge over a cosmetic loss.
+
 Once M1/M2 pass, this script runs `gh pr merge <n> --squash` itself, then COMPOSES
 `campaign_close.py` (imported, not reimplemented) for the post-merge branch-delete-verify +
 optional gate sweep. Exit 0 all clean, 1 on any FAIL (refused to merge, or merged but
@@ -120,6 +126,33 @@ def _gh_pr_info(pr_number, repo=None):
     return json.loads(r.stdout)
 
 
+def _gh_pr_body(pr_number, repo=None):
+    """Best-effort PR body fetch for the squash commit body (#377). Never raises: an unreadable
+    body degrades the merge to a bare --squash (title only), never blocks M1/M2."""
+    cmd = ["gh", "pr", "view", pr_number, "--json", "body"]
+    if repo:
+        cmd += ["--repo", repo]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode != 0:
+            return None
+        body = json.loads(r.stdout).get("body")
+        return body if body else None
+    except Exception:
+        return None
+
+
+def build_merge_cmd(pr_number, repo=None, body=None):
+    """Pure — the squash merge command, with --body attached only when a non-empty PR body is
+    available (selftest fixture for the #377 squash-commit-body practice)."""
+    cmd = ["gh", "pr", "merge", pr_number, "--squash"]
+    if repo:
+        cmd += ["--repo", repo]
+    if body:
+        cmd += ["--body", body]
+    return cmd
+
+
 def run(pr_number: str, repo=None, gate_roots=None, timeout=DEFAULT_TIMEOUT,
         interval=DEFAULT_INTERVAL):
     findings = []
@@ -132,9 +165,8 @@ def run(pr_number: str, repo=None, gate_roots=None, timeout=DEFAULT_TIMEOUT,
         _report(findings)
         return 1
 
-    merge_cmd = ["gh", "pr", "merge", pr_number, "--squash"]
-    if repo:
-        merge_cmd += ["--repo", repo]
+    pr_body = _gh_pr_body(pr_number, repo)
+    merge_cmd = build_merge_cmd(pr_number, repo, pr_body)
     m = subprocess.run(merge_cmd, capture_output=True, text=True)
     if m.returncode != 0:
         findings.append(("M2", False, f"gh pr merge failed: {m.stderr.strip()}"))
@@ -230,10 +262,21 @@ def selftest():
         "42", None, [], DEFAULT_TIMEOUT, DEFAULT_INTERVAL), \
         "a bare PR number must parse with the documented defaults"
 
+    # build_merge_cmd — #377: PR body rides as the squash commit body, --repo threaded through,
+    # and an empty/missing body degrades to a bare --squash rather than an empty --body flag
+    cmd = build_merge_cmd("42", repo="o/r", body="the why, one indirection closer")
+    assert cmd == ["gh", "pr", "merge", "42", "--squash", "--repo", "o/r",
+                    "--body", "the why, one indirection closer"], \
+        f"PR body must ride as --body on the squash merge: {cmd}"
+    cmd = build_merge_cmd("42", repo=None, body=None)
+    assert cmd == ["gh", "pr", "merge", "42", "--squash"], \
+        f"a missing PR body must degrade to a bare --squash, never an empty --body: {cmd}"
+
     print("merge_when_clean selftest · PASS · check_mergeable rejects the #371 UNSTABLE-waved-"
           "through negative control (OPEN+MERGEABLE alone is not enough), poll_until_clean "
-          "resolves on eventual CLEAN and FAILs on a timed-out stuck PR, and the #188-class "
-          "parse_args controls (unknown token, dangling flag, bare PR number) all hold")
+          "resolves on eventual CLEAN and FAILs on a timed-out stuck PR, the #188-class "
+          "parse_args controls (unknown token, dangling flag, bare PR number) all hold, and "
+          "build_merge_cmd (#377) threads the PR body onto --body without failing on an empty one")
     return 0
 
 

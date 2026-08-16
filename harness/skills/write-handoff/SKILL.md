@@ -33,6 +33,25 @@ Keep each tight; omit nothing — write `(none)` when a field is empty. Inline w
 - **Open questions** — unresolved decisions needing a human or another role; max 3, each decision-shaped.
 - **Recommended next action** — the single best next step **and who owns it** (`planner` / `builder` / the maker whose work was reviewed — a reviewer's handback recommends "maker applies the fix" / host).
 
+**Optional: one review-path line.** When the change has a non-obvious reading order — a schema
+before its consumers, a contract before its implementation — add one line after Recommended next
+action: `Review path: start at X, then Y.` Omit it when the diff has one natural entry point (most
+handoffs); it's a reading-order hint for the critic, never a required field, and `handoff_check.py`
+does not gate on it.
+
+**Evidence, by medium.** What counts as verifiable Evidence depends on what changed — make the
+field concrete instead of a generic "ran the tests"; use the best-available form for the medium
+that actually shipped, and where it's genuinely unobtainable (no display to screenshot, no
+baseline to diff against), say so rather than substituting a weaker form silently:
+
+| Medium of the change | Evidence that verifies it |
+|---|---|
+| UI change | A screenshot (before/after where the diff is visual) |
+| Perf claim | A benchmark delta — before/after numbers, not "feels faster" |
+| Hook change | Fixture output — the hook firing (or not) against a real or synthetic trigger |
+| Doc/contract change | The gate output (`doc_lint.py`, `skill_lint.py`) plus the specific section changed |
+| Script/code change | The command run and its exit code, or the test output |
+
 ## Gate ≠ commit
 
 A green gate is **not** a landed change. Read the gate output, *then* commit as a separate step — never chain a commit onto a test run with `&&`, or a regression rides in on a gate whose output was never read. (`team-lead`/host commits; a maker hands back gated state, it does not self-land.)
