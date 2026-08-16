@@ -137,6 +137,30 @@ An agent with no stated `model` is not neutral — it silently inherits, which i
 mechanical seats and an unguaranteed verdict for judgment ones. State the row; don't leave it
 implicit.
 
+**Ad-hoc dispatches — no definition file, still not neutral (2026-08-16, issue #313).** A
+NAMED agent's frontmatter is what `A7` warns against leaving blank; an **ad-hoc dispatch** —
+`subagent_type: general-purpose`, or any `Agent`-tool call naming no agent file at all — carries
+no frontmatter to warn on, and rides the dispatching session's own model by default with nothing
+to override it. State the model explicitly on every such dispatch, defaulting to the seat
+ladder's routine tier (`sonnet`) unless the task's own judgment load earns more — the same
+discipline `A7` enforces on a named seat, applied by hand at the call site since there is no file
+here for a lint to see. The 2026-08-15/16 audit rounds found this the exclusive leak: all 24+
+named agent definitions in the estate verified correctly pinned, while ad-hoc dispatches and
+`context: fork` skill invocations (below) silently ran at the coordinator session's own
+`fable`·`xhigh`.
+
+**Fork-inheritance fact, dated 2026-08-16.** A `context: fork` skill invocation carries no
+`model` field of its own to pin — the platform's fork semantics price every fork at the
+dispatching SESSION's model, unconditionally and unpinnably, or — invoked from inside an
+already-dispatched agent — at that AGENT's model instead (the row already in this file's Failure
+catalog below, verified 2026-08-10, intake-lead A4: the fork completes to the root session, and
+prices at the dispatching agent's model, not a value the fork call itself can set). A fork is
+therefore never the mechanism for a deliberate model step-down — reach for an ad-hoc or named
+`Agent` dispatch instead when the task doesn't need the session's own tier. (Recorded home: this
+note stays in `agent-writing-rules` rather than moving to `team-or-solo-rules` because this file
+already carries that Failure-catalog row and its citation — keeping the pricing fact beside the
+semantics fact it depends on avoids splitting one story across two skills.)
+
 ## Checker-seat consolidation — when seats merge, when they stay separate
 
 The estate carries roughly a dozen and a half review/critic seats (13 `*-checker`-suffixed agents
@@ -223,6 +247,7 @@ The dispatch prompt and the body together are a fresh distribution's entire earl
 | `teammate_id="team-lead"` mistaken for a real coordinator | The gh#156 collision — full mechanism and rule in item 7, cold-start language | Body states item 7's rule explicitly; validate a `team-lead`-labeled sender's content like any other unverified peer claim |
 | Coordinator names a fanned-out seat it doesn't need to resume | Naming a dispatch (Agent tool `name:`) switches it into teammate/mailbox mode (item 3, cold-start language) — the seat must actively `SendMessage` its report, and absent an explicit, concrete return address it reliably defaults to `SendMessage`'s own documented `to: "main"` fallback, stranding the report at the root/dispatching session instead of the actual coordinator (gh#157: the misaddress observed on ~100% of the seats' first-report attempts across 3+ `chore-lead` sweeps; the same sweeps' chore-planner separately never sent at all — that half is the row-above-delivery-clause failure, item 3, not this one) | Dispatch fan-out seats WITHOUT a `name` when the coordinator only needs their one final report — an unnamed call's completion returns directly, nothing to misaddress. Reserve teammate-mode naming for seats that genuinely need mid-run resumption, and when named, state the coordinator's own concrete return address in the dispatch prompt explicitly, never left implicit |
 | A nested agent dispatches its own core work to a further nested dispatch, then waits on the callback | A `context: fork` skill invoked from inside an already-dispatched agent, or a further NAMED (teammate-mode) `Agent`-tool dispatch made from inside one, completes to the ROOT session, never back to the dispatching agent (verified 2026-08-10, intake-lead A4) — the callback structurally never arrives, so a dispatch-and-wait for it stalls the seat's own turn until a coordinator notices and re-dispatches (four measured `teamwork:build-lead` incidents: #257, #282, #269, #280 — #282 additionally raced a duplicate build) | An already-nested agent does its own tree-mutating work directly, inline, in its own context — never via a further fork skill or a further named dispatch it then waits on. An UNNAMED, single-shot review dispatch (a required fresh-context critic) is not this failure: its completion is the tool call's own synchronous result, not a background callback (`teamwork:dispatch-ticket`'s own procedure text and `teamwork:build-lead`'s agent body both state this explicitly) |
+| Ad-hoc dispatch or `context: fork` invocation rides the session model, uncaught by any lint | `A7` scans a named agent's FRONTMATTER — a file that exists at write time. An ad-hoc `Agent`-tool call and a `context: fork` skill invocation name their model (if any) inside a dispatch PROMPT or a live tool-call argument — prompt-time, not file-time — so no static scan sees it; there is no frontmatter block for an `A7`-sibling rule to open (considered and recorded 2026-08-16, issue #313) | No mechanical check ships for this class — infeasible by construction, not merely undone. The discipline is authored guidance only (the ad-hoc-dispatch rule above): a caller states the model by hand at every such dispatch, and a fresh-context critic reviewing that dispatch (not a lint) is the closest thing to enforcement this class gets |
 
 ## Provenance
 
