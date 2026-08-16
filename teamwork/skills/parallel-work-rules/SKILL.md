@@ -138,6 +138,20 @@ plain Edit/Bash calls from one sibling can intermittently land in a different si
   worktree→primary and sibling→sibling — but its own disclosed blind spots (dynamic `$(...)`
   targets, `sh -c`/`bash -c` wrappers) still pass silently, so the discipline above is
   belt-and-suspenders on top of the guard, never made redundant by it.
+- **#359 (2026-08-16) is a recurrence of this exact class, root-caused PLATFORM-side** — the
+  same cwd/write-guard identity migration #189 already tracked, corroborated in production a
+  second time (write-guard identity hopping worktree→worktree as sibling `build-lead` dispatches
+  each created their own tree). Investigated and closed with no estate lever for the RACE itself
+  (the CLI's own cwd-pin mechanics, upstream `anthropics/claude-code#86584`) — the estate stays a
+  detection-only bystander here, never the source, and never gets a lever inside the platform's
+  own pin internals. What #359 DID surface as a genuine estate gap: `worktree-prebash-guard` only
+  ever caught an escape WITHIN one compound Bash call (an explicit `cd` chained to a mutating
+  follow-on) — a cwd already wrong on a LATER, SEPARATE call, no `cd` anywhere in it, passed
+  completely undetected. Issue #363 closed that specific gap with a persisted per-session
+  worktree-identity pin (first-call pin-write inside the same PreToolUse(Bash) hook, keyed by the
+  event's own `session_id`, ASK on drift, self-heals after flagging once so a legitimate
+  Exit/EnterWorktree move doesn't nag forever) — still detection-only, still ASK-never-BLOCK,
+  same posture as everything else in this section.
 
 ## Output contract (when reporting a decision or a collision)
 
@@ -161,7 +175,7 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | docs' backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
 | The Recovery section above | A nested child's worktree got auto-reaped while the parent idled on it (#207) |
 | The Standing-mitigation section above | Sibling sessions from one background job share host cwd state racily (#189) |
-| `worktree_prebash_guard.py` (teamwork `scripts/`) | Mechanical catch for worktree→primary and sibling→sibling cd escapes — still blind to dynamic/wrapped targets, per its own header |
+| `worktree_prebash_guard.py` (teamwork `scripts/`) | Mechanical catch for worktree→primary and sibling→sibling cd escapes, PLUS (#363) a persisted per-session identity pin that catches a cwd already wrong on a later separate call with no cd at all — both still blind to dynamic/wrapped targets, per its own header |
 | [[team-or-solo-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-rules` (harness) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
