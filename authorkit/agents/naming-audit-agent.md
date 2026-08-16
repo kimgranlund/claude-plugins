@@ -4,11 +4,12 @@ kind: agent
 description: Batch conformance sweeps — audits N estates or plugins in an isolated context and aggregates one estate-wide report. Delegate to it when a sweep would pollute the working session's context. Read-only; reports, never renames.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-13
+last_updated: 2026-08-15
 performs: naming-audit
 requires: [naming-audit]
 autonomous_write: false
 context: isolated
+model: sonnet
 tools: Read, Glob, Grep, Bash(python3 */scripts/validate.py *)
 ---
 

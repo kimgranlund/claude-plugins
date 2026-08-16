@@ -6,15 +6,13 @@ layout, and migration tooling — plus a separate busy-work/over-specification a
 its own spec: `skills/naming-audit/scripts/validate.py` validates this plugin clean against
 itself with an empty exemptions array.
 
-Kept **disabled** in this workspace's own `.claude/settings.json` (`enabledPlugins`) — enabled
-only in the estates it audits, so its own `naming-conventions` routing never collides with
-harness's `naming-rules` here. `naming-rules` now carries an in-place ADR-0011/D9 supersession
-note (2026-08-14) rather than retiring outright, so the collision this boundary guards against
-is still live — this stays disabled here until that note itself retires (issue #197).
-`fix-old-names` moved here from harness the same day (issue #197, D9 — a mechanically clean
-move, no shared-script dependency) but is, for the same reason, temporarily **unreachable in
-this workspace**: authorkit's own routing surface (including `fix-old-names`) only activates
-once `enabledPlugins` flips, which this ticket does not do.
+**Enabled** in this workspace's own `.claude/settings.json` (`enabledPlugins` carries
+`"authorkit@nonoun-plugins": true`; issue #197 is CLOSED) — the earlier disable-here boundary
+retired once the v0.10.1 reciprocal NOT-fences (issue #282) closed the
+`naming-conventions` ↔ harness `naming-rules` collision that boundary existed to guard
+against. `fix-old-names` (moved here from harness under #197/D9) routes normally in this
+workspace along with the rest of authorkit's surface. (Paragraph repaired 2026-08-15, issue
+#283 rider — the prior text still described the pre-#197 disabled state.)
 
 All six original skills stay model-invocable, none user-invocable (issue #196's shipped
 dials) — a user's on-demand surface goes exclusively through the thin identical-name command
@@ -78,6 +76,12 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.10.2 · 2026-08-15 · `naming-audit-agent` and `bloat-audit-agent` gain an explicit
+`model: sonnet` pin (issue #283, the A7 defect-class follow-up deferred from #275's
+`attention-audit-agent` fix — PR #126's original A7 gap: a missing/`inherit` model field
+silently rides the dispatching session's model). `skill_lint` A7 passes clean on both agents.
+Shipped standalone (no imminent authorkit release in flight to ride along with, per this
+ticket's own Scope/Open note). Rebumped from 0.10.1 — that number shipped via PR #289 mid-flight.
 v0.10.1 · 2026-08-15 · reciprocal NOT-fences added closing the collision-baseline twins with harness (issue #282, PR #278's recipe): `naming-conventions` ↔ harness's `naming-rules` and `bloat-audit` ↔ harness's `check-skill`; each description gains a NOT-clause and a reciprocal eval case (bloat-audit n07 new; naming-conventions n05's existing case gains a dated owner-comment closing the loop); `naming-conventions`'s description also dieted (tool-grant parenthetical de-duped, exemptions detail trimmed) to stay under the W8 700-char budget with the new clause added
 v0.10.0 · 2026-08-15 · attention-audit joins as the third audit axis (issues #259/#261/#264;
 the 2026-08-15 context-efficiency review): always-on menu rent (rent.py — dial-aware,
