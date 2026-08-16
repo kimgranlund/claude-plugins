@@ -21,6 +21,9 @@
     { "id": "n07", "prompt": "What's the state of the project? What's blocked on me?", "expect": "no-trigger", "comment": "owner: harness check-state (repo evidence, not conversation)" },
     { "id": "n08", "prompt": "Triage the new issues that came in overnight", "expect": "no-trigger", "comment": "owner: issue-sorter (items already filed)" },
     { "id": "n09", "prompt": "Summarize what we did today", "expect": "no-trigger", "comment": "recap, not intake; no ticket minting asked" },
-    { "id": "n10", "prompt": "Scan our docs folder for knowledge we haven't captured as a skill yet", "expect": "no-trigger", "comment": "owner: harness save-lessons (knowledge, not work items)" }
+    { "id": "n10", "prompt": "Scan our docs folder for knowledge we haven't captured as a skill yet", "expect": "no-trigger", "comment": "owner: harness save-lessons (knowledge, not work items)" },
+    { "id": "n11", "prompt": "Close this out — check for anything left to capture.", "expect": "no-trigger", "comment": "owner: teamwork close-session (session ending now, one verdict, not a many-item sweep) — issue #416" },
+    { "id": "n12", "prompt": "Before you exit, make sure nothing's left uncaptured.", "expect": "no-trigger", "comment": "owner: teamwork close-session — issue #416" },
+    { "id": "n13", "prompt": "Before you stop, check if there's a PR or issue we should file from this session.", "expect": "no-trigger", "comment": "owner: teamwork close-session — issue #416" }
   ]
 }

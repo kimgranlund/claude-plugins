@@ -2,13 +2,13 @@
 name: file-leftovers
 description: >-
   Sweep the current chat session for work mentioned but not advanced — bugs, feature
-  ideas, feedback, chores, unanswered questions — and roll it up into workable tickets:
-  one evidence-quoted candidate table, one batched clarification round, then each approved
-  item minted through its owning intake skill. Use for "sweep this chat for leftover
-  work", "ticket everything we didn't get to", "did we drop anything this session",
-  "file the leftovers", "roll up what we mentioned but never did into tickets". NOT for
-  decisions needing no ticket (find-open-questions); NOT for one known item
-  (file-bug/file-feature/file-task); NOT for repo work-state (harness check-state).
+  ideas, feedback, chores, unanswered questions — and roll it into workable tickets: a
+  candidate table, one clarification round, then each item minted through its owning intake
+  skill. Use for "sweep this chat for leftover work", "ticket everything we didn't get to",
+  "did we drop anything this session", "file the leftovers", "roll up what we mentioned
+  but never did". NOT for decisions needing no ticket (find-open-questions); NOT for one known
+  item (file-bug/file-feature/file-task); NOT repo work-state (harness check-state); NOT a
+  session ending right now, even phrased "capture"/"file" (teamwork close-session).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[optional scope hint, e.g. 'only the bugs']"
