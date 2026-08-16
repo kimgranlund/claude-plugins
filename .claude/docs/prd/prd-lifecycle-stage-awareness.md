@@ -48,7 +48,7 @@ running `/check-state` who also wants the lifecycle axis alongside the work-stat
   follow-up build ships (verifiable: running it here reports concrete counts, not a placeholder).
 - **OUT-02** — Every signal the report cites is labeled mechanized (script-derived, from a typed
   record census) or judgment (narrated with the signals that informed the call) — never presented
-  as a flat verdict with no visible evididence class. Verifiable: a fresh reader can tell, line by
+  as a flat verdict with no visible evidence class. Verifiable: a fresh reader can tell, line by
   line, which parts to trust as fact and which are a call.
 - **OUT-03** — The new skill's own Boundaries section and `harness:check-state`'s description both
   name each other explicitly, and neither collector re-derives data the other already collects
@@ -127,7 +127,8 @@ vs judgment requires naming both lists concretely, not in the abstract:
   here), zero under `.claude/docs/rdd/` (the type doesn't exist yet — `rdd` is absent from
   `TYPES`, see resolution (c) below).
 - Status distribution per type, against each type's own enum (ADR: `proposed`/`accepted`/
-  `superseded`; IDR/RDD: `draft`/`locked`/`superseded`) — a locked-vs-draft ratio per type.
+  `superseded`; IDR: `draft`/`locked`/`superseded` — RDD the same enum, but only once #332 lands
+  and `rdd` joins `TYPES`; see resolution (c) below) — a locked-vs-draft ratio per type.
 - ROADMAP presence/absence and its own `active`/`retired` status, once minted (`roadmap` is
   already a `TYPES` entry; **this workspace has no ROADMAP.md at its root today** — another
   concrete zero-signal reading, checked directly).
@@ -168,9 +169,10 @@ the Releases-loop signal's precision (a mechanized locked/draft RDD ratio, inste
 fallback) but does not gate the follow-up ticket's own existence. The follow-up ticket's own Links
 section should carry this as a soft "related, sequencing-note" pointer to #332 — the same house
 convention `prd-rdd-framework.md` used for its own #316 relationship, and exactly the pattern
-ticket #321's own Links section already used for #316/#318 ("detection quality rises sharply once
-these exist... builder's call whether hard or soft" — this PRD is that builder's call, decided
-soft).
+ticket #321's own Links section ("detection quality rises sharply once these exist... machine-
+readable signals") plus its Scope/Open gap (c) ("record a soft Blocked-by or sequencing-note per
+the house convention — builder's call whether hard or soft") already set up — this PRD is that
+builder's call, decided soft.
 
 ## (d) Report-only vs routing-biasing — report-only v1; biasing is a named, gated future phase
 
