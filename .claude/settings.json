@@ -20,7 +20,15 @@
       "mcp__claude-in-chrome__read_console_messages",
       "mcp__claude-in-chrome__read_network_requests",
       "mcp__plugin_figma_figma__get_screenshot",
-      "mcp__plugin_figma_figma__get_metadata"
+      "mcp__plugin_figma_figma__get_metadata",
+      "Bash(git fetch *)",
+      "Bash(python3 harness/scripts/campaign_close.py *)",
+      "Bash(python3 harness/scripts/adr_checkpoint.py *)",
+      "Bash(python3 authorkit/skills/attention-audit/scripts/collide.py *)",
+      "Bash(python3 authorkit/skills/attention-audit/evals/check_known_pairs.py *)",
+      "mcp__linear__get_issue",
+      "mcp__linear__list_issues",
+      "mcp__plugin_figma_figma__get_variable_defs"
     ]
   },
   "enabledPlugins": {
@@ -60,7 +68,7 @@
   "autoMode": {
     "allow": [
       "$defaults",
-      "A dispatched build-lead/teammate subagent may run gh pr merge when its own sealed dispatch prompt contains the literal line auto-merge: authorized, AND the PR CI checks are green, AND release_gate.py passed locally for the touched plugin \u2014 this is the ADR-0012 quick-build fast path (kimgranlund/claude-plugins), never a general merge grant to subagents."
+      "A dispatched build-lead/teammate subagent may run gh pr merge when its own sealed dispatch prompt contains the literal line auto-merge: authorized, AND the PR CI checks are green, AND release_gate.py passed locally for the touched plugin — this is the ADR-0012 quick-build fast path (kimgranlund/claude-plugins), never a general merge grant to subagents."
     ]
   }
 }
