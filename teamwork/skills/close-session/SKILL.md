@@ -5,7 +5,8 @@ description: >-
   verdict. Use for "wrap up this session", "close this out", or "nothing's left hanging in the
   worktree before I go" — also fires at a natural closing point with real work behind it. NOT for
   a peer session's worktree (parallel-work-rules), unresolved conversational questions
-  (find-open-questions), or removal mechanics (ExitWorktree).
+  (find-open-questions), removal mechanics (ExitWorktree), or sweeping the whole session for many
+  dropped items (docs:file-leftovers).
 disable-model-invocation: false
 user-invocable: true
 ---
