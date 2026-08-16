@@ -11,7 +11,7 @@ owner: kim.granlund
 ## Problem
 
 This repo's docs type system has no locked, cited, DRI-accountable record of a *release
-commitment*. `plan` (Steps/Validation/Rollback, `active → complete`) is a living execution
+commitment*. `plan` (Steps/Validation/Rollback, `active → complete/abandoned`) is a living execution
 runbook with no lock and no citation requirement. `roadmap` (Now/Next/Later, `active → retired`)
 is a living index that never locks by design. `ticket` (`kind: feature`, Scope/Acceptance/Links)
 is a work item whose `Links` section is unenforced prose, archived on close but never
@@ -43,13 +43,16 @@ reconstructing it from closed GitHub issues.
   `locked` is blocked from in-place content edits — verifiable by a selftest fixture pair
   (positive: locked-edit blocked; negative: draft-edit allowed), reusing the ADR/IDR ledger-lock
   mechanic (see Type contract — Mutability below for the one narrow extension this reuse needs).
-- **OUT-02** — A `locked` RDD with an empty `decision-refs:` citation list FAILS `doc_lint` (not
-  merely WARNs) — verifiable by a selftest fixture pair (locked + empty refs → FAIL; locked + ≥1
-  ref → clean). Deliberately stricter than T6's ADR-orphan WARN (Delta/Citation spine below
-  explains why RDD earns FAIL where ADR only earns WARN).
-- **OUT-03** — `project-docs` (or the equivalent consult skill in an adopting repo) answers "what
-  release commitments has this project made, and are they live" by pointing at `.claude/docs/rdd/`
-  plus the ROADMAP, not "absent."
+- **OUT-02** — A `locked` RDD with an empty `decision-refs:` citation list, OR an empty `dri:`
+  field, FAILS `doc_lint` (not merely WARNs) — verifiable by two selftest fixture pairs (locked +
+  empty refs → FAIL; locked + ≥1 ref → clean; and the same pair for `dri:`). Deliberately
+  stricter than T6's ADR-orphan WARN (Delta/Citation spine below explains why RDD earns FAIL where
+  ADR only earns WARN); DRI-accountability rides the identical mechanism rather than staying an
+  unenforced Problem-statement claim (see Type contract — Frontmatter, below).
+- **OUT-03** — the `project-docs` consult table (or the equivalent consult skill in an adopting
+  repo) contains a row pointing "what release commitments has this project made, and are they
+  live" at `.claude/docs/rdd/` plus the ROADMAP — verifiable by the row's presence, same
+  fixture-grade check `prd-idr-framework.md`'s own OUT-03 settled for.
 - **OUT-04** — at least one `decision-watcher`-queued candidate, once the escalation-detection
   extension (Implementation surface item 6, deferred) ships, surfaces a case where ≥2
   `superseded` RDDs cite the same ADR — giving the bible's escalation rule a live, non-vacuous
@@ -206,16 +209,25 @@ falsified by build reality climbs to an IDR revision."*) becomes lintable or sta
 This splits cleanly into two different mechanisms, at two different grains:
 
 **Lintable today — citation presence, one file at a time (`doc_lint.py`).** A new frontmatter
-field, `decision-refs:` (a non-empty list of `adr-NNNN`/`idr-NNNN` ids, parallel to ADR's own
-`intent-refs:`), required once an RDD reaches `locked` status. Unlike ADR's T6 (WARN-only,
-because 13 existing ADRs predate `intent-refs:` and a hard FAIL would break every one of them
-retroactively), **RDD has zero existing instances** — there is no retrofit debt, so this PRD
-recommends a hard **FAIL** (new check, next available code — `T7` at the follow-up ticket's
-implementation time) the moment `status: locked` (or beyond) carries an empty/missing
-`decision-refs:`. `draft` RDDs are exempt (citations may genuinely not be settled yet — the same
-"harvest window" reasoning IDR's `draft` state already gets). This closes OUT-02: a release simply
-cannot lock without at least one upward citation, mechanically, from day one — the ADR-orphan
-problem RDD would otherwise silently reproduce a third time.
+field, `decision-refs:` (parallel to ADR's own `intent-refs:`), required once an RDD reaches
+`locked` status. **Wire format, pinned:** `doc_lint.py`'s `parse_frontmatter` is a line-based
+scalar parser (one `key: value` per line — it does not read YAML block lists; a `- adr-0001`
+continuation line parses as nothing, leaving the key's value empty). `decision-refs:` is
+therefore a single-line, comma-or-space-separated scalar of ids on the SAME line as the key —
+`decision-refs: adr-0002, idr-0001` — exactly the form `intent-refs: idr-0001` already uses for
+one id; T7 (below) splits on `,`/whitespace the same way any future multi-id ADR field would need
+to. Unlike ADR's T6 (WARN-only, because 13 existing ADRs predate `intent-refs:` and a hard FAIL
+would break every one of them retroactively), **RDD has zero existing instances** — there is no
+retrofit debt, so this PRD recommends a hard **FAIL** (new check, next available code — `T7` at
+the follow-up ticket's implementation time) the moment `status: locked` (or beyond) carries an
+empty/missing `decision-refs:` **or an empty/missing `dri:`** (Outcomes OUT-02 folds both fields
+into the same check — DRI-accountability is a Problem-statement claim this PRD makes, so it earns
+the identical enforcement, not a softer judgment-tier carve-out). `draft` RDDs are exempt for
+both fields (citations and DRI assignment may genuinely not be settled yet — the same "harvest
+window" reasoning IDR's `draft` state already gets). This closes OUT-02: a release simply cannot
+lock without at least one upward citation and a named accountable human, mechanically, from day
+one — the ADR-orphan problem RDD would otherwise silently reproduce a third time, on two axes
+instead of one.
 
 **Judgment-tier — the escalation PATTERN itself, cross-document, over time.** "Repeatedly failing
 against the same ADR" is a claim about **multiple** RDDs (a count ≥2, over an unspecified but
@@ -248,9 +260,12 @@ status: draft                  # draft | locked | superseded  (see Mutability, b
 date: YYYY-MM-DD
 owner:
 dri:                           # the named accountable human (bible: "a DRI can explain what
-                                # shipped") — distinct from owner (who authored the record)
-decision-refs:                 # list of adr-NNNN / idr-NNNN ids — required non-empty at `locked`
-                                # (T7, FAIL — see Citation spine above)
+                                # shipped") — distinct from owner (who authored the record);
+                                # required non-empty at `locked` (T7, FAIL)
+decision-refs:                 # comma/space-separated adr-NNNN / idr-NNNN ids, ONE line —
+                                # parse_frontmatter is a scalar parser, no YAML block lists;
+                                # e.g. `decision-refs: adr-0002, idr-0001` — required non-empty
+                                # at `locked` (T7, FAIL — see Citation spine above)
 supersedes: null                # rdd-NNNN when replacing a prior release commitment
 ```
 
@@ -329,9 +344,12 @@ rows needed.
    `"rdd": "locked"` to `LEDGER_LOCK` (verbatim reuse, per the primary Mutability design); add
    selftest fixtures (positive: locked-RDD-edit blocked; negative: draft-RDD-edit allowed;
    regression: existing ADR/IDR fixtures unaffected).
-2. **`doc_lint.py` — new T7 citation-presence FAIL** *(realizes OUT-02)* — a `locked` (or beyond)
-   RDD with an empty/missing `decision-refs:` FAILs; `draft` is exempt. Selftest fixture pair:
-   locked + empty refs → FAIL; locked + ≥1 ref → clean.
+2. **`doc_lint.py` — new T7 citation+DRI-presence FAIL** *(realizes OUT-02)* — a `locked` (or
+   beyond) RDD with an empty/missing `decision-refs:` OR an empty/missing `dri:` FAILs; `draft` is
+   exempt on both. `decision-refs:` parses as a single-line comma/space-separated scalar (pinned
+   wire format, Citation spine above — NOT a YAML list; `parse_frontmatter` cannot read one).
+   Selftest fixtures: locked + empty refs → FAIL; locked + empty dri → FAIL; locked + ≥1 ref and
+   non-empty dri → clean.
 3. **`doc-writing-rules` SKILL.md** — add the RDD row to the type contract table and to the
    mutability-classes table (Ledger class, third member); add `references/templates/rdd.md`
    mirroring `adr.md`/`idr.md`'s structure; add `docs/rdd/` to the canonical directory list;
@@ -345,18 +363,25 @@ rows needed.
    `.claude/docs/rdd/` (`RDD-*`, `locked` = append-only) plus the `roadmap`'s own living view for
    what's currently shipping. Not touched by this PRD's own branch — real follow-up work.
 6. **`decision-watcher` extension** *(realizes OUT-04, deferred)* — extend the standing ADR-review
-   seat's sweep to also glob `docs/rdd/*.md`, group by `decision-refs:`, and queue a harvest
-   candidate when ≥2 `superseded` RDDs cite the same ADR — the mechanized half of "escalation
-   rides the citations" (Citation spine section, above). Lives in `harness`, cross-plugin from
-   `docs` — explicitly out of this scoping PRD's own file set, same boundary #316's own PRD used
-   for its bootstrap-auto-mint deferral.
+   seat's sweep to also glob the repo-relative `.claude/docs/rdd/*.md` (this repo's actual file
+   path — distinct from item 3's `docs/rdd/` shorthand, which is doc-writing-rules' own
+   documentation-table notation, not a literal glob), parse each RDD's `decision-refs:` scalar,
+   group by cited id, and queue a harvest candidate when ≥2 `superseded` RDDs cite the same ADR —
+   the mechanized half of "escalation rides the citations" (Citation spine section, above). Lives
+   in `harness`, cross-plugin from `docs` — explicitly out of this scoping PRD's own file set,
+   same boundary #316's own PRD used for its bootstrap-auto-mint deferral.
 7. **Selftest fixtures** — RDD joins the template self-consistency sweep (`doc_lint.py selftest`
    already walks every template in `references/templates/`; adding `rdd.md` there is the whole
    registration, no separate wiring).
 8. **`docs` plugin version bump** — owed only once item 1 (or later) actually touches
    `docs/scripts/doc_lint.py` or another plugin-rooted file; **not owed by this PRD's own PR**
    (verified below — no plugin content touched here, mirroring `prd-idr-framework.md`/PR #304's
-   own verified-clean precedent).
+   own verified-clean precedent). **Named deviation:** ticket #318's own Acceptance item 5 reads
+   "`docs` plugin version bump when the PRD itself lands (scoping-doc mint, not the type build)" —
+   this PR does not bump it, for the mechanical reason just given (the PRD is a workspace doc
+   under `.claude/docs/prd/`, outside every plugin's own directory; PR #304 set exactly this
+   precedent for the sibling #273 PRD without a bump). Flagged explicitly here so #318's close-out
+   reads this as a verified, reasoned deviation rather than an unmet acceptance line.
 
 ## Gate output
 
