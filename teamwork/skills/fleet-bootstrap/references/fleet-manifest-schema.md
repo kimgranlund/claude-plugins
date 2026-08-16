@@ -21,13 +21,22 @@ first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a ful
   },
   "live_state": {
     "joined": [
-      { "role": "agent", "mode": "manual", "date": "2026-08-16", "agent_name": null }
+      { "role": "agent", "mode": "manual", "date": "2026-08-16", "action": "joined", "agent_name": null },
+      { "role": "reviewer", "mode": "manual", "date": "2026-08-16", "action": "joined", "agent_name": null },
+      { "role": "reviewer", "mode": "manual", "date": "2026-08-20", "action": "released", "agent_name": null, "reason": "handed off to plugins-review" },
+      { "role": "reviewer", "mode": "manual", "date": "2026-08-20", "action": "joined", "agent_name": null }
     ],
     "loop_position": null,
     "gate": null
   }
 }
 ```
+
+The trailing three `reviewer` rows show a full retire/takeover cycle: joined, then released
+(`/team-scaffolding retire reviewer`, `references/fleet-manifest-schema.md`'s own consumer,
+`team-scaffolding`'s Phase 6), then a fresh `joined` row for the taking-over session — no separate
+"takeover" action exists; a `joined` row appended after a `released` row for the same role IS the
+takeover record.
 
 ## Fields
 
@@ -52,6 +61,20 @@ first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a ful
   joined, in what mode, when, and (for background seats) under what agent name. Append-only —
   never rewritten in place; a seat rejoining after a restart appends a new row rather than editing
   its old one, so the history of who has held a seat stays intact.
+- **`live_state.joined[].action`** — **this field's semantics are canonical here; `team-scaffolding`'s
+  Phases 1/2/6 cite this entry rather than restating it.** `"joined"` (a seat bound this row,
+  either a fresh bind or a takeover of a previously-released seat) or `"released"` (the seat
+  holder retired via `/team-scaffolding retire <role>`, `team-scaffolding`'s Phase 6). Absent on a
+  row is read as `"joined"` — every entry written before this field existed predates it and was
+  always a join. **Liveness for a role is the `action` of its LATEST row, not the row's mere
+  presence**: a role whose latest row is `"released"` is open (a following
+  `/team-scaffolding <role>` binds without collision); a role whose latest row is `"joined"` (or
+  has no `action` field) is live and collides. There is no separate "takeover" action — an
+  ordinary `joined` append made after a role's latest row was `"released"` IS the takeover record;
+  the two rows read together tell the whole story.
+- **`live_state.joined[].reason`** — optional, present only on a `"released"` row: the free-text
+  reason argument passed to `/team-scaffolding retire <role> [reason]`, or `null` if none was
+  given.
 - **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.
