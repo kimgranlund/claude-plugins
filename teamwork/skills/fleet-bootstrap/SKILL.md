@@ -24,7 +24,7 @@ The standing fleet is four seats (`{repo}-agent` / `{repo}-reviewer` / `{repo}-p
 This command is level 2: a single terminal drives the whole cold start — adopt orchestrator,
 stand up the product seat, gate on human ratification of the intent layer that seat produces, then
 spawn whichever remaining seats the human wants running in the background. `$ARGUMENTS`: an
-optional comma-separated spawn-list, default empty (see Phase 5).
+optional comma-separated spawn-list, default empty (see Phase 4).
 
 ## Phase 0 — Seed or read the fleet manifest
 
@@ -86,11 +86,16 @@ human can run afterward for ongoing day-to-day orchestration, never claimed as a
 
 ## Phase 2 — Dispatch the product seat
 
-Dispatch a synchronous `Agent` call (subagent_type: general-purpose is fine — no dedicated agent
-file exists for this seat; the dispatch prompt instructs it to adopt `docs:product-authoring`'s
-contract for one charter: "produce or update the intent layer — product brief / PRD / IDRs — for
-this repo, then report a summary of what it proposes, ready for human ratification. Do not treat
-silence as approval; you are drafting for someone else's sign-off.") Record `live_state.joined`
+Dispatch a synchronous `Agent` call, `subagent_type: docs:product-leader-agent` (the standing
+product-leader seat — owns the intent-layer record types and the spec-lock gate) for one charter:
+"produce or update the intent layer — product brief / PRD / IDRs — for this repo, then report a
+summary of what it proposes, ready for human ratification. Do not treat silence as approval; you
+are drafting for someone else's sign-off." **`docs` not installed in this workspace**:
+`docs:product-leader-agent` isn't reachable either, so there is no working fallback subagent for
+this dispatch — report the product seat as undispatchable for that reason and proceed to Phase 3
+with nothing to gate on (same shape as Phase 5's `product` handoff row: a soft cross-plugin
+mention that degrades to "install docs" rather than pretending an equivalent exists). Record
+`live_state.joined`
 (`role: product`, `mode: dispatched` — a synchronous `Agent` call, not a live terminal or a
 long-lived background seat) once it reports back.
 
@@ -118,16 +123,33 @@ seats Kim drives manually in a terminal — a background agent cannot be interac
 way a live terminal seat can, so defaulting to spawning them would fight the human's own stated
 operating mode.
 
+**Read live seat state before offering anything to spawn.** Read `.claude/ops/fleet.json`'s
+`live_state.joined` for `reviewer` and `planner` and take each role's LATEST row's `action`
+(absent read as `"joined"` — the schema's own liveness rule, canonical in
+`references/fleet-manifest-schema.md`, never re-derived here). A role whose latest row is
+`"joined"` is **already held** — drop it from `$ARGUMENTS`' effective list and from the confirm's
+offered options entirely; this phase has no takeover path the way Phase 1 does for `agent`; a
+spawn here would just double-book a live seat. A role whose latest row is `"released"`, or with no
+entry at all, is open and eligible. **Never a silent drop**: if `$ARGUMENTS` named a role dropped
+here, say so plainly before presenting the confirm — "`<role>` is already held (joined
+`<date>`) — dropped from the spawn list" — and carry the same fact into Phase 6's reported spawn
+line rather than letting the filtered list read as if the argument had simply omitted it.
+
 **This command's one confirm** (#410 bare-invocation-UX addendum: "exactly ONE confirm — the
 background-seat spawn list before creating them; fan-out is confirmed, never inferred"): present
-the resolved list — the argument's value, or "none (default)" — via one `AskUserQuestion` before
-spawning anything, options `None` / `reviewer` / `planner` / `reviewer + planner`, pre-selected to
-match `$ARGUMENTS`. The human's answer here is final regardless of what `$ARGUMENTS` said — an
-argument sets the pre-selection, it does not skip this confirm. No live user reachable here — a
-rarer case than Phase 3's, since an unattended run already stopped at that earlier gate; this
-branch only fires if the human became unreachable after ratifying — → do not spawn anything (an
-unconfirmed fan-out is not "assume the argument's list"); report the spawn phase as skipped for
-the same no-live-user reason, and proceed to Phase 6.
+the resolved list — `$ARGUMENTS`' value after dropping any already-held role, or "none (default)"
+— via one `AskUserQuestion` before spawning anything, offering only the OPEN roles as options
+(`None` always included; `reviewer`, `planner`, and `reviewer + planner` each appear only if every
+role they name is open — an already-held role is never an offered option, mirroring
+`team-scaffolding` Phase 1's bare-invocation rule that a held seat is never offered), pre-selected
+to match the filtered `$ARGUMENTS`. If both roles are already held, skip the `AskUserQuestion`
+entirely — there is nothing left to confirm — and report the spawn phase as "none — reviewer and
+planner already held" in Phase 6. The human's answer here is final regardless of what `$ARGUMENTS`
+said — an argument sets the pre-selection, it does not skip this confirm. No live user reachable
+here — a rarer case than Phase 3's, since an unattended run already stopped at that earlier gate;
+this branch only fires if the human became unreachable after ratifying — → do not spawn anything
+(an unconfirmed fan-out is not "assume the argument's list"); report the spawn phase as skipped
+for the same no-live-user reason, and proceed to Phase 6.
 
 ## Phase 5 — Spawn the confirmed seats as long-lived named background agents
 
@@ -152,8 +174,9 @@ what a rejoining session reads to discover it's taking over an existing seat, no
 ## Phase 6 — Report
 
 One summary: which seats are live and how (manual/background), the gate's outcome, the spawn list
-honored (one of: "none — confirmed default", "reviewer/planner — confirmed", or "confirm skipped —
-no live user, nothing spawned"), the `fleet.json` path as the durable record a later session reads
+honored (one of: "none — confirmed default", "reviewer/planner — confirmed", "none — reviewer and
+planner already held", or "confirm skipped — no live user, nothing spawned"), the `fleet.json`
+path as the durable record a later session reads
 to resume orientation, and — since Phase 1 only registered the orchestrator seat, not the
 `teamwork:lead-team` contract itself — name `/lead-team` as the follow-up command for the human to
 run in this session when they want that contract's ongoing day-to-day discipline.
