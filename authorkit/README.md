@@ -32,8 +32,8 @@ every one of the six now has a wrapper).
 | `skills/pattern-audit` | Procedural skill | model-only | Compiles a caller-supplied literal pattern or natural-language instruction into labeled probes, runs `scripts/scan.py`, and optionally judges each match (`verdict: hit \| false-positive`). Emits a flat, structured match dataset (`id`/`file`/`line`/`col`/`match`/`context`/`kind` + totals) for a downstream step to consume — review, bulk edit, migration, or overhaul-planning's Phase 0. Read-only — reports, never rewrites. Distinct from naming-audit's grammar axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis. Wrapped for user-invocation by `commands/pattern-audit` |
 | `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0 steps 1–2, always) + a conditional fifth `pattern-audit` sweep (Phase 0 step 3, only when the campaign's charter names a pattern none of the other four instruments owns — issue #286), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
 | `skills/overhaul-execute` | Procedural skill | model-only | The DRIVES half of the `overhaul-planning` pair (issue #241, enforcing #238's E1 sign-off): discover+scope-confirm, measure, plan, then gated wave execution (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits, `teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename wave) — under three live-user gates (scope, Gate A, Gate B), never self-approving. Extracted 2026-08-14 out of what shipped in PR #240 as a standalone command; exists as a skill at all only because of the reverse-wrapper grammar amendment below. Wrapped for user-invocation by `commands/overhaul-execute` |
-| `agents/naming-audit-agent` | Subagent | dispatch-only | Batch conformance sweeps across N estates/plugins in an isolated context, one aggregated report |
-| `agents/bloat-audit-agent` | Subagent | dispatch-only | Batch busy-work sweeps across N skills/plugins/corpuses in an isolated context, one aggregated report |
+| `skills/estate-audit` | Reference skill | model-only | The audit-family index (issue #293/#272) — no procedure of its own; names the four instruments (naming/bloat/attention/pattern) and the `instrument` parameter `agents/estate-audit-agent` takes. The backing skill for that agent's primary ADR-0011 naming production |
+| `agents/estate-audit-agent` | Subagent | dispatch-only | Batch estate-audit sweeps across N estates/plugins/corpuses in an isolated context, parameterized by one `instrument` (naming/bloat/attention/pattern), one aggregated report. Replaces `naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent` (issue #293, executing #272's checker-seat consolidation ruling) |
 | `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
 | `commands/bloat-audit` | Command | user-only (`/bloat-audit`) | Thin user-invocable wrapper over `skills/bloat-audit`, same reason |
 | `commands/pattern-audit` | Command | user-only (`/pattern-audit`) | Thin user-invocable wrapper over `skills/pattern-audit`, same reason |
@@ -62,11 +62,13 @@ hand-off step (or, for `rename-planning`, `rename-execute`'s own precondition st
 invocable directly by a user typing a skill name. `fix-old-names` (moved in
 2026-08-14, issue #197) is the one exception — both dials `true`, since it carries its own
 `/fix-old-names` invocation directly rather than through a thin wrapper command, unchanged from
-its harness incarnation. `naming-audit-agent` and `bloat-audit-agent` each cite their matching
-skill via `requires:` (authorkit's own
-existence-edge convention, not the `skills:` preload field) — both matching skills therefore
-carry `disable-model-invocation: false`, since that dial blocks preloading outright wherever it
-IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain). `overhaul-planning`
+its harness incarnation. `estate-audit-agent` (issue #293, replacing the three single-instrument
+agents that used this pattern one-for-one) cites its four instrument skills via `requires:`
+(authorkit's own existence-edge convention, not the `skills:` preload field) — every cited skill
+therefore carries `disable-model-invocation: false`, since that dial blocks preloading outright
+wherever it IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain);
+`estate-audit`, the agent's own backing skill for ADR-0011's primary naming production, carries no
+procedure but the same dial pair. `overhaul-planning`
 (2026-08-14, issue #225) follows the same wrapper pattern as `naming-audit`/`bloat-audit`:
 model-invocable, not user-invocable, with `commands/overhaul-planning` as its identical-name
 wrapper (the validator's wrapper-production exception — no VerbLex terminal required when a
@@ -79,6 +81,39 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.12.0 · 2026-08-15 · Merges the three single-instrument batch-audit agents
+(`naming-audit-agent`, `bloat-audit-agent`, `attention-audit-agent`) into one
+parameterized `estate-audit-agent` (issue #293), executing `agent-writing-rules`'
+"Checker-seat consolidation" merge test and issue #272's ruling: identical
+isolated-context batch-sweep mechanics, one read-only script grant per instrument,
+one aggregate-report shape, differing only in which validator script and `requires:`
+skill each named. The dispatch now names an `instrument` (`naming`/`bloat`/`attention`/
+`pattern`) instead of picking one of three (soon four) near-identical agents;
+`pattern-audit` (#288 shipped it skill+command only, no standalone agent twin) joins
+as the fourth instrument, gaining `scan.py`'s read-only grant on the merged agent
+without ever having had its own agent to retire. Tool wall is the exact union of the
+four instruments' read-only script grants (`validate.py`/`measure.py`/`rent.py`/
+`collide.py`/`usage.py`/`trend.py`/`scan.py`) plus `Read`/`Glob`/`Grep` — no write
+capability added. `estate-audit-agent`'s naming ('follow the audit-family pattern')
+does not resolve under ADR-0011's primary agent-of-skill production as-is — the
+residue `estate-audit` was no extant skill — so a new minimal `estate-audit` index
+skill (no procedure of its own, `disable-model-invocation: false`/`user-invocable:
+false`, small evals suite) backs the name, and `estate` is newly registered in both
+the repo-root and this plugin's own `naming.manifest.json` `object_vocab` (a clean,
+justified registration — the term is already pervasive in this estate's own prose,
+just not yet an ObjectVocab token). `naming-audit-agent`/`bloat-audit-agent` are
+removed from the repo-root manifest's exemptions array (retired names, no longer
+grandfathered); `attention-audit-agent` was never in that list. The three retired
+agent files are deleted; every live reference repointed estate-wide (the #266
+chore-lead-retirement precedent) — this README's Map table and invocation-dials
+paragraph, `naming-conventions/references/GRAMMAR.md`'s and `TOOL-GRANTS.md`'s
+worked examples, `overhaul-execute`'s Phase 1 MEASURE dispatch line, `attention-audit`'s
+Composition section, and harness's `agent-writing-rules`' "Checker-seat consolidation"
+section (cross-plugin, since it named this ticket as the pending merge candidate).
+Historical README ledger entries and dated ops/report snapshots that merely narrate
+past events are left untouched, per this estate's append-only-history convention.
+Fresh-context `harness:agent-checker` (FLOOR, no model override) passed on the new
+agent definition before this PR opened — see the PR body for the verdict.
 v0.11.4 · 2026-08-16 · `overhaul-planning`'s Phase 0 gains a conditional fifth instrument
 (issue #286, the deferred `lld-0004-pattern-audit.md` acceptance-predicate-8 follow-up from
 #257/PR #288): a new step 3 composes `authorkit:pattern-audit` when the campaign's charter names

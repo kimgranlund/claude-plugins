@@ -164,20 +164,24 @@ semantics fact it depends on avoids splitting one story across two skills.)
 ## Checker-seat consolidation — when seats merge, when they stay separate
 
 The estate carries roughly a dozen and a half review/critic seats (13 `*-checker`-suffixed agents
-plus authorkit's three batch-audit agents, counted 2026-08-16) — each pays always-on description
-rent in every session's Agent-tool listing and a full context re-gather on every dispatch (issue
-#272). Three of those (#293's `naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent`) are
-the one confirmed merge candidate — the trio passes the merge test below, and the consolidation
-itself is #293's own follow-up to execute. No other grouping in the estate passes, as of the same
-audit.
+plus authorkit's one `estate-audit-agent`, counted 2026-08-15 post-merge) — each pays always-on
+description rent in every session's Agent-tool listing and a full context re-gather on every
+dispatch (issue #272). Authorkit's three single-instrument batch-audit agents
+(`naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent`) were the one confirmed merge
+candidate — the trio passed the merge test below — and #293 executed the consolidation: the three
+are retired, replaced by one `estate-audit-agent` parameterized by `instrument`
+(`naming`/`bloat`/`attention`/`pattern` — `pattern-audit` joined as a fourth instrument on the same
+merge, per #288, without ever having had its own standalone agent to retire). No other grouping in
+the estate passes, as of the same audit.
 
 **Merge test — both must hold, or keep the seats separate:**
 
 1. **Identical mechanics.** The candidates share one tool wall, one dispatch contract, one report
    shape, and differ ONLY in which instrument (script + owning skill) runs — the same operation,
-   parameterized. #293's three: same `Read/Glob/Grep/Bash(python3 */scripts/<tool>.py *)` shape,
-   same "isolated-context batch sweep over N estates/plugins, read-only, one aggregated report"
-   contract, differing only in which validator script and which `requires:` skill each names.
+   parameterized. #293's three (now four, with `pattern`): same
+   `Read/Glob/Grep/Bash(python3 */scripts/<tool>.py *)` shape, same "isolated-context batch sweep
+   over N estates/plugins, read-only, one aggregated report" contract, differing only in which
+   validator script and which `requires:` skill each names.
 2. **One grading standard survives.** The candidates share one owning rulebook, one gate script,
    one set of review mechanics. If the merge would blend two genuinely distinct grading standards
    into one seat's judgment, it fails this test.
