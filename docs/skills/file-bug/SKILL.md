@@ -173,7 +173,20 @@ label, `done` closes the issue, `wontfix` closes with a `wontfix` label; Option 
 adapter's own status representation (Linear: a state of the mapped type — `doing`/`done`/`wontfix`
 → `started`/`completed`/`canceled`, `references/linear-adapter.md`, Findings-first, same ordering)
 — and report the record (path,
-issue URL, or adapter-native id) and status. Findings gained no entry and the dispatch was an
+issue URL, or adapter-native id) and status.
+
+**`done`/close means the fix is ON MAIN — merged state, never working-tree or branch state.**
+"Shipped", on every backend, means a direct commit to main (a solo single-file fix) or a MERGED
+PR (campaign work); "landed in-tree" on an unmerged branch is neither, and closing on it makes
+the record assert a fix that main does not contain — the observed premature-close class
+(2026-08-16: an issue closed at 13:41 citing "fix landed in-tree" whose PR merged only at 15:01).
+A fix riding a still-open PR leaves the record open: append the dated Findings entry naming the
+PR, then either defer the close to that PR's own `Closes #<id>` line (git-native backend only —
+a file-backend record has no merge-closes integration; return post-merge and close it yourself)
+or return post-merge and close against main by SHA — never close ahead of the merge. `wontfix` carries no fix and needs no
+merge.
+
+Findings gained no entry and the dispatch was an
 agent → one re-dispatch with the contract quoted, then check again.
 Still nothing, or the dispatch was a fork that is no longer addressable → append a dated
 "investigation returned with no findings recorded" entry (file section, or issue comment), leave
