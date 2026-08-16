@@ -42,6 +42,19 @@ against dispatching at all — an UNNAMED, single-shot review dispatch (Phase 4'
 checker, Phase 5 stage 2b's critic) is not this failure, since its completion is the tool call's
 own synchronous result, not a background callback to wait on.
 
+**The critic step still stalls the same way — read the return value yourself.** Being technically
+UNNAMED does not stop a seat from treating the dispatch as if it were NAMED: the recurrence on
+2026-08-16 (PR #368, the ADR-0014 build) idled on its `docs:doc-checker` critic call because the
+seat waited for a completion notification anyway, and that notification — same mechanism as the
+paragraph above — routed to the ROOT session, not back to the seat. **Never wait for a
+notification after dispatching a critic.** The Agent tool call's own synchronous return value
+already IS the critic's verdict the instant the call completes — read that return value directly
+and act on it; no separate signal will ever reach you. If a stall like this is already underway (a
+critic dispatched, no verdict in hand, the turn sitting idle), do not keep waiting it out: read the
+critic's own transcript or output file directly instead of polling for a callback that
+structurally will not arrive, or, for an already-nested seat with a coordinator watching it
+(`build-lead`), report the stall and let the coordinator relay the verdict.
+
 ## Phase 1 — Find or make the record
 
 - `$ARGUMENTS` resolves to a ticket id (`TKT-####`, a bare issue number on the git-native backend,
