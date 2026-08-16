@@ -44,7 +44,7 @@ every one of the six now has a wrapper).
 | `commands/exemption-retire` | Command | user-only (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched |
 | `commands/overhaul-execute` | Command | user-only (`/overhaul-execute`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-execute` (issue #241 — was a standalone command through PR #240/v0.8.0; the reverse-wrapper grammar amendment let the procedure move into a skill, this command adds nothing). The DRIVES counterpart to `overhaul-planning`'s GENERATES |
 | `skills/fix-old-names` | Command skill | both (`/fix-old-names`) | Moved from harness 2026-08-14 (issue #197, ADR-0011/D9). Consumer-side rename migration: sweeps a repo that INSTALLS these plugins for references to retired names and rewrites the live ones, from the derived `renames.json`. Report-first, historical records left byte-identical, ambiguous names escalated to a human, filenames never rewritten |
-| `hooks/hooks.json` (`PostToolUse`) | Hook | automatic | Runs `scripts/validate.py --hook` after every `Write`/`Edit`; no-ops cleanly when the target estate has no manifest (governance is opt-in per estate) |
+| `hooks/hooks.json` (`PostToolUse`) | Hook | automatic | Three siblings on every `Write`/`Edit`, each self-scoping before doing any real work: `naming-audit/scripts/validate.py hook` (no-ops cleanly when the target estate has no manifest — governance is opt-in per estate); `attention-audit/scripts/collide_hook.py` (issue #294 — fires only on a `SKILL.md` whose `description:` changed, prints an advisory collision finding, never blocks); `attention-audit/scripts/trend_hook.py` (issue #294 — fires only on a plugin's own version bump, appends that plugin's row to `attention-trend.csv`) |
 | `skills/naming-audit/scripts/validate.py` | Script | invoked by naming-audit | Deterministic checks only: name grammar, folder layout, frontmatter schema, relation graph, policy/capability coherence, provenance. `selftest` mode proves schema/grammar/lexicon counters bite. Gained `--scope {full,grammar}` 2026-08-14 (issue #197): `grammar` gates only naming-grammar findings, leaving the broader structural/provenance checks informational — how this validator wires into an estate (nonoun-plugins) that hasn't adopted the full frontmatter schema without failing on hundreds of non-naming findings |
 | `skills/bloat-audit/scripts/measure.py` | Script | invoked by bloat-audit | Deterministic measurement: body size, phase-heavy headings, oversized Failure sections, dense descriptions, cross-file near-duplicate paragraphs. `selftest` mode proves flag/duplicate/empty-target counters bite |
 | `skills/pattern-audit/scripts/scan.py` | Script | invoked by pattern-audit | Deterministic sweep: literal, labeled regex + glob probes in, a flat match dataset out — instruction-blind, all NL-compilation and judgment lives in the skill. `selftest` mode proves match/label/multi-probe/glob/skip-dir/binary/invalid-regex/id-stability/verdict-line counters bite |
@@ -78,6 +78,23 @@ what licenses this specific name shape, and it applies only because `commands/ov
 exists in the same plugin root.
 
 ## Version ledger
+
+v0.11.2 · 2026-08-16 · `attention-audit`'s write-time and ship-time instruments (v0.10.0's
+`collide.py --against` and `trend.py`) get wired into actual enforcement tiers instead of
+staying manual-run-only (issue #294). Two new PostToolUse sibling hooks in `hooks/hooks.json`,
+reusing #276/#287's derive-target-from-write plumbing: `collide_hook.py` fires only when a
+written `SKILL.md`'s `description:` field changed (a body-only edit skips the sweep; measured
+~0.04s no-op, ~0.12s on a real change against this workspace's ~140 skills) and prints an
+advisory finding — judgment-shaped, never a hard block, per hook-writing-rules' routing test —
+classifying each collision as routing twin / boilerplate tax / coincidence, the same three
+buckets the skill's own procedure already names. `trend_hook.py` fires on a plugin's own
+`.claude-plugin/plugin.json` `version` bump (this workspace's own ship signal) and appends that
+plugin's row to `attention-trend.csv` automatically (dead/stolen/leaked record `absent` — no
+routing report at hook time); scoped authorkit-side only, since the harness-native alternative
+(`release_gate.py`'s own G6 package step) needs a harness file edit and a harness version bump
+both off-limits while issue #313 holds that slot concurrently — left as a named follow-up.
+Both hooks carry #287's shape guards (fail-open on any malformed event, unreadable file, or
+internal exception) and their own `selftest`.
 
 v0.11.1 · 2026-08-16 · `naming-audit`'s `validate.py` gains a malformed-manifest robustness
 sweep before the adia estates campaign (issue #296): every top-level field
