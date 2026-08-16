@@ -46,12 +46,6 @@ file, never presented as "the only way to do this."
    that every project must reproduce these exact numbers or tool names).**
 4. Route output work at the boundary (see below) — this pack answers; it does not build.
 
-**Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any
-build ask (an actual logging pipeline, eval runner, or notification integration) is routed to the
-consumer's own build seat. **NOT done** while a claim ships without the failure mode it prevents,
-or a single dated measurement/tool name is presented as a universal requirement rather than one
-real instance of the underlying discipline.
-
 ## The core invariants (why these patterns exist)
 
 - **A transcript proves what was said; only a structured signal proves what happened.** A chat

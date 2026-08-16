@@ -49,13 +49,6 @@ instances — including the sibling packs in this very plugin).
    invariant).**
 4. Route output work at the boundary (below) — this pack answers; it does not build.
 
-**Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any
-build ask is routed to the consumer's own build seat (this pack has none — it is
-project-agnostic). **NOT done** while a claim ships without the failure mode it prevents, or a
-worked-instance detail (Claude Code's exact four memory types, this workspace's exact axis split)
-is presented as if every harness must replicate it verbatim rather than honor the invariant it
-protects.
-
 ## The core invariants (why these conventions exist)
 
 - **A corpus entered by search beats one pasted into context wholesale** — a knowledge base

@@ -47,12 +47,6 @@ this."
    layout, as long as the invariant the pattern protects still holds).**
 4. Route output work at the boundary (see below) — this pack answers; it does not build.
 
-**Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any
-build/design-a-team-for-my-project ask is routed to the consumer's own orchestration seat or the
-host working inline. **NOT done** while a claim ships without the failure mode it prevents, or a
-worked-example seat name (`planner`, `team-lead`) is presented as a
-universal requirement rather than one valid instance of the role it plays.
-
 ## The core invariants (why these patterns exist)
 
 - **A dispatch the host cannot verify is a dispatch the host cannot trust.** A subagent is stood
