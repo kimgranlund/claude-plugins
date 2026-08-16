@@ -58,6 +58,19 @@ CLAUDE.md ("a semantic edit rides with a critic") and in the per-flow contracts 
 still own WHEN in their own procedure the check runs; this section owns the calibration test
 itself, in one place, so it isn't re-derived differently by each flow.
 
+## Semantic-diff soft size budget
+
+A semantic PR (carries ≥1 semantic edit per the unit above) also carries a soft size budget —
+past it, split into serialized waves or justify the size in the PR body; a mechanical-only sweep
+(version bumps, ledger lines, a repo-wide rename's enumerated edits) is exempt, since a critic
+already reads the whole slice as one unit regardless of file count. The overhaul family's wave
+serialization (`authorkit`'s `overhaul-execute`) is the in-house prior art this budget
+generalizes: a big semantic change lands as bounded waves a single critic pass can hold in
+context, not one unreviewable mega-diff. No fixed file count is prescribed — the budget is
+qualitative ("a reviewer can hold the whole slice's semantic content in one pass"), so a PR
+author who doubts that of their own slice names the doubt in the PR body and either splits or
+justifies staying whole, rather than leaving the size unaddressed for the critic to discover.
+
 ## Procedure
 
 Every review this discipline governs runs all three — no precondition skips one:
