@@ -43,6 +43,7 @@
     "rules",
     "scaffolding",
     "selection",
+    "stage",
     "triage",
     "wiring",
     "writing"
@@ -294,6 +295,11 @@
     },
     {
       "canonical": "product-lifecycle",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "check",
       "plural": null,
       "banned_aliases": []
     }

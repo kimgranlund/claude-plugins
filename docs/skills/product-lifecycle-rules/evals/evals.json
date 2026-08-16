@@ -1,6 +1,6 @@
 {
   "skill": "product-lifecycle-rules",
-  "note": "Authored with the skill 2026-08-16 (issue #320), realizing product-lifecycle-bible.md v1.1.0 as a portable knowledge pack. Negatives drawn adversarially from the two nearest boundaries this repo's own doc-writing-rules and project-docs suites gained reciprocal fences for, plus teamwork's loop-rules (shared 'loop' vocabulary, unrelated concept) and the unbuilt lifecycle-stage gap (#321's future territory).",
+  "note": "Authored with the skill 2026-08-16 (issue #320), realizing product-lifecycle-bible.md v1.1.0 as a portable knowledge pack. Negatives drawn adversarially from the two nearest boundaries this repo's own doc-writing-rules and project-docs suites gained reciprocal fences for, plus teamwork's loop-rules (shared 'loop' vocabulary, unrelated concept) and the lifecycle-stage-position axis, now owned by docs:check-stage (issue #336, closing #321's forward gap).",
   "cases": [
     {
       "id": "t01",
@@ -55,7 +55,8 @@
     {
       "id": "n03",
       "prompt": "what lifecycle stage is this specific project in right now",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "owner: docs:check-stage (live-placement reading; this pack is general doctrine only)"
     },
     {
       "id": "n04",

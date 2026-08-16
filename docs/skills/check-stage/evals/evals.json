@@ -1,0 +1,22 @@
+{
+  "skill": "check-stage",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "cases": [
+    { "id": "t01", "prompt": "What lifecycle stage is this project in right now?", "expect": "trigger" },
+    { "id": "t02", "prompt": "Are we pre- or post-Spec-lock on this repo?", "expect": "trigger" },
+    { "id": "t03", "prompt": "Which of the three loops — North star, Foundation, Releases — is this project currently emphasizing?", "expect": "trigger" },
+    { "id": "t04", "prompt": "Has this project crossed the POC boundary yet?", "expect": "trigger" },
+    { "id": "t05", "prompt": "What's our version triple — thesis, architecture, release?", "expect": "trigger" },
+    { "id": "t06", "prompt": "I'm orienting cold on this repo — where does it stand in its build lifecycle?", "expect": "trigger" },
+    { "id": "t07", "prompt": "Give me the ADR/IDR/RDD status counts and whether we're in harvest-mode or post-lock discipline.", "expect": "trigger" },
+    { "id": "n01", "prompt": "What's the state of the project — branches, worktrees, open PRs?", "expect": "no-trigger", "comment": "owner: harness check-state (work-state axis, not lifecycle-position)" },
+    { "id": "n02", "prompt": "What's blocked on me right now across tickets and PRs?", "expect": "no-trigger", "comment": "owner: harness check-state" },
+    { "id": "n03", "prompt": "What's an IDR for, and how is it different from an ADR in general?", "expect": "no-trigger", "comment": "owner: product-lifecycle-rules (general portable doctrine, not this repo's live position)" },
+    { "id": "n04", "prompt": "Which doc type and sections do I use to write this decision up?", "expect": "no-trigger", "comment": "owner: doc-writing-rules (the live type contract, not a stage reading)" },
+    { "id": "n05", "prompt": "What has this repo already decided or queued in its docs and issues?", "expect": "no-trigger", "comment": "owner: project-docs" },
+    { "id": "n06", "prompt": "What should I work on next? Prioritize the backlog.", "expect": "no-trigger", "comment": "owner: chore-planner" },
+    { "id": "n07", "prompt": "Is this a bug or a new feature request — file it for me.", "expect": "no-trigger", "comment": "owner: file-bug / file-feature (this skill only narrates the Verify-stage discipline in the abstract when a live instance is in view, never files anything)" },
+    { "id": "n08", "prompt": "Should I use /goal or /loop for this autonomous run?", "expect": "no-trigger", "comment": "owner: teamwork loop-rules (a different, unrelated 'loop' concept)" },
+    { "id": "n09", "prompt": "Clean up the stale branches and remove dead worktrees.", "expect": "no-trigger", "comment": "owner: repo-cleaner" }
+  ]
+}

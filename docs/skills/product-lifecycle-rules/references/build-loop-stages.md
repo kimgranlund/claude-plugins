@@ -41,6 +41,6 @@ concurrently, stages overlap, and Spec lock is the only hard gate."
 
 This file names the seven stages and their done-when tests as a portable model. It does not
 determine which stage a specific project's current work sits in — that reading requires live
-project state (recent commits, open PRs, ticket status, ADR/IDR/RDD lock states) this pack does
-not carry. As of 2026-08-16, no skill in this estate answers "what stage is THIS project in" —
-see `SKILL.md`'s Boundaries section for the forward pointer.
+project state (recent commits, open PRs, ticket status, ADR/IDR/RDD lock states). As of
+2026-08-16, `docs:check-stage` answers that live-placement question (issue #336,
+`prd-lifecycle-stage-awareness.md`) — see `SKILL.md`'s Boundaries section for the pointer.

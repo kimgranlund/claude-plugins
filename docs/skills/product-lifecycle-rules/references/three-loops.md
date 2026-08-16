@@ -63,6 +63,6 @@ outer loop's *record*, never its *work*.
 
 This file states the GENERAL three-loop model, portable to any project. It does not track which
 loop or turn a specific project is currently in — that reading requires live signals (this repo's
-own ADR/IDR/RDD state, roadmap position) this pack does not carry. No skill in this estate
-currently answers "what stage is THIS project in" as of 2026-08-16 — a named forward gap, not
-this pack's job (see `SKILL.md`'s Boundaries section).
+own ADR/IDR/RDD state, roadmap position). As of 2026-08-16, `docs:check-stage` answers that
+live-placement question (issue #336, `prd-lifecycle-stage-awareness.md`) — see `SKILL.md`'s
+Boundaries section for the pointer.

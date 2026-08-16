@@ -7,7 +7,7 @@ description: >-
   anti-patterns. Portable -- orients ANY project. Use for "what's an IDR/ADR/RDD for", "why Spec
   lock matters", "how a knowledge base matures", "the relearn rate", "admission test, ADR vs
   IDR". NOT which doc type/sections/frontmatter to use here (doc-writing-rules); NOT what THIS
-  repo decided/queued (project-docs); NOT this project's stage (unbuilt gap); NOT /goal or /loop
+  repo decided/queued (project-docs); NOT this project's live stage (docs:check-stage); NOT /goal or /loop
   mechanics (loop-rules).
 disable-model-invocation: false
 user-invocable: false
@@ -70,10 +70,10 @@ this repo's own schema.
 - **NOT what THIS repo has decided, queued, or shipped.** `project-docs` answers from the live
   `.claude/docs/` tree and GitHub Issues. This pack carries no live state about any specific repo.
 - **NOT what lifecycle stage THIS project is in right now.** Determining a live project's current
-  position in the loops/stages this pack describes needs a project-status reading no skill in this
-  estate builds yet, as of 2026-08-16 — a named forward gap (tracked in this repo as issue #321's
-  territory), not this pack's job. If asked, name the general stage definitions and say plainly
-  that live placement is unanswered rather than guessing from context.
+  position in the loops/stages this pack describes needs a project-status reading — as of
+  2026-08-16, `docs:check-stage` answers it (issue #336, `prd-lifecycle-stage-awareness.md`,
+  closing the forward gap issue #321 opened). If asked, hand off to `check-stage` rather than
+  guessing live placement from context.
 - **NOT the agentic continuation-loop mechanics** (`/goal`, `/loop`, Stop hooks, autonomy caps) —
   a different, unrelated "loop": teamwork's `loop-rules` owns that word for a different concept
   entirely. This pack's "loop" is always North star/Foundation/Releases or a build turn.
