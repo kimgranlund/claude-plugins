@@ -5,10 +5,10 @@ description: >-
   .claude/docs/ corpus and GitHub Issues. Use for "what are the requirements for X", "which
   tickets are open", "what's on the roadmap / the plan", "what did we decide about Y", "is there
   a spec for Z", "what's the status of issue #NN", "what's already been queued or shipped".
-  Consult table → the .claude/docs/ files and `gh issue`; Grep/gh first, read the matching
-  section. ANSWERS from the corpus only. NOT for authoring or editing a document (/make-doc,
-  docs); NOT for capturing a new feature idea (/file-feature) or bug (/file-bug); NOT for
-  building from a record (/build-feature, teamwork).
+  ANSWERS from the corpus only. NOT for authoring/editing a document (/make-doc); NOT capturing a
+  feature (/file-feature) or bug (/file-bug); NOT building from a record (/build-feature); NOT
+  the general "why do these doc types exist" doctrine, portable to any project
+  (docs:product-lifecycle-rules).
 user-invocable: false
 disable-model-invocation: false
 ---
@@ -22,7 +22,8 @@ answer is reported as absent, never guessed.
 
 | Ask | Look in |
 |---|---|
-| How we build — the three loops, IDR/ADR/PRP doctrine, knowledge-base habits, the glossary | `.claude/docs/spec/product-lifecycle-bible.md` (the canonical reference; on disagreement the internal doctrine corpus wins, per its own header) |
+| How we build, generally — the three loops, IDR/ADR/RDD doctrine, knowledge-base habits, the glossary | `docs:product-lifecycle-rules` (the canonical operating surface as of 2026-08-16, issue #320 — `.claude/docs/spec/product-lifecycle-bible.md` is now a dated snapshot pointing at it) |
+| What THIS repo has actually built of that doctrine (which types exist, which are only scoped) | `.claude/docs/idr/`, `.claude/docs/adr/`, `.claude/docs/prd/prd-rdd-framework.md` (RDD: scoped, not yet a `doc_lint` type) — `docs:doc-writing-rules`' live type table is the enforced source |
 | Requirements, exact behavior, acceptance criteria | `.claude/docs/spec/` (spec-* files; the dir also holds the lifecycle bible above) |
 | A ratified decision and its alternatives | `.claude/docs/adr/` (ADR-*, accepted = append-only) |
 | What's queued, in flight, or done | GitHub Issues (`gh issue list`; bare labels `bug`/`feature`/`task` + `size:small`/`size:big` — this repo's ADR-0002 git-native ticket backend, NOT `docs/tickets/` — see #267 for a live specimen of the scheme) |

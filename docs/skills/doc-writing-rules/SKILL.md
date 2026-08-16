@@ -5,7 +5,9 @@ description: >-
   IDR. Use when asking which document type fits, what sections/frontmatter a type requires,
   whether a document can be edited (why an accepted ADR or a locked IDR is append-only), how
   documents reference each other (the ID spine), how plans track status, or why doc_lint failed.
-  NOT for drafting one (make-doc); NOT for reviewing one (check-doc).
+  NOT for drafting one (make-doc); NOT for reviewing one (check-doc); NOT the general "why do
+  IDR/ADR/RDD exist, what's the build loop" doctrine, portable to any project
+  (product-lifecycle-rules) — this skill owns the live, enforced type contract only.
 disable-model-invocation: false
 user-invocable: false
 ---

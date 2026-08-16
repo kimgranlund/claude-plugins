@@ -1,7 +1,19 @@
 # The Product Lifecycle Bible
-## How we build — the canonical reference
+## How we build — a dated snapshot; the operating source moved
 
-**v1.1.0 · 2026-08-13 (v1.1.0: gradual context-building named as a principle — Part 5, Kickoff, anti-patterns) · sourced from the internal doctrine corpus (v2.3.0); on any disagreement, the corpus wins. The companion one-pager ("How We Build") is this document's abstract.**
+**v1.2.0 · 2026-08-16 — DEMOTED to a snapshot (issue #320): this workspace's own operating source
+for this doctrine is now `docs:product-lifecycle-rules` (a portable knowledge pack realizing the
+content below, `references/` cited by Part number), per CLAUDE.md's sources-flow-outward
+invariant ("standards skills in the plugins are canonical; corpus snapshots... refresh FROM them,
+never the reverse"). This resolves the prior ambiguity between that invariant and this file's own
+"the corpus wins" header, which — read literally within this workspace — had this file and the
+new pack both able to claim canon; only the pack does now. This file's own upstream — the
+**external internal doctrine corpus (v2.3.0)**, outside this repo — is unaffected by this ruling
+and remains the ultimate source both this file and the new pack trace to; nothing below changed to
+make that ruling, only the header. Consult the pack for the operating surface; consult this file
+for the original committed prose or historical provenance.**
+
+**v1.1.0 · 2026-08-13 (v1.1.0: gradual context-building named as a principle — Part 5, Kickoff, anti-patterns) · sourced from the internal doctrine corpus (v2.3.0). The companion one-pager ("How We Build") is this document's abstract.**
 
 **How to read this:** Parts 1–3 are the read-through — the idea, the loops, the lifecycle. Parts 4–8 are the lookup — the alignment docs, the knowledge base, the rules, the metrics, the anti-patterns. Part 9 is the glossary. New joiners read the whole thing once (~15 minutes); after that, you consult it.
 

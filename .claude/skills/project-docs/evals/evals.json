@@ -1,0 +1,61 @@
+{
+  "skill": "project-docs",
+  "note": "New suite, 2026-08-16 (issue #320) — project-docs previously shipped with no eval suite; added alongside the product-lifecycle-rules pack split so the estate-level check-routing sweep can prove this boundary. n05/n06 are the reciprocal fence against product-lifecycle-rules: a general 'why does this doctrine exist' ask is that pack's territory, not this project's own decided/queued state; owner: docs plugin (project-docs is a bare .claude/skills/ estate skill, not plugin-scoped).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "which tickets are open in this repo right now",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what did we decide about the RDD naming question",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "is there a spec for the naming convention",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "what's the status of issue #316",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "has this project already built the IDR type, or is it still scoped",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write an ADR about our database choice",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "file a bug about the broken build",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "build the ticket that's already queued",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "what sections does a locked ADR require, in general",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "why does the IDR/ADR/RDD alignment doc grammar exist, as general doctrine",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "explain the seven-stage build loop and why Spec lock is the only hard gate",
+      "expect": "no-trigger"
+    }
+  ]
+}

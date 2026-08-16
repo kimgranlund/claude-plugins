@@ -291,6 +291,11 @@
       "canonical": "overhaul",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "product-lifecycle",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

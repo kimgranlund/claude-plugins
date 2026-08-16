@@ -1,0 +1,81 @@
+{
+  "skill": "product-lifecycle-rules",
+  "note": "Authored with the skill 2026-08-16 (issue #320), realizing product-lifecycle-bible.md v1.1.0 as a portable knowledge pack. Negatives drawn adversarially from the two nearest boundaries this repo's own doc-writing-rules and project-docs suites gained reciprocal fences for, plus teamwork's loop-rules (shared 'loop' vocabulary, unrelated concept) and the unbuilt lifecycle-stage gap (#321's future territory).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "what's an IDR for, and how is it different from an ADR",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "why is Spec lock the only hard gate in the build loop",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "explain the three nested loops, North star, Foundation, Releases",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "how does a knowledge base mature over time, generally",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what is the relearn rate supposed to measure",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what's the admission test for writing an ADR versus an IDR",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "name the seven stages of one turn of the build loop",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what's the POC ossification anti-pattern and why does it fail",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "which document type should I use for this decision in our repo, and what sections does it need",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "what did this project decide about the RDD type, is it built yet",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "what lifecycle stage is this specific project in right now",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "write a /goal loop with a stopping predicate and a try cap",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "why does my /loop keep spinning on the same failure",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "which open tickets are queued for this repo right now",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "what frontmatter fields does doc_lint require on a locked ADR",
+      "expect": "no-trigger"
+    }
+  ]
+}
