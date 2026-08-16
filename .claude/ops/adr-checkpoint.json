@@ -51,6 +51,10 @@
     "adr-0013": {
       "hash": "7f969caf426db65ba0f00e2a69c6b7ab5dbe1b224c42bccd7170e58de2681480",
       "status": "accepted"
+    },
+    "adr-0014": {
+      "hash": "fd990595b51a1041375e820e666bd5fcaab410ebdf1f26dca9010ae465b25d67",
+      "status": "proposed"
     }
   }
 }
