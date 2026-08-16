@@ -49,6 +49,7 @@ ledgers, CHANGELOGs, ADRs, and the legacy READMEs.
 | `color-material-facts` | `physical-color-facts` |
 | `design-kit-checker` (agent) | `design-system-checker` |
 
+v1.0.8 · 2026-08-16 · checker-agent diet tail (#367): font-choice-checker's description already had no removable boilerplate (collide.py scores unchanged, e.g. ↔doc-checker 75.5). Body opener reworded for consistency with #364's siblings. Critic clean. No evals owed.
 v1.0.7 · 2026-08-16 · checker-agent description diet (#357): design-system-checker's description drops the shared fresh-isolated-context / never-grades-own-work / gap-map boilerplate (collide.py's top cross-plugin *-checker baseline, 6 agents, 103.9-158.4); doctrine moved to body. Re-run: ↔doc-checker 158.4→78.3, ↔flow-checker 115.4→101.1, ↔code-checker 109.9→91.3, ↔wiring-checker below threshold. Batched critic pass (6 files) clean; no evals.json owed. Siblings in docs/screens/teamwork trimmed same PR.
 v1.0.6 · 2026-08-16 · #348 footer sweep: 8 packs' stamped "Extending this pack" paragraph replaced with the one-line `Extension: governed by [[make-pack]]` citation per pack-writing-rules (harness 3.8.9) — mechanical, bodies otherwise untouched
 v1.0.5 · 2026-08-16 · checker retier (Kim's ruling): 2 *-checker agents move effort high→medium, model fable unchanged — review quality held at medium across the 2026-08-15/16 rounds while inherited-xhigh runs added cost, not findings

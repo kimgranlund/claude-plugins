@@ -1,7 +1,7 @@
 {
   "name": "design",
   "displayName": "Design",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "The design plugin \u2014 color science and palettes, typography systems, and design-system exports in one install: OKLCH ramps and verification, the 11-voice type system, Material Design token grammar, and the DESIGN.md/Figma Make/Google Stitch export bundles a generative design agent consumes.",
   "author": {
     "name": "Kim G / NONOUN"
