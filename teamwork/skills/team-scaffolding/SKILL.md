@@ -6,12 +6,14 @@ description: >-
   the seat's permission profile, prints the comms charter (peer roster + SendMessage-is-a-nudge
   doctrine + durable-channel fallback), then adopts the matching lead-* contract. Run
   /team-scaffolding, first argument agent, reviewer, planner, or product, then an optional
-  charter. NOT a one-off adoption of a single lead-* contract with no fleet bootstrap (/lead-team,
+  charter — or bare with no role: asks one question offering only missing seats (or seeds a
+  virgin repo's fleet manifest first), never re-asking once a role is bound. NOT a one-off
+  adoption of a single lead-* contract with no fleet bootstrap (/lead-team,
   /lead-review, /lead-planning, /product-authoring directly); NOT for a task one context can hold
   (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "agent|reviewer|planner|product [charter]"
+argument-hint: "[agent|reviewer|planner|product [charter]] — bare asks which seat"
 ---
 
 # team-scaffolding — name the seat, wall it, brief it, then hand off to the lead-* contract
@@ -21,15 +23,52 @@ Four standing sessions run one project: `{repo}-agent` (orchestrator), `{repo}-r
 authority). Each already has an owning contract — `teamwork:lead-team`, `teamwork:lead-review`,
 `teamwork:lead-planning`, `docs:product-authoring` — but none of those commands name the session, wall
 it, or brief it on its peers; that bootstrap layer is this command, run once per session before
-the matching `/lead-*` contract takes over. `$ARGUMENTS`: the role (required, first token) and an
-optional charter (the rest, passed straight through to the adopted contract).
+the matching `/lead-*` contract takes over. `$ARGUMENTS`: the role, first token — or bare, see
+Phase 1's interactive branch — and an optional charter (the rest, passed straight through to the
+adopted contract).
 
 ## Phase 1 — Bind the role
 
-Parse the first token of `$ARGUMENTS` as the role. Valid roles: `agent`, `reviewer`, `planner`,
-`product`. Blank or unrecognized role → Failure branches. State the bound role and repo name
-(basename of `git rev-parse --show-toplevel`, or the worktree root if inside one) back in one
-line before proceeding: `Seat: {repo}-<role>`.
+Valid roles: `agent`, `reviewer`, `planner`, `product`. Branch on `$ARGUMENTS` (#410
+bare-invocation-UX addendum):
+
+- **A role token given** (`$ARGUMENTS`'s first token is one of the four): **zero questions.**
+  Validate against `.claude/ops/fleet.json` — an unrecognized token is a Failure branch. Manifest
+  absent (virgin repo, role given directly) → seed it now with the canonical seat ladder (Phase 4
+  point 1), today's date as every seat's `justification_date`, `mode: "manual"` for all four —
+  canonical defaults, no interview, because an explicit role token is itself the human declining
+  the interview. Manifest present and this role's `live_state.joined` already carries a still-live
+  manual/dispatched entry → a collision, not a choice: report the existing entry's date and stop
+  (Failure branches) rather than layering a second holder over it. Otherwise (valid, unheld role)
+  → bind immediately, straight to Phase 2.
+- **Bare invocation (no `$ARGUMENTS`)**:
+  1. Read `.claude/ops/fleet.json`. **Absent** (virgin repo) → run the manifest-seeding interview
+     as ONE BATCHED `AskUserQuestion` round (never sequential — exactly these three questions,
+     asked together, no follow-up round): (a) seat set, default the canonical quartet; (b)
+     manned-vs-background, one multi-select — which of the seats picked in (a) run background; (c)
+     tier ladder — accept the canonical ladder (Phase 4 point 1) as-is, or name per-seat
+     deviations with their justification inline in the same answer (a deviation given with no
+     justification text is treated as declined — that seat stays canonical, per the schema's own
+     mechanizable-sweep requirement in `fleet-bootstrap`'s `references/fleet-manifest-schema.md`).
+     Seed the manifest from the answers — this is the same "explicit act, no further interview"
+     shape Phase 2 relies on for the role-token branch — then fall through to the role question
+     below (step 3) recommending `agent` (orchestrator) first, since nothing has joined yet.
+  2. **Present, not virgin** → read `live_state.joined`. All four roles already held (live
+     entries, no role missing) → ask nothing; report the roster (who holds what, since when) and
+     stop — there is no seat left to bind this session to.
+  3. **Otherwise** (present, at least one role missing) → ONE `AskUserQuestion` offering only the
+     MISSING seats as options (a held seat is never offered — joining it would be the collision
+     Phase 1's role-token branch already rejects, not a live choice here). Recommendation is
+     derived from standing-up order, first match wins **among the missing seats only** (a matched
+     but already-held seat is skipped, never recommended — it isn't an offerable option): no file
+     matches `.claude/docs/prd/*.md` or `.claude/docs/decompositions/*.md` (Phase 4 point 5's own
+     intent-layer check) and `product` is missing → `product`; a match exists and `planner` is
+     missing → `planner`; `planner` is held and `reviewer` is missing → `reviewer`; otherwise →
+     `agent`. The human's pick becomes the bound role; proceed to Phase 2 as if it had been the
+     `$ARGUMENTS` token.
+
+State the bound role and repo name (basename of `git rev-parse --show-toplevel`, or the worktree
+root if inside one) back in one line before proceeding: `Seat: {repo}-<role>`.
 
 ## Phase 2 — Name the session (convention, not platform-enforced)
 
@@ -39,12 +78,13 @@ live session, so this is a printed instruction plus a durable record, not an enf
 `.claude/ops/fleet-roster.md` (create it if absent, one Markdown table row: role · session-name ·
 date · repo) — this is the roster peers read for discovery (Phase 3).
 
-Also read `.claude/ops/fleet.json` (the structured fleet manifest — schema and rationale in
-`teamwork:fleet-bootstrap`'s `references/fleet-manifest-schema.md`, shared by both commands).
-Absent → this is the first seat to join a virgin repo: seed it now with the canonical seat ladder
-(Phase 4 point 1 below), today's date as every seat's `justification_date`, `mode: "manual"` for
-all four, and this role's `live_state.joined` entry. Present → append this role's
-`live_state.joined` entry only (role, mode, date, `agent_name: null` for a manual seat); every
+`.claude/ops/fleet.json` (the structured fleet manifest — schema and rationale in
+`teamwork:fleet-bootstrap`'s `references/fleet-manifest-schema.md`, shared by both commands) is
+already seeded by now — either Phase 1's bare-invocation branch seeded it via the batched
+interview before any role bound, or its role-token branch seeded it with canonical defaults
+directly (the explicit token stood in for the interview). Either way seeding never runs twice: an
+absent manifest at this point is a Phase 1 defect, not something Phase 2 re-derives. Append this
+role's `live_state.joined` entry (role, mode, date, `agent_name: null` for a manual seat); every
 other role's existing entry and the seat-tier table are read-only from here.
 
 ## Phase 3 — Write or verify the permission profile
@@ -127,8 +167,12 @@ From this point, this session runs under the adopted contract exactly as if invo
 
 ## Failure branches
 
-- **Invoked with no `$ARGUMENTS` or an unrecognized role** → report the four valid roles and stop;
-  no session naming, no profile write, no adoption.
+- **Unrecognized role token** → report the four valid roles and stop; no session naming, no
+  profile write, no adoption.
+- **Bare invocation with all four roles already held** → report the roster and stop (Phase 1); no
+  question asked, nothing to bind this session to.
+- **A role (given or picked via Phase 1's question) whose `live_state.joined` already carries a
+  still-live entry** → report the existing holder's date and stop; never layer a second holder.
 - **Phase 3's `settings.local.json` write or verification fails for `reviewer`** → stop at Phase 3;
   never silently downgrade to a stated-only wall.
 - **`docs` not installed and role is `product`** → name the gap plainly (Phases 1–4 still ran; only

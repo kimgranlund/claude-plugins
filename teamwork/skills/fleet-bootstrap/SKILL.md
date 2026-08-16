@@ -7,8 +7,8 @@ description: >-
   user stops and names the pending gate). Seeds or updates the fleet manifest (roster, tier
   deviations with dated justification, manned-vs-background, live seat state). Run
   /fleet-bootstrap [spawn-list], a comma-separated subset of reviewer,planner (default empty —
-  those two are manually operated per #410 addendum 3; pass them to background-spawn instead).
-  NOT a single seat's own bootstrap
+  those two are manually operated per #410 addendum 3), always confirmed via one AskUserQuestion
+  before spawning — the argument only pre-selects, it never skips that confirm. NOT a single seat's own bootstrap
   (team-scaffolding, which this calls internally per seat, and which alone is correct for a human
   joining one seat by hand); NOT for redoing the gate after ratification (fires once per cold start).
 disable-model-invocation: true
@@ -30,8 +30,10 @@ optional comma-separated spawn-list, default empty (see Phase 5).
 Read `.claude/ops/fleet.json`. Absent → this is a virgin repo; seed it now with the schema in
 `references/fleet-manifest-schema.md` (seat roster, canonical tier ladder with today's date as
 `justification_date` for every seat still at its canonical tier, `mode: "manual"` for every seat,
-empty `live_state.joined`). Present → read it as the record of who has already joined and at what
-tier/mode; do not overwrite existing `live_state` entries, only append.
+empty `live_state.joined`) — no interview, matching `team-scaffolding`'s own rule that an explicit
+command invocation with no role question asked is itself the human's act of declining one; running
+`/fleet-bootstrap` at all is that same explicit act. Present → read it as the record of who has
+already joined and at what tier/mode; do not overwrite existing `live_state` entries, only append.
 
 ## Phase 1 — Adopt the orchestrator seat
 
@@ -65,19 +67,29 @@ hard gate reports SKIPPED/blocked.
 Record the gate's outcome (`ratified` / `revised-and-reratified` / `rejected-stopped-here`) as
 `live_state.gate` in `fleet.json` before continuing.
 
-## Phase 4 — Determine the spawn list
+## Phase 4 — Determine and confirm the spawn list
 
 `$ARGUMENTS`, comma-separated, restricted to `reviewer` and `planner` (the only two seats this
 phase can spawn — `agent` is already this session, `product` was already dispatched in Phase 2).
 **Default (no argument): empty.** Reviewer and planner are, per #410 addendum 3, the
 seats Kim drives manually in a terminal — a background agent cannot be interactively steered the
 way a live terminal seat can, so defaulting to spawning them would fight the human's own stated
-operating mode. An explicit spawn-list argument overrides the default when the human *does* want
-one or both running unattended (e.g. an overnight repo with no one free to drive planner by hand).
+operating mode.
 
-## Phase 5 — Spawn the requested seats as long-lived named background agents
+**This command's one confirm** (#410 bare-invocation-UX addendum: "exactly ONE confirm — the
+background-seat spawn list before creating them; fan-out is confirmed, never inferred"): present
+the resolved list — the argument's value, or "none (default)" — via one `AskUserQuestion` before
+spawning anything, options `None` / `reviewer` / `planner` / `reviewer + planner`, pre-selected to
+match `$ARGUMENTS`. The human's answer here is final regardless of what `$ARGUMENTS` said — an
+argument sets the pre-selection, it does not skip this confirm. No live user reachable here — a
+rarer case than Phase 3's, since an unattended run already stopped at that earlier gate; this
+branch only fires if the human became unreachable after ratifying — → do not spawn anything (an
+unconfirmed fan-out is not "assume the argument's list"); report the spawn phase as skipped for
+the same no-live-user reason, and proceed to Phase 6.
 
-For each role in the spawn list (skip entirely if empty — proceed straight to Phase 6):
+## Phase 5 — Spawn the confirmed seats as long-lived named background agents
+
+For each role in the confirmed list (skip entirely if empty — proceed straight to Phase 6):
 
 1. Dispatch via the `Agent` tool, `name: "{repo}-<role>"`, prompt instructing it to run
    `/team-scaffolding <role>` as its first action (so it inherits level 1's own
@@ -98,7 +110,8 @@ what a rejoining session reads to discover it's taking over an existing seat, no
 ## Phase 6 — Report
 
 One summary: which seats are live and how (manual/background), the gate's outcome, the spawn list
-honored (or "none — default"), and the `fleet.json` path as the durable record a later session
+honored (one of: "none — confirmed default", "reviewer/planner — confirmed", or "confirm skipped —
+no live user, nothing spawned"), and the `fleet.json` path as the durable record a later session
 reads to resume orientation.
 
 ## Failure branches
