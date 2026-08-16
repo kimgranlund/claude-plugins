@@ -47,7 +47,8 @@ bare-invocation-UX addendum):
   `references/fleet-manifest-schema.md`, the canonical home). Live (`"joined"`, or absent) → a
   collision, not a choice: report the existing entry's date and stop (Failure branches) rather
   than layering a second holder over it. Released (`"released"`), or no entry exists yet for this
-  role → not a collision; bind immediately, straight to Phase 2.
+  role → not a collision; bind immediately — for `reviewer`, after the worktree precondition
+  below; every other role goes straight to Phase 2.
 - **Bare invocation (no `$ARGUMENTS`)**:
   1. Read `.claude/ops/fleet.json`. **Absent** (virgin repo) → run the manifest-seeding interview
      as ONE BATCHED `AskUserQuestion` round (never sequential — exactly these three questions,
@@ -72,7 +73,19 @@ bare-invocation-UX addendum):
      intent-layer check) and `product` is missing → `product`; a match exists and `planner` is
      missing → `planner`; `planner` is held and `reviewer` is missing → `reviewer`; otherwise →
      `agent`. The human's pick becomes the bound role; proceed to Phase 2 as if it had been the
-     `$ARGUMENTS` token.
+     `$ARGUMENTS` token — for `reviewer`, after the worktree precondition below.
+
+**`reviewer`-only precondition (issue #427, C2 amendment in
+`.claude/docs/lld/lld-0006-fleet-permission-profile.md`): the reviewer's wall must land in an
+isolated worktree, never the shared primary checkout.** Run `git rev-parse --git-common-dir` and
+`git rev-parse --git-dir` — they differ only inside a linked worktree (never in the primary
+checkout). Different → isolated, proceed. Same → **stop here**, before naming or walling anything:
+report that the reviewer seat requires its own worktree (the real fleet runs multiple seats in one
+shared checkout by default, and a wall written there would govern every session in it, not just
+this one — the exact scope leak #427 found), name `EnterWorktree` as the fix, and instruct
+re-running `/team-scaffolding reviewer` from the resulting worktree. This check never runs for the
+other three roles — `agent`/`planner`/`product` write no deny profile (Phase 3) and have no
+scope-leak risk to guard against.
 
 State the bound role and repo name (basename of `git rev-parse --show-toplevel`, or the worktree
 root if inside one) back in one line before proceeding: `Seat: {repo}-<role>`.
@@ -99,12 +112,18 @@ the seat-tier table are read-only from here.
 
 Branch on role:
 
-- **`reviewer`** — the wall must be STRUCTURAL, not stated (issue #404 spec correction 3). Follow
-  `.claude/docs/lld/lld-0006-fleet-permission-profile.md` C1–C3 exactly: merge (never clobber) `deny: ["Edit",
-  "Write"]` plus the `gh`/Read/Grep/Glob allow-list into `.claude/settings.local.json` in this
-  worktree, then re-read the file and grep for both deny entries before continuing. If
-  verification fails, STOP here and report the failure — do not proceed to Phase 4 believing the
-  seat is walled when it might not be.
+- **`reviewer`** — the wall must be STRUCTURAL, not stated (issue #404 spec correction 3), and must
+  cover the `Bash` write hole (issue #427, C1a). Follow
+  `.claude/docs/lld/lld-0006-fleet-permission-profile.md` C1–C1a exactly:
+  1. Merge (never clobber) `deny: ["Edit", "Write"]` plus the `gh`/Read/Grep/Glob allow-list into
+     `.claude/settings.local.json` in this worktree.
+  2. Merge (never clobber existing `hooks.PreToolUse` entries) a `PreToolUse` hook, matcher
+     `Bash`, into the same file: a `command`-type hook denying any `Bash` invocation that doesn't
+     match C1a's allowlist — the exact command shape (charset, escape-hatch pattern, JSON) is
+     canonical there and never restated here.
+  3. Re-read the file and grep for both deny entries AND the hook entry before continuing. If
+     verification fails, STOP here and report the failure — do not proceed to Phase 4 believing the
+     seat is walled when it might not be.
 - **`agent` / `planner` / `product`** — no additional deny profile; these seats need their normal
   write access to dispatch, author docs, or maintain product records. State this explicitly
   (`No permission-profile deviation for this role — full write access retained`) so a reader never
@@ -207,22 +226,27 @@ item: who executes the un-wall must be stated, not implied). **A `reviewer` sess
 `deny: ["Edit", "Write"]` wall (Phase 3) covers exactly the `Edit`/`Write` tools, not `Bash`** —
 every write in this phase (all three steps, not step 1 alone: `fleet.json` and
 `fleet-roster.md` are ordinary worktree files the reviewer wall also blocks via Edit/Write) runs
-as a `Bash` command (`sed`/inline heredoc, whatever's surgical) for that reason, with a `Read`
+as a `Bash` command (`sed`/`cat`/`printf`, whatever's surgical) for that reason, with a `Read`
 re-check after each write (`Read` is never denied either) — stating the mechanism here so the
 model's first attempt isn't an `Edit` call that walks straight into the wall it's trying to
-remove. Run these three steps in order; a failure at any step stops there and is reported
-(Failure branches) rather than silently skipped:
+remove. **This does not self-lock against issue #427's `Bash`-gating `PreToolUse` hook (Phase
+3/C1a)**: that hook's allowlist carries a deliberate, narrow escape hatch for exactly this
+step — `sed`/`cat`/`printf` commands naming one of the three fleet-state files, no chaining
+metacharacters — documented in `lld-0006-fleet-permission-profile.md` C1a, never re-derived here.
+Run these three steps in order; a failure at any step stops there and is reported (Failure
+branches) rather than silently skipped:
 
-1. **Un-wall, `reviewer` only.** Remove exactly the entries Phase 3/C1 added to
-   `.claude/settings.local.json` (`deny: ["Edit", "Write"]` and the `gh`/Read/Grep/Glob
-   allow-list) — surgical removal via `Bash`, never a wholesale file delete, since the file may
-   carry unrelated keys the human added by hand (the same merge-never-clobber discipline C1 uses
-   going in applies going out). Re-read the file and confirm both deny entries are gone before
-   continuing. Other roles (`agent`/`planner`/`product`) never wrote a deny profile (Phase 3), so
-   this step is a no-op for them — state that plainly rather than skipping silently, and use the
-   normal `Edit`/`Write` tools for steps 2-3 (nothing walls those roles). The seat is deliberately
-   left un-walled, not re-walled to some default: the next session to bind `reviewer` re-runs
-   Phase 3 fresh and re-writes its own wall — no session inherits another's wall.
+1. **Un-wall, `reviewer` only.** Remove exactly the entries Phase 3/C1–C1a added to
+   `.claude/settings.local.json` (`deny: ["Edit", "Write"]`, the `gh`/Read/Grep/Glob allow-list,
+   and the `PreToolUse`/`Bash` hook) — surgical removal via `Bash`, never a wholesale file delete,
+   since the file may carry unrelated keys the human added by hand (the same merge-never-clobber
+   discipline C1 uses going in applies going out). Re-read the file and confirm the deny entries
+   AND the hook entry are gone before continuing. Other roles (`agent`/`planner`/`product`) never
+   wrote a deny profile (Phase 3), so this step is a no-op for them — state that plainly rather
+   than skipping silently, and use the normal `Edit`/`Write` tools for steps 2-3 (nothing walls
+   those roles). The seat is deliberately left un-walled, not re-walled to some default: the next
+   session to bind `reviewer` re-runs Phase 3 fresh and re-writes its own wall — no session
+   inherits another's wall.
 2. **Append the release record.** In `.claude/ops/fleet.json`, append (never rewrite) a
    `live_state.joined` entry for this role: `{ "role": "<role>", "mode": "<from the entry being
    released>", "date": "<today>", "action": "released", "agent_name": null, "reason":
