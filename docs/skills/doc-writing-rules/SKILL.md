@@ -120,8 +120,9 @@ ADR/IDR via its own `decision-refs:` frontmatter field, never the reverse. Reali
 product-lifecycle-bible (Part 4) PRP concept as a docs type, named RDD rather than PRP to complete
 the `_DR` family grammar IDR/ADR already established. Lifecycle mirrors ADR/IDR's proven two-phase
 mechanic: `draft` (freely editable, citations/DRI not yet required) → `locked` (T4 blocks
-committed-HEAD content edits; `decision-refs:` and `dri:` become mandatory — T7 FAILs a locked RDD
-carrying either empty) → `superseded` (terminal; a new RDD cites `supersedes:`). **Deliberately no
+committed-HEAD content edits; `decision-refs:` and `dri:` become mandatory — T7 FAILs a
+locked-or-beyond RDD carrying either empty) → `superseded` (terminal; a new RDD cites
+`supersedes:`). **Deliberately no
 fourth `shipped-and-archived` status value** (Kim's ruling, 2026-08-16, issue #332): completion
 tracking belongs to the `roadmap` type's own living Now/Next/Later movement — "releases lock, the
 roadmap breathes" — a shipped RDD stays `locked` forever, byte-identical; a renegotiated

@@ -118,7 +118,7 @@ def lint_text(text):
                                             "with no upward ADR/IDR citation is a release commitment "
                                             "with zero traceability"))
         dri = fm.get("dri", "").strip().lower()
-        if dri in ("", "null", "none"):
+        if dri in ("", "null", "none", "[]"):
             findings.append(("FAIL", "T7", "no `dri:` -> a locked-or-beyond RDD needs a named "
                                             "accountable human, mechanically, not just a Problem-statement claim"))
     return findings

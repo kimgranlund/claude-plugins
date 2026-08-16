@@ -33,8 +33,11 @@ One batched round covering the type's load-bearing slots: for a SPEC, the testab
 and the non-goals; for an ADR, the alternatives actually considered; for a PLAN, each step's
 done-when; for a TICKET, what it traces to; for an IDR, the admission test — "would two reasonable
 builds differ on it?" — same spirit as ADR's own "a choice someone will later ask why about" gate;
-a claim that fails it isn't an IDR, and the round ends there rather than minting one. Where the
-harness plugin's find-intent and break-down-problem are installed, use them here; where not, apply
+a claim that fails it isn't an IDR, and the round ends there rather than minting one; for an RDD,
+the Scope admission test — "could two reasonable teams ship different releases from this roadmap
+line?" — a line that fails it doesn't earn its own RDD, and the round ends there before minting
+one, same as IDR's own gate. Where the harness plugin's find-intent and break-down-problem are
+installed, use them here; where not, apply
 their discipline inline — ambiguities surfaced as multiple-choice, structure before prose.
 
 ## Phase 3 — Draft from the template

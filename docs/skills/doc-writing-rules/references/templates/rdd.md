@@ -6,11 +6,11 @@ date: YYYY-MM-DD
 owner: 
 dri:                            # the named accountable human (bible: "a DRI can explain what
                                  # shipped") — distinct from owner (who authored the record);
-                                 # required non-empty at `locked` (T7, FAIL)
+                                 # required non-empty at `locked` or beyond (T7, FAIL)
 decision-refs:                  # comma/space-separated adr-NNNN / idr-NNNN ids, ONE line —
                                  # parse_frontmatter is a scalar parser, no YAML block lists;
                                  # e.g. `decision-refs: adr-0002, idr-0001` — required non-empty
-                                 # at `locked` (T7, FAIL)
+                                 # at `locked` or beyond (T7, FAIL)
 supersedes: null                 # rdd-NNNN when replacing a prior release commitment
 ---
 # RDD-0000 — <the release commitment, stated as what ships>

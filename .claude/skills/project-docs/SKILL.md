@@ -30,7 +30,7 @@ answer is reported as absent, never guessed.
 | A system decomposition or partition manifest | `.claude/docs/decompositions/` |
 | A subagent's handback / handoff record | `.claude/docs/handoff/` |
 | A founding hypothesis or testable claim this project is built on | `.claude/docs/idr/` (`idr-*`, `locked` = append-only; not yet present in this repo as of 2026-08-16 — the type ships in this same change, no instance minted here) |
-| A locked release commitment — scope, citations, DRI | `.claude/docs/rdd/` (`RDD-*`, `locked` = append-only; not yet present in this repo as of 2026-08-16 — the type ships in this same change, no instance minted here) plus the `roadmap`'s own living view for what's currently shipping |
+| A locked release commitment — scope, citations, DRI | `.claude/docs/rdd/` (`rdd-*`, `locked` = append-only; not yet present in this repo as of 2026-08-16 — the type ships in this same change, no instance minted here) plus the `roadmap`'s own living view for what's currently shipping |
 | PRD (why/what) | `.claude/docs/prd/` (first instance 2026-08-15: `prd-idr-framework.md`, the IDR scoping) |
 | LLD (how) | `.claude/docs/lld/` (lld-0001…0004 as of 2026-08-15) |
 | PLAN, ROADMAP (Now/Next/Later), TASK | Not present in this repo as of 2026-08-15 — a request for one of these types routes to `/make-doc`, never assumed absent-forever |
