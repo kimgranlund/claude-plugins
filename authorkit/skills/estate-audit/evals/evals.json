@@ -1,15 +1,17 @@
 {
   "skill": "estate-audit",
-  "note": "Minted 2026-08-15 (issue #293/#272) as the backing skill for estate-audit-agent's primary agent-of-skill naming production (ADR-0011) — an index with no procedure of its own, so its trigger surface is deliberately narrow: which instrument fits, or how to parameterize the batch agent. Running any one sweep directly stays each instrument skill's own domain; every no-trigger case here names that owner.",
+  "note": "Minted 2026-08-15 (issue #293/#272) as the backing skill for estate-audit-agent's primary agent-of-skill naming production (ADR-0011) — an index with no procedure of its own, so its trigger surface is deliberately narrow: which instrument fits, or how to parameterize the batch agent. Running any one sweep directly stays each instrument skill's own domain; every no-trigger case here names that owner. t05/n06 added 2026-08-16 (issue #379) for the fifth instrument, doctrine-audit.",
   "cases": [
     {"id": "t01", "prompt": "Which of authorkit's audit instruments should I use to check for busy-work versus naming conformance?", "expect": "trigger"},
     {"id": "t02", "prompt": "What instrument value do I pass to estate-audit-agent for an attention/menu-rent sweep?", "expect": "trigger"},
     {"id": "t03", "prompt": "List the estate-audit family's instruments and which skill owns each one.", "expect": "trigger"},
     {"id": "t04", "prompt": "I need to batch-audit 10 estates for both naming and bloat — what agent and parameters do I dispatch?", "expect": "trigger"},
+    {"id": "t05", "prompt": "What instrument value do I pass to estate-audit-agent for a doctrine-drift sweep across these plugins?", "expect": "trigger"},
     {"id": "n01", "prompt": "Audit this plugin for naming conformance.", "expect": "no-trigger", "comment": "owner: naming-audit — runs the sweep directly"},
     {"id": "n02", "prompt": "Audit this skill for busy-work and ceremony.", "expect": "no-trigger", "comment": "owner: bloat-audit — runs the sweep directly"},
     {"id": "n03", "prompt": "Report the menu-rent and description-collision figures for this estate.", "expect": "no-trigger", "comment": "owner: attention-audit — runs the sweep directly"},
     {"id": "n04", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — runs the sweep directly"},
-    {"id": "n05", "prompt": "What does the grammar say about how agent names are formed?", "expect": "no-trigger", "comment": "owner: naming-conventions"}
+    {"id": "n05", "prompt": "What does the grammar say about how agent names are formed?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
+    {"id": "n06", "prompt": "Sweep this workspace against doctrine.manifest.json and tell me which canon-to-dependent edges are broken.", "expect": "no-trigger", "comment": "owner: doctrine-audit — runs the sweep directly"}
   ]
 }

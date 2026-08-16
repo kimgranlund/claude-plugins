@@ -81,6 +81,26 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.14.0 · 2026-08-16 · New capability (issue #379): `doctrine-audit`, a fifth estate-audit
+instrument for canon-to-dependent DOCTRINE-drift conformance — a rule stated canonically in
+one artifact (a standards skill, an ADR) violated, omitted, or paraphrased by a dependent (an
+agent body, a forge skeleton, a README ledger row). Own manifest, `doctrine.manifest.json` at
+the repo root (separate schema from `naming.manifest.json` per ADR-0011 D1 — Kim's
+2026-08-16 ruling), with its own `sweep.py validate` subcommand. Four edge types:
+`verbatim-line` (require/forbid an exact pattern), `ledger-sync` (a ledger row still matches
+what's on disk), `vocab-term` (canonical term vs. banned aliases), and `judgment` (no
+lexical anchor — routed to a named owning checker, reported "queued, not built", never
+dispatched from the instrument per Kim's ruling — read-only like its four siblings).
+`estate-audit-agent` grows a fifth `instrument` value; `overhaul-planning`'s measure-first
+Phase 0 gains it as a sixth composed instrument (fires whenever the target carries a
+`doctrine.manifest.json`), `requires` extended on both. Manifest seeded with 5 of the
+2026-08-16 team/coordination-surface review's 8 findings (the other 3 could not be
+recovered from any written record — seeded honestly as a documented gap, not fabricated);
+running the sweep against this workspace right now catches 4 of the 5 live (findings 1/2/5
+— #380/#381 are still open, not yet merged via PR #383 — and finding 4's stale README row),
+with the 5th (finding 3/#382) correctly routed to `harness:wording-checker` as a judgment
+edge. Minor bump — new capability, no existing contract changed.
+
 v0.13.1 · 2026-08-16 · Reconciled `overhaul-planning`'s doc-type ruling with docs' own type
 taxonomy (issue #369): PR #346's `docs:doc-checker` pass judged a generated overhaul-plan doc
 plan-shaped (living checkboxes, no genuine Components/Interfaces/Data/Risks), not LLD-shaped as

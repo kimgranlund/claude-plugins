@@ -14,7 +14,8 @@
     {"canonical": "team", "plural": null, "banned_aliases": []},
     {"canonical": "bloat", "plural": null, "banned_aliases": ["verbosity", "ceremony", "cruft"]},
     {"canonical": "pattern", "plural": "patterns", "banned_aliases": []},
-    {"canonical": "estate", "plural": "estates", "banned_aliases": []}
+    {"canonical": "estate", "plural": "estates", "banned_aliases": []},
+    {"canonical": "doctrine", "plural": null, "banned_aliases": []}
   ],
   "brand_tokens": ["adia", "authorkit"],
   "author_registry": ["kim"],
