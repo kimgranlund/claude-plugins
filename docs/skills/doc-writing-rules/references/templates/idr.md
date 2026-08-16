@@ -4,7 +4,7 @@ id: idr-0000
 status: draft            # draft | locked | superseded
 date: YYYY-MM-DD
 owner: 
-proof-ref:                # path/URL to the test, demo, or prototype state — required at lock
+proof-ref:                # path/URL to the test, demo, or prototype state — fill before locking (authoring contract; not lint-gated)
 supersedes: null          # idr-NNNN when replacing a prior claim, reason in ## Why
 ---
 # IDR-0000 — <the testable hypothesis or outcome claim, stated so it could fail>
@@ -21,7 +21,9 @@ supersedes: null          # idr-NNNN when replacing a prior claim, reason in ## 
 ## Proof
 <!-- A REFERENCE only — a test, demo, or prototype path/URL that would confirm or falsify the
      claim. Never inline the evidence itself here; point at it, the same "point at the source,
-     don't restate" discipline the ID spine enforces everywhere else. Required before `locked`. -->
+     don't restate" discipline the ID spine enforces everywhere else. Fill this and proof-ref
+     before flipping to `locked` — an authoring contract, same as the section's own presence
+     (doc_lint's T3), not itself a separately lint-gated field. -->
 
 <!-- LEDGER CLASS (second member alongside ADR): once status: locked, this file is append-only.
      To change the claim, write a new IDR with supersedes: this id — the hook blocks edits here.

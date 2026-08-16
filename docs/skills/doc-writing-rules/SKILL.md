@@ -99,15 +99,14 @@ ADR's own "a choice someone will later ask why about" gate. Lifecycle mirrors AD
 two-phase mechanic exactly: `draft` (freely editable, the harvest window) → `locked` (committed-HEAD
 edits blocked — T4, same mechanism as an accepted ADR) → `superseded` (terminal; a new IDR cites
 `supersedes:`). An ADR **may** cite `≥1` IDR via its own `intent-refs:` frontmatter field (parallel
-to `supersedes:`) — an ADR with no upstream intent citation is an "orphan ADR" per the corpus's
-product-lifecycle-bible (Part 4); the citation field and its orphan check are their own,
-separately-scoped follow-up (`.claude/docs/prd/prd-idr-framework.md`, Implementation surface item
-7 — not yet built as of this row landing). **Cardinality** (ruling, issue #273, 2026-08-16): plural
-and numbered like ADR — one IDR per testable hypothesis; `idr-0001` is the bootstrap-minted
+to `supersedes:`) — an ADR with no upstream intent citation warns as an "orphan ADR" (T6) per the
+corpus's product-lifecycle-bible (Part 4); ADRs 0001-0013 predate the field and correctly warn
+until retrofitted, its own deferred follow-up. **Cardinality** (ruling, issue #273, 2026-08-16):
+plural and numbered like ADR — one IDR per testable hypothesis; `idr-0001` is the bootstrap-minted
 founding record, not a claim that the type itself is singular. The bible's shape wins in full:
 plural locked IDRs **plus ONE living index** (a "product brief" aggregator over `idr-0*`) — the
-living-index type itself stays a deferred follow-up, not built by this row (querying `idr-0*`
-directly suffices until it lands). Full scoping: `prd-idr-framework.md`; concept authority:
+living-index type itself stays a deferred follow-up, not built here (querying `idr-0*` directly
+suffices until it lands). Full scoping: `prd-idr-framework.md`; concept authority:
 `product-lifecycle-bible.md` Part 4.
 
 ## Bug-shaped tickets
