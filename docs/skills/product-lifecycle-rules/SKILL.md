@@ -34,6 +34,7 @@ what any one project has actually decided. Three fences keep it that way (see Bo
 | What an IDR/ADR/RDD (the bible's PRP) is *for*, admission tests, citation direction, escalation-rides-the-citations | `references/alignment-record-types.md` |
 | How a knowledge base matures (born → harvest → amend → prune), the grounding doc, the seven habits, what gets measured | `references/knowledge-base-habits.md` |
 | Named anti-patterns, and the glossary (IDR/ADR/PRP/DRI/pivot/relearn rate, etc.) | `references/anti-patterns-glossary.md` |
+| Adopting the north-star loop onto a project with no existing intent layer — harvest, provenance-marked drafts, batched ratification, day-0 homes-not-content | `references/cold-start-adoption.md` |
 
 Five files, all reachable 1:1 from this table — no separate INDEX (pack-writing-rules' 2026-07-09
 ruling: a flat corpus at or under ~7 files makes the table itself the retrieval map).
