@@ -85,6 +85,13 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.3 · 2026-08-16 · critic-step nested-wait hardened (closes #370, PR #317's structural rule
+extended past build delegation to the critic step): `dispatch-ticket`'s no-nested-wait paragraph
+and `build-lead`'s own copy both gain an explicit recovery instruction — after dispatching a
+fresh-context critic, never wait for a completion notification (it routes to the ROOT session like
+any other nested callback, per PR #368's ADR-0014-build recurrence); act on the Agent tool call's
+own synchronous return value directly, or, if already stalled, read the critic's transcript/output
+file yourself or let the coordinator relay the verdict
 v2.14.2 · 2026-08-16 · persisted worktree-identity pin (closes #363, #359 follow-up): `worktree_prebash_guard.py` gains a per-session, session_id-keyed pin, ASK-and-self-heal on drift (first-call pin-write, no cd needed to catch it); 10 new selftest fixtures (32-41); `parallel-work-rules` doctrine note citing #359. Fresh-context hook-checker: 1 Major fixed pre-merge (unwritable data dir crashed the hook — now fails open, tmp-write race fixed alongside)
 v2.14.1 · 2026-08-16 · checker-agent description diet (#357): code-checker/wiring-checker descriptions drop the shared fresh-isolated-context / never-grades-own-work / gap-map boilerplate (collide.py's top cross-plugin *-checker baseline, 6 agents, 103.9-158.4); doctrine added to each body opener. Re-run: code-checker↔design-system-checker 109.9→91.3, ↔flow-checker 103.9→69.6; wiring-checker↔layout-checker 135.6→64.0, rest below threshold. Batched critic pass (6 files): both clean; layout-checker's dropped fix-owner clause repaired same-round. No evals.json owed. Siblings trimmed same PR.
 v2.14.0 · 2026-08-15 · agent-contract-adoption ritual centralized (closes #352, bloat-audit
