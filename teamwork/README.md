@@ -85,6 +85,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.7 · 2026-08-16 · build-lead gains the standing teammate-mode SendMessage delivery clause (agent-writing-rules item 3, gh#157 stranded-report class; closes half of #381). Rebased onto 2.14.6 and rebumped by PR #383's takeover session (coordinator dispatch, 2026-08-16) — 2.14.4/2.14.5 stayed reserved/skipped per the 2.14.6 note below; supersedes that note, this is the actual #383 rebump.
 v2.14.6 · 2026-08-16 · DE-standards adoption (#377): `dispatch-ticket`'s PR-open bullet and Findings write-back both gain a required rejected-alternatives entry (docs doc-writing-rules' TICKET contract, same tier as Findings); its critic dispatch may carry an optional review-path line, mirroring write-handoff's (harness). 2.14.4/2.14.5 skipped, reserved for PR #383's own rebump (comment-coordinated).
 v2.14.4 · 2026-08-16 · agent-scoped worktree-identity pin (closes #375, #363/#359's own follow-up):
 `worktree_prebash_guard.py`'s persisted pin was keyed by `session_id` alone, but this workspace's
