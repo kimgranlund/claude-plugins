@@ -149,7 +149,7 @@ def _scalar(v):
 # already carries its own back-compat fallback in main(); it is deliberately excluded here.
 TOP_LEVEL_LIST_FIELDS = (
     "verb_lex", "process_lex", "role_lex", "object_vocab", "brand_tokens",
-    "author_registry", "mutating_no_confirm_allowlist", "exemptions",
+    "author_registry", "mutating_no_confirm_allowlist", "exemptions", "topic_lex",
 )
 
 
@@ -178,6 +178,12 @@ class Grammar:
         self.verb_lex = set(_typed_list(manifest, "verb_lex", self.manifest_errors))
         self.process_lex = set(_typed_list(manifest, "process_lex", self.manifest_errors))
         self.role_lex = set(_typed_list(manifest, "role_lex", self.manifest_errors))
+        # TopicLex (spec-naming-convention.md §14.2, ADR-0014 D3): closed lexicon of
+        # `-rules` reference-doc topic words (`icon`, `motion`, …), structurally identical
+        # to RoleLex — consulted ONLY inside D1's union-pool resolution below, never
+        # disjointness-checked against ObjectVocab/ProcessLex (D3: no ambiguity possible in
+        # that context, only harmless redundancy).
+        self.topic_lex = set(_typed_list(manifest, "topic_lex", self.manifest_errors))
         self.exemptions = set(_typed_list(manifest, "exemptions", self.manifest_errors))
         # author_registry must be a flat list of plain strings (MANIFEST-TEMPLATE.json's
         # own contract). A structured entry (e.g. {"name": ..., "emails": [...]}) is not
@@ -250,15 +256,29 @@ class Grammar:
                 self.objects[entry["plural"]] = canon
             for alias in entry.get("banned_aliases", []):
                 self.banned[alias] = canon
+        # D1's union pool (ADR-0014): ObjectVocab ∪ single-token ProcessLex members ∪
+        # TopicLex — built once here, never re-derived per parse. ProcessLex/TopicLex
+        # entries are added only where absent so an ObjectVocab canonical form (which may
+        # carry its own plural mapping) is never shadowed by a same-spelled Process/Topic
+        # entry (issue matters only in a name clash, which registration hygiene should
+        # flag, never something this merge should silently prefer one way).
+        self.objects_union = dict(self.objects)
+        for tok in self.process_lex:
+            self.objects_union.setdefault(tok, tok)
+        for tok in self.topic_lex:
+            self.objects_union.setdefault(tok, tok)
         overlap = self.verb_lex & self.process_lex
         self.lexicon_errors = (
             [f"VerbLex/ProcessLex disjointness violated: {sorted(overlap)}"]
             if overlap else []
         )
 
-    def resolve_objects(self, tokens):
-        """Greedy left-anchored longest-match of hyphen tokens against
-        ObjectVocab. Returns (ok, unresolved_token_or_None)."""
+    def _resolve(self, tokens, pool):
+        """Greedy left-anchored longest-match of hyphen tokens against `pool`.
+        Returns (ok, unresolved_token_or_None). Shared by resolve_objects (ObjectVocab
+        alone) and resolve_objects_union (D1's union pool) — same algorithm, different
+        lexicon set, per ADR-0014 D1's own framing ("no change to the matching algorithm
+        itself, only to which lexicon set it's built from")."""
         i = 0
         while i < len(tokens):
             matched = False
@@ -266,12 +286,23 @@ class Grammar:
                 cand = "-".join(tokens[i:j])
                 if cand in self.banned:
                     return False, f"banned alias {cand!r} (use {self.banned[cand]!r})"
-                if cand in self.objects:
+                if cand in pool:
                     i, matched = j, True
                     break
             if not matched:
                 return False, f"token {tokens[i]!r} resolves in no lexicon or vocab"
         return True, None
+
+    def resolve_objects(self, tokens):
+        """Greedy left-anchored longest-match of hyphen tokens against
+        ObjectVocab. Returns (ok, unresolved_token_or_None)."""
+        return self._resolve(tokens, self.objects)
+
+    def resolve_objects_union(self, tokens):
+        """Same algorithm as resolve_objects, resolved against D1's union pool
+        (ObjectVocab ∪ ProcessLex ∪ TopicLex) — the `-rules` reserved-tail production's
+        own resolution pool (ADR-0014 D1)."""
+        return self._resolve(tokens, self.objects_union)
 
     def check_brand(self, tokens):
         hits = [t for t in tokens if t in self.brand_tokens]
@@ -319,6 +350,19 @@ class Grammar:
         if kind == "skill":
             if tokens[-1] == "agent":
                 return errs + ["reserved head -agent on a skill"]
+            # D1 — `-rules` reserved TAIL (spec §14.2, ADR-0014): must sit BEFORE the
+            # object-process check below, since `rules` already sits in ProcessLex and
+            # that check hard-returns on any match — a branch placed after it would be
+            # unreachable dead code for this entire class (ADR-0014 Context, "Root cause").
+            if tokens[-1] == "rules" and len(tokens) >= 2:
+                ok, why = self.resolve_objects_union(tokens[:-1])
+                return errs if ok else errs + [f"skill topic (rules tail): {why}"]
+            # D2 — `check-` reserved HEAD (spec §14.2, ADR-0014): same dead-code hazard as
+            # D1 — must also sit before the object-process check (critical for
+            # `check-stage`, whose terminal token `stage` sits in ProcessLex).
+            if tokens[0] == "check" and len(tokens) >= 2:
+                ok, why = self.resolve_objects(tokens[1:])
+                return errs if ok else errs + [f"skill object (check- head): {why}"]
             if len(tokens) >= 2 and tokens[-1] in self.process_lex:
                 ok, why = self.resolve_objects(tokens[:-1])
                 return errs if ok else errs + [f"skill object: {why}"]
@@ -1073,6 +1117,109 @@ def selftest():
         assert not result["grammar_errors"], \
             f"existing nominal skill names must be unaffected by the reverse-wrapper amendment: {result['grammar_errors']}"
 
+    # D1 — `-rules` reserved-tail production (spec-naming-convention.md §14.2, ADR-0014):
+    # positive (topic-phrase resolves via the union pool: an ObjectVocab noun + a
+    # ProcessLex word, mirroring the estate's real `{noun}-writing-rules` pattern),
+    # negative (an unregistered topic word still fails — the amendment must not open the
+    # door to an arbitrary `-rules` name), regression (a plain object-process name is
+    # unaffected even once TopicLex is populated).
+    topic_manifest = dict(manifest, topic_lex=["icon"])
+
+    # Positive control: `demo-review-rules` — "demo" ∈ ObjectVocab, "review" ∈ ProcessLex —
+    # resolves via D1's union pool even though neither token is in TopicLex.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review-rules").mkdir(parents=True)
+        (r / "skills" / "demo-review-rules" / "SKILL.md").write_text(skill_md("demo-review-rules"))
+        result = run(r, topic_manifest)
+        assert not result["grammar_errors"], \
+            f"a -rules tail whose topic-phrase resolves via the union pool must pass: {result['grammar_errors']}"
+
+    # Positive control 2: `icon-rules` — "icon" resolves via TopicLex alone (no ObjectVocab
+    # or ProcessLex membership needed) — the pure D3 topic-word case.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "icon-rules").mkdir(parents=True)
+        (r / "skills" / "icon-rules" / "SKILL.md").write_text(skill_md("icon-rules"))
+        result = run(r, topic_manifest)
+        assert not result["grammar_errors"], \
+            f"a -rules tail resolving purely via TopicLex must pass: {result['grammar_errors']}"
+
+    # Negative control: `bogus-rules` — "bogus" resolves in no lexicon at all — must still
+    # fail; the union pool is not a blanket pass for any `-rules` name.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "bogus-rules").mkdir(parents=True)
+        (r / "skills" / "bogus-rules" / "SKILL.md").write_text(skill_md("bogus-rules"))
+        result = run(r, topic_manifest)
+        assert result["grammar_errors"], \
+            "a -rules tail with an unregistered topic word must still fail grammar"
+        assert any("rules tail" in e[2] for e in result["grammar_errors"]), \
+            "the failing finding must name the rules-tail production"
+
+    # Regression control: an ordinary object-process skill name (no -rules tail) is
+    # unaffected even once TopicLex carries entries.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, topic_manifest)
+        assert not result["grammar_errors"], \
+            f"a non--rules name must be unaffected by a populated TopicLex: {result['grammar_errors']}"
+
+    # D2 — `check-` reserved-head production (spec-naming-convention.md §14.2, ADR-0014):
+    # positive (`check-demo`, residue resolves via ObjectVocab), negative (`check-bogus`,
+    # unregistered residue still fails), regression (a quantifier-shaped name —
+    # `check-all-demos`-style — stays failing exactly as the 4 named non-goals require,
+    # since "all" is never registered anywhere).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "check-demo").mkdir(parents=True)
+        (r / "skills" / "check-demo" / "SKILL.md").write_text(skill_md("check-demo"))
+        result = run(r, manifest)
+        assert not result["grammar_errors"], \
+            f"check-<noun> whose residue resolves via ObjectVocab must pass: {result['grammar_errors']}"
+
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "check-bogus").mkdir(parents=True)
+        (r / "skills" / "check-bogus" / "SKILL.md").write_text(skill_md("check-bogus"))
+        result = run(r, manifest)
+        assert result["grammar_errors"], \
+            "check- with an unregistered residue noun must still fail grammar"
+        assert any("check- head" in e[2] for e in result["grammar_errors"]), \
+            "the failing finding must name the check-head production"
+
+    # Regression control: the 4 quantifier-shaped non-goals (ADR-0014 "What does NOT
+    # change") stay exempt-only — "all" is never registered in any lexicon, so a
+    # check-all-<noun> shape still fails grammar even when <noun> itself resolves.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "check-all-demo").mkdir(parents=True)
+        (r / "skills" / "check-all-demo" / "SKILL.md").write_text(skill_md("check-all-demo"))
+        result = run(r, manifest)
+        assert result["grammar_errors"], \
+            "a quantifier-shaped check-all-<noun> name must still fail grammar (named non-goal)"
+
+    # Dual-membership control (ADR-0014 D4): a token registered in BOTH ObjectVocab and
+    # ProcessLex (like the production manifest's own `stage`) must still resolve under D2's
+    # ObjectVocab-only residue check — proves D2 does not accidentally exclude a dual-member
+    # token just because it also sits in ProcessLex.
+    dual_manifest = dict(
+        manifest,
+        process_lex=list(manifest["process_lex"]) + ["stage"],
+        object_vocab=list(manifest["object_vocab"]) + [
+            {"canonical": "stage", "plural": None, "banned_aliases": []}
+        ],
+    )
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "check-stage").mkdir(parents=True)
+        (r / "skills" / "check-stage" / "SKILL.md").write_text(skill_md("check-stage"))
+        result = run(r, dual_manifest)
+        assert not result["grammar_errors"], \
+            f"check-stage must pass via D2 even with stage dual-registered in ProcessLex: {result['grammar_errors']}"
+
     # author_registry shape validation (issue #252): a structured entry (dict, not a plain
     # string) used to raise a raw uncaught `TypeError: unhashable type: 'dict'` straight out
     # of Grammar.__init__'s set(...) call. Three fixtures: the exact crash reproduced via a
@@ -1449,7 +1596,10 @@ def selftest():
     print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite, "
           "--scope grammar/full partition proven, schema_scope manifest default + "
           "own-tree carve-out proven, reverse-wrapper skill-name amendment "
-          "(positive/negative/regression) proven, author_registry shape validation "
+          "(positive/negative/regression) proven, ADR-0014 D1 -rules reserved-tail + D2 "
+          "check- reserved-head productions (positive/negative/regression, plus a "
+          "quantifier-non-goal and a dual-membership control) proven, author_registry "
+          "shape validation "
           "(issue #252: structured entry fails clean, never a raw TypeError) proven, "
           "`hook` mode worktree-scoped target derivation (issue #276: resolves to the "
           "writing worktree's own root+plugin, not the primary checkout; catches a bad "

@@ -81,6 +81,28 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.13.0 · 2026-08-16 · ADR-0014 ratified and executed (issue #353): `validate.py`'s
+`Grammar.parse` skill branch gains two new reserved productions, both inserted before the
+existing object-process check to avoid its dead-code hazard — D1 `-rules` becomes a reserved
+tail (topic-phrase resolves via a new union pool, `ObjectVocab ∪ ProcessLex ∪ TopicLex`, through
+a new `resolve_objects_union` method sharing a `_resolve` helper with `resolve_objects`), D2
+`check-` becomes a reserved head (residue resolves via `ObjectVocab` alone). New closed lexicon
+`TopicLex` (D3, 15 entries) added to `naming.manifest.json`'s schema (`TOP_LEVEL_LIST_FIELDS`
+gains `topic_lex`). `ObjectVocab` gains 12 entries (D4: `entry-file`, `routing`, `state`,
+`focus`, `safety`, `speed`, `translation`/`translations`, `color`/`colors`, `isolation`, `a2a`,
+`ui-change`, `stage` — the last a deliberate dual membership with `ProcessLex`); `check` removed
+from `ObjectVocab` (D2's reserved head supersedes it). Selftest gains D1/D2 fixture triads
+(positive/negative/regression) plus a quantifier-non-goal control and a `stage` dual-membership
+control, mirroring §14.1's own reverse-wrapper pattern. Estate-wide `--scope grammar` re-run
+(all 8 plugins + the workspace `.claude/skills` tree): 182 artifacts, 0 grammar errors before
+and after — the 32 named exemptions now parse clean via grammar (not exemption), the 5
+already-clean names (`check-doc`/`check-skill`/`check-stage`/`naming-rules`/
+`product-lifecycle-rules`) unaffected, the 4 quantifier non-goals (`check-all-agents`,
+`check-all-skills`, `check-everything`, `check-whole-ui`) still exempt-only, never
+grammar-passing. Root `naming.manifest.json`'s `exemptions` array shrunk 156 → 124 via
+`authorkit:/exemption-retire`'s own discipline. `.claude/docs/spec/spec-naming-convention.md`
+gains §14.2 mirroring §14.1's pattern (ruling, why, validator change, non-goals). Minor bump —
+additive grammar productions, backward compatible (every previously-passing name still passes).
 v0.12.1 · 2026-08-16 · Structural-hygiene fixes from the naming-audit's non-gating findings
 (issue #350). `validate.py`'s agent schema was missing `model` from its optional fields —
 `estate-audit-agent`'s deliberate sonnet pin (PR #328, per `agent-writing-rules`' seat ladder)

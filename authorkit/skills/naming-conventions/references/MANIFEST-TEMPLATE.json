@@ -4,6 +4,8 @@
   "verb_lex": ["create", "execute", "retire", "lint", "run", "mint", "sweep", "seed"],
   "process_lex": ["audit", "planning", "authoring", "triage", "review", "migration"],
   "role_lex": ["leader", "orchestrator", "coordinator"],
+  "topic_lex_note": "-rules reserved-tail topic words only (spec-naming-convention.md §14.2, ADR-0014 D3) — consulted only inside the -rules production's own union-pool resolution, never disjointness-checked against ObjectVocab/ProcessLex.",
+  "topic_lex": [],
   "object_vocab": [
     {"canonical": "skill", "plural": "skills", "banned_aliases": []},
     {"canonical": "harness", "plural": null, "banned_aliases": []}
