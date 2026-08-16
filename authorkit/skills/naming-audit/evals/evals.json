@@ -13,6 +13,7 @@
     {"id": "n02", "prompt": "Plan the rename for this artifact that's violating the grammar.", "expect": "no-trigger", "comment": "owner: rename-planning"},
     {"id": "n03", "prompt": "Seed a manifest for this new, ungoverned estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
     {"id": "n04", "prompt": "Audit this skill for busy-work and ceremony instead of naming.", "expect": "no-trigger", "comment": "owner: bloat-audit"},
-    {"id": "n05", "prompt": "Check whether this project is still on retired plugin names before I ship.", "expect": "no-trigger", "comment": "owner: fix-old-names (fix-old-names' suite's t10) — retired-name reference sweep, not grammar conformance; confirmed 2-of-2 cross-suite steal in PR #230/#232's check-routing runs, fenced here by the NOT-for boundary (issue #233)"}
+    {"id": "n05", "prompt": "Check whether this project is still on retired plugin names before I ship.", "expect": "no-trigger", "comment": "owner: fix-old-names (fix-old-names' suite's t10) — retired-name reference sweep, not grammar conformance; confirmed 2-of-2 cross-suite steal in PR #230/#232's check-routing runs, fenced here by the NOT-for boundary (issue #233)"},
+    {"id": "n06", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — reciprocal fence, 2026-08-15 (issue #257)"}
   ]
 }

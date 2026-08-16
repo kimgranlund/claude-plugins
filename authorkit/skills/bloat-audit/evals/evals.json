@@ -15,6 +15,6 @@
     {"id": "n04", "prompt": "What does the naming grammar say about skill name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
     {"id": "n05", "prompt": "Audit our menu cost — how much context do all these skill descriptions burn every turn?", "expect": "no-trigger", "comment": "owner: attention-audit (always-on menu rent, not prose economy inside bodies) — reciprocal fence, 2026-08-15"},
     {"id": "n06", "prompt": "Which skills tax Claude's performance the most across the estate?", "expect": "no-trigger", "comment": "owner: attention-audit — reciprocal fence, 2026-08-15"},
-    {"id": "n07", "prompt": "Does this skill correctly follow skill-writing-rules, or does it misfire in routing?", "expect": "no-trigger", "comment": "owner: harness check-skill — content correctness/routing fidelity, not length/ceremony proportionality; reciprocal fence, 2026-08-15 (issue #282)"}
-  ]
+    {"id": "n07", "prompt": "Does this skill correctly follow skill-writing-rules, or does it misfire in routing?", "expect": "no-trigger", "comment": "owner: harness check-skill — content correctness/routing fidelity, not length/ceremony proportionality; reciprocal fence, 2026-08-15 (issue #282)"},
+    {"id": "n08", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — reciprocal fence, 2026-08-15 (issue #257)"}  ]
 }

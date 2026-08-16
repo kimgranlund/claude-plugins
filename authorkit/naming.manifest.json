@@ -12,7 +12,8 @@
     {"canonical": "skill", "plural": "skills", "banned_aliases": []},
     {"canonical": "harness", "plural": null, "banned_aliases": []},
     {"canonical": "team", "plural": null, "banned_aliases": []},
-    {"canonical": "bloat", "plural": null, "banned_aliases": ["verbosity", "ceremony", "cruft"]}
+    {"canonical": "bloat", "plural": null, "banned_aliases": ["verbosity", "ceremony", "cruft"]},
+    {"canonical": "pattern", "plural": "patterns", "banned_aliases": []}
   ],
   "brand_tokens": ["adia", "authorkit"],
   "author_registry": ["kim"],
