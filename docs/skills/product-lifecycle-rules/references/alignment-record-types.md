@@ -51,12 +51,11 @@ from where the assumption actually broke. This is the alignment-record-specific 
 ## Boundary — general doctrine vs. this repo's realization
 
 This file states the bible's GENERAL three-part grammar and admission tests, portable to any
-project. **It is not a substitute for a specific repo's own doc-type contract.** A concrete
-question about which type to author, its required sections, its frontmatter schema, or whether
-`doc_lint.py` will accept it is a **this-repo** question — route it to `doc-writing-rules` (docs
-plugin), which maintains the live, enforced type table. As of 2026-08-16, in *this* repo
-specifically: IDR is a built, `doc_lint`-enforced type (`.claude/docs/idr/`); ADR is long-standing;
-**RDD is scoped but not yet built** — `prd-rdd-framework.md` (`.claude/docs/prd/`) recommends the
-name and contract, but `doc_lint.py` does not yet recognize `doc-type: rdd`. A question about
-whether RDD exists *yet*, or what THIS repo has actually decided about it, is a `project-docs`
-question, not this pack's — this pack only carries the general concept the name realizes.
+project. **It is not a substitute for a specific repo's own doc-type contract, and it carries no
+live state about any specific repo** (RDD's own local naming choice, above, is the one deliberate
+exception — it names the realization decision itself, not whether any repo has built it yet). A
+concrete question about which type to author, its required sections, its frontmatter schema, or
+whether a specific repo's linter will accept it is a **this-repo** question — route it to
+`doc-writing-rules` (docs plugin), which maintains the live, enforced type table for whichever
+repo is asking. A question about whether a given type actually exists yet in a specific repo, or
+what that repo has decided about it, is a `project-docs`-and-equivalent question, not this pack's.

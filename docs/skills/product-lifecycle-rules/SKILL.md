@@ -5,9 +5,10 @@ description: >-
   Releases), the seven-stage build loop (Kickoff..Spec lock..Verify..Retro; Spec lock the only
   hard gate), the IDR/ADR/RDD alignment doc grammar, knowledge-base maturation, habits, named
   anti-patterns. Portable -- orients ANY project. Use for "what's an IDR/ADR/RDD for", "why Spec
-  lock matters", "how a knowledge base matures", "the relearn rate", "IDR vs ADR". NOT which doc
-  type/sections/frontmatter to use here (doc-writing-rules); NOT what THIS repo decided/queued
-  (project-docs); NOT this project's stage (unbuilt gap); NOT /goal or /loop mechanics (loop-rules).
+  lock matters", "how a knowledge base matures", "the relearn rate", "admission test, ADR vs
+  IDR". NOT which doc type/sections/frontmatter to use here (doc-writing-rules); NOT what THIS
+  repo decided/queued (project-docs); NOT this project's stage (unbuilt gap); NOT /goal or /loop
+  mechanics (loop-rules).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -39,8 +40,9 @@ ruling: a flat corpus at or under ~7 files makes the table itself the retrieval 
 
 ## Consult procedure
 
-1. Classify the ask against the table above; open only the matching file — this is a lookup
-   corpus, not a linear read.
+1. Classify the ask against the table above; Grep the matching file for the term first on a long
+   or multi-topic ask, then Read the matching section — this is a lookup corpus, not a linear
+   read.
 2. Answer with the **claim + the file it came from** (e.g. "`references/alignment-record-types.md`: an
    ADR with no IDR citation is an orphan ADR"). Every reference file cites the bible by Part
    number — trace back to `.claude/docs/spec/product-lifecycle-bible.md` for the full original
