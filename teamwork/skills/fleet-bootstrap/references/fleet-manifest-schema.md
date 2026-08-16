@@ -40,6 +40,13 @@ takeover record.
 
 ## Fields
 
+- **Schema key vs. printed session name (`agent` role only).** `fleet.json`'s role key stays
+  `agent` everywhere in this schema — `seats.agent`, `live_state.joined[].role: "agent"` — and a
+  builder never renames it. The PRINTED/roster session name for that role is `{repo}-team-lead`,
+  not `{repo}-agent` (`team-scaffolding` Phase 1/2, `fleet-bootstrap` Phase 1): the seat's session
+  identity matches the `teamwork:lead-team` contract it adopts, while the schema key stays the
+  generic role bucket. Every other role's session name is its role token verbatim
+  (`{repo}-reviewer`, `{repo}-planner`, `{repo}-product`) — only `agent` has this split.
 - **`seats.<role>.tier`** — the model/effort tier this seat runs at in THIS repo. Starts equal to
   the canonical seat ladder (`team-scaffolding`'s Phase 4 point 1: agent fable+low, reviewer
   fable+xhigh, planner fable+medium, product fable+high).

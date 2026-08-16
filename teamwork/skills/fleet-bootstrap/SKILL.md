@@ -19,7 +19,7 @@ argument-hint: "[spawn-list - comma-separated subset of reviewer,planner; defaul
 
 # fleet-bootstrap — one terminal, cold-start the whole fleet
 
-The standing fleet is four seats (`{repo}-agent` / `{repo}-reviewer` / `{repo}-planner` /
+The standing fleet is four seats (`{repo}-team-lead` / `{repo}-reviewer` / `{repo}-planner` /
 `{repo}-product`), each already reachable one at a time via `/team-scaffolding <role>` (level 1).
 This command is level 2: a single terminal drives the whole cold start — adopt orchestrator,
 stand up the product seat, gate on human ratification of the intent layer that seat produces, then
@@ -38,7 +38,7 @@ already joined and at what tier/mode; do not overwrite existing `live_state` ent
 
 ## Phase 1 — Register this session as the orchestrator seat
 
-This session registers itself as `{repo}-agent` by performing `team-scaffolding`'s own Phase 1–4
+This session registers itself as `{repo}-team-lead` (role key `agent`) by performing `team-scaffolding`'s own Phase 1–4
 mechanics inline — role `agent`, canonical tier, no permission-profile deviation — rather than
 running `/team-scaffolding agent` through the Skill tool. That path is structurally blocked:
 `team-scaffolding` carries `disable-model-invocation: true` (command-only adoption is deliberate
@@ -64,8 +64,9 @@ target).
    session-identity signal to structurally rule out a genuinely different human re-running
    `/fleet-bootstrap` on the same repo and getting treated as a takeover too — same accepted risk
    the hybrid-swap rule already carries for background seats, not a new one.
-2. Print `Seat: {repo}-agent — takeover` when step 1 found a live entry, `Seat: {repo}-agent`
-   otherwise, and append the roster row to `.claude/ops/fleet-roster.md` — suffixed `(takeover)`
+2. Print `Seat: {repo}-team-lead — takeover` when step 1 found a live entry, `Seat: {repo}-team-lead`
+   otherwise, and append the roster row to `.claude/ops/fleet-roster.md` under that same
+   `{repo}-team-lead` session name (role key `agent`) — suffixed `(takeover)`
    in the former case (`team-scaffolding` Phase 2).
 3. `agent` carries no permission-profile deviation (`team-scaffolding` Phase 3) — state that
    explicitly: `No permission-profile deviation for this role — full write access retained`.

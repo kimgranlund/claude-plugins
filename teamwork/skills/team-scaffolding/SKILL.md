@@ -1,7 +1,7 @@
 ---
 name: team-scaffolding
 description: >-
-  Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-agent` /
+  Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-team-lead` /
   `{repo}-reviewer` / `{repo}-planner` / `{repo}-product`): names the session, writes or verifies
   the seat's permission profile, prints the comms charter (peer roster + SendMessage-is-a-nudge
   doctrine + durable-channel fallback), then names the matching lead-* command for the human to
@@ -20,7 +20,8 @@ argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason
 
 # team-scaffolding — name the seat, wall it, brief it, then name the lead-* command
 
-Four standing sessions run one project: `{repo}-agent` (orchestrator), `{repo}-reviewer`
+Four standing sessions run one project: `{repo}-team-lead` (orchestrator — role key `agent` in
+`fleet.json`; Phase 1 covers the schema-key/session-name split), `{repo}-reviewer`
 (read-only review desk), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
 authority). Each already has an owning contract — `teamwork:lead-team`, `teamwork:lead-review`,
 `teamwork:lead-planning`, `docs:product-authoring` — but none of those commands name the session, wall
@@ -88,13 +89,17 @@ other three roles — `agent`/`planner`/`product` write no deny profile (Phase 3
 scope-leak risk to guard against.
 
 State the bound role and repo name (basename of `git rev-parse --show-toplevel`, or the worktree
-root if inside one) back in one line before proceeding: `Seat: {repo}-<role>`.
+root if inside one) back in one line before proceeding: `Seat: {repo}-<role>` — except role
+`agent`, which prints `Seat: {repo}-team-lead` (the session-name/role-key split: the `agent` role
+key is schema-stable in `fleet.json`, only the printed/roster session name reads `team-lead`).
 
 ## Phase 2 — Name the session (convention, not platform-enforced)
 
-Print `{repo}-<role>` as the session's expected identity — there is no platform hook to rename a
-live session, so this is a printed instruction plus a durable record, not an enforced rename
-(reasoning: `.claude/docs/lld/lld-0006-fleet-permission-profile.md` D1). Append one dated line to
+Print `{repo}-<role>` as the session's expected identity — except role `agent`, which is named
+`{repo}-team-lead` (never `{repo}-agent`); every other role prints its role token verbatim. There
+is no platform hook to rename a live session, so this is a printed instruction plus a durable
+record, not an enforced rename (reasoning: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
+D1). Append one dated line to
 `.claude/ops/fleet-roster.md` (create it if absent, one Markdown table row: role · session-name ·
 date · repo) — this is the roster peers read for discovery (Phase 3).
 
@@ -188,7 +193,9 @@ State, as one standing block before any real work:
    row in either source → skip this step and state so plainly (`No live orchestrator seat —
    skipping introduction`); this never blocks the bootstrap (Phase 4 point 3's own no-blocking
    rule for discovery applies here too). A live row exists → `SendMessage` to its recorded session
-   name (`{repo}-agent`) introducing this seat: role, session name (`{repo}-<role>`), and the
+   name — `{repo}-team-lead` by convention (lld-0006 D1), never the roster row's literal text,
+   which on rows written before #434 may still read `{repo}-agent` — introducing this seat: role,
+   session name (`{repo}-<role>`), and the
    charter (the remainder of `$ARGUMENTS` after the role token, or "no charter given" if blank).
    This is the same one-way liveness nudge as point 2, not a request-response handshake — no reply
    is awaited, and a delivery failure (recipient session gone) is reported but does not fail the
@@ -261,7 +268,8 @@ branches) rather than silently skipped:
    append-only convention.
 
 Report the three steps' outcomes in one line (`Retired: {repo}-<role> — wall removed (or n/a) ·
-fleet.json released · roster synced`) and stop; retiring never hands off to a `/lead-*` command
+fleet.json released · roster synced`) — role `agent` reports `Retired: {repo}-team-lead` (same
+exception as Phase 1/2) — and stop; retiring never hands off to a `/lead-*` command
 (Phase 5 is bind-only, not part of this flow).
 
 ## Failure branches
