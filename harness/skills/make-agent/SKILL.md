@@ -41,7 +41,7 @@ three incidents in one day with the first forge's own record — the flat form A
   (gh#157).
 - **Config** — `model` + `effort` from the seat ladder (`agent-writing-rules` §Model tiering) — state the row, never leave it implicit; `maxTurns` only where the default is wrong; `color` by function (analysis blue/cyan, validation yellow, generation magenta).
 
-Name check before closing: agentive head that reconstructs the primary preload (`x-review` → `x-reviewer`); the interview rejects status nouns.
+Name check before closing: agentive head that reconstructs the primary preload (`x-review` → `x-reviewer`); the interview rejects status nouns. For the full naming paradigm — the five tests, shapes-by-kind, and (per its own supersession note) the ADR-0011 spec a NEW name is actually checked against — see `naming-rules`; this is only the agent-specific slice of it.
 
 **Gate A1:** every slot filled; report contract written; all preloads exist and are preloadable.
 
