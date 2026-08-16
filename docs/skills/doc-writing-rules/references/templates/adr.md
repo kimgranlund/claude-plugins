@@ -5,6 +5,7 @@ status: proposed        # proposed | accepted | superseded
 date: YYYY-MM-DD
 owner: 
 supersedes: null        # adr-NNNN when replacing a prior decision
+intent-refs: null        # idr-NNNN(s) — the founding claim(s) this decision serves; empty warns T6 (orphan ADR)
 ---
 # ADR-0000 — <decision, stated as the choice made>
 

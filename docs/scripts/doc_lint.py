@@ -9,14 +9,22 @@ Usage:
 
 Rules ("no validator, no type" — Vol 3 §3.1):
   T1 [FAIL] frontmatter parses and carries doc-type, id, status
-  T2 [FAIL] doc-type is one of the eight; status is in that type's enum
+  T2 [FAIL] doc-type is one of the nine; status is in that type's enum
   T3 [FAIL] required sections for the type present as `## ` headings
-  T4 [FAIL] ledger protection (hook mode): editing a file whose COMMITTED (HEAD) version is an
-            accepted ADR — supersede, never edit. Refined 2026-07-15: a new/untracked ADR, or one
-            still `proposed` in HEAD, may be authored and ratified (the proposed->accepted flip is
-            the ratification act, not a forgery); the append-only guarantee protects history.
-            git absent / not a repo / any doubt -> conservative block, as before.
+  T4 [FAIL] ledger protection (hook mode): editing a file whose COMMITTED (HEAD) version is a
+            locked ledger entry — an accepted ADR or a locked IDR — supersede, never edit.
+            Refined 2026-07-15 (ADR): a new/untracked ADR, or one still `proposed` in HEAD, may be
+            authored and ratified (the proposed->accepted flip is the ratification act, not a
+            forgery); the append-only guarantee protects history. Generalized 2026-08-16 (IDR,
+            #316) to a ledger-lock guard covering both `doc-type: adr, status: accepted` and
+            `doc-type: idr, status: locked` — the same two-phase mechanic, reused verbatim per
+            LEDGER_LOCK below. git absent / not a repo / any doubt -> conservative block, as before.
   T5 [WARN] plan steps without a done-when token; spec Requirements without REQ- IDs
+  T6 [WARN] an ADR with no `intent-refs:` citation — an "orphan ADR" per the corpus's
+            product-lifecycle-bible (Part 4): a HOW decision with no cited upstream IDR claim.
+            Added 2026-08-16 (#316) alongside the `idr` type; existing ADRs 0001-0013 predate
+            `intent-refs:` and are EXPECTED to warn here — the retrofit is its own deferred
+            follow-up (PRD Implementation surface item 7), not required for this check to ship.
 """
 import json
 import re
@@ -32,6 +40,15 @@ TYPES = {
     "roadmap": {"status": {"active", "retired"},                  "sections": ["Now", "Next", "Later"]},
     "ticket":  {"status": {"open", "doing", "done", "wontfix"},   "sections": ["Summary", "Acceptance", "Links"]},
     "task":    {"status": {"todo", "doing", "done"},              "sections": ["Goal", "Done-when"]},
+    "idr":     {"status": {"draft", "locked", "superseded"},      "sections": ["Claim", "Why", "Proof"]},
+}
+
+# T4's ledger-lock scope, keyed by doc-type -> the status value that means "committed and locked".
+# ADR's `accepted` and IDR's `locked` are the same mechanic (ADR-0013's proven two-phase
+# proposed/draft -> ratified flip); adding a doc-type here is the whole extension, no new code path.
+LEDGER_LOCK = {
+    "adr": "accepted",
+    "idr": "locked",
 }
 
 
@@ -72,6 +89,11 @@ def lint_text(text):
         findings.append(("WARN", "T5", "no `done-when` found in the plan -> steps without one are guesses"))
     if dtype == "spec" and "Requirements" in heads and not re.search(r"\bREQ-\d+", text):
         findings.append(("WARN", "T5", "no REQ- IDs in the spec -> the ID spine starts here"))
+    if dtype == "adr":
+        intent_refs = fm.get("intent-refs", "").strip().lower()
+        if intent_refs in ("", "null", "none", "[]"):
+            findings.append(("WARN", "T6", "no `intent-refs:` citation -> an ADR with no upstream "
+                                            "IDR is an orphan (bible: 'an ADR with no IDR citation is an orphan')"))
     return findings
 
 
@@ -86,12 +108,13 @@ def render(path, findings):
     return 1 if verdict == "FAIL" else 0
 
 
-def head_is_accepted_adr(p: Path) -> bool:
-    """T4's scope test (refined 2026-07-15): the ledger protection guards COMMITTED history.
-    True (block) when the file's HEAD version is an accepted ADR; False (allow) when the file
-    is new/untracked or still `proposed` in HEAD — authoring and the proposed->accepted
-    ratification flip are legal acts on an uncommitted ledger entry. git absent, not a repo,
-    or any failure -> True (conservative block, the pre-refinement behavior)."""
+def head_is_locked_ledger(p: Path) -> bool:
+    """T4's scope test (refined 2026-07-15 for ADR; generalized 2026-08-16, #316, for IDR): the
+    ledger protection guards COMMITTED history. True (block) when the file's HEAD version is a
+    locked ledger entry per LEDGER_LOCK (an accepted ADR or a locked IDR); False (allow) when the
+    file is new/untracked or still pre-lock (`proposed`/`draft`) in HEAD — authoring and the
+    lock-flip ratification are legal acts on an uncommitted ledger entry. git absent, not a repo,
+    or any failure -> True (conservative block, unchanged from the ADR-only version)."""
     import subprocess
     try:
         r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
@@ -105,8 +128,10 @@ def head_is_accepted_adr(p: Path) -> bool:
         if r.returncode != 0:
             return False  # not in HEAD: a new ledger entry, not history
         head_fm = parse_frontmatter(r.stdout)
-        return bool(head_fm and head_fm.get("doc-type") == "adr"
-                    and head_fm.get("status") == "accepted")
+        if not head_fm:
+            return False
+        locked_status = LEDGER_LOCK.get(head_fm.get("doc-type"))
+        return bool(locked_status and head_fm.get("status") == locked_status)
     except Exception:
         return True
 
@@ -125,9 +150,11 @@ def hook_mode():
     if fm is None or "doc-type" not in fm:
         return 0
     findings = lint_text(text) or []
-    if fm.get("doc-type") == "adr" and fm.get("status") == "accepted" and head_is_accepted_adr(p):
-        findings.append(("FAIL", "T4", "this ADR is accepted in committed history — the ledger is append-only; "
-                                       "revert this edit and write a new ADR with `supersedes: " + fm.get("id", "adr-????") + "`"))
+    dtype = fm.get("doc-type")
+    locked_status = LEDGER_LOCK.get(dtype)
+    if locked_status and fm.get("status") == locked_status and head_is_locked_ledger(p):
+        findings.append(("FAIL", "T4", f"this {dtype.upper()} is {locked_status} in committed history — the ledger is append-only; "
+                                       f"revert this edit and write a new {dtype.upper()} with `supersedes: " + fm.get("id", f"{dtype}-????") + "`"))
     fails = [f for f in findings if f[0] == "FAIL"]
     if fails:
         print(json.dumps({"decision": "block",
@@ -145,16 +172,26 @@ def selftest():
     bad = "---\ndoc-type: spec\nid: spec-x\nstatus: shipped\n---\n# S\n\n## Requirements\ntext\n"
     codes = {f[1] for f in lint_text(bad)}
     assert {"T2", "T3"} <= codes, f"bad status + missing sections must fail, got {codes}"
+    # T6 orphan-ADR WARN (#316): no intent-refs -> warn; cited intent-refs -> silent
+    orphan_adr = ("---\ndoc-type: adr\nid: adr-0099\nstatus: proposed\ndate: 2026-08-16\n"
+                  "intent-refs: null\n---\n# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
+    assert any(f[1] == "T6" for f in lint_text(orphan_adr)), "ADR with no intent-refs must WARN T6 (orphan)"
+    cited_adr = orphan_adr.replace("intent-refs: null", "intent-refs: idr-0001")
+    assert not any(f[1] == "T6" for f in lint_text(cited_adr)), "ADR citing an IDR must NOT warn T6"
     assert any(f[1] == "T5" for f in lint_text(bad.replace("status: shipped", "status: draft"))), "REQ-less spec must warn T5"
     nofm = lint_text("---\ndoc-type: adr\n---\n# A\n## Context\n## Decision\n## Consequences\n")
     assert any(f[1] == "T1" for f in nofm), "missing id/status must fail T1"
-    # T4 git-aware scope (2026-07-15): committed-accepted blocks; new/ratifying doesn't
+    # T4 git-aware scope (2026-07-15, ADR; generalized 2026-08-16, #316, IDR): committed-locked
+    # blocks; new/ratifying doesn't. Same temp repo, two independent ledger files -> proves the
+    # generalized guard still handles ADR (regression) and now also handles IDR (new).
     import shutil
     if shutil.which("git"):
         import subprocess
         import tempfile
         adr = ("---\ndoc-type: adr\nid: adr-0001\nstatus: {s}\ndate: 2026-07-15\n---\n"
                "# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
+        idr = ("---\ndoc-type: idr\nid: idr-0001\nstatus: {s}\ndate: 2026-08-16\nproof-ref: n/a\n"
+               "supersedes: null\n---\n# I\n## Claim\nc\n## Why\nw\n## Proof\np\n")
         with tempfile.TemporaryDirectory() as td:
             repo = Path(td)
             env_git = lambda *a: subprocess.run(["git", *a], cwd=repo, capture_output=True, text=True,
@@ -162,16 +199,26 @@ def selftest():
                                                      "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t",
                                                      "PATH": __import__("os").environ["PATH"], "HOME": td})
             env_git("init", "-q")
+            # --- ADR regression: the pre-existing fixture pair, unaffected by the generalization ---
             f = repo / "0001-x.md"
             f.write_text(adr.format(s="accepted"))
-            assert not head_is_accepted_adr(f), "untracked new accepted ADR must be ALLOWED (authoring, not forgery)"
+            assert not head_is_locked_ledger(f), "untracked new accepted ADR must be ALLOWED (authoring, not forgery)"
             env_git("add", "0001-x.md"); env_git("commit", "-qm", "adr proposed")
-            # HEAD holds accepted now -> editing must block
-            assert head_is_accepted_adr(f), "committed-accepted ADR must BLOCK edits (the ledger)"
+            assert head_is_locked_ledger(f), "committed-accepted ADR must BLOCK edits (the ledger) — regression"
             f.write_text(adr.format(s="proposed"))
             env_git("add", "0001-x.md"); env_git("commit", "-qm", "as proposed")
-            assert not head_is_accepted_adr(f), "HEAD-proposed ADR must allow the ratification flip"
-    print("doc_lint selftest · PASS · all 8 templates self-consistent; type/status/sections/spine counters bite; T4 guards committed history only")
+            assert not head_is_locked_ledger(f), "HEAD-proposed ADR must allow the ratification flip — regression"
+            # --- IDR positive: committed-locked IDR blocks edit ---
+            g = repo / "idr-0001-x.md"
+            g.write_text(idr.format(s="locked"))
+            env_git("add", "idr-0001-x.md"); env_git("commit", "-qm", "idr locked")
+            assert head_is_locked_ledger(g), "committed-locked IDR must BLOCK edits (the ledger) — positive"
+            # --- IDR negative: a draft IDR (even committed) stays freely editable ---
+            g.write_text(idr.format(s="draft"))
+            env_git("add", "idr-0001-x.md"); env_git("commit", "-qm", "idr amended to draft")
+            assert not head_is_locked_ledger(g), "committed-draft IDR must be ALLOWED to edit — negative"
+    print("doc_lint selftest · PASS · all 9 templates self-consistent; type/status/sections/spine counters bite; "
+          "T4 ledger-lock guards committed ADR(accepted)/IDR(locked) history only; T6 orphan-ADR warn bites")
     return 0
 
 

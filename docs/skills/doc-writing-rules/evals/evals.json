@@ -38,6 +38,11 @@
       "expect": "trigger"
     },
     {
+      "id": "t08",
+      "prompt": "what sections does a locked IDR need, and can I still edit it",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "write the PRD for this feature",
       "expect": "no-trigger"

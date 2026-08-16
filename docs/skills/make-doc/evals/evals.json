@@ -48,6 +48,11 @@
       "expect": "trigger"
     },
     {
+      "id": "t10",
+      "prompt": "mint the founding IDR for this project",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "which document type should this be, a spec or a PRD",
       "expect": "no-trigger",
@@ -62,6 +67,12 @@
     {
       "id": "n03",
       "prompt": "can I edit an accepted ADR",
+      "expect": "no-trigger",
+      "note": "doc-writing-rules"
+    },
+    {
+      "id": "n03b",
+      "prompt": "what sections does a locked IDR need, and can I still edit it",
       "expect": "no-trigger",
       "note": "doc-writing-rules"
     },

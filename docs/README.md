@@ -6,7 +6,7 @@ shipped through the harness release gate.
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/doc-writing-rules` | Declarative skill | model-only | Mutability classes, universal practices, the type contract table; `references/templates/` — eight authoring contracts (adr, prd, spec, lld, plan, roadmap, ticket, task) |
+| `skills/doc-writing-rules` | Declarative skill | model-only | Mutability classes, universal practices, the type contract table; `references/templates/` — nine authoring contracts (adr, prd, spec, lld, plan, roadmap, ticket, task, idr) |
 | `skills/make-doc` | Procedural | both (`/make-doc`) | Type routing -> intent -> template draft -> language pass -> doc_lint clean |
 | `skills/check-doc` | Procedural | both (`/check-doc`) | Mechanical pass first, then J1-J6 judgment; verdict-first report |
 | `skills/file-bug` | Procedural (orchestrator) | both (`/file-bug`) | Capture -> classify -> record -> dispatch -> write-back: a bug-shaped TICKET (`kind: bug`) minted before any fork/agent starts, closing the loss window raw `/fork bug-name ...` left open |
@@ -50,6 +50,7 @@ degrades to inline judgment when not. No hard edges cross the boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v1.5.0 · 2026-08-16 · IDR doc type (Issue #316, `prd-idr-framework.md`): doc_lint TYPES gains `idr` (draft/locked/superseded, Claim/Why/Proof), T4's ledger-lock guard generalized to cover both accepted-ADR and locked-IDR, new T6 WARN (orphan-ADR — no `intent-refs:` citation), `references/templates/idr.md`, doc-writing-rules' type/mutability tables gain the IDR row, make-doc routes `idr`; bootstrap auto-mint (cross-plugin, harness's `/make-plugin`) and the ADR 0001-0013 `intent-refs:` retrofit stay deferred follow-ups
 v1.4.9 · 2026-08-16 · checker retier (Kim's ruling): 1 *-checker agent move effort high→medium, model fable unchanged — review quality held at medium across the 2026-08-15/16 rounds while inherited-xhigh runs added cost, not findings
 v1.4.8 · 2026-08-15 · make-reference gains the save-lessons fence (NOT whether a fact EARNS an entry — save-lessons judges the bar, this skill writes the doc) + reciprocal eval n12, and a W8 description diet back under the 700-char budget (triggers preserved verbatim); twin found by authorkit attention-audit's first live run (PR #275)
 v1.4.7 · 2026-08-13 · footer ledger regenerated to one line per version (issue #203) — governed by harness's plugin-writing-rules cap; no docs-side contract change

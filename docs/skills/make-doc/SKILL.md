@@ -1,11 +1,11 @@
 ---
 name: make-doc
 description: >-
-  Author a functional document — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, or TASK — through
+  Author a functional document — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK, or IDR — through
   gated phases: route, capture intent, draft, validate. Use it to write, draft, author, record,
-  or spec out a document — "write the PRD for this feature". Runs via /make-doc [type and intent].
-  NOT for the rules themselves (doc-writing-rules); NOT for reviewing (check-doc); NOT for
-  feature intake (file-feature).
+  or spec out a document — "write the PRD for this feature", "mint the founding IDR for this
+  project". Runs via /make-doc [type and intent]. NOT for the rules themselves (doc-writing-rules);
+  NOT for reviewing (check-doc); NOT for feature intake (file-feature).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[type] [one-line intent]"
@@ -30,9 +30,11 @@ IDs — say so and forge them in dependency order.
 
 One batched round covering the type's load-bearing slots: for a SPEC, the testable requirements
 and the non-goals; for an ADR, the alternatives actually considered; for a PLAN, each step's
-done-when; for a TICKET, what it traces to. Where the harness plugin's find-intent and
-break-down-problem are installed, use them here; where not, apply their discipline inline —
-ambiguities surfaced as multiple-choice, structure before prose.
+done-when; for a TICKET, what it traces to; for an IDR, the admission test — "would two reasonable
+builds differ on it?" — same spirit as ADR's own "a choice someone will later ask why about" gate;
+a claim that fails it isn't an IDR, and the round ends there rather than minting one. Where the
+harness plugin's find-intent and break-down-problem are installed, use them here; where not, apply
+their discipline inline — ambiguities surfaced as multiple-choice, structure before prose.
 
 ## Phase 3 — Draft from the template
 
