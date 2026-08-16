@@ -129,6 +129,13 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.8 · 2026-08-16 · `make-plugin`'s Phase 3 gains the OUT-02 bootstrap step deferred from #316
+(closes #333): new `scripts/mint_idr_bootstrap.py`, idempotent by construction (glob-detects an
+existing `idr-0001*`, so the founding IDR draft + the product-brief living-index stub mint on a
+target repo's genuine first bootstrap only, never duplicated on a repo's Nth `/make-plugin` run)
+— `make-plugin` was confirmed the ill-fitting surface (a plugin skeleton owns no `.claude/docs/`
+tree of its own) but the idempotent check is what keeps OUT-02's "exactly one" true regardless,
+since no better-fitting whole-project bootstrap command exists yet in this workspace.
 v3.8.7 · 2026-08-16 · Cross-PR version-claim coordination encoded (closes #311, evidence: the
 #284/#285/#290 collision cluster): `big-change-git-rules/references/who-ships-what.md` gains a
 "Cross-PR version-claim coordination" section — ONE version-bumping build in flight per plugin at
