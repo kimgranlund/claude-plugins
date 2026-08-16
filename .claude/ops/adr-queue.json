@@ -1,3 +1,18 @@
 {
-  "candidates": []
+  "candidates": [
+    {
+      "adr_id": "adr-0013",
+      "evidence": ".claude/docs/adr/0013-adr-0012-automode-allow-verification.md:44-58 (Decision) — empirical finding: the auto-mode permission classifier denies the Agent tool call itself at dispatch-creation time the moment the sealed prompt carries 'auto-merge: authorized' (before dispatch-ticket/stage 2b ever run), stricter and earlier than ADR-0012 predicted; merge-tier behavior of the autoMode.allow rule (commit 40dd5c3) remains unmeasured. Durable, ratified, impact-detector fires on first occurrence per save-lessons Phase 1.",
+      "kind": "harvest",
+      "plan": "",
+      "queued_at": "2026-08-16T01:12:21Z"
+    },
+    {
+      "adr_id": "adr-0012",
+      "evidence": "harness/skills/big-change-git-rules/references/who-ships-what.md:88-92 cites ADR-0012's 'deployment prerequisite' Consequences bullet verbatim ('the path is inert until a scoped allow-rule ... exists, so this exception is currently theoretical pending that rule') — that exact bullet is the one adr-0013 supersedes (narrow, single-bullet scope per adr-0013's own frontmatter + Consequences re-read: 'ADR-0012's Consequences bullet beginning Deployment prerequisite... is superseded by this record; every other Decision and Consequences line in ADR-0012 stands exactly as ratified'). The same file's lines 38-81 (QB0-QB7 predicate citation) are unaffected and NOT stale.",
+      "kind": "stale-citation",
+      "plan": "",
+      "queued_at": "2026-08-16T01:12:21Z"
+    }
+  ]
 }
