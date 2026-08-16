@@ -362,3 +362,91 @@ control the validator's own selftest fixtures alongside the positive and regress
 `VerbLex`/`ProcessLex` disjointness invariant (§4) — a token still lives in exactly one lexicon;
 this amendment only adds a second *skill* production that may legally consume a `VerbLex` token
 under the stated precondition.
+
+### 14.2 `-rules` reserved tail and `check-` reserved head (2026-08-16, issue #353, ADR-0014 ratified 2026-08-16)
+
+**Ruling:** two new, independently-scoped skill-grammar productions, plus one new closed lexicon,
+register two recurring name shapes the estate kept re-exempting by hand instead of parsing:
+
+```
+skill := topic-phrase "-" "rules"          # D1 — rules becomes a reserved TAIL
+skill := "check" "-" object-phrase         # D2 — check becomes a reserved HEAD
+```
+
+`rules` is the literal terminal token (D1). `topic-phrase` (every token but the trailing `rules`)
+resolves against a **union pool** — `ObjectVocab ∪ ProcessLex ∪ TopicLex` — via the same greedy
+longest-match algorithm §5 already specifies, just fed a broader lexicon set. `check` is the
+literal token `tokens[0]` (D2), not a `VerbLex`-head production generalized to every verb; the
+remaining `object-phrase` resolves against **`ObjectVocab` only**, deliberately narrower than
+D1's pool — a `check-<noun>` name denotes a real, checkable system object, the same contract
+`ObjectVocab` already carries. Kim's ratification of ADR-0014 (2026-08-16) is this ruling's
+authority.
+
+**Why:** ADR-0011 D8's grandfather-and-ratchet migration posture is correct for one-off legacy
+debt; it is the wrong tool for a *recurring, predictable* shape a human keeps re-minting. Measured
+against the pre-amendment `naming.manifest.json`: 22 exempted names ended in `-rules` (a closed
+reference-doc-standards pattern — `agent-writing-rules`, `doc-writing-rules`, …) and 14 matched
+`check-<noun>`, of which 3 (`check-doc`, `check-skill`, `check-stage`) already parsed clean only
+*by accident* — leaning on `check` sitting in `ObjectVocab` as if it were an ordinary noun, which
+only worked for the lucky subset of tails whose other token happened to be independently
+registered. Declining to register either pattern means every future `-rules` standards skill or
+`check-<noun>` report generator re-earns a hand exemption forever — the exact toil ADR-0011 D8's
+ratchet exists to retire opportunistically, never eliminate structurally. Full design record,
+decision rationale, and the rejected alternatives (an unconstrained `-rules` prefix; folding topic
+words into `ObjectVocab`; generalizing `check-` to every `VerbLex` verb): ADR-0014.
+
+**Validator change:** `naming-audit/scripts/validate.py`'s `Grammar.parse` skill branch gains two
+new branches, both inserted **before** the existing object-process check (`tokens[-1] in
+self.process_lex`) — that check hard-returns on any match, and `rules` already sits in
+`ProcessLex` (registered for the ordinary `{object}-writing` shape), so a branch placed after it
+would be unreachable dead code for the entire `-rules` class. Same hazard for D2: `check-stage`'s
+terminal token `stage` sits in `ProcessLex`, so D2 must also precede that check or it would never
+see `check-stage` at all. A new `resolve_objects_union` method (a `_resolve` helper shared with
+`resolve_objects`, differing only in which lexicon dict it searches) implements D1's union-pool
+resolution; `Grammar.__init__` builds the union pool once — `ObjectVocab` entries plus every
+single-token `ProcessLex` member (`ProcessLex` is single-token by construction — every entry is a
+skill terminal) plus every `TopicLex` member, multi-token compounds included (`font-token`,
+`ops-write-sandbox`, …), `ObjectVocab` never shadowed. `ObjectVocab` gained 12
+entries (`entry-file`, `routing`, `state`, `focus`, `safety`, `speed`, `translation`/`translations`,
+`color`/`colors`, `isolation`, `a2a`, `ui-change`, and `stage` — the last a deliberate dual
+membership with `ProcessLex`, keeping `check-stage` resolving once `check` is no longer in
+`ObjectVocab`); `check` itself was **removed** from `ObjectVocab` — D2's reserved head supersedes
+the reason it was registered, and leaving it in would let a stray nominal phrase abuse `check` as
+an ordinary noun.
+
+**New lexicon `TopicLex` (D3):** structurally identical to `RoleLex` — a flat list, closed,
+`naming.manifest.json` top level, grown only by manifest PR. Seeded with 15 entries covering 14 of
+the 22 `-rules` names (`icon`, `loop`, `motion`, `checking`, `font-token`, `design-md`,
+`ops-write-sandbox`, `parallel-work`, `size-and-shape`, `team-or-solo`, `thinking-depth`,
+`blocked-by`, `big-change-git`, `prompt`, `wording`); the remaining 8 need no new `TopicLex` entry
+at all — 7 are the `{noun}-writing-rules` pattern (the noun is already `ObjectVocab`, `writing` is
+already `ProcessLex`) and the 8th (`entry-file-rules`) resolves through the `entry-file`
+`ObjectVocab` addition instead. `TopicLex` carries **no disjointness requirement** against
+`ObjectVocab`/`ProcessLex` — it is consulted only inside D1's already-fixed union-pool context,
+where a token sitting in more than one pool creates redundancy, never ambiguity.
+
+**Non-goals (named explicitly, never grandfathered back in per §10's shrink-only rule):**
+
+- This amendment does not touch command grammar (§3.1), agent grammar (§3.3), the `-agent`
+  reserved head, the §14.1 reverse-wrapper amendment, or the plain nominal-phrase fallback for
+  every skill name that is neither `-rules`-tailed nor `check-`-headed.
+- It does not extend the `VerbLex ∩ ProcessLex = ∅` disjointness invariant (§4) to `TopicLex` —
+  no such requirement exists, by design (D3 above).
+- **4 exemptions this amendment deliberately does not retire:** `check-all-agents`,
+  `check-all-skills`, `check-everything`, `check-whole-ui`. Their non-tail tokens (`all`,
+  `everything`, `whole`) are quantifiers, not domain objects — minting a `QuantifierLex` for 3
+  idiomatic superlative names is disproportionate to the recurring-pattern problem this amendment
+  exists to fix. They stay exempt; the validator's own selftest carries a control proving they
+  still fail grammar (never silently start passing).
+- `check-` is one literal reserved head, closed — not a `VerbLex`-wide production. Generalizing it
+  to every `VerbLex` verb was considered and rejected (ADR-0014 Alt C): it would open a second,
+  broader avenue for verb-shaped skill names undermining §14.1's own narrowness rationale, making
+  "is this a skill or could it be read as command-shaped" no longer decidable from the lexicon
+  alone.
+
+**Exemption burn-down:** on landing, exactly 32 of the estate's then-156 exemptions retired via
+`naming.manifest.json`'s shrink-only `exemptions` array (156 → 124) — the 22 `-rules` names in
+full, plus 10 of the 14 exempted `check-<noun>` names (the 4 quantifier non-goals above stay
+exempt). `check-doc`, `check-skill`, `check-stage`, `naming-rules`, and `product-lifecycle-rules`
+were never in `exemptions` (they already parsed clean); their passing reason changes from
+accidental to designed under this amendment, not counted in the 32.

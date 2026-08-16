@@ -53,6 +53,23 @@
     "orchestrator",
     "coordinator"
   ],
+  "topic_lex": [
+    "icon",
+    "loop",
+    "motion",
+    "checking",
+    "font-token",
+    "design-md",
+    "ops-write-sandbox",
+    "parallel-work",
+    "size-and-shape",
+    "team-or-solo",
+    "thinking-depth",
+    "blocked-by",
+    "big-change-git",
+    "prompt",
+    "wording"
+  ],
   "object_vocab": [
     {
       "canonical": "skill",
@@ -299,7 +316,62 @@
       "banned_aliases": []
     },
     {
-      "canonical": "check",
+      "canonical": "entry-file",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "routing",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "state",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "focus",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "safety",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "speed",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "translation",
+      "plural": "translations",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "color",
+      "plural": "colors",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "isolation",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "a2a",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "ui-change",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "stage",
       "plural": null,
       "banned_aliases": []
     }
@@ -322,10 +394,7 @@
     "adopt-plugin",
     "agent-checker",
     "agent-residency-facts",
-    "agent-writing-rules",
     "apple-mobile-facts",
-    "big-change-git-rules",
-    "blocked-by-rules",
     "break-down-flow",
     "break-down-layout",
     "break-down-problem",
@@ -338,21 +407,10 @@
     "chat-harness-routing-facts",
     "chat-harness-tool-facts",
     "chat-harness-workflow-facts",
-    "check-a2a-isolation",
     "check-all-agents",
     "check-all-skills",
-    "check-colors",
-    "check-entry-file",
     "check-everything",
-    "check-focus",
-    "check-routing",
-    "check-safety",
-    "check-speed",
-    "check-state",
-    "check-translations",
-    "check-ui-change",
     "check-whole-ui",
-    "checking-rules",
     "chore-planner",
     "clean-git",
     "clean-repo",
@@ -364,14 +422,11 @@
     "color-theory-facts",
     "component-checker",
     "decision-watcher",
-    "design-md-rules",
     "design-system-checker",
     "dispatch-ticket",
     "doc-checker",
-    "doc-writing-rules",
     "docs-writer",
     "dom-layout-facts",
-    "entry-file-rules",
     "experiment-runner",
     "fact-finder",
     "figma-plugin-facts",
@@ -384,13 +439,10 @@
     "fix-old-names",
     "flow-checker",
     "font-choice-checker",
-    "font-token-rules",
     "github-facts",
     "grill-the-ask",
     "hook-checker",
-    "hook-writing-rules",
     "html-to-markdown",
-    "icon-rules",
     "init-repo",
     "intake-lead",
     "issue-sorter",
@@ -403,7 +455,6 @@
     "lettering-facts",
     "llm-gateway-facts",
     "llm-streaming-facts",
-    "loop-rules",
     "make-a2a-agent",
     "make-agent",
     "make-component",
@@ -429,10 +480,6 @@
     "material-token-facts",
     "material-type-facts",
     "mobilize-chores",
-    "motion-rules",
-    "ops-write-sandbox-rules",
-    "pack-writing-rules",
-    "parallel-work-rules",
     "physical-color-facts",
     "pick-fonts",
     "plan-chores",
@@ -442,23 +489,16 @@
     "planner",
     "plugin-checker",
     "plugin-install-facts",
-    "plugin-writing-rules",
-    "prompt-wording-rules",
     "repo-cleaner",
     "research-methods",
     "reshape-skill",
     "routing-judge",
     "save-lessons",
-    "script-writing-rules",
     "ship-plugin",
-    "size-and-shape-rules",
     "skill-checker",
-    "skill-writing-rules",
     "sort-issues",
     "sweep-chores",
     "team-lead",
-    "team-or-solo-rules",
-    "thinking-depth-rules",
     "tidy-docs",
     "token-builder",
     "ui-genre-facts",

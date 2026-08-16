@@ -6,12 +6,15 @@
 command   := object "-" verb              skill-create, rename-execute
           |  wrapper: skill-name          naming-audit  (iff wraps: that skill)
 skill     := object "-" process           skills-audit, rename-planning
+          |  topic-phrase "-" "rules"     agent-writing-rules  (§14.2, ADR-0014 D1)
+          |  "check" "-" object-phrase    check-routing        (§14.2, ADR-0014 D2)
           |  nominal-phrase               naming-conventions  (all tokens resolve)
 agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
           |  scope "-" role "-" "agent"   team-leader-agent   (orchestrators only)
 ```
 
-One reserved head: `-agent`.
+Reserved heads/tails on a skill name: `-agent` (agents only, illegal on a skill), `-rules`
+(reserved tail, §14.2), `check-` (reserved head, §14.2).
 
 ## Kind decision
 
@@ -55,9 +58,13 @@ object); RoleLex stays ≤ 4 entries.
 | ProcessLex | skill terminals | closed; PR to change |
 | RoleLex | orchestrator roles | closed; ≤ 4 |
 | ObjectVocab | domain objects | registered; anti-ambiguity gate |
+| TopicLex | `-rules` reference-doc topic words (§14.2) | closed; PR to change |
 
 **Disjointness invariant:** VerbLex ∩ ProcessLex = ∅. Position plus membership
-decides kind; a token in both would break that. ObjectVocab entries register
+decides kind; a token in both would break that. TopicLex carries no such
+requirement — it's consulted only inside the `-rules` production's own
+union-pool resolution (ObjectVocab ∪ ProcessLex ∪ TopicLex), where a token in
+more than one pool is redundant, never ambiguous. ObjectVocab entries register
 canonical form, plural, and banned aliases (`pr`, never `pull-request`).
 `banned_aliases` scopes to artifact NAMES only — it governs what token a
 command/skill/agent name may use, never general prose, documentation, or

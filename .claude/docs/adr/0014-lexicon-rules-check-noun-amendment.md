@@ -1,19 +1,25 @@
 ---
 doc-type: adr
 id: adr-0014
-status: proposed
+status: accepted
+ratified: by Kim, 2026-08-16 (live AskUserQuestion round) — the execution follow-on named in
+  Consequences was dispatched in the same change: `validate.py` gained D1/D2 (plus the
+  `resolve_objects_union` helper and D3's `TopicLex`), `naming.manifest.json` seeded TopicLex,
+  added D4's 12 ObjectVocab entries, removed `check`, and retired exactly the 32 named
+  exemptions (156→124); `spec-naming-convention.md` gained §14.2 mirroring §14.1's own pattern.
 date: 2026-08-16
 owner: kim.granlund
 supersedes: null
 intent-refs: null
 ---
-# ADR-0014 — Register a `-rules`/gerund object class and the `check-<noun>` tail in the naming-convention grammar (PROPOSED — pending Kim's review)
+# ADR-0014 — Register a `-rules`/gerund object class and the `check-<noun>` tail in the naming-convention grammar
 
-> **Not ratified.** This ADR is a design artifact for review (issue #353, CONTESTED by the
-> ticket's own framing). Nothing in `naming.manifest.json` or
-> `authorkit/skills/naming-audit/scripts/validate.py` changes as part of landing this document.
-> Kim's ratification (a status flip to `accepted`) is the only event that authorizes the
-> execution follow-on named in Consequences.
+> **Ratified 2026-08-16 (Kim, live AskUserQuestion — see `ratified:` above).** Execution landed
+> in the same change: `naming.manifest.json` and
+> `authorkit/skills/naming-audit/scripts/validate.py` now carry D1–D4 exactly as decided below.
+> This note is append-only per the accepted-ADR ledger-lock contract (doc_lint T4) — the
+> flip from `proposed` to `accepted` above is itself the ratification act; nothing below this
+> point is rewritten, only appended to going forward.
 
 ## Context
 
@@ -326,3 +332,47 @@ what keeps `check-stage` passing at all once `check` is removed — see D2 and D
 - **Irreversible in the ratchet sense:** once the 32 exemptions retire per D8's shrink-only rule,
   they may never be re-added to `exemptions` — a future regression in one of those 32 names would
   have to be fixed forward (rename or re-conform), never grandfathered back in.
+
+### Execution record (2026-08-16, append-only per the ledger-lock contract)
+
+All six follow-on steps named above landed in the same change that ratified this ADR (PR
+referencing this ADR and issue #353):
+
+1. D1/D2 implemented in `validate.py`'s `Grammar.parse` skill branch, both inserted before the
+   existing object-process check; `resolve_objects_union` added (backed by a shared `_resolve`
+   helper so `resolve_objects`/`resolve_objects_union` differ only in which lexicon pool they
+   search).
+2. `TopicLex` (D3, 15 entries) seeded; the 12 `ObjectVocab` additions registered; `check` removed.
+3. Validator selftest fixtures added mirroring §14.1's positive/negative/regression triad for
+   both D1 and D2, plus a quantifier-non-goal control and a `stage` dual-membership control (D4).
+4. `authorkit:naming-audit`'s validator re-run estate-wide (`--scope grammar`, all 8 plugins +
+   the workspace `.claude/skills` tree): 182 artifacts, 0 grammar errors before and after: the
+   exact 32 named exemptions now parse clean via grammar (not exemption), the 5 already-clean
+   names (`check-doc`, `check-skill`, `check-stage`, `naming-rules`, `product-lifecycle-rules`)
+   are unaffected, and the 4 quantifier non-goals remain exempt-only, never grammar-passing.
+5. `naming.manifest.json`'s `exemptions` array shrunk by exactly those 32 entries: 156 → 124.
+6. `.claude/docs/spec/spec-naming-convention.md` §14.2 added, mirroring §14.1's own pattern.
+
+### Post-execution corrections (2026-08-16, append-only, fresh-context doc-checker findings)
+
+- **Item 4's "182 artifacts" reproducibility, pinned exactly.** Per-plugin `--scope grammar`
+  counts, same invocation each: `python3 authorkit/skills/naming-audit/scripts/validate.py
+  --target <target> --manifest naming.manifest.json --scope grammar --json`, run once per
+  target listed — `agent-protocols` 8, `authorkit` 21, `design` 25, `docs` 21, `harness` 59,
+  `llm` 9, `screens` 18, `teamwork` 20, `.claude` 1 (the workspace-root `.claude/skills` tree,
+  reached via `--target .claude`, NOT `--target .claude/skills` directly — the latter path
+  under-resolves to 0 because `discover()` expects an estate/plugin root, not the `skills/`
+  folder itself, and would silently undercount the total by 1). Sum: 182, matching item 4 above
+  exactly; 0 grammar errors in every one of the 9 runs, before and after.
+- **Item (1)'s "a separate ticket" deviation, named.** The Consequences bullet above (before this
+  Execution record) said the follow-on execution would land as "a separate ticket,
+  authorkit-owned." It landed instead in this same change, same PR, same commit as the
+  ratification itself — Kim's live ratification round authorized executing inline rather than
+  opening a second ticket first. The "No file … changes as part of landing this ADR" line earlier
+  in this document (Decision section, "What does NOT change") is likewise superseded by this
+  Execution record for the same reason: it described the state before ratification, not after.
+- **`intent-refs: null` (frontmatter, unchanged by this ratification).** This ADR carries no
+  upstream IDR citation, same as ADRs 0001–0013 predating the `intent-refs:` field (doc_lint T6,
+  WARN tier — an accepted retrofit debt, not a blocker). No IDR exists for issue #353's
+  underlying claim at ratification time; the orphan-WARN is accepted as-is rather than backfilled
+  under this change, consistent with T6's own documented retrofit-deferral posture.
