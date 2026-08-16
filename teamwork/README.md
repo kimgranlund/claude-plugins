@@ -85,6 +85,25 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.4 · 2026-08-16 · agent-scoped worktree-identity pin (closes #375, #363/#359's own follow-up):
+`worktree_prebash_guard.py`'s persisted pin was keyed by `session_id` alone, but this workspace's
+multi-agent teams feature hands every parallel agent in one dispatch the SAME session_id — agent
+B's correct, escape-free command in its OWN worktree false-positived as drift because agent A's
+earlier call (different worktree) had written the shared pin file (screenshot evidence,
+2026-08-16). Two independent fixes: (1) `resolve_agent_key()` folds a best-effort per-agent
+discriminator (`CLAUDE_AGENT_ID`, else `CLAUDE_PID`/`CMUX_CLAUDE_PID` — no documented per-agent
+field exists on the PreToolUse event or hook env, verified live; falls back to session-only
+keying, unchanged, when none resolve) into the pin's file key. (2) a no-escape-attempt carve-out:
+a call with no cd/pushd token anywhere no longer asks on a pin mismatch — live evidence during
+this build that this host's own reported `cwd` can move between consecutive same-agent calls
+with nothing in the command to explain it, making "no cd, cwd moved" alone unreliable; the
+compound-cd/-C escape detection (`analyze_command`) is untouched, so a genuine cd-then-write into
+the primary checkout or a sibling still asks regardless. 5 new selftest fixtures (40 repurposed,
+42-45); fresh-context hook-checker critic: 1 Major fixed pre-merge (the carve-out's cd-token
+scan initially also counted `-C`/`--prefix`, defeating itself on `rg -C 3 foo`-shaped commands —
+narrowed to cd/pushd only, since a genuine -C escape is independently caught by
+`analyze_command`'s own hits regardless of the pin), plus a stale docstring paragraph and the
+drift ASK message text repaired to match the new behavior.
 v2.14.3 · 2026-08-16 · critic-step nested-wait hardened (closes #370, PR #317's structural rule
 extended past build delegation to the critic step): `dispatch-ticket`'s no-nested-wait paragraph
 and `build-lead`'s own copy both gain an explicit recovery instruction — after dispatching a
