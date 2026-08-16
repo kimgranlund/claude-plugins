@@ -16,7 +16,7 @@
           "pattern": "description:\\s*\\|[\\s\\S]{0,600}<example>"
         }
       ],
-      "source": "issue #379 finding 1 == issue #380; PR #383 proposes the fix but is still OPEN as of 2026-08-16 (verified via `gh pr view 383` -- not merged), so this edge fires live against the current workspace"
+      "source": "issue #379 finding 1 == issue #380; PR #383 proposed the fix. [Amended 2026-08-16, issue #393: PR #383 has since MERGED -- the <example> block is evicted from make-agent's description, so this forbid edge now correctly reports clean; it remains armed as a regression tripwire.]"
     },
     {
       "id": "D02",
@@ -30,10 +30,10 @@
       "dependents": [
         {
           "file": "teamwork/agents/build-lead.md",
-          "pattern": "SendMessage`?\\s+to your dispatcher"
+          "pattern": "SendMessage`?\\s+to\\s+your\\s+dispatcher"
         }
       ],
-      "source": "issue #379 finding 2 == issue #381; PR #383 proposes the fix but is still OPEN as of 2026-08-16 (verified via `gh pr view 383` -- not merged), so this edge fires live against the current workspace. Scoped to build-lead.md only -- docs/agents/intake-lead.md carries a close paraphrase ('deliver the final report via SendMessage to the dispatcher', not byte-identical to canon), a real but separate drift instance the sweep also catches by design (skill-checker finding, 2026-08-16: a verbatim-line edge is supposed to catch exactly this kind of near-miss, not wave it through as verbatim)"
+      "source": "issue #379 finding 2 == issue #381; PR #383 proposed the fix. [Amended 2026-08-16, issue #393: PR #383 has since MERGED and the clause is present in build-lead.md, but it line-wraps between 'your' and 'dispatcher' -- the original literal-space pattern missed it (the false 'required pattern absent' of the first acceptance run); the pattern is now whitespace-tolerant (\\s+ between words) so a prose re-wrap cannot break this require edge. Reported double-escaping was falsified: the JSON was always correctly single-escaped.] Scoped to build-lead.md only -- docs/agents/intake-lead.md carries a close paraphrase ('deliver the final report via SendMessage to the dispatcher', not byte-identical to canon), a real but separate drift instance the sweep also catches by design (skill-checker finding, 2026-08-16: a verbatim-line edge is supposed to catch exactly this kind of near-miss, not wave it through as verbatim)"
     },
     {
       "id": "D03",
