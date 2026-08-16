@@ -7,12 +7,12 @@ description: >-
   living indexes, bug-vs-requirement-gap
   adjudication at Verify, the written retro, and citation-driven escalation — operating from
   docs:product-lifecycle-rules and driving docs:check-stage for the lifecycle-position question.
-  Holds until the charter closes. Run /leading-product [charter]. NOT the dispatched sibling seat
-  (product-leader-agent, Agent tool); NOT authoring PRD/SPEC/LLD (teamwork's /leading-planning, one
-  loop-tier down); NOT enforcing the spec-lock gate at dispatch time (teamwork's /leading-teams, which
+  Holds until the charter closes. Run /lead-product [charter]. NOT the dispatched sibling seat
+  (product-leader-agent, Agent tool); NOT authoring PRD/SPEC/LLD (teamwork's /lead-planning, one
+  loop-tier down); NOT enforcing the spec-lock gate at dispatch time (teamwork's /lead-team, which
   reads this seat's gate); NOT a one-off lifecycle-position report (docs:check-stage directly).
-disable-model-invocation: true
-user-invocable: true
+disable-model-invocation: false
+user-invocable: false
 argument-hint: "[charter — the loop/gate/IDR/RDD work needing the product seat]"
 ---
 
@@ -24,14 +24,14 @@ non-conforming against the CURRENTLY-LIVE naming grammar until the naming-ADR Ki
 supersede ADR-0011 REQ-002's `-agent` suffix rule lands) is the dispatched form of the standing
 product seat, now same-plugin. This command is the other
 half of the pair — the
-`/leading-teams` ↔ `team-leader` pattern. The seat's own doctrine preloads
+`/lead-team` ↔ `team-leader` pattern. The seat's own doctrine preloads
 (`product-lifecycle-rules`, `check-stage`, `doc-writing-rules`) stay canonical in `docs` — reached
 only as soft cross-plugin named mentions (never a `skills:` frontmatter preload, the hard
 plugin-boundary rule), with an explicit failure branch when `docs` isn't installed; the AGENT file
 itself is same-plugin now, only its doctrine content stays cross-plugin. Under ADR-0006 the pair
 splits by species:
 command = nominal object-process form conforming to ADR-0011's naming grammar
-(`/leading-product` — this is a NEW name, so the legacy `lead-*` verb form isn't available;
+(`/lead-product` — this is a NEW name, so the legacy `lead-*` verb form isn't available;
 `leading-teams`/`leading-review`/`leading-planning` stay grandfathered under naming-rules), agent = role
 noun (`product-leader`). Seed:
 `$ARGUMENTS` (the charter — the loop-authority/spec-lock/IDR/RDD work needing this seat).

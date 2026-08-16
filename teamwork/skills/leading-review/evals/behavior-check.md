@@ -33,6 +33,6 @@ sealed would-dispatches captured verbatim.
 
 ## Remaining live item (family-standard disclosure)
 
-Live checker dispatches from a real /leading-review session are first-use territory — the check
+Live checker dispatches from a real /lead-review session are first-use territory — the check
 proved routing, sealing, and the guard's neutrality, not the Agent-tool round trip (which the
 estate exercises daily elsewhere; lowest-risk of the family's disclosed items).

@@ -7,24 +7,24 @@ description: >-
   itself (authoring IS this seat's deliverable) but never grades one it wrote: each authored doc
   rides to docs:doc-checker fresh-context, review-by-hand against doc-writing-rules' rubric where
   docs isn't installed. Holds until the charter closes on a named loop-rules decision, rolled up
-  to the invoking human. Run /leading-planning [charter]. NOT for implementing an approved LLD
+  to the invoking human. Run /lead-planning [charter]. NOT for implementing an approved LLD
   (builder, Agent tool); NOT a bugfix or single-file change (the host states Components/Risks
-  inline, no doc, no seat); NOT a generic multi-seat coordination charter (/leading-teams); NOT
+  inline, no doc, no seat); NOT a generic multi-seat coordination charter (/lead-team); NOT
   reviewing an existing design doc standalone (docs:check-doc / dispatch doc-checker directly);
   NOT an unattended dispatch for a coordinator or /goal loop (planning-leader, Agent tool — the
   standing dispatched twin of this command, closes #433).
-disable-model-invocation: true
-user-invocable: true
+disable-model-invocation: false
+user-invocable: false
 argument-hint: "[charter — the design/decomposition work needing a PRD/SPEC/LLD/ADR]"
 ---
 
 # leading-planning — the host runs the design seat, not a dispatched copy of it
 
 `planner` (`teamwork/agents/planner.md`) is the dispatched form of the standing design seat. This
-command is the other half of the pair — the `/leading-teams` ↔ `team-leader` pattern, teamwork's
+command is the other half of the pair — the `/lead-team` ↔ `team-leader` pattern, teamwork's
 fifth `/lead-*` member: it makes **this session** — the one the human is typing into — hold that
 agent's contract directly, for one named charter, with no `Agent` spawn. Under ADR-0006 the pair
-splits by species: command = verb form (`/leading-planning`), agent = role noun (`planner`). Seed:
+splits by species: command = verb form (`/lead-planning`), agent = role noun (`planner`). Seed:
 `$ARGUMENTS` (the charter — the design/decomposition work needing a PRD/SPEC/LLD/ADR).
 
 A caller needing this same discipline as an unattended Agent-tool dispatch — no live host session
@@ -42,7 +42,7 @@ authored.
 
 From this point until the charter closes (Phase 4), this session holds the agent's own contract
 as its own operating rules, following the shared ritual in
-`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md` (the canonical copy,
+`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md` (the canonical copy,
 shared with `leading-teams`/`leading-builds`):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/planner.md` now, in full.** Adopt its four priorities
@@ -62,7 +62,7 @@ shared with `leading-teams`/`leading-builds`):
 Three places the host's version genuinely differs from the agent's, because the host is not a
 dispatched subagent:
 
-- **Write discipline INVERTS relative to leading-teams.** `/leading-teams`'s one rule is the host never
+- **Write discipline INVERTS relative to leading-teams.** `/lead-team`'s one rule is the host never
   touches `Write`/`Edit` on a charter deliverable — every unit of real work is a dispatch. Here
   the inverse holds: authoring the PRD/SPEC/LLD/ADR the charter earns **is** this seat's own
   deliverable, so the host writes and edits those docs directly, the same as the dispatched
@@ -74,7 +74,7 @@ dispatched subagent:
 - **Roll-up audience (planner's Priority 4).** The agent reports design status to a dispatching
   coordinator; this session has none for this charter — the roll-up's audience is the human or
   caller who invoked this command.
-- **Invoking this command is the explicit scoped choice.** Same override `/leading-teams` states for
+- **Invoking this command is the explicit scoped choice.** Same override `/lead-team` states for
   its own charter: running the planning discipline for THIS charter is deliberate regardless of
   how small it turns out — not an invitation to fall back to solo-first mid-charter once the
   shape becomes clear. If the charter is genuinely done, close it (Phase 4); never shrink the
@@ -109,7 +109,7 @@ what was authored, what each doc-checker verdict said, what remains open.
   re-dispatching the same fix a third time hoping the checker relents.
 - **The charter turns out smaller than expected once underway** → the shared ritual's first
   failure branch
-  (`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`): keep authoring
+  (`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`): keep authoring
   under the adopted contract anyway; close it (Phase 4) rather than shrinking the discipline
   around what's left.
 - **The `doc-checker` dispatch itself fails to return** (a tool error, not a reviewed finding) →
@@ -121,9 +121,9 @@ what was authored, what each doc-checker verdict said, what remains open.
 ## When this rule ends
 
 The shared ritual's closing rule
-(`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`) applies: the
+(`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`) applies: the
 adopted discipline holds only for the charter bound in Phase 1, until it closes on a named
-decision in Phase 4; a new charter requires a new `/leading-planning` invocation.
+decision in Phase 4; a new charter requires a new `/lead-planning` invocation.
 
 Done when the charter has closed on a named `loop-rules` decision, every doc this session
 authored or materially revised carries a `doc-checker` verdict (or the disclosed by-hand

@@ -6,7 +6,7 @@ description: >-
   INTAKE sibling (docs' intake-lead), and wires per-ticket build capacity (build-leader
   dispatches) — then reports the armed arrangement. Per-session: spawned siblings die with the
   session; re-run each work session. Run /init-repo [optional repo root]. NOT the parts alone
-  (/init, /leading-teams, /lead-intake, /leading-builds, /leading-review); NOT batch ticket mobilization
+  (/init, /lead-team, /lead-intake, /lead-build, /lead-review); NOT batch ticket mobilization
   (/mobilize-chores).
 disable-model-invocation: true
 user-invocable: true
@@ -34,14 +34,14 @@ earlier one succeeded.
    `init` skill (Skill tool — legal here: `init` is model-invocable, the reachable side of the
    #134 dichotomy step 3 states the blocked side of) and let it complete before arming
    continues — an armed session over an unmapped repo coordinates blind.
-3. **Adopt team-lead — this session becomes the apex, no spawn.** `/leading-teams` itself is
+3. **Adopt team-lead — this session becomes the apex, no spawn.** `/lead-team` itself is
    `disable-model-invocation: true` and cannot be Skill-invoked from inside this command (the
    #134/#135 class), so this step carries the adoption directly, per that command's own
    Phase 2: read `${CLAUDE_PLUGIN_ROOT}/agents/team-leader.md` in full and adopt its priorities
    as this session's standing rules; invoke `team-or-solo-rules` and `loop-rules` (the same
-   preloads the agent carries). ONE named deviation from /leading-teams: the charter. /leading-teams
+   preloads the agent carries). ONE named deviation from /lead-team: the charter. /lead-team
    binds one bounded charter; here the charter IS the session — "this session's incoming work
-   on <repo>" — closing at session end or an explicit stand-down. /leading-teams's own host
+   on <repo>" — closing at session end or an explicit stand-down. /lead-team's own host
    deltas (roll-up audience, review-seat degradation, the write-scoping discipline) apply as
    written. **Acknowledge the adoption in one standing block** — the contract file read, the
    charter deviation, the duration — before any spawn fires.
@@ -62,7 +62,7 @@ earlier one succeeded.
    an omission.
 6. **The armed report.** One closing block: each step's outcome; how to feed each seat (raw
    intake → relayed to INTAKE; a confirmed ticket → a build-leader dispatch; a review target →
-   its owning checker, or `/leading-review` in a dedicated session); the per-session lifetime
+   its owning checker, or `/lead-review` in a dedicated session); the per-session lifetime
    line. From here the session runs under the adopted team-lead contract until it ends.
 
 ## Failure branches

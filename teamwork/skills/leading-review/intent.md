@@ -16,7 +16,7 @@ dispatch-only.
 
 ## Gate P1 — Interview slots (PASS, pre-ruled)
 
-- **Trigger:** human types `/leading-review` when converting a session into a dedicated review
+- **Trigger:** human types `/lead-review` when converting a session into a dedicated review
   desk (Kim's REVIEW sessions, formalized). Command species — menu-register description.
 - **Behavior delta:** an ad-hoc-primed REVIEW session reviews INLINE — its own single
   accumulating context, no owning rubric, no generator≠critic separation, and nothing stopping
@@ -27,8 +27,8 @@ dispatch-only.
 - **Freedom:** medium — the routing table is the contract; dispatch mechanics per
   agent-writing-rules' sealed-dispatch discipline.
 - **Fences:** NOT a one-off checker dispatch (dispatch the owning checker directly); NOT a
-  coordination charter (/leading-teams); NOT the standing intake/build seats (/lead-intake,
-  /leading-builds); NOT the review procedures themselves (check-skill, check-doc — the checkers
+  coordination charter (/lead-team); NOT the standing intake/build seats (/lead-intake,
+  /lead-build); NOT the review procedures themselves (check-skill, check-doc — the checkers
   preload those).
 - **Done-when:** adoption acknowledged; every target since routed to its owning checker (or
   the named degradation), verdict relayed verdict-first; zero inline reviews; self-authored

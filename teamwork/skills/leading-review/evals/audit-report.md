@@ -1,8 +1,8 @@
-# Audit: teamwork/skills/leading-review — FLOOR review vs skill-writing-rules
+# Audit: teamwork/skills/lead-review — FLOOR review vs skill-writing-rules
 
 Auditor: fresh-context checker, 2026-08-10. Inputs read on disk: `SKILL.md`, `intent.md`,
 `evals/assertions.md`, `evals/baseline/baseline-report.md`; pattern baselines
-`teamwork/skills/leading-teams/SKILL.md`, `teamwork/skills/leading-builds/SKILL.md`,
+`teamwork/skills/lead-team/SKILL.md`, `teamwork/skills/lead-build/SKILL.md`,
 `docs/skills/lead-intake/SKILL.md`; all 11 routed checker agent files; shipped checker
 descriptions. `skill_lint.py`: clean.
 
@@ -81,7 +81,7 @@ rubric itself was unavailable, not just the generator ≠ critic loss.
 ## 4 — Command-species conventions: CONFORMANT
 
 `disable-model-invocation: true` + `user-invocable: true` ✓; `argument-hint` present ✓;
-description carries the `/leading-review [optional repo root]` invocation and three NOT-fences
+description carries the `/lead-review [optional repo root]` invocation and three NOT-fences
 ✓; eval-suite skip recorded for command species (`intent.md:49`, house precedent) ✓. Hard
 gates: exactly three standing rules (SKILL.md:56–72) — at the ≤3 ceiling, none decorative.
 Done/NOT-done predicate present and each clause independently checkable (SKILL.md:98–102).

@@ -11,8 +11,8 @@ description: >-
   virgin repo's fleet manifest first), never re-asking once a role is bound. Also runs the
   reverse: /team-scaffolding retire ROLE releases the retiring session's own seat (un-walls
   settings.local.json, releases fleet.json, syncs fleet-roster.md). NOT a one-off adoption of a
-  single lead-* contract with no fleet bootstrap (/leading-teams, /leading-review, /leading-planning,
-  /leading-product directly); NOT for a task one context can hold (team-or-solo-rules).
+  single lead-* contract with no fleet bootstrap (/lead-team, /lead-review, /lead-planning,
+  /lead-product directly); NOT for a task one context can hold (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason] — bare asks which seat"
@@ -160,7 +160,7 @@ State, as one standing block before any real work:
    (spec correction 4 — a cloud session cannot message back, so blocking on liveness would strand
    it). Fall back to durable records (Issues, PR comments) as the coordination channel regardless
    of roster state.
-4. **`reviewer` only** — name the review instrument roster: the doc/code checkers `/leading-review`
+4. **`reviewer` only** — name the review instrument roster: the doc/code checkers `/lead-review`
    already routes to, plus authorkit's read-only sweeps — `naming-audit`, `doctrine-audit`,
    `bloat-audit`, `attention-audit`, `estate-audit` (ruling: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
    D3).
@@ -213,10 +213,10 @@ step — mirroring how `authorkit:overhaul-execute` hands a merge/split off as a
 
 | Role | Command to print | Home plugin |
 |---|---|---|
-| `agent` | `/leading-teams` | teamwork |
-| `reviewer` | `/leading-review` | teamwork |
-| `planner` | `/leading-planning` | teamwork |
-| `product` | `/leading-product` | teamwork (`skills/leading-product`, moved from docs — issue #433) |
+| `agent` | `/lead-team` | teamwork |
+| `reviewer` | `/lead-review` | teamwork |
+| `planner` | `/lead-planning` | teamwork |
+| `product` | `/lead-product` | teamwork (`skills/lead-product`, moved from docs — issue #433) |
 
 `product`'s handoff is now a same-plugin command (the `product-authoring` skill, now `leading-product`
 here, and its `product-leader-agent` full-moved from docs to teamwork under issue #433's ruling); the prior

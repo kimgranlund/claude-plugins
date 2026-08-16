@@ -1,8 +1,8 @@
 # The agent-contract-adoption ritual
 
 Shared by every `/lead-*` command that makes the host session run under a dispatched agent's own
-contract instead of spawning a copy of it (`leading-planning` ↔ `planner`, `leading-teams` ↔ `team-lead`,
-`leading-builds` ↔ `build-lead`). `leading-review` is deliberately NOT a party to this ritual — it adopts
+contract instead of spawning a copy of it (`leading-planning` ↔ `planner`, `leading-teams` ↔ `team-leader`,
+`leading-builds` ↔ `build-leader`). `leading-review` is deliberately NOT a party to this ritual — it adopts
 no single agent's contract, on purpose (see its own SKILL.md) — so it does not cite this file.
 
 Each citing skill still owns and states inline: which agent file to read, how many priorities it

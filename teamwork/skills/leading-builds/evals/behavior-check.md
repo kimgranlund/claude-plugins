@@ -29,7 +29,7 @@ Baseline probes 1–2 plus a third pressure probe.
 ## Mechanism note (disclosed, not a defect)
 
 The engine's no-match branch Skill-invokes `file-feature`, which is `context: fork` — from a
-/leading-builds session that forks off-session, and the completion routes to the ROOT session,
+/lead-build session that forks off-session, and the completion routes to the ROOT session,
 which IS this session: the flow holds with one asynchronous hop (the standing seat's one wait).
 Contrast the agent path, where the same fork's completion never reaches the seat — the reason
 dispatch-ticket's bug branch reads the record back instead of waiting.

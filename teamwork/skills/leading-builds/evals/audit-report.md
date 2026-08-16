@@ -3,7 +3,7 @@
 Audited against harness `skill-writing-rules` (3.1.12) + the brief's six checkpoints.
 Files read: `SKILL.md`, `intent.md`, `evals/assertions.md`, `agents/build-lead.md` (the twin),
 `skills/dispatch-ticket/SKILL.md` (the engine, as shipped), `skills/build-feature/SKILL.md`,
-`skills/leading-teams/SKILL.md` (pattern original), `docs/skills/lead-intake/SKILL.md` + its
+`skills/lead-team/SKILL.md` (pattern original), `docs/skills/lead-intake/SKILL.md` + its
 audit report (sibling baseline). Lint: `skill_lint.py` clean. Description: 601 chars (cap
 1,024); build-feature's: 673.
 
@@ -26,7 +26,7 @@ declare the now-false caller set:
 - Its description (lines 4–5): "Use when invoked by name from /build-feature's own body or the
   build-lead agent — never from a direct user ask." `dispatch-ticket` is
   `disable-model-invocation: false` — this description sits in the live listing budget. A
-  standing /leading-builds session invokes the engine on every turn a target arrives, and from
+  standing /lead-build session invokes the engine on every turn a target arrives, and from
   mid-session the target IS a direct user ask; the engine's self-declared caller contract now
   excludes its third sanctioned caller and actively repels the invocation path this command's
   Phase 3 orders.
@@ -91,7 +91,7 @@ host-vs-agent deltas section it's defensible, but the superlative invites the wr
    not a missing precondition — no blank-args branch owed, unlike leading-teams's charter. Done /
    NOT-done predicate present; ≤3 uppercase hard gates; lint clean.
 4. **Reciprocal fence — CONSISTENT both ways.** build-feature:9–11 carries "NOT for converting
-   this session into the standing build seat (/leading-builds) — this command forks ONE
+   this session into the standing build seat (/lead-build) — this command forks ONE
    already-known target"; leading-builds fences "/build-feature" back. Both descriptions well
    under budget (673 / 601 chars). Both dmi:true, so menu-clarity fences — matching intent.md
    P5's recorded disposition.

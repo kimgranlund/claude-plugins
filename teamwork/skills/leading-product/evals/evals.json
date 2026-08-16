@@ -2,7 +2,7 @@
   "skill": "leading-product",
   "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). disable-model-invocation: true means this is a command-species skill, but routing intent is still documented.",
   "cases": [
-    { "id": "t01", "prompt": "/leading-product is this release spec-locked yet?", "expect": "trigger" },
+    { "id": "t01", "prompt": "/lead-product is this release spec-locked yet?", "expect": "trigger" },
     { "id": "t02", "prompt": "Adopt the product seat's contract and tell me which loop we're in.", "expect": "trigger" },
     { "id": "t03", "prompt": "Author the IDR for this north-star question and keep the roadmap current.", "expect": "trigger" },
     { "id": "t04", "prompt": "Is this Verify-stage finding a bug or a requirement gap? Adjudicate it as the product seat.", "expect": "trigger" },

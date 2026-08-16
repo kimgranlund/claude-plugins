@@ -2,7 +2,7 @@
 
 Scope: `teamwork/skills/init-repo/` (SKILL.md, intent.md, evals/assertions.md) against
 skill-writing-rules, with composition accuracy checked against the shipped parts on disk:
-`teamwork/skills/leading-teams/SKILL.md`, `docs/agents/intake-lead.md` + `intake-lead.intent.md`,
+`teamwork/skills/lead-team/SKILL.md`, `docs/agents/intake-lead.md` + `intake-lead.intent.md`,
 `teamwork/agents/build-lead.md`, `teamwork/skills/mobilize-chores/SKILL.md`, sibling commands
 `leading-builds`/`leading-review`, `harness/skills/naming-rules/SKILL.md`, issues #134/#135.
 Mechanics: `skill_lint.py` clean.
@@ -78,7 +78,7 @@ the body actually orders.
 
 ### m5 — The built-in `init` invocation's legality is assumed, not stated
 
-Step 2 invokes the built-in `init` via the Skill tool; step 3 states why /leading-teams CANNOT be
+Step 2 invokes the built-in `init` via the Skill tool; step 3 states why /lead-team CANNOT be
 Skill-invoked (dmi:true, the #134/#135 class) — but nowhere does the skill or intent record
 state why `init` CAN be: it is model-invocable (present on the session's Skill surface),
 i.e. the other side of the same #134 dichotomy. The estate's #134 defect arose precisely from
@@ -98,7 +98,7 @@ stated reasoning is missing.
   skill-writing-rules 2026-07-15 amendment's letter scopes to "a knowledge catalog's subject";
   the load-bearing basis here is naming-rules' broader term-of-art row plus the ADR-0006
   Decision 7 shelf precedent, both of which intent.md also cites. Defensible as ruled.
-- **team-lead adoption fidelity.** Step 3 tracks /leading-teams Phase 2 by reference (read the
+- **team-lead adoption fidelity.** Step 3 tracks /lead-team Phase 2 by reference (read the
   agent file in full, adopt, invoke `team-or-solo-rules` + `loop-rules` — the agent's own
   preloads), names the ONE deviation (charter = the session) explicitly, and incorporates all
   three host deltas by name-and-reference ("roll-up audience, review-seat degradation, the
@@ -113,7 +113,7 @@ stated reasoning is missing.
   `agents/team-lead.md` — same-plugin (file exists at `teamwork/agents/team-lead.md`).
   `docs:intake-lead` is an Agent dispatch — a legal soft mention with a degradation branch
   (the branch's content is M2, but its existence and shape are correct). All fence mentions
-  (`/init`, `/leading-teams`, `/lead-intake`, `/leading-builds`, `/leading-review`,
+  (`/init`, `/lead-team`, `/lead-intake`, `/lead-build`, `/lead-review`,
   `/mobilize-chores`) resolve to shipped artifacts on disk.
 - **Command-species conventions.** dmi:true + ui:true + argument-hint; `$ARGUMENTS` named in
   the intro and bound in step 1 (the siblings' shape); failure branches cover every step that

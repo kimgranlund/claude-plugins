@@ -19,8 +19,8 @@ dispatches) — nothing here is a hook, an always-true rule, or a new agent.
   wired — identically every time.
 - **Species + dials:** Command — `disable-model-invocation: true`, `user-invocable: true`.
 - **Freedom:** medium — a fixed arming sequence composing named parts by reference.
-- **Fences:** NOT the parts themselves (/init, /leading-teams, /lead-intake, /leading-builds,
-  /leading-review — each usable alone); NOT batch ticket mobilization (/mobilize-chores).
+- **Fences:** NOT the parts themselves (/init, /lead-team, /lead-intake, /lead-build,
+  /lead-review — each usable alone); NOT batch ticket mobilization (/mobilize-chores).
 - **Done-when:** the armed report delivered — what was adopted, what was spawned, how to feed
   each seat — with every step's outcome named (run, skipped-present, or failed-plainly).
 
@@ -33,9 +33,9 @@ case) were considered and rejected. Kim named it `init-repo` in the originating 
 
 **The composition rulings (settled across the session's design rounds):**
 1. **Host adopts team-lead; no team-lead spawn** (Kim's AskUserQuestion answer). Mechanically:
-   /leading-teams is dmi:true — NOT Skill-invocable from inside this command (the #134/#135
+   /lead-team is dmi:true — NOT Skill-invocable from inside this command (the #134/#135
    class) — so this body carries the adoption step itself: read agents/team-leader.md and adopt
-   per /leading-teams's Phase 2, with one deviation, the CHARTER: /leading-teams binds one bounded
+   per /lead-team's Phase 2, with one deviation, the CHARTER: /lead-team binds one bounded
    charter; here the charter IS the work session ("this session's incoming work on <repo>"),
    closing at session end or stand-down. Named deviation, not silent drift.
 2. **INTAKE spawns standing; BUILD is per-ticket — the asymmetry is the seats' own contracts.**
@@ -51,7 +51,7 @@ case) were considered and rejected. Kim named it `init-repo` in the originating 
    command arms ONE work session and says so; re-run per session — the estate's session-scoped
    cron re-arm precedent (repo-cleaner/decision-watcher).
 4. **Home: teamwork** — composes team-lead (this plugin), build-leader (this plugin), and the
-   /leading-teams mechanism; `docs:intake-lead` is a named cross-plugin Agent dispatch (soft,
+   /lead-team mechanism; `docs:intake-lead` is a named cross-plugin Agent dispatch (soft,
    degrades gracefully when docs is absent — the arming reports the missing seat and
    continues).
 

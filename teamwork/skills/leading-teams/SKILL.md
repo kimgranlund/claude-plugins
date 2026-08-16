@@ -3,29 +3,29 @@ name: leading-teams
 description: >-
   Makes this host session run under the team-lead agent's own contract for one stated charter,
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
-  directly, dispatching every unit of real work while the charter stays open. Run /leading-teams
+  directly, dispatching every unit of real work while the charter stays open. Run /lead-team
   [charter]. NOT for a task one context can hold (team-or-solo-rules); NOT for reviewing one
   artifact directly (dispatch the owning reviewer); NOT a solo design/decomposition charter where
-  the host authors the docs itself (/leading-planning).
-disable-model-invocation: true
-user-invocable: true
+  the host authors the docs itself (/lead-planning).
+disable-model-invocation: false
+user-invocable: false
 argument-hint: "[charter — the plan/build-feature/review work needing a team]"
 ---
 
 # leading-teams — the host runs the seat, not a dispatched copy of it
 
-`issue-sorter` dispatches a separate agent instance for its standing seat. This command does the
+`issue-sorter` dispatches a separate agent instance for its standing seat. This skill does the
 opposite on purpose: it makes **this session** — the one the human is talking to — hold the
-`team-lead` agent's own contract
+`team-leader` agent's own contract
 (`${CLAUDE_PLUGIN_ROOT}/agents/team-leader.md`) directly, for one named charter, with
 no separate `Agent`/`Task` spawn for the coordinator role itself. The host becomes the apex; every
 OTHER seat in the chain is still a real dispatch. Seed: `$ARGUMENTS`.
 
-This command imports the contract of `agents/team-leader.md` — a deliberate pairing in the same
-family as harness's `issue-sorter` ruling. Under ADR-0006 the pair splits by species on purpose: the
-command takes the verb form (`/leading-teams` — what you DO), the agent the role noun (`team-lead` —
-what it IS); `disable-model-invocation: true` keeps this command off every surface the model
-routes against regardless.
+This skill imports the contract of `agents/team-leader.md` — a deliberate pairing in the same
+family as harness's `issue-sorter` ruling. The human-typed entry point is the thin
+`teamwork/commands/lead-team.md` wrapper, which invokes this skill by name — this file carries
+the full procedure and is itself reached by the model (`disable-model-invocation: false,
+user-invocable: false`), never typed directly.
 
 ## Phase 1 — Bind the charter
 
@@ -113,7 +113,7 @@ what was ratified.
 
 The shared ritual's closing rule (`references/adopt-agent-contract.md`) applies: the adopted
 discipline holds only for the charter bound in Phase 1, until it closes on a named decision in
-Phase 4; a new charter requires a new `/leading-teams` invocation.
+Phase 4; a new charter requires a new `/lead-team` invocation.
 
 Done when the charter has closed on a named `loop-rules` decision, the coordination records hold
 the state a successor could resume from, and no charter deliverable was written or edited by the

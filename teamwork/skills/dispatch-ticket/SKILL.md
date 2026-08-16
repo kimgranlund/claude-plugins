@@ -1,7 +1,7 @@
 ---
 name: dispatch-ticket
 description: >-
-  Use when invoked by name from /build-feature's body, the build-leader agent, or a /leading-builds
+  Use when invoked by name from /build-feature's body, the build-leader agent, or a /lead-build
   session driving its targets — never model-routed from a raw ask. Finds or mints the target's
   record, then branches by kind: feature → size solo-first and build under a mandatory Findings
   write-back contract; task → clarify with one find-intent round, then dispatch under the same
@@ -14,7 +14,7 @@ user-invocable: false
 
 # dispatch-ticket
 
-The procedure behind `/build-feature`, the `build-leader` agent, and `/leading-builds`'s standing seat
+The procedure behind `/build-feature`, the `build-leader` agent, and `/lead-build`'s standing seat
 — one engine, three entries. `/build-feature` is `disable-model-invocation: true` (command-only,
 unreachable via the Skill tool or agent preload — issue #134/#135's shared defect class), so this
 skill carries the actual procedure and both callers invoke it rather than duplicating it.
@@ -24,7 +24,7 @@ double hop from `/build-feature`, no third hop from `build-leader` — rationale
 body). Seed: $ARGUMENTS.
 
 **No nested wait.** A seat already running as a nested dispatch when it executes this procedure —
-`build-leader`, spawned via the `Agent` tool (`/leading-builds`'s own standing seat runs no Agent
+`build-leader`, spawned via the `Agent` tool (`/lead-build`'s own standing seat runs no Agent
 spawn — the host session itself, not nested — and is unaffected by this rule) — performs Phase
 3's isolate work and Phase 4's `small` build DIRECTLY in its own context and worktree. It never
 spawns a further nested `context: fork` skill, or a further NAMED (teammate-mode) `Agent`-tool

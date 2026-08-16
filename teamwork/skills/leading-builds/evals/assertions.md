@@ -1,8 +1,8 @@
 # leading-builds — behavioral assertions (Phase 2)
 
-Checked with/without in Phase 5. "The session" = a session that ran /leading-builds.
+Checked with/without in Phase 5. "The session" = a session that ran /lead-build.
 
-1. **Adoption acknowledgment:** immediately after /leading-builds, the session's reply names the
+1. **Adoption acknowledgment:** immediately after /lead-build, the session's reply names the
    adopted contract file, the three host deltas, and the duration rule — before any target is
    processed.
 2. **Record-first + state check:** a ticket id given to the session runs dispatch-ticket's

@@ -5,7 +5,7 @@ Checked with/without in Phase 5. "The session" = a session that ran /init-repo.
 1. **Conditional /init:** a repo with CLAUDE.md present → the /init step reported
    skipped-present, never re-run; absent → run, and the arming continues from its result.
 2. **Adoption acknowledged:** the session adopts team-lead's contract (read from the agent
-   file, per /leading-teams's Phase 2) with the session-charter deviation stated — before any
+   file, per /lead-team's Phase 2) with the session-charter deviation stated — before any
    sibling spawns.
 3. **The asymmetric seats wired per their own contracts:** the INTAKE sibling spawned as a
    named background teammate with intake-lead's canonical dispatch shape (repo root, marker

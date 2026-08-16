@@ -7,12 +7,12 @@ re-asked.
 ## Gate P0 — Route (PASS)
 
 Primitive = **skill, command species**. The agent twin (`agents/build-leader.md`, ADR-0010)
-exists; this is the host-adoption half — the `/leading-teams` ↔ `team-lead` pattern, teamwork's
+exists; this is the host-adoption half — the `/lead-team` ↔ `team-leader` pattern, teamwork's
 second instance, docs' `/lead-intake` being the first estate-wide sibling.
 
 ## Gate P1 — Interview slots (PASS, pre-ruled)
 
-- **Trigger:** human types `/leading-builds` when converting a session into a dedicated build seat
+- **Trigger:** human types `/lead-build` when converting a session into a dedicated build seat
   (Kim's hand-rolled BUILD sessions, formalized). Command species — menu-register description.
 - **Behavior delta:** ad hoc "you are my BUILD session" priming carries no record-first
   discipline, no state check on resumed tickets, no sizing floors — baseline evidence in
@@ -23,7 +23,7 @@ second instance, docs' `/lead-intake` being the first estate-wide sibling.
   `dispatch-ticket` via the Skill tool.
 - **Fences:** NOT the dispatched agent (`build-leader`, Agent tool); NOT one forked build
   (`/build-feature <id>` — one ticket, off-session); NOT batch find-and-confirm
-  (`/mobilize-chores`); NOT a generic coordination charter (`/leading-teams`).
+  (`/mobilize-chores`); NOT a generic coordination charter (`/lead-team`).
 - **Done-when:** adoption acknowledged; every target driven to dispatch-ticket's typed result
   (Findings write-backs included) or its named blocker; record-first never violated.
 

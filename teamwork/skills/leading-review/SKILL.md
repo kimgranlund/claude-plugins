@@ -4,13 +4,13 @@ description: >-
   Makes this session a standing review desk: every target sent here — a PR, diff, doc, skill,
   agent, hook, plugin, or wiring arrangement — is dispatched to its owning fresh-context checker
   and the verdict relayed, never reviewed inline; a target this session authored itself gets a
-  neutral dispatch with the authorship disclosed. Holds until the session ends. Run /leading-review
+  neutral dispatch with the authorship disclosed. Holds until the session ends. Run /lead-review
   [optional repo root]. NOT a one-off review (dispatch the owning checker directly); NOT a
-  coordination charter (/leading-teams); NOT the standing intake or build seats (/lead-intake,
-  /leading-builds); NOT an unattended dispatch for a coordinator or /goal loop (review-leader,
+  coordination charter (/lead-team); NOT the standing intake or build seats (/lead-intake,
+  /lead-build); NOT an unattended dispatch for a coordinator or /goal loop (review-leader,
   Agent tool — the standing dispatched twin of this command, closes #433).
-disable-model-invocation: true
-user-invocable: true
+disable-model-invocation: false
+user-invocable: false
 argument-hint: "[optional target repo root — defaults to the current working directory]"
 ---
 
@@ -97,14 +97,14 @@ reviewed", "what failed") is answered from the relayed verdicts, not re-dispatch
 - **A re-review of the same target after fixes** → a FRESH dispatch to the same checker
   (fresh context is the point); never "check my fixes" against the desk's memory of the last
   report.
-- **`/leading-review` invoked again while the desk stands** → rebind the repo root, re-acknowledge
+- **`/lead-review` invoked again while the desk stands** → rebind the repo root, re-acknowledge
   in one line, continue — never stack a second adoption.
 
 ## When this rule ends
 
 The adopted discipline holds until the session ends or the human explicitly stands the desk
 down ("stop being review" / "back to normal work"). Standing down is acknowledged in one line.
-A new session needs its own `/leading-review`.
+A new session needs its own `/lead-review`.
 
 Done when adoption was acknowledged before the first target, every target since reached its
 owning checker (or the named degradation/gap) with the verdict relayed verdict-first, every
