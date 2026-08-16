@@ -7,3 +7,7 @@ naming is convention, not platform-enforced — lld-0006 D1).
 |---|---|---|---|
 | reviewer | plugins-reviewer | 2026-08-16 | plugins |
 | agent | plugins-agent | 2026-08-16 | plugins |
+| reviewer | plugins-review (takeover) | 2026-08-16 | plugins |
+| planner | plugins-planner (ex plugins-reviewer, seat switch) | 2026-08-16 | plugins |
+| agent | plugins-agent (takeover) | 2026-08-16 | plugins |
+| product | plugins-product | 2026-08-16 | plugins |
