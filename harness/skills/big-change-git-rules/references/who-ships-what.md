@@ -137,6 +137,21 @@ sibling that opened mid-build) — it is advisory to a human or coordinator, nev
 across PRs, which is the isolation property ADR-0002 deliberately relies on for CI's own
 trustworthiness.
 
+**The complementary tier CI CAN see — wired into `release_gate.py`/CI itself (issue #445,
+2026-08-16).** `version_claim_check.py` above is deliberately never wired into the gate because it
+looks ACROSS open PRs, which the gate structurally cannot do per-PR. But a narrower, single-PR
+check IS something the gate can see: `harness/scripts/version_monotonic_check.py`, run as
+`release_gate.py`'s G14, FAILs when a touched plugin's `plugin.json` version on the checked-out
+branch is not strictly greater than that plugin's version on `origin/main`, or when the README
+ledger's newest line doesn't name that branch version (the #425/#430 `2.16.2 -> 2.16.3` same-value
+collision is its own selftest negative control). It reuses this section's script's
+`parse_version`/`version_tuple` helpers rather than restating them. Feature-detected clean (SKIP,
+never a false red) when `origin/main` isn't reachable, the plugin carries no diff against it, or
+the plugin is brand new (absent from `origin/main` entirely) — `gate.yml` gained `fetch-depth: 0`
+so CI can resolve `origin/main` for the comparison. The two tiers do not overlap: this one catches
+a stale-vs-main branch (including the second of two now-merged siblings); `version_claim_check.py`
+alone catches two still-OPEN PRs racing each other, which this tier cannot see.
+
 ## The dispatch-brief convention this implies
 
 [inferred, derived 2026-07-21 from the two incidents above, twice-verified] Scope a build seat's brief to: commit locally

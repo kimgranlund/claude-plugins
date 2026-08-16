@@ -1,7 +1,7 @@
 # The estate's CI gate (ADR-0002, 2026-07-15): the same plain scripts that run locally,
 # run on every push/PR — catching edits the in-session PostToolUse hook can't see
 # (human editors, parallel sessions). No new logic lives here; CI only EXECUTES
-# release_gate.py (G1–G11, which composes skill_lint/eval_check/corpus_check/docs_check
+# release_gate.py (G1–G14, which composes skill_lint/eval_check/corpus_check/docs_check
 # and the ruff/eslint style tier) against every plugin.
 
 name: gate
@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # G14 (issue #445) needs origin/main reachable for the
+                           # version-monotonicity comparison; a shallow clone can't see it
 
       - uses: actions/setup-python@v5
         with:
