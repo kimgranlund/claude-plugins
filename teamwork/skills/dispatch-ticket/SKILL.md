@@ -23,6 +23,23 @@ task, or bug — the kind branch below picks the path. Carries no `context: fork
 double hop from `/build-feature`, no third hop from `build-lead` — rationale in `/build-feature`'s
 body). Seed: $ARGUMENTS.
 
+**No nested wait.** A seat already running as a nested dispatch when it executes this procedure —
+`build-lead`, or `/lead-build`'s standing seat, both spawned via the `Agent` tool — performs Phase
+3's isolate work and Phase 4's `small` build DIRECTLY in its own context and worktree. It never
+spawns a further nested `context: fork` skill, or a further NAMED (teammate-mode) `Agent`-tool
+dispatch, for that core mutating work and then treats its own turn as blocked on that dispatch's
+callback: a background/mailbox dispatch made from inside an already-dispatched agent completes to
+the ROOT session, never back to the dispatching seat (the fork-from-agent finding, 2026-08-10,
+intake-lead A4, measured) — the callback structurally never arrives, stalling the seat until a
+coordinator notices and re-dispatches it (four measured incidents: #257, #282, #269, #280 — #282
+additionally raced a duplicate build). This narrows Phase 4's `small` bullet's "one sealed
+fork/agent" clause to a TOP-LEVEL host only — an already-nested seat always takes the inline
+branch — and it means Phase 2's task-kind `Agent`-tool dispatch is always UNNAMED: an unnamed
+call's synchronous tool-result IS its return value, never mailbox-routed. This is not a rule
+against dispatching at all — an UNNAMED, single-shot review dispatch (Phase 4's fresh-context
+checker, Phase 5 stage 2b's critic) is not this failure, since its completion is the tool call's
+own synchronous result, not a background callback to wait on.
+
 ## Phase 1 — Find or make the record
 
 - `$ARGUMENTS` resolves to a ticket id (`TKT-####`, a bare issue number on the git-native backend,
@@ -68,8 +85,11 @@ report that routing and stop; docs' seats own it.
   an unclear brief — no claim taken, since no build effort was ever starting. Otherwise run Phase
   3 (claim, then isolate) first, then dispatch via the `Agent` tool — `subagent_type:
   general-purpose` by default (`team-or-solo-rules`' solo-first/null-unit reasoning: a generic
-  task needs no tool restriction, parallelism, or multi-skill preload); a named agent only when
-  the clarified brief genuinely needs one of those three. The dispatch prompt is sealed per Phase
+  task needs no tool restriction, parallelism, or multi-skill preload); a named `subagent_type`
+  only when the clarified brief genuinely needs one of those three. Never a NAMED (teammate-mode,
+  the Agent tool's `name:` field) dispatch here regardless of `subagent_type` choice: the
+  no-nested-wait rule above means a `name:` buys mailbox routing this caller cannot collect on
+  when it is itself already nested. The dispatch prompt is sealed per Phase
   5's contract — the CLARIFIED brief (the dispatched agent never sees the clarify conversation),
   the record, the write-back verb per backend, a dated Findings-equivalent entry at each
   significant result. A task is ONE sealed dispatch — Phase 5's `/goal` try-cap wrapper is the
@@ -191,8 +211,10 @@ caller's side:
 
 - **small** — the host builds it inline, or one sealed fork/agent when isolation or tooling
   demands it (an agent only for tool restriction, parallelism, or multi-skill preload; a fork for
-  everything else — harness's fork-vs-agent gate, inline where harness is absent). No planner,
-  coordinator, or team. A small build that semantically edits a prompt-carrying artifact (a
+  everything else — harness's fork-vs-agent gate, inline where harness is absent) — **but only
+  when the host is a TOP-LEVEL session**; a host that is itself already a nested dispatch takes
+  the inline branch unconditionally, per the no-nested-wait rule above. No planner, coordinator,
+  or team. A small build that semantically edits a prompt-carrying artifact (a
   SKILL.md body, an agent definition, a hook prompt) still gets a fresh-context checker pass
   before the loop closes — lint and gates prove mechanics, not semantics (2026-08-11 estate
   audit: every unaudited semantic edit carried a real gap); pure code/config under the repo's own

@@ -29,6 +29,19 @@ your own final text, in full, never overridden with your own read; the same type
 typing `/build-feature <id>` would see. This one rule governs every phase and branch below; it is
 not restated again.
 
+**No nested wait.** You are yourself a nested dispatch (spawned via the `Agent` tool), so you
+never delegate `dispatch-ticket`'s build work to a further nested dispatch and then end your own
+turn waiting on its callback — you do that work directly, inline, in your own context and
+worktree. A further `context: fork` skill invocation, or a further NAMED (teammate-mode)
+`Agent`-tool dispatch, made from inside your own run completes to the ROOT session, never back to
+you (the fork-from-agent finding, 2026-08-10, intake-lead A4, measured) — so a dispatch-and-wait
+for that callback structurally never receives it. This is the exact stall four prior `build-lead`
+dispatches hit before a coordinator noticed and re-dispatched them (#257, #282, #269, #280 — #282
+additionally raced a duplicate build). The one exception is an UNNAMED, single-shot review
+dispatch `dispatch-ticket`'s own contract already requires (a fresh-context checker before a
+semantic-edit loop closes): its completion is that tool call's own synchronous result, not a
+background callback.
+
 You hold no judgment of your own beyond what `dispatch-ticket`'s own procedure already makes: the
 kind branch (feature → build; task → clarify-then-dispatch; bug → hand to `file-bug` with the
 marker), size solo-first (small builds inline within this dispatch; big routes to the delivery
