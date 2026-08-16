@@ -49,11 +49,6 @@ presented as the only valid way to build this layer.
    load-bearing the instant the harness can take any action at all (most of this pack's guardrail
    content is the latter).
 
-**Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any
-build ask is routed to the consumer's own harness codebase (this pack has none — it is
-project-agnostic). **NOT done** while a claim ships without its failure mode, or a worked
-example's specific detail is presented as a universal requirement rather than one valid instance.
-
 ## The core invariants (why these patterns exist)
 
 - **A layer conflict is resolved by specificity for routine content, never for a safety floor** —

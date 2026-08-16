@@ -50,14 +50,6 @@ the only valid implementation.
    — measured, adversarial, re-run over time — still holds).**
 4. Route output work at the boundary (see below) — this pack answers; it does not build.
 
-**Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any build
-ask (writing the actual routing code, the actual SKILL.md, the actual eval harness) is routed to the
-consumer's own build seat or to `skill-writing-rules`/`make-skill` where installed — this
-pack has neither, it teaches the pattern.
-**NOT done** while a claim ships without the failure mode it prevents, or a workspace-specific
-schema detail (this repo's exact `routing-corpus.json` shape) is presented as a universal
-requirement rather than one valid instance of the discipline.
-
 ## The core invariants (why these patterns exist)
 
 - **Everything loaded into every turn's context is a standing tax, paid whether or not it's used**

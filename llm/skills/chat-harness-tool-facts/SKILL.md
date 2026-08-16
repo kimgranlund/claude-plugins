@@ -48,11 +48,6 @@ specification (a platform fact, verify against current docs if this pack has age
    `llm-gateway-facts` already owns in full.
 5. Route output work at the boundary (see below) — this pack answers; it does not build.
 
-**Done when** the answer carries the claim + its grounding + the failure mode/caveat, and any
-build ask is routed to the consumer's own build seat. **NOT done** while a claim ships without the
-failure mode it prevents, or this pack's external-service file re-explains what
-`llm-gateway-facts` already teaches instead of routing to it.
-
 ## The core invariants (why these distinctions exist)
 
 - **A tool, a skill, and a resource differ in WHO invokes them and WHAT they cost, not just in
