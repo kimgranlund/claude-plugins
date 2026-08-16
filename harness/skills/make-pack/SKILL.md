@@ -58,6 +58,9 @@ In one change: INDEX lines under the axis heading, the SKILL.md consult-table ro
 suite gains this wave's Phase-2 phrasings as trigger cases (plus reciprocal no-triggers in any
 sibling whose vocabulary the new axis brushes — the fence-closure rule applies to axes, not just
 skills). An unregistered file is unreachable; do not start the next wave with this one unregistered.
+A brand-new pack's SKILL.md carries where extension routes as a one-line footer citation —
+`Extension: governed by [[make-pack]]` — never the full paragraph; `pack-writing-rules`'
+"Extension citation" states the rule once, this line only points to it.
 
 ## Phase 6 — Validate and report
 

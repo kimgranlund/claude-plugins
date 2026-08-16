@@ -129,6 +129,11 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.9 · 2026-08-16 · `pack-writing-rules` gains the "Extension citation" rule (closes #338): a
+pack's growth-routing footer is a one-line citation — `Extension: governed by [[make-pack]]` —
+stated once here instead of the ~150-char stamped paragraph copied across 28 pack SKILL.md files;
+`make-pack`'s Phase 5 points to it. Existing footers left unswept (recorded choice, PR body) —
+28-file/5-plugin sweep deferred to the overhaul.
 v3.8.8 · 2026-08-16 · `make-plugin`'s Phase 3 gains the OUT-02 bootstrap step deferred from #316
 (closes #333): new `scripts/mint_idr_bootstrap.py`, idempotent by construction (glob-detects an
 existing `idr-0001*`, so the founding IDR draft + the product-brief living-index stub mint on a
