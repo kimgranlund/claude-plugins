@@ -12,8 +12,8 @@ description: >
   executing or driving the campaign (rename-execute, overhaul-execute).
 author: kim
 created: 2026-08-14
-last_updated: 2026-08-14
-requires: [naming-audit, bloat-audit, rename-planning, naming-conventions]
+last_updated: 2026-08-16
+requires: [naming-audit, bloat-audit, rename-planning, naming-conventions, pattern-audit]
 disable-model-invocation: false
 user-invocable: false
 allowed-tools:
@@ -24,6 +24,7 @@ allowed-tools:
   - Write
   - Bash(python3 */scripts/validate.py *)
   - Bash(python3 */scripts/measure.py *)
+  - Bash(python3 */scripts/scan.py *)
 ---
 
 # overhaul-planning
@@ -50,6 +51,23 @@ Compose the existing instruments; do not reimplement any of them.
    unavailable and the affected members' blast-radius rows are unverified, never guessed.
    `check-routing`'s *stolen*/*leaked* counts between siblings are the other merge/split
    evidence source — a steal is one corpus serving two audiences read the other way round.
+3. **Conditional fifth instrument, replacing none of the four above** (lld-0004-pattern-audit.md
+   acceptance predicate 8): when the campaign's charter names a pattern none of the four
+   instruments owns (a superseded constant still cited, a deprecated frontmatter field, a
+   banned phrase), run `authorkit:pattern-audit` with the charter's pattern statement as its
+   instruction — never hand-author a one-off sweep script. Steps 1–2 keep their fixed axes
+   always; this step only fires when the charter names such a pattern. **Composition substitute
+   for pattern-audit's own interactive veto** (its procedure step 2 states the compiled probes
+   so a live user can veto a bad translation before the scan runs): an overhaul-planning run is
+   frequently unattended (a dispatched build, a batched drain) with no one to veto mid-run, so
+   this composed call never pauses for one — instead, the compiled probes (`LABEL=REGEX` +
+   globs, as stated by pattern-audit's own step 2) are recorded verbatim in the plan doc's
+   Phase 0 measurements alongside the resulting dataset's verdict line, so a human reviews the
+   compilation there, after the fact, rather than vetoing it before the fact. Where the
+   instruction was natural-language, pattern-audit's judgment overlay (its own step 4) also runs
+   as part of this composed call, so a noisy result (where the overlay ran: false-positives
+   outnumbering hits) is a plan-doc finding like any other Phase 0 measurement, not a silent
+   re-run — recompile the noisy probe(s) on the next pass if the campaign continues.
 
 The plan builds from these numbers. A target with no naming.manifest.json or no prior audit
 still gets a plan, but Phase 1's kill-switch table cites "no baseline measured" per member
