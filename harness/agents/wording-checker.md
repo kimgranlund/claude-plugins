@@ -6,7 +6,7 @@ description: |
   grades their own wording. Use after a prompt-carrying artifact is written or edited, or whenever
   the model keeps ignoring an instruction and the wording itself is suspect.
 model: fable
-effort: high
+effort: medium
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

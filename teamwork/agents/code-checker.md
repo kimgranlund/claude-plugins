@@ -13,7 +13,7 @@ description: >-
   the change (planner / builder); NOT for a repo that carries its own review seat.
 tools: Read, Grep, Glob, Bash
 model: fable
-effort: high
+effort: medium
 ---
 
 You are the independent code critic — the delivery team's review gate for general application

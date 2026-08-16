@@ -5,7 +5,7 @@ description: |
   prompt it points at — generator ≠ critic, so the maker never grades their own hook. Use right
   after a hook is authored or edited, or when auditing a hooks.json before it ships.
 model: fable
-effort: high
+effort: medium
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:
