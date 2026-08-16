@@ -6,10 +6,12 @@
     { "id": "t02", "prompt": "/team-scaffolding reviewer review the fleet bootstrap PR", "expect": "trigger" },
     { "id": "t03", "prompt": "Bootstrap this session as the fleet's planner seat.", "expect": "trigger" },
     { "id": "t04", "prompt": "Set this session up as {repo}-product and print the comms charter.", "expect": "trigger" },
+    { "id": "t05", "prompt": "/team-scaffolding planner — warn me if there's no intent layer yet.", "expect": "trigger" },
     { "id": "n01", "prompt": "Adopt the team-lead contract for this planning charter.", "expect": "no-trigger", "comment": "owner: teamwork:lead-team directly — no fleet bootstrap (naming/profile/roster) requested" },
     { "id": "n02", "prompt": "Review this PR against its LLD.", "expect": "no-trigger", "comment": "owner: teamwork:lead-review / docs:doc-checker (a one-off review, not a standing seat bootstrap)" },
     { "id": "n03", "prompt": "Should this be a subagent or a team for this task?", "expect": "no-trigger", "comment": "owner: teamwork:team-or-solo-rules" },
     { "id": "n04", "prompt": "Write a permission profile for a Node service running as non-root.", "expect": "no-trigger", "comment": "owner: general security guidance — not this fleet's own seat wall" },
-    { "id": "n05", "prompt": "What is the product lifecycle's spec-lock gate?", "expect": "no-trigger", "comment": "owner: docs:product-lifecycle-rules / docs:lead-product" }
+    { "id": "n05", "prompt": "What is the product lifecycle's spec-lock gate?", "expect": "no-trigger", "comment": "owner: docs:product-lifecycle-rules / docs:lead-product" },
+    { "id": "n06", "prompt": "Cold-start the whole fleet from this one terminal — orchestrator, product, and background reviewer/planner.", "expect": "no-trigger", "comment": "owner: teamwork:fleet-bootstrap — the full multi-seat cold start, not one seat's own bootstrap" }
   ]
 }

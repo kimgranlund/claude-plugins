@@ -38,6 +38,7 @@
     "migration",
     "planning",
     "qa",
+    "bootstrap",
     "release",
     "review",
     "rules",
@@ -152,6 +153,11 @@
       "canonical": "team",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "fleet",
+      "plural": null,
+      "banned_aliases": ["swarm"]
     },
     {
       "canonical": "naming",

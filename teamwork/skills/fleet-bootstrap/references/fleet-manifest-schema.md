@@ -1,0 +1,64 @@
+# `.claude/ops/fleet.json` — the per-repo fleet manifest
+
+Per-repo variation in how the standing fleet is run is DATA, not a duplicated command copy
+(design ruling, #410, 2026-08-16: `/fleet-bootstrap` and `/team-scaffolding` are plugin commands;
+this file is the only thing that varies per repo). `/team-scaffolding <role>` seeds/updates it on
+first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a full cold start.
+
+## Shape
+
+```json
+{
+  "version": 1,
+  "seats": {
+    "agent":    { "tier": "fable+low",    "justification_date": "2026-08-16", "mode": "manual" },
+    "reviewer": { "tier": "fable+xhigh",  "justification_date": "2026-08-16", "mode": "manual" },
+    "planner":  { "tier": "fable+medium", "justification_date": "2026-08-16", "mode": "manual" },
+    "product":  { "tier": "fable+high",   "justification_date": "2026-08-16", "mode": "manual" }
+  },
+  "permission_profiles": {
+    "reviewer": "deny-edit-write"
+  },
+  "live_state": {
+    "joined": [
+      { "role": "agent", "mode": "manual", "date": "2026-08-16", "agent_name": null }
+    ],
+    "loop_position": null,
+    "gate": null
+  }
+}
+```
+
+## Fields
+
+- **`seats.<role>.tier`** — the model/effort tier this seat runs at in THIS repo. Starts equal to
+  the canonical seat ladder (`team-scaffolding`'s Phase 4 point 1: agent fable+low, reviewer
+  fable+xhigh, planner fable+medium, product fable+high).
+- **`seats.<role>.justification_date`** — **required whenever `tier` deviates from the canonical
+  ladder value.** This is the sweepable invariant Kim's ruling calls for: a tier deviation with no
+  justification date is a doctrine-audit-class finding, mechanically checkable — grep every
+  `seats.*.tier` against the canonical table in `team-scaffolding`'s Phase 4; any mismatch missing
+  a sibling `justification_date` is a finding, full stop, no judgment call needed.
+- **`seats.<role>.mode`** — `"manual"` (a human-driven terminal), `"background"` (a spawned
+  long-lived named agent), or `"dispatched"` (a synchronous `Agent` call that already returned —
+  today only the product seat's `/fleet-bootstrap` Phase 2 dispatch; distinct from `"manual"` so a
+  reader never infers a live terminal session that isn't there). Reviewer and planner default to
+  `"manual"` per #410 addendum 3; `/fleet-bootstrap`'s spawn-list argument is what flips one to
+  `"background"`.
+- **`permission_profiles`** — which structural wall (per `lld-0006-fleet-permission-profile.md`)
+  applies to which seat in this repo. Today only `reviewer` carries one (`deny-edit-write`); the
+  key exists so a future seat's profile has a place to record without a schema change.
+- **`live_state.joined`** — the orientation record a rejoining session reads: which roles have
+  joined, in what mode, when, and (for background seats) under what agent name. Append-only —
+  never rewritten in place; a seat rejoining after a restart appends a new row rather than editing
+  its old one, so the history of who has held a seat stays intact.
+- **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
+  loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
+  until the product seat records one.
+
+## Doctrine-audit hook
+
+A future `authorkit:doctrine-audit` edge can point at this schema directly: read every
+`fleet.json` under `.claude/ops/`, for each `seats.*` entry compare `tier` against the canonical
+ladder, flag any mismatch with `justification_date` absent or null. This file documents the check
+so that edge can be added without re-deriving the schema.
