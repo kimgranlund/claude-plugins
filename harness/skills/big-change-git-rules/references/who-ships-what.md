@@ -53,6 +53,30 @@ in this file's "who is allowed to merge" ruling stands unamended: absent that ex
 combination, merge authority is still the human's, delegated per-instance by a live instruction,
 never assumed by a session because it authored the PR.
 
+[verified against ADR-0013, 2026-08-16] **Dispatch-tier BLOCKED (measured); merge-tier still
+UNMEASURED — don't overclaim the `autoMode.allow` rule's reach.** The `autoMode.allow` rule
+(commit 40dd5c3) was designed to clear the classifier's `gh pr merge` block once a dispatch
+legitimately reaches stage 2b's merge sequence — but an interactive auto-mode coordinator's own
+attempt to reach that point never gets there: the classifier denies the `Agent` tool call
+itself, at DISPATCH-CREATION time, the moment its sealed prompt carries the literal
+`auto-merge: authorized` grant line — before `dispatch-ticket` ever runs, before stage 2b is
+ever reached, before any `gh pr merge` is attempted. Two sibling dispatches in the same
+tool-call block, identical shape but no grant line, launched without incident, isolating the
+grant line itself as the trigger. This is a PARTIAL verification, not a complete one: the block
+is earlier and stricter than ADR-0012 predicted, but whether `autoMode.allow` itself would
+actually clear `gh pr merge` once a dispatch legitimately reaches stage 2b remains UNMEASURED —
+stage 2b was never reached in this test. Practical consequence: ADR-0012's quick-build
+carve-out currently cannot be exercised at all from an interactive auto-mode coordinator; a
+human-typed invocation path (Kim directly running `/build-feature` or `/mobilize-chores auto`
+from an interactive-but-non-auto-mode prompt) remains untested, and so does the grant placed by
+a differently-scoped caller. This sharpens WHERE the
+predicate degrades gracefully (dispatch creation, not the merge command) without changing any
+downstream behavior — `dispatch-ticket`'s stage 2b code path, `build-lead`'s relay contract, and
+`mobilize-chores`' unattended ceiling all still read exactly as ADR-0012 left them. See
+`.claude/docs/adr/0013-adr-0012-automode-allow-verification.md` (accepted 2026-08-16) — narrowly
+supersedes only ADR-0012's "deployment prerequisite" Consequences bullet; every other Decision
+and Consequences line of ADR-0012, including the QB0–QB7 predicate itself, stands unamended.
+
 ## The dispatch-brief convention this implies
 
 [inferred, derived 2026-07-21 from the two incidents above, twice-verified] Scope a build seat's brief to: commit locally
@@ -86,7 +110,15 @@ Provenance: GH issue kimgranlund/claude-plugins#78 (2026-07-21; closes on this c
 agent-ui project memory `subagent-ship-leg-classifier-block.md` (2026-07-21). [drift-prone:
 classifier behavior is harness-version-dependent — re-verify on a Claude Code major version
 bump before citing as current.] The ADR-0012 exception (2026-08-15 addition) is grounded in
-`.claude/docs/adr/0012-quick-build-auto-merge.md` (accepted 2026-08-14, this workspace); note also
-that ADR-0012's own Consequences record the classifier as a deployment prerequisite — the path is
-inert until a scoped allow-rule for `gh pr merge` exists, so this exception is currently theoretical
-pending that rule, same [drift-prone] caveat as the paragraph above.
+`.claude/docs/adr/0012-quick-build-auto-merge.md` (accepted 2026-08-14, this workspace) for the
+QB0–QB7 predicate and merge-sequence mechanics. [Amended 2026-08-16: this note originally cited
+ADR-0012's own "deployment prerequisite" Consequences bullet as the reason the exception was
+"currently theoretical pending that rule" — that exact bullet is the one
+`.claude/docs/adr/0013-adr-0012-automode-allow-verification.md` (accepted 2026-08-16) narrowly
+supersedes; every other Decision and Consequences line of ADR-0012 stands unamended.] Re-grounded
+in the measured reality: dispatch-tier is BLOCKED (an interactive auto-mode coordinator's `Agent`
+dispatch carrying the grant line is denied before stage 2b ever runs — see the dated paragraph
+above), merge-tier is still UNMEASURED (whether `autoMode.allow`, commit 40dd5c3, would clear
+`gh pr merge` once a dispatch legitimately reaches stage 2b remains untested, since stage 2b was
+never reached). Same [drift-prone] caveat as the paragraph above: re-verify on a Claude Code
+major version bump before citing as current.
