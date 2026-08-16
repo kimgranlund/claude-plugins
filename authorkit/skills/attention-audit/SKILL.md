@@ -14,7 +14,7 @@ description: >
   for one skill's content quality (harness check-skill).
 author: kim
 created: 2026-08-15
-last_updated: 2026-08-15
+last_updated: 2026-08-16
 disable-model-invocation: false
 user-invocable: true
 allowed-tools:
@@ -111,6 +111,36 @@ every finding names an owner.
   names the missing signal and the audit completes regardless.
 - No `~/.claude.json` or empty skillUsage: step 4 reports "no telemetry on
   this host" and candidates fall back to cost + eval signals only.
+
+## Enforcement wiring (issue #294)
+
+Two of these steps also run unattended, as `authorkit/hooks/hooks.json` PostToolUse
+siblings to the naming-grammar gate — neither replaces the manual procedure above,
+both narrow their own scope so the common write stays cheap:
+
+- **Step 3's write-time pre-lint** (`collide.py --against`) fires via
+  `scripts/collide_hook.py` whenever a written `SKILL.md`'s `description:` field
+  actually changed (a body-only edit no-ops, measured ~0.04s; a real description
+  change runs the full estate sweep, measured ~0.12s against this workspace's ~140
+  skills — both well inside the hook's 20s budget). Judgment-shaped, never a hard
+  block: a flagged pair prints as an advisory finding to classify (routing twin /
+  boilerplate tax / coincidence), the same three buckets step 3 already names — it
+  never forces a rename or a fence on its own say-so.
+- **Step 6's trend capture** fires via `scripts/trend_hook.py` whenever a plugin's
+  own `.claude-plugin/plugin.json` `version` field changes (this workspace's own
+  ship signal — every version bump happens right before/around `release_gate.py
+  --package`) and appends that ONE plugin's row to `<estate-root>/attention-trend.csv`
+  automatically, columns `absent` for dead/stolen/leaked (no routing report at hook
+  time) — exactly like an unattended manual run without `--routing-report`. Scoped
+  authorkit-side only (2026-08-16): the harness-native alternative — calling
+  `trend.py` straight out of `release_gate.py`'s own G6 package step, once per
+  `--package` run rather than per raw version-bump write — touches a harness file
+  and a harness version bump, both off-limits while a concurrent dispatch holds that
+  slot; left as a named follow-up, not built here.
+
+Both hooks are fail-open by construction (#287's shape guards): a malformed event,
+an unreadable file, no derivable git root, or any internal exception exits 0
+silently rather than ever blocking a write.
 
 ## Composition
 

@@ -9,6 +9,18 @@
             "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/skills/naming-audit/scripts/validate.py\" hook",
             "timeout": 20,
             "statusMessage": "naming-postwrite-grammar-gate"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/skills/attention-audit/scripts/collide_hook.py\"",
+            "timeout": 20,
+            "statusMessage": "attention-audit-collide-postwrite"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/skills/attention-audit/scripts/trend_hook.py\"",
+            "timeout": 20,
+            "statusMessage": "attention-audit-trend-postwrite"
           }
         ]
       }
