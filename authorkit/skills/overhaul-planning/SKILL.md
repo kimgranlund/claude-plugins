@@ -135,13 +135,19 @@ exactly like it kills a move):
 Render per `references/PLAN-TEMPLATE.md` — the template is the single home for its own
 sections (the per-ticket execution contract, the closeout checklist, the five respect
 invariants); this skill states only what varies by target, never restates the template's
-body. **The doc's type and home:** an LLD (components/interfaces/risks maps directly onto
-where-it-lives/species/blast-radius, with the merge/split-candidate and knowledge-tier
-answers as two more risk-adjacent columns) — where `docs:make-doc` is installed, invoke it to
-author and place the doc under its own LLD contract (gated by `docs:doc-checker`); where
-docs is not installed, write the same sections (Phase 0 measurements through the ticket-seed
-list, one file, seeds included) to `<target>/overhaul-plan-<YYYY-MM-DD>.md`, no doc-type
-frontmatter claimed.
+body. **The doc's type and home:** a PLAN (2026-08-16 ruling, issue #369, superseding this
+paragraph's prior "an LLD" text — `docs:doc-checker` judged a rendered instance plan-shaped at
+PR #346: living checkbox state that gets checked off wave by wave, Steps/Validation-shaped
+content, no genuine Components/Interfaces/Data/Risks; PLAN's own "sequenced steps, each with
+done-when and a status" is exactly Phase 2's waved ticket-seed list, and PLAN's living-state
+class — one canonical copy, reviewed on a cadence — is exactly how this doc is meant to be
+used, re-reviewed as waves land, not versioned-and-frozen like an LLD) — where `docs:make-doc`
+is installed, invoke it to author and place the doc under its own PLAN contract (`## Steps` /
+`## Validation` / `## Rollback`, gated by `docs:doc-checker`); where docs is not installed,
+write the same sections (Phase 0 measurements through the ticket-seed list, one file, seeds
+included) to `<target>/overhaul-plan-<YYYY-MM-DD>.md`, stripping the template's own
+`doc-type: plan` frontmatter block first — no doc-type frontmatter claimed outside docs' own
+authoring path.
 
 ## Phase 2 — Tickets with Blocked-by edges, waved by risk
 
@@ -182,9 +188,9 @@ seed: claim → worktree → `git mv` → supersession note/`renames.json` entry
 
 ## Phase 4 — Prove it, after execution (stated, never run)
 
-`references/PLAN-TEMPLATE.md`'s Phase 4 checklist names the closeout a human/builder runs per
-wave once tickets land (`/check-routing`, a `fix-old-names` sweep, dated supersession notes).
-This skill never runs it.
+`references/PLAN-TEMPLATE.md`'s Validation checklist names the closeout a human/builder runs
+per wave once tickets land (`/check-routing`, a `fix-old-names` sweep, dated supersession
+notes). This skill never runs it.
 
 ## The five respect invariants
 
@@ -193,7 +199,7 @@ plan's own contract, not just this skill's.
 
 ## Done when
 
-The plan doc exists at its stated home (LLD under `docs:make-doc`, or the dated fallback
+The plan doc exists at its stated home (PLAN under `docs:make-doc`, or the dated fallback
 path); every member Phase 0 measured has a kill-switch row in Phase 1 answering all five
 questions (where-it-lives, species, blast-radius, merge/split-candidate, procedure-or-knowledge
 + tier); every member not killed there has exactly one ticket seed in Phase 2, in the right

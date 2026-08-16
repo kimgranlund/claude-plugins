@@ -16,6 +16,15 @@ table, Phase 1's per-row kill-switch verdicts, and Phase 2's waved seeds are thi
 findings; Phase 3's execution contract and Phase 4's closeout checklist are the template's
 standing contract, emitted verbatim. Nothing below has been executed — see Next step.
 
+> **2026-08-16 dated note (issue #369):** `overhaul-planning`'s doc-home ruling was "an LLD" at
+> the time this file was generated (PR #346's own `docs:doc-checker` pass judged the content
+> plan-shaped instead — living checkboxes, no genuine Components/Interfaces/Data/Risks). #369
+> resolved the tension in favor of `docs`' own type taxonomy: `overhaul-planning`'s SKILL.md and
+> `PLAN-TEMPLATE.md` now target `doc-type: plan` for every future run. This file is left as
+> `doc-type: lld` (draft, unapproved) rather than retyped in place — migration was ruled
+> optional at #369 and this instance is superseded by ordinary plan-doc practice on its own next
+> revision, not by a forced rewrite here.
+
 ## Components
 
 The plan's parts, per `authorkit:overhaul-planning`'s `PLAN-TEMPLATE.md`: Phase 0's
