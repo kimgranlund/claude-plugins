@@ -71,20 +71,24 @@ rewritten to the single native flow below; issue #411).
   never asserted as if it were an already-ratified decision. The ratification round in step 5 is
   what actually promotes it; the draft's own wording must not pre-empt that.
 
-## Prior art (study pass, 2026-08-16, issue #411)
+## Prior art (study pass, 2026-08-16, issue #411 — minimal per #404's scope fence)
 
 Step 4's convergence/highest-severity/blind-spot synthesis shape is adapted, with provenance and
-a native rewrite, from a pattern observed in `product-forge` (a separate, unrelated marketplace
-plugin, `kimgranlund/nonoun-plugins` — read as a study source only, never a runtime dependency):
-its `product-council` agent fans out multiple isolated critic
-passes over one artifact and synthesizes them across four axes (convergence, highest severity, a
-named tension, a blind spot) rather than concatenating raw findings. This file's step 4 keeps the
-fan-out-then-synthesize shape but drops the tension axis (this workspace's review runs one
-instrument — `docs:doc-checker` — not several distinct critic lenses, so there is no second lens
-to genuinely disagree with) and re-scopes "blind spot" to this review's own failure mode
-(unverified provenance, drifted hypothesis phrasing) rather than a cross-lens gap. No other part
-of `product-forge` cleared the bar for a note here — its orientation-classify shape
-(`/product-orient`) and method-card schema (`timebox · participants · produces`) are both
-plausible prior art in the abstract, but neither maps cleanly onto this file's five-step flow
-without inventing an artifact class (a method-card catalog) this workspace's product doctrine
-doesn't have yet — noted honestly as not adopted here, not silently dropped.
+a native rewrite, from `product-forge`'s `product-council` agent (a separate marketplace plugin,
+`kimgranlund/nonoun-plugins` — read as a study source only, never a runtime dependency): it fans
+out isolated critic passes over one artifact and synthesizes them rather than concatenating raw
+findings. Only this load-bearing shape was extracted — `product-forge`'s
+deeper method content (JTBD, strategy kernels, positioning playbooks, rubrics, method-card
+schemas) is explicitly out of scope here per #404's 2026-08-16 scope fence: that content arrives,
+if at all, with the future `product-management` plugin migration (see the seam below), not
+through this study pass.
+
+## Method-depth seam — routes to `product-management` where installed
+
+This file and the seat that runs it own RECORDS and loop authority only (steps 1, 2, 3, 5 above,
+plus the doc-checker review in step 4). Deeper product-methodology work — discovery/JTBD methods,
+strategy kernels, positioning, rubric-scored critique panels — is out of scope for this doctrine
+and, where a `product-management` plugin is installed (a planned future in-repo migration of
+`product-forge`'s method content, per #404), that work routes to its commands instead; this is a
+soft, degrade-gracefully named mention only — no preload, no `${CLAUDE_PLUGIN_ROOT}` path, and
+every step above already runs to completion without it.
