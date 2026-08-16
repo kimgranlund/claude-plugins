@@ -56,6 +56,42 @@ HOOK_NAME = "worktree-prebash-guard"
 
 WORKTREE_MARKER = "/.claude/worktrees/"
 
+# Read-only carve-out (added 2026-08-15): a compound command whose ENTIRE tail after the
+# escaping cd is provably read-only never needs a human's eyes — the actual risk this guard
+# exists for is a WRITE landing outside the session's own worktree, not a read. Kept
+# deliberately narrow and allowlist-shaped (fail toward still-asking, never toward silently
+# passing something ambiguous): non-git commands here never touch the filesystem in a way
+# that could escape the tree; git subcommands here are ones that never mutate a repo
+# regardless of what flags/args follow them. Notably excluded even though often safe:
+# `git branch`, `git worktree`, `git remote`, `git config` — each has a real mutating form
+# under the same subcommand name (`-d`, `add`, `set-url`, `user.name ...`), so arg-aware
+# safety would be needed and isn't implemented; they still fall through to ASK.
+# `log`/`diff`/`show` are deliberately EXCLUDED despite never mutating a git repo's history:
+# all three share diff-formatting machinery that accepts `--output=<path>` (git >=2.19),
+# which writes arbitrary content to an arbitrary filesystem path — a real write, same
+# arg-aware-safety gap as `branch`/`worktree`/`remote`/`config` below, just less obvious
+# (hook-checker critic finding, 2026-08-15: confirmed live against --hook, `git log
+# --output=<path>` after an escaping cd passed completely silently — worse than pre-carve-out
+# behavior, which at least always asked).
+READ_ONLY_COMMANDS = {"pwd", "ls", "true"}
+READ_ONLY_GIT_SUBCOMMANDS = {
+    "status",
+    "rev-parse",
+    "ls-files",
+    "describe",
+}
+# Any of these appearing as a standalone token means the segment writes somewhere or pipes
+# into something unverifiable — disqualifies the read-only carve-out outright.
+UNSAFE_TOKENS = {"|", ">", ">>", "<", "<<"}
+# Raw-substring metacharacter rejection (second critic round, 2026-08-15): shell operators are
+# NOT shlex words, so a token-equality check alone misses every attached form — `>/x`, `2>/x`,
+# `&>/x`, `$(...)` or backticks inside an allowlisted command's args, process substitution
+# `>(...)`, and a single `&` smuggling a second command into one segment (split_segments only
+# splits on `&&`). Any of these characters appearing ANYWHERE in the segment disqualifies the
+# carve-out before tokenizing. Over-asks on quoted literals containing them — exactly the
+# stated fail-toward-asking posture. UNSAFE_TOKENS above stays as belt-and-braces.
+UNSAFE_SUBSTRING_CHARS = "|&<>`$"
+
 
 def find_primary_root(cwd):
     """Return the primary checkout root if cwd is inside <root>/.claude/worktrees/..., else None."""
@@ -154,6 +190,32 @@ def scan_path_flags(segment):
     return targets
 
 
+def is_read_only_segment(segment):
+    """True only if this single segment is unambiguously non-mutating (see carve-out note above)."""
+    # Raw-substring check FIRST — shell operators aren't shlex words, so attached forms
+    # (`>/x`, `2>/x`, `$(...)`, `` ` ``, `>(...)`, a lone `&`) never surface as equal tokens.
+    if any(ch in segment for ch in UNSAFE_SUBSTRING_CHARS):
+        return False
+    try:
+        tokens = shlex.split(segment)
+    except ValueError:
+        return False
+    if not tokens:
+        return False
+    if any(tok in UNSAFE_TOKENS for tok in tokens):
+        return False
+    if tokens[0] in READ_ONLY_COMMANDS:
+        return True
+    if tokens[0] == "git" and len(tokens) > 1 and tokens[1] in READ_ONLY_GIT_SUBCOMMANDS:
+        return True
+    return False
+
+
+def is_read_only_tail(segments):
+    """True only if EVERY segment in the tail is individually read-only (empty tail: True)."""
+    return all(is_read_only_segment(s) for s in segments)
+
+
 def resolve_target(target, current_dir):
     """Resolve a cd/-C target to an absolute path, or None if it can't be resolved statically."""
     if target is None or current_dir is None:
@@ -201,9 +263,10 @@ def analyze_command(command, cwd):
             sibling_name = worktree_name_of(resolved, worktrees_root)
             escapes_sibling = sibling_name is not None and sibling_name != own_name
             has_follow_on = i < len(segments) - 1
-            if escapes_primary and has_follow_on:
+            tail_is_read_only = has_follow_on and is_read_only_tail(segments[i + 1 :])
+            if escapes_primary and has_follow_on and not tail_is_read_only:
                 hits.append(("cd", resolved, segments[i + 1]))
-            if escapes_sibling and has_follow_on:
+            if escapes_sibling and has_follow_on and not tail_is_read_only:
                 hits.append(("cd-sibling", resolved, segments[i + 1]))
             continue
         for flag_target in scan_path_flags(seg):
@@ -389,6 +452,111 @@ def selftest():
             "cd /repo/.claude/worktrees/seat10/sub && node scripts/build/components.mjs",
             "/repo/.claude/worktrees/seat1",
             True,  # seat10 IS a real sibling of seat1 — this proves it still hits, just correctly
+        ),
+        # read-only carve-out (2026-08-15): the exact reported barrage pattern — build-lead's
+        # routine primary-checkout status check — must NOT hit anymore.
+        (
+            "fixture18_readonly_carveout_pwd_git_status",
+            "cd /repo && pwd && git status --short",
+            "/repo/.claude/worktrees/seat1",
+            False,
+        ),
+        # regression guard: the ORIGINAL disclosed #139 pattern (a real mutation) must still hit —
+        # the carve-out must never swallow a genuine write.
+        (
+            "fixture19_readonly_carveout_does_not_swallow_mutation",
+            "cd /repo && git commit -am wip",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # partial safety is not enough: if ANY segment in the tail is not read-only, still hit —
+        # proves the carve-out requires the WHOLE tail, not just the first follow-on.
+        (
+            "fixture20_readonly_carveout_requires_whole_tail",
+            "cd /repo && git status && node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # redirection defeats the carve-out even though `git status` alone would qualify —
+        # a write can hide behind an otherwise-safe command via `>`.
+        (
+            "fixture21_readonly_carveout_redirection_disqualifies",
+            "cd /repo && git status > /repo/out.txt",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # the carve-out applies identically on the sibling-escape direction (#198).
+        (
+            "fixture22_readonly_carveout_applies_to_sibling",
+            "cd /repo/.claude/worktrees/seat2 && git status --short",
+            "/repo/.claude/worktrees/seat1",
+            False,
+        ),
+        # hook-checker critic finding (2026-08-15): git log/diff/show share diff-formatting
+        # machinery that accepts `--output=<path>` — a real arbitrary-path write. Excluded
+        # from the safe list entirely (same posture as branch/worktree/remote/config) rather
+        # than special-cased, so a plain `git log`/`git diff`/`git show` still always asks.
+        (
+            "fixture23_readonly_carveout_excludes_diff_family",
+            "cd /repo && git log --output=/repo/scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        (
+            "fixture24_readonly_carveout_excludes_diff_family_plain",
+            "cd /repo && git diff",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # Second critic round (code-checker, 2026-08-15): shell operators aren't shlex words,
+        # so the token-equality check alone missed every ATTACHED form. Each probe class that
+        # passed silently pre-fix gets its own fixture (fixtures 25-29), plus the stderr
+        # attached form (30). All must hit via the raw-substring rejection.
+        (
+            "fixture25_attached_redirection",
+            "cd /repo && git status >/repo/pwned.txt",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        (
+            "fixture26_command_substitution_in_args",
+            "cd /repo && git status $(rm -rf scripts)",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        (
+            "fixture27_backtick_substitution_in_args",
+            "cd /repo && ls `touch /repo/pwned`",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        (
+            "fixture28_process_substitution",
+            "cd /repo && ls >(tee /repo/pwned.txt)",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # a single `&` smuggles a second command into one segment — split_segments only
+        # splits on `&&`, so `git status & node build.mjs` is ONE segment
+        (
+            "fixture29_single_ampersand_backgrounding",
+            "cd /repo && git status & node scripts/build/components.mjs",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        (
+            "fixture30_attached_stderr_redirection",
+            "cd /repo && git status 2>/repo/err.txt",
+            "/repo/.claude/worktrees/seat1",
+            True,
+        ),
+        # negative control: the plain reported pattern must STILL pass silently after the
+        # substring rejection (no metacharacters anywhere in its tail)
+        (
+            "fixture31_plain_readonly_still_passes",
+            "cd /repo && pwd && git status --short && git rev-parse HEAD",
+            "/repo/.claude/worktrees/seat1",
+            False,
         ),
     ]
     for name, command, cwd, expect_hit in cases:
