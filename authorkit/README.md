@@ -81,6 +81,16 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.13.1 · 2026-08-16 · Reconciled `overhaul-planning`'s doc-type ruling with docs' own type
+taxonomy (issue #369): PR #346's `docs:doc-checker` pass judged a generated overhaul-plan doc
+plan-shaped (living checkboxes, no genuine Components/Interfaces/Data/Risks), not LLD-shaped as
+the skill's Phase-1 doc-home paragraph claimed. Retargeted doc type to `plan` — PLAN's own
+"sequenced steps, each with done-when and a status" and its living-state class (one canonical
+copy, reviewed on a cadence) fit a wave-by-wave campaign plan; `PLAN-TEMPLATE.md` restructured
+under the canonical `## Steps` / `## Validation` / `## Rollback` headings (a new Rollback
+section authored: undo per irreversible step — reverted `git mv`, restored ledger entries,
+reversing supersession notes, reverted reshape PRs). No description-field change (body-only).
+
 v0.13.0 · 2026-08-16 · ADR-0014 ratified and executed (issue #353): `validate.py`'s
 `Grammar.parse` skill branch gains two new reserved productions, both inserted before the
 existing object-process check to avoid its dead-code hazard — D1 `-rules` becomes a reserved
