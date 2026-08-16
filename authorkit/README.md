@@ -81,6 +81,22 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.16.0 · 2026-08-16 · New `repo-audit` command+skill (issue #407) — one umbrella audit sweep:
+Phase-0-style discover/scope-confirm (reusing `overhaul-execute`'s own scan, one
+`AskUserQuestion` round), fans out all five instruments (`naming-audit`/`bloat-audit`/
+`attention-audit`/`pattern-audit`/`doctrine-audit`, batched via `estate-audit-agent` over the
+same >3-estates/>40-members threshold), adds `harness:check-routing` +
+`skill-checker`/`agent-checker` FLOOR sweeps as cross-plugin axes where harness is installed
+(absent → named `UNMEASURED`), and renders ONE verdict-first 🟢/🟡/🔴 roll-up per estate per axis.
+Structurally read-only — its tool grants carry no `Write`/`Edit`/`Bash(git *)`. **Naming note**:
+the originating ticket proposed `/audit-repo`; the ADR-0011 grammar check (this same plugin's own
+`validate.py`) rejects that order — a command's terminal token must resolve in `VerbLex`
+(`audit` sits only in `ProcessLex`), so `audit-repo` matches neither the object-verb command
+production nor the object-process skill production. `repo-audit` (object=`repo`, tail=`audit`)
+conforms via the same object-process wrapper production `naming-audit`/`bloat-audit`/
+`estate-audit` already use — both `repo` and `audit` are already-registered vocabulary
+(`object_vocab`/`process_lex`), so no manifest change was needed. Minor bump: new capability,
+fully additive, no existing command/skill contract reshaped.
 v0.15.1 · 2026-08-16 · `overhaul-execute`: wire `pattern-audit` + `doctrine-audit` into Phase 1
 MEASURE and `doctrine-audit` re-run into Phase 6 PROVE (issue #408). Phase 1 gains the same two
 conditional instruments `overhaul-planning`'s Phase 0 already composes (steps 3-4, cited not

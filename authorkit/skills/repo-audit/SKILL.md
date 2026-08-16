@@ -3,27 +3,23 @@ name: repo-audit
 kind: skill
 description: >
   One umbrella sweep across the full audit battery — Phase-0-style discover/scope-confirm, then
-  fans out all five authorkit instruments (naming/bloat/attention/pattern/doctrine, batched via
-  estate-audit-agent over the estate-audit threshold) plus, where installed, harness's
-  check-routing and skill-checker/agent-checker FLOOR sweeps as cross-plugin axes — into ONE
-  verdict-first 🟢/🟡/🔴 roll-up per estate per axis. Read-only: reports, never mutates. Use for
-  "audit this repo", "run the full audit battery", "give me one verdict across naming, bloat,
-  attention, and routing", or "how healthy is this estate across every instrument we have". Ships
-  with an identical-name command wrapper (/repo-audit). NOT for one instrument alone
-  (naming-audit/bloat-audit/attention-audit/pattern-audit/doctrine-audit — this skill composes
-  them, never reimplements); NOT for driving an approved overhaul's execution waves
-  (overhaul-execute — that skill MUTATES through gated waves, this one only ever reports); NOT for
-  choosing which single instrument fits an ask (estate-audit, this skill's own composed index);
-  NOT for sweeping and building the ops chore queue (harness:sweep-chores — that fans out
-  decision-watcher/issue-sorter/repo-cleaner over live work-state, not authorkit's static audit
-  instruments); NOT for a point-in-time work-state report — branches, PRs, drift
-  (harness:check-state — this skill's axes are audit instruments, never git/ticket state).
+  fans out all five authorkit instruments plus, where installed, harness's cross-plugin axes —
+  into ONE verdict-first 🟢/🟡/🔴 roll-up per estate per axis. Read-only: reports, never mutates.
+  Use for "audit this repo", "run the full audit battery", "give me one verdict across naming,
+  bloat, attention, and routing". Ships with an identical-name command wrapper (/repo-audit). NOT
+  for one instrument alone (naming-audit/bloat-audit/attention-audit/pattern-audit/doctrine-audit,
+  or estate-audit's single-instrument index — this skill composes all five, never reimplements);
+  NOT for driving an approved overhaul's execution waves (overhaul-execute mutates through gated
+  waves, this one only ever reports); NOT for the ops chore queue (harness:sweep-chores — live
+  work-state, not static audit instruments); NOT for a point-in-time work-state report
+  (harness:check-state — branches/PRs/drift, not audit axes).
 author: kim
 created: 2026-08-16
 last_updated: 2026-08-16
 requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, estate-audit]
 disable-model-invocation: false
 user-invocable: false
+disallowed-tools: [Write, Edit, NotebookEdit]
 allowed-tools:
   - Read
   - Glob
@@ -54,11 +50,9 @@ reimplement one of their sweeps inline.
 
 ## Phase 0 — DISCOVER + SCOPE CONFIRM (one gate)
 
-Reuse `overhaul-execute`'s own Phase 0 scan verbatim — same markers
-(`**/.claude-plugin/plugin.json`, `*/skills/*/SKILL.md`, `.claude/` dirs, bare `agents/`/
-`commands/` dirs, `**/naming.manifest.json`), same auto-excludes
-(`.claude/worktrees/`, `node_modules/`, `.git/`, `dist/`, `.refactor-attic/`), same governed
-vs. ungoverned classification. Present ONE table — root / markers found / classification /
+Reuse `overhaul-execute`'s own Phase 0 scan exactly — its markers, auto-excludes, and governed
+vs. ungoverned classification, cited not restated (`authorkit/skills/overhaul-execute/SKILL.md`
+Phase 0). Present ONE table — root / markers found / classification /
 recommended in-or-out / one-clause why — and take the user's picks in ONE `AskUserQuestion` round
 before any instrument spends a token. No live user (dispatched unattended, e.g. from
 `mobilize-chores` or a cron routine) → skip the round and scope to every governed estate the scan

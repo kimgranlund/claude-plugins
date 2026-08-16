@@ -32,7 +32,8 @@ skill's procedure exactly; this wrapper adds nothing except the on-demand, user-
 point — the skill itself is not user-invocable.
 
 `mutates: false` / `confirm: not-required` is this command's own contract: every composed
-instrument is read-only and this skill's own tool grants carry no `Write`/`Edit`/`Bash(git *)` —
-nothing here ever needs a mutation gate. The one `AskUserQuestion` round in Phase 0 is a SCOPE
-question, not a mutation confirm, and degrades to a named skip under no live user rather than
-blocking the report.
+instrument is read-only, and this skill's own `disallowed-tools: [Write, Edit, NotebookEdit]`
+plus a `Bash` allowlist naming only read-only audit scripts back that up — nothing here ever
+needs a mutation gate. The one `AskUserQuestion` round in Phase 0 is a SCOPE question, not a
+mutation confirm, and degrades to a named skip under no live user rather than blocking the
+report.
