@@ -19,11 +19,15 @@
  *
  * `chore_sweep_apply.mjs selftest` proves the two extraction/detection functions on inline
  * fixtures: a real block applies; a narrated-but-absent claim bites; a bare path mention with no
- * write verb does NOT false-positive; an out-of-sandbox target path is refused, never written.
+ * write verb does NOT false-positive; an out-of-sandbox target path is refused, never written; and
+ * the entry guard fires when the script lives under a path containing a space (the real plugin
+ * install path) — the negative control for the silent-no-op guard bug fixed 2026-08-16.
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync, mkdtempSync, rmSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync, mkdtempSync, rmSync, realpathSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { execFileSync } from 'node:child_process'
 
 const SANDBOX_PREFIX = '.claude/ops/'
 const WRITE_VERBS = ['wrote', 'emitted', 'produced', 'saved']
@@ -184,6 +188,26 @@ function selftest() {
     // 6. No-args → exit 2.
     const noArgsCode = main([])
     assert(noArgsCode === 2, 'no args must exit 2 (usage error)')
+
+    // 7. Entry guard under a path containing a space (the plugin's real install path is under
+    //    `~/Library/Application Support/...`). `import.meta.url` percent-encodes the space while
+    //    process.argv[1] does not, so a string-compare guard was silently false: main() never ran
+    //    and the process exited 0 with no output — a no-op indistinguishable from success
+    //    (observed 2026-08-16). Copy this script under a spaced dir and run it as a child process.
+    const spacedDir = join(dir, 'Application Support', 'scripts')
+    mkdirSync(spacedDir, { recursive: true })
+    const spacedScript = join(spacedDir, 'chore_sweep_apply.mjs')
+    writeFileSync(spacedScript, readFileSync(fileURLToPath(import.meta.url)))
+    let spacedOut = ''
+    let spacedCode = 0
+    try {
+      spacedOut = execFileSync(process.execPath, [spacedScript, join(dir, 'does-not-exist.md')], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
+    } catch (e) {
+      spacedCode = e.status
+      spacedOut = String(e.stdout ?? '') + String(e.stderr ?? '')
+    }
+    assert(spacedCode === 2, `entry guard must fire when the script path contains a space (got exit ${spacedCode}, expected 2 for a missing report file)`)
+    assert(spacedOut.length > 0, 'a spaced-path invocation must produce output (a silent exit 0 means the entry guard never ran main())')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -192,10 +216,23 @@ function selftest() {
     console.log(`chore_sweep_apply selftest · FAIL · ${failures} failing assertion(s)`)
     return 1
   }
-  console.log('chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/sandbox-refusal/usage all correct')
+  console.log('chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/sandbox-refusal/usage/spaced-path-entry-guard all correct')
   return 0
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Entry guard: compare REAL filesystem paths, not URL strings. `import.meta.url` percent-encodes
+// characters like the space in `~/Library/Application Support/...` while process.argv[1] does not,
+// so a `file://${process.argv[1]}` string-compare is silently false under such an install path;
+// and Node resolves the module URL through symlinks (macOS `/var` → `/private/var`) while argv[1]
+// is whatever the caller typed, so both sides go through realpath before comparing.
+function isEntryModule() {
+  if (!process.argv[1]) return false
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]))
+  } catch {
+    return false
+  }
+}
+if (isEntryModule()) {
   process.exit(main(process.argv.slice(2)))
 }
