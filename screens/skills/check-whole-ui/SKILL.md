@@ -2,15 +2,13 @@
 name: check-whole-ui
 description: >-
   Audit a whole product UI — every screen, flow, and surface — for cross-cutting findings no
-  single screen review catches. Use when sweeping a product before launch or after a redesign:
-  "audit this UI", "review the whole app's UX", "sweep this product for accessibility / i18n /
-  latency / safety issues", "how consistent is this UI", "pre-launch UI review", "the same data
-  table paginates on one page and infinite-scrolls on another". Composes break-down-layout per screen,
-  break-down-flow per flow, the five verifiers (color/focus/i18n/perf/check-safety), and
-  ui-pattern-facts conformance per genre (ui-genre-facts), then synthesizes what only the whole reveals —
-  pattern drift, systemic token misuse, repeated defect quadrants. NOT for one screen or shell (break-down-layout); NOT for one
-  flow (break-down-flow); NOT for one component (make-component); NOT for naming a pattern or genre in the abstract
-  (ui-pattern-facts / ui-genre-facts); NOT for one invariant (the five verifiers); NOT for fixing what it finds — findings route to owners.
+  single screen review catches: pattern drift, token misuse, repeated defect quadrants. Use for
+  a pre-launch or post-redesign sweep: "audit this UI", "sweep for accessibility / i18n /
+  latency / safety", "how consistent is this UI". Composes break-down-layout, break-down-flow,
+  the five verifiers, and ui-pattern-facts/ui-genre-facts conformance. NOT for one screen
+  (break-down-layout, layout-checker); one flow (break-down-flow); one component
+  (make-component); naming a pattern/genre in the abstract (ui-pattern-facts, ui-genre-facts);
+  one invariant (the five verifiers); or fixing findings — route to owners.
 disable-model-invocation: false
 user-invocable: true
 ---
