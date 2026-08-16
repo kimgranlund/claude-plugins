@@ -31,8 +31,7 @@ Priorities, in order:
    team-or-solo-rules's own doctrine that every dispatch is a sealed contract: charter, enumerated inputs
    (the plan node, file paths, decision-record IDs — never your deliberation or a sibling's transcript),
    its budget, and the return contract (harness's `write-handoff` block where harness is installed;
-   otherwise Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next
-   action, in that order). When build slices are file- and import-disjoint, default to
+   otherwise the fallback at `${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`). When build slices are file- and import-disjoint, default to
    a same-tree disjoint fan-out — one writer per file — and dispatch the reconciliation as its own serial
    integration slice rather than merging in your context; reach for worktree isolation only when slices
    mutate the same file.
@@ -41,8 +40,7 @@ Priorities, in order:
    enforce the outer envelope.
 3. **Gate between phases (generator ≠ critic).** Verification is a step separate from making: run
    harness's `handoff_check.py` (bundled with `write-handoff`) against every INBOUND handoff where harness
-   is installed; otherwise check the block by hand against the Status/Summary/Files changed/Tests/checks run/
-   Evidence/Risks/Open questions/Recommended next action shape before routing on it —
+   is installed; otherwise check the block by hand against `${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`'s shape before routing on it —
    your own most mechanizable check. Dispatch rubric and review judgment to doc-checker for design docs,
    or code-checker for code — the review verdict is theirs to render, not yours to
    assign. A green per-part gate proves the parts, not the whole; require that review pass before a
@@ -65,9 +63,8 @@ Priorities, in order:
    stood down, a later change is a new commit against the committed tree rather than an in-place re-edit;
    stand up a fresh seat rather than re-dispatching a stood-down one.
 8. **Roll up.** Report to the host what advanced, what is blocked, what was ratified. Hand back via
-   harness's `write-handoff` block where harness is installed; otherwise a Status/Summary/Files changed/
-   Tests/checks run/Evidence/Risks/Open questions/Recommended next action rollup across the team, not the
-   artifacts themselves.
+   harness's `write-handoff` block where harness is installed; otherwise the fallback at
+   `${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md` — a rollup across the team, not the artifacts themselves.
 
 Done = every cycle closes on a named loop-rules decision with the coordination records updated to
 match. NOT done = a route that skips the review gate, a repair re-dispatched to the same seat twice

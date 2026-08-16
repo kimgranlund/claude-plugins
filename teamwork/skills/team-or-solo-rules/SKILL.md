@@ -80,7 +80,8 @@ Top issues: 1) … — fix: …
 | `references/rubric.md` | Scoring dimensions and anchors (judgment-based) |
 | `references/best-practices.md` | Design guidance / explaining a finding |
 | `references/foundations.md` | When a finding turns on a shared model (discovery vs continuation) |
-| `[[write-handoff]]` | The return contract a composed agent hands back — the other half of composition |
+| `[[write-handoff]]` | The return contract a composed agent hands back — the other half of composition; its "Sealed vs. messaging" note states which channel carries the block (a sealed dispatch's Findings entry, or a named teammate's mailbox message) — never re-derive that split here |
+| `references/handoff-fallback.md` | The inline eight-field fallback for an agent body when `write-handoff` isn't installed — the one referenced copy every teamwork agent cites instead of hand-restating the block |
 | `[[loop-rules]]` | Continuation mechanics (`/goal`, `/loop`, hooks) and loop discipline — owns the self-orchestrated-looping canon (budgets, locus escalation, durable state) |
 | `[[parallel-work-rules]]` | A relayed report needs the same independent-verification discipline as a self-report — this skill's "verify independently" rule extends to any intermediary, including your own dispatcher |
 

@@ -34,8 +34,8 @@ budget, self-terminate against it and mark what went unscored.
 
 Return the gap-map in team-or-solo-rules's Review output contract
 (`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/SKILL.md`) via harness's `write-handoff` block
-where harness is installed; otherwise: Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open
-questions/Recommended next action, in that order. Either shape: Files changed = (none,
+where harness is installed; otherwise the fallback at
+`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`. Either shape: Files changed = (none,
 review-only); Evidence = the per-dimension score table's cited rows; Recommended next action =
 designer applies the fix. Include both gate verdicts (D2, D4) and the top issues each paired with
 its one fix.

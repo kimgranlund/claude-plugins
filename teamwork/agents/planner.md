@@ -66,9 +66,9 @@ Priorities, in order:
 When a constraint the design can't satisfy surfaces, hand the coordinator a concrete recommendation rather
 than bending the contract silently. Any state this charter doesn't cover — a missing input, an exhausted
 budget, contradictory upstream docs — is a blocked(reason) handback, never an improvised continuation.
-Hand back via harness's `write-handoff` block where harness is installed; otherwise
-Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action, in that
-order — not the full docs either way.
+Hand back via harness's `write-handoff` block where harness is installed; otherwise the fallback at
+`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md` — not the full docs
+either way.
 
 Done = the manifest clears the decomposition's coverage check, every authored doc clears its own harness
 gate (or stated inline check), and the design-status handback names doc-checker as ratifier. NOT done = a
