@@ -36,18 +36,20 @@ scope is on record before any dispatch fires.
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
 From this point until the charter closes (Phase 4), this session holds the agent's own contract as
-its own operating rules — read, don't re-derive:
+its own operating rules, following the shared ritual in `references/adopt-agent-contract.md`
+(this skill — the canonical copy; `lead-planning` and `lead-build` cite it too):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/team-lead.md`, Priorities 1–8 (its own
    lines 22–69), now, in full.** Adopt all eight verbatim as this session's standing rules for the
    charter's duration: route by shape and dispatch sealed; budget every dispatch; gate between
    phases (generator ≠ critic); close every cycle on a named decision; run the discovered-reality
    escalation loop; keep durable state in records, not context; treat the committed tree as source
-   of truth; roll up. Nothing in that file is optional for the host to skip — a partial restatement
-   here would drift from the source the moment either file changes next.
+   of truth; roll up.
 2. **Invoke `team-or-solo-rules` and `loop-rules`** (this plugin) — the same two skills the
    agent itself preloads (`agents/team-lead.md:15`) — so the routing rubric and the
    closed decision-set Priority 4 and 6 depend on are actually loaded, not assumed.
+3. **Acknowledge adoption** before dispatching anything: one standing block naming the contract
+   file read, the three host deltas below, and the duration rule ("until this charter closes").
 
 Three places the host's version genuinely differs from the agent's, because the host is not a
 dispatched subagent:
@@ -98,23 +100,20 @@ what was ratified.
   the same seat for the same finding twice: the artifact violates its contract → the building seat
   that owns it; the contract itself permits the defect → `planner` repairs the owning doc;
   the task was mis-cut → replan. The same finding failing twice indicts the contract, not the seat.
-- **The charter turns out smaller than expected once underway** → keep dispatching under the
-  adopted contract anyway; do not silently revert to solo-first mid-charter. If the charter is
-  genuinely done, close it (Phase 4) rather than shrinking the discipline around what's left.
+- **The charter turns out smaller than expected once underway** → the shared ritual's first
+  failure branch (`references/adopt-agent-contract.md`): keep dispatching under the adopted
+  contract anyway; close it (Phase 4) rather than shrinking the discipline around what's left.
 - **The Task/Agent dispatch itself fails to return** (a tool error, not a seat-reported finding) →
   report the dispatch failure plainly; never fabricate a seat's report to fill the gap.
 - **Invoked again while a charter bound by an earlier Phase 1 in this same session is still
-  open** → check the coordination records (Priority 6) before binding the new one: if the records
-  show the prior charter never reached Phase 4, report that it's still open and ask whether this
-  invocation closes/replaces it or is a genuinely distinct, parallel charter — never silently merge
-  two charters' state into one set of records.
+  open** → the shared ritual's second failure branch, checked against this seat's own
+  coordination records (Priority 6).
 
 ## When this rule ends
 
-The adopted discipline holds only for the charter bound in Phase 1, until it closes on a named
-decision in Phase 4. A new charter — even later in the same conversation — requires a new
-`/lead-team` invocation; this command does not silently keep governing unrelated
-work once its own charter has closed.
+The shared ritual's closing rule (`references/adopt-agent-contract.md`) applies: the adopted
+discipline holds only for the charter bound in Phase 1, until it closes on a named decision in
+Phase 4; a new charter requires a new `/lead-team` invocation.
 
 Done when the charter has closed on a named `loop-rules` decision, the coordination records hold
 the state a successor could resume from, and no charter deliverable was written or edited by the

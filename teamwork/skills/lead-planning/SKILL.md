@@ -34,13 +34,14 @@ authored.
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
 From this point until the charter closes (Phase 4), this session holds the agent's own contract
-as its own operating rules — read, don't re-derive:
+as its own operating rules, following the shared ritual in
+`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md` (the canonical copy,
+shared with `lead-team`/`lead-build`):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/planner.md` now, in full.** Adopt its four priorities
    verbatim as this session's standing rules for the charter's duration: decompose before
    authoring, author only what this change earns, distill recurring knowledge, report — never
-   grade the docs yourself. Nothing in that file is optional to skip — a partial restatement
-   here would drift from the source the moment either file changes next.
+   grade the docs yourself.
 2. **Invoke the same skills the agent's body soft-mentions** — harness's `break-down-problem`
    for the two-plane decomposition (its inline method where harness isn't installed: sketch the
    whole broken into parts, the actions each part must support, checked for mutual coverage) and
@@ -99,23 +100,23 @@ what was authored, what each doc-checker verdict said, what remains open.
   the doc's own intent capture, not the checker — escalate to re-examine what the charter is
   actually asking for (Phase 1's restatement, or the decomposition itself) rather than
   re-dispatching the same fix a third time hoping the checker relents.
-- **The charter turns out smaller than expected once underway** → keep authoring under the
-  adopted contract anyway; do not silently revert to solo-first mid-charter. If the charter is
-  genuinely done, close it (Phase 4) rather than shrinking the discipline around what's left.
+- **The charter turns out smaller than expected once underway** → the shared ritual's first
+  failure branch
+  (`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`): keep authoring
+  under the adopted contract anyway; close it (Phase 4) rather than shrinking the discipline
+  around what's left.
 - **The `doc-checker` dispatch itself fails to return** (a tool error, not a reviewed finding) →
   report the dispatch failure plainly; never fabricate a verdict to fill the gap.
 - **Invoked again while a charter bound by an earlier Phase 1 in this same session is still
-  open** → check the coordination records (the charter's own docs and their status) before
-  binding the new one: if they show the prior charter never reached Phase 4, report that it's
-  still open and ask whether this invocation closes/replaces it or is a genuinely distinct,
-  parallel charter — never silently merge two charters' state into one set of records.
+  open** → the shared ritual's second failure branch, checked against this seat's own
+  coordination records (the charter's own docs and their status).
 
 ## When this rule ends
 
-The adopted discipline holds only for the charter bound in Phase 1, until it closes on a named
-decision in Phase 4. A new charter — even later in the same conversation — requires a new
-`/lead-planning` invocation; this command does not silently keep governing unrelated work once
-its own charter has closed.
+The shared ritual's closing rule
+(`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`) applies: the
+adopted discipline holds only for the charter bound in Phase 1, until it closes on a named
+decision in Phase 4; a new charter requires a new `/lead-planning` invocation.
 
 Done when the charter has closed on a named `loop-rules` decision, every doc this session
 authored or materially revised carries a `doc-checker` verdict (or the disclosed by-hand
