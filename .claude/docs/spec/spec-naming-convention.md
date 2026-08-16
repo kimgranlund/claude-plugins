@@ -1,3 +1,12 @@
+---
+doc-type: spec
+id: spec-naming-convention
+status: draft
+version: 1.1.0
+date: 2026-08-16
+owner: kim.granlund
+prd: null   # no PRD — descends from ADR-0011 (accepted 2026-08-13), amended by ADR-0014 (2026-08-16)
+---
 # Harness Artifact Naming Convention — Specification
 
 **Status:** Draft v1.0 · **Applies to:** `.claude/` harness artifacts (agents, commands, skills) · **Enforced by:** `naming.manifest.json` + validator (CI gate, pre-mint gate in `/skill-create`)
@@ -12,7 +21,14 @@ Design principle: **syntax encodes invocation semantics**. The grammatical mood 
 
 ---
 
-## 2. Taxonomy
+## Requirements
+
+REQ-numbered clusters below state this spec's binding rules. Each retains its original
+section number (`2.`–`9.`) as a stable citation anchor — ADR-0011, ADR-0014, `validate.py`, and
+sibling docs cite this spec by those numbers (see §14 Amendments); the numbers are unchanged by
+this restructure, only regrouped under the SPEC-type contract's required headings.
+
+### REQ-001 — 2. Taxonomy
 
 Three kinds, partitioned by **invoker** — the one axis the platform actually enforces.
 
@@ -28,7 +44,7 @@ Three kinds, partitioned by **invoker** — the one axis the platform actually e
 
 ---
 
-## 3. Grammar
+### REQ-002 — 3. Grammar
 
 ```
 command   := object "-" verb                    skill-create, work-start
@@ -40,20 +56,20 @@ agent     := skill-name "-" "agent"             skills-audit-agent   (primary)
 
 One reserved head: `-agent`.
 
-### 3.1 Commands — object-first
+#### 3.1 Commands — object-first
 
 Commands are object-first (`skill-create`, not `create-skill`) so that slash autocomplete groups operations by object: `/skill-<tab>` surfaces `skill-create`, `skill-review`, `skill-lint` together. Discovery ergonomics outrank reading-as-English for a user-invoked surface.
 
 The terminal token must be a member of `VerbLex`.
 
-### 3.2 Skills — nominal, process head preferred
+#### 3.2 Skills — nominal, process head preferred
 
 The canonical skill production is `{object}-{process}` (`skills-audit`, `entry-file-authoring`). The terminal token should be a member of `ProcessLex`. Skills that are genuinely not object-process shaped — report generators, routers, and reference corpora — use the nominal-phrase production, but every token must still resolve in the lexicons (§4): the looseness is in the *shape*, never in the *vocabulary*.
 
 Reading test (procedural): the name completes "this artifact teaches how to do ___."
 Reading test (reference-shaped): the name completes "consult ___ for this."
 
-### 3.3 Agents — derived from skills
+#### 3.3 Agents — derived from skills
 
 The primary production is `{existing-skill-name}-agent`. An agent's capability must have an authored skill spec; the peer audit verifies this by stripping `-agent` and asserting the skill exists.
 
@@ -63,7 +79,7 @@ Reading test: the name completes "hand this off to the ___."
 
 ---
 
-## 4. Lexicons
+### REQ-003 — 4. Lexicons
 
 Four lexicons live in `naming.manifest.json`. Three are closed (additions require a manifest PR — this is the governance gate); one grows by registration.
 
@@ -89,7 +105,7 @@ Brand tokens (`adia`) are banned from ObjectVocab. Plugin namespacing is the mar
 
 ---
 
-## 5. Parse algorithm
+### REQ-004 — 5. Parse algorithm
 
 Deterministic; specified here so no two tools hand-roll it differently.
 
@@ -102,7 +118,7 @@ Ambiguity is prevented at write time, not resolved at read time: the ObjectVocab
 
 ---
 
-## 6. Directory & file layout
+### REQ-005 — 6. Directory & file layout
 
 Invoker is decided by **location**; the grammar corroborates it.
 
@@ -121,7 +137,7 @@ Invoker is decided by **location**; the grammar corroborates it.
 
 Validator rule: `folder == name` for every artifact.
 
-### 6.1 Skill folder layout — closed set
+#### 6.1 Skill folder layout — closed set
 
 ```
 skills/{name}/
@@ -142,7 +158,7 @@ Boundary validation (the validator checks these and nothing deeper):
 
 Below the boundary, the validator is deliberately blind: internal file names, nesting, and formats are the author's domain. Validation pressure inside a skill's internals is the §9 signal that content wants to be an artifact — never a reason to grow the validator.
 
-### 6.2 Content organization within the layout
+#### 6.2 Content organization within the layout
 
 **Knowledge corpora — discoverable by two hops, loaded on demand.** Discovery is always: *description → SKILL.md → reference index → file.* The router matches the skill's `description` (hop one); the SKILL.md body must then contain a **reference index** — a table listing every file under `references/` with a one-line *when-to-read* trigger (hop two):
 
@@ -162,7 +178,7 @@ The index is the corpus's contract with context: without it, an agent session ei
 
 ---
 
-## 7. Composition relations — declared in frontmatter, graph derived
+### REQ-006 — 7. Composition relations — declared in frontmatter, graph derived
 
 Composability comes from the **shared ObjectVocab**, not from shared name shapes. Relations are **declared in the frontmatter of the depending artifact** — never in a central registry. One authority per fact: a relation lives with the artifact that holds it; the manifest holds only lexicons and exemptions; the estate-wide relation graph is *compiled* from frontmatter by the validator, never hand-maintained. A central `relations` registry would force two files to agree about one fact, which is the drift shape this spec exists to kill.
 
@@ -182,11 +198,11 @@ Derived-graph audits (all mechanical): dangling endpoints (relation references a
 
 ---
 
-## 8. Frontmatter schema
+### REQ-007 — 8. Frontmatter schema
 
 Frontmatter is the **authoring surface** for everything the tooling reads. The rule that keeps it from rotting: **every field in this schema is validated; no field enters the schema unless something reads it.** Fields nothing validates are prohibited, not optional — ungoverned metadata is where frontmatter lies accumulate.
 
-### 8.1 Identity (required, all kinds)
+#### 8.1 Identity (required, all kinds)
 
 ```yaml
 name: skills-audit          # canonical; == folder; parseable per §5
@@ -197,7 +213,7 @@ description: >              # the trigger contract — governed by
 
 The validator asserts agreement, never trusts declaration: name parse + directory → **decided kind**; frontmatter must match. Disagreement is a lint failure. Frontmatter is an agreement check, never a tiebreaker — the specific defense against the rename-drift class (`entry-file-author` / `claude-md-author`) where a name silently stops meaning what the metadata claims.
 
-### 8.2 Relations (per §7, on the depending artifact)
+#### 8.2 Relations (per §7, on the depending artifact)
 
 ```yaml
 performs: skills-audit             # agents
@@ -205,7 +221,7 @@ wraps: naming-audit                # commands (dual-access)
 requires: [naming-conventions]     # any kind — deps that must exist and be available
 ```
 
-### 8.3 Invocation policy and tool grants (required for agents and mutating commands)
+#### 8.3 Invocation policy and tool grants (required for agents and mutating commands)
 
 ```yaml
 # agents
@@ -230,7 +246,7 @@ Policy fields are **enforced contracts, not documentation**: the validator asser
 - **Policy/capability coherence is validated:** `autonomous_write: false` ⇒ no `Edit`, `Write`, or unscoped `Bash` in the agent's tools. `mutates: true` ⇒ the command declares a write-capable tool; `mutates: false` ⇒ it declares none. Divergence between the policy fields and the grants is a lint failure — policy asserts, grants enforce, and neither may drift from the other.
 - The estate's mutation topology becomes grep-decidable: which artifacts can write is answered from frontmatter alone, never from reading procedure bodies.
 
-### 8.4 Provenance (required, all kinds)
+#### 8.4 Provenance (required, all kinds)
 
 ```yaml
 author: kim                 # ∈ AuthorRegistry in the manifest
@@ -241,13 +257,13 @@ review_after: 180d          # optional per-artifact override of the default
 
 `last_updated` is load-bearing: `harness_check` flags any artifact whose `last_updated` exceeds its review window as **stale** — a warning tier alongside the exemption burn-down, because stale files are drift's incubation stage. The field is validated against git history (declared date may not postdate the last commit touching the artifact), so it cannot be cosmetically bumped without an actual change.
 
-### 8.5 What stays out
+#### 8.5 What stays out
 
 `version` (git is the version authority), `tags` (the grammar + description are the routing surface; a parallel folksonomy forks it), free-form `notes` (body content, not metadata). If a future field earns validation, it enters by manifest PR like a lexicon entry.
 
 ---
 
-## 9. Two-level taxonomy — artifacts vs intra-skill resources
+### REQ-008 — 9. Two-level taxonomy — artifacts vs intra-skill resources
 
 The estate has exactly two levels, and only the top one is governed by this grammar:
 
@@ -267,7 +283,12 @@ Checklists, rubrics, templates, calibration corpora (`CALIBRATION.md`), blast-ra
 
 ---
 
-## 10. Migration posture — grandfathering
+## Non-goals
+
+See also §8.5 ("What stays out") for the artifact-frontmatter fields this spec deliberately
+excludes from validation (`version`, `tags`, free-form `notes`).
+
+### 10. Migration posture — grandfathering
 
 The live estate conforms at roughly 30%. The grammar is a target; without an explicit migration mechanism it is dead paper. Posture: **enforce for new names; grandfather existing ones.**
 
@@ -280,26 +301,30 @@ Known exemption seeds (non-exhaustive): `handoff-to-human`, `handoff-to-agent`, 
 
 ---
 
-## 11. Validator
+## Acceptance
+
+### 11. Validator
 
 String ops plus YAML reads, no NLP. Runs in CI and as a pre-mint gate in `/skill-create`.
 
 Checks, in order:
 
-1. Name ∈ `exemptions` → grammar checks skip (record for burn-down); frontmatter checks (4–7) still apply.
-2. Parse per §5; all tokens resolve; no banned aliases; no brand tokens.
-3. `folder == name` (§6); skill folder layout closed set, `SKILL.md` present, no nested skills (§6.1); reference index complete and dangling-free (§6.2).
-4. Frontmatter schema (§8): required fields present; no fields outside the schema; decided kind (parse + directory) matches declared kind.
-5. Relations (§7): every endpoint exists; `performs` equals name minus `-agent`; `wraps` targets a model-invocable skill; compiled `requires` graph is acyclic.
-6. Invocation policy (§8.3): `mutates: true ⇒ confirm: required` (allowlist excepted); agents fail closed to `autonomous_write: false`; policy/capability coherence — tool grants match declared policy, `Bash` grants are scoped patterns.
-7. Provenance (§8.4): `author` ∈ AuthorRegistry; `last_updated` does not postdate last git touch; staleness beyond review window → warning tier.
-8. ObjectVocab registration gate (on manifest change): new entries create no parse ambiguity; disjointness of VerbLex/ProcessLex holds.
+1. **AC-001** (REQ-001) Name ∈ `exemptions` → grammar checks skip (record for burn-down); frontmatter checks (4–7) still apply.
+2. **AC-002** (REQ-004) Parse per §5; all tokens resolve; no banned aliases; no brand tokens.
+3. **AC-003** (REQ-005) `folder == name` (§6); skill folder layout closed set, `SKILL.md` present, no nested skills (§6.1); reference index complete and dangling-free (§6.2).
+4. **AC-004** (REQ-007) Frontmatter schema (§8): required fields present; no fields outside the schema; decided kind (parse + directory) matches declared kind.
+5. **AC-005** (REQ-006) Relations (§7): every endpoint exists; `performs` equals name minus `-agent`; `wraps` targets a model-invocable skill; compiled `requires` graph is acyclic.
+6. **AC-006** (REQ-007) Invocation policy (§8.3): `mutates: true ⇒ confirm: required` (allowlist excepted); agents fail closed to `autonomous_write: false`; policy/capability coherence — tool grants match declared policy, `Bash` grants are scoped patterns.
+7. **AC-007** (REQ-007) Provenance (§8.4): `author` ∈ AuthorRegistry; `last_updated` does not postdate last git touch; staleness beyond review window → warning tier.
+8. **AC-008** (REQ-003) ObjectVocab registration gate (on manifest change): new entries create no parse ambiguity; disjointness of VerbLex/ProcessLex holds.
 
 Grammar and relation failures block the mint/merge; staleness warns.
 
 ---
 
-## 12. Worked examples
+## Examples
+
+### 12. Worked examples
 
 | Name | Location | Parse | Verdict |
 |---|---|---|---|
@@ -450,3 +475,44 @@ full, plus 10 of the 14 exempted `check-<noun>` names (the 4 quantifier non-goal
 exempt). `check-doc`, `check-skill`, `check-stage`, `naming-rules`, and `product-lifecycle-rules`
 were never in `exemptions` (they already parsed clean); their passing reason changes from
 accidental to designed under this amendment, not counted in the 32.
+
+### 14.3 SPEC-type frontmatter and section restructure (2026-08-16, issue #372, Kim's ruling)
+
+**Ruling:** this spec gained `docs/skills/doc-writing-rules` SPEC-type frontmatter
+(`doc-type: spec`) and was reorganized under that type's four required `## ` headings —
+Requirements, Non-goals, Examples, Acceptance — so `docs/scripts/doc_lint.py` covers it as a
+functional document. **Form only, no substance change:** every normative sentence in §§1–13 is
+unchanged verbatim; sections `2.`–`12.` keep their original numbers (now written as
+`REQ-00N — N. Title` or `N. Title` headings, one level deeper) so every existing citation into
+this spec by number — from ADR-0011, ADR-0014, `validate.py`, `overhaul-execute/SKILL.md`,
+`authorkit/README.md`, and this file's own §14.1/§14.2 — still resolves without edits.
+
+Sections `2.`–`9.` (Taxonomy, Grammar, Lexicons, Parse algorithm, Directory & file layout,
+Composition relations, Frontmatter schema, Two-level taxonomy) became REQ-001 through REQ-008
+under `## Requirements`; §10 (Migration posture) moved under `## Non-goals` (its own
+scope-limiting content — "enforce for new names; grandfather existing" — was already the closest
+existing fit, alongside a new pointer to §8.5 "What stays out"); §12 (Worked examples) moved
+under `## Examples`; §11 (Validator) moved under `## Acceptance`, its 8 checks labeled
+AC-001–AC-008 against their nearest REQ. §1, §13, and §14 kept their original numbering and
+position unchanged.
+
+**Why:** docs-checker flagged this spec (PR #368 review, 2026-08-16) as "not a functional
+document — no doc-type frontmatter" despite being ADR-0011's own ratified naming canon.
+Frontmatter-only was investigated first and found infeasible without content change — `doc_lint`
+hard-requires the four headings with no exemption path (findings posted to #372:
+`https://github.com/kimgranlund/claude-plugins/issues/372#issuecomment-5307727282`). Kim ruled
+to restructure rather than carve a doc_lint exemption or leave the spec permanently out of the
+type contract (the other two options raised in that finding).
+
+**Rejected alternatives** (from the original #372 finding, superseded by this ruling): (1) add a
+`doc_lint` exemption/grandfather mechanism for legacy specs predating the section contract —
+rejected because T3 is FAIL-tier by design, not WARN, and a bespoke carve-out for one file
+undermines the "template is the contract" invariant the check exists to enforce; (2) leave
+`spec-naming-convention.md` permanently out of `doc_lint`'s scope — rejected because ADR-0011's
+own canon spec being invisible to the docs type contract it was written to satisfy for every
+*other* artifact was the actual gap #372 exists to close.
+
+**Non-goal:** this amendment does not touch any normative rule in §§2–12, the `-agent` reserved
+head, the §14.1 reverse-wrapper amendment, the §14.2 `-rules`/`check-` amendment, or
+`naming-audit/scripts/validate.py`'s parsing logic — it is a docs-plugin frontmatter/structure
+fix, not a naming-grammar change.
