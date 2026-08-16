@@ -128,6 +128,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.7.5 · 2026-08-16 · `big-change-git-rules`' who-ships-what.md gains ADR-0013's harvest (batched confirm): dispatch-tier BLOCKED (measured), merge-tier still UNMEASURED for `autoMode.allow`; the stale ADR-0012 provenance citation is re-grounded in ADR-0013 with a dated amendment note
 v3.7.4 · 2026-08-16 · Delegation-Mechanics Review Gate v2 (issue #274): `skill_lint.py` mechanizes R1/R2/R3 with F1-F3 negative-control fixtures proven biting; `check-skill` gains judgment-tier DM-R4/DM-R5/DM-R6 (DM-R6 WARN-capped pending the F4 fixture); `make-skill`'s interview gains the fork self-sufficiency/background questions; `skill-writing-rules` gains the dated fact block. F4/F5 are named live-harness follow-up experiments, not run here
 v3.7.3 · 2026-08-16 · `checking-rules` gains the generator≠critic invariant's UNIT calibration (issue #272): semantic edits earn a critic dispatch at any diff size, mechanical edits (ledger trims, version renumbers) ride floor-tier verification; `agent-writing-rules` gains a checker-seat consolidation merge test, citing #293 as the one confirmed candidate
 v3.7.2 · 2026-08-16 · `plugin-writing-rules`' Reload semantics gains prompt-cache reload hygiene (issue #271): a mid-session reload or description edit invalidates the ~26k-token always-on-description cache prefix, re-read uncached until the next boundary — batch reloads there instead, plus a matching Failure-catalog row
