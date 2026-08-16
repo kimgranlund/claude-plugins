@@ -129,6 +129,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.10 · 2026-08-16 · `check-state`'s description gains a one-line disambiguation naming `docs:check-stage` (issue #336, `prd-lifecycle-stage-awareness.md`) as the sibling owning the lifecycle-position axis, reciprocal eval n13 added
 v3.8.9 · 2026-08-16 · `pack-writing-rules` gains the "Extension citation" rule (closes #338): a
 pack's growth-routing footer is a one-line citation — `Extension: governed by [[make-pack]]` —
 stated once here instead of the ~150-char stamped paragraph copied across 28 pack SKILL.md files;

@@ -8,8 +8,9 @@ description: >-
   "where are we", "what's blocked on me", "give me a project state report", "what can be
   merged or deleted", "catch me up on this repo", or reviewing all roadmap/plan/backlog
   items and open tickets. NOT for choosing next work (chore-planner), executing cleanup
-  (repo-cleaner), plugin health (/check-everything), or one PR/issue's status (plain gh
-  lookup).
+  (repo-cleaner), plugin health (/check-everything), one PR/issue's status (plain gh
+  lookup), or which lifecycle loop/build-turn stage the project is in — the
+  lifecycle-POSITION axis, not work-state (docs:check-stage, where installed).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[repo-root] [--artifact]"

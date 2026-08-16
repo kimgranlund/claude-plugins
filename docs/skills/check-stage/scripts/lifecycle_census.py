@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+"""lifecycle_census.py — read-only typed-record census for the check-stage skill.
+
+Usage:
+  lifecycle_census.py [<repo-root>]     print the JSON snapshot
+  lifecycle_census.py selftest          prove the parsers on inline fixtures
+
+No args defaults the root to `.` — mirrors check-state's doc_state.py collector
+(a deliberate, disclosed deviation from the no-args-prints-usage anatomy: the
+default target is meaningful for a collector).
+
+Walks `.claude/docs/{adr,idr,rdd}/*.md`, parses doc_lint-compatible frontmatter,
+and emits per-type counts, status distributions, and the orphan-ADR (doc_lint's
+T6 WARN — no `intent-refs:` citation) count, plus ROADMAP.md presence/status at
+the repo root. Reuses docs/scripts/doc_lint.py's own TYPES/LEDGER_LOCK contract
+(sources-flow-outward) rather than re-declaring the type/status enums here.
+
+This is the SCRIPT-DETECTABLE half only (PRD resolution (b)) — presence, counts,
+status distributions. The judgment-tier reading (POC boundary crossed, which loop
+is emphasized, bug-vs-requirement-gap, whether Retro lessons landed) is narrated
+by the check-stage skill body from this JSON plus other project signals; it is
+never computed here.
+
+Exit: 0 snapshot printed · 1 unexpected failure · 2 usage.
+Selftest: 0 proven · 1 a control failed.
+"""
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+LEDGER_TYPES = ("adr", "idr", "rdd")
+
+
+def load_doc_lint():
+    """Import docs/scripts/doc_lint.py by path — a same-plugin sibling script,
+    never a cross-plugin import (plugin-authoring.md's hard-boundary rule is for
+    preloads/${CLAUDE_PLUGIN_ROOT} paths crossing PLUGINS, not sibling scripts
+    inside one plugin's own scripts/ tree)."""
+    here = Path(__file__).resolve()
+    doc_lint_path = here.parent.parent.parent.parent / "scripts" / "doc_lint.py"
+    spec = importlib.util.spec_from_file_location("doc_lint", doc_lint_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def census_dir(root, dtype, parse_frontmatter):
+    d = Path(root) / ".claude" / "docs" / dtype
+    files = sorted(d.glob("*.md")) if d.is_dir() else []
+    statuses = {}
+    orphans = 0
+    for p in files:
+        fm = parse_frontmatter(p.read_text(errors="replace")) or {}
+        status = fm.get("status", "unknown")
+        statuses[status] = statuses.get(status, 0) + 1
+        if dtype == "adr":
+            intent_refs = fm.get("intent-refs", "").strip().lower()
+            if intent_refs in ("", "null", "none", "[]"):
+                orphans += 1
+    entry = {"count": len(files), "status_distribution": statuses}
+    if dtype == "adr":
+        entry["orphan_count"] = orphans
+    return entry
+
+
+def roadmap_state(root, parse_frontmatter):
+    p = Path(root) / "ROADMAP.md"
+    if not p.is_file():
+        return {"present": False, "status": None}
+    fm = parse_frontmatter(p.read_text(errors="replace")) or {}
+    return {"present": True, "status": fm.get("status")}
+
+
+def collect(root):
+    doc_lint = load_doc_lint()
+    ledger = {t: census_dir(root, t, doc_lint.parse_frontmatter) for t in LEDGER_TYPES}
+    return {"ledger": ledger, "roadmap": roadmap_state(root, doc_lint.parse_frontmatter),
+            "types_known": sorted(doc_lint.TYPES), "ledger_lock": doc_lint.LEDGER_LOCK}
+
+
+def selftest():
+    fails = []
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        adr_dir = root / ".claude" / "docs" / "adr"
+        adr_dir.mkdir(parents=True)
+        (adr_dir / "0001-x.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0001\nstatus: accepted\n"
+            "intent-refs: IDR-0001\n---\n## Context\n## Decision\n## Consequences\n")
+        (adr_dir / "0002-y.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0002\nstatus: proposed\n---\n"
+            "## Context\n## Decision\n## Consequences\n")
+        result = collect(root)
+        adr = result["ledger"]["adr"]
+        if adr["count"] != 2:
+            fails.append(f"negative control: adr count wrong (got {adr['count']}, want 2)")
+        if adr["status_distribution"] != {"accepted": 1, "proposed": 1}:
+            fails.append(f"status distribution wrong: {adr['status_distribution']}")
+        if adr["orphan_count"] != 1:
+            fails.append(f"orphan count wrong (got {adr['orphan_count']}, want 1 — the "
+                          f"no-intent-refs ADR)")
+        for t in ("idr", "rdd"):
+            if result["ledger"][t]["count"] != 0:
+                fails.append(f"reverse control: empty {t} dir reported nonzero count")
+        if result["roadmap"]["present"]:
+            fails.append("reverse control: no ROADMAP.md but reported present")
+        if "adr" not in result["types_known"] or "idr" not in result["types_known"]:
+            fails.append("types_known didn't pass through doc_lint's live TYPES dict")
+
+        (root / "ROADMAP.md").write_text("---\ndoc-type: roadmap\nid: r1\nstatus: active\n---\n"
+                                          "## Now\n## Next\n## Later\n")
+        result2 = collect(root)
+        if not (result2["roadmap"]["present"] and result2["roadmap"]["status"] == "active"):
+            fails.append(f"negative control: ROADMAP.md present/status not read "
+                         f"({result2['roadmap']})")
+
+    if fails:
+        print(f"lifecycle_census · selftest FAIL · {len(fails)} fail / 0 warn")
+        [print(f"  - {f}") for f in fails]
+        sys.exit(1)
+    print("lifecycle_census · selftest ok · 0 fail / 0 warn")
+    sys.exit(0)
+
+
+def main(argv):
+    if len(argv) == 2 and argv[1] == "selftest":
+        selftest()
+    root = argv[1] if len(argv) > 1 else "."
+    if root.startswith("-"):
+        print(__doc__)
+        sys.exit(2)
+    try:
+        print(json.dumps(collect(root), indent=2))
+    except OSError as e:
+        print(f"lifecycle_census · FAIL · {e}")
+        sys.exit(1)
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main(sys.argv)
