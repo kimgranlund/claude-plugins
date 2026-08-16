@@ -73,7 +73,10 @@ No installed harness required; every check is a plain script. Run from the works
   Lint and gates prove mechanics, not semantics (2026-08-11 audit: every recent unaudited semantic
   edit carried a real gap). The contract is encoded where those flows live — `file-bug`'s
   fix-inline branch, `dispatch-ticket`'s build path, `make-skill`'s P5. Pure code/config under the
-  repo's own test gates is exempt.
+  repo's own test gates is exempt. **The invariant's UNIT** — semantic (earns the dispatch, at any
+  diff size) vs. mechanical (a ledger-line trim, a version renumber — floor-tier verification in
+  the same loop suffices) — is calibrated in harness's `checking-rules` (2026-08-16, #272); don't
+  re-derive the boundary here.
 - **Plugin boundaries are hard for preloads and `${CLAUDE_PLUGIN_ROOT}` paths, soft for mentions.**
   Cross-plugin handoffs are named mentions that degrade gracefully when the other plugin isn't
   installed; an agent preload or script path crossing plugins is a defect (plan-plugin-split's `surface_map.py check`

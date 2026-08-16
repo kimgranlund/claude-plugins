@@ -127,6 +127,50 @@ An agent with no stated `model` is not neutral — it silently inherits, which i
 mechanical seats and an unguaranteed verdict for judgment ones. State the row; don't leave it
 implicit.
 
+## Checker-seat consolidation — when seats merge, when they stay separate
+
+The estate carries roughly a dozen and a half review/critic seats (13 `*-checker`-suffixed agents
+plus authorkit's three batch-audit agents, counted 2026-08-16) — each pays always-on description
+rent in every session's Agent-tool listing and a full context re-gather on every dispatch (issue
+#272). Three of those (#293's `naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent`) are
+the one confirmed merge candidate — the trio passes the merge test below, and the consolidation
+itself is #293's own follow-up to execute. No other grouping in the estate passes, as of the same
+audit.
+
+**Merge test — both must hold, or keep the seats separate:**
+
+1. **Identical mechanics.** The candidates share one tool wall, one dispatch contract, one report
+   shape, and differ ONLY in which instrument (script + owning skill) runs — the same operation,
+   parameterized. #293's three: same `Read/Glob/Grep/Bash(python3 */scripts/<tool>.py *)` shape,
+   same "isolated-context batch sweep over N estates/plugins, read-only, one aggregated report"
+   contract, differing only in which validator script and which `requires:` skill each names.
+2. **One grading standard survives.** The candidates share one owning rulebook, one gate script,
+   one set of review mechanics. If the merge would blend two genuinely distinct grading standards
+   into one seat's judgment, it fails this test.
+
+**Negative proof case (measured 2026-08-16, harness's own `agent-checker` / `hook-checker` /
+`plugin-checker`):** same shape at a glance — all three fresh-context, same tool wall
+(`Read/Grep/Glob/Bash`), same `checking-rules` + `write-handoff` preload pair — but each fails the
+test on inspection: each preloads a DIFFERENT owning rulebook (`agent-writing-rules` /
+`hook-writing-rules` / `plugin-writing-rules`), runs a DIFFERENT gate script (`skill_lint.py
+<agent>` / `skill_lint.py <hooks.json>` / `release_gate.py <plugin-root>`), and `hook-checker`
+alone runs an adversarial stdin-injection probe with no analog in the other two (hook-writing-rules'
+security-first mandate — a hook runs with the user's privileges on every matching event).
+Superficial shape similarity (same tool wall, same critic pattern) is not the merge test; identical
+PARAMETERIZABLE mechanics is.
+
+**Consulted at the same audit, no merge found:** `design-system-checker`/`font-choice-checker`
+(deliberately fenced apart by each other's own NOT-for lines — a pre-export decision-checker and a
+post-export corpus-checker, different lifecycle stages, different rubric); the `screens` trio
+(`component-checker`/`flow-checker`/`layout-checker` — three disjoint verification objects by
+design, each excluded from the other two in its own description); `code-checker`/`wiring-checker`
+(code diff vs. orchestration-composition — different artifact classes); `skill-checker`/
+`wording-checker` (structure vs. cross-cutting language — deliberately split axes over overlapping
+artifacts, not redundant ones). None share #293's parameterizable-instrument shape.
+
+This section is the durable test for the next time a new checker seat is proposed, or an existing
+fleet is re-audited for consolidation — apply it before minting the next one.
+
 ## Naming
 
 **Superseded as canon 2026-07-21 (ADR-0006 Phase 0):** the estate's naming canon is `naming-rules` (this plugin) — its agent shape (noun + person-word: `x-checker`, `x-sorter`, `x-lead`) is the agentive rule below restated in the simple paradigm's vocabulary. This section keeps describing the legacy grammar that governs names the campaign has not yet renamed.
