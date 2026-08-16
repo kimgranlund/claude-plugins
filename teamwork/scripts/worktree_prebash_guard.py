@@ -70,13 +70,52 @@ this plugin's own `session_end_worktree_check.py`) — this survives across hook
 one session (each call re-reads/re-writes the same file) but not across sessions (a fresh
 session_id gets a fresh, empty pin file; nothing durable is shared cross-session by design).
 
-Drift response and re-pin path: on the FIRST PreToolUse(Bash) call this session, or whenever no
-pin file exists yet, the pin is written silently (nothing to compare against yet) — the
-`pin-write` fixture. On every later call, the pin is compared against the current call's own
-worktree name; a match stays silent (`match-silent`). A mismatch — cwd's worktree differs from
-the pinned one, WITH OR WITHOUT a cd in the triggering command — emits an ASK, reusing this
-file's existing message format/posture (`mismatch-asks`; #359's own headline case is exactly a
-mismatch with no cd at all). Pin invalidation is handled by self-healing: the very same call that
+Agent-scoped pin (issue #375, this ticket's own follow-up): the assumption above — one
+session_id names one actor — breaks under this workspace's own multi-agent teams feature. A
+coordinator dispatching several build agents in parallel, each in its OWN `EnterWorktree`
+worktree, hands every one of them the SAME `session_id` (verified live, 2026-08-16, building
+THIS fix: this build's own `env | grep CLAUDE_CODE_SESSION_ID` was identical across every
+sibling seat named in the dispatching session, while each ran as a distinct OS process — and
+this build's own `cwd`, reported per Bash call by the host, was independently observed to jump
+between worktrees across *consecutive* calls with zero `cd` in any of them, a host-level
+cwd-reporting race distinct from the session/agent-identity bug). Agent A's first Bash call
+pins the shared file to A's worktree; Agent B's very next call — in B's OWN worktree, no cd
+anywhere — reads that file, finds a "mismatch", and false-positives exactly the #359 pattern
+this pin exists to catch, on a completely correct command (screenshot evidence, issue date). No
+`CLAUDE_AGENT_ID` or equivalent platform-documented per-agent field exists on the PreToolUse
+event JSON or in the hook subprocess's own environment (verified live in the same probe: swept
+the full env for every `CLAUDE_`/`CMUX_`/`AI_AGENT` key). The one signal that DID differ between
+sibling agent processes in that probe was the invoking Claude process's own PID (`CLAUDE_PID`,
+mirrored by this host's `CMUX_CLAUDE_PID`) — stable for one agent's whole lifetime (unlike
+`os.getpid()` of the hook's own short-lived subprocess, which changes every call), but disclosed
+as host/wrapper-specific, not a documented cross-platform contract; an install without it
+degrades to the old session-only keying, unchanged.
+
+Two independent layers respond, matching the ticket's own "AND/OR" allowance: (1)
+`resolve_agent_key()` folds a best-effort per-agent discriminator into the pin's file key so two
+agents sharing a session_id get two separate pin files instead of one shared one — the direct
+fix for the reported symptom, byte-identical to today's behavior when no discriminator is
+available. (2) independently, and more load-bearing given the second live finding above —
+`check_identity_pin` no longer ASKs on a no-escape-attempt call (no cd/pushd/-C/--prefix token
+anywhere in the command) as long as the current cwd resolves to a syntactically valid worktree
+name under this repo's own `.claude/worktrees/`: a command that never tried to go anywhere,
+sitting in a real worktree of this repo, isn't evidence of drift — it self-heals the pin
+silently instead of asking. The compound-cd/-C escape detection (`analyze_command`, above) is
+completely untouched by either layer: a genuine cd-then-write into the primary checkout or a
+sibling still asks exactly as before, pin or no pin.
+
+Drift response and re-pin path: on the FIRST PreToolUse(Bash) call this session/agent, or
+whenever no pin file exists yet, the pin is written silently (nothing to compare against yet) —
+the `pin-write` fixture. On every later call, the pin is compared against the current call's own
+worktree name; a match stays silent (`match-silent`). A mismatch WITH a cd/pushd token present in
+the triggering command emits an ASK, reusing this file's existing message format/posture
+(`mismatch-asks`). REVISED by issue #375: a mismatch with NO cd/pushd token anywhere in the
+command — #359's own original headline case — no longer asks; see the "Agent-scoped pin (issue
+#375)" section above for why (live evidence that this host's own cwd reporting can move between
+consecutive same-agent calls with nothing in the command to explain it, making "no cd, cwd moved"
+alone an unreliable signal — the carve-out narrows the ask to calls that at least contain a
+cd/pushd token, even one that resolves entirely within the call's own reported worktree). Pin
+invalidation is handled by self-healing: the very same call that
 flags a mismatch ALSO rewrites the pin to the current worktree, so a LEGITIMATE worktree change
 (the session genuinely finished one campaign and moved into another) asks exactly once, then goes
 quiet for the new location on every subsequent call (`legitimate-repin`) — never permanently
@@ -163,6 +202,51 @@ def find_own_worktree_name(cwd):
     return remainder.split("/", 1)[0] if remainder else None
 
 
+def resolve_agent_key():
+    """Best-effort per-agent discriminator, for folding into the pin key alongside session_id.
+
+    No platform-documented per-agent field exists (verified live, issue #375: swept the full
+    hook-subprocess environment on this host, found no `CLAUDE_AGENT_ID` or equivalent). Checked
+    in order of how likely a future harness version is to set it deliberately, down to what THIS
+    host actually provides today: `CLAUDE_AGENT_ID` (aspirational — not currently set anywhere
+    observed, kept first so a future host that adds it needs no code change here), then
+    `CLAUDE_PID` / `CMUX_CLAUDE_PID` (verified live on this host: the invoking Claude process's
+    own PID, stable for one agent's whole lifetime, distinct between sibling agent processes in a
+    parallel dispatch — NOT `os.getpid()`, which would be this short-lived hook subprocess's own
+    PID and differ on every single call). Returns None when nothing is found — the pin then keys
+    on session_id alone, identical to pre-#375 behavior (the disclosed no-discriminator fallback).
+    """
+    for var in ("CLAUDE_AGENT_ID", "CLAUDE_PID", "CMUX_CLAUDE_PID"):
+        val = os.environ.get(var)
+        if val:
+            return val
+    return None
+
+
+def pin_key_for(session_id, agent_key):
+    """Compose the pin's identity key. Falls back to bare session_id when agent_key is absent —
+    byte-identical to pre-#375 pin filenames for any install without a resolvable discriminator."""
+    if not session_id:
+        return session_id
+    return f"{session_id}__{agent_key}" if agent_key else session_id
+
+
+def has_cd_or_flag_target(command):
+    """True if this command contains any cd/pushd token at all, regardless of whether it
+    resolves or escapes anywhere. Used only to gate the no-escape-attempt auto-pass below — a
+    command that never tries to go anywhere is not evidence of drift.
+
+    Deliberately checks cd/pushd only, NOT -C/--prefix (hook-checker finding, 2026-08-16): a
+    genuine -C/--prefix escape is already independently caught by analyze_command's own
+    flag-based hits regardless of this carve-out (run_hook asks whenever `hits` is non-empty,
+    pin or no pin) — so gating the carve-out on -C too would buy nothing there, while it WOULD
+    reintroduce host-level noise for the common non-path use of `-C` (e.g. `rg -C 3 foo`,
+    `grep -C2`, `diff -C 5` — a numeric context-line flag scan_path_flags can't tell apart from a
+    real path target without resolving it, and resolving a bare "3" always lands inside the
+    caller's own cwd anyway, never a real escape)."""
+    return any(parse_cd_target(segment) is not None for segment in split_segments(command))
+
+
 def resolve_data_dir():
     """${CLAUDE_PLUGIN_DATA}, falling back to a fixed dir when unset — same pattern already
     proven in this plugin's session_end_worktree_check.py (the unset-env-var incident, #262-era
@@ -225,30 +309,44 @@ def write_pin(data_dir, session_id, worktree_name):
     return payload
 
 
-def check_identity_pin(data_dir, session_id, cwd):
+def check_identity_pin(data_dir, session_id, cwd, agent_key=None, command=None):
     """Compare this call's own worktree identity against the session's persisted pin.
+
+    `agent_key` (issue #375) folds a best-effort per-agent discriminator into the pin's file key
+    so parallel agents sharing one session_id get separate pins instead of aliasing onto a
+    single shared one — see resolve_agent_key(). `command`, when given, gates a second,
+    independent carve-out: a call with no cd/pushd/-C/--prefix token anywhere in it never tried
+    to go anywhere, so a "mismatch" against the pin isn't evidence of drift — it self-heals the
+    pin silently instead of flagging (issue #375's ticket-endorsed alternative fix). Passing
+    `command=None` (e.g. a caller that never has it) preserves the original always-compare
+    behavior for that call.
 
     Returns None when there's nothing to flag: cwd isn't inside a worktree at all (out of this
     guard's scope, same as analyze_command's own applicability window), no session_id was on the
-    event (can't key a pin — fails open, not closed), the first call this session ever sees for
-    a fresh worktree (pin-write, nothing yet to compare), or the pin already matches
-    (match-silent). Returns {"pinned": <old>, "current": <new>} on a drift hit — and, as a side
-    effect, self-heals the pin to <new> right then (see module docstring: the legitimate-repin
-    path IS the ask-once-then-adopt behavior, not a separate re-pin command).
+    event (can't key a pin — fails open, not closed), the first call this session/agent ever
+    sees for a fresh worktree (pin-write, nothing yet to compare), the pin already matches
+    (match-silent), or the no-escape-attempt carve-out applies. Returns {"pinned": <old>,
+    "current": <new>} on a drift hit — and, as a side effect, self-heals the pin to <new> right
+    then (see module docstring: the legitimate-repin path IS the ask-once-then-adopt behavior,
+    not a separate re-pin command).
     """
     if find_primary_root(cwd) is None or not session_id:
         return None
     current_name = find_own_worktree_name(cwd)
     if current_name is None:
         return None
-    pin = read_pin(data_dir, session_id)
+    pin_key = pin_key_for(session_id, agent_key)
+    pin = read_pin(data_dir, pin_key)
     if pin is None:
-        write_pin(data_dir, session_id, current_name)
+        write_pin(data_dir, pin_key, current_name)
         return None
     pinned_name = pin.get("worktree")
     if pinned_name == current_name:
         return None
-    write_pin(data_dir, session_id, current_name)
+    if command is not None and not has_cd_or_flag_target(command):
+        write_pin(data_dir, pin_key, current_name)
+        return None
+    write_pin(data_dir, pin_key, current_name)
     return {"pinned": pinned_name, "current": current_name}
 
 
@@ -432,7 +530,7 @@ def format_reason(primary_root, own_name, hits, drift=None):
     """
     worktrees_root = os.path.join(primary_root, ".claude", "worktrees")
     header = "compound command reaches outside this session's own worktree" if hits else (
-        "worktree-identity pin drift — no cd in this command, but the cwd moved anyway"
+        "worktree-identity pin drift — this call's cd stayed in-tree, but the cwd moved anyway"
     )
     lines = [
         f"{HOOK_NAME} · {header}",
@@ -449,7 +547,8 @@ def format_reason(primary_root, own_name, hits, drift=None):
     if drift:
         lines.append(
             f"  pinned identity was '{drift['pinned']}', this call is running from "
-            f"'{drift['current']}' — no cd anywhere in this command (the #359 pattern)"
+            f"'{drift['current']}' — this call's own cd resolved inside '{drift['current']}', "
+            "so the earlier move into it wasn't caught by anything in this command"
         )
         lines.append(
             "  pin updated to this worktree — if this was a deliberate Exit/EnterWorktree "
@@ -477,7 +576,9 @@ def run_hook():
     hits = analyze_command(command, cwd)
 
     session_id = event.get("session_id")
-    drift = check_identity_pin(resolve_data_dir(), session_id, cwd)
+    drift = check_identity_pin(
+        resolve_data_dir(), session_id, cwd, agent_key=resolve_agent_key(), command=command
+    )
 
     if not hits and not drift:
         return 0
@@ -834,44 +935,159 @@ def selftest():
             print(f"FAIL fixture39_drift_message_names_both_and_repin_path (reason={reason!r})")
             fails += 1
 
-    # fixture40: end-to-end via the real --hook subprocess entrypoint (not just the pure
-    # function) -- proves the FULL wiring, not just check_identity_pin in isolation. Two
+    # fixture40 (revised for #375): end-to-end via the real --hook subprocess entrypoint. Two
     # separate Bash calls, same session_id, NO cd anywhere in either command -- the second
-    # call's cwd is just already a different worktree, exactly the #359 repro (write-guard
-    # identity moved between separate calls with nothing in the command itself to catch).
+    # call's cwd is just already a different worktree with nothing in the command itself to
+    # catch it. Pre-#375 this was the #359 headline pattern and had to ASK. Post-#375 it is
+    # EXACTLY the reported false-positive (a parallel agent's correct, escape-free command in
+    # its own worktree) -- the no-escape-attempt carve-out means it must now stay SILENT on
+    # both calls instead.
     with tempfile.TemporaryDirectory() as hook_data_dir:
         script_path = os.path.abspath(__file__)
         env = dict(os.environ, CLAUDE_PLUGIN_DATA=hook_data_dir)
+        for var in ("CLAUDE_AGENT_ID", "CLAUDE_PID", "CMUX_CLAUDE_PID"):
+            env.pop(var, None)  # isolate this fixture from whatever agent runs the selftest
 
-        def run_hook_subprocess(cwd, command):
+        def run_hook_subprocess(cwd, command, session_id="sess-e2e", extra_env=None):
             event = {
                 "tool_name": "Bash",
                 "tool_input": {"command": command},
                 "cwd": cwd,
-                "session_id": "sess-e2e",
+                "session_id": session_id,
             }
+            call_env = dict(env, **(extra_env or {}))
             return subprocess.run(
                 [sys.executable, script_path, "--hook"],
                 input=json.dumps(event),
                 capture_output=True,
                 text=True,
-                env=env,
+                env=call_env,
                 timeout=10,
             )
 
         first = run_hook_subprocess("/repo/.claude/worktrees/seat1", "npm test")
         second = run_hook_subprocess("/repo/.claude/worktrees/seat2", "npm test")
         first_silent = first.returncode == 0 and first.stdout.strip() == ""
-        second_asks = second.returncode == 0 and '"permissionDecision": "ask"' in second.stdout
-        if first_silent and second_asks:
-            print("ok    fixture40_the_359_headline_end_to_end_via_hook_subprocess")
+        second_silent = second.returncode == 0 and second.stdout.strip() == ""
+        if first_silent and second_silent:
+            print("ok    fixture40_no_escape_attempt_stays_silent_across_worktrees_e2e")
         else:
             print(
-                "FAIL fixture40_the_359_headline_end_to_end_via_hook_subprocess "
+                "FAIL fixture40_no_escape_attempt_stays_silent_across_worktrees_e2e "
                 f"(first_rc={first.returncode!r} first_out={first.stdout!r} "
                 f"second_rc={second.returncode!r} second_out={second.stdout!r})"
             )
             fails += 1
+
+        # fixture42: a GENUINE escape -- a real compound cd into a sibling worktree with a
+        # follow-on mutating command -- must still ASK. Proves the carve-out only swallows
+        # no-escape-attempt calls; it never blinds analyze_command's own compound-cd detection,
+        # pin or no pin.
+        third = run_hook_subprocess(
+            "/repo/.claude/worktrees/seat1",
+            "cd /repo/.claude/worktrees/seat2 && npm test",
+        )
+        third_asks = third.returncode == 0 and '"permissionDecision": "ask"' in third.stdout
+        if third_asks:
+            print("ok    fixture42_genuine_cross_worktree_write_still_asks_e2e")
+        else:
+            print(
+                "FAIL fixture42_genuine_cross_worktree_write_still_asks_e2e "
+                f"(rc={third.returncode!r} out={third.stdout!r})"
+            )
+            fails += 1
+
+        # fixture43 (the #375 regression itself): two agents sharing ONE session_id -- the
+        # exact coordinator-with-parallel-build-agents shape -- each with its OWN CLAUDE_PID,
+        # each in its OWN worktree, no cd in either command. Pre-#375 the second agent's call
+        # false-positived against the first agent's pin (same session_id, shared file). Both
+        # must now be silent, on the agent-scoped-pin mechanism alone (each gets its own pin
+        # file via CLAUDE_PID) -- proven independent of the command-based carve-out by using a
+        # command that DOES touch a cd token but stays inside the caller's own worktree, so the
+        # carve-out above does not apply and only the agent-scoped key can save it.
+        agent_a = run_hook_subprocess(
+            "/repo/.claude/worktrees/seat1",
+            "cd /repo/.claude/worktrees/seat1/sub && npm test",
+            session_id="sess-shared",
+            extra_env={"CLAUDE_PID": "1111"},
+        )
+        agent_b = run_hook_subprocess(
+            "/repo/.claude/worktrees/seat2",
+            "cd /repo/.claude/worktrees/seat2/sub && npm test",
+            session_id="sess-shared",
+            extra_env={"CLAUDE_PID": "2222"},
+        )
+        agent_a_silent = agent_a.returncode == 0 and agent_a.stdout.strip() == ""
+        agent_b_silent = agent_b.returncode == 0 and agent_b.stdout.strip() == ""
+        if agent_a_silent and agent_b_silent:
+            print("ok    fixture43_parallel_agents_disjoint_worktrees_shared_session_both_pass_e2e")
+        else:
+            print(
+                "FAIL fixture43_parallel_agents_disjoint_worktrees_shared_session_both_pass_e2e "
+                f"(a_rc={agent_a.returncode!r} a_out={agent_a.stdout!r} "
+                f"b_rc={agent_b.returncode!r} b_out={agent_b.stdout!r})"
+            )
+            fails += 1
+
+        # fixture44: no-agent-id fallback still behaves like pre-#375 for the residual case the
+        # carve-out does NOT cover -- a call that carries a cd/-C token but the cd stays wholly
+        # WITHIN the (already-drifted) cwd's own tree, so analyze_command finds no escape hit of
+        # its own, yet the pin still disagrees with where this call is actually running. No
+        # agent discriminator is set (env stripped above), so this is the original
+        # session-only pin, unchanged: first call pins seat9 with no cd (silent); second call,
+        # same session, now genuinely running from seat3 with an in-tree-only cd -- the carve-out
+        # doesn't apply (a cd token IS present) so the drift must still ask.
+        fallback_first = run_hook_subprocess("/repo/.claude/worktrees/seat9", "npm test", session_id="sess-fallback")
+        fallback_second = run_hook_subprocess(
+            "/repo/.claude/worktrees/seat3",
+            "cd sub && npm test",
+            session_id="sess-fallback",
+        )
+        fallback_asks = fallback_second.returncode == 0 and '"permissionDecision": "ask"' in fallback_second.stdout
+        if fallback_first.stdout.strip() == "" and fallback_asks:
+            print("ok    fixture44_no_agent_id_fallback_unchanged_e2e")
+        else:
+            print(
+                "FAIL fixture44_no_agent_id_fallback_unchanged_e2e "
+                f"(first_out={fallback_first.stdout!r} second_out={fallback_second.stdout!r})"
+            )
+            fails += 1
+
+    # fixture45: resolve_agent_key() precedence -- CLAUDE_AGENT_ID (aspirational, not currently
+    # set by any observed host) wins over CLAUDE_PID/CMUX_CLAUDE_PID when both are present; each
+    # of the three is individually picked up when it's the only one set; none set -> None (the
+    # documented fallback path).
+    orig_env = {
+        k: os.environ.get(k) for k in ("CLAUDE_AGENT_ID", "CLAUDE_PID", "CMUX_CLAUDE_PID")
+    }
+    try:
+        for k in orig_env:
+            os.environ.pop(k, None)
+        cases_45 = [
+            ({}, None),
+            ({"CMUX_CLAUDE_PID": "999"}, "999"),
+            ({"CLAUDE_PID": "111"}, "111"),
+            ({"CLAUDE_PID": "111", "CMUX_CLAUDE_PID": "999"}, "111"),
+            ({"CLAUDE_AGENT_ID": "agent-x", "CLAUDE_PID": "111"}, "agent-x"),
+        ]
+        fixture45_ok = True
+        for env_vars, expected in cases_45:
+            for k in orig_env:
+                os.environ.pop(k, None)
+            os.environ.update(env_vars)
+            got = resolve_agent_key()
+            if got != expected:
+                print(f"FAIL fixture45_agent_key_precedence (env={env_vars!r}, expected={expected!r}, got={got!r})")
+                fixture45_ok = False
+                fails += 1
+        if fixture45_ok:
+            print("ok    fixture45_agent_key_precedence")
+    finally:
+        for k, v in orig_env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
 
     # fixture41: an unwritable data dir must fail OPEN, never crash the hook (hook-checker
     # Major, 2026-08-16 — live probe found write_pin's os.makedirs/open/os.replace raising
