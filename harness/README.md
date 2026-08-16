@@ -129,6 +129,16 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.19 · 2026-08-16 · `release_gate.py` gains G14 (closes #445): a touched plugin's version must
+strictly exceed `origin/main`'s, and the README ledger's newest line must name that version — the
+pre-merge, CI-visible tier `version_claim_check.py`'s cross-open-PR tier (#311/PR #329) cannot
+fill on its own. New `scripts/version_monotonic_check.py` (selftest-proven on real git plumbing:
+strictly-greater PASS, equal-version FAIL — the #425/#430 `2.16.3` collision as the negative
+control — lower-version FAIL, ledger-mismatch FAIL, and origin/main-missing/untouched/new-plugin
+all SKIP clean, never a false red) reuses `version_claim_check.py`'s `parse_version`/
+`version_tuple` rather than restating them; `gate.yml` inherits G14 since CI runs the same script
+(gains `fetch-depth: 0` so `origin/main` is resolvable). `dispatch-ticket`'s build path gains a
+one-line note to re-read the plugin's version on `origin/main` right before opening the PR.
 v3.8.18 · 2026-08-16 · `chore_sweep_apply.mjs` entry guard: `import.meta.url === \`file://${argv[1]}\`` was silently false under an install path with a space (Cowork's `~/Library/Application Support/...` — URL side percent-encodes, argv does not): `main()` never ran, exit 0, no output (seen live in an agent-ui `/sweep-chores` fallback). Now compares both sides via `realpathSync` (also covers macOS `/var`→`/private/var`); selftest gains a spaced-path negative control. No other harness script has the pattern; screens' `ui-probe.mjs` is space-safe, symlink-fragile (noted only).
 v3.8.17 · 2026-08-16 · issue #402 (doctrine edge D06, live finding): make-agent's Phase-1 naming step gains a pointer to `naming-rules` — the forge previously taught only the legacy agentive-head check with no route to the naming paradigm, or (per naming-rules' own supersession note) the ADR-0011 spec a NEW name is actually checked against.
 v3.8.16 · 2026-08-16 · issue #382: `write-handoff` states the sealed-vs-messaging handoff-channel precedence once — a sealed, record-first dispatch (`dispatch-ticket`'s Findings write-back) carries the block's routing-relevant subset inside its dated Findings entry instead of a separate mailbox message; a named teammate-mode seat still sends the full block. `team-or-solo-rules` (teamwork) gains a pointer to that rule.

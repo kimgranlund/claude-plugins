@@ -33,6 +33,10 @@ Gate order (plugin-writing-rules §Release discipline):
   G13 marketplace coverage (2026-08-14): when the workspace root carries
       .claude-plugin/marketplace.json, the gated plugin must appear in its plugins list
       (the authorkit-invisible-in-/plugin incident); no manifest -> not applicable
+  G14 version monotonicity (2026-08-16, issue #445): a touched plugin's version must exceed
+      origin/main's, and the README ledger's newest line must name that version
+      (version_monotonic_check.py; complements version_claim_check.py's cross-open-PR tier);
+      no origin/main, untouched, or a brand-new plugin -> not applicable
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -48,6 +52,7 @@ import skill_lint  # the check tier composes; it is not restated
 import eval_check
 import corpus_check
 import docs_check
+import version_monotonic_check
 
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
 KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -571,6 +576,45 @@ def gate(root: Path, package: bool = False):
             else:
                 fail("G13", f"{name} missing from root marketplace.json -> installed users never "
                             "see it in /plugin; add its entry (name/displayName/source/description)")
+
+    # G14 version monotonicity (issue #445): a touched plugin's version must strictly exceed
+    # origin/main's, and the README ledger's newest line must name that version — the pre-merge,
+    # CI-visible tier of version discipline (version_claim_check.py's cross-open-PR tier is the
+    # coordinator-run complement CI cannot see). Feature-detected via version_monotonic_check's
+    # own SKIP path: no origin/main reachable, this plugin untouched relative to it, or the
+    # plugin absent from origin/main entirely (brand new) -> not applicable, never a false red.
+    vmc = version_monotonic_check
+    top = vmc._git(["rev-parse", "--show-toplevel"], root)
+    if top.returncode != 0:
+        warn("G14", "not inside a git checkout -> version-monotonicity check not applicable")
+    else:
+        git_root = Path(top.stdout.strip())
+        rel = root.resolve().relative_to(git_root).as_posix()
+        if not vmc._origin_main_available(git_root):
+            warn("G14", "origin/main unavailable in this checkout (no fetch, or the ref is "
+                        "missing) -> version-monotonicity check skipped, not failed")
+        elif not vmc._plugin_touched(git_root, rel):
+            ok("G14 not applicable: no diff against origin/main for this plugin")
+        else:
+            manifest_rel = f"{rel}/.claude-plugin/plugin.json"
+            main_manifest_text = vmc._file_at_main(git_root, manifest_rel)
+            if main_manifest_text is None:
+                ok("G14 not applicable: no baseline on origin/main (new plugin)")
+            else:
+                main_version = vmc.parse_version(main_manifest_text)
+                if main_version is None or version is None:
+                    fail("G14", f"origin/main's {manifest_rel} has no readable \"version\" field")
+                else:
+                    mono_ok, mono_msg = vmc.check_monotonic(version, main_version)
+                    readme_text = (root / "README.md").read_text(encoding="utf-8", errors="replace") \
+                        if (root / "README.md").is_file() else ""
+                    ledger_ok, ledger_msg = vmc.check_ledger(version, readme_text)
+                    if mono_ok and ledger_ok:
+                        ok(f"G14 version monotonicity: {mono_msg}; {ledger_msg}")
+                    if not mono_ok:
+                        fail("G14", mono_msg)
+                    if not ledger_ok:
+                        fail("G14", ledger_msg)
 
     # G6 package
     artifact = None
