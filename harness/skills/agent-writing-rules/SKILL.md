@@ -132,9 +132,10 @@ implicit.
 The estate carries roughly a dozen and a half review/critic seats (13 `*-checker`-suffixed agents
 plus authorkit's three batch-audit agents, counted 2026-08-16) — each pays always-on description
 rent in every session's Agent-tool listing and a full context re-gather on every dispatch (issue
-#272). Two of those already merged into one seat by a confirmed follow-up (#293:
-`naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent`) — that pairing passes the merge
-test below; no other pairing in the estate does, as of the same audit.
+#272). Three of those (#293's `naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent`) are
+the one confirmed merge candidate — the trio passes the merge test below, and the consolidation
+itself is #293's own follow-up to execute. No other grouping in the estate passes, as of the same
+audit.
 
 **Merge test — both must hold, or keep the seats separate:**
 
@@ -143,9 +144,9 @@ test below; no other pairing in the estate does, as of the same audit.
    parameterized. #293's three: same `Read/Glob/Grep/Bash(python3 */scripts/<tool>.py *)` shape,
    same "isolated-context batch sweep over N estates/plugins, read-only, one aggregated report"
    contract, differing only in which validator script and which `requires:` skill each names.
-2. **No independent rubric lost.** Neither candidate's preloaded rulebook, gate script, or review
-   mechanics differ from the other's in a way that would blend two genuinely distinct grading
-   standards into one seat's judgment.
+2. **One grading standard survives.** The candidates share one owning rulebook, one gate script,
+   one set of review mechanics. If the merge would blend two genuinely distinct grading standards
+   into one seat's judgment, it fails this test.
 
 **Negative proof case (measured 2026-08-16, harness's own `agent-checker` / `hook-checker` /
 `plugin-checker`):** same shape at a glance — all three fresh-context, same tool wall
@@ -156,7 +157,7 @@ test on inspection: each preloads a DIFFERENT owning rulebook (`agent-writing-ru
 alone runs an adversarial stdin-injection probe with no analog in the other two (hook-writing-rules'
 security-first mandate — a hook runs with the user's privileges on every matching event).
 Superficial shape similarity (same tool wall, same critic pattern) is not the merge test; identical
-PARAMETERIZABLE mechanics is. Never merge on shape alone.
+PARAMETERIZABLE mechanics is.
 
 **Consulted at the same audit, no merge found:** `design-system-checker`/`font-choice-checker`
 (deliberately fenced apart by each other's own NOT-for lines — a pre-export decision-checker and a
@@ -168,7 +169,7 @@ design, each excluded from the other two in its own description); `code-checker`
 artifacts, not redundant ones). None share #293's parameterizable-instrument shape.
 
 This section is the durable test for the next time a new checker seat is proposed, or an existing
-fleet is re-audited for consolidation — apply it before minting seat #17.
+fleet is re-audited for consolidation — apply it before minting the next one.
 
 ## Naming
 

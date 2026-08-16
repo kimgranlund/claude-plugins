@@ -22,10 +22,11 @@ and every finding survives one self-directed rebuttal before it ships.
 
 Generator ≠ critic is not up for repeal — the 2026-08-11 estate audit's finding stands: every
 recent unaudited SEMANTIC edit to a prompt-carrying artifact carried a real gap. What calibrates is
-the invariant's UNIT: not "one touched file of the right type," but one build/PR slice, and within
-it, whether an edit is semantic (changes what the artifact tells the model to do or decide) or
-mechanical (a version bump, a README ledger line, an ID renumber, a punctuation/lint-only fix —
-fully specified and fully checked by an existing automated gate).
+the invariant's UNIT: not "one touched file of the right type," but one build/PR slice (the
+changeset that closes together — the PR, or a solo loop's single commit), and within it, whether an
+edit is semantic (changes what the artifact tells the model to do or decide) or mechanical (fully
+specified and fully checked by an existing automated gate: a version bump, a README ledger line, an
+ID renumber, a punctuation/lint-only fix).
 
 - **Semantic → the dispatch earns its cost, every time, regardless of diff size.** A three-line
   change to a hook's fail-open branch, a guard's operator-attachment check, or a selftest fixture's
@@ -35,12 +36,12 @@ fully specified and fully checked by an existing automated gate).
   contract breach in a hook, an attached-operator bypass class in a guard, a tautological selftest
   fixture — none of which the repo's own gates would have caught, since the gates test mechanics,
   not the interpretation a semantic edit changes).
-- **Mechanical → floor-tier verification in the same loop suffices, no separate dispatch.** A
+- **Mechanical → floor-tier verification (the repo's own automated gates — `skill_lint`,
+  `docs_check`, the version-format check) in the same loop suffices, no separate dispatch.** A
   ledger-line trim, a version renumber, a citation-only fix — the same 2026-08-15 round showed
-  per-edit critic dispatches on these added nothing beyond what the repo's own gates (`skill_lint`,
-  `docs_check`, the version-format check) already catch. These edits carry no interpretive content
-  for a critic to grade; dispatching one anyway pays the spin-up cost for a verdict the gate already
-  delivered.
+  per-edit critic dispatches on these added nothing beyond what those gates already catch. These
+  edits carry no interpretive content for a critic to grade; dispatching one anyway pays the
+  spin-up cost for a verdict the gate already delivered.
 - **The UNIT is the slice, not the touch.** One fresh-context critic dispatch covers every semantic
   edit inside one build/PR slice together — batching them never weakens the finding, since each
   edit still gets independent eyes before the loop closes; splitting hairs over line-count to dodge
