@@ -41,8 +41,10 @@ joining later, for whom the IDR ledger is the fastest way to recover *why*, not 
   `find .claude/docs/idr -name 'idr-0001*'` after a bootstrap run.
 - **OUT-03** — `project-docs` (or the equivalent consult skill in an adopting repo) answers "what
   hypothesis is this project built on" by pointing at `.claude/docs/idr/`, not "absent."
-- **OUT-04** (stretch, deferred) — at least one ADR in the adopting repo carries a non-empty
-  `intent-refs:` field citing an IDR, giving the eventual "orphan ADR" check a non-vacuous target.
+- **OUT-04** — at least one ADR in the adopting repo carries a non-empty `intent-refs:` field
+  citing an IDR, giving the eventual "orphan ADR" check a non-vacuous target. Gated on
+  Implementation surface item 7 (deferred); **not required for this PRD's own v0.1 approval** —
+  listed here only so item 7 has a named, checkable target when it ships.
 
 ## Non-goals
 
@@ -72,7 +74,7 @@ of truth instead of paraphrasing it"), read it directly for the full model; this
 restates the fragments a type-contract decision turns on.
 
 **Provenance note:** `product-lifecycle-bible.md` was forwarded as a mid-build input by the
-coordinator (corroborated by the standing charter record, `.claude/ops/charter-batch-cde.md`:
+coordinator (corroborated by a session charter record, ops-local and untracked:
 "SUPERSEDING INPUT forwarded mid-build... bible = concept authority") while still untracked in
 this worktree. It has since been committed to `main` directly by Kim
 (commit `5044c0c`, "docs: commit the Product Lifecycle Bible spec (IDR/ADR/PRP doctrine, v1.1.0)")
@@ -127,6 +129,48 @@ genuine gap the mapping surfaces, and it is deliberately out of scope here (see 
 Cardinality below): ticket #273 asks for one record type, and the aggregation question it would
 answer is already reachable by querying `idr-0*` files directly once follow-up item 4 ships.
 
+## Naming — collision test and recommendation
+
+Ticket #273's own Scope/Open section names this as the one gap left unresolved by Kim's batched
+rulings: *"does the type collide with harness:find-intent's routing surface, and what does
+ADR-0011's naming grammar say about the type name?"* Both tests, run explicitly:
+
+**Collision test against `harness:find-intent`.** find-intent is a per-ask extraction *procedure*,
+triggered by imperative phrasing in its own description — "what am I really asking for", "figure
+out what they actually want", "clarify this before we build it". ADR-0009 deliberately retired
+`find-the-ask` in favor of plain **"intent"** as that skill's memorable head noun. A bare `INTENT`
+doc-type (the ticket's own placeholder name) would collide directly with that investment: "let's
+write the intent doc" and "let's run find-intent" become indistinguishable from the bare word
+alone — **rejected**. **IDR** carries zero lexical overlap with find-intent's trigger phrases at
+the form actually used in speech or reference ("file an IDR", "`idr-0001`", "the IDR ledger") — no
+router ever matches a noun-reference doc-type token against an imperative trigger phrase in the
+first place, since doc types are addressed by id/command (`/make-doc idr`), never by
+description-routing the way a skill is. The long form, *Intent Decision Record*, keeps "Intent" as
+its first word but paired with "Decision Record" — the same structural pattern as *Architecture
+Decision Record* not colliding with any "architecture" skill, because the disambiguating head
+noun carries the weight, not the leading word alone. **Verdict: no collision** — IDR is safe to
+adopt.
+
+**ADR-0011 grammar test.** `.claude/docs/spec/spec-naming-convention.md` states its own scope in
+line 3: *"Applies to: `.claude/` harness artifacts (agents, commands, skills)."* A `doc-type`
+frontmatter token is none of those three kinds — it isn't parsed by `VerbLex`/`ProcessLex`/
+`ObjectVocab` at all, and isn't a name a router ever description-matches. **The grammar does not
+bind this decision** — applying it to `idr` would be a category error, and the ticket's framing
+(which asks the scoping to check the type's name "against" it) slightly conflates the artifact
+namespace with the docs plugin's own, already-established doc-type namespace (the `TYPES` dict in
+`doc_lint.py`, lowercase short tokens: `adr`/`prd`/`spec`/`lld`/`plan`/`roadmap`/`ticket`/`task`).
+The actual binding check is that namespace: `idr` is a new lowercase, unhyphenated, three-letter
+token — consistent in shape with every existing entry, and directory-mapped
+(`.claude/docs/idr/`) the same way. ADR-0011 *does* apply, and should be checked at that time, to
+any new **skill or command** the implementation surface below mints (e.g. if `make-doc` gains a
+distinct routing token beyond its existing type-dispatch) — flagged there, not required here.
+
+**Recommendation: `IDR` / `Intent Decision Record`.** Rejected alternative considered: `FIR` /
+`Founding Intent Record` — avoids "Intent" in the acronym but invents a synonym for a concept this
+repo's own doctrine corpus (the bible) already names, which is exactly the "one home per fact/term"
+violation the bible warns against (Part 5, Part 6 habit 2, Part 9 glossary). IDR reuses the
+existing term-of-art and is strictly better on that axis, not merely equal.
+
 ## Type contract
 
 ### Frontmatter
@@ -177,8 +221,11 @@ considered ready to build against.
 
 ### File & directory convention
 
-`.claude/docs/idr/idr-0001-<slug>.md`, mirroring `.claude/docs/adr/000N-slug.md`'s numbered-ledger
-pattern (frontmatter `id: idr-0001`, filename carries the same number). Repo-rooted, never
+`.claude/docs/idr/idr-0001-<slug>.md` — the canonical type-prefixed numbered-ledger form
+doc-writing-rules already specifies for new types (frontmatter `id: idr-0001`, filename carries the
+same number). This deliberately diverges from this repo's own `.claude/docs/adr/` directory, whose
+files are grandfathered *unprefixed* (`0002-git-native-execution.md`, not `adr-0002-...`) — IDR
+adopts the canonical form rather than copying that grandfathered exception. Repo-rooted, never
 plugin-rooted, per doc-writing-rules' existing directory rule.
 
 ## Cardinality — reconciling "one founding document" with a plural ledger
@@ -223,11 +270,12 @@ reordering of the existing seven rows needed.
 
 ## Implementation surface (follow-up build scope — enumerated, not built here)
 
-1. **`doc_lint.py`** — add `"idr"` to the `TYPES` dict (status enum `draft`/`locked`/`superseded`,
-   sections `Claim`/`Why`/`Proof`); generalize the existing `head_is_accepted_adr` guard into a
-   ledger-lock guard covering both `doc-type: adr, status: accepted` and `doc-type: idr,
-   status: locked`; add selftest fixtures (positive: locked-IDR-edit blocked; negative:
-   draft-IDR-edit allowed; regression: existing ADR fixtures unaffected).
+1. **`doc_lint.py`** *(realizes OUT-01)* — add `"idr"` to the `TYPES` dict (status enum
+   `draft`/`locked`/`superseded`, sections `Claim`/`Why`/`Proof`); generalize the existing
+   `head_is_accepted_adr` guard into a ledger-lock guard covering both `doc-type: adr,
+   status: accepted` and `doc-type: idr, status: locked`; add selftest fixtures (positive:
+   locked-IDR-edit blocked; negative: draft-IDR-edit allowed; regression: existing ADR fixtures
+   unaffected).
 2. **`doc-writing-rules` SKILL.md** — add the IDR row to the type contract table and to the
    mutability-classes table (Ledger class, second member); add
    `references/templates/idr.md` mirroring `adr.md`'s structure and inline comments.
@@ -235,13 +283,13 @@ reordering of the existing seven rows needed.
    `idr-000N-<slug>.md` under `.claude/docs/idr/`; prompt the admission test ("would two
    reasonable builds differ on it?") before minting, same spirit as ADR's "a choice someone will
    later ask why about" gate.
-4. **`project-docs` consult-table row** (or the equivalent consult skill in an adopting repo) —
-   add a row: *"A founding hypothesis or testable claim this project is built on"* →
-   `.claude/docs/idr/` (`IDR-*`, `locked` = append-only). Not touched by this PRD's own branch —
-   `.claude/skills/project-docs/SKILL.md` is real follow-up work, not scoping.
-5. **Bootstrap auto-mint** — `/make-plugin` and equivalent project-bootstrap commands (harness)
-   gain a step minting `idr-0001` (`status: draft`) as part of scaffolding a new plugin/project.
-   Not touched here; harness's `make-plugin` command is out of this PRD's file set.
+4. **`project-docs` consult-table row** *(realizes OUT-03)* (or the equivalent consult skill in an
+   adopting repo) — add a row: *"A founding hypothesis or testable claim this project is built
+   on"* → `.claude/docs/idr/` (`IDR-*`, `locked` = append-only). Not touched by this PRD's own
+   branch — `.claude/skills/project-docs/SKILL.md` is real follow-up work, not scoping.
+5. **Bootstrap auto-mint** *(realizes OUT-02)* — `/make-plugin` and equivalent project-bootstrap
+   commands (harness) gain a step minting `idr-0001` (`status: draft`) as part of scaffolding a new
+   plugin/project. Not touched here; harness's `make-plugin` command is out of this PRD's file set.
 6. **Provenance closure (partially done)** — `product-lifecycle-bible.md` is committed
    (`5044c0c`); an ADR formally ratifying adoption of its IDR/ADR/PRP framing in this repo remains
    optional, not required before item 1 ships.
