@@ -1,11 +1,3 @@
 {
-  "candidates": [
-    {
-      "adr_id": "adr-0012",
-      "evidence": "ADR-0012 Decision 2-4 (QB0-QB7 fail-closed predicate, explicit revocable 'auto-merge: authorized' grant) narrows big-change-git-rules/references/who-ships-what.md's ratified rule 'treat merge authority as the human's ... never assumed by a session because it authored the PR' (file:.claude/docs/adr/0012-quick-build-auto-merge.md:51-73) — not yet captured in that pack (grepped: no QB/auto-merge/quick-build hit in harness/skills/big-change-git-rules/); the mechanism is already threaded into dispatch-ticket/mobilize-chores/build-feature/build-lead as executable procedure, but the git-rules knowledge pack's own 'who may merge' fact still reads as an absolute human-only rule with no exception noted",
-      "kind": "harvest",
-      "plan": "",
-      "queued_at": "2026-08-15T21:14:39Z"
-    }
-  ]
+  "candidates": []
 }
