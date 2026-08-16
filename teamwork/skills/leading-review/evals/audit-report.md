@@ -1,8 +1,8 @@
-# Audit: teamwork/skills/lead-review — FLOOR review vs skill-writing-rules
+# Audit: teamwork/skills/leading-review — FLOOR review vs skill-writing-rules
 
 Auditor: fresh-context checker, 2026-08-10. Inputs read on disk: `SKILL.md`, `intent.md`,
 `evals/assertions.md`, `evals/baseline/baseline-report.md`; pattern baselines
-`teamwork/skills/lead-team/SKILL.md`, `teamwork/skills/lead-build/SKILL.md`,
+`teamwork/skills/leading-teams/SKILL.md`, `teamwork/skills/leading-builds/SKILL.md`,
 `docs/skills/lead-intake/SKILL.md`; all 11 routed checker agent files; shipped checker
 descriptions. `skill_lint.py`: clean.
 
@@ -57,10 +57,10 @@ is the design.
 ## 3 — Dispatch-only, degradation, self-authored guard: COHERENT, INSTANTIATED
 
 - **Dispatch-only** (SKILL.md:58–63) is imperative with a named refusal ("just look at it
-  yourself, it's quick" → declined) and one named exception. Consistent with lead-team's
-  precedent (lead-team SKILL.md:57–59: doc-checker absent → hand-review against the owning
-  rubric) — lead-review generalizes the same rule to all checkers and adds the disclosure
-  requirement, which lead-team's version lacked. An improvement, not a drift.
+  yourself, it's quick" → declined) and one named exception. Consistent with leading-teams's
+  precedent (leading-teams SKILL.md:57–59: doc-checker absent → hand-review against the owning
+  rubric) — leading-review generalizes the same rule to all checkers and adds the disclosure
+  requirement, which leading-teams's version lacked. An improvement, not a drift.
 - **Self-authored guard** (SKILL.md:64–68) is instantiated, not described: the dispatch's
   permitted contents are enumerated ("the artifact pointer and the report destination"), the
   banned contents are enumerated ("zero rationale, zero framing, zero self-defense"), the
@@ -74,14 +74,14 @@ is the design.
 **M2 (minor):** the degradation branch says hand-review "against the owning rubric" — but when
 the owning checker's plugin is absent, its bundled rubric is usually absent too (the checkers
 preload rubrics shipped in their own plugins). The hand-review actually runs from the rubric's
-remembered shape. This soft spot is inherited verbatim from lead-team's precedent, and the
+remembered shape. This soft spot is inherited verbatim from leading-teams's precedent, and the
 mandatory disclosure mitigates it, but one clause would make it honest: disclose when the
 rubric itself was unavailable, not just the generator ≠ critic loss.
 
 ## 4 — Command-species conventions: CONFORMANT
 
 `disable-model-invocation: true` + `user-invocable: true` ✓; `argument-hint` present ✓;
-description carries the `/lead-review [optional repo root]` invocation and three NOT-fences
+description carries the `/leading-review [optional repo root]` invocation and three NOT-fences
 ✓; eval-suite skip recorded for command species (`intent.md:49`, house precedent) ✓. Hard
 gates: exactly three standing rules (SKILL.md:56–72) — at the ≤3 ceiling, none decorative.
 Done/NOT-done predicate present and each clause independently checkable (SKILL.md:98–102).
@@ -126,7 +126,7 @@ both genuine desk-specific branches, not decoration.
   end it with "…and the rest of doc-checker's own description".
 - **M2 (minor).** Degradation branch (SKILL.md:60–63): when the owning plugin is absent its
   rubric usually is too; the disclosure should cover rubric unavailability, not only the
-  generator ≠ critic loss. Inherited from lead-team's precedent; one clause fixes it.
+  generator ≠ critic loss. Inherited from leading-teams's precedent; one clause fixes it.
 - **N1 (note).** code-checker's own fence "NOT for a repo that carries its own review seat"
   is not reflected in the table — a repo with a native review seat (e.g. one carrying its own
   reviewer agent) would still be routed to code-checker. Acceptable for a generic desk;

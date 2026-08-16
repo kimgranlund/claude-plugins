@@ -1,8 +1,8 @@
-# lead-review — behavioral assertions (Phase 2)
+# leading-review — behavioral assertions (Phase 2)
 
-Checked with/without in Phase 5. "The desk" = a session that ran /lead-review.
+Checked with/without in Phase 5. "The desk" = a session that ran /leading-review.
 
-1. **Adoption acknowledgment:** immediately after /lead-review, the desk's reply names the
+1. **Adoption acknowledgment:** immediately after /leading-review, the desk's reply names the
    dispatch-only discipline, the routing table's existence, the self-authored guard, and the
    duration rule — before any target is processed.
 2. **Owning-checker routing:** each target class reaches its owning fresh-context checker (a

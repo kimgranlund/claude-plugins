@@ -1,7 +1,7 @@
 ---
 name: dispatch-ticket
 description: >-
-  Use when invoked by name from /build-feature's body, the build-lead agent, or a /lead-build
+  Use when invoked by name from /build-feature's body, the build-leader agent, or a /leading-builds
   session driving its targets — never model-routed from a raw ask. Finds or mints the target's
   record, then branches by kind: feature → size solo-first and build under a mandatory Findings
   write-back contract; task → clarify with one find-intent round, then dispatch under the same
@@ -14,17 +14,17 @@ user-invocable: false
 
 # dispatch-ticket
 
-The procedure behind `/build-feature`, the `build-lead` agent, and `/lead-build`'s standing seat
+The procedure behind `/build-feature`, the `build-leader` agent, and `/leading-builds`'s standing seat
 — one engine, three entries. `/build-feature` is `disable-model-invocation: true` (command-only,
 unreachable via the Skill tool or agent preload — issue #134/#135's shared defect class), so this
 skill carries the actual procedure and both callers invoke it rather than duplicating it.
 Generalized from `dispatch-feature` per ADR-0010: one confirmed ticket of ANY kind — feature,
 task, or bug — the kind branch below picks the path. Carries no `context: fork` of its own (no
-double hop from `/build-feature`, no third hop from `build-lead` — rationale in `/build-feature`'s
+double hop from `/build-feature`, no third hop from `build-leader` — rationale in `/build-feature`'s
 body). Seed: $ARGUMENTS.
 
 **No nested wait.** A seat already running as a nested dispatch when it executes this procedure —
-`build-lead`, spawned via the `Agent` tool (`/lead-build`'s own standing seat runs no Agent
+`build-leader`, spawned via the `Agent` tool (`/leading-builds`'s own standing seat runs no Agent
 spawn — the host session itself, not nested — and is unaffected by this rule) — performs Phase
 3's isolate work and Phase 4's `small` build DIRECTLY in its own context and worktree. It never
 spawns a further nested `context: fork` skill, or a further NAMED (teammate-mode) `Agent`-tool
@@ -53,7 +53,7 @@ and act on it; no separate signal will ever reach you. If a stall like this is a
 critic dispatched, no verdict in hand, the turn sitting idle), do not keep waiting it out: read the
 critic's own transcript or output file directly instead of polling for a callback that
 structurally will not arrive, or, for an already-nested seat with a coordinator watching it
-(`build-lead`), report the stall and let the coordinator relay the verdict.
+(`build-leader`), report the stall and let the coordinator relay the verdict.
 
 ## Phase 1 — Find or make the record
 
@@ -95,7 +95,7 @@ report that routing and stop; docs' seats own it.
   (`file-task`'s scope is deliberately heterogeneous), so run `find-intent` (harness, where
   installed; inline otherwise) on the ticket's full body first — ONE batched clarifying round
   maximum, only when genuinely ambiguous AND an interactive user is present (Phase 1's
-  ambiguous-match test; `build-lead` has no one to ask — an already-clear ticket needs zero
+  ambiguous-match test; `build-leader` has no one to ask — an already-clear ticket needs zero
   rounds). Still not concretely actionable → report SKIPPED with the named gap, never dispatch on
   an unclear brief — no claim taken, since no build effort was ever starting. Otherwise run Phase
   3 (claim, then isolate) first, then dispatch via the `Agent` tool — `subagent_type:
@@ -133,7 +133,7 @@ is what actually contains its inline-fix path.
   established `<domain>/<id>-<slug>` convention), then take ADR-0005's `claim` operation
   (`doc-writing-rules`' `references/backend-resolver.md`, its seventh operation; this dispatch is
   its first real caller): git-native — `gh issue edit --add-assignee @me` plus a `gh issue
-  comment` naming the claimant (`build-lead`/`dispatch-ticket`), a UTC timestamp, and the branch
+  comment` naming the claimant (`build-leader`/`dispatch-ticket`), a UTC timestamp, and the branch
   name; file backend — the record's `claimed-by`/`claimed-at` pair; an adapter — its own
   realization. **Re-read the record** (Phase 6's `read` verb) before proceeding: an
   earlier-timestamped competing claim means this caller lost the race (ADR-0005 tie-break: lower
@@ -192,7 +192,7 @@ is what actually contains its inline-fix path.
   required or create: (1) cwd is a linked worktree, not the primary checkout (a decided-name match
   IN the primary checkout never licenses reuse — the #180/#182 residue below is exactly a stale
   branch left checked out there); AND (2) that worktree's checked-out branch matches the decided
-  name (a resumed `build-lead`/`lead-build` re-entering its own isolation — the name embeds the
+  name (a resumed `build-leader`/`leading-builds` re-entering its own isolation — the name embeds the
   ticket id, so a match is identity, not shape). "cwd sits under `.claude/worktrees/`" alone
   satisfies NEITHER conjunct (#191: a caller's own long-lived worktree for an unrelated purpose,
   e.g. `mobilize-chores`'s, matches that shape too — reusing it on shape alone checks the wrong
@@ -258,7 +258,7 @@ caller's side:
   host→fork→coordinator→seats — a third level past `team-or-solo-rules`' default depth ≤2, named
   deliberately: the fork isolates the CALLER's session, the coordinator isolates the multi-seat
   chain — two different things, not one dispatch nested for no reason. Same shape on a
-  `build-lead` dispatch, with the agent context taking the fork's place.
+  `build-leader` dispatch, with the agent context taking the fork's place.
 
 ## Phase 5 — Dispatch under contract: the four lifecycle stages
 
@@ -369,7 +369,7 @@ discover and repair branch/worktree residue by hand):
    eight conjunct results>`. When stage 2b evaluated and MISSED, the handoff names the failed
    conjunct and states the fallback plainly — PR opened, awaiting a human merge, today's behavior
    unchanged. When no grant was present, the handoff says nothing about auto-merge at all.
-   `build-lead`'s own return contract (`agents/build-lead.md`) carries these lines through
+   `build-leader`'s own return contract (`agents/build-leader.md`) carries these lines through
    verbatim to whatever dispatched it.
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
@@ -425,7 +425,7 @@ conversational summary never substitutes for the entry the record was owed.
   which, one question, then proceed. A `/build-feature`-initiated call counts as having one even
   inside that command's fork — forking relieves the caller's session, it does not remove the
   person, and `AskUserQuestion` still reaches them directly. **No interactive user** (e.g. via
-  `build-lead`, from `mobilize-chores`) → report the ambiguity as a named blocker instead — the
+  `build-leader`, from `mobilize-chores`) → report the ambiguity as a named blocker instead — the
   batch confirm already spent the user's one gate for this run, so a mid-dispatch question has
   nowhere sanctioned to land (same discipline as this plugin's other unattended failure branches:
   `close-session`, `mobilize-chores`); never guess which record was meant.

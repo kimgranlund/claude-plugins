@@ -1,4 +1,4 @@
-# lead-build — forge intent record
+# leading-builds — forge intent record
 
 Forged 2026-08-10 via /make-skill, third artifact of the /lead-* family (after the intake-lead
 agent, PR #162, and /lead-intake, PR #163). Slots ruled during the family design; recorded, not
@@ -6,13 +6,13 @@ re-asked.
 
 ## Gate P0 — Route (PASS)
 
-Primitive = **skill, command species**. The agent twin (`agents/build-lead.md`, ADR-0010)
-exists; this is the host-adoption half — the `/lead-team` ↔ `team-lead` pattern, teamwork's
+Primitive = **skill, command species**. The agent twin (`agents/build-leader.md`, ADR-0010)
+exists; this is the host-adoption half — the `/leading-teams` ↔ `team-lead` pattern, teamwork's
 second instance, docs' `/lead-intake` being the first estate-wide sibling.
 
 ## Gate P1 — Interview slots (PASS, pre-ruled)
 
-- **Trigger:** human types `/lead-build` when converting a session into a dedicated build seat
+- **Trigger:** human types `/leading-builds` when converting a session into a dedicated build seat
   (Kim's hand-rolled BUILD sessions, formalized). Command species — menu-register description.
 - **Behavior delta:** ad hoc "you are my BUILD session" priming carries no record-first
   discipline, no state check on resumed tickets, no sizing floors — baseline evidence in
@@ -21,22 +21,22 @@ second instance, docs' `/lead-intake` being the first estate-wide sibling.
 - **Species + dials:** Command — `disable-model-invocation: true`, `user-invocable: true`.
 - **Freedom:** medium — read-and-adopt the agent file; drive each target through
   `dispatch-ticket` via the Skill tool.
-- **Fences:** NOT the dispatched agent (`build-lead`, Agent tool); NOT one forked build
+- **Fences:** NOT the dispatched agent (`build-leader`, Agent tool); NOT one forked build
   (`/build-feature <id>` — one ticket, off-session); NOT batch find-and-confirm
-  (`/mobilize-chores`); NOT a generic coordination charter (`/lead-team`).
+  (`/mobilize-chores`); NOT a generic coordination charter (`/leading-teams`).
 - **Done-when:** adoption acknowledged; every target driven to dispatch-ticket's typed result
   (Findings write-backs included) or its named blocker; record-first never violated.
 
 **The mechanism differs from /lead-intake, deliberately:** `dispatch-ticket` carries NO
 `context: fork` (ADR-0010's design — no double hop from /build-feature's fork, no third hop
-from build-lead). A host-session Skill invocation of it therefore runs INLINE in this session's
+from build-leader). A host-session Skill invocation of it therefore runs INLINE in this session's
 own turn — the fork hazard that forced /lead-intake's read-and-apply-inline workaround does not
 exist here. The adoption is thin: read the agent file for the contract, then invoke
 `dispatch-ticket` (Skill tool) per target, exactly as `/build-feature`'s own body does inside
 its fork. One engine, three entries: forked one-shot (/build-feature), unattended seat
-(build-lead), live standing seat (this command).
+(build-leader), live standing seat (this command).
 
-**Host deltas from the build-lead agent:**
+**Host deltas from the build-leader agent:**
 1. **The interactive branches are ALIVE.** dispatch-ticket's Phase 1 ambiguous-match branch
    asks its one question instead of reporting a blocker, and the task-kind clarify round runs
    instead of straight-to-SKIPPED — the exact branches the agent's unattended context disables.

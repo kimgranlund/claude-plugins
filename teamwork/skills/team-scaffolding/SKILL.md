@@ -11,8 +11,8 @@ description: >-
   virgin repo's fleet manifest first), never re-asking once a role is bound. Also runs the
   reverse: /team-scaffolding retire ROLE releases the retiring session's own seat (un-walls
   settings.local.json, releases fleet.json, syncs fleet-roster.md). NOT a one-off adoption of a
-  single lead-* contract with no fleet bootstrap (/lead-team, /lead-review, /lead-planning,
-  /product-authoring directly); NOT for a task one context can hold (team-or-solo-rules).
+  single lead-* contract with no fleet bootstrap (/leading-teams, /leading-review, /leading-planning,
+  /leading-product directly); NOT for a task one context can hold (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason] — bare asks which seat"
@@ -23,8 +23,8 @@ argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason
 Four standing sessions run one project: `{repo}-team-lead` (orchestrator — role key `agent` in
 `fleet.json`; Phase 1 covers the schema-key/session-name split), `{repo}-reviewer`
 (read-only review desk), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
-authority). Each already has an owning contract — `teamwork:lead-team`, `teamwork:lead-review`,
-`teamwork:lead-planning`, `docs:product-authoring` — but none of those commands name the session, wall
+authority). Each already has an owning contract — `teamwork:leading-teams`, `teamwork:leading-review`,
+`teamwork:leading-planning`, `docs:leading-product` — but none of those commands name the session, wall
 it, or brief it on its peers; that bootstrap layer is this command, run once per session before
 the matching `/lead-*` contract takes over. `$ARGUMENTS`: the role, first token — or bare, see
 Phase 1's interactive branch — and an optional charter (the rest, passed straight through to the
@@ -160,7 +160,7 @@ State, as one standing block before any real work:
    (spec correction 4 — a cloud session cannot message back, so blocking on liveness would strand
    it). Fall back to durable records (Issues, PR comments) as the coordination channel regardless
    of roster state.
-4. **`reviewer` only** — name the review instrument roster: the doc/code checkers `/lead-review`
+4. **`reviewer` only** — name the review instrument roster: the doc/code checkers `/leading-review`
    already routes to, plus authorkit's read-only sweeps — `naming-audit`, `doctrine-audit`,
    `bloat-audit`, `attention-audit`, `estate-audit` (ruling: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
    D3).
@@ -213,13 +213,14 @@ step — mirroring how `authorkit:overhaul-execute` hands a merge/split off as a
 
 | Role | Command to print | Home plugin |
 |---|---|---|
-| `agent` | `/lead-team` | teamwork |
-| `reviewer` | `/lead-review` | teamwork |
-| `planner` | `/lead-planning` | teamwork |
-| `product` | `/product-authoring` | docs (soft cross-plugin mention) |
+| `agent` | `/leading-teams` | teamwork |
+| `reviewer` | `/leading-review` | teamwork |
+| `planner` | `/leading-planning` | teamwork |
+| `product` | `/leading-product` | teamwork (`skills/leading-product`, moved from docs — issue #433) |
 
-`product`'s handoff is a soft cross-plugin mention — it degrades to "install docs to bootstrap
-the product seat" if `docs` isn't installed (Failure branches, below).
+`product`'s handoff is now a same-plugin command (the `product-authoring` skill, now `leading-product`
+here, and its `product-leader-agent` full-moved from docs to teamwork under issue #433's ruling); the prior
+cross-plugin degrade branch is retired along with the docs-absent case it existed for.
 
 This session does NOT adopt the contract itself. `team-scaffolding`'s own discipline (Phases 1–4)
 has already run and does not repeat; the printed command is what carries the session forward once
@@ -312,6 +313,6 @@ the roster left unsynced.
 
 Flipping the four lead-* skills' `disable-model-invocation` flag so Phase 5 could invoke them via
 the Skill tool was considered and rejected: command-only adoption is deliberate — a seat contract
-is adopted by a human's session, never model-routed (`lead-team`'s own body defends this flag for
+is adopted by a human's session, never model-routed (`leading-teams`'s own body defends this flag for
 the same reason). The fix stays scoped to Phase 5's own false claim, not the target skills'
 invocation contract.

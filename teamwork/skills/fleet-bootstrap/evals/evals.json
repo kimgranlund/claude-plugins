@@ -11,6 +11,6 @@
     { "id": "n02", "prompt": "/team-scaffolding reviewer review the fleet bootstrap PR", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding directly" },
     { "id": "n03", "prompt": "Should this be a subagent or a team for this task?", "expect": "no-trigger", "comment": "owner: teamwork:team-or-solo-rules" },
     { "id": "n04", "prompt": "Seed a naming manifest for this new estate.", "expect": "no-trigger", "comment": "owner: authorkit:manifest-authoring" },
-    { "id": "n05", "prompt": "Re-run the ratification gate now that the PRD changed.", "expect": "no-trigger", "comment": "owner: docs:product-authoring directly — the gate fires once per cold start, not re-invoked via this command" }
+    { "id": "n05", "prompt": "Re-run the ratification gate now that the PRD changed.", "expect": "no-trigger", "comment": "owner: docs:leading-product directly — the gate fires once per cold start, not re-invoked via this command" }
   ]
 }

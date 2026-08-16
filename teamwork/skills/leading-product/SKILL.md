@@ -1,5 +1,5 @@
 ---
-name: product-authoring
+name: leading-product
 description: >-
   Makes this session a dedicated product seat: it adopts the product-leader-agent's own contract
   directly — loop authority (which of north star / foundation / releases is turning), the
@@ -7,26 +7,33 @@ description: >-
   living indexes, bug-vs-requirement-gap
   adjudication at Verify, the written retro, and citation-driven escalation — operating from
   docs:product-lifecycle-rules and driving docs:check-stage for the lifecycle-position question.
-  Holds until the charter closes. Run /product-authoring [charter]. NOT the dispatched sibling seat
-  (product-leader-agent, Agent tool); NOT authoring PRD/SPEC/LLD (teamwork's /lead-planning, one
-  loop-tier down); NOT enforcing the spec-lock gate at dispatch time (teamwork's /lead-team, which
+  Holds until the charter closes. Run /leading-product [charter]. NOT the dispatched sibling seat
+  (product-leader-agent, Agent tool); NOT authoring PRD/SPEC/LLD (teamwork's /leading-planning, one
+  loop-tier down); NOT enforcing the spec-lock gate at dispatch time (teamwork's /leading-teams, which
   reads this seat's gate); NOT a one-off lifecycle-position report (docs:check-stage directly).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[charter — the loop/gate/IDR/RDD work needing the product seat]"
 ---
 
-# product-authoring — the host runs the product seat, not a dispatched copy of it
+# leading-product — the host runs the product seat, not a dispatched copy of it
 
-`product-leader-agent` (`${CLAUDE_PLUGIN_ROOT}/agents/product-leader-agent.md`) is the dispatched
-form of the standing product seat. This command is the other half of the pair — the
-`/lead-team` ↔ `team-lead` pattern, ported to this plugin because the seat's own preloads
-(`product-lifecycle-rules`, `check-stage`, `doc-writing-rules`) are docs-local (same-plugin-preload
-precedent: `docs:lead-intake` ↔ `docs:intake-lead`). Under ADR-0006 the pair splits by species:
+`product-leader` (`${CLAUDE_PLUGIN_ROOT}/agents/product-leader.md` — moved here from
+`docs/agents/product-leader-agent.md`, dropping the `-agent` suffix in the same move, issue #433;
+non-conforming against the CURRENTLY-LIVE naming grammar until the naming-ADR Kim ruled will
+supersede ADR-0011 REQ-002's `-agent` suffix rule lands) is the dispatched form of the standing
+product seat, now same-plugin. This command is the other
+half of the pair — the
+`/leading-teams` ↔ `team-leader` pattern. The seat's own doctrine preloads
+(`product-lifecycle-rules`, `check-stage`, `doc-writing-rules`) stay canonical in `docs` — reached
+only as soft cross-plugin named mentions (never a `skills:` frontmatter preload, the hard
+plugin-boundary rule), with an explicit failure branch when `docs` isn't installed; the AGENT file
+itself is same-plugin now, only its doctrine content stays cross-plugin. Under ADR-0006 the pair
+splits by species:
 command = nominal object-process form conforming to ADR-0011's naming grammar
-(`/product-authoring` — this is a NEW name, so the legacy `lead-*` verb form isn't available;
-`lead-team`/`lead-review`/`lead-planning` stay grandfathered under naming-rules), agent = role
-noun (`product-leader-agent`). Seed:
+(`/leading-product` — this is a NEW name, so the legacy `lead-*` verb form isn't available;
+`leading-teams`/`leading-review`/`leading-planning` stay grandfathered under naming-rules), agent = role
+noun (`product-leader`). Seed:
 `$ARGUMENTS` (the charter — the loop-authority/spec-lock/IDR/RDD work needing this seat).
 
 ## Phase 1 — Bind the charter
@@ -41,10 +48,11 @@ own pointer for the flow, not restated here — a first-class entry, never treat
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
 From this point until the charter closes, this session holds
-`${CLAUDE_PLUGIN_ROOT}/agents/product-leader-agent.md`'s own contract as its own operating rules —
+`docs:product-leader-agent`'s own contract (`docs/agents/product-leader-agent.md`, cross-plugin —
+fail closed with the gap named if `docs` isn't installed) as its own operating rules —
 read that file and hold its seven priorities verbatim as this session's standing discipline for
 the charter's duration, rather than re-derived inline here (the drift-pair defect class
-`lead-team`'s own R5 finding named: restating a copy invites birth-drift against the source of
+`leading-teams`'s own R5 finding named: restating a copy invites birth-drift against the source of
 record). Acknowledge adoption in one line before processing anything: the file read, the
 duration rule ("until this charter closes"), and the seat-tier deviation line stated verbatim
 from the agent file (fable+high, dated 2026-08-16, D08/#395 precedent).
@@ -67,7 +75,7 @@ surfaced was routed to its owning doc.
   Verify-stage bug-vs-gap call, a retro to file).
 - **`docs:check-stage` unavailable** → fall back to a manually narrated lifecycle-position
   judgment, labeled explicitly as judgment (per the agent file's own failure branch).
-- **Asked to author a PRD/SPEC/LLD directly** → name that this is `teamwork:lead-planning`'s
+- **Asked to author a PRD/SPEC/LLD directly** → name that this is `teamwork:leading-planning`'s
   grain and hand off, rather than authoring it in this seat.
 - **Invoked again while a charter bound by an earlier Phase 1 in this same session is still
   open** → name the open charter and require an explicit close-or-fold decision before starting a

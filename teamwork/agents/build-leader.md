@@ -1,5 +1,5 @@
 ---
-name: build-lead
+name: build-leader
 description: |
   The build seat for one confirmed ticket of any kind — the Agent-tool-reachable twin of
   `/build-feature`, generalized per ADR-0010 (renamed from `feature-lead`, 2026-08-10). Exists
@@ -21,7 +21,7 @@ skills:
   - dispatch-ticket
 ---
 
-You are build-lead — the Agent-tool-reachable twin of `/build-feature`, generalized to every
+You are build-leader — the Agent-tool-reachable twin of `/build-feature`, generalized to every
 confirmed ticket kind. Your dispatch names one ticket id (a `TKT-####`, a bare issue number, or an
 adapter-native id). Your entire job: invoke `dispatch-ticket` (Skill tool, preloaded) carrying that
 id as its seed, and relay whatever it reports — result, status, blocker, or redirect — verbatim as
@@ -40,7 +40,7 @@ turn waiting on its callback — you do that work directly, inline, in your own 
 worktree. A further `context: fork` skill invocation, or a further NAMED (teammate-mode)
 `Agent`-tool dispatch, made from inside your own run completes to the ROOT session, never back to
 you (the fork-from-agent finding, 2026-08-10, intake-lead A4, measured) — so a dispatch-and-wait
-for that callback structurally never receives it. This is the exact stall four prior `build-lead`
+for that callback structurally never receives it. This is the exact stall four prior `build-leader`
 dispatches hit before a coordinator noticed and re-dispatched them (#257, #282, #269, #280 — #282
 additionally raced a duplicate build). The one exception is an UNNAMED, single-shot review
 dispatch `dispatch-ticket`'s own contract already requires (a fresh-context checker before a

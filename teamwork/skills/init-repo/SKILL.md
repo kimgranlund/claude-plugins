@@ -3,10 +3,10 @@ name: init-repo
 description: >-
   Arms this session as a repo's working session, in one command: runs the built-in /init when
   no CLAUDE.md exists, makes this session adopt the team-lead contract, spawns the standing
-  INTAKE sibling (docs' intake-lead), and wires per-ticket build capacity (build-lead
+  INTAKE sibling (docs' intake-lead), and wires per-ticket build capacity (build-leader
   dispatches) — then reports the armed arrangement. Per-session: spawned siblings die with the
   session; re-run each work session. Run /init-repo [optional repo root]. NOT the parts alone
-  (/init, /lead-team, /lead-intake, /lead-build, /lead-review); NOT batch ticket mobilization
+  (/init, /leading-teams, /lead-intake, /leading-builds, /leading-review); NOT batch ticket mobilization
   (/mobilize-chores).
 disable-model-invocation: true
 user-invocable: true
@@ -34,14 +34,14 @@ earlier one succeeded.
    `init` skill (Skill tool — legal here: `init` is model-invocable, the reachable side of the
    #134 dichotomy step 3 states the blocked side of) and let it complete before arming
    continues — an armed session over an unmapped repo coordinates blind.
-3. **Adopt team-lead — this session becomes the apex, no spawn.** `/lead-team` itself is
+3. **Adopt team-lead — this session becomes the apex, no spawn.** `/leading-teams` itself is
    `disable-model-invocation: true` and cannot be Skill-invoked from inside this command (the
    #134/#135 class), so this step carries the adoption directly, per that command's own
-   Phase 2: read `${CLAUDE_PLUGIN_ROOT}/agents/team-lead.md` in full and adopt its priorities
+   Phase 2: read `${CLAUDE_PLUGIN_ROOT}/agents/team-leader.md` in full and adopt its priorities
    as this session's standing rules; invoke `team-or-solo-rules` and `loop-rules` (the same
-   preloads the agent carries). ONE named deviation from /lead-team: the charter. /lead-team
+   preloads the agent carries). ONE named deviation from /leading-teams: the charter. /leading-teams
    binds one bounded charter; here the charter IS the session — "this session's incoming work
-   on <repo>" — closing at session end or an explicit stand-down. /lead-team's own host
+   on <repo>" — closing at session end or an explicit stand-down. /leading-teams's own host
    deltas (roll-up audience, review-seat degradation, the write-scoping discipline) apply as
    written. **Acknowledge the adoption in one standing block** — the contract file read, the
    charter deviation, the duration — before any spawn fires.
@@ -54,15 +54,15 @@ earlier one succeeded.
    report/idea/chore arriving in THIS session relays to it via `SendMessage` (a send resumes
    a named teammate), seeds VERBATIM — the fork-blind rule applies: INTAKE sees no history,
    so a pointer like "the bug above" travels as the full report, never the pointer.
-5. **Wire build capacity — per-ticket, not a standing spawn.** `build-lead`'s own contract is
+5. **Wire build capacity — per-ticket, not a standing spawn.** `build-leader`'s own contract is
    one confirmed ticket per dispatch, so there is no idle BUILD sibling to spawn — build
-   capacity IS this session dispatching `Agent(teamwork:build-lead)` per confirmed ticket as
+   capacity IS this session dispatching `Agent(teamwork:build-leader)` per confirmed ticket as
    work arrives, serially (mobilize-chores' mutating-dispatches rule), each relayed
    verdict-first with its Findings evidence. The asymmetry is the seats' own contracts, not
    an omission.
 6. **The armed report.** One closing block: each step's outcome; how to feed each seat (raw
-   intake → relayed to INTAKE; a confirmed ticket → a build-lead dispatch; a review target →
-   its owning checker, or `/lead-review` in a dedicated session); the per-session lifetime
+   intake → relayed to INTAKE; a confirmed ticket → a build-leader dispatch; a review target →
+   its owning checker, or `/leading-review` in a dedicated session); the per-session lifetime
    line. From here the session runs under the adopted team-lead contract until it ends.
 
 ## Failure branches

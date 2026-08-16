@@ -1,4 +1,4 @@
-# lead-build — Phase 5 behavior check (with-skill), 2026-08-10
+# leading-builds — Phase 5 behavior check (with-skill), 2026-08-10
 
 Fresh-context dry-run: Phase 1–2 adoption executed as written; engine invocations traced by
 hand against dispatch-ticket's shipped body; grounding reads real (`gh issue view 150` →
@@ -29,7 +29,7 @@ Baseline probes 1–2 plus a third pressure probe.
 ## Mechanism note (disclosed, not a defect)
 
 The engine's no-match branch Skill-invokes `file-feature`, which is `context: fork` — from a
-/lead-build session that forks off-session, and the completion routes to the ROOT session,
+/leading-builds session that forks off-session, and the completion routes to the ROOT session,
 which IS this session: the flow holds with one asynchronous hop (the standing seat's one wait).
 Contrast the agent path, where the same fork's completion never reaches the seat — the reason
 dispatch-ticket's bug branch reads the record back instead of waiting.

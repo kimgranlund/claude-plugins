@@ -1,9 +1,9 @@
-# lead-build — fresh-context FLOOR audit (2026-08-10)
+# leading-builds — fresh-context FLOOR audit (2026-08-10)
 
 Audited against harness `skill-writing-rules` (3.1.12) + the brief's six checkpoints.
 Files read: `SKILL.md`, `intent.md`, `evals/assertions.md`, `agents/build-lead.md` (the twin),
 `skills/dispatch-ticket/SKILL.md` (the engine, as shipped), `skills/build-feature/SKILL.md`,
-`skills/lead-team/SKILL.md` (pattern original), `docs/skills/lead-intake/SKILL.md` + its
+`skills/leading-teams/SKILL.md` (pattern original), `docs/skills/lead-intake/SKILL.md` + its
 audit report (sibling baseline). Lint: `skill_lint.py` clean. Description: 601 chars (cap
 1,024); build-feature's: 673.
 
@@ -20,18 +20,18 @@ two, and the engine's description is a live routing surface.
 
 ### F1 — MAJOR: dispatch-ticket's caller enumeration is now stale (reciprocal closure owed)
 
-`dispatch-ticket/SKILL.md` contains zero mentions of `lead-build` (grep-verified). Two spots
+`dispatch-ticket/SKILL.md` contains zero mentions of `leading-builds` (grep-verified). Two spots
 declare the now-false caller set:
 
 - Its description (lines 4–5): "Use when invoked by name from /build-feature's own body or the
   build-lead agent — never from a direct user ask." `dispatch-ticket` is
   `disable-model-invocation: false` — this description sits in the live listing budget. A
-  standing /lead-build session invokes the engine on every turn a target arrives, and from
+  standing /leading-builds session invokes the engine on every turn a target arrives, and from
   mid-session the target IS a direct user ask; the engine's self-declared caller contract now
   excludes its third sanctioned caller and actively repels the invocation path this command's
   Phase 3 orders.
 - Its intro (lines 18–19): "factored out so it has two reachable entry points instead of one" —
-  lead-build's own body says "One engine, three entries, on purpose." One of these files is
+  leading-builds's own body says "One engine, three entries, on purpose." One of these files is
   wrong, and it's the engine.
 
 Same class, lower stakes: `build-feature/SKILL.md:41–43` rationalizes the engine's no-fork
@@ -47,7 +47,7 @@ the same change, `/check-routing` at the wave boundary.
 `intent.md` Gate P2: "Baseline: `evals/baseline/` — ad-hoc-primed BUILD session vs a CLOSED
 ticket id (state-check probe) and a raw vague ask (record-first probe)." The directory exists
 and is empty (verified on disk 2026-08-10). Identical to lead-intake's F2; a
-`lead-build-baseline` seat is active this session — land its output before the P5 behavior
+`leading-builds-baseline` seat is active this session — land its output before the P5 behavior
 check, or the P2 PASS is unearned and assertions.md has no "without" leg.
 
 ### F3 — MINOR: one restated engine slogan (the body's only reference-discipline slip)
@@ -88,11 +88,11 @@ host-vs-agent deltas section it's defensible, but the superlative invites the wr
    accepts a raw ask — but "ONE build" is the load-bearing half and it's right.
 3. **Command-species conventions — CLEAN.** Both dials explicit, argument-hint present,
    description written as menu documentation, blank `$ARGUMENTS` is a designed default (cwd),
-   not a missing precondition — no blank-args branch owed, unlike lead-team's charter. Done /
+   not a missing precondition — no blank-args branch owed, unlike leading-teams's charter. Done /
    NOT-done predicate present; ≤3 uppercase hard gates; lint clean.
 4. **Reciprocal fence — CONSISTENT both ways.** build-feature:9–11 carries "NOT for converting
-   this session into the standing build seat (/lead-build) — this command forks ONE
-   already-known target"; lead-build fences "/build-feature" back. Both descriptions well
+   this session into the standing build seat (/leading-builds) — this command forks ONE
+   already-known target"; leading-builds fences "/build-feature" back. Both descriptions well
    under budget (673 / 601 chars). Both dmi:true, so menu-clarity fences — matching intent.md
    P5's recorded disposition.
 5. **`${CLAUDE_PLUGIN_ROOT}` paths — SAME-PLUGIN.** The only path is
@@ -103,7 +103,7 @@ host-vs-agent deltas section it's defensible, but the superlative invites the wr
    adoption-acknowledgment step mirror the family. lead-intake's record-first WALL is
    correctly inverted, not copied: this seat builds, so the analog is the "just do it, no
    ticket" decline — a live-session pressure the engine's unattended callers never face, so
-   the branch earns its line rather than duplicating engine Phase 1. lead-team's
+   the branch earns its line rather than duplicating engine Phase 1. leading-teams's
    invoke-the-agent's-preloads step is correctly transformed into the per-target Skill
    invocation (the agent's `skills: [dispatch-ticket]` preload, host form). mobilize-chores'
    serialize rule cited in delta 3 exists as claimed (its SKILL.md line 98).

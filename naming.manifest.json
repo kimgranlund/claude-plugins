@@ -151,6 +151,16 @@
     },
     {
       "canonical": "team",
+      "plural": "teams",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "build",
+      "plural": "builds",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "leading",
       "plural": null,
       "banned_aliases": []
     },
@@ -391,11 +401,6 @@
     {
       "canonical": "product",
       "plural": "products",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "build",
-      "plural": "builds",
       "banned_aliases": []
     }
   ],
