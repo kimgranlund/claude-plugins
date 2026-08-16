@@ -152,11 +152,7 @@ is what actually contains its inline-fix path.
   after the ticket claim lands — a sibling open PR already claiming that plugin's next version
   means rebase-and-rebump onto it rather than racing it, the same discipline as a lost
   ticket-claim race above. Re-run it before the PR opens (Phase 5 stage 2) too, since a sibling
-  can appear mid-build. **Right before opening the PR, re-read the target plugin's version on
-  `origin/main` and bump from THAT, not from the branch-cut version** (issue #445) — a build that
-  bumps once at branch-cut and never rechecks is exactly what `release_gate.py`'s G14
-  (`version_monotonic_check.py`) catches post-hoc; this note prevents the bump from going stale
-  in the first place. Where harness isn't installed, this check is skipped — named as such,
+  can appear mid-build. Where harness isn't installed, this check is skipped — named as such,
   never silently assumed clean, with the manual equivalent named in its place: `gh pr list
   --state open --json files` filtered to the plugin's own `.claude-plugin/plugin.json`.
 - **Once the claim wins, make it LIST-VISIBLE too (#199)** — the claim comment is durable but
