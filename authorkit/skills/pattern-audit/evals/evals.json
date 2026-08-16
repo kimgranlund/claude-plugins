@@ -1,6 +1,6 @@
 {
   "skill": "pattern-audit",
-  "note": "This skill owns an arbitrary caller-supplied pattern/instruction sweep that emits a structured match dataset — distinct from naming-audit's grammar-conformance axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis, even though all four are read-only report/dataset skills over overlapping artifact kinds. Authored fresh at mint (2026-08-15, issue #257, lld-0004-pattern-audit.md) — no prior eval history. Dieted 2026-08-15 (PR #288 review): dataset-field parenthetical made precise (fixed fields; kind labels instruction-defined) and compressed under W8 — no trigger/no-trigger vocabulary changed, no case changes. Wired 2026-08-16 (issue #286, lld-0004-pattern-audit.md predicate 8) — overhaul-planning composes this skill as a conditional Phase 0 fifth instrument; n07 added as the reciprocal fence (a full estate-overhaul-plan ask stays overhaul-planning's own, even though it now invokes this skill internally for one sweep step). No description change.",
+  "note": "This skill owns an arbitrary caller-supplied pattern/instruction sweep that emits a structured match dataset — distinct from naming-audit's grammar-conformance axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis, even though all four are read-only report/dataset skills over overlapping artifact kinds. Authored fresh at mint (2026-08-15, issue #257, lld-0004-pattern-audit.md) — no prior eval history. Dieted 2026-08-15 (PR #288 review): dataset-field parenthetical made precise (fixed fields; kind labels instruction-defined) and compressed under W8 — no trigger/no-trigger vocabulary changed, no case changes. Wired 2026-08-16 (issue #286, lld-0004-pattern-audit.md predicate 8) — overhaul-planning composes this skill as a conditional Phase 0 fifth instrument; n07 added as the reciprocal fence (a full estate-overhaul-plan ask stays overhaul-planning's own, even though it now invokes this skill internally for one sweep step). No description change. n08 added 2026-08-16 (issue #379) as the reciprocal fence against the new doctrine-audit skill (governed manifest-driven edges vs. this skill's ad-hoc caller-supplied sweep); description re-budgeted under 700 chars in the same change.",
   "cases": [
     {
       "id": "t01",
@@ -74,6 +74,12 @@
       "prompt": "Plan a phased overhaul of this whole estate's naming and structure, with a per-member kill-switch and waved ticket seeds.",
       "expect": "no-trigger",
       "comment": "owner: overhaul-planning — a campaign-planning ask, not a raw pattern sweep; overhaul-planning composes this skill internally as a conditional Phase 0 step (issue #286) but the plan-generation ask itself stays overhaul-planning's own"
+    },
+    {
+      "id": "n08",
+      "prompt": "Sweep the estate against our doctrine.manifest.json and tell me which canon-to-dependent edges are broken.",
+      "expect": "no-trigger",
+      "comment": "owner: doctrine-audit (issue #379) — a governed, persisted canon-to-dependent edge sweep, not an arbitrary caller-supplied pattern with no manifest"
     }
   ]
 }

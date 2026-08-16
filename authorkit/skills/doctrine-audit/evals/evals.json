@@ -1,0 +1,78 @@
+{
+  "skill": "doctrine-audit",
+  "note": "New at mint (2026-08-16, issue #379): owns canon-to-dependent DOCTRINE-drift conformance -- a rule stated canonically in one artifact violated/omitted/paraphrased by a dependent -- distinct from naming-audit's grammar axis, bloat-audit's busy-work axis, and pattern-audit's arbitrary caller-supplied sweep with no governed manifest. Fenced against attention-audit (menu-rent/collision, not doctrine conformance), overhaul-planning (this skill composes INTO its measure-first phase, never replaces it), estate-audit-agent (the batch dispatch form, owns no logic of its own), and make-script (a one-off check that should become a script, not a standing manifest edge).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Audit this workspace for doctrine drift -- rules our canon skills state that dependents actually violate.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Check whether the forge template still contradicts the standard it's supposed to invoke.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Does every teammate-dispatchable agent still carry the mandated SendMessage delivery clause verbatim?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Sweep doctrine.manifest.json against the estate and tell me which canon-to-dependent edges are broken.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Is this README ledger row still in sync with the file it names on disk?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Which of our agent bodies still use the old tool name instead of the current canonical one?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Audit this estate for naming convention violations.",
+      "expect": "no-trigger",
+      "comment": "owner: naming-audit -- grammar axis, not canon-to-dependent doctrine edges"
+    },
+    {
+      "id": "n02",
+      "prompt": "Is this skill too long? Audit it for busy-work and ceremony.",
+      "expect": "no-trigger",
+      "comment": "owner: bloat-audit"
+    },
+    {
+      "id": "n03",
+      "prompt": "Sweep the repo for every occurrence of X and give me a dataset -- no governed manifest, just this one instruction.",
+      "expect": "no-trigger",
+      "comment": "owner: pattern-audit -- an ad-hoc caller-supplied sweep with no persisted doctrine.manifest.json edge"
+    },
+    {
+      "id": "n04",
+      "prompt": "Which skills tax Claude's routing the most, and do any descriptions collide?",
+      "expect": "no-trigger",
+      "comment": "owner: attention-audit -- menu-rent/collision economy, not doctrine conformance"
+    },
+    {
+      "id": "n05",
+      "prompt": "Generate a full phased estate-overhaul plan with waved ticket seeds for this rename campaign.",
+      "expect": "no-trigger",
+      "comment": "owner: overhaul-planning -- this skill composes doctrine-audit as one measure-first instrument, never the reverse"
+    },
+    {
+      "id": "n06",
+      "prompt": "Batch-audit these five plugins for naming conformance in one isolated context.",
+      "expect": "no-trigger",
+      "comment": "owner: estate-audit-agent -- the batch dispatch form; it can name this instrument but owns none of its logic"
+    },
+    {
+      "id": "n07",
+      "prompt": "I keep hand-checking this one thing by eye every release -- turn it into a permanent script.",
+      "expect": "no-trigger",
+      "comment": "owner: harness:make-script -- a standing check with no canon/dependent edge shape belongs in a script, not a manifest edge"
+    }
+  ]
+}

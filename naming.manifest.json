@@ -296,6 +296,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "doctrine",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "llm-client",
       "plural": null,
       "banned_aliases": []

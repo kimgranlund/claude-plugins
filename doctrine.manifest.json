@@ -1,0 +1,84 @@
+{
+  "$schema_note": "nonoun-plugins repo-root doctrine manifest (issue #379). Separate from naming.manifest.json (ADR-0011 D1: that manifest stays single-purpose for naming grammar) -- this one enumerates canon-to-dependent DOCTRINE edges: a rule stated canonically in one artifact that a dependent artifact must not violate, omit, or paraphrase away from. Four edge types: verbatim-line (a dependent must, or must not, contain an exact string/pattern from canon -- mode require|forbid), ledger-sync (a ledger/index row must match the artifact it names on disk), vocab-term (dependents must use the canonical term, never a banned alias, for one concept), judgment (no mechanical check exists -- the sweep reports the edge and its owning checker as 'queued, not built', never silently drops it). Seeded from the 2026-08-16 team/coordination-surface review (issue #379's own resolved comment): 8 findings total, 5 recovered as edges below (findings 1-3 map onto issues #380/#381/#382, closed via PR #383; findings 4-5 are stated directly in #379's own issue body). Findings 6-8 could not be recovered -- see unrecovered_findings below; the array records that gap honestly rather than fabricating edges.",
+  "version": 1,
+  "edges": [
+    {
+      "id": "D01",
+      "type": "verbatim-line",
+      "mode": "forbid",
+      "title": "make-agent's forge skeleton must not place an <example> block inside the description scalar",
+      "severity": "major",
+      "canon_file": "harness/skills/agent-writing-rules/SKILL.md",
+      "canon_ref": "~line 77-84: '<example> blocks belong in the body, never the description' (ADR/#80, 2026-07-21: descriptions are always resident in every session's Agent-tool listing; examples go under a '## Dispatch examples' body heading)",
+      "dependents": [
+        {
+          "file": "harness/skills/make-agent/SKILL.md",
+          "pattern": "description:\\s*\\|[\\s\\S]{0,600}<example>"
+        }
+      ],
+      "source": "issue #379 finding 1 == issue #380; PR #383 proposes the fix but is still OPEN as of 2026-08-16 (verified via `gh pr view 383` -- not merged), so this edge fires live against the current workspace"
+    },
+    {
+      "id": "D02",
+      "type": "verbatim-line",
+      "mode": "require",
+      "title": "Every teammate-dispatchable agent body carries the standing teammate-mode SendMessage delivery clause",
+      "severity": "major",
+      "canon_file": "harness/skills/agent-writing-rules/SKILL.md",
+      "canon_ref": "line ~224: the standing delivery clause mandate",
+      "canon_literal": "When dispatched as a named teammate, deliver your final report via `SendMessage` to your dispatcher",
+      "dependents": [
+        {
+          "file": "teamwork/agents/build-lead.md",
+          "pattern": "SendMessage`?\\s+to your dispatcher"
+        }
+      ],
+      "source": "issue #379 finding 2 == issue #381; PR #383 proposes the fix but is still OPEN as of 2026-08-16 (verified via `gh pr view 383` -- not merged), so this edge fires live against the current workspace. Scoped to build-lead.md only -- docs/agents/intake-lead.md carries a close paraphrase ('deliver the final report via SendMessage to the dispatcher', not byte-identical to canon), a real but separate drift instance the sweep also catches by design (skill-checker finding, 2026-08-16: a verbatim-line edge is supposed to catch exactly this kind of near-miss, not wave it through as verbatim)"
+    },
+    {
+      "id": "D03",
+      "type": "judgment",
+      "title": "write-handoff vs record-first return-channel precedence is stated nowhere; the eight-field handoff fallback list is hand-copied inline across ~6 teamwork agents instead of centralized",
+      "severity": "minor",
+      "canon_file": "harness/skills/write-handoff/SKILL.md",
+      "dependents": [
+        { "file": "teamwork/agents/builder.md" },
+        { "file": "teamwork/agents/planner.md" },
+        { "file": "teamwork/agents/code-checker.md" },
+        { "file": "teamwork/agents/docs-writer.md" },
+        { "file": "teamwork/agents/team-lead.md" },
+        { "file": "teamwork/agents/wiring-checker.md" }
+      ],
+      "owning_checker": "harness:wording-checker",
+      "status": "queued, not built",
+      "source": "issue #379 finding 3 == issue #382 (open)"
+    },
+    {
+      "id": "D04",
+      "type": "ledger-sync",
+      "title": "teamwork README's construction-note ledger row names agents/lead-team; the actual file on disk is team-lead.md",
+      "severity": "minor",
+      "canon_file": "teamwork/README.md",
+      "ledger_pattern": "agents/lead-team",
+      "actual_path": "teamwork/agents/team-lead.md",
+      "source": "issue #379 finding 4 (no separate issue filed)"
+    },
+    {
+      "id": "D05",
+      "type": "vocab-term",
+      "title": "Task-vs-Agent tool-name divergence across sibling seats -- the platform tool is named Agent (this session's own tool list), but team-lead.md's frontmatter tool grant and intake-lead.md's disallowedTools list still carry the retired name Task",
+      "severity": "minor",
+      "canonical_term": "Agent",
+      "banned_aliases": ["Task"],
+      "dependents": [
+        { "file": "teamwork/agents/team-lead.md" },
+        { "file": "docs/agents/intake-lead.md" }
+      ],
+      "source": "issue #379 finding 5 (no separate issue filed) -- verified live 2026-08-16: team-lead.md:13 grants tool 'Task' in its tools: line; intake-lead.md:17 still lists 'Task' in disallowedTools alongside 'Agent'"
+    }
+  ],
+  "unrecovered_findings": {
+    "count": 3,
+    "note": "The 2026-08-16 team/coordination-surface review is stated to have produced 8 findings; issue #379's own body enumerates 5 concrete ones (seeded above as D01-D05) and explicitly names #380/#381/#382 + PR #383 as the trace for recovering the remaining 3. Those three issues/PR account for findings 1-3 only (the same three already in the 5-list) -- they add no additional findings beyond what #379 itself already states. A full-text search across issues/PRs #375-#390 and a search for 'coordination-surface' and 'team/coordination-surface' turned up no further written record. Findings 6-8 are genuinely unrecoverable from this workspace's current record as of 2026-08-16 (build for #379) -- seeded honestly as a gap rather than fabricated. If the source review transcript surfaces later, extend this array to 8 edges and remove this note."
+  }
+}

@@ -13,7 +13,7 @@ description: >
 author: kim
 created: 2026-08-14
 last_updated: 2026-08-16
-requires: [naming-audit, bloat-audit, rename-planning, naming-conventions, pattern-audit]
+requires: [naming-audit, bloat-audit, rename-planning, naming-conventions, pattern-audit, doctrine-audit]
 disable-model-invocation: false
 user-invocable: false
 allowed-tools:
@@ -25,6 +25,7 @@ allowed-tools:
   - Bash(python3 */scripts/validate.py *)
   - Bash(python3 */scripts/measure.py *)
   - Bash(python3 */scripts/scan.py *)
+  - Bash(python3 */scripts/sweep.py *)
 ---
 
 # overhaul-planning
@@ -68,10 +69,21 @@ Compose the existing instruments; do not reimplement any of them.
    as part of this composed call, so a noisy result (where the overlay ran: false-positives
    outnumbering hits) is a plan-doc finding like any other Phase 0 measurement, not a silent
    re-run — recompile the noisy probe(s) on the next pass if the campaign continues.
+4. **Sixth instrument (fifth was pattern-audit, above), always fires when the target
+   carries a `doctrine.manifest.json`** (issue #379): `authorkit:doctrine-audit` — run
+   `sweep.py validate --manifest <path>` then `sweep.py --root <target> [--manifest <path>]
+   --json` against the target. Its findings feed Phase 1 question 3 (blast radius) the same
+   way naming/bloat findings feed questions 1-2: a `verbatim-line`/`ledger-sync`/`vocab-term`
+   finding on a member under consideration is blast-radius evidence for that member's row; a
+   `judgment` edge's `owning_checker` is recorded as a named next step, never dispatched from
+   this composed call (doctrine-audit's own read-only contract holds here too — this skill
+   still never executes a move). No `doctrine.manifest.json` on the target → state plainly
+   that doctrine-drift evidence is unavailable for this run, same discipline as the
+   dependency-closure gap in step 2; never invent edges to fill the gap.
 
-The plan builds from these numbers. A target with no naming.manifest.json or no prior audit
-still gets a plan, but Phase 1's kill-switch table cites "no baseline measured" per member
-rather than inventing a verdict.
+The plan builds from these numbers. A target with no naming.manifest.json, no
+doctrine.manifest.json, or no prior audit still gets a plan, but Phase 1's kill-switch table
+cites "no baseline measured" per member rather than inventing a verdict.
 
 ## Phase 1 — One design doc, per-member KILL-SWITCH
 
