@@ -232,7 +232,8 @@ agent-level wall.
 
 ### D1 — Seat-naming convention (Scope/Open item 2): convention, not enforced
 
-`{repo}-agent` / `{repo}-reviewer` / `{repo}-planner` / `{repo}-product` names the SESSION, not a
+`{repo}-team-lead` (role key `agent` in `fleet.json` — schema-stable, only the printed session
+name changed, #434) / `{repo}-reviewer` / `{repo}-planner` / `{repo}-product` names the SESSION, not a
 file or a git ref — there is no platform hook that renames a live session, and inventing one
 (e.g. requiring a specific tmux/terminal title) would add mechanism no other fleet function
 depends on. `/team-scaffolding` prints the expected name as the first line of its output and appends it
