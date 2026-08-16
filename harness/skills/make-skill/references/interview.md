@@ -28,7 +28,7 @@ Complete when: species named, both dial values chosen, and the name's grammar ag
 
 **Fork self-sufficiency and background questions (Delegation-Mechanics Review Gate v2, issue #274) — ask only when this skill is heading toward `context: fork`:**
 
-- "This will fork onto a subagent that sees only the SKILL.md body and its own system prompt — no CLAUDE.md, no conversation history, no git status if it's `agent: Explore`/`Plan`. What paths, conventions, or repo facts does the body need to carry explicitly, or inject via a `!command` line, so it still works with nothing but its own text?"
+- "This will fork onto a subagent that sees only the SKILL.md body and its own system prompt — no conversation history, and no CLAUDE.md or git status if it's `agent: Explore`/`Plan`. What paths, conventions, or repo facts does the body need to carry explicitly, or inject via a `!command` line, so it still works with nothing but its own text?"
 - "This will run backgrounded by default, and a backgrounded fork's edits land outside session checkpoints — `/rewind` won't undo them, git is the revert path. Does the body write anything? If so, does it need `background: false`, or is a body note (or a stated git-revert step) enough acknowledgment?"
 
 Complete when: the self-sufficiency answer names what the body carries or injects (or confirms the body is already self-contained), and the background-write question is answered explicitly — `background: false` recorded, or the checkpoint-escape acknowledgment recorded in the draft. Skip both, silently, for a skill that isn't taking `context: fork`.

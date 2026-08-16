@@ -46,15 +46,17 @@ Rules (F = FAIL, blocks; W = WARN, reported, never blocks):
   subagents/delegation/parallelism/isolation/spawn/dispatch/fork, or whose frontmatter carries
   `context: fork` — every other skill pays nothing for this tier.
   R1 [WARN] invocation code in the body: an imperative line whose verb IS a pseudo-call
-     (`Run Agent(subagent_type: ..., ...)`) the model might parrot verbatim. Backticked/quoted
+     (`Run Agent(subagent_type: ..., ...)`) the model might parrot verbatim. Backticked
      syntax, a parenthetical naming a tool in prose, and fenced blocks are exempt by
      construction (this rule scans backtick-stripped, fence-blanked prose).
   R2 [FAIL] dispatch topology matches skill species: a `context: fork` skill whose body
      dispatches 2+ distinct named agents (orchestration) contradicts its own fork — the fork
      would isolate the orchestrator from the conversation it steers. A skill with no
-     `context: fork` whose body dispatches exactly one named agent, with no orchestration
-     signal and no stated reason to keep main-agent judgment in the loop, is FAILed the other
-     way — pin `context: fork` + `agent:`, or state the reason.
+     `context: fork` whose THIN body (<=12 non-blank prose lines — a real multi-phase
+     procedure that merely dispatches once along the way is not this species) dispatches
+     exactly one named agent, with no orchestration signal and no stated reason to keep
+     main-agent judgment in the loop, is FAILed the other way — pin `context: fork` +
+     `agent:`, or state the reason.
   R3 [FAIL] fork requires a task: `context: fork` with zero actionable imperatives in the body
      returns nothing — a forked guideline set gives the subagent no prompt. The fix
      recommendation is GUARDED: `disable-model-invocation: true` also blocks subagent preloads,
