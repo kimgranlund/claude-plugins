@@ -142,12 +142,43 @@ def _scalar(v):
 
 # -------------------------------------------------------------------- grammar
 
+# Every top-level field MANIFEST-TEMPLATE.json declares as a list — swept from that
+# template's own schema (issue #296) rather than hand-picked, so a field the template adds
+# tomorrow is caught by re-reading the template, not by remembering to update this set by
+# hand. `schema_scope` is the one top-level field that is NOT list-shaped (a string) and
+# already carries its own back-compat fallback in main(); it is deliberately excluded here.
+TOP_LEVEL_LIST_FIELDS = (
+    "verb_lex", "process_lex", "role_lex", "object_vocab", "brand_tokens",
+    "author_registry", "mutating_no_confirm_allowlist", "exemptions",
+)
+
+
+def _typed_list(manifest, field, errors):
+    """Return manifest[field] if present and list-shaped; otherwise record a named,
+    actionable manifest_errors finding and return [] — never let a wrong-type top-level
+    field crash downstream (`set(...)`/`for entry in ...`) with a raw, uncaught TypeError
+    (issue #296, generalizing #252's author_registry-only shape guard to every top-level
+    list field). A field missing entirely is not an error — every field here is optional
+    per MANIFEST-TEMPLATE.json and defaults to empty."""
+    if field not in manifest:
+        return []
+    val = manifest[field]
+    if not isinstance(val, list):
+        errors.append(
+            f"manifest field {field!r} must be a list, got "
+            f"{type(val).__name__}: {val!r} (see MANIFEST-TEMPLATE.json)"
+        )
+        return []
+    return val
+
+
 class Grammar:
     def __init__(self, manifest):
-        self.verb_lex = set(manifest.get("verb_lex", []))
-        self.process_lex = set(manifest.get("process_lex", []))
-        self.role_lex = set(manifest.get("role_lex", []))
-        self.exemptions = set(manifest.get("exemptions", []))
+        self.manifest_errors = []
+        self.verb_lex = set(_typed_list(manifest, "verb_lex", self.manifest_errors))
+        self.process_lex = set(_typed_list(manifest, "process_lex", self.manifest_errors))
+        self.role_lex = set(_typed_list(manifest, "role_lex", self.manifest_errors))
+        self.exemptions = set(_typed_list(manifest, "exemptions", self.manifest_errors))
         # author_registry must be a flat list of plain strings (MANIFEST-TEMPLATE.json's
         # own contract). A structured entry (e.g. {"name": ..., "emails": [...]}) is not
         # hashable and used to raise a raw, uncaught `TypeError: unhashable type: 'dict'`
@@ -160,9 +191,8 @@ class Grammar:
         # (name + emails) has no single field that is obviously "the" author string, and
         # guessing one would mask the real fix (correcting the manifest) behind output that
         # looks like it worked.
-        self.manifest_errors = []
         self.authors = set()
-        for entry in manifest.get("author_registry", []):
+        for entry in _typed_list(manifest, "author_registry", self.manifest_errors):
             if isinstance(entry, str):
                 self.authors.add(entry)
             else:
@@ -171,12 +201,50 @@ class Grammar:
                     f"{type(entry).__name__}: {entry!r} — expected a flat list of "
                     f"strings, e.g. [\"kim\", \"jane\"] (see MANIFEST-TEMPLATE.json)"
                 )
-        self.brand_tokens = set(manifest.get("brand_tokens", []))
-        self.mutation_allowlist = set(manifest.get("mutating_no_confirm_allowlist", []))
+        self.brand_tokens = set(_typed_list(manifest, "brand_tokens", self.manifest_errors))
+        self.mutation_allowlist = set(
+            _typed_list(manifest, "mutating_no_confirm_allowlist", self.manifest_errors)
+        )
         self.objects = {}       # any acceptable surface form -> canonical
         self.banned = {}        # banned alias -> canonical
-        for entry in manifest.get("object_vocab", []):
+        seen_canonicals = set()
+        for entry in _typed_list(manifest, "object_vocab", self.manifest_errors):
+            # Mirror of #252's author_registry guard, in the OTHER direction: object_vocab
+            # expects a STRUCTURED {"canonical": ...} entry per MANIFEST-TEMPLATE.json; a
+            # plain STRING entry (e.g. mistakenly mimicking author_registry's own flat-list
+            # shape) used to raise a raw, uncaught `TypeError: string indices must be
+            # integers` out of `entry["canonical"]` below (issue #296).
+            if not isinstance(entry, dict):
+                self.manifest_errors.append(
+                    f"object_vocab entry must be a structured object with a 'canonical' "
+                    f"key, got {type(entry).__name__}: {entry!r} — expected "
+                    f"{{\"canonical\": ..., \"plural\": ..., \"banned_aliases\": [...]}} "
+                    f"(see MANIFEST-TEMPLATE.json)"
+                )
+                continue
+            # Required key missing — used to raise a raw, uncaught `KeyError: 'canonical'`
+            # out of the same line (issue #296).
+            if "canonical" not in entry:
+                self.manifest_errors.append(
+                    f"object_vocab entry missing required key 'canonical': {entry!r} "
+                    f"(see MANIFEST-TEMPLATE.json)"
+                )
+                continue
             canon = entry["canonical"]
+            # Duplicate registration — pinned semantics (issue #296): the LAST entry for a
+            # given `canonical` wins (its plural/banned_aliases silently override the
+            # earlier entry's), matching this dict's own natural last-write-wins
+            # assignment below. That resolution is never left UNSIGNALED, though — a
+            # duplicate always surfaces as a named manifest_errors finding so the manifest
+            # is not considered clean until the redundant entry is resolved by hand.
+            if canon in seen_canonicals:
+                self.manifest_errors.append(
+                    f"duplicate object_vocab registration: canonical={canon!r} registered "
+                    f"more than once — the LAST registration wins, silently overriding the "
+                    f"earlier entry's plural/banned_aliases (pinned semantics, issue #296); "
+                    f"de-duplicate in the manifest to clear this finding"
+                )
+            seen_canonicals.add(canon)
             self.objects[canon] = canon
             if entry.get("plural"):
                 self.objects[entry["plural"]] = canon
@@ -1052,6 +1120,170 @@ def selftest():
         assert not any("author_registry entry must be a plain string" in e[2] for e in result["errors"]), \
             "a normal plain string-list author_registry must never trip the shape check"
 
+    # ------------------------------------------------------------------------------
+    # Malformed-manifest robustness sweep (issue #296, pre-adia-estates-campaign): every
+    # remaining malformed-`naming.manifest.json` class besides #252's own author_registry
+    # shape guard, swept from MANIFEST-TEMPLATE.json's own schema rather than hand-picked.
+    # Each class follows #252's worked triplet: a direct run() call (must not raise, must
+    # surface a named manifest_errors finding), the CLI's own exit-code contract via
+    # subprocess (must exit 1, never a raw traceback), and a regression control (a clean
+    # fixture must never trip the new check).
+    # ------------------------------------------------------------------------------
+
+    # --- Class 1: wrong type per top-level field — swept from MANIFEST-TEMPLATE.json's own
+    # list-typed fields (TOP_LEVEL_LIST_FIELDS), not hand-picked. Every field gets the SAME
+    # wrong-type value (a bare int — non-iterable, so it used to raise `TypeError: 'int'
+    # object is not iterable` uncaught out of every one of these fields' pre-guard
+    # set()/for-loop call sites) and must surface a named finding instead, never crash.
+    for field in TOP_LEVEL_LIST_FIELDS:
+        bad_manifest = dict(manifest, **{field: 5})
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td)
+            (r / "skills" / "demo-review").mkdir(parents=True)
+            (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+            result = run(r, bad_manifest)
+            assert any(field in e[2] and "must be a list" in e[2] for e in result["errors"]), \
+                f"wrong-type {field!r} must surface a named manifest_errors finding: {result['errors']}"
+            assert not any("not iterable" in e[2] for e in result["errors"]), \
+                f"the raw TypeError text must never leak into a {field!r} finding message"
+
+            mf = r / "naming.manifest.json"
+            mf.write_text(json.dumps(bad_manifest))
+            cli = subprocess.run(
+                [sys.executable, __file__, "--target", str(r), "--manifest", str(mf)],
+                capture_output=True, text=True,
+            )
+            assert cli.returncode == 1, f"wrong-type {field!r} must exit 1 cleanly, not crash: {cli.returncode}"
+            assert "Traceback" not in cli.stderr, \
+                f"wrong-type {field!r} must never raise a raw traceback: {cli.stderr}"
+
+    # Regression control: the baseline manifest (every TOP_LEVEL_LIST_FIELDS entry
+    # correctly list-shaped) must never trip the top-level type sweep.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, manifest)
+        assert not any("must be a list" in e[2] for e in result["errors"]), \
+            "a correctly-typed manifest must never trip the top-level shape sweep"
+
+    # --- Class 2: missing keys — an object_vocab entry omitting the required 'canonical'
+    # key used to raise a raw, uncaught `KeyError: 'canonical'` out of `entry["canonical"]`;
+    # must instead surface a named finding and skip the malformed entry, never crash.
+    missing_key_manifest = dict(manifest, object_vocab=[{"plural": "skills"}])
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, missing_key_manifest)
+        assert any(
+            "object_vocab entry missing required key 'canonical'" in e[2] for e in result["errors"]
+        ), f"an object_vocab entry missing 'canonical' must surface a named finding: {result['errors']}"
+        assert not any("KeyError" in e[2] for e in result["errors"]), \
+            "the raw KeyError text must never leak into a finding message"
+
+        mf = r / "naming.manifest.json"
+        mf.write_text(json.dumps(missing_key_manifest))
+        cli = subprocess.run(
+            [sys.executable, __file__, "--target", str(r), "--manifest", str(mf)],
+            capture_output=True, text=True,
+        )
+        assert cli.returncode == 1, f"a missing 'canonical' key must exit 1 cleanly, not crash: {cli.returncode}"
+        assert "Traceback" not in cli.stderr, \
+            f"a missing 'canonical' key must never raise a raw traceback: {cli.stderr}"
+
+    # Regression control: a complete object_vocab entry (every fixture in this selftest
+    # already uses one) must never trip the missing-key check.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, manifest)
+        assert not any("missing required key 'canonical'" in e[2] for e in result["errors"]), \
+            "a complete object_vocab entry must never trip the missing-key check"
+
+    # --- Class 3: duplicate registrations — two object_vocab entries registering the SAME
+    # canonical name today silently overwrite each other with no signal at all. Ruling
+    # (pinned here, never silently coerced): duplicate registration is an ERROR — the LAST
+    # entry still wins (matching this dict's own natural last-write-wins assignment), but
+    # that resolution is always surfaced as a named finding, so an unresolved duplicate
+    # still gates exit 1 rather than validating clean by accident.
+    dup_manifest = dict(manifest, object_vocab=[
+        {"canonical": "demo", "plural": None, "banned_aliases": ["sample"]},
+        {"canonical": "demo", "plural": "demos", "banned_aliases": []},
+    ])
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, dup_manifest)
+        assert any(
+            "duplicate object_vocab registration" in e[2] and "demo" in e[2] for e in result["errors"]
+        ), f"a duplicate canonical registration must surface a named finding: {result['errors']}"
+        assert any("last" in e[2].lower() and "wins" in e[2].lower() for e in result["errors"]), \
+            "the duplicate finding must name the pinned last-wins resolution, not stay silent about it"
+
+        mf = r / "naming.manifest.json"
+        mf.write_text(json.dumps(dup_manifest))
+        cli = subprocess.run(
+            [sys.executable, __file__, "--target", str(r), "--manifest", str(mf)],
+            capture_output=True, text=True,
+        )
+        assert cli.returncode == 1, f"a duplicate registration must exit 1 cleanly, not crash: {cli.returncode}"
+        assert "Traceback" not in cli.stderr, \
+            f"a duplicate registration must never raise a raw traceback: {cli.stderr}"
+
+    # Regression control: no duplicate canonicals (every other fixture in this selftest)
+    # must never trip the duplicate-registration check.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, manifest)
+        assert not any("duplicate object_vocab registration" in e[2] for e in result["errors"]), \
+            "a manifest with no duplicate canonicals must never trip the duplicate-registration check"
+
+    # --- Class 4: structured-vs-string entries — the MIRROR of #252's author_registry fix:
+    # there, a STRUCTURED entry was given where author_registry expects a plain string.
+    # Here, object_vocab expects a STRUCTURED {"canonical": ...} entry per
+    # MANIFEST-TEMPLATE.json — a plain STRING entry (e.g. mistakenly mimicking
+    # author_registry's own flat-list shape) used to raise a raw, uncaught `TypeError:
+    # string indices must be integers` out of `entry["canonical"]`. Must surface a named
+    # finding instead, never crash.
+    string_entry_manifest = dict(manifest, object_vocab=["demo"])
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, string_entry_manifest)
+        assert any(
+            "object_vocab entry must be a structured object" in e[2] for e in result["errors"]
+        ), f"a plain-string object_vocab entry must surface a named finding: {result['errors']}"
+        assert not any("string indices" in e[2] for e in result["errors"]), \
+            "the raw TypeError text must never leak into a finding message"
+
+        mf = r / "naming.manifest.json"
+        mf.write_text(json.dumps(string_entry_manifest))
+        cli = subprocess.run(
+            [sys.executable, __file__, "--target", str(r), "--manifest", str(mf)],
+            capture_output=True, text=True,
+        )
+        assert cli.returncode == 1, \
+            f"a plain-string object_vocab entry must exit 1 cleanly, not crash: {cli.returncode}"
+        assert "Traceback" not in cli.stderr, \
+            f"a plain-string object_vocab entry must never raise a raw traceback: {cli.stderr}"
+
+    # Regression control: normal structured object_vocab entries (every fixture above)
+    # must never trip the structured-vs-string check.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, manifest)
+        assert not any(
+            "object_vocab entry must be a structured object" in e[2] for e in result["errors"]
+        ), "normal structured object_vocab entries must never trip the shape check"
+
     # `hook` mode target derivation (issue #276) — a REAL git repo + a REAL `git worktree
     # add`, not a simulated directory tree, because the fix's own correctness claim is
     # "git's own top-level is worktree-correct by construction"; a fixture that never
@@ -1222,7 +1454,12 @@ def selftest():
           "`hook` mode worktree-scoped target derivation (issue #276: resolves to the "
           "writing worktree's own root+plugin, not the primary checkout; catches a bad "
           "write there; fails open on malformed events, ungoverned trees, and a "
-          "wrong-shape-but-valid-JSON manifest) proven")
+          "wrong-shape-but-valid-JSON manifest) proven, malformed-manifest robustness "
+          "sweep (issue #296: wrong type per top-level field swept from "
+          "MANIFEST-TEMPLATE.json's own schema, missing object_vocab key, duplicate "
+          "object_vocab registration pinned last-wins-but-named, structured-vs-string "
+          "object_vocab entries — each a named manifest_errors finding + clean exit-1, "
+          "never a raw traceback, each with a regression control) proven")
     return 0
 
 
