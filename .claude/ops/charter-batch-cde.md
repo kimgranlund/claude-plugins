@@ -19,7 +19,8 @@ coordinator after gates pass, per Kim's explicit "do it" precedent on the previo
 ## Batch state
 - Batch C: CLOSED (decision: done). #267 (PR #298, harness 3.7.1) · #268 (PR #299, teamwork
   2.12.3) · #271 (PR #301, harness 3.7.2) all merged+closed · #281 verdict-closed · #300 minted.
-- Batch D wave 1: #272 DISPATCHED (harness 3.7.3 slot) · #262 DISPATCHED (root files) ·
+- Batch D: CLOSED (decision: done). #272 (PR #302, harness 3.7.3) · #262 (PR #303,
+  CLAUDE.md -930 chars + .claude/rules/ x5) both merged+closed ·
   #256 DONE — grant-carrying dispatch blocked by auto-mode classifier at dispatch-creation;
   Kim ruled the block IS the outcome; recorded as ADR-0013 (narrow supersede of ADR-0012's
   deployment-prerequisite bullet — T4 blocks in-place appends to accepted ADRs, seat-verified),
