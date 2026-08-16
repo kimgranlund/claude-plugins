@@ -1,10 +1,11 @@
 ---
 doc-type: idr
 id: idr-0003
-status: draft
+status: locked
 date: 2026-08-16
 owner: kim.granlund
 proof-ref: harness/skills/check-routing/SKILL.md
+provenance: derived-from-evidence
 supersedes: null
 ---
 # IDR-0003 — Routing quality is a measurable property of names and descriptions

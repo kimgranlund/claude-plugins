@@ -1,10 +1,11 @@
 ---
 doc-type: idr
 id: idr-0001
-status: draft
+status: locked
 date: 2026-08-16
 owner: kim.granlund
 proof-ref: harness/scripts/release_gate.py
+provenance: derived-from-evidence
 supersedes: null
 ---
 # IDR-0001 — A mechanized incident class stays gone

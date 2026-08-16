@@ -34,6 +34,12 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             (FAIL, not WARN): RDD has zero existing instances, so there is no retrofit debt to
             excuse a soft landing. `decision-refs:` is a single-line comma/space-separated scalar
             (`parse_frontmatter` cannot read a YAML block list) — never a list.
+  T8 [FAIL] an IDR with a missing/empty `provenance:` frontmatter key, or a value outside
+            {derived-from-evidence, inferred, decided-by-human} — machine-readable provenance for
+            every claim, one of the same three labels the `## Why` prose already states in prose
+            for idr-0001..0006 (#431, ratification round). IDR-only for now (no retrofit debt on
+            other types); FAIL, not WARN — IDR has a small, fully-authored instance set, so there
+            is no soft-landing case to make.
 """
 import json
 import re
@@ -68,6 +74,9 @@ LEDGER_LOCK = {
 
 # T7's scope: RDD statuses at or beyond `locked` that must carry both a citation and a DRI.
 RDD_CITED_STATUSES = {"locked", "superseded"}
+
+# T8's scope: the vocabulary a `provenance:` key on an IDR must take.
+PROVENANCE_VALUES = {"derived-from-evidence", "inferred", "decided-by-human"}
 
 
 def parse_frontmatter(text):
@@ -122,6 +131,12 @@ def lint_text(text):
         if dri in ("", "null", "none", "[]"):
             findings.append(("FAIL", "T7", "no `dri:` -> a locked-or-beyond RDD needs a named "
                                             "accountable human, mechanically, not just a Problem-statement claim"))
+    if dtype == "idr":
+        provenance = fm.get("provenance", "").strip()
+        if provenance not in PROVENANCE_VALUES:
+            findings.append(("FAIL", "T8", f"`provenance:` missing or not one of {sorted(PROVENANCE_VALUES)} "
+                                            "-> every IDR claim needs a machine-readable source label, "
+                                            "not just prose in `## Why`"))
     return findings
 
 
@@ -221,6 +236,16 @@ def selftest():
     assert not any(f[1] == "T7" for f in lint_text(locked_clean)), "locked RDD with refs+dri must NOT FAIL T7"
     draft_empty = rdd_base.format(s="draft", dri="", refs="")
     assert not any(f[1] == "T7" for f in lint_text(draft_empty)), "draft RDD is exempt from T7 on both fields"
+    # T8 IDR provenance FAIL (#431): missing/empty/bad-value provenance FAILs; a valid value is clean.
+    idr_prov_base = ("---\ndoc-type: idr\nid: idr-0099\nstatus: draft\ndate: 2026-08-16\n"
+                      "owner: k\nproof-ref: n/a\n{prov}supersedes: null\n---\n"
+                      "# I\n## Claim\nc\n## Why\nw\n## Proof\np\n")
+    missing_prov = idr_prov_base.format(prov="")
+    assert any(f[1] == "T8" for f in lint_text(missing_prov)), "IDR with no provenance must FAIL T8"
+    bad_prov = idr_prov_base.format(prov="provenance: made-up\n")
+    assert any(f[1] == "T8" for f in lint_text(bad_prov)), "IDR with an out-of-vocab provenance must FAIL T8"
+    good_prov = idr_prov_base.format(prov="provenance: decided-by-human\n")
+    assert not any(f[1] == "T8" for f in lint_text(good_prov)), "IDR with a valid provenance must NOT FAIL T8"
     nofm = lint_text("---\ndoc-type: adr\n---\n# A\n## Context\n## Decision\n## Consequences\n")
     assert any(f[1] == "T1" for f in nofm), "missing id/status must fail T1"
     # T4 git-aware scope (2026-07-15, ADR; generalized 2026-08-16, #316, IDR): committed-locked
@@ -233,7 +258,7 @@ def selftest():
         adr = ("---\ndoc-type: adr\nid: adr-0001\nstatus: {s}\ndate: 2026-07-15\n---\n"
                "# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
         idr = ("---\ndoc-type: idr\nid: idr-0001\nstatus: {s}\ndate: 2026-08-16\nproof-ref: n/a\n"
-               "supersedes: null\n---\n# I\n## Claim\nc\n## Why\nw\n## Proof\np\n")
+               "provenance: decided-by-human\nsupersedes: null\n---\n# I\n## Claim\nc\n## Why\nw\n## Proof\np\n")
         rdd = ("---\ndoc-type: rdd\nid: rdd-0001\nstatus: {s}\ndate: 2026-08-16\nowner: k\n"
                "dri: k\ndecision-refs: adr-0002\nsupersedes: null\n---\n# R\n"
                "## Scope\ns\n## Acceptance\na\n## Sequencing\nq\n## Completion\nc\n")
@@ -273,7 +298,7 @@ def selftest():
             assert not head_is_locked_ledger(h), "committed-draft RDD must be ALLOWED to edit — negative"
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
-          "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites")
+          "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites")
     return 0
 
 
