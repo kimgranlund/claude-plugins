@@ -68,6 +68,21 @@ not merely implied. `grill-the-ask`'s own SKILL.md carried the same stale
 `prd-author`/`spec-author`/`lld-author` references in its NOT-for clause and output contract; those
 were repaired the same way, pointing at docs' `make-doc`/`doc-writing-rules`.
 
+**2026-08-16 (#382): the six hand-copied `write-handoff` fallback blocks became one referenced
+copy.** Every agent above (plus `wiring-checker`, ported later) restated the same eight-field
+Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next
+action shape inline — six independent copies to keep in sync by hand. Since agents can't preload
+a harness skill across the plugin boundary (the hard-preload rule above), the fix follows the
+same `references/`-file pattern `lead-team`/`lead-planning`/`lead-build` already use for
+`adopt-agent-contract.md`: the shape now lives once at
+`teamwork/skills/team-or-solo-rules/references/handoff-fallback.md`, and each of the six agent
+bodies cites that path (`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`)
+instead of restating the fields. `write-handoff` itself also gained a precedence rule for which
+channel carries the finished block: a sealed, record-first dispatch's dated `## Findings` entry
+IS the handoff (no separate mailbox message), while a named teammate-mode seat still sends the
+full block to its coordinator — stated once in `write-handoff`'s "Before you hand back" section
+and pointed to from `team-or-solo-rules`'s reference table, so no citing agent re-derives it.
+
 `loop-rules/scripts/harness_checks.py` shipped in the source library as a symlink to a sibling
 skill (`skill-author`) outside this plugin boundary — a second, quieter instance of the same
 cross-boundary problem, this time at the file-path layer rather than the frontmatter layer. It has
@@ -85,6 +100,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.8 · 2026-08-16 · issue #382: the six hand-copied `write-handoff` eight-field fallback blocks (`team-lead`, `builder`, `planner`, `docs-writer`, `code-checker`, `wiring-checker`) consolidated to one referenced copy at `team-or-solo-rules/references/handoff-fallback.md`, following the `adopt-agent-contract.md` pattern; each agent cites the path instead of restating the fields.
 v2.14.7 · 2026-08-16 · build-lead gains the standing teammate-mode SendMessage delivery clause (agent-writing-rules item 3, gh#157 stranded-report class; closes half of #381). Rebased onto 2.14.6 and rebumped by PR #383's takeover session (coordinator dispatch, 2026-08-16) — 2.14.4/2.14.5 stayed reserved/skipped per the 2.14.6 note below; supersedes that note, this is the actual #383 rebump.
 v2.14.6 · 2026-08-16 · DE-standards adoption (#377): `dispatch-ticket`'s PR-open bullet and Findings write-back both gain a required rejected-alternatives entry (docs doc-writing-rules' TICKET contract, same tier as Findings); its critic dispatch may carry an optional review-path line, mirroring write-handoff's (harness). 2.14.4/2.14.5 skipped, reserved for PR #383's own rebump (comment-coordinated).
 v2.14.4 · 2026-08-16 · agent-scoped worktree-identity pin (closes #375, #363/#359's own follow-up):

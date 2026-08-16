@@ -20,6 +20,13 @@ The single block every team agent emits when it hands work back (to the coordina
 
 **In a messaging team, drain your full inbox first.** Read every still-pending message before you compose — a handoff written one message behind is already wrong the moment it ships: it re-asks a question a later message already answered, re-edits an artifact a teammate already committed, or retracts a finding a newer commit already fixed. Compose only once nothing is left unread. A **sealed subagent has no inbox** — its world was enumerated at dispatch, and new information reaches it only by re-dispatch; for it, freshness means consistency with the inputs it was handed.
 
+**Sealed vs. messaging — which channel carries the handoff.** The two dispatch shapes above route the finished block through different channels, stated once here so no citing agent has to re-derive it:
+
+- **Sealed, record-first dispatches** (`dispatch-ticket`'s Findings write-back contract and anything built the same way — a task or feature dispatched as one sealed `Agent`-tool call with no `name:`, no mailbox): the durable record's dated `## Findings` entry (or its backend equivalent) **IS** the handoff — there is no separate return message to compose. Carry the block's routing-relevant subset (at minimum Status, Summary, Evidence, Recommended next action) inside that Findings entry itself; the caller reads the record back per the dispatching skill's own read-back step (`dispatch-ticket`'s Phase 6), not a mailbox.
+- **Messaging-team seats** (a `name:`-addressed teammate reporting to a coordinator or the host over `SendMessage`): the mailbox block stands as documented above — compose and send it once the inbox is drained.
+
+A seat never owes both — check which shape it was dispatched under before composing, not after.
+
 ## The block — exactly these fields, in order
 
 Keep each tight; omit nothing — write `(none)` when a field is empty. Inline what routes; anything bulky returns **by reference** (write it to a file, cite the path) — a handback is a routing surface, not a payload. A handoff is **write-once**: once shipped it is never edited in place — the recipient may already have routed on it; repair = re-dispatch + re-compose.
@@ -60,9 +67,9 @@ A green gate is **not** a landed change. Read the gate output, *then* commit as 
 
 | Path | Use when |
 |---|---|
-| `scripts/handoff_check.py` | Mechanical H1 gate — field presence, order, `(none)` markers, Status enum — run before any rubric judgment |
+| `scripts/handoff_check.py` | Mechanical H1 gate — field presence, order, `(none)` markers, Status enum — run before any rubric judgment; the full mailbox block only, not a record-first Findings subset |
 | `references/foundations.md` | Why the shape is verifiable-not-narrative; the up-loop + generator/critic split it feeds |
 | `references/best-practices.md` | Per-field how-to + the per-seat notes (planning / execution / orchestration / steward / tokens) |
 | `references/rubric.md` | Scoring a handoff block — completeness, verifiability, honesty, routing-readiness |
 
-**Done** when all eight fields stand in order, Status routes on the enum, Evidence lets the consumer confirm the Summary without re-doing the work, every unrun gate is stated UNMEASURED, and the recommendation names one step with one owner. **NOT done** while a field is missing rather than `(none)`, a verdict hides in prose, a "tests pass" stands bare, Risks reassure — or a shipped block gets edited in place instead of re-dispatched and re-composed.
+**Done** when all eight fields stand in order (record-first: the Findings-entry routing-relevant subset per the Sealed vs. messaging rule above), Status routes on the enum, Evidence lets the consumer confirm the Summary without re-doing the work, every unrun gate is stated UNMEASURED, and the recommendation names one step with one owner. **NOT done** while a field is missing rather than `(none)`, a verdict hides in prose, a "tests pass" stands bare, Risks reassure — or a shipped block gets edited in place instead of re-dispatched and re-composed.

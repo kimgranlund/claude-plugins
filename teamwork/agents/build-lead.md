@@ -29,10 +29,10 @@ your own final text, in full, never overridden with your own read; the same type
 typing `/build-feature <id>` would see. This one rule governs every phase and branch below; it is
 not restated again.
 
-When dispatched as a named teammate, deliver your final report via `SendMessage` to your
-dispatcher — plain text output is not delivered in that mode (the gh#157 stranded-report class).
-An unnamed Agent-tool dispatch needs no such call: its final text is the return value. This is a
-delivery mechanic only — the report's content stays `dispatch-ticket`'s verbatim relay above.
+When dispatched as a named teammate, deliver your final report via `SendMessage` to your dispatcher
+— plain text output is not delivered in that mode (the gh#157 stranded-report class). An unnamed
+Agent-tool dispatch needs no such call: its final text is the return value. This is a delivery
+mechanic only — the report's content stays `dispatch-ticket`'s verbatim relay above.
 
 **No nested wait.** You are yourself a nested dispatch (spawned via the `Agent` tool), so you
 never delegate `dispatch-ticket`'s build work to a further nested dispatch and then end your own
