@@ -8,13 +8,14 @@ description: >-
   run next. Run
   /team-scaffolding, first argument agent, reviewer, planner, or product, then an optional
   charter — or bare with no role: asks one question offering only missing seats (or seeds a
-  virgin repo's fleet manifest first), never re-asking once a role is bound. NOT a one-off
-  adoption of a single lead-* contract with no fleet bootstrap (/lead-team,
-  /lead-review, /lead-planning, /product-authoring directly); NOT for a task one context can hold
-  (team-or-solo-rules).
+  virgin repo's fleet manifest first), never re-asking once a role is bound. Also runs the
+  reverse: /team-scaffolding retire ROLE releases the retiring session's own seat (un-walls
+  settings.local.json, releases fleet.json, syncs fleet-roster.md). NOT a one-off adoption of a
+  single lead-* contract with no fleet bootstrap (/lead-team, /lead-review, /lead-planning,
+  /product-authoring directly); NOT for a task one context can hold (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[agent|reviewer|planner|product [charter]] — bare asks which seat"
+argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason] — bare asks which seat"
 ---
 
 # team-scaffolding — name the seat, wall it, brief it, then name the lead-* command
@@ -33,15 +34,20 @@ adopted contract).
 Valid roles: `agent`, `reviewer`, `planner`, `product`. Branch on `$ARGUMENTS` (#410
 bare-invocation-UX addendum):
 
+- **First token is `retire`** → this is the reverse flow, not a role bind. Skip straight to Phase
+  6 with the second token as the role to release and the remainder as an optional reason; Phases
+  1–5 (bind/name/wall/brief/hand-off) never run for a retire invocation.
 - **A role token given** (`$ARGUMENTS`'s first token is one of the four): **zero questions.**
   Validate against `.claude/ops/fleet.json` — an unrecognized token is a Failure branch. Manifest
   absent (virgin repo, role given directly) → seed it now with the canonical seat ladder (Phase 4
   point 1), today's date as every seat's `justification_date`, `mode: "manual"` for all four —
   canonical defaults, no interview, because an explicit role token is itself the human declining
-  the interview. Manifest present and this role's `live_state.joined` already carries a still-live
-  manual/dispatched entry → a collision, not a choice: report the existing entry's date and stop
-  (Failure branches) rather than layering a second holder over it. Otherwise (valid, unheld role)
-  → bind immediately, straight to Phase 2.
+  the interview. Manifest present → read this role's `live_state.joined` entries and take the
+  LATEST one's `action` field (liveness rule and field semantics: `fleet-bootstrap`'s
+  `references/fleet-manifest-schema.md`, the canonical home). Live (`"joined"`, or absent) → a
+  collision, not a choice: report the existing entry's date and stop (Failure branches) rather
+  than layering a second holder over it. Released (`"released"`), or no entry exists yet for this
+  role → not a collision; bind immediately, straight to Phase 2.
 - **Bare invocation (no `$ARGUMENTS`)**:
   1. Read `.claude/ops/fleet.json`. **Absent** (virgin repo) → run the manifest-seeding interview
      as ONE BATCHED `AskUserQuestion` round (never sequential — exactly these three questions,
@@ -85,8 +91,9 @@ already seeded by now — either Phase 1's bare-invocation branch seeded it via 
 interview before any role bound, or its role-token branch seeded it with canonical defaults
 directly (the explicit token stood in for the interview). Either way seeding never runs twice: an
 absent manifest at this point is a Phase 1 defect, not something Phase 2 re-derives. Append this
-role's `live_state.joined` entry (role, mode, date, `agent_name: null` for a manual seat); every
-other role's existing entry and the seat-tier table are read-only from here.
+role's `live_state.joined` entry (role, mode, date, `action: "joined"`, `agent_name: null` for a
+manual seat) — field semantics: `fleet-manifest-schema.md`. Every other role's existing entry and
+the seat-tier table are read-only from here.
 
 ## Phase 3 — Write or verify the permission profile
 
@@ -171,6 +178,47 @@ This session does NOT adopt the contract itself. `team-scaffolding`'s own discip
 has already run and does not repeat; the printed command is what carries the session forward once
 the human types it.
 
+## Phase 6 — Retire a seat (`/team-scaffolding retire <role> [reason]`)
+
+The RETIRING session runs this itself, before it stops — never the taking-over session (it has no
+standing to un-wall a seat it never held) and never a bystander orchestrator (issue #426's Open
+item: who executes the un-wall must be stated, not implied). **A `reviewer` session's own
+`deny: ["Edit", "Write"]` wall (Phase 3) covers exactly the `Edit`/`Write` tools, not `Bash`** —
+every write in this phase (all three steps, not step 1 alone: `fleet.json` and
+`fleet-roster.md` are ordinary worktree files the reviewer wall also blocks via Edit/Write) runs
+as a `Bash` command (`sed`/inline heredoc, whatever's surgical) for that reason, with a `Read`
+re-check after each write (`Read` is never denied either) — stating the mechanism here so the
+model's first attempt isn't an `Edit` call that walks straight into the wall it's trying to
+remove. Run these three steps in order; a failure at any step stops there and is reported
+(Failure branches) rather than silently skipped:
+
+1. **Un-wall, `reviewer` only.** Remove exactly the entries Phase 3/C1 added to
+   `.claude/settings.local.json` (`deny: ["Edit", "Write"]` and the `gh`/Read/Grep/Glob
+   allow-list) — surgical removal via `Bash`, never a wholesale file delete, since the file may
+   carry unrelated keys the human added by hand (the same merge-never-clobber discipline C1 uses
+   going in applies going out). Re-read the file and confirm both deny entries are gone before
+   continuing. Other roles (`agent`/`planner`/`product`) never wrote a deny profile (Phase 3), so
+   this step is a no-op for them — state that plainly rather than skipping silently, and use the
+   normal `Edit`/`Write` tools for steps 2-3 (nothing walls those roles). The seat is deliberately
+   left un-walled, not re-walled to some default: the next session to bind `reviewer` re-runs
+   Phase 3 fresh and re-writes its own wall — no session inherits another's wall.
+2. **Append the release record.** In `.claude/ops/fleet.json`, append (never rewrite) a
+   `live_state.joined` entry for this role: `{ "role": "<role>", "mode": "<from the entry being
+   released>", "date": "<today>", "action": "released", "agent_name": null, "reason":
+   "<the optional reason argument, or null>" }` — same append-only discipline as every other
+   `live_state.joined` write (field semantics: `fleet-manifest-schema.md`'s `action`/`reason`
+   entries, the canonical home for this rule).
+3. **Sync the roster.** Append one dated row to `.claude/ops/fleet-roster.md` recording the
+   release (role · `RETIRED` · date · repo) — this is what keeps the roster (Phase 2's discovery
+   file) and `fleet.json` (Phase 1's collision check) agreeing on who currently holds the seat,
+   closing the exact drift issue #426 found (a hand-edited roster row with no matching manifest
+   record). Never hand-edit an existing roster row in place — append, matching the file's own
+   append-only convention.
+
+Report the three steps' outcomes in one line (`Retired: {repo}-<role> — wall removed (or n/a) ·
+fleet.json released · roster synced`) and stop; retiring never hands off to a `/lead-*` command
+(Phase 5 is bind-only, not part of this flow).
+
 ## Failure branches
 
 - **Unrecognized role token** → report the four valid roles and stop; no session naming, no
@@ -186,6 +234,14 @@ the human types it.
 - **Re-invoked in a session that already bootstrapped a different role** → name the existing role
   and require an explicit close-or-switch decision from the human before re-running; never silently
   layer a second role's profile over the first.
+- **`retire <role>` given no role token, or an unrecognized one** → report the four valid roles
+  and stop; no fleet.json write, no roster write.
+- **`retire <role>` where the role's latest `live_state.joined` entry is already `"released"` (or
+  no entry exists at all)** → nothing live to release; report that and stop rather than appending
+  a redundant release record.
+- **Phase 6's `settings.local.json` un-wall or its re-verification fails for `reviewer`** → stop at
+  step 1; do not proceed to append the fleet.json release record while the wall's true state is
+  unknown.
 
 ## Done
 
@@ -193,7 +249,9 @@ Done when Phases 1–4 have completed for the bound role (profile verified where
 row appended, charter printed) and Phase 5 has named the matching lead-* command for the human to
 run next — never when only the bootstrap layer ran with no command named, and never claiming the
 session itself adopted the contract (Skill-tool invocation is structurally impossible against a
-`disable-model-invocation` target).
+`disable-model-invocation` target). For a `retire` invocation: done when all three Phase 6 steps
+have completed (or been reported as no-ops) and the one-line outcome is printed — never when only
+the un-wall ran with fleet.json or the roster left unsynced.
 
 ## Rejected alternatives
 

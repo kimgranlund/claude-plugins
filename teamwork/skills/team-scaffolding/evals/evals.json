@@ -7,6 +7,8 @@
     { "id": "t03", "prompt": "Bootstrap this session as the fleet's planner seat.", "expect": "trigger" },
     { "id": "t04", "prompt": "Set this session up as {repo}-product and print the comms charter.", "expect": "trigger" },
     { "id": "t05", "prompt": "/team-scaffolding planner — warn me if there's no intent layer yet.", "expect": "trigger" },
+    { "id": "t06", "prompt": "/team-scaffolding retire reviewer — handing off to plugins-review.", "expect": "trigger" },
+    { "id": "t07", "prompt": "This session is retiring the reviewer seat; un-wall it and release it in the fleet manifest.", "expect": "trigger" },
     { "id": "n01", "prompt": "Adopt the team-lead contract for this planning charter.", "expect": "no-trigger", "comment": "owner: teamwork:lead-team directly — no fleet bootstrap (naming/profile/roster) requested" },
     { "id": "n02", "prompt": "Review this PR against its LLD.", "expect": "no-trigger", "comment": "owner: teamwork:lead-review / docs:doc-checker (a one-off review, not a standing seat bootstrap)" },
     { "id": "n03", "prompt": "Should this be a subagent or a team for this task?", "expect": "no-trigger", "comment": "owner: teamwork:team-or-solo-rules" },
