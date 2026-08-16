@@ -22,4 +22,10 @@ version-bumping build per plugin at a time, coordinator merges after CI, campaig
 - HELD: #258 (Kim's standing defer) · #295 (own charter later, per Kim's confirm choice)
 
 ## Ratified
-(none yet this drain)
+- Waves F/G/H: all 9 pre-#293 tickets merged (PRs #315, #317, #319, #322-#327). Two host-sleep
+  crashes (#308, #297) salvaged: #308 coordinator-finished post-critic, #297 seat resumed in
+  place. F4 measured (skill's model wins; R6 un-capped WARN→FAIL), F5 measured (fork blocks
+  foreground under -p; R5 confirmed for that path).
+- Lifecycle arc CONFIRMED by Kim (2026-08-16, batched confirm): full arc in order after #293 —
+  #316 (IDR impl) → #318 (RDD scoping, Blocked-by #316) → #320 (bible pack) → #321 (stage
+  awareness). Serialize where docs-plugin files overlap. Same gates/merge discipline.
