@@ -7,7 +7,7 @@ command   := object "-" verb              skill-create, rename-execute
           |  wrapper: skill-name          naming-audit  (iff wraps: that skill)
 skill     := object "-" process           skills-audit, rename-planning
           |  nominal-phrase               naming-conventions  (all tokens resolve)
-agent     := skill-name "-" "agent"       naming-audit-agent  (primary)
+agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
           |  scope "-" role "-" "agent"   team-leader-agent   (orchestrators only)
 ```
 

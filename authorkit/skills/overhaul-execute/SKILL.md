@@ -69,8 +69,8 @@ tool) FIRST — governance before measurement.
 ## Phase 1 — MEASURE
 
 Per in-scope estate: `naming-audit`, `bloat-audit`, and `attention-audit` (Skill tool). More
-than 3 estates in scope, or any single estate over 40 members, dispatches `naming-audit-agent`,
-`bloat-audit-agent`, and `attention-audit-agent` (Agent tool) with the batch instead. Record
+than 3 estates in scope, or any single estate over 40 members, dispatches `estate-audit-agent`
+(Agent tool) once per instrument — `naming`, `bloat`, `attention` — with the batch instead. Record
 each estate's baseline in the run ledger — error count, exemption count, routable/agent
 description chars (attention-audit's rent figures) — the Phase 6 burn-down starts here.
 

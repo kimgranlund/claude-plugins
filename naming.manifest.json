@@ -166,6 +166,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "estate",
+      "plural": "estates",
+      "banned_aliases": []
+    },
+    {
       "canonical": "attention",
       "plural": null,
       "banned_aliases": [
@@ -310,7 +315,6 @@
     "apple-mobile-facts",
     "big-change-git-rules",
     "bloat-audit",
-    "bloat-audit-agent",
     "blocked-by-rules",
     "break-down-flow",
     "break-down-layout",
@@ -421,7 +425,6 @@
     "mobilize-chores",
     "motion-rules",
     "naming-audit",
-    "naming-audit-agent",
     "naming-conventions",
     "naming-rules",
     "ops-write-sandbox-rules",

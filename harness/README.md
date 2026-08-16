@@ -129,6 +129,13 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.6 · 2026-08-15 · `agent-writing-rules`' "Checker-seat consolidation" section repointed
+post-execution (issue #293, cross-plugin): the section narrated authorkit's three
+single-instrument batch-audit agents as the pending merge candidate; now records the merge as
+executed — `estate-audit-agent` (one agent, `instrument`-parameterized) replaces
+`naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent`, with `pattern-audit` joining as
+a fourth instrument on the same merge. Narrative/reference update only — no description, frontmatter,
+or behavioral change to this skill.
 v3.8.5 · 2026-08-16 · F4 measured (issue #308, #274 follow-up): a live `claude -p` fork dispatch with a conflicting skill/agent `model:` pair proved the skill's `model:` deterministically wins (the spawn record's own `subagents/*.meta.json`, not self-report) — `skill-writing-rules`' Delegation-mechanics fact block gains the dated result and `check-skill`'s DM-R6 is un-capped from WARN to FAIL on a skill/agent model conflict
 v3.8.4 · 2026-08-15 · `skill-writing-rules`' Delegation-mechanics fact block gains the F5 re-verify result (issue #309, #274 follow-up): a live `claude -p` run measured a `context: fork` skill blocking foreground exactly per R5's documented exception list (marker landed ~8.4s before process exit); F4/R6 precedence stays open, tracked separately at #308
 v3.8.3 · 2026-08-16 · `agent-writing-rules`' seat-ladder section gains the model-inheritance-leak discipline (issue #313): an ad-hoc (no-definition) dispatch states its model explicitly, defaulting to the seat ladder's routine tier (`sonnet`); the fork-inheritance fact (a `context: fork` skill is always priced at the session's model, unpinnable) lands as a dated note beside it, plus a Failure-catalog row recording why no `A7`-sibling lint can see either class (prompt-time, not file-time)

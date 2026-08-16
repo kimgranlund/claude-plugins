@@ -27,7 +27,7 @@ exact matcher syntax as harness-owned.
 | Artifact | Grants | Why |
 |---|---|---|
 | naming-audit (skill) | Read, Glob, Grep, Bash(validate.py) | read-only diagnostic |
-| naming-audit-agent | same as its skill | mirrors performs target |
+| estate-audit-agent | union of its 4 instruments' read-only script grants | mirrors performs target; parameterized by `instrument` |
 | rename-planning | Read, Glob, Grep, Bash(git log *), Bash(git grep *) | read-only + history |
 | manifest-authoring | Read, Edit/Write scoped to naming.manifest.json | one file |
 | rename-execute | Read, Glob, Grep, Edit, Write, Bash(git mv *), Bash(validate.py) | THE mutation point, behind confirm |

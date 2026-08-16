@@ -185,9 +185,11 @@ silently rather than ever blocking a write.
 ## Composition
 
 Inside authorkit, overhaul-execute runs this skill in its Phase 1 MEASURE
-(alongside naming-audit and bloat-audit; the attention-audit-agent twin
-takes the batch path at the same scale threshold) and re-runs trend.py in
-its Phase 6 burn-down — the trend row is the baseline→now evidence.
+(alongside naming-audit and bloat-audit; `estate-audit-agent` dispatched
+with `instrument: attention` takes the batch path at the same scale
+threshold — the merged agent's batch twin since issue #293) and re-runs
+trend.py in its Phase 6 burn-down — the trend row is the baseline→now
+evidence.
 
 ## References
 
