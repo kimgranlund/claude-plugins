@@ -20,14 +20,9 @@ only in chat context vanishes with it. Runs as a background fork (`context: fork
 fork sees no conversation history — `$ARGUMENTS` is the only channel in. Seed: `$ARGUMENTS`.
 
 **Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
-(`references/backend-resolver.md`) once; it returns Option A (local — the file backend, make-doc's
-TICKET path), Option B (git-native — `gh issue`, an ADR-0002-style ruling), or Option C (external —
-a named adapter; Linear's realization: `references/linear-adapter.md`, a bring-your-own adapter
-documents its own). No ruling, or the ruled option's adapter is unreachable → Option A, exactly as
-always. Every phase below follows whichever option the resolver returned: "ticket file" reads as
-"GitHub Issue" under Option B, or as the named external adapter's own record under Option C — same
-payload contract, same ordering, different store. Canonical statement: `file-bug`'s SKILL.md —
-this is the same seam, not a second one.
+(`references/backend-resolver.md`) once and follow whichever option it returns for every phase
+below — canonical definition of the three options, the ruling shape, and the failure fallback
+lives there, not restated here.
 
 ## Phase 1 — Route: fresh idea, or resume by record state
 
