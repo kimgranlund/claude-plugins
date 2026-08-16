@@ -2,13 +2,13 @@
 name: big-change-git-rules
 description: >-
   This workspace's git campaign safety rules. Use for "gh reports a post-merge checkout error",
-  "did the remote branch actually get deleted", "pull without clobbering a parallel session's
+  "did the branch actually get deleted", "pull without clobbering a parallel session's
   work", "a git command said it worked but nothing changed", "solo commit or a full campaign",
-  "resolve a stash-pop conflict safely", "was requiring PRs on main ever considered here",
+  "resolve a stash-pop conflict safely", "were PRs on main ever required",
   "push or PR-create Blocked by classifier in a subagent", "execute this rename safely", "what
-  must land in the same change as a rename". Covers discard safety, delete-failures, who
-  ships, the rename contract. NOT authoring artifacts (*-writing-rules), NOT choosing the new
-  name (naming-rules), NOT full campaigns (CLAUDE.md).
+  lands with a rename", "stacked child PR auto-closed on parent delete". Covers discard safety,
+  delete-failures, who ships, the rename contract. NOT authoring artifacts (*-writing-rules), NOT
+  choosing the new name (naming-rules), NOT full campaigns (CLAUDE.md).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -25,7 +25,7 @@ reader arrives with, not a chronological log.
 | Ask | Load |
 |---|---|
 | Worktree placement, the post-merge checkout error, discard safety | `references/worktree-mechanics.md` |
-| Squash safety, the ten-branch delete-failure class, CI as the gate, auth-path consistency | `references/merge-semantics.md` |
+| Squash safety, the ten-branch delete-failure class, CI as the gate, auth-path consistency, a stacked child PR auto-closing when its parent's branch is deleted | `references/merge-semantics.md` |
 | "A command said it worked but nothing changed" — the general pattern + six dated instances | `references/silent-failure-catalog.md` |
 | Pulling onto a checkout a parallel session is using; classification, quarantine, conflict resolution | `references/parallel-session-reconcile.md` |
 | Solo-main-direct vs. campaign; the branch-protection rejection; the close sequence in order | `references/campaign-decision-tree.md` |

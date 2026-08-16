@@ -189,6 +189,12 @@
       "prompt": "how do we prove routing did not break after the rename",
       "expect": "no-trigger",
       "comment": "owner: check-routing — running the routing proof is its charter even in a rename context. Ceded 2026-08-12 (issue #172, ownership ruling); was t20."
+    },
+    {
+      "id": "t21",
+      "prompt": "my stacked child PR auto-closed the moment I merged and deleted its parent branch",
+      "expect": "trigger",
+      "note": "stacked-PR merge rule axis (merge-semantics.md), issue #443, incident 2026-08-16"
     }
   ]
 }

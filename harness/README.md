@@ -129,6 +129,16 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.20 · 2026-08-16 · closes #443: the stacked-PR merge rule (PR #437 auto-closed as child of
+#424 when its parent branch was deleted, re-opened as PR #439) is now recorded in
+`big-change-git-rules/references/merge-semantics.md` (new section + failure-catalog row, consult
+table and description gain the routing phrase) — retarget the child to `main` + `git rebase
+--onto origin/main <parent-old-tip>` BEFORE deleting the parent branch, since squash-merge also
+orphans the child's copy of the parent's commits. `campaign_close.py` gains C4 (warn-only,
+never blocks the delete): `gh pr list --base <branch> --state open` before the branch-delete
+step names any open child PR still based on it; selftest covers the warning and the clean case.
+Teamwork's `parallel-work-rules` mention deferred until PR #442 (teamwork's version slot) lands.
+
 v3.8.19 · 2026-08-16 · `release_gate.py` gains G14 (closes #445): a touched plugin's version must
 strictly exceed `origin/main`'s, and the README ledger's newest line must name that version — the
 pre-merge, CI-visible tier `version_claim_check.py`'s cross-open-PR tier (#311/PR #329) cannot
