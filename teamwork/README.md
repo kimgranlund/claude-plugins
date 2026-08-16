@@ -85,6 +85,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.1 · 2026-08-16 · checker-agent description diet (#357): code-checker/wiring-checker descriptions drop the shared fresh-isolated-context / never-grades-own-work / gap-map boilerplate (collide.py's top cross-plugin *-checker baseline, 6 agents, 103.9-158.4); doctrine added to each body opener. Re-run: code-checker↔design-system-checker 109.9→91.3, ↔flow-checker 103.9→69.6; wiring-checker↔layout-checker 135.6→64.0, rest below threshold. Batched critic pass (6 files): both clean; layout-checker's dropped fix-owner clause repaired same-round. No evals.json owed. Siblings trimmed same PR.
 v2.14.0 · 2026-08-15 · agent-contract-adoption ritual centralized (closes #352, bloat-audit
 2026-08-16): `lead-planning`, `lead-team`, and `lead-build` carried near-duplicate copies of the
 "read the agent file, adopt its contract verbatim, acknowledge before real work, don't stack a
