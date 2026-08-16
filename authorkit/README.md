@@ -81,6 +81,21 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.17.0 · 2026-08-16 · ADR-0015 follow-on (issue #433): the orchestrator agent production
+(`{scope}-{role}`) no longer requires the `-agent` tail — `naming-audit/scripts/validate.py`'s
+`Grammar.parse` agent branch tries a bare scope-role name (terminal ∈ RoleLex) alongside the
+existing `-agent`-stripped path, both spellings resolving scope against a new
+`ObjectVocab ∪ ProcessLex` pool (`resolve_orchestrator_scope`, deliberately narrower than
+ADR-0014's `-rules` union — no TopicLex); `RoleLex` gains a D3 disjointness check against that
+same pool. Selftest gains 6 fixtures (positive ObjectVocab/ProcessLex scopes, legacy-spelling
+regression, bare non-role negative, skill-shaped negative, D3 manifest-collision negative).
+Repo-root `naming.manifest.json`: `build` registered in `ObjectVocab` (needed for
+`build-leader`); `$schema_note` gains a dated sentence; exemptions unchanged (124 → 124 — this
+change admits nothing by exemption). `naming-conventions`'s GRAMMAR.md/SKILL.md/MIGRATION.md/
+FRONTMATTER.md and `.claude/docs/spec/spec-naming-convention.md` (§3/§3.3/§4 AC-008/§5/§12,
+new §14.4) updated to match. ADR-0011 itself untouched (append-only); the supersession is
+recorded in ADR-0015's frontmatter alone.
+
 v0.16.0 · 2026-08-16 · New `repo-audit` command+skill (issue #407) — one umbrella audit sweep:
 Phase-0-style discover/scope-confirm (reusing `overhaul-execute`'s own scan, one
 `AskUserQuestion` round), fans out all five instruments (`naming-audit`/`bloat-audit`/
