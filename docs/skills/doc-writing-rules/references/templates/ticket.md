@@ -15,3 +15,8 @@ owner:
 
 ## Links
 <!-- spec / plan step / ADRs this traces to. A ticket tracing to nothing is scope creep. -->
+
+## Rejected alternatives
+<!-- What was deliberately NOT done, and why — filled in at close, same tier as Findings
+     write-back. "Nothing rejected" is a valid entry when the path was uncontested; leaving
+     the section absent at close is not. -->
