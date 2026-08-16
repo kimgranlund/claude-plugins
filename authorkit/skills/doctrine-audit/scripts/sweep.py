@@ -13,6 +13,8 @@ belongs to the doctrine-audit SKILL, not here.
 Usage:
   sweep.py --root PATH [--manifest PATH] [--json]
   sweep.py validate --manifest PATH             schema-check a manifest, no target sweep
+                                                 (also warns on line-wrap-fragile
+                                                 verbatim-line patterns — #396)
   sweep.py selftest                             prove the counters bite
 
 Exit codes: 0 clean (no mechanizable findings; judgment edges may still be reported),
@@ -28,6 +30,13 @@ from pathlib import Path
 
 KNOWN_TYPES = {"verbatim-line", "ledger-sync", "vocab-term", "judgment"}
 REQUIRED_TOP = {"edges"}
+
+# A literal space between two word characters inside a verbatim-line dependent
+# pattern is line-wrap fragile (issue #393): a prose re-wrap of the dependent file
+# breaks the exact-string match, producing a false "required pattern absent" on a
+# require edge or silently disarming a forbid edge. \s+ (or another whitespace
+# escape) tolerates the wrap; a literal space does not.
+SPACE_BETWEEN_WORDS_RE = re.compile(r"\w \w")
 
 
 class SweepError(Exception):
@@ -91,6 +100,26 @@ def validate_edge_shape(edge: dict, idx: int) -> list:
         if not edge.get("owning_checker"):
             errs.append(f"{eid}: judgment edge needs owning_checker (the checker it's routed to)")
     return errs
+
+
+def check_pattern_fragility(data: dict) -> list:
+    """Returns warning strings (never errors) for verbatim-line dependent patterns
+    containing a literal space between word characters -- the #393 line-wrap
+    fragility class. Warning tier only (#396): existing manifests carrying fragile
+    patterns still validate VALID; this only advises a \\s+ rewrite."""
+    warnings = []
+    for edge in data.get("edges", []):
+        if edge.get("type") != "verbatim-line":
+            continue
+        eid = edge.get("id", "<unnamed edge>")
+        for dep in edge.get("dependents", []):
+            pattern = dep.get("pattern", "")
+            if SPACE_BETWEEN_WORDS_RE.search(pattern):
+                warnings.append(
+                    f"{eid}: dependent pattern {pattern!r} has a literal space "
+                    f"between word characters -- line-wrap fragile; consider \\s+ instead"
+                )
+    return warnings
 
 
 def validate_manifest(data: dict) -> list:
@@ -268,12 +297,17 @@ def main():
             print(f"doctrine-audit sweep: {e}")
             sys.exit(2)
         errs = validate_manifest(data)
+        fragility_warnings = check_pattern_fragility(data)
         if errs:
             print("doctrine-audit manifest validate · INVALID")
             for e in errs:
                 print(f"  - {e}")
+            for w in fragility_warnings:
+                print(f"  [warning] {w}")
             sys.exit(1)
         print(f"doctrine-audit manifest validate · VALID · {len(data['edges'])} edges")
+        for w in fragility_warnings:
+            print(f"  [warning] {w}")
         sys.exit(0)
 
     if not args.root:
@@ -324,6 +358,9 @@ def selftest():
       - the pinned verdict-line string is exact; CLI exit tri-state (0/1/2)
         verified through actual subprocess runs of main(), including the
         'validate' subcommand.
+      - pattern fragility (#396): a verbatim-line pattern with a literal space
+        between word characters warns at validate time; a \s+-tolerant pattern
+        (negative control) produces zero warnings and stays VALID.
     """
     import subprocess
     import tempfile
@@ -530,9 +567,60 @@ def selftest():
         assert bad.returncode == 1, f"an invalid manifest must exit 1, got {bad.returncode}"
         assert "INVALID" in bad.stdout
 
+        # Pattern fragility (#396) positive control: a literal space between word
+        # characters in a verbatim-line pattern warns, but still validates VALID
+        # (warning tier only, never an error).
+        fragile_manifest = r / "fragile.manifest.json"
+        fragile_manifest.write_text(json.dumps({"edges": [{
+            "id": "F1", "type": "verbatim-line", "mode": "require",
+            "canon_file": "dep.md",
+            "dependents": [{"file": "dep.md", "pattern": "deliver your final report"}],
+        }]}))
+        fragile = subprocess.run(
+            [sys.executable, __file__, "validate", "--manifest", str(fragile_manifest)],
+            capture_output=True, text=True,
+        )
+        assert fragile.returncode == 0, \
+            f"a fragile-but-shape-valid manifest must still exit 0, got {fragile.returncode}"
+        assert "VALID" in fragile.stdout
+        assert "[warning]" in fragile.stdout and "line-wrap fragile" in fragile.stdout, \
+            f"a literal-space verbatim-line pattern must warn: {fragile.stdout!r}"
+
+        # Pattern fragility (#396) negative control: a \s+-tolerant pattern (no
+        # literal space between word characters) produces zero warnings.
+        tolerant_manifest = r / "tolerant.manifest.json"
+        tolerant_manifest.write_text(json.dumps({"edges": [{
+            "id": "F2", "type": "verbatim-line", "mode": "require",
+            "canon_file": "dep.md",
+            "dependents": [{"file": "dep.md", "pattern": r"deliver\s+your\s+final\s+report"}],
+        }]}))
+        tolerant = subprocess.run(
+            [sys.executable, __file__, "validate", "--manifest", str(tolerant_manifest)],
+            capture_output=True, text=True,
+        )
+        assert tolerant.returncode == 0
+        assert "VALID" in tolerant.stdout
+        assert "[warning]" not in tolerant.stdout, \
+            f"a \\s+-tolerant pattern must not warn: {tolerant.stdout!r}"
+
+    # check_pattern_fragility() unit-level assertions (direct call, no subprocess).
+    assert check_pattern_fragility({"edges": [{
+        "id": "U1", "type": "verbatim-line",
+        "dependents": [{"file": "x.md", "pattern": "two words"}],
+    }]}) == ["U1: dependent pattern 'two words' has a literal space between word "
+             "characters -- line-wrap fragile; consider \\s+ instead"]
+    assert check_pattern_fragility({"edges": [{
+        "id": "U2", "type": "verbatim-line",
+        "dependents": [{"file": "x.md", "pattern": r"two\s+words"}],
+    }]}) == [], "an \\s+-tolerant pattern must not be flagged"
+    assert check_pattern_fragility({"edges": [{
+        "id": "U3", "type": "judgment", "owning_checker": "x",
+    }]}) == [], "a non-verbatim-line edge must never be scanned for pattern fragility"
+
     print(
         "doctrine-audit sweep selftest · PASS · verbatim-line/ledger-sync/vocab-term/"
-        "judgment/shape-validation/unrecovered-passthrough/verdict/exit-tristate counters bite"
+        "judgment/shape-validation/unrecovered-passthrough/verdict/exit-tristate/"
+        "pattern-fragility counters bite"
     )
     return 0
 
