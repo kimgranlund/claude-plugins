@@ -79,6 +79,19 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.11.1 · 2026-08-16 · `naming-audit`'s `validate.py` gains a malformed-manifest robustness
+sweep before the adia estates campaign (issue #296): every top-level field
+`MANIFEST-TEMPLATE.json` declares as a list is now type-checked (`_typed_list`, swept from the
+template's own schema, not hand-picked) — a wrong-type field surfaces a named `manifest_errors`
+finding and is treated as empty rather than crashing `Grammar.__init__`'s `set()`/`for` calls.
+`object_vocab` entries gain three more guards, generalizing #252's author_registry-only shape
+fix: a missing `canonical` key, a plain-string entry where a structured `{"canonical": ...}`
+object is required (the mirror of #252's own direction), and a duplicate `canonical`
+registration — ruled last-wins (matching the dict's own natural overwrite) but never silently:
+a duplicate always surfaces a named finding, so the manifest is not clean until resolved by
+hand. Each of the four classes carries a positive/CLI-exit-1/regression triplet in
+`validate.py selftest`, following #252's worked pattern.
+
 v0.11.0 · 2026-08-15 · `pattern-audit` joins as a fourth audit-family sibling (issue #257,
 lld-0004-pattern-audit.md): a genuinely distinct instrument — sweeps a repo/corpus for an
 arbitrary caller-supplied literal pattern or natural-language instruction and emits a flat,
