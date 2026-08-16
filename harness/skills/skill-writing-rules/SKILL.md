@@ -65,12 +65,23 @@ self-sufficiency and background questions before minting a fork-species skill:
 | With `context: fork`, the skill's `model:` sets the forked subagent's model instead of the session's; **not established by current docs:** which side wins when the skill's `model:` and the agent definition's own model pin conflict | WARN on any skill/agent model conflict; never FAIL or assert precedence until the precedence fixture (F4) exists and reports (R6 stays WARN-capped by construction, not by convention, in both `skill_lint.py` and `check-skill`'s DM-R6) |
 | `context: fork` with a reference/convention body carrying no actionable imperative gives the subagent no prompt and returns nothing | `skill_lint.py`'s R3; the guarded fix never recommends a `skills:` preload when `disable-model-invocation: true` — that flag also blocks preloads, so the unguarded fix would mint a dead skill |
 
-**Two follow-up experiments are named, not yet run** (a distinct empirical deliverable shape from
-the fixtures above — live-harness dispatches, not `skill_lint` selftest fixtures): F4 (dispatch a
-fork where the skill's `model:` and its agent's own pin disagree; record which model actually
-reports, to resolve the R6 precedence question) and F5 (invoke a fork under `-p`; assert the
-foreground-exception behavior actually holds). Until F4 reports, R6 stays WARN-capped everywhere
-it's checked.
+**F5 measured 2026-08-15** (issue #309, live-harness run against Claude Code v2.1.233): a
+throwaway `context: fork` skill invoked via non-interactive `claude -p` blocked foreground exactly
+as documented. The forked subagent's marker file landed at `2026-08-16T02:59:03.345219000Z`
+(`date -u` inside the fork's own Bash call) — measurably *before* the `-p` process exited at
+`2026-08-16T02:59:11.723427000Z` (exit 0, ~8.4s later) — and the process's own stdout echoed the
+marker's timestamp back, proving the parent waited on the fork's result rather than backgrounding
+it. Confirms the `-p` half of the exception list's first entry (non-interactive `-p` / Agent SDK)
+exactly as written; no contradiction found. The Agent SDK half of that same entry, and the other
+three exception-list entries (`CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`, re-invoking a running
+fork, a scheduled task's own prompt), remain unmeasured — this run covers non-interactive `-p`
+only.
+
+**F4 remains named, not yet run** (tracked separately, issue #308 — a distinct empirical
+deliverable shape from the fixtures above, live-harness dispatches, not `skill_lint` selftest
+fixtures): dispatch a fork where the skill's `model:` and its agent's own pin disagree; record
+which model actually reports, to resolve the R6 precedence question. Until F4 reports, R6 stays
+WARN-capped everywhere it's checked.
 
 **Re-verify trigger:** re-check this table (against `/doctor`, the changelog, and the live docs
 page above) on every Claude Code minor-version bump — the background-default cliff at v2.1.218 is
