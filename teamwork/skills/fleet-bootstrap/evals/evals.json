@@ -1,0 +1,16 @@
+{
+  "skill": "fleet-bootstrap",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). disable-model-invocation: true means this is a command-species skill — routing cases still document intent, but the model never auto-invokes it.",
+  "cases": [
+    { "id": "t01", "prompt": "/fleet-bootstrap", "expect": "trigger" },
+    { "id": "t02", "prompt": "/fleet-bootstrap reviewer,planner", "expect": "trigger" },
+    { "id": "t03", "prompt": "Cold-start the whole fleet from this one terminal.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Bootstrap the full fleet — orchestrator, product seat, and background reviewer/planner — in one go.", "expect": "trigger" },
+    { "id": "t05", "prompt": "One terminal, stand up the entire fleet and gate on ratifying the intent layer before spawning anyone else.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Bootstrap this session as the fleet's planner seat.", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding — one seat's own bootstrap, not the full cold start" },
+    { "id": "n02", "prompt": "/team-scaffolding reviewer review the fleet bootstrap PR", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding directly" },
+    { "id": "n03", "prompt": "Should this be a subagent or a team for this task?", "expect": "no-trigger", "comment": "owner: teamwork:team-or-solo-rules" },
+    { "id": "n04", "prompt": "Seed a naming manifest for this new estate.", "expect": "no-trigger", "comment": "owner: authorkit:manifest-authoring" },
+    { "id": "n05", "prompt": "Re-run the ratification gate now that the PRD changed.", "expect": "no-trigger", "comment": "owner: docs:product-authoring directly — the gate fires once per cold start, not re-invoked via this command" }
+  ]
+}

@@ -39,6 +39,14 @@ live session, so this is a printed instruction plus a durable record, not an enf
 `.claude/ops/fleet-roster.md` (create it if absent, one Markdown table row: role · session-name ·
 date · repo) — this is the roster peers read for discovery (Phase 3).
 
+Also read `.claude/ops/fleet.json` (the structured fleet manifest — schema and rationale in
+`teamwork:fleet-bootstrap`'s `references/fleet-manifest-schema.md`, shared by both commands).
+Absent → this is the first seat to join a virgin repo: seed it now with the canonical seat ladder
+(Phase 4 point 1 below), today's date as every seat's `justification_date`, `mode: "manual"` for
+all four, and this role's `live_state.joined` entry. Present → append this role's
+`live_state.joined` entry only (role, mode, date, `agent_name: null` for a manual seat); every
+other role's existing entry and the seat-tier table are read-only from here.
+
 ## Phase 3 — Write or verify the permission profile
 
 Branch on role:
@@ -84,6 +92,20 @@ State, as one standing block before any real work:
    already routes to, plus authorkit's read-only sweeps — `naming-audit`, `doctrine-audit`,
    `bloat-audit`, `attention-audit`, `estate-audit` (ruling: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
    D3).
+5. **`planner` only — standing-order self-check (#410 addendum 3, level 1).** Check
+   `.claude/docs/prd/*.md` and `.claude/docs/decompositions/*.md` (IDRs); any file present there
+   counts as an intent layer. Neither glob matches → print, as a WARNING (never a block): "No
+   intent layer found (`.claude/docs/prd/`, `.claude/docs/decompositions/` — both empty or absent)
+   — an ADR or LLD authored from this seat now risks becoming an orphan, with no ratified WHY
+   behind it. The `product` seat is the prerequisite: run `/team-scaffolding product` first, or
+   proceed at your own risk if the human overrides." A match exists → state that plainly (`Intent
+   layer found — orphan-ADR check clear`) and proceed with no warning.
+6. **`reviewer` only — standing-order self-check (#410 addendum 3, level 1).** Check for a locked
+   spec: any `.claude/docs/spec/*.md` or `.claude/docs/lld/*.md` with frontmatter `status: locked`.
+   None found → print, as a NOTICE (never a block): "No spec is locked yet — this session runs
+   STYLE-REVIEW-ONLY (formatting, doctrine, naming, obvious defects) until a spec locks;
+   contract-correctness review resumes once one does." A locked spec exists → state that plainly
+   (`Locked spec found — full contract-correctness review in scope`) and proceed with no notice.
 
 ## Phase 5 — Adopt the matching lead-* contract
 
