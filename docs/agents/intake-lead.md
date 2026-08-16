@@ -14,7 +14,7 @@ model: sonnet
 effort: high
 color: cyan
 tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash"]
-disallowedTools: ["Skill", "Agent", "Task"]
+disallowedTools: ["Skill", "Agent"]
 skills:
   - file-bug
   - file-feature

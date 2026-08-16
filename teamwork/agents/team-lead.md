@@ -10,7 +10,7 @@ description: >-
   host's own. NOT for reviewing one artifact directly (dispatch to the reviewer that owns its
   rubric); NOT for deciding subagent-vs-team in the abstract (team-or-solo-rules answers that
   inline).
-tools: Read, Grep, Glob, Write, Bash, Task
+tools: Read, Grep, Glob, Write, Bash, Agent
 model: sonnet
 effort: xhigh
 skills: [team-or-solo-rules, loop-rules]
