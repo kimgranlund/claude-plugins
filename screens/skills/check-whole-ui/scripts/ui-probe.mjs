@@ -88,7 +88,7 @@
  * => SKIP printed with guidance, exit 2 — never a fake pass.
  */
 import { createRequire } from 'node:module';
-import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync, existsSync, realpathSync, symlinkSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -981,6 +981,34 @@ function unitChecks() {
      Array.isArray(ic.surfaces[0].hardcoded_strings) && ic.surfaces[0].hardcoded_strings.length === 0,
      'i18n card shape wrong');
 
+  // Entry-guard negative control (same class as #436): run the script through a SYMLINKED dir as
+  // a child process. Node resolves import.meta.url through the symlink to the real target, so a
+  // non-realpath entry guard would compare the resolved path against the caller's symlinked
+  // argv[1] and be silently false — main() never runs, exit 0, no output. A tmpdir on macOS is
+  // itself a symlink (`/var` → `/private/var`), so this also stands in for the ordinary case.
+  {
+    const tmpRoot = mkdtempSync(path.join(os.tmpdir(), 'ui-probe-entryguard-'));
+    try {
+      const realDir = path.join(tmpRoot, 'real');
+      const linkDir = path.join(tmpRoot, 'link');
+      mkdirSync(realDir, { recursive: true });
+      writeFileSync(path.join(realDir, 'ui-probe.mjs'), readFileSync(fileURLToPath(import.meta.url)));
+      symlinkSync(realDir, linkDir, 'dir');
+      // No args => the usage-error branch (exit 2, with a message) — the fastest way to prove
+      // main() actually ran, without recursing into selftest (which would spawn this same check
+      // again, unbounded).
+      const linkedScript = path.join(linkDir, 'ui-probe.mjs');
+      const run = spawnSync(process.execPath, [linkedScript], { encoding: 'utf8' });
+      ok(run.status === 2, `entry guard must fire through a symlinked path (got exit ${run.status}, ` +
+        `expected 2 for the usage error); stderr: ${run.stderr}`);
+      ok((run.stderr || '').length > 0,
+        'a symlinked-path invocation must produce output (a silent exit with no output means the ' +
+        'entry guard never ran main())');
+    } finally {
+      rmSync(tmpRoot, { recursive: true, force: true });
+    }
+  }
+
   return errs;
 }
 
@@ -1212,6 +1240,20 @@ async function main(argv) {
 // Guard the CLI entrypoint so importing this module (to reuse its exported pure functions/card
 // builders — e.g. a supplementary tool composing buildFocusCard/buildBudgetCard/buildI18nCard)
 // never re-executes main() against the IMPORTER's argv or launches a browser as a side effect.
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+//
+// Compare REAL filesystem paths, not URL strings (same class as #436's spaced-path fix): Node
+// resolves the module URL through symlinks (macOS `/var` → `/private/var` via os.tmpdir(), or a
+// symlinked plugin cache) while process.argv[1] is whatever the caller typed, so a bare
+// `pathToFileURL(argv[1]).href` string-compare is silently false under such an install path —
+// main() never runs, the process exits 0 with no output.
+function isEntryModule() {
+  if (!process.argv[1]) return false;
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(path.resolve(process.argv[1]));
+  } catch {
+    return false;
+  }
+}
+if (isEntryModule()) {
   main(process.argv.slice(2)).then((code) => { process.exitCode = code; });
 }
