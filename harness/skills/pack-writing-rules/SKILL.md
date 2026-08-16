@@ -101,6 +101,15 @@ A wave is the unit of corpus growth, and it is question-led, not source-led:
 Wave sizing: one axis per wave is the healthy default; a whole-pack mint is 3–7 waves, not one
 heroic pass — distillation quality collapses when gathering outruns it.
 
+## Extension citation
+
+A pack's own SKILL.md states, once, where growth requests route: "a missing axis, a stale
+reference, or 'add X to this pack' is authoring work — route to `/make-pack`." Every pack cites
+that routing rule with a one-line footer — `Extension: governed by [[make-pack]]` — never restates
+it as a paragraph. The rule lives here, once; a pack's footer points to it. Restating the paragraph per pack is how it silently re-diverges the
+next time either source changes wording (found via the #258 bloat-audit sweep, 2026-08-16: 28
+packs across five plugins carrying a byte-identical stamped paragraph).
+
 ## Snapshots and freshness
 
 When a corpus is mirrored outward (project knowledge, docs bundles), the pack is the source of
