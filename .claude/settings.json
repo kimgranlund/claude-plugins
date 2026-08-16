@@ -49,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "for p in harness docs teamwork screens design agent-protocols llm authorkit; do out=$(python3 \"$CLAUDE_PROJECT_DIR/authorkit/skills/naming-audit/scripts/validate.py\" --target \"$CLAUDE_PROJECT_DIR/$p\" --manifest \"$CLAUDE_PROJECT_DIR/naming.manifest.json\" --hook --scope grammar 2>&1); rc=$?; if [ \"$rc\" -ne 0 ]; then echo \"$out\" >&2; exit 2; fi; done",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/authorkit/skills/naming-audit/scripts/validate.py\" hook",
             "timeout": 20,
             "statusMessage": "naming-postwrite-grammar-gate"
           }

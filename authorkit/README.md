@@ -76,6 +76,7 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.10.3 · 2026-08-15 · naming-audit `validate.py` gains the `hook` subcommand (issue #276): the PostToolUse hook derives its target from the write's own file_path, so worktree sessions validate their own tree (not the main checkout) and only the touched plugin; the plugin's own shipped `hooks/hooks.json` rewired off its worktree-blind `--target ${CLAUDE_PROJECT_DIR}` form too; critic pass added wrong-shape fail-open guards + fixtures
 v0.10.2 · 2026-08-15 · `naming-audit-agent` and `bloat-audit-agent` gain an explicit
 `model: sonnet` pin (issue #283, the A7 defect-class follow-up deferred from #275's
 `attention-audit-agent` fix — PR #126's original A7 gap: a missing/`inherit` model field

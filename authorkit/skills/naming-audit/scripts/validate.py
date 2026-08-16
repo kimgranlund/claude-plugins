@@ -7,10 +7,38 @@ interpretation, report narrative) belongs to the naming-audit skill, not here.
 
 Usage:
   validate.py --target PATH [--manifest PATH] [--json] [--hook] [--scope full|grammar]
+  validate.py hook                            PostToolUse entry point: reads the hook
+                                               event off stdin and derives --target/
+                                               --manifest itself from tool_input.file_path
+                                               (issue #276) — never call with --target by
+                                               hand; see resolve_hook_target below
   validate.py selftest                        prove the counters bite
 
 Exit codes: 0 clean (warnings allowed), 1 errors found, 2 no manifest or no
 args (--hook mode exits 0 on missing manifest: governance is opt-in per estate).
+`hook` mode's own contract differs: exit 2 = grammar FINDINGS on the written
+file's plugin (the PostToolUse blocking convention); everything unexpected —
+malformed/wrong-shape event, no derivable root, unreadable manifest — exits 0
+silently (fail open, hook-writing-rules).
+
+`hook` mode (issue #276, 2026-08-15): a write-time PostToolUse hook that hardcodes
+`--target "$CLAUDE_PROJECT_DIR/$plugin"` for a fixed plugin roster is blind to
+EnterWorktree sessions — `$CLAUDE_PROJECT_DIR` names the PRIMARY checkout for the whole
+session's lifetime, never the worktree a campaign is required to write into (ADR-0002), so
+the hook validated the wrong tree's (already-clean) files while the campaign's real writes
+went unchecked until `release_gate.py` G12 caught them a whole tier later. `hook` mode fixes
+this at the root: it derives its target from the tool payload actually written
+(`tool_input.file_path`, on the hook's own stdin per the platform's documented event
+contract) via `resolve_hook_target`/`find_repo_root` — ask git for `--show-toplevel` of the
+checkout containing the written file; that IS the repo root the write landed in, primary
+checkout or worktree alike, because every EnterWorktree checkout is its own git worktree
+with its own top-level. (A directory walk for a `naming.manifest.json` marker file was
+tried first and rejected: `authorkit` carries its own nested manifest copy for
+self-dogfooding, which makes a walk-up-to-nearest-manifest stop at the wrong ancestor for
+any write inside authorkit, worktree or not — see `find_repo_root`'s own docstring.) No env
+var, no worktree-marker string match, no hardcoded plugin list — which also naturally
+narrows validation to the ONE plugin the triggering write actually touched, instead of
+unconditionally re-checking all N plugins on every write.
 
 --scope (2026-08-14, issue #197 wiring): this validator checks two genuinely different
 things under one name — naming GRAMMAR (name production, lexicon disjointness, the
@@ -50,6 +78,7 @@ decision --scope already made non-blocking.
 import argparse
 import json
 import re
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -559,6 +588,118 @@ def run(target: Path, manifest: dict, scope: str = "full", own_root: Path = None
     }
 
 
+def find_repo_root(path: Path):
+    """git's own top-level for the checkout containing `path` — correct for a worktree
+    BY CONSTRUCTION (every EnterWorktree checkout is its own git worktree with its own
+    top-level; asking git is unambiguous, never a heuristic).
+
+    A directory walk for a `naming.manifest.json` marker file was tried first and
+    REJECTED: this very estate's `authorkit` plugin carries its own nested copy of
+    `naming.manifest.json` for self-dogfooding (its own README: "validates clean against
+    its own validator"), so a walk-up-to-nearest-manifest stops at `authorkit/` instead
+    of the true workspace root for ANY write inside authorkit — in the primary checkout,
+    not just a worktree — silently narrowing `target` to a non-plugin subdirectory
+    (`authorkit/skills`) that `discover()` finds nothing under, so authorkit's own
+    grammar violations would never be caught by the hook at all. `git rev-parse
+    --show-toplevel` has no such false-positive: it asks git which checkout the file
+    physically lives in, and a nested manifest file is irrelevant to that answer.
+
+    Returns None (fail open) on any git failure — no `.git`, git missing, timeout."""
+    cwd = path if path.is_dir() else path.parent
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(cwd), "rev-parse", "--show-toplevel"],
+            capture_output=True, text=True, timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if out.returncode != 0 or not out.stdout.strip():
+        return None
+    return Path(out.stdout.strip())
+
+
+def resolve_hook_target(file_path: str):
+    """Given the absolute path of a file a PostToolUse write just landed on
+    (`tool_input.file_path`), return (target_dir, manifest_path) for `run()` — or
+    (None, None) if no owning root can be derived, meaning the hook should no-op.
+
+    Resolves the write's own checkout root via `find_repo_root` (git's top-level, worktree-
+    correct by construction — issue #276), requires a `naming.manifest.json` directly AT
+    that root (governance is opt-in — no manifest there, no-op, same as the prior `--hook`
+    contract), and takes the first path segment under that root as the touched plugin — so
+    only that ONE plugin is validated, never a fixed all-N-plugins loop."""
+    if not file_path:
+        return None, None
+    p = Path(file_path)
+    if not p.is_absolute():
+        return None, None
+    repo_root = find_repo_root(p)
+    if repo_root is None:
+        return None, None
+    manifest_path = repo_root / "naming.manifest.json"
+    if not manifest_path.is_file():
+        return None, None
+    try:
+        rel = p.resolve().relative_to(repo_root.resolve())
+    except ValueError:
+        return None, None
+    if not rel.parts:
+        return None, None
+    target = repo_root / rel.parts[0]
+    if not target.is_dir():
+        return None, None
+    return target, manifest_path
+
+
+def main_hook_stdin():
+    """PostToolUse entry point (`validate.py hook`, issue #276). Reads the hook event
+    off stdin, derives target+manifest via `resolve_hook_target`, and gates on grammar
+    findings only — the same `--scope grammar` the prior fixed-loop hook always passed.
+    Fails open (exit 0, silent) on anything unexpected: a malformed event, no derivable
+    root, an unreadable/wrong-shape manifest, or any other unhandled exception inside
+    `run()` — a flaky governance hook is worse than none (hook-writing-rules)."""
+    try:
+        event = json.load(sys.stdin)
+    except (json.JSONDecodeError, ValueError):
+        return 0
+    # Shape guards (code-checker finding, 2026-08-15): valid JSON is not necessarily a
+    # dict-shaped event — `[1,2]`, `{"tool_input":"oops"}`, and a non-str file_path all
+    # crashed here with traceback + exit 1, violating this function's own fail-open
+    # contract. Guard every shape before use.
+    if not isinstance(event, dict):
+        return 0
+    tool_input = event.get("tool_input")
+    if not isinstance(tool_input, dict):
+        return 0
+    file_path = tool_input.get("file_path", "")
+    if not isinstance(file_path, str) or not file_path:
+        return 0
+    target, manifest_path = resolve_hook_target(file_path)
+    if target is None:
+        return 0  # nothing governed under this write — no manifest ancestor found
+    try:
+        manifest = json.loads(manifest_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return 0  # unreadable/malformed manifest — fail open, never block the write
+    if not isinstance(manifest, dict):
+        return 0  # valid JSON, wrong shape (e.g. a bare list) — fail open, not a crash
+    try:
+        result = run(target, manifest, scope="grammar")
+    except Exception:
+        # run()/Grammar() can still raise on a manifest that's dict-shaped but malformed
+        # in some OTHER way this validator doesn't defensively check for everywhere
+        # (found live, issue #276 review: hook-checker probed a wrong-shape-but-valid-JSON
+        # manifest and got an uncaught crash here). A crashing governance hook is worse
+        # than a skipped check — fail open on ANY unexpected exception, never let an
+        # internal bug surface as exit 1 + traceback on every subsequent write.
+        return 0
+    if result["grammar_errors"]:
+        for name, _lvl, msg, _cat in result["grammar_errors"]:
+            print(f"authorkit naming-grammar: {name}: {msg}", file=sys.stderr)
+        return 2
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--target", required=True)
@@ -749,7 +890,6 @@ def selftest():
 
     # CLI wiring: --scope grammar must exit 0 on a structural-only fixture that --scope
     # full (default) fails; a genuine grammar violation must still exit 1 under either.
-    import subprocess
     with tempfile.TemporaryDirectory() as td:
         r = Path(td)
         (r / "skills" / "demo-review").mkdir(parents=True)
@@ -912,11 +1052,177 @@ def selftest():
         assert not any("author_registry entry must be a plain string" in e[2] for e in result["errors"]), \
             "a normal plain string-list author_registry must never trip the shape check"
 
+    # `hook` mode target derivation (issue #276) — a REAL git repo + a REAL `git worktree
+    # add`, not a simulated directory tree, because the fix's own correctness claim is
+    # "git's own top-level is worktree-correct by construction"; a fixture that never
+    # asks git would not actually exercise that claim.
+    def _git(cwd, *args):
+        subprocess.run(
+            ["git", "-c", "user.email=demo@example.com", "-c", "user.name=demo", *args],
+            cwd=str(cwd), check=True, capture_output=True, text=True,
+        )
+
+    with tempfile.TemporaryDirectory() as td:
+        # .resolve() up front: macOS's /var -> /private/var symlink means an unresolved
+        # tempdir path and git's (always-physical) --show-toplevel answer compare unequal
+        # for the identical directory otherwise — a path-normalization artifact, not a
+        # real target mismatch.
+        r = Path(td).resolve()
+        _git(r, "init", "-q")
+        (r / "naming.manifest.json").write_text(json.dumps(manifest))
+        # authorkit's own nested naming.manifest.json (self-dogfooding, per its README) is
+        # the exact fixture that falsified the manifest-walk approach: a write inside it,
+        # in the PRIMARY checkout, with NO worktree involved at all, must still resolve to
+        # authorkit/ as the plugin root — never authorkit/skills — proving find_repo_root's
+        # git-based answer is immune to the nested-manifest false stop.
+        (r / "authorkit").mkdir()
+        (r / "authorkit" / "naming.manifest.json").write_text(json.dumps(manifest))
+        (r / "authorkit" / "skills" / "demo-agent3").mkdir(parents=True)
+        (r / "authorkit" / "skills" / "demo-agent3" / "SKILL.md").write_text(skill_md("demo-agent3"))
+        _git(r, "add", "-A")
+        _git(r, "commit", "-q", "-m", "seed")
+
+        nested_write = r / "authorkit" / "skills" / "demo-agent3" / "SKILL.md"
+        nested_target, nested_manifest = resolve_hook_target(str(nested_write))
+        assert nested_target == r / "authorkit", (
+            "a write inside authorkit's OWN nested-manifest tree must still resolve to "
+            f"authorkit/ (not authorkit/skills) in the PRIMARY checkout: {nested_target}"
+        )
+        nested_hook = subprocess.run(
+            [sys.executable, __file__, "hook"],
+            input=json.dumps({"tool_input": {"file_path": str(nested_write)}}),
+            capture_output=True, text=True,
+        )
+        assert nested_hook.returncode == 2, (
+            "the nested-manifest false-stop must not silently swallow a real grammar "
+            f"violation inside authorkit itself: {nested_hook.returncode} {nested_hook.stderr}"
+        )
+
+        # Now the worktree half of the fixture: a REAL `git worktree add`, whose own
+        # top-level `git rev-parse --show-toplevel` reports is the WORKTREE path, never
+        # the primary's — the exact mechanism this fix relies on. Branched off the commit
+        # ABOVE (which carries no harness/ at all yet), so nothing under harness/ is shared
+        # checked-out history between the two — the primary's own post-branch edit below is
+        # genuinely invisible to the worktree, not just uncommitted-but-still-shared.
+        wt = r / ".claude" / "worktrees" / "demo-wt"
+        _git(r, "worktree", "add", "-q", "-b", "demo-wt-branch", str(wt))
+
+        # A grammar violation added to the PRIMARY checkout's own working tree AFTER the
+        # worktree branched off — present on disk at r/harness, never committed, and
+        # invisible to the worktree's own working directory by construction (worktrees
+        # share git history, never uncommitted files). If target resolution ever bled
+        # into the primary root, this is what a worktree-write validation would wrongly
+        # catch.
+        (r / "harness" / "skills" / "demo-agent").mkdir(parents=True)
+        (r / "harness" / "skills" / "demo-agent" / "SKILL.md").write_text(skill_md("demo-agent"))
+
+        (wt / "harness" / "skills" / "demo-review").mkdir(parents=True)
+        (wt / "harness" / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+
+        clean_write = wt / "harness" / "skills" / "demo-review" / "SKILL.md"
+        target, mpath = resolve_hook_target(str(clean_write))
+        assert target == wt / "harness", \
+            f"a write inside a worktree must resolve to THAT worktree's own plugin root, got {target}"
+        assert mpath == wt / "naming.manifest.json", \
+            f"a write inside a worktree must resolve to THAT worktree's own manifest, got {mpath}"
+
+        clean_hook = subprocess.run(
+            [sys.executable, __file__, "hook"],
+            input=json.dumps({"tool_input": {"file_path": str(clean_write)}}),
+            capture_output=True, text=True,
+        )
+        assert clean_hook.returncode == 0, (
+            "a clean write inside a worktree must exit 0 even though the PRIMARY "
+            f"checkout's own harness/ is grammar-broken (proves no primary bleed): "
+            f"{clean_hook.returncode} {clean_hook.stderr}"
+        )
+
+        (wt / "harness" / "skills" / "demo-agent2").mkdir(parents=True)
+        (wt / "harness" / "skills" / "demo-agent2" / "SKILL.md").write_text(skill_md("demo-agent2"))
+        bad_write = wt / "harness" / "skills" / "demo-agent2" / "SKILL.md"
+        bad_hook = subprocess.run(
+            [sys.executable, __file__, "hook"],
+            input=json.dumps({"tool_input": {"file_path": str(bad_write)}}),
+            capture_output=True, text=True,
+        )
+        assert bad_hook.returncode == 2, \
+            f"a genuinely bad write inside the SAME worktree must still be caught: {bad_hook.returncode}"
+        assert "demo-agent2" in bad_hook.stderr, \
+            f"the caught finding must name the offending artifact: {bad_hook.stderr}"
+
+        _git(r, "worktree", "remove", "-f", str(wt))
+
+    # Fail-open controls: malformed event, a write with no naming.manifest.json at its
+    # repo's own top-level, and a write outside any git repo at all — all three must
+    # exit 0 silently, never raise (hook-writing-rules: a flaky governance hook is worse
+    # than none).
+    malformed = subprocess.run(
+        [sys.executable, __file__, "hook"], input="not json", capture_output=True, text=True,
+    )
+    assert malformed.returncode == 0, f"a malformed hook event must fail open: {malformed.returncode}"
+
+    # Valid-JSON-but-wrong-shape events (code-checker finding, 2026-08-15): each of these
+    # three shapes crashed pre-guard with traceback + exit 1 — the exact fail-open breach
+    # the guards close. All must exit 0 with EMPTY stderr (a traceback would still print).
+    for shape_name, payload in (
+        ("bare-list event", "[1, 2]"),
+        ("non-dict tool_input", json.dumps({"tool_input": "oops"})),
+        ("non-str file_path", json.dumps({"tool_input": {"file_path": 3}})),
+    ):
+        wrong_shape = subprocess.run(
+            [sys.executable, __file__, "hook"], input=payload, capture_output=True, text=True,
+        )
+        assert wrong_shape.returncode == 0, \
+            f"{shape_name} must fail open, got exit {wrong_shape.returncode}"
+        assert "Traceback" not in wrong_shape.stderr, \
+            f"{shape_name} must not print a traceback: {wrong_shape.stderr}"
+
+    with tempfile.TemporaryDirectory() as td:
+        orphan = Path(td) / "somewhere" / "file.md"
+        orphan.parent.mkdir(parents=True)
+        orphan.write_text("x")
+        ungoverned = subprocess.run(
+            [sys.executable, __file__, "hook"],
+            input=json.dumps({"tool_input": {"file_path": str(orphan)}}),
+            capture_output=True, text=True,
+        )
+        assert ungoverned.returncode == 0, \
+            f"a write outside any git repo must fail open: {ungoverned.returncode}"
+
+    # Wrong-SHAPE manifest, still valid JSON (issue #276 review, hook-checker): a bare
+    # list at naming.manifest.json's top level parses clean but crashed uncaught deep
+    # inside Grammar.__init__/run() before the isinstance(manifest, dict) guard + broad
+    # except in main_hook_stdin were added — must now fail open, never exit 1 + traceback.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        _git(r, "init", "-q")
+        (r / "naming.manifest.json").write_text(json.dumps(["not", "a", "dict"]))
+        (r / "harness" / "skills" / "demo-review").mkdir(parents=True)
+        (r / "harness" / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        _git(r, "add", "-A")
+        _git(r, "commit", "-q", "-m", "seed")
+        wrong_shape_write = r / "harness" / "skills" / "demo-review" / "SKILL.md"
+        wrong_shape_hook = subprocess.run(
+            [sys.executable, __file__, "hook"],
+            input=json.dumps({"tool_input": {"file_path": str(wrong_shape_write)}}),
+            capture_output=True, text=True,
+        )
+        assert wrong_shape_hook.returncode == 0, (
+            "a wrong-shape (but valid-JSON) manifest must fail open, never crash: "
+            f"{wrong_shape_hook.returncode} {wrong_shape_hook.stderr}"
+        )
+        assert "Traceback" not in wrong_shape_hook.stderr, \
+            f"a wrong-shape manifest must never surface a raw traceback: {wrong_shape_hook.stderr}"
+
     print("naming-audit validate selftest · PASS · schema/grammar/lexicon counters bite, "
           "--scope grammar/full partition proven, schema_scope manifest default + "
           "own-tree carve-out proven, reverse-wrapper skill-name amendment "
           "(positive/negative/regression) proven, author_registry shape validation "
-          "(issue #252: structured entry fails clean, never a raw TypeError) proven")
+          "(issue #252: structured entry fails clean, never a raw TypeError) proven, "
+          "`hook` mode worktree-scoped target derivation (issue #276: resolves to the "
+          "writing worktree's own root+plugin, not the primary checkout; catches a bad "
+          "write there; fails open on malformed events, ungoverned trees, and a "
+          "wrong-shape-but-valid-JSON manifest) proven")
     return 0
 
 
@@ -926,4 +1232,6 @@ if __name__ == "__main__":
         sys.exit(2)
     if sys.argv[1] == "selftest":
         sys.exit(selftest())
+    if sys.argv[1] == "hook":
+        sys.exit(main_hook_stdin())
     main()
