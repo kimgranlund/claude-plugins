@@ -53,6 +53,10 @@ Agent files (agents/*.md) get a focused rule set (incl. A6 name == file stem):
   A7 model declared and not `inherit` (agent-writing-rules' seat ladder — an unpinned seat
      silently rides whatever model dispatched it, cheap-planning-dispatches-expensive-execution
      class)
+  A8 a dispatch-only agent ("dispatch-only" / "do not auto-delegate" in its description) whose
+     description exceeds the one-sentence cap (issue #260: a dispatch-only agent is never
+     selected by the router, so its resident description's only job is repulsion + a
+     human-readable contract — routing-style detail belongs in the body, same pattern as A7)
 
 hooks.json files get:
   H1 valid JSON
@@ -110,6 +114,11 @@ BADGOOD_RE = re.compile(r"\bBad:\s*(.+?)\s*(?:→|->)\s*Good:\s*(.+?)(?=\s*\|\s*
 BACKTICK_TOKEN_RE = re.compile(r"`([^`]+)`")
 PERSONA_RE = re.compile(r"^\s*(You are an?\b|You're\b)")
 KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+# A8 (issue #260): a dispatch-only agent's resident description has no selection job to do —
+# only a human glancing at the Agent-tool menu needs the one-sentence contract. Anything past
+# that is routing-style detail that belongs in the body instead.
+DISPATCH_ONLY_RE = re.compile(r"dispatch-only|do not auto-delegate", re.IGNORECASE)
+A8_DESCRIPTION_CAP = 320
 
 
 def parse_frontmatter(lines):
@@ -346,6 +355,14 @@ def lint_agent_text(text, agent_file_stem=None):
                          "coding/execution -> opus+xhigh with sonnet/haiku step-downs, "
                          "orchestration -> sonnet+high, mechanical -> haiku); `inherit` is only "
                          "for a seat that deliberately means to ride the session."))
+    desc_val, desc_val_line = fields.get("description", ("", fm_end + 1))
+    if DISPATCH_ONLY_RE.search(desc_val) and len(desc_val) > A8_DESCRIPTION_CAP:
+        findings.append(("WARN", desc_val_line, "A8",
+                         f"dispatch-only agent's description is {len(desc_val)} chars -> a "
+                         "dispatch-only agent is never selected by the router, so its resident "
+                         f"description's only job is a one-sentence human-readable contract (cap "
+                         f"{A8_DESCRIPTION_CAP} chars); move mechanism/NOT-for/dispatch-protocol "
+                         "detail into the body (agent-writing-rules, issue #260)"))
     return findings
 
 
@@ -613,6 +630,30 @@ model: inherit
 Body.
 """
 
+# A8 fixtures (issue #260): a dispatch-only agent's description carrying the marker plus real
+# routing prose past the one-sentence cap, versus the trimmed one-sentence contract that clears it.
+DISPATCH_ONLY_OVERSIZED_FIXTURE = """---
+name: demo-judge
+description: |
+  Blind judge dispatched only by its coordinator. It reads a shuffled prompt set with no other
+  context, scores each one against a fixed rubric with zero synthesis, and returns a verdict per
+  item. Deliberately declared with no tools so it cannot contaminate its own blindness. Do not
+  auto-delegate to this agent; it is dispatch-only, never selected by the router on its own.
+model: haiku
+tools: []
+---
+Body.
+"""
+
+DISPATCH_ONLY_TRIMMED_FIXTURE = """---
+name: demo-judge
+description: Blind judge for its own coordinator's suite; dispatch-only, never auto-delegated.
+model: haiku
+tools: []
+---
+Body.
+"""
+
 
 def selftest():
     good = lint_text(GOOD_FIXTURE, "demo-review")
@@ -660,6 +701,15 @@ def selftest():
     assert not any(f[2] == "F9" for f in lint_text(GOOD_FIXTURE, "demo-review")), "name == dir must not trip F9"
     assert any(f[2] == "A6" for f in lint_agent_text(GOOD_AGENT_FIXTURE, "wrong-stem")), "agent name != stem must fail A6"
     assert not any(f[2] == "A6" for f in lint_agent_text(GOOD_AGENT_FIXTURE, "demo-auditor")), "agent name == stem must not trip A6"
+    # A8 (issue #260): a dispatch-only agent's oversized description warns; the same marker on a
+    # trimmed one-sentence description stays clean, and a marker-free oversized description
+    # (routing-selected agents still get to write a full contract) never trips A8 either.
+    assert any(f[2] == "A8" for f in lint_agent_text(DISPATCH_ONLY_OVERSIZED_FIXTURE)), \
+        "oversized dispatch-only description must warn A8"
+    assert not any(f[2] == "A8" for f in lint_agent_text(DISPATCH_ONLY_TRIMMED_FIXTURE)), \
+        "one-sentence dispatch-only description must not trip A8"
+    assert not any(f[2] == "A8" for f in lint_agent_text(GOOD_AGENT_FIXTURE)), \
+        "a description with no dispatch-only marker never trips A8, however long"
     # W4/W5 retired 2026-08-14 (issue #197/ADR-0011) — their ADR-0001/ADR-0006 grammar is
     # superseded. Naming-grammar conformance is authorkit's naming-audit validator's job
     # now (its own selftest proves the reserved -agent head on a skill is still caught).
