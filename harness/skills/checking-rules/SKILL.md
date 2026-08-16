@@ -18,6 +18,45 @@ conduct rules a reviewer applies to every finding: dismissals earn the same evid
 confirmations, a "fixed" claim is checked against the artifact instead of taken from a changelog,
 and every finding survives one self-directed rebuttal before it ships.
 
+## The invariant's unit — what earns a fresh-context dispatch
+
+Generator ≠ critic is not up for repeal — the 2026-08-11 estate audit's finding stands: every
+recent unaudited SEMANTIC edit to a prompt-carrying artifact carried a real gap. What calibrates is
+the invariant's UNIT: not "one touched file of the right type," but one build/PR slice, and within
+it, whether an edit is semantic (changes what the artifact tells the model to do or decide) or
+mechanical (a version bump, a README ledger line, an ID renumber, a punctuation/lint-only fix —
+fully specified and fully checked by an existing automated gate).
+
+- **Semantic → the dispatch earns its cost, every time, regardless of diff size.** A three-line
+  change to a hook's fail-open branch, a guard's operator-attachment check, or a selftest fixture's
+  assertion is exactly the class the 2026-08-11 finding names — a fresh-context critic pass catches
+  what the maker's own context is structurally blind to (confirmed again in a 2026-08-15 review
+  round: three fresh-context critic passes each caught a real defect the maker missed — a fail-open
+  contract breach in a hook, an attached-operator bypass class in a guard, a tautological selftest
+  fixture — none of which the repo's own gates would have caught, since the gates test mechanics,
+  not the interpretation a semantic edit changes).
+- **Mechanical → floor-tier verification in the same loop suffices, no separate dispatch.** A
+  ledger-line trim, a version renumber, a citation-only fix — the same 2026-08-15 round showed
+  per-edit critic dispatches on these added nothing beyond what the repo's own gates (`skill_lint`,
+  `docs_check`, the version-format check) already catch. These edits carry no interpretive content
+  for a critic to grade; dispatching one anyway pays the spin-up cost for a verdict the gate already
+  delivered.
+- **The UNIT is the slice, not the touch.** One fresh-context critic dispatch covers every semantic
+  edit inside one build/PR slice together — batching them never weakens the finding, since each
+  edit still gets independent eyes before the loop closes; splitting hairs over line-count to dodge
+  the dispatch does. A slice containing even one semantic edit to a prompt-carrying artifact still
+  owes the dispatch; a slice containing only mechanical edits to such a file owes none.
+- **The test, in one line:** would a human reviewing this diff need to think about whether the
+  BEHAVIOR is correct (semantic), or does an existing automated check already fully specify
+  correctness for this exact edit (mechanical)? The gates prove mechanics; this line is what still
+  needs a second mind.
+
+This section is the referenced "unit" for the standing invariant recorded in this repo's own
+CLAUDE.md ("a semantic edit rides with a critic") and in the per-flow contracts that apply it
+(`dispatch-ticket`'s build path, `make-skill`'s P5, `file-bug`'s fix-inline branch) — those flows
+still own WHEN in their own procedure the check runs; this section owns the calibration test
+itself, in one place, so it isn't re-derived differently by each flow.
+
 ## Procedure
 
 Every review this discipline governs runs all three — no precondition skips one:
