@@ -62,7 +62,7 @@ self-sufficiency and background questions before minting a fork-species skill:
 | A backgrounded fork runs the narrower background-subagent tool set | A body needing a tool outside that set, or a blocking result, needs `background: false` explicitly (R5) |
 | A backgrounded fork's edits land outside session checkpoints; `/rewind` does not undo them — git is the revert path | A background write with no acknowledgment (a body note or a stated git-revert step) is a silent checkpoint gap (R5, WARN) |
 | Foreground exceptions to the background default: non-interactive (`-p` / Agent SDK), `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`, re-invoking a forked skill while a prior invocation of the same skill still runs, a scheduled task firing with the skill as its prompt | Do not infer misconfiguration from observed foreground behavior alone — check this list first |
-| With `context: fork`, the skill's `model:` sets the forked subagent's model instead of the session's; **not established by current docs:** which side wins when the skill's `model:` and the agent definition's own model pin conflict | WARN on any skill/agent model conflict; never FAIL or assert precedence until the precedence fixture (F4) exists and reports (R6 stays WARN-capped by construction, not by convention, in both `skill_lint.py` and `check-skill`'s DM-R6) |
+| With `context: fork`, the skill's `model:` sets the forked subagent's model instead of the session's; **measured 2026-08-16 (F4, issue #308): the skill's `model:` deterministically wins** over the agent's own frontmatter pin on a genuine conflict — the spawn record (`subagents/*.meta.json`) shows the effective model set at dispatch time from the skill's field, and the agent's own pin never took effect for that turn | FAIL on a skill/agent model conflict (R6 un-capped by F4's result, in `check-skill`'s DM-R6 — the agent's model pin is dead configuration whenever a conflicting skill invokes it, not merely an unresolved race) |
 | `context: fork` with a reference/convention body carrying no actionable imperative gives the subagent no prompt and returns nothing | `skill_lint.py`'s R3; the guarded fix never recommends a `skills:` preload when `disable-model-invocation: true` — that flag also blocks preloads, so the unguarded fix would mint a dead skill |
 
 **F5 measured 2026-08-15** (issue #309, live-harness run against Claude Code v2.1.233): a
@@ -77,11 +77,18 @@ three exception-list entries (`CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`, re-invok
 fork, a scheduled task's own prompt), remain unmeasured — this run covers non-interactive `-p`
 only.
 
-**F4 remains named, not yet run** (tracked separately, issue #308 — a distinct empirical
-deliverable shape from the fixtures above, live-harness dispatches, not `skill_lint` selftest
-fixtures): dispatch a fork where the skill's `model:` and its agent's own pin disagree; record
-which model actually reports, to resolve the R6 precedence question. Until F4 reports, R6 stays
-WARN-capped everywhere it's checked.
+**F4 measured 2026-08-16** (issue #308, live-harness run against Claude Code v2.1.233): a
+throwaway `context: fork` skill (`model: sonnet`) named an agent pinned `model: haiku`, invoked
+via non-interactive `claude -p --permission-mode bypassPermissions`. The fork's own subagent
+transcript directory (`.claude/projects/<hash>/<session>/subagents/agent-<id>.meta.json`) records
+`{"agentType":"marker-agent","spawnDepth":1,"model":"claude-sonnet-5"}` — the harness's own spawn
+record, not a self-report — and every `assistant` turn inside that subagent's JSONL carries
+`"model":"claude-sonnet-5"`, never `haiku`. The skill's `model:` won outright; the agent's own pin
+never took effect for that dispatch. Unambiguous on run 1 (the spawn record is a structural fact,
+not a race) — no second, conflict-reversed run needed (budget: 1 of 2 used; measured via non-interactive `-p` only, but the spawn record is written at dispatch time regardless of invocation path), matching F5's
+same-shaped "no repeat run" outcome. **R6 is un-capped by this result**: `check-skill`'s DM-R6 now
+FAILs a skill/agent model conflict instead of WARNing, since the agent's pin is proven dead
+configuration in that shape, not merely unresolved precedence.
 
 **Re-verify trigger:** re-check this table (against `/doctor`, the changelog, and the live docs
 page above) on every Claude Code minor-version bump — the background-default cliff at v2.1.218 is
