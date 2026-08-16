@@ -81,6 +81,19 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.15.1 · 2026-08-16 · `overhaul-execute`: wire `pattern-audit` + `doctrine-audit` into Phase 1
+MEASURE and `doctrine-audit` re-run into Phase 6 PROVE (issue #408). Phase 1 gains the same two
+conditional instruments `overhaul-planning`'s Phase 0 already composes (steps 3-4, cited not
+restated) — doctrine-audit fires whenever the estate carries a `doctrine.manifest.json`,
+pattern-audit fires when the campaign charter names a pattern none of the other four instruments
+owns; both batch via `estate-audit-agent` under the existing >3-estates/>40-members threshold,
+alongside naming/bloat/attention. No-manifest/no-pattern estates report those axes `absent`,
+mirroring Phase 6's existing routing-report `absent` handling. Phase 6 re-runs `doctrine-audit`
+on every wave-touched estate that had a Phase 1 baseline and diffs against it — new findings are
+Gate-B-adjacent evidence named in the roll-up by estate and edge type, whether or not Gate B
+fired. `requires` and the Bash allowlist (`scan.py`, `sweep.py`) extended to match. Contract-
+extending, backward compatible (no existing Phase 1/6 step removed or reshaped) — patch bump,
+mechanical wiring of two already-shipped instruments, no new capability of its own.
 v0.15.0 · 2026-08-16 · `doctrine-audit` two-issue follow-up (#395, #396) on the v0.14.0
 instrument. **#395:** `doctrine.manifest.json` extended from 5 to the full 8 edges
 (D01–D08) — the 2026-08-16 team/coordination-surface review's source transcript surfaced

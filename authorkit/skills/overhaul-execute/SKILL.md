@@ -12,8 +12,8 @@ description: >
   plain audit (naming-audit, bloat-audit).
 author: kim
 created: 2026-08-14
-last_updated: 2026-08-14
-requires: [naming-audit, bloat-audit, overhaul-planning, rename-planning, manifest-authoring, fix-old-names]
+last_updated: 2026-08-16
+requires: [naming-audit, bloat-audit, overhaul-planning, rename-planning, manifest-authoring, fix-old-names, pattern-audit, doctrine-audit]
 disable-model-invocation: false
 user-invocable: false
 allowed-tools:
@@ -26,6 +26,8 @@ allowed-tools:
   - Write
   - Bash(python3 */scripts/validate.py *)
   - Bash(python3 */scripts/measure.py *)
+  - Bash(python3 */scripts/scan.py *)
+  - Bash(python3 */scripts/sweep.py *)
   - Bash(gh issue *)
 ---
 
@@ -68,11 +70,32 @@ tool) FIRST — governance before measurement.
 
 ## Phase 1 — MEASURE
 
-Per in-scope estate: `naming-audit`, `bloat-audit`, and `attention-audit` (Skill tool). More
-than 3 estates in scope, or any single estate over 40 members, dispatches `estate-audit-agent`
-(Agent tool) once per instrument — `naming`, `bloat`, `attention` — with the batch instead. Record
-each estate's baseline in the run ledger — error count, exemption count, routable/agent
-description chars (attention-audit's rent figures) — the Phase 6 burn-down starts here.
+Per in-scope estate: `naming-audit`, `bloat-audit`, and `attention-audit` (Skill tool), plus two
+conditional instruments mirroring `overhaul-planning`'s own Phase 0 composition (its steps 3-4 —
+cite, don't restate):
+
+- **doctrine-audit**, always fires when the estate carries a `doctrine.manifest.json`:
+  `authorkit:doctrine-audit`. No manifest on the estate → report the doctrine axis `absent` for
+  that estate, mirroring Phase 6's own routing-report `absent` handling below — never invent
+  edges to fill the gap.
+- **pattern-audit**, conditional on the approved plan's own statement of intent naming a
+  pattern none of the other four instruments owns: `authorkit:pattern-audit` with that pattern
+  statement as its instruction. No such pattern named → report the pattern axis `absent` for
+  that estate.
+
+More than 3 estates in scope, or any single estate over 40 members, dispatches
+`estate-audit-agent` (Agent tool) once per instrument — `naming`, `bloat`, `attention`, plus
+`doctrine` and `pattern` wherever their trigger fired above — with the batch instead (the same
+threshold governs all five). On the pattern-audit batch leg specifically, this procedure's own
+live user is present by contract (Phase 0's gate) — compile the probes per pattern-audit's own
+step 2 with its veto round still running there, then dispatch the agent with the compiled
+`LABEL=REGEX` probes, never the raw statement; `estate-audit-agent` accepts only pre-compiled
+probes on this instrument, same rule its planning-side precedent already follows. Record each
+estate's baseline in the run ledger — error count, exemption count, routable/agent description
+chars (attention-audit's rent figures), doctrine finding counts by edge type, pattern-audit's
+verdict line (record-only — Phase 6 burns down naming, attention, and doctrine, not pattern) —
+the Phase 6 burn-down starts here for those three axes;
+an `absent` axis is recorded as `absent`, not omitted.
 
 ## Phase 2 — PLAN
 
@@ -158,9 +181,16 @@ fires in between.
 3. Re-run `attention-audit`'s rent measurement and append its trend row (trend.py) per estate:
    the dated row IS the baseline → now evidence for the attention axis; a repo with no routing
    report records those columns `absent`.
-4. Verdict-first roll-up: 🟢/🟡/🔴 per estate; waves run/killed/pending; PRs open awaiting the
-   human's merge; emergent items minted (ids) or declined; every degraded or skipped step named
-   with its reason; the run-ledger path.
+4. Re-run `doctrine-audit` on every wave-touched estate that had a Phase 1 doctrine baseline
+   (an estate with no `doctrine.manifest.json` stays `absent` here too — a wave never seeds one
+   from this step). Diff against the Phase 1 baseline: any new finding not present at baseline is
+   drift a wave introduced — Gate-B-adjacent evidence, named in the roll-up below by estate and
+   edge type, whether or not Gate B actually fired (this is a report finding, not a fourth gate).
+   No new findings → the estate's doctrine axis reports clean, baseline to now.
+5. Verdict-first roll-up: 🟢/🟡/🔴 per estate; waves run/killed/pending; PRs open awaiting the
+   human's merge; emergent items minted (ids) or declined; new doctrine drift since baseline
+   (estate, edge type) or none; every degraded or skipped step named with its reason; the
+   run-ledger path.
 
 ## Degraded modes
 
