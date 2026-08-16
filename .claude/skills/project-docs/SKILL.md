@@ -22,14 +22,15 @@ answer is reported as absent, never guessed.
 
 | Ask | Look in |
 |---|---|
-| Requirements, exact behavior, acceptance criteria | `.claude/docs/spec/` (SPEC-*) |
+| How we build — the three loops, IDR/ADR/PRP doctrine, knowledge-base habits, the glossary | `.claude/docs/spec/product-lifecycle-bible.md` (the canonical reference; on disagreement the internal doctrine corpus wins, per its own header) |
+| Requirements, exact behavior, acceptance criteria | `.claude/docs/spec/` (spec-* files; the dir also holds the lifecycle bible above) |
 | A ratified decision and its alternatives | `.claude/docs/adr/` (ADR-*, accepted = append-only) |
-| What's queued, in flight, or done | GitHub Issues (`gh issue list`; labels `kind:bug`/`kind:feature`/`kind:task` — this repo's ADR-0002 git-native ticket backend, NOT `docs/tickets/`) |
+| What's queued, in flight, or done | GitHub Issues (`gh issue list`; bare labels `bug`/`feature`/`task` + `size:small`/`size:big` — this repo's ADR-0002 git-native ticket backend, NOT `docs/tickets/` — see #267 for a live specimen of the scheme) |
 | A system decomposition or partition manifest | `.claude/docs/decompositions/` |
 | A subagent's handback / handoff record | `.claude/docs/handoff/` |
-| PRD (why/what), LLD (how), PLAN (sequenced steps), ROADMAP (Now/Next/Later), TASK | Not present in this repo as of 2026-08-08 — this project's own routing table
-  (`CLAUDE.md`) is the standing index of what's built; a request for one of these types
-  routes to `/make-doc`, never assumed absent-forever |
+| PRD (why/what) | `.claude/docs/prd/` (first instance 2026-08-15: `prd-idr-framework.md`, the IDR scoping) |
+| LLD (how) | `.claude/docs/lld/` (lld-0001…0004 as of 2026-08-15) |
+| PLAN, ROADMAP (Now/Next/Later), TASK | Not present in this repo as of 2026-08-15 — a request for one of these types routes to `/make-doc`, never assumed absent-forever |
 
 (This repo's docs directory is `.claude/docs/`, not `docs/` — a plugin-workspace convention,
 recorded here so a future session doesn't waste a sweep looking in the wrong place. Before
