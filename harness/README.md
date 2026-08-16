@@ -129,6 +129,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.12 · 2026-08-16 · new `scripts/merge_when_clean.py` (closes #371): mechanizes the coordinator's pre-merge CI wait — polls `gh pr view` for OPEN + MERGEABLE + `mergeStateStatus` CLEAN (the #364 incident's actual gap: the hand-run loop grepped for any SUCCESS check instead of requiring GitHub's own composite verdict), then `gh pr merge --squash`, then composes (imports, doesn't reimplement) `campaign_close.py` for the post-merge branch-delete-verify + optional gate sweep; selftest's negative control is the #371 mergeStateStatus-UNSTABLE-waved-through fixture
 v3.8.11 · 2026-08-16 · #348 footer sweep: 3 harness packs' (big-change-git-rules, github-facts, prompt-wording-rules) stamped "Extending this pack" paragraph replaced with the one-line `Extension: governed by [[make-pack]]` citation per pack-writing-rules' new Extension-citation rule (3.8.9) — mechanical, bodies otherwise untouched
 v3.8.10 · 2026-08-16 · `check-state`'s description gains a one-line disambiguation naming `docs:check-stage` (issue #336, `prd-lifecycle-stage-awareness.md`) as the sibling owning the lifecycle-position axis, reciprocal eval n13 added
 v3.8.9 · 2026-08-16 · `pack-writing-rules` gains the "Extension citation" rule (closes #338): a
