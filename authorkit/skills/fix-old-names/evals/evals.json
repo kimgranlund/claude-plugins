@@ -22,6 +22,7 @@
     { "id": "n07", "prompt": "Rename this variable across the TypeScript codebase.", "expect": "no-trigger", "comment": "no skill — ordinary source refactor, explicitly out of scope" },
     { "id": "n08", "prompt": "Why does my skill never trigger?", "expect": "no-trigger", "comment": "skill-writing-rules — trigger debugging" },
     { "id": "n09", "prompt": "Propose the conforming target name for this skill that's flagged as a naming violation.", "expect": "no-trigger", "comment": "rename-planning (this plugin, added 2026-08-14/#197) — proposes the target name and blast radius, never executes; the new same-plugin confusion this move creates" },
-    { "id": "n10", "prompt": "Apply this approved rename plan now.", "expect": "no-trigger", "comment": "rename-execute (this plugin, added 2026-08-14/#197) — the estate's single mutation point for an already-planned rename, not a stale-reference sweep of an installing repo" }
+    { "id": "n10", "prompt": "Apply this approved rename plan now.", "expect": "no-trigger", "comment": "rename-execute (this plugin, added 2026-08-14/#197) — the estate's single mutation point for an already-planned rename, not a stale-reference sweep of an installing repo" },
+    { "id": "n11", "prompt": "Collect every occurrence of this arbitrary pattern — it's not a retired name, just a string I care about — as a JSON dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — reciprocal fence, 2026-08-15 (issue #257); the rename-provenance cut keeps fix-old-names' own t05/t08 read-only finds unambiguously its own" }
   ]
 }

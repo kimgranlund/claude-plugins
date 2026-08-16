@@ -29,12 +29,14 @@ every one of the six now has a wrapper).
 | `skills/rename-planning` | Procedural skill | model-only | Plans one artifact rename: proposes the conforming target name and enumerates the full blast radius (invocation strings, relations, hooks, workflow configs). Produces a typed plan; never executes |
 | `skills/manifest-authoring` | Procedural skill | model-only | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement |
 | `skills/bloat-audit` | Procedural skill | model-only | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites. Wrapped for user-invocation by `commands/bloat-audit` |
+| `skills/pattern-audit` | Procedural skill | model-only | Compiles a caller-supplied literal pattern or natural-language instruction into labeled probes, runs `scripts/scan.py`, and optionally judges each match (`verdict: hit \| false-positive`). Emits a flat, structured match dataset (`id`/`file`/`line`/`col`/`match`/`context`/`kind` + totals) for a downstream step to consume — review, bulk edit, migration, or overhaul-planning's Phase 0. Read-only — reports, never rewrites. Distinct from naming-audit's grammar axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis. Wrapped for user-invocation by `commands/pattern-audit` |
 | `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0, soft-mentioned where harness isn't installed), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
 | `skills/overhaul-execute` | Procedural skill | model-only | The DRIVES half of the `overhaul-planning` pair (issue #241, enforcing #238's E1 sign-off): discover+scope-confirm, measure, plan, then gated wave execution (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits, `teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename wave) — under three live-user gates (scope, Gate A, Gate B), never self-approving. Extracted 2026-08-14 out of what shipped in PR #240 as a standalone command; exists as a skill at all only because of the reverse-wrapper grammar amendment below. Wrapped for user-invocation by `commands/overhaul-execute` |
 | `agents/naming-audit-agent` | Subagent | dispatch-only | Batch conformance sweeps across N estates/plugins in an isolated context, one aggregated report |
 | `agents/bloat-audit-agent` | Subagent | dispatch-only | Batch busy-work sweeps across N skills/plugins/corpuses in an isolated context, one aggregated report |
 | `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
 | `commands/bloat-audit` | Command | user-only (`/bloat-audit`) | Thin user-invocable wrapper over `skills/bloat-audit`, same reason |
+| `commands/pattern-audit` | Command | user-only (`/pattern-audit`) | Thin user-invocable wrapper over `skills/pattern-audit`, same reason |
 | `commands/overhaul-planning` | Command | user-only (`/overhaul-planning`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-planning` — this one writes the plan doc + ticket-seed list to disk, so it gates on confirmation before writing, unlike the two read-only audit wrappers above |
 | `commands/manifest-authoring` | Command | user-only (`/manifest-authoring`), `confirm: required` | Thin user-invocable wrapper over `skills/manifest-authoring` — mutating (seeds/edits the target estate's `naming.manifest.json`), so it gates on confirmation before writing, same posture as `rename-execute` |
 | `commands/rename-planning` | Command | user-only (`/rename-planning`) | Thin user-invocable wrapper over `skills/rename-planning` — plan-only, never executes, same read-only posture as `naming-audit`/`bloat-audit` above |
@@ -45,6 +47,7 @@ every one of the six now has a wrapper).
 | `hooks/hooks.json` (`PostToolUse`) | Hook | automatic | Runs `scripts/validate.py --hook` after every `Write`/`Edit`; no-ops cleanly when the target estate has no manifest (governance is opt-in per estate) |
 | `skills/naming-audit/scripts/validate.py` | Script | invoked by naming-audit | Deterministic checks only: name grammar, folder layout, frontmatter schema, relation graph, policy/capability coherence, provenance. `selftest` mode proves schema/grammar/lexicon counters bite. Gained `--scope {full,grammar}` 2026-08-14 (issue #197): `grammar` gates only naming-grammar findings, leaving the broader structural/provenance checks informational — how this validator wires into an estate (nonoun-plugins) that hasn't adopted the full frontmatter schema without failing on hundreds of non-naming findings |
 | `skills/bloat-audit/scripts/measure.py` | Script | invoked by bloat-audit | Deterministic measurement: body size, phase-heavy headings, oversized Failure sections, dense descriptions, cross-file near-duplicate paragraphs. `selftest` mode proves flag/duplicate/empty-target counters bite |
+| `skills/pattern-audit/scripts/scan.py` | Script | invoked by pattern-audit | Deterministic sweep: literal, labeled regex + glob probes in, a flat match dataset out — instruction-blind, all NL-compilation and judgment lives in the skill. `selftest` mode proves match/label/multi-probe/glob/skip-dir/binary/invalid-regex/id-stability/verdict-line counters bite |
 | `scripts/fix_old_names.py` | Script | CLI + selftest | Moved from harness 2026-08-14 (issue #197). Classifies each stale-name hit LIVE (rewrite) vs HISTORICAL (byte-identical) vs AMBIGUOUS (escalated); report-only by default, `--write` applies, exit 1 on live hits. `derive` regenerates `renames.json` from git rename detection |
 
 ## Invocation dials
@@ -76,6 +79,33 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.11.0 · 2026-08-15 · `pattern-audit` joins as a fourth audit-family sibling (issue #257,
+lld-0004-pattern-audit.md): a genuinely distinct instrument — sweeps a repo/corpus for an
+arbitrary caller-supplied literal pattern or natural-language instruction and emits a flat,
+structured match dataset (`id`/`file`/`line`/`col`/`match`/`context`/`kind` + totals), for a
+downstream step (review, bulk edit, migration, or overhaul-planning's Phase 0) to consume —
+never a replacement for naming-audit/bloat-audit/surface_map's own fixed-axis measures, which
+stay exactly as they are. Skill+script+command wrapper, sibling-shaped
+(`skills/pattern-audit/SKILL.md` + `scripts/scan.py` + `commands/pattern-audit.md`, same
+model-only/not-user-invocable dial pair as naming-audit/bloat-audit). The measure-then-judge
+split holds: `scan.py` accepts only literal, labeled regex/glob probes (deterministic,
+selftest-proved: positive/reverse/label-plumbing/multi-probe/glob-narrowing/skip-dir+binary
+pruning/invalid-regex-fail-clean/id-stability/verdict-line-shape); the skill compiles a
+natural-language instruction into those probes first, stating the compilation for veto before
+running, and optionally annotates matches with `verdict: hit | false-positive` — never deleting
+or renumbering records. Script deliberately named `scan.py`, not `measure.py`, so it never
+silently rides overhaul-planning's existing `Bash(python3 */scripts/measure.py *)` grant. New
+`object_vocab` registration: `pattern` (repo-root manifest already carried it; this plugin's own
+`naming.manifest.json` did not). Reciprocal NOT-for fences closed in naming-audit (n06),
+bloat-audit (n07), and fix-old-names (n11) — the object cut (rename provenance vs. an arbitrary
+pattern with no rename provenance) keeps fix-old-names' own t05/t08 read-only finds
+unambiguously its own. NOT a generalization of `plan-plugin-split`'s `surface_map.py` (a typed
+relation graph is not regex-expressible) and NOT a `make-script` one-off (a permanent instrument
+with its own recurrence ratchet handing repeat ad-hoc sweeps to `make-script` instead). The
+overhaul-planning Phase-0 wiring (a conditional fifth step, replacing none of the four existing
+instruments) is explicitly deferred to its own follow-up ticket, filed as this build's own
+acceptance predicate — this change touches no overhaul-planning file.
+· v0.10.3 · 2026-08-15 · naming-audit `validate.py` gains the `hook` subcommand (issue #276): the PostToolUse hook derives its target from the write's own file_path, so worktree sessions validate their own tree (not the main checkout) and only the touched plugin; the plugin's own shipped `hooks/hooks.json` rewired off its worktree-blind `--target ${CLAUDE_PROJECT_DIR}` form too; critic pass added wrong-shape fail-open guards + fixtures
 v0.10.4 · 2026-08-15 · `overhaul-planning`'s split/merge/partition NOT-clause is dieted (issue #280): now "a single-pair split/merge decision or single-plugin partition (plan-skill-split, plan-plugin-split — composed, not replaced)", dropping the separate `plan-skill-merge` name now that harness's `plan-skill-split` names `plan-skill-merge` as its own merge-direction sibling and is the stated canonical owner other skills fence back to by name only; n08/n09 gain dated owner-comments, no new cases (renumbered from 0.10.2 — that slot went to PR #285's rebump)
 v0.10.3 · 2026-08-15 · naming-audit `validate.py` gains the `hook` subcommand (issue #276): the PostToolUse hook derives its target from the write's own file_path, so worktree sessions validate their own tree (not the main checkout) and only the touched plugin; the plugin's own shipped `hooks/hooks.json` rewired off its worktree-blind `--target ${CLAUDE_PROJECT_DIR}` form too; critic pass added wrong-shape fail-open guards + fixtures
 v0.10.2 · 2026-08-15 · `naming-audit-agent` and `bloat-audit-agent` gain an explicit
