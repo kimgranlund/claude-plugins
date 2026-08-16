@@ -33,7 +33,7 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 | Sweep the ops queue AND drive buildable tickets to an actual build | teamwork: `/mobilize-chores` (wraps harness's `/sweep-chores`, never reimplements it; `/sweep-chores` alone stays report-only). Gated by one batched confirm — or unattended via `/mobilize-chores auto` (2026-08-11: the explicit token, never inferred; ceiling PR-opened, with ADR-0012's one carve-out — a dispatch carrying the explicit `auto-merge: authorized` grant line AND clearing the full quick-build predicate may land merged; everything else still waits for a human, and nothing ever auto-reviews), the entry point a `/goal` loop calls to drain the queue overnight |
 | Periodic ADR review — surface ratified Decisions worth a knowledge-pack entry, or stale citations of a superseded ADR | harness: `decision-watcher` agent (scheduled via `CronCreate` or on-demand) — checkpointed, never authors; queues candidates for one batched confirm, names the `/make-pack`/`/make-skill` command a human runs next |
 | A drifted repo — duplicated instruction trees, stale corpus, dead automation: the committing campaign | harness: `/clean-repo` |
-| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs the release gates on it; solo single-file fixes may still commit to main. EnterWorktree worktrees live in-repo at `.claude/worktrees/` (gitignored); a change that retires a path a `.gitignore` rule names repairs the rule in the same change (rulings + history: ADR-0002, the git-native memory, harness's clean-repo razor). **Close it with `campaign_close.py <pr-number> --repo <owner/repo> --gate <plugin-root>...`** — verifies MERGED, deletes the remote branch and REVERIFIES it's gone (the ten-branch silent-delete-failure class, 2026-07-16), gates the touched plugins. **A dirty main before pulling parallel-session work: `sync_main.py`** — quarantines local dirt as a named stash, `--ff-only` pulls, reverifies HEAD by SHA (never trust a command's print alone) |
+| A campaign (multi-file, multi-session, or parallel work) | branch + git worktree + PR (ADR-0002) — the PR is the merge gate; CI runs the release gates on it; solo single-file fixes may still commit to main. EnterWorktree worktrees live in-repo at `.claude/worktrees/` (gitignored; path-retirement vs. `.gitignore`: `.claude/rules/gitignore-repair.md`). **Close it with `campaign_close.py <pr-number> --repo <owner/repo> --gate <plugin-root>...`** — verifies MERGED, deletes the remote branch and REVERIFIES it's gone (the ten-branch silent-delete-failure class, 2026-07-16), gates the touched plugins. **A dirty main before pulling parallel-session work: `sync_main.py`** — quarantines local dirt as a named stash, `--ff-only` pulls, reverifies HEAD by SHA (never trust a command's print alone) |
 | Ship | `/ship-plugin <plugin>` — the only way anything ships |
 
 ## Common commands
@@ -57,31 +57,15 @@ No installed harness required; every check is a plain script. Run from the works
 ## Invariants (all plugins, no exceptions)
 
 - **Ship only through the gate.** `release_gate.py <plugin-root> --package` (see Common commands
-  above) is plugin-agnostic; artifacts land in `<plugin>/dist/`. Never hand-zip. Never re-ship a
-  version — the version is the update cache key; bump every change and log it in that plugin's
-  README footer ledger. `dist/` is gate output: read-only.
+  above) is plugin-agnostic. Never re-ship a version — the version is the update cache key; bump
+  every change and log it in that plugin's README footer ledger. `dist/` output handling:
+  `.claude/rules/dist-output.md`.
 - **Incident → infrastructure, same day.** A load failure, false positive, or skipped step becomes
-  a lint rule, gate check, or selftest fixture before the fix ships. Every `scripts/*.py|mjs|js`
-  in every plugin carries a `selftest` mode and it stays green (anatomy, exit tri-state, and
-  placement: harness's `script-writing-rules`; the gate's G4 sweeps all three extensions).
-- **Descriptions are the routing surface.** Any model-invocable description edit updates its
-  `evals/evals.json` in the same change, closes reciprocal fences in sibling suites, and gets an
-  `/check-routing` after boundary changes.
-- **A semantic edit rides with a critic.** A semantic edit to a prompt-carrying artifact (a
-  SKILL.md body, an agent definition, a hook prompt) gets a fresh-context `*-checker` pass before
-  its loop closes, whichever flow applied it — inline fix, unattended dispatch, or a host session.
-  Lint and gates prove mechanics, not semantics (2026-08-11 audit: every recent unaudited semantic
-  edit carried a real gap). The contract is encoded where those flows live — `file-bug`'s
-  fix-inline branch, `dispatch-ticket`'s build path, `make-skill`'s P5. Pure code/config under the
-  repo's own test gates is exempt. **The invariant's UNIT** — semantic (earns the dispatch, at any
-  diff size) vs. mechanical (a ledger-line trim, a version renumber — floor-tier verification in
-  the same loop suffices) — is calibrated in harness's `checking-rules` (2026-08-16, #272); don't
-  re-derive the boundary here.
-- **Plugin boundaries are hard for preloads and `${CLAUDE_PLUGIN_ROOT}` paths, soft for mentions.**
-  Cross-plugin handoffs are named mentions that degrade gracefully when the other plugin isn't
-  installed; an agent preload or script path crossing plugins is a defect (plan-plugin-split's `surface_map.py check`
-  kills it).
-- **Naming:** for names shipped through 2026-08-13, the canon is harness's `naming-rules`
+  a lint rule, gate check, or selftest fixture before the fix ships. Bundled-script selftest
+  requirements: `.claude/rules/scripts.md`.
+- **Skill/agent/hook authoring invariants** — the description-routing-surface rule, the
+  semantic-edit critic gate, and plugin-boundary hygiene for preloads and script paths:
+  `.claude/rules/plugin-authoring.md`.- **Naming:** for names shipped through 2026-08-13, the canon is harness's `naming-rules`
   (ADR-0006, 2026-07-21) — grandfathered verbatim, no rename campaign (ADR-0011 D8). For a
   NEW name, the canon is the harness artifact naming convention spec (ADR-0011, accepted
   2026-08-13): `.claude/docs/spec/spec-naming-convention.md`, checked by authorkit's
@@ -93,12 +77,9 @@ No installed harness required; every check is a plain script. Run from the works
   `design:make-design-system`, `design:design-md-rules` (ADR-0008) — and
   never contain `claude` or `anthropic` anywhere in a skill name or directory — the install
   rejects it and the whole plugin fails to load.
-- **Docs and ledgers:** functional documents follow docs' type contracts and mutability classes
-  (the accepted-ADR append-only rule is hook-enforced — doc_lint T4; supersede, never edit).
-  `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted
-  casually. **Work items are GitHub Issues in this workspace (ADR-0002)** — decisions/contracts
+- **Work items are GitHub Issues in this workspace (ADR-0002)** — decisions/contracts
   (ADR/PRD/SPEC/LLD) and README ledgers stay in-repo files; `docs/tickets/` is retired for new
-  work items here.
+  work items here. Docs mutability + `.refactor-attic/` handling: `.claude/rules/docs-mutability.md`.
 - **CI mirrors the local gates (ADR-0002).** `.github/workflows/gate.yml` runs `release_gate.py`
   (G1–G11, incl. the ruff/eslint style tier — configs `ruff.toml`/`eslint.config.mjs` at this
   root) over every plugin on each push/PR — it executes the same plain scripts, no CI-only
@@ -106,6 +87,14 @@ No installed harness required; every check is a plain script. Run from the works
 - **Sources of record flow outward.** Standards skills in the plugins are canonical; corpus
   snapshots and project-knowledge copies refresh *from* them at release boundaries, never the
   reverse. Falsified claims are amended in place with a dated note.
+
+## Path-scoped rules (`.claude/rules/`)
+
+No native Claude Code mechanism was found that auto-loads a `.claude/rules/*.md` file by the path
+being edited (verified 2026-08-16, issue #262 — undocumented at the platform docs consulted, and
+a comparable real-world project treats these files as manually-pointed reference, not
+auto-conditional). Each file states its own path scope up top; the Invariants bullets above
+point to the one that applies — read it explicitly, a matching open path alone won't surface it.
 
 ## When starting anything
 
