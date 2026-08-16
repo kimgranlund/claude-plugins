@@ -33,6 +33,19 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
    buy it twice. A dispatch that costs more context and latency than doing the work inline is
    over-orchestration, whatever the task's step count — then match the unit to the task and
    justify team fan-out by genuine parallel value.
+   **The job-evidence test (new seats/flows only) — modeled directly on `plan-plugin-split`'s
+   job-evidence rule, same shape, same rigor:** before a NEW coordination seat or multi-seat flow
+   is added, its design records the evidence for why the main loop plus at most one
+   Explore/checker dispatch cannot hold the job. Evidence is a concrete, named gap — an isolation
+   need the host provably lacks (its own context is polluted or must stay clean for a later step),
+   a genuinely concurrent slice competing for the same turn, or a generator≠critic split a
+   high-stakes artifact requires — a template default ("systems eventually get a
+   coordinator") or the step count alone ("it's multi-step, so it needs orchestration") is a
+   question, not evidence (#4 already rejects that reasoning for depth, this test rejects it for
+   existence). No cited gap → the seat/flow doesn't earn a place; the solo-first default above
+   stands. This test gates
+   NEW seats and flows going forward only — an existing seat already in an estate is not
+   retroactively re-justified by it.
 2. Each description a precise interface; `tools` scoped, `model` to task class, `skills:` only for standing expertise; verify keys against the installed build.
 3. Keep teammate roles as subagent definitions (teams compose them at runtime).
 4. Dispatch sealed and shallow: enumerate inputs, state the budget, name the typed return; depth ≤ 2 (host → specialist) — a third level needs justification, a fourth means the decomposition under-cut.
@@ -42,6 +55,9 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
 ## Review
 1. This skill's gates are systemic judgment, not a single-file mechanical check — there is no `harness_checks` subcommand: D2 is judgment because whether a description is a precise interface only shows against the sibling set (no string test sees it); D4's YAML-validity half IS mechanizable — its checker is queued, not built — so until it lands, score D4 by inspection and mark uninspected fields skipped-not-passed. Score against `references/rubric.md`, citing evidence on the 1–5 anchors.
 2. Check plane separation first (the top failure: expecting `/goal` to select capabilities).
+   For any NEW seat or multi-seat flow in the arrangement, check the job-evidence test (Design
+   #1) was actually recorded — a cited gap, not an assumed one; an unjustified new seat is a D1
+   finding.
 3. Findings by severity; gate verdict; top issues with a concrete fix each. **Generator ≠ critic:** for a high-stakes system dispatch the independent **`wiring-checker`** (fresh context, scores this same rubric by inspection) rather than grading your own arrangement.
 
 ## Improve (repair an arrangement)
