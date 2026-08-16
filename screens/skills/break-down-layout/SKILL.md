@@ -1,17 +1,16 @@
 ---
 name: break-down-layout
 description: >-
-  Decompose, evaluate, and design any UI layout with the two-axis technique. Use when analyzing a screenshot
-  or mockup, naming UI regions, grading a layout, or scaffolding an app shell — OUTSIDE-IN (frame → regions
-  → groups → atoms) and INSIDE-OUT (verbs → bindings → feedback → coherence), with a gated rubric and ASCII
-  wireframes for four archetypes (productivity-shell, saas-dashboard, marketing-site, mobile-app). Also:
-  "review / critique this layout", "wireframe a dashboard / marketing page / mobile app", "which archetype
-  fits", "the screen looks clean but nothing on it does anything", "every action works but it's all one
-  giant stacked column". NOT for visual or color design (the color-*-facts packs / lettering-facts), production
-  CSS/component code, or copywriting — structure + interaction only; NOT for the cross-screen journey
-  (break-down-flow — this owns within-screen); NOT for the whole-product sweep (check-whole-ui); NOT for naming a
-  pattern in the abstract (ui-pattern-facts — needs a concrete UI or intent); NOT for abstract system,
-  technical, or goal decomposition with no concrete screen (harness's break-down-problem).
+  Decompose, evaluate, and design any UI layout via the two-axis technique — OUTSIDE-IN
+  (frame→regions→groups→atoms) × INSIDE-OUT (verbs→bindings→feedback→coherence) — gated rubric,
+  ASCII wireframes across four archetypes. Use when analyzing a screenshot/mockup, naming UI
+  regions, grading a layout, or scaffolding an app shell: "review/critique this layout",
+  "wireframe a dashboard/marketing/mobile app", "which archetype fits", "looks clean but
+  nothing does anything", "every action works but it's one giant stacked column". NOT
+  visual/color design (color-*-facts/lettering-facts), CSS/component code, or copywriting; NOT
+  cross-screen journeys (break-down-flow); NOT the whole-product sweep (check-whole-ui); NOT
+  naming a pattern in the abstract (ui-pattern-facts); NOT abstract decomposition with no
+  concrete screen (break-down-problem).
 disable-model-invocation: false
 user-invocable: true
 ---

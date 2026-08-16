@@ -2,17 +2,16 @@
 name: make-component
 description: >-
   Author a zero-dependency web component or composition to the standard shape. Use when building
-  or upgrading a custom element, control, or module outside a framework: "build a web component
-  / custom element", "make a checkbox / select / toolbar component", "design this component's
-  API/anatomy", "wrap a native element or form-associated?", "the tiers feel mis-cut", "my
-  custom element renders empty after a re-render", "the icon-only button isn't square", "what
-  icon/caret size on the ramp" — tier, anatomy, API contract, composition, geometry;
-  Compose-then-Realize, machine-checked. NOT for ui-* controls in agent-ui — "add a ui-button"
-  (that repo's own build seat); NOT for app shells (break-down-layout); NOT for naming a UI
-  pattern (ui-pattern-facts); NOT for feature/system decomposition (break-down-problem); NOT for color
-  ramps (make-palette); NOT for nested-surface radius/spacing composition — "what radius on
-  the inner card" (size-and-shape-rules); NOT for grading a component you didn't author
-  (component-checker).
+  or upgrading a custom element, control, or module outside a framework: "build a web
+  component/custom element", "make a checkbox/select/toolbar", "design this component's
+  API/anatomy", "wrap native or form-associated?", "tiers feel mis-cut", "renders empty after a
+  re-render", "icon-only button isn't square", "icon/caret size on the ramp". Tier, anatomy, API
+  contract, composition, geometry — Compose-then-Realize, machine-checked. NOT ui-* controls in
+  agent-ui (that repo's own build seat); NOT app shells (break-down-layout); NOT naming a UI
+  pattern (ui-pattern-facts); NOT feature/system decomposition (break-down-problem); NOT color
+  ramps (make-palette); NOT nested-surface radius/spacing — "what radius on the inner card"
+  (size-and-shape-rules); NOT grading a
+  component you didn't author (component-checker).
 disable-model-invocation: false
 user-invocable: true
 ---
