@@ -9,8 +9,9 @@ description: >-
   /fleet-bootstrap [spawn-list], a comma-separated subset of reviewer,planner (default empty —
   those two are manually operated per #410 addendum 3), always confirmed via one AskUserQuestion
   before spawning — the argument only pre-selects, it never skips that confirm. NOT a single seat's own bootstrap
-  (team-scaffolding, which this calls internally per seat, and which alone is correct for a human
-  joining one seat by hand); NOT for redoing the gate after ratification (fires once per cold start).
+  (team-scaffolding — reproduced inline here for the orchestrator seat, called directly for
+  reviewer/planner spawns; alone correct for a human joining one seat by hand); NOT for redoing the
+  gate after ratification (fires once per cold start).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[spawn-list - comma-separated subset of reviewer,planner; default empty]"
@@ -35,12 +36,37 @@ command invocation with no role question asked is itself the human's act of decl
 `/fleet-bootstrap` at all is that same explicit act. Present → read it as the record of who has
 already joined and at what tier/mode; do not overwrite existing `live_state` entries, only append.
 
-## Phase 1 — Adopt the orchestrator seat
+## Phase 1 — Register this session as the orchestrator seat
 
-Run `/team-scaffolding agent` with no charter — this session becomes `{repo}-agent`
-under its own contract (`teamwork:lead-team`), per level 1's existing Phases 1–5. This also appends
-this session's `fleet-roster.md` row and, per Phase 0, a `live_state.joined` entry in `fleet.json`
-(`role: agent`, `mode: manual`, today's date).
+This session registers itself as `{repo}-agent` by performing `team-scaffolding`'s own Phase 1–4
+mechanics inline — role `agent`, canonical tier, no permission-profile deviation — rather than
+running `/team-scaffolding agent` through the Skill tool. That path is structurally blocked:
+`team-scaffolding` carries `disable-model-invocation: true` (command-only adoption is deliberate
+there — see its own Rejected alternatives), and `/fleet-bootstrap` carries the same flag, so this
+composition IS already the one explicit human-typed invocation `team-scaffolding`'s contract
+requires; there is no second human turn to wait on (same defect class as #421/#422, team-scaffolding's
+own Phase 5 fix — a skill claiming a Skill-tool hand-off against a `disable-model-invocation`
+target).
+
+1. Bind role `agent`. Validate against `.claude/ops/fleet.json` per `team-scaffolding` Phase 1's
+   role-token branch — a still-live `agent` entry is a collision, not a choice: report the existing
+   entry's date and stop (Failure branches) rather than layering a second holder over it.
+2. Print `Seat: {repo}-agent`, and append the roster row to `.claude/ops/fleet-roster.md`
+   (`team-scaffolding` Phase 2).
+3. `agent` carries no permission-profile deviation (`team-scaffolding` Phase 3) — state that
+   explicitly: `No permission-profile deviation for this role — full write access retained`.
+4. Print the comms charter (`team-scaffolding` Phase 4): the `agent` seat-tier deviation
+   (fable+low vs. the canonical sonnet+high orchestration tier, justified by forks being
+   unpinnable per #313 — team-scaffolding Phase 4 point 1's own wording), the
+   SendMessage-is-a-nudge doctrine, and the peer roster read from `fleet-roster.md`.
+5. Append `live_state.joined` (`role: agent`, `mode: manual`, today's date) in `fleet.json`, per
+   Phase 0.
+
+This registers the seat; it does not separately adopt `teamwork:lead-team`'s contract via a
+printed command the way a solo `/team-scaffolding agent` run would (its Phase 5 hands that off to
+a second human-typed `/lead-team`). `/fleet-bootstrap`'s own remaining phases (2–6) ARE this
+session's orchestration work for the cold start — Phase 6 names `/lead-team` as a follow-up the
+human can run afterward for ongoing day-to-day orchestration, never claimed as already adopted here.
 
 ## Phase 2 — Dispatch the product seat
 
@@ -111,8 +137,10 @@ what a rejoining session reads to discover it's taking over an existing seat, no
 
 One summary: which seats are live and how (manual/background), the gate's outcome, the spawn list
 honored (one of: "none — confirmed default", "reviewer/planner — confirmed", or "confirm skipped —
-no live user, nothing spawned"), and the `fleet.json` path as the durable record a later session
-reads to resume orientation.
+no live user, nothing spawned"), the `fleet.json` path as the durable record a later session reads
+to resume orientation, and — since Phase 1 only registered the orchestrator seat, not the
+`teamwork:lead-team` contract itself — name `/lead-team` as the follow-up command for the human to
+run in this session when they want that contract's ongoing day-to-day discipline.
 
 ## Failure branches
 
