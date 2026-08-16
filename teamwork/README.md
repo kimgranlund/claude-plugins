@@ -85,7 +85,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
-v2.14.2 · 2026-08-16 · persisted worktree-identity pin (closes #363, #359 follow-up): `worktree_prebash_guard.py` gains a per-session, session_id-keyed pin, ASK-and-self-heal on drift (first-call pin-write, no cd needed to catch it); 9 new selftest fixtures (32-40); `parallel-work-rules` doctrine note added citing #359
+v2.14.2 · 2026-08-16 · persisted worktree-identity pin (closes #363, #359 follow-up): `worktree_prebash_guard.py` gains a per-session, session_id-keyed pin, ASK-and-self-heal on drift (first-call pin-write, no cd needed to catch it); 10 new selftest fixtures (32-41); `parallel-work-rules` doctrine note citing #359. Fresh-context hook-checker: 1 Major fixed pre-merge (unwritable data dir crashed the hook — now fails open, tmp-write race fixed alongside)
 v2.14.1 · 2026-08-16 · checker-agent description diet (#357): code-checker/wiring-checker descriptions drop the shared fresh-isolated-context / never-grades-own-work / gap-map boilerplate (collide.py's top cross-plugin *-checker baseline, 6 agents, 103.9-158.4); doctrine added to each body opener. Re-run: code-checker↔design-system-checker 109.9→91.3, ↔flow-checker 103.9→69.6; wiring-checker↔layout-checker 135.6→64.0, rest below threshold. Batched critic pass (6 files): both clean; layout-checker's dropped fix-owner clause repaired same-round. No evals.json owed. Siblings trimmed same PR.
 v2.14.0 · 2026-08-15 · agent-contract-adoption ritual centralized (closes #352, bloat-audit
 2026-08-16): `lead-planning`, `lead-team`, and `lead-build` carried near-duplicate copies of the

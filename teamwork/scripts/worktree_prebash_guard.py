@@ -173,7 +173,11 @@ def resolve_data_dir():
 
 def pin_file_path(data_dir, session_id):
     """Path for one session's pin file. Sanitized so a hostile/malformed session_id can't
-    escape PIN_SUBDIR via path traversal."""
+    escape PIN_SUBDIR via path traversal. Disclosed limitation (hook-checker nit, 2026-08-16):
+    the sanitizer maps every non-alnum/-/_ char to '_', so two distinct session_ids differing
+    only in punctuation (e.g. "a.b" and "a/b") collide onto the same pin file — harmless in
+    practice (a real session_id is a platform-issued opaque token, not adversarially chosen to
+    collide) but disclosed rather than silently assumed collision-free."""
     safe_id = "".join(c if (c.isalnum() or c in "-_") else "_" for c in (session_id or "unknown"))
     return os.path.join(data_dir, PIN_SUBDIR, f"{safe_id}.json")
 
@@ -189,18 +193,35 @@ def read_pin(data_dir, session_id):
 
 
 def write_pin(data_dir, session_id, worktree_name):
-    """Write (or overwrite) this session's pin. Atomic via tmp+rename so a hook racing a
-    concurrent Bash call from the same session never observes a half-written file."""
+    """Write (or overwrite) this session's pin. Atomic via a per-call unique tmp file (never a
+    fixed name — two concurrent same-session writers must not race the same tmp path) +
+    os.replace, so a hook racing a concurrent Bash call from the same session never observes a
+    half-written file. NEVER RAISES: an unwritable data dir, full disk, or any other OSError
+    fails open and silently, returning None — same disclosed posture as this file's other
+    unprovable/exceptional paths (fresh-context hook-checker finding, 2026-08-16: an uncaught
+    write error previously crashed the hook on EVERY subsequent Bash call once the dir was
+    unwritable — worse than the guard doing nothing at all, hook-writing-rules' own
+    flaky-is-worse-than-none doctrine)."""
     path = pin_file_path(data_dir, session_id)
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    pin_dir = os.path.dirname(path)
     payload = {
         "worktree": worktree_name,
         "pinned_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
-    tmp_path = path + ".tmp"
-    with open(tmp_path, "w") as f:
-        json.dump(payload, f)
-    os.replace(tmp_path, path)
+    tmp_path = None
+    try:
+        os.makedirs(pin_dir, exist_ok=True)
+        fd, tmp_path = tempfile.mkstemp(dir=pin_dir, prefix=".pin-", suffix=".tmp")
+        with os.fdopen(fd, "w") as f:
+            json.dump(payload, f)
+        os.replace(tmp_path, path)
+    except OSError:
+        if tmp_path is not None:
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass
+        return None
     return payload
 
 
@@ -851,6 +872,36 @@ def selftest():
                 f"second_rc={second.returncode!r} second_out={second.stdout!r})"
             )
             fails += 1
+
+    # fixture41: an unwritable data dir must fail OPEN, never crash the hook (hook-checker
+    # Major, 2026-08-16 — live probe found write_pin's os.makedirs/open/os.replace raising
+    # uncaught through check_identity_pin into run_hook, so an unwritable dir took the whole
+    # guard down with rc=1 + a traceback on EVERY subsequent Bash call, worse than not having
+    # the guard at all). Skipped, not falsely failed, when running as root (root ignores the
+    # chmod below, so the write would actually succeed and the fixture couldn't prove anything).
+    if hasattr(os, "geteuid") and os.geteuid() == 0:
+        print("skip  fixture41_unwritable_data_dir_fails_open (running as root — chmod is a no-op)")
+    else:
+        with tempfile.TemporaryDirectory() as ro_tmp:
+            pins_dir = os.path.join(ro_tmp, PIN_SUBDIR)
+            os.makedirs(pins_dir)
+            os.chmod(pins_dir, 0o500)  # read+execute, no write
+            try:
+                result = write_pin(ro_tmp, "sess-ro", "seat1")
+                drift = check_identity_pin(ro_tmp, "sess-ro", "/repo/.claude/worktrees/seat1")
+                if result is not None or drift is not None:
+                    print(
+                        "FAIL fixture41_unwritable_data_dir_fails_open "
+                        f"(expected None/None, got write_pin={result!r} drift={drift!r})"
+                    )
+                    fails += 1
+                else:
+                    print("ok    fixture41_unwritable_data_dir_fails_open")
+            except OSError as e:
+                print(f"FAIL fixture41_unwritable_data_dir_fails_open (raised {e!r} instead of failing open)")
+                fails += 1
+            finally:
+                os.chmod(pins_dir, 0o700)  # restore write so TemporaryDirectory cleanup can remove it
 
     if fails:
         print(f"-- {fails} fixture(s) failed --")
