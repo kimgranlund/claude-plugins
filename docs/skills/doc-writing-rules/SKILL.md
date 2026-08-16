@@ -91,6 +91,16 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 | TASK | One actor, one sitting, one done-when | work item | Goal · Done-when |
 | RDD | One locked release commitment, cited to ≥1 ADR/IDR, DRI-accountable — plural, numbered (`rdd-NNNN`), ADR/IDR-parallel lifecycle | ledger | Scope · Acceptance · Sequencing · Completion |
 
+**Rejected alternatives, required at close.** Every TICKET's close-out states what was
+deliberately NOT done and why — one section (`## Rejected alternatives` in
+`references/templates/ticket.md`), filled in when the ticket moves to `done`/`wontfix`, same
+enforcement tier as the `## Findings` write-back convention below (a documented practice teams
+follow, not a `doc_lint.py` T3 gate — a bare "nothing rejected" is a valid entry when the chosen
+path was genuinely uncontested; an absent section at close is not). Prior art proving the value:
+PR #343's scope note, PR #347's no-split writeup — both surfaced a real alternative a reviewer
+would otherwise have had to ask about. `dispatch-ticket`'s (teamwork) Findings write-back contract
+carries the same requirement for its build path.
+
 **Which type?** Route by the question being answered: what do we believe, before any choice →
 IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
 what order → PLAN/ROADMAP; who does what next → TICKET/TASK; what release commitment did we lock
@@ -191,6 +201,20 @@ new one); it defines the primitive only, it does not require `file-bug`/`feature
 (transport resolution, configuration, status-type mapping, payload mapping, claim):
 `references/linear-adapter.md`. A bring-your-own Option-C adapter documents its own realization the
 same way, in its own workspace — this skill owns the interface, not every implementation of it.
+
+## Deliberate non-adoptions (DE-standards gap review, #377)
+
+Two industry/DE-standard practices surfaced in the 2026-08-16 gap review and were deliberately
+**not** adopted, because this estate's existing contract is already stricter than the norm they'd
+import:
+
+- **Generator ≠ critic.** Already the standing invariant (`plugin-authoring.md`'s semantic-edit
+  gate, `checking-rules`) — a maker never grades its own semantic edit. The industry practice this
+  would otherwise import (self-review checklists in lieu of a second reviewer) is a weaker
+  substitute for a rule already enforced structurally here.
+- **ID-spine traceability.** Already stricter than the common "link a ticket to an epic" norm — the
+  ID spine (`REQ-###` ↔ plan step ↔ ticket ↔ ADR) is bidirectional and a ticket tracing to nothing
+  is named scope creep, above.
 
 ## Failure catalog
 
