@@ -2,11 +2,11 @@
 name: doc-writing-rules
 description: >-
   Standards for authoring functional documents — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK,
-  IDR. Use when asking which document type fits, what sections/frontmatter a type requires,
-  whether a document can be edited (why an accepted ADR or a locked IDR is append-only), how
-  documents reference each other (the ID spine), how plans track status, or why doc_lint failed.
-  NOT for drafting one (make-doc); NOT for reviewing one (check-doc); NOT the general "why do
-  IDR/ADR/RDD exist, what's the build loop" doctrine, portable to any project
+  IDR, RDD. Use when asking which document type fits, what sections/frontmatter a type requires,
+  whether a document can be edited (why an accepted ADR, a locked IDR, or a locked RDD is
+  append-only), how documents reference each other (the ID spine), how plans track status, or why
+  doc_lint failed. NOT for drafting one (make-doc); NOT for reviewing one (check-doc); NOT the
+  general "why do IDR/ADR/RDD exist, what's the build loop" doctrine, portable to any project
   (product-lifecycle-rules) — this skill owns the live, enforced type contract only.
 disable-model-invocation: false
 user-invocable: false
@@ -25,7 +25,7 @@ authoring contracts, `doc_lint.py` the enforcement. No validator, no type.
 
 | Class | Change rule | Types here | Canonical failure |
 |---|---|---|---|
-| Ledger | Append-only; supersede, never edit | ADR, IDR | An edited accepted ADR or locked IDR is a forged memory (the write hook blocks it) |
+| Ledger | Append-only; supersede, never edit | ADR, IDR, RDD | An edited accepted ADR, locked IDR, or locked RDD is a forged memory (the write hook blocks it) |
 | Versioned contract | Change via versioned release only | PRD, SPEC, LLD | Silent edits make every downstream reference incomparable |
 | Living state | One canonical copy, an owner, a review cadence | PLAN, ROADMAP | Forking — two copies both "current", neither trusted |
 | Work item | Living while open; archived on close, learnings promoted first | TICKET, TASK | Closed items left active — future agents act on dead intent |
@@ -50,10 +50,11 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    number/date, then slug; directory conventions are what let hooks and path-scoped rules fire.
    The canonical directory per type (ruled 2026-07-12; make-doc and the project-docs index both
    consume THIS map — a second map is drift): `docs/prd/` · `docs/spec/` · `docs/lld/` ·
-   `docs/adr/` · `docs/idr/` · `docs/plan/` · `docs/roadmap/` · `docs/tickets/` · `docs/task/`. The
-   two pluralization exceptions (`tickets`, `adr`) are historical and load-bearing (three command
-   skills hardcode `docs/tickets/`) — recorded, not to be "fixed". `docs/idr/` adopts the canonical
-   type-prefixed numbered form (`idr-0001-<slug>.md`) rather than copying ADR's grandfathered
+   `docs/adr/` · `docs/idr/` · `docs/rdd/` · `docs/plan/` · `docs/roadmap/` · `docs/tickets/` ·
+   `docs/task/`. The two pluralization exceptions (`tickets`, `adr`) are historical and
+   load-bearing (three command skills hardcode `docs/tickets/`) — recorded, not to be "fixed".
+   `docs/idr/` and `docs/rdd/` adopt the canonical type-prefixed numbered form
+   (`idr-0001-<slug>.md` / `rdd-0001-<slug>.md`) rather than copying ADR's grandfathered
    exception. Aligning an EXISTING repo to this map is `/tidy-docs`'s job.
    Every canonical directory is repo-rooted, never plugin-rooted (ruled 2026-07-13): resolve
    against the **local or target repo's own root** — the repo the session is already working in
@@ -88,11 +89,13 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 | ROADMAP | Horizons of intent, reviewed on a cadence | living state | Now · Next · Later |
 | TICKET | One shippable unit, traced to spec IDs (`kind: bug`/`feature`, see below; `kind: task` — a generic chore/follow-up, `file-task`'s own convention, no dedicated section needed beyond this row) | work item | Summary · Acceptance · Links |
 | TASK | One actor, one sitting, one done-when | work item | Goal · Done-when |
+| RDD | One locked release commitment, cited to ≥1 ADR/IDR, DRI-accountable — plural, numbered (`rdd-NNNN`), ADR/IDR-parallel lifecycle | ledger | Scope · Acceptance · Sequencing · Completion |
 
 **Which type?** Route by the question being answered: what do we believe, before any choice →
 IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
-what order → PLAN/ROADMAP; who does what next → TICKET/TASK. A document answering two of these
-questions is usually two documents joined by IDs.
+what order → PLAN/ROADMAP; who does what next → TICKET/TASK; what release commitment did we lock
+in, cited to which decisions → RDD. A document answering two of these questions is usually two
+documents joined by IDs.
 
 **IDR — Intent Decision Record.** Sits upstream of ADR on the ID spine (more foundational, not
 "instead of"): a testable belief about what's true, minted before any architecture choice exists
@@ -110,6 +113,25 @@ plural locked IDRs **plus ONE living index** (a "product brief" aggregator over 
 living-index type itself stays a deferred follow-up, not built here (querying `idr-0*` directly
 suffices until it lands). Full scoping: `prd-idr-framework.md`; concept authority:
 `product-lifecycle-bible.md` Part 4.
+
+**RDD — Roadmap Decision Record.** Sits downstream of both ADR and IDR on the ID spine — a locked
+release commitment (scope, IDR-grammar acceptance criteria, sequencing, DRI) that **cites** `≥1`
+ADR/IDR via its own `decision-refs:` frontmatter field, never the reverse. Realizes the corpus's
+product-lifecycle-bible (Part 4) PRP concept as a docs type, named RDD rather than PRP to complete
+the `_DR` family grammar IDR/ADR already established. Lifecycle mirrors ADR/IDR's proven two-phase
+mechanic: `draft` (freely editable, citations/DRI not yet required) → `locked` (T4 blocks
+committed-HEAD content edits; `decision-refs:` and `dri:` become mandatory — T7 FAILs a locked RDD
+carrying either empty) → `superseded` (terminal; a new RDD cites `supersedes:`). **Deliberately no
+fourth `shipped-and-archived` status value** (Kim's ruling, 2026-08-16, issue #332): completion
+tracking belongs to the `roadmap` type's own living Now/Next/Later movement — "releases lock, the
+roadmap breathes" — a shipped RDD stays `locked` forever, byte-identical; a renegotiated
+commitment gets a new RDD, exactly the ADR/IDR supersession pattern, never an in-place terminal
+flip. `decision-refs:` presence-only for v1 (ruled 2026-08-16): whether each cited id structurally
+resolves to a real `adr-*`/`idr-*` file is a deferred stronger check, not built here. The
+cross-document escalation pattern this citation spine feeds — "≥2 `superseded` RDDs citing the
+same ADR" — is a deferred `decision-watcher` (harness) extension, out of this skill's own scope
+(judgment-tier, cross-corpus, not a single-file lint). Full scoping: `prd-rdd-framework.md`;
+concept authority: `product-lifecycle-bible.md` Part 4.
 
 ## Bug-shaped tickets
 
@@ -173,12 +195,13 @@ same way, in its own workspace — this skill owns the interface, not every impl
 
 | Failure | Mechanism | Fix |
 |---|---|---|
-| Class confusion | Editing ledgers, forking living state | Class in frontmatter; the hook blocks accepted-ADR and locked-IDR edits |
+| Class confusion | Editing ledgers, forking living state | Class in frontmatter; the hook blocks accepted-ADR, locked-IDR, and locked-RDD edits |
 | Verdicts in prose | Code can't read the gate | Structured frontmatter enums, always |
 | Plans without "done when" | Guesses wearing plan frontmatter | Per-step validation criteria, decided upfront |
 | Restated substrate | Spec repeats a skill or a sibling doc → drift pair | ID spine; reference, never restate |
 | Type sprawl | One doc answering PRD and SPEC and PLAN questions | One question per type; split, join by IDs |
 | Completed docs left active | Dead intent steering live agents | Archive on close; promote learnings on the way out |
+| Release with no traceability | A locked RDD with zero cited ADR/IDR, or no named DRI | `decision-refs:`/`dri:` required non-empty at `locked` (T7, FAIL) |
 
 ## Provenance
 

@@ -1,11 +1,12 @@
 ---
 name: make-doc
 description: >-
-  Author a functional document — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK, or IDR — through
-  gated phases: route, capture intent, draft, validate. Use it to write, draft, author, record,
-  or spec out a document — "write the PRD for this feature", "mint the founding IDR for this
-  project". Runs via /make-doc [type and intent]. NOT for the rules themselves (doc-writing-rules);
-  NOT for reviewing (check-doc); NOT for feature intake (file-feature).
+  Author a functional document — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK, IDR, or RDD —
+  through gated phases: route, capture intent, draft, validate. Use it to write, draft, author,
+  record, or spec out a document — "write the PRD for this feature", "mint the founding IDR for
+  this project", "lock in the RDD for this release". Runs via /make-doc [type and intent]. NOT for
+  the rules themselves (doc-writing-rules); NOT for reviewing (check-doc); NOT for feature intake
+  (file-feature).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[type] [one-line intent]"
