@@ -17,7 +17,7 @@ description: >-
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[blank for a full sweep-and-mobilize | 'auto' to skip the confirm round for unattended/loop use | a scope instruction, optionally prefixed with 'auto ']"
-allowed-tools: ["Read", "Glob", "Edit", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Agent", "AskUserQuestion"]
+allowed-tools: ["Read", "Glob", "Write", "Edit", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Bash(node harness/scripts/chore_sweep_apply.mjs *)", "Agent", "Workflow", "Skill", "AskUserQuestion"]
 ---
 
 # mobilize-chores
@@ -38,16 +38,22 @@ sweep surfaced that's actually buildable.
    a `/goal` loop or scheduled routine calls (`/mobilize-chores auto`) to get a confirm-free pass —
    never inferred from "no human appears to be watching," always this explicit token, so the same
    invocation behaves identically whether a human or a loop types it.
-1. **Sweep.** `/sweep-chores` is `disable-model-invocation: true` — command-only, unreachable via
-   the Skill tool from inside another skill's procedure (verified 2026-08-08, issue #134: every
-   attempt fails immediately with "cannot be used with Skill tool due to disable-model-invocation").
-   `/sweep-chores`' own body names exactly what it wraps: it dispatches the `chore-lead` agent
-   (Agent tool, `subagent_type: "harness:chore-lead"`), carrying the scope instruction from step 0
-   verbatim, then shows the banner (if `.claude/ops/plan.md` doesn't exist yet) and relays the
-   report unmodified. Do that dispatch directly — the agent, not the command — with the identical
-   contract: banner check first when the plan file is absent, the step-0 scope instruction passed
-   through, the report relayed as this step's own findings. This IS running `/sweep-chores`,
-   mechanically, not a workaround.
+1. **Sweep.** Invoke harness's `sweep-chores` skill directly — `Skill(skill: "harness:sweep-chores",
+   args: "<the step-0 scope instruction>")` — carrying the step-0 scope instruction verbatim (empty
+   → full sweep). Issue #266 retired the `chore-lead` coordinator agent this step used to dispatch
+   (its whole job was a deterministic dispatch graph — #265 measured that model-in-the-loop chain
+   at 1.92× output tokens / 3.6× wall-clock vs. solo for equivalent outcome quality); `sweep-chores`
+   now carries that choreography directly and was reclassified from command-only
+   (`disable-model-invocation: true`, unreachable via the Skill tool — verified 2026-08-08, issue
+   #134) to a "both"-invocable procedural skill for exactly this reason, so this step can invoke
+   the identical procedure by name instead of duplicating it (the same cross-plugin Skill-tool
+   pattern `dispatch-ticket` itself already uses to hand a bug-kind ticket to docs' `file-bug`) —
+   never a hardcoded `${CLAUDE_PLUGIN_ROOT}` path or a duplicated fan-out, which would be the
+   hard-plugin-boundary defect `plan-plugin-split`'s `surface_map.py check` exists to catch. This
+   IS running `/sweep-chores`, mechanically, not a workaround — its own banner check, scope
+   resolution, Workflow-preferred/Agent-fallback fan-out, and `chore_sweep_apply.mjs` payload
+   application all run inline in this session since a Skill-tool call has no isolated context of
+   its own; relay `sweep-chores`' report as this step's findings.
 2. **Find mobilizable tickets.** Resolve this repo's ticket backend once (`doc-writing-rules`'
    backend resolver, `references/backend-resolver.md`, where `docs` is installed; not installed,
    or no ruling → git-native, this workspace's own ADR-0002 instance, unchanged from before this
@@ -151,10 +157,12 @@ sweep surfaced that's actually buildable.
    clarify round, never guessed at) apply automatically, since this dispatch never has an
    interactive user. Relay each returned typed result (path/URL, status, what shipped, a
    recorded blocker, or a SKIPPED gap) as that ticket's mobilized outcome — the same output a
-   human running `/build-feature <id>` would see. This is the same
-   `chore-lead`/`sweep-chores` shape step 1 already uses: the command stays
-   `disable-model-invocation: true`, the agent carries the reachable procedure (issue
-   #134/#135's shared fix pattern).
+   human running `/build-feature <id>` would see. `build-feature` stays
+   `disable-model-invocation: true` — per-ticket dispatch genuinely needs `build-lead`'s own
+   isolated agent context (parallel, independently-isolated builds), unlike step 1's sweep, which
+   needs no isolation of its own and so was reclassified to a directly Skill-tool-reachable
+   procedure instead (issue #266) rather than kept as a two-piece command+agent pair — two
+   different fixes to the same disable-model-invocation-blocks-Skill-tool class (issue #134/#135).
 
    **On the UNATTENDED branch only, write the grant line into each dispatch prompt** — the literal
    text `auto-merge: authorized`, on its own line, typed out in the sealed prompt. It is a field
@@ -282,8 +290,8 @@ sweep surfaced that's actually buildable.
   own unattended contract, the identical outcome a human declining it in step 4 would have
   produced — never treated as an error unique to the unattended path.
 
-Done when `/sweep-chores` has run (via the direct `chore-lead` dispatch step 1 names, not a failed
-Skill-tool call), every open `feature`/`bug`/`task` ticket with no build in flight, no active
+Done when `/sweep-chores` has run (via the direct Skill-tool call step 1 names, not a duplicated
+fan-out), every open `feature`/`bug`/`task` ticket with no build in flight, no active
 claim, AND no open `Blocked-by:` dependency (#193) has been considered, every dispatch was gated
 by the human's one batched confirm
 (INTERACTIVE) or by step 2's own filtering under the explicit `auto` token (UNATTENDED) — never by
@@ -300,5 +308,5 @@ feature/task dispatches with overlapping or unstated edit targets are pushed to 
 instead of the safer serial default (isolation itself is no longer this step's call — that's
 `dispatch-ticket`'s own unconditional Phase 3, per #183 — but a foreseeable merge conflict from
 overlapping targets still is), a dispatch leaving no Findings-equivalent entry goes unnoticed, step
-1 is attempted via the Skill tool instead of the direct `chore-lead` dispatch, or an UNATTENDED run
+1 duplicates the fan-out in its own prose instead of the direct `Skill(harness:sweep-chores)` call, or an UNATTENDED run
 is inferred from context rather than the explicit `auto` token.
