@@ -10,9 +10,13 @@ version-bumping build per plugin at a time, coordinator merges after CI, campaig
   authorkit 0.11.1) · #300 BUILDING (screens 1.0.10)
 - G (DISPATCHED): #313 (harness 3.8.3 slot) · #294 (authorkit 0.11.2 slot) · #309 queued
   (F5 experiment; its skill-writing-rules fact note takes the harness slot after #313)
-- Side work: project-docs consult-table repair (bible row + label-scheme + PRD/LLD rows) —
-  critic in flight, commits to main after pass. New backlog: #316 (IDR impl), #318 (RDD,
-  Blocked-by #316) — join the queue after H per Kim's direction.
+- F CLOSED: #300 DONE (PR #319 merged, screens 1.0.10 — 53.9 collision cleared, 26/26 routing).
+- Side work DONE: project-docs consult-table repair committed (9907852) — bible indexed,
+  label-scheme + PRD/LLD rows corrected, critic pass applied.
+- Lifecycle track (Kim 2026-08-16, post-H queue in arc order): #316 (IDR impl) → #318 (RDD,
+  Blocked-by #316) → #320 (lifecycle knowledge pack from the bible) → #321 (stage awareness —
+  reads the record types as signals; soft-depends #316/#318). #320/#321 are scoping-first,
+  gaps named in their bodies.
 - H (pending G): #308 (F4; harness slot) · #297 (authorkit after #294) · #286 (authorkit
   after #297) · #293 (authorkit LAST — the agent merge inherits all prior authorkit changes)
 - HELD: #258 (Kim's standing defer) · #295 (own charter later, per Kim's confirm choice)
