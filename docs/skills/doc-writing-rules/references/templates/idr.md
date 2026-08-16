@@ -5,6 +5,7 @@ status: draft            # draft | locked | superseded
 date: YYYY-MM-DD
 owner: 
 proof-ref:                # path/URL to the test, demo, or prototype state — fill before locking (authoring contract; not lint-gated)
+provenance: derived-from-evidence  # derived-from-evidence | inferred | decided-by-human — machine-readable, must match the ## Why prose (doc_lint T8, FAIL-gated)
 supersedes: null          # idr-NNNN when replacing a prior claim, reason in ## Why
 ---
 # IDR-0000 — <the testable hypothesis or outcome claim, stated so it could fail>
