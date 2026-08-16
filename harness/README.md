@@ -129,6 +129,13 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.7 · 2026-08-16 · Cross-PR version-claim coordination encoded (closes #311, evidence: the
+#284/#285/#290 collision cluster): `big-change-git-rules/references/who-ships-what.md` gains a
+"Cross-PR version-claim coordination" section — ONE version-bumping build in flight per plugin at
+a time, a rebump stacks its predecessor's ledger entry byte-identically — plus a new script,
+`scripts/version_claim_check.py` (selftest-proven, incl. the #284/#289 `3.6.2 -> 3.6.2` collision
+as its own negative control fixture), the pre-merge coordinator-run tier release_gate/CI/
+campaign_close each structurally cannot fill. Consult table and script list updated to match.
 v3.8.6 · 2026-08-15 · `agent-writing-rules`' "Checker-seat consolidation" section repointed
 post-execution (issue #293, cross-plugin): the section narrated authorkit's three
 single-instrument batch-audit agents as the pending merge candidate; now records the merge as
