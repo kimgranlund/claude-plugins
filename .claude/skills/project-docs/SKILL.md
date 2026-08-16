@@ -23,13 +23,14 @@ answer is reported as absent, never guessed.
 | Ask | Look in |
 |---|---|
 | How we build, generally — the three loops, IDR/ADR/RDD doctrine, knowledge-base habits, the glossary | `docs:product-lifecycle-rules` (the canonical operating surface as of 2026-08-16, issue #320 — `.claude/docs/spec/product-lifecycle-bible.md` is now a dated snapshot pointing at it) |
-| What THIS repo has actually built of that doctrine (which types exist, which are only scoped) | `.claude/docs/idr/`, `.claude/docs/adr/`, `.claude/docs/prd/prd-rdd-framework.md` (RDD: scoped, not yet a `doc_lint` type) — `docs:doc-writing-rules`' live type table is the enforced source |
+| What THIS repo has actually built of that doctrine (which types exist, which are only scoped) | `.claude/docs/idr/`, `.claude/docs/adr/`, `.claude/docs/rdd/` — `docs:doc-writing-rules`' live type table is the enforced source |
 | Requirements, exact behavior, acceptance criteria | `.claude/docs/spec/` (spec-* files; the dir also holds the lifecycle bible above) |
 | A ratified decision and its alternatives | `.claude/docs/adr/` (ADR-*, accepted = append-only) |
 | What's queued, in flight, or done | GitHub Issues (`gh issue list`; bare labels `bug`/`feature`/`task` + `size:small`/`size:big` — this repo's ADR-0002 git-native ticket backend, NOT `docs/tickets/` — see #267 for a live specimen of the scheme) |
 | A system decomposition or partition manifest | `.claude/docs/decompositions/` |
 | A subagent's handback / handoff record | `.claude/docs/handoff/` |
 | A founding hypothesis or testable claim this project is built on | `.claude/docs/idr/` (`idr-*`, `locked` = append-only; not yet present in this repo as of 2026-08-16 — the type ships in this same change, no instance minted here) |
+| A locked release commitment — scope, citations, DRI | `.claude/docs/rdd/` (`rdd-*`, `locked` = append-only; not yet present in this repo as of 2026-08-16 — the type ships in this same change, no instance minted here) plus the `roadmap`'s own living view for what's currently shipping |
 | PRD (why/what) | `.claude/docs/prd/` (first instance 2026-08-15: `prd-idr-framework.md`, the IDR scoping) |
 | LLD (how) | `.claude/docs/lld/` (lld-0001…0004 as of 2026-08-15) |
 | PLAN, ROADMAP (Now/Next/Later), TASK | Not present in this repo as of 2026-08-15 — a request for one of these types routes to `/make-doc`, never assumed absent-forever |

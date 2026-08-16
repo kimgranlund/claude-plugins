@@ -9,15 +9,16 @@ Usage:
 
 Rules ("no validator, no type" — Vol 3 §3.1):
   T1 [FAIL] frontmatter parses and carries doc-type, id, status
-  T2 [FAIL] doc-type is one of the nine; status is in that type's enum
+  T2 [FAIL] doc-type is one of the ten; status is in that type's enum
   T3 [FAIL] required sections for the type present as `## ` headings
   T4 [FAIL] ledger protection (hook mode): editing a file whose COMMITTED (HEAD) version is a
-            locked ledger entry — an accepted ADR or a locked IDR — supersede, never edit.
-            Refined 2026-07-15 (ADR): a new/untracked ADR, or one still `proposed` in HEAD, may be
-            authored and ratified (the proposed->accepted flip is the ratification act, not a
-            forgery); the append-only guarantee protects history. Generalized 2026-08-16 (IDR,
-            #316) to a ledger-lock guard covering both `doc-type: adr, status: accepted` and
-            `doc-type: idr, status: locked` — the same two-phase mechanic, reused verbatim per
+            locked ledger entry — an accepted ADR, a locked IDR, or a locked RDD — supersede,
+            never edit. Refined 2026-07-15 (ADR): a new/untracked ADR, or one still `proposed` in
+            HEAD, may be authored and ratified (the proposed->accepted flip is the ratification
+            act, not a forgery); the append-only guarantee protects history. Generalized
+            2026-08-16 (IDR, #316; RDD, #332) to a ledger-lock guard covering
+            `doc-type: adr, status: accepted`, `doc-type: idr, status: locked`, and
+            `doc-type: rdd, status: locked` — the same two-phase mechanic, reused verbatim per
             LEDGER_LOCK below. git absent / not a repo / any doubt -> conservative block, as before.
   T5 [WARN] plan steps without a done-when token; spec Requirements without REQ- IDs
   T6 [WARN] an ADR with no `intent-refs:` citation — an "orphan ADR" per the corpus's
@@ -25,6 +26,14 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             Added 2026-08-16 (#316) alongside the `idr` type; existing ADRs 0001-0013 predate
             `intent-refs:` and are EXPECTED to warn here — the retrofit is its own deferred
             follow-up (PRD Implementation surface item 7), not required for this check to ship.
+  T7 [FAIL] a `locked`-or-`superseded` RDD with an empty/missing `decision-refs:` OR an
+            empty/missing `dri:` — a release commitment locked with no upward citation or no
+            named accountable human. Added 2026-08-16 (#332, `prd-rdd-framework.md`) alongside
+            the `rdd` type; `draft` RDDs are exempt on both fields (the harvest window — citations
+            and DRI assignment may genuinely not be settled yet). Deliberately stricter than T6
+            (FAIL, not WARN): RDD has zero existing instances, so there is no retrofit debt to
+            excuse a soft landing. `decision-refs:` is a single-line comma/space-separated scalar
+            (`parse_frontmatter` cannot read a YAML block list) — never a list.
 """
 import json
 import re
@@ -41,15 +50,23 @@ TYPES = {
     "ticket":  {"status": {"open", "doing", "done", "wontfix"},   "sections": ["Summary", "Acceptance", "Links"]},
     "task":    {"status": {"todo", "doing", "done"},              "sections": ["Goal", "Done-when"]},
     "idr":     {"status": {"draft", "locked", "superseded"},      "sections": ["Claim", "Why", "Proof"]},
+    "rdd":     {"status": {"draft", "locked", "superseded"},      "sections": ["Scope", "Acceptance", "Sequencing", "Completion"]},
 }
 
 # T4's ledger-lock scope, keyed by doc-type -> the status value that means "committed and locked".
 # ADR's `accepted` and IDR's `locked` are the same mechanic (ADR-0013's proven two-phase
 # proposed/draft -> ratified flip); adding a doc-type here is the whole extension, no new code path.
+# RDD's `locked` reuses the identical mechanic verbatim (#332) — the primary Mutability design
+# from `prd-rdd-framework.md`: `shipped-and-archived` tracks on the `roadmap`'s own living index,
+# never a fourth status enum value here, so no new guard logic is owed.
 LEDGER_LOCK = {
     "adr": "accepted",
     "idr": "locked",
+    "rdd": "locked",
 }
+
+# T7's scope: RDD statuses at or beyond `locked` that must carry both a citation and a DRI.
+RDD_CITED_STATUSES = {"locked", "superseded"}
 
 
 def parse_frontmatter(text):
@@ -94,6 +111,16 @@ def lint_text(text):
         if intent_refs in ("", "null", "none", "[]"):
             findings.append(("WARN", "T6", "no `intent-refs:` citation -> an ADR with no upstream "
                                             "IDR is an orphan (bible: 'an ADR with no IDR citation is an orphan')"))
+    if dtype == "rdd" and status in RDD_CITED_STATUSES:
+        decision_refs = fm.get("decision-refs", "").strip().lower()
+        if decision_refs in ("", "null", "none", "[]"):
+            findings.append(("FAIL", "T7", "no `decision-refs:` citation -> a locked-or-beyond RDD "
+                                            "with no upward ADR/IDR citation is a release commitment "
+                                            "with zero traceability"))
+        dri = fm.get("dri", "").strip().lower()
+        if dri in ("", "null", "none", "[]"):
+            findings.append(("FAIL", "T7", "no `dri:` -> a locked-or-beyond RDD needs a named "
+                                            "accountable human, mechanically, not just a Problem-statement claim"))
     return findings
 
 
@@ -109,12 +136,13 @@ def render(path, findings):
 
 
 def head_is_locked_ledger(p: Path) -> bool:
-    """T4's scope test (refined 2026-07-15 for ADR; generalized 2026-08-16, #316, for IDR): the
-    ledger protection guards COMMITTED history. True (block) when the file's HEAD version is a
-    locked ledger entry per LEDGER_LOCK (an accepted ADR or a locked IDR); False (allow) when the
-    file is new/untracked or still pre-lock (`proposed`/`draft`) in HEAD — authoring and the
-    lock-flip ratification are legal acts on an uncommitted ledger entry. git absent, not a repo,
-    or any failure -> True (conservative block, unchanged from the ADR-only version)."""
+    """T4's scope test (refined 2026-07-15 for ADR; generalized 2026-08-16, #316, for IDR; #332,
+    for RDD): the ledger protection guards COMMITTED history. True (block) when the file's HEAD
+    version is a locked ledger entry per LEDGER_LOCK (an accepted ADR, a locked IDR, or a locked
+    RDD); False (allow) when the file is new/untracked or still pre-lock (`proposed`/`draft`) in
+    HEAD — authoring and the lock-flip ratification are legal acts on an uncommitted ledger entry.
+    git absent, not a repo, or any failure -> True (conservative block, unchanged from the
+    ADR-only version)."""
     import subprocess
     try:
         r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
@@ -179,6 +207,19 @@ def selftest():
     cited_adr = orphan_adr.replace("intent-refs: null", "intent-refs: idr-0001")
     assert not any(f[1] == "T6" for f in lint_text(cited_adr)), "ADR citing an IDR must NOT warn T6"
     assert any(f[1] == "T5" for f in lint_text(bad.replace("status: shipped", "status: draft"))), "REQ-less spec must warn T5"
+    # T7 RDD citation+DRI-presence FAIL (#332): locked-or-beyond with empty refs/dri FAILs;
+    # draft is exempt on both; locked with both present is clean.
+    rdd_base = ("---\ndoc-type: rdd\nid: rdd-0099\nstatus: {s}\ndate: 2026-08-16\nowner: k\n"
+                "dri: {dri}\ndecision-refs: {refs}\nsupersedes: null\n---\n# R\n"
+                "## Scope\ns\n## Acceptance\na\n## Sequencing\nq\n## Completion\nc\n")
+    locked_empty_refs = rdd_base.format(s="locked", dri="kim", refs="")
+    assert any(f[1] == "T7" for f in lint_text(locked_empty_refs)), "locked RDD with empty decision-refs must FAIL T7"
+    locked_empty_dri = rdd_base.format(s="locked", dri="", refs="adr-0002")
+    assert any(f[1] == "T7" for f in lint_text(locked_empty_dri)), "locked RDD with empty dri must FAIL T7"
+    locked_clean = rdd_base.format(s="locked", dri="kim", refs="adr-0002, idr-0001")
+    assert not any(f[1] == "T7" for f in lint_text(locked_clean)), "locked RDD with refs+dri must NOT FAIL T7"
+    draft_empty = rdd_base.format(s="draft", dri="", refs="")
+    assert not any(f[1] == "T7" for f in lint_text(draft_empty)), "draft RDD is exempt from T7 on both fields"
     nofm = lint_text("---\ndoc-type: adr\n---\n# A\n## Context\n## Decision\n## Consequences\n")
     assert any(f[1] == "T1" for f in nofm), "missing id/status must fail T1"
     # T4 git-aware scope (2026-07-15, ADR; generalized 2026-08-16, #316, IDR): committed-locked
@@ -192,6 +233,9 @@ def selftest():
                "# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
         idr = ("---\ndoc-type: idr\nid: idr-0001\nstatus: {s}\ndate: 2026-08-16\nproof-ref: n/a\n"
                "supersedes: null\n---\n# I\n## Claim\nc\n## Why\nw\n## Proof\np\n")
+        rdd = ("---\ndoc-type: rdd\nid: rdd-0001\nstatus: {s}\ndate: 2026-08-16\nowner: k\n"
+               "dri: k\ndecision-refs: adr-0002\nsupersedes: null\n---\n# R\n"
+               "## Scope\ns\n## Acceptance\na\n## Sequencing\nq\n## Completion\nc\n")
         with tempfile.TemporaryDirectory() as td:
             repo = Path(td)
             env_git = lambda *a: subprocess.run(["git", *a], cwd=repo, capture_output=True, text=True,
@@ -217,8 +261,18 @@ def selftest():
             g.write_text(idr.format(s="draft"))
             env_git("add", "idr-0001-x.md"); env_git("commit", "-qm", "idr amended to draft")
             assert not head_is_locked_ledger(g), "committed-draft IDR must be ALLOWED to edit — negative"
-    print("doc_lint selftest · PASS · all 9 templates self-consistent; type/status/sections/spine counters bite; "
-          "T4 ledger-lock guards committed ADR(accepted)/IDR(locked) history only; T6 orphan-ADR warn bites")
+            # --- RDD positive: committed-locked RDD blocks edit ---
+            h = repo / "rdd-0001-x.md"
+            h.write_text(rdd.format(s="locked"))
+            env_git("add", "rdd-0001-x.md"); env_git("commit", "-qm", "rdd locked")
+            assert head_is_locked_ledger(h), "committed-locked RDD must BLOCK edits (the ledger) — positive"
+            # --- RDD negative: a draft RDD (even committed) stays freely editable ---
+            h.write_text(rdd.format(s="draft"))
+            env_git("add", "rdd-0001-x.md"); env_git("commit", "-qm", "rdd amended to draft")
+            assert not head_is_locked_ledger(h), "committed-draft RDD must be ALLOWED to edit — negative"
+    print("doc_lint selftest · PASS · all 10 templates self-consistent; type/status/sections/spine counters bite; "
+          "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
+          "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites")
     return 0
 
 
