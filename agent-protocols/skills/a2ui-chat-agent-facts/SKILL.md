@@ -91,7 +91,4 @@ answer with the *why*, not just the rule:
 
 ## Extending this pack
 
-A missing axis, a stale reference (a canon ADR/SPEC moved, or ADR-0088 flips to `accepted`/built),
-or "add X to this pack" is authoring work — route to [[make-pack]] (axis decomposition,
-grounded research waves, index discipline). Never bolt an uncited file onto the corpus inline. The
-pack's routing corpus of record lives at `scripts/routing-corpus.json`.
+Extension: governed by [[make-pack]]

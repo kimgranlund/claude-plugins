@@ -101,6 +101,4 @@ Both the foundation corpus (knowledge consulted) and the operating standard (rub
 
 ## Extending this pack
 
-A missing axis, a stale reference, or "add X to this pack" is authoring work: research it, cite
-it, and land it in this pack's source of record with a version bump — never bolt an uncited file
-onto the corpus inline.
+Extension: governed by [[make-pack]]

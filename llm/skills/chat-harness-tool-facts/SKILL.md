@@ -96,8 +96,4 @@ specification (a platform fact, verify against current docs if this pack has age
 
 ## Extending this pack
 
-A missing axis, a stale citation (this session's ToolSearch mechanics or the MCP spec moved), or a
-second worked example proving one of these patterns generalizes beyond this harness — route to
-`make-pack` (axis decomposition, grounded research waves, index discipline), where installed;
-otherwise apply its discipline inline: one reference per distinct class of ask, every claim
-grounded, never an uncited file bolted on.
+Extension: governed by [[make-pack]]

@@ -59,7 +59,4 @@ gets root-caused against the actual mechanism instead of patched by trial-and-er
 
 ## Extending this pack
 
-A missing mechanism, a stale spec citation (a CSS Working Group spec advances to a new stage,
-`content-visibility`/`contain` semantics shift), or "add X" is authoring work — route to
-[[make-pack]] (grounded research waves, one axis per wave); never bolt an uncited claim onto the
-corpus inline.
+Extension: governed by [[make-pack]]

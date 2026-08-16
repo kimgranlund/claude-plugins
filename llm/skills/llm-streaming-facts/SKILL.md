@@ -84,7 +84,4 @@ presented as if every SSE-streaming vendor shares it verbatim.
 
 ## Extending this pack
 
-A missing axis (a second vendor's SSE contract fully worked through, a non-SSE streaming
-transport), a stale spec/vendor-doc citation, or a second worked example from a different
-codebase — route to `make-pack` where installed; otherwise apply its discipline inline: one
-reference per distinct class of ask, every claim grounded, never an uncited file bolted on.
+Extension: governed by [[make-pack]]

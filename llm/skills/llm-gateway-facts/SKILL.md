@@ -82,8 +82,4 @@ is presented as a universal requirement rather than one valid implementation of 
 
 ## Extending this pack
 
-A missing axis, a stale worked-example citation (the source repo's implementation moved), or a
-second worked example from a different codebase proving the pattern generalizes — route to
-`make-pack` (axis decomposition, grounded research waves, index discipline), where
-installed; otherwise apply its discipline inline: one reference per distinct class of ask, every
-claim grounded, never an uncited file bolted on.
+Extension: governed by [[make-pack]]
