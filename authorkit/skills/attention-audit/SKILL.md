@@ -61,12 +61,50 @@ rewards deleting the fences that protect rare-but-expensive misroutes.
    report's attached artifact. At write time, pre-lint one edited artifact
    with `--against <name>`. Classify each rendered pair — the judgment the
    script deliberately does not make:
-   - **routing twin** — unfenced, same ask territory → recommend the fence,
-     its owner, and the reciprocal eval case;
+   - **routing twin** — unfenced, same ask territory → recommend a fix from
+     the structural-fix category set below (owner named), defaulting to the
+     reciprocal fence unless a reduction criterion fires;
    - **boilerplate tax** — shared template sentences across a role family
-     (ops-seat wording, checker templates) → recommend moving the shared
-     sentence into bodies; it pays rent in every resident description;
+     (ops-seat wording, checker templates) → recommend **centralize-boilerplate**
+     (move the shared sentence into bodies or a shared reference); it pays
+     rent in every resident description;
    - **coincidence** — dismiss with one clause.
+
+   **Structural-fix category set (issue #297)** — a collision or rent
+   finding names ONE fix: **reciprocal fence** (default — a NOT-clause on
+   each side) · **demote-to-wiring** (narrow, or set
+   `disable-model-invocation: true` on, a side reachable only by dispatch —
+   agent-preloaded or Skill-tool-only, with no human-typed trigger) ·
+   **merge** (the pair does near-duplicate work; fold one into the other) ·
+   **centralize-boilerplate** (the shared text is template, not twin
+   intent) · **retire** (one side already clears step 5's ≥2-signal retire
+   floor). Reduction beats a fence when ANY of these hold — name which one,
+   and pick the category from the pair's own evidence (a dispatch-only side
+   → demote-to-wiring; near-duplicate work → merge; template text →
+   centralize-boilerplate; otherwise → retire the weaker signal-holder):
+   - **the fence would blow W8** — `collide.py`'s JSON carries each side's
+     `headroom_a`/`headroom_b` (700 minus that side's current char count);
+     `fence_tight: true` (either headroom under 23 — this estate's own
+     shortest measured real NOT-clause, n=232, 2026-08-16) means no
+     realistic fence fits without a diet first (precedent:
+     naming-conventions v0.10.1 dieted its description just to afford its
+     own fence — the treadmill this tier exists to stop).
+   - **the pair was already fenced once** and rent is still climbing —
+     evidenced by a prior report's Collisions block or `git log` on either
+     description naming the fence (collide.py's own `fenced` check
+     suppresses a currently-fenced pair from this run's collision output,
+     so this criterion reaches the judge only via a rent/trend finding). A
+     second fence on the same pair IS the treadmill, not a fix for it.
+   - **one side is dispatch-only** — demote-to-wiring beats fencing a
+     description no human ever routes to by typing.
+   - **one side already clears step 5's retire/merge floor** — retire or
+     merge it rather than fence an artifact that's already leaving.
+   None fire → reciprocal fence, named with its owner, as today. A rent
+   finding with no collision partner draws from the same set minus
+   reciprocal fence (usually demote-to-wiring, centralize-boilerplate, or
+   retire) and renders in the Retire/merge candidates section's "proposed
+   action" slot — the Collisions block is pair-shaped and a partnerless
+   finding has no pair to occupy it.
    Two twin classes are the LLM tier's catch, not this script's — the
    report names them as check-routing's territory rather than over-claiming:
    common-words twins (shared evidence is only estate-generic vocabulary —
@@ -88,7 +126,8 @@ rewards deleting the fences that protect rare-but-expensive misroutes.
    their description until their topic arrives; the question for a
    zero-usage pack is whether its RENT is proportionate, not whether it
    fired. A collision pair is a finding only when both descriptions are
-   routable and no NOT-fence names the other side.
+   routable and no NOT-fence names the other side; every such finding
+   carries a structural-fix category per step 3.
 6. Trend: `python3 <this skill>/scripts/trend.py --rent <rent.json>
    [--routing-report <path>] --out <root>/attention-trend.csv` — appends
    one dated row per plugin. Missing routing report → the dead/stolen/
@@ -100,9 +139,10 @@ rewards deleting the fences that protect rare-but-expensive misroutes.
    report changes nothing itself.
 
 Done when: the report exists with all five sections rendered from this
-run's script outputs, every candidate carries its ≥2 signals, the trend
-row is appended (or its columns read `absent` with the reason named), and
-every finding names an owner.
+run's script outputs, every candidate carries its ≥2 signals, every
+collision/rent finding names a structural-fix category and an owner, and
+the trend row is appended (or its columns read `absent` with the reason
+named).
 
 ## Degraded modes
 

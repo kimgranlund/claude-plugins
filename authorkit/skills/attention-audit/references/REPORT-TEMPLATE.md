@@ -15,7 +15,12 @@ Note: agent chars bill unconditionally; skill chars are the ceiling (runtime may
 
 ## Collisions (cross-plugin included)
 One block per flagged pair: the two qualified names, shared distinctive terms, whether either
-side fences the other, and the one-clause recommended fence + its owner.
+side fences the other, and the recommended fix — ONE category from SKILL.md's structural-fix
+set (reciprocal fence · demote-to-wiring · merge · centralize-boilerplate · retire), its owner,
+and — when it isn't the default fence — the one criterion that fired (e.g. "fence-tight:
+headroom 12 < 23" or "already fenced once"). A rent finding with no collision partner draws
+from the same set minus reciprocal fence, but renders in Retire/merge candidates' "proposed
+action" slot below, not here — this block is pair-shaped.
 
 ## Usage cross-reference
 Zero-evidence list AFTER lineage + preload correction (state both corrections ran; name the

@@ -10,6 +10,12 @@ AND neither description names the other artifact (a NOT-fence naming the sibling
 This is the cheap deterministic tier UPSTREAM of harness /check-routing's LLM-judged blind
 simulation — it pre-filters, it never replaces the judged run.
 
+Each flagged pair also carries `headroom_a`/`headroom_b` (chars left before that side's OWN
+description alone trips skill_lint's W8 700-char ceiling) and `fence_tight` (issue #297: true
+when either headroom is under this estate's own shortest measured NOT-clause — no realistic
+fence fits without a diet first, the signal the judgment layer uses to prefer a structural-
+reduction fix — demote-to-wiring/merge/centralize-boilerplate/retire — over stacking a fence).
+
 Usage:
   python3 collide.py --target <estate-root> [--json] [--threshold N]
   python3 collide.py selftest
@@ -26,6 +32,15 @@ THRESHOLD = 7.0  # pair score floor
 OWN_MAX = 10     # only terms owned by <= OWN_MAX descriptions count as evidence: routing twins
                  # share CONTESTED TRIGGER TERRITORY (words few artifacts claim), not bulk
                  # vocabulary — a pair sharing forty medium words is prose kinship, not a twin
+
+W8_BUDGET = 700       # harness skill_lint.py's W8 ceiling for a model-invocable description
+                      # (issue #79) — every entry collide.py sees is already non-dmi (gather()
+                      # excludes disable-model-invocation:true), so W8 applies uniformly here.
+MIN_FENCE_CHARS = 23  # shortest real NOT-fence clause measured across this estate's own
+                      # descriptions (2026-08-16, n=232 clauses, median 58) — headroom under
+                      # this floor means no fence this estate has ever actually shipped would
+                      # fit without dieting the description first (issue #297's fence-vs-
+                      # reduction criterion: "the fence would blow W8").
 
 STOP = set("""a an and are as at be but by can do for from has have how i in is it its my not
 of on one or our so that the their these this those to use used using we what when where which
@@ -118,13 +133,23 @@ def collide(entries, threshold=THRESHOLD):
                 nb.split(":")[-1].replace(" (agent)", "")
             fenced = (short_b.lower() in da.lower()) or (short_a.lower() in db.lower())
             if not fenced:
+                # W8-budget headroom (issue #297): chars left before either side's OWN
+                # description alone would trip skill_lint's W8 warn ceiling — a proxy for
+                # "can this pair even afford a reciprocal fence", not the fence's exact cost
+                # (unknowable here: the actual NOT-clause text is a judgment-layer decision).
+                headroom_a = W8_BUDGET - len(da)
+                headroom_b = W8_BUDGET - len(db)
                 flags.append({"a": na, "b": nb, "score": round(score, 1),
                               "shared": [t for _, w, t in top if w == 1],
                               "shared_bigrams": [t for _, w, t in top if w == 2],
                               # same name-family (both *-checker, both watch-*): template
                               # siblings — expected wording overlap, a separate finding class
                               "family": family(na) == family(nb),
-                              "cross_plugin": na.split(":")[0] != nb.split(":")[0]})
+                              "cross_plugin": na.split(":")[0] != nb.split(":")[0],
+                              "headroom_a": headroom_a,
+                              "headroom_b": headroom_b,
+                              "fence_tight": headroom_a < MIN_FENCE_CHARS or
+                                             headroom_b < MIN_FENCE_CHARS})
     flags.sort(key=lambda x: (x["family"], -x["score"], x["a"], x["b"]))
     return flags
 
@@ -177,6 +202,21 @@ def selftest():
     assert not any("gamma" in x["a"] + x["b"] and "alpha" in x["a"] + x["b"] for x in f2), f2
     # negative control: non-overlapping corpus → zero flags
     assert collide(others) == [], "negative control failed"
+    # fence-budget headroom (issue #297): both twin1/twin2 sit well under 700 chars → not tight
+    assert all(not x["fence_tight"] for x in f if x["a"] == "p1:alpha-audit"), f
+    # a description padded to just under the W8 ceiling on one side of a colliding pair MUST
+    # flag fence_tight — headroom under MIN_FENCE_CHARS means no realistic NOT-clause fits
+    long_desc = twin1[1] + " Joins every plugin's rent figures against real usage evidence " \
+        "and a per-release trend series so the report stays verdict-first, evidence-backed. "
+    long_desc += "x" * max(0, (W8_BUDGET - MIN_FENCE_CHARS + 5) - len(long_desc))
+    assert len(long_desc) > W8_BUDGET - MIN_FENCE_CHARS, len(long_desc)
+    tight = ("p1:delta-audit", long_desc)
+    f3 = collide([tight, twin2] + others)
+    hit = next((x for x in f3 if "delta-audit" in x["a"] + x["b"]), None)
+    assert hit is not None, f3
+    assert hit["fence_tight"], hit
+    tight_headroom = hit["headroom_a"] if "delta-audit" in hit["a"] else hit["headroom_b"]
+    assert tight_headroom < MIN_FENCE_CHARS, hit
     # determinism: same input → identical output
     assert collide([twin1, twin2] + others) == collide([twin1, twin2] + others)
     print("collide.py selftest: PASS")
@@ -216,12 +256,15 @@ def main():
         for x in flags:
             scope = "CROSS-PLUGIN" if x["cross_plugin"] else "same-plugin"
             fam = " [name-family]" if x["family"] else ""
+            tight = (f" FENCE-TIGHT (headroom a={x['headroom_a']} b={x['headroom_b']}, "
+                     f"min real fence ~{MIN_FENCE_CHARS})" if x["fence_tight"] else "")
             ev = ", ".join(x["shared"] + [f'"{b}"' for b in x["shared_bigrams"]])
-            print(f"{x['score']:6.1f} {scope}{fam}: {x['a']}  <->  {x['b']}\n"
+            print(f"{x['score']:6.1f} {scope}{fam}{tight}: {x['a']}  <->  {x['b']}\n"
                   f"       evidence: {ev}")
-        print(f"{total} pair(s) over threshold; showing {len(flags)}. Classify each: routing "
-              f"twin (unfenced, same ask) / boilerplate tax (shared template sentences) / "
-              f"coincidence — the judgment layer's job, not this script's.")
+        print(f"{total} pair(s) over threshold; showing {len(flags)}. Classify each and name a "
+              f"structural fix (issue #297): routing twin -> reciprocal fence (default) unless "
+              f"FENCE-TIGHT or already-fenced-once, then demote-to-wiring/merge/retire; "
+              f"boilerplate tax -> centralize-boilerplate; coincidence -> dismiss.")
     return 1 if total else 0
 
 

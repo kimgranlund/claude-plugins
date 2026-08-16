@@ -79,6 +79,25 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.11.3 · 2026-08-16 · `attention-audit` gains the structural-fix recommendation tier (issue
+#297): a collision or rent finding can now recommend ONE fix from a named category set —
+reciprocal fence (default) · demote-to-wiring · merge · centralize-boilerplate · retire —
+instead of only fences, closing the treadmill where a fence fix grows both descriptions
+(v0.10.1 had to diet `naming-conventions` just to afford its own fence). Criteria for when
+reduction beats a fence live inline in `SKILL.md`'s step-3 classify judgment (not a separate
+references file — the category assignment is the same judgment act as the existing
+routing-twin/boilerplate-tax/coincidence three-bucket classify, and the criteria are short
+enough to read on every run rather than earning their own indirection).
+`collide.py` mechanically measures the W8-blown criterion (in scope, cheap): each flagged pair
+now carries `headroom_a`/`headroom_b` (700 minus that side's current description length) and
+`fence_tight` (true when either headroom is under 23 chars — this estate's own shortest
+measured real NOT-clause, n=232, 2026-08-16) — a live real-estate run flagged
+`ops-write-sandbox-rules`↔`sweep-chores` FENCE-TIGHT (`sweep-chores` already over 700 chars),
+proving the signal fires on real data; `selftest` gained a positive/negative pair for it.
+`REPORT-TEMPLATE.md`'s Collisions block gains the fix-category field (fence stays available,
+no longer the only option); a rent finding with no collision partner draws from the same set
+minus reciprocal fence. Instrument stays report-only — recommends, never rewrites.
+
 v0.11.2 · 2026-08-16 · `attention-audit`'s write-time and ship-time instruments (v0.10.0's
 `collide.py --against` and `trend.py`) get wired into actual enforcement tiers instead of
 staying manual-run-only (issue #294). Two new PostToolUse sibling hooks in `hooks/hooks.json`,

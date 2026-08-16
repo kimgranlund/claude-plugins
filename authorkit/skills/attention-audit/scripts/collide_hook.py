@@ -104,12 +104,15 @@ def format_findings(plugin: str, against: str, hits: list) -> str:
         other = x["b"] if short_name(x["a"]) == against else x["a"]
         ev = ", ".join(x["shared"][:4] + [f'"{b}"' for b in x["shared_bigrams"][:2]])
         scope = "cross-plugin" if x["cross_plugin"] else "same-plugin"
-        lines.append(f"  {x['score']:.1f} {scope} vs {other} — shared: {ev}")
+        tight = " FENCE-TIGHT" if x.get("fence_tight") else ""
+        lines.append(f"  {x['score']:.1f} {scope}{tight} vs {other} — shared: {ev}")
     lines.append(
-        "Classify each: routing twin (needs a NOT-fence naming the sibling, or a rename) / "
-        "boilerplate tax (shared template sentences) / coincidence. Never required to change "
-        "anything on this signal alone — it's evidence for the judgment layer, same as a "
-        "manual `collide.py --against` run."
+        "Classify each and name a structural fix (issue #297): routing twin -> reciprocal "
+        "fence (default; a NOT-clause naming the sibling) unless FENCE-TIGHT or already "
+        "fenced once, then demote-to-wiring/merge/retire instead / boilerplate tax -> "
+        "centralize-boilerplate / coincidence -> dismiss. Not required to change anything on "
+        "this signal alone — it's evidence for the judgment layer, same as a manual "
+        "`collide.py --against` run."
     )
     return "\n".join(lines)
 
