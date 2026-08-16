@@ -16,7 +16,8 @@ description: >              # the trigger contract (see skill-authoring
 ## Relations (on the depending artifact — never a central registry)
 
 ```yaml
-performs: skills-audit          # agents; must equal name minus -agent
+performs: skills-audit          # primary-production agents; must equal name minus -agent
+                                 # (orchestrator agents carry no performs — ADR-0015 D4)
 wraps: naming-audit             # commands; dual-access wrapper
 requires: [naming-conventions]  # any kind; "must exist and be available"
 ```

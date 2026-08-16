@@ -272,6 +272,23 @@ class Grammar:
             [f"VerbLex/ProcessLex disjointness violated: {sorted(overlap)}"]
             if overlap else []
         )
+        # ADR-0015 D2's orchestrator scope pool: ObjectVocab (every canonical + plural
+        # key of self.objects) union ProcessLex — deliberately NOT ADR-0014 D1's
+        # three-way union (self.objects_union also folds in TopicLex): a seat
+        # coordinates a thing or a process, never a reference-doc topic word, so
+        # TopicLex stays out of this pool (ADR-0015 D2, distinguishing itself from the
+        # `-rules` production's pool on purpose).
+        self.orchestrator_scope_pool = dict(self.objects)
+        for tok in self.process_lex:
+            self.orchestrator_scope_pool.setdefault(tok, tok)
+        # ADR-0015 D3: RoleLex must be disjoint from ObjectVocab ∪ ProcessLex — once a
+        # bare {scope}-{role} name is a legal agent shape, a role word double-booked as
+        # an object/process would let the same string parse as a skill AND an agent.
+        role_overlap = self.role_lex & (set(self.objects) | self.process_lex)
+        if role_overlap:
+            self.lexicon_errors.append(
+                f"RoleLex/ObjectVocab∪ProcessLex disjointness violated: {sorted(role_overlap)}"
+            )
 
     def _resolve(self, tokens, pool):
         """Greedy left-anchored longest-match of hyphen tokens against `pool`.
@@ -304,6 +321,12 @@ class Grammar:
         own resolution pool (ADR-0014 D1)."""
         return self._resolve(tokens, self.objects_union)
 
+    def resolve_orchestrator_scope(self, tokens):
+        """Same algorithm, resolved against ADR-0015 D2's pool (ObjectVocab ∪
+        ProcessLex, no TopicLex) — the orchestrator agent production's own scope
+        resolution, shared by both the bare and legacy `-agent`-tailed spellings."""
+        return self._resolve(tokens, self.orchestrator_scope_pool)
+
     def check_brand(self, tokens):
         hits = [t for t in tokens if t in self.brand_tokens]
         return f"brand token(s) in local name: {hits}" if hits else None
@@ -317,18 +340,26 @@ class Grammar:
             errs.append(brand)
 
         if kind == "agent":
-            if not name.endswith("-agent"):
-                return errs + ["agent name must end in -agent"]
-            residue = name[: -len("-agent")]
-            if residue in skills:
-                return errs  # primary production: agent-of-skill
+            # ADR-0015 D1: the orchestrator production no longer requires the -agent
+            # tail. `-agent` remains the estate's one reserved head for the PRIMARY
+            # production (skill-name + "-agent"), and remains a legal — legacy —
+            # spelling on the orchestrator production; both spellings are tried below.
+            legacy = name.endswith("-agent")
+            residue = name[: -len("-agent")] if legacy else name
+            if legacy and residue in skills:
+                return errs  # primary production: agent-of-skill (unchanged)
             rtoks = residue.split("-")
             if len(rtoks) >= 2 and rtoks[-1] in self.role_lex:
-                ok, why = self.resolve_objects(rtoks[:-1])
+                ok, why = self.resolve_orchestrator_scope(rtoks[:-1])
                 return errs if ok else errs + [f"orchestrator scope: {why}"]
+            if legacy:
+                return errs + [
+                    f"strip -agent -> {residue!r} is no extant skill and no "
+                    f"scope-role production (RoleLex: {sorted(self.role_lex)})"
+                ]
             return errs + [
-                f"strip -agent -> {residue!r} is no extant skill and no "
-                f"scope-role production (RoleLex: {sorted(self.role_lex)})"
+                f"agent name {name!r} is no bare scope-role orchestrator name "
+                f"(RoleLex: {sorted(self.role_lex)}) and does not end in -agent"
             ]
 
         if kind == "command":
@@ -972,6 +1003,91 @@ def selftest():
         assert any("reserved head -agent on a skill" in e[2] for e in result["grammar_errors"]), \
             "a skill named *-agent must be a grammar_errors hit (W4's successor concern)"
 
+    # ADR-0015 D1/D2/D3 — orchestrator agents parse as {scope}-{role}, -agent optional
+    # on that production only; scope resolves against ObjectVocab ∪ ProcessLex; RoleLex
+    # stays disjoint from that pool. `manifest` above ships role_lex=[]; a dedicated
+    # variant registers `leader` plus the scopes these fixtures exercise.
+    def agent_md(name, performs="demo-review"):
+        return (f"---\nname: {name}\nkind: agent\ndescription: demo\n"
+                f"author: kim\ncreated: 2026-08-13\nlast_updated: 2026-08-13\n"
+                f"performs: {performs}\nautonomous_write: false\ncontext: isolated\n"
+                f"tools: Read\n---\nbody\n")
+
+    orch_manifest = dict(
+        manifest,
+        role_lex=["leader"],
+        object_vocab=manifest["object_vocab"] + [
+            {"canonical": "team", "plural": None, "banned_aliases": []},
+            {"canonical": "product", "plural": None, "banned_aliases": []},
+        ],
+    )
+
+    # Positive: bare {scope}-{role} — scope resolved against ObjectVocab (`team`).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "team-leader.md").write_text(agent_md("team-leader"))
+        result = run(r, orch_manifest)
+        assert not result["grammar_errors"], \
+            f"bare {{scope}}-{{role}} orchestrator name must parse clean: {result['grammar_errors']}"
+
+    # Positive: bare {scope}-{role} — scope resolved against ProcessLex (`review`,
+    # ADR-0015 D2's union pool, not ObjectVocab alone).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "review-leader.md").write_text(agent_md("review-leader"))
+        result = run(r, orch_manifest)
+        assert not result["grammar_errors"], \
+            f"ProcessLex-scoped orchestrator name must parse clean: {result['grammar_errors']}"
+
+    # Regression: the legacy {scope}-{role}-agent spelling still parses (D1 keeps it
+    # conformant by grammar, not by exemption).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "product-leader-agent.md").write_text(agent_md("product-leader-agent"))
+        result = run(r, orch_manifest)
+        assert not result["grammar_errors"], \
+            f"legacy scope-role-agent spelling must still parse clean: {result['grammar_errors']}"
+
+    # Negative: a bare non-role name in agents/ (no RoleLex terminal, no -agent tail)
+    # must still fail.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "estate-audit.md").write_text(agent_md("estate-audit"))
+        result = run(r, orch_manifest)
+        assert result["grammar_errors"], \
+            "a bare non-role agent name must still fail grammar"
+
+    # Negative: the same {scope}-{role} string in skills/ must still fail — `leader`
+    # is no ObjectVocab/ProcessLex member, so nominal resolution rejects it.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "team-leader").mkdir(parents=True)
+        (r / "skills" / "team-leader" / "SKILL.md").write_text(skill_md("team-leader"))
+        result = run(r, orch_manifest)
+        assert result["grammar_errors"], \
+            "a scope-role string minted as a SKILL must still fail grammar"
+
+    # Negative: a RoleLex word that also lives in ObjectVocab must raise the D3
+    # manifest disjointness error.
+    collision_manifest = dict(
+        manifest,
+        role_lex=["leader"],
+        object_vocab=manifest["object_vocab"] + [
+            {"canonical": "leader", "plural": None, "banned_aliases": []},
+        ],
+    )
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        result = run(r, collision_manifest)
+        assert any("RoleLex" in e[2] and "disjointness" in e[2] for e in result["errors"]), \
+            f"RoleLex/ObjectVocab collision must raise the D3 manifest error: {result['errors']}"
+
     # Scoped write-grant detection (issue #237, found during #235/PR #236): the
     # policy/grant-coherence check must recognize a SCOPED write grant (tool name
     # + parenthesized scope, e.g. 'Edit(**/naming.manifest.json)') as that write
@@ -1609,7 +1725,11 @@ def selftest():
           "MANIFEST-TEMPLATE.json's own schema, missing object_vocab key, duplicate "
           "object_vocab registration pinned last-wins-but-named, structured-vs-string "
           "object_vocab entries — each a named manifest_errors finding + clean exit-1, "
-          "never a raw traceback, each with a regression control) proven")
+          "never a raw traceback, each with a regression control) proven, ADR-0015 D1/D2/D3 "
+          "orchestrator agent production (bare {scope}-{role} against ObjectVocab and "
+          "ProcessLex scopes, legacy {scope}-{role}-agent regression, a bare non-role "
+          "agent-dir negative, a scope-role string minted as a skill negative, a "
+          "RoleLex/ObjectVocab D3 disjointness manifest error) proven")
     return 0
 
 

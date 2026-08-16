@@ -29,7 +29,10 @@ Core commitments, for orientation before any file loads:
 - **Three kinds, partitioned by invoker.** Command = user (`/name`), skill =
   model (description match), agent = delegated. Knowledge is a content
   pattern (reference-shaped skill), not a kind, subtype, or suffix.
-- **One reserved head:** `-agent`. Kind is decided by directory; the grammar
+- **One reserved head:** `-agent`. Mandatory on the primary agent production
+  and on skills (illegal there); optional on the orchestrator agent
+  production only — `{scope}-{role}` is the canonical spelling, `{scope}-{role}-agent`
+  a legal legacy one (ADR-0015 D1). Kind is decided by directory; the grammar
   corroborates; frontmatter must agree and never decides.
 - **One canonical name** everywhere: folder == file stem == frontmatter name.
 - **Relations live in frontmatter** of the depending artifact; the graph is

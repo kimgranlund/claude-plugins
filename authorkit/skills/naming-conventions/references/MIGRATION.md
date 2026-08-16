@@ -50,8 +50,9 @@ not a real defect.
 - **`"grammar"`**: only naming-grammar findings gate; structural findings for
   artifacts OUTSIDE authorkit's own tree are dropped entirely from the run (not
   merely non-gated) — the load-bearing half (name production, lexicon
-  disjointness, the reserved `-agent` head) stays fully policed everywhere,
-  regardless of this field. Artifacts INSIDE authorkit's own tree still get the
+  disjointness, the reserved `-agent` head — mandatory on skills/the primary
+  agent production, optional on the orchestrator production per ADR-0015 D1)
+  stays fully policed everywhere, regardless of this field. Artifacts INSIDE authorkit's own tree still get the
   full structural check even when the estate's own tier is `"grammar"` —
   authorkit keeps dogfooding `"full"` on itself.
 - **One field, one manifest per estate** — never a hardcoded per-consumer plugin

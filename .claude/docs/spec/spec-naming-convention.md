@@ -51,10 +51,12 @@ command   := object "-" verb                    skill-create, work-start
 skill     := object "-" process                 skills-audit, ui-layout-planning
           |  nominal-phrase                     naming-conventions   (looser production)
 agent     := skill-name "-" "agent"             skills-audit-agent   (primary)
-          |  scope "-" role "-" "agent"         team-leader-agent    (orchestrators only)
+          |  scope "-" role                     team-leader          (orchestrators — canonical, ADR-0015 D1)
+          |  scope "-" role "-" "agent"         product-leader-agent (orchestrators — legacy spelling, ADR-0015 D1)
 ```
 
-One reserved head: `-agent`.
+One reserved head: `-agent`. Mandatory on the primary agent production and on skills
+(illegal there); optional on the orchestrator agent production only (§3.3, ADR-0015 D1).
 
 #### 3.1 Commands — object-first
 
@@ -73,7 +75,7 @@ Reading test (reference-shaped): the name completes "consult ___ for this."
 
 The primary production is `{existing-skill-name}-agent`. An agent's capability must have an authored skill spec; the peer audit verifies this by stripping `-agent` and asserting the skill exists.
 
-The single escape hatch is the orchestrator production `{scope}-{role}-agent` (`team-leader-agent`), for agents that coordinate rather than execute and therefore have no patient object. `RoleLex` starts at ≤4 entries and grows only by manifest PR.
+The orchestrator production, for agents that coordinate rather than execute and therefore have no patient object: `{scope}-{role}` (`team-leader`) is canonical (ADR-0015 D1 — the role noun is already the agent marker, so the `-agent` tail is redundant on this production only); `{scope}-{role}-agent` (`product-leader-agent`) remains a legal legacy spelling, never rejected, not chosen for new mints. `scope` resolves against `ObjectVocab ∪ ProcessLex` (ADR-0015 D2 — a coordinating seat's scope is either a thing or a process). `RoleLex` starts at ≤4 entries, grows only by manifest PR, and stays disjoint from `ObjectVocab ∪ ProcessLex` (ADR-0015 D3, §4 AC-008).
 
 Reading test: the name completes "hand this off to the ___."
 
@@ -87,10 +89,10 @@ Four lexicons live in `naming.manifest.json`. Three are closed (additions requir
 |---|---|---|
 | `VerbLex` | Command terminal tokens: `create`, `review`, `lint`, `sweep`, `start`, `finish`, `run`, `mint`… | Closed |
 | `ProcessLex` | Skill terminal tokens: `audit`, `planning`, `authoring`, `triage`, `review`ᵈ, `migration`… | Closed |
-| `RoleLex` | Orchestrator roles: `leader`, `orchestrator`, `coordinator` | Closed, ≤4 to start |
+| `RoleLex` | Orchestrator roles: `leader`, `orchestrator`, `coordinator` | Closed, ≤4 to start; disjoint from `ObjectVocab ∪ ProcessLex` (ADR-0015 D3) |
 | `ObjectVocab` | Domain objects: `skill`/`skills`, `issue`/`issues`, `pr`, `ui-layout`, `entry-file`, `harness`… | Registered |
 
-**Disjointness invariant:** `VerbLex ∩ ProcessLex = ∅`. A token lives in exactly one. Where a word plausibly belongs to both (e.g. `audit`), it is assigned to one lexicon and the other kind uses an alternative (`audit` ∈ ProcessLex; a command triggering an audit uses `run` or wraps the skill per §7). This disjointness is what keeps command/skill classification decidable from the name alone as a lint check, even though directory location is the authoritative discriminator (§6).
+**Disjointness invariant:** `VerbLex ∩ ProcessLex = ∅`. A token lives in exactly one. Where a word plausibly belongs to both (e.g. `audit`), it is assigned to one lexicon and the other kind uses an alternative (`audit` ∈ ProcessLex; a command triggering an audit uses `run` or wraps the skill per §7). This disjointness is what keeps command/skill classification decidable from the name alone as a lint check, even though directory location is the authoritative discriminator (§6). A second, independent disjointness holds once the orchestrator agent production admits a bare `{scope}-{role}` name (ADR-0015 D1): `RoleLex ∩ (ObjectVocab ∪ ProcessLex) = ∅` (AC-008) — otherwise a role word could double as a skill's object or process token, letting one string parse as a skill and as an agent.
 
 **ObjectVocab registration** records, per entry:
 
@@ -109,8 +111,15 @@ Brand tokens (`adia`) are banned from ObjectVocab. Plugin namespacing is the mar
 
 Deterministic; specified here so no two tools hand-roll it differently.
 
-1. **Strip the reserved head:** `-agent`, if present. What was stripped fixes kind candidacy.
-2. **Longest-match resolve** the remaining token sequence against ObjectVocab (multi-token entries like `ui-layout` match greedily, left-anchored).
+1. **Strip the reserved head:** `-agent`, if present. For the primary agent production
+   (and a skill's own reserved-head rejection) what was stripped still fixes kind
+   candidacy. For a bare orchestrator name (ADR-0015 D1) there is nothing to strip —
+   kind candidacy then comes from the directory (`agents/`) plus a `RoleLex` terminal
+   token, tried alongside the stripped form rather than instead of it.
+2. **Longest-match resolve** the remaining token sequence against ObjectVocab (commands,
+   skills, the primary agent production; multi-token entries like `ui-layout` match
+   greedily, left-anchored) — or, for the orchestrator agent production's scope phrase
+   specifically, against `ObjectVocab ∪ ProcessLex` (ADR-0015 D2), same algorithm, wider pool.
 3. **Classify the terminal token** of the residue against `VerbLex` / `ProcessLex` / `RoleLex`.
 4. **Every token must resolve.** Any token that is in no lexicon and no ObjectVocab entry fails the parse.
 
@@ -316,7 +325,7 @@ Checks, in order:
 5. **AC-005** (REQ-006) Relations (§7): every endpoint exists; `performs` equals name minus `-agent`; `wraps` targets a model-invocable skill; compiled `requires` graph is acyclic.
 6. **AC-006** (REQ-007) Invocation policy (§8.3): `mutates: true ⇒ confirm: required` (allowlist excepted); agents fail closed to `autonomous_write: false`; policy/capability coherence — tool grants match declared policy, `Bash` grants are scoped patterns.
 7. **AC-007** (REQ-007) Provenance (§8.4): `author` ∈ AuthorRegistry; `last_updated` does not postdate last git touch; staleness beyond review window → warning tier.
-8. **AC-008** (REQ-003) ObjectVocab registration gate (on manifest change): new entries create no parse ambiguity; disjointness of VerbLex/ProcessLex holds.
+8. **AC-008** (REQ-003) ObjectVocab registration gate (on manifest change): new entries create no parse ambiguity; disjointness of VerbLex/ProcessLex holds; disjointness of RoleLex against ObjectVocab ∪ ProcessLex holds (ADR-0015 D3).
 
 Grammar and relation failures block the mint/merge; staleness warns.
 
@@ -333,7 +342,8 @@ Grammar and relation failures block the mint/merge; staleness warns.
 | `naming-conventions` | `skills/` | nominal production; reference-shaped body | ✓ skill |
 | `hcc-coding` | `skills/` | nominal production (tokens resolve) | ✓ skill |
 | `skills-audit-agent` | `agents/` | strips `-agent` → extant skill `skills-audit` | ✓ agent (performs) |
-| `team-leader-agent` | `agents/` | scope=`team`, role=`leader` ∈ RoleLex | ✓ agent (orchestrator) |
+| `team-leader` | `agents/` | scope=`team` ∈ ObjectVocab, role=`leader` ∈ RoleLex | ✓ agent (orchestrator, canonical, ADR-0015 D1) |
+| `team-leader-agent` | `agents/` | scope=`team`, role=`leader` ∈ RoleLex | ✓ agent (orchestrator, legacy spelling) |
 | `create-skill` | `commands/` | verb-initial — violates object-first | ✗ reject |
 | `hcc-coding-knowledge-base` | `skills/` | `knowledge-base` ∉ any lexicon — no reserved head exists for content patterns | ✗ reject |
 | `coding-agent` | `agents/` | strip `-agent` → `coding` is no extant skill, no role | ✗ reject |
@@ -516,3 +526,44 @@ own canon spec being invisible to the docs type contract it was written to satis
 head, the §14.1 reverse-wrapper amendment, the §14.2 `-rules`/`check-` amendment, or
 `naming-audit/scripts/validate.py`'s parsing logic — it is a docs-plugin frontmatter/structure
 fix, not a naming-grammar change.
+
+### 14.4 Orchestrator `-agent` tail becomes optional; scope resolves against ObjectVocab ∪ ProcessLex (2026-08-16, issue #433, ADR-0015 ratified 2026-08-16)
+
+**Ruling authority:** ADR-0015 (`.claude/docs/adr/0015-orchestrator-agents-drop-agent-suffix.md`),
+ratified by Kim 2026-08-16, superseding three clauses of ADR-0011 D7 only (the orchestrator
+agent production's hardcoded `-agent` tail; the orchestrator scope-resolution pool; the
+lexicon disjointness set the AC-008 gate checks). ADR-0011 itself is not edited — accepted
+ADRs are append-only (T4); the supersession is recorded by ADR-0015's `supersedes:` field.
+
+**Validator change:** three changes to `naming-audit/scripts/validate.py`'s `Grammar.parse`,
+`kind == "agent"` branch, mirroring §14.1/§14.2's positive/negative/regression pattern:
+
+1. **D1 — the orchestrator production accepts a bare `{scope}-{role}` name.** A
+   `-agent`-tailed name still strips the tail and tries primary (residue ∈ skills) then
+   orchestrator (residue's terminal ∈ RoleLex); a bare name tries orchestrator only
+   (terminal ∈ RoleLex); a name that is neither fails with a diagnostic naming both roads.
+   The primary production and the skill-side reserved-head rejection are unchanged.
+2. **D2 — the orchestrator scope phrase resolves against `ObjectVocab ∪ ProcessLex`,
+   for both spellings.** One more resolution pool built once at `Grammar.__init__`,
+   deliberately narrower than §14.2 D1's three-way union (no `TopicLex` — a seat
+   coordinates a thing or a process, never a reference-doc topic word). `build`
+   registers in `ObjectVocab` (needed for `build-leader`; `planning`/`review` already
+   sit in `ProcessLex`).
+3. **D3 — `RoleLex` gains a disjointness check against `ObjectVocab ∪ ProcessLex`,**
+   one more `lexicon_errors` intersection alongside the existing `VerbLex ∩ ProcessLex`
+   check (AC-008).
+
+**Selftest fixtures** (mirroring §14.1/§14.2's triad): positive `team-leader` (ObjectVocab
+scope) and `review-leader` (ProcessLex scope) parse; legacy `product-leader-agent` still
+parses (regression); negative `estate-audit` bare in `agents/` fails (no RoleLex terminal,
+no `-agent` tail); negative `team-leader` minted as a skill fails (`leader` resolves in no
+lexicon or vocab); a manifest fixture with a RoleLex word also registered in ObjectVocab
+raises the D3 manifest error.
+
+**Non-goal:** this amendment does not touch command grammar (§3.1), skill grammar (§3.2,
+incl. §14.1/§14.2), the primary agent production, `performs` arithmetic (AC-005), the
+`-agent` reserved head on skills, ADR-0011 D8's shrink-only exemption ratchet, or any
+existing exemption (124 → 124, none retired or admitted by this change).
+
+**Exemption count:** unchanged (124 → 124) — this amendment admits `{scope}-{role}` names
+by grammar conformance, never by exemption; D8's ratchet is untouched.

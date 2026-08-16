@@ -10,7 +10,8 @@ skill     := object "-" process           skills-audit, rename-planning
           |  "check" "-" object-phrase    check-routing        (§14.2, ADR-0014 D2)
           |  nominal-phrase               naming-conventions  (all tokens resolve)
 agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
-          |  scope "-" role "-" "agent"   team-leader-agent   (orchestrators only)
+          |  scope "-" role               team-leader         (orchestrators — canonical, ADR-0015 D1)
+          |  scope "-" role "-" "agent"   product-leader-agent (orchestrators — legacy spelling, ADR-0015 D1)
 ```
 
 Reserved heads/tails on a skill name: `-agent` (agents only, illegal on a skill), `-rules`
@@ -47,8 +48,13 @@ Reading tests: procedural — "this teaches how to do ___"; reference-shaped —
 
 Primary: `{existing-skill-name}-agent`; the peer audit strips `-agent` and
 asserts the skill exists. An agent's capability must have an authored skill
-spec. Escape hatch: `{scope}-{role}-agent` for orchestrators only (no patient
-object); RoleLex stays ≤ 4 entries.
+spec. Orchestrator production (no patient object): `{scope}-{role}` is
+canonical (ADR-0015 D1 — the role noun is already the agent marker, so the
+`-agent` tail is redundant on this production only); `{scope}-{role}-agent`
+remains a legal legacy spelling, never rejected, not chosen for new mints.
+`scope` resolves against ObjectVocab ∪ ProcessLex (ADR-0015 D2 — a seat
+coordinates a thing or a process); RoleLex stays ≤ 4 entries and disjoint
+from ObjectVocab ∪ ProcessLex (ADR-0015 D3).
 
 ## Lexicons
 
@@ -56,7 +62,7 @@ object); RoleLex stays ≤ 4 entries.
 |---|---|---|
 | VerbLex | command terminals | closed; PR to change |
 | ProcessLex | skill terminals | closed; PR to change |
-| RoleLex | orchestrator roles | closed; ≤ 4 |
+| RoleLex | orchestrator roles | closed; ≤ 4; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3) |
 | ObjectVocab | domain objects | registered; anti-ambiguity gate |
 | TopicLex | `-rules` reference-doc topic words (§14.2) | closed; PR to change |
 
@@ -74,11 +80,17 @@ marketplace prefix supplies the namespace; embedding brand double-prefixes.
 
 ## Parse algorithm (normative — implement exactly this)
 
-1. Strip the reserved head `-agent`, if present. What was stripped fixes kind
-   candidacy.
-2. Longest-match resolve remaining tokens against ObjectVocab, greedy,
-   left-anchored (multi-token entries like `ui-layout` match before their
-   prefixes).
+1. Strip the reserved head `-agent`, if present. For the primary production
+   (and a skill's own reserved-head rejection) what was stripped still fixes
+   kind candidacy; for a bare orchestrator name (ADR-0015 D1) there is nothing
+   to strip — kind candidacy then comes from the directory (`agents/`) plus a
+   RoleLex terminal, tried alongside the stripped form rather than instead of
+   it.
+2. Longest-match resolve remaining tokens against ObjectVocab (commands,
+   skills, the primary agent production) — or, for the orchestrator agent
+   production's scope phrase specifically, against ObjectVocab ∪ ProcessLex
+   (ADR-0015 D2) — greedy, left-anchored (multi-token entries like `ui-layout`
+   match before their prefixes).
 3. Classify the terminal token of the residue against VerbLex / ProcessLex /
    RoleLex per the kind's production.
 4. Every token must resolve. Anything in no lexicon and no vocab entry fails.
