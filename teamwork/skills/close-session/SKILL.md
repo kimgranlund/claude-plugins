@@ -1,12 +1,14 @@
 ---
 name: close-session
 description: >-
-  Wraps up a session before it ends: captures a real finding, verifies writes landed, states one
-  verdict. Use for "wrap up this session", "close this out", or "nothing's left hanging in the
-  worktree before I go" — also fires at a natural closing point with real work behind it. NOT for
-  a peer session's worktree (parallel-work-rules), unresolved conversational questions
-  (find-open-questions), removal mechanics (ExitWorktree), or sweeping the whole session for many
-  dropped items (docs:file-leftovers).
+  Wraps up a session at the moment it's ending: captures a real finding, verifies writes landed,
+  states one verdict on THIS session's own worktree. Use for the closing MOMENT, whatever verb
+  names the ask — "wrap up this session", "close this out, check for anything left to capture",
+  "before you exit/stop, make sure nothing's left uncaptured or unfiled", "check if there's a PR
+  or issue to file before you stop". NOT for a peer session's
+  worktree (parallel-work-rules), unresolved conversational questions (find-open-questions),
+  removal mechanics (ExitWorktree), or sweeping the whole conversation for MANY dropped items into
+  tickets, any time — even at a session's end (docs:file-leftovers).
 disable-model-invocation: false
 user-invocable: true
 ---
