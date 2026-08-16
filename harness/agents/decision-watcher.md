@@ -10,7 +10,7 @@ description: |
   per work session, not a durable crontab) or dispatched directly for an on-demand sweep. NOT
   for work-item intake (`issue-sorter`); NOT for repo hygiene — worktrees, branches, PRs
   (`repo-cleaner`); NOT for judging a fact that isn't from a ratified ADR (`save-lessons`); NOT
-  for the whole-family sweep (`chore-lead`) or prioritizing the ops backlog (`chore-planner`).
+  for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog (`chore-planner`).
 model: sonnet
 effort: high
 color: teal

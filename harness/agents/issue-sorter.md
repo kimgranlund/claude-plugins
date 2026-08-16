@@ -9,7 +9,7 @@ description: |
   merges, no closes beyond the ticket record. Fired hourly by a cloud routine (`/schedule`) for
   unattended GitHub intake, or dispatched directly for an on-demand sweep or to execute a human's
   approve/deny decision. NOT for repo-hygiene work (`repo-cleaner`); NOT for instruction-tree or
-  corpus drift (`/clean-repo`); NOT for the whole-family sweep (`chore-lead`) or prioritizing the
+  corpus drift (`/clean-repo`); NOT for the whole-family sweep (`/sweep-chores`) or prioritizing the
   ops backlog (`chore-planner`).
 model: sonnet
 effort: high

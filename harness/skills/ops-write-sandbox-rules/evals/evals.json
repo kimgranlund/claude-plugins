@@ -13,6 +13,6 @@
     { "id": "n02", "prompt": "what does issue-sorter do when a filing author isn't on the friendlies list", "expect": "no-trigger", "comment": "owner: watch-tickets" },
     { "id": "n03", "prompt": "which of repo-cleaner's three scripts is gated to run directly", "expect": "no-trigger", "comment": "owner: clean-git" },
     { "id": "n04", "prompt": "why did chore-lead's dispatch to a sibling seat get duplicated mid-sweep", "expect": "no-trigger", "comment": "owner: agent-writing-rules (bare-name dispatch, gh#154)" },
-    { "id": "n05", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: sweep-chores / chore-lead" }
+    { "id": "n05", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: /sweep-chores" }
   ]
 }

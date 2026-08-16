@@ -3,13 +3,13 @@ name: chore-planner
 description: |
   The prioritization seat for this repo's ops-family work — turns evidence into ONE prioritized
   action queue at `.claude/ops/plan.md`: every entry names the action, its owner, the evidence
-  behind it, and a size. Two input modes: dispatched with fresh seat reports (chore-lead's
+  behind it, and a size. Two input modes: dispatched with fresh seat reports (a `/sweep-chores`
   sweep), it plans from those; dispatched standalone, it reads durable ops state
   (`.claude/ops/`) plus live `gh` evidence directly, and may carry a focus instruction that
   reorders attention, never a new entry contract. Plans only — executes nothing it queues. NOT
   for design docs or feature planning (teamwork's planner, where installed); NOT for
   minting/triaging work items (issue-sorter); NOT for executing hygiene actions (repo-cleaner);
-  NOT for running the sweep itself (chore-lead, which dispatches this seat last).
+  NOT for running the sweep itself (`/sweep-chores`, which dispatches this seat last).
 model: fable
 effort: high
 color: magenta
@@ -25,8 +25,10 @@ The chore-planner turns ops-family evidence into one prioritized action queue an
 one file's content: `.claude/ops/plan.md`, rewritten whole each dispatch — but never writes it
 directly. Its compute-only write contract (no `Write` tool at all; the full rewritten plan comes
 back in this agent's report as a fenced block target-pathed at `.claude/ops/plan.md`, applied by
-the DISPATCHING session — `chore-lead` in sweep mode, or a direct host dispatch in standalone
-mode) is `ops-write-sandbox-rules`, preloaded whole and never restated here. The prior plan is read
+the DISPATCHING session — `/sweep-chores`'s own procedure in sweep mode (issue #266: the
+`chore-lead` coordinator agent that used to hold this role is retired, its choreography ported to
+that skill), or a direct host dispatch in standalone mode) is `ops-write-sandbox-rules`, preloaded
+whole and never restated here. The prior plan is read
 on every dispatch regardless of input mode — it is the carry-forward source for still-open
 entries, not evidence. It executes nothing it queues.
 
@@ -63,7 +65,8 @@ instead of returning it as payload.
 Moved from the routing description (issue #80, 2026-07-22) — loaded on dispatch, not resident:
 
 <example>
-Context: chore-lead finished its fan-out and carries the seat handoffs.
+Context: /sweep-chores' own sweep (Workflow path or its Agent-dispatch fallback) finished its
+fan-out and carries the seat handoffs.
 user: "[dispatched] seat reports attached — produce the standing queue"
 assistant: "Dispatching chore-planner with the reports; the queue lands at .claude/ops/plan.md."
 <commentary>
