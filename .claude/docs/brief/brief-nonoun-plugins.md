@@ -17,20 +17,21 @@ estate is the working test of that bet.
 
 ## Confirmed
 
-<!-- Empty at cold-start by contract: entries land here only after ratification, each a one-line
-     pointer to its own locked IDR
-     (docs/skills/product-lifecycle-rules/references/cold-start-adoption.md; brief template). -->
+- Self-governing toolchain, mechanized incident classes stay gone → `idr-0001`.
+- Git substrate (Issues/PRs/CI/worktrees/ADR ledger) is the durable cold-start memory → `idr-0002`.
+- Routing quality is a measurable, governable property of names/descriptions → `idr-0003`.
+- Autonomy scales through gates, not around them → `idr-0004`.
+- External audience, low urgency; portability machinery kept as-is at zero further investment → `idr-0005`.
+- Success measure: incident-recurrence rate (primary), routing-eval trend (secondary) → `idr-0006`.
+- Roster growth is deliberate strategy, not accretion — ratified 2026-08-16 (Kim, ratification
+  round): `harness:plan-plugin-split`'s anti-matrix rule (a distinct domain surface per plugin)
+  is confirmed as a binding gate on every roster addition, including the planned
+  `product-management` / `brand-design` migrations. Home: `harness:plan-plugin-split`'s own
+  anti-matrix contract — this ruling scopes an existing gate rather than minting a new claim, so
+  no IDR.
 
 ## Open Questions
 
-- Should `idr-0001`–`idr-0004` (drafted 2026-08-16, each `derived-from-evidence` from this
-  repo's ADRs and invariants) be ratified or superseded? Candidates, not yet load-bearing.
-- `idr-0005` (inferred): who is the primary audience — external marketplace installers, or the
-  owner's own estates? The warranted portability cost hangs on the answer.
-- What is the estate's success measure as a product — installs, routing-eval trend,
-  autonomous-merge rate, incident recurrence? No IDR drafted; a genuine gap, not silently guessed.
-- Roster growth: are the planned `product-management` / `brand-design` migrations a deliberate
-  roster strategy or accretion? plan-plugin-split's anti-matrix rule needs a stated intent to
-  bind against.
-- Releases-loop homes (a `roadmap` index, a first RDD) are unminted — mint at ratification per
-  cold-start "homes, not content", or defer until the first release-grain commitment?
+- When does a real release-grain commitment land? Until then, releases-loop homes (a `roadmap`
+  index, a first RDD) stay unminted — deferred 2026-08-16 (Kim, ratification round), not an
+  oversight.

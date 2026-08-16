@@ -1,10 +1,11 @@
 ---
 doc-type: idr
 id: idr-0004
-status: draft
+status: locked
 date: 2026-08-16
 owner: kim.granlund
 proof-ref: .claude/docs/adr/0013-adr-0012-automode-allow-verification.md
+provenance: derived-from-evidence
 supersedes: null
 ---
 # IDR-0004 — Autonomy scales through gates, not around them

@@ -1,10 +1,11 @@
 ---
 doc-type: idr
 id: idr-0002
-status: draft
+status: locked
 date: 2026-08-16
 owner: kim.granlund
 proof-ref: harness/skills/check-state/SKILL.md
+provenance: derived-from-evidence
 supersedes: null
 ---
 # IDR-0002 — The git substrate is the durable memory agents cold-start from
