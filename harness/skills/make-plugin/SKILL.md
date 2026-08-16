@@ -60,7 +60,16 @@ wrong.
 ## Phase 3 — Scaffold
 
 Plugin skeleton per `plugin-writing-rules`: manifest at `0.1.0`, README with the member map,
-empty member dirs. Nothing else — content comes from the make-* workflows.
+empty member dirs. **Bootstrap check (OUT-02, `prd-idr-framework.md`):** run `python3
+${CLAUDE_SKILL_DIR}/scripts/mint_idr_bootstrap.py <git-root-of-the-repo-being-scaffolded>` right
+after the skeleton lands, same commit — the argument is the git root whose (shared,
+workspace-level) `.claude/docs/` will hold the IDR ledger, never the new plugin's own
+subdirectory, which owns no docs tree of its own. The script is idempotent by construction — a
+repo with no `.claude/docs/idr/idr-0001*` yet treats this as its first bootstrap moment under the
+pattern and mints the founding `idr-0001` draft plus the product-brief living-index stub; a repo
+that already has one (this isn't its first plugin) skips silently, never duplicating or
+overwriting. A nonzero exit stops the scaffold right there and reports it — never continue to
+Phase 4 with the bootstrap half-minted. Nothing else — content comes from the make-* workflows.
 
 ## Phase 4 — Forge loop
 
