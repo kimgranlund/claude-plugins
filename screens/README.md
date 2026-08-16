@@ -37,6 +37,7 @@ when it is not — no hard preload crosses the plugin boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v1.0.12 · 2026-08-16 · #348 footer sweep: 6 packs' stamped "Extending this pack" paragraph replaced with the one-line `Extension: governed by [[make-pack]]` citation per pack-writing-rules (harness 3.8.9) — mechanical, bodies otherwise untouched
 v1.0.11 · 2026-08-15 · description trims (issue #340): break-down-layout 1140→838, make-component 1025→908 chars — both still over the W8 700 bar (WARN not FAIL), triggers/NOT-fences kept intact; wording-checker restored one dropped collision quote (size-and-shape-rules) before landing; blind /check-routing clean (22/22, 24/24 incl. a 3-of-3 vote)
 v1.0.10 · 2026-08-16 · check-whole-ui trim + fence (issue #300, #281 follow-up): description 1040→699 chars (W8 ≤700), reciprocal NOT-fence added naming `layout-checker` (agent); collide.py --against check-whole-ui: 25→10 pairs, the 53.9 layout-checker collision gone. ui-pattern-facts re-verified first — absent from top-30 both runs, no fence needed. evals.json updated same-change; wording-checker CLEAN (minor only); blind /check-routing re-judge: 26/26 PASS (t12 voted 3-of-3) — no tuning owed
 v1.0.9 · 2026-08-16 · checker retier (Kim's ruling): 3 *-checker agents move effort high→medium, model fable unchanged — review quality held at medium across the 2026-08-15/16 rounds while inherited-xhigh runs added cost, not findings

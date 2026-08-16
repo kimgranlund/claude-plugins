@@ -83,8 +83,4 @@ blind re-measure, not the executor's care, is what proves a rename landed.
 
 ## Extending this pack
 
-A new dated incident that generalizes past this one workspace, a stale citation (a cited script
-path or commit that moved), or an eighth axis genuinely distinct from the seven above — route to
-`make-pack` where installed; otherwise apply the discipline inline: one file
-per question type, every claim dated and sourced, register a new axis in this table in the same
-change that adds the file.
+Extension: governed by [[make-pack]]

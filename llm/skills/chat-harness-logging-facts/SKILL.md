@@ -85,8 +85,4 @@ file, never presented as "the only way to do this."
 
 ## Extending this pack
 
-A missing axis, a stale citation (a cited hook, tool, or check-routing number that no longer matches
-current reality), or a second worked instance from a different workspace proving the discipline
-generalizes — route to `make-pack` (axis decomposition, grounded research waves, index
-discipline), where installed; otherwise apply its discipline inline: one reference per distinct
-class of ask, every claim grounded, never an uncited file bolted on.
+Extension: governed by [[make-pack]]

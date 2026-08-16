@@ -92,8 +92,4 @@ instances — including the sibling packs in this very plugin).
 
 ## Extending this pack
 
-A missing axis, a stale citation (Claude Code's memory mechanics moved, a workspace convention
-changed), or a second worked instance proving a variant generalizes — route to `make-pack`
-(axis decomposition, grounded research waves, index discipline), where installed; otherwise apply
-its discipline inline: one reference per distinct class of ask, every claim grounded, never an
-uncited file bolted on.
+Extension: governed by [[make-pack]]

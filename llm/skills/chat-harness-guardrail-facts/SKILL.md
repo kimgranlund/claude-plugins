@@ -101,8 +101,4 @@ presented as the only valid way to build this layer.
 
 ## Extending this pack
 
-A missing axis, a stale worked-example citation (either worked system's file moved or its content
-changed), or a second independently-observed harness proving one of these patterns generalizes
-further — route to `make-pack` (axis decomposition, grounded research waves, index
-discipline), where installed; otherwise apply its discipline inline: one reference per distinct
-class of ask, every claim grounded, never an uncited file bolted on.
+Extension: governed by [[make-pack]]

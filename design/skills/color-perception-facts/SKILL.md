@@ -98,6 +98,4 @@ of these files, answer the mechanism and route the judgment itself to `color-the
 
 ## Extending this pack
 
-A missing axis, a stale reference, or "add X to this pack" is authoring work — route to
-[[make-pack]] (axis decomposition, grounded research waves, index discipline); never bolt an
-uncited file onto the corpus inline.
+Extension: governed by [[make-pack]]
