@@ -351,7 +351,7 @@ FIELDS = {
                                                 "argument-hint"]},
     "agent":   {"required": COMMON_REQUIRED + ["performs", "autonomous_write",
                                                 "context", "tools"],
-                "optional": COMMON_OPTIONAL + ["requires"]},
+                "optional": COMMON_OPTIONAL + ["requires", "model"]},
 }
 WRITE_TOOLS = {"Edit", "Write", "NotebookEdit", "MultiEdit"}
 
@@ -424,7 +424,7 @@ def provenance_checks(fm, grammar):
 
 # ----------------------------------------------------------- layout & indexes
 
-ALLOWED_SKILL_ENTRIES = {"SKILL.md", "references", "scripts", "assets", "evals"}
+ALLOWED_SKILL_ENTRIES = {"SKILL.md", "references", "scripts", "assets", "evals", "intent.md"}
 
 
 def layout_checks(skill_dir):
