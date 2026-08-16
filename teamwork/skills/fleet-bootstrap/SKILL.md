@@ -48,19 +48,35 @@ requires; there is no second human turn to wait on (same defect class as #421/#4
 own Phase 5 fix — a skill claiming a Skill-tool hand-off against a `disable-model-invocation`
 target).
 
-1. Bind role `agent`. Validate against `.claude/ops/fleet.json` per `team-scaffolding` Phase 1's
-   role-token branch — a still-live `agent` entry is a collision, not a choice: report the existing
-   entry's date and stop (Failure branches) rather than layering a second holder over it.
-2. Print `Seat: {repo}-agent`, and append the roster row to `.claude/ops/fleet-roster.md`
-   (`team-scaffolding` Phase 2).
+1. Bind role `agent`. Validate against `.claude/ops/fleet.json`. A still-live `agent` entry here
+   is a **takeover, not a collision** (not a Failure branch — proceed straight to steps 2 and 5's
+   takeover path). This is narrower than `team-scaffolding`'s own role-token collision rule, and
+   the distinguishing fact is which caller is at the call site, not how explicitly either command
+   was invoked: `team-scaffolding`'s bare/role-token path can be run by ANY session binding ANY
+   role, so a live entry there really can be a second, different session double-booking the same
+   role — the case its collision guard exists to catch. `/fleet-bootstrap` Phase 1 only ever binds
+   THIS running session to `agent`, so the live entry it finds is either this same terminal's own
+   earlier registration or a stale entry from a session that never released the seat — never a
+   concurrent bind attempt at this call site. This mirrors the accepted-risk framing Phase 5's
+   hybrid-swap rule already states for background seats ("replaceable at any time by a human
+   running `/team-scaffolding <role>` in their own terminal") — extended here to the orchestrator
+   seat itself. **Caveat, stated plainly rather than papered over**: this command has no
+   session-identity signal to structurally rule out a genuinely different human re-running
+   `/fleet-bootstrap` on the same repo and getting treated as a takeover too — same accepted risk
+   the hybrid-swap rule already carries for background seats, not a new one.
+2. Print `Seat: {repo}-agent — takeover` when step 1 found a live entry, `Seat: {repo}-agent`
+   otherwise, and append the roster row to `.claude/ops/fleet-roster.md` — suffixed `(takeover)`
+   in the former case (`team-scaffolding` Phase 2).
 3. `agent` carries no permission-profile deviation (`team-scaffolding` Phase 3) — state that
    explicitly: `No permission-profile deviation for this role — full write access retained`.
 4. Print the comms charter (`team-scaffolding` Phase 4): the `agent` seat-tier deviation
    (fable+low vs. the canonical sonnet+high orchestration tier, justified by forks being
    unpinnable per #313 — team-scaffolding Phase 4 point 1's own wording), the
    SendMessage-is-a-nudge doctrine, and the peer roster read from `fleet-roster.md`.
-5. Append `live_state.joined` (`role: agent`, `mode: manual`, today's date) in `fleet.json`, per
-   Phase 0.
+5. **Fresh join only** (no live entry found in step 1): append `live_state.joined`
+   (`role: agent`, `mode: manual`, today's date) in `fleet.json`, per Phase 0. **Takeover**: leave
+   the existing `live_state.joined` entry as-is — the roster row is the takeover's own durable
+   record; `fleet.json` never carries two `agent` entries for one still-live role.
 
 This registers the seat; it does not separately adopt `teamwork:lead-team`'s contract via a
 printed command the way a solo `/team-scaffolding agent` run would (its Phase 5 hands that off to
