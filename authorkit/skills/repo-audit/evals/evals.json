@@ -1,0 +1,18 @@
+{
+  "skill": "repo-audit",
+  "note": "Minted 2026-08-16 (issue #407) as the umbrella command+skill fanning out all five authorkit audit instruments plus the harness cross-plugin axes into one verdict-first roll-up. Distinct from estate-audit (that skill only NAMES which single instrument fits — no procedure of its own) and from overhaul-execute (that skill MUTATES through gated waves; this one only ever reports).",
+  "cases": [
+    {"id": "t01", "prompt": "Audit this whole repo across every instrument you have and give me one verdict.", "expect": "trigger"},
+    {"id": "t02", "prompt": "Run the full audit battery over this estate — naming, bloat, attention, doctrine, the works.", "expect": "trigger"},
+    {"id": "t03", "prompt": "Give me a single roll-up of naming, bloat, attention, and routing health for this plugin set.", "expect": "trigger"},
+    {"id": "t04", "prompt": "How healthy is this repo across every audit axis we have installed?", "expect": "trigger"},
+    {"id": "t05", "prompt": "I want a red/yellow/green verdict per estate per audit instrument, in one report.", "expect": "trigger"},
+    {"id": "n01", "prompt": "Audit this plugin for naming conformance.", "expect": "no-trigger", "comment": "owner: naming-audit — one instrument, not the full battery"},
+    {"id": "n02", "prompt": "Audit this skill for busy-work and ceremony.", "expect": "no-trigger", "comment": "owner: bloat-audit — one instrument"},
+    {"id": "n03", "prompt": "Which of authorkit's audit instruments should I use to check for busy-work versus naming conformance?", "expect": "no-trigger", "comment": "owner: estate-audit — chooses ONE instrument, no battery run"},
+    {"id": "n04", "prompt": "Drive the approved overhaul plan through its execution waves.", "expect": "no-trigger", "comment": "owner: overhaul-execute — mutates through gated waves; this skill never mutates"},
+    {"id": "n05", "prompt": "Sweep the ops queue and give me a prioritized action list.", "expect": "no-trigger", "comment": "owner: harness sweep-chores — live ops/work-state, not authorkit's static audit instruments"},
+    {"id": "n06", "prompt": "What's the current state of this repo — branches, open PRs, drift since last check?", "expect": "no-trigger", "comment": "owner: harness check-state — point-in-time work-state, not the audit battery"},
+    {"id": "n07", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — one instrument, and only when a concrete pattern is supplied"}
+  ]
+}
