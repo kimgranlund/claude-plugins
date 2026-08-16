@@ -85,6 +85,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.6 · 2026-08-16 · DE-standards adoption (#377): `dispatch-ticket`'s PR-open bullet and Findings write-back both gain a required rejected-alternatives entry (docs doc-writing-rules' TICKET contract, same tier as Findings); its critic dispatch may carry an optional review-path line, mirroring write-handoff's (harness). 2.14.4/2.14.5 skipped, reserved for PR #383's own rebump (comment-coordinated).
 v2.14.4 · 2026-08-16 · agent-scoped worktree-identity pin (closes #375, #363/#359's own follow-up):
 `worktree_prebash_guard.py`'s persisted pin was keyed by `session_id` alone, but this workspace's
 multi-agent teams feature hands every parallel agent in one dispatch the SAME session_id — agent

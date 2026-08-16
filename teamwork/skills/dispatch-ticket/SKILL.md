@@ -271,8 +271,12 @@ discover and repair branch/worktree residue by hand):
 2. **Branch + commits + PR opened**, per ADR-0002. Commit meaningfully as work lands, push the
    claimed branch, and open exactly one PR against `main` carrying `Closes #<id>` (every id this
    dispatch closes, on a folded campaign), a plain what/why, the gate output for every touched
-   plugin, and an integration-notes line naming any known overlap with other open PRs (adopt
-   another PR's field wording where one owns it, never mint a competing definition). **The moment
+   plugin, an integration-notes line naming any known overlap with other open PRs (adopt
+   another PR's field wording where one owns it, never mint a competing definition), and a
+   **rejected-alternatives line** naming what was deliberately NOT done and why (docs
+   doc-writing-rules' TICKET contract, `## Rejected alternatives`; same enforcement tier as the
+   Findings write-back below — a bare "nothing rejected" is a valid entry when the path was
+   uncontested, an absent line at PR-open is not). **The moment
    the PR opens (git-native only), remove the `in-flight` claim label** — the open PR is now the
    visible in-progress signal (#192: its PR once merged and closed the issue with `in-flight`
    still on it, before this step existed — the stale-display defect #199 closes). Claim comment and
@@ -373,12 +377,23 @@ enumerated inputs + budget + the typed return + stage 2's own `--remove-label in
 the moment the PR opens (named explicitly on a task or big-feature dispatch, since the dispatched
 agent/seat opening the PR never loaded this file), and a **mandatory dated `## Findings`
 write-back at each significant result** (slice built, gate green, PR opened), not only at the
-end, so an interrupted build still left evidence. The write-back verb follows the resolved
+end, so an interrupted build still left evidence — the entry that closes the ticket
+(`doing`→`done`/`wontfix`) additionally states the **rejected alternatives**: what was deliberately
+NOT done and why, same tier as the rest of this contract, mirroring the PR-body line above onto
+the record itself. The write-back verb follows the resolved
 backend: git-native — the issue number, `gh issue comment`; file backend — the TICKET file's
 path, editing its `## Findings` section; an external adapter — its `update` operation. Run under
 `/goal` with a try-cap (5, per loop-rules's feature-ticket recipe — the feature path only; task's
 single sealed dispatch carries no try-cap wrapper): named stopping predicate, capped tries,
 escalate on the same failure twice.
+
+**Optional review-path line for a dispatched critic.** The sealed prompt handed to any
+fresh-context checker this dispatch spawns (Phase 4's small-build checker, Phase 5 stage 2b's QB5
+critic) may carry one optional line — `review path: start at X, then Y` — naming a reading order
+when the change has a non-obvious one (a schema before its consumers, a contract before its
+implementation); omit it when the diff has one natural entry point. Same optional field,
+`write-handoff`'s own contract (harness) — named here so the critic dispatch, not just the
+handback, can carry it.
 
 ## Phase 6 — Close the loop
 
