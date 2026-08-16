@@ -154,6 +154,27 @@ State, as one standing block before any real work:
    STYLE-REVIEW-ONLY (formatting, doctrine, naming, obvious defects) until a spec locks;
    contract-correctness review resumes once one does." A locked spec exists → state that plainly
    (`Locked spec found — full contract-correctness review in scope`) and proceed with no notice.
+7. **Introduce this seat to the live orchestrator (every role except `agent` — the orchestrator
+   never introduces itself to itself; issue #429).** Re-read `.claude/ops/fleet-roster.md` (already
+   loaded for point 3) and cross-check `.claude/ops/fleet.json`'s `live_state.joined` entries for
+   `role: "agent"`, taking the latest one's `action` — only a `"joined"` (or absent-`action`) row
+   counts as live, the same liveness rule Phase 1's collision check uses. On disagreement between
+   the two sources (the exact drift class issue #426 found — e.g. the roster still shows a live
+   row but `fleet.json`'s latest entry is `"released"`), `fleet.json`'s latest `action` governs;
+   the roster is a discovery convenience, `fleet.json` the structured record. **Fleet-scoped only**:
+   this step discovers exclusively from these two registered-fleet records — never `ListAgents`,
+   which would surface arbitrary unregistered peers (other repos' sessions, other worktrees) that
+   issue #429 explicitly rules out as introduction targets; `ListAgents` is legitimate only to
+   confirm liveness of a session already named in the roster, never to find one. No live `agent`
+   row in either source → skip this step and state so plainly (`No live orchestrator seat —
+   skipping introduction`); this never blocks the bootstrap (Phase 4 point 3's own no-blocking
+   rule for discovery applies here too). A live row exists → `SendMessage` to its recorded session
+   name (`{repo}-agent`) introducing this seat: role, session name (`{repo}-<role>`), and the
+   charter (the remainder of `$ARGUMENTS` after the role token, or "no charter given" if blank).
+   This is the same one-way liveness nudge as point 2, not a request-response handshake — no reply
+   is awaited, and a delivery failure (recipient session gone) is reported but does not fail the
+   bootstrap; the roster/manifest rows already written in Phase 2 are the durable truth regardless
+   of whether the nudge landed.
 
 ## Phase 5 — Name the matching lead-* command for the human
 
@@ -246,12 +267,14 @@ fleet.json released · roster synced`) and stop; retiring never hands off to a `
 ## Done
 
 Done when Phases 1–4 have completed for the bound role (profile verified where applicable, roster
-row appended, charter printed) and Phase 5 has named the matching lead-* command for the human to
-run next — never when only the bootstrap layer ran with no command named, and never claiming the
-session itself adopted the contract (Skill-tool invocation is structurally impossible against a
-`disable-model-invocation` target). For a `retire` invocation: done when all three Phase 6 steps
-have completed (or been reported as no-ops) and the one-line outcome is printed — never when only
-the un-wall ran with fleet.json or the roster left unsynced.
+row appended, charter printed, orchestrator introduction sent, explicitly skipped, or n/a for the
+`agent` seat itself) and Phase 5
+has named the matching lead-* command for the human to run next — never when only the bootstrap
+layer ran with no command named, and never claiming the session itself adopted the contract
+(Skill-tool invocation is structurally impossible against a `disable-model-invocation` target).
+For a `retire` invocation: done when all three Phase 6 steps have completed (or been reported as
+no-ops) and the one-line outcome is printed — never when only the un-wall ran with fleet.json or
+the roster left unsynced.
 
 ## Rejected alternatives
 
