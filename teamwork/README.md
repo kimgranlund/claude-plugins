@@ -85,6 +85,16 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.14.0 · 2026-08-15 · agent-contract-adoption ritual centralized (closes #352, bloat-audit
+2026-08-16): `lead-planning`, `lead-team`, and `lead-build` carried near-duplicate copies of the
+"read the agent file, adopt its contract verbatim, acknowledge before real work, don't stack a
+second adoption, close on the named decision" ritual (1.0 similarity on parts, 0.7 on others).
+Reconciled into one canonical copy, `lead-team`'s `references/adopt-agent-contract.md`, cited
+one-line by the other two; `lead-review` was deliberately left out — it adopts no single agent's
+contract by design, so it never carried this ritual to begin with. Each skill's own "three
+places the host's version differs" list and duration rule (charter- vs. session-scoped) stayed
+inline — genuine per-seat divergence, not drift.
+
 v2.13.3 · 2026-08-16 · cross-PR version-claim coordination cross-referenced (closes #311,
 harness-side doctrine): `dispatch-ticket`'s Phase 3 claim bullet gains a pointer — a ticket claim
 is not a plugin-version claim, so right after claiming, and again before the PR opens, run

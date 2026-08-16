@@ -33,7 +33,9 @@ build this session drives lands against that repo.
 ## Phase 2 — Adopt the contract as the session's own standing discipline
 
 From this point until the session ends, this session holds the build seat's contract as its own
-operating rules — read, don't re-derive:
+operating rules, following the shared ritual in
+`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md` (the canonical copy,
+shared with `lead-planning`/`lead-team`):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/build-lead.md` now, in full.** Adopt its contract as
    this session's standing rules: one confirmed target at a time, driven through
@@ -83,15 +85,18 @@ records, not re-driven.
 - **A target needing a genuinely parallel multi-slice build** → that is `/lead-team`'s charter
   shape or `/mobilize-chores`' batch; name the redirect rather than serializing a team's work
   through one seat.
-- **`/lead-build` invoked again while the seat already stands** → rebind: re-resolve the repo
-  root from the new `$ARGUMENTS`, re-acknowledge in one line, continue — never stack a second
-  adoption or re-drive completed targets.
+- **`/lead-build` invoked again while the seat already stands** → the shared ritual's
+  session-scoped re-acknowledge-never-stack step
+  (`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`): rebind the repo
+  root from the new `$ARGUMENTS`, re-acknowledge in one line, continue — never re-drive completed
+  targets.
 
 ## When this rule ends
 
 The adopted discipline holds until the session ends or the human explicitly stands the seat
-down ("stop being build" / "back to normal work"). Standing down is acknowledged in one line;
-work after it follows ordinary routing. A new session needs its own `/lead-build`.
+down ("stop being build" / "back to normal work") — the session-scoped variant of the shared
+ritual's closing rule. Standing down is acknowledged in one line; work after it follows ordinary
+routing. A new session needs its own `/lead-build`.
 
 Done when adoption was acknowledged before the first target, every target since reached its
 typed result (Findings evidence included) or its named blocker, and no build effort was spent
