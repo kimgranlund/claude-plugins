@@ -47,6 +47,7 @@ TYPES = {
     "lld":     {"status": {"draft", "approved", "superseded"},    "sections": ["Components", "Interfaces", "Data", "Risks"]},
     "plan":    {"status": {"active", "complete", "abandoned"},    "sections": ["Steps", "Validation", "Rollback"]},
     "roadmap": {"status": {"active", "retired"},                  "sections": ["Now", "Next", "Later"]},
+    "brief":   {"status": {"active", "retired"},                  "sections": ["Thesis", "Confirmed", "Open Questions"]},
     "ticket":  {"status": {"open", "doing", "done", "wontfix"},   "sections": ["Summary", "Acceptance", "Links"]},
     "task":    {"status": {"todo", "doing", "done"},              "sections": ["Goal", "Done-when"]},
     "idr":     {"status": {"draft", "locked", "superseded"},      "sections": ["Claim", "Why", "Proof"]},
@@ -270,7 +271,7 @@ def selftest():
             h.write_text(rdd.format(s="draft"))
             env_git("add", "rdd-0001-x.md"); env_git("commit", "-qm", "rdd amended to draft")
             assert not head_is_locked_ledger(h), "committed-draft RDD must be ALLOWED to edit — negative"
-    print("doc_lint selftest · PASS · all 10 templates self-consistent; type/status/sections/spine counters bite; "
+    print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
           "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites")
     return 0

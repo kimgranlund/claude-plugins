@@ -1,8 +1,8 @@
 ---
 name: doc-writing-rules
 description: >-
-  Standards for authoring functional documents — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK,
-  IDR, RDD. Use when asking which document type fits, what sections/frontmatter a type requires,
+  Standards for authoring functional documents — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, BRIEF,
+  TICKET, TASK, IDR, RDD. Use when asking which document type fits, what sections/frontmatter a type requires,
   whether a document can be edited (why an accepted ADR, a locked IDR, or a locked RDD is
   append-only), how documents reference each other (the ID spine), how plans track status, or why
   doc_lint failed. NOT for drafting one (make-doc); NOT for reviewing one (check-doc); NOT the
@@ -27,7 +27,7 @@ authoring contracts, `doc_lint.py` the enforcement. No validator, no type.
 |---|---|---|---|
 | Ledger | Append-only; supersede, never edit | ADR, IDR, RDD | An edited accepted ADR, locked IDR, or locked RDD is a forged memory (the write hook blocks it) |
 | Versioned contract | Change via versioned release only | PRD, SPEC, LLD | Silent edits make every downstream reference incomparable |
-| Living state | One canonical copy, an owner, a review cadence | PLAN, ROADMAP | Forking — two copies both "current", neither trusted |
+| Living state | One canonical copy, an owner, a review cadence | PLAN, ROADMAP, BRIEF | Forking — two copies both "current", neither trusted |
 | Work item | Living while open; archived on close, learnings promoted first | TICKET, TASK | Closed items left active — future agents act on dead intent |
 
 The class lives in frontmatter and is enforced mechanically, not requested politely.
@@ -50,8 +50,8 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    number/date, then slug; directory conventions are what let hooks and path-scoped rules fire.
    The canonical directory per type (ruled 2026-07-12; make-doc and the project-docs index both
    consume THIS map — a second map is drift): `docs/prd/` · `docs/spec/` · `docs/lld/` ·
-   `docs/adr/` · `docs/idr/` · `docs/rdd/` · `docs/plan/` · `docs/roadmap/` · `docs/tickets/` ·
-   `docs/task/`. The two pluralization exceptions (`tickets`, `adr`) are historical and
+   `docs/adr/` · `docs/idr/` · `docs/rdd/` · `docs/plan/` · `docs/roadmap/` · `docs/brief/` ·
+   `docs/tickets/` · `docs/task/`. The two pluralization exceptions (`tickets`, `adr`) are historical and
    load-bearing (three command skills hardcode `docs/tickets/`) — recorded, not to be "fixed".
    `docs/idr/` and `docs/rdd/` adopt the canonical type-prefixed numbered form
    (`idr-0001-<slug>.md` / `rdd-0001-<slug>.md`) rather than copying ADR's grandfathered
@@ -71,7 +71,7 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    adapter interface; Linear ships as docs' own concrete Option-C adapter, everything else is
    bring-your-own against the same interface) — see "Work-item backend delegation" below for the
    full three-way contract. The decision/contract tiers (ADR, PRD, SPEC, LLD) and living-state
-   docs (PLAN, ROADMAP) are never delegated — they stay files on this map, always.
+   docs (PLAN, ROADMAP, BRIEF) are never delegated — they stay files on this map, always.
 
 ## The type contract table
 
@@ -87,6 +87,7 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 | LLD | How it's built: components, interfaces, tradeoffs | versioned contract | Components · Interfaces · Data · Risks |
 | PLAN | Sequenced steps, each with "done when" and a status | living state | Steps · Validation · Rollback |
 | ROADMAP | Horizons of intent, reviewed on a cadence | living state | Now · Next · Later |
+| BRIEF | The north-star loop's living index — one pointer per ratified IDR, never restated content | living state | Thesis · Confirmed · Open Questions |
 | TICKET | One shippable unit, traced to spec IDs (`kind: bug`/`feature`, see below; `kind: task` — a generic chore/follow-up, `file-task`'s own convention, no dedicated section needed beyond this row) | work item | Summary · Acceptance · Links |
 | TASK | One actor, one sitting, one done-when | work item | Goal · Done-when |
 | RDD | One locked release commitment, cited to ≥1 ADR/IDR, DRI-accountable — plural, numbered (`rdd-NNNN`), ADR/IDR-parallel lifecycle | ledger | Scope · Acceptance · Sequencing · Completion |
@@ -104,8 +105,8 @@ carries the same requirement for its build path.
 **Which type?** Route by the question being answered: what do we believe, before any choice →
 IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
 what order → PLAN/ROADMAP; who does what next → TICKET/TASK; what release commitment did we lock
-in, cited to which decisions → RDD. A document answering two of these questions is usually two
-documents joined by IDs.
+in, cited to which decisions → RDD; where do our ratified beliefs index, one pointer per IDR →
+BRIEF. A document answering two of these questions is usually two documents joined by IDs.
 
 **IDR — Intent Decision Record.** Sits upstream of ADR on the ID spine (more foundational, not
 "instead of"): a testable belief about what's true, minted before any architecture choice exists
@@ -120,9 +121,9 @@ until retrofitted, its own deferred follow-up. **Cardinality** (ruling, issue #2
 plural and numbered like ADR — one IDR per testable hypothesis; `idr-0001` is the bootstrap-minted
 founding record, not a claim that the type itself is singular. The bible's shape wins in full:
 plural locked IDRs **plus ONE living index** (a "product brief" aggregator over `idr-0*`) — the
-living-index type itself stays a deferred follow-up, not built here (querying `idr-0*` directly
-suffices until it lands). Full scoping: `prd-idr-framework.md`; concept authority:
-`product-lifecycle-bible.md` Part 4.
+living-index type landed as **BRIEF** (issue #404, 2026-08-16; row above, `docs/brief/`), one
+instance per product/repo — `<scope>` names the product, never a second copy. Full scoping:
+`prd-idr-framework.md`; concept authority: `product-lifecycle-bible.md` Part 4.
 
 **RDD — Roadmap Decision Record.** Sits downstream of both ADR and IDR on the ID spine — a locked
 release commitment (scope, IDR-grammar acceptance criteria, sequencing, DRI) that **cites** `≥1`
