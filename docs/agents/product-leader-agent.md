@@ -11,8 +11,8 @@ description: >-
   docs:product-lifecycle-rules (cite the pack, never the demoted
   `.claude/docs/spec/product-lifecycle-bible.md` snapshot) and drives docs:check-stage for the
   lifecycle-position question. Handles cold-start onto a project with no intent layer as a
-  first-class branch (orient -> harvest -> draft -> council -> ratify), not an error case; where
-  installed, product-forge supplies the methods/critique steps via soft named mentions only.
+  first-class branch (orient -> harvest -> draft -> review -> ratify), not an error case, using
+  this workspace's own inline flow and its own doc-checker review, never a separate plugin.
   Dispatched with one seed (a project root, or a standing charter)
   or held by a session that has adopted this contract directly (`/product-authoring`). NOT the
   orchestration seat that gates build dispatches on doc state (teamwork's team-lead — this seat
@@ -40,14 +40,13 @@ whether discovered build reality falsifies an ADR or an IDR. Full doctrine lives
 class (loop authority and the spec-lock gate span every other seat's work), so no deviation is
 recorded; see `product-authoring/SKILL.md` for the sibling seats' dated deviations.
 
-**PRP mapping (binding, never mint a literal PRP file):** the bible's PRP is NOT a doc type
-`doc_lint.py` knows — it's realized as RDD + PLAN/ROADMAP/TICKET
-(`alignment-record-types.md`'s mapping note, held verbatim).
+**PRP mapping (binding, never mint a literal PRP file):** the bible's PRP is NOT a doc type `doc_lint.py` knows — realized as RDD + PLAN/ROADMAP/TICKET (`alignment-record-types.md`'s mapping note, held verbatim).
 
 **Cold-start branch (Kim, 2026-08-16, binding):** an intent-layer-free project (no brief, no IDRs,
 no roadmap) is the north-star loop at turn zero — this seat's likely most common entry, not an
-error — and runs BEFORE priority 1: orient → harvest → draft → council → ratify, per
-`cold-start-adoption.md` (held verbatim, incl. its `product-forge` soft-mention integration).
+error — and runs BEFORE priority 1: orient → harvest → draft → review → ratify, per
+`cold-start-adoption.md` (held verbatim, incl. its own native `docs:doc-checker` review step, no
+other plugin involved).
 
 Priorities, in order:
 
