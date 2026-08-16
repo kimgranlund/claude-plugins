@@ -55,6 +55,19 @@ Installed skills invoke as `/plugin-name:skill-name`; unqualified names keep wor
 
 `SKILL.md` edits are live-detected within a session. **Everything else is not**: `hooks/`, `agents/`, `.mcp.json`, and `output-styles/` changes require `/reload-plugins` or a restart. "I edited the hook and nothing changed" is this rule, not a bug — the second most common false bug report after the version-cache-key skip.
 
+### Reload cost — the prompt-cache prefix it invalidates
+
+Every reload — a mid-session `/reload-plugins`, or a live-detected `SKILL.md` description edit —
+rewrites the always-on descriptions the model reads on every turn (this workspace runs roughly
+26k tokens of them across its installed plugins). That block sits at the front of the prompt, so
+it anchors the provider's prompt-cache prefix; changing even one description invalidates that
+prefix, and every turn after the reload re-reads the whole always-on block uncached until a new
+prefix is established. The mechanism is ordinary prompt caching, not a plugin bug — but a session
+that reloads repeatedly (an authoring sprint editing several skills in a row) re-pays that
+uncached cost on every reload instead of once. The habit that avoids it: **batch
+`/reload-plugins` calls and description edits at natural session boundaries** (session start,
+after a batch of edits is done) rather than firing one per edit mid-sprint.
+
 ## Trust — installing is running code
 
 Plugin hooks execute shell commands; MCP servers are processes; bundled executables enter the PATH — and the trust decision **recurs on every update**, because an update is arbitrary new code with the same credentials. Third-party sources pin to exact commit SHAs; your own releases carry explicit versions and a changelog; project-scope skills-dir plugins load only after the workspace trust dialog. Adopting a plugin is adopting a dependency; give it the same rigor.
@@ -81,6 +94,7 @@ Gate clean → bump recorded in the README footer (the human-readable ledger) �
 | One bad file | Plugin load is atomic | The release gate before every ship, no exceptions |
 | State in `${CLAUDE_PLUGIN_ROOT}` | Updates wipe the install dir | `${CLAUDE_PLUGIN_DATA}` for anything that must survive |
 | Edited hook, no effect | Hooks/agents/MCP are not live-reloaded | `/reload-plugins`; only SKILL.md hot-reloads |
+| Frequent mid-sprint reloads/description edits | Each invalidates the prompt-cache prefix over the always-on descriptions; every turn after re-reads it uncached | Batch `/reload-plugins` and description edits at natural session boundaries |
 | Plugin name = domain prefix | `/ui:ui-review` stutter; packaging becomes a rename | Distribution taxonomy ≠ domain taxonomy |
 | Unpinned third-party plugin | Every update is unreviewed code on your machine | SHA pinning; re-vet on update |
 | Manual release ritual | Steps skipped under time pressure; the skipped one ships the incident | `/ship-plugin` runs the gate; humans approve, scripts check |
