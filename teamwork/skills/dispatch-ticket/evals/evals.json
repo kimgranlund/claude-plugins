@@ -1,10 +1,10 @@
 {
   "skill": "dispatch-ticket",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). dispatch-ticket is invoked BY NAME from /build-feature, build-leader, or /lead-build — never model-routed from a raw ask (its own description states this); the trigger cases below reflect that named-invocation shape.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). dispatch-ticket is invoked BY NAME from /build-feature, build-leader, or /bind-build — never model-routed from a raw ask (its own description states this); the trigger cases below reflect that named-invocation shape.",
   "cases": [
     { "id": "t01", "prompt": "Use teamwork:dispatch-ticket to drive #240 through the shared build procedure.", "expect": "trigger" },
     { "id": "t02", "prompt": "build-leader here — run dispatch-ticket against ticket TKT-0042.", "expect": "trigger" },
-    { "id": "t03", "prompt": "/lead-build session: dispatch this confirmed ticket via dispatch-ticket's kind-branched procedure.", "expect": "trigger" },
+    { "id": "t03", "prompt": "/bind-build session: dispatch this confirmed ticket via dispatch-ticket's kind-branched procedure.", "expect": "trigger" },
     { "id": "t04", "prompt": "Invoke dispatch-ticket by name on issue #318 — find or mint the record, then branch by kind.", "expect": "trigger" },
     { "id": "t05", "prompt": "Run dispatch-ticket's Phase 1 against this seed, prefixed [nested-intake].", "expect": "trigger" },
     { "id": "t06", "prompt": "dispatch-ticket: claim, isolate, and size ticket #99 per its own Phase 3/4.", "expect": "trigger" },

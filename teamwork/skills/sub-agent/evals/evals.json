@@ -1,0 +1,14 @@
+{
+  "skill": "sub-agent",
+  "note": "Trigger-routing suite. Command species (disable-model-invocation: true) — every positive case is the explicit slash form; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "cases": [
+    { "id": "t01", "prompt": "/sub-agent build-leader ship ticket #240 end to end, unattended.", "expect": "trigger" },
+    { "id": "t02", "prompt": "/sub-agent review-leader review this one target, unattended.", "expect": "trigger" },
+    { "id": "t03", "prompt": "/sub-agent planning-leader decompose this charter across both planes.", "expect": "trigger" },
+    { "id": "t04", "prompt": "/sub-agent fleet-marshal coordinate the plan/build/review chain for this feature, unattended.", "expect": "trigger" },
+    { "id": "t05", "prompt": "/sub-agent code-checker review this diff, unattended.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Run the builder agent's own contract as a background fork off this session.", "expect": "no-trigger", "comment": "owner: /fork-agent — a background fork, not a real Agent-tool dispatch" },
+    { "id": "n02", "prompt": "Make this session adopt the build-leader agent's own contract directly and hold it until I say stop.", "expect": "no-trigger", "comment": "owner: /bind-build — the host adopts the contract in place, no dispatch" },
+    { "id": "n03", "prompt": "Sweep the ops queue and mobilize whatever's buildable.", "expect": "no-trigger", "comment": "owner: /mobilize-chores — batch find-and-confirm, not one named agent dispatch" }
+  ]
+}

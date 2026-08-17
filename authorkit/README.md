@@ -84,6 +84,24 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.19.4 · 2026-08-17 · ADR-0020 wave 5 (closes #523): with all six former `/lead-*` surfaces
+renamed to `bind-*` in the same campaign (teamwork's five + docs' `lead-intake` → `bind-intake`,
+riding alongside rather than a separate PR — splitting would leave a real gap between merges
+where the grandfather set's removal breaks the still-unrenamed surface), `LEAD_HEAD_GRANDFATHER`
+and the two `lead` branches that consulted it (command + skill parse) are deleted outright — a
+`lead-*` mint now falls through to the plain object-verb production and fails there like any
+other retired head, not via a dedicated retirement message (there is no `lead` branch left to
+raise one). The closed reserved-head set for skills shrinks from `{check, lead, make, file}` to
+`{check, make, file}`. Also fixes a real dead-code-hazard bug this wave's own mandated names
+exposed: `/fork-agent`/`/sub-agent` (ADR-0020 D4) residue is the literal word `agent`, which the
+unconditional `-agent` reserved-tail check on the skill branch was catching FIRST — the
+bind-/fork-/sub- head check now runs ahead of it, mirroring the existing check-/rules dead-code
+precedent. `bind-marshal` (D4's own illustrative example) does not conform under the orchestrator
+scope pool (`marshal` lives only in RoleLex, never ObjectVocab/ProcessLex) — minted as
+`bind-team` instead, the historical `/lead-team` scope word, already registered; no validator
+change needed for that half. Selftest fixtures updated to match: the "six grandfathered names
+parse clean" case is replaced with "the six RENAMED bind-* names parse clean via the general
+reserved-head branch alone". Estate-wide: 0 grammar errors, 85 exemptions (unchanged).
 v0.19.3 · 2026-08-17 · Skill-as-command conversion (issue #525, Kim's ruling: CONVERT ALL 15 wrappers, no grandfathering — teamwork ×5 rides W5/#523 separately). All 10 `commands/*.md` wrappers deleted; every wrapped skill gains `user-invocable: true`; `rename-execute`/`exemption-retire` mint as skills for the first time (previously command-only). `overhaul-planning`/`manifest-authoring` gain a pre-write confirm-gate moved in from their retired wrappers. Spec gains §14.9 (extends §14.1's reverse-wrapper licence to `user-invocable: true` with no sibling command); `validate.py` gains the matching `user_invocable` branch + selftest triad. Estate-wide: 0 grammar errors, 85 exemptions unchanged. Details: PR body.
 v0.19.2 · 2026-08-17 · ADR-0020 wave 2 (issue #520): `bind-`/`fork-`/`sub-` join as reserved verb-first heads on both command and skill parse branches (residue resolves against ADR-0015 D2's orchestrator scope pool, exactly as `lead-` always did). `lead-` retired as an OPEN production — a brand-new `lead-*` mint now fails grammar even when its scope resolves — but the six live `/lead-*` surfaces (`lead-team`/`lead-build`/`lead-planning`/`lead-product`/`lead-review`, `lead-intake`) still parse clean via a new closed, never-grown `LEAD_HEAD_GRANDFATHER` set (deprecated 2026-08-17, deleted outright at wave 5/#523 when those six rename to `bind-*`) — never via the `exemptions` array, which stays at 85, unchanged. GRAMMAR.md's production/lexicon/reserved-head sections updated to match. Selftest gains fixtures per head (positive bind-/fork-/sub- on both branches, negative unregistered-scope per head, a NEW lead-* mint rejected on both branches, the six grandfathered names still parsing). Estate-wide: 0 grammar errors, 85 exemptions (unchanged).
 v0.19.1 · 2026-08-17 · ADR-0020 wave 1 (issue #519): `RoleLex` +1 `marshal` (14 entries), `ProcessLex` +1 `orchestration` (21 entries) — anti-ambiguity gate run clean (no collision against any lexicon or ObjectVocab entry). `GRAMMAR.md`'s stated RoleLex count synced 13→14 and doctrine.manifest.json's D10 edge pattern/canon_ref updated in the same change. `naming-audit`/`doctrine-audit` both clean.

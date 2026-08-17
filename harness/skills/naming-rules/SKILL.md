@@ -97,7 +97,7 @@ regardless of which naming grammar is canon.
 - **`-facts` vs `-rules`**: facts state what is true (protocols, science, platform behavior);
   rules state what must be followed. A mixed catalog is named by its dominant half.
 - **Twins**: a command and the agent it dispatches are verb↔noun of the same words —
-  `/sort-issues` ↔ `issue-sorter`, `/lead-team` ↔ `team-lead`. A twin sharing one literal name
+  `/sort-issues` ↔ `issue-sorter`, `/bind-team` ↔ `fleet-marshal`. A twin sharing one literal name
   across artifact types is a test-2 failure (the kind is inaudible).
 - **Deciders vs doers**: `plan-` names decide (`plan-skill-split`); bare-verb names execute
   (`reshape-skill`, `merge-skills`).

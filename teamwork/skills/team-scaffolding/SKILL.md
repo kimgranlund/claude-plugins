@@ -4,29 +4,29 @@ description: >-
   Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-team-lead` /
   `{repo}-reviewer` / `{repo}-planner` / `{repo}-product`): names the session, writes or verifies
   the seat's permission profile, prints the comms charter (peer roster + SendMessage-is-a-nudge
-  doctrine + durable-channel fallback), then names the matching lead-* command for the human to
+  doctrine + durable-channel fallback), then names the matching bind-* skill for the human to
   run next. Run
   /team-scaffolding, first argument agent, reviewer, planner, or product, then an optional
   charter — or bare with no role: asks one question offering only missing seats (or seeds a
   virgin repo's fleet manifest first), never re-asking once a role is bound. Also runs the
   reverse: /team-scaffolding retire ROLE releases the retiring session's own seat (un-walls
   settings.local.json, releases fleet.json, syncs fleet-roster.md). NOT a one-off adoption of a
-  single lead-* contract with no fleet bootstrap (/lead-team, /lead-review, /lead-planning,
-  /lead-product directly); NOT for a task one context can hold (team-or-solo-rules).
+  single bind-* contract with no fleet bootstrap (/bind-team, /bind-review, /bind-planning,
+  /bind-product directly); NOT for a task one context can hold (team-or-solo-rules).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason] — bare asks which seat"
 ---
 
-# team-scaffolding — name the seat, wall it, brief it, then name the lead-* command
+# team-scaffolding — name the seat, wall it, brief it, then name the bind-* skill
 
 Four standing sessions run one project: `{repo}-team-lead` (orchestrator — role key `agent` in
 `fleet.json`; Phase 1 covers the schema-key/session-name split), `{repo}-reviewer`
 (read-only review seat), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
-authority). Each already has an owning contract — `teamwork:fleet-orchestration`, `teamwork:leading-review`,
-`teamwork:leading-planning`, `docs:leading-product` — but none of those commands name the session, wall
+authority). Each already has an owning contract — `teamwork:bind-team`, `teamwork:bind-review`,
+`teamwork:bind-planning`, `teamwork:bind-product` — but none of those commands name the session, wall
 it, or brief it on its peers; that bootstrap layer is this command, run once per session before
-the matching `/lead-*` contract takes over. `$ARGUMENTS`: the role, first token — or bare, see
+the matching `/bind-*` contract takes over. `$ARGUMENTS`: the role, first token — or bare, see
 Phase 1's interactive branch — and an optional charter (the rest, passed straight through to the
 adopted contract).
 
@@ -160,7 +160,7 @@ State, as one standing block before any real work:
    (spec correction 4 — a cloud session cannot message back, so blocking on liveness would strand
    it). Fall back to durable records (Issues, PR comments) as the coordination channel regardless
    of roster state.
-4. **`reviewer` only** — name the review instrument roster: the doc/code checkers `/lead-review`
+4. **`reviewer` only** — name the review instrument roster: the doc/code checkers `/bind-review`
    already routes to, plus authorkit's read-only sweeps — `naming-audit`, `doctrine-audit`,
    `bloat-audit`, `attention-audit`, `estate-audit` (ruling: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
    D3).
@@ -202,9 +202,9 @@ State, as one standing block before any real work:
    bootstrap; the roster/manifest rows already written in Phase 2 are the durable truth regardless
    of whether the nudge landed.
 
-## Phase 5 — Name the matching lead-* command for the human
+## Phase 5 — Name the matching bind-* skill for the human
 
-Every lead-* target carries `disable-model-invocation: true` by design (adoption is a human's
+Every bind-* target carries `disable-model-invocation: true` by design (adoption is a human's
 session, never model-routed — see the rejected alternative below), so this phase can never invoke
 one via the Skill tool. Instead, print the exact command the HUMAN types next, with the charter
 (the remainder of `$ARGUMENTS` after the role token) appended verbatim, as the final bootstrap
@@ -213,12 +213,12 @@ step — mirroring how `authorkit:overhaul-execute` hands a merge/split off as a
 
 | Role | Command to print | Home plugin |
 |---|---|---|
-| `agent` | `/lead-team` | teamwork |
-| `reviewer` | `/lead-review` | teamwork |
-| `planner` | `/lead-planning` | teamwork |
-| `product` | `/lead-product` | teamwork (`skills/lead-product`, moved from docs — issue #433) |
+| `agent` | `/bind-team` | teamwork |
+| `reviewer` | `/bind-review` | teamwork |
+| `planner` | `/bind-planning` | teamwork |
+| `product` | `/bind-product` | teamwork (`skills/bind-product`, moved from docs — issue #433) |
 
-`product`'s handoff is now a same-plugin command (the `product-authoring` skill, now `leading-product`
+`product`'s handoff is now a same-plugin command (the `product-authoring` skill, now `bind-product`
 here, and its `product-leader-agent` full-moved from docs to teamwork under issue #433's ruling); the prior
 cross-plugin degrade branch is retired along with the docs-absent case it existed for.
 
@@ -270,7 +270,7 @@ branches) rather than silently skipped:
 
 Report the three steps' outcomes in one line (`Retired: {repo}-<role> — wall removed (or n/a) ·
 fleet.json released · roster synced`) — role `agent` reports `Retired: {repo}-team-lead` (same
-exception as Phase 1/2) — and stop; retiring never hands off to a `/lead-*` command
+exception as Phase 1/2) — and stop; retiring never hands off to a `/bind-*` command
 (Phase 5 is bind-only, not part of this flow).
 
 ## Failure branches
@@ -302,7 +302,7 @@ exception as Phase 1/2) — and stop; retiring never hands off to a `/lead-*` co
 Done when Phases 1–4 have completed for the bound role (profile verified where applicable, roster
 row appended, charter printed, orchestrator introduction sent, explicitly skipped, or n/a for the
 `agent` seat itself) and Phase 5
-has named the matching lead-* command for the human to run next — never when only the bootstrap
+has named the matching bind-* skill for the human to run next — never when only the bootstrap
 layer ran with no command named, and never claiming the session itself adopted the contract
 (Skill-tool invocation is structurally impossible against a `disable-model-invocation` target).
 For a `retire` invocation: done when all three Phase 6 steps have completed (or been reported as
@@ -311,8 +311,8 @@ the roster left unsynced.
 
 ## Rejected alternatives
 
-Flipping the four lead-* skills' `disable-model-invocation` flag so Phase 5 could invoke them via
+Flipping the four bind-* skills' `disable-model-invocation` flag so Phase 5 could invoke them via
 the Skill tool was considered and rejected: command-only adoption is deliberate — a seat contract
-is adopted by a human's session, never model-routed (`fleet-orchestration`'s own body defends this flag for
+is adopted by a human's session, never model-routed (`bind-team`'s own body defends this flag for
 the same reason). The fix stays scoped to Phase 5's own false claim, not the target skills'
 invocation contract.

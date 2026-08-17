@@ -1,0 +1,16 @@
+{
+  "skill": "bind-team",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "cases": [
+    { "id": "t01", "prompt": "/bind-team plan and build the new billing export feature end to end.", "expect": "trigger" },
+    { "id": "t02", "prompt": "Run this host session under the fleet-marshal agent's own contract for the checkout redesign charter.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Adopt routing/gating/budget/rollup discipline directly here — dispatch every unit of real work while this charter stays open.", "expect": "trigger" },
+    { "id": "t04", "prompt": "/bind-team — coordinate the plan/build/review chain for this feature, never a separately dispatched agent.", "expect": "trigger" },
+    { "id": "t05", "prompt": "Make this session the standing coordination seat for a parallel multi-slice build.", "expect": "trigger" },
+    { "id": "n01", "prompt": "This is a small task one context can hold — just fix the config typo.", "expect": "no-trigger", "comment": "owner: team-or-solo-rules — a task one context can hold, no team needed" },
+    { "id": "n02", "prompt": "Review this PR against its LLD directly.", "expect": "no-trigger", "comment": "owner: dispatch the owning reviewer directly (code-checker/doc-checker) — one artifact, not a coordination charter" },
+    { "id": "n03", "prompt": "Adopt the planner's own contract and author the PRD/SPEC/LLD yourself for this charter.", "expect": "no-trigger", "comment": "owner: teamwork:bind-planning — a solo design/decomposition charter where the host authors docs itself" },
+    { "id": "n04", "prompt": "Make this session a dedicated build seat driving tickets through dispatch-ticket.", "expect": "no-trigger", "comment": "owner: teamwork:bind-build" },
+    { "id": "n05", "prompt": "Dispatch fleet-marshal via the Agent tool as a nested coordinator for this batch.", "expect": "no-trigger", "comment": "owner: fleet-marshal (Agent tool) — a separately dispatched agent, the opposite of this skill's own host-adopts-the-contract shape" }
+  ]
+}

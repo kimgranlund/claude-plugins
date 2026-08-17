@@ -34,8 +34,8 @@ caller reaches it is a separate design question this skill owns too — three st
 different doors, none a synonym for another, and nothing in a bare seat name reveals which one a
 given caller gets:
 
-1. **Session adoption** — a `/lead-*` command (`/lead-build`, `/lead-team`, `/lead-planning`) and
-   its paired `leading-*` skill make the CURRENT session hold a standing agent's contract
+1. **Session adoption** — a `/bind-*` command (`/bind-build`, `/bind-team`, `/bind-planning`) and
+   its skill-as-command shape make the CURRENT session hold a standing agent's contract
    in-place, with no `Agent` spawn and no fork. Nothing left the session, so its interactive
    branches — a live clarifying question, an `AskUserQuestion` round — stay reachable turn after
    turn for as long as the session runs. Pick this door when a human is going to feed the seat

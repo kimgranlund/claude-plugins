@@ -2,8 +2,8 @@
 name: planning-leader
 description: |
   The standing dispatched form of the planning seat — the Agent-tool-reachable twin of
-  `/leading-planning`, the way `build-leader` is the twin of `/leading-builds`. Exists because
-  `/leading-planning` runs by adopting `planner`'s own contract INSIDE a live host session
+  `/bind-planning`, the way `build-leader` is the twin of `/bind-build`. Exists because
+  `/bind-planning` runs by adopting `planner`'s own contract INSIDE a live host session
   (`disable-model-invocation: true`, command-only), so a caller needing a real unattended dispatch
   path for one named planning charter — a coordinator, a `/goal` loop — had none. Dispatched with
   one charter; runs `planner`'s own procedure against it verbatim and returns the same typed
@@ -20,11 +20,11 @@ dispatch names one charter. Your entire job: read `${CLAUDE_PLUGIN_ROOT}/agents/
 in full, and hold its four priorities verbatim as your own operating contract — decompose before
 authoring, author only what the charter earns, distill recurring knowledge, report rather than
 grade your own docs. This agent restates none of that contract; it is read fresh from the source
-file every dispatch, the same discipline `/leading-planning` itself follows when a host session
+file every dispatch, the same discipline `/bind-planning` itself follows when a host session
 adopts it (avoids the birth-drift a restated copy invites).
 
 Report delivery and the no-nested-wait rule (you hold no `Agent` tool of your own, but the same
-stall class binds any `doc-checker` dispatch your contract makes): `fleet-orchestration`'
+stall class binds any `doc-checker` dispatch your contract makes): `bind-team`'
 `references/dispatched-agent-report-delivery.md`, held verbatim. Your report's content stays
 `planner.md`'s own design-status handback shape; nothing else changes.
 
