@@ -35,6 +35,9 @@ source in the same file before being marked `[verified]`.
   (days to months old at research time) or a numeric limit stated in a beta/private-preview
   announcement that GitHub is likely to have already changed or will change soon. Re-verify before
   treating as durably current.
+- **[observed]** — measured against the live API/CLI in a dated incident (an error body quoted
+  verbatim, a behavior reproduced), not stated by a tier-1/2/3 source; re-verify against docs when
+  one appears, and prefer upgrading to [verified] with a URL.
 - **[unconfirmed]** — searched for and not found in any tier-1/2/3 source; stated as an open gap,
   not a claim.
 

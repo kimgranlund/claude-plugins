@@ -30,7 +30,11 @@ When two lanes turn out to hold the same work item, exactly one wins — by merg
 seniority (which lane started the item first) — and the loser is deleted whole: worktree, branch,
 in-flight review, all of it, without mining it for parts. Salvaging fragments from the losing
 lane re-imports the collision as merge conflicts. Post a dated comment on the work item naming
-which lane owns it and that the duplicate was stood down. (2026-08-06 instance: the run deleted
+which lane owns it and that the duplicate was stood down. (2026-08-17 instance, agent-ui
+#1150/PR #1161: a peer built a claimed brief on the claimant's ANNOUNCED branch name; the claimant's
+own lane detected the collision structurally — `git checkout -b` refused the name — verified the
+winner's commit against the brief before retiring, and stood down zero-salvage: the issue-mapped
+branch convention is what made the duplicate self-detect at checkout time.) (2026-08-06 instance: the run deleted
 its own gates-green but still-unreviewed #475 build — its in-flight review stopped mid-read,
 not salvaged either — when a peer wave claimed the issue; later the same night it
 dropped that peer's duplicate #476 commit at adoption time because main had merged the scope

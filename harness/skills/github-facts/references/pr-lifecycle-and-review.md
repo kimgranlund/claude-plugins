@@ -63,3 +63,17 @@ rebase-merge.
 This matters directly for `linking-and-closing-keywords.md`'s unresolved gap: squash's
 auto-generated (but user-editable) commit message is the one place a closing keyword could be
 silently dropped by an editor before merge — worth a glance before assuming the auto-close fired.
+
+[observed] **A PR whose head branch is force-pushed while the PR is CLOSED becomes permanently
+unreopenable.** REST `PATCH /pulls/{n} state=open` returns 422 — verbatim: "state cannot be changed.
+The <branch> branch was force-pushed or recreated." Neither the UI nor the API can revive it; the
+only path is a FRESH PR from the same branch (observed 2026-08-17, agent-ui PR #1123 → superseded
+by #1128 after a rebase force-push landed while a GraphQL outage had left the PR closed-unmerged).
+
+[observed] **GraphQL and REST degrade independently during GitHub 503 storms** — `gh pr`/`gh issue`
+verbs (GraphQL) fail first and recover last, while `gh api repos/...` (REST) keeps working for the
+same operations: create PRs via `POST /repos/{o}/{r}/pulls`, merge via `PUT .../pulls/{n}/merge`,
+comment via `POST .../issues/{n}/comments`. Also observed: mergeability served by a degraded API can
+be STALE ("Pull Request is not mergeable" against a branch that re-queries MERGEABLE minutes later) —
+verify by re-query, never by trusting one storm-time answer (2026-08-17, multi-hour storm, ~12
+operations rerouted REST-side).
