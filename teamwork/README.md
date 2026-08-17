@@ -105,6 +105,13 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.6 · assembled 2026-08-17 · leading-product Phase 2 repointed at the same-plugin
+`${CLAUDE_PLUGIN_ROOT}/agents/product-leader.md` (closes #486): Phase 2 still named the retired
+cross-plugin path `docs/agents/product-leader-agent.md` (dead since the #433 move the skill's own
+head acknowledges) with a fail-closed rule, so contract adoption failed in ALL installs; the
+cross-plugin framing is dropped — the agent file is same-plugin, only its doctrine mentions stay
+cross-plugin. Found by the abandoned #475 build's fresh-context skill-checker (MAJOR).
+
 v2.17.5 · assembled 2026-08-17 · residual description diet (closes #475, #373 Phase-6
 re-measure): the six teamwork artifacts still over the 700-char routable budget after #468/#471
 — skill `leading-product` (879→699, boilerplate-trim style matching #468's leading-planning/

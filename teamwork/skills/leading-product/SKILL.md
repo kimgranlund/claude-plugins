@@ -46,8 +46,8 @@ own pointer for the flow, not restated here — a first-class entry, never treat
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
 From this point until the charter closes, this session holds
-`docs:product-leader-agent`'s own contract (`docs/agents/product-leader-agent.md`, cross-plugin —
-fail closed with the gap named if `docs` isn't installed) as its own operating rules —
+`product-leader`'s own contract (`${CLAUDE_PLUGIN_ROOT}/agents/product-leader.md`, same-plugin
+since the #433 move noted above) as its own operating rules —
 read that file and hold its seven priorities verbatim as this session's standing discipline for
 the charter's duration, rather than re-derived inline here (the drift-pair defect class
 `leading-teams`'s own R5 finding named: restating a copy invites birth-drift against the source of
