@@ -1,5 +1,5 @@
 ---
-name: team-leader
+name: fleet-marshal
 description: >-
   The orchestration seat for a planning/execution agent team. Use to establish the
   chain-of-command, route work across planning → execution → review, set the dispatch order,

@@ -1,7 +1,7 @@
 ---
 name: leading-teams
 description: >-
-  Makes this host session run under the team-lead agent's own contract for one stated charter,
+  Makes this host session run under the fleet-marshal agent's own contract for one stated charter,
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
   directly, dispatching every unit of real work while the charter stays open. Run /lead-team
   [charter]. NOT for a task one context can hold (team-or-solo-rules); NOT for reviewing one
@@ -16,12 +16,12 @@ argument-hint: "[charter — the plan/build-feature/review work needing a team]"
 
 `issue-sorter` dispatches a separate agent instance for its standing seat. This skill does the
 opposite on purpose: it makes **this session** — the one the human is talking to — hold the
-`team-leader` agent's own contract
-(`${CLAUDE_PLUGIN_ROOT}/agents/team-leader.md`) directly, for one named charter, with
+`fleet-marshal` agent's own contract
+(`${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md`) directly, for one named charter, with
 no separate `Agent`/`Task` spawn for the coordinator role itself. The host becomes the apex; every
 OTHER seat in the chain is still a real dispatch. Seed: `$ARGUMENTS`.
 
-This skill imports the contract of `agents/team-leader.md` — a deliberate pairing in the same
+This skill imports the contract of `agents/fleet-marshal.md` — a deliberate pairing in the same
 family as harness's `issue-sorter` ruling. The human-typed entry point is the thin
 `teamwork/commands/lead-team.md` wrapper, which invokes this skill by name — this file carries
 the full procedure and is itself reached by the model (`disable-model-invocation: false,
@@ -39,14 +39,14 @@ From this point until the charter closes (Phase 4), this session holds the agent
 its own operating rules, following the shared ritual in `references/adopt-agent-contract.md`
 (this skill — the canonical copy; `leading-planning` and `leading-builds` cite it too):
 
-1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/team-leader.md`, Priorities 1–8 (its own
+1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md`, Priorities 1–8 (its own
    lines 22–69), now, in full.** Adopt all eight verbatim as this session's standing rules for the
    charter's duration: route by shape and dispatch sealed; budget every dispatch; gate between
    phases (generator ≠ critic); close every cycle on a named decision; run the discovered-reality
    escalation loop; keep durable state in records, not context; treat the committed tree as source
    of truth; roll up.
 2. **Invoke `team-or-solo-rules` and `loop-rules`** (this plugin) — the same two skills the
-   agent itself preloads (`agents/team-leader.md:15`) — so the routing rubric and the
+   agent itself preloads (`agents/fleet-marshal.md:15`) — so the routing rubric and the
    closed decision-set Priority 4 and 6 depend on are actually loaded, not assumed.
 3. **Acknowledge adoption** before dispatching anything: one standing block naming the contract
    file read, the three host deltas below, and the duration rule ("until this charter closes").

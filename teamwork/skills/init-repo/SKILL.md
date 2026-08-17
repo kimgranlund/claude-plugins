@@ -37,7 +37,7 @@ earlier one succeeded.
 3. **Adopt team-lead — this session becomes the apex, no spawn.** `/lead-team` itself is
    `disable-model-invocation: true` and cannot be Skill-invoked from inside this command (the
    #134/#135 class), so this step carries the adoption directly, per that command's own
-   Phase 2: read `${CLAUDE_PLUGIN_ROOT}/agents/team-leader.md` in full and adopt its priorities
+   Phase 2: read `${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md` in full and adopt its priorities
    as this session's standing rules; invoke `team-or-solo-rules` and `loop-rules` (the same
    preloads the agent carries). ONE named deviation from /lead-team: the charter. /lead-team
    binds one bounded charter; here the charter IS the session — "this session's incoming work

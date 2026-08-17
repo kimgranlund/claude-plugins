@@ -7,7 +7,7 @@ re-asked.
 ## Gate P0 — Route (PASS)
 
 Primitive = **skill, command species**. The agent twin (`agents/build-leader.md`, ADR-0010)
-exists; this is the host-adoption half — the `/lead-team` ↔ `team-leader` pattern, teamwork's
+exists; this is the host-adoption half — the `/lead-team` ↔ `fleet-marshal` pattern, teamwork's
 second instance, docs' `/lead-intake` being the first estate-wide sibling.
 
 ## Gate P1 — Interview slots (PASS, pre-ruled)

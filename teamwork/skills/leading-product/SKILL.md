@@ -22,7 +22,7 @@ non-conforming against the CURRENTLY-LIVE naming grammar until the naming-ADR Ki
 supersede ADR-0011 REQ-002's `-agent` suffix rule lands) is the dispatched form of the standing
 product seat, now same-plugin. This command is the other
 half of the pair — the
-`/lead-team` ↔ `team-leader` pattern. The seat's own doctrine preloads
+`/lead-team` ↔ `fleet-marshal` pattern. The seat's own doctrine preloads
 (`product-lifecycle-rules`, `check-stage`, `doc-writing-rules`) stay canonical in `docs` — reached
 only as soft cross-plugin named mentions (never a `skills:` frontmatter preload, the hard
 plugin-boundary rule), with an explicit failure branch when `docs` isn't installed; the AGENT file

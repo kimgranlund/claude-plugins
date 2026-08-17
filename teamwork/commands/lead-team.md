@@ -1,7 +1,7 @@
 ---
 name: lead-team
 kind: command
-description: Makes this host session run under the team-leader agent's own contract for one stated charter, never a separately dispatched agent.
+description: Makes this host session run under the fleet-marshal agent's own contract for one stated charter, never a separately dispatched agent.
 argument-hint: "[charter — the plan/build-feature/review work needing a team]"
 author: kim
 created: 2026-08-16

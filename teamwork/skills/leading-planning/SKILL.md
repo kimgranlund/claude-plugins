@@ -17,7 +17,7 @@ argument-hint: "[charter — the design/decomposition work needing a PRD/SPEC/LL
 # leading-planning — the host runs the design seat, not a dispatched copy of it
 
 `planner` (`teamwork/agents/planner.md`) is the dispatched form of the standing design seat. This
-command is the other half of the pair — the `/lead-team` ↔ `team-leader` pattern, teamwork's
+command is the other half of the pair — the `/lead-team` ↔ `fleet-marshal` pattern, teamwork's
 fifth `/lead-*` member: it makes **this session** — the one the human is typing into — hold that
 agent's contract directly, for one named charter, with no `Agent` spawn. Under ADR-0006 the pair
 splits by species: command = verb form (`/lead-planning`), agent = role noun (`planner`). Seed:
