@@ -36,24 +36,24 @@ seat until a coordinator notices and re-dispatches it (four measured incidents: 
 #280 — #282
 additionally raced a duplicate build). This narrows Phase 4's `small` bullet's "one sealed
 fork/agent" clause to a TOP-LEVEL host only — an already-nested seat always takes the inline
-branch — and it means Phase 2's task-kind `Agent`-tool dispatch is always UNNAMED: an unnamed
-call's synchronous tool-result IS its return value, never mailbox-routed. This is not a rule
+branch — and it means Phase 2's task-kind `Agent`-tool dispatch is always UNNAMED: usually the
+unnamed call's synchronous tool-result IS its return value, not mailbox-routed. This is not a rule
 against dispatching at all — an UNNAMED, single-shot review dispatch (Phase 4's fresh-context
-checker, Phase 5 stage 2b's critic) is not this failure, since its completion is the tool call's
-own synchronous result, not a background callback to wait on.
+checker, Phase 5 stage 2b's critic) is not this failure, since its completion is normally the tool
+call's own synchronous result, not a background callback to wait on — with one dated exception below.
 
-**The critic step still stalls the same way — read the return value yourself.** Being technically
-UNNAMED does not stop a seat from treating the dispatch as if it were NAMED: the recurrence on
-2026-08-16 (PR #368, the ADR-0014 build) idled on its `docs:doc-checker` critic call because the
-seat waited for a completion notification anyway, and that notification — same mechanism as the
-paragraph above — routed to the ROOT session, not back to the seat. **Never wait for a
-notification after dispatching a critic.** The Agent tool call's own synchronous return value
-already IS the critic's verdict the instant the call completes — read that return value directly
-and act on it; no separate signal will ever reach you. If a stall like this is already underway (a
-critic dispatched, no verdict in hand, the turn sitting idle), do not keep waiting it out: read the
-critic's own transcript or output file directly instead of polling for a callback that
-structurally will not arrive, or, for an already-nested seat with a coordinator watching it
-(`build-leader`), report the stall and let the coordinator relay the verdict.
+**The critic step still stalls the same way — read the return value yourself, but a notification
+can be the real verdict too (corrected 2026-08-17, issue #554).** Being technically UNNAMED does
+not stop a seat from treating the dispatch as if it were NAMED: PR #368 (2026-08-16, the ADR-0014
+build) idled on its `docs:doc-checker` critic call by waiting for a completion notification that
+routed to the ROOT session instead, not back to the seat — a real stall; fix it by reading the
+Agent tool call's own synchronous return directly. PR #547's fold falsified this section's ONLY-
+valid-completion framing, though: its unnamed critic dispatch ran ASYNC, its all-PASS verdict
+arriving intact as a background task notification to the DISPATCHING session (not the root — the
+TOP-LEVEL-host case, not a nested seat's misrouted callback). Both paths are real: read a
+synchronous return if the call gives you one; if a notification reports completion instead, that
+notification IS the verdict — accept and relay it (report-before-idle). Escalate a stall — read
+the transcript/output file, or flag a coordinator — only when NEITHER arrives within ~10 minutes.
 
 ## Phase 1 — Find or make the record
 
