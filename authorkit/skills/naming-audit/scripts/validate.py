@@ -413,6 +413,23 @@ class Grammar:
             if tokens[0] == "lead" and len(tokens) >= 2:
                 ok, why = self.resolve_orchestrator_scope(tokens[1:])
                 return errs if ok else errs + [f"skill scope (lead- head): {why}"]
+            # ADR-0018 D1 — `make-` and `file-` reserved HEADS (spec §14.7, mechanism per §14.2, same
+            # mechanism as ADR-0014's check- head): literal head token, residue
+            # resolves against ObjectVocab ONLY (never the process/union pools) —
+            # the estate's canonical forge (`make-`) and intake (`file-`) verb
+            # families. Must sit BEFORE the object-process check below for the same
+            # dead-code-hazard reason as check-/lead-: `make-doc`'s residue `doc`
+            # and `file-task`'s residue `task` are plain ObjectVocab members, but a
+            # branch placed after the process check could still shadow a future
+            # residue landing in ProcessLex. The literal head set stays closed at
+            # {check, lead, make, file} — not a template for other VerbLex members
+            # (ADR-0014 Alt C stays rejected). Runs AFTER the -agent tail check
+            # above (line ~391), which is what keeps `make-agent` permanently
+            # failing: the tail strips first, unconditionally, before any head
+            # branch is reached.
+            if tokens[0] in ("make", "file") and len(tokens) >= 2:
+                ok, why = self.resolve_objects(tokens[1:])
+                return errs if ok else errs + [f"skill object ({tokens[0]}- head): {why}"]
             if len(tokens) >= 2 and tokens[-1] in self.process_lex:
                 ok, why = self.resolve_objects(tokens[:-1])
                 return errs if ok else errs + [f"skill object: {why}"]
@@ -1179,6 +1196,98 @@ def selftest():
         result = run(r, lead_manifest)
         assert not result["grammar_errors"], \
             f"object-first names must be unaffected by the lead- head: {result['grammar_errors']}"
+
+    # ADR-0017 — RoleLex +10 execution-seat suffixes (checker/runner/planner/watcher/
+    # finder/sorter/cleaner/judge/builder/writer): the {scope}-{role} production now
+    # covers execution seats, not only coordinators. Positive: a scope token (either
+    # ObjectVocab or ProcessLex, per ADR-0015 D2's pool) with each new role suffix.
+    s8_role_manifest = dict(
+        manifest,
+        role_lex=["leader", "checker", "runner", "planner", "watcher", "finder",
+                  "sorter", "cleaner", "judge", "builder", "writer"],
+        process_lex=["review"],
+        object_vocab=manifest["object_vocab"] + [
+            {"canonical": "code", "plural": None, "banned_aliases": []},
+            {"canonical": "experiment", "plural": None, "banned_aliases": []},
+            {"canonical": "decision", "plural": "decisions", "banned_aliases": []},
+        ],
+    )
+    for agent_name in ("code-checker", "experiment-runner", "decision-watcher",
+                       "review-planner"):
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td)
+            (r / "agents").mkdir(parents=True)
+            (r / "agents" / f"{agent_name}.md").write_text(agent_md(agent_name))
+            result = run(r, s8_role_manifest)
+            assert not result["grammar_errors"], \
+                f"{agent_name} must parse clean under RoleLex+10: {result['grammar_errors']}"
+
+    # Negative: a bare RoleLex terminal with no scope token still fails (ADR-0017
+    # explicitly does NOT make bare role words like `builder`/`planner` conformant —
+    # the {scope}-{role} production requires >= 2 tokens with a resolvable scope).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "builder.md").write_text(agent_md("builder"))
+        result = run(r, s8_role_manifest)
+        assert result["grammar_errors"], \
+            "a bare RoleLex word with no scope token must still fail grammar"
+
+    # ADR-0018 D1 — `make-` and `file-` reserved skill heads. Positive: registered
+    # ObjectVocab residues under each head.
+    s8_head_manifest = dict(
+        manifest,
+        object_vocab=manifest["object_vocab"] + [
+            {"canonical": "doc", "plural": "docs", "banned_aliases": []},
+            {"canonical": "reference", "plural": "references", "banned_aliases": []},
+            {"canonical": "rubric", "plural": "rubrics", "banned_aliases": []},
+            {"canonical": "vision-memo", "plural": None, "banned_aliases": []},
+            {"canonical": "llms-txt", "plural": None, "banned_aliases": []},
+            {"canonical": "bug", "plural": "bugs", "banned_aliases": []},
+            {"canonical": "task", "plural": "tasks", "banned_aliases": []},
+        ],
+    )
+    for head_name in ("make-doc", "make-reference", "make-rubric", "make-vision-memo",
+                      "make-llms-txt", "file-bug", "file-task"):
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td)
+            (r / "skills" / head_name).mkdir(parents=True)
+            (r / "skills" / head_name / "SKILL.md").write_text(skill_md(head_name))
+            result = run(r, s8_head_manifest)
+            assert not result["grammar_errors"], \
+                f"{head_name} must parse clean under the make-/file- heads: {result['grammar_errors']}"
+
+    # Negative: a non-reserved verb head is not granted the same treatment — the
+    # literal head set stays closed at {check, lead, make, file}, never a template
+    # for VerbLex at large (ADR-0014 Alt C stays rejected).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "sort-issues").mkdir(parents=True)
+        (r / "skills" / "sort-issues" / "SKILL.md").write_text(skill_md("sort-issues"))
+        result = run(r, s8_head_manifest)
+        assert result["grammar_errors"], \
+            "a non-reserved verb head (sort-) must still fail grammar"
+
+    # Negative: make-{unregistered scope} still fails.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "make-widget").mkdir(parents=True)
+        (r / "skills" / "make-widget" / "SKILL.md").write_text(skill_md("make-widget"))
+        result = run(r, s8_head_manifest)
+        assert result["grammar_errors"], \
+            "make-<unregistered scope> must still fail grammar"
+
+    # CRITICAL regression — tail-before-head: `make-agent` must keep failing even
+    # though `make` is now a valid reserved head, because the -agent reserved TAIL
+    # check (line ~391) runs unconditionally before any head-token branch is reached.
+    # This is the one fixture ADR-0018 names explicitly as the dead-code-hazard proof.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "make-agent").mkdir(parents=True)
+        (r / "skills" / "make-agent" / "SKILL.md").write_text(skill_md("make-agent"))
+        result = run(r, s8_head_manifest)
+        assert any("reserved head -agent on a skill" in e[2] for e in result["grammar_errors"]), \
+            f"make-agent must keep failing on the -agent tail, tail-before-head: {result['grammar_errors']}"
 
     # Scoped write-grant detection (issue #237, found during #235/PR #236): the
     # policy/grant-coherence check must recognize a SCOPED write grant (tool name

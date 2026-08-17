@@ -412,6 +412,56 @@
       "canonical": "product",
       "plural": "products",
       "banned_aliases": []
+    },
+    {
+      "canonical": "experiment",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "decision",
+      "plural": "decisions",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "fact",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "code",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "wording",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "intake",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "reference",
+      "plural": "references",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "rubric",
+      "plural": "rubrics",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "vision-memo",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "llms-txt",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
@@ -430,13 +480,11 @@
     "a2ui-protocol-facts",
     "a2ui-training-facts",
     "adopt-plugin",
-    "agent-checker",
     "agent-residency-facts",
     "apple-mobile-facts",
     "break-down-flow",
     "break-down-layout",
     "break-down-problem",
-    "build-feature",
     "builder",
     "chat-harness-guardrail-facts",
     "chat-harness-logging-facts",
@@ -448,29 +496,19 @@
     "check-all-skills",
     "check-everything",
     "check-whole-ui",
-    "chore-planner",
     "clean-git",
     "clean-repo",
     "close-session",
-    "code-checker",
     "color-contrast-facts",
     "color-perception-facts",
     "color-space-facts",
     "color-theory-facts",
     "component-checker",
-    "decision-watcher",
     "design-system-checker",
     "dispatch-ticket",
-    "doc-checker",
-    "docs-writer",
     "dom-layout-facts",
-    "experiment-runner",
-    "fact-finder",
     "figma-plugin-facts",
-    "file-bug",
-    "file-feature",
     "file-leftovers",
-    "file-task",
     "find-intent",
     "find-open-questions",
     "fix-old-names",
@@ -478,13 +516,9 @@
     "font-choice-checker",
     "github-facts",
     "grill-the-ask",
-    "hook-checker",
     "html-to-markdown",
     "init-repo",
-    "intake-lead",
-    "issue-sorter",
     "layout-checker",
-    "lead-intake",
     "lettering-facts",
     "llm-gateway-facts",
     "llm-streaming-facts",
@@ -492,20 +526,10 @@
     "make-agent",
     "make-component",
     "make-design-system",
-    "make-doc",
     "make-dscard-kit",
     "make-figma-make-kit",
-    "make-hook",
-    "make-llms-txt",
-    "make-pack",
     "make-palette",
-    "make-plugin",
-    "make-reference",
-    "make-rubric",
-    "make-script",
-    "make-skill",
     "make-stitch-kit",
-    "make-vision-memo",
     "markdown-to-markup",
     "material-color-facts",
     "material-motion-facts",
@@ -520,26 +544,19 @@
     "plan-skill-merge",
     "plan-skill-split",
     "planner",
-    "plugin-checker",
     "plugin-install-facts",
-    "repo-cleaner",
     "research-methods",
     "reshape-skill",
-    "routing-judge",
     "save-lessons",
     "ship-plugin",
-    "skill-checker",
     "sort-issues",
     "sweep-chores",
     "tidy-docs",
-    "token-builder",
     "ui-genre-facts",
     "ui-pattern-facts",
     "watch-adrs",
     "watch-tickets",
     "what-shipped",
-    "wiring-checker",
-    "wording-checker",
     "write-handoff"
   ]
 }
