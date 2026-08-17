@@ -129,6 +129,14 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.23 · 2026-08-17 · agent-description diet (closes #461, #373 Wave-2 S7): 8 agent frontmatter
+descriptions (`agent-checker`, `chore-planner`, `decision-watcher`, `hook-checker`,
+`issue-sorter`, `plugin-checker`, `repo-cleaner`, `skill-checker`) carrying a trailing NOT-for
+disambiguation sentence had it moved into an exhaustive body NOT-for paragraph — `agent-checker`,
+`hook-checker`, `plugin-checker` were already done; `skill-checker` had none at all, so one was
+authored fresh — plus a reciprocal `watch-adrs` ↔ `watch-tickets` fence. `/check-routing harness`
+ran 20/20 clean on the two touched suites, no stolen/leaked/dead/hung.
+
 v3.8.22 · 2026-08-16 · `release_gate.py`'s G8 allowlist gains 9 entries surfaced by #433's
 renames (closes #450): `lead-planning`/`lead-review`/`lead-product` (teamwork commands, not
 skills), `product-leader-agent` (docs' agent name), `product-authoring` (leading-product's

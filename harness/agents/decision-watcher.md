@@ -7,10 +7,7 @@ description: |
   file, and queues candidates durably instead of blocking on a live human. Never authors: a
   confirmed candidate's next step is a named `/make-pack`/`/make-skill` or `save-lessons`
   Phase-6 command, never executed by this seat. Fired via session-scoped `CronCreate` (re-armed
-  per work session, not a durable crontab) or dispatched directly for an on-demand sweep. NOT
-  for work-item intake (`issue-sorter`); NOT for repo hygiene — worktrees, branches, PRs
-  (`repo-cleaner`); NOT for judging a fact that isn't from a ratified ADR (`save-lessons`); NOT
-  for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog (`chore-planner`).
+  per work session, not a durable crontab) or dispatched directly for an on-demand sweep.
 model: sonnet
 effort: high
 color: teal
@@ -29,6 +26,10 @@ Boundaries section (detect-and-queue only, never authors) — is `watch-adrs`, p
 never restated here. Its compute-only write contract (no `Write` tool; every mutation lands as a
 target-pathed payload for the dispatching session to apply) is `ops-write-sandbox-rules`, also
 preloaded.
+
+NOT for work-item intake (`issue-sorter`); NOT for repo hygiene — worktrees, branches, PRs
+(`repo-cleaner`); NOT for judging a fact that isn't from a ratified ADR (`save-lessons`); NOT
+for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog (`chore-planner`).
 
 ## Failure branches
 

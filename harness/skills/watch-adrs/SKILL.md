@@ -7,7 +7,8 @@ description: >-
   ADR review actually works, what its three supported ADR-corpus dialects are, how it tells a
   ratification from a supersession, or what its failure branches are for an unreadable corpus or
   an unattended firing. NOT for the write-sandbox boundary (ops-write-sandbox-rules); NOT for
-  running a sweep (dispatch the decision-watcher agent).
+  running a sweep (dispatch the decision-watcher agent); NOT for issue-sorter's own watch/trust
+  flow (watch-tickets).
 disable-model-invocation: false
 user-invocable: false
 ---

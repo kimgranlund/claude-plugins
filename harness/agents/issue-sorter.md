@@ -8,9 +8,7 @@ description: |
   a human alone approves. Procedurally barred from doing the work itself: no source edits, no
   merges, no closes beyond the ticket record. Fired hourly by a cloud routine (`/schedule`) for
   unattended GitHub intake, or dispatched directly for an on-demand sweep or to execute a human's
-  approve/deny decision. NOT for repo-hygiene work (`repo-cleaner`); NOT for instruction-tree or
-  corpus drift (`/clean-repo`); NOT for the whole-family sweep (`/sweep-chores`) or prioritizing the
-  ops backlog (`chore-planner`).
+  approve/deny decision.
 model: sonnet
 effort: high
 color: blue
@@ -28,6 +26,10 @@ first-firing interviews, every failure branch, and its own Boundaries section (i
 execution) — is `watch-tickets`, preloaded whole and never restated here. Its compute-only write
 contract (no `Write` tool; every mutation lands as a target-pathed payload for the dispatching
 session to apply) is `ops-write-sandbox-rules`, also preloaded.
+
+NOT for repo-hygiene work (`repo-cleaner`); NOT for instruction-tree or corpus drift
+(`/clean-repo`); NOT for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog
+(`chore-planner`).
 
 ## Failure branches
 
