@@ -15,6 +15,7 @@ reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/sk
 | `skills/team-or-solo-rules` | Declarative skill | both | Design or review how skills, subagents, and teams compose, and the YAML frontmatter that wires them — unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate |
 | `skills/loop-rules` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
 | `skills/parallel-work-rules` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
+| `skills/fleet-rules` | Declarative skill | both | NEW (closes #480): the default operating protocol every orchestration-adjacent seat starts from instead of re-deriving it mid-run — the fleet-scoped coordination-scope ladder, the claim-then-guard sequence before dispatching, report-supersedes-nudge communication routing, one-version-bumping-build-per-plugin + merge-order rules, session-death resilience (orphaned-claim reset, resumable worktree/branch naming), and the `EnterWorktree` pin-race unblock playbook. Cites its canonical mechanics elsewhere (`dispatch-ticket`'s claim/version-collision checks, `mobilize-chores`' four-layer guard, `parallel-work-rules`' cwd-race detection, harness's `big-change-git-rules`' stacked-PR sequence) rather than restating them; preloaded by `team-leader` and `build-leader` |
 | `skills/close-session` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through file-bug/feature/issue, triggers save-lessons's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
 | `scripts/session_end_worktree_check.py.retired` | Retired script | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly a `SessionEnd` hook: passive safety net for `close-session`, logging a durable warning line if a git worktree was left dirty or unpushed. `SessionEnd` never blocked; this was always a pure log, never a gate. Kept on disk retired, not deleted, for history |
 | `scripts/worktree_prebash_guard.py.retired` | Retired script | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly issue #139's repo-side `PreToolUse` mitigation, ASK-only: flagged (never blocked) a Bash command that `cd`'s or `-C`/`--prefix`'s out of a worktree cwd into the shared primary checkout or a sibling worktree and then ran a further command in the same call. Kept on disk retired, not deleted, for history — `parallel-work-rules` now carries this as a manual discipline instead |
@@ -104,6 +105,34 @@ mint.
 Directories align with plugin names (ADR-0007).
 
 ## Version ledger
+
+v2.17.8 · assembled 2026-08-17 · new pack `fleet-rules` (closes #480, #373 overnight-campaign
+evidence): default operating protocol every orchestration-adjacent teamwork skill/agent starts
+from instead of re-deriving mid-run — coordination scope ladder (fleet-scoped only, status-only
+replies to same-user other-repo desks, true-global only on explicit instruction), the
+claim-then-guard sequence before dispatching (ADR-0005 claim + mobilize-chores' four-layer
+double-dispatch guard, cited not restated), report-supersedes-nudge communication routing,
+one-version-bumping-build-per-plugin + stacked-PR merge-order rules, session-death resilience
+(orphaned-claim reset, resumable worktree/branch naming), and the `EnterWorktree` pin-race unblock
+playbook. Placement resolved on evidence rather than left open: a NEW pack, not a
+`parallel-work-rules` extension — only one of the six areas (pin-race) nests inside that skill's
+own git-tree-isolation/collision plane; the other five (scope ladder, claim/guard, comms routing,
+version-slot, session-death) are cross-cutting orchestration default with no single existing
+canonical home, scattered across `team-scaffolding`/`fleet-bootstrap`'s inline phases and this
+workspace's own incident history instead — cramming them into `parallel-work-rules` would have
+broken that skill's own stated plane separation (NOT dispatch shape, NOT next-turn timing) for a
+net five-sixths mismatch. Reciprocal NOT-clause fences added to `team-or-solo-rules` and
+`parallel-work-rules` (both this plugin, evals.json cases added on both sides); a body-only
+cross-plugin citation added to harness's `agent-writing-rules` (its own authoring-mechanics scope
+left untouched — no description/evals change there); `fleet-rules` preloaded into `team-leader`
+and `build-leader`'s `skills:` lists with a body citation at each seat's own durable-state/claim
+priority. Version-slot VALUE race caught mid-build (#445's own class): the dispatch's own
+instruction numbered this from 2.17.7 on the expectation that open `PR #487` would land 2.17.6 —
+it merged 2.17.6 to `main` while this build was in flight, confirmed via a fresh
+`version_claim_check.py` + an `origin/main` re-read immediately before this PR opened; 2.17.7
+still clears both checks cleanly (no rebump needed). Fresh-context `skill-checker`/`agent-checker`
+passes before merge (no model override, per plugin-authoring's semantic-edit invariant);
+`release_gate.py teamwork` result recorded in the PR body ·
 
 v2.17.7 · assembled 2026-08-17 · issue #477 sibling reference fix (docs' S8 lexicon amendment, ADR-0017/ADR-0018): `docs' intake-lead` renamed `docs' intake-leader` in `init-repo`'s SKILL.md dispatch step, README's live table row, and its own eval assertion — the docs-side agent rename's cross-plugin mention, updated in the same PR since preloads/dispatches are hard plugin boundaries, mentions are soft but still get fixed when the target renames. No behavior change; the dispatched Agent tool call already used the string literal
 

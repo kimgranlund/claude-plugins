@@ -9,7 +9,8 @@ description: >-
   for duplicates", "do my agents leverage the right skills" (check-all-agents /
   check-all-skills);
   NOT a single agent definition (make-agent / agent-writing-rules); NOT next-turn
-  timing (loop-rules).
+  timing (loop-rules); NOT the fleet's default coordination-scope/claim/comms/version-slot/
+  pin-race protocol (fleet-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

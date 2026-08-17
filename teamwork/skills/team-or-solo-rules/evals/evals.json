@@ -111,6 +111,12 @@
       "id": "n12",
       "prompt": "should this subagent use isolation: worktree",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "which plugin version slot is free for this build to claim before it starts",
+      "expect": "no-trigger",
+      "comment": "owner: fleet-rules (2026-08-17, #480) — the version-slot/merge-order default, not dispatch shape or wiring"
     }
   ]
 }

@@ -1,0 +1,126 @@
+{
+ "skill": "fleet-rules",
+ "note": "Trigger-routing suite for the new default-orchestration-protocol pack (issue #480, minted from the #373 overnight campaign). Positives across the six areas (coordination scope ladder, work-claim protocol, communication routing, version-slot/merge-order, session-death resilience, pin-race playbook). Negatives drawn from the fenced siblings' own trigger vocabulary: parallel-work-rules (isolation decision / live collision), team-or-solo-rules (dispatch shape/wiring), loop-rules (continuation timing), mobilize-chores (which tickets are mobilizable), and big-change-git-rules (stacked-PR/rename git mechanics, cross-plugin) — plus a same-plugin agent-writing-rules probe (encoding the delivery clause into an agent file, not applying the runtime default).",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "which peers should this orchestrator talk to before it starts coordinating",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "another repo's desk just pinged this session for a status update, what am I allowed to tell it",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "what should I check on a ticket before I dispatch a build for it",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "how should a dispatched seat report back to its coordinator, and what happens if an idle ping arrives after it already reported",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "which plugin version slot is free for this build to claim",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "two builds might bump the same plugin's version at once, what's the default to avoid colliding",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "the orchestrator session died mid-build last night, how do I resume as the successor",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "a dispatched seat's worktree is still claimed but nothing is dispatched against it anymore, what's the default response",
+   "expect": "trigger"
+  },
+  {
+   "id": "t09",
+   "prompt": "my cwd pin is stuck in the wrong worktree again, what's the standard unblock",
+   "expect": "trigger"
+  },
+  {
+   "id": "t10",
+   "prompt": "what's our default fleet-scoped coordination rule for an unattended overnight run",
+   "expect": "trigger"
+  },
+  {
+   "id": "t11",
+   "prompt": "should an out-of-scope poll from an unregistered sender get a claim or just silence",
+   "expect": "trigger"
+  },
+  {
+   "id": "t12",
+   "prompt": "what's the default protocol every orchestration-adjacent seat should already be following instead of re-deriving it mid-run",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "should I work in a worktree for this, or is the shared tree fine",
+   "expect": "no-trigger",
+   "comment": "owner: parallel-work-rules — the isolation decision itself"
+  },
+  {
+   "id": "n02",
+   "prompt": "another Claude session has uncommitted changes to files I need to edit right now",
+   "expect": "no-trigger",
+   "comment": "owner: parallel-work-rules — resolving a live collision"
+  },
+  {
+   "id": "n03",
+   "prompt": "should this be a subagent or a team for this task",
+   "expect": "no-trigger",
+   "comment": "owner: team-or-solo-rules — dispatch shape/unit choice"
+  },
+  {
+   "id": "n04",
+   "prompt": "review my agent frontmatter and skills: preload wiring",
+   "expect": "no-trigger",
+   "comment": "owner: team-or-solo-rules — wiring review"
+  },
+  {
+   "id": "n05",
+   "prompt": "write a /goal for this migration with a verifiable end state",
+   "expect": "no-trigger",
+   "comment": "owner: loop-rules — continuation timing"
+  },
+  {
+   "id": "n06",
+   "prompt": "my /loop keeps re-running work that's already finished",
+   "expect": "no-trigger",
+   "comment": "owner: loop-rules — continuation timing"
+  },
+  {
+   "id": "n07",
+   "prompt": "sweep the ops queue and tell me which tickets are actually mobilizable right now",
+   "expect": "no-trigger",
+   "comment": "owner: mobilize-chores — ticket discovery/mobilizability, not the claim-guard default this skill cites from it"
+  },
+  {
+   "id": "n08",
+   "prompt": "a stacked child PR got auto-closed when its parent's branch was deleted, how do I recover it",
+   "expect": "no-trigger",
+   "comment": "owner: harness's big-change-git-rules (cross-plugin) — the git mechanics themselves"
+  },
+  {
+   "id": "n09",
+   "prompt": "write the SendMessage delivery clause into this new teammate-mode agent's own body",
+   "expect": "no-trigger",
+   "comment": "owner: harness's agent-writing-rules (cross-plugin) — authoring the mechanic into an agent file, not applying the runtime default"
+  },
+  {
+   "id": "n10",
+   "prompt": "decompose this system across the planning and execution planes before we spec it",
+   "expect": "no-trigger",
+   "comment": "owner: planner / team-or-solo-rules territory — decomposition, not fleet protocol"
+  }
+ ]
+}

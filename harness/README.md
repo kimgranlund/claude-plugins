@@ -129,6 +129,9 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.29 · 2026-08-17 · body-only cross-plugin citation added to `agent-writing-rules` (teamwork #480's `fleet-rules` pack): items 3/7's teammate-delivery-clause and generic-identity-caveat authoring contract now points at `teamwork:fleet-rules`' Section 3 for the matching RUNTIME default (report-before-idle, report-supersedes-nudge, idle pings as no-ops) instead of leaving that default undocumented cross-plugin; no description/frontmatter change, no evals impact.
+
+
 v3.8.28 · 2026-08-17 · `release_gate.py`'s G8 allowlist gains 14 entries clearing the standing warn (closes #488, surfaced by #483): retired-agent citations, a live-agent name, per-unit prose compounds, a measured literal, and a report-dir convention — zero repoints, all fencing. `release_gate.py harness` now reports 0 warn on G8. (Rebumped from 3.8.27 to 3.8.28: open PR #493 already claims 3.8.27 — rebase-and-rebump rather than race it.)
 
 v3.8.27 · 2026-08-17 · `routing-judge` states its inlined-input contract loudly and refuses path-shaped dispatches instead of fabricating verdicts (closes #489).
