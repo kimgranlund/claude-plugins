@@ -366,6 +366,15 @@ class Grammar:
             # wrapper production: command name identical to its wrapped skill
             if wraps_target and name == wraps_target and name in skills:
                 return errs
+            # ADR-0016 D1/D2 — `lead-` reserved verb-first head: lead-{scope} conforms
+            # when the scope resolves against the orchestrator scope pool (ADR-0015
+            # D2's ObjectVocab ∪ ProcessLex — a /lead-* command makes the session adopt
+            # the orchestrator seat whose scope that is, so one vocabulary serves
+            # both). `lead` is a literal, exactly like ADR-0014's `check-`: not a
+            # VerbLex member, never a template for other verbs.
+            if tokens[0] == "lead" and len(tokens) >= 2:
+                ok, why = self.resolve_orchestrator_scope(tokens[1:])
+                return errs if ok else errs + [f"command scope (lead- head): {why}"]
             if len(tokens) < 2:
                 return errs + ["command needs object-verb shape (>= 2 tokens)"]
             verb = tokens[-1]
@@ -394,6 +403,16 @@ class Grammar:
             if tokens[0] == "check" and len(tokens) >= 2:
                 ok, why = self.resolve_objects(tokens[1:])
                 return errs if ok else errs + [f"skill object (check- head): {why}"]
+            # ADR-0016 D2 — the /lead-* surfaces ship as command-species SKILLS
+            # (user-invocable, disable-model-invocation; no commands/ dir), and §6
+            # decides kind by directory — so the lead- head is recognized here too,
+            # mirroring how ADR-0014's check- head lives on this branch. Must sit
+            # BEFORE the object-process check: lead-review/lead-planning have
+            # ProcessLex terminals, so a later placement is unreachable dead code
+            # for exactly the names ADR-0016 exists for.
+            if tokens[0] == "lead" and len(tokens) >= 2:
+                ok, why = self.resolve_orchestrator_scope(tokens[1:])
+                return errs if ok else errs + [f"skill scope (lead- head): {why}"]
             if len(tokens) >= 2 and tokens[-1] in self.process_lex:
                 ok, why = self.resolve_objects(tokens[:-1])
                 return errs if ok else errs + [f"skill object: {why}"]
@@ -1088,6 +1107,79 @@ def selftest():
         assert any("RoleLex" in e[2] and "disjointness" in e[2] for e in result["errors"]), \
             f"RoleLex/ObjectVocab collision must raise the D3 manifest error: {result['errors']}"
 
+    # ADR-0016 D1/D2/D3 — `lead-` reserved verb-first head on the command grammar,
+    # recognized on both the command and skill parse branches (the live /lead-*
+    # surfaces are command-species skills). Scope pool = the orchestrator scope pool
+    # (ADR-0015 D2). Positive all five #433 names as skills + lead-team as a command;
+    # negative a non-lead verb-first command and an unregistered scope (lead-intake's
+    # class); regression object-first commands and object-process skills unaffected.
+    lead_manifest = dict(
+        manifest,
+        process_lex=["review", "planning"],
+        object_vocab=manifest["object_vocab"] + [
+            {"canonical": "team", "plural": None, "banned_aliases": []},
+            {"canonical": "product", "plural": "products", "banned_aliases": []},
+            {"canonical": "build", "plural": "builds", "banned_aliases": []},
+        ],
+    )
+
+    def lead_command_md(name):
+        return (f"---\nname: {name}\nkind: command\ndescription: demo\n"
+                f"author: kim\ncreated: 2026-08-16\nlast_updated: 2026-08-16\n---\nbody\n")
+
+    # Positive: all five lead-* names parse clean as SKILLS (ObjectVocab scopes
+    # team/product/build; ProcessLex scopes planning/review).
+    for lead_name in ("lead-team", "lead-product", "lead-build", "lead-planning", "lead-review"):
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td)
+            (r / "skills" / lead_name).mkdir(parents=True)
+            (r / "skills" / lead_name / "SKILL.md").write_text(skill_md(lead_name))
+            result = run(r, lead_manifest)
+            assert not result["grammar_errors"], \
+                f"{lead_name} must parse clean under the lead- head: {result['grammar_errors']}"
+
+    # Positive: the same head on the COMMAND branch (a commands/ file).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "commands").mkdir(parents=True)
+        (r / "commands" / "lead-team.md").write_text(lead_command_md("lead-team"))
+        result = run(r, lead_manifest)
+        assert not result["grammar_errors"], \
+            f"lead-team as a command must parse clean under the lead- head: {result['grammar_errors']}"
+
+    # Negative: a verb-first command that is NOT lead-* still fails — the head is one
+    # literal, never a VerbLex-wide verb-first production.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "commands").mkdir(parents=True)
+        (r / "commands" / "audit-team.md").write_text(lead_command_md("audit-team"))
+        result = run(r, lead_manifest)
+        assert result["grammar_errors"], \
+            "a non-lead verb-first command must still fail grammar"
+
+    # Negative: lead-{unregistered scope} (lead-intake's class) fails on BOTH branches.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "lead-intake").mkdir(parents=True)
+        (r / "skills" / "lead-intake" / "SKILL.md").write_text(skill_md("lead-intake"))
+        (r / "commands").mkdir(parents=True)
+        (r / "commands" / "lead-intake.md").write_text(lead_command_md("lead-intake"))
+        result = run(r, lead_manifest)
+        hit_names = {n for n, _, _, _ in result["grammar_errors"]}
+        assert "lead-intake" in hit_names and len(result["grammar_errors"]) >= 2, \
+            f"lead-<unregistered> must fail on both branches: {result['grammar_errors']}"
+
+    # Regression: object-first commands and object-process skills are unaffected.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-review").mkdir(parents=True)
+        (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        (r / "commands").mkdir(parents=True)
+        (r / "commands" / "demo-audit.md").write_text(lead_command_md("demo-audit"))
+        result = run(r, lead_manifest)
+        assert not result["grammar_errors"], \
+            f"object-first names must be unaffected by the lead- head: {result['grammar_errors']}"
+
     # Scoped write-grant detection (issue #237, found during #235/PR #236): the
     # policy/grant-coherence check must recognize a SCOPED write grant (tool name
     # + parenthesized scope, e.g. 'Edit(**/naming.manifest.json)') as that write
@@ -1729,7 +1821,10 @@ def selftest():
           "orchestrator agent production (bare {scope}-{role} against ObjectVocab and "
           "ProcessLex scopes, legacy {scope}-{role}-agent regression, a bare non-role "
           "agent-dir negative, a scope-role string minted as a skill negative, a "
-          "RoleLex/ObjectVocab D3 disjointness manifest error) proven")
+          "RoleLex/ObjectVocab D3 disjointness manifest error) proven, ADR-0016 lead- "
+          "reserved verb-first command head (all five lead-* skills + a lead-* command "
+          "positive, non-lead verb-first command negative, unregistered-scope negative "
+          "on both branches, object-first regression) proven")
     return 0
 
 

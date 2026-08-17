@@ -81,6 +81,7 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.18.0 · 2026-08-16 · ADR-0016 follow-on (issue #433): reserved verb-first command head `lead-` — `lead-{scope}` resolves against ADR-0015 D2's orchestrator scope pool, recognized on both command and skill parse branches (the live `/lead-*` surfaces are command-species skills); selftest triad added; 4 exemptions retired (124 → 120, `lead-intake` stays); GRAMMAR.md + spec §3.1/§14.5 updated. ADR-0016 ratified 2026-08-17 by Kim (live, via plugins-team-lead).
 v0.17.0 · 2026-08-16 · ADR-0015 follow-on (issue #433): the orchestrator agent production
 (`{scope}-{role}`) no longer requires the `-agent` tail — `naming-audit/scripts/validate.py`'s
 `Grammar.parse` agent branch tries a bare scope-role name (terminal ∈ RoleLex) alongside the
