@@ -161,7 +161,7 @@ record.**
 - **A hot shared file doesn't force strict serialization.** Merge-then-rebase-next (each writer
   fetches and rebases immediately before opening its own PR, ≥1 rebase pass treated as normal, not
   a defect) is the steady state for one file under heavy concurrent write pressure. This refines
-  rather than contradicts the serialize-same-file bullet above: serialize the DECISION to start
+  rather than contradicts the same-file-serializes rule above: serialize the DECISION to start
   touching the file if you can, but once several legitimately already are, rebase-next absorbs the
   overlap instead of forcing a queue. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment
   5317746661, lesson 6) · 2026-08-17 · [incident]
@@ -178,14 +178,14 @@ record.**
   lessons 1–3, 5; ADR-0069) · 2026-08-17 · [verified]
 - **Credentialed steps don't run inside a seat's own worktree.** A regen or build step needing a
   secret absent from seat contexts either no-ops or writes an empty/red stub there — the pattern is
-  admin-merge first, then the host or CI (which holds the credential) regenerates. Never read a
+  an admin merge first, then the host or CI (which holds the credential) regenerates. Never read a
   seat-context red on a credentialed step as a real regression. · gen-ui-kit fleet-ops harvest
   (agent-ui#1115, comment 5317746661, lesson 19) · 2026-08-17 · [verified]
 - **A worktree's own installer shapes its build bytes** — a locally-bootstrapped worktree can
   produce meaningfully different bundle bytes than CI's own install path, so a freshness/parity
   gate comparing the two needs the SAME install path on both sides, not just the same source;
   `harness:big-change-git-rules`' worktree-mechanics reference is the canonical home for
-  worktree-bootstrap mechanics generally — cited rather than re-derived here. · gen-ui-kit
+  worktree bootstrap mechanics generally — cited rather than re-derived here. · gen-ui-kit
   fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 18) · 2026-08-17 · [verified]
 
 ### 5. Session-death resilience
