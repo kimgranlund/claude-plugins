@@ -106,7 +106,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
-v2.17.11 · assembled 2026-08-17 · `team-or-solo-rules` gains a "Seat-access doors" section (closes
+v2.17.12 · assembled 2026-08-17 · `team-or-solo-rules` gains a "Seat-access doors" section (closes
 #531) documenting the three structurally different ways a caller reaches a standing seat's
 contract — session adoption (`/lead-*` + `leading-*`), `context: fork` execution, and `Agent`-tool
 dispatch via a `*-leader` agent — citing issue #134/#135 (a `disable-model-invocation: true`
@@ -115,6 +115,9 @@ reason all three doors exist, and naming the `*-leader` twin rationale this forc
 per the ticket's own non-goal: no rename, no bind-/fork-/sub- head coinage, no marshal vocabulary,
 grammar untouched. Rejected ADR-0020 (gh#518) is this section's surviving insight, not a grammar
 change. Body-only edit (no description/frontmatter change) to `team-or-solo-rules/SKILL.md`.
+Version-slot note: this branch was cut when `main` was 2.17.10; PR #532 held an open claim on
+2.17.11 (`worktree-land-desk-seat-sweep-517`, desk→seat terminology sweep) — bumped to 2.17.12 to
+sequence behind it rather than race the same slot (`version_claim_check.py` V1/V2).
 v2.17.10 · assembled 2026-08-17 · `dispatch-ticket` Phase 3's isolate bullet names the
 bootstrap-on-isolation step at its own call site (closes #498, gen-ui-kit gh#1389 residual): the
 moment a fresh worktree is created, feature-detect and run the host repo's
