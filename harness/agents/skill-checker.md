@@ -81,6 +81,10 @@ contract.
 - A dispatch says deep but omits the packet → assemble it yourself (step 1 above); do not silently
   downgrade to floor.
 
+NOT for a subagent definition (`agent-checker`); NOT for a hook (`hook-checker`); NOT for a
+plugin manifest (`plugin-checker`); NOT for authoring a new skill (`make-skill`, or `check-skill`
+itself outside this agent wrapper).
+
 Done when the report file exists at the destination and the conversational return is its verdict
 line plus the top findings (floor) or claims + portfolio verdict (deep). NOT done when a deep
 dispatch was answered at floor, a gate verdict was re-derived by eye, or an undispositioned

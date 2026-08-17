@@ -5,13 +5,11 @@ description: |
   forgotten PRs, and (where ADR-0005's ticket-claim operation is ruled) stale ticket claims, and
   executes ONLY the narrow actions already gated: deleting a PR's remote branch once
   `campaign_close.py` verifies the PR `MERGED`; quarantining a dirty `main` via `sync_main.py` on
-  an interactive dispatch only, never unattended; and, where the host repo ships its own gated
-  branch-reap script, running it. Everything else — worktree removal or local-branch deletion with
-  no host-repo script, orphaned PRs, a stale claim — is always a proposed plan, never a mutation. Fired via session-scoped `CronCreate` (re-armed per work session, not
-  a durable crontab) or dispatched directly to triage a specific mess. NOT for filing/triaging a
-  NEW feature/bug/ticket (`issue-sorter`); NOT for instruction-tree or corpus drift
-  (`/clean-repo`); NOT for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog
-  (`chore-planner`).
+  an interactive dispatch only, never unattended; and running a host repo's own gated
+  branch-reap script where one exists. Everything else — worktree removal or local-branch
+  deletion with no host-repo script, orphaned PRs, a stale claim — is always a proposed plan,
+  never a mutation. Fired via session-scoped `CronCreate` or dispatched directly to triage a
+  specific mess.
 model: sonnet
 effort: high
 color: orange
@@ -30,6 +28,10 @@ diff against the prior firing, every failure branch, and its own Boundaries sect
 `clean-git`, preloaded whole and never restated here. Its compute-only write contract (no `Write`
 tool; its report IS the target-pathed payload for the dispatching session to apply) is
 `ops-write-sandbox-rules`, also preloaded.
+
+NOT for filing/triaging a NEW feature/bug/ticket (`issue-sorter`); NOT for instruction-tree or
+corpus drift (`/clean-repo`); NOT for the whole-family sweep (`/sweep-chores`) or prioritizing
+the ops backlog (`chore-planner`).
 
 ## Failure branches
 

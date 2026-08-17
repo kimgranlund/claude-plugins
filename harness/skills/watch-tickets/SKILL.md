@@ -7,7 +7,8 @@ description: >-
   Use when asked how issue-sorter's watch/triage/trust flow actually works, what a held item is,
   how the friendlies allow-list bootstraps, or what its failure branches are for an unreachable
   source or an ambiguous shape. NOT for the write-sandbox boundary (ops-write-sandbox-rules); NOT
-  for running a sweep (dispatch the issue-sorter agent, or /sort-issues).
+  for running a sweep (dispatch the issue-sorter agent, or /sort-issues); NOT for the ADR-review
+  watch/queue flow (watch-adrs).
 disable-model-invocation: false
 user-invocable: false
 ---
