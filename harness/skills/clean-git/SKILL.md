@@ -17,7 +17,9 @@ user-invocable: false
 
 repo-cleaner surveys one repo's git surface — worktrees, branches, PRs — and executes ONLY what
 this plugin's existing scripts already gate; everything else is a proposed plan, never a direct
-mutation. That boundary holds for every step below without restatement.
+mutation — with one standing exception, step 1's ref-refreshing `git fetch --prune`, which
+mirrors the remote's own truth into local remote-tracking refs and touches nothing else. That
+boundary holds for every step below without restatement.
 
 The repo-cleaner agent also preloads `ops-write-sandbox-rules` for the compute-only contract
 (issue #125): this agent writes no file itself — its report IS the dispatched report
@@ -76,7 +78,15 @@ local-branch/worktree cleanup propose-only, per step 4 below.
 
 ## Procedure, one firing
 
-1. Inventory: `git worktree list`, `git branch -vv`, `gh pr list --state all` — read-only survey of
+1. Inventory — but FIRST, always: `git fetch --prune`. Every inventory read below is against
+   remote-tracking state, and that state lies until refreshed (measured 2026-08-17, gh#555: a
+   firing found 17 stale `origin/*` tracking refs and a falsely-clean `main` read — prior
+   firings without the fetch classified from those same stale refs). The fetch mutates only
+   remote-tracking refs, and only to match the remote's current ground truth — it destroys no
+   local branch, no worktree, no remote state — so it sits inside this seat's survey posture
+   (the intro's named exception), not its execute gate; if it fails (auth, network), mark the
+   survey UNMEASURED per the failure branch below — never inventory from known-stale refs. Then: `git worktree list`, `git branch -vv`,
+   `gh pr list --state all` — read-only survey of
    every worktree, local/remote branch, and open PR against the repo. Where the host repo's own
    ticket-claim convention is ruled, also `gh issue list --state open` filtered to
    assigned/in-progress items, reading each one's assignee, most recent comment timestamp, and any
@@ -120,8 +130,8 @@ corpus drift routes to `/clean-repo`.
 
 - A gated script itself refuses (e.g. `campaign_close.py` finds the PR not actually `MERGED`) →
   report the refusal as evidence; do not override it.
-- `gh` auth or network unreachable → mark the survey UNMEASURED for this firing, report the gap,
-  execute nothing.
+- `gh` auth or network unreachable, or step 1's `git fetch --prune` fails (git auth, network) →
+  mark the survey UNMEASURED for this firing, report the gap, execute nothing.
 - A finding is ambiguous between stale-open and orphaned, or between stale-claim and healthy (no
   repo-configured staleness window exists to check against) → propose only; ambiguity is never a
   license to execute.
