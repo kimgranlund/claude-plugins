@@ -34,8 +34,8 @@ issue #429 explicitly rules these out as introduction/coordination targets). `Li
 legitimate for one narrow use: confirming liveness of a session ALREADY named in the roster,
 never for finding one.
 
-- **Same-user desks in other repos** (Kim's 2026-08-17 amendment): a status-only reply is allowed
-  when one of the user's desks in another repo polls this one — never a claim, never a dispatch,
+- **Same-user seats in other repos** (Kim's 2026-08-17 amendment): a status-only reply is allowed
+  when one of the user's seats in another repo polls this one — never a claim, never a dispatch,
   never scope creep into that repo's own work.
 - **Truly global coordination** (across repos, beyond a status reply) fires only on the user's
   explicit instruction — never inferred from "it would help" or from a peer's own request.

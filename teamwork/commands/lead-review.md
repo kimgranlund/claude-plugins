@@ -1,7 +1,7 @@
 ---
 name: lead-review
 kind: command
-description: Makes this host session a standing review desk, routing each target to its owning fresh-context checker.
+description: Makes this host session a standing review seat, routing each target to its owning fresh-context checker.
 argument-hint: "[optional target — a diff, branch, doc, skill, or agent to route]"
 author: kim
 created: 2026-08-16

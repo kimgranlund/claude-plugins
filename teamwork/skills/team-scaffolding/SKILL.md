@@ -22,7 +22,7 @@ argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason
 
 Four standing sessions run one project: `{repo}-team-lead` (orchestrator — role key `agent` in
 `fleet.json`; Phase 1 covers the schema-key/session-name split), `{repo}-reviewer`
-(read-only review desk), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
+(read-only review seat), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
 authority). Each already has an owning contract — `teamwork:leading-teams`, `teamwork:leading-review`,
 `teamwork:leading-planning`, `docs:leading-product` — but none of those commands name the session, wall
 it, or brief it on its peers; that bootstrap layer is this command, run once per session before
@@ -146,7 +146,7 @@ State, as one standing block before any real work:
      anything needing a different tier routes through a pinned `Agent` dispatch instead of relying
      on the seat's own tier.
    - `reviewer` — fable+xhigh (vs. the *-checker agent family's fable+medium baseline). Justification: this
-     seat is the review DESK across every artifact class in one project, not one bounded checker
+     seat spans EVERY artifact class in one project, not one bounded checker
      rubric — the broader judgment surface earns the higher tier the same way `team-lead` runs
      sonnet+high above the checker baseline.
    - `planner` — fable+medium (canonical planning tier). No deviation.
