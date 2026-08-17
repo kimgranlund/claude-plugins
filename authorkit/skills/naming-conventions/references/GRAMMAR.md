@@ -9,6 +9,8 @@ command   := object "-" verb              skill-create, rename-execute
 skill     := object "-" process           skills-audit, rename-planning
           |  topic-phrase "-" "rules"     agent-writing-rules  (§14.2, ADR-0014 D1)
           |  "check" "-" object-phrase    check-routing        (§14.2, ADR-0014 D2)
+          |  "make" "-" object-phrase     make-doc             (§14.7, ADR-0018 D1)
+          |  "file" "-" object-phrase     file-bug             (§14.7, ADR-0018 D1)
           |  nominal-phrase               naming-conventions  (all tokens resolve)
 agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
           |  scope "-" role               team-leader         (orchestrators — canonical, ADR-0015 D1)
@@ -18,7 +20,9 @@ agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
 Reserved heads/tails on a skill name: `-agent` (agents only, illegal on a skill), `-rules`
 (reserved tail, §14.2), `check-` (reserved head, §14.2), `lead-` (reserved head, §14.5,
 ADR-0016 — defined on the command grammar and recognized on the skill parse too, since the
-`/lead-*` surfaces ship as command-species skills).
+`/lead-*` surfaces ship as command-species skills), `make-`/`file-` (reserved heads, §14.7,
+ADR-0018 — residue resolves against ObjectVocab only). The literal head set is closed at
+exactly `{check, lead, make, file}` — never a template for other VerbLex members.
 
 ## Kind decision
 
@@ -62,8 +66,12 @@ canonical (ADR-0015 D1 — the role noun is already the agent marker, so the
 `-agent` tail is redundant on this production only); `{scope}-{role}-agent`
 remains a legal legacy spelling, never rejected, not chosen for new mints.
 `scope` resolves against ObjectVocab ∪ ProcessLex (ADR-0015 D2 — a seat
-coordinates a thing or a process); RoleLex stays ≤ 4 entries and disjoint
-from ObjectVocab ∪ ProcessLex (ADR-0015 D3).
+coordinates a thing or a process); RoleLex is disjoint from ObjectVocab ∪
+ProcessLex (ADR-0015 D3) and covers execution seats as well as coordinators
+(ADR-0017, §14.6, 2026-08-17) — `leader`, `orchestrator`, `coordinator`,
+`checker`, `runner`, `planner`, `watcher`, `finder`, `sorter`, `cleaner`,
+`judge`, `builder`, `writer`. A bare RoleLex word with no scope token still
+fails — the production always requires `{scope}-{role}`, never a bare role.
 
 ## Lexicons
 
@@ -71,7 +79,7 @@ from ObjectVocab ∪ ProcessLex (ADR-0015 D3).
 |---|---|---|
 | VerbLex | command terminals | closed; PR to change |
 | ProcessLex | skill terminals | closed; PR to change |
-| RoleLex | orchestrator roles | closed; ≤ 4; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3) |
+| RoleLex | orchestrator + execution-seat roles | closed; 13 entries; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3, ADR-0017) |
 | ObjectVocab | domain objects | registered; anti-ambiguity gate |
 | TopicLex | `-rules` reference-doc topic words (§14.2) | closed; PR to change |
 

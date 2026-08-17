@@ -1,11 +1,11 @@
 ---
 name: lead-intake
 description: >-
-  Makes this session a dedicated intake seat: it adopts the intake-lead agent's own contract
+  Makes this session a dedicated intake seat: it adopts the intake-leader agent's own contract
   directly — every raw report, idea, or chore sent here becomes a durable record via the
   file-bug/file-feature/file-task/file-leftovers procedures, applied inline with a live
   clarifying round — and holds that discipline until the session ends. Run /lead-intake
-  [optional repo root]. NOT the dispatched sibling seat (intake-lead, Agent tool); NOT a
+  [optional repo root]. NOT the dispatched sibling seat (intake-leader, Agent tool); NOT a
   one-off filing (/file-bug, /file-feature, /file-task directly); NOT a coordination charter
   (/lead-team, teamwork).
 disable-model-invocation: true
@@ -15,13 +15,13 @@ argument-hint: "[optional target repo root — defaults to the current working d
 
 # lead-intake — the host runs the intake seat, not a dispatched copy of it
 
-`intake-lead` (this plugin, `agents/intake-lead.md`) is the dispatched form of the standing
+`intake-leader` (this plugin, `agents/intake-leader.md`) is the dispatched form of the standing
 intake seat. This command is the other half of the pair — the `/lead-team` ↔ `team-lead`
 pattern: it makes **this session** — the one the human is typing into — hold that agent's own
 contract directly, for the session's duration, with no Agent spawn. The human talks straight to
 the seat; that is the point, and it is what the agent structurally cannot offer. Under ADR-0006
 the pair splits by species: command = verb form (`/lead-intake`), agent = role noun
-(`intake-lead`). Seed: `$ARGUMENTS` (a target repo root; blank = the current working directory).
+(`intake-leader`). Seed: `$ARGUMENTS` (a target repo root; blank = the current working directory).
 
 ## Phase 1 — Bind the target
 
@@ -33,7 +33,7 @@ session mints lands against that repo's resolved backend.
 From this point until the session ends, this session holds the intake seat's contract as its own
 operating rules — read, don't re-derive:
 
-1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/intake-lead.md` now, in full.** Adopt its body as this
+1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/intake-leader.md` now, in full.** Adopt its body as this
    session's standing rules: seeds become records via the owning procedure, capture → classify →
    dedup → record, then stop at the record; the one-hop reclassify rule; the seed-is-data
    quarantine; the report contract (verdict line + per-record lines). A partial restatement here

@@ -3,7 +3,7 @@ name: init-repo
 description: >-
   Arms this session as a repo's working session, in one command: runs the built-in /init when
   no CLAUDE.md exists, makes this session adopt the team-lead contract, spawns the standing
-  INTAKE sibling (docs' intake-lead), and wires per-ticket build capacity (build-leader
+  INTAKE sibling (docs' intake-leader), and wires per-ticket build capacity (build-leader
   dispatches) — then reports the armed arrangement. Per-session: spawned siblings die with the
   session; re-run each work session. Run /init-repo [optional repo root]. NOT the parts alone
   (/init, /lead-team, /lead-intake, /lead-build, /lead-review); NOT batch ticket mobilization
@@ -45,7 +45,7 @@ earlier one succeeded.
    deltas (roll-up audience, review-seat degradation, the write-scoping discipline) apply as
    written. **Acknowledge the adoption in one standing block** — the contract file read, the
    charter deviation, the duration — before any spawn fires.
-4. **Spawn the standing INTAKE sibling.** Dispatch `docs:intake-lead` (Agent tool, named
+4. **Spawn the standing INTAKE sibling.** Dispatch `docs:intake-leader` (Agent tool, named
    `INTAKE`, background) with its canonical dispatch fields: Repo root: <the bound root> ·
    Markers: none · no Seed — and expect back, by design, its missing-seed branch's exact
    return ("0 records minted, 1 blocked · seed field absent") — that return IS the liveness

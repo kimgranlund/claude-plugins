@@ -1,13 +1,13 @@
 # lead-intake — forge intent record
 
-Forged 2026-08-10 via /make-skill, immediately after the intake-lead agent forge (PR #162).
+Forged 2026-08-10 via /make-skill, immediately after the intake-leader agent forge (PR #162).
 The interview's slots were ruled during this session's /lead-* family design; recorded here,
 not re-asked.
 
 ## Gate P0 — Route (PASS)
 
 Primitive = **skill, command species**. Not a hook (nothing mechanically checkable), not an
-entry-file rule (on-demand, not every-turn), not an agent (the agent twin `agents/intake-lead.md`
+entry-file rule (on-demand, not every-turn), not an agent (the agent twin `agents/intake-leader.md`
 already exists — this command is deliberately the OTHER half: the host adopts the same contract
 itself, the `/lead-team` ↔ `team-lead` pattern).
 
@@ -18,12 +18,12 @@ itself, the `/lead-team` ↔ `team-lead` pattern).
   Command species: the description is slash-menu documentation, no trigger contract.
 - **Behavior delta:** today the priming is an ad hoc hand-written prompt — no standard contract,
   so walls, dedup, payload shape, and clarify discipline vary run to run (baseline evidence in
-  `evals/baseline/`). With the skill: the session adopts `agents/intake-lead.md`'s exact
+  `evals/baseline/`). With the skill: the session adopts `agents/intake-leader.md`'s exact
   contract plus the three host deltas below, identically every time.
 - **Species + dials:** Command — `disable-model-invocation: true`, `user-invocable: true`.
 - **Freedom:** medium — read-and-adopt the agent file (never restate its contract), plus the
   named host deltas; the intake procedures themselves stay owned by the four sibling skills.
-- **Fences:** NOT the dispatched agent (`intake-lead` via the Agent tool — a sibling session,
+- **Fences:** NOT the dispatched agent (`intake-leader` via the Agent tool — a sibling session,
   not this one); NOT a one-off filing (`/file-bug`/`/file-feature`/`/file-task` directly); NOT
   a coordination charter (`/lead-team`).
 - **Done-when:** adoption acknowledged with the standing line; thereafter every raw seed in the

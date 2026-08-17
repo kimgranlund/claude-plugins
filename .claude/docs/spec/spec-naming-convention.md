@@ -77,6 +77,8 @@ validator recognizes the head on both the command and skill parse branches (§14
 
 The canonical skill production is `{object}-{process}` (`skills-audit`, `entry-file-authoring`). The terminal token should be a member of `ProcessLex`. Skills that are genuinely not object-process shaped — report generators, routers, and reference corpora — use the nominal-phrase production, but every token must still resolve in the lexicons (§4): the looseness is in the *shape*, never in the *vocabulary*.
 
+Four literal reserved verb-first heads live on the skill grammar, closed at exactly this set — not a template for any other `VerbLex` member: `check-` (§14.2, ADR-0014), `lead-` (§14.5, ADR-0016), and `make-`/`file-` (§14.7, ADR-0018). Each resolves its residue against `ObjectVocab` alone (`check-`/`make-`/`file-`) or the orchestrator scope pool (`lead-`), and each sits before the `ProcessLex` terminal check to avoid the dead-code hazard §14.2 names.
+
 Reading test (procedural): the name completes "this artifact teaches how to do ___."
 Reading test (reference-shaped): the name completes "consult ___ for this."
 
@@ -623,4 +625,128 @@ ratchet is honored in its burn-down direction and untouched in its rule.
 from this literal), skill grammar otherwise (§3.2, §14.1, §14.2), agent grammar (§3.3,
 §14.4), the `-agent` reserved head, or the wrapper production. `lead-*` names in `agents/`
 still fail; the agent seats (`team-lead`, `build-lead`, `intake-lead`) stay exempt exactly
-as ADR-0015 D4 left them.
+as ADR-0015 D4 left them. [Amended 2026-08-17, issue #477: `team-lead`/`build-lead` renamed
+`team-leader.md`/`build-leader.md` and now conform by grammar (§3.3 orchestrator production);
+`intake-lead` renamed `intake-leader` and conforms once `intake` enters `ObjectVocab` (§14.7
+D2) — the `intake` registration this amendment declined is exactly what S8/ADR-0018 later
+registers, on new second-consumer evidence. This line's exemption list is historical as of
+that rename; see §14.7 for the current state.]
+
+### 14.6 `RoleLex` gains the execution-seat suffixes (2026-08-17, issue #477, ADR-0017)
+
+**Ruling authority:** ADR-0017 (`.claude/docs/adr/0017-rolelex-execution-seats.md`), ratified
+2026-08-17 by Kim (live AskUserQuestion via plugins-team-lead), superseding ADR-0011 D7's
+"≤4 entries to start" sizing clause as this spec's §4 adopted it, and ADR-0015 D1's
+coordinator-only framing of the `{scope}-{role}` production. ADR-0011 and ADR-0015 are not
+edited — accepted ADRs are append-only (T4); ADR-0015 D2 (scope pool), D3 (disjointness), and
+D4 (exemption posture) stand unchanged.
+
+**Lexicon change (D1):** `RoleLex` grows from `{leader, orchestrator, coordinator}` by 10
+members: `checker, runner, planner, watcher, finder, sorter, cleaner, judge, builder,
+writer`. No grammar production changes — §3.3's `{scope}-{role}` shape already covers any
+`RoleLex` terminal; this amendment only widens which words qualify, so the estate's dominant
+execution-seat naming pattern (`code-checker`, `experiment-runner`, `decision-watcher`, …)
+parses as the same production coordinators already use, instead of needing a fresh exemption
+per new reviewer/standing seat.
+
+**Anti-ambiguity gate (D2, ADR-0015 D3):** each of the 10 candidates checked against the live
+manifest — none collides with `ObjectVocab` or `ProcessLex` (exact-token disjointness; near
+misses `builder`/`build`, `planner`/`planning`, `writer`/`writing`, `checker`/`checking` are
+harmless because disjointness is exact-token and `TopicLex` carries no disjointness
+requirement, ADR-0014 D3). Gate: PASS × 10.
+
+**Cost (ADR-0015's own caveat, carried forward):** each of the 10 is now permanently barred
+from future `ObjectVocab`/`ProcessLex` registration by D3's disjointness — a one-way door,
+cheap here because all 10 are agentive nouns with no plausible object/process reading.
+
+**Deliberately not widened:** bare `RoleLex` terminals with no scope token (`builder`,
+`planner`) stay exempt — the `{scope}-{role}` production requires a resolvable scope phrase;
+conforming them is a rename question (e.g. `feature-builder`), out of this amendment's scope.
+`lead` is deliberately not added to `RoleLex` — it is ADR-0016's reserved *command* head, and
+`leader` already covers the role; `intake-lead` follows the `team-lead → team-leader`
+precedent (§14.4/§14.5 history) via direct rename instead (done same-change, issue #477).
+
+**Selftest fixtures** (mirroring §14.4's triad): positive — `code-checker`,
+`experiment-runner`, `decision-watcher` (`ObjectVocab` scopes) and `review-planner`
+(`ProcessLex` scope) parse clean as agents under the grown `RoleLex`; negative — a bare
+`RoleLex` terminal with no scope token (`builder`) still fails.
+
+**Exemption count:** measured baseline 118 (D8's ratchet had already dropped 2 of the
+proposal's projected 120 by this tree — `team-lead`/`build-lead` conformed via an earlier
+rename, ahead of this amendment). This amendment plus §14.7 together retire 33 (118 → 85);
+see §14.7 for the combined burn-down since the two amendments landed as one PR.
+
+### 14.7 `make-`/`file-` reserved skill heads + ObjectVocab registrations (2026-08-17, issue #477, ADR-0018)
+
+**Ruling authority:** ADR-0018 (`.claude/docs/adr/0018-make-file-reserved-heads.md`), ratified
+2026-08-17 by Kim (live AskUserQuestion via plugins-team-lead). Amends §3.2 by the §14.2
+mechanism (ADR-0014). ADR-0014 and ADR-0016 are not edited — accepted ADRs are append-only
+(T4); the `check-`/`lead-` heads and their selftest triads are unchanged.
+
+**Grammar change (D1):** two literal verb-first heads join `check`/`lead` on the skill
+grammar:
+
+```
+skill := "make" "-" object-phrase     make-skill, make-doc, make-reference
+skill := "file" "-" object-phrase     file-bug, file-feature, file-task
+```
+
+Residue resolves against `ObjectVocab` ONLY (never the `-rules` tail's union pool) — same
+mechanism as `check-`, same reasoning: `make-`/`file-` names denote a real object the forge or
+intake family produces, not a process. The literal head set is now closed at exactly
+`{check, lead, make, file}` — ADR-0014 Alt C (generalizing to all of `VerbLex`) stays
+rejected; `make`/`file` already sit in `VerbLex` for the unrelated object-verb command
+production (§3.1) and command-terminal skill wrapper — no conflict, the head check is a
+distinct literal-token branch on the skill grammar only.
+
+**Validator change (D2):** `Grammar.parse`'s `kind == "skill"` branch gains the two head
+checks immediately after the `lead-` head and before the `ProcessLex` terminal check — same
+dead-code-hazard placement as `check-`/`lead-` (`make-pack`'s residue `pack` and `file-task`'s
+residue `task` are plain `ObjectVocab` members that a later placement would never reach for
+some names). Critically, this sits AFTER the `-agent` reserved-tail check that opens the
+branch (§3, one reserved head `-agent`): the tail strips first, unconditionally, which is
+what keeps `make-agent` permanently failing even though `make` is now a valid head —
+tail-before-head, not a special case.
+
+**ObjectVocab registrations (D3, 10 entries):** `experiment` (null plural), `decision`
+(`decisions`), `fact` (null — deliberately, to avoid a collision with `ProcessLex`'s `facts`),
+`code` (null), `wording` (null — dual membership with `TopicLex`'s `wording` is redundancy,
+not ambiguity; `TopicLex` carries no disjointness requirement, ADR-0014 D3), `intake` (null),
+`reference` (`references`), `rubric` (`rubrics`), `vision-memo` (null, multi-token, no
+existing entry starts with `vision`), `llms-txt` (null, multi-token). All 10 gated per §5's
+per-entry anti-ambiguity check (no prefix collision with an existing multi-token entry, no
+existing name's parse made ambiguous) — PASS × 10.
+
+**The `intake` reversal, named explicitly:** ADR-0016 §14.5 declined registering `intake`
+"solely to clear one exemption" (Alt B / Alt E dilution concern). This amendment registers it
+anyway, on different evidence than ADR-0016 had: one live consumer (`docs:lead-intake`, which
+retires from this registration alone via the existing `lead-` head) plus one deliberate
+consumer this same change creates (`docs:intake-leader`, the `intake-lead → intake-leader`
+rename executed alongside this amendment, conforming via `{scope=intake}-{role=leader}`).
+The second-consumer bar ADR-0016 asked for is met prospectively, not retrospectively — recorded
+here so no future reader mistakes this for a silent reversal on thread-comment authority alone.
+
+**Selftest fixtures** (mirroring §14.2/§14.5's triad): positive — `make-doc`,
+`make-reference`, `make-rubric`, `make-vision-memo`, `make-llms-txt`, `file-bug`, `file-task`
+parse clean under the new heads; negative — a non-reserved verb head (`sort-issues`) still
+fails, `make-{unregistered scope}` still fails; regression — `make-agent` keeps failing on the
+`-agent` tail (the tail-before-head fixture named in D2).
+
+**Exemption count (combined with §14.6, one PR):** measured baseline 118 (2 below the
+proposal's projected 120 — `team-lead`/`build-lead` had already conformed via rename ahead of
+this tree). Re-running the estate audit at `--scope grammar` with exemptions emptied measures
+86 genuine grammar failures under the new grammar (19 fewer skill exemptions from the
+`make-`/`file-` heads and B-registrations, 12 fewer agent exemptions from §14.6's RoleLex
+growth, plus `lead-intake` retiring via B6's `intake` registration) — 118 → 86 by grammar
+conformance alone. One further entry, `intake-lead`, was a dead exemption after this same
+change's `intake-lead → intake-leader` rename: no artifact named `intake-lead` remains to
+exempt, so it is removed as housekeeping rather than retired by conformance — final count
+118 → 85, one below the proposal's 86 projection. No exemption outside the proposal's own
+enumeration was retired; every retirement (conformance-based or dead-entry housekeeping) was
+verified against a live re-run, never forced to match the projection (per this ticket's own
+instruction).
+
+**Non-goal:** the optional B11–B13 registrations (`component`, `flow`, `layout`) proposed
+alongside B1–B10 are NOT included — out of this amendment's ratified scope; the three
+screens checkers they would have retired (`component-checker`, `flow-checker`,
+`layout-checker`) and `make-component` stay exempt pending a future amendment.
