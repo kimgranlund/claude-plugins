@@ -91,7 +91,7 @@ reading, not the doctrine itself.
 
 ## Failure branches
 
-- Not a git repo, or `.claude/docs/` absent entirely → report the census as all-zero counts
+- Not a git repo, or neither `docs/ops/` nor `.claude/docs/` exists → report the census as all-zero counts
   (a real, non-degenerate reading: "no typed ledger records exist yet — pre-North-star or the
   doctrine isn't adopted here"), never a hard stop.
 - Census script exits 1 → quote its FAIL line, mark the ledger-census section UNMEASURED, still

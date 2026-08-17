@@ -81,6 +81,11 @@ No installed harness required; every check is a plain script. Run from the works
 - **Work items are GitHub Issues in this workspace (ADR-0002)** — decisions/contracts
   (ADR/PRD/SPEC/LLD) and README ledgers stay in-repo files; `docs/tickets/` is retired for new
   work items here. Docs mutability + `.refactor-attic/` handling: `.claude/rules/docs-mutability.md`.
+- **Docs-root override (ruled 2026-08-17, issue #514).** docs' `doc-writing-rules` ladder defaults
+  repo/project-level records (ADR/PRD/SPEC/LLD/PLAN/ROADMAP/etc.) to `docs/ops/`, reserving
+  `.claude/docs/` for agent-specific docs. THIS workspace overrides that default at rung 1:
+  **everything stays under `.claude/docs/`** — the `docs` plugin directory already owns the bare
+  `docs/` path, so a `docs/ops/` root here would collide with the plugin's own name.
 - **CI mirrors the local gates (ADR-0002).** `.github/workflows/gate.yml` runs `release_gate.py`
   (G1–G11, incl. the ruff/eslint style tier — configs `ruff.toml`/`eslint.config.mjs` at this
   root) over every plugin on each push/PR — it executes the same plain scripts, no CI-only

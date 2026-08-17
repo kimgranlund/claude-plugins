@@ -19,6 +19,12 @@ target; this command owns getting an EXISTING corpus there. Migration only: file
 frontmatter; **prose is never rewritten** — a document's content quality is check-doc's
 question, on a later day. Seed: `$ARGUMENTS` (a subtree scopes the sweep; empty = whole repo).
 
+**Resolve `<root>` first, per doc-writing-rules' "Where documents live" ladder (issue #514):**
+the target repo's own CLAUDE.md override wins if stated (this workspace's own CLAUDE.md states
+one — everything under `.claude/docs/`, per ADR-0019); else the portable default `docs/ops/` for
+repo/project-level records, with `.claude/docs/` reserved for agent-specific docs. Never
+hardcode `docs/` as the destination without checking for a host override first.
+
 ## Phase 1 — Inventory: what document reality exists
 
 Sweep three surfaces and classify every hit by the question it answers (the standards' type
@@ -46,8 +52,8 @@ what they have and where.
 ## Phase 2 — Plan: one table, one gate
 
 Build the migration manifest — per artifact: source → canonical destination
-(`docs/<type>/<type>-<number-or-date>-<slug>.md` per the standards; ticket exception:
-`docs/tickets/tkt-…`) · frontmatter to add (`doc-type`, `id` — derived from the minted
+(`<root>/<type>/<type>-<number-or-date>-<slug>.md` per the standards, `<root>` resolved above;
+ticket exception: `<root>/tickets/tkt-…`) · frontmatter to add (`doc-type`, `id` — derived from the minted
 filename — and `status`; nothing more: doc_lint's T1 requires exactly these three) · links that
 will need repair. The manifest also carries a **.gitignore row** whenever Phase 1's
 git-visibility pass found anything: ignore rules to retire (a rule matching the migrated source
