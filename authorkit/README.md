@@ -14,35 +14,36 @@ against. `fix-old-names` (moved here from harness under #197/D9) routes normally
 workspace along with the rest of authorkit's surface. (Paragraph repaired 2026-08-15, issue
 #283 rider — the prior text still described the pre-#197 disabled state.)
 
-All six original skills stay model-invocable, none user-invocable (issue #196's shipped
-dials) — a user's on-demand surface goes exclusively through the thin identical-name command
-wrappers in `commands/` (issue #235: the last two, `manifest-authoring` and `rename-planning`,
-gained theirs 2026-08-14, closing the gap left after #227's `overhaul-planning` wrapper —
-every one of the six now has a wrapper).
+**All ten command wrappers retired 2026-08-17 (issue #525, Kim's ruling: skill-as-command —
+`user-invocable: true` on the SKILL.md itself — is the estate's dual-access successor to the
+thin identical-name command-wrapper pattern; migration posture CONVERT ALL, no
+grandfathering).** Every skill that used to ship behind a `commands/*.md` wrapper now carries
+`user-invocable: true` directly; `rename-execute` and `exemption-retire` — previously
+command-only files with zero skill siblings — minted as skills for the first time in the same
+change. `commands/` is now empty in this plugin. The grammar implication (two of the ten,
+`overhaul-execute` and the newly-minted `rename-execute`/`exemption-retire`, carry verb-terminal
+names whose legality used to depend on the now-deleted sibling command) is closed by
+`.claude/docs/spec/spec-naming-convention.md` §14.9, extending §14.1's reverse-wrapper amendment
+to license the same name shape off `user-invocable: true` alone. `fix-old-names` already shipped
+this exact dial pair before this ticket (§ below) — the pattern is not new, only now universal.
 
 ## Map
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
 | `skills/naming-conventions` | Knowledge skill | model-only | The naming grammar itself — productions, lexicons (VerbLex/ProcessLex/RoleLex/ObjectVocab), frontmatter schema, folder layout, migration rules. The single authority every other authorkit skill cites; has no procedure of its own |
-| `skills/naming-audit` | Procedural skill | model-only | Runs `scripts/validate.py` over an estate's `naming.manifest.json`, judges findings (violation/exempt/frontmatter-disagreement/orphaned relation), reports the exemption burn-down. Read-only — reports, never renames. Wrapped for user-invocation by `commands/naming-audit` |
-| `skills/rename-planning` | Procedural skill | model-only | Plans one artifact rename: proposes the conforming target name and enumerates the full blast radius (invocation strings, relations, hooks, workflow configs). Produces a typed plan; never executes |
-| `skills/manifest-authoring` | Procedural skill | model-only | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement |
-| `skills/bloat-audit` | Procedural skill | model-only | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites. Wrapped for user-invocation by `commands/bloat-audit` |
-| `skills/pattern-audit` | Procedural skill | model-only | Compiles a caller-supplied literal pattern or natural-language instruction into labeled probes, runs `scripts/scan.py`, and optionally judges each match (`verdict: hit \| false-positive`). Emits a flat, structured match dataset (`id`/`file`/`line`/`col`/`match`/`context`/`kind` + totals) for a downstream step to consume — review, bulk edit, migration, or overhaul-planning's Phase 0. Read-only — reports, never rewrites. Distinct from naming-audit's grammar axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis. Wrapped for user-invocation by `commands/pattern-audit` |
-| `skills/overhaul-planning` | Procedural skill | model-only | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0 steps 1–2, always) + a conditional fifth `pattern-audit` sweep (Phase 0 step 3, only when the campaign's charter names a pattern none of the other four instruments owns — issue #286), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Wrapped for user-invocation by `commands/overhaul-planning` |
-| `skills/overhaul-execute` | Procedural skill | model-only | The DRIVES half of the `overhaul-planning` pair (issue #241, enforcing #238's E1 sign-off): discover+scope-confirm, measure, plan, then gated wave execution (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits, `teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename wave) — under three live-user gates (scope, Gate A, Gate B), never self-approving. Extracted 2026-08-14 out of what shipped in PR #240 as a standalone command; exists as a skill at all only because of the reverse-wrapper grammar amendment below. Wrapped for user-invocation by `commands/overhaul-execute` |
+| `skills/naming-audit` | Command skill | both (`/naming-audit`) | Runs `scripts/validate.py` over an estate's `naming.manifest.json`, judges findings (violation/exempt/frontmatter-disagreement/orphaned relation), reports the exemption burn-down. Read-only — reports, never renames |
+| `skills/rename-planning` | Command skill | both (`/rename-planning`) | Plans one artifact rename: proposes the conforming target name and enumerates the full blast radius (invocation strings, relations, hooks, workflow configs). Produces a typed plan; never executes |
+| `skills/manifest-authoring` | Command skill | both (`/manifest-authoring`) | Seeds or edits an estate's `naming.manifest.json` — lexicon proposals, ObjectVocab registration (anti-ambiguity gate), AuthorRegistry, exemptions enumeration/retirement. Presents the proposed change and waits for explicit confirmation before writing (moved in from the retired wrapper's own gate, issue #525) |
+| `skills/bloat-audit` | Command skill | both (`/bloat-audit`) | Runs `scripts/measure.py` over any markdown corpus, judges busy-work/ceremony/restatement findings against `references/CALIBRATION.md`. Read-only — reports, never rewrites |
+| `skills/pattern-audit` | Command skill | both (`/pattern-audit`) | Compiles a caller-supplied literal pattern or natural-language instruction into labeled probes, runs `scripts/scan.py`, and optionally judges each match (`verdict: hit \| false-positive`). Emits a flat, structured match dataset (`id`/`file`/`line`/`col`/`match`/`context`/`kind` + totals) for a downstream step to consume — review, bulk edit, migration, or overhaul-planning's Phase 0. Read-only — reports, never rewrites. Distinct from naming-audit's grammar axis, bloat-audit's busy-work axis, and fix-old-names' retired-name-reference axis |
+| `skills/overhaul-planning` | Command skill | both (`/overhaul-planning`) | Generates a phased estate-overhaul plan for a target spanning many members: composes naming-audit + bloat-audit + harness's check-routing/plan-plugin-split (Phase 0 steps 1–2, always) + a conditional fifth `pattern-audit` sweep (Phase 0 step 3, only when the campaign's charter names a pattern none of the other four instruments owns — issue #286), a per-member kill-switch design doc answering all four reorganization axes — where-it-lives, species, merge/split-candidate nomination (soft-mentions `plan-skill-merge`/`plan-skill-split`), and procedure-vs-knowledge with a context-optimization tier (`keep-inline`/`move-to-references`/`extract-to-pack`/`retire`, anchored to bloat-audit's own measured numbers) — any of which can come back "no move"/"no candidate"/"keep-inline" (#197's precedent, extended 2026-08-14 issue #229), then waved ticket seeds with Blocked-by edges (Phase 2, seed list only — never auto-minted, per this estate's capture, confirm, then build discipline). Generates only: never executes a move, rename, merge, split, or build. Presents the Phase 0/1 measurements and waits for explicit confirmation before writing the plan doc (moved in from the retired wrapper's own gate, issue #525) |
+| `skills/overhaul-execute` | Command skill | both (`/overhaul-execute`) | The DRIVES half of the `overhaul-planning` pair (issue #241, enforcing #238's E1 sign-off): discover+scope-confirm, measure, plan, then gated wave execution (rename-planning → rename-execute per rename, `harness:reshape-skill` for merge/splits, `teamwork:build-lead` dispatches for moves/builds, `fix-old-names` sweeps after every rename wave) — under three live-user gates (scope, Gate A, Gate B), never self-approving. Extracted 2026-08-14 out of what shipped in PR #240 as a standalone command; its verb-terminal name is licensed by spec §14.9 (issue #525), extending §14.1's original reverse-wrapper amendment now that it ships with no sibling command at all |
+| `skills/rename-execute` | Command skill | both (`/rename-execute`) | The estate's single mutation point — applies one `rename-planning` plan atomically, verifies via the validator, reverts whole on any new error. Minted as a skill for the first time 2026-08-17 (issue #525) — previously command-only with zero skill siblings (spec §14.1's own "Why"); its verb-terminal name is licensed by spec §14.9 |
+| `skills/exemption-retire` | Command skill | both (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched. Minted as a skill for the first time 2026-08-17 (issue #525) — previously command-only with zero skill siblings |
 | `skills/estate-audit` | Reference skill | model-only | The audit-family index (issue #293/#272) — no procedure of its own; names the four instruments (naming/bloat/attention/pattern) and the `instrument` parameter `agents/estate-audit-agent` takes. The backing skill for that agent's primary ADR-0011 naming production |
+| `skills/repo-audit` | Command skill | both (`/repo-audit`) | The full-battery counterpart to `estate-audit` — fans out all five audit instruments plus, where installed, harness's cross-plugin axes, into one verdict-first roll-up. Structurally read-only |
 | `agents/estate-audit-agent` | Subagent | dispatch-only | Batch estate-audit sweeps across N estates/plugins/corpuses in an isolated context, parameterized by one `instrument` (naming/bloat/attention/pattern), one aggregated report. Replaces `naming-audit-agent`/`bloat-audit-agent`/`attention-audit-agent` (issue #293, executing #272's checker-seat consolidation ruling) |
-| `commands/naming-audit` | Command | user-only (`/naming-audit`) | Thin user-invocable wrapper over `skills/naming-audit` — skills aren't user-invocable, this is the on-demand surface |
-| `commands/bloat-audit` | Command | user-only (`/bloat-audit`) | Thin user-invocable wrapper over `skills/bloat-audit`, same reason |
-| `commands/pattern-audit` | Command | user-only (`/pattern-audit`) | Thin user-invocable wrapper over `skills/pattern-audit`, same reason |
-| `commands/overhaul-planning` | Command | user-only (`/overhaul-planning`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-planning` — this one writes the plan doc + ticket-seed list to disk, so it gates on confirmation before writing, unlike the two read-only audit wrappers above |
-| `commands/manifest-authoring` | Command | user-only (`/manifest-authoring`), `confirm: required` | Thin user-invocable wrapper over `skills/manifest-authoring` — mutating (seeds/edits the target estate's `naming.manifest.json`), so it gates on confirmation before writing, same posture as `rename-execute` |
-| `commands/rename-planning` | Command | user-only (`/rename-planning`) | Thin user-invocable wrapper over `skills/rename-planning` — plan-only, never executes, same read-only posture as `naming-audit`/`bloat-audit` above |
-| `commands/rename-execute` | Command | user-only (`/rename-execute`) | The estate's single mutation point — applies one `rename-planning` plan atomically (`confirm: required`), verifies via the validator, reverts whole on any new error |
-| `commands/exemption-retire` | Command | user-only (`/exemption-retire`) | Opportunistic one-step chain: rename-planning → confirm → rename-execute → manifest shrink, for an artifact already being touched |
-| `commands/overhaul-execute` | Command | user-only (`/overhaul-execute`), `confirm: required` | Thin user-invocable wrapper over `skills/overhaul-execute` (issue #241 — was a standalone command through PR #240/v0.8.0; the reverse-wrapper grammar amendment let the procedure move into a skill, this command adds nothing). The DRIVES counterpart to `overhaul-planning`'s GENERATES |
 | `skills/fix-old-names` | Command skill | both (`/fix-old-names`) | Moved from harness 2026-08-14 (issue #197, ADR-0011/D9). Consumer-side rename migration: sweeps a repo that INSTALLS these plugins for references to retired names and rewrites the live ones, from the derived `renames.json`. Report-first, historical records left byte-identical, ambiguous names escalated to a human, filenames never rewritten |
 | `skills/attention-audit/scripts/collide_hook.py.retired` / `trend_hook.py.retired` | Retired scripts | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly two `PostToolUse` siblings (issue #294) alongside naming-audit's own hook `subcommand` below: the collide sibling fired only on a `SKILL.md` whose `description:` changed and printed an advisory collision finding, never blocking; the trend sibling fired only on a plugin's own version bump and appended that plugin's row to `attention-trend.csv`. Kept on disk retired, not deleted, for history — run `attention-audit` manually instead |
 | `skills/naming-audit/scripts/validate.py` | Script | invoked by naming-audit | Deterministic checks only: name grammar, folder layout, frontmatter schema, relation graph, policy/capability coherence, provenance. `selftest` mode proves schema/grammar/lexicon counters bite. Gained `--scope {full,grammar}` 2026-08-14 (issue #197): `grammar` gates only naming-grammar findings, leaving the broader structural/provenance checks informational — how this validator wires into an estate (nonoun-plugins) that hasn't adopted the full frontmatter schema without failing on hundreds of non-naming findings. Its `hook` subcommand (issue #276) is unused since the `PostToolUse` wiring was retired 2026-08-17 (#466 — remove-all-hooks directive); run `/naming-audit` manually instead |
@@ -52,36 +53,38 @@ every one of the six now has a wrapper).
 
 ## Invocation dials
 
-The five original skills are all model-invocable (`disable-model-invocation: false`) and none
-are user-invocable (`user-invocable: false`) — every one of the five now carries a thin
-identical-name command wrapper as its user-facing surface: `commands/naming-audit` and
-`commands/bloat-audit` were the original two; `commands/manifest-authoring` and
-`commands/rename-planning` (issue #235, 2026-08-14) close the gap for the remaining pair,
-which until then were consulted only by the model, mid-workflow, via `naming-audit`'s own
-hand-off step (or, for `rename-planning`, `rename-execute`'s own precondition step) — never
-invocable directly by a user typing a skill name. `fix-old-names` (moved in
-2026-08-14, issue #197) is the one exception — both dials `true`, since it carries its own
-`/fix-old-names` invocation directly rather than through a thin wrapper command, unchanged from
-its harness incarnation. `estate-audit-agent` (issue #293, replacing the three single-instrument
-agents that used this pattern one-for-one) cites its four instrument skills via `requires:`
-(authorkit's own existence-edge convention, not the `skills:` preload field) — every cited skill
-therefore carries `disable-model-invocation: false`, since that dial blocks preloading outright
-wherever it IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain);
-`estate-audit`, the agent's own backing skill for ADR-0011's primary naming production, carries no
-procedure but the same dial pair. `overhaul-planning`
-(2026-08-14, issue #225) follows the same wrapper pattern as `naming-audit`/`bloat-audit`:
-model-invocable, not user-invocable, with `commands/overhaul-planning` as its identical-name
-wrapper (the validator's wrapper-production exception — no VerbLex terminal required when a
-command's name equals its wrapped skill's name). `overhaul-execute` (2026-08-14, issue #241)
-joins the same dial pattern via a DIFFERENT grammar production — its terminal token (`execute`)
-lives in `VerbLex`, not `ProcessLex`, so the object-process wrapper exception above doesn't
-apply; the reverse-wrapper amendment (`.claude/docs/spec/spec-naming-convention.md` §14.1) is
-what licenses this specific name shape, and it applies only because `commands/overhaul-execute`
-exists in the same plugin root.
+**As of 2026-08-17 (issue #525), every procedural skill in this plugin carries both dials
+`true`** — `disable-model-invocation: false` (model-routed) and `user-invocable: true` (a user
+typing `/skill-name` directly) — the skill-as-command shape, one file serving both surfaces.
+This retires the thin identical-name `commands/*.md` wrapper pattern the six original skills
+plus `overhaul-planning`/`overhaul-execute`/`repo-audit` used to ship behind (`commands/` is now
+empty); `fix-old-names` already carried this exact dial pair before this ticket (moved in from
+harness 2026-08-14, issue #197) — proof the shape was never new, only, until now, not universal
+across every skill in this plugin.
+
+**Grammar consequence, closed by spec §14.9 (issue #525):** two conversions carry a
+verb-terminal name (terminal ∈ `VerbLex`, not `ProcessLex`) whose legality used to depend on the
+now-deleted sibling command — `overhaul-execute` (already a skill, previously licensed by
+§14.1's reverse-wrapper amendment off its command sibling) and the newly-minted
+`rename-execute`/`exemption-retire` (previously command-only files with zero skill siblings at
+all, per §14.1's own "Why" section — command-only was the ONLY shape a verb-terminal name could
+take before this ticket). §14.9 extends §14.1's licence to cover `user-invocable: true` with no
+sibling command at all — the same "one procedure, two surfaces" fact, now carried on one file
+instead of two. The other seven conversions (`naming-audit`, `bloat-audit`, `pattern-audit`,
+`rename-planning`, `manifest-authoring`, `overhaul-planning`, `repo-audit`) needed no grammar
+change at all — their terminal tokens (`audit`, `planning`, `authoring`) already sit in
+`ProcessLex`, so their legality never depended on a sibling command in the first place.
+`estate-audit-agent` (issue #293) cites its instrument skills via `requires:` (authorkit's own
+existence-edge convention, not the `skills:` preload field) — every cited skill therefore still
+needs `disable-model-invocation: false`, since that dial blocks preloading outright wherever it
+IS the real preload mechanism (verified 2026-08-13, PR #217's critic chain); `estate-audit`, the
+agent's own backing skill, carries no procedure but the same model-invocable dial (it stays
+`user-invocable: false` — it's a pure reference index, never a user-typed on-demand surface, and
+was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
-v0.19.3 · 2026-08-17 · ADR-0020 wave 5 (closes #523): with all six former `/lead-*` surfaces
+v0.19.4 · 2026-08-17 · ADR-0020 wave 5 (closes #523): with all six former `/lead-*` surfaces
 renamed to `bind-*` in the same campaign (teamwork's five + docs' `lead-intake` → `bind-intake`,
 riding alongside rather than a separate PR — splitting would leave a real gap between merges
 where the grandfather set's removal breaks the still-unrenamed surface), `LEAD_HEAD_GRANDFATHER`
@@ -89,12 +92,17 @@ and the two `lead` branches that consulted it (command + skill parse) are delete
 `lead-*` mint now falls through to the plain object-verb production and fails there like any
 other retired head, not via a dedicated retirement message (there is no `lead` branch left to
 raise one). The closed reserved-head set for skills shrinks from `{check, lead, make, file}` to
-`{check, make, file}`. Selftest fixtures updated to match: the "six grandfathered names parse
-clean" case is replaced with "the six RENAMED bind-* names parse clean via the general
-reserved-head branch alone" (no manifest change needed — `marshal`/`intake` added to the test's
-own local scope-pool fixture, same pattern the original lead-intake fixture used). Estate-wide:
-0 grammar errors, 85 exemptions (unchanged).
-
+`{check, make, file}`. Also fixes a real dead-code-hazard bug this wave's own mandated names
+exposed: `/fork-agent`/`/sub-agent` (ADR-0020 D4) residue is the literal word `agent`, which the
+unconditional `-agent` reserved-tail check on the skill branch was catching FIRST — the
+bind-/fork-/sub- head check now runs ahead of it, mirroring the existing check-/rules dead-code
+precedent. `bind-marshal` (D4's own illustrative example) does not conform under the orchestrator
+scope pool (`marshal` lives only in RoleLex, never ObjectVocab/ProcessLex) — minted as
+`bind-team` instead, the historical `/lead-team` scope word, already registered; no validator
+change needed for that half. Selftest fixtures updated to match: the "six grandfathered names
+parse clean" case is replaced with "the six RENAMED bind-* names parse clean via the general
+reserved-head branch alone". Estate-wide: 0 grammar errors, 85 exemptions (unchanged).
+v0.19.3 · 2026-08-17 · Skill-as-command conversion (issue #525, Kim's ruling: CONVERT ALL 15 wrappers, no grandfathering — teamwork ×5 rides W5/#523 separately). All 10 `commands/*.md` wrappers deleted; every wrapped skill gains `user-invocable: true`; `rename-execute`/`exemption-retire` mint as skills for the first time (previously command-only). `overhaul-planning`/`manifest-authoring` gain a pre-write confirm-gate moved in from their retired wrappers. Spec gains §14.9 (extends §14.1's reverse-wrapper licence to `user-invocable: true` with no sibling command); `validate.py` gains the matching `user_invocable` branch + selftest triad. Estate-wide: 0 grammar errors, 85 exemptions unchanged. Details: PR body.
 v0.19.2 · 2026-08-17 · ADR-0020 wave 2 (issue #520): `bind-`/`fork-`/`sub-` join as reserved verb-first heads on both command and skill parse branches (residue resolves against ADR-0015 D2's orchestrator scope pool, exactly as `lead-` always did). `lead-` retired as an OPEN production — a brand-new `lead-*` mint now fails grammar even when its scope resolves — but the six live `/lead-*` surfaces (`lead-team`/`lead-build`/`lead-planning`/`lead-product`/`lead-review`, `lead-intake`) still parse clean via a new closed, never-grown `LEAD_HEAD_GRANDFATHER` set (deprecated 2026-08-17, deleted outright at wave 5/#523 when those six rename to `bind-*`) — never via the `exemptions` array, which stays at 85, unchanged. GRAMMAR.md's production/lexicon/reserved-head sections updated to match. Selftest gains fixtures per head (positive bind-/fork-/sub- on both branches, negative unregistered-scope per head, a NEW lead-* mint rejected on both branches, the six grandfathered names still parsing). Estate-wide: 0 grammar errors, 85 exemptions (unchanged).
 v0.19.1 · 2026-08-17 · ADR-0020 wave 1 (issue #519): `RoleLex` +1 `marshal` (14 entries), `ProcessLex` +1 `orchestration` (21 entries) — anti-ambiguity gate run clean (no collision against any lexicon or ObjectVocab entry). `GRAMMAR.md`'s stated RoleLex count synced 13→14 and doctrine.manifest.json's D10 edge pattern/canon_ref updated in the same change. `naming-audit`/`doctrine-audit` both clean.
 v0.19.0 · 2026-08-17 · S8 lexicon amendment (issue #477, ADR-0017/ADR-0018, Kim ratified live via plugins-team-lead): `RoleLex` +10 execution-seat suffixes (ADR-0017); `make-`/`file-` join `check-`/`lead-` as reserved skill heads (ADR-0018 D1/D2, after the `-agent` tail strip); `ObjectVocab` +10 incl. `intake` (ADR-0018 D3, a deliberate cited reversal of ADR-0016's non-goal). Selftest gains fixtures per class incl. the `make-agent` tail-before-head regression. Exemptions: measured baseline 118 (2 below #464's projected 120, an earlier rename already retired `team-lead`/`build-lead`) → 85 (33 retired: 16 agent via RoleLex, 13 skill via the two heads, `lead-intake` via `intake`, plus one dead `intake-lead` entry after its rename to `intake-leader`). `GRAMMAR.md`/spec §14.6-§14.7 updated. Estate-wide: 0 grammar errors at 85 exemptions.

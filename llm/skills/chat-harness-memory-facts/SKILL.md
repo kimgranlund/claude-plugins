@@ -28,6 +28,8 @@ instances — including the sibling packs in this very plugin).
 |---|---|
 | Authoring a knowledge base as a cited, retrieval-by-search corpus — "build an expert pack", "why is my agent's context full of reference docs", "axis decomposition for a corpus", "grep-then-read discipline", "a curated/judged training corpus instead of a fact pack" | `references/knowledge-packs-and-cited-retrieval.md` |
 | Durable memory vs. ephemeral task state — "remember this across sessions", "four memory types", "convert a relative date before saving", "why a Plan/Task list isn't memory", "verify a recalled memory before trusting it" | `references/durable-memory-vs-ephemeral-task-state.md` |
+| Capability availability tiering — "disclose a saved capability without paying its full cost every turn", "ever-present vs invocable vs off" | `references/capability-availability-tiering-and-ambient-cost.md` |
+| Model-authored memory patch safety — "let the model propose a memory write without letting it destroy anything" | `references/model-authored-memory-patch-non-destructive-writes.md` |
 | Provenance — platform fact vs. worked-instance source | `references/sources.md` |
 
 ## Consult procedure

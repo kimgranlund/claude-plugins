@@ -9,7 +9,7 @@ description: >-
 disable-model-invocation: false
 user-invocable: true
 context: fork
-argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id to resume]"
+argument-hint: "[raw bug report, or a TKT-/#issue/adapter-native id (+ answers to fold in) to resume]"
 ---
 
 # file-bug
@@ -32,11 +32,14 @@ every phase below follows whichever option it returns.
 in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
 `gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
 `TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`, REQ-010)
-— → this is a resume; branch by that record's own state, never re-dispatch blindly:
+— → this is a resume. Extra text follows the id (new detail, a repro that did not exist before,
+or an answer to a clarifying question Phase 4 named in a prior close-out) → fold it into the
+ticket's Repro/Classification FIRST, unconditionally — this composes with every branch below, not
+an alternative to them; a Findings entry already existing (the fork ran Phase 5 before the person
+replied) does not swallow the fold-in, it only decides what happens next once folding is done.
+Then branch by the record's own state, never re-dispatch blindly:
 - `## Findings` already carries an entry and status is still `open`/`doing` → Phase 6, to close
   the loop on what already came back — not a second investigation chasing the first.
-- Extra text follows the id (new detail, a repro that did not exist before) → fold it into the
-  ticket's Repro/Classification, then continue to Phase 5.
 - Status is `done` or `wontfix` → report the closed state and stop; reopening is the user's call.
 - Otherwise (open/doing, no findings yet) → continue directly to Phase 5.
 
@@ -44,23 +47,36 @@ An id that does not resolve (no such file; `gh issue view` errors; Option C's `r
 not-found, AC-010) is not a resume: treat it as a fresh report, continue to Phase 2, and say so —
 never proceed as if an unresolved id already had a record behind it.
 
-## Phase 2 — Capture
+## Phase 2 — Capture (no live clarify round — the fork has no question channel)
 
 Invoke find-intent on the raw report: separate the literal complaint from the root cause, and
 produce a repro (or the explicit statement "no fixed repro" for an intermittent or subjective
-report). Where find-intent is not installed, apply its discipline inline — one batched round of
-clarifying questions, never more, asked via `AskUserQuestion`. A live user is the default
-assumption — running forked (`context: fork`) does not change it: forking relieves the caller's
-session, it does not remove the person, and the fork still reaches the user directly. Skip
-straight to capture-with-gaps only when the seed itself carries one of the two shared markers
-(canonical statement: `file-task`'s Phase 2): `[redirected-from:X]` — the one-batched-round
-budget was already spent upstream; a live user may well still be present, this only means don't
-ask twice — or `[unattended]` — no live user backs the run at all. A seed that references context
-the fork cannot see ("the crash above", "that test", "what we discussed") is itself a gap, not a
-reason to guess: ask for the actual evidence via the same round — `$ARGUMENTS` is the fork's only
-channel in, it carries no conversation history. Missing detail after the round, or no round at
-all, does not block capture: write the ticket with what is known and name the gap in
-Classification, rather than delaying persistence for completeness.
+report) — but do not attempt its clarifying round as a live `AskUserQuestion` call. **Measured
+2026-08-17 (gh#541):** a `context: fork` background dispatch has no question channel at all —
+`AskUserQuestion` is unreachable from inside it (confirmed two ways: two independent thin
+captures, #1122 and #541's own filing, both minted clarify-less; and a background dispatch
+cannot even discover the tool). This is this skill's only invocation shape (`context: fork` is
+fixed above), so the round never runs live, full stop — there is no "if forked" branch left to
+weigh.
+
+Corrected assumption (2026-08-09 text, falsified 2026-08-17 per gh#541, kept here as the dated
+record of the mistake): the prior claim — "a live user is the default assumption; forking
+relieves the caller's session, it does not remove the person, and the fork still reaches the
+user directly" — is wrong. Do not restate it as canon.
+
+What happens instead: capture immediately from `$ARGUMENTS` alone (the fork's only channel in, no
+conversation history), naming every gap the clarifying round would have surfaced AS a question in
+Classification, phrased so it stands alone in the record itself — not only in the fork's
+(ephemeral) close-out report — including a seed that references context the fork cannot see ("the
+crash above", "that test", "what we discussed"), which is itself a named gap, never a guess. The
+close-out (Phase 4, at mint) then owes the round it couldn't run live: it lists the same
+Classification-named questions verbatim and names the resume command — `/file-bug <id> <answers>`
+— that folds the answers into the record once a person supplies them (Phase 1's unconditional
+fold-in). Name no clarify questions in the close-out when the seed carries `[redirected-from:X]`
+(the round budget was already spent upstream; shared marker protocol, canonical statement
+`file-task`'s Phase 2) or `[unattended]` (no live session to report back to at all, so there is
+nobody to ask). Either way, missing detail never blocks capture: write the ticket with what is
+known and name the gap, rather than delaying persistence for completeness.
 
 ## Phase 3 — Classify
 
@@ -111,7 +127,11 @@ tickets" defines; use it, never invent one per ticket), and an empty Findings se
   unreachable.
 
 The record exists (on disk, or as a created issue whose URL is reported) before Phase 5 starts;
-this ordering is the entire fix, and it does not move.
+this ordering is the entire fix, and it does not move. Where Phase 2 named unasked clarifying
+questions (no `[redirected-from:X]`/`[unattended]` marker on the seed), the close-out reported
+here carries them verbatim plus the resume command (`/file-bug <id> <answers>`) — this is the
+report the caller's session actually reads; do not defer it to Phase 6, which only fires on a
+later return from dispatch.
 
 `.github/ISSUE_TEMPLATE/bug.yml` mirrors this contract for a human filing directly on GitHub.
 

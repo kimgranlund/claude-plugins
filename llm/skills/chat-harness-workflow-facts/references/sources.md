@@ -74,3 +74,14 @@ logging what an agent run actually did (tokens, latency, tool calls fired) is
 [[chat-harness-logging-facts]]. Designing the wiring itself for a specific project — which unit,
 which frontmatter keys, `skills:` preloads — is that project's own team-or-solo-rules seat or
 skill, not this pack.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`self-correct-feedback-design.md`, `settled-answer-state-law.md`, and
+`model-declared-plan-vs-host-execution.md` were added from agent-ui#1115's "Scope-conformant
+revision v2" comment (posted 2026-08-17T17:14:57Z), the litmus-filtered re-harvest of
+`@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness knowledge only. Lessons 1, 5, 6,
+and 7 of that same v2 export were evaluated and SKIPPED here as hard dedup — already substantively
+covered by [[llm-streaming-facts]]'s `validate-then-stream-self-correct.md` (1, 5) and
+[[llm-gateway-facts]]'s `stateless-session-and-turn-model.md` (6, 7); they are not restated in
+this pack even though v2's own section header filed them under this pack's axis.

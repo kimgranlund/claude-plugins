@@ -9,10 +9,10 @@ description: >
   Produces a typed plan; never executes.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-13
+last_updated: 2026-08-17
 requires: [naming-conventions, naming-audit]
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -22,6 +22,10 @@ allowed-tools:
 ---
 
 # rename-planning
+
+Target: `$ARGUMENTS`. Plan-only — this skill carries no `Write`/`Edit` grant, matching its
+read-only allowed-tools; it never mutates, so it needs no confirmation gate of its own.
+`rename-execute` is the estate's single mutation point — hand this plan to it next.
 
 ## Procedure
 

@@ -155,3 +155,21 @@ skill authoring and routing itself, not instruction layering or guardrails. The 
 trust-boundary pattern (registry validation, dev-proxy, adapter injection) is a different, narrower
 concern than this pack's general instruction-layering/guardrail scope — see
 [[llm-gateway-facts]]'s own `sources.md` for that pattern's provenance.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`disclosure-and-failure-surfacing-in-a-chat-runtime.md` was added from agent-ui#1115's
+"Scope-conformant revision v2" comment (posted 2026-08-17T17:14:57Z), the litmus-filtered
+re-harvest of `@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness knowledge only. Five
+lessons (29, 31, 32, 33, 34) were CONSOLIDATED into this one file rather than split ask-shaped one
+question type per file, specifically to hold this pack's axis count at 8 rather than let it run to
+10-11 — this pack was already at 7 axes (the `pack-writing-rules` 3-7 target) before this fold;
+adding even one file pushes it one past that target, flagged here as a split signal for a
+follow-up `plan-skill-split` pass rather than resolved in this fold. Lesson 30 of the same v2
+export ("a browser cannot hold a secret") was evaluated and SKIPPED here as hard dedup — already
+substantively covered by [[llm-gateway-facts]]'s `dev-proxy-and-bundler-footguns.md` and
+`provider-adapter-seam.md`. Lesson 39's kept (`[split]`) half ("byte-pinned, file-loaded prompt
+content") was likewise SKIPPED as hard dedup — already covered by this pack's own
+`config-schema-and-prompt-externalization.md` ("When a derivation already exists over the
+pre-externalized text, preserve it exactly" section), even though v2 filed lesson 39 under
+`chat-harness-logging-facts`.

@@ -28,6 +28,9 @@ not as the only valid implementation.
 | The chunk-buffering technique — "my SSE parser drops text", "how do I handle a frame split across two reads", "the blank-line event boundary" | `references/sse-chunk-parsing-technique.md` |
 | The Anthropic contract, worked — "what's the exact event sequence", "message_start/content_block_delta/...", "the error-sentinel technique" | `references/anthropic-sse-worked-example.md` |
 | Validate-then-stream — "never emit invalid structured output", "the self-correct retry loop", "halt-and-report", "feed failures back to the model" | `references/validate-then-stream-self-correct.md` |
+| The transport-agnostic stream abstraction — "one contract across SSE/WebSocket/EventSource", "backpressure policy", "EventSource can't send custom headers", "keep one NDJSON splitter" | `references/stream-abstraction-transport-constraints.md` |
+| WebSocket reconnect + heartbeat — "a dying socket double-reconnected", "when should a socket actually reconnect vs. just end" | `references/websocket-reconnect-and-heartbeat.md` |
+| Streaming render — reveal order + pending anchors — "don't animate first-paint streaming", "hold back a sibling for reveal order", "render a reference to something that hasn't arrived yet" | `references/streaming-render-reveal-and-anchors.md` |
 | Provenance — spec/vendor-doc fact vs worked-example source | `references/sources.md` |
 
 ## Consult procedure
