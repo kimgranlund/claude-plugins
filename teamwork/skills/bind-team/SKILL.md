@@ -4,12 +4,13 @@ description: >-
   Makes this host session run under the fleet-marshal agent's own contract for one stated charter,
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
   directly, dispatching every unit of real work while the charter stays open. Run /bind-team
-  [charter]. NOT for a task one context can hold (fleet-rules); NOT for reviewing one
-  artifact directly (dispatch the owning reviewer); NOT a solo design/decomposition charter where
-  the host authors the docs itself (/bind-planning).
+  [charter] — blank binds a default charter instead of erroring: adopt against the current repo
+  and hold for the first unit of work fed into the session. NOT for a task one context can hold
+  (fleet-rules); NOT for reviewing one artifact directly (dispatch the owning reviewer); NOT a
+  solo design/decomposition charter where the host authors the docs itself (/bind-planning).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[charter — the plan/build-feature/review work needing a team]"
+argument-hint: "[optional charter — blank binds a default: adopt against cwd, hold for work]"
 ---
 
 # bind-team — the host runs the seat, not a dispatched copy of it
@@ -28,11 +29,17 @@ procedure in one artifact (skill-as-command, ADR-0020/#525) — reachable as `/b
 per `team-scaffolding`'s own rejected-alternatives note: a `disable-model-invocation` target is
 structurally unreachable via the `Skill` tool); there is no separate wrapper command.
 
-## Phase 1 — Bind the charter
+## Phase 1 — Bind the charter, or the default
 
-`$ARGUMENTS` is the charter — the plan/build-feature/review work needing a team. Non-blank is required; see
-Failure branches for a blank invocation. Restate it back in one sentence before proceeding, so the
-scope is on record before any dispatch fires.
+`$ARGUMENTS` is the charter — the plan/build-feature/review work needing a team. Non-blank →
+restate it back in one sentence before proceeding, so the scope is on record before any dispatch
+fires. Blank → bind the default charter instead of erroring, consistent with the sibling binds
+(`bind-build`/`bind-review`/docs' `bind-intake`, which already default a blank seed to cwd):
+adopt the seat against the current repo (cwd), state that binding back in one line ("bound
+against `<cwd>`; holding for the first unit of work"), and treat the next message carrying real
+plan/build/review work as the charter — re-run this phase's restatement against that message
+before Phase 3 continues. A default charter that never receives work closes as a no-op when the
+session ends or is explicitly stood down — nothing to roll up.
 
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
@@ -97,9 +104,6 @@ what was ratified.
 
 ## Failure branches
 
-- **Invoked with no `$ARGUMENTS`** → report that a charter is required and name what a charter looks
-  like (design/decomposition, a build-to-plan sequence, or a review chain spanning ≥2 seats); never
-  invent one to fill the gap.
 - **A dispatched seat's return fails the phase gate** → route the repair by locus, never re-dispatch
   the same seat for the same finding twice: the artifact violates its contract → the building seat
   that owns it; the contract itself permits the defect → `planner` repairs the owning doc;

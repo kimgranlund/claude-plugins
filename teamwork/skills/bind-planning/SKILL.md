@@ -4,14 +4,16 @@ description: >-
   Makes this session a dedicated planning seat, running the planner agent's own contract for one
   named charter: decompose across both planes, then author only the PRD/SPEC/LLD/ADR the charter
   earns, each doc riding to docs:doc-checker fresh-context before it counts gated. Holds until the
-  charter closes on a named loop-rules decision. Run /bind-planning [charter]. NOT implementing an
+  charter closes on a named loop-rules decision. Run /bind-planning [charter] — blank binds a
+  default charter instead of erroring: adopt against the current repo and hold for the first
+  design/decomposition ask fed into the session. NOT implementing an
   approved LLD (builder, Agent tool); NOT a bugfix or single-file change (host states
   Components/Risks inline, no doc); NOT a generic multi-seat charter (/bind-team); NOT reviewing
   an existing design doc standalone (docs:check-doc); NOT an unattended dispatch (planning-leader,
   Agent tool).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[charter — the design/decomposition work needing a PRD/SPEC/LLD/ADR]"
+argument-hint: "[optional charter — blank binds a default: adopt against cwd, hold for work]"
 ---
 
 # bind-planning — the host runs the design seat, not a dispatched copy of it
@@ -28,11 +30,17 @@ to adopt it — reaches `planning-leader` (`teamwork/agents/planning-leader.md`,
 standing dispatched twin, reading `planner.md` fresh per dispatch the same way this command's
 Phase 2 does, returning the same typed design-status handback.
 
-## Phase 1 — Bind the charter
+## Phase 1 — Bind the charter, or the default
 
-`$ARGUMENTS` is the charter. Non-blank is required; see Failure branches for a blank invocation.
-Restate it back in one sentence before proceeding, so the scope is on record before any doc is
-authored.
+`$ARGUMENTS` is the charter. Non-blank → restate it back in one sentence before proceeding, so
+the scope is on record before any doc is authored. Blank → bind the default charter instead of
+erroring, consistent with the sibling binds (`bind-build`/`bind-review`/docs' `bind-intake`,
+which already default a blank seed to cwd): adopt the design seat against the current repo
+(cwd), state that binding back in one line ("bound against `<cwd>`; holding for the first design
+ask"), and treat the next message carrying real design/decomposition work as the charter —
+re-run this phase's restatement against that message before Phase 3 continues. A default
+charter that never receives work closes as a no-op when the session ends or is explicitly stood
+down — no doc was ever owed.
 
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
@@ -95,10 +103,6 @@ what was authored, what each doc-checker verdict said, what remains open.
 
 ## Failure branches
 
-- **Invoked with no `$ARGUMENTS`** → report that a charter is required and name what a planning
-  charter looks like (a feature spanning multiple components/sessions, a contract change, or a
-  decision needing ratification — the same floor `planner`'s own description states); never
-  invent one to fill the gap.
 - **A doc-checker verdict fails twice on the same doc** → the same finding failing twice indicts
   the doc's own intent capture, not the checker — escalate to re-examine what the charter is
   actually asking for (Phase 1's restatement, or the decomposition itself) rather than
