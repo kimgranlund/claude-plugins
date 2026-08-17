@@ -4,7 +4,9 @@
 `**/.refactor-attic/**`.
 
 Functional documents follow docs' type contracts and mutability classes — the accepted-ADR
-append-only rule is hook-enforced (doc_lint T4): supersede, never edit, an accepted ADR.
+append-only rule (doc_lint T4) was hook-enforced until enforcement retired 2026-08-17 (#466,
+remove-all-hooks directive); it now runs only at `docs_check.py`/release-gate time (G10), never
+per-write. Supersede, never edit, an accepted ADR.
 `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted
 casually.
 
