@@ -129,6 +129,8 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.33 · 2026-08-17 · `big-change-git-rules`' `worktree-mechanics.md` gains the bootstrap-on-isolation ruling (closes #498, gen-ui-kit gh#1389 residual): feature-detect and run the host repo's `scripts/dev/bootstrap-worktree.mjs` right after a fresh worktree is created, before trusting any gate/check inside it. Platform half (auto-run at `EnterWorktree`/Agent-tool isolation) is out of reach — no hook fires there; estate-side half lands at `dispatch-ticket`'s isolate call site (teamwork 2.17.10). (Rebumped past 3.8.32: PR #513 shipped that slot.)
+
 v3.8.32 · 2026-08-17 · `release_gate.py`'s G8 phantom-`[[handle]]` inventory widened to sweep `agents/*.md` names alongside `skills/*/SKILL.md` (own plugin and every workspace sibling), closes #497: a live agent's name (e.g. `estate-audit-agent`) now resolves directly, so PR #496's allowlist entry for it is removed. Selftest gains a fixture (a fresh `demo-auditor` agent cited in the demo skill) proving the citation passes clean with no allowlisting. (Rebumped past 3.8.31: PR #505 already shipped that slot.)
 
 v3.8.31 · 2026-08-17 · ops seat-definition fix batch (closes gen-ui-kit#1484): `ops-write-sandbox-rules` gains the payload-fence rule for hedged/cross-file citations; `clean-git`/`repo-cleaner` resolve the host repo's own ticket-claim ruling dynamically and cite plan items by content, not section number; `sweep-chores` dispatches state scope/exclusions/timestamp, timestamp as sequence key

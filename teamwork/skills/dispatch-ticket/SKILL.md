@@ -207,11 +207,18 @@ is what actually contains its inline-fix path.
   satisfies NEITHER conjunct (#191: a caller's own long-lived worktree for an unrelated purpose,
   e.g. `mobilize-chores`'s, matches that shape too — reusing it on shape alone checks the wrong
   ticket's branch out on top of the caller's tree). Either conjunct fails → create (`git worktree
-  add`, off a clean `main` HEAD) and run every remaining step inside it. This isolate-when-used
-  rule is what the #180/PR #182 defect fixed (2026-08-12: that build ran in the HOST checkout with
-  no worktree and left its branch checked out; the coordinator repaired it by hand) — never build
-  in the shared host checkout outside the four-precondition skip above, and never reuse an
-  unrelated worktree standing in for one, however deeply nested (#191).
+  add`, off a clean `main` HEAD), **then bootstrap before running anything else inside it**: a
+  fresh worktree is a bare checkout, not a built one (gh#498, gen-ui-kit gh#1389) — feature-detect
+  the host repo's `scripts/dev/bootstrap-worktree.mjs` (or its own declared equivalent) and run it
+  unconditionally when present before any gate or check inside the new worktree, or a missing
+  `node_modules`/build tree reads as a false-red regression (full mechanics, failure catalog, and
+  why this can't be closed at the platform's own `EnterWorktree`/Agent-tool isolation layer:
+  `big-change-git-rules`' `references/worktree-mechanics.md`). No such script → nothing to run,
+  proceed as before. This isolate-when-used rule is what the #180/PR #182 defect fixed
+  (2026-08-12: that build ran in the HOST checkout with no worktree and left its branch checked
+  out; the coordinator repaired it by hand) — never build in the shared host checkout outside the
+  four-precondition skip above, and never reuse an unrelated worktree standing in for one, however
+  deeply nested (#191).
 - **Release on abandonment — post-claim exits only.** Only a failure AFTER the claim landed has
   anything to release: a discovered design fork routed back to planner, an unresolved gate
   failure (both mid-flight, Failure branches below), or Phase 6's recorded-loss ending (a

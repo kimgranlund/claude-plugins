@@ -106,6 +106,11 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.10 · assembled 2026-08-17 · `dispatch-ticket` Phase 3's isolate bullet names the
+bootstrap-on-isolation step at its own call site (closes #498, gen-ui-kit gh#1389 residual): the
+moment a fresh worktree is created, feature-detect and run the host repo's
+`scripts/dev/bootstrap-worktree.mjs` (or its declared equivalent) before trusting any gate/check
+run inside it — full mechanics and rationale live in harness's `big-change-git-rules` (`worktree-mechanics.md`, harness 3.8.31), this is the pointer at the build path's own creation site.
 v2.17.9 · assembled 2026-08-17 · `dispatch-ticket` gate-run time budget (gh#1485, adiahealth/
 gen-ui-kit): Phase 5 stage 2's local gate-aggregate run (`npm run check` or the host repo's own
 equivalent) now runs under the same feature-detected 900s wrapper as stage 2b's CI-watch
