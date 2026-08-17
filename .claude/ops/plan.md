@@ -112,3 +112,11 @@ report-evidenced dependency edge — nothing reordered; every entry ranks purely
   happen — recommended close).
 - Prior entry 3 (three orphaned worktrees) — NOT DONE: all three reappear in this firing's
   inventory as repeat proposals; carried and grown into entry 3 above.
+
+## Rulings 2026-08-17 (Kim, interactive session plugins-team-lead)
+
+- Entry 2 (decision-watcher hedge clause): CLOSED as resolved-by-events — the pattern did not
+  recur this firing; a phrasing-fix task is minted only if it ever recurs.
+- Entry 3 (orphaned worktree reap): APPROVED — found already executed by peer session plugins-db
+  before this session ran it (verified: all four worktrees and five branches gone; inventory is
+  primary + build-554 only). Resolved.
