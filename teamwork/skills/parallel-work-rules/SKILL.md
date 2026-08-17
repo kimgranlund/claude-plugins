@@ -3,10 +3,11 @@ name: parallel-work-rules
 description: >-
   Decide whether concurrent sessions/subagents need git-tree isolation, and what to do
   on collision. Use when overlapping actors may mutate the same tree — "should I work
-  in a worktree for this", "should this subagent use isolation: worktree", uncommitted
+  in a worktree for this", "should this subagent use isolation: worktree", "design a
+  protocol for running several Claude Code terminals against one repo", uncommitted
   shared-file changes, two builders on the same files, a collided build, or committing
-  before a risky move. NOT dispatch shape/cost, or the fleet's default
-  coordination-scope/claim/comms/version-slot/pin-race-unblock protocol (fleet-rules); NOT
+  before a risky move. NOT dispatch shape/cost, or the fleet's default coordination/claim/
+  comms protocol (fleet-rules); NOT a greenfield design decision (grill-the-ask); NOT
   next-turn timing — /goal, /loop (loop-rules); NOT closing out THIS session's worktree
   (close-session).
 disable-model-invocation: false

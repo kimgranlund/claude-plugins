@@ -1,6 +1,6 @@
 {
   "skill": "parallel-work-rules",
-  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the fenced siblings' own trigger vocabulary: fleet-rules (solo-vs-team, wiring, fan-out), loop-rules (/goal, /loop continuation), harness's hook-writing-rules/entry-file-rules/agent-writing-rules (harness-mechanics authoring once a rule is already decided), and close-session (n10 — this session's own worktree close-out, not a peer-collision question).",
+  "note": "Trigger-routing suite, authored at skill mint (2026-07-17) from the intent interview's Slot-1 phrasings plus feature-noun/symptom/lifecycle-moment variants. Negatives drawn from the fenced siblings' own trigger vocabulary: fleet-rules (solo-vs-team, wiring, fan-out), loop-rules (/goal, /loop continuation), harness's hook-writing-rules/entry-file-rules/agent-writing-rules (harness-mechanics authoring once a rule is already decided), and close-session (n10 — this session's own worktree close-out, not a peer-collision question). 2026-08-17 (#581): t10 was stolen 3-of-3 by grill-the-ask (\"design a protocol for X\" read as a greenfield design-decision ask) — description tuned to name the 'protocol for several Claude Code terminals' phrasing verbatim and to fence grill-the-ask by name; grill-the-ask's own n09 closes the reciprocal fence.",
   "cases": [
     {
       "id": "t01",

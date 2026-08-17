@@ -1,6 +1,6 @@
 {
   "skill": "grill-the-ask",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus, excellence campaign batch 4 (2026-07-03): positives imperative / diagnostic / symptom / indirect. Negatives adversarial from the neighborhood: find-intent, break-down-problem (harness), and docs' PRD/SPEC/LLD authoring surface (make-doc, governed by doc-writing-rules) \u2014 the pre-migration corpus named the now-retired prd-author/lld-author skills docs has since consolidated.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into this workspace's cases schema. Deep-review corpus, excellence campaign batch 4 (2026-07-03): positives imperative / diagnostic / symptom / indirect. Negatives adversarial from the neighborhood: find-intent, break-down-problem (harness), docs' PRD/SPEC/LLD authoring surface (make-doc, governed by doc-writing-rules) \u2014 the pre-migration corpus named the now-retired prd-author/lld-author skills docs has since consolidated \u2014 and, added 2026-08-17 (#581), parallel-work-rules (n09): the reciprocal fence for t10's own tune, closing the t10 stolen-case pair from both sides.",
   "cases": [
     {
       "id": "t01",
@@ -86,6 +86,12 @@
       "id": "n08",
       "prompt": "author the LLD for the already-settled design",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "design a protocol for running several Claude Code terminals against one repo",
+      "expect": "no-trigger",
+      "comment": "owner: parallel-work-rules (2026-08-17, #581) — the concurrent-session isolation/collision protocol; 'design a protocol for X' reads as this skill's greenfield framing but the decision space here (worktree isolation, collision response) is already made, not derived"
     }
   ]
 }

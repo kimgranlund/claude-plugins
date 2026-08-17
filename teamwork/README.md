@@ -108,6 +108,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.22.2 · assembled 2026-08-17 · #581: parallel-work-rules t10 ("design a protocol for running several Claude Code terminals against one repo") stopped losing to grill-the-ask — description gains the phrasing verbatim plus a named fence, grill-the-ask gains the reciprocal n09. fleet-rules gains NOT-fences for write-handoff and break-down-problem, closing n17/n18 as real tunes; n07/n16 confirmed as a genuine cross-plugin structural leak (true owner absent from a teamwork-scoped menu) and accepted with dated notes; t17/t18 re-judged as single-judge noise via the contested-vote round, not a regression.
 v2.22.1 · assembled 2026-08-17 · fleet-rules SKILL §2 gains the guard-skipping-peer claim bullet; parallel-work-rules unattended-collision §2 gains the agent-ui #1150/PR #1161 checkout-time-self-detect instance.
 v2.22.0 · assembled 2026-08-17 · closes #558: `mobilize-chores` now works the stuck set instead of
 only reporting it. Root cause: step 2's `Blocked-by:` exclusion (#193) was a hard skip with no

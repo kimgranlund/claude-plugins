@@ -1,14 +1,15 @@
 ---
 name: fleet-rules
 description: >-
-  Default fleet protocol, AND how skills/subagents/teams compose: coordination scope,
-  claim-then-guard, comms routing, version-slot/merge-order, session-death, pin-race,
-  incoming-item triage, sealed dispatch, `skills:` preload/frontmatter. Use for "which peers can
+  Default fleet protocol, AND how skills/subagents/teams compose: coordination, claim-guard,
+  comms, version-slot, session-death, pin-race, incoming-item triage, sealed dispatch,
+  `skills:` frontmatter. Use for "which peers can
   this orchestrator talk to", "orchestrator died mid-build", "cwd pin stuck", "subagent or team",
-  "how do my skills/agents connect", "review my wiring", "where does this bug report go". NOT
-  isolation/collisions (parallel-work-rules); NOT next-turn timing (loop-rules); NOT
-  mobilizability (mobilize-chores); NOT stacked-PR (big-change-git-rules); NOT corpus audits
-  (check-all-agents/-skills); NOT one agent (agent-writing-rules).
+  "review my wiring", "where does this bug report go". NOT isolation/collisions
+  (parallel-work-rules); NOT next-turn timing (loop-rules); NOT mobilizability (mobilize-chores);
+  NOT stacked-PR (big-change-git-rules); NOT corpus audits (check-all-agents/-skills); NOT one
+  agent or its return block (agent-writing-rules/write-handoff); NOT abstract decomposition
+  (break-down-problem).
 disable-model-invocation: false
 user-invocable: false
 ---
