@@ -15,11 +15,10 @@ description: >
   (harness:check-state — branches/PRs/drift, not audit axes).
 author: kim
 created: 2026-08-16
-last_updated: 2026-08-16
+last_updated: 2026-08-17
 requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, estate-audit]
 disable-model-invocation: false
 user-invocable: false
-disallowed-tools: [Write, Edit, NotebookEdit]
 allowed-tools:
   - Read
   - Glob

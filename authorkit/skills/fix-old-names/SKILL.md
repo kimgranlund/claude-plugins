@@ -1,5 +1,6 @@
 ---
 name: fix-old-names
+kind: skill
 description: >-
   Sweep a repo for references to RETIRED plugin, skill, agent, or command names from a rename
   wave and rewrite the live ones. Use for "my agent dispatch says no such agent", "these skill
@@ -8,9 +9,11 @@ description: >-
   Reads a derived manifest, never guesses. NOT for choosing a brand-new name (naming-rules); NOT
   for planning or executing a rename inside the plugin repo itself (rename-planning/rename-
   execute, this plugin; big-change-git-rules); NOT for general repo drift (clean-repo).
+author: kim
+created: 2026-07-26
+last_updated: 2026-08-17
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[repo-root, default .]"
 ---
 
 # fix-old-names
