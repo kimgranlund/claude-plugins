@@ -96,6 +96,20 @@ already ranks in class 1 by its own gated-remediation status).
 - **Evidence:** repo-cleaner §Tooling note — measured this firing, not hypothesized.
 - **Size:** ~5 min ticket + ~15–30 min fix.
 
+## Post-firing updates (2026-08-17 ~18:55Z, dispatching session — dated amendments, queue text above untouched)
+
+- Entry 1: DONE (ops commit 85ba7b9 pushed).
+- Entry 2: relayed to plugins-dd by the coordinator (whoever-merged-runs-it; #544 was a wave
+  merge). Entry 5 unblocks behind it.
+- Entry 3: RESOLVED-BY-EVENTS (coordinator correction) — #490's upstream forward already
+  happened: filed as anthropics/claude-code#87349 with a minimal-repro recipe, cross-linked on
+  #490. Nothing left for Kim here.
+- Entry 4: DONE — 3 worktrees (build-520/build-541/build-548-docs) + 7 branches removed;
+  verified before removal: 3 by ancestry, 4 by MERGED PR status (#540/#549/#545/#538 —
+  squash-merged, so tips are correctly not ancestors; the plan's ancestry framing was the
+  imprecise part, not the verdict). build-522 and locked/active worktrees untouched.
+- Entry 6: ticket minted via docs:file-task (id in the intake fork's read-back; see issue list).
+
 ## Not queued (checked, found clean or deliberately left — standing rulings carried)
 
 - **PR #550 / #523 (wave 5, mid-build):** OPEN, fresh (17:55Z), healthy — owns its own lifecycle;
