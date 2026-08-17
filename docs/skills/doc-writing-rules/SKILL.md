@@ -117,6 +117,17 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 | TASK | One actor, one sitting, one done-when | work item | Goal · Done-when |
 | RDD | One locked release commitment, cited to ≥1 ADR/IDR, DRI-accountable — plural, numbered (`rdd-NNNN`), ADR/IDR-parallel lifecycle | ledger | Scope · Acceptance · Sequencing · Completion |
 
+**Agent verification, template-carried, not yet gated (issue #542, `prd-agent-testability.md`).**
+SPEC, PRD, and LLD each carry a `## Agent verification` section in their templates — SPEC and PRD
+answering "how would the coding agent tell this was achieved without a human in the loop" (per
+requirement for SPEC, per Outcome for PRD), LLD naming which existing instrument already verifies
+the design or what harness the build must create first. Deliberately template-carried prose, not
+a `doc_lint.py` T-check: the substance (is the assert layer right, is the criterion actually
+agent-runnable) is judgment, so it lands in `check-doc`'s J7 criterion — mechanizing presence into
+a lint rule is explicitly deferred until the section's shape stabilizes across real instances (the
+same retrofit-debt posture as T6's orphan-ADR warn). How to choose the assert layer and design the
+harness itself is a separate, larger question — docs' `agent-harness-rules` knowledge pack.
+
 **Rejected alternatives, required at close.** Every TICKET's close-out states what was
 deliberately NOT done and why — one section (`## Rejected alternatives` in
 `references/templates/ticket.md`), filled in when the ticket moves to `done`/`wontfix`, same

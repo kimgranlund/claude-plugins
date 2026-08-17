@@ -21,3 +21,9 @@ spec: spec-<slug>
 
 ## Risks
 <!-- Ranked, each with its detection signal and fallback. Cite REQ IDs at risk. -->
+
+## Agent verification
+<!-- Which component(s) this design needs a NEW test harness/fixture for, and which existing
+     instrument already covers the rest (evals suite, script selftest, release-gate check,
+     integration test) — cite the owning SPEC's own Agent verification section, never restate
+     it. A component with no instrument and no plan to build one is a Risk, not a silent gap. -->

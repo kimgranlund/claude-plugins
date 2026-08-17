@@ -29,14 +29,21 @@ IDs — say so and forge them in dependency order.
 
 ## Phase 2 — Capture intent
 
-One batched round covering the type's load-bearing slots: for a SPEC, the testable requirements
-and the non-goals; for an ADR, the alternatives actually considered; for a PLAN, each step's
-done-when; for a TICKET, what it traces to; for an IDR, the admission test — "would two reasonable
+One batched round covering the type's load-bearing slots: for a SPEC, the testable requirements,
+the non-goals, and — same round, not a follow-up — how the coding agent will autonomously verify
+each requirement without a human in the loop (the `## Agent verification` section; a genuinely
+human-only criterion is named as an exception, not left silent); for a PRD, the outcomes, the
+non-goals, and the same question at Outcome grain — how an agent would tell each Outcome was
+achieved; for an LLD, the components/interfaces and which existing instrument (evals suite, script
+selftest, release-gate check) already verifies the design, or what harness this build must create
+first; for an ADR, the alternatives actually considered; for a PLAN, each step's done-when; for a
+TICKET, what it traces to; for an IDR, the admission test — "would two reasonable
 builds differ on it?" — same spirit as ADR's own "a choice someone will later ask why about" gate;
 a claim that fails it isn't an IDR, and the round ends there rather than minting one; for an RDD,
 the Scope admission test — "could two reasonable teams ship different releases from this roadmap
 line?" — a line that fails it doesn't earn its own RDD, and the round ends there before minting
-one, same as IDR's own gate. Where the harness plugin's find-intent and break-down-problem are
+one, same as IDR's own gate. Consult docs' `agent-harness-rules` for how to choose the assert layer or design the harness —
+this phase only asks the question, that pack answers how. Where the harness plugin's find-intent and break-down-problem are
 installed, use them here; where not, apply
 their discipline inline — ambiguities surfaced as multiple-choice, structure before prose.
 

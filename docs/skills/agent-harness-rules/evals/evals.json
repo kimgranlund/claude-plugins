@@ -1,0 +1,71 @@
+{
+  "skill": "agent-harness-rules",
+  "note": "Trigger-eval suite for the agent-harness-rules pack (docs plugin), minted issue #542 / PR #559. Positives span the five axes (assert-layer choice, agent-native harness design, assertion/fixture grammar, estate instrument mapping, the Gen-UI grounding case). Negatives fence the doctrine skill this pack answers to (doc-writing-rules'/check-doc's REQUIREMENT that a plan exist, vs this pack's HOW), the adjacent already-scorable-system method corpus (research-methods), and this estate's own release-gate mechanics (harness's checking-rules/script-writing-rules), which this pack cites rather than re-derives.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "how would a coding agent test this chat system without a human clicking through screenshots",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "should this scenario assert at the JSON payload layer or drive the actual browser UI",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "help me design a fleet of driver agents to exercise this system like a real user would",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "is this acceptance criterion actually agent-runnable, or does it need a human reviewer",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what testing instruments does this estate already have before I build a new verification harness",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "walk me through the Gen-UI JSON-payload verification case",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "how do I write a golden-payload assertion and fixture for this agent scenario",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "we keep QA-ing this feature through claude-in-chrome screenshots, is there a cheaper layer",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "does this SPEC's Acceptance section require an Agent verification answer",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n02",
+      "prompt": "review this PRD against check-doc's J7 agent-testability criterion",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n03",
+      "prompt": "improve the score on this already-scorable system, we just need to tune the parameters",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "why did release_gate.py's G4 selftest check fail on this plugin",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n05",
+      "prompt": "which document type should I use to record this decision",
+      "expect": "no-trigger"
+    }
+  ]
+}

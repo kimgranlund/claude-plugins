@@ -1,6 +1,6 @@
 {
   "skill": "doc-writing-rules",
-  "note": "Authored with the plugin 2026-07-07. Boundaries: make-doc (drafting), check-doc (judging), the harness plugin (harness artifacts). 2026-08-16 (issue #320): n05 added as the reciprocal fence against product-lifecycle-rules — a general 'why does this alignment doc grammar exist' ask is that pack's territory, not this repo's live type-contract table; owner: docs plugin, contested boundary resolved by keeping 'which type/sections/frontmatter HERE' on this skill and 'what's a type FOR, generally' on the new pack. 2026-08-16 (issue #332): t09 added alongside the RDD type (mirrors t08's IDR case) — the description gained 'RDD' and 'locked RDD is append-only'. 2026-08-16 (issue #404): t10 added alongside the new BRIEF type (north-star living index) — mirrors t08/t09's pattern.",
+  "note": "Authored with the plugin 2026-07-07. Boundaries: make-doc (drafting), check-doc (judging), the harness plugin (harness artifacts). 2026-08-16 (issue #320): n05 added as the reciprocal fence against product-lifecycle-rules — a general 'why does this alignment doc grammar exist' ask is that pack's territory, not this repo's live type-contract table; owner: docs plugin, contested boundary resolved by keeping 'which type/sections/frontmatter HERE' on this skill and 'what's a type FOR, generally' on the new pack. 2026-08-16 (issue #332): t09 added alongside the RDD type (mirrors t08's IDR case) — the description gained 'RDD' and 'locked RDD is append-only'. 2026-08-16 (issue #404): t10 added alongside the new BRIEF type (north-star living index) — mirrors t08/t09's pattern. 2026-08-17 (issue #542): n06 added as the reciprocal fence against the new sibling pack `agent-harness-rules` — a HOW-to-design-the-harness ask is that pack's territory, not this skill's WHAT-is-required type contract.",
   "cases": [
     {
       "id": "t01",
@@ -75,6 +75,11 @@
     {
       "id": "n05",
       "prompt": "why does the IDR/ADR/RDD alignment doc grammar exist, in general, across any project",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "how would a coding agent design a driver-agent harness to test this system alone",
       "expect": "no-trigger"
     }
   ]
