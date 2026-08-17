@@ -1,10 +1,11 @@
 ---
 doc-type: adr
 id: adr-0020
-status: rejected
-ratified: NOT RATIFIED — drafted 2026-08-17 from Kim's live AskUserQuestion answers in a Cowork
-  session; D5 ruled by Kim in a second AskUserQuestion round the same day (merge). Ready for
-  ratification; no open blockers.
+status: accepted
+ratified: rejected 2026-08-17T16:03Z (live, drain session) / ratified 16:04Z (live
+  AskUserQuestion) / tie-break by Kim same day: ratify stands — see #518. Drafted 2026-08-17
+  from Kim's live AskUserQuestion answers in a Cowork session; D5 ruled by Kim in a second
+  AskUserQuestion round the same day (merge).
 date: 2026-08-17
 owner: kim.granlund
 supersedes: adr-0015 (D1's role production insofar as RoleLex membership is closed to the
@@ -17,7 +18,29 @@ intent-refs: null
 ---
 # ADR-0020 — The fleet vocabulary (`marshal`, `orchestration`) and the mechanism-revealing command heads `bind-` / `fork-` / `sub-`
 
-> **REJECTED 2026-08-17 (Kim, live review; see gh#518).** Reversed ADR-0015/0016 <48h after ratification; `marshal` below ADR-0018 bar (self-admitted); ~633-site blast radius for zero behavior change. The bind-/fork-/sub- mechanism-revealing INSIGHT survives as documentation-only work (gh#527-class ticket), no renames.
+> **REJECTED 2026-08-17T16:03Z (Kim, live review, drain session; see gh#518).** Reversed
+> ADR-0015/0016 <48h after ratification; `marshal` below ADR-0018 bar (self-admitted); ~633-site
+> blast radius for zero behavior change. The bind-/fork-/sub- mechanism-revealing INSIGHT
+> survives as documentation-only work (gh#527-class ticket), no renames. **Superseded one
+> minute later by the ratification below — kept verbatim as the record of the conflicting
+> ruling, not deleted.**
+>
+> **RATIFIED 2026-08-17T16:04Z (Kim, live AskUserQuestion; see gh#518).** ADR-0020 is RATIFIED:
+> the fleet vocabulary (`marshal`, `orchestration`), the reserved `lead-` head replaced by
+> `bind-`/`fork-`/`sub-`, and `team-leader` → `fleet-marshal`; the supersession of
+> ADR-0015/0016/0017 clauses below is Kim's own decision, made live.
+>
+> **TIE-BREAK 2026-08-17 (Kim, live AskUserQuestion; see gh#518).** Kim ruled on the conflicting
+> 16:03 rejection vs. 16:04 ratification above, both records presented side by side:
+> **RATIFY STANDS.** This ADR is ACCEPTED per the frontmatter's `status: accepted`; the 16:03
+> rejection comment above is superseded, not deleted. #532 (the desk→seat terminology-sweep
+> carve-out this ADR's own text names) merged independently and is unaffected by this ruling
+> either way.
+>
+> **Superseded status note below (kept verbatim, not deleted):** the "DRAFT — not ratified" line
+> that follows is the original 2026-08-17 draft-stage marker, from before D5 was ruled and before
+> either the rejection or the ratification above. It is historical only — this ADR is ACCEPTED.
+>
 > **DRAFT — not ratified.** Drafted 2026-08-17 in a Cowork session from Kim's answers to a live
 > AskUserQuestion (four decisions, recorded verbatim in Context below). This draft is offered for
 > review, not adopted: **D5 below is an unresolved collision that blocks ratification as drafted.**
