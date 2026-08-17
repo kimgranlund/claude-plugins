@@ -81,6 +81,7 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.18.1 · 2026-08-16 · `bloat-audit`'s `measure.py` hardened against two false positives (issue #465): phase-heavy's numbered-list fallback now requires a Phase/Step/Stage lead-in (no longer misreads a plain numbered principles list); done-section's fallback regex now anchors line-initial and stops at the next blank line (no longer captures an incidental mid-sentence "done when" to EOF). Two negative + one inversion selftest fixture added; the #373-confirmed true positive (file-bug's Failure-branches section) still flags.
 v0.18.0 · 2026-08-16 · ADR-0016 follow-on (issue #433): reserved verb-first command head `lead-` — `lead-{scope}` resolves against ADR-0015 D2's orchestrator scope pool, recognized on both command and skill parse branches (the live `/lead-*` surfaces are command-species skills); selftest triad added; 4 exemptions retired (124 → 120, `lead-intake` stays); GRAMMAR.md + spec §3.1/§14.5 updated. ADR-0016 ratified 2026-08-17 by Kim (live, via plugins-team-lead).
 v0.17.0 · 2026-08-16 · ADR-0015 follow-on (issue #433): the orchestrator agent production
 (`{scope}-{role}`) no longer requires the `-agent` tail — `naming-audit/scripts/validate.py`'s

@@ -77,8 +77,14 @@ def section_span(body, heading_pattern):
 
 
 def phase_count(body):
+    """Count real phase/step markers only — a heading ("## Phase 3") or a
+    top-level numbered item whose own bold lead-in names a phase/step/stage
+    ("1. **Phase 1: Discover**"). A plain numbered list of bolded terms
+    (principles, glossary entries, findings) is not a phase list just
+    because it's numbered and bold (issue #465)."""
     headings = len(re.findall(r"(?m)^##+\s*Phase\s+\d", body))
-    numbered_top = len(re.findall(r"(?m)^\d+\.\s+\*\*", body))
+    numbered_top = len(re.findall(
+        r"(?mi)^\d+\.\s+\*\*\s*(Phase|Step|Stage)\b", body))
     return max(headings, numbered_top)
 
 
@@ -169,7 +175,12 @@ def analyze(target: Path):
         failure_chars = section_span(body, r"^##+\s*Failure\s+(branches|catalog)")
         done_chars = section_span(body, r"^##+\s*Done\b")
         if not done_chars:
-            m = re.search(r"(?is)done when.*$", body)
+            # Line-initial "Done when"/"Done when:" only — an incidental
+            # mid-sentence mention ("...spec). Done when the lint is
+            # clean...") must not anchor a match, and the match stops at
+            # the next blank line so it can't run to EOF (issue #465).
+            m = re.search(r"(?mi)^\*{0,2}done when\b.*?(?=\n\s*\n|\Z)",
+                          body, re.DOTALL)
             done_chars = len(m.group(0)) if m else 0
         phases = phase_count(body)
 
@@ -271,8 +282,12 @@ def main():
 def selftest():
     """Prove analyze()'s counters bite: a clean small file passes (reverse
     control); a phase-heavy file with an oversized Failure section is CAUGHT
-    (negative control); a genuine cross-file duplicate paragraph is CAUGHT;
-    a target with no markdown returns None (the usage-error case)."""
+    (inversion fixture); a plain numbered list of principles is NOT
+    misread as phase-heavy, and an incidental mid-sentence "done when"
+    doesn't capture to EOF (negative controls, issue #465); a genuine
+    line-initial Done-when paragraph is still CAUGHT (inversion fixture); a
+    genuine cross-file duplicate paragraph is CAUGHT; a target with no
+    markdown returns None (the usage-error case)."""
     import tempfile
 
     # Reverse control: a small, unflagged file must come back clean.
@@ -299,6 +314,54 @@ def selftest():
         flags = result["measurements"][0]["flags"]
         assert any("phase-heavy" in f for f in flags), "phase-heavy file must be flagged"
         assert any("large-failure-section" in f for f in flags), "oversized Failure section must be flagged"
+
+    # Negative control: a plain numbered list of bolded principles (no
+    # phase/step/stage wording) must NOT be misread as phase-heavy — #465.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "principled-skill").mkdir(parents=True)
+        principles = "\n".join(
+            f"{i}. **Principle {i} is the name.** Explanatory prose follows here, "
+            f"long enough to look like real content but not a build phase.\n"
+            for i in range(1, 7))
+        body = (f"---\nname: principled-skill\ndescription: short\n---\n"
+                f"# principled-skill\n\n{principles}\n")
+        (r / "skills" / "principled-skill" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        flags = result["measurements"][0]["flags"]
+        assert not any("phase-heavy" in f for f in flags), \
+            "a plain numbered list of principles must not be flagged phase-heavy"
+
+    # Negative control: an incidental mid-sentence "done when" phrase must
+    # not fall back to a greedy to-EOF capture — #465.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "incidental-done").mkdir(parents=True)
+        tail = "More unrelated content follows this paragraph, on and on. " * 200
+        body = (f"---\nname: incidental-done\ndescription: short\n---\n"
+                f"# incidental-done\n\nRun the linter until it is clean and every link "
+                f"resolves. Done when the lint is clean and every link resolves.\n\n"
+                f"## Unrelated section\n\n{tail}\n")
+        (r / "skills" / "incidental-done" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        done_chars = result["measurements"][0]["done_section_chars"]
+        assert done_chars < 300, (
+            f"an incidental mid-sentence 'done when' must not capture to EOF "
+            f"(got {done_chars} chars)")
+
+    # Inversion fixture: a genuine line-initial "Done when" paragraph must
+    # still be caught (docs intake Failure-branches class — #373 deep pass).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "real-done").mkdir(parents=True)
+        body = ("---\nname: real-done\ndescription: short\n---\n# real-done\n\n"
+                "Some procedure body text describing the work to do.\n\n"
+                "Done when the report exists with every finding named and every "
+                "owner assigned, and nothing is left ambiguous.\n")
+        (r / "skills" / "real-done" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        done_chars = result["measurements"][0]["done_section_chars"]
+        assert done_chars > 40, "a genuine line-initial Done-when paragraph must still be measured"
 
     # Inversion fixture: a near-identical paragraph repeated across two files must be CAUGHT.
     with tempfile.TemporaryDirectory() as td:
