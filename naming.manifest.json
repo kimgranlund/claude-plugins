@@ -47,7 +47,8 @@
     "stage",
     "triage",
     "wiring",
-    "writing"
+    "writing",
+    "orchestration"
   ],
   "role_lex": [
     "leader",
@@ -62,7 +63,8 @@
     "cleaner",
     "judge",
     "builder",
-    "writer"
+    "writer",
+    "marshal"
   ],
   "topic_lex": [
     "icon",
