@@ -40,6 +40,15 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             for idr-0001..0006 (#431, ratification round). IDR-only for now (no retrofit debt on
             other types); FAIL, not WARN — IDR has a small, fully-authored instance set, so there
             is no soft-landing case to make.
+  T9 [WARN] a SPEC with no `## Agent verification` section — the agent-testability doctrine
+            (#542, `prd-agent-testability.md`): every SPEC states how a coding agent autonomously
+            verifies the built system, not a human in the loop. Added 2026-08-17 as WARN, not
+            FAIL, on the T6 orphan-ADR precedent — 3 live draft SPECs (spec-naming-convention,
+            spec-linear-adapter, spec-ticketing-watch-triage) predate the section and are
+            EXPECTED to warn here; the retrofit is its own deferred follow-up, not required for
+            this check to ship. SPEC-only for now — PRD/LLD carry the same template section but
+            check-doc's J7 judgment criterion covers them instead of a doc_lint presence rule
+            (the PRD's own D3: SPEC gets the mechanical rule, PRD/LLD stay judgment-only).
 """
 import json
 import re
@@ -116,6 +125,9 @@ def lint_text(text):
         findings.append(("WARN", "T5", "no `done-when` found in the plan -> steps without one are guesses"))
     if dtype == "spec" and "Requirements" in heads and not re.search(r"\bREQ-\d+", text):
         findings.append(("WARN", "T5", "no REQ- IDs in the spec -> the ID spine starts here"))
+    if dtype == "spec" and "Agent verification" not in heads:
+        findings.append(("WARN", "T9", "no `## Agent verification` section -> the spec doesn't say "
+                                        "how a coding agent autonomously verifies the built system"))
     if dtype == "adr":
         intent_refs = fm.get("intent-refs", "").strip().lower()
         if intent_refs in ("", "null", "none", "[]"):
@@ -223,6 +235,12 @@ def selftest():
     cited_adr = orphan_adr.replace("intent-refs: null", "intent-refs: idr-0001")
     assert not any(f[1] == "T6" for f in lint_text(cited_adr)), "ADR citing an IDR must NOT warn T6"
     assert any(f[1] == "T5" for f in lint_text(bad.replace("status: shipped", "status: draft"))), "REQ-less spec must warn T5"
+    # T9 SPEC agent-verification WARN (#542): no `## Agent verification` -> warn; section present -> silent.
+    spec_no_av = ("---\ndoc-type: spec\nid: spec-x\nstatus: draft\n---\n# S\n"
+                  "## Requirements\nREQ-1: x\n## Non-goals\nn\n## Examples\ne\n## Acceptance\na\n")
+    assert any(f[1] == "T9" for f in lint_text(spec_no_av)), "SPEC with no Agent verification section must WARN T9"
+    spec_with_av = spec_no_av + "## Agent verification\nv\n"
+    assert not any(f[1] == "T9" for f in lint_text(spec_with_av)), "SPEC with Agent verification section must NOT warn T9"
     # T7 RDD citation+DRI-presence FAIL (#332): locked-or-beyond with empty refs/dri FAILs;
     # draft is exempt on both; locked with both present is clean.
     rdd_base = ("---\ndoc-type: rdd\nid: rdd-0099\nstatus: {s}\ndate: 2026-08-16\nowner: k\n"
@@ -298,7 +316,8 @@ def selftest():
             assert not head_is_locked_ledger(h), "committed-draft RDD must be ALLOWED to edit — negative"
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
-          "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites")
+          "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites; "
+          "T9 SPEC agent-verification WARN bites")
     return 0
 
 
