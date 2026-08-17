@@ -1,0 +1,26 @@
+{
+  "skill": "pattern-sweeping",
+  "note": "Initial suite (issue #576). Trigger-routing: expect=trigger fires in a fresh session; expect=no-trigger is a near-miss owned elsewhere (owner in comment).",
+  "cases": [
+    { "id": "t01", "prompt": "Sweep the repo for inline min-width styles on UI components and remove them.", "expect": "trigger" },
+    { "id": "t02", "prompt": "Find every page that still renders a hand-rolled drawer title instead of the standard component.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Audit all drawers for double card frames and fix the offenders.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Sweep this corpus of pages for a DOM pattern: tables missing valign=top.", "expect": "trigger" },
+    { "id": "t05", "prompt": "Codemod this deprecated attribute away across the whole frontend.", "expect": "trigger" },
+    { "id": "t06", "prompt": "How many places still use the old badge variant? Give me the full list.", "expect": "trigger" },
+    { "id": "t07", "prompt": "Migrate every remaining call site off getLegacyClient().", "expect": "trigger" },
+    { "id": "t08", "prompt": "Run a site-wide conformance sweep: every list page must mirror its filters into the URL.", "expect": "trigger" },
+    { "id": "t09", "prompt": "Search all our Astro pages for console.log calls and clean them up safely.", "expect": "trigger" },
+    { "id": "t10", "prompt": "I want a census of every component that sets style= inline, classified by whether it's safe to delete.", "expect": "trigger" },
+    { "id": "t11", "prompt": "Plan a repo-wide removal of the retired data-card-body idiom without breaking load-bearing uses.", "expect": "trigger" },
+    { "id": "t12", "prompt": "Before we delete these 86 inline styles, how do we know which ones are load-bearing?", "expect": "trigger" },
+    { "id": "t13", "prompt": "Run the ops sweep — dispatch the standing seats and give me the prioritized queue.", "expect": "no-trigger", "comment": "owner: sweep-chores (ops-family seats, .claude/ops/plan.md)" },
+    { "id": "t14", "prompt": "Sweep the ops queue for this repo — intake, ADR review, and repo hygiene.", "expect": "no-trigger", "comment": "owner: sweep-chores" },
+    { "id": "t15", "prompt": "Audit this plugin's skills for naming-convention conformance.", "expect": "no-trigger", "comment": "owner: authorkit:naming-audit (instruction-markdown estate instrument)" },
+    { "id": "t16", "prompt": "Review this skill for verbosity and bloat — does it need to be this long?", "expect": "no-trigger", "comment": "owner: authorkit:bloat-audit" },
+    { "id": "t17", "prompt": "Rerun the trigger evals and prove routing after my description edit.", "expect": "no-trigger", "comment": "owner: check-routing" },
+    { "id": "t18", "prompt": "Sweep this chat session for leftover work we never ticketed.", "expect": "no-trigger", "comment": "owner: docs:file-leftovers (conversation sweep, not a code/DOM corpus)" },
+    { "id": "t19", "prompt": "Fix the broken min-width on the claims filter bar.", "expect": "no-trigger", "comment": "single-site fix, no census scope — ordinary edit, no skill" },
+    { "id": "t20", "prompt": "Sweep for stale references to the old skill names and rewrite them.", "expect": "no-trigger", "comment": "owner: authorkit:fix-old-names (retired-handle sweep over harness estates)" }
+  ]
+}

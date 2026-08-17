@@ -129,6 +129,8 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.9.0 · 2026-08-17 · New skill `pattern-sweeping` (closes #576): the safe repo/corpus sweep method — census → known-member/nonmember sanity checks → decorative/load-bearing/idiom classification → gated disposition (audit-first, transform last) → rendered-property verification → ratchet. Funded by four production incidents (adiav2 admin sweeps, Jul 2026: TS-assembled-string grep blindness, `[0-9]` deleting load-bearing `min-width: 0`, proxy assertions, a 98→54 census undercount). Ships `scripts/pattern_census.py` (census + `--must-match`/`--must-not-match` proofs; selftest with 2 negative controls), a 20-case eval suite, and reciprocal fences in sweep-chores/check-routing (+ authorkit naming-audit/bloat-audit, bumped separately). New ProcessLex token `sweeping` registered in both manifests (root + authorkit bundle, G12b parity).
+
 v3.8.40 · 2026-08-17 · Warn-pair cleared (closes #563): `sweep-chores` description trimmed 826→698 chars (W8 ≤700; seat verbs kept per checker, evals re-checked case-by-case, /check-routing rode); G8's phantom `fix-or-retire` reworded to plain prose in save-lessons (×2 + eval doc) and watch-adrs — prose fix chosen over allowlist to avoid same-file overlap with #562. (Rebumped past 3.8.39: the wave-6 companion shipped that slot.)
 v3.8.39 · 2026-08-17 · ADR-0020 wave 6 companion (#524, teamwork's D5 merge): G8's phantom-`[[handle]]`
 allowlist gains `team-or-solo-rules` — the retired skill's name survives as a historical

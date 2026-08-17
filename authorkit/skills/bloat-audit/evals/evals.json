@@ -2,19 +2,94 @@
   "skill": "bloat-audit",
   "note": "This skill owns the busy-work/over-specification axis (ceremony, ProseTax, restatement) — distinct from naming-audit's grammar-conformance axis, even though both are read-only report skills over the same artifact kinds. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
   "cases": [
-    {"id": "t01", "prompt": "Does this skill need to be this long?", "expect": "trigger"},
-    {"id": "t02", "prompt": "Audit this agent for busy-work and unnecessary ceremony.", "expect": "trigger"},
-    {"id": "t03", "prompt": "Review this plugin's skills for verbosity and over-specification.", "expect": "trigger"},
-    {"id": "t04", "prompt": "Find content restated across these skill files instead of cited once.", "expect": "trigger"},
-    {"id": "t05", "prompt": "Is this SKILL.md too heavy-handed for how small the task actually is?", "expect": "trigger"},
-    {"id": "t06", "prompt": "Measure how much of this doc is padding versus load-bearing instruction.", "expect": "trigger"},
-    {"id": "t07", "prompt": "Check this corpus of markdown for busy-work root causes.", "expect": "trigger"},
-    {"id": "n01", "prompt": "Audit this estate for naming convention violations.", "expect": "no-trigger", "comment": "owner: naming-audit"},
-    {"id": "n02", "prompt": "Plan a rename for this artifact.", "expect": "no-trigger", "comment": "owner: rename-planning"},
-    {"id": "n03", "prompt": "Seed a naming manifest for this repo.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
-    {"id": "n04", "prompt": "What does the naming grammar say about skill name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
-    {"id": "n05", "prompt": "Audit our menu cost — how much context do all these skill descriptions burn every turn?", "expect": "no-trigger", "comment": "owner: attention-audit (always-on menu rent, not prose economy inside bodies) — reciprocal fence, 2026-08-15"},
-    {"id": "n06", "prompt": "Which skills tax Claude's performance the most across the estate?", "expect": "no-trigger", "comment": "owner: attention-audit — reciprocal fence, 2026-08-15"},
-    {"id": "n07", "prompt": "Does this skill correctly follow skill-writing-rules, or does it misfire in routing?", "expect": "no-trigger", "comment": "owner: harness check-skill — content correctness/routing fidelity, not length/ceremony proportionality; reciprocal fence, 2026-08-15 (issue #282)"},
-    {"id": "n08", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — reciprocal fence, 2026-08-15 (issue #257)"}  ]
+    {
+      "id": "t01",
+      "prompt": "Does this skill need to be this long?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Audit this agent for busy-work and unnecessary ceremony.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Review this plugin's skills for verbosity and over-specification.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Find content restated across these skill files instead of cited once.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Is this SKILL.md too heavy-handed for how small the task actually is?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Measure how much of this doc is padding versus load-bearing instruction.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "Check this corpus of markdown for busy-work root causes.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Audit this estate for naming convention violations.",
+      "expect": "no-trigger",
+      "comment": "owner: naming-audit"
+    },
+    {
+      "id": "n02",
+      "prompt": "Plan a rename for this artifact.",
+      "expect": "no-trigger",
+      "comment": "owner: rename-planning"
+    },
+    {
+      "id": "n03",
+      "prompt": "Seed a naming manifest for this repo.",
+      "expect": "no-trigger",
+      "comment": "owner: manifest-authoring"
+    },
+    {
+      "id": "n04",
+      "prompt": "What does the naming grammar say about skill name shape?",
+      "expect": "no-trigger",
+      "comment": "owner: naming-conventions"
+    },
+    {
+      "id": "n05",
+      "prompt": "Audit our menu cost — how much context do all these skill descriptions burn every turn?",
+      "expect": "no-trigger",
+      "comment": "owner: attention-audit (always-on menu rent, not prose economy inside bodies) — reciprocal fence, 2026-08-15"
+    },
+    {
+      "id": "n06",
+      "prompt": "Which skills tax Claude's performance the most across the estate?",
+      "expect": "no-trigger",
+      "comment": "owner: attention-audit — reciprocal fence, 2026-08-15"
+    },
+    {
+      "id": "n07",
+      "prompt": "Does this skill correctly follow skill-writing-rules, or does it misfire in routing?",
+      "expect": "no-trigger",
+      "comment": "owner: harness check-skill — content correctness/routing fidelity, not length/ceremony proportionality; reciprocal fence, 2026-08-15 (issue #282)"
+    },
+    {
+      "id": "n08",
+      "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.",
+      "expect": "no-trigger",
+      "comment": "owner: pattern-audit — reciprocal fence, 2026-08-15 (issue #257)"
+    },
+    {
+      "id": "t09",
+      "prompt": "Sweep the repo for inline min-width styles on our UI components and remove the decorative ones safely.",
+      "expect": "no-trigger",
+      "comment": "owner: harness:pattern-sweeping (code/DOM pattern sweep, not an instruction-markdown bloat audit) — reciprocal fence, issue #576"
+    }
+  ]
 }

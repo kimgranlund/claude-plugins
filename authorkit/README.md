@@ -87,6 +87,8 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.19.6 · 2026-08-17 · Reciprocal fences for harness's new `pattern-sweeping` (#576): one no-trigger case each in naming-audit and bloat-audit suites; bundled `naming.manifest.json` gains ProcessLex `sweeping` in step with the root manifest (G12b parity).
+
 v0.19.5 · 2026-08-17 · Bundled `naming.manifest.json` resynced, not deleted (issue #553, PR #545's
 risk finding). Evidence first: `release_gate.py`'s G12 always passes `--manifest naming.manifest.json`
 (the workspace-root file) explicitly, regardless of which plugin is gated — the bundled copy is

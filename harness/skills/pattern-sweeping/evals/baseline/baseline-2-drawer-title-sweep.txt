@@ -1,0 +1,20 @@
+Agent found the patterns. Here's what needs fixing:
+
+**Two canonical drawer title patterns exist:**
+1. **`slot="heading"`** with `<span slot="heading"><text-ui variant="heading">Title</text-ui></span>` (10 files) — standard pattern
+2. **`setAttribute('text', title)`** on drawer-ui (5 files) — used only for permanent drawers with dirty-state guards
+
+**The inconsistencies within pattern 1:**
+- 2 files use plain text (not semantic)
+- 5 files correctly use `<text-ui variant="heading">`
+- 1 file puts text-ui directly on the slot
+- 6 files use `<h3>` (mostly card-ui, not drawer-specific)
+
+**My approach:**
+1. Create a reusable helper function that enforces the standard `slot="heading"` pattern
+2. Update the 7-8 files with inconsistent heading markup to use that helper
+3. Document when to use `setAttribute('text')` vs. `slot="heading"` based on context
+
+The main files needing attention: `filter-bar.ts`, `agent-test-drawer-shell.ts` (both plain text), and a few others missing the `variant="heading"` attribute.
+
+Should I proceed with creating the helper and fixing all 8-10 inconsistent files?
