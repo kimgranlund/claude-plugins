@@ -108,6 +108,23 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.6 · assembled 2026-08-17 · closes #574: `bind-team`, `bind-planning`, and `bind-product`
+each defaulted a blank invocation instead of erroring — Phase 1 in all three now binds a default
+charter on `$ARGUMENTS` blank ("adopt against cwd, hold for the first unit of work fed in"),
+consistent with the sibling binds (`bind-build`/`bind-review`/docs' `bind-intake`, which already
+default a blank seed to cwd). The corresponding "Invoked with no `$ARGUMENTS`" failure branch —
+now the ordinary Phase 1 default path, not a failure — was removed from each. Descriptions and
+argument-hints updated to state the default; `evals/evals.json` gained a blank-invocation trigger
+case for `bind-team`/`bind-product` (`bind-planning` already carried one). ADR-0020 does not fix
+the non-blank-charter requirement anywhere in its own text (checked in full: it rules the fleet
+vocabulary and the `bind-`/`fork-`/`sub-` command heads, not per-seat blank-invocation behavior) —
+no ADR amendment or dated note was needed; the requirement lived only in each skill's own prose,
+edited directly. Fresh-context `wording-checker` pass rode the semantic edit (three SKILL.md
+bodies): 1 major (bind-product's re-binding line pointed at "Phase 2" instead of "Phase 3" —
+fixed) and 3 minor (redundant "instead of erroring" phrasing on a routing surface, and the
+NEVER-prohibition-budget nudge from "never receives work" — both reworded across all three
+files). Re-run after fixes: clean. `release_gate.py teamwork` clean.
+
 v2.21.5 · assembled 2026-08-17 · (closes #554): `dispatch-ticket`'s no-nested-wait section
 corrected — its prose claimed an unnamed `Agent`-tool critic dispatch's synchronous tool-result
 was always the return value, "no separate signal will ever reach you." PR #547's fold observed a
