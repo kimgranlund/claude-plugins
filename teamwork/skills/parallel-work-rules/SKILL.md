@@ -5,10 +5,10 @@ description: >-
   on collision. Use when overlapping actors may mutate the same tree — "should I work
   in a worktree for this", "should this subagent use isolation: worktree", uncommitted
   shared-file changes, two builders on the same files, a collided build, or committing
-  before a risky move. NOT dispatch shape/cost (team-or-solo-rules); NOT next-turn
-  timing — /goal, /loop (loop-rules); NOT closing out THIS session's worktree
-  (close-session); NOT the fleet's default coordination-scope/claim/comms/version-slot/
-  pin-race-unblock protocol (fleet-rules).
+  before a risky move. NOT dispatch shape/cost, or the fleet's default
+  coordination-scope/claim/comms/version-slot/pin-race-unblock protocol (fleet-rules); NOT
+  next-turn timing — /goal, /loop (loop-rules); NOT closing out THIS session's worktree
+  (close-session).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -39,7 +39,7 @@ rest of the decision even starts.
 1. Will 2+ actors mutate the same repo checkout concurrently, AND do their target files/imports
    actually overlap? Multiple actors alone isn't the trigger — same-session subagents assigned
    genuinely disjoint slices need no isolation at all: dispatching the disjoint same-tree fan-out
-   (each worker self-gating its own path) is team-or-solo-rules's own sanctioned default, not a
+   (each worker self-gating its own path) is fleet-rules's own sanctioned default, not a
    risk this skill overrides. Isolation answers the overlap question, not the actor-count question.
 2. Isolate when slices overlap, can't be cleanly partitioned, or you can't confirm disjointness at
    all (an actor outside your control — a peer session, an opaque one):
@@ -177,7 +177,7 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | The Recovery section above | A nested child's worktree got auto-reaped while the parent idled on it (#207) |
 | The Standing-mitigation section above | Sibling sessions from one background job share host cwd state racily (#189) |
 | `worktree_prebash_guard.py.retired` (teamwork `scripts/`, hook wiring retired 2026-08-17, #466 — remove-all-hooks directive) | Formerly a mechanical catch for worktree→primary and sibling→sibling cd escapes, PLUS (#363) a persisted per-session identity pin that caught a cwd already wrong on a later separate call with no cd at all — both were always blind to dynamic/wrapped targets, per its own header. No automatic catch remains; this discipline is manual now |
-| [[team-or-solo-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
+| [[fleet-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |
 | `entry-file-rules` (harness) | Encoding the resulting rule as a standing CLAUDE.md instruction, once this skill says one is warranted |
 | `hook-writing-rules` (harness) | The decision should become a mechanically-enforced guard (e.g. blocking a specific unsafe edit), not just guidance |

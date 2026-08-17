@@ -1,6 +1,6 @@
 {
   "skill": "write-handoff",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Negatives are near-misses owned by team-or-solo-rules, loop-rules, docs' adr/lld-author paths, skill-author, make-rubric, skills-refactor, and checking-rules (n14 — this skill owns the return-block FIELDS, checking-rules owns per-finding review CONDUCT; no query claims both).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Negatives are near-misses owned by fleet-rules, loop-rules, docs' adr/lld-author paths, skill-author, make-rubric, skills-refactor, and checking-rules (n14 — this skill owns the return-block FIELDS, checking-rules owns per-finding review CONDUCT; no query claims both).",
   "cases": [
     { "id": "t01", "prompt": "how do I hand this back to the coordinator", "expect": "trigger" },
     { "id": "t02", "prompt": "report my results", "expect": "trigger" },

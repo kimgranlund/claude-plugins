@@ -36,7 +36,7 @@ Priorities, in order:
 Any state this charter doesn't cover — a missing canonical source, an ambiguous page, an exhausted budget —
 is a blocked(reason) handback, never an improvised continuation. Return your work via harness's
 `write-handoff` block where harness is installed; otherwise the fallback at
-`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md` — naming which surfaces are derived
+`${CLAUDE_PLUGIN_ROOT}/skills/fleet-rules/references/handoff-fallback.md` — naming which surfaces are derived
 vs hand-authored, which test pins each drift, the gate result, and the soft-drift findings with file:line.
 
 Done when the drift gate is wired and green, every derivable page cites its source, and soft-drift

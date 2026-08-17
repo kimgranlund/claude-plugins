@@ -99,7 +99,7 @@ report that routing and stop; docs' seats own it.
   rounds). Still not concretely actionable → report SKIPPED with the named gap, never dispatch on
   an unclear brief — no claim taken, since no build effort was ever starting. Otherwise run Phase
   3 (claim, then isolate) first, then dispatch via the `Agent` tool — `subagent_type:
-  general-purpose` by default (`team-or-solo-rules`' solo-first/null-unit reasoning: a generic
+  general-purpose` by default (`fleet-rules`' solo-first/null-unit reasoning: a generic
   task needs no tool restriction, parallelism, or multi-skill preload); a named `subagent_type`
   only when the clarified brief genuinely needs one of those three. Never a NAMED (teammate-mode,
   the Agent tool's `name:` field) dispatch here regardless of `subagent_type` choice: the caller
@@ -272,7 +272,7 @@ caller's side:
   (the record's Links may already carry the docs — don't re-author), `builder` implements to the
   approved LLD, `code-checker` grades the slice before merge. The coordinator seat only when the
   chain genuinely spans ≥2 seats across contexts. A `/build-feature`-initiated call makes
-  host→fork→coordinator→seats — a third level past `team-or-solo-rules`' default depth ≤2, named
+  host→fork→coordinator→seats — a third level past `fleet-rules`' default depth ≤2, named
   deliberately: the fork isolates the CALLER's session, the coordinator isolates the multi-seat
   chain — two different things, not one dispatch nested for no reason. Same shape on a
   `build-leader` dispatch, with the agent context taking the fork's place.

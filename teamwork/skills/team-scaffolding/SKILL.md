@@ -12,7 +12,7 @@ description: >-
   reverse: /team-scaffolding retire ROLE releases the retiring session's own seat (un-walls
   settings.local.json, releases fleet.json, syncs fleet-roster.md). NOT a one-off adoption of a
   single bind-* contract with no fleet bootstrap (/bind-team, /bind-review, /bind-planning,
-  /bind-product directly); NOT for a task one context can hold (team-or-solo-rules).
+  /bind-product directly); NOT for a task one context can hold (fleet-rules).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason] — bare asks which seat"

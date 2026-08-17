@@ -80,6 +80,13 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
 
+v1.0.13 · assembled 2026-08-17 · ADR-0020 wave 6 companion (#524): `agent-residency-facts` and
+`chat-harness-workflow-facts` repoint their `team-or-solo-rules` citations at `teamwork:fleet-rules`
+(D5 merged the former into the latter) — also fixes a stale `orchestration:` plugin-boundary
+prefix in `agent-residency-facts`' routing table (should have read `teamwork:` since the ADR-0006
+rename). Pointer-only, no trigger/description change; both skills' evals untouched beyond the
+same string fix in comments.
+
 v1.0.12 · assembled 2026-08-17 · 1.0.12: `plan-skill-split` resolves the split signal PR #547
 flagged (issue #552) — `chat-harness-guardrail-facts` had drifted to 8 reference files, one past
 the `pack-writing-rules` 3-7 target, after its own fold consolidated 5 v2-harvest lessons into one

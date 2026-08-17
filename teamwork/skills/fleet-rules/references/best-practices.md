@@ -1,6 +1,6 @@
 # Best Practices — Orchestration, Integration & YAML Frontmatter
 
-> `team-or-solo-rules` domain reference. Foundations in `foundations.md`; scored by `rubric.md`. · 2026-06-27
+> `fleet-rules` domain reference (Part B, merged from `team-or-solo-rules` per ADR-0020 D5). Foundations in `foundations.md`; scored by `rubric.md`. · 2026-06-27
 
 Covers how subagents, skills, and teams discover and compose with each other, and the productive expressions of the frontmatter that wires them. Assumes the models in `foundations.md`. Scored by `rubric.md`.
 

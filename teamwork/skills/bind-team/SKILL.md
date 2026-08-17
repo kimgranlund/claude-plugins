@@ -4,7 +4,7 @@ description: >-
   Makes this host session run under the fleet-marshal agent's own contract for one stated charter,
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
   directly, dispatching every unit of real work while the charter stays open. Run /bind-team
-  [charter]. NOT for a task one context can hold (team-or-solo-rules); NOT for reviewing one
+  [charter]. NOT for a task one context can hold (fleet-rules); NOT for reviewing one
   artifact directly (dispatch the owning reviewer); NOT a solo design/decomposition charter where
   the host authors the docs itself (/bind-planning).
 disable-model-invocation: true
@@ -46,11 +46,12 @@ its own operating rules, following the shared ritual in `references/adopt-agent-
    phases (generator ≠ critic); close every cycle on a named decision; run the discovered-reality
    escalation loop; keep durable state in records, not context; treat the committed tree as source
    of truth; roll up.
-2. **Invoke `team-or-solo-rules` and `loop-rules`** (this plugin) — two of the three skills the
-   agent itself preloads (`agents/fleet-marshal.md`'s `skills:` frontmatter field also carries
-   `fleet-rules`, deliberately not re-invoked here since it governs fleet-scoped multi-session
-   coordination this single-host charter doesn't enter) — so the routing rubric and the
-   closed decision-set Priority 4 and 6 depend on are actually loaded, not assumed.
+2. **Invoke `fleet-rules` and `loop-rules`** (this plugin) — the two skills the agent itself
+   preloads (`agents/fleet-marshal.md`'s `skills:` frontmatter field). Only `fleet-rules`' Part B
+   (composition/wiring design) is operative here — its Part A (fleet-scoped multi-session
+   coordination) doesn't bind, since this single-host charter doesn't enter fleet coordination
+   scope — so the routing rubric and the closed decision-set Priority 4 and 6 depend on are
+   actually loaded, not assumed.
 3. **Acknowledge adoption** before dispatching anything: one standing block naming the contract
    file read, the three host deltas below, and the duration rule ("until this charter closes").
 
@@ -73,7 +74,7 @@ unit of real authoring, building, docs, or review work is a `Task`/`Agent` dispa
 owns it. This is a stated discipline, not a tool wall — the host keeps every tool it already had;
 the point is the deliberate choice not to use them on the charter's own output.
 
-**This deliberately overrides `team-or-solo-rules`'s general solo-first default.** That skill's
+**This deliberately overrides `fleet-rules`' general solo-first default (Part B).** That skill's
 own doctrine is "a task one context can hold is the host's own; multi-step alone does not earn a
 team" — correct as a *general* rule, and not what governs here. Invoking this command is the
 explicit, scoped choice to force team-shaped delegation for THIS charter regardless of size; it is

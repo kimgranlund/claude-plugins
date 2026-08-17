@@ -5,7 +5,7 @@ description: >-
   (hosted chatbot), and routes to the skill owning each tier's guidance. Use for "CLI vs hosted
   chatbot", "Resident or Ephemeral", "transfer across tiers", "which agent tier". NOT for
   Ephemeral guardrails (chat-harness-guardrail-facts); NOT for Resident dispatch once tiered
-  (parallel-work-rules, team-or-solo-rules); NOT for subagent preload (agent-writing-rules).
+  (parallel-work-rules, fleet-rules); NOT for subagent preload (agent-writing-rules).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -55,7 +55,7 @@ the hosted chat-agent shape.
 | Question shape | Tier | Owner |
 |---|---|---|
 | "Should this subagent use `isolation:worktree`", "another session has uncommitted changes I need" | Resident | `teamwork:parallel-work-rules` |
-| "Solo vs. team, how many subagents, is this fan-out worth it" | Resident | `orchestration:team-or-solo-rules` |
+| "Solo vs. team, how many subagents, is this fan-out worth it" | Resident | `teamwork:fleet-rules` |
 | "How do I write a thin subagent file, what belongs in `skills:` preload" | Resident | `harness:agent-writing-rules` |
 | "Which instruction layer wins, how do I gate a risky action behind confirmation" | Ephemeral | `llm:chat-harness-guardrail-facts` |
 | "How does my chatbot remember things across turns/sessions" | Ephemeral | `llm:chat-harness-memory-facts` |

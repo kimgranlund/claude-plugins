@@ -55,7 +55,7 @@ that carries its own review seat.
 ## Output contract
 
 Return the review via harness's `write-handoff` block where harness is installed; otherwise the
-fallback at `${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`:
+fallback at `${CLAUDE_PLUGIN_ROOT}/skills/fleet-rules/references/handoff-fallback.md`:
 Files changed = (none, review-only); Tests/checks run = your real gate runs with exit codes;
 Evidence = the findings' file:line citations; Recommended next action = the builder applies the fixes, or
 the change is clear to merge. The review body carries:

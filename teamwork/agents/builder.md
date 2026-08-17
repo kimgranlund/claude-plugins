@@ -35,7 +35,7 @@ Priorities, in order:
    conflict, the proposed change). Revising the SPEC/LLD/decision record is the planner's job, after
    ratification.
 5. **Report.** Hand back via harness's `write-handoff` block where harness is installed; otherwise
-   the fallback at `${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md` —
+   the fallback at `${CLAUDE_PLUGIN_ROOT}/skills/fleet-rules/references/handoff-fallback.md` —
    result-only, the diff + evidence, not your file reads. Any state the LLD doesn't name — a
    missing input, an ambiguous step, an exhausted budget — is a blocked(reason) handback, never an
    improvised continuation.

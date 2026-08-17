@@ -2,7 +2,7 @@
 
 Cited by every teamwork agent that reports back to a coordinator or the host, for the case
 harness's `write-handoff` isn't installed. Canonical copy — an agent body cites this path
-(`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`) rather than
+(`${CLAUDE_PLUGIN_ROOT}/skills/fleet-rules/references/handoff-fallback.md`) rather than
 hand-restating the block; the six ported agents (`team-lead`, `builder`, `planner`,
 `docs-writer`, `code-checker`, `wiring-checker`) each carried their own inline copy before this
 consolidation (teamwork README's Construction note; #382).

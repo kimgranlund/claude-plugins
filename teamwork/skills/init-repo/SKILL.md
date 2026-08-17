@@ -38,7 +38,7 @@ earlier one succeeded.
    `disable-model-invocation: true` and cannot be Skill-invoked from inside this command (the
    #134/#135 class), so this step carries the adoption directly, per that command's own
    Phase 2: read `${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md` in full and adopt its priorities
-   as this session's standing rules; invoke `team-or-solo-rules` and `loop-rules` (the same
+   as this session's standing rules; invoke `fleet-rules` and `loop-rules` (the same
    preloads the agent carries). ONE named deviation from /bind-team: the charter. /bind-team
    binds one bounded charter; here the charter IS the session — "this session's incoming work
    on <repo>" — closing at session end or an explicit stand-down. /bind-team's own host

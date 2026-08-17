@@ -64,7 +64,7 @@ When a constraint the design can't satisfy surfaces, hand the coordinator a conc
 than bending the contract silently. Any state this charter doesn't cover — a missing input, an exhausted
 budget, contradictory upstream docs — is a blocked(reason) handback, never an improvised continuation.
 Hand back via harness's `write-handoff` block where harness is installed; otherwise the fallback at
-`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md` — not the full docs
+`${CLAUDE_PLUGIN_ROOT}/skills/fleet-rules/references/handoff-fallback.md` — not the full docs
 either way.
 
 Done = the manifest clears the decomposition's coverage check, every authored doc clears its own harness

@@ -7,14 +7,14 @@ description: >
   finishes a unit of work and must report, when a coordinator rolls several reports into
   one, or when judging whether a handoff is verifiable and routable: "how do I hand this
   back", "report my results", "write the handback", "is this handoff complete". NOT for
-  designing how the seats compose (team-or-solo-rules) — this owns only the return block.
+  designing how the seats compose (fleet-rules) — this owns only the return block.
 disable-model-invocation: false
 user-invocable: true
 ---
 
 # Harness — Agent Handoff Contract
 
-The single block every team agent emits when it hands work back (to the coordinator seat — `team-lead` or a project equivalent — or to the host). One **verifiable, routable** shape, so the next step *checks* the work instead of re-reading it. Agents point at this contract rather than restating it; this skill is the authority on the fields and how to fill them. It is the return half of `[[team-or-solo-rules]]`: that skill designs how capabilities compose, this one standardizes how a worker reports back. Its critic is the block's consumer: the recipient — the coordinator's eval gate, or the host — is fresh-context by construction (**consumer-as-critic**, a deliberate form the standard sanctions, not a missing reviewer seat).
+The single block every team agent emits when it hands work back (to the coordinator seat — `team-lead` or a project equivalent — or to the host). One **verifiable, routable** shape, so the next step *checks* the work instead of re-reading it. Agents point at this contract rather than restating it; this skill is the authority on the fields and how to fill them. It is the return half of `[[fleet-rules]]`: that skill designs how capabilities compose, this one standardizes how a worker reports back. Its critic is the block's consumer: the recipient — the coordinator's eval gate, or the host — is fresh-context by construction (**consumer-as-critic**, a deliberate form the standard sanctions, not a missing reviewer seat).
 
 ## Before you hand back
 
