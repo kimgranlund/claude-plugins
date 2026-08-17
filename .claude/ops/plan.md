@@ -125,8 +125,10 @@ report-evidenced dependency edge — nothing reordered; every entry ranks purely
 
 ## Rulings 2026-08-17 (Kim, interactive session plugins-team-lead)
 
-- Entry 2 (decision-watcher hedge clause): CLOSED as resolved-by-events — the pattern did not
-  recur this firing; a phrasing-fix task is minted only if it ever recurs.
+- Entry 2 (decision-watcher hedge clause): RULED → #585 (minted 21:35Z via plugins-f6's
+  session). A later close-as-resolved ruling in the coordinator session was made unaware of
+  #585 and was superseded by Kim's tie-break (22:0xZ): #585 stays open as a size:small
+  phrasing hardening. Do not re-ask.
 - Entry 3 (orphaned worktree reap): APPROVED — found already executed by peer session plugins-db
   before this session ran it (verified: all four worktrees and five branches gone; inventory is
   primary + build-554 only). Resolved.
