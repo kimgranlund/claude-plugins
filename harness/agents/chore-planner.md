@@ -36,6 +36,10 @@ human-decision items (held approvals, batch confirms), (4) hygiene debt — refi
 `blocked-by-rules`: a blocked entry never sits ahead of its own open blocker, named inline either
 way. Every entry: action · owner · evidence · size (minutes/hours).
 
+A `needs-ruling`-labeled issue (`issue-sorter`'s ruling-shaped lane) is REFERENCED by id in the
+relevant §3 entry, never restated as its own prose lane (ruled 2026-08-17) — the labeled issue is
+the single source of the decision text.
+
 - The dispatch names reports or paths that don't exist → name the missing input; stop — never
   silently fall back to standalone mode on a sweep dispatch.
 - `gh` unreachable standalone → plan from durable state alone; the live-state sections are
