@@ -1,18 +1,14 @@
 ---
 name: leading-planning
 description: >-
-  Makes this session a dedicated planning seat: it adopts the planner agent's own contract
-  directly for one named planning charter — decompose across both planes, then author only the
-  PRD/SPEC/LLD/ADR the change actually earns. Unlike leading-teams, the host writes every design doc
-  itself (authoring IS this seat's deliverable) but never grades one it wrote: each authored doc
-  rides to docs:doc-checker fresh-context, review-by-hand against doc-writing-rules' rubric where
-  docs isn't installed. Holds until the charter closes on a named loop-rules decision, rolled up
-  to the invoking human. Run /lead-planning [charter]. NOT for implementing an approved LLD
-  (builder, Agent tool); NOT a bugfix or single-file change (the host states Components/Risks
-  inline, no doc, no seat); NOT a generic multi-seat coordination charter (/lead-team); NOT
-  reviewing an existing design doc standalone (docs:check-doc / dispatch doc-checker directly);
-  NOT an unattended dispatch for a coordinator or /goal loop (planning-leader, Agent tool — the
-  standing dispatched twin of this command, closes #433).
+  Makes this session a dedicated planning seat, running the planner agent's own contract for one
+  named charter: decompose across both planes, then author only the PRD/SPEC/LLD/ADR the charter
+  earns, each doc riding to docs:doc-checker fresh-context before it counts gated. Holds until the
+  charter closes on a named loop-rules decision. Run /lead-planning [charter]. NOT implementing an
+  approved LLD (builder, Agent tool); NOT a bugfix or single-file change (host states
+  Components/Risks inline, no doc); NOT a generic multi-seat charter (/lead-team); NOT reviewing
+  an existing design doc standalone (docs:check-doc); NOT an unattended dispatch (planning-leader,
+  Agent tool).
 disable-model-invocation: false
 user-invocable: false
 argument-hint: "[charter — the design/decomposition work needing a PRD/SPEC/LLD/ADR]"
@@ -42,7 +38,7 @@ authored.
 
 From this point until the charter closes (Phase 4), this session holds the agent's own contract
 as its own operating rules, following the shared ritual in
-`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md` (the canonical copy,
+`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md` (the canonical copy,
 shared with `leading-teams`/`leading-builds`):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/planner.md` now, in full.** Adopt its four priorities
@@ -109,7 +105,7 @@ what was authored, what each doc-checker verdict said, what remains open.
   re-dispatching the same fix a third time hoping the checker relents.
 - **The charter turns out smaller than expected once underway** → the shared ritual's first
   failure branch
-  (`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`): keep authoring
+  (`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`): keep authoring
   under the adopted contract anyway; close it (Phase 4) rather than shrinking the discipline
   around what's left.
 - **The `doc-checker` dispatch itself fails to return** (a tool error, not a reviewed finding) →
@@ -121,7 +117,7 @@ what was authored, what each doc-checker verdict said, what remains open.
 ## When this rule ends
 
 The shared ritual's closing rule
-(`${CLAUDE_PLUGIN_ROOT}/skills/lead-team/references/adopt-agent-contract.md`) applies: the
+(`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`) applies: the
 adopted discipline holds only for the charter bound in Phase 1, until it closes on a named
 decision in Phase 4; a new charter requires a new `/lead-planning` invocation.
 
