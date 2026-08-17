@@ -545,7 +545,29 @@ def gate(root: Path, package: bool = False):
              "source-file",
              # check-everything's "harness-audit" is its OWN report-directory naming convention
              # (`<root>/harness-audit-<date>/`), not a citation of any sibling skill:
-             "harness-audit"}
+             "harness-audit",
+             # issue #497's own G8 widening (agents/*.md now feeds the inventory) pulled five
+             # NEW agent-owned suffixes into `suffixes` (-runner from fact-finder's family,
+             # -finder, -checker from the *-checker seats, -judge from routing-judge) — each
+             # newly catching pre-existing, unrelated prose, the standing false-positive class:
+             # "backfill-runner" is skill-writing-rules' illustrative NOT-for example (a
+             # hypothetical sibling in a "Good (trigger contract)" teaching block, never a real
+             # skill); "candidate-finder" is plan-skill-merge's own self-descriptive negative
+             # ("Not a candidate-finder"); "decision-checker" and "corpus-checker" are
+             # agent-writing-rules' generic lifecycle-stage role labels for design-system-checker/
+             # font-choice-checker ("a pre-export decision-checker and a post-export
+             # corpus-checker"), not citations of any real sibling; "single-judge" is
+             # check-routing's own named concept (its single-judge-noise voting-round rationale),
+             # not a skill or agent name:
+             "backfill-runner", "candidate-finder", "decision-checker", "corpus-checker",
+             "single-judge",
+             # same #497 widening, caught in OTHER plugins once their own gate runs against the
+             # now-larger cross-workspace suffix set: "single-writer" (agent-protocols'
+             # a2a-training-facts, "all-or-nothing single-writer import tool") is a term-of-art
+             # phrase, not a sibling name; "ops-planner" (authorkit's fix-old-names, an
+             # illustrative retired-agent error message: "Agent type 'ops-planner' not found") is
+             # a deliberate historical citation, the same class as `ops-issues` already above:
+             "single-writer", "ops-planner"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):
