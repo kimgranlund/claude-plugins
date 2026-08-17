@@ -28,27 +28,46 @@ every phase below follows whichever option it returns.
 in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
 `gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
 `TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`,
-REQ-010) — → resume by that record's state: `done`/`wontfix`/closed → report and stop
-(reopening is the user's call); open with new detail following the id → fold it into
-Summary/Scope and re-run Phase 4's sizing only if the new detail changes the size class;
-otherwise (open, no new detail) → report the record's state, size, and placement, point at
+REQ-010) — → resume by that record's state. Trailing text matching the Phase 6 offer's own
+resume word (verbatim `install-docs-index`, case-insensitive) → skip straight to Phase 6's write
+regardless of open/closed state — accepting the index offer is not a scope change and needs no
+sizing. Otherwise: `done`/`wontfix`/closed → report and stop, echoing back any trailing text
+unfolded (reopening is the user's call, but an answer to a Phase 4/5 close-out's named question
+is not silently dropped); open with new detail following the id — including an answer to a named
+clarifying question — → fold it into Summary/Scope/Open (clearing the answered gap from
+Scope/Open once folded) and re-run Phase 4's sizing only if the new detail changes the size
+class; otherwise (open, no new detail) → report the record's state, size, and placement, point at
 `/build-feature` for momentum, and stop. An id that does not resolve (no such file; `gh issue view`
 errors; Option C's `read` returns not-found, AC-010) is a fresh idea — say so, never proceed as if
 a record existed.
 
-## Phase 2 — Extract
+## Phase 2 — Extract (no live clarify round — the fork has no question channel)
 
 Invoke find-intent (harness, where installed; apply its discipline inline otherwise): root goal
-vs literal ask, the delta taxonomy, ONE batched clarifying round maximum — asked via
-`AskUserQuestion`. A live user is the default assumption — running forked (`context: fork`) does
-not change it: forking relieves the caller's session, it does not remove the person. Skip straight
-to capture-with-gaps only when the seed carries `[redirected-from:X]` (the round budget was
-already spent upstream) or `[unattended]` (no live user backs the run at all) — the shared marker
-protocol, canonical statement `file-task`'s Phase 2. A seed that references context the fork
-cannot see ("the idea we discussed", "what I just described") is itself a gap, not a reason to
-guess: ask for the actual idea via the same round — `$ARGUMENTS` carries no conversation history.
-A still-vague idea after that round, or no round at all, is captured anyway — the named gaps go
-into the record's Scope/Open section; vagueness is a note, never a blocker to persistence.
+vs literal ask, the delta taxonomy — but do not run its clarifying round as a live
+`AskUserQuestion` call. **Measured 2026-08-17 (gh#541):** a `context: fork` background dispatch
+has no question channel at all — `AskUserQuestion` is unreachable from inside it (confirmed two
+ways: two independent thin captures, #1122 and #541's own filing, both minted clarify-less; and a
+background dispatch cannot even discover the tool). This is this skill's only invocation shape
+(`context: fork` is fixed above), so the round never runs live, full stop.
+
+Corrected assumption (2026-08-09 text, falsified 2026-08-17 per gh#541, kept here as the dated
+record of the mistake): the prior claim — "a live user is the default assumption; forking
+relieves the caller's session, it does not remove the person" — is wrong. Do not restate it as
+canon.
+
+What happens instead: capture immediately from `$ARGUMENTS` alone (carries no conversation
+history), naming every gap the clarifying round would have surfaced — including a seed that
+references context the fork cannot see ("the idea we discussed", "what I just described"), which
+is itself a named gap, never a guess — in the record's Scope/Open section. The close-out (Phase
+5, at mint) then owes the round it couldn't run live: it lists the batched clarifying questions
+find-intent's discipline would have asked, and names the resume command —
+`/file-feature <id> <answers>` — that folds the answers into the record once a person supplies
+them (Phase 1's fold-in path already handles "open with new detail following the id"). Name no
+clarify questions in the close-out when the seed carries `[redirected-from:X]` (the round budget
+was already spent upstream) or `[unattended]` (no live session to report back to at all) — the
+shared marker protocol, canonical statement `file-task`'s Phase 2. Either way, a still-vague idea
+never blocks persistence — vagueness is a named gap, never a gate.
 
 ## Phase 3 — Dedup: it may already exist
 
@@ -118,6 +137,10 @@ build's write-back.
 Place it: add the line to ROADMAP (Now/Next/Later) or PLAN **only where those docs already
 exist** — never mint living-state docs unprompted (both backends; queue docs stay files).
 
+Where Phase 2 named unasked clarifying questions (no `[redirected-from:X]`/`[unattended]` marker
+on the seed), the close-out reported here carries them verbatim plus the resume command
+(`/file-feature <id> <answers>`) — this is the report the caller's session actually reads.
+
 ## Phase 6 — Bootstrap the project index (opt-in, when absent)
 
 The record is durable but not yet DISCOVERABLE: a fresh session finds `docs/` only if told.
@@ -125,21 +148,22 @@ Direct entry only — the seed carries no `[redirected-from:X]` and no `[nested-
 (`dispatch-ticket`'s marker — teamwork, renamed from `dispatch-feature` per ADR-0010 — when it
 runs this skill's intake as part of `/build-feature`'s
 pipeline): a nested run already owes `dispatch-ticket`'s own ambiguity question and this skill's
-own Phase 2 round, and a third `AskUserQuestion` from one background run is one too many — skip
-straight to the pointer line below on either marker. When `.claude/skills/project-docs/SKILL.md`
-is absent from the project AND a live user backs the run (file-bug's Phase 2 test, shared) AND
-entry is direct, offer — once, via ONE AskUserQuestion — to install the project-docs index skill
-from this skill's
-`assets/project-docs-skill-template.md` (fill `{{PROJECT_NAME}}` from the repo directory name,
-or the project manifest's name field where one exists), so doc-shaped asks ("what are the
-requirements for X", "which tickets are open") route to the corpus in every future session.
-Options: install (recommended) · not now. Installing writes exactly one file and reports the
-path. Declined → one pointer line in the close-out report ("index skill not installed — a later
-/file-feature run can add it; a scattered existing corpus is /tidy-docs's job"), no re-ask this session, no marker files — which is why the option is
-"not now", never "never": with no durable record of a refusal, a standing no cannot be honored,
-so it is not offered. This step is opt-in by design: writing into `.claude/skills/` changes the
-project's routing surface, and that earns a knowing yes from the live user backing the run. The
-skill already present → skip silently.
+own Phase 2 round — skip this offer entirely on either marker (never mind the question channel:
+per Phase 2's measured finding, none of these were ever live `AskUserQuestion` rounds anyway, only
+named-in-the-close-out ones). When `.claude/skills/project-docs/SKILL.md` is absent from the
+project, no `[unattended]` marker is on the seed, and entry is direct, this step does not attempt
+a live `AskUserQuestion` offer either (same gh#541 finding as Phase 2: the fork has no question
+channel) — it names the offer in the close-out instead: "no project-docs index skill found —
+install it? reply `/file-feature <id> install-docs-index` and this skill will write it from
+`assets/project-docs-skill-template.md` (fills `{{PROJECT_NAME}}` from the repo directory name or
+the project manifest's name field)." That exact resume word is Phase 1's own trigger (above) for
+routing straight to the write, skipping the Summary/Scope fold-in a plain answer would take.
+Writing into `.claude/skills/` changes the project's routing surface, which is why this stays an
+offer named for a person to accept via that resume, never a default-yes write from the fork
+itself. Unanswered → the offer simply stands in that close-out; no re-ask on a later resume that
+doesn't invoke it, no marker files — the option is "not now", never "never": with no durable
+record of a refusal, a standing no cannot be honored, so it is not offered again unprompted. The
+skill already present → skip silently, nothing to name in the close-out.
 
 ## Failure branches
 

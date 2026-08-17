@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "displayName": "Docs",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK, IDR, RDD \u2014 standards, maker, review, validator, ten type templates, and file-bug (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, make-rubric), markdown\u2194markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (make-reference, make-llms-txt, make-vision-memo \u2014 knowledge-pack authoring lives in harness's make-pack), product-lifecycle-rules (the general, portable build-loop/alignment doc doctrine) and check-stage (its live lifecycle-position reading \u2014 which loop/build-turn stage a repo is in), and a fresh-context doc-checker agent alongside the experiment-runner agent.",
   "license": "MIT",
   "author": {
