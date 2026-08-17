@@ -37,6 +37,7 @@ apply harness's skill-authoring standard by hand. No hard edge crosses the plugi
 
 Directories align with plugin names (ADR-0007).
 
+v1.0.10 · 2026-08-17 · batched harvest wave, one PR closing #507 #508 #509 #511 #512: dead-data class (training-facts); waking-vs-invalidation sharpened (protocol-facts); `exclusive`-flag prompt trap (chat-agent-facts); live-verdict-never-precomputed + flagship fact (check-a2a-isolation); CSS-less-consumer law + 3-lane chooser (catalog-facts). #510 already-shipped, closed directly, excluded.
 v1.0.9 · 2026-08-17 · #482 A2UI v1.0 Candidate terminology sweep, four a2ui-*-facts packs: client→renderer/server→agent role vocabulary; `callFunction`→`callRendererFunction`; `functionResponse`→`rendererFunctionResponse`; `callableFrom` `clientOnly`/`remoteOnly`/`clientOrRemote`→`rendererOnly`/`agentOnly`/`rendererOrAgent`. Mirrors gen-ui-kit's sweep (issue #1354, PR #1472, unmerged); each sources.md gained a dated Terminology note. STRICT-resolution/severity levels had no claim to correct — scoped out.
 
 v1.0.8 · 2026-08-16 · #348 footer sweep: 3 packs' (a2ui-catalog-facts, a2ui-chat-agent-facts, a2ui-training-facts) stamped "Extending this pack" paragraph replaced with the one-line `Extension: governed by [[make-pack]]` citation per pack-writing-rules (harness 3.8.9) — mechanical, bodies otherwise untouched

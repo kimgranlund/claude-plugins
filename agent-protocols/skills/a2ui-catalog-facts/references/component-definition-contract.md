@@ -80,7 +80,38 @@ mis-render.
 
 ---
 
-## UPDATE 2026-07-08 — two prop idioms the chart/Text waves minted (ADR-0106/0109/0107)
+## UPDATE 2026-08-17 — the CSS-less-consumer law (ADR-0102) — no CSS verb, three-lane chooser (issue #512)
+
+**[inferred]** from `agent-ui` ADR-0102 (accepted 2026-07-08, + lane exemplars in 0103/0106), cited
+here from that report (memory `css-less-consumer-law`) — re-verify against the accepted ADR text at
+the next refresh wave rather than trusting this restatement cold. This is the definition the
+"UPDATE 2026-07-08" section below already assumed when it said "route through ADR-0102's
+CSS-less-consumer chooser" — stated here explicitly, once, so a reader doesn't have to already know
+the ADR to use that reference.
+
+**The law:** an A2UI catalog consumer has **NO CSS verb at all** — there is no stylesheet, no class
+attribute, no inline-style prop the renderer honors. So any component contract that assumes "the
+page author supplies layout/spacing/surface via CSS" **deterministically fails** on an A2UI surface;
+this is not a bug to patch per instance, it is a structural fact about the consumer that every new
+component or prop decision has to route through.
+
+**The three-lane chooser** — for every "how should this rendered-correctness gap be closed" ask:
+
+- **Lane A — component-owned default.** The component itself picks a sane default (spacing,
+  emphasis, wrapping) when composition alone cannot express the intent. No new prop, no catalog
+  change.
+- **Lane B — a catalog prop.** A boolean/enum prop for **per-instance intent** — e.g. `Text.truncate`
+  — only when the concern is genuinely per-instance and a safe default (Lane A) isn't enough (see
+  the "intake test" bullet below, already in this file).
+- **Lane C — a taught idiom.** Composable but non-obvious layout (e.g. `FormProvider` declaring zero
+  layout of its own) is taught via an exemplar or prompt guidance — the payload author composes it
+  from existing primitives, the catalog doesn't grow a new mechanism.
+
+**Routing rule — route new instances through the chooser; never re-litigate the law per bug.** Each
+"a component looks wrong without CSS" report is an instance of this one gap class, not a fresh
+design question; the chooser (Lane A before B before C — cheapest, least-catalog-surface fix first)
+is the answer every time, and the ADR is the place a genuinely new lane would be proposed, not a
+one-off exception argued in a bug thread.
 
 - **Non-bindable presentation intent** (`Text.truncate`, `Text.emphasis`): per-instance INTENT that
   is not data state takes a boolean prop with **`bindable` ABSENT by key-omission** (never

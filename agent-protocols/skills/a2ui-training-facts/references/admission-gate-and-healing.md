@@ -61,3 +61,24 @@ Structured `A2uiOutput` input skips the text arms (a)/(b) — only (c)/(d) can a
 `HealResult` is verdict-neutral (`heal.ts:38-40`): `ok:true` always carries a `messages` array (even when `changed:false` — the next stage always runs against `messages`, never raw `input`); `ok:false` means the input couldn't be coerced to JSON at all. Each caller maps `ok:false` to its own vocabulary — admission → `E_SCHEMA` (`admit.ts:89`), the streaming codec → `PARSE` (`heal.ts:36`). A healed admission is marked `status:"repaired"`; the `repairs` list travels in `AdmitResult`, not on the record (the schema is closed — ADR-0061 rejected a `meta.repairs` field; see `references/record-schema-and-provenance.md`).
 
 **Deviation doctrine:** the closed list "will feel too small" the first time a new common LLM defect appears (e.g. smart quotes) — that is deliberate (ADR-0061 Consequences). Widening it is an **amendment to ADR-0061 clause 1**, and each new arm must argue it is *form, not semantics* — never an ad-hoc addition in the module (`heal.ts:19-21`).
+
+## UPDATE 2026-08-17 — "dead data" as its own defect class (issue #507)
+
+**[inferred]** from `agent-ui`'s ADR-0024/0026 corpus wave (source: `.claude/docs/lld/a2ui-renderer`
+LLD-C6/C10, memory `a2ui-lld-c6-list-parked`) — cited here from that report, not independently
+re-verified against the `agent-ui` working tree from this pack's own repo (re-verify against
+`admit.ts`'s pointer-resolution stage — above — at the next research wave; this entry is a
+placeholder for that check, not a substitute for it).
+
+Pointer RESOLUTION (above) checks one direction only: every `{path}` **binding** in a candidate
+resolves against its bundled data model. It says nothing about the **reverse** direction — a data
+model key that exists but that NO binding in the record ever references. **"Dead data"** names that
+reverse defect class: model data seeded into a record (or an authored payload) but never bound to
+anything the renderer touches — a real judged REJECT verdict in the source corpus wave
+(frontier-trip-card), not a hypothetical. **Why it matters for curation, not just correctness:** an
+admission pipeline that only checks binding→data resolution has no signal for data→binding coverage
+at all, so a record can pass every existing admission stage (tier-1, pointer resolution, dedup) while
+carrying dead weight an exemplar-quality bar should catch. **Caveat — this is a naming/taxonomy
+addition, not a new admission stage**: this pack's own pipeline (`admit.ts`, above) does not
+currently implement a dead-data check; a curator or tier-2 judge rubric that wants to catch it needs
+to add the check, not assume admission already does.

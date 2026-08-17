@@ -82,6 +82,31 @@ catalog-derived half — so a note-channel instruction (see
 conversational-reasoning-and-click-routing-gap) would live in the grammar half without disturbing
 the gate.
 
+## Single-modality consumer prompt framing — the `exclusive` flag (issue #509)
+
+**[incident]** — a real, dated live bug (`agent-ui gen-ui-live.html`, 2026-07-25), root-caused and
+fixed; cited here from that report (memory `genui-exclusive-consumer-prompt-framing`; source
+`genui-surface.spec.md` §10 v0.4 — re-verify against that spec text at the next refresh wave, not
+independently re-checked from this pack's own repo). A shared system-prompt framing tuned for a
+**COEXISTENCE** consumer — "A2UI stays your default; reach for genui only when the catalog cannot
+express it" — silently misdirects a **GenUI-ONLY** consumer: the model still emits valid A2UI JSONL,
+the transport still streams it, and a single-modality client drops every line by design. **Failure
+mode:** zero errors anywhere in the pipeline — validate-then-stream still reports success (above) —
+the only symptom is a blank surface, because the framing told the model a channel exists that this
+particular caller never wired up.
+
+**Fix pattern:** an explicit `exclusive` flag on the surface config composes an override paragraph
+into the GRAMMAR naming the concrete fact — "this caller has no A2UI rendering path at all" — rather
+than relying on the shared coexistence framing to degrade gracefully on its own. This is a GRAMMAR-half
+change (see "The prompt is catalog-derived and drift-gated" above): it is hand-authored instruction
+text, not something `prompt-drift.test.ts`'s catalog-inventory gate would ever catch, so it needs its
+own explicit check rather than riding the drift gate's coverage.
+
+**General law for this pack:** any prompt block that steers on an assumption about the CALLER's
+rendering capabilities must be checked against every real consumer archetype the deployment actually
+has, not just the one it was originally written for. A shared GRAMMAR string is a claim about every
+caller that loads it, not just the first one.
+
 ## What this file does NOT cover
 
 The transport that carries the yielded stream (agent-transport-seam) · what feeds `input`
