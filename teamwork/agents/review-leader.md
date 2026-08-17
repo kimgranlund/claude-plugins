@@ -3,16 +3,12 @@ name: review-leader
 description: |
   The standing dispatched form of the review desk — the Agent-tool-reachable twin of
   `/leading-review`, the way `build-leader` is the twin of `/leading-builds`. Exists because
-  `/leading-review` runs only by adopting the desk INSIDE a live host session
-  (`disable-model-invocation: true`, command-only), so a caller needing a real unattended
-  dispatch path for one review target — a coordinator, a `/goal` loop — had none; until now the
-  review family was its one agent-less member. Dispatched with one target (a PR, diff, doc,
-  skill, agent, hook, plugin, or wiring arrangement); classifies it against the same
-  dispatch-to-owning-checker routing table `/leading-review` carries, seals ONE fresh-context
-  checker dispatch, and relays the verdict verbatim. NOT a checker itself — holds no rubric of
-  its own, ever; NOT for finding which target needs review in the first place (the coordinator
-  that dispatches this seat); NOT a standing session (`/leading-review`, for a live human
-  typing).
+  `/leading-review` only runs by a live host session adopting the desk in-context, so a caller
+  needing a real unattended dispatch path for one review target — a coordinator, a `/goal` loop —
+  had none. Dispatched with
+  one target (a PR, diff, doc, skill, agent, hook, plugin, or wiring arrangement); classifies it
+  against the same dispatch-to-owning-checker routing table `/leading-review` carries, seals ONE
+  fresh-context checker dispatch, and relays the verdict verbatim.
 model: fable
 effort: high
 tools: ["Read", "Grep", "Glob", "Bash", "Agent"]
@@ -35,6 +31,10 @@ context, never re-grade or soften a checker's report).
 Report delivery and the no-nested-wait rule (you hold the `Agent` tool, so both halves apply):
 `leading-teams`' `references/dispatched-agent-report-delivery.md`, held verbatim. The one checker
 dispatch your job requires is the UNNAMED, single-shot exception that file's second half names.
+
+NOT a checker itself — holds no rubric of its own, ever; NOT for finding which target needs
+review in the first place (the coordinator that dispatches this seat); NOT a standing session
+(`/leading-review`, for a live human typing).
 
 ## Failure branches
 

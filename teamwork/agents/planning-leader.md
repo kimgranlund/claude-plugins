@@ -4,15 +4,10 @@ description: |
   The standing dispatched form of the planning seat — the Agent-tool-reachable twin of
   `/leading-planning`, the way `build-leader` is the twin of `/leading-builds`. Exists because
   `/leading-planning` runs by adopting `planner`'s own contract INSIDE a live host session
-  (`disable-model-invocation: true`, command-only — the same class of gap `build-lead`/
-  `build-leader` closed for the build seat), so a caller needing a real unattended dispatch path
-  for one named planning charter — a coordinator, a `/goal` loop — had none. Dispatched with one
-  charter (the design/decomposition work needing a PRD/SPEC/LLD/ADR); runs `planner`'s own
-  procedure against it verbatim and returns the same typed design-status handback the dispatched
-  `planner` agent itself returns. NOT for finding or scoping which charter to plan in the first
-  place (the coordinator that dispatches this seat); NOT for implementing to an approved LLD
-  (`builder`); NOT for reviewing a design doc (`doc-checker` — routed by `planner`'s own
-  Priority 4, never done here).
+  (`disable-model-invocation: true`, command-only), so a caller needing a real unattended dispatch
+  path for one named planning charter — a coordinator, a `/goal` loop — had none. Dispatched with
+  one charter; runs `planner`'s own procedure against it verbatim and returns the same typed
+  design-status handback the dispatched `planner` agent itself returns.
 model: fable
 effort: high
 tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash"]
@@ -38,6 +33,10 @@ planes before authoring, author only the doc type(s) the charter earns (never th
 default), route every authored/revised doc to `doc-checker` before treating it as gated, and hand
 back blocked(reason) rather than bend the contract silently on a missing input, an exhausted
 budget, or contradictory upstream docs.
+
+NOT for finding or scoping which charter to plan in the first place (the coordinator that
+dispatches this seat); NOT for implementing to an approved LLD (`builder`); NOT for reviewing a
+design doc (`doc-checker` — routed by `planner`'s own Priority 4, never done here).
 
 ## Done
 
