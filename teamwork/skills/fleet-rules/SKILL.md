@@ -134,6 +134,15 @@ record.**
   session at 16:03 and ratified in a second, parallel session one minute later at 16:04 — the
   same decision put to the user through two channels at once, requiring a consolidated tie-break
   round to repair. This rule is what that repair would have made unnecessary.
+- **A duty report always gets a work order back — never a bare hold-idle.** When a seat reports
+  for duty (or reports done and asks what's next) to the coordinator, the reply names either work
+  or a condition — one of three arms, never an unstructured "hold idle"/"stand by" with no named
+  slice or trigger: an immediate assignment; an explicit QUEUED assignment naming both the slice
+  and the trigger condition that activates it ("hold as reserve; on X landing, you take Y"); or,
+  if the queue is genuinely empty, that fact stated explicitly plus the next check-in condition.
+  Minted 2026-08-17: a fresh seat reported in, the queue was drained, and the seat sat in an
+  unstructured holding pattern for several message rounds before a queued-slice promise finally
+  emerged (#539).
 
 ### 4. Version-slot + merge-order rules
 
