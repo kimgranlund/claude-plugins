@@ -21,57 +21,62 @@ const SEAT_PROMPT = {
     'Run your standing per-firing procedure now (clean-git) — one bounded repo-hygiene sweep. Return your report exactly as you always have: prose findings plus any fenced, target-pathed payload block for computed .claude/ops/ state (ops-write-sandbox-rules) — you still carry no Write tool, nothing here changes that contract.',
 }
 
-// Top-level `return` is not valid standard JS/ESM — the two real cited Workflow-script instances
-// use it, which means the platform's own loader must wrap a file's body some non-standard way
-// before executing it. This file instead stays standards-parseable (this repo's own G11 eslint
-// gate has to pass it) and hands its result back via `export default` from an awaited async
-// function — unverified against the live Workflow tool same as the rest of this path; adjust the
-// export shape once a live run proves what the loader actually reads.
-async function runSweep() {
-  // `args` may arrive as the caller's raw JSON string rather than the parsed object, depending on
-  // the invoking runtime; normalize so both work (same defensive parse the marketplace
-  // code-modernization plugin's portfolio-assess.js workflow uses).
-  const ARGS = typeof args === 'string' ? (() => { try { return JSON.parse(args) } catch (e) { return args } })() : args
+// The Workflow tool's own loader extracts the `meta` literal above, then runs everything below
+// it as the BODY of an async function it supplies itself — top-level `await`, `return`, and the
+// phase()/log()/agent()/parallel()/args globals all come from that wrapper, not from anything
+// this file declares. A second file-level `export` after `meta` (this file previously closed
+// with `export default await runSweep()`) is invalid syntax inside that function body — that is
+// exactly what produced the live "Unexpected keyword 'export'" failure (#529). Confirmed against
+// a real prior Workflow run captured on this machine (a code-review-wf_*.js instance) that uses
+// this same bare-body, single-export shape with top-level `return`. The earlier
+// "stay standards-parseable for G11 eslint" constraint this file cited doesn't bind here either:
+// eslint.config.mjs only targets `**/scripts/*.mjs|js`, never `**/workflows/*.js`.
 
-  const requestedScope = ARGS && Array.isArray(ARGS.scope) && ARGS.scope.length > 0 ? ARGS.scope : KNOWN_SEATS
-  const scope = requestedScope.filter((s) => KNOWN_SEATS.includes(s))
-  const unrecognized = requestedScope.filter((s) => !KNOWN_SEATS.includes(s))
-  if (scope.length === 0) {
-    throw new Error(
-      `chore-sweep workflow requires at least one known seat in args.scope (decision-watcher | issue-sorter | repo-cleaner) — got ${JSON.stringify(requestedScope)}`,
-    )
-  }
+// `args` may arrive as the caller's raw JSON string rather than the parsed object, depending on
+// the invoking runtime; normalize so both work (same defensive parse the marketplace
+// code-modernization plugin's portfolio-assess.js workflow uses).
+const ARGS = typeof args === 'string' ? (() => { try { return JSON.parse(args) } catch (e) { return args } })() : args
 
-  const seatResults = await parallel(
-    scope.map((seat) => () =>
-      agent(SEAT_PROMPT[seat], { agentType: `harness:${seat}`, label: `seat:${seat}` }).then((report) => ({
-        seat,
-        report: report || null,
-      })),
-    ),
+const requestedScope = ARGS && Array.isArray(ARGS.scope) && ARGS.scope.length > 0 ? ARGS.scope : KNOWN_SEATS
+const scope = requestedScope.filter((s) => KNOWN_SEATS.includes(s))
+const unrecognized = requestedScope.filter((s) => !KNOWN_SEATS.includes(s))
+if (scope.length === 0) {
+  throw new Error(
+    `chore-sweep workflow requires at least one known seat in args.scope (decision-watcher | issue-sorter | repo-cleaner) — got ${JSON.stringify(requestedScope)}`,
   )
-
-  const returned = seatResults.filter((r) => r && r.report)
-  const unmeasured = seatResults
-    .filter((r) => !r || !r.report)
-    .map((r) => r.seat)
-    .concat(unrecognized.map((s) => `${s} (unrecognized seat name — valid menu: ${KNOWN_SEATS.join(', ')})`))
-
-  let plannerReport = null
-  if (returned.length > 0) {
-    const bundle = returned.map(({ seat, report }) => `## ${seat}\n\n${report}`).join('\n\n---\n\n')
-    plannerReport = await agent(
-      `The following are this sweep's seat reports, verbatim — judge exactly these, refetch nothing. Produce ONE rewritten .claude/ops/plan.md exactly per your own contract (compute-only — return it as a fenced, target-pathed block, never write it yourself). Name every UNMEASURED seat in the plan itself: ${JSON.stringify(unmeasured)}.\n\n${bundle}`,
-      { agentType: 'harness:chore-planner', label: 'planner' },
-    )
-  }
-
-  return {
-    scope,
-    seatReports: Object.fromEntries(returned.map(({ seat, report }) => [seat, report])),
-    unmeasured,
-    plannerReport,
-  }
 }
 
-export default await runSweep()
+phase('Sweep')
+const seatResults = await parallel(
+  scope.map((seat) => () =>
+    agent(SEAT_PROMPT[seat], { agentType: `harness:${seat}`, label: `seat:${seat}` }).then((report) => ({
+      seat,
+      report: report || null,
+    })),
+  ),
+)
+
+const returned = seatResults.filter((r) => r && r.report)
+const unmeasured = seatResults
+  .filter((r) => !r || !r.report)
+  .map((r) => r.seat)
+  .concat(unrecognized.map((s) => `${s} (unrecognized seat name — valid menu: ${KNOWN_SEATS.join(', ')})`))
+
+log(`Sweep done: ${returned.length} seat report(s), ${unmeasured.length} unmeasured`)
+
+let plannerReport = null
+if (returned.length > 0) {
+  phase('Plan')
+  const bundle = returned.map(({ seat, report }) => `## ${seat}\n\n${report}`).join('\n\n---\n\n')
+  plannerReport = await agent(
+    `The following are this sweep's seat reports, verbatim — judge exactly these, refetch nothing. Produce ONE rewritten .claude/ops/plan.md exactly per your own contract (compute-only — return it as a fenced, target-pathed block, never write it yourself). Name every UNMEASURED seat in the plan itself: ${JSON.stringify(unmeasured)}.\n\n${bundle}`,
+    { agentType: 'harness:chore-planner', label: 'planner' },
+  )
+}
+
+return {
+  scope,
+  seatReports: Object.fromEntries(returned.map(({ seat, report }) => [seat, report])),
+  unmeasured,
+  plannerReport,
+}

@@ -6,7 +6,15 @@
 // names, unreachable code, dead conditions).
 
 export default [
-  { ignores: ["**/dist/**", "**/node_modules/**"] },
+  {
+    // Workflow-tool scripts (**/workflows/*.js) are governed by the Workflow tool's own loader
+    // contract, not this repo's JS/ESM conventions (issue #529): the loader extracts a leading
+    // `meta` literal, then runs the rest of the file as the body of an async function it supplies
+    // itself — top-level `return`/`await` are valid there and a second top-level `export` is not,
+    // the opposite of what this file's `sourceType: "module"` block would enforce. Excluded
+    // rather than special-cased so this gate never contradicts that contract.
+    ignores: ["**/dist/**", "**/node_modules/**", "**/workflows/*.js"],
+  },
   {
     files: ["**/scripts/*.mjs", "**/scripts/*.js"],
     languageOptions: {
