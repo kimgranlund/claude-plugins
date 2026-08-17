@@ -72,3 +72,15 @@ selected at discovery time, as opposed to how its accuracy is measured after the
 [[chat-harness-routing-facts]]. Building an actual logging pipeline, eval harness, or
 notification integration for a project is that project's own build seat; this pack teaches the
 pattern, it owns no codebase's source.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`turn-trace-and-failure-diagnostics.md` and `metric-integrity-and-progress-delivery.md` were
+added from agent-ui#1115's "Scope-conformant revision v2" comment (posted
+2026-08-17T17:14:57Z), the litmus-filtered re-harvest of `@agent-ui/a2ui` lessons kept to
+web-based virtual-chat-harness knowledge only. Lesson 39's dropped (CLI-tier) half — the
+`prompt-drift`/`prompt-equivalence` test-gate mechanism — was already excluded by v2 itself as
+development-side, not this pack's concern; the KEPT half of lesson 39 was evaluated and SKIPPED
+here as hard dedup — already covered by [[chat-harness-guardrail-facts]]'s own
+`config-schema-and-prompt-externalization.md`, even though v2 filed the kept half under this
+pack's own axis.

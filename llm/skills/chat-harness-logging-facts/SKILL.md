@@ -29,6 +29,8 @@ file, never presented as "the only way to do this."
 | Deterministic logging/tracing — "log what the harness did, not what the user typed", "trace a tool call", "a hook fired vs. the transcript says" | `references/logging-and-tracing.md` |
 | Routing-accuracy measurement — "measure skill routing accuracy", "held-out adversarial eval suite", "is this a real regression or judge noise", "a blind routing judge" | `references/routing-accuracy-evals.md` |
 | Background-task notification vs. polling — "notify instead of poll", "task-notification vs. an external CI/deploy check", "why shouldn't I sleep-loop on a background agent" | `references/background-task-notification.md` |
+| Per-turn trace + failure diagnostics — "assemble a decision trace for a chat product's own turn loop", "a halt message needs to say which member and where" | `references/turn-trace-and-failure-diagnostics.md` |
+| Metric integrity + progress delivery — "a repair-rate metric that never reads zero", "progress updates go invisible during a tool round" | `references/metric-integrity-and-progress-delivery.md` |
 | Provenance — this harness's own verified mechanics vs. this workspace's own measured, dated worked instance | `references/sources.md` |
 
 ## Consult procedure

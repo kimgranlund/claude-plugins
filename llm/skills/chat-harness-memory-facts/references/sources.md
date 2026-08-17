@@ -62,3 +62,11 @@ is [[chat-harness-routing-facts]]'s territory. The wire format of a model's own 
 output is [[llm-streaming-facts]]'s. When a cited worked instance and its own source repo disagree
 about current behavior, the source repo wins and this pack's citation needs repair, not the other
 way around.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`capability-availability-tiering-and-ambient-cost.md` and
+`model-authored-memory-patch-non-destructive-writes.md` were added from agent-ui#1115's "Scope-conformant
+revision v2" comment (posted 2026-08-17T17:14:57Z), the litmus-filtered re-harvest of
+`@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness knowledge only. No lesson routed
+to this pack by that export overlapped existing coverage — no dedup skip was needed here.

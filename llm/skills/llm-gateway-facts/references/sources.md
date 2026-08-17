@@ -53,3 +53,16 @@ that repo's actual shipped behavior (dated, exhaustive, `file:line`-cited agains
 snapshot) rather than a portable pattern, is the `agent-protocols` plugin's `a2ui-chat-agent-facts`
 pack — when the worked example and that pack disagree, THAT pack's citation-verified snapshot of
 the real repo wins; this pack's job is to have correctly generalized from it, not to duplicate it.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`single-flight-401-refresh.md` and `retry-policy-and-streaming-passthrough.md` were added from
+agent-ui#1115's "Scope-conformant revision v2" comment (posted 2026-08-17T17:14:57Z), the
+litmus-filtered re-harvest of `@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness
+knowledge only (lessons 40-45 of that export — `packages/agent-ui/data/src/gateway/{auth,retry}.ts`,
+a distinct source module from this pack's existing `tools/agent/` citations). No lesson routed to
+this pack by that export overlapped this pack's PRE-EXISTING coverage — no dedup skip was needed
+for lessons 40-45 themselves. This pack's OWN existing files, however, are cited AS the dedup
+target for several other lessons the export routed elsewhere: lessons 6/7 (workflow), 18
+(routing), 20 and 30 (tool and guardrail, both `[split]`) — see those packs' own `sources.md`
+Provenance notes.

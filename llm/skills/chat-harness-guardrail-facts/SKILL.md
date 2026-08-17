@@ -30,6 +30,7 @@ presented as the only valid way to build this layer.
 | Config precedence + setup — "settings.json vs. the system prompt", "which settings scope wins", "install or bootstrap this reproducibly" | `references/config-precedence-and-setup.md` |
 | Structuring the config/prompt layer itself — "one shared config schema or scattered params", "hardcoding my system prompt as a string feels wrong", "hoist a config type across a package boundary", "the model list drifted from the real registry" | `references/config-schema-and-prompt-externalization.md` |
 | Multi-turn validation gates — "my per-turn validator contradicts the consumer's cross-turn rules", "the model keeps re-sending what it was told not to", "validate against the session's accumulated state", "catch violations producer-side instead of shipping the error" | `references/multi-turn-validation-and-state-seeded-gates.md` |
+| Disclosure knobs + failure surfacing — "a progress/reasoning disclosure knob shouldn't leak more than intended", "a stream that already sent 200 needs to fail loudly", "halt at the retry bound instead of widening it", "an evolving seam must stay byte-identical when a new flag is absent" | `references/disclosure-and-failure-surfacing-in-a-chat-runtime.md` |
 | Provenance — verified `file:line` vs. observed harness behavior vs. platform fact | `references/sources.md` |
 
 ## Consult procedure

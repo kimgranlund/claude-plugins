@@ -28,6 +28,8 @@ specification (a platform fact, verify against current docs if this pack has age
 | Deferred/search-to-load tool catalogs — "why did calling this tool fail before I searched for it", "amortize a big catalog's schema cost" | `references/deferred-tool-loading.md` |
 | Read-only resources — "attach a file/doc as context, not an action", "MCP resources capability" | `references/resources-vs-tools.md` |
 | External service integration — "wire in a network dependency behind a seam" (routes to the LLM-specific worked pack) | `references/external-service-integration-seam.md` |
+| Tool registry + execution loop — "who owns the tool definitions", "a failed tool shouldn't kill the turn", "where does the multi-round tool-call loop actually run" | `references/tool-registry-and-execution-loop.md` |
+| Adapter degradation + enablement scaling — "an adapter can't map this dial", "a fixed per-tool enablement list rotted" | `references/adapter-degradation-and-enablement-scaling.md` |
 | Provenance — this-session platform fact vs MCP spec fact vs routed sibling | `references/sources.md` |
 
 ## Consult procedure

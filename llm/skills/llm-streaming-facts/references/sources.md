@@ -46,3 +46,16 @@ than a portable pattern, is the `agent-protocols` plugin's `a2ui-chat-agent-fact
 (`produce-loop.md`, `anthropic-sse-wire-contract.md`) — when the worked example and that pack
 disagree, that pack's citation-verified snapshot of the real repo wins; this pack's job is to have
 correctly generalized from it, not to duplicate it.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`stream-abstraction-transport-constraints.md`, `websocket-reconnect-and-heartbeat.md`, and
+`streaming-render-reveal-and-anchors.md` were added from agent-ui#1115's "Scope-conformant
+revision v2" comment (posted 2026-08-17T17:14:57Z), the litmus-filtered re-harvest of
+`@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness knowledge only (lessons 46-53 of
+that export, grounded in `data/src/stream/*`, `SPEC-R12/R13a/R13b/R13c`, ADR-0183/0194 —
+transport/render facts distinct from this pack's existing SSE/Anthropic/validate-then-stream
+citations). Lessons 1 and 5 of that same v2 export ("validate-then-stream", "empty ≠ invalid")
+were confirmed as ALREADY covered by this pack's own pre-existing
+`validate-then-stream-self-correct.md`, even though v2's own section header filed them under
+`chat-harness-workflow-facts` — see that pack's own Provenance note for the corresponding skip.

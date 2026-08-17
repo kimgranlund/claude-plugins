@@ -58,3 +58,15 @@ loading technique; it does not restate the LLM-provider gateway pattern (route t
 [[chat-harness-memory-facts]]) — when this pack and a routed sibling could both plausibly
 answer, the sibling that OWNS the concrete mechanism wins, and this pack's job is to have routed
 correctly, not to have half-answered first.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`tool-registry-and-execution-loop.md` and `adapter-degradation-and-enablement-scaling.md` were
+added from agent-ui#1115's "Scope-conformant revision v2" comment (posted
+2026-08-17T17:14:57Z), the litmus-filtered re-harvest of `@agent-ui/a2ui` lessons kept to
+web-based virtual-chat-harness knowledge only. Lesson 20 of that same v2 export ("one provider
+seam, plain fetch, no vendor SDK") was evaluated and SKIPPED here as hard dedup — already
+substantively covered by [[llm-gateway-facts]]'s `provider-adapter-seam.md`; it is not restated in
+this pack even though v2's own section header filed it under this pack's axis (v2 itself marks
+lesson 20 `[split]` — its CLI-tier grep-gate half is out of scope entirely, routed to the
+teamwork/harness re-route ticket #543).

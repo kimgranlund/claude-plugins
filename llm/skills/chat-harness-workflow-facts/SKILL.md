@@ -29,6 +29,9 @@ this."
 | Chain of command — "who plans vs who builds vs who reviews", "decompose across a team", "the builder found the plan is wrong, now what" | `references/multi-agent-decomposition-and-chain-of-command.md` |
 | The typed hand-off — "what fields go in a report back", "make this hand-off verifiable", "the coordinator can't tell if the build actually passed" | `references/typed-handoff-contracts.md` |
 | Deterministic pipelines — "script this instead of dispatching ad hoc", "fan out and fan back in", "parallel vs pipeline", "when does a barrier belong" | `references/deterministic-workflows-vs-ad-hoc-dispatch.md` |
+| Self-correct retry feedback design — "the model keeps repeating the same mistake on retry", "what should the feedback actually say", "the retry note leaked internal process to the user" | `references/self-correct-feedback-design.md` |
+| Editing a settled answer — "the user wants to change an already-submitted answer", "answered vs disabled", "stale-while-revalidate for an async surface" | `references/settled-answer-state-law.md` |
+| A model's own declared plan — "let the model propose a plan without letting it execute one" | `references/model-declared-plan-vs-host-execution.md` |
 | Provenance — platform mechanic vs worked-example source | `references/sources.md` |
 
 ## Consult procedure

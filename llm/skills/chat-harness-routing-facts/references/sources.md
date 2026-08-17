@@ -65,3 +65,18 @@ repo-structural standard for writing a SKILL.md file to spec (frontmatter shape,
 per-species templates) is `skill-writing-rules` directly, where installed — this pack teaches
 the upstream DECISIONS that standard's file format then encodes, and should never restate its
 checkable rules.
+
+## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
+
+`envelope-framing-and-out-of-band-signals.md`, `multi-producer-namespacing.md`,
+`model-declared-routing-integrity-check.md`, and `client-side-label-auto-attach.md` were added
+from agent-ui#1115's "Scope-conformant revision v2" comment (posted 2026-08-17T17:14:57Z), the
+litmus-filtered re-harvest of `@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness
+knowledge only. Lesson 18 of that same v2 export ("the server's validated selection beats
+client-supplied fields") was evaluated and SKIPPED here as hard dedup — already substantively
+covered by [[llm-gateway-facts]]'s `registry-and-trust-boundary.md` (`resolvePair`'s own
+discriminated-result story); it is not restated in this pack even though v2's own section header
+filed it under this pack's axis. This fold routes an ENVELOPE-line-routing question (which kind of
+line is this, on the same stream as content) as a distinct axis from this pack's existing
+REQUEST-routing question (which skill/tool answers this ask) — both are "routing," at different
+grains, and this pack now answers both.
