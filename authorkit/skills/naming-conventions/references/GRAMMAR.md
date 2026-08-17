@@ -7,10 +7,9 @@ command   := object "-" verb              skill-create, rename-execute
           |  wrapper: skill-name          naming-audit  (iff wraps: that skill)
           |  ("bind"|"fork"|"sub") "-" scope   bind-team, fork-agent, sub-agent (reserved
                                           heads, §14.5, ADR-0020 D3 — supersedes `lead-`)
-          |  "lead" "-" scope             lead-team, lead-review (RETIRED open production,
-                                          ADR-0020 D3; only the closed grandfather set of
-                                          six live names still parses — deprecated
-                                          2026-08-17, deleted at wave 5/#523)
+          |  "lead" "-" scope             RETIRED (ADR-0020 D3; open production removed
+                                          outright, no grandfather set — wave 5/#523
+                                          renamed the six former live names to bind-{scope})
 skill     := object "-" process           skills-audit, rename-planning
           |  topic-phrase "-" "rules"     agent-writing-rules  (§14.2, ADR-0014 D1)
           |  "check" "-" object-phrase    check-routing        (§14.2, ADR-0014 D2)
@@ -26,12 +25,12 @@ Reserved heads/tails on a skill name: `-agent` (agents only, illegal on a skill)
 (reserved tail, §14.2), `check-` (reserved head, §14.2), `bind-`/`fork-`/`sub-` (reserved
 heads, §14.5, ADR-0020 D3 — defined on the command grammar and recognized on the skill parse
 too, since the surfaces ship as a mix of true commands and command-species skills), `lead-`
-(RETIRED as an open production, §14.5, ADR-0020 D3 — a closed, never-grown grandfather set of
-exactly the six live `/lead-*` names, `LEAD_HEAD_GRANDFATHER` in `validate.py`, still parses
-until wave 5/#523 renames them; a brand-new `lead-*` mint fails), `make-`/`file-` (reserved
-heads, §14.7, ADR-0018 — residue resolves against ObjectVocab only). The literal head set is
-closed at exactly `{check, bind, fork, sub, make, file}` plus the closed-list-only `lead` —
-never a template for other VerbLex members.
+(RETIRED as an open production, §14.5, ADR-0020 D3 — no grandfather set left as of wave 5/#523:
+the six former live `/lead-*` names all renamed to `bind-{scope}`, `LEAD_HEAD_GRANDFATHER` and
+its two parse branches deleted outright; any `lead-*` mint now fails, old name or new), `make-`/
+`file-` (reserved heads, §14.7, ADR-0018 — residue resolves against ObjectVocab only). The
+literal head set is closed at exactly `{check, bind, fork, sub, make, file}` — never a template
+for other VerbLex members.
 
 ## Kind decision
 
@@ -54,15 +53,13 @@ in-session, `fork-` a `context: fork`, `sub-` an `Agent` dispatch). Each head is
 exactly like `check-`: not a VerbLex member, never a template for other verbs. These three
 supersede `lead-` (ADR-0016 D1/D2), retired below.
 
-**`lead-` retired (§14.5, ADR-0020 D3, 2026-08-17):** no new `lead-{scope}` mint conforms,
-even when `{scope}` resolves fine in the orchestrator scope pool. Wave 2 (#520) could not
-rename the six live `/lead-*` surfaces in the same change (that is wave 5, #523), and the
-`exemptions` array is shrink-only (ADR-0011 D8) — so those six stay parsing via a closed,
-never-grown grandfather set (`LEAD_HEAD_GRANDFATHER` in `validate.py`: `lead-team`,
-`lead-build`, `lead-planning`, `lead-product`, `lead-review`, `lead-intake`), never via
-`exemptions`. This is deprecated scaffolding, not a permanent third mechanism: wave 5
-deletes the grandfather set and both `lead-` code branches outright when it renames those
-six to `bind-{scope}`.
+**`lead-` retired (§14.5, ADR-0020 D3, 2026-08-17; grandfather set removed wave 5/#523):** no
+`lead-{scope}` mint conforms, even when `{scope}` resolves fine in the orchestrator scope pool.
+Between wave 2 (#520, which could not rename the six live `/lead-*` surfaces in the same change)
+and wave 5 (#523, which did), those six parsed via a closed, never-grown grandfather set
+(`LEAD_HEAD_GRANDFATHER` in `validate.py`) rather than the shrink-only `exemptions` array
+(ADR-0011 D8). Wave 5 renamed all six to `bind-{scope}` and deleted the grandfather set plus
+both `lead-` code branches outright — deprecated scaffolding, never a permanent third mechanism.
 
 **Wrapper production:** a command whose sole job is exposing a skill to the
 user carries the skill's exact name and declares `wraps:` it. The `/` surface

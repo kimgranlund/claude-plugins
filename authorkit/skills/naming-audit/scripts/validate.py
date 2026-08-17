@@ -175,25 +175,16 @@ def _typed_list(manifest, field, errors):
 # ADR-0020 D3 (2026-08-17, issue #520): `bind-`/`fork-`/`sub-` replace the general-purpose
 # `lead-` production as the estate's reserved, mechanism-revealing command/skill heads —
 # `bind-` (seat adoption, no spawn), `fork-` (context: fork), `sub-` (Agent dispatch). `lead-`
-# is retired as an OPEN production (no new `lead-{scope}` mint conforms), but wave 2 cannot
-# rename the six live `/lead-*` surfaces itself — that is wave 5 (#523), sequenced after #520
-# only by `Blocked-by`, not atomically with it — and the `exemptions` array is shrink-only
-# (ADR-0011 D8), so simply dropping `lead-` support would force six NEW exemption entries the
-# array can never shed. Per ADR-0014's dead-code precedent for a retired-but-not-yet-migrated
-# head, this closed grandfather set (never grown, never a template — distinct from the
-# `exemptions` array's per-artifact structural burn-down) keeps exactly these six literal
-# names parsing under the old `lead-{scope}` production until wave 5 renames them to
-# `bind-{scope}`, at which point this set — and the `lead` branches that consult it — are
-# deleted outright, not merely emptied. DEPRECATED 2026-08-17; remove with #523.
-LEAD_HEAD_GRANDFATHER = frozenset({
-    "lead-team", "lead-build", "lead-planning", "lead-product", "lead-review",  # teamwork commands
-    "lead-intake",  # docs skill (command-species)
-})
-
-# The three ADR-0020 D3 heads, open to any new mint (unlike the closed LEAD_HEAD_GRANDFATHER
-# above) — residue resolves against the same orchestrator-scope pool `lead-` always used
-# (ADR-0015 D2: ObjectVocab ∪ ProcessLex), since each names a different platform mechanic for
-# adopting the identical seat-scope vocabulary.
+# is retired as an OPEN production (no new `lead-{scope}` mint conforms). Wave 5 (#523) renamed
+# every live `/lead-*` surface to `bind-{scope}` (the six: `lead-team`, `lead-build`,
+# `lead-planning`, `lead-product`, `lead-review`, `lead-intake`), so the `LEAD_HEAD_GRANDFATHER`
+# closed set this comment used to describe — and the `lead` branches that consulted it — are
+# deleted outright, not merely emptied (removed 2026-08-17, #523): nothing needs grandfathering
+# anymore, and re-adding a `lead-{scope}` mint should fail grammar like any other retired head.
+#
+# The three ADR-0020 D3 heads — residue resolves against the same orchestrator-scope pool
+# `lead-` always used (ADR-0015 D2: ObjectVocab ∪ ProcessLex), since each names a different
+# platform mechanic for adopting the identical seat-scope vocabulary.
 RESERVED_BIND_FORK_SUB_HEADS = ("bind", "fork", "sub")
 
 
@@ -401,20 +392,6 @@ class Grammar:
             if tokens[0] in RESERVED_BIND_FORK_SUB_HEADS and len(tokens) >= 2:
                 ok, why = self.resolve_orchestrator_scope(tokens[1:])
                 return errs if ok else errs + [f"command scope ({tokens[0]}- head): {why}"]
-            # `lead-` (ADR-0016 D1/D2) is RETIRED as an open production (ADR-0020 D3): no
-            # new `lead-{scope}` mint conforms. The six live `/lead-*` surfaces stay
-            # parsing under the old production only via the closed, never-grown
-            # LEAD_HEAD_GRANDFATHER set above, until wave 5 (#523) renames them to
-            # `bind-{scope}` and this whole branch is deleted.
-            if tokens[0] == "lead" and len(tokens) >= 2:
-                if name not in LEAD_HEAD_GRANDFATHER:
-                    return errs + [
-                        f"lead- head retired (ADR-0020 D3, #520): {name!r} is not on the "
-                        f"closed grandfather list {sorted(LEAD_HEAD_GRANDFATHER)!r} — new "
-                        f"mints use bind-/fork-/sub-"
-                    ]
-                ok, why = self.resolve_orchestrator_scope(tokens[1:])
-                return errs if ok else errs + [f"command scope (lead- head, grandfathered): {why}"]
             if len(tokens) < 2:
                 return errs + ["command needs object-verb shape (>= 2 tokens)"]
             verb = tokens[-1]
@@ -428,6 +405,17 @@ class Grammar:
             return errs if ok else errs + [f"command object: {why}"]
 
         if kind == "skill":
+            # ADR-0020 D3/D4 (2026-08-17, #520/#523) — `bind-`/`fork-`/`sub-` reserved
+            # heads MUST run before the unconditional `-agent` reserved-tail check just
+            # below: D4 mandates `/fork-agent {agent-name}` and `/sub-agent {agent-name}`
+            # by name, and their residue is the literal word `agent` (which resolves
+            # cleanly in ObjectVocab) — a genuinely new instance of the dead-code hazard
+            # `make-agent` intentionally hits (that one stays correctly rejected; this one
+            # must not, since ADR-0020 names these two exact surfaces as the mint). Placed
+            # here, ahead of every other skill-branch check, for the same reason.
+            if tokens[0] in RESERVED_BIND_FORK_SUB_HEADS and len(tokens) >= 2:
+                ok, why = self.resolve_orchestrator_scope(tokens[1:])
+                return errs if ok else errs + [f"skill scope ({tokens[0]}- head): {why}"]
             if tokens[-1] == "agent":
                 return errs + ["reserved head -agent on a skill"]
             # D1 — `-rules` reserved TAIL (spec §14.2, ADR-0014): must sit BEFORE the
@@ -443,30 +431,8 @@ class Grammar:
             if tokens[0] == "check" and len(tokens) >= 2:
                 ok, why = self.resolve_objects(tokens[1:])
                 return errs if ok else errs + [f"skill object (check- head): {why}"]
-            # ADR-0020 D3 (2026-08-17, #520) — the /bind-*, /fork-*, /sub-* surfaces ship
-            # as a mix of true commands/*.md files and command-species SKILLS
-            # (user-invocable, disable-model-invocation; no commands/ dir), and §6 decides
-            # kind by directory — so these heads are recognized on this branch too, per
-            # ADR-0014's dead-code precedent and ADR-0016's own surface-reality finding.
-            # Must sit BEFORE the object-process check below: a scope residue can land a
-            # ProcessLex terminal, which would make a later placement unreachable dead
-            # code for exactly the names this head exists for.
-            if tokens[0] in RESERVED_BIND_FORK_SUB_HEADS and len(tokens) >= 2:
-                ok, why = self.resolve_orchestrator_scope(tokens[1:])
-                return errs if ok else errs + [f"skill scope ({tokens[0]}- head): {why}"]
-            # `lead-` (ADR-0016 D2) is RETIRED as an open production (ADR-0020 D3) on this
-            # branch too — only the closed LEAD_HEAD_GRANDFATHER set (currently just
-            # `lead-intake`, the one docs-plugin skill among the six live surfaces) still
-            # parses, until wave 5 (#523) renames it and this branch is deleted outright.
-            if tokens[0] == "lead" and len(tokens) >= 2:
-                if name not in LEAD_HEAD_GRANDFATHER:
-                    return errs + [
-                        f"lead- head retired (ADR-0020 D3, #520): {name!r} is not on the "
-                        f"closed grandfather list {sorted(LEAD_HEAD_GRANDFATHER)!r} — new "
-                        f"mints use bind-/fork-/sub-"
-                    ]
-                ok, why = self.resolve_orchestrator_scope(tokens[1:])
-                return errs if ok else errs + [f"skill scope (lead- head, grandfathered): {why}"]
+            # (bind-/fork-/sub- checked at the very top of this kind branch, ahead of the
+            # -agent tail check — see the comment there for why.)
             # ADR-0018 D1 — `make-` and `file-` reserved HEADS (spec §14.7, mechanism per §14.2, same
             # mechanism as ADR-0014's check- head): literal head token, residue
             # resolves against ObjectVocab ONLY (never the process/union pools) —
@@ -476,7 +442,7 @@ class Grammar:
             # and `file-task`'s residue `task` are plain ObjectVocab members, but a
             # branch placed after the process check could still shadow a future
             # residue landing in ProcessLex. The literal head set stays closed at
-            # {check, lead, make, file} — not a template for other VerbLex members
+            # {check, make, file} — not a template for other VerbLex members
             # (ADR-0014 Alt C stays rejected). Runs AFTER the -agent tail check
             # above (line ~391), which is what keeps `make-agent` permanently
             # failing: the tail strips first, unconditionally, before any head
@@ -1259,10 +1225,13 @@ def selftest():
         assert not result["grammar_errors"], \
             f"object-first names must be unaffected by the new reserved heads: {result['grammar_errors']}"
 
-    # ADR-0020 D3 — `lead-` is RETIRED as an open production: a brand-new lead-* mint
-    # (never seen before, not one of the six live surfaces) must be REJECTED even though
-    # its scope resolves fine in the orchestrator scope pool — the exact shape a `lead-`
-    # mint would have taken under the now-superseded ADR-0016 production.
+    # ADR-0020 D3 — `lead-` is RETIRED as an open production, with no grandfather set left
+    # (the closed `LEAD_HEAD_GRANDFATHER` set and its two branches were deleted outright at
+    # wave 5, #523, once all six live surfaces renamed to `bind-{scope}`): ANY `lead-*` mint —
+    # brand new, or one of the six former surface names — must be REJECTED now, exactly like
+    # any other unregistered head. It falls through to the plain object-verb command/skill
+    # productions and fails there (`lead` is not a VerbLex/ProcessLex/ObjectVocab member), not
+    # via a dedicated "lead- head retired" message — there is no lead- branch left to raise one.
     with tempfile.TemporaryDirectory() as td:
         r = Path(td)
         (r / "skills" / "lead-widget").mkdir(parents=True)
@@ -1276,9 +1245,7 @@ def selftest():
         )
         result = run(r, widget_manifest)
         assert result["grammar_errors"], \
-            "a NEW lead-* mint must be rejected — lead- is retired, not merely deprecated"
-        assert any("lead- head retired" in e[2] for e in result["grammar_errors"]), \
-            f"the rejection must name the retirement, not some other grammar failure: {result['grammar_errors']}"
+            "a lead-* mint must be rejected — lead- is retired with no grandfather set left"
 
     with tempfile.TemporaryDirectory() as td:
         r = Path(td)
@@ -1292,36 +1259,27 @@ def selftest():
         )
         result = run(r, widget_manifest)
         assert result["grammar_errors"], \
-            "a NEW lead-* command mint must be rejected on the command branch too"
-        assert any("lead- head retired" in e[2] for e in result["grammar_errors"]), \
-            f"the rejection must name the retirement: {result['grammar_errors']}"
+            "a lead-* command mint must be rejected on the command branch too"
 
-    # Regression — the six live `/lead-*` surfaces (ADR-0020's own LEAD_HEAD_GRANDFATHER,
-    # #433's five teamwork commands + docs' lead-intake) still parse clean, on whichever
-    # branch each actually ships on today, via the closed grandfather set — not by
-    # exemption (the exemptions array must not grow for this wave, ADR-0020's own
-    # acceptance criterion) and not by the general lead- production (retired above).
-    for lead_name in ("lead-team", "lead-product", "lead-build", "lead-planning", "lead-review"):
+    # Regression — the six FORMER `/lead-*` surfaces, renamed to `/bind-*` at wave 5 (#523),
+    # parse clean under their new names with no grandfather set involved — the general
+    # RESERVED_BIND_FORK_SUB_HEADS branch alone, same as any other bind-/fork-/sub- mint.
+    # `intake` isn't in lead_manifest's scope pool above, so extend it locally — exactly
+    # the original lead-intake fixture's own pattern for the same reason.
+    bind_regression_manifest = dict(
+        lead_manifest,
+        object_vocab=lead_manifest["object_vocab"] + [
+            {"canonical": "intake", "plural": None, "banned_aliases": []},
+        ],
+    )
+    for bind_name in ("bind-team", "bind-product", "bind-build", "bind-planning", "bind-review", "bind-intake"):
         with tempfile.TemporaryDirectory() as td:
             r = Path(td)
             (r / "commands").mkdir(parents=True)
-            (r / "commands" / f"{lead_name}.md").write_text(lead_command_md(lead_name))
-            result = run(r, lead_manifest)
+            (r / "commands" / f"{bind_name}.md").write_text(lead_command_md(bind_name))
+            result = run(r, bind_regression_manifest)
             assert not result["grammar_errors"], \
-                f"{lead_name} (grandfathered) must still parse clean as a command: {result['grammar_errors']}"
-    with tempfile.TemporaryDirectory() as td:
-        r = Path(td)
-        (r / "skills" / "lead-intake").mkdir(parents=True)
-        (r / "skills" / "lead-intake" / "SKILL.md").write_text(skill_md("lead-intake"))
-        intake_manifest = dict(
-            lead_manifest,
-            object_vocab=lead_manifest["object_vocab"] + [
-                {"canonical": "intake", "plural": None, "banned_aliases": []},
-            ],
-        )
-        result = run(r, intake_manifest)
-        assert not result["grammar_errors"], \
-            f"lead-intake (grandfathered) must still parse clean as a skill: {result['grammar_errors']}"
+                f"{bind_name} must parse clean as a command via the general bind- head: {result['grammar_errors']}"
 
     # ADR-0017 — RoleLex +10 execution-seat suffixes (checker/runner/planner/watcher/
     # finder/sorter/cleaner/judge/builder/writer): the {scope}-{role} production now
@@ -1384,7 +1342,7 @@ def selftest():
                 f"{head_name} must parse clean under the make-/file- heads: {result['grammar_errors']}"
 
     # Negative: a non-reserved verb head is not granted the same treatment — the
-    # literal head set stays closed at {check, lead, make, file}, never a template
+    # literal head set stays closed at {check, make, file}, never a template
     # for VerbLex at large (ADR-0014 Alt C stays rejected).
     with tempfile.TemporaryDirectory() as td:
         r = Path(td)
@@ -2058,9 +2016,11 @@ def selftest():
           "agent-dir negative, a scope-role string minted as a skill negative, a "
           "RoleLex/ObjectVocab D3 disjointness manifest error) proven, ADR-0020 D3 "
           "bind-/fork-/sub- reserved verb-first heads (each head on skill + command "
-          "branches, unregistered-scope negative per head, object-first regression, a "
-          "NEW lead-* mint rejected on both branches, the six live lead-* surfaces still "
-          "parsing clean via the closed grandfather set — never the exemptions array) "
+          "branches, unregistered-scope negative per head, object-first regression, "
+          "a lead-* mint rejected on both branches with no grandfather set left "
+          "(#523: the six former lead-* surfaces renamed to bind-*, LEAD_HEAD_GRANDFATHER "
+          "deleted outright), the six renamed bind-* surfaces parsing clean via the "
+          "general reserved-head branch alone) "
           "proven")
     return 0
 

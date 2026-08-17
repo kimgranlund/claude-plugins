@@ -9,7 +9,7 @@ description: |
   or investigations — a bug record reports its resume command instead. NOT for triaging
   already-filed external GitHub items on a schedule (harness:issue-sorter); NOT for building
   from a record (teamwork:build-leader); NOT when the current session should adopt this contract
-  itself (/lead-intake, where installed).
+  itself (/bind-intake, where installed).
 model: sonnet
 effort: high
 color: cyan

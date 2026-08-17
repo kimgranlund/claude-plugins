@@ -1,0 +1,16 @@
+{
+  "skill": "bind-planning",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "cases": [
+    { "id": "t01", "prompt": "/bind-planning", "expect": "trigger" },
+    { "id": "t02", "prompt": "Make this session a dedicated planning seat for the new billing charter — decompose across both planes and author only what it earns.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Adopt the planner agent's own contract directly here and hold it until the charter closes.", "expect": "trigger" },
+    { "id": "t04", "prompt": "/bind-planning revise the LLD once the new rate-limit constraint surfaces.", "expect": "trigger" },
+    { "id": "t05", "prompt": "This session should author the PRD/SPEC/LLD itself, never grading a doc it wrote.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Implement the approved LLD for the checkout redesign.", "expect": "no-trigger", "comment": "owner: builder (Agent tool) — implementing an approved LLD, not authoring one" },
+    { "id": "n02", "prompt": "Fix this one-file typo in the config loader.", "expect": "no-trigger", "comment": "owner: the host inline — a bugfix/single-file change earns no doc, no seat" },
+    { "id": "n03", "prompt": "Set up a generic multi-seat coordination charter for this launch.", "expect": "no-trigger", "comment": "owner: teamwork:bind-team — a generic coordination charter, not solo design authoring" },
+    { "id": "n04", "prompt": "Make this session a dedicated build seat driving tickets through dispatch-ticket.", "expect": "no-trigger", "comment": "owner: teamwork:bind-build" },
+    { "id": "n05", "prompt": "Review this existing SPEC against doc-writing-rules' rubric.", "expect": "no-trigger", "comment": "owner: docs:doc-checker — reviewing an existing doc, not authoring a new one" }
+  ]
+}

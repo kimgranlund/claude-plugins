@@ -7,7 +7,7 @@ description: >-
   contract. Run /build-feature [what to build, or a TKT- id]. NOT for pure intake with no build
   intended (/file-feature); NOT for bug investigation (file-bug); NOT for finding and
   batch-confirming which open tickets to build in the first place (mobilize-chores); NOT for
-  converting this session into the standing build seat (/lead-build) — this command forks ONE
+  converting this session into the standing build seat (/bind-build) — this command forks ONE
   already-known target off the session.
 disable-model-invocation: true
 user-invocable: true
@@ -40,7 +40,7 @@ output — this IS running the procedure, mechanically, not a restatement of it.
 itself stays un-forked (its own frontmatter carries no `context: fork`): invoked from here it runs
 inline inside this command's own fork (no double hop); invoked from `build-lead` it runs inline
 inside that agent's already-isolated context (no live user there, so forking again would only add
-a needless third hop with nothing to buy); invoked from a `/lead-build` session it runs inline in
+a needless third hop with nothing to buy); invoked from a `/bind-build` session it runs inline in
 that session's own turn (a live user IS present and inline is exactly what keeps the engine's
 interactive branches on that user's channel — a fork would push them off it).
 

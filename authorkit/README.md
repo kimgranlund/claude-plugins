@@ -81,6 +81,20 @@ exists in the same plugin root.
 
 ## Version ledger
 
+v0.19.3 · 2026-08-17 · ADR-0020 wave 5 (closes #523): with all six former `/lead-*` surfaces
+renamed to `bind-*` in the same campaign (teamwork's five + docs' `lead-intake` → `bind-intake`,
+riding alongside rather than a separate PR — splitting would leave a real gap between merges
+where the grandfather set's removal breaks the still-unrenamed surface), `LEAD_HEAD_GRANDFATHER`
+and the two `lead` branches that consulted it (command + skill parse) are deleted outright — a
+`lead-*` mint now falls through to the plain object-verb production and fails there like any
+other retired head, not via a dedicated retirement message (there is no `lead` branch left to
+raise one). The closed reserved-head set for skills shrinks from `{check, lead, make, file}` to
+`{check, make, file}`. Selftest fixtures updated to match: the "six grandfathered names parse
+clean" case is replaced with "the six RENAMED bind-* names parse clean via the general
+reserved-head branch alone" (no manifest change needed — `marshal`/`intake` added to the test's
+own local scope-pool fixture, same pattern the original lead-intake fixture used). Estate-wide:
+0 grammar errors, 85 exemptions (unchanged).
+
 v0.19.2 · 2026-08-17 · ADR-0020 wave 2 (issue #520): `bind-`/`fork-`/`sub-` join as reserved verb-first heads on both command and skill parse branches (residue resolves against ADR-0015 D2's orchestrator scope pool, exactly as `lead-` always did). `lead-` retired as an OPEN production — a brand-new `lead-*` mint now fails grammar even when its scope resolves — but the six live `/lead-*` surfaces (`lead-team`/`lead-build`/`lead-planning`/`lead-product`/`lead-review`, `lead-intake`) still parse clean via a new closed, never-grown `LEAD_HEAD_GRANDFATHER` set (deprecated 2026-08-17, deleted outright at wave 5/#523 when those six rename to `bind-*`) — never via the `exemptions` array, which stays at 85, unchanged. GRAMMAR.md's production/lexicon/reserved-head sections updated to match. Selftest gains fixtures per head (positive bind-/fork-/sub- on both branches, negative unregistered-scope per head, a NEW lead-* mint rejected on both branches, the six grandfathered names still parsing). Estate-wide: 0 grammar errors, 85 exemptions (unchanged).
 v0.19.1 · 2026-08-17 · ADR-0020 wave 1 (issue #519): `RoleLex` +1 `marshal` (14 entries), `ProcessLex` +1 `orchestration` (21 entries) — anti-ambiguity gate run clean (no collision against any lexicon or ObjectVocab entry). `GRAMMAR.md`'s stated RoleLex count synced 13→14 and doctrine.manifest.json's D10 edge pattern/canon_ref updated in the same change. `naming-audit`/`doctrine-audit` both clean.
 v0.19.0 · 2026-08-17 · S8 lexicon amendment (issue #477, ADR-0017/ADR-0018, Kim ratified live via plugins-team-lead): `RoleLex` +10 execution-seat suffixes (ADR-0017); `make-`/`file-` join `check-`/`lead-` as reserved skill heads (ADR-0018 D1/D2, after the `-agent` tail strip); `ObjectVocab` +10 incl. `intake` (ADR-0018 D3, a deliberate cited reversal of ADR-0016's non-goal). Selftest gains fixtures per class incl. the `make-agent` tail-before-head regression. Exemptions: measured baseline 118 (2 below #464's projected 120, an earlier rename already retired `team-lead`/`build-lead`) → 85 (33 retired: 16 agent via RoleLex, 13 skill via the two heads, `lead-intake` via `intake`, plus one dead `intake-lead` entry after its rename to `intake-leader`). `GRAMMAR.md`/spec §14.6-§14.7 updated. Estate-wide: 0 grammar errors at 85 exemptions.
