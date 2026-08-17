@@ -371,6 +371,17 @@ def selftest():
     assert not ok and "could not verify" in msg, \
         "a lookup failure must refuse the delete, not assume safety"
 
+    # C5 coverage proof — 2026-08-17 ops ruling: gen-ui-kit's bot/derived-resync succession, PR
+    # #1479 (MERGED) and PR #1568 (OPEN) reusing the same head branch, is the identical gh#1483
+    # reuse class C5 already guards (a merged PR's branch name later reused by a new open PR).
+    # This fixture proves the existing check bites on that exact succession without any code
+    # change; it is never a reason to weaken or duplicate the guard above.
+    ok, msg = verify_no_reused_head([{"number": 1568}], True, "bot/derived-resync",
+                                    exclude_pr="1479")
+    assert not ok and "#1568" in msg and "branch-name reuse" in msg, \
+        ("C5 must already refuse deleting PR #1479's branch while #1568 reuses it as an OPEN "
+         "head (2026-08-17 ruling); if this fails, C5 needs strengthening, never weakening")
+
     print("campaign_close selftest · PASS · merge/delete/gate/stacked-children/reused-head checks "
           "bite, incl. the ten-branch silent-delete-failure negative control, the #102 "
           "async-propagation race (lag resolves ok and is disclosed; a stranded branch still "

@@ -78,6 +78,16 @@ report-evidenced dependency edge — nothing reordered; every entry ranks purely
   three of five items now repeat across two consecutive firings.
 - **Size:** ~4 min.
 
+## Post-firing updates (2026-08-17 ~20:40Z, dispatching session — dated amendments)
+
+- Entry 1: DONE (ops commit pushed).
+- Entry 2: RULED by Kim (mint) — fix task minted via docs:file-task (id in the intake read-back /
+  issue list: decision-watcher no-op-report hedge phrasing).
+- Entry 3: RESOLVED-BY-EVENTS — all three orphan worktrees + branches already removed by a peer
+  session before this session reached them; verified absent from `git worktree list`.
+- Mobilize rider (same run): #574 → PR #578 opened (build seat), #576 labeled `feature` per Kim
+  (now mobilizable next pass).
+
 ## Narrated-but-absent audit
 
 - **decision-watcher:** clean — both state files explicitly declared unchanged with the rule
