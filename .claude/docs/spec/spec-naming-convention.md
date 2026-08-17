@@ -48,7 +48,11 @@ Three kinds, partitioned by **invoker** — the one axis the platform actually e
 
 ```
 command   := object "-" verb                    skill-create, work-start
-          |  "lead" "-" scope                   lead-team            (reserved head, §14.5, ADR-0016)
+          |  ("bind"|"fork"|"sub") "-" scope    bind-team, fork-agent, sub-agent
+                                                 (reserved heads, §14.5, ADR-0020 D3)
+          |  "lead" "-" scope                   lead-team            (RETIRED open production,
+                                                 ADR-0020 D3; six-name closed grandfather
+                                                 only, §14.8)
 skill     := object "-" process                 skills-audit, ui-layout-planning
           |  nominal-phrase                     naming-conventions   (looser production)
 agent     := skill-name "-" "agent"             skills-audit-agent   (primary)
@@ -65,19 +69,23 @@ Commands are object-first (`skill-create`, not `create-skill`) so that slash aut
 
 The terminal token must be a member of `VerbLex`.
 
-One reserved verb-first head: `lead-` (§14.5, ADR-0016). `lead-{scope}` conforms when
-`{scope}` resolves against the orchestrator scope pool (`ObjectVocab ∪ ProcessLex`, ADR-0015
-D2's pool) — a `/lead-{scope}` command makes the host session adopt the orchestrator seat
-whose scope that is, so the command surface and the agent seats share one scope vocabulary.
-`lead` is a literal (like §14.2's `check-`), not a `VerbLex` member. Because the live
-`/lead-*` surfaces ship as command-species skills and §6 decides kind by directory, the
-validator recognizes the head on both the command and skill parse branches (§14.5).
+Three reserved verb-first heads: `bind-`/`fork-`/`sub-` (§14.5/§14.8, ADR-0020 D3),
+superseding `lead-` (ADR-0016, retired). `{head}-{scope}` conforms when `{scope}` resolves
+against the orchestrator scope pool (`ObjectVocab ∪ ProcessLex`, ADR-0015 D2's pool) — the
+command makes the host session adopt the orchestrator seat whose scope that is; the head
+names which platform mechanic does the adopting (`bind-`: the host itself; `fork-`: `context:
+fork`; `sub-`: an `Agent` dispatch). Each head is a literal (like §14.2's `check-`), not a
+`VerbLex` member. `lead-` still parses, but ONLY for a closed, never-grown six-name
+grandfather set (§14.8) — a new `lead-*` mint fails even when its scope resolves. Because the
+live `/bind-*`/`/fork-*`/`/sub-*` surfaces ship as a mix of true commands and command-species
+skills and §6 decides kind by directory, the validator recognizes every head (including the
+grandfathered `lead-`) on both the command and skill parse branches (§14.5/§14.8).
 
 #### 3.2 Skills — nominal, process head preferred
 
 The canonical skill production is `{object}-{process}` (`skills-audit`, `entry-file-authoring`). The terminal token should be a member of `ProcessLex`. Skills that are genuinely not object-process shaped — report generators, routers, and reference corpora — use the nominal-phrase production, but every token must still resolve in the lexicons (§4): the looseness is in the *shape*, never in the *vocabulary*.
 
-Four literal reserved verb-first heads live on the skill grammar, closed at exactly this set — not a template for any other `VerbLex` member: `check-` (§14.2, ADR-0014), `lead-` (§14.5, ADR-0016), and `make-`/`file-` (§14.7, ADR-0018). Each resolves its residue against `ObjectVocab` alone (`check-`/`make-`/`file-`) or the orchestrator scope pool (`lead-`), and each sits before the `ProcessLex` terminal check to avoid the dead-code hazard §14.2 names.
+Six literal reserved verb-first heads live on the skill grammar, closed at exactly this set — not a template for any other `VerbLex` member: `check-` (§14.2, ADR-0014), `bind-`/`fork-`/`sub-` (§14.5/§14.8, ADR-0020 D3, superseding `lead-`), the now-closed-grandfather `lead-` itself (six live names only, §14.8), and `make-`/`file-` (§14.7, ADR-0018). Each resolves its residue against `ObjectVocab` alone (`check-`/`make-`/`file-`) or the orchestrator scope pool (`bind-`/`fork-`/`sub-`/`lead-`), and each sits before the `ProcessLex` terminal check to avoid the dead-code hazard §14.2 names.
 
 Reading test (procedural): the name completes "this artifact teaches how to do ___."
 Reading test (reference-shaped): the name completes "consult ___ for this."
@@ -750,3 +758,69 @@ instruction).
 alongside B1–B10 are NOT included — out of this amendment's ratified scope; the three
 screens checkers they would have retired (`component-checker`, `flow-checker`,
 `layout-checker`) and `make-component` stay exempt pending a future amendment.
+
+### 14.8 `bind-`/`fork-`/`sub-` reserved heads supersede `lead-` (2026-08-17, issue #520, ADR-0020 D3)
+
+**Ruling authority:** ADR-0020 (`.claude/docs/adr/0020-fleet-vocabulary-and-binding-heads.md`),
+accepted 2026-08-17 by Kim (rejected 16:03, ratified 16:04, tie-break "ratify stands" 16:21,
+FINAL RULING "ACCEPTED" 16:31 — all live, via plugins-team-lead; see gh#518's full thread).
+Supersedes ADR-0016 D1/D2 in full (the `lead-` reserved head and its scope-resolution
+clause). ADR-0016 is not edited — accepted ADRs are append-only (T4); §14.5 above stays as
+written, historical as of this section.
+
+**Grammar change (D1):** the command grammar's one reserved verb-first head becomes three:
+
+```
+command := ("bind"|"fork"|"sub") "-" scope     bind-team, fork-agent, sub-agent
+```
+
+Each of `bind`, `fork`, `sub` is a literal (like §14.2's `check-`), not a `VerbLex` member.
+`scope` resolves via the same greedy longest-match algorithm against the orchestrator scope
+pool `ObjectVocab ∪ ProcessLex` (ADR-0015 D2's pool, unchanged) — the head names which
+platform mechanic adopts the seat (`bind-`: the host session itself, no spawn; `fork-`:
+`context: fork`; `sub-`: an `Agent` dispatch), the scope names which seat.
+
+**`lead-` retirement, not deletion (D3, this ticket's own sequencing finding):** ADR-0020's
+own wave order (#519→#524) sequences the six live `/lead-*` surfaces' rename to wave 5
+(#523), which is NOT atomic with this grammar change (#520) — both are only `Blocked-by`
+#520, not by each other. Retiring `lead-` as an open production immediately, with no interim,
+would force those six into `exemptions` — but D8's ratchet is shrink-only (ADR-0011), so six
+new entries could never be shed and this ticket's own acceptance criterion ("the exemptions
+array has not grown") would be unmeetable by construction. Resolution (conservative reading,
+posted as Findings on gh#520 rather than assumed): `lead-` becomes a CLOSED grandfather
+production — `LEAD_HEAD_GRANDFATHER` in `validate.py`, exactly `{lead-team, lead-build,
+lead-planning, lead-product, lead-review, lead-intake}`, never grown — instead of the open
+`lead-{any resolvable scope}` production ADR-0016 D1 defined. A name on the list still
+resolves its scope against the same orchestrator pool as before; any `lead-*` name NOT on the
+list (a brand-new mint) now fails grammar outright, even if its scope would resolve fine.
+Deprecated 2026-08-17; wave 5 (#523) deletes the grandfather set and both `lead-` code
+branches outright when it renames those six to `bind-{scope}` — this is scaffolding for one
+sequencing gap, never a permanent fourth head.
+
+**Validator change (D2):** `Grammar.parse`'s `kind == "command"` and `kind == "skill"`
+branches each gain the `bind-`/`fork-`/`sub-` head check (same placement logic as `lead-`
+always used — before the object-process/verb-terminal fallback, since a scope residue can
+land a `ProcessLex` terminal), followed by the now-closed `lead-` check consulting
+`LEAD_HEAD_GRANDFATHER`.
+
+**Selftest fixtures** (mirroring §14.5's triad, extended): positive — each of `bind-`/`fork-`/
+`sub-` parses clean on both the skill and command branches (ObjectVocab and ProcessLex
+scopes; the skill-branch fixtures deliberately avoid an `agent` scope, which collides with
+the unconditional `-agent` reserved-tail check — the same dead-code hazard `make-agent`
+proves in §14.7, not a defect in this head); negative — a non-reserved verb-first name still
+fails, and `{head}-{unregistered scope}` fails on both branches, for each of the three heads;
+negative — a brand-new `lead-*` mint (`lead-widget`, scope resolvable) is REJECTED on both
+branches, naming the retirement explicitly; regression — all six grandfathered `lead-*`
+names still parse clean; regression — object-first commands and object-process skills
+unaffected.
+
+**Exemption count:** unchanged, 85 → 85. This wave conforms zero new names and retires zero
+exemptions by design — the six live `/lead-*` surfaces were never in `exemptions` (they
+conformed by grammar under ADR-0016), and they stay conforming by grammar under the new
+closed grandfather production; nothing here touches D8's ratchet in either direction.
+
+**Non-goal:** this section does not rename any of the six live `/lead-*` surfaces (wave 5,
+#523) or `team-leader`/`leading-teams`/`team-or-solo-rules` (waves 3/4/6, #521/#522/#524);
+it does not register `marshal`/`orchestration` (wave 1, #519, already landed); it does not
+touch `VerbLex`, skill grammar otherwise (§3.2, §14.1, §14.2, §14.7), agent grammar (§3.3,
+§14.4, §14.6), or the `-agent`/wrapper productions.
