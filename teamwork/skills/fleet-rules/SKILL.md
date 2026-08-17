@@ -88,13 +88,13 @@ record.**
 - **One decision, one channel.** A decision that belongs to the user — an ADR ratification, a
   ruling, a batched confirm — is put to them through exactly ONE session/channel, never fanned
   out to more than one on the assumption that redundancy is safer. Three clauses:
-  1. **One channel per user-decision.** Whichever seat reaches the user first with a given
-     decision owns putting it to them; no second seat opens a parallel ask for the same
+  1. **One channel per user-decision.** Whichever session/channel reaches the user first with a
+     given decision owns putting it to them; no second session opens a parallel ask for the same
      decision on its own initiative.
-  2. **A seat that discovers the same decision already pending elsewhere STOPS and routes to the
-     first asker**, rather than re-asking the user itself — the same discipline as Section 1's
-     scope ladder (never escalate around an existing channel) applied to one decision instead of
-     one repo.
+  2. **A session that discovers the same decision already pending elsewhere STOPS and routes to
+     the first asker**, rather than re-asking the user itself — this section's own
+     never-escalate-straight-to-the-human bullet above, applied to one decision instead of one
+     outcome.
   3. **A ruling is superseded only by an explicit later ruling that names the earlier one**
      (the tie-break) — never by a second, parallel answer arriving through a different channel.
      An answer that doesn't cite what it's overriding isn't a supersession, it's a collision.
