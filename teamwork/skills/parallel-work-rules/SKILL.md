@@ -44,7 +44,12 @@ rest of the decision even starts.
 2. Isolate when slices overlap, can't be cleanly partitioned, or you can't confirm disjointness at
    all (an actor outside your control — a peer session, an opaque one):
    - Same-session subagents with overlapping/unpartitionable targets → the `Agent` tool's
-     `isolation:"worktree"` at dispatch.
+     `isolation:"worktree"` at dispatch. **A host session already pinned to its own worktree
+     poisons its plain-Bash subagents** — they inherit the pin and cannot create a worktree of
+     their own from inside it; dispatching with `isolation:"worktree"` sidesteps this because the
+     harness creates the child's worktree itself, rather than the child trying to carve one out of
+     the parent's pinned cwd. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661,
+     lesson 11) · 2026-08-17 · [incident]
    - The whole session, working alongside sessions outside your control → `EnterWorktree`. Its own
      contract requires an explicit trigger ("the user
      directly, or... project instructions") — nothing routes a session into it automatically. If
