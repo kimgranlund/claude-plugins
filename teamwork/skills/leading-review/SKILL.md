@@ -2,13 +2,12 @@
 name: leading-review
 description: >-
   Makes this session a standing review desk: every target sent here — a PR, diff, doc, skill,
-  agent, hook, plugin, or wiring arrangement — is dispatched to its owning fresh-context checker
-  and the verdict relayed, never reviewed inline; a target this session authored itself gets a
-  neutral dispatch with the authorship disclosed. Holds until the session ends. Run /lead-review
-  [optional repo root]. NOT a one-off review (dispatch the owning checker directly); NOT a
-  coordination charter (/lead-team); NOT the standing intake or build seats (/lead-intake,
-  /lead-build); NOT an unattended dispatch for a coordinator or /goal loop (review-leader,
-  Agent tool — the standing dispatched twin of this command, closes #433).
+  agent, hook, plugin, or wiring arrangement — is dispatched to its owning fresh-context checker,
+  verdict relayed, never reviewed inline; self-authored targets get a neutral dispatch, authorship
+  disclosed. Run /lead-review [optional repo root] to open it, ending only when you say so. NOT a
+  one-off review (dispatch the owning checker directly); NOT a coordination charter (/lead-team);
+  NOT the standing intake or build seats (/lead-intake, /lead-build); NOT an unattended dispatch
+  for a coordinator/goal loop (review-leader, Agent tool).
 disable-model-invocation: false
 user-invocable: false
 argument-hint: "[optional target repo root — defaults to the current working directory]"

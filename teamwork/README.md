@@ -105,6 +105,21 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.2 · assembled 2026-08-16 · overhaul #373 Wave-2 S3 (closes #458): centralized the
+`leading-planning`/`leading-review` description boilerplate the standing-seat charter template
+duplicated across all four `leading-*` skills (the estate's top description-collision cluster,
+scores 172–247) — trimmed both under the 700-char budget (1082→672, 714→628) while keeping each
+skill's domain noun-phrase and NOT-fences intact; `leading-builds`/`leading-teams` were already
+under budget from a prior pass and got a lighter matching touch. Also fixed a stale
+`skills/lead-team/references/adopt-agent-contract.md` path in `leading-planning`/`leading-builds`
+(the real directory is `leading-teams`) that would have 404'd on first read. Folded in
+`teamwork/agents/product-leader.md`'s description diet per the ticket's Scope/Open note — verified
+teamwork-owned (not docs' twin) at build time, cut 1666→700 chars, keeping the loop-authority
+framing, IDR/RDD types, spec-lock gate, and all four NOT-fences; three body-level asides (RDD/PRP
+mapping, cite-the-pack-not-the-bible, cold-start branch) dropped from the description since each
+is already stated in full elsewhere (the agent's own body, or `leading-product`'s SKILL.md).
+Fresh-context `skill-checker`/`agent-checker` passes on all three touched files: PASS.
+
 PENDING (no version bump yet — coordinator bumps once the full #433 wave lands) · 2026-08-16 ·
 issue #433 wave 3, the agent-file leg: `team-lead.md`→`team-leader.md`, `build-lead.md`→
 `build-leader.md` (self-references updated, `/lead-team`/`/lead-build` cross-references
