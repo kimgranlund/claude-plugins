@@ -28,10 +28,13 @@ every phase below follows whichever option it returns.
 in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
 `gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
 `TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`,
-REQ-010) — → resume by that record's state. Trailing text matching the Phase 6 offer's own
-resume word (verbatim `install-docs-index`, case-insensitive) → skip straight to Phase 6's write
-regardless of open/closed state — accepting the index offer is not a scope change and needs no
-sizing. Otherwise: `done`/`wontfix`/closed → report and stop, echoing back any trailing text
+REQ-010) — → resume by that record's state. Trailing text that is EXACTLY the Phase 6 offer's own
+resume word (verbatim `install-docs-index`, case-insensitive, nothing else trailing it) → skip
+straight to Phase 6's write regardless of open/closed state — accepting the index offer is not a
+scope change and needs no sizing. Anything more than the bare word (new detail, an answer, the
+word plus other text) folds first under the branches below, same as any other trailing text; the
+word only triggers the direct-to-Phase-6 route when it is the ENTIRE trailing text with nothing
+else to fold. Otherwise: `done`/`wontfix`/closed → report and stop, echoing back any trailing text
 unfolded (reopening is the user's call, but an answer to a Phase 4/5 close-out's named question
 is not silently dropped); open with new detail following the id — including an answer to a named
 clarifying question — → fold it into Summary/Scope/Open (clearing the answered gap from
@@ -156,8 +159,10 @@ a live `AskUserQuestion` offer either (same gh#541 finding as Phase 2: the fork 
 channel) — it names the offer in the close-out instead: "no project-docs index skill found —
 install it? reply `/file-feature <id> install-docs-index` and this skill will write it from
 `assets/project-docs-skill-template.md` (fills `{{PROJECT_NAME}}` from the repo directory name or
-the project manifest's name field)." That exact resume word is Phase 1's own trigger (above) for
-routing straight to the write, skipping the Summary/Scope fold-in a plain answer would take.
+the project manifest's name field)." That resume word, and ONLY that word with nothing else
+trailing it, is Phase 1's own trigger (above) for routing straight to the write, skipping the
+Summary/Scope fold-in a plain answer would take; the same word arriving alongside other text
+folds first, same as any other trailing detail, and does not short-circuit to the write.
 Writing into `.claude/skills/` changes the project's routing surface, which is why this stays an
 offer named for a person to accept via that resume, never a default-yes write from the fork
 itself. Unanswered → the offer simply stands in that close-out; no re-ask on a later resume that
@@ -189,8 +194,8 @@ restated here.
 Done when a `kind: feature` record exists — a lint-clean file on disk, a labeled GitHub Issue (its
 URL reported), or an Option-C adapter's record (its native id reported) — sized and shaped
 correctly, linked into whatever queue docs exist, with
-every extraction gap named, the index offer's disposition reported (installed path, pointer line,
-already-present skip, or skipped-nested) — and NO build was dispatched BY THIS SKILL (that is
+every extraction gap named, the index offer's disposition reported (installed path, offered and
+unanswered, already-present skip, or skipped-nested) — and NO build was dispatched BY THIS SKILL (that is
 `/build-feature`'s contract, teamwork plugin, where installed) — OR the seed was redirected to
 `file-bug`/`file-task` under the one-hop rule (first classification only) and the sibling
 invocation was reported; no feature record is owed on a redirected seed, and a sibling reached by
