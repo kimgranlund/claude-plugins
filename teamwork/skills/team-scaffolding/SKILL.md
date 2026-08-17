@@ -1,7 +1,7 @@
 ---
 name: team-scaffolding
 description: >-
-  Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-team-lead` /
+  Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-marshal` /
   `{repo}-reviewer` / `{repo}-planner` / `{repo}-product`): names the session, writes or verifies
   the seat's permission profile, prints the comms charter (peer roster + SendMessage-is-a-nudge
   doctrine + durable-channel fallback), then names the matching bind-* skill for the human to
@@ -20,7 +20,7 @@ argument-hint: "agent|reviewer|planner|product [charter], or retire ROLE [reason
 
 # team-scaffolding — name the seat, wall it, brief it, then name the bind-* skill
 
-Four standing sessions run one project: `{repo}-team-lead` (orchestrator — role key `agent` in
+Four standing sessions run one project: `{repo}-marshal` (orchestrator — role key `agent` in
 `fleet.json`; Phase 1 covers the schema-key/session-name split), `{repo}-reviewer`
 (read-only review seat), `{repo}-planner` (design docs), `{repo}-product` (WHY/WHAT and loop
 authority). Each already has an owning contract — `teamwork:bind-team`, `teamwork:bind-review`,
@@ -90,13 +90,14 @@ scope-leak risk to guard against.
 
 State the bound role and repo name (basename of `git rev-parse --show-toplevel`, or the worktree
 root if inside one) back in one line before proceeding: `Seat: {repo}-<role>` — except role
-`agent`, which prints `Seat: {repo}-team-lead` (the session-name/role-key split: the `agent` role
-key is schema-stable in `fleet.json`, only the printed/roster session name reads `team-lead`).
+`agent`, which prints `Seat: {repo}-marshal` (the session-name/role-key split: the `agent` role
+key is schema-stable in `fleet.json`, only the printed/roster session name reads `marshal`, per
+ADR-0020's convergence — `team-lead` was this same split's prior value, superseded issue #586).
 
 ## Phase 2 — Name the session (convention, not platform-enforced)
 
 Print `{repo}-<role>` as the session's expected identity — except role `agent`, which is named
-`{repo}-team-lead` (never `{repo}-agent`); every other role prints its role token verbatim. There
+`{repo}-marshal` (never `{repo}-agent`); every other role prints its role token verbatim. There
 is no platform hook to rename a live session, so this is a printed instruction plus a durable
 record, not an enforced rename (reasoning: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
 D1). Append one dated line to
@@ -147,7 +148,7 @@ State, as one standing block before any real work:
      on the seat's own tier.
    - `reviewer` — fable+xhigh (vs. the *-checker agent family's fable+medium baseline). Justification: this
      seat spans EVERY artifact class in one project, not one bounded checker
-     rubric — the broader judgment surface earns the higher tier the same way `team-lead` runs
+     rubric — the broader judgment surface earns the higher tier the same way `marshal` runs
      sonnet+high above the checker baseline.
    - `planner` — fable+medium (canonical planning tier). No deviation.
    - `product` — fable+high (planning-tier, outermost slow-turning judgments — loop authority and
@@ -193,8 +194,10 @@ State, as one standing block before any real work:
    row in either source → skip this step and state so plainly (`No live orchestrator seat —
    skipping introduction`); this never blocks the bootstrap (Phase 4 point 3's own no-blocking
    rule for discovery applies here too). A live row exists → `SendMessage` to its recorded session
-   name — `{repo}-team-lead` by convention (lld-0006 D1), never the roster row's literal text,
-   which on rows written before #434 may still read `{repo}-agent` — introducing this seat: role,
+   name — `{repo}-marshal` by convention (lld-0006 D1, ADR-0020's marshal vocabulary — issue #586
+   superseded the prior `{repo}-team-lead` value here), never the roster row's literal text,
+   which on rows written before #586 may still read `{repo}-agent` or `{repo}-team-lead` —
+   introducing this seat: role,
    session name (`{repo}-<role>`), and the
    charter (the remainder of `$ARGUMENTS` after the role token, or "no charter given" if blank).
    This is the same one-way liveness nudge as point 2, not a request-response handshake — no reply
@@ -269,7 +272,7 @@ branches) rather than silently skipped:
    append-only convention.
 
 Report the three steps' outcomes in one line (`Retired: {repo}-<role> — wall removed (or n/a) ·
-fleet.json released · roster synced`) — role `agent` reports `Retired: {repo}-team-lead` (same
+fleet.json released · roster synced`) — role `agent` reports `Retired: {repo}-marshal` (same
 exception as Phase 1/2) — and stop; retiring never hands off to a `/bind-*` command
 (Phase 5 is bind-only, not part of this flow).
 
