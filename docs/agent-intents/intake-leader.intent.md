@@ -1,4 +1,4 @@
-# intake-lead — forge intent record
+# intake-leader — forge intent record
 
 Forged 2026-08-10 via /make-agent. The interview's slots were ruled during this session's
 `/lead-*` family design (Kim's answers recorded inline below), not re-asked at the forge.
@@ -36,12 +36,12 @@ issue-sorter's procedural "intake only" bar), **distinct config** (standing sonn
   markers per the siblings' shared protocol; the target repo root. Missing seed → named branch.
 - **Config:** sonnet + high (orchestration/coordination row — classify-and-capture, no
   adversarial judgment), color cyan (analysis/triage).
-- **Name:** intake-lead — noun + person-word (naming-rules agent shape), Twins-rule pair with
+- **Name:** intake-leader — noun + person-word (naming-rules agent shape), Twins-rule pair with
   the planned `/lead-intake` command, family-consistent with team-lead/build-lead/chore-lead.
   Ratified by Kim in the `/lead-*` design round (2026-08-10; `agent-` prefix forms rejected
   against naming-rules tests 1/2/4).
 - **Boundary vs issue-sorter (harness):** issue-sorter triages already-filed external GitHub
-  items on a schedule (allow-list gated); intake-lead mints NEW records from raw conversational
+  items on a schedule (allow-list gated); intake-leader mints NEW records from raw conversational
   seeds relayed to it. Fenced in the description.
 
 ## Gates

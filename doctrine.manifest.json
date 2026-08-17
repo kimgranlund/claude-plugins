@@ -89,10 +89,10 @@
      "file": "teamwork/agents/team-leader.md"
     },
     {
-     "file": "docs/agents/intake-lead.md"
+     "file": "docs/agents/intake-leader.md"
     }
    ],
-   "source": "issue #379 finding 5 (no separate issue filed) -- verified live 2026-08-16: team-lead.md:13 grants tool 'Task' in its tools: line; intake-lead.md:17 still lists 'Task' in disallowedTools alongside 'Agent'. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:13 now grants 'Agent' (not 'Task'), and intake-lead.md:17 lists disallowedTools [\"Skill\", \"Agent\"] with no 'Task' -- this edge now reports clean; it remains armed as a regression tripwire.]"
+   "source": "issue #379 finding 5 (no separate issue filed) -- verified live 2026-08-16: team-lead.md:13 grants tool 'Task' in its tools: line; intake-lead.md:17 still lists 'Task' in disallowedTools alongside 'Agent'. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:13 now grants 'Agent' (not 'Task'), and intake-lead.md:17 lists disallowedTools [\"Skill\", \"Agent\"] with no 'Task' -- this edge now reports clean; it remains armed as a regression tripwire.] [Amended 2026-08-17, issue #477: S8 lexicon amendment renamed intake-lead.md -> intake-leader.md; file path updated. Edge still reports clean.]"
   },
   {
    "id": "D06",
