@@ -1,0 +1,29 @@
+{
+  "skill": "chat-harness-runtime-resilience-facts",
+  "_note": "Routing corpus of record (minted 2026-08-17 by plan-skill-split, issue #552). Positives split across the three axes: multi-turn validation and state-seeded gates (carried over from the parent pack's own corpus), disclosure knobs and progress detail, failure surfacing in a deployed chat runtime. Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-guardrail-facts (the sibling this pack split out of — instruction layering, injection defense, action risk tiers), chat-harness-workflow-facts (the self-correct feedback loop's own prompt DESIGN is that pack's, not this pack's halt-at-the-bound decision), llm-gateway-facts (the provider/secret trust-boundary pattern), llm-streaming-facts (the wire-format sibling), chat-harness-routing-facts (skill authoring/routing), agent-residency-facts (tier classification), plus a genuine build/implement ask (this pack answers, it does not build).",
+  "positives": [
+    "my per-turn output validator keeps rejecting the incremental update my renderer would accept",
+    "the model keeps re-sending the full structure it was explicitly told not to resend",
+    "should my producer loop validate each turn standalone or against the session's accumulated state",
+    "should turning on full reasoning detail automatically also turn on raw source payload detail",
+    "a progress disclosure knob is leaking more of the runtime's internal state than intended",
+    "the stream already sent a 200 but then failed silently with no error shown to the client",
+    "should I widen the retry bound when the model keeps failing the same self-correct round",
+    "an error message shown to the end user accidentally echoed raw text from the upstream provider",
+    "adding a new optional flag to my producer changed the request shape even for callers who never set it"
+  ],
+  "negatives": [
+    "why isn't my skill triggering when the user asks about this",
+    "how do I write a SKILL.md description so it routes correctly",
+    "layer a global CLAUDE.md, a project CLAUDE.md, and a session instruction so the more specific one wins",
+    "what's the defense against prompt injection through tool output",
+    "classify which actions need explicit confirmation versus which can just proceed",
+    "keep an API key off the client and out of a static build",
+    "design a dev-time proxy for calling an LLM from a browser app",
+    "why is my SSE parser dropping text fragments",
+    "the model keeps repeating the same mistake on retry, what should the feedback text actually say",
+    "decompose this task across a team of agents with a clear chain of command",
+    "is this a Resident Agent or an Ephemeral Agent",
+    "implement the retry logic for my chat app's producer loop"
+  ]
+}

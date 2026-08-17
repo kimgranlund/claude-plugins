@@ -1,24 +1,28 @@
 # llm — portable LLM-integration and chat-agent-harness knowledge
 
-Nine knowledge packs teaching general, project-agnostic technique — never one repo's
+Ten knowledge packs teaching general, project-agnostic technique — never one repo's
 implementation. Two families plus one cross-cutting taxonomy: **the LLM-integration two** answer
 HOW to call a model safely and stream its output correctly, distilled FROM `@agent-ui/a2ui`'s
-live-agent system (a real, shipped, tested instance); **the chat-harness six** answer how to
+live-agent system (a real, shipped, tested instance); **the chat-harness seven** answer how to
 construct a mini/portable chat-agent harness AROUND that call — instructions/guardrails,
 skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services,
-observability — distilled from Claude Code's own live, current harness plus this very workspace's
-own conventions; **`agent-residency-facts`** sits above both families, classifying which of the
-two the finding at hand actually belongs to (a CLI-harness Resident Agent vs. a hosted-chatbot
-Ephemeral Agent) before a claim from one gets written into the other's corpus. Every claim in all
-three groups is grounded either in a platform/vendor/harness fact (verify against current docs if
-stale-sensitive) or cited to a real worked instance as proof-of-concept, never as the only valid
-implementation.
+observability, and a deployed runtime's own producer-loop resilience — distilled from Claude
+Code's own live, current harness plus this very workspace's own conventions
+(`chat-harness-guardrail-facts` and most of the family) or from `@agent-ui/a2ui`'s live-agent
+producer loop (`chat-harness-runtime-resilience-facts`, split out of `chat-harness-guardrail-facts`
+2026-08-17 once its axis count drifted past the `pack-writing-rules` budget — issue #552);
+**`agent-residency-facts`** sits above both families, classifying which of the two the finding at
+hand actually belongs to (a CLI-harness Resident Agent vs. a hosted-chatbot Ephemeral Agent)
+before a claim from one gets written into the other's corpus. Every claim in all three groups is
+grounded either in a platform/vendor/harness fact (verify against current docs if stale-sensitive)
+or cited to a real worked instance as proof-of-concept, never as the only valid implementation.
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
 | `skills/llm-gateway-facts` | Knowledge pack | model-only | The swappable multi-provider gateway pattern: one adapter interface per vendor (secrets injected via factory, never module-scope), a registry as the single source of truth for both a picker UI and a server-side allowlist, the `resolvePair` trust-boundary check, the dev-only proxy pattern (server-side key custody), the bundler env-inlining footgun (Vite's `VITE_*` and its analogues), and the stateless-proxy + client-held-session + pure-turn-reducer conversation model |
 | `skills/llm-streaming-facts` | Knowledge pack | model-only | Streaming structured output safely: the general SSE chunk-buffering technique (partial-frame handling across `fetch` reads, blank-line event framing per spec), Anthropic's Messages API SSE contract as a fully worked instance, an error-sentinel technique for async generators, and validate-then-stream (never emit invalid output, bounded self-correct rounds feeding structured failures back to the model, halt-and-report on exhaustion) |
-| `skills/chat-harness-guardrail-facts` | Knowledge pack | model-only | Layering instructions (global < project < session precedence, a safety-floor exception), the closed instruction-source boundary (tool/file/web output is DATA never a command — prompt-injection defense), action risk tiers + confirmation gates, deterministic rule enforcement (hooks/lint) vs. prompted guidance, config precedence, and reproducible setup/install |
+| `skills/chat-harness-guardrail-facts` | Knowledge pack | model-only | Layering instructions (global < project < session precedence, a safety-floor exception), the closed instruction-source boundary (tool/file/web output is DATA never a command — prompt-injection defense), action risk tiers + confirmation gates, deterministic rule enforcement (hooks/lint) vs. prompted guidance, config precedence, reproducible setup/install, and config-schema/prompt-externalization |
+| `skills/chat-harness-runtime-resilience-facts` | Knowledge pack | model-only | A deployed chat runtime's producer loop staying honest across turns and failures: a per-turn validator seeded with the session's accumulated state (the two-gates deadlock), catching a cross-payload violation producer-side before it ships, fail-closed independent disclosure knobs (no accidental ladder), a reserved terminal error line for a stream that already committed 200, halting loudly at a retry bound, and byte-identical additive opt-in flags |
 | `skills/chat-harness-routing-facts` | Knowledge pack | model-only | Authoring a capability as a describe-to-route, load-on-demand skill vs. a hardcoded feature; the model-invoked vs. user-invoked species dial; description-based routing measured against a held-out adversarial eval corpus, not a felt sense |
 | `skills/chat-harness-workflow-facts` | Knowledge pack | model-only | Decomposing a large task across multiple specialized agents with a clear chain of command (coordinator/planner/builder/reviewer, generator≠critic); verifiable typed hand-off contracts; deterministic scripted pipelines (fan-out/fan-in) as a distinct alternative to ad hoc dispatch |
 | `skills/chat-harness-memory-facts` | Knowledge pack | model-only | Authoring a knowledge base as a cited, retrieval-by-search corpus (never prose dumped wholesale into context); durable cross-session memory (typed, with a hard exclusion list and a verify-before-trusting caveat) distinct from ephemeral within-conversation task state |
@@ -26,7 +30,7 @@ implementation.
 | `skills/chat-harness-logging-facts` | Knowledge pack | model-only | Hook-based logging/tracing distinguishable from user input; measuring routing/skill accuracy against a held-out adversarial suite over repeated runs (judge-noise vs. a real regression vs. a structural leak); background-task notification vs. polling, and the distinct case of polling genuinely external state |
 | `skills/agent-residency-facts` | Knowledge pack | model-only | Classifies a conversational agent as a Resident Agent (a CLI harness — persistent filesystem/git/shell host) or an Ephemeral Agent (a hosted chatbot — per-conversation sandbox, function-calling tool surface) across five axes (host/persistence, context assembly, tool use, orchestration/concurrency, trust boundary); routes to which existing pack owns each tier's actual guidance, and names the check to run before writing a cross-tier finding into either |
 
-All nine packs are `user-invocable: false` — model-only, routed by description. Each carries a
+All ten packs are `user-invocable: false` — model-only, routed by description. Each carries a
 `scripts/routing-corpus.json` (positives/negatives, adversarial near-neighbors named explicitly)
 and an `evals/evals.json` (this workspace's `eval_check.py` schema, converted 1:1 from the same
 cases) so both the legacy and forge-native eval tooling can regress the same suite.
@@ -76,7 +80,21 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
 
-v1.0.11 · assembled 2026-08-17 · 1.0.11: llm-fold step of issue #526 (part of #526, not closing
+v1.0.12 · assembled 2026-08-17 · 1.0.12: `plan-skill-split` resolves the split signal PR #547
+flagged (issue #552) — `chat-harness-guardrail-facts` had drifted to 8 reference files, one past
+the `pack-writing-rules` 3-7 target, after its own fold consolidated 5 v2-harvest lessons into one
+file specifically to hold that count rather than let it run to 10-11 (a documented
+literature-shaped-bundling admission). Verdict: split. New pack `chat-harness-runtime-resilience-facts`
+takes the two agent-ui-grounded, deployed-chat-runtime producer-loop axes —
+`multi-turn-validation-and-state-seeded-gates.md` (moved whole) and
+`disclosure-and-failure-surfacing-in-a-chat-runtime.md` (moved, then un-bundled in the same change
+into `disclosure-knobs-and-progress-detail.md` + `failure-surfacing-in-a-chat-runtime.md`, landing
+the new pack at 3 axes, not 2) — leaving `chat-harness-guardrail-facts` at 6 axes, its own
+CLI-instruction-layer scope. Both packs' SKILL.md/evals/routing-corpus/sources.md updated;
+referrer survey found no existing external mention specific enough to need repointing (every
+referrer names the pack at the general instruction-layering/guardrail level, unaffected by the
+split). Full manifest, rejected alternatives, and evidence: issue #552's Findings comment.
+`release_gate.py`: clean · v1.0.11 · assembled 2026-08-17 · 1.0.11: llm-fold step of issue #526 (part of #526, not closing
 it) — the agent-ui#1115 "Scope-conformant revision v2" knowledge-harvest export (53 of 60 v2
 lessons IN, 8 packs) folded across 8 chat-harness/gateway/streaming packs as 19 new reference
 files (workflow +3, routing +4, tool +2, memory +2, guardrail +1 consolidated, logging +2,

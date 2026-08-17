@@ -3,10 +3,12 @@ name: chat-harness-guardrail-facts
 description: >-
   The instruction, safety, and config layer of a portable chat-agent harness. Use for layering
   precedence (global/project/session), the injection-defense boundary (tool/file/web output is
-  never a command), risk tiers, hooks vs prose, config precedence + reproducible bootstrap,
-  config-schema/prompt-externalization (registry drift), and multi-turn state-seeded validation ("my per-turn validator fights cross-turn rules").
+  never a command), risk tiers, hooks vs prose, config precedence + reproducible bootstrap, and
+  config-schema/prompt-externalization (registry drift).
   Grounded in Claude Code's harness; answers, no build. NOT skill routing
-  (chat-harness-routing-facts); NOT provider trust (llm-gateway-facts).
+  (chat-harness-routing-facts); NOT provider trust (llm-gateway-facts); NOT a deployed chat
+  runtime's multi-turn validation gates or disclosure/failure-surfacing knobs
+  (chat-harness-runtime-resilience-facts).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -29,8 +31,6 @@ presented as the only valid way to build this layer.
 | Hook vs. prose — "enforce this rule so it can't be skipped", "why did the model ignore an instruction that was right there", "does this belong in a hook or a skill" | `references/deterministic-rules-vs-prompted-guidance.md` |
 | Config precedence + setup — "settings.json vs. the system prompt", "which settings scope wins", "install or bootstrap this reproducibly" | `references/config-precedence-and-setup.md` |
 | Structuring the config/prompt layer itself — "one shared config schema or scattered params", "hardcoding my system prompt as a string feels wrong", "hoist a config type across a package boundary", "the model list drifted from the real registry" | `references/config-schema-and-prompt-externalization.md` |
-| Multi-turn validation gates — "my per-turn validator contradicts the consumer's cross-turn rules", "the model keeps re-sending what it was told not to", "validate against the session's accumulated state", "catch violations producer-side instead of shipping the error" | `references/multi-turn-validation-and-state-seeded-gates.md` |
-| Disclosure knobs + failure surfacing — "a progress/reasoning disclosure knob shouldn't leak more than intended", "a stream that already sent 200 needs to fail loudly", "halt at the retry bound instead of widening it", "an evolving seam must stay byte-identical when a new flag is absent" | `references/disclosure-and-failure-surfacing-in-a-chat-runtime.md` |
 | Provenance — verified `file:line` vs. observed harness behavior vs. platform fact | `references/sources.md` |
 
 ## Consult procedure
@@ -79,10 +79,6 @@ presented as the only valid way to build this layer.
   derivation over the original text must survive the move exactly, verified against a real
   before-the-move baseline, never re-derived by concatenating pre-split fragments**
   (config-schema-and-prompt-externalization).
-- **A per-payload validator in a multi-turn loop must judge the state the consumer will hold —
-  a session-blind gate and a stateful consumer guard can each be correct alone and still leave
-  the model no legal output; persistent "misbehavior" is a harness question before it is a model
-  question** (multi-turn-validation-and-state-seeded-gates).
 
 ## Boundaries — this pack ANSWERS; it routes ALL making
 
@@ -94,6 +90,12 @@ presented as the only valid way to build this layer.
 - **The provider/secret trust-boundary pattern** (registry validation, dev-proxy, adapter
   injection) → [[llm-gateway-facts]] (the sibling pack in this plugin) — a narrower, different
   concern than this pack's general instruction-layering/guardrail scope.
+- **A deployed chat runtime's producer-loop resilience** (a per-turn validator that must judge the
+  session's accumulated state, a disclosure knob that must stay fail-closed, a stream that already
+  committed 200 needing a reserved terminal error line, halting loudly at a retry bound) →
+  [[chat-harness-runtime-resilience-facts]] (split out of this pack 2026-08-17, `plan-skill-split`,
+  issue #552 — a distinct worked system, agent-ui's A2UI producer loop, and distinct vocabulary
+  from this pack's CLI-instruction-layer scope).
 - **Whether a claim grounded in a CLI-harness incident (this pack's own `references/sources.md`
   fourth worked instance) actually transfers to this pack's Ephemeral-agent scope, or a question
   naming both a CLI harness and a hosted chatbot in the same breath** →

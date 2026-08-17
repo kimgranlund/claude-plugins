@@ -1,12 +1,15 @@
 # Multi-turn validation and state-seeded gates
 
-> A fourth axis alongside deterministic-rules-vs-prompted-guidance (hook vs. prose for ONE rule):
-> how the VALIDATION GATES around a multi-turn structured-output producer must relate to each
+> How the VALIDATION GATES around a multi-turn structured-output producer must relate to each
 > other and to the session's accumulated state — and the failure mode where two individually
 > correct gates trap the model with no legal output shape. Grounded in one real, directly verified
 > worked instance — the `agent-ui` repo's TKT-0081 (a measured live defect and its shipped fix) —
 > not sole authority; the pattern generalizes to any loop that validates per-payload while a
-> stateful consumer enforces cross-payload rules. Verified directly, 2026-07-17.
+> stateful consumer enforces cross-payload rules. Verified directly, 2026-07-17. Moved 2026-08-17
+> from `chat-harness-guardrail-facts` into this pack (`plan-skill-split`, issue #552) — this
+> pack's own producer-loop axis, alongside disclosure-knobs-and-progress-detail.md and
+> failure-surfacing-in-a-chat-runtime.md, rather than the CLI-instruction-layer axes
+> `chat-harness-guardrail-facts` retains (instruction layering, hook vs. prose, and the rest).
 
 ## A per-payload validator in a multi-turn loop must judge the state the consumer will hold
 

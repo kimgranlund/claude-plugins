@@ -158,18 +158,30 @@ concern than this pack's general instruction-layering/guardrail scope — see
 
 ## Provenance — 2026-08-17 knowledge-harvest fold (issue #526)
 
-`disclosure-and-failure-surfacing-in-a-chat-runtime.md` was added from agent-ui#1115's
-"Scope-conformant revision v2" comment (posted 2026-08-17T17:14:57Z), the litmus-filtered
-re-harvest of `@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness knowledge only. Five
-lessons (29, 31, 32, 33, 34) were CONSOLIDATED into this one file rather than split ask-shaped one
-question type per file, specifically to hold this pack's axis count at 8 rather than let it run to
-10-11 — this pack was already at 7 axes (the `pack-writing-rules` 3-7 target) before this fold;
-adding even one file pushes it one past that target, flagged here as a split signal for a
-follow-up `plan-skill-split` pass rather than resolved in this fold. Lesson 30 of the same v2
-export ("a browser cannot hold a secret") was evaluated and SKIPPED here as hard dedup — already
-substantively covered by [[llm-gateway-facts]]'s `dev-proxy-and-bundler-footguns.md` and
-`provider-adapter-seam.md`. Lesson 39's kept (`[split]`) half ("byte-pinned, file-loaded prompt
-content") was likewise SKIPPED as hard dedup — already covered by this pack's own
-`config-schema-and-prompt-externalization.md` ("When a derivation already exists over the
-pre-externalized text, preserve it exactly" section), even though v2 filed lesson 39 under
-`chat-harness-logging-facts`.
+The agent-ui#1115 "Scope-conformant revision v2" comment (posted 2026-08-17T17:14:57Z), the
+litmus-filtered re-harvest of `@agent-ui/a2ui` lessons kept to web-based virtual-chat-harness
+knowledge only, added a file consolidating five lessons (29, 31, 32, 33, 34) into this pack rather
+than split ask-shaped one question type per file, specifically to hold this pack's axis count at 8
+rather than let it run to 10-11 — this pack was already at 7 axes (the `pack-writing-rules` 3-7
+target) before this fold; adding even one file pushed it one past that target, flagged as a split
+signal for a follow-up `plan-skill-split` pass (see the next Provenance entry for the resolution).
+Lesson 30 of the same v2 export ("a browser cannot hold a secret") was evaluated and SKIPPED here
+as hard dedup — already substantively covered by [[llm-gateway-facts]]'s
+`dev-proxy-and-bundler-footguns.md` and `provider-adapter-seam.md`. Lesson 39's kept (`[split]`)
+half ("byte-pinned, file-loaded prompt content") was likewise SKIPPED as hard dedup — already
+covered by this pack's own `config-schema-and-prompt-externalization.md` ("When a derivation
+already exists over the pre-externalized text, preserve it exactly" section), even though v2
+filed lesson 39 under `chat-harness-logging-facts`.
+
+## Provenance — 2026-08-17 plan-skill-split (issue #552)
+
+The split signal above was resolved by running `plan-skill-split`'s four tests against the full
+8-axis corpus (verdict: split, evidence in issue #552's Findings comment). This pack retains the
+six axes grounded in Claude Code's own CLI harness and the `nonoun-plugins` workspace's
+conventions (instruction layering, injection defense, action risk tiers, hook-vs-prose, config
+precedence, config-schema/prompt-externalization). The two axes consolidated into the v2-harvest
+file above — multi-turn validation (added 2026-07-17, ahead of the fold) and disclosure
+knobs/failure surfacing (added by the fold itself) — moved to the new
+`chat-harness-runtime-resilience-facts` pack, un-bundling the fold's consolidated file into
+`disclosure-knobs-and-progress-detail.md` and `failure-surfacing-in-a-chat-runtime.md` in the same
+change (that pack's own `sources.md` carries the full worked-instance citations for both).

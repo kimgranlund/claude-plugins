@@ -162,6 +162,21 @@
       "banned_aliases": []
     },
     {
+      "canonical": "chat",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "runtime",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "resilience",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "team",
       "plural": "teams",
       "banned_aliases": []
