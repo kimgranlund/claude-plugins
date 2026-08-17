@@ -108,6 +108,36 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.22.0 · assembled 2026-08-17 · closes #558: `mobilize-chores` now works the stuck set instead of
+only reporting it. Root cause: step 2's `Blocked-by:` exclusion (#193) was a hard skip with no
+executed follow-through — a per-shape proposed action in step 6 that was never acted on, even when
+a blocker was itself a plainly mobilizable ticket. New reference file
+`references/unstick-ordering.md` carries the fix as buildable prose (LLD `lld-0007`): a fail-closed
+B0–B5 classification (CLOSED / UNRESOLVABLE / CYCLE-or-too-deep(depth cap 5) / IN-FLIGHT /
+HUMAN-SHAPE / MOBILIZABLE) resolved depth-first per candidate with cycle detection and an in-run
+memo cache, ordered dependency-first; only a B5 (fully mobilizable) blocker ever dispatches — every
+other class stays report-only, by construction. Within-run chaining is bounded, never a wait: after
+a wave's dispatches return, one read-only re-check of each sequenced dependent's blockers (never a
+`gh pr checks --watch` or a sleep), all-CLOSED unlocking the next wave, max 3 waves — which on the
+default PR-opened ceiling degrades to next-run-only unless an ADR-0012 quick-build merge closed a
+blocker in-run. `blocked-by-convention.md` stays the one format canon (only its consumer-pointer
+line changed); SKILL.md gained the unstick clause in its description, step 2's exclusion paragraph,
+step 3's stop condition, one second listed section inside step 4's SAME single confirm round (a
+chain confirms/declines as a whole — no second `AskUserQuestion` round, ever), step 5's wave
+re-check paragraph (explicit: a chain member's dispatch carries no extra auto-merge authority —
+`dispatch-ticket` stage 2b evaluates it exactly like any other ticket), step 6's three-way outcome
+vocabulary (`unstuck-this-run` / `sequenced-for-next-run` / `still-stuck-and-why`), and matching
+Failure-branch/Done-when extensions. The skill gains exactly ONE new verb (dispatch the mobilizable
+blocker) — never a `Blocked-by:` line edit, a relabel, a claim-reclaim, or a ratify comment; those
+stay human acts or `repo-cleaner`'s own territory (Rejected alternatives RA1–RA4 in the LLD). No
+ADR: no cross-consumer contract changed (`blocked-by-convention.md`'s format/realization/non-goals
+are untouched; `chore-planner`'s own ordering in harness's `blocked-by-rules` is unaffected).
+`release_gate.py teamwork` exit 0; `/check-routing teamwork` shows no boundary regression from the
+description-clause edit (mobilize-chores is `disable-model-invocation: true`, so no `evals.json` is
+owed). Fresh-context `teamwork:code-checker` reviewed the semantic edits (SKILL.md body,
+`unstick-ordering.md`, the convention file's pointer line) before merge, per the plugin-authoring
+semantic-edit invariant (PASS, 0 blocker/major, 2 minor fixed in this same diff — verdict recorded on the PR and the issue Findings).
+
 v2.21.7 · assembled 2026-08-17 · closes #577: fleet-marshal charter/role-name mismatch fixed.
 Root cause: ADR-0020 Wave 3 (#521) renamed `team-leader`→`fleet-marshal` as a pure data-only edit
 — the agent body still carried team-leader's single-team plan→build→review charter, and no
