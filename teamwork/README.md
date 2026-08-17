@@ -108,6 +108,19 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.2 · assembled 2026-08-17 · closes #539: `fleet-rules` §3 (Communication routing) gains a
+duty-report/work-order guarantee bullet, placed right after the "one decision, one channel"
+bullet — every seat's duty report (or done/what's-next report) to the coordinator now must get
+back one of three named shapes: an immediate assignment, an explicit QUEUED assignment naming
+both the slice and its trigger condition, or an explicit empty-queue statement plus the next
+check-in condition. A bare "hold idle"/"stand by" with no named slice or trigger is ruled out.
+Minted from a 2026-08-17 incident: a fresh seat reported in, the queue was drained, and the seat
+sat in an unstructured holding pattern for several message rounds before a queued-slice promise
+finally emerged. Fresh-context skill-checker pass (FLOOR): PASS with one minor fixed pre-ship (the
+bullet's original "always one of two shapes" self-contradicted its own third, empty-queue arm —
+reworded to one three-arm enumeration) and one nit fixed ("marshal/coordinator" → "coordinator",
+matching the file's established vocabulary). No evals change (description untouched).
+
 v2.21.1 · assembled 2026-08-17 · closes #543: the gen-ui-kit CLI-tier fleet-ops harvest
 (agent-ui#1115, comment 5317746661, 25 claim·evidence·date·confidence lessons) folds into its
 actual owning doctrine, `fleet-rules` and `parallel-work-rules`, now that #524/D5 (above) has
