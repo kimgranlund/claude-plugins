@@ -108,6 +108,18 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.22.4 · assembled 2026-08-17 · closes #592: fleet-rules SKILL §4 (version-slot + merge-order
+rules) gains the missing inverse rule — the shared primary checkout stays on `main`, always;
+feature branches belong in worktrees. ADR-0002 states the forward half (a campaign gets its own
+branch + worktree) but never the inverse, and the gap let a live incident bite: a session checked
+out `fix/harness-ops-rulings` on the primary checkout while peers were live, stranding a
+concurrent peer's ops commit (9e115cd) on that feature branch instead of `main`. Placed in §4
+(shared-tree write discipline), not §1 (coordination scope/polling authority), per a
+fresh-context skill-checker's major finding on the first draft. Optional repo-cleaner
+inventory-flag piece deliberately not folded in here — left for its own ticket, out of this
+small-sized ticket's scope. The #585 cross-reference in the seed didn't hold up on
+verification: #585 is currently a decision-watcher no-op-firing ticket, unrelated to this
+incident.
 v2.22.3 · assembled 2026-08-17 · closes #588: fleet-rules SKILL §2 (work-claim protocol) gains
 the claim-provenance wording rule — a coordinator's claim posted on behalf of a dispatch names
 the dispatched builder, with a worked example line, closing the #542 abandoned-pre-claim

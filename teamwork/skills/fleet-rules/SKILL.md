@@ -180,6 +180,16 @@ record.**
   deleting the parent's branch — never after (#443). `harness:big-change-git-rules`'
   `references/merge-semantics.md` owns the full retarget-then-delete sequence and its worked
   failure mode (PR #437); cited, not reproduced here.
+- **The shared primary checkout stays on `main`, always — feature branches belong in worktrees.**
+  Every peer's claim-and-commit assumption (Section 2, `[[dispatch-ticket]]`'s Phase 3) is that
+  committing against the shared primary checkout (the workspace root, never a
+  `.claude/worktrees/` entry) lands on `main`; a session that checks out a feature branch ON the
+  primary breaks that assumption for every OTHER live peer, silently. ADR-0002 already states the
+  forward half (a campaign gets its own branch + worktree); this is its unstated inverse, and the
+  gap is what let it bite: a session checked out `fix/harness-ops-rulings` on the primary
+  checkout while peers were live, and a concurrent session's ops commit (9e115cd) landed on that
+  feature branch instead of `main` — stranded, requiring manual reconciliation. · #592 incident ·
+  2026-08-17 · [incident]
 - **Merge-on-green verifies each check's CONCLUSION individually — never the watch command's exit
   code alone.** `gh pr checks <pr> --watch --fail-fast` was found to exit 0 on non-terminal/failed
   states, and this bit three live merges (#530, #546, #549) before a human caught it (#551). The
