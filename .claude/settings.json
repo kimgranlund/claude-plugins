@@ -50,21 +50,6 @@
       "autoUpdate": true
     }
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/authorkit/skills/naming-audit/scripts/validate.py\" hook",
-            "timeout": 20,
-            "statusMessage": "naming-postwrite-grammar-gate"
-          }
-        ]
-      }
-    ]
-  },
   "autoMode": {
     "allow": [
       "$defaults",
