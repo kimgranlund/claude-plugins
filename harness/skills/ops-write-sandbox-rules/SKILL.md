@@ -55,7 +55,7 @@ to report for a path omits that path entirely rather than naming it conditionall
 binds a LATER payload that cites an EARLIER one: a state file (e.g. `held-items.md`) may reference
 another path (e.g. a per-firing report) as existing only once that path's own fenced block has
 actually been emitted in this firing or a prior one — never on the strength of having been merely
-mentioned. A live consuming-repo sweep found exactly this gap (issue-sorter hedged a report path
+mentioned. A live sweep on a repo consuming this plugin found exactly this gap (issue-sorter hedged a report path
 as "if written," never emitted it, and `held-items.md` went on to cite it as if it did) — the fix
 is this rule, stated once here for every ops-family seat rather than patched per-instance.
 
