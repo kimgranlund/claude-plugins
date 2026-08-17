@@ -68,8 +68,13 @@ structurally will not arrive, or, for an already-nested seat with a coordinator 
   offer rides along; apply its phases inline otherwise: extract → dedup → size/shape → lint-clean
   `kind: feature` ticket, no index offer without docs' template), via the Skill tool, seed prefixed
   `[nested-intake]` — file-feature's own Phase 6 gates its index-bootstrap offer off this marker
-  (a nested intake already owes this skill's own ambiguity question plus file-feature's own round;
-  a third `AskUserQuestion` in one background run is one too many). A raw seed reaching this skill
+  (a nested intake already owes this skill's own ambiguity question plus file-feature's own Phase
+  2 round; neither runs live past this point — `file-feature` invoked here runs inside whatever
+  fork or dispatch this skill itself is already running under, and a `context: fork` background
+  dispatch has no `AskUserQuestion` channel at all, gh#541 — so both are capture-with-gaps, and
+  the marker exists to stop a third capture-with-gaps close-out from piling redundant unasked-
+  question noise onto the same record, not to protect a live round budget). A raw seed reaching
+  this skill
   is feature-shaped by its callers' own contracts; the intake's classification still redirects a
   disguised bug or chore. The record exists before any build effort is spent — ticket-first is the
   entire loss-window fix, and it does not move.
@@ -461,14 +466,26 @@ conversational summary never substitutes for the entry the record was owed.
   a named blocker and stop; never overwrite the winning claim, never guess which run owns the
   ticket. `in-flight` is only ever applied AFTER the race check confirms a win, so a losing claim
   never had one to remove.
-- Ambiguous match in Phase 1 (two plausible records) → **with an interactive user present**, ask
-  which, one question, then proceed. A `/build-feature`-initiated call counts as having one even
-  inside that command's fork — forking relieves the caller's session, it does not remove the
-  person, and `AskUserQuestion` still reaches them directly. **No interactive user** (e.g. via
-  `build-leader`, from `mobilize-chores`) → report the ambiguity as a named blocker instead — the
-  batch confirm already spent the user's one gate for this run, so a mid-dispatch question has
-  nowhere sanctioned to land (same discipline as this plugin's other unattended failure branches:
-  `close-session`, `mobilize-chores`); never guess which record was meant.
+- Ambiguous match in Phase 1 (two plausible records) → only `/bind-build`'s own standing seat runs
+  this procedure in the live host session itself (the "No nested wait" section's not-nested case
+  above, no `Agent`-tool
+  hop and no fork) — there, and only there, ask which via `AskUserQuestion`, one question, then
+  proceed. Every other caller has no question channel to reach: a `/build-feature`-initiated call
+  runs this procedure INSIDE that command's own `context: fork` (`build-feature/SKILL.md`'s
+  frontmatter), and a `context: fork` background dispatch has no `AskUserQuestion` channel at all —
+  measured 2026-08-17 (gh#541): the tool is unreachable from inside one, confirmed two ways (two
+  independent thin captures minted clarify-less, and a background dispatch that could not even
+  discover the tool). The 2026-08-09 claim this line used to carry — "forking relieves the
+  caller's session, it does not remove the person, and `AskUserQuestion` still reaches them
+  directly" — is that falsified assumption; don't restate it. `build-leader` (`Agent`-tool
+  dispatch, same no-channel finding) and `mobilize-chores` (the batch confirm already spent the
+  user's one gate for this run) have no live question channel either. **No live question channel**
+  (`/build-feature`'s fork, `build-leader`, `mobilize-chores`) → capture-with-gaps: report the
+  ambiguity as a named blocker naming both candidate ids, plus the resume path — re-invoke this
+  procedure with the explicit ticket id once a person picks one (Phase 1's ticket-id branch takes
+  precedence over the sweep, so a resolved id skips the ambiguity entirely) — same discipline as
+  this plugin's other unattended failure branches (`close-session`, `mobilize-chores`); never guess
+  which record was meant.
 - A raw (recordless) seed that is bug-shaped → `file-bug` (docs) owns it from intake, not a build;
   the Phase 2 bug branch covers a ticket that already exists. This dispatch never invokes
   `file-bug` directly for a recordless seed (Phase 1's nested-intake hand-off does, ahead of any
