@@ -193,7 +193,7 @@
    "id": "n11",
    "prompt": "review this agent definition",
    "expect": "no-trigger",
-   "comment": "owner: harness's agent-checker"
+   "comment": "owner: harness's agent-checker. Observed leaking to fleet-rules on one of #581's re-verification runs (2026-08-17) — same candidate cross-plugin structural-leak shape as n07/n16 (owner absent from a teamwork-scoped menu), but this case was outside #581's named scope (n07/n16/n17/n18 only) and passed clean on other runs in the same session, so noise vs. a real gap is unconfirmed. Not fixed here — flag for a future ticket if it persists."
   },
   {
    "id": "n12",
