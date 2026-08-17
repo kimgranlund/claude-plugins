@@ -58,6 +58,26 @@ memoized `computed(() => resolvePointer(surface.data.value, pointer))` over it
 - **Reuse across widgets:** every widget reading the same pointer shares the one computed, so a data
   change drives at most one pointer-walk per distinct path (`binding.ts:88-94`).
 
+**UPDATE 2026-08-17 — waking vs. invalidation is a real distinction, not two names for the same
+thing (issue #508). [inferred]** from a generalizable implementation learning off this renderer
+(memory `a2ui-binding-perpath-mechanism`; cited here from that report, re-Grep `binding.ts` before
+trusting the line numbers below at the next refresh). **Per-path WAKING is achievable from ONE data
+signal** — the mechanism above: one memoized computed per bound pointer, an `Object.is` cutoff, and
+an immutable `setPointer` that structurally shares every untouched subtree (see "Pointer resolution"
+below), so a write to `/a` re-resolves `/b`'s computed to the SAME reference and `/b`'s widget never
+re-renders. **Per-path INVALIDATION is NOT achievable from that one signal** — every path-computed
+in the `WeakMap<Surface, Map<pointer, computed>>` must still be marked possibly-stale on every
+write, an O(distinct-bound-paths) flag pass that is unavoidable without a genuinely separate signal
+PER path, which is intractable to wire up under arbitrary-depth, arbitrary-overlap pointer nesting
+(a write to `/a` may or may not affect a computed bound to `/a/b/c`, and the overlap can only be
+discovered by re-resolving, not declared upfront). The distinction matters because a per-binding
+cutoff targets **widget-update cost** (what re-renders), not **scheduler-visit cost** (how many
+computeds get walked) — a docs page that only states the waking half silently implies the walk is
+free, and it is not. **Free memoization proof:** the subscriber count on the ONE data signal always
+equals the count of DISTINCT bound paths on the surface, never the widget count — multiple widgets
+bound to the same pointer share one computed (the "Reuse across widgets" bullet above), so
+subscriber growth tracks path cardinality, not render-tree size.
+
 ## Pointer resolution + placeholder discipline
 
 `resolvePointer(doc, pointer)` (`binding.ts:46`) walks an **absolute** RFC-6901 pointer, decoding

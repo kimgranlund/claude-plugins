@@ -70,3 +70,26 @@ channels with the runner owning and tearing down both endpoints of each pair, no
 existing, delivery proven by genuine transit through the boundary (send → drain → record the
 delivered message) `[estate — tools/arena/match.ts:118-129,183-237]`; the closed reply surface
 (`note` is spectator-only, never relayed to the opponent) `[estate — src/arena/referee.ts:40-44]`.
+
+## UPDATE 2026-08-17 — verdicts are computed live, never precomputed (issue #511)
+
+**[inferred]** from the arena's own standing practice, cited here from that report (source: `agent-ui`
+`packages/agent-ui/a2a` arena + `matches/flagship.match.jsonl`; memory `a2a-section-state` —
+re-Grep the cited files at the next refresh wave rather than trusting these line numbers cold).
+**The proof's verdicts are computed LIVE at report/view time over the recording, never
+precomputed or committed alongside it.** This is the same principle §4's clean-run evidence already
+leans on ("gate-silent: `checkIsolation → []`") stated explicitly as its own rule: a report that
+shows a STORED "passed" badge next to a transcript is trust theater — the only thing worth showing
+is the gate's OWN output from re-running `checkIsolation`/`validateTranscript` against the actual
+recorded bytes, right now. (The a2a-training-facts sibling pack documents the identical discipline
+for its concepts-page artifact verdicts — `data-validated` is "computed, never a
+precomputed/hardcoded badge" — the same rule, a different surface; see that pack's
+`derivation.md`.) **Failure mode a report format must avoid:** caching or hand-transcribing a past
+run's verdict into the report text — the moment the code changes, a cached verdict silently goes
+stale while still reading as current.
+
+**The standing evidence artifact is a REAL match between two DIFFERENT models**, not a scripted or
+same-model fixture: `flagship.match.jsonl` is the positive control that must pass clean (§3 above;
+`scripted === false` + real provider names, per the header check in §1) — its evidentiary weight as
+a flagship specifically rests on it being a genuine cross-model interaction, not a same-model replay
+that would leave a same-provider leak channel unexercised.
