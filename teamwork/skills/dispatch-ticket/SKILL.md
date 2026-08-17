@@ -367,9 +367,9 @@ discover and repair branch/worktree residue by hand):
      No recorded verdict → out; a remembered one is not a recorded one.
    - **QB6 gate green twice** — `release_gate.py <plugin>` exit 0 locally, AND CI green on the PR
      per the bounded watch below. Local green alone never suffices; CI is ADR-0002's own layer.
-     **The CI half of this conjunct is not observed here — it is PROVEN by the merge sequence's
-     own step 1 below**, so evaluating the eight conjuncts once, then running the bounded watch
-     once, checks CI green exactly once total, never twice.
+     **The CI half of this conjunct is not observed here — it is PROVEN by steps (1)+(1b) below**
+     ((1b) is load-bearing, (1)'s watch advisory only, #551), so evaluating the eight conjuncts
+     once, then running (1)+(1b) once, checks CI green exactly once total, never twice.
    - **QB7 no overlapping open PR** — no other OPEN PR touches the same plugin (`gh pr list
      --state open --json number,files`). Overlap → a human merges.
 
@@ -377,16 +377,18 @@ discover and repair branch/worktree residue by hand):
    failed conjunct in the stage-4 handoff and continue to stage 3 exactly as today — PR open,
    human merges, nothing else different. Never re-run a conjunct to chase a pass. All eight green
    → run the merge sequence, one attempt each, in order: (1) a BOUNDED `gh pr checks <pr> --watch
-   --fail-fast` — the ceiling is a real wrapper with a real exit code, not a promise to watch the
-   clock, and the wrapper is **feature-detected, never assumed**: `timeout 900 …` where GNU
-   coreutils `timeout` is on PATH (`gtimeout 900 …` on a Homebrew macOS box), otherwise the
-   portable `perl -e 'alarm 900; exec @ARGV' gh pr checks <pr> --watch --fail-fast`. Stock macOS
-   carries NEITHER `timeout` nor `gtimeout` (measured 2026-08-14) — assuming the GNU spelling
-   would make this whole path silently inert. **Exit 0 is the only pass**; every other exit is
-   ineligible with no interpretation — 124 (GNU expiry), 142 (SIGALRM expiry), 127 (no wrapper
-   found, so the bound could not be ENFORCED — never run an unbounded watch in its place), or any
-   failing check. A timeout is NEVER read as an implicit pass; (2) `gh pr merge <pr> --squash`;
-   (3) verify by
+   --fail-fast` — a real wrapper with a real exit code: `timeout 900 …` (GNU coreutils, or
+   `gtimeout 900 …` on Homebrew macOS), else the portable `perl -e 'alarm 900; exec @ARGV' gh pr
+   checks <pr> --watch --fail-fast` (stock macOS has neither, measured 2026-08-14 — never assume
+   the GNU spelling). 124/142/127 (expiry/missing wrapper — unenforceable, never unbounded
+   instead) are ineligible outright. **Exit 0 alone is NEVER the pass, only the signal to run
+   (1b)** — #551 found this watch exits 0 on non-terminal/failed states, biting three merges
+   (#530, #546, #549) before a human caught it. (1b) `gh api --paginate
+   repos/<owner>/<repo>/commits/<sha>/check-runs` against the head SHA (`gh pr view <pr> --json
+   headRefOid`): an EMPTY `check_runs` array, any `in_progress`/`queued` status, or any
+   `conclusion` besides `success`/`neutral`/`skipped` (the latter two only when independently
+   confirmed non-required), is NOT eligible regardless of (1)'s exit code, advisory only. A
+   timeout at (1) or (1b) is never an implicit pass; (2) `gh pr merge <pr> --squash`; (3) verify by
    re-query, never by trusting the merge command's own print — `gh pr view <pr> --json
    state,mergeCommit` must show `MERGED` and a non-empty SHA; (4) `python3
    harness/scripts/campaign_close.py <pr> --repo <owner/repo> --gate <plugin-root>`; (5) a dated

@@ -108,6 +108,25 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.4 · assembled 2026-08-17 · closes #551: two follow-ups from the wave-5 rename campaign.
+(1) `bind-product` (formerly `leading-product`, renamed under ADR-0020 W5) had two pre-existing
+leaked no-trigger cases (n02 "gate this build dispatch" → was winning over its true owner
+`bind-team`; n03 "what lifecycle stage" → was winning over `none`/`docs:check-stage`) — fixed by
+narrowing the description's positive clause (dropped the bare words "gate" and "driving
+docs:check-stage" that the leaks keyed on) and sharpening the NOT-fences; also repaired a stale
+Phase 2 citation claiming product-leader.md records a dated seat-tier "deviation" for itself when
+the agent file actually says the opposite (no deviation — it's the ladder's own default ceiling).
+A 5th trigger case (t05) added to clear the E5 floor. Fresh blind routing re-proof: 10/10 clean,
+n02/n03 now route to their true owners. Fresh-context skill-checker: PASS. (2) Merge-on-green
+tooling defect, repeatedly bitten (#530, #546, #549 all raced it): `gh pr checks --watch
+--fail-fast` was found to exit 0 on non-terminal/failed states, so a chained `&& gh pr merge`
+could fire on a red or still-running PR. `dispatch-ticket`'s quick-build merge sequence gains
+step 1b — a mandatory `gh api .../check-runs` sweep verifying every check's own `conclusion`
+individually before merge, exit 0 from the watch demoted to advisory-only. `fleet-rules`' merge
+choreography section gains the matching doctrine bullet, citing dispatch-ticket rather than
+re-deriving it. `harness:merge_when_clean.py` was checked and found already immune (it polls
+`gh pr view`'s `mergeStateStatus`, never `gh pr checks --watch`) — no script change needed there.
+
 v2.21.3 · assembled 2026-08-17 · closes #548: `dispatch-ticket`'s Phase 1 ambiguous-match failure
 branch and the `[nested-intake]` marker rationale still carried the falsified 2026-08-09 canon
 ("forking relieves the caller's session, it does not remove the person, and `AskUserQuestion`
