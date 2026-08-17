@@ -1,11 +1,13 @@
 ---
 name: thinking-depth-rules
 description: >-
-  The n-order reasoning spectrum for decision and refactor work — a recurring finding despite
-  fixes, a verdict that's just tidying. Use for "push the reasoning further", "question the rules
-  themselves", "apply higher-order reasoning", "are we at a local maximum", or "is this
-  improvement real or just relabeling". NOT the wording layer (prompt-wording-rules); NOT a
-  structural breakdown (break-down-problem); NOT extracting the ask (find-intent).
+  The n-order reasoning spectrum for matching judgment depth to a decision, and for naming when a
+  rule itself — not just the latest attempt — is wrong. Use for "push the reasoning further",
+  "question the rules themselves", "the same finding keeps recurring despite fixes", "are we at a
+  local maximum", or "is this improvement real or just relabeling". NOT the wording layer
+  (prompt-wording-rules); NOT a structural breakdown (break-down-problem); NOT extracting the ask
+  (find-intent); NOT a scored baseline→change→remeasure loop (docs:research-methods) — this skill
+  judges whether a rule deserves scrutiny, it never runs the loop that scores a change.
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -15,18 +17,18 @@ user-invocable: false
 A spectrum for matching reasoning depth to the decision at hand — and for refusing both failure
 modes: under-reasoning (organizing when transformation was available) and over-reasoning (paradigm
 theater where a rename suffices). Provenance: the spectrum is the user's framework [imported
-2026-07-07]; the escalation triggers, instantiations, and rent rule are this project's practice,
-each anchored to a dated worked case from harness's own build.
+2026-07-07]; the escalation triggers, worked examples, and rent rule are this project's practice,
+distilled from harness's own build.
 
 ## The spectrum
 
-| Order | Core question | Architectural level | Forge-scale instantiation (worked case) |
+| Order | Core question | Architectural level | Worked example |
 |---|---|---|---|
-| 1st | What does the data say? | Tool execution | Run the lint; read the graph; count the files. (`skill_lint.py`, `surface_map.py map`) |
-| 2nd | How well did I analyze it? | Reflection / self-check | The validator validates itself: every script's `selftest`, the gate refusing its own bad ship, generator ≠ critic audits. (G4; the fixture that had to *actually* cross a preload edge) |
-| 3rd | How will the other player react to my act? | Multi-agent / game theory | Model the router and the consumer: blind `/check-routing` judges choosing from the menu; fence closure anticipating sibling theft; a description written for how it will be *read*, not what it says. (stolen/leaked shapes) |
-| 4th | How will the ecosystem react to those reactions? | Network / ecosystem simulation | The shared 1% listing budget; trust re-decisions on every update; stutter and namespace competition across *all* installed plugins; partition by install/update behavior, not folder resemblance. (G8; the lifecycle ledger) |
-| 5th | Are the system's rules themselves wrong or limited? | Ontological / paradigm evolution | Falsify the given laws and amend the corpus: the §6.6 library-only state disproved and re-modeled; mention-vs-use discovered as a rule *about* rules; asking "is the plugin even the right unit?" before partitioning plugins. |
+| 1st | What does the data say? | Tool execution | Run the lint; read the graph; count the files. |
+| 2nd | How well did I analyze it? | Reflection / self-check | The validator validates itself: a script's `selftest`, a gate refusing its own bad ship, generator ≠ critic audits. |
+| 3rd | How will the other player react to my act? | Multi-agent / game theory | Model the router and the consumer: a blind routing judge choosing from the menu; fence closure anticipating sibling theft; a description written for how it will be *read*, not what it says. |
+| 4th | How will the ecosystem react to those reactions? | Network / ecosystem simulation | A shared listing budget; trust re-decisions on every update; namespace competition across *all* installed plugins; partition by install/update behavior, not folder resemblance. |
+| 5th | Are the system's rules themselves wrong or limited? | Ontological / paradigm evolution | Falsify a given law and amend the corpus: a documented invariant disproved and re-modeled; a rule discovered to be *about* rules; asking "is this even the right unit?" before restructuring. |
 
 ## Escalation protocol
 
@@ -74,3 +76,12 @@ Every claim above 2nd order pays rent in the currency of the order below it:
 Language of the artifact → `prompt-wording-rules`. Structure of the problem →
 `break-down-problem`. What's actually being asked → `find-intent`. Whether decisions earned their
 verdicts → the decision skills' own tests; this skill governs how high those tests must reach.
+
+**Boundary vs. `docs:research-methods`.** Both surface on "why did this recur", "is this actually
+better", "are we stuck". The discriminator is whether a scorer runs: research-methods fixes a
+measure and loops baseline→change→remeasure→keep-or-revert against it — a regression, a tuning
+knob, a stress test. This skill has no scorer and never measures a delta; it judges whether a
+*rule or model* deserves scrutiny at all — the recurrence itself as 5th-order evidence, tidying
+mistaken for transformation, escalation as a decision (not an experiment) about how far to push
+reasoning. A research-methods loop can conclude "the rule is wrong" as a finding; this skill is
+what decided the loop was worth escalating to in the first place.

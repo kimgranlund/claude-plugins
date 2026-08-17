@@ -5,7 +5,9 @@ description: >-
   ablation, sweep, bisect, adversarial. Triggers: "improve the score", "find the root cause of
   this regression", "which parts actually matter", "what's the best value for X", "tune these
   parameters", "what breaks this", "it used to work, now it doesn't". NOT lookup (web search); NOT
-  artifact review (*-checker agents); NOT authoring/building (*-forge/builder).
+  artifact review (*-checker agents); NOT authoring/building (*-forge/builder); NOT for judging
+  whether a recurring finding means a rule or reasoning-depth itself is wrong, absent a scorer
+  and a baseline→change→remeasure loop (harness:thinking-depth-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

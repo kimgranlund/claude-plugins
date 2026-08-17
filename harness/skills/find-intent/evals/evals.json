@@ -1,6 +1,6 @@
 {
   "skill": "find-intent",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. t04 rephrased 2026-07-09: 'Improve this prompt brief' was itself the ambiguity — 'prompt' reads as an instruction artifact (prompt-wording-rules' territory) in 3 of 4 blind runs; the case now tests the ask-sharpening reading it was written for.",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). Convertible to skill-creator's eval format; run via its description-tuning loop or manual fresh-session baseline. t04 rephrased 2026-07-09: 'Improve this prompt brief' was itself the ambiguity — 'prompt' reads as an instruction artifact (prompt-wording-rules' territory) in 3 of 4 blind runs; the case now tests the ask-sharpening reading it was written for. t06/t07 added 2026-08-17 (issue #479, #295's ablation finding): rt1-class raw under-specified asks with no meta-language died to none/plugin-install-facts at baseline — the description previously only caught requests that named intent-extraction outright. n06/n07 added the same change as no-theft guards: a request that's small but already fully scoped must not be swept in by the broadened wording.",
   "cases": [
     {
       "id": "t01",
@@ -52,6 +52,36 @@
       "prompt": "Before we wrap up, is there anything still open?",
       "expect": "no-trigger",
       "comment": "owner: find-open-questions — sweeping a session's already-raised unresolved items closed, not sharpening a not-yet-started ask"
+    },
+    {
+      "id": "t06",
+      "prompt": "Make our plugins easier for people to get started with.",
+      "expect": "trigger",
+      "comment": "rt1-class (issue #479, #295's ablation report): a raw, plainly under-specified ask with no meta-language naming intent-extraction — no scope, no audience, no success criterion stated"
+    },
+    {
+      "id": "t07",
+      "prompt": "Make the onboarding better.",
+      "expect": "trigger",
+      "comment": "rt1-class: same shape as t06, shorter — a bare goal with nothing to anchor scope or done"
+    },
+    {
+      "id": "n06",
+      "prompt": "Add a dark mode toggle to the settings page that persists to localStorage.",
+      "expect": "no-trigger",
+      "comment": "no-theft guard: small ask, but scope, unit, and success criterion are already fully stated — extraction has nothing to resolve"
+    },
+    {
+      "id": "n07",
+      "prompt": "Bump the harness version to 3.9.0 and add the ledger line for this change.",
+      "expect": "no-trigger",
+      "comment": "no-theft guard: a bare, mechanical instruction with an explicit target and done-condition — not vague, just short"
+    },
+    {
+      "id": "n08",
+      "prompt": "Add pagination to the users list.",
+      "expect": "no-trigger",
+      "comment": "mid-band boundary probe: scope is named (the users list, pagination) even though the done-condition is implicit — pins the boundary so the broadened t06/t07 wording doesn't drift into ordinary feature requests"
     }
   ]
 }

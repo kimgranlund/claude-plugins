@@ -1,6 +1,6 @@
 {
   "skill": "thinking-depth-rules",
-  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Boundaries: prompt-wording-rules (wording), break-down-problem (structure), find-intent (the ask).",
+  "note": "Trigger-routing suite, authored with the skill 2026-07-07. Boundaries: prompt-wording-rules (wording), break-down-problem (structure), find-intent (the ask), docs:research-methods (a scored baseline->change->remeasure loop). n06 added 2026-08-17 (issue #478, #295's ablation report): docs:research-methods was found to absorb the recurring-finding/local-maximum/relabeling surface under ablation (t05, t06, t07 above); n06 proves a scored-loop ask over that same recurring-symptom shape still routes away to the sibling.",
   "cases": [
     {
       "id": "t01",
@@ -61,6 +61,12 @@
       "id": "n05",
       "prompt": "review this skill against the standards",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n06",
+      "prompt": "bisect the last week of commits to find which one made this regress, then propose the fix",
+      "expect": "no-trigger",
+      "comment": "owner: docs:research-methods — a scored baseline->change->remeasure loop against a known-good prior, not a judgment call about whether the rule itself is wrong"
     }
   ]
 }

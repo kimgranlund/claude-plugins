@@ -1,11 +1,14 @@
 ---
 name: find-intent
 description: >-
-  Extract the ROOT intent behind a task or brief before acting. Use when a request is vague
-  or the wording and goal diverge — "what am I really asking for", "figure out what they
-  actually want", "clarify this before we build it". Resolve gaps with multiple-choice
-  questions. NOT for a new skill's interview (make-skill); NOT decomposing a system
-  (break-down-problem); NOT a session's open questions (find-open-questions).
+  Extract the ROOT intent behind a task or brief before acting — including a bare goal with no
+  stated scope or success criterion and no meta-language ("make our plugins easier to get
+  started"), not only requests naming intent-extraction outright. Use when a request is vague or
+  the wording and goal diverge — "what am I really asking for", "figure out what they actually
+  want", "clarify this before we build it". Resolve gaps with multiple-choice questions. NOT for a
+  request already stating its own scope and done-condition, however small; NOT a new skill's
+  interview (make-skill); NOT an already-scoped system (break-down-problem); NOT a session's open
+  questions (find-open-questions).
 disable-model-invocation: false
 user-invocable: true
 ---
