@@ -1,12 +1,21 @@
 # Turn / Session / TurnInput — the multi-turn model and input-intent handling
 
 > Axis: the turn-history data model the browser holds, how the two `TurnInput` kinds ("intent"
-> text vs a "client" message reduced from a UI action/functionResponse/error) frame the next turn,
+> text vs a "client" message reduced from a UI action/rendererFunctionResponse/error) frame the next turn,
 > and how "the agent continues." Grounded in
 > `packages/agent-ui/a2ui/tools/agent/agent-transport.ts`,
 > `packages/agent-ui/a2ui/tools/agent/session.ts`, `site/pages/a2ui-live.ts`,
 > `.claude/docs/specs/specs/a2ui-live-agent.spec.md` (SPEC-R8). ADR-0072 = the multi-turn session
 > model. Verified against source as of 2026-07-07.
+>
+> **Terminology note (2026-08-17, issue #482):** A2UI v1.0 Candidate renames the protocol's role
+> vocabulary — client → renderer, server → agent. This pack's OWN narrative (SKILL.md, sources.md)
+> uses the Candidate names. This file's `kind: "client"` discriminant, `A2uiClientMessage`,
+> `handleClientMessage`, and `frameClientMessage` below are literal citations to this repo's actual
+> TypeScript identifiers, which have NOT themselves been renamed yet (that is gen-ui-kit's own
+> in-repo sweep, issue #1354 / PR #1472, open/unmerged as of this writing) — so they are left as
+> written in the cited source rather than fabricating a rename the code doesn't show. Read `"client"`
+> here as the Candidate spec's **renderer** role.
 
 ## The shapes (SPEC-R8 / ADR-0072)
 
@@ -53,7 +62,7 @@ happened and how to continue (`session.ts:20-36`, SPEC-R8 AC1):
 
 - **`action`** → `"The user triggered the "<name>" action (from component <id>)."` plus the
   `context` and the surface `dataModel` when present (`session.ts:21-27`).
-- **`functionResponse`** → the awaited value for the issued `callFunction`
+- **`rendererFunctionResponse`** → the awaited value for the issued `callRendererFunction`
   (`session.ts:29-31`).
 - **`error`** → the rejected surface, fed back for **cross-turn recovery** — distinct from
   `produce()`'s intra-turn generate/validate self-correct loop; this is the agent getting a fresh
@@ -65,7 +74,7 @@ in the protocol layer (see [[a2ui-protocol-facts]]), not this pack.
 
 ## "The agent continues" — the round-trip is unconditional today
 
-**Claim — any rendered control's action/functionResponse/error already round-trips to a full agent
+**Claim — any rendered control's action/rendererFunctionResponse/error already round-trips to a full agent
 turn, unconditionally.** `host.onClientMessage(handleClientMessage)` (`a2ui-live.ts:160`) →
 `handleClientMessage` calls `runTurn(nextTurn(session, message))` for EVERY client message with no
 condition (`a2ui-live.ts:224-229`). This is the whole answer to "how does a UI click become an
@@ -87,6 +96,6 @@ conversational-reasoning-and-click-routing-gap.
 The transport the session flows through (agent-transport-seam) · the generate→validate loop that
 turns a `TurnInput` into a JSONL stream (produce-loop) · what `ProviderSelection` binds to
 (provider-model-seam-and-trust-boundary, switcher-and-live-overlay) · the shape of an
-`A2uiClientMessage`'s `action`/`functionResponse`/`error` on the wire ([[a2ui-protocol-facts]]) · the
+`A2uiClientMessage`'s `action`/`rendererFunctionResponse`/`error` on the wire ([[a2ui-protocol-facts]]) · the
 PROPOSED note channel + decision-trace + `wantResponse` routing
 (conversational-reasoning-and-click-routing-gap).

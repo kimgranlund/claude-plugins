@@ -51,6 +51,25 @@ repaired.
   `wantResponse` routing. **`Status: proposed` (2026-07-07), NOT built, NOT ratified** — a design
   record only; see conversational-reasoning-and-click-routing-gap for the shipped/proposed split.
 
+## Terminology note — A2UI v1.0 Candidate rename (2026-08-17, issue #482)
+
+This pack's own narrative (SKILL.md, this file) uses A2UI v1.0 Candidate's protocol role names:
+**client → renderer**, **server → agent**. Mirrors adiahealth/gen-ui-kit's own in-repo sweep
+(issue #1354, PR #1472 — open/review-pending, not yet merged). Two things this sweep deliberately
+did NOT touch:
+
+1. **This repo's literal TypeScript identifiers** — `A2uiClientMessage`, `A2uiServerMessage`,
+   `handleClientMessage`, `frameClientMessage`, the `kind: "client"` discriminant
+   (`turn-session-and-input-intent.md`), and `handleClientMessage`/`runTurn`/`summarize`/
+   `wireLiveOverlay` above — because those names have not themselves been renamed in the cited
+   source (gen-ui-kit's own code-level sweep is the unmerged PR above); inventing a rename in the
+   citation text would misrepresent what the file actually contains.
+2. **The dev-proxy's OWN "client"/"server" vocabulary** (`provider-model-seam-and-trust-boundary.md`,
+   `produce-loop.md`'s `input.model` precedence claim) — that is plain HTTP client/server language
+   for the Vite dev-proxy's backend process and the request body it receives, a different system
+   layer entirely (it would exist with or without A2UI), not the A2UI protocol's role vocabulary —
+   so it is out of scope for this rename and left as written.
+
 ## Boundary — layers owned elsewhere
 
 This pack answers the live-agent system; it does not restate its neighbors. The A2UI wire shape

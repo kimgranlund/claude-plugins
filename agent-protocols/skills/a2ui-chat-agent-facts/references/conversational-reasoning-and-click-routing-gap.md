@@ -116,7 +116,7 @@ zero layout, so `FormProvider › Column gap='md' › Field per control` is taug
 **The routing predicate lives in the pure reducer layer, not the page** — a shipped refinement over
 ADR-0088 §3's "handleClientMessage routes" sketch: `shouldRunTurn(message)` in
 `tools/agent/session.ts:68-71` answers `action.wantResponse !== false` for the `action` arm and
-`true` for `functionResponse`/`error` (inherently agent-directed). The page calls it FIRST, so a
+`true` for `rendererFunctionResponse`/`error` (inherently agent-directed). The page calls it FIRST, so a
 `TurnInput` can never be constructed for a message that should stay silent (`session.ts:9-13`):
 `handleClientMessage` returns before any chat entry or `runTurn` on an explicit `false`
 (`site/pages/a2ui-live.ts:404-413`). The default is the back-compat OPT-OUT Kim ratified (ADR-0088

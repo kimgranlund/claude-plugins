@@ -69,7 +69,7 @@
     },
     {
       "id": "t14",
-      "prompt": "why did my callFunction for required get rejected",
+      "prompt": "why did my callRendererFunction for required get rejected",
       "expect": "trigger"
     },
     {
@@ -94,7 +94,7 @@
     },
     {
       "id": "t19",
-      "prompt": "does a failed check send an error to the server",
+      "prompt": "does a failed check send an error to the agent",
       "expect": "trigger"
     },
     {

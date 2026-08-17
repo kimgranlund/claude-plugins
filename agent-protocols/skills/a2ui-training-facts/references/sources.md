@@ -41,6 +41,18 @@ Read the ADR/SPEC clause a code comment cites before repeating it (verify-cited-
 
 - **`google/A2UI@main`** (Apache-2.0) — `eval/datasets/dataset_schema.json` (the record superset; fetched 2026-07-03 per ADR-0063), `schema/manager.py` / `schema/catalog.py` (the few-shot example-file shape; fetched per `export.ts:3-19`), and the `parse_response` / `payload_fixer` healing pair the closed healer mirrors. **Caveat:** these are external facts (SPEC Constraint C1) — this repo conforms to them, does not redefine them. A claim about upstream must be re-verified against the current upstream artifact, not a paraphrase (the repo-absence-≠-spec-absence discipline that drove ADR-0063's reversal).
 
+## Terminology note — A2UI v1.0 Candidate rename (2026-08-17, issue #482)
+
+This pack's two `callFunction` mentions (record-schema-and-provenance.md's single-surface exclusion,
+canonicalization-and-dedup.md's fold-stream exclusion) were renamed to the Candidate wire term
+**`callRendererFunction`** — this pack only ever documented the envelope key as the one A2UI kind
+excluded from single-surface counting / canonicalization, not the RPC's direction or
+`callableFrom` semantics, so the rename is mechanical here. Mirrors adiahealth/gen-ui-kit's own
+in-repo Candidate-terms sweep (issue #1354, PR #1472 — open/review-pending, not yet merged); the
+`record.ts`/`canonical.ts` `file:line` citations still name the repo's actual pre-Candidate field
+spelling until that PR lands — re-Grep before trusting the exact spelling at a cited line. No
+client/server role-vocabulary claim existed anywhere in this pack to sweep (grepped, none found).
+
 ## What is corpus-backed vs general knowledge
 
 Everything in this pack's references is corpus-backed (file:line or ADR/SPEC clause). Where an answer leans on general knowledge — e.g. what MinHash/TF-IDF *are* as algorithms — say so and keep the corpus-specific parameters (128 perms, k=3, θ=0.9, TF-IDF-not-embeddings) as the cited part. Anything the code marks "designed but not built" (the `repair()` orchestrator, `score()`, lift measurement — see `references/retrieval-and-repair-loop.md`) must be flagged as specced-not-shipped, never described as working.

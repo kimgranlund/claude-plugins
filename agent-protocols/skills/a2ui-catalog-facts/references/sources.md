@@ -54,8 +54,24 @@ The shipped source is the ground truth; specs/ADRs describe intent, code is what
 - A2UI v1.0 (Google's Agent-to-Agent UI protocol, ~v0.9→v1.0). The catalog spec's Constraint C1 and
   SPEC-R8 derive from A2UI's own guidance: *a catalog is a JSON-Schema file declaring the components/
   functions/themes an agent may use, and clients SHOULD build catalogs that directly reflect their
-  design system rather than adapting a generic (Basic) catalog.* This pack does not re-derive the
-  wire protocol — for the message/node wire shape see the sibling `a2ui-protocol-facts` pack (when minted).
+  design system rather than adapting a generic (Basic) catalog.* (Pre-Candidate a2ui.org wording,
+  preserved verbatim — see the Terminology note below; "clients" there = today's "renderers".) This
+  pack does not re-derive the wire protocol — for the message/node wire shape see the sibling
+  `a2ui-protocol-facts` pack (when minted).
+
+## Terminology note — A2UI v1.0 Candidate rename (2026-08-17, issue #482)
+
+This pack's taught vocabulary was swept to A2UI v1.0 Candidate terms: **client → renderer**,
+**server → agent** in prose; the `callableFrom` enum **`clientOnly`/`remoteOnly`/`clientOrRemote` →
+`rendererOnly`/`agentOnly`/`rendererOrAgent`**; the RPC kind it governs, **`callFunction` →
+`callRendererFunction`** (this pack only ever documented the agent-initiated direction — the
+Candidate spec's mirror `callAgentFunction`, for a renderer-initiated call executing on the agent,
+is not covered here). Mirrors adiahealth/gen-ui-kit's own in-repo sweep (issue #1354, PR #1472 —
+open/review-pending, not yet merged). Tier-1 `file:line` citations still name the repo's actual
+(pre-Candidate) identifiers — e.g. `catalog.ts:45`'s literal enum spelling — until gen-ui-kit's own
+code-level PR lands; re-Grep before trusting a citation's exact spelling, per the Verification note
+below. Catalog resolution's STRICT-mode change and `ValidationResult` severity levels (also named in
+issue #482) have no existing claim anywhere in this pack to correct — out of this sweep's scope.
 
 ## Status note — ADR-0087 is code-landed, marker still `proposed`
 

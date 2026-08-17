@@ -1,19 +1,19 @@
-# Functions & checks — client-side evaluation vs server-initiated RPC
+# Functions & checks — renderer-side evaluation vs agent-initiated RPC
 
-> Axis: the two DISTINCT function surfaces (local binding-eval vs the server `callFunction` RPC),
+> Axis: the two DISTINCT function surfaces (local binding-eval vs the agent `callRendererFunction` RPC),
 > `${…}` DynamicString interpolation, and the `checks` inline-validation construct. Grounded in
 > `packages/agent-ui/a2ui/src/renderer/{functions,interpolate,fn-expr,checks,call-function}.ts` and
 > `.claude/docs/specs/specs/a2ui-runtime.spec.md` (SPEC-R10, SPEC-R14). ADR-0026 = function-call
-> bindings + `@index`; ADR-0027/0028 = `${…}`; ADR-0029 = `checks`; ADR-0034 = `callFunction`.
+> bindings + `@index`; ADR-0027/0028 = `${…}`; ADR-0029 = `checks`; ADR-0034 = `callRendererFunction`.
 
 ## The load-bearing distinction: two surfaces, one registry
 
 There are **two spec-distinct function surfaces** (ADR-0034 fact 6, verbatim from a2ui.org v1.0):
 
-- **Client-side binding evaluation** — a `{call}` in a binding, DynamicString, or `checks`, *"invoked
+- **Renderer-side binding evaluation** — a `{call}` in a binding, DynamicString, or `checks`, *"invoked
   locally during component rendering — no network round-trip."* Reactive, surface-scoped, args
   resolved recursively as bindings. Owned by `functions.ts` `evaluate`.
-- **Server-initiated `callFunction` RPC** — *"an envelope-level message requiring `functionCallId`
+- **Agent-initiated `callRendererFunction` RPC** — *"an envelope-level message requiring `functionCallId`
   tracking, bidirectional RPC."* Flat, surfaceless, args are concrete literals. Owned by
   `call-function.ts` `handleCallFunction`.
 
@@ -21,11 +21,11 @@ There are **two spec-distinct function surfaces** (ADR-0034 fact 6, verbatim fro
 (`call-function.ts:2-13`). Both read the same `catalog.functions` metadata + `catalogFunctions` pure
 impls (ADR-0026's registry). But `evaluate` does `@`-system dispatch + recursive `resolveValue`;
 `handleCallFunction` does a flat gated call with concrete args and zero surface coupling. **Failure
-mode a maintainer must avoid:** routing one through the other — e.g. resolving `callFunction` args via
+mode a maintainer must avoid:** routing one through the other — e.g. resolving `callRendererFunction` args via
 `resolveValue` (there is no surface/data-model to resolve a `{path}` against — ADR-0034 fork 1) or
-giving `evaluate` a `callableFrom` gate (a local binding is the client surface, always allowed).
+giving `evaluate` a `callableFrom` gate (a local binding is the renderer surface, always allowed).
 
-## Client-side `evaluate` (ADR-0026, LLD-C10)
+## Renderer-side `evaluate` (ADR-0026, LLD-C10)
 
 `resolveValue(value, surface, itemScope?, emitError, registry)` (`functions.ts:67`) is the single
 dispatcher `widget.ts`'s bound-prop effect calls for every dynamic prop, with four cases
@@ -88,16 +88,16 @@ or unterminated `${…}`, or a positional-arg function-expression, renders **lit
 discipline. Reactivity is free: `interpolate` runs inside the bound-prop effect, so each embedded
 `${/path}` wakes it per-path (SPEC-N2).
 
-## `checks` — client-side inline validation, NO server error (ADR-0029)
+## `checks` — renderer-side inline validation, NO agent error (ADR-0029)
 
 A component-level `checks` array runs each entry's `{call,args}` through the **same** `evaluate` and
-drives the control's validity/disabled state — entirely client-side (`checks.ts:1-6`).
+drives the control's validity/disabled state — entirely renderer-side (`checks.ts:1-6`).
 
-**Claim — a failed check emits NO server error, ever** (ADR-0029 fact 4, verbatim: *"Servers never
-receive notifications of failed checks unless explicitly included in an action's context"*).
-`VALIDATION_FAILED` is the **schema**-validation wire code, **not** a form-validation channel
-(SPEC-R10; ADR-0029 §4). This is the sharp line for a "why did validation not reach my server"
-question: a check failure is UI-only.
+**Claim — a failed check emits NO agent error, ever** (ADR-0029 fact 4, verbatim: *"Servers never
+receive notifications of failed checks unless explicitly included in an action's context"* — pre-Candidate
+a2ui.org wording, "Servers" = today's "agents"). `VALIDATION_FAILED` is the **schema**-validation wire
+code, **not** a form-validation channel (SPEC-R10; ADR-0029 §4). This is the sharp line for a "why
+did validation not reach my agent" question: a check failure is UI-only.
 
 Mechanics:
 
@@ -120,35 +120,37 @@ Mechanics:
   failure, re-running when a `{path}` arg changes (SPEC-N2); the scope is the surface scope or a
   per-item child scope, so a list item's checks die with the item (`checks.ts:19-25`, `154`).
 
-## Server-initiated `callFunction` RPC (ADR-0034, SPEC-R14)
+## Agent-initiated `callRendererFunction` RPC (ADR-0034, SPEC-R14)
 
-An inbound envelope `{version, functionCallId, wantResponse?, callFunction:{call, args?}}`
+An inbound envelope `{version, functionCallId, wantResponse?, callRendererFunction:{call, args?}}`
 (`protocol.ts:149-150`, `197-212`) — envelope-level, **no `surfaceId`**, `functionCallId`
 **top-level**. `handleCallFunction` (`call-function.ts:35`) looks the function up across **all**
 registered catalogs and gates on `callableFrom`.
 
 - **Args are CONCRETE LITERALS, not binding-resolved** (`protocol.ts:196-199`, ADR-0034 fork 1) — the
-  server provides flat values per the function's catalog schema; there is no data model to resolve a
+  agent provides flat values per the function's catalog schema; there is no data model to resolve a
   `{path}`/`{call}` arg against.
-- **`callableFrom` enum: `clientOnly` | `remoteOnly` | `clientOrRemote`; default `clientOnly`**
-  (ADR-0034 fact 5, verbatim: *"If omitted, it defaults to `clientOnly`"*). This is the **spec's**
-  default (least-authority: not server-invocable unless opted in), not a repo choice. The default
-  catalog's `required`/`email`/`regex` are `clientOnly` — so every `callFunction` against the default
-  catalog **rejects** until a project registers a `remoteOnly`/`clientOrRemote` function.
-- **`clientOnly` is a HARD FLOOR — most-restrictive-wins, order-independent** (ADR-0034 amendment;
-  `call-function.ts:43-79`). If **any** active catalog declares the function `clientOnly`, the call is
+- **`callableFrom` enum: `rendererOnly` | `agentOnly` | `rendererOrAgent`; default `rendererOnly`**
+  (ADR-0034 fact 5; pre-Candidate ADR wording verbatim: *"If omitted, it defaults to `clientOnly`"*,
+  renamed here per the v1.0 Candidate rename this pack now tracks — see `references/sources.md`).
+  This is the **spec's** default (least-authority: not agent-invocable unless opted in), not a repo
+  choice. The default catalog's `required`/`email`/`regex` are `rendererOnly` — so every
+  `callRendererFunction` against the default catalog **rejects** until a project registers an
+  `agentOnly`/`rendererOrAgent` function.
+- **`rendererOnly` is a HARD FLOOR — most-restrictive-wins, order-independent** (ADR-0034 amendment;
+  `call-function.ts:43-79`). If **any** active catalog declares the function `rendererOnly`, the call is
   rejected regardless of a permissive sibling. **Failure mode this fixed (a real defect, #30):** the
-  first build did first-**allows**-match — it skipped a `clientOnly` declaration and took the first
+  first build did first-**allows**-match — it skipped a `rendererOnly` declaration and took the first
   permissive catalog, citing a **fabricated** "ADR-0034 clause 4b" that never existed. That fails
   OPEN on a security gate. A `callableFrom` check is a security gate and MUST fail closed.
 - **Emission** (`call-function.ts:97-116`, ADR-0034 forks 4/5): success + `wantResponse:true` →
-  `functionResponse{functionCallId, call, value}` with `functionCallId` copied **verbatim**; success +
-  `wantResponse` false/absent → fire-and-forget; **reject** (unregistered / `clientOnly` /
+  `rendererFunctionResponse{functionCallId, call, value}` with `functionCallId` copied **verbatim**; success +
+  `wantResponse` false/absent → fire-and-forget; **reject** (unregistered / `rendererOnly` /
   no-impl / **throwing** impl) → `error{code:'INVALID_FUNCTION_CALL', functionCallId}` (no
-  `surfaceId`) — **always** emitted, not gated on `wantResponse` (the server must learn its
+  `surfaceId`) — **always** emitted, not gated on `wantResponse` (the agent must learn its
   invocation was invalid). `@index`, being a system helper not in `catalog.functions`, is
-  **unregistered** for `callFunction` → rejected (correct — a collection-scope helper is never
-  server-invocable).
+  **unregistered** for `callRendererFunction` → rejected (correct — a collection-scope helper is never
+  agent-invocable).
 
 ## What this file does NOT cover
 

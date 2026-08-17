@@ -36,7 +36,7 @@ Worked example (from the shipped tests, `default/index.test.ts:252-261`): a `Mod
 
 - **Caveat — PRESENT-props only:** conformance verdicts the properties a node CARRIES, not
   required-presence (`default/index.test.ts:253-255`). A missing required prop is NOT a conformance
-  failure here; presence/validity of required fields is a client-side `checks` / control-validity
+  failure here; presence/validity of required fields is a renderer-side `checks` / control-validity
   concern, not catalog conformance.
 
 ## `RESERVED` structural keys are never properties

@@ -50,7 +50,7 @@ Defined at `catalog.ts:29-33`; validated by `validatePropDef` (`catalog.ts:158-1
 ## The component-level `checks` array — NOT a property
 
 `checks` is a **component-level construct, not a bindable catalog property** (SPEC-R4). It is a
-`[{call,args,message}]` validation array evaluated client-side, surfaced inline (an input → its
+`[{call,args,message}]` validation array evaluated renderer-side, surfaced inline (an input → its
 validity message; a Button → auto-disable; ADR-0029). It is a `RESERVED` structural key
 (`conformance.ts:14`) — any node may carry it without a `CATALOG` unknown-property failure, and it
 is never `applyProp`'d.

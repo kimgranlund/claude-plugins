@@ -8,7 +8,7 @@
 
 `canonicalize(out)` (`canonical.ts:75-89`) is **async** (it rides `crypto.subtle` for SHA-256 — see below). Algorithm (`canonical.ts:1-24`, LLD §4):
 
-1. **Fold the stream** (`foldStream`, `canonical.ts:93-111`): upsert every `updateComponents` component into one id-keyed map (last write wins per id); apply `updateDataModel` writes in stream order into one data-model value (whole-doc replace when no `path`, else an immutable RFC-6901 write via `setAtPointer`, `canonical.ts:124-139`). `createSurface`/`deleteSurface`/`actionResponse`/`callFunction` carry no tree/data content and don't participate.
+1. **Fold the stream** (`foldStream`, `canonical.ts:93-111`): upsert every `updateComponents` component into one id-keyed map (last write wins per id); apply `updateDataModel` writes in stream order into one data-model value (whole-doc replace when no `path`, else an immutable RFC-6901 write via `setAtPointer`, `canonical.ts:124-139`). `createSurface`/`deleteSurface`/`actionResponse`/`callRendererFunction` carry no tree/data content and don't participate.
 2. **DFS from `root`** (`computeVisitOrder`, `canonical.ts:149-182`) via `child` then `children` in **declared field order**, assigning canonical ids `c0=root, c1, c2, …` in visit order. A node reached through two parents is visited once (`canonical.ts:159`).
 3. **Rewrite id references** (`buildCanonicalComponent`, `canonical.ts:186-208`): `child`, `children: string[]`, and a children-template's `componentId` are rewritten to canonical ids.
 4. **Serialize + hash** (`stableStringify`/`encode`, `canonical.ts:215-232`; `sha256Hex`, `canonical.ts:234-240`).
