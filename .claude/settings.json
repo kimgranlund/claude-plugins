@@ -3,33 +3,7 @@
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
-    "allow": [
-      "Write(.claude/ops/watch-checkpoint.json)",
-      "Write(.claude/ops/friendlies.json)",
-      "Write(.claude/ops/held-items.md)",
-      "Write(.claude/ops/reports/*.md)",
-      "Bash(python3 harness/scripts/skill_lint.py *)",
-      "Bash(python3 harness/scripts/release_gate.py *)",
-      "Bash(python3 harness/scripts/eval_check.py *)",
-      "Bash(python3 harness/scripts/docs_check.py *)",
-      "Bash(python3 harness/scripts/corpus_check.py *)",
-      "Bash(python3 docs/scripts/doc_lint.py *)",
-      "Bash(python3 authorkit/skills/naming-audit/scripts/validate.py *)",
-      "mcp__claude-in-chrome__tabs_context_mcp",
-      "mcp__claude-in-chrome__find",
-      "mcp__claude-in-chrome__read_console_messages",
-      "mcp__claude-in-chrome__read_network_requests",
-      "mcp__plugin_figma_figma__get_screenshot",
-      "mcp__plugin_figma_figma__get_metadata",
-      "Bash(git fetch *)",
-      "Bash(python3 harness/scripts/campaign_close.py *)",
-      "Bash(python3 harness/scripts/adr_checkpoint.py *)",
-      "Bash(python3 authorkit/skills/attention-audit/scripts/collide.py *)",
-      "Bash(python3 authorkit/skills/attention-audit/evals/check_known_pairs.py *)",
-      "mcp__linear__get_issue",
-      "mcp__linear__list_issues",
-      "mcp__plugin_figma_figma__get_variable_defs"
-    ]
+    "defaultMode": "bypassPermissions"
   },
   "enabledPlugins": {
     "harness@nonoun-plugins": true,
