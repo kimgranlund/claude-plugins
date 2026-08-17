@@ -37,7 +37,7 @@
         "role": "agent",
         "mode": "manual",
         "date": "2026-08-16",
-        "agent_name": "plugins-agent"
+        "agent_name": null
       },
       {
         "role": "product",

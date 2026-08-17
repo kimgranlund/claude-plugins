@@ -42,11 +42,21 @@ takeover record.
 
 - **Schema key vs. printed session name (`agent` role only).** `fleet.json`'s role key stays
   `agent` everywhere in this schema — `seats.agent`, `live_state.joined[].role: "agent"` — and a
-  builder never renames it. The PRINTED/roster session name for that role is `{repo}-team-lead`,
+  builder never renames it. The PRINTED/roster session name for that role is `{repo}-marshal`,
   not `{repo}-agent` (`team-scaffolding` Phase 1/2, `fleet-bootstrap` Phase 1): the seat's session
-  identity matches the `teamwork:bind-team` contract it adopts, while the schema key stays the
-  generic role bucket. Every other role's session name is its role token verbatim
-  (`{repo}-reviewer`, `{repo}-planner`, `{repo}-product`) — only `agent` has this split.
+  identity matches the `teamwork:bind-team` contract it adopts (ADR-0020's marshal vocabulary —
+  `{repo}-team-lead` was this same split's prior value, superseded 2026-08-17, issue #586), while
+  the schema key stays the generic role bucket. Every other role's session name is its role token
+  verbatim (`{repo}-reviewer`, `{repo}-planner`, `{repo}-product`) — only `agent` has this split.
+  **Role-key migration considered and declined this wave (issue #586, 2026-08-17).** #586's
+  acceptance criteria left the schema key's migration to the builder's own cheap/not-cheap call.
+  Not cheap here: the key is a live data field read by every existing `.claude/ops/fleet.json`
+  row across repos (including this repo's own — see below), by every sweepable-invariant grep
+  this schema already documents (`justification_date` checks keyed on `seats.*.tier`), and
+  potentially by other repos' own copies of this convention with no shared migration path: a
+  rename would need a cross-repo sweep this ticket's blast radius never enumerated, not just a
+  same-file text edit. The split stays as designed — schema key `agent`, printed name now
+  `{repo}-marshal` — confirmed schema-stable, not migrated.
 - **`seats.<role>.tier`** — the model/effort tier this seat runs at in THIS repo. Starts equal to
   the canonical seat ladder (`team-scaffolding`'s Phase 4 point 1: agent fable+low, reviewer
   fable+xhigh, planner fable+medium, product fable+high).

@@ -108,6 +108,30 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.23.0 · assembled 2026-08-17 · closes #586: orchestrator seat naming converged on ADR-0020's
+marshal vocabulary — the session-name convention moves `{repo}-team-lead` → `{repo}-marshal`
+across every live canon surface: `fleet-bootstrap` SKILL.md (Phase 1, its 3 print/append sites),
+`team-scaffolding` SKILL.md (description + 6 body sites: Phase 1's `Seat:`/tier-justification
+lines, Phase 2's session-name print, Phase 4 point 7's introduction target, Phase 6's retire
+report), `fleet-manifest-schema.md`'s schema-key/session-name split Field entry, and
+`lld-0006-fleet-permission-profile.md`'s D1. `team-scaffolding`'s description changed, so its
+`evals.json` n01 case moved from `team-lead` to `marshal` phrasing in the same change (no other
+suite carried a reciprocal fence on this term). Repaired the stale rows named in the same
+ticket: `.claude/ops/fleet-roster.md`'s two `agent | plugins-agent` rows corrected to
+`plugins-marshal` in place (with an explanatory note — these predated even the `#434` convention
+correctly, since the printed name was never the bare role token); `.claude/ops/fleet.json`'s
+manual-mode `agent` live_state entry had a stray `agent_name: "plugins-agent"` where every sibling
+manual entry carries `null` — corrected to `null` to match. `fleet-rules`'s own `team-lead`
+mention (the `teammate_id="team-lead"` platform-default citation, `agent-writing-rules`' fact,
+unrelated to this seat's own naming) and `handoff-fallback.md`'s historical "six ported agents"
+citation are left untouched — neither is this convention. `init-repo`'s "team-lead contract"
+phrasing checked and left alone too: it names the still-unrenamed `/bind-team` command, a
+different axis ADR-0020 didn't touch. **Role-key migration declined this wave** (ticket's own
+open question, builder's call): `fleet.json`'s schema key stays `agent` — not cheap, since it's a
+live data field multiple sweepable-invariant greps and (potentially) other repos' own fleet.json
+copies key on, with no cross-repo migration path this ticket's blast radius enumerated; the
+split stays as designed, only the printed name's vocabulary moved. Fresh-context `skill-checker`
+FLOOR pass on both edited skills: PASS.
 v2.22.4 · assembled 2026-08-17 · closes #592: fleet-rules SKILL §4 (version-slot + merge-order
 rules) gains the missing inverse rule — the shared primary checkout stays on `main`, always;
 feature branches belong in worktrees. ADR-0002 states the forward half (a campaign gets its own
