@@ -1,6 +1,6 @@
 # Message lifecycle — surface create/update/delete + progressive render
 
-> Axis: the server→client message stream and how the renderer turns it into a live surface.
+> Axis: the agent→renderer message stream and how the renderer turns it into a live surface.
 > Grounded in `packages/agent-ui/a2ui/src/renderer/{dispatch,surface,tree,parser}.ts`,
 > `src/protocol.ts`, and `.claude/docs/specs/specs/a2ui-runtime.spec.md` (SPEC-R1–R4).
 > A2UI is Google's Apache-2.0 protocol (a2ui.org); `@agent-ui/a2ui` is this repo's
@@ -10,7 +10,7 @@
 
 An A2UI payload is a **JSONL stream**: one JSON envelope per line, applied in **arrival order**
 (SPEC-R1). Every envelope carries a top-level `version` string plus exactly **one** message-kind key.
-The six server→client kinds are the closed set in `dispatch.ts:36` (`DISPATCHED_ENVELOPE_KEYS`) and
+The six agent→renderer kinds are the closed set in `dispatch.ts:36` (`DISPATCHED_ENVELOPE_KEYS`) and
 mirrored in `validate.ts:42` (`MESSAGE_KINDS`):
 
 | envelope key | body | effect |
@@ -19,11 +19,11 @@ mirrored in `validate.ts:42` (`MESSAGE_KINDS`):
 | `updateComponents` | `{surfaceId, components: A2uiComponent[]}` | buffer/patch the component tree |
 | `updateDataModel` | `{surfaceId, path?, value?}` | upsert the data model (see bindings-and-data-model) |
 | `deleteSurface` | `{surfaceId}` | release the surface |
-| `actionResponse` | `{surfaceId, actionId, value?, error?}` | correlate a server reply (see actions-and-two-way-input) |
-| `callFunction` | `{functionCallId, wantResponse?, callFunction}` | server-initiated RPC (see functions-and-checks) |
+| `actionResponse` | `{surfaceId, actionId, value?, error?}` | correlate an agent reply (see actions-and-two-way-input) |
+| `callRendererFunction` | `{functionCallId, wantResponse?, callRendererFunction}` | agent-initiated RPC (see functions-and-checks) — Candidate splits this by direction; the mirror `callAgentFunction`/`agentFunctionResponse` (renderer calling a function that executes on the agent) is a new capability this pack does not yet document |
 
-**Caveat — `callFunction` is envelope-level, not surface-scoped.** Its `functionCallId` is a
-**top-level sibling** of `callFunction`, not nested in a body, and it carries **no `surfaceId`**
+**Caveat — `callRendererFunction` is envelope-level, not surface-scoped.** Its `functionCallId` is a
+**top-level sibling** of `callRendererFunction`, not nested in a body, and it carries **no `surfaceId`**
 (`protocol.ts:149-150`, `dispatch.ts:102-107`). Every other kind's identifying fields live inside
 its body. A validator or parser that assumes "all fields are in `msg[kind]`" mis-reads it — this is
 why `validate.ts:142` checks `functionCallId` against `msg`, not `body`.
@@ -42,7 +42,7 @@ why `validate.ts:142` checks `functionCallId` against `msg`, not `body`.
 `A2uiError` rather than emitting one; the host emits it and skips the message (`dispatch.ts:14-15`).
 Body-shape validation is `validate.ts`'s SCHEMA stage, deliberately kept separate so dispatch stays
 a trivially testable pure switch (`dispatch.ts:8-9`). **Failure mode this prevents:** the
-`DISPATCHED_ENVELOPE_KEYS` / `MESSAGE_KINDS` drift bug (ADR-0055 §1.2) — `callFunction` was routed by
+`DISPATCHED_ENVELOPE_KEYS` / `MESSAGE_KINDS` drift bug (ADR-0055 §1.2) — `callRendererFunction` was routed by
 dispatch but unrecognized by the validator, so a spec-legal stream was called SCHEMA-invalid. A
 `dispatch.test.ts` parity probe now asserts the two lists are equal; keep them in lockstep.
 
@@ -91,5 +91,5 @@ same one every error path in this protocol follows — see errors-and-versioning
 
 Binding resolution and the data model (bindings-and-data-model) · dynamic list templates
 (dynamic-lists) · actions, `actionResponse` correlation, two-way input
-(actions-and-two-way-input) · function evaluation, `checks`, `callFunction` (functions-and-checks) ·
+(actions-and-two-way-input) · function evaluation, `checks`, `callRendererFunction` (functions-and-checks) ·
 the error taxonomy and version rejection detail (errors-and-versioning).

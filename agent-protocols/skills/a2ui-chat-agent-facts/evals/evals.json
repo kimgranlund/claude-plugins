@@ -64,7 +64,7 @@
     },
     {
       "id": "t13",
-      "prompt": "how do intent turns differ from client turns",
+      "prompt": "how do intent turns differ from renderer turns",
       "expect": "trigger"
     },
     {
@@ -89,7 +89,7 @@
     },
     {
       "id": "t18",
-      "prompt": "how does the agent continue the conversation after a client message",
+      "prompt": "how does the agent continue the conversation after a renderer message",
       "expect": "trigger"
     },
     {

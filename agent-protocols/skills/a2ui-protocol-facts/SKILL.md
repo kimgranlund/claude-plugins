@@ -5,7 +5,7 @@ description: >-
   payload fail validation", "what does a binding/action/check look like on the wire", "how do
   dynamic lists render", "action vs function call", "which error code and why". Covers the
   message lifecycle, the Binding union, data-model updates, dynamic-list templates, DynamicString interpolation, the
-  callFunction RPC, the error taxonomy, version pinning. ANSWERS from a cited corpus; does not
+  callRendererFunction RPC, the error taxonomy, version pinning. ANSWERS from a cited corpus; does not
   build. NOT for catalog design (a2ui-catalog-facts); NOT for corpus records
   (a2ui-training-facts); NOT for the session/turn model or the live agent's validate-then-stream
   pipeline (a2ui-chat-agent-facts).
@@ -25,7 +25,7 @@ retrieval axes, one per reference — each answering a distinct class of ask.
 | Binding a value — "literal vs {path} vs {call}?", "how does updateDataModel propagate?", "why did only one widget update?", "is this pointer valid?" | `references/bindings-and-data-model.md` |
 | List iteration — "how do dynamic lists render?", "why no per-item key?", "how does a relative binding resolve inside a list item?" | `references/dynamic-lists.md` |
 | Interaction round-trip — "what does an action message contain?", "how does actionResponse correlate?", "how does two-way input work?", "wantResponse / sendDataModel?" | `references/actions-and-two-way-input.md` |
-| Functions & validation — "action vs function call?", "how do checks / ${...} interpolation / @index work?", "client-side eval vs the callFunction RPC?", "callableFrom?" | `references/functions-and-checks.md` |
+| Functions & validation — "action vs function call?", "how do checks / ${...} interpolation / @index work?", "renderer-side eval vs the callRendererFunction RPC?", "callableFrom?" | `references/functions-and-checks.md` |
 | Errors & versions — "which error code and why did I get it?", "why did this payload fail validation?", "VALIDATION_FAILED vs INVALID_FUNCTION_CALL?", "supported versions?" | `references/errors-and-versioning.md` |
 | Provenance — where a claim comes from, spec-fact vs repo-choice | `references/sources.md` |
 
@@ -36,13 +36,13 @@ retrieval axes, one per reference — each answering a distinct class of ask.
    files are cited catalogs, not linear reads. Enter by search, not by reading top-to-bottom.
 2. **Answer on the contract: claim + cited source (`file:line` or ADR clause) + the failure mode or
    caveat.** A protocol claim without its failure mode is half an answer. Worked example:
-   > *"Why did my `callFunction` for `required` get rejected?"* → function/validation axis →
-   > **claim:** the default catalog's `required` is `callableFrom: clientOnly`, and `clientOnly` is a
+   > *"Why did my `callRendererFunction` for `required` get rejected?"* → function/validation axis →
+   > **claim:** the default catalog's `required` is `callableFrom: rendererOnly`, and `rendererOnly` is a
    > **hard floor** — most-restrictive-wins, order-independent (`call-function.ts:43-79`, ADR-0034
-   > amendment). **Failure mode named:** a server `callFunction` for any `clientOnly` function emits
+   > amendment). **Failure mode named:** an agent `callRendererFunction` for any `rendererOnly` function emits
    > `INVALID_FUNCTION_CALL` + `functionCallId` (never invoked); it is NOT the render-time `FUNCTION`
    > error, and a permissive sibling catalog does not loosen it. **Caveat:** the default catalog ships
-   > no server-invocable function — register a `remoteOnly`/`clientOrRemote` one in a project catalog.
+   > no agent-invocable function — register an `agentOnly`/`rendererOrAgent` one in a project catalog.
 3. **Verify before an action** (see `references/sources.md`): a `file:line` drifts as the renderer
    evolves — grep the symbol; an ADR clause may be superseded — confirm it still says what the
    reference claims. Recommending a stale citation is the pack's own failure mode.

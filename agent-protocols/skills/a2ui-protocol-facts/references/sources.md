@@ -26,9 +26,33 @@ The SPEC owns behavior contracts; ADRs record ratified *changes*. Cited by requi
 - **ADRs** (`.claude/docs/adr/`): **0024** (positional dynamic lists, no key; + write-side / subtree /
   per-item-listener amendments) · **0026** (`{call,args}` binding kind + `@index`) · **0027/0028**
   (`${…}` DynamicString interpolation + function-expression grammar) · **0029** (`checks` inline
-  validation) · **0031** (error-vocab reconciliation → the two-code wire map) · **0034** (server-
-  initiated `callFunction` RPC + the `callableFrom` hard-floor amendment) · **0011** (action-prop
+  validation) · **0031** (error-vocab reconciliation → the two-code wire map) · **0034** (agent-
+  initiated `callRendererFunction` RPC + the `callableFrom` hard-floor amendment) · **0011** (action-prop
   shape) · **0019/0053** (the input `value` mark + catalog naming law).
+
+## Terminology note — A2UI v1.0 Candidate rename (2026-08-17, issue #482)
+
+This pack's taught vocabulary was swept to A2UI v1.0 Candidate terminology: the protocol's role
+names **client → renderer** and **server → agent** throughout prose; the RPC kind **`callFunction`
+→ `callRendererFunction`** (this pack documents only the agent-initiates/renderer-executes
+direction — the Candidate spec's mirror `callAgentFunction`/`agentFunctionResponse`, for a
+renderer-initiated call executing on the agent, is a new capability not yet covered here); the
+reply key **`functionResponse` → `rendererFunctionResponse`**; and the `callableFrom` enum
+**`clientOnly`/`remoteOnly`/`clientOrRemote` → `rendererOnly`/`agentOnly`/`rendererOrAgent`**. This
+mirrors adiahealth/gen-ui-kit's own in-repo Candidate-terms sweep (issue #1354, PR #1472 — open/
+review-pending as of this writing, not yet merged). **Caveat this creates:** every `file:line`
+citation in this pack still names the repo's ACTUAL (pre-Candidate) TypeScript identifiers and
+JSON field names — `handleCallFunction`, `call-function.ts`, `catalog.ts:182-185`'s literal
+`clientOnly` default, etc. — because those identifiers have not themselves been renamed in the
+cited source yet (gen-ui-kit's own code-level sweep is the unmerged PR above). Read this pack's
+prose in Candidate vocabulary; read a cited `file:line`'s literal contents in whatever vocabulary
+the source currently uses, and re-verify before acting on it (see "Verifying a claim" below) — this
+is the same drift this pack's re-sync duty already anticipates, now with a named cause. The two
+other Candidate changes named in issue #482 — catalog resolution moving to STRICT (no silent
+fallback) and `ValidationResult` gaining severity levels — have no existing pre-Candidate claim
+anywhere in this pack to correct (grepped, none found); adding them would be new, ungrounded
+protocol-behavior claims, not a terminology rename, so they are deliberately OUT of this sweep's
+scope pending a real research wave (`/make-pack`) grounded in the actual spec text.
 
 ## 3. The external protocol (authority for "the spec requires X" vs "this repo chose Y")
 
@@ -37,7 +61,7 @@ The SPEC owns behavior contracts; ADRs record ratified *changes*. Cited by requi
   v0.9.1 also supported via the version pin). The pack reaches the external spec's exact wording
   **through the ADRs**, which host-verified verbatim quotes from a2ui.org at authoring time and
   attribute them explicitly (e.g. ADR-0031 fact 1 on the two-code wire contract; ADR-0034 facts 1-6
-  on `callFunction`; ADR-0024 on positional matching; ADR-0026 fact 4 on `@index` innermost-only).
+  on `callRendererFunction`; ADR-0024 on positional matching; ADR-0026 fact 4 on `@index` innermost-only).
   When a reference says "verbatim from a2ui.org," the quote lives in the cited ADR.
 
 **Where the spec-vs-repo line falls (worth stating once):** v1.0 governs **only the wire** — the

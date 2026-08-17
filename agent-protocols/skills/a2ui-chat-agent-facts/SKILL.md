@@ -16,7 +16,7 @@ user-invocable: false
 # a2ui-chat-agent-facts — the live-agent world model
 
 Answers how `@agent-ui/a2ui`'s live-agent demo works: a real LLM prompted → a validated A2UI stream
-→ a rendered surface → the human interacts → client messages return → the agent continues. It
+→ a rendered surface → the human interacts → renderer messages return → the agent continues. It
 documents THIS repo's shipped implementation (as of 2026-07-07), not a generic tutorial — every
 claim cites its source file:line or an ADR/SPEC clause.
 
@@ -27,7 +27,7 @@ claim cites its source file:line or an ADR/SPEC clause.
 | Ask | Load |
 |---|---|
 | Transport swap — "how does recorded↔live work?", "the zero-edit seam", "what does CI run?" | `references/agent-transport-seam.md` |
-| Turn model — "how does a click become a turn?", "intent vs client turn", "the reducer", "the agent continues" | `references/turn-session-and-input-intent.md` |
+| Turn model — "how does a click become a turn?", "intent vs renderer turn (code: 'client')", "the reducer", "the agent continues" | `references/turn-session-and-input-intent.md` |
 | The runtime loop — "the produce() self-correct loop", "validate-then-stream", "how is the prompt built?", "halt-and-report" | `references/produce-loop.md` |
 | Providers & keys — "wire a new provider", "add a model", "where's the key?", "is it safe?", "the trust boundary", "the VITE_ footgun" | `references/provider-model-seam-and-trust-boundary.md` |
 | The Anthropic SSE wire contract — "why did my SSE parsing break", "what's the exact event sequence", "why is text getting dropped mid-stream", "the buffering assumption", "the error sentinel" | `references/anthropic-sse-wire-contract.md` |
@@ -67,7 +67,7 @@ answer with the *why*, not just the rule:
 - **The routing default is opt-out** *because* the committed seed + corpus set no `wantResponse`
   (`canvas-button.ts:27`) — opt-in is a legal deviation only if you also re-seed transcript +
   corpus + prompt (the open fork).
-- **Prose rides BESIDE the A2UI stream, never inside a server message** *because* the shared
+- **Prose rides BESIDE the A2UI stream, never inside an A2UI stream message** *because* the shared
   validator + judged corpus demand wire purity (SPEC-N3 / ADR-0070 clause 3). A "just add a Text
   component with the explanation" shortcut violates it.
 - **The key is read server-side, non-`VITE_`-prefixed** *because* Vite inlines `VITE_*` into the

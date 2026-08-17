@@ -1,4 +1,4 @@
-# Actions & two-way input — the client→server round-trip
+# Actions & two-way input — the renderer→agent round-trip
 
 > Axis: how a user interaction becomes an `action` message, how `actionResponse` correlates back,
 > and how an input widget writes its value into the data model. Grounded in
@@ -8,7 +8,7 @@
 
 ## The `action` message (SPEC-R8)
 
-On a triggered action the renderer emits an `action` client→server envelope
+On a triggered action the renderer emits an `action` renderer→agent envelope
 (`protocol.ts:167-182`, `A2uiAction`):
 
 ```ts
@@ -18,7 +18,7 @@ On a triggered action the renderer emits an `action` client→server envelope
 
 Built by `ActionDispatcher.emitAction` (`action.ts:85`):
 
-- **`actionId` is client-generated and globally unique** (a v1.0 requirement, SPEC-R8) — via an
+- **`actionId` is renderer-generated and globally unique** (a v1.0 requirement, SPEC-R8) — via an
   **injected** `newId()` provider, never ambient `Math.random()` (`action.ts:26-33`). Likewise
   `timestamp` comes from an injected `now()`. **Why:** determinism — tests pin a fake id/clock and
   assert an exact message shape + round-trip (`action.ts:9-11`).
@@ -89,8 +89,9 @@ rewrite makes read and write symmetric.
 
 ## `wantResponse` is wired end-to-end but not used for routing (a design seam, not a shipped feature)
 
-The action envelope carries `wantResponse` from control → renderer → client message, but in the
-shipped live-agent demo **every** client message triggers a full turn regardless. Routing on
+The action envelope carries `wantResponse` from control → renderer → the outbound wire message, but
+in the shipped live-agent demo **every** renderer-originated message triggers a full turn
+regardless. Routing on
 `wantResponse` (true → visible dialog; false/absent → silent data update) is a **proposed** design,
 not implemented — that belongs to the conversational-agent layer, not this protocol pack. Treat
 `wantResponse` here as: emitted correctly, correlated correctly, and available to a consumer who
@@ -98,7 +99,7 @@ chooses to route on it.
 
 ## What this file does NOT cover
 
-Function-call bindings, `checks`, and the server-initiated `callFunction` RPC
+Function-call bindings, `checks`, and the agent-initiated `callRendererFunction` RPC
 (functions-and-checks) · the `{path}` read memo and `setPointer` (bindings-and-data-model) · list
 item scope and per-item lifetime (dynamic-lists) · the wire error shape of an `actionResponse.error`
 (errors-and-versioning).

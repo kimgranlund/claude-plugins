@@ -26,7 +26,7 @@
     "extend vs replace the default catalog — which do I get",
     "why does Checkbox bind checked and not value like Basic",
     "what is the mapsTo field for and why is a non-identity mapping load-bearing",
-    "can a project catalog loosen a clientOnly function to server-invocable"
+    "can a project catalog loosen a rendererOnly function to agent-invocable"
   ],
   "negatives": [
     "why did this payload fail validation on the wire",

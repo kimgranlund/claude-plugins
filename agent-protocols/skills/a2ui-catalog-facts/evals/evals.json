@@ -69,7 +69,7 @@
     },
     {
       "id": "t14",
-      "prompt": "can a project catalog loosen a clientOnly function to server-invocable",
+      "prompt": "can a project catalog loosen a rendererOnly function to agent-invocable",
       "expect": "trigger"
     },
     {

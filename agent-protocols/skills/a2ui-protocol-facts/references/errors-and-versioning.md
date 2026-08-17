@@ -6,7 +6,7 @@
 
 ## Two vocabularies: internal (rich) vs wire (two codes)
 
-**Claim — A2UI v1.0 defines EXACTLY TWO client→server error codes, and governs ONLY the wire; the
+**Claim — A2UI v1.0 defines EXACTLY TWO renderer→agent error codes, and governs ONLY the wire; the
 repo keeps a richer INTERNAL taxonomy** (ADR-0031 fact 1, verbatim from a2ui.org v1.0: *"the spec
 defines only WIRE-level error messages; INTERNAL validation is NOT part of the protocol
 specification"*). So the internal codes are legitimately the repo's own.
@@ -32,20 +32,20 @@ ADR-0031 clause 5).
 - **All 8 internal codes → `VALIDATION_FAILED` + `surfaceId` this wave** (`protocol.ts:70-73`,
   ADR-0031 clause 2). Including `FUNCTION`: a render-time binding-evaluation failure (`@index` misuse,
   an unknown/throwing catalog function *referenced in a binding*) is a **message-validation** failure,
-  exactly parallel to `CATALOG` — **not** the spec's `INVALID_FUNCTION_CALL`, which is a
-  server-initiated call rejection.
+  exactly parallel to `CATALOG` — **not** the spec's `INVALID_FUNCTION_CALL`, which is an
+  agent-initiated call rejection.
 - **A present `path` is FOLDED into `message`** (`"… (at <path>)"`, `protocol.ts:69`) so the locus
-  survives for the server, then dropped — the wire has no `path` field (ADR-0031 clause 4).
+  survives for the agent, then dropped — the wire has no `path` field (ADR-0031 clause 4).
 
 **Caveat — `INVALID_FUNCTION_CALL` is modeled but reached from ONE place only.** `toWireError` never
 emits it (`protocol.ts:66`); it is emitted **directly** (bypassing `toWireError`) by the
-server-initiated `callFunction` RPC handler, which carries a `functionCallId`, not a `surfaceId`
+agent-initiated `callRendererFunction` RPC handler, which carries a `functionCallId`, not a `surfaceId`
 (`protocol.ts:238-241`; ADR-0034 activates ADR-0031's reserved arm). So: a **binding-eval** function
-error is `VALIDATION_FAILED`; only a **server `callFunction`** rejection is `INVALID_FUNCTION_CALL`.
-Conflating them mis-maps the wire code (a binding-eval failure would emit the server-only
+error is `VALIDATION_FAILED`; only an **agent `callRendererFunction`** rejection is `INVALID_FUNCTION_CALL`.
+Conflating them mis-maps the wire code (a binding-eval failure would emit the agent-only
 `INVALID_FUNCTION_CALL`) — ADR-0031 rejected the "`FUNCTION` → `INVALID_FUNCTION_CALL`, use `node.id`
 as `functionCallId`" lean precisely because `node.id` is not a call id and render-time errors are not
-server-initiated.
+agent-initiated.
 
 ## The stage→code map (validator, `validate.ts`)
 
@@ -102,6 +102,6 @@ payload to v1.0" — no transform layer exists; an out-of-set version is simply 
 ## What this file does NOT cover
 
 Where each error is produced (message-lifecycle for `PARSE`/`SCHEMA`/`IDGRAPH`; functions-and-checks
-for `FUNCTION`/`INVALID_FUNCTION_CALL`; bindings-and-data-model for `POINTER`) · the `callFunction`
+for `FUNCTION`/`INVALID_FUNCTION_CALL`; bindings-and-data-model for `POINTER`) · the `callRendererFunction`
 rejection triggers in full (functions-and-checks) · corpus admission's use of the internal codes
 (that is the corpus subsystem, routed to a2ui-training-facts once it exists — not this pack).

@@ -36,7 +36,7 @@ rebuild). Project catalogs MAY extend OR wholly replace the default (SPEC-R6).
 
 `registry.get(id)` returns `undefined` for an unregistered id (`registry.ts:64-66`). A
 `createSurface.catalogId` not in the registry makes the renderer emit `CATALOG_UNKNOWN` (SPEC-R6 AC3)
-— the registry is the allowlist of catalogs a client supports. `supportedCatalogIds()`
+— the registry is the allowlist of catalogs a renderer supports. `supportedCatalogIds()`
 (`registry.ts:68-70`) feeds the renderer's capabilities announcement (renderer LLD-C12).
 
 ## `submitGateSelector` aggregates across ALL registered catalogs
@@ -50,16 +50,16 @@ MUST treat that as "no gate anywhere" and skip `Element.closest` (an empty selec
 
 ## Function `callableFrom` — a security floor that TIGHTENS across tiers
 
-Catalog functions carry a `callableFrom` enum (`clientOnly | remoteOnly | clientOrRemote`,
-`catalog.ts:45`) governing the server-initiated `callFunction` RPC (SPEC-R5, ADR-0034). Two-tier
+Catalog functions carry a `callableFrom` enum (`rendererOnly | agentOnly | rendererOrAgent`,
+`catalog.ts:45`) governing the agent-initiated `callRendererFunction` RPC (SPEC-R5, ADR-0034). Two-tier
 rule (SPEC-R5, its AC3): when a name is declared in more than one registered catalog, the effective
-`callableFrom` is the **MOST RESTRICTIVE** across them — `clientOnly` is a HARD FLOOR, independent of
+`callableFrom` is the **MOST RESTRICTIVE** across them — `rendererOnly` is a HARD FLOOR, independent of
 registration order. A sibling catalog may *tighten* a security boundary, never *loosen* it.
 
-- **Default:** an omitted `callableFrom` defaults to `clientOnly` (`catalog.ts:182-185`) — least
-  authority; a function is not server-invocable unless explicitly opted in.
+- **Default:** an omitted `callableFrom` defaults to `rendererOnly` (`catalog.ts:182-185`) — least
+  authority; a function is not agent-invocable unless explicitly opted in.
 - **Failure mode this prevents:** a permissive project catalog cannot re-declare the default's
-  `clientOnly` validator (`required`/`email`/`regex`) as `clientOrRemote` to gain server-invoke — the
+  `rendererOnly` validator (`required`/`email`/`regex`) as `rendererOrAgent` to gain agent-invoke — the
   floor wins. This is NOT first-match / most-permissive.
 
 ## Worked example — extending, not replacing
