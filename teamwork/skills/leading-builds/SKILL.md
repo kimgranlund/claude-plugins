@@ -34,8 +34,8 @@ build this session drives lands against that repo.
 
 From this point until the session ends, this session holds the build seat's contract as its own
 operating rules, following the shared ritual in
-`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md` (the canonical copy,
-shared with `leading-planning`/`leading-teams`):
+`${CLAUDE_PLUGIN_ROOT}/skills/fleet-orchestration/references/adopt-agent-contract.md` (the canonical copy,
+shared with `leading-planning`/`fleet-orchestration`):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/build-leader.md` now, in full.** Adopt its contract as
    this session's standing rules: one confirmed target at a time, driven through
@@ -87,7 +87,7 @@ records, not re-driven.
   through one seat.
 - **`/lead-build` invoked again while the seat already stands** → the shared ritual's
   session-scoped re-acknowledge-never-stack step
-  (`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`): rebind the repo
+  (`${CLAUDE_PLUGIN_ROOT}/skills/fleet-orchestration/references/adopt-agent-contract.md`): rebind the repo
   root from the new `$ARGUMENTS`, re-acknowledge in one line, continue — never re-drive completed
   targets.
 

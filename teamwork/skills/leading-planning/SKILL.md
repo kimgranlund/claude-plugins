@@ -38,8 +38,8 @@ authored.
 
 From this point until the charter closes (Phase 4), this session holds the agent's own contract
 as its own operating rules, following the shared ritual in
-`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md` (the canonical copy,
-shared with `leading-teams`/`leading-builds`):
+`${CLAUDE_PLUGIN_ROOT}/skills/fleet-orchestration/references/adopt-agent-contract.md` (the canonical copy,
+shared with `fleet-orchestration`/`leading-builds`):
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/planner.md` now, in full.** Adopt its four priorities
    verbatim as this session's standing rules for the charter's duration: decompose before
@@ -58,7 +58,7 @@ shared with `leading-teams`/`leading-builds`):
 Three places the host's version genuinely differs from the agent's, because the host is not a
 dispatched subagent:
 
-- **Write discipline INVERTS relative to leading-teams.** `/lead-team`'s one rule is the host never
+- **Write discipline INVERTS relative to fleet-orchestration.** `/lead-team`'s one rule is the host never
   touches `Write`/`Edit` on a charter deliverable — every unit of real work is a dispatch. Here
   the inverse holds: authoring the PRD/SPEC/LLD/ADR the charter earns **is** this seat's own
   deliverable, so the host writes and edits those docs directly, the same as the dispatched
@@ -105,7 +105,7 @@ what was authored, what each doc-checker verdict said, what remains open.
   re-dispatching the same fix a third time hoping the checker relents.
 - **The charter turns out smaller than expected once underway** → the shared ritual's first
   failure branch
-  (`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`): keep authoring
+  (`${CLAUDE_PLUGIN_ROOT}/skills/fleet-orchestration/references/adopt-agent-contract.md`): keep authoring
   under the adopted contract anyway; close it (Phase 4) rather than shrinking the discipline
   around what's left.
 - **The `doc-checker` dispatch itself fails to return** (a tool error, not a reviewed finding) →
@@ -117,7 +117,7 @@ what was authored, what each doc-checker verdict said, what remains open.
 ## When this rule ends
 
 The shared ritual's closing rule
-(`${CLAUDE_PLUGIN_ROOT}/skills/leading-teams/references/adopt-agent-contract.md`) applies: the
+(`${CLAUDE_PLUGIN_ROOT}/skills/fleet-orchestration/references/adopt-agent-contract.md`) applies: the
 adopted discipline holds only for the charter bound in Phase 1, until it closes on a named
 decision in Phase 4; a new charter requires a new `/lead-planning` invocation.
 

@@ -79,7 +79,7 @@ copy.** Every agent above (plus `wiring-checker`, ported later) restated the sam
 Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next
 action shape inline — six independent copies to keep in sync by hand. Since agents can't preload
 a harness skill across the plugin boundary (the hard-preload rule above), the fix follows the
-same `references/`-file pattern `leading-teams`/`leading-planning`/`leading-builds` already use for
+same `references/`-file pattern `fleet-orchestration`/`leading-planning`/`leading-builds` already use for
 `adopt-agent-contract.md`: the shape now lives once at
 `teamwork/skills/team-or-solo-rules/references/handoff-fallback.md`, and each of the six agent
 bodies cites that path (`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`)
@@ -105,6 +105,27 @@ mint.
 Directories align with plugin names (ADR-0007).
 
 ## Version ledger
+
+v2.19.0 · assembled 2026-08-17 · ADR-0020 wave 4 (closes #522): `skills/leading-teams/` renamed
+`skills/fleet-orchestration/` (frontmatter `name: fleet-orchestration`, title heading matched),
+proving the `{object}-{process}` skill production for `orchestration` now that it's registered in
+the root `naming.manifest.json`'s ProcessLex (wave 1, #519). Its two `references/` files
+(`adopt-agent-contract.md`, `dispatched-agent-report-delivery.md`) and `evals/evals.json` moved
+with the directory unchanged in content, save internal self-citations of the old skill name.
+Every live invocation string repointed in the same change: `commands/lead-team.md`'s `wraps:`/
+`requires:` (the command itself keeps its own name and `/lead-team` invocation — wave 5, #523,
+converts that surface); the four `*-leader` twins' (`build-leader`, `planning-leader`,
+`product-leader`, `review-leader`) citations of the shared `references/` files; `fleet-bootstrap`,
+`team-scaffolding`, `leading-builds`, `leading-planning`, `leading-product`, `leading-review`'s
+prose/path mentions and `evals/evals.json` no-trigger-owner comments; `doctrine.manifest.json`'s
+D02 dependent path (appended a dated amendment note rather than rewritten — the accepted-ADR-
+adjacent append-only convention); and harness's `estate-rename-map.md` paradigm-name table.
+Historical ledger rows, dated audit reports, and ADR-0020/spec-naming-convention.md's own
+wave-4 citations are left untouched by design — they record what was true at the time, not a
+live pointer. `check-routing` on the renamed suite: clean, no new stolen/leaked/dead cases.
+`naming-audit --scope grammar`: 0 errors (`fleet-orchestration` parses under `{object}-{process}`,
+`fleet` in ObjectVocab, `orchestration` in ProcessLex per wave 1); full-scope structural findings
+unchanged before/after (380, all pre-existing, none grammar). `release_gate.py teamwork` CLEAN.
 
 v2.18.0 · assembled 2026-08-17 · ADR-0020 wave 3 (closes #521): `agents/team-leader.md` renamed
 `agents/fleet-marshal.md` (frontmatter `name: fleet-marshal`), proving the `{scope}-{role}`

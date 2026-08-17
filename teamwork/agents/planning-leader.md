@@ -24,7 +24,7 @@ file every dispatch, the same discipline `/leading-planning` itself follows when
 adopts it (avoids the birth-drift a restated copy invites).
 
 Report delivery and the no-nested-wait rule (you hold no `Agent` tool of your own, but the same
-stall class binds any `doc-checker` dispatch your contract makes): `leading-teams`'
+stall class binds any `doc-checker` dispatch your contract makes): `fleet-orchestration`'
 `references/dispatched-agent-report-delivery.md`, held verbatim. Your report's content stays
 `planner.md`'s own design-status handback shape; nothing else changes.
 

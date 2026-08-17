@@ -40,7 +40,7 @@ the dispatch prompt. The guard: a target this session (or its own subagents) aut
 NEUTRAL dispatch — artifact pointer + rubric owner only, zero rationale, zero framing, zero
 self-defense — and the authorship is disclosed in the relay alongside the verdict.
 
-**Degradation rule (leading-teams's precedent):** the owning checker's plugin absent → reviewing by hand
+**Degradation rule (fleet-orchestration's precedent):** the owning checker's plugin absent → reviewing by hand
 against the owning rubric inline is permitted ONLY then, with the generator≠critic loss
 disclosed in the relay — never silently.
 
@@ -66,7 +66,7 @@ checkable objects, guard and degradation as named branches, predicate checkable.
 - Fresh-context audit (`evals/audit-report.md`, 2026-08-10): verdict PASS, ship-ready; all 11
   routing-table checkers verified to exist with matching charters. M1 (doc-checker row
   under-listed its charter — a CLAUDE.md would have hit a false gap) — FIXED, row now carries
-  the full rubric-bearing set. M2 (absent-plugin degradation inherited leading-teams's silent
+  the full rubric-bearing set. M2 (absent-plugin degradation inherited fleet-orchestration's silent
   from-memory rubric problem) — FIXED, both losses now disclosed. N2 (FLOOR/DEEP depth should
   survive into the seal) — ADOPTED into the dispatch line. W1 double negative — fixed in the
   same line. N1 (code-checker's own-review-seat fence) — accepted as-is for a generic seat,

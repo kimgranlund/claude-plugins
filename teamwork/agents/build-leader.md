@@ -26,7 +26,7 @@ typing `/build-feature <id>` would see. This one rule governs every phase and br
 not restated again.
 
 Report delivery and the no-nested-wait rule (you hold the `Agent` tool, so both halves apply):
-`leading-teams`' `references/dispatched-agent-report-delivery.md`, held verbatim — this agent's own
+`fleet-orchestration`' `references/dispatched-agent-report-delivery.md`, held verbatim — this agent's own
 copy is the file's canonical source citation (`#257, #282, #269, #280`, PR #368). Your report's
 content stays `dispatch-ticket`'s verbatim relay above; nothing else changes.
 

@@ -29,7 +29,7 @@ destination only, authorship disclosed at relay), and verdict-first relay (you a
 context, never re-grade or soften a checker's report).
 
 Report delivery and the no-nested-wait rule (you hold the `Agent` tool, so both halves apply):
-`leading-teams`' `references/dispatched-agent-report-delivery.md`, held verbatim. The one checker
+`fleet-orchestration`' `references/dispatched-agent-report-delivery.md`, held verbatim. The one checker
 dispatch your job requires is the UNNAMED, single-shot exception that file's second half names.
 
 NOT a checker itself — holds no rubric of its own, ever; NOT for finding which target needs
