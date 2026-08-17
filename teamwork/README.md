@@ -126,6 +126,12 @@ individually before merge, exit 0 from the watch demoted to advisory-only. `flee
 choreography section gains the matching doctrine bullet, citing dispatch-ticket rather than
 re-deriving it. `harness:merge_when_clean.py` was checked and found already immune (it polls
 `gh pr view`'s `mergeStateStatus`, never `gh pr checks --watch`) — no script change needed there.
+(3) Folded in per Kim's request before merge: W6's routing report (#565/#524) flagged one
+marginal single-judge steal in the merged fleet-rules suite. Traced it to t03's own wording —
+"what should I check on a ticket before I dispatch a build for it" reads as `dispatch-ticket`'s
+domain, not fleet-rules' claim-then-guard protocol — confirmed 3-of-3 across a vote round, so a
+real case defect, not noise. The eval case was wrong, not the description: reworded t03 to key
+on fleet-rules' own claim-then-guard vocabulary instead. Fresh full 41-case re-proof: 41/41 clean.
 
 v2.21.3 · assembled 2026-08-17 · closes #548: `dispatch-ticket`'s Phase 1 ambiguous-match failure
 branch and the `[nested-intake]` marker rationale still carried the falsified 2026-08-09 canon
