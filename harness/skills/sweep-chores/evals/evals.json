@@ -1,6 +1,6 @@
 {
   "skill": "sweep-chores",
-  "note": "New eval suite — issue #266 moved this skill from disable-model-invocation:true (command-only, no suite by definition) to a 'both' procedural skill (disable-model-invocation:false, user-invocable:true, matching check-state/what-shipped's own species) so it's directly Skill-tool-reachable cross-plugin by teamwork's mobilize-chores. Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "note": "New eval suite — issue #266 moved this skill from disable-model-invocation:true (command-only, no suite by definition) to a 'both' procedural skill (disable-model-invocation:false, user-invocable:true, matching check-state/what-shipped's own species) so it's directly Skill-tool-reachable cross-plugin by teamwork's mobilize-chores. Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). 2026-08-17 (#563): description trimmed 826→under-700 for W8; every case re-checked against the trimmed text — all trigger phrases and both NOT-fences survive verbatim or by direct paraphrase (t03's 'prioritized queue' remains in the description body); no case edits owed, /check-routing rode the change.",
   "cases": [
     {
       "id": "t01",

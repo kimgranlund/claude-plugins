@@ -113,7 +113,7 @@ The same finding failing three times → stop and hand it to the user; do not su
 Run only on an explicit ask ("check if our harvested knowledge is still accurate", "re-verify this
 skill's citations") — never as a background process. For each landed entry's recorded citations:
 re-open the cited `file:line`/quote and confirm it still matches current reality. Anything broken
-or moved gets a proposed fix-or-retire plan, then returns to **Phase 3's same AskUserQuestion gate**
+or moved gets a proposed plan to fix or retire it, then returns to **Phase 3's same AskUserQuestion gate**
 before any edit — staleness resolution is not exempt from the confirmation requirement.
 
 ## Output contract
@@ -133,7 +133,7 @@ Landed: <files touched> · structural gate: <clean | fixed N> · review: <findin
 - `release_gate.py` fails after authoring → fix and re-run; the same failure three times → stop,
   hand to the user.
 - Independent reviewer finds a blocking issue → fix before treating the candidate as landed.
-- A staleness check finds a broken citation but the user declines the fix-or-retire plan → leave it
+- A staleness check finds a broken citation but the user declines the proposed fix/retire plan → leave it
   flagged in the entry (do not silently edit or silently leave it looking trustworthy) and report.
 
 **Done when** a candidate has either landed (authored, structural-gate clean, review findings

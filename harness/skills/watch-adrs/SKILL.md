@@ -163,7 +163,7 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
    drawn from the ADR's Decision) for the corpus, `/make-skill`'s knowledge-species path for the
    entry surface where a new skill is warranted. This agent never runs either command itself.
 8. **On a confirmed stale-citation candidate**, name `save-lessons`'s own Phase 6 as the next step
-   (its own re-open/fix-or-retire/`AskUserQuestion` contract, restated nowhere here) — never run by
+   (its own re-open, fix/retire, and `AskUserQuestion` contract, restated nowhere here) — never run by
    this agent.
 9. **Clear resolved rows** from the queue precisely, still against the scratch copy — `python3
    "${CLAUDE_PLUGIN_ROOT}/scripts/adr_queue.py" clear <scratch-path> --ids <id[:kind],...>` — a
