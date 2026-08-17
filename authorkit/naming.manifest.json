@@ -15,10 +15,13 @@
     {"canonical": "bloat", "plural": null, "banned_aliases": ["verbosity", "ceremony", "cruft"]},
     {"canonical": "pattern", "plural": "patterns", "banned_aliases": []},
     {"canonical": "estate", "plural": "estates", "banned_aliases": []},
-    {"canonical": "doctrine", "plural": null, "banned_aliases": []}
+    {"canonical": "doctrine", "plural": null, "banned_aliases": []},
+    {"canonical": "attention", "plural": null, "banned_aliases": ["menu-rent", "context-tax"]},
+    {"canonical": "overhaul", "plural": null, "banned_aliases": []},
+    {"canonical": "repo", "plural": "repos", "banned_aliases": []}
   ],
   "brand_tokens": ["adia", "authorkit"],
   "author_registry": ["kim"],
   "mutating_no_confirm_allowlist": [],
-  "exemptions": []
+  "exemptions": ["fix-old-names"]
 }

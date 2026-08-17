@@ -339,6 +339,14 @@ established pattern; the two non-decisions are recorded in Components).
    stays at its measured pre-build baseline of 3 (`fix-old-names`, `overhaul-execute`,
    `overhaul-planning` — all pre-existing) and contains no entry naming `pattern-audit`
    (skill or command).
+
+   *Dated note, 2026-08-17 (issue #553):* this baseline drifted further (5, gaining
+   `attention-audit`/`repo-audit`) before anyone registered against it, then was resynced to 0
+   — `attention`/`overhaul`/`repo` registered into the bundled manifest's `object_vocab`,
+   `fix-old-names` grandfathered into its `exemptions` array mirroring the root manifest's own
+   D8 treatment. See authorkit's README ledger v0.19.5 entry for the full evidence and the
+   chosen (process, not gate-code) anti-drift mechanism. This predicate's own baseline-of-3
+   framing is superseded by that entry, not restated here.
 5. Row 5 landed: `grep -l "owner: pattern-audit"` matches all three sibling
    `evals/evals.json` files, and each new case is `"expect": "no-trigger"`.
 6. Fresh-context skill-checker pass on the new SKILL.md and the command body (the
