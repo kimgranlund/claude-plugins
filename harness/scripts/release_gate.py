@@ -23,7 +23,9 @@ Gate order (plugin-writing-rules §Release discipline):
       CLAUDE.md counts reconcile (composes docs_check.py; accuracy stays human)
   G9 packs: every skill with references/INDEX.md passes corpus_check (K1 FAILs fail the gate)
   G8 sibling names: kebab tokens in SKILL.md files that carry one of this plugin's own
-     name-suffixes but match no installed skill -> WARN (rename drift, phantom prose siblings)
+     name-suffixes but match no installed skill OR agent -> WARN (rename drift, phantom
+     prose siblings; issue #497 widened the inventory to sweep agents/*.md alongside
+     skills/*/SKILL.md, so a live agent name no longer needs its own allowlist entry)
   G11 style lint (ADR-0002): ruff over .py / eslint over .mjs|.js, workspace-root configs;
       run when a runner is reachable, WARN when not (CI enforces); no config -> not applicable
   G12 naming grammar (ADR-0011/D9, wired 2026-08-14): authorkit's naming-audit validator run
@@ -244,9 +246,14 @@ def gate(root: Path, package: bool = False):
     # Sibling-aware (2026-07-09): cross-plugin soft mentions are doctrine-legal, so tokens
     # resolve against every workspace sibling's skills too before warning — only TRUE
     # phantoms (matching no skill anywhere in the workspace) remain findings.
+    # issue #497: the inventory sweeps agents/*.md alongside skills/*/SKILL.md (own plugin
+    # and every workspace sibling) — a live agent's name (e.g. `estate-audit-agent`) now
+    # resolves directly, the same way a live skill name does, with no allowlist entry owed.
     inventory = {p.parent.name for p in root.glob("skills/*/SKILL.md")}
+    inventory |= {p.stem for p in root.glob("agents/*.md")}
     for sib in root.parent.glob("*/.claude-plugin/plugin.json"):
         inventory |= {p.parent.name for p in sib.parent.parent.glob("skills/*/SKILL.md")}
+        inventory |= {p.stem for p in sib.parent.parent.glob("agents/*.md")}
     suffixes = {n.rsplit("-", 1)[-1] for n in inventory}
     # verified prose-compound false positives (hyphenated phrases sharing a real suffix)
     allow = {"nested-intake",  # the [nested-intake] seed-marker literal (docs/teamwork protocol), suffix went live with lead-intake
@@ -504,11 +511,10 @@ def gate(root: Path, package: bool = False):
              # "batch-audit" is the same section's own prose category noun ("Authorkit's three
              # single-instrument batch-audit agents"), not a name:
              "batch-audit",
-             # "estate-audit-agent" is authorkit's real, LIVE agent (authorkit/agents/
-             # estate-audit-agent.md) that replaced the three retired ones above — G8's
-             # inventory only sweeps `skills/*/SKILL.md`, so a live AGENT name is a structural
-             # false positive here, same class as product-leader-agent/lead-planning above:
-             "estate-audit-agent",
+             # "estate-audit-agent" allowlist entry removed (issue #497): G8's inventory now
+             # sweeps `agents/*.md` too, so authorkit's real, LIVE agent (authorkit/agents/
+             # estate-audit-agent.md) resolves directly against the widened inventory —
+             # no allowlist entry owed any more.
              # clean-git's Done-when line ("every inventoried worktree/branch/PR/claimed-ticket")
              # is a per-unit prose compound sharing dispatch-ticket's "-ticket" suffix, same class
              # as per-ticket/feature-ticket above:
@@ -539,7 +545,29 @@ def gate(root: Path, package: bool = False):
              "source-file",
              # check-everything's "harness-audit" is its OWN report-directory naming convention
              # (`<root>/harness-audit-<date>/`), not a citation of any sibling skill:
-             "harness-audit"}
+             "harness-audit",
+             # issue #497's own G8 widening (agents/*.md now feeds the inventory) pulled five
+             # NEW agent-owned suffixes into `suffixes` (-runner from fact-finder's family,
+             # -finder, -checker from the *-checker seats, -judge from routing-judge) — each
+             # newly catching pre-existing, unrelated prose, the standing false-positive class:
+             # "backfill-runner" is skill-writing-rules' illustrative NOT-for example (a
+             # hypothetical sibling in a "Good (trigger contract)" teaching block, never a real
+             # skill); "candidate-finder" is plan-skill-merge's own self-descriptive negative
+             # ("Not a candidate-finder"); "decision-checker" and "corpus-checker" are
+             # agent-writing-rules' generic lifecycle-stage role labels for design-system-checker/
+             # font-choice-checker ("a pre-export decision-checker and a post-export
+             # corpus-checker"), not citations of any real sibling; "single-judge" is
+             # check-routing's own named concept (its single-judge-noise voting-round rationale),
+             # not a skill or agent name:
+             "backfill-runner", "candidate-finder", "decision-checker", "corpus-checker",
+             "single-judge",
+             # same #497 widening, caught in OTHER plugins once their own gate runs against the
+             # now-larger cross-workspace suffix set: "single-writer" (agent-protocols'
+             # a2a-training-facts, "all-or-nothing single-writer import tool") is a term-of-art
+             # phrase, not a sibling name; "ops-planner" (authorkit's fix-old-names, an
+             # illustrative retired-agent error message: "Agent type 'ops-planner' not found") is
+             # a deliberate historical citation, the same class as `ops-issues` already above:
+             "single-writer", "ops-planner"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):
@@ -727,6 +755,21 @@ def selftest():
             gate(r)
         assert "G8" in buf.getvalue() and "ancient-review" in buf.getvalue(), "stale sibling name must warn G8"
         body.write_text(body.read_text().replace("\nsee ancient-review for history\n", ""))
+        # G8 agent-name widening (issue #497): a live agent cited in a SKILL.md must resolve
+        # against agents/*.md too, not just skills/*/SKILL.md — clean with NO allowlist entry
+        # proves the widened inventory actually fired, not a coincidence of the allow set.
+        agents_dir = r / "agents"
+        agents_dir.mkdir()
+        (agents_dir / "demo-auditor.md").write_text(skill_lint.GOOD_AGENT_FIXTURE)
+        body.write_text(body.read_text() + "\nsee demo-auditor for the dispatched review seat\n")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "G8" not in buf.getvalue(), \
+            "a live agent name must resolve via the widened G8 inventory, no allowlist needed"
+        body.write_text(body.read_text().replace("\nsee demo-auditor for the dispatched review seat\n", ""))
+        (agents_dir / "demo-auditor.md").unlink()
+        agents_dir.rmdir()
         # G2 subfolder conformance: a rogue topical dir warns; a sanctioned one doesn't
         rogue = r / "skills" / "demo-review" / "recipes"
         rogue.mkdir()
