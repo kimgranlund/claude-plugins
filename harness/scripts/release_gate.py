@@ -494,7 +494,52 @@ def gate(root: Path, package: bool = False):
              # the fleet manifest's on-disk state, not a skill name.
              "lead-planning", "lead-review", "lead-product", "product-leader-agent",
              "product-authoring", "same-plugin", "big-feature", "index-bootstrap",
-             "fleet-state"}
+             "fleet-state",
+             # issue #488 (2026-08-17): the G8 sweep's standing 14-item warn, triaged item by
+             # item — every one a false positive, none an actual rename-drift repoint target.
+             # agent-writing-rules' checker-seat-consolidation section (issue #293) deliberately
+             # cites three now-RETIRED agent names while explaining the merge — the same
+             # deliberate-historical-citation class as knowledge-forge/product-authoring above:
+             "attention-audit-agent", "bloat-audit-agent", "naming-audit-agent",
+             # "batch-audit" is the same section's own prose category noun ("Authorkit's three
+             # single-instrument batch-audit agents"), not a name:
+             "batch-audit",
+             # "estate-audit-agent" is authorkit's real, LIVE agent (authorkit/agents/
+             # estate-audit-agent.md) that replaced the three retired ones above — G8's
+             # inventory only sweeps `skills/*/SKILL.md`, so a live AGENT name is a structural
+             # false positive here, same class as product-leader-agent/lead-planning above:
+             "estate-audit-agent",
+             # clean-git's Done-when line ("every inventoried worktree/branch/PR/claimed-ticket")
+             # is a per-unit prose compound sharing dispatch-ticket's "-ticket" suffix, same class
+             # as per-ticket/feature-ticket above:
+             "claimed-ticket",
+             # clean-git's/watch-tickets' "host-repo"/"per-repo" are per-unit prose compounds
+             # sharing clean-repo's "-repo" suffix, same class as target-repo/multi-repo/
+             # out-of-repo above:
+             "host-repo", "per-repo",
+             # watch-tickets' "interactive-session" ("richer interactive-session access") is a
+             # per-unit prose compound sharing close-session's "-session" suffix, same class as
+             # per-session/this-session/cross-session above:
+             "interactive-session",
+             # skill-writing-rules' "marker-agent" is a literal quoted field value from a
+             # measured spawn record (issue #308's F4 finding) — an ephemeral throwaway test
+             # agent's name from that experiment, not a live sibling reference:
+             "marker-agent",
+             # plan-skill-merge's "pack-authoring" ("route to a pack-authoring research wave") is
+             # prose naming make-pack's own domain of work, sharing manifest-authoring's
+             # "-authoring" suffix — not a skill name, same class as product-authoring above:
+             "pack-authoring",
+             # checking-rules' "per-flow" ("the per-flow contracts that apply it") is a per-unit
+             # prose compound sharing break-down-flow's "-flow" suffix, same class as
+             # cross-flow/mid-flow above:
+             "per-flow",
+             # watch-tickets' "source-file" ("no source-file edits") is a per-unit prose compound
+             # sharing entry-file's "-file" suffix, same class as single-file/shared-file/
+             # entry-file above:
+             "source-file",
+             # check-everything's "harness-audit" is its OWN report-directory naming convention
+             # (`<root>/harness-audit-<date>/`), not a citation of any sibling skill:
+             "harness-audit"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):
