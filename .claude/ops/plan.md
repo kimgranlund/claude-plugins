@@ -1,21 +1,23 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-17T18:35Z** (UTC).
-Evidence: all three seat reports attached and complete — **no seat UNMEASURED this firing**
-(dispatch-named UNMEASURED list: empty). decision-watcher: 20 ADRs, adr-0020 ratified
-(proposed→accepted, gh#518), already harvested, 0 candidates queued, checkpoint advanced.
-issue-sorter: 22 issues + 15 PRs in window (14:50:18Z→18:30:59Z), 9 new issues all fully formed
-at mint, 0 held, checkpoint advanced. repo-cleaner: full inventory after `git fetch --prune`
-(17 stale refs cleared), `sync_main.py` ok (main @ `28c6b697f`), `campaign_close.py 544` refused
-on C2 (remote `worktree-build-522` survives delete), no stale claims, no stale-open PRs.
+Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-17T20:18Z** (UTC,
+repo-cleaner's report timestamp — the latest seat). Evidence: all three seat reports attached
+and complete — **no seat UNMEASURED this firing** (dispatch-named UNMEASURED list: empty).
+decision-watcher: clean no-op recheck (20 ADRs, zero delta vs. the 18:31Z checkpoint, 0
+candidates pending, no state mutation needed). issue-sorter: clean checkpoint-advance (window
+18:30:59Z→20:16:04Z; 19 issues + 17 PRs touched; 10 new issues all fully formed at mint; 0
+unknown authors, 0 held; steps 7/8 not-applicable). repo-cleaner: executed its gated mutations
+(`git fetch --prune` cleared 13 dead refs; `sync_main.py` ff'd a clean-but-1-behind main to
+`32f417fd7`, SHA-reverified); independently reconfirmed the prior firing's C2 refusal resolved
+(PR #544's `worktree-build-522` remote → 404); 3 orphaned post-merge worktrees proposed for
+removal; no stale claims, no stale-open PRs, gitignore WARNs unchanged/pre-ruled.
 
-Prior plan (2026-08-17T14:50:18Z) is 10/11 resolved (see Resolved below); its entry 8 (#490
-upstream forward) carries — no completion evidence in this firing's reports.
+Prior plan (2026-08-17T18:35Z firing): **all 6 entries resolved** (see Resolved below) — nothing
+carries forward as an open entry.
 
-**Blocked-by (#193):** no literal `Blocked-by:` line in any evidence this firing. One
-report-evidenced dependency ordered anyway and named inline: build-522's local cleanup (entry 5)
-sits behind the C2 remote-delete remediation (entry 2) — campaign_close's own printed
-remediation, not an inferred edge.
+**Blocked-by (#193):** no literal `Blocked-by:` line in any evidence this firing, and no
+report-evidenced dependency either (the prior plan's entry-2→5 edge closed with build-522's
+cleanup) — nothing reordered; every entry ranks purely on class.
 
 ## Queue
 
@@ -23,127 +25,85 @@ remediation, not an inferred edge.
 
 ### 1. Commit + push this firing's ops artifacts — explicit pathspec only
 - **Action:** `git status --porcelain` first, then stage exactly `.claude/ops/plan.md`,
-  `.claude/ops/adr-checkpoint.json`, `.claude/ops/watch-checkpoint.json`,
-  `.claude/ops/reports/2026-08-17T18-31-58Z-decision-watcher.md`, and
-  `.claude/ops/reports/2026-08-17T18-35-11Z-repo-cleaner.md` (issue-sorter emitted no per-firing
-  report file — checkpoint only, per its payload-fence rule). Read the status output, commit as a
-  separate step (gate ≠ commit), push. Never `git add -A`.
+  `.claude/ops/watch-checkpoint.json`, and
+  `.claude/ops/reports/2026-08-17T20-18-02Z-repo-cleaner.md` (the only payload blocks emitted
+  this firing — decision-watcher declared unchanged-and-omitted for both its state files;
+  issue-sorter emitted checkpoint only). Read the status output, commit as a separate step
+  (gate ≠ commit), push. Never `git add -A`.
 - **Owner:** the dispatching session (coordinator).
 - **Evidence:** ops-write-sandbox-rules — state persists through the repo or the next firing
-  starts blind; all payload blocks present in the seat reports.
+  starts blind; issue-sorter's and repo-cleaner's fenced blocks present in their reports.
 - **Size:** ~2 min.
 
-### 2. Complete campaign_close #544 — delete the surviving remote branch, re-run
-- **Action:** `gh api -X DELETE repos/kimgranlund/claude-plugins/git/refs/heads/worktree-build-522`,
-  then re-run `campaign_close.py 544 --repo kimgranlund/claude-plugins --gate teamwork --gate
-  harness`. This is the script's own printed remediation after its C2 refusal; PR #544
-  independently verified MERGED twice (script + `git ls-remote` reconfirm), C1/C3/C4/C5 already
-  clean. Unblocks entry 5.
-- **Owner:** coordinator (or repo-cleaner next firing).
-- **Evidence:** repo-cleaner §Executed — C2 FAILED, refusal reported not overridden; remediation
-  named by the script itself.
-- **Size:** ~5 min.
-
-**Class 2 — items blocking other work:** none this firing (the one live dependency, entry 2 → 5,
-already ranks in class 1 by its own gated-remediation status).
+**Class 2 — items blocking other work:** none this firing.
 
 **Class 3 — human decisions:**
 
-### 3. Forward #490's pin-race evidence upstream — carried from the prior plan
-- **Action:** Kim confirms the 14:50Z firing's degradation evidence (2 of 3 seats blocked
-  mid-firing) reached the upstream platform report; forward if not. Carried: the prior plan's
-  entry 8, with no completion evidence in this firing's reports (only same-session comment
-  activity on #490 is visible). Note this firing itself had zero pin-race degradation — all
-  three seats ran clean.
+### 2. Rule on decision-watcher's conditionally-named report path (fence-rule hedge clause)
+- **Action:** decision-watcher's report names its own per-firing record path conditionally
+  ("would land at `.claude/ops/reports/2026-08-17T19-XX-XXZ-decision-watcher.md` ... nothing new
+  to persist") without emitting a block. Per ops-write-sandbox-rules' hedge clause, a seat with
+  nothing to report for a path omits it entirely rather than naming it conditionally. No
+  downstream payload cites the path, so nothing is stranded — but the pattern is the exact class
+  the rule forbids. Kim rules: brush-noted only, or mint a small task to fix the seat's
+  no-op-report phrasing (a semantic agent edit → rides with a checker per plugin-authoring rules).
 - **Owner:** Kim.
-- **Evidence:** prior plan entry 8 (open, unconfirmed); issue-sorter — #490 open by design,
-  comment activity in-window.
-- **Size:** ~5 min.
+- **Evidence:** decision-watcher report §Report (verbatim in this dispatch);
+  ops-write-sandbox-rules "payload-fence rule binds regardless of hedge language."
+- **Size:** ~3 min ruling (+~15 min fix if minted).
 
 **Class 4 — hygiene debt:**
 
-### 4. Batch-remove the orphaned post-merge worktrees and bare branches
+### 3. Batch-remove the three orphaned post-merge worktrees and their local branches
 - **Action:** run repo-cleaner's proposed commands verbatim (propose-only from that seat — no
-  host reap script exists to gate them):
-  ```
-  git worktree remove .claude/worktrees/build-520 && git branch -D build-521-fleet-marshal-rename
-  git worktree remove .claude/worktrees/build-541 && git branch -D worktree-build-541
-  git worktree remove .claude/worktrees/build-548-docs && git branch -D fix-548-docs-batch
-  git branch -D build-525-authorkit-skill-as-command worktree-build-520 worktree-build-529 worktree-build-548-docs
-  ```
-  All verified by repo-cleaner: PRs #540/#549/#545/#538/#546 MERGED with remotes gone, or content
-  an ancestor of `origin/main` (build-541, worktree-build-529 — the former held-evidence branch,
-  now landed; its snapshot at `.claude/ops/reports/unclaimed-desk-seat-sweep-2026-08-17.diff.md`
-  stays untouched). Does NOT touch build-522 (entry 5) or build-523-w5 (active, PR #550 open).
+  host reap script exists in this workspace's CLAUDE.md/README to gate them):
+  `git worktree remove .claude/worktrees/build-524-w6` + `git branch -D worktree-build-524-w6`;
+  `git worktree remove .claude/worktrees/build-539` + `git branch -D worktree-build-539`;
+  `git worktree remove .claude/worktrees/t9-agent-verification` + `git branch -D
+  docs-542-t9-agent-verification`. All three verified: PRs #565/#569/#575 MERGED, remote
+  branches already gone. Does NOT touch b548-teamwork (PR #573 open), build-554 (PR #556 open
+  draft), or issue-576-sweep-skill (fresh, ~7 min old at inventory — too new to call orphaned).
 - **Owner:** coordinator (or Kim by hand).
-- **Evidence:** repo-cleaner §Inventory + §Proposed only — post-fetch-prune, accurate.
-- **Size:** ~5 min.
+- **Evidence:** repo-cleaner §Inventory + §Proposed only — post-fetch-prune, SHA/state-verified.
+- **Size:** ~3 min.
 
-### 5. Remove `.claude/worktrees/build-522` + its local branch — blocked by entry 2 (open): do not start before it lands
-- **Action:** after entry 2's re-run of `campaign_close.py 544` passes C2, `git worktree remove
-  .claude/worktrees/build-522 && git branch -D worktree-build-522`.
-- **Owner:** coordinator (or repo-cleaner next firing).
-- **Evidence:** repo-cleaner — worktree left as-is pending the C2 refusal's resolution.
-- **Size:** ~2 min once unblocked.
+## Narrated-but-absent audit
 
-### 6. Mint infrastructure ticket: clean-git must mandate `git fetch --prune` before inventory
-- **Action:** file the issue (docs `file-task` shape): repo-cleaner found 17 stale `origin/*`
-  tracking refs and a falsely-clean `main` read — any prior firing without a fetch/prune first
-  worked from stale inventory. Fix = an explicit fetch-prune step at the top of harness's
-  `clean-git` procedure skill (semantic edit → rides with a checker per plugin-authoring rules).
-  Incident → infrastructure, same day, per workspace invariant.
-- **Owner:** coordinator mints; a harness build seat owns the fix.
-- **Evidence:** repo-cleaner §Tooling note — measured this firing, not hypothesized.
-- **Size:** ~5 min ticket + ~15–30 min fix.
-
-## Post-firing updates (2026-08-17 ~18:55Z, dispatching session — dated amendments, queue text above untouched)
-
-- Entry 1: DONE (ops commit 85ba7b9 pushed).
-- Entry 2: relayed to plugins-dd by the coordinator (whoever-merged-runs-it; #544 was a wave
-  merge). Entry 5 unblocks behind it.
-- Entry 3: RESOLVED-BY-EVENTS (coordinator correction) — #490's upstream forward already
-  happened: filed as anthropics/claude-code#87349 with a minimal-repro recipe, cross-linked on
-  #490. Nothing left for Kim here.
-- Entry 4: DONE — 3 worktrees (build-520/build-541/build-548-docs) + 7 branches removed;
-  verified before removal: 3 by ancestry, 4 by MERGED PR status (#540/#549/#545/#538 —
-  squash-merged, so tips are correctly not ancestors; the plan's ancestry framing was the
-  imprecise part, not the verdict). build-522 and locked/active worktrees untouched.
-- Entry 6: ticket minted via docs:file-task (id in the intake fork's read-back; see issue list).
+- **issue-sorter:** clean — `watch-checkpoint.json` block present; `friendlies.json` /
+  `held-items.md` / `.mcp.json` explicitly declared unchanged, no blocks owed.
+- **repo-cleaner:** clean — its per-firing report block present; executed actions are gated
+  git/gh mutations inside its own procedure, not `.claude/ops/` file writes.
+- **decision-watcher:** state files explicitly declared unchanged (clean); its per-firing report
+  path named conditionally without a block — flagged, not silently absorbed → entry 2.
 
 ## Not queued (checked, found clean or deliberately left — standing rulings carried)
 
-- **PR #550 / #523 (wave 5, mid-build):** OPEN, fresh (17:55Z), healthy — owns its own lifecycle;
-  merge is Kim's per the auto-mode ceiling. #524/#525 likewise open mid-build (#525 carries a
-  fresh assignee claim, ~40 min old — not stale per ADR-0005).
-- **#490 itself:** open by design (platform tracking issue) — only entry 3's forward queues.
-- **ADR-0020 waves 3–7:** open execution work per the ADR's own Consequences table, tracked by
-  the open wave issues and driven by the in-flight builds — not a knowledge-pack gap
-  (decision-watcher: already harvested, reject-as-duplicate).
-- **adr-0015 partial supersession:** zero downstream citations of the superseded clause
-  (decision-watcher grepped the full corpus) — nothing to repair.
-- **decision-watcher confirm:** 0 candidates pending — no batched confirm owed.
-- **gh GraphQL 503s:** transient, all calls retried to success, no inventory gap — nothing to fix.
-- **Narrated-but-absent audit:** clean — every claimed ops write in all three reports is backed
-  by a fenced, target-pathed block (or explicitly declared unchanged-and-omitted).
-- **Standing rulings carried:** `.gitignore` G1 WARNs (`dist/`, `harness-audit-*/`) pre-ruled
-  on-demand-generated/accepted, no edit; root entry-file freshness CI gate = deliberate NO (Kim,
-  2026-08-15); checkpoint-bypass = accepted one-off (Kim, 2026-08-14).
+- **PRs #573 (open) and #556 (open, draft):** fresh, active, own their lifecycles; merge is
+  Kim's per the auto-mode ceiling.
+- **Worktree `issue-576-sweep-skill`:** tracks `origin/main`, no divergent commits, issue #576
+  minutes old at inventory — healthy, re-measure next firing.
+- **6 open unassigned issues (#576, #574, #558, #554, #551, #490):** backlog work, no stale
+  claims (zero assignees, ADR-0005); driving builds is `/mobilize-chores` territory, not this
+  queue. #490 stays open by design (platform tracking issue, upstream filed as
+  anthropics/claude-code#87349).
+- **Prior entry 6's fix (clean-git fetch-prune step):** ticket minted last cycle; the build
+  rides its own issue through the build pipeline — not ops-family execution.
+- **`gitignore_check.py` G1 WARNs (`dist/`, `harness-audit-*/`):** unchanged, pre-ruled accepted
+  (2026-08-17-entry11 ruling carried).
+- **Batched confirms:** none owed — decision-watcher 0 candidates, issue-sorter 0 held.
+- **ADR corpus:** zero delta; adr-0020 already harvested (reject-as-duplicate), adr-0015's
+  superseded clause has no downstream citations.
 
-## Resolved since the prior plan (2026-08-17T14:50:18Z firing)
+## Resolved since the prior plan (2026-08-17T18:35Z firing)
 
-- Prior entry 1 (ops-artifacts commit) — landed (this firing's seats diffed against those files).
-- Prior entry 2 (#490 evidence comment) — landed (issue-sorter: in-window comment activity on #490).
-- Prior entry 3 (ratify/reject ADR-0020) — RESOLVED: accepted, Kim's live tie-break per gh#518
-  (commit `06c95df`); decision-watcher re-judged the ratified body, already harvested.
-- Prior entry 4 (chore-sweep.js launch failure) — fixed and closed (#529 via merged PR #530,
-  harness 3.8.34).
-- Prior entries 5 + 6 (authoring-session trace; held desk→seat evidence ruling) — resolved: the
-  held content landed on `origin/main` (repo-cleaner: `worktree-build-529`'s commit is now an
-  ancestor); snapshot preserved untouched; only the branch delete remains (rides entry 4).
-- Prior entry 7 (#517–#526 disposition) — resolved by the ADR-0020 wave merges: #517–#522, #526,
-  #527 closed; #523/#524/#525 open mid-build, in flight.
-- Prior entry 8 (#490 upstream forward) — CARRIED as entry 3 (no completion evidence).
-- Prior entry 9 (verify-491 orphan worktree) — gone from this firing's inventory; resolved.
-- Prior entry 10 (decision-watcher step-3 re-fire) — resolved: full clean firing, checkpoint
-  advanced.
-- Prior entry 11 (gitignore + stale-claim re-measure) — resolved: both measured clean this firing.
+- Prior entry 1 (ops-artifacts commit) — DONE (commit 85ba7b9, per that plan's dated amendment).
+- Prior entry 2 (#544 C2 remote-branch delete + re-run) — RESOLVED: this firing's repo-cleaner
+  independently reconfirmed `worktree-build-522` gone via `gh api` → 404.
+- Prior entry 3 (#490 upstream forward) — RESOLVED-BY-EVENTS: already filed upstream
+  (anthropics/claude-code#87349), cross-linked on #490.
+- Prior entry 4 (orphaned worktrees/branches batch) — DONE (3 worktrees + 7 branches removed,
+  per the dated amendment); repo-cleaner confirms none reappear in this firing's inventory.
+- Prior entry 5 (build-522 worktree removal) — RESOLVED: gone from this firing's worktree
+  inventory entirely.
+- Prior entry 6 (clean-git fetch-prune ticket) — MINTED (dated amendment); the fix itself now
+  rides its GitHub issue (see Not queued).
