@@ -171,6 +171,15 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
    `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/adr_queue.py" pending <scratch-path>` lists everything
    outstanding, then ONE `AskUserQuestion` round covers all of it — never one round per candidate,
    regardless of how many firings contributed.
+   **A clean no-op firing (nothing new/amended/newly-superseded this round) states that fact
+   directly — "nothing new this firing" — and omits every report-path mention entirely, per
+   `ops-write-sandbox-rules`' payload-fence rule.** Never narrate a hypothetical per-firing report
+   path conditionally ("this firing's own record would land at `.claude/ops/reports/<ts>.md` ...
+   nothing new to persist") — that hedge is the same violation that rule already names (a path
+   with no fenced block behind it is unnamed, full stop), in softer words, whether the firing
+   found nothing or the seat merely didn't bother writing the block. A no-op firing that also
+   queued no scratch content owes neither of step 6's two file-payload fences either — the report
+   is prose only.
 7. **On a confirmed harvest candidate**, name the concrete next command per `save-lessons`'s own
    Phase 2 placement judgment — `/make-pack <skill-dir>` with the wave charter (axis, question set
    drawn from the ADR's Decision) for the corpus, `/make-skill`'s knowledge-species path for the
@@ -205,10 +214,14 @@ that isn't from a ratified ADR routes to `save-lessons`'s own standing detectors
   6's batched confirm is named as deferred in the report, never attempted blind.
 - A queued candidate's evidence changes on a later firing (the ADR was amended again) → update the
   existing row in place (step 4's idempotency), never queue a second row for the same (adr, kind).
-- Dispatch names no report destination (a bare scheduled firing) → target-path the report payload
-  at `.claude/ops/reports/<UTC-timestamp>.md` as the standing default (`issue-sorter`/
+- Dispatch names no report destination (a bare scheduled firing) with something to actually report
+  (any queued candidate or checkpoint advance) → target-path the report payload at
+  `.claude/ops/reports/<UTC-timestamp>.md` as the standing default (`issue-sorter`/
   `repo-cleaner`'s own convention) and let the dispatching session apply it; only a missing
-  destination on an interactive dispatch that expects one is reported as a missing-field error.
+  destination on an interactive dispatch that expects one is reported as a missing-field error. A
+  bare scheduled firing that turns out to be a clean no-op names no such path at all (step 6,
+  above) — the standing-default path exists for a payload that ships, never as a placeholder for
+  one that doesn't.
 - A halt occurs between step 1 (classify) and step 5 (advance) → the checkpoint is simply never
   reached; nothing to revert, since `classify` never wrote it. The same delta re-classifies next
   firing and re-queues harmlessly into the same idempotent rows.
@@ -217,7 +230,9 @@ Done when every `new`/`amended`/`newly_superseded` ADR this firing has been judg
 candidate is queued (new or updated) on the scratch copy, the scratch checkpoint has been advanced
 (step 5, only after queueing succeeded), and the report exists carrying both files' full content
 as target-pathed payload for the dispatching session to apply — naming a batched confirm if a
-human is present, or deferring it plainly if not. NOT done while an ADR's delta goes unjudged, a
-candidate is queued twice, a stale citation is found but not named, the checkpoint advances before
-its delta was queued, or this agent writes any knowledge-pack or state path itself instead of
-returning it as payload.
+human is present, or deferring it plainly if not — **or, on a clean no-op firing with nothing new
+to persist, the report states that plainly and carries neither file-payload fence nor any
+report-path mention at all (step 6's no-op clause)**. NOT done while an ADR's delta goes unjudged,
+a candidate is queued twice, a stale citation is found but not named, the checkpoint advances
+before its delta was queued, this agent writes any knowledge-pack or state path itself instead of
+returning it as payload, or a no-op firing's report narrates a report path it never fences.
