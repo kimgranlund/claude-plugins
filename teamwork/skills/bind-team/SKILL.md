@@ -58,11 +58,14 @@ its own operating rules, following the shared ritual in `references/adopt-agent-
    discipline for — this door and the dispatched-agent door (`fleet-rules`' Part B "Seat-access
    doors") describe one discipline, not two.
 2. **Invoke `fleet-rules` and `loop-rules`** (this plugin) — the two skills the agent itself
-   preloads (`agents/fleet-marshal.md`'s `skills:` frontmatter field). Only `fleet-rules`' Part B
-   (composition/wiring design) is operative here — its Part A (fleet-scoped multi-session
-   coordination) doesn't bind, since this single-host charter doesn't enter fleet coordination
-   scope — so the routing rubric and the closed decision-set Priority 4 and 6 depend on are
-   actually loaded, not assumed.
+   preloads (`agents/fleet-marshal.md`'s `skills:` frontmatter field). `fleet-rules`' Part B
+   (composition/wiring design) is operative here, and so is Section 7 ("Route-anything-incoming
+   protocol") — it states plainly that it "binds both doors of the same seat identically," and
+   point 1 above already adopts it. What does NOT bind is the rest of Part A (Sections 1–6's
+   multi-session coordination scope, claim-then-guard, version-slot, and pin-race mechanics),
+   since this single-host charter doesn't enter fleet-scoped multi-session coordination — so the
+   routing rubric and the closed decision-set Priority 4 and 6 depend on are actually loaded, not
+   assumed.
 3. **Acknowledge adoption** before dispatching anything: one standing block naming the contract
    file read, the three host deltas below, and the duration rule ("until this charter closes").
 
@@ -75,9 +78,10 @@ dispatched subagent:
 - **Adversarial-review seat availability (Priority 1).** `doc-checker` is docs' — where docs
   isn't installed, review the design doc by hand against `doc-writing-rules`' own rubric
   before treating it as gated.
-- **Write scoping (agent frontmatter's `tools:` allowlist).** The agent's `Write` tool is structurally scoped to
-  coordination records by its own frontmatter allowlist. The host has no such wall — see the
-  discipline below, which does the same job by rule instead of by tool restriction.
+- **Write scoping (by rule, not by tool wall).** The agent's frontmatter grants a bare `Write` —
+  its coordination-records-only scope is a stated discipline in its own body, not a tool
+  restriction. The host holds the same discipline the same way: by rule, never by a wall — see
+  below.
 
 **The one rule that makes this a coordinator and not a build session:** the host does not touch
 `Write`/`Edit` on any charter deliverable directly, regardless of how small the piece looks. Every
