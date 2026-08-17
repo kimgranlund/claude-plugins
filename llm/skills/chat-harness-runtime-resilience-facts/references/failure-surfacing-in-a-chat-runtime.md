@@ -1,22 +1,12 @@
-# Disclosure knobs and failure surfacing in a deployed chat runtime
+# Failure surfacing in a deployed chat runtime
 
-> Axis: two adjacent concerns bundled deliberately into one file to hold this pack's axis count
-> (already at 7 before this fold) — how much of the runtime's own internal state a disclosure
-> knob may reveal, and how a runtime that has already committed to a response must still surface
-> a failure loudly and safely rather than let it read as a silent, empty success. Grounded in a
-> worked instance: `@agent-ui/a2ui`'s `produce.ts`/`meta-line.ts`. **Axis-budget note:** folding
-> this v2-harvest content pushes `chat-harness-guardrail-facts` to 8 reference files, one past the
-> pack-writing-rules 3-7 target — flagged as a split signal for a follow-up `plan-skill-split`
-> pass, not resolved in this fold (see this ticket's PR body).
-
-## Every disclosure knob is fail-closed and independent — no accidental ladder
-
-**Claim — progress detail defaults to stage transitions only (no reasoning text); `'full'`
-(bounded reasoning excerpts, capped ~200 chars) and `'source'` (raw payload lines behind
-validate/retry stages, capped 16 KB with an EXPLICIT truncation marker, never a silent cut) are
-separate opt-ins where one never implies the other.** A consumer needing both is a deliberate
-future member, not a ladder accident. · `produce.ts:139-207` (ADR-0146 F3, GH #240/ADR-0159) ·
-2026-08-17 · [verified]
+> Axis: how a runtime that has already committed to a response must still surface a failure
+> loudly and safely — never let it read as a silent, empty success — plus the byte-identity
+> discipline that keeps an evolving producer/provider seam safe for existing consumers. Distinct
+> from disclosure-knobs-and-progress-detail.md's axis (how much internal state a knob may reveal
+> at all). Un-bundled 2026-08-17 from `disclosure-and-failure-surfacing-in-a-chat-runtime.md` —
+> see this pack's own `sources.md` for the `plan-skill-split` provenance. Grounded in a worked
+> instance: `@agent-ui/a2ui`'s `produce.ts`/`meta-line.ts`.
 
 ## A stream that already committed 200 needs a reserved terminal error line
 
@@ -55,10 +45,10 @@ TESTABLE, not just asserted — byte-pinned equivalence gates enforce it. ·
 
 ## What this file does NOT cover
 
-The "browser cannot hold a secret" invariant — already covered by [[llm-gateway-facts]]'s
-`dev-proxy-and-bundler-footguns.md` and `provider-adapter-seam.md` (a v2-harvest dedup: lesson 30
-of the same source export is not restated here). Byte-pinning the PROMPT CONTENT itself (as
-opposed to the seam's request/response shape) — already covered by this pack's own
-`config-schema-and-prompt-externalization.md` (a v2-harvest dedup: the kept half of lesson 39 is
-not restated here). The self-correct feedback loop's own design, which the round-bound halt above
-is the backstop for: [[chat-harness-workflow-facts]]'s `self-correct-feedback-design.md`.
+How much of the runtime's own internal state a disclosure knob may reveal in the first place —
+this pack's own `disclosure-knobs-and-progress-detail.md`. Byte-pinning the PROMPT CONTENT itself
+(as opposed to the seam's request/response shape) — already covered by
+[[chat-harness-guardrail-facts]]'s own `config-schema-and-prompt-externalization.md` (a
+v2-harvest dedup: the kept half of lesson 39 is not restated here). The self-correct feedback
+loop's own design, which the round-bound halt above is the backstop for:
+[[chat-harness-workflow-facts]]'s `self-correct-feedback-design.md`.
