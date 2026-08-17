@@ -5,8 +5,9 @@ description: >-
   whose decision space is mostly unmade. Use for "grill me on the design", "plan this new
   feature, nothing is decided yet", "what do we need to decide here", or "walk me through the
   choices round by round" — grounded, cascading rounds until settled. NOT for sharpening a given
-  ask (find-intent), decomposing it (break-down-problem), or authoring the PRD/SPEC/LLD
-  (make-doc).
+  ask (find-intent), decomposing it (break-down-problem), authoring the PRD/SPEC/LLD
+  (make-doc), or a protocol for concurrent sessions/terminals sharing one repo
+  (parallel-work-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
