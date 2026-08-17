@@ -69,7 +69,10 @@ named it as a live routing target has been repointed to this skill in the same c
    this skill is invoked cross-plugin by `mobilize-chores`, and `${CLAUDE_PLUGIN_ROOT}`'s
    resolution across that boundary is unverified; this repo's own convention is already
    workspace-root-relative for every documented script invocation, so this trades
-   install-elsewhere portability for behavior verified safe in THIS repo.)
+   install-elsewhere portability for behavior verified safe in THIS repo.) The Workflow path is
+   live-proven: the 2026-08-17T18:35Z all-three-seats firing ran it end-to-end clean — 4 agents
+   returned, zero UNMEASURED, every payload block applied via step 5's script, plan verified on
+   disk.
 
    **Fallback — no Workflow tool.** Fan out the resolved seats in parallel — one `Agent` call
    each, `subagent_type` the literal `harness:`-prefixed name (`harness:decision-watcher` /
@@ -98,22 +101,6 @@ named it as a live routing target has been repointed to this skill in the same c
    each seat's fenced, target-pathed blocks by hand per the contract stated there (`Write` each
    verbatim to its named path) and name the degradation in the sweep report — never skip payload
    application because the script that mechanizes it went missing.
-
-   **Residual verification owed** (named here, not overclaimed): #529 fixed `chore-sweep.js`'s
-   shape — it launched with `SyntaxError: Unexpected keyword 'export'` (reproduced live,
-   2026-08-17T14:50:18Z) because the file closed with a second `export` statement
-   (`export default await runSweep()`) after the loader's own `meta`-literal extraction — a
-   statement that is invalid inside the async-function body the loader wraps the rest of the file
-   in; the fix (a bare body, no wrapper function, no second export — confirmed against a real
-   prior Workflow run captured on this machine that uses the identical shape) was proven only by
-   static contract-conformance, since fixing this bug cannot itself invoke the Workflow tool to
-   prove it. The fallback branch is still what's actually exercised until a live Workflow-path
-   sweep completes end-to-end and confirms the corrected shape loads — that proof rides the NEXT
-   sweep firing that has the Workflow tool available, not this change. Delete this note once a
-   Workflow-path sweep completes end-to-end; until then, the fallback branch reproduces the same
-   choreography and contracts `chore-lead` used to run
-   (payload application now via the selftested apply script, step 5) — not proven byte-identical,
-   since the mechanism changed, but nothing here rests on an unverified claim either.
 5. **Apply every returned payload.** For each seat's raw report text (Workflow or fallback path
    alike), write it to a scratch file and run:
    ```
