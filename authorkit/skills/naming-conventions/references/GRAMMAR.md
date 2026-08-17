@@ -70,7 +70,7 @@ coordinates a thing or a process); RoleLex is disjoint from ObjectVocab ∪
 ProcessLex (ADR-0015 D3) and covers execution seats as well as coordinators
 (ADR-0017, §14.6, 2026-08-17) — `leader`, `orchestrator`, `coordinator`,
 `checker`, `runner`, `planner`, `watcher`, `finder`, `sorter`, `cleaner`,
-`judge`, `builder`, `writer`. A bare RoleLex word with no scope token still
+`judge`, `builder`, `writer`, `marshal` (ADR-0020, 2026-08-17). A bare RoleLex word with no scope token still
 fails — the production always requires `{scope}-{role}`, never a bare role.
 
 ## Lexicons
@@ -79,7 +79,7 @@ fails — the production always requires `{scope}-{role}`, never a bare role.
 |---|---|---|
 | VerbLex | command terminals | closed; PR to change |
 | ProcessLex | skill terminals | closed; PR to change |
-| RoleLex | orchestrator + execution-seat roles | closed; 13 entries; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3, ADR-0017) |
+| RoleLex | orchestrator + execution-seat roles | closed; 14 entries; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3, ADR-0017, ADR-0020) |
 | ObjectVocab | domain objects | registered; anti-ambiguity gate |
 | TopicLex | `-rules` reference-doc topic words (§14.2) | closed; PR to change |
 

@@ -154,17 +154,17 @@
    "id": "D10",
    "type": "verbatim-line",
    "mode": "require",
-   "title": "GRAMMAR.md:82 hardcodes RoleLex's membership count ('closed; 13 entries') with no edge binding it to naming.manifest.json's role_lex array -- a lexicon addition (as ADR-0017 just did, growing RoleLex from 3 to 13) invalidates the count with no code change anywhere",
+   "title": "GRAMMAR.md:82 hardcodes RoleLex's membership count ('closed; 14 entries') with no edge binding it to naming.manifest.json's role_lex array -- a lexicon addition (as ADR-0017 grew RoleLex from 3 to 13, and ADR-0020 wave 1 grows it again to 14 with 'marshal') invalidates the count with no code change anywhere",
    "severity": "major",
    "canon_file": "naming.manifest.json",
-   "canon_ref": "top-level 'role_lex' array -- 13 entries as of ADR-0017 (2026-08-17): leader, orchestrator, coordinator, checker, runner, planner, watcher, finder, sorter, cleaner, judge, builder, writer",
+   "canon_ref": "top-level 'role_lex' array -- 14 entries as of ADR-0020 wave 1 (2026-08-17): leader, orchestrator, coordinator, checker, runner, planner, watcher, finder, sorter, cleaner, judge, builder, writer, marshal",
    "dependents": [
     {
      "file": "authorkit/skills/naming-conventions/references/GRAMMAR.md",
-     "pattern": "closed;\\s+13\\s+entries"
+     "pattern": "closed;\\s+14\\s+entries"
     }
    ],
-   "source": "issue #527. Verified live 2026-08-17: naming.manifest.json's role_lex array has exactly 13 entries, matching GRAMMAR.md:82's stated count -- this edge reports clean now, but is a regression tripwire only (a static pattern, not a live recount): the next RoleLex growth (ADR-0017 §Harder-once-landed already flags this as a future risk) must amend both GRAMMAR.md's stated count AND this edge's pattern in the same change, or the sweep goes stale-clean instead of catching the drift. Deliberately typed verbatim-line rather than a live count computation -- doctrine-audit's sweep.py mechanizes only verbatim-line/ledger-sync/vocab-term as static pattern/path checks (no JSON-array-length arithmetic in any of the three); inventing a fifth edge type or teaching ledger-sync to count was out of scope for this fix (issue #527's own instruction: pick from the existing vocabulary)."
+   "source": "issue #527, amended for ADR-0020 wave 1 (issue #519). Verified live 2026-08-17: naming.manifest.json's role_lex array has exactly 14 entries, matching GRAMMAR.md:82's stated count -- this edge reports clean now, but is a regression tripwire only (a static pattern, not a live recount): the next RoleLex growth must amend both GRAMMAR.md's stated count AND this edge's pattern in the same change, or the sweep goes stale-clean instead of catching the drift. Deliberately typed verbatim-line rather than a live count computation -- doctrine-audit's sweep.py mechanizes only verbatim-line/ledger-sync/vocab-term as static pattern/path checks (no JSON-array-length arithmetic in any of the three); inventing a fifth edge type or teaching ledger-sync to count was out of scope for this fix (issue #527's own instruction: pick from the existing vocabulary)."
   }
  ]
 }
