@@ -74,6 +74,12 @@
       "prompt": "File this bug I just found.",
       "expect": "no-trigger",
       "comment": "owner: docs file-bug — single-item intake, no sweep intent"
+    },
+    {
+      "id": "t08",
+      "prompt": "Sweep the repo for inline min-width styles on our UI components and remove the decorative ones safely.",
+      "expect": "no-trigger",
+      "comment": "owner: pattern-sweeping (code/DOM pattern sweep, not the ops-family seats) — reciprocal fence, issue #576"
     }
   ]
 }

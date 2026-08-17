@@ -1,0 +1,7 @@
+I need to clarify the location of the repo. The current working directory is a scratch directory with no source code. Before I describe the sweep strategy, **where is the actual admin app repository located?** Is it:
+
+1. On your local machine at a specific path (e.g., `~/Projects/adia-v2/frontend/apps/admin`)?
+2. In a different location than the current working directory?
+3. Should I be working in the parent project directory?
+
+Once I know the repo location, I'll describe the exact sweep strategy step by step.
