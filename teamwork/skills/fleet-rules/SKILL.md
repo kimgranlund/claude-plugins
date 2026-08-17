@@ -322,7 +322,7 @@ nothing but acknowledge it has not routed it.
 
 **Escalation.** An overdue handback — a dispatched seat that owed a report and hasn't produced one
 within its stated budget — gets CHASED, not silently re-queued or forgotten: re-check the seat's
-own durable state first (Section 5's inventory-from-durable-state default — a live worktree/branch
+own durable state first (Section 5's own default of inventorying from durable state — a live worktree/branch
 with recent commits is still working; nothing durable and no live dispatch is orphaned, per
 Section 5's reset-orphaned-seats bullet), then either re-dispatch under the same sealed contract
 or escalate the locus per the discovered-reality loop. A chase is itself an incoming item and
