@@ -21,10 +21,8 @@ measured variance (missing labels, drifting section sets, no dedup, contractless
 skill's baseline evidence. Runs as a background fork (`context: fork`) by default: the fork sees
 no conversation history — `$ARGUMENTS` is the only channel in. Seed: `$ARGUMENTS`.
 
-**Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
-(`references/backend-resolver.md`) once and follow whichever option it returns for every phase
-below — canonical definition of the three options, the ruling shape, and the failure fallback
-lives there, not restated here.
+**Backend seam (Phase 0):** resolve once via doc-writing-rules' `references/backend-resolver.md`;
+every phase below follows whichever option it returns.
 
 ## Phase 1 — Route: fresh item, or resume by id
 
@@ -149,18 +147,13 @@ this skill stops; that ordering is the contract.
 
 ## Failure branches
 
-- Backend ruled git-native but `gh` fails partway → fall back to the file backend for THIS
-  record, say so, note the migration in the record (the shared sibling rule). A failed
-  `gh issue edit --type` (Phase 4) is not this failure — the record already exists by the time
-  that call runs; it never triggers the file-backend fallback, only the skipped-type note.
-- Backend ruled Option C but the adapter operation fails partway (auth, API error, MCP
-  disconnect) → same fallback discipline, to the file backend for that operation, noted in the
-  record.
-- The item is really a bug or feature in disguise → invoke the correct sibling (Phase 2) via the
-  Skill tool with the seed; never force-file it as a task to save a hop.
-- Resume finds the record closed → report its state; reopening is the user's explicit call.
-- A status verb on an unresolved id → report the failed resolution; nothing is created.
-- Dedup finds it shipped or queued → report, stop or resume; never a duplicate record.
+The redirect to `file-bug`/`file-feature` and its one-hop rule (Phase 2) are the canonical
+statement the sibling skills point back to — nothing to add here.
+
+Every other branch — an unresolved id, a status verb against it, and a closed-record resume
+(Phase 1); a shipped/queued dedup hit (Phase 3); `doc_lint.py` and backend-fallback failures
+(Phase 4, and doc-writing-rules' backend-resolver.md for the fallback shape) — is handled inline
+at its own phase; not restated here.
 
 Done when a `task`-labeled record exists (an issue URL reported, a lint-clean `kind: task`
 TICKET on disk, or an Option-C adapter's record with its native id reported) carrying the full

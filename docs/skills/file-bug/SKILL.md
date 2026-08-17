@@ -23,10 +23,8 @@ fix `/fork bug-name` lacked even though the skill itself now runs forked. The fo
 conversation history — `$ARGUMENTS` is the only channel in; Phase 2 covers what a thin seed owes.
 Seed: `$ARGUMENTS`.
 
-**Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
-(`references/backend-resolver.md`) once and follow whichever option it returns for every phase
-below — canonical definition of the three options, the ruling shape, and the failure fallback
-lives there, not restated here.
+**Backend seam (Phase 0):** resolve once via doc-writing-rules' `references/backend-resolver.md`;
+every phase below follows whichever option it returns.
 
 ## Phase 1 — Route: fresh report, or resume by record state
 
@@ -195,29 +193,11 @@ entry it owed the record.
 
 ## Failure branches
 
-- Report too vague after one clarifying round → capture anyway (Phase 2); the gap becomes a
-  Classification note, not a blocker.
-- Classification (Phase 3) finds no defect on the FIRST classification → invoke the correct
-  sibling via the Skill tool (Phase 3); never force a bug record onto non-bug work at this step.
-  A seed arriving already redirected from a sibling is captured here regardless of fit (the
-  one-hop rule's fallback, Phase 3) — this skill's own redirect never fires twice.
-- Named id does not resolve (file or issue) → treat as fresh (Phase 1); never proceed as if it
-  existed.
-- Resume finds unprocessed Findings → Phase 6, not a second dispatch (Phase 1's named branch).
-- Resume finds `done`/`wontfix`/closed → report and stop; do not reopen unasked.
-- Agent dispatch returns with no Findings entry → one re-dispatch, contract quoted, before
-  recording the loss (Phase 6). A fork that is no longer addressable skips straight to recording —
-  it cannot be re-dispatched into.
-- `doc_lint.py` fails on the drafted ticket → fix and re-run; an unlintable ticket is not a
-  captured one (file backend).
-- Workspace rules git-native but `gh` fails partway through a run (auth, network) → fall back to the file
-  backend for THIS record, say so, and note the migration in the record so it can be re-homed —
-  never leave the report uncaptured because the preferred store was unreachable. A failed
-  `gh issue edit --type` (Phase 4) is not this failure — the record already exists by the time
-  that call runs; it never triggers the file-backend fallback, only the skipped-type note.
-- Workspace rules Option C but the adapter operation fails partway (auth, API error, MCP
-  disconnect) → same fallback discipline, to the file backend for that operation, noted in the
-  record.
+Every branch is handled inline at its owning phase — an unresolved id or a `done`/`wontfix`/closed
+resume, and the unprocessed-Findings branch to Phase 6 instead of a second dispatch (Phase 1); the
+no-defect redirect, one-hop rule included (Phase 3); `doc_lint.py` and backend-fallback failures
+(Phase 4, and doc-writing-rules' backend-resolver.md for the fallback shape); a Findings-less
+dispatch return (Phase 6). Not restated here.
 
 Done when a `kind: bug` record exists — a `doc-type: ticket` file on disk, a labeled GitHub Issue,
 or an Option-C adapter's record (its native id reported) — carrying the report and classification,

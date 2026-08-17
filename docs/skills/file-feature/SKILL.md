@@ -19,10 +19,8 @@ spends build effort — the same loss-window fix `file-bug` made for bugs: an id
 only in chat context vanishes with it. Runs as a background fork (`context: fork`) by default: the
 fork sees no conversation history — `$ARGUMENTS` is the only channel in. Seed: `$ARGUMENTS`.
 
-**Backend seam (Phase 0, decided once per run):** call doc-writing-rules' backend resolver
-(`references/backend-resolver.md`) once and follow whichever option it returns for every phase
-below — canonical definition of the three options, the ruling shape, and the failure fallback
-lives there, not restated here.
+**Backend seam (Phase 0):** resolve once via doc-writing-rules' `references/backend-resolver.md`;
+every phase below follows whichever option it returns.
 
 ## Phase 1 — Route: fresh idea, or resume by record state
 
@@ -145,31 +143,24 @@ skill already present → skip silently.
 
 ## Failure branches
 
-- Idea too vague after one round → capture with gaps named (Phase 2); never stall persistence.
-- Dedup finds it shipped → report location, stop; found queued → resume, not re-mint.
-- `doc_lint.py` fails → fix and re-run (file backend).
-- On the FIRST classification only (the seed carries no `[redirected-from:X]` marker yet), the ask
-  is actually bug-shaped ("X is broken") → invoke `file-bug` directly via the Skill tool, carrying
-  the seed prefixed `[redirected-from:file-feature]`; report which sibling was invoked and why.
-  Don't force a feature ticket onto a defect. One hop only (the siblings' shared redirect rule,
-  `file-task`'s SKILL.md); file-feature ends there — Phases 5–6 never run for a redirected seed.
-- Same, first classification only, for a generic chore/follow-up with nothing to size or shape →
-  invoke `file-task` via the Skill tool, seed prefixed `[redirected-from:file-feature]`, same
-  one-hop rule and stop.
-- A seed already carrying a `[redirected-from:X]` marker (naming a DIFFERENT sibling) → captured
-  regardless of fit: `kind: feature` with the mismatch named in Scope/Open, per this skill's own
-  named fallback in the shared rule (Phase 2's capture-anyway rule already covers the mechanics).
-  This skill's own redirect (above) never fires on a seed that already carries the marker — one
-  hop only, detected from the seed itself, not from history the fork doesn't have.
-- Index bootstrap declined → the pointer line, nothing else this session.
-- Workspace rules git-native but `gh` fails partway through a run → fall back to the file backend for THIS
-  record, say so, and note the migration in the record — never leave the idea uncaptured because
-  the preferred store was unreachable (file-bug's rule, shared). A failed `gh issue edit --type`
-  (Phase 5) is not this failure — the record already exists by the time that call runs; it never
-  triggers the file-backend fallback, only the skipped-type note.
-- Workspace rules Option C but the adapter operation fails partway (auth, API error, MCP
-  disconnect) → same fallback discipline, to the file backend for that operation, noted in the
-  record.
+Phase 4 defers its Defect/generic-chore redirect here — this is that redirect's canonical
+statement, not a re-narration:
+
+- FIRST classification only (no `[redirected-from:X]` marker yet), the ask is bug-shaped
+  ("X is broken") → invoke `file-bug` via the Skill tool, seed prefixed
+  `[redirected-from:file-feature]`; report which sibling was invoked and why. One hop only
+  (the shared rule, canonically stated in `file-task`'s SKILL.md); Phases 5–6 never run for a
+  redirected seed.
+- Same, a generic chore/follow-up with nothing to size or shape → invoke `file-task`, same
+  marker and one-hop rule.
+- A seed already carrying `[redirected-from:X]` (a DIFFERENT sibling) → captured regardless of
+  fit: `kind: feature` with the mismatch named in Scope/Open — this skill's own redirect never
+  fires twice.
+
+Every other branch — a resume's shipped/queued dedup hit (Phase 3), `doc_lint.py` and
+backend-fallback failures (Phase 5, and doc-writing-rules' backend-resolver.md for the fallback
+shape), and a declined index bootstrap (Phase 6) — is handled inline at its own phase; not
+restated here.
 
 Done when a `kind: feature` record exists — a lint-clean file on disk, a labeled GitHub Issue (its
 URL reported), or an Option-C adapter's record (its native id reported) — sized and shaped
