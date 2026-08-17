@@ -1,5 +1,5 @@
 {
- "$schema_note": "nonoun-plugins repo-root doctrine manifest (issue #379). Separate from naming.manifest.json (ADR-0011 D1: that manifest stays single-purpose for naming grammar) -- this one enumerates canon-to-dependent DOCTRINE edges: a rule stated canonically in one artifact that a dependent artifact must not violate, omit, or paraphrase away from. Four edge types: verbatim-line (a dependent must, or must not, contain an exact string/pattern from canon -- mode require|forbid), ledger-sync (a ledger/index row must match the artifact it names on disk), vocab-term (dependents must use the canonical term, never a banned alias, for one concept), judgment (no mechanical check exists -- the sweep reports the edge and its owning checker as 'queued, not built', never silently drops it). Seeded from the 2026-08-16 team/coordination-surface review (issue #379's own resolved comment): 8 findings total. Findings 1-3 map onto issues #380/#381/#382, closed via PR #383 (edges D01-D02; D03 stays judgment/queued); findings 4-5 are stated directly in #379's own issue body (D04-D05). Findings 6-8 were unrecoverable at #379's build time and stayed a declared gap until the source review transcript surfaced (issue #395, 2026-08-16) and supplied them verbatim as D06-D08.",
+ "$schema_note": "nonoun-plugins repo-root doctrine manifest (issue #379). Separate from naming.manifest.json (ADR-0011 D1: that manifest stays single-purpose for naming grammar) -- this one enumerates canon-to-dependent DOCTRINE edges: a rule stated canonically in one artifact that a dependent artifact must not violate, omit, or paraphrase away from. Four edge types: verbatim-line (a dependent must, or must not, contain an exact string/pattern from canon -- mode require|forbid), ledger-sync (a ledger/index row must match the artifact it names on disk), vocab-term (dependents must use the canonical term, never a banned alias, for one concept), judgment (no mechanical check exists -- the sweep reports the edge and its owning checker as 'queued, not built', never silently drops it). Seeded from the 2026-08-16 team/coordination-surface review (issue #379's own resolved comment): 8 findings total. Findings 1-3 map onto issues #380/#381/#382, closed via PR #383 (edges D01-D02; D03 stays judgment/queued); findings 4-5 are stated directly in #379's own issue body (D04-D05). Findings 6-8 were unrecoverable at #379's build time and stayed a declared gap until the source review transcript surfaced (issue #395, 2026-08-16) and supplied them verbatim as D06-D08. D09-D10 added 2026-08-17 (issue #527): authorkit's GRAMMAR.md restates the docs-owned naming spec's productions and hardcodes RoleLex's lexicon count with no binding edge -- both typed verbatim-line regression tripwires (the mechanized-type vocabulary has no live cross-file arithmetic, only static pattern/path checks) and both verified clean live.",
  "version": 1,
  "edges": [
   {
@@ -129,6 +129,42 @@
    "owning_checker": "harness:agent-checker",
    "status": "queued, not built",
    "source": "2026-08-16 team/coordination-surface review, finding 8, recovered verbatim via issue #395 -- verified live 2026-08-16: team-lead.md:14 model: sonnet; builder.md:12 model: opus; planner.md:14 model: fable; no rationale comment near team-lead's model: line. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:14 model: sonnet, builder.md:12 model: opus, planner.md:14 model: fable -- the underlying tiering-gap fact is unchanged post-rename, no rationale comment added; edge stands.]"
+  },
+  {
+   "id": "D09",
+   "type": "verbatim-line",
+   "mode": "require",
+   "title": "authorkit's GRAMMAR.md restates the naming spec's command/skill grammar productions (ADR-0015 already documents this in prose: 'GRAMMAR.md (Productions block) restates the same two productions') with no edge binding the restatement to its canon -- a spec grammar edit could drift GRAMMAR.md silently",
+   "severity": "minor",
+   "canon_file": ".claude/docs/spec/spec-naming-convention.md",
+   "canon_ref": "REQ-002 (§3 Grammar): 'command := object \"-\" verb' and 'skill := object \"-\" process' -- the two production shapes GRAMMAR.md's own Productions block restates",
+   "dependents": [
+    {
+     "file": "authorkit/skills/naming-conventions/references/GRAMMAR.md",
+     "pattern": "command\\s+:=\\s+object\\s+\"-\"\\s+verb"
+    },
+    {
+     "file": "authorkit/skills/naming-conventions/references/GRAMMAR.md",
+     "pattern": "skill\\s+:=\\s+object\\s+\"-\"\\s+process"
+    }
+   ],
+   "source": "issue #527 (found while scoping ADR-0020 wave 1, #519). Verified live 2026-08-17: both production shapes are byte-identical between spec-naming-convention.md REQ-002 and GRAMMAR.md's Productions block (only the trailing example artifact names differ, which the pattern deliberately excludes); this edge reports clean and stands as a regression tripwire against future spec-grammar drift."
+  },
+  {
+   "id": "D10",
+   "type": "verbatim-line",
+   "mode": "require",
+   "title": "GRAMMAR.md:82 hardcodes RoleLex's membership count ('closed; 13 entries') with no edge binding it to naming.manifest.json's role_lex array -- a lexicon addition (as ADR-0017 just did, growing RoleLex from 3 to 13) invalidates the count with no code change anywhere",
+   "severity": "major",
+   "canon_file": "naming.manifest.json",
+   "canon_ref": "top-level 'role_lex' array -- 13 entries as of ADR-0017 (2026-08-17): leader, orchestrator, coordinator, checker, runner, planner, watcher, finder, sorter, cleaner, judge, builder, writer",
+   "dependents": [
+    {
+     "file": "authorkit/skills/naming-conventions/references/GRAMMAR.md",
+     "pattern": "closed;\\s+13\\s+entries"
+    }
+   ],
+   "source": "issue #527. Verified live 2026-08-17: naming.manifest.json's role_lex array has exactly 13 entries, matching GRAMMAR.md:82's stated count -- this edge reports clean now, but is a regression tripwire only (a static pattern, not a live recount): the next RoleLex growth (ADR-0017 §Harder-once-landed already flags this as a future risk) must amend both GRAMMAR.md's stated count AND this edge's pattern in the same change, or the sweep goes stale-clean instead of catching the drift. Deliberately typed verbatim-line rather than a live count computation -- doctrine-audit's sweep.py mechanizes only verbatim-line/ledger-sync/vocab-term as static pattern/path checks (no JSON-array-length arithmetic in any of the three); inventing a fifth edge type or teaching ledger-sync to count was out of scope for this fix (issue #527's own instruction: pick from the existing vocabulary)."
   }
  ]
 }
