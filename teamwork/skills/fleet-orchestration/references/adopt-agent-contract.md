@@ -1,14 +1,14 @@
 # The agent-contract-adoption ritual
 
 Shared by every `/lead-*` command that makes the host session run under a dispatched agent's own
-contract instead of spawning a copy of it (`leading-planning` ↔ `planner`, `leading-teams` ↔ `fleet-marshal`,
+contract instead of spawning a copy of it (`leading-planning` ↔ `planner`, `fleet-orchestration` ↔ `fleet-marshal`,
 `leading-builds` ↔ `build-leader`). `leading-review` is deliberately NOT a party to this ritual — it adopts
 no single agent's contract, on purpose (see its own SKILL.md) — so it does not cite this file.
 
 Each citing skill still owns and states inline: which agent file to read, how many priorities it
 carries and their one-line gloss, which co-preloaded skills to invoke alongside it, its own
 "three places the host's version differs" list, and its own duration rule (charter-scoped for
-`leading-planning`/`leading-teams`, session-scoped for `leading-builds`) — those are genuine per-seat
+`leading-planning`/`fleet-orchestration`, session-scoped for `leading-builds`) — those are genuine per-seat
 divergence, not drift, and stay local to each skill.
 
 ## The ritual, in four steps
@@ -25,7 +25,7 @@ divergence, not drift, and stay local to each skill.
    (`leading-builds`).** For a session-scoped adoption, re-invocation always lands inside the still-
    open scope, so it always rebinds: re-resolve the target from the new arguments,
    re-acknowledge in one line, continue — never layer a second adoption on top of the first. A
-   charter-scoped adoption (`leading-planning`, `leading-teams`) instead follows the second failure
+   charter-scoped adoption (`leading-planning`, `fleet-orchestration`) instead follows the second failure
    branch below, which can find the prior charter open OR closed and branches accordingly — the
    two are mutually exclusive by scope, never both live for the same citing skill.
 

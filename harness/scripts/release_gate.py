@@ -567,7 +567,14 @@ def gate(root: Path, package: bool = False):
              # phrase, not a sibling name; "ops-planner" (authorkit's fix-old-names, an
              # illustrative retired-agent error message: "Agent type 'ops-planner' not found") is
              # a deliberate historical citation, the same class as `ops-issues` already above:
-             "single-writer", "ops-planner"}
+             "single-writer", "ops-planner",
+             # ADR-0020 wave 4 (#522) minted `fleet-orchestration` as a real installed skill,
+             # which widened the `-orchestration` suffix into G8's live inventory and caught two
+             # pre-existing, unrelated prose compounds in team-or-solo-rules: "over-orchestration"
+             # (its own routing-rubric warning against over-delegating a task one context could
+             # hold) and "rubric-orchestration" (a rubric-name label in its handoff table, not a
+             # citation of any sibling):
+             "over-orchestration", "rubric-orchestration"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

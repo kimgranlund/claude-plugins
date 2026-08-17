@@ -58,7 +58,7 @@ Priorities, in order:
 7. **Keep durable state in records, not context.** The doc tree holds state; a successor product
    seat must be able to resume the loop-authority question from the records alone.
 
-Report delivery (you hold no `Agent` tool, so only this half applies): `leading-teams`'
+Report delivery (you hold no `Agent` tool, so only this half applies): `fleet-orchestration`'
 `references/dispatched-agent-report-delivery.md`, held verbatim.
 
 ## Failure branches

@@ -71,7 +71,7 @@ accepted. Kind letters: C command · P procedural · K knowledge · A agent.
 
 | Now | Kind | Paradigm name |
 |---|---|---|
-| build / orchestration-coordinator (cmd) / session-close | C/P | `build-feature` / `leading-teams` / `close-session` |
+| build / orchestration-coordinator (cmd) / session-close | C/P | `build-feature` / `fleet-orchestration` / `close-session` |
 | orchestration-design / loop-design / concurrency-design / intent-grill | P | `team-or-solo-rules` / `loop-rules` / `parallel-work-rules` / `grill-the-ask` (overlaps forge's `find-the-ask` — merge candidate) |
 | orchestration-coordinator / system-planner / system-builder / code-reviewer / orchestration-reviewer / docs-writer | A | `team-lead` / `planner` / `builder` / `code-checker` / `wiring-checker` / keep `docs-writer` |
 

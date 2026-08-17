@@ -9,7 +9,7 @@
     { "id": "t05", "prompt": "This session should author the PRD/SPEC/LLD itself, never grading a doc it wrote.", "expect": "trigger" },
     { "id": "n01", "prompt": "Implement the approved LLD for the checkout redesign.", "expect": "no-trigger", "comment": "owner: builder (Agent tool) — implementing an approved LLD, not authoring one" },
     { "id": "n02", "prompt": "Fix this one-file typo in the config loader.", "expect": "no-trigger", "comment": "owner: the host inline — a bugfix/single-file change earns no doc, no seat" },
-    { "id": "n03", "prompt": "Set up a generic multi-seat coordination charter for this launch.", "expect": "no-trigger", "comment": "owner: teamwork:leading-teams — a generic coordination charter, not solo design authoring" },
+    { "id": "n03", "prompt": "Set up a generic multi-seat coordination charter for this launch.", "expect": "no-trigger", "comment": "owner: teamwork:fleet-orchestration — a generic coordination charter, not solo design authoring" },
     { "id": "n04", "prompt": "Make this session a dedicated build seat driving tickets through dispatch-ticket.", "expect": "no-trigger", "comment": "owner: teamwork:leading-builds" },
     { "id": "n05", "prompt": "Review this existing SPEC against doc-writing-rules' rubric.", "expect": "no-trigger", "comment": "owner: docs:doc-checker — reviewing an existing doc, not authoring a new one" }
   ]

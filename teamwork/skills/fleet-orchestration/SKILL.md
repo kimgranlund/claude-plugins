@@ -1,5 +1,5 @@
 ---
-name: leading-teams
+name: fleet-orchestration
 description: >-
   Makes this host session run under the fleet-marshal agent's own contract for one stated charter,
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
@@ -12,7 +12,7 @@ user-invocable: false
 argument-hint: "[charter — the plan/build-feature/review work needing a team]"
 ---
 
-# leading-teams — the host runs the seat, not a dispatched copy of it
+# fleet-orchestration — the host runs the seat, not a dispatched copy of it
 
 `issue-sorter` dispatches a separate agent instance for its standing seat. This skill does the
 opposite on purpose: it makes **this session** — the one the human is talking to — hold the

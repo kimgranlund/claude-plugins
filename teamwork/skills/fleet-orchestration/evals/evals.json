@@ -1,5 +1,5 @@
 {
-  "skill": "leading-teams",
+  "skill": "fleet-orchestration",
   "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
   "cases": [
     { "id": "t01", "prompt": "/lead-team plan and build the new billing export feature end to end.", "expect": "trigger" },

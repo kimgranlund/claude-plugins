@@ -30,7 +30,7 @@ itself is same-plugin now, only its doctrine content stays cross-plugin. Under A
 splits by species:
 command = nominal object-process form conforming to ADR-0011's naming grammar
 (`/lead-product` — this is a NEW name, so the legacy `lead-*` verb form isn't available;
-`leading-teams`/`leading-review`/`leading-planning` stay grandfathered under naming-rules), agent = role
+`fleet-orchestration`/`leading-review`/`leading-planning` stay grandfathered under naming-rules), agent = role
 noun (`product-leader`). Seed:
 `$ARGUMENTS` (the charter — the loop-authority/spec-lock/IDR/RDD work needing this seat).
 
@@ -50,7 +50,7 @@ From this point until the charter closes, this session holds
 since the #433 move noted above) as its own operating rules —
 read that file and hold its seven priorities verbatim as this session's standing discipline for
 the charter's duration, rather than re-derived inline here (the drift-pair defect class
-`leading-teams`'s own R5 finding named: restating a copy invites birth-drift against the source of
+`fleet-orchestration`'s own R5 finding named: restating a copy invites birth-drift against the source of
 record). Acknowledge adoption in one line before processing anything: the file read, the
 duration rule ("until this charter closes"), and the seat-tier deviation line stated verbatim
 from the agent file (fable+high, dated 2026-08-16, D08/#395 precedent).
