@@ -5,7 +5,7 @@ description: >-
   named charter: decompose across both planes, then author only the PRD/SPEC/LLD/ADR the charter
   earns, each doc riding to docs:doc-checker fresh-context before it counts gated. Holds until the
   charter closes on a named loop-rules decision. Run /bind-planning [charter] — blank binds a
-  default charter instead of erroring: adopt against the current repo and hold for the first
+  default charter: adopt against the current repo and hold for the first
   design/decomposition ask fed into the session. NOT implementing an
   approved LLD (builder, Agent tool); NOT a bugfix or single-file change (host states
   Components/Risks inline, no doc); NOT a generic multi-seat charter (/bind-team); NOT reviewing
@@ -33,14 +33,12 @@ Phase 2 does, returning the same typed design-status handback.
 ## Phase 1 — Bind the charter, or the default
 
 `$ARGUMENTS` is the charter. Non-blank → restate it back in one sentence before proceeding, so
-the scope is on record before any doc is authored. Blank → bind the default charter instead of
-erroring, consistent with the sibling binds (`bind-build`/`bind-review`/docs' `bind-intake`,
-which already default a blank seed to cwd): adopt the design seat against the current repo
-(cwd), state that binding back in one line ("bound against `<cwd>`; holding for the first design
-ask"), and treat the next message carrying real design/decomposition work as the charter —
-re-run this phase's restatement against that message before Phase 3 continues. A default
-charter that never receives work closes as a no-op when the session ends or is explicitly stood
-down — no doc was ever owed.
+the scope is on record before any doc is authored. Blank → bind the default charter: adopt the
+design seat against the current repo (cwd), state that binding back in one line ("bound against
+`<cwd>`; holding for the first design ask"), and treat the next message carrying real
+design/decomposition work as the charter — re-run this phase's restatement against that message
+before Phase 3 continues. A default charter that receives no work closes as a no-op when the
+session ends or is explicitly stood down — no doc was ever owed.
 
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 

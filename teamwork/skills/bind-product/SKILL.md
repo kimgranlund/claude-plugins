@@ -5,9 +5,9 @@ description: >-
   directly — loop authority (north star/foundation/releases), reading whether spec-lock has been
   earned, IDR/RDD authoring, bug-vs-requirement-gap adjudication at Verify, the retro, and
   citation-driven escalation — operating from docs:product-lifecycle-rules. Holds until the
-  charter closes. Run /bind-product [charter] — blank binds a default charter instead of
-  erroring: adopt against the current repo and hold for the first loop/gate/IDR/RDD ask fed into
-  the session. NOT the dispatched sibling seat (product-leader,
+  charter closes. Run /bind-product [charter] — blank binds a default charter: adopt against the
+  current repo and hold for the first loop/gate/IDR/RDD ask fed into the session. NOT the
+  dispatched sibling seat (product-leader,
   Agent tool); NOT authoring PRD/SPEC/LLD (/bind-planning); NOT the build dispatch itself gating
   on spec-lock (/bind-team enforces the gate; this seat only supplies the reading when asked as
   its own charter); NOT a one-off lifecycle-position report run standalone (docs:check-stage
@@ -38,13 +38,12 @@ noun (`product-leader`). Seed:
 
 `$ARGUMENTS` is the charter. Non-blank → restate it back in one sentence, naming which loop it
 appears to touch (north star / foundation / releases) before any other action — a first-pass
-guess, corrected once `check-stage` runs in Phase 3. Blank → bind the default charter instead of
-erroring, consistent with the sibling binds (`bind-build`/`bind-review`/docs' `bind-intake`,
-which already default a blank seed to cwd): adopt the product seat against the current repo
-(cwd), state that binding back in one line ("bound against `<cwd>`; holding for the first
-loop/gate/IDR/RDD ask"), and treat the next message carrying real work as the charter — re-run
-this phase's restatement against that message before Phase 2 continues. A default charter that
-never receives work closes as a no-op when the session ends or is explicitly stood down —
+guess, corrected once `check-stage` runs in Phase 3. Blank → bind the default charter: adopt the
+product seat against the current repo (cwd), state that binding back in one line ("bound
+against `<cwd>`; holding for the first loop/gate/IDR/RDD ask"), and treat the next message
+carrying real work as the charter — re-run this phase's restatement against that message before
+Phase 3 continues. A default charter that receives no work closes as a no-op when the session
+ends or is explicitly stood down —
 nothing was ever owed to the doc spine. Check for an existing intent layer (product brief, IDRs, roadmap) here: none found means
 the agent file's cold-start branch runs first, ahead of the seven priorities — see that file's
 own pointer for the flow, not restated here — a first-class entry, never treated as an error.

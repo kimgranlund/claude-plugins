@@ -4,8 +4,8 @@ description: >-
   Makes this host session run under the fleet-marshal agent's own contract for one stated charter,
   never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline
   directly, dispatching every unit of real work while the charter stays open. Run /bind-team
-  [charter] — blank binds a default charter instead of erroring: adopt against the current repo
-  and hold for the first unit of work fed into the session. NOT for a task one context can hold
+  [charter] — blank binds a default charter: adopt against the current repo and hold for the
+  first unit of work fed into the session. NOT for a task one context can hold
   (fleet-rules); NOT for reviewing one artifact directly (dispatch the owning reviewer); NOT a
   solo design/decomposition charter where the host authors the docs itself (/bind-planning).
 disable-model-invocation: true
@@ -33,13 +33,12 @@ structurally unreachable via the `Skill` tool); there is no separate wrapper com
 
 `$ARGUMENTS` is the charter — the plan/build-feature/review work needing a team. Non-blank →
 restate it back in one sentence before proceeding, so the scope is on record before any dispatch
-fires. Blank → bind the default charter instead of erroring, consistent with the sibling binds
-(`bind-build`/`bind-review`/docs' `bind-intake`, which already default a blank seed to cwd):
-adopt the seat against the current repo (cwd), state that binding back in one line ("bound
-against `<cwd>`; holding for the first unit of work"), and treat the next message carrying real
-plan/build/review work as the charter — re-run this phase's restatement against that message
-before Phase 3 continues. A default charter that never receives work closes as a no-op when the
-session ends or is explicitly stood down — nothing to roll up.
+fires. Blank → bind the default charter: adopt the seat against the current repo (cwd), state
+that binding back in one line ("bound against `<cwd>`; holding for the first unit of work"), and
+treat the next message carrying real plan/build/review work as the charter — re-run this
+phase's restatement against that message before Phase 3 continues. A default charter that
+receives no work closes as a no-op when the session ends or is explicitly stood down — nothing
+to roll up.
 
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
