@@ -99,12 +99,21 @@ named it as a live routing target has been repointed to this skill in the same c
    verbatim to its named path) and name the degradation in the sweep report — never skip payload
    application because the script that mechanizes it went missing.
 
-   **Residual verification owed** (named here, not overclaimed): this skill has not yet been run
-   end-to-end with the Workflow tool live inside a real sweep — the fallback branch is what's
-   actually exercised until that live proof lands. Track it as a follow-up; the fallback branch
-   reproduces the same choreography and contracts `chore-lead` used to run (payload application
-   now via the selftested apply script, step 5) — not proven byte-identical, since the mechanism
-   changed, but nothing here rests on an unverified claim either.
+   **Residual verification owed** (named here, not overclaimed): #529 fixed `chore-sweep.js`'s
+   shape — it launched with `SyntaxError: Unexpected keyword 'export'` (reproduced live,
+   2026-08-17T14:50:18Z) because the file closed with a second `export` statement
+   (`export default await runSweep()`) after the loader's own `meta`-literal extraction — a
+   statement that is invalid inside the async-function body the loader wraps the rest of the file
+   in; the fix (a bare body, no wrapper function, no second export — confirmed against a real
+   prior Workflow run captured on this machine that uses the identical shape) was proven only by
+   static contract-conformance, since fixing this bug cannot itself invoke the Workflow tool to
+   prove it. The fallback branch is still what's actually exercised until a live Workflow-path
+   sweep completes end-to-end and confirms the corrected shape loads — that proof rides the NEXT
+   sweep firing that has the Workflow tool available, not this change. Delete this note once a
+   Workflow-path sweep completes end-to-end; until then, the fallback branch reproduces the same
+   choreography and contracts `chore-lead` used to run
+   (payload application now via the selftested apply script, step 5) — not proven byte-identical,
+   since the mechanism changed, but nothing here rests on an unverified claim either.
 5. **Apply every returned payload.** For each seat's raw report text (Workflow or fallback path
    alike), write it to a scratch file and run:
    ```
