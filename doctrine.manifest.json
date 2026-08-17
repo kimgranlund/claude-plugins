@@ -29,7 +29,7 @@
       "canon_literal": "When dispatched as a named teammate, deliver your final report via `SendMessage` to your dispatcher",
       "dependents": [
         {
-          "file": "teamwork/agents/build-lead.md",
+          "file": "teamwork/agents/build-leader.md",
           "pattern": "SendMessage`?\\s+to\\s+your\\s+dispatcher"
         }
       ],
@@ -46,7 +46,7 @@
         { "file": "teamwork/agents/planner.md" },
         { "file": "teamwork/agents/code-checker.md" },
         { "file": "teamwork/agents/docs-writer.md" },
-        { "file": "teamwork/agents/team-lead.md" },
+        { "file": "teamwork/agents/team-leader.md" },
         { "file": "teamwork/agents/wiring-checker.md" }
       ],
       "owning_checker": "harness:wording-checker",
@@ -56,25 +56,25 @@
     {
       "id": "D04",
       "type": "ledger-sync",
-      "title": "teamwork README's construction-note ledger row names agents/lead-team; the actual file on disk is team-lead.md",
+      "title": "teamwork README's construction-note ledger row names agents/lead-team; the actual file on disk is team-leader.md",
       "severity": "minor",
       "canon_file": "teamwork/README.md",
       "ledger_pattern": "agents/lead-team",
-      "actual_path": "teamwork/agents/team-lead.md",
-      "source": "issue #379 finding 4 (no separate issue filed)"
+      "actual_path": "teamwork/agents/team-leader.md",
+      "source": "issue #379 finding 4 (no separate issue filed). [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; actual_path updated to match.]"
     },
     {
       "id": "D05",
       "type": "vocab-term",
-      "title": "Task-vs-Agent tool-name divergence across sibling seats -- the platform tool is named Agent (this session's own tool list), but team-lead.md's frontmatter tool grant and intake-lead.md's disallowedTools list still carry the retired name Task",
+      "title": "Task-vs-Agent tool-name divergence across sibling seats -- the platform tool is named Agent (this session's own tool list), but team-leader.md's frontmatter tool grant and intake-lead.md's disallowedTools list still carry the retired name Task",
       "severity": "minor",
       "canonical_term": "Agent",
       "banned_aliases": ["Task"],
       "dependents": [
-        { "file": "teamwork/agents/team-lead.md" },
+        { "file": "teamwork/agents/team-leader.md" },
         { "file": "docs/agents/intake-lead.md" }
       ],
-      "source": "issue #379 finding 5 (no separate issue filed) -- verified live 2026-08-16: team-lead.md:13 grants tool 'Task' in its tools: line; intake-lead.md:17 still lists 'Task' in disallowedTools alongside 'Agent'"
+      "source": "issue #379 finding 5 (no separate issue filed) -- verified live 2026-08-16: team-lead.md:13 grants tool 'Task' in its tools: line; intake-lead.md:17 still lists 'Task' in disallowedTools alongside 'Agent'. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:13 now grants 'Agent' (not 'Task'), and intake-lead.md:17 lists disallowedTools [\"Skill\", \"Agent\"] with no 'Task' -- this edge now reports clean; it remains armed as a regression tripwire.]"
     },
     {
       "id": "D06",
@@ -105,12 +105,12 @@
     {
       "id": "D08",
       "type": "judgment",
-      "title": "team-lead's model tier sonnet (teamwork/agents/team-lead.md:14) sits below its subordinates builder (opus) and planner (fable) with no justification recorded against agent-writing-rules' Model tiering section or team-or-solo-rules' model-to-task-class rule",
+      "title": "team-leader's model tier sonnet (teamwork/agents/team-leader.md:14) sits below its subordinates builder (opus) and planner (fable) with no justification recorded against agent-writing-rules' Model tiering section or team-or-solo-rules' model-to-task-class rule",
       "severity": "minor",
       "canon_file": "harness/skills/agent-writing-rules/SKILL.md",
       "owning_checker": "harness:agent-checker",
       "status": "queued, not built",
-      "source": "2026-08-16 team/coordination-surface review, finding 8, recovered verbatim via issue #395 -- verified live 2026-08-16: team-lead.md:14 model: sonnet; builder.md:12 model: opus; planner.md:14 model: fable; no rationale comment near team-lead's model: line."
+      "source": "2026-08-16 team/coordination-surface review, finding 8, recovered verbatim via issue #395 -- verified live 2026-08-16: team-lead.md:14 model: sonnet; builder.md:12 model: opus; planner.md:14 model: fable; no rationale comment near team-lead's model: line. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:14 model: sonnet, builder.md:12 model: opus, planner.md:14 model: fable -- the underlying tiering-gap fact is unchanged post-rename, no rationale comment added; edge stands.]"
     }
   ]
 }
