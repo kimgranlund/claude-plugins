@@ -1,16 +1,14 @@
 ---
 name: sweep-chores
 description: >-
-  Run one ops-family sweep on demand against this repo — fans out decision-watcher + issue-sorter
-  + repo-cleaner in parallel and returns chore-planner's single prioritized queue
-  (.claude/ops/plan.md). Reachable both as /sweep-chores and via the Skill tool by name
-  (teamwork's mobilize-chores invokes it this way). Use for "run the ops sweep", "sweep the ops
-  queue", "fan out the standing seats and give me the prioritized queue", or a scoped ask like
-  "repo hygiene sweep only". NOT for one seat's own single-item job — file/triage one item
-  (issue-sorter), clean one thing (repo-cleaner), check one ADR (decision-watcher) — dispatch that
-  seat directly instead; NOT for driving the queue's buildable tickets to an actual build
-  (teamwork's mobilize-chores, which wraps this skill and adds that step) — this skill only ever
-  reports.
+  Run one ops-family sweep on demand against this repo — fans out decision-watcher +
+  issue-sorter + repo-cleaner in parallel and returns chore-planner's single prioritized queue
+  (.claude/ops/plan.md). Reachable as /sweep-chores and via the Skill tool by name. Use for
+  "run the ops sweep", "sweep the ops queue", "fan out the standing seats", or a scoped ask
+  like "repo hygiene sweep only". NOT for one seat's own single-item job — triage one item
+  (issue-sorter), clean one thing (repo-cleaner), check one ADR (decision-watcher): dispatch it
+  directly; NOT for driving the queue's buildable tickets to an actual build (teamwork's
+  mobilize-chores, which wraps this skill) — this skill only ever reports.
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[blank for a full sweep | a scope instruction, e.g. 'repo hygiene only']"
