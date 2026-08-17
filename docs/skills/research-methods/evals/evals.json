@@ -151,6 +151,12 @@
       "id": "n15",
       "prompt": "design the stopping predicate for this loop",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "the same lint false-positive has recurred after three separate fixes — propose the next step",
+      "expect": "no-trigger",
+      "comment": "owner: harness:thinking-depth-rules (issue #478, #295's ablation finding) — a recurring finding despite fixes is 5th-order evidence the RULE needs scrutiny, judged without a scorer; it is not this skill's baseline→change→remeasure loop"
     }
   ]
 }
