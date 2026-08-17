@@ -1,145 +1,161 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-17 ~11:42Z window (UTC).
-Checkout at plan time: branch `fix-423-fleet-bootstrap-phase1` @ `fc3942c` (NOT main; local
-`main` is behind `origin/main` by 31 — see entry 5). Evidence: all three seat reports attached,
-none UNMEASURED — decision-watcher (`reports/2026-08-17T11-39-56Z-decision-watcher.md`: 0
-candidates, adr-0014 rejected as already-harvested duplicate, checkpoint advanced, ADR queue
-empty), issue-sorter (`reports/2026-08-17T11-39-41Z-issue-sorter.md`: 92 issues touched
-in-window, 90 closed; exactly 2 open — #475 small/unclaimed/buildable, #295 big/active-WIP;
-0 open PRs; nothing minted or held), repo-cleaner
-(`reports/2026-08-17T11-41-41Z-repo-cleaner.md`: executed `campaign_close.py 441` clean —
-merged PR's remote branch deleted and reverified gone; 23 fully-merged worktrees + ~8
-superseded scratch branches PROPOSED for human cleanup; locked `issue-475-teamwork-diet`
-worktree flagged distinctly; gitignore WARN `harness-audit-*/` stale, no edit proposed).
+Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-17T14:50:18Z** (UTC).
+Evidence: all three seat reports attached, none UNMEASURED as seats — but the **#490 pin race
+degraded 2 of 3 mid-firing** (decision-watcher: step 3 incomplete, checkpoint deliberately held;
+repo-cleaner: gated executions blocked, then run clean by the coordinator in-firing — its report
+applied at `reports/2026-08-17T14-50-18Z-repo-cleaner.md`). Issue-sorter fired clean: 36 issues
+touched in-window, 25 closed via 19 merged PRs, 0 open PRs, checkpoint advanced to 14:50:18Z.
+Open issue set: #490 (open by design) + #517–#527.
 
-Prior plan (2026-08-16 ~01:12Z) is fully resolved: ops commit landed; the adr-0013+adr-0012
-batched confirm EXECUTED between sweeps (decision-watcher: queue still empty, 0 pending);
-#258 CLOSED (its defer-ruling retires with it); the 11-issue backlog drained to 2 (90 closed
-in-window). Queue rebuilds 4 → 5.
+Prior plan (2026-08-17 ~11:42Z) is FULLY resolved: its ops commit landed; the 23-worktree/8-branch
+batch cleanup and the `issue-475-teamwork-diet` ruling were consumed by the "34+ purged, main
+synced" cleanup (repo-cleaner now counts 4 worktrees, 5 branches); #475 and #295 both closed
+in-window; the stale-main refresh is moot (main synced). Queue rebuilds 5 → 11.
 
-**Blocked-by (#193):** no `Blocked-by:` line in any evidence this sweep — ordering below is
-pure class ranking.
-
-**Drain note (this dispatch):** unattended overnight drain, PR-opened ceiling, no auto-merge.
-Class-3 entries below WAIT for Kim — the drain skips them and proceeds to entry 4, the sole
-buildable item. Skipping a human-decision entry to reach a buildable one is expected, not a
-violation of queue order.
-
-## Human-decision call-outs — nothing below executes autonomously
-
-1. **Worktree/branch batch cleanup** (entry 2) — propose-only per repo-cleaner's contract (no
-   host reap script named in this repo's docs); only Kim runs the removals.
-2. **Locked-worktree ruling** (entry 3) — a lock is normally deliberate; only Kim decides
-   stale vs. intentional.
+**Blocked-by (#193):** no literal `Blocked-by:` line in any evidence this firing. One
+report-evidenced dependency ordered below anyway and named inline: the #517–#526 disposition
+(entry 7) sits behind the ADR-0020 ruling (entry 3) — a held-state gate from issue-sorter's
+report, not an inferred edge.
 
 ## Queue
 
 **Class 1 — gated mutations verified safe:**
 
-### 1. Commit this firing's ops artifacts — explicit pathspec only
-- **Action:** Read `git status --porcelain` first, then stage exactly
-  `git add .claude/ops/plan.md .claude/ops/adr-checkpoint.json
-  .claude/ops/watch-checkpoint.json
-  .claude/ops/reports/2026-08-17T11-39-56Z-decision-watcher.md
-  .claude/ops/reports/2026-08-17T11-39-41Z-issue-sorter.md
-  .claude/ops/reports/2026-08-17T11-41-41Z-repo-cleaner.md`, read the status output, commit
-  as a separate step (gate ≠ commit), push. Never `git add -A` — the same checkout carries
-  this session's own live edits (`.claude/ops/fleet-roster.md`, `.claude/settings.json`,
-  `attention-trend.csv`), which repo-cleaner classified as in-progress session state, not
-  this firing's delta. Note the commit rides branch `fix-423-fleet-bootstrap-phase1`, not
-  main — it reaches main with that branch's own PR.
-- **Owner:** the dispatching session if Bash-capable, else human (Kim).
-- **Evidence:** repo-cleaner's checkout inventory names exactly these seat-payload files +
-  reports as this sweep's delta and the three session-live files as out of scope.
+### 1. Commit + push this firing's ops artifacts — explicit pathspec only
+- **Action:** `git status --porcelain` first, then stage exactly `.claude/ops/plan.md`,
+  `.claude/ops/watch-checkpoint.json`, and this firing's report files
+  (`.claude/ops/reports/2026-08-17T14-50-18Z-*.md`); read the status output, commit as a separate
+  step (gate ≠ commit), push. **Never `git add -A`** — the primary checkout
+  (`sweep-desk-to-seat` @ c393fcd) carries 13 modified + 1 untracked file that are HELD
+  evidence for Kim (entry 6), not this firing's delta. `adr-checkpoint.json` is deliberately
+  NOT advanced (decision-watcher held it pending step-3 re-fire) — stage it only if untouched
+  since the prior firing's commit, else leave it.
+- **Owner:** the dispatching session (coordinator).
+- **Evidence:** ops-write-sandbox-rules (state persists through the repo or the next firing
+  starts blind); repo-cleaner's held-untouched flag on the primary checkout's dirt.
 - **Size:** ~2 min.
 
-(`campaign_close.py 441` — the only other class-1 candidate this sweep — was already executed
-by repo-cleaner and reverified clean. Recorded under Resolved, not queued.)
+### 2. Append this firing's pin-race evidence to #490
+- **Action:** `gh issue comment 490` with: firing 2026-08-17T14:50:18Z, 2 of 3 seats degraded
+  mid-firing (decision-watcher blocked at step 3; repo-cleaner blocked on all 4 gated
+  executions, signature "pinned to `.claude/worktrees/build-527`, never entered by the seat"),
+  coordinator ran the four `campaign_close.py` gates itself — #506/#516/#513/#515 all clean.
+  Append-only comment; safe now.
+- **Owner:** coordinator.
+- **Evidence:** repo-cleaner report §Tooling failure + coordinator addendum; decision-watcher's
+  INCOMPLETE step 3 with the same signature.
+- **Size:** ~5 min.
 
 **Class 2 — items blocking other work:**
 
-(None. Zero open PRs, zero `Blocked-by:` edges, nothing named as blocking anything.)
+### 3. Ratify or reject ADR-0020
+- **Action:** Kim reads `.claude/docs/adr/0020-fleet-vocabulary-and-binding-heads.md` (currently
+  an UNTRACKED draft on the held `sweep-desk-to-seat` checkout — see entries 5/6) and rules.
+  Status `proposed`/unratified; its supersession edges reverse fresh ADR-0015/0016/0017
+  rulings, so decision-watcher correctly held them non-actionable. This single ruling gates
+  ten held issues (entry 7).
+- **Owner:** Kim (morning gate).
+- **Evidence:** decision-watcher (edges held, unratified); issue-sorter (#517–#526 HELD on
+  exactly this gate).
+- **Size:** ~15–30 min.
+
+### 4. Ticket + fix: `harness/workflows/chore-sweep.js` fails to launch
+- **Action:** Mint the issue (`SyntaxError: Unexpected keyword 'export'` at launch — the
+  skill's own "residual verification owed", now measured as a real defect), then dispatch the
+  fix to a build seat, PR-opened ceiling. Until fixed, `/sweep-chores`' Workflow path is dead;
+  every sweep rides the Agent-dispatch fallback (this firing did).
+- **Owner:** coordinator mints the issue now; a teamwork build seat owns the fix.
+- **Evidence:** dispatch standing context — launch failure reproduced this firing.
+- **Size:** ~5 min ticket + ~30–60 min fix.
 
 **Class 3 — human decisions:**
 
-### 2. Batched confirm + run: remove 23 fully-merged worktrees and ~8 superseded scratch branches
-- **Action:** One batched confirm over repo-cleaner's proposed list, then human-run
-  `git worktree remove` + `git branch -D` per item. The full itemized list (each independently
-  diffed 0-unique-commits vs. `origin/main`, remote branches already pruned) lives in
-  `.claude/ops/reports/2026-08-17T11-41-41Z-repo-cleaner.md` — 23 worktrees under
-  `.claude/worktrees/` plus scratch branches `build-425-work`, `restack-425-work`,
-  `build-429-orchestrator-introduction`, `build-430-work`, `build-432-work`,
-  `restack-432-work`, `restack-437-work`, `worktree-build-426-seat-retirement`, and the
-  `pr442-finalize` worktree/branch (5 "ahead" commits are pre-squash lineage of merged #442 —
-  superseded, same disposition). EXCLUDES `issue-475-teamwork-diet` (entry 3 owns it).
-- **Owner:** human (Kim) — no gated mutation path exists for local worktrees/branches here.
-- **Evidence:** repo-cleaner this sweep — per-item merge verification, `gh pr list --state
-  open` → zero, both fetch-prunes clean.
-- **Size:** ~10–15 min.
+### 5. Identify the unidentified authoring session behind ADR-0020 / #517–#526
+- **Action:** Kim traces which session authored the ADR-0020 draft and the #517–#526 family.
+  Strong lead: the held primary-checkout state (branch `sweep-desk-to-seat` @ c393fcd, 13
+  modified + 1 untracked — the untracked file IS the ADR-0020 draft) is the likely residue of
+  that session. Rule takeover vs. abandon.
+- **Owner:** Kim (morning gate).
+- **Evidence:** issue-sorter ("authoring session unidentified"); repo-cleaner's held-untouched
+  inventory naming the draft.
+- **Size:** ~10 min.
 
-### 3. Locked worktree `issue-475-teamwork-diet` — rule the lock stale or intentional
-- **Action:** Decide whether the lock is a live claim or leftover. Commit evidence says safe
-  (0 unique commits vs. `origin/main`, content fully merged), but issue #475 is open and was
-  updated 10 min before the sweep — if the lock was a deliberate claim, removing it destroys
-  a signal. If ruled stale: unlock + remove alongside entry 2. Until ruled, entry 4's build
-  must not reuse or remove this worktree.
-- **Owner:** human (Kim).
-- **Evidence:** repo-cleaner's distinct flag (locked, 0 unique commits, matching open issue).
-- **Size:** ~2 min.
+### 6. Rule on the held desk→seat sweep evidence
+- **Action:** Kim rules claim/land/discard on the `sweep-desk-to-seat` checkout's 13 modified +
+  1 untracked files; snapshot preserved at
+  `.claude/ops/reports/unclaimed-desk-seat-sweep-2026-08-17.diff.md`. Naturally follows
+  entries 3 and 5 (same artifact cluster). No seat touches this state until ruled — entry 1's
+  pathspec already excludes it.
+- **Owner:** Kim.
+- **Evidence:** repo-cleaner §Held, untouched.
+- **Size:** ~10–15 min after entries 3/5.
 
-**Class 4 — hygiene debt / backlog drain:**
+### 7. Disposition #517–#526 — blocked by the ADR-0020 ruling (entry 3, open): do not start before it lands
+- **Action:** After Kim rules on ADR-0020: ratified → release the ten for triage (issue-sorter
+  re-classifies next firing); rejected → close the family with the ruling cited. Ten issues,
+  one batched pass.
+- **Owner:** Kim rules; issue-sorter applies the disposition next firing.
+- **Evidence:** issue-sorter — #517–#526 HELD on the ratification gate.
+- **Size:** ~10 min once unblocked.
 
-### 4. Build #475 — teamwork residual description diet (size:small, unclaimed, buildable)
-- **Action:** Dispatch via teamwork's `build-leader`, ceiling PR-opened (no auto-merge — no
-  `auto-merge: authorized` grant in this dispatch). Fresh branch + fresh worktree ONLY: the
-  existing locked `issue-475-teamwork-diet` worktree is entry 3's to rule on — do not reuse,
-  unlock, or remove it. Description edits are routing-surface edits: same-change
-  `evals/evals.json` updates and the fresh-context checker pass per the semantic-edit
-  invariant apply inside the build loop.
-- **Owner:** dispatching session → teamwork `build-leader` seat.
-- **Evidence:** issue-sorter this sweep — #475 open, size:small, unclaimed, buildable; the
-  only idle buildable item (the other open issue, #295, is active WIP — see Not queued).
-- **Size:** ~30–60 min.
+### 8. Forward #490's platform report
+- **Action:** Kim forwards the pin-race platform report upstream; entry 2's appended evidence
+  (two more degraded seats in one firing) strengthens it — forward after entry 2 lands.
+- **Owner:** Kim (morning gate).
+- **Evidence:** #490 open by design as the tracking issue; two seats degraded this firing.
+- **Size:** ~5 min.
 
-### 5. Refresh local `main` — behind `origin/main` by 31
-- **Action:** In an ATTENDED session, `python3 harness/scripts/sync_main.py` (quarantine any
-  dirt as a named stash, `--ff-only` pull, reverify HEAD by SHA). Interactive-only per its
-  contract — repo-cleaner correctly skipped it unattended; not for the overnight drain.
-- **Owner:** human (Kim), or any attended session.
-- **Evidence:** repo-cleaner inventory — `main` behind by 31, no worktree of its own, healthy
-  but stale.
-- **Size:** ~2 min.
+**Class 4 — hygiene debt:**
+
+### 9. Ambiguous orphan worktree `verify-491-teamwork-hooks` — ancestry check, then remove
+- **Action:** `git merge-base --is-ancestor e51c9f2 origin/main`; ancestor → `git worktree
+  remove .claude/worktrees/verify-491-teamwork-hooks` + `git branch -D
+  worktree-verify-491-teamwork-hooks`; NOT an ancestor → stop and escalate to Kim. Commit
+  message duplicates merged PR #502's title under a different branch — likely duplicate, not
+  yet verified.
+- **Owner:** coordinator, or repo-cleaner next firing.
+- **Evidence:** repo-cleaner §Proposed only (branch @ e51c9f2, no remote ref).
+- **Size:** ~5 min.
+
+### 10. Decision-watcher step-3-only re-fire — stale-citation check for adr-0011/adr-0016
+- **Action:** Re-dispatch decision-watcher scoped to step 3 only (classify + harvest are done
+  and correct: adr-0015..0019 → zero pack candidates). Checkpoint was deliberately held so
+  this re-fire picks up cleanly. Pin-race mitigation: absolute-path Bash throughout.
+- **Owner:** next firing, or coordinator re-dispatch sooner.
+- **Evidence:** decision-watcher report — step 3 INCOMPLETE (Bash pin-race block), checkpoint
+  not advanced.
+- **Size:** ~10 min.
+
+### 11. Re-measure `gitignore_check` + stale-claim survey
+- **Action:** Both UNMEASURED this firing (#490 tool block mid-firing) — repo-cleaner runs them
+  next firing. UNMEASURED is skipped-not-passed; carried here so the gap stays named.
+- **Owner:** repo-cleaner, next firing.
+- **Evidence:** repo-cleaner report §Inventory.
+- **Size:** ~5 min next firing.
 
 ## Not queued (checked, found clean or deliberately left — standing rulings carried)
 
-- **#295 (Doctrine ablation program):** open and size:big but carrying active in-progress
-  ablation-agent Findings under a standing overnight directive — NOT idle. Do not dispatch
-  build-leader at it; it owns its own lifecycle. Issue-sorter re-checks each sweep.
-- **ADR queue:** empty — adr-0014 correctly rejected as duplicate (already harvested verbatim
-  into authorkit's GRAMMAR.md). No confirm owed.
-- **PR estate:** zero open; #437 CLOSED-unmerged is a recorded duplicate of merged #439, not
-  a finding.
-- **Session-live tracked edits** (`fleet-roster.md`, `settings.json`, `attention-trend.csv`)
-  on `fix-423-fleet-bootstrap-phase1`: live in-progress state, not cruft (repo-cleaner
-  concurs); excluded from entry 1's pathspec.
-- **`.gitignore` WARN `harness-audit-*/`:** stale-looking (matches nothing in-tree) but
-  on-demand-generated; no edit proposed (repo-cleaner concurs). If the generating path is
-  ever retired for real, repair the rule in that same change per
-  `.claude/rules/gitignore-repair.md`. Recorded judgment, not a task.
-- **Root entry-file freshness CI gate:** deliberate NO (Kim, 2026-08-15) — ruling carried, do
-  not re-propose.
-- **Checkpoint-bypass:** accepted one-off (Kim, 2026-08-14); re-litigate only on recurrence —
-  ruling carried.
-- **#258 defer-ruling:** RETIRED — the issue closed between sweeps; nothing left to defer.
+- **#527:** dispatched to a build seat by the coordinator, in flight — owns its own lifecycle;
+  coordinator monitors the handback, nothing to queue.
+- **#490 itself:** open by design (platform tracking issue) — only evidence entries (2, 8)
+  queue; no local fix exists.
+- **ADR harvest:** adr-0015..0019 judged, zero pack candidates (each names its canonical
+  landing surface in its own ratifying change) — no confirm owed.
+- **Coordinator's in-firing `campaign_close.py` runs** (#506/#516/#513/#515): all closed clean
+  (merged, remote branch absent + reverified, gate clean) — recorded under Resolved, not queued.
+- **Standing rulings carried:** root entry-file freshness CI gate = deliberate NO (Kim,
+  2026-08-15); checkpoint-bypass = accepted one-off (Kim, 2026-08-14); `.gitignore`
+  `harness-audit-*/` WARN = recorded judgment, no edit (re-verify rides entry 11's re-measure).
 
-## Resolved since the prior plan (2026-08-16 ~01:12Z sweep)
+## Resolved since the prior plan (2026-08-17 ~11:42Z firing)
 
-- Prior entry 1 (commit ops artifacts) — DONE.
-- Prior entry 2 (adr-0013 harvest + adr-0012 stale-citation batched confirm) — EXECUTED
-  between sweeps; decision-watcher confirms the ADR queue empty, 0 pending.
-- Prior entry 3 (#258 bloat-audit, deferred by ruling) — issue CLOSED between sweeps.
-- Prior entry 4 (11-issue backlog tracking) — drained 11 → 2 open (90 issues closed
-  in-window, all by trusted author).
-- New this sweep, already executed by its seat: `campaign_close.py 441` — merged PR #441's
-  remote branch deleted and reverified gone; 24 stale remote-tracking refs pruned.
+- Prior entry 1 (ops-artifacts commit) — landed.
+- Prior entries 2 + 3 (23-worktree/8-branch batch cleanup; `issue-475-teamwork-diet` lock
+  ruling) — consumed by the between-firings "34+ purged" cleanup; estate now 4 worktrees /
+  5 branches.
+- Prior entry 4 (build #475) — closed in-window (among the 25 closed via 19 merged PRs); #295
+  also closed.
+- Prior entry 5 (stale local `main`) — main synced between firings.
+- New this firing, already executed in-firing by the coordinator: `campaign_close.py`
+  #506/#516/#513/#515 — all clean, four remote branches deleted and reverified gone.
