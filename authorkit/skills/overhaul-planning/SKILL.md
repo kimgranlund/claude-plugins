@@ -12,10 +12,10 @@ description: >
   executing or driving the campaign (rename-execute, overhaul-execute).
 author: kim
 created: 2026-08-14
-last_updated: 2026-08-16
+last_updated: 2026-08-17
 requires: [naming-audit, bloat-audit, rename-planning, naming-conventions, pattern-audit, doctrine-audit]
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -35,6 +35,8 @@ the #197 campaign, where the design phase killed 7 of 8 proposed moves. **Hard b
 skill GENERATES only.** No move is executed here — `rename-execute`, `overhaul-execute` (the
 skill+`/overhaul-execute` command pair that drives the whole campaign), and the human's own
 ratify/merge own execution, always in a later, separate step.
+
+Target: `$ARGUMENTS` (blank = the current project — an estate root, plugin set, or member list).
 
 ## Phase 0 — Measure first, never re-derive
 
@@ -97,7 +99,7 @@ exactly like it kills a move):
    defect, the general subsumes the narrow).
 2. **What species it is** — the invoker decides, per `naming-conventions`' taxonomy:
    user-typed → command, model-routed → skill, needs-own-context → agent; dual access →
-   skill + thin command wrapper (this skill's own shape).
+   one skill with both dials `true` (skill-as-command, issue #525 — this skill's own shape).
 3. **Blast radius** — `rename-planning`'s enumeration method: every invocation string,
    relation edge, wrapper, hook, and workflow config the move would touch.
 4. **Merge/split candidate?** — read against Phase 0's evidence: `bloat-audit` near-duplicate
@@ -143,6 +145,13 @@ exactly like it kills a move):
      redundant, not merely miscategorized.
    Cite the specific `bloat-audit` number (chars, flag, or duplicate pair) behind every
    non-`keep-inline` tier — a tier with no cited measurement is a guess, not a verdict.
+
+**This gate fires after Phase 2's ticket-seed derivation below, immediately before the write:
+present the full Phase 0 measurements, this Phase 1 kill-switch table, AND Phase 2's waved
+ticket-seed list (including any Wave 0 merge/split nominations and Blocked-by edges), and wait
+for explicit confirmation** — mutating, so this gate is not a suggestion (issue #525). No live
+user to confirm with → stop and report the gate SKIPPED rather than writing unconfirmed, same
+discipline as `overhaul-execute`'s own three gates.
 
 Render per `references/PLAN-TEMPLATE.md` — the template is the single home for its own
 sections (the per-ticket execution contract, the closeout checklist, the five respect

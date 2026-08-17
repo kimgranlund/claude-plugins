@@ -18,7 +18,7 @@ created: 2026-08-16
 last_updated: 2026-08-17
 requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, estate-audit]
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -40,15 +40,17 @@ allowed-tools:
 
 The full-battery counterpart to `estate-audit`'s single-instrument index: where that skill only
 names which ONE instrument fits an ask, this skill runs ALL of them plus the cross-plugin axes
-and rolls the result into one verdict. Ships as a skill with an identically-named command wrapper
-(`/repo-audit`, `commands/repo-audit.md`) per the reverse-wrapper grammar amendment
-(`.claude/docs/spec/spec-naming-convention.md` §14.1, issue #241). **Structurally read-only**: the
+and rolls the result into one verdict. Ships `user-invocable: true` directly — `/repo-audit` is
+this skill, no separate command wrapper (issue #525: skill-as-command is the estate's dual-access
+successor to the command-wrapper pattern; superseded `commands/repo-audit.md` retired in the same
+change). **Structurally read-only**: the
 tool grants above carry no `Write`/`Edit`/`Bash(git *)` — this skill cannot mutate the target even
 if a composed instrument's own output suggests a fix. Compose the existing instruments; never
 reimplement one of their sweeps inline.
 
 ## Phase 0 — DISCOVER + SCOPE CONFIRM (one gate)
 
+Target: `$ARGUMENTS` (blank = the current project's estate-root, plugin-set, or member list).
 Reuse `overhaul-execute`'s own Phase 0 scan exactly — its markers, auto-excludes, and governed
 vs. ungoverned classification, cited not restated (`authorkit/skills/overhaul-execute/SKILL.md`
 Phase 0). Present ONE table — root / markers found / classification /

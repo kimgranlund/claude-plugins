@@ -69,6 +69,13 @@ user carries the skill's exact name and declares `wraps:` it. The `/` surface
 disambiguates command from skill; the validator accepts the name by wrapper
 identity, bypassing the object-verb shape.
 
+**Reverse-wrapper on skills (§14.1, extended §14.9):** a skill MAY carry a verb-terminal name
+(terminal ∈ VerbLex, not ProcessLex) when EITHER an identically-named command wraps it (§14.1's
+original dual-access realization) OR the skill itself is `user-invocable: true` with no sibling
+command at all (§14.9's skill-as-command realization, issue #525 — the successor dual-access
+shape carries both surfaces on one file). Object-prefix resolution against ObjectVocab still
+applies either way — the license is the dual-access fact, never the skill's say-so alone.
+
 ## Skills
 
 Canonical: `{object}-{process}`, terminal ∈ ProcessLex. Reference corpora,

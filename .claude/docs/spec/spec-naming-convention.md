@@ -2,8 +2,8 @@
 doc-type: spec
 id: spec-naming-convention
 status: draft
-version: 1.1.0
-date: 2026-08-16
+version: 1.2.0
+date: 2026-08-17
 owner: kim.granlund
 prd: null   # no PRD — descends from ADR-0011 (accepted 2026-08-13), amended by ADR-0014 (2026-08-16)
 ---
@@ -824,3 +824,64 @@ closed grandfather production; nothing here touches D8's ratchet in either direc
 it does not register `marshal`/`orchestration` (wave 1, #519, already landed); it does not
 touch `VerbLex`, skill grammar otherwise (§3.2, §14.1, §14.2, §14.7), agent grammar (§3.3,
 §14.4, §14.6), or the `-agent`/wrapper productions.
+
+### 14.9 Reverse-wrapper extended to skill-as-command, no sibling command required (2026-08-17, issue #525)
+
+**Ruling authority:** issue #525's live ruling (Kim, 2026-08-17): "Successor shape:
+skill-as-command (`user-invocable: true` on the SKILL.md itself). Migration posture: CONVERT
+ALL — all 15 command wrappers (teamwork ×5, authorkit ×10) convert in a one-shot campaign, no
+grandfathering." This section amends §14.1 to make that ruling's authorkit slice
+grammar-legal — §14.1 is not edited (draft-amendment convention, this file's own §14.1–§14.8
+precedent: append, never rewrite a landed section).
+
+**The conflict this closes:** §14.1's reverse-wrapper production requires "an identically-named
+command exists in the same plugin root and wraps it" as the precondition licensing a
+verb-terminal skill name (`overhaul-execute`, and — newly minted as skills this same ticket —
+`rename-execute`/`exemption-retire`, previously command-only per §14.1's own "Why" section).
+Issue #525's ruling retires the sibling command entirely in favor of one file carrying both
+surfaces. Read literally, §14.1's precondition becomes permanently unsatisfiable for the exact
+names it was written to license the moment their wrapper commands are deleted — a direct
+collision between two rulings this section resolves in the newer ruling's favor, naming the
+supersession explicitly rather than leaving it to be rediscovered.
+
+**Ruling:** a skill's verb-terminal name (terminal ∈ VerbLex, not ProcessLex) is ALSO legal —
+in addition to, never instead of, §14.1's original command-sibling path — when the skill itself
+carries `user-invocable: true` and has NO sibling command at all. Object-prefix resolution
+against `ObjectVocab` still applies in both branches; the license is the dual-access fact (one
+procedure, two surfaces — §14.1's own framing), never the skill's say-so alone. `VerbLex ∩
+ProcessLex = ∅` (§4) is untouched — this is a second precondition on the same production, not a
+new lexicon or a relaxed disjointness rule.
+
+**Why this and not a §14.1 rewrite:** §14.1's own ratified authority (Kim's Sign-off on #241) was
+narrowly "a command wraps this skill" — rewriting it in place to also cover the no-command case
+would blur which ruling licenses which shape as the estate's history is read back later. Amending
+forward, the same convention every prior 14.x section in this file already uses, keeps both facts
+recoverable: §14.1 explains why the wrapper-sibling path exists at all (the `overhaul-planning` →
+`overhaul-execute` symmetry, `rename-planning` → `rename-execute`'s original command-only gap);
+§14.9 explains why that path stopped being the ONLY one.
+
+**Validator change:** `naming-audit/scripts/validate.py`'s `Grammar.parse` skill branch's
+existing reverse-wrapper condition (`name in commands`) becomes `name in commands OR
+user_invocable` — `Grammar.parse` gains a `user_invocable` parameter, threaded from the
+artifact's own `user-invocable` frontmatter field at the single call site in `run()`. A
+verb-terminal skill name with NEITHER a command sibling NOR `user-invocable: true` still fails
+exactly as before this amendment (the negative control alongside a positive fixture for each of
+the two now-independent paths and a regression fixture proving the original §14.1 command-sibling
+path is unaffected).
+
+**Non-goal:** this section does not touch command grammar (§3.1), agent grammar (§3.3), the
+`VerbLex`/`ProcessLex` disjointness invariant (§4), or the plain object-process/nominal skill
+productions for a terminal that already resolves via `ProcessLex` or `ObjectVocab` alone (`audit`,
+`planning`, `authoring` — the process-terminal skills this same campaign also converted needed no
+grammar change at all, since their legality never depended on a sibling command in the first
+place). It does not retire or deprecate §14.1's command-sibling path — a future plugin may still
+ship a verb-terminal skill behind a real wrapper command if that shape ever earns a reason to
+exist again; this section only stops the wrapper's absence from being read as evidence against a
+name §14.1 already earned the right to carry.
+
+**Landed same-change:** `authorkit`'s 10 command wrappers (issue #525's authorkit slice) —
+`overhaul-execute` converts in place; `rename-execute` and `exemption-retire` mint as skills for
+the first time (previously command-only, zero skill siblings, per §14.1's own "Why" section); the
+remaining 7 needed no grammar change (process-terminal names, always legal independent of any
+wrapper). Exemption count unchanged (85 → 85) — this section conforms names that were already
+either grammar-clean or licensed via §14.1, not previously-exempted debt.
