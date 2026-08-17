@@ -129,6 +129,8 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.26 · 2026-08-17 · `find-open-questions` Step 1 sweeps dispatched seats' handback Open-questions blocks + needed-input items too (closes #483); batched-round mechanics untouched.
+
 v3.8.25 · 2026-08-17 · closes #478, #479 (#295's ablation follow-ups): `thinking-depth-rules` dieted to its uniquely-owned content, reciprocal NOT-fence vs `docs:research-methods` added both sides; `find-intent`'s description broadened for a raw under-specified ask (rt1-class), guarded by no-theft cases. Routing-judge proof clean on all three touched suites.
 
 v3.8.24 · 2026-08-17 · plugin-shipped hook retired (#466, Kim's remove-all-hooks directive): `hooks/hooks.json` (the `skill_lint.py` PostToolUse wiring) deleted; the script is unaffected and still runs via G3/G4 and CLI. No gate check asserted a hook must exist, so no gate amendment was needed.

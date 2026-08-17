@@ -16,10 +16,15 @@ find-open-questions clears a session's backlog of unresolved items in one round,
 prose list nobody actually resolves.
 
 ## Procedure
-1. Scan the conversation for items that are still genuinely open: an unanswered question, an
-   assumption stated but left unconfirmed, a stray idea floated in passing that stayed a maybe
-   instead of a decision. Ground every item in something actually raised earlier in this session
-   — a speculative "would this be useful" idea with no prior mention stays out of scope.
+1. Scan for items that are still genuinely open, from every source this session actually
+   carries — not only the host conversation's own prose. Qualifying sources: an unanswered
+   question or an assumption stated but left unconfirmed in the conversation itself; a stray idea
+   floated in passing that stayed a maybe instead of a decision; **and** any dispatched seat's
+   handback carrying an **Open questions** field (`write-handoff`'s block) or any other pending
+   needed-input item a dispatch surfaced — a `blocked(reason)` Status naming a missing decision, a
+   planner/builder escalation left waiting on a call. Ground every item in something actually
+   raised or handed back earlier in this session — a speculative "would this be useful" idea with
+   no prior mention, and a question the dispatch itself already resolved, both stay out of scope.
 2. Nothing qualifies → report "nothing open" in one line and stop there. A clean session earns
    that line, not a manufactured question.
 3. Turn every qualifying item into ONE AskUserQuestion call: 1-4 questions, 2-4 options each. An
@@ -44,7 +49,9 @@ line — the two outcomes are exclusive; a prose list satisfies neither.
   next); name the remainder in the batch's own framing text ("N more minor items — ask again to
   cover those"), keeping the surplus visible instead of dropped.
 - An item already went stale — the code or decision moved past it — drops from the batch: asking
-  about a settled decision spends the user's answer on nothing.
+  about a settled decision spends the user's answer on nothing. This test applies uniformly
+  regardless of source: a dispatched seat's handback question that a later turn already answered
+  is stale under this same branch, not a separate rule.
 - The user skips or declines the round (picks "Other" with a dismissal, or answers "later") →
   stop there; the reply resolves nothing further and the same batch stays unasked for the rest of
   the session.
