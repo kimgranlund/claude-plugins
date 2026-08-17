@@ -129,6 +129,8 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.30 · 2026-08-17 · `campaign_close.py` gains C5, fail-closed unlike C4's warn (closes gen-ui-kit#1483): before deleting a PR's remote branch, refuses if any OTHER open PR has that branch as its HEAD — proven live twice (PR #1419 MERGED / #1449 OPEN, both `bot/corpus-resync`; earlier `design/1334-site-a2ui-retirement`). A failed `gh` lookup also refuses, never assumes no reuse. Selftest gains the #1419/#1449 negative control. (Rebumped past 3.8.29: PR #499 already shipped that slot.)
+
 v3.8.29 · 2026-08-17 · body-only cross-plugin citation added to `agent-writing-rules` (teamwork
 #480's `fleet-rules` pack): items 3/7's teammate-delivery-clause and generic-identity-caveat
 authoring contract now points at `teamwork:fleet-rules`' Section 3 for the matching RUNTIME
