@@ -85,6 +85,26 @@ record.**
   is silently dropped; a `teammate_id="team-lead"` sender may be the root session's own generic
   identity, not a real coordinator) are `harness:agent-writing-rules`' own authoring contract for
   encoding this into an agent file — cited there, not restated here.
+- **One decision, one channel.** A decision that belongs to the user — an ADR ratification, a
+  ruling, a batched confirm — is put to them through exactly ONE session/channel, never fanned
+  out to more than one on the assumption that redundancy is safer. Three clauses:
+  1. **One channel per user-decision.** Whichever seat reaches the user first with a given
+     decision owns putting it to them; no second seat opens a parallel ask for the same
+     decision on its own initiative.
+  2. **A seat that discovers the same decision already pending elsewhere STOPS and routes to the
+     first asker**, rather than re-asking the user itself — the same discipline as Section 1's
+     scope ladder (never escalate around an existing channel) applied to one decision instead of
+     one repo.
+  3. **A ruling is superseded only by an explicit later ruling that names the earlier one**
+     (the tie-break) — never by a second, parallel answer arriving through a different channel.
+     An answer that doesn't cite what it's overriding isn't a supersession, it's a collision.
+
+  Minted from the 2026-08-17 crossed-ruling evidence in #518: ADR-0020 was rejected in one
+  session at 16:03 and ratified in a second, parallel session one minute later at 16:04 — the
+  same decision put to the user through two channels at once, requiring a consolidated tie-break
+  round to repair. This rule is what that repair would have made unnecessary. Sequencing note:
+  this section lands before ADR-0020's own wave-3+ teamwork churn continues; wave 6 later merges
+  `team-or-solo-rules` into this skill and inherits this section as-is.
 
 ## 4. Version-slot + merge-order rules
 
