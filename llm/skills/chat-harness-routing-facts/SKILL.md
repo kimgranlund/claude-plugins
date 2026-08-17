@@ -31,6 +31,10 @@ the only valid implementation.
 | Skill vs hardcoded feature — "should this be a skill", "why hardcode this instead", "load-on-demand capability" | `references/authoring-a-skill-vs-a-hardcoded-feature.md` |
 | Model-invoked vs user-invoked — "should this auto-trigger or need a slash command", "disable-model-invocation", "user-invocable", "preload this into a subagent" | `references/invocation-species-model-vs-user-invoked.md` |
 | Routing + adversarial evals — "why did the wrong skill fire", "write a routing corpus", "test skill triggering", "measure routing accuracy over time" | `references/description-routing-and-adversarial-evals.md` |
+| Envelope framing / out-of-band signals — "a note vs. a trace vs. content on the same stream", "how do I tell a meta-line from a protocol message", "one bad field shouldn't break the whole envelope" | `references/envelope-framing-and-out-of-band-signals.md` |
+| Multi-producer id namespacing — "two producers writing to the same session collide on ids" | `references/multi-producer-namespacing.md` |
+| Model-declared routing facts — "the model said route to X but X doesn't exist, now what" | `references/model-declared-routing-integrity-check.md` |
+| Client-side auto-attach — "the assistant told the user to tag something it just offered" | `references/client-side-label-auto-attach.md` |
 | Provenance — platform mechanic vs this workspace's own convention | `references/sources.md` |
 
 ## Consult procedure

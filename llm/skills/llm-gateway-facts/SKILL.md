@@ -27,6 +27,8 @@ to do this."
 | The registry + trust boundary — "one config for the picker AND the allowlist", "validate {provider,model} before reading a secret", "reject an unlisted pair safely" | `references/registry-and-trust-boundary.md` |
 | The dev-proxy + bundler footguns — "keep the key out of the static build", "why did my key end up in the bundle", "the `.env` not landing in `process.env`" | `references/dev-proxy-and-bundler-footguns.md` |
 | The conversation model — "keep the proxy stateless", "where does turn history live", "a pure reducer for the next turn" | `references/stateless-session-and-turn-model.md` |
+| Single-flight 401 refresh — "concurrent requests all hit a 401 at once", "replay after refresh with the wrong token", "a streaming body can't be replayed" | `references/single-flight-401-refresh.md` |
+| Retry policy + streaming pass-through — "should this request retry", "full jitter backoff", "no middleware may read the streamed body" | `references/retry-policy-and-streaming-passthrough.md` |
 | Provenance — worked-example source vs platform-primitive source | `references/sources.md` |
 
 ## Consult procedure
