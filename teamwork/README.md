@@ -106,7 +106,16 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
-v2.17.13 · assembled 2026-08-17 · desk→seat terminology sweep (closes #517): `review desk`/`the
+v2.17.14 · assembled 2026-08-17 · `fleet-rules` gains a "One decision, one channel" rule in its
+Communication routing section (closes #535): three clauses — one channel per user-decision; a
+seat discovering the same decision pending elsewhere STOPS and routes to the first asker instead
+of re-asking; a ruling is superseded only by an explicit later ruling naming the earlier one,
+never by a parallel answer. Minted from the 2026-08-17 crossed-ruling evidence in #518 —
+ADR-0020 rejected in one session at 16:03 and ratified in a parallel session one minute later at
+16:04, requiring a consolidated tie-break round to repair. Prose-only addition to
+`fleet-rules/SKILL.md`'s body (no description/frontmatter change, no evals churn — the routing
+surface didn't move). Sequencing: lands before ADR-0020's own wave-3+ teamwork churn continues;
+wave 6 (the `team-or-solo-rules` → `fleet-rules` merge) inherits this section verbatim · v2.17.13 · assembled 2026-08-17 · desk→seat terminology sweep (closes #517): `review desk`/`the
 desk` reworded to `review seat`/`the seat` across README's own table row, `review-leader.md`,
 `lead-review.md`, `fleet-rules/SKILL.md`, `leading-review/SKILL.md`, its `intent.md`, and
 `evals/assertions.md` — landing wave 7's already-executed rewording (ADR-0020 REJECTED the
