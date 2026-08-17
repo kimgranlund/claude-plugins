@@ -72,6 +72,17 @@ was already spent upstream) or `[unattended]` (no live session to report back to
 shared marker protocol, canonical statement `file-task`'s Phase 2. Either way, a still-vague idea
 never blocks persistence — vagueness is a named gap, never a gate.
 
+**The testability question rides the same capture-or-gap treatment.** For a likely-Work idea
+(Phase 4 confirms shape; extraction runs before that, so this asks provisionally rather than
+waiting), extraction also captures *how the built result will be agent-verifiable* — which assert
+layer (payload/API/browser/human) per `docs:agent-harness-rules` — same as every other extraction
+question: the seed already answers it → capture it; it doesn't → name it as a Scope/Open gap
+("needs a harness first") and add it to Phase 5's close-out batched clarifying-questions list.
+Never a blocking live round — this phase's own no-question-channel finding above applies here
+too — and never a restatement of `agent-harness-rules` itself, only a cite. Phase 4 shaping the
+idea Knowledge (or a Failure-branch redirect) moots this provisional gap — it never survives into
+a non-Work record's Scope/Open.
+
 ## Phase 3 — Dedup: it may already exist
 
 Before minting anything, sweep three surfaces and report what's found:
@@ -109,9 +120,11 @@ decision-ratifying.
 ## Phase 5 — Record, lint, place
 
 The payload contract, identical regardless of backend: Summary · Acceptance (from the extraction's
-success criterion) · Links (the ID spine to any PRD/SPEC/LLD/corpus minted in Phase 4) ·
-Scope/Open (the named gaps) · the size class · an empty `## Findings` section for the eventual
-build's write-back.
+success criterion, plus — for a Work-shaped record — Phase 2's agent-verifiability answer, stated
+as which assert layer per `docs:agent-harness-rules`; unanswered → carried in Scope/Open as "needs
+a harness first" instead of blocking the record) · Links (the ID spine to any PRD/SPEC/LLD/corpus
+minted in Phase 4) · Scope/Open (the named gaps) · the size class · an empty `## Findings` section
+for the eventual build's write-back.
 
 - **Option A (local/file backend):** mint the `kind: feature` TICKET via make-doc's TICKET path
   (`docs/tickets/` of the local or target repo — repo-rooted per doc-writing-rules'
