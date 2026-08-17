@@ -82,6 +82,14 @@ general statement, cited there rather than restated.
   (`parallel-work-rules` `references/unattended-collision-protocol.md` §2 owns the stand-down that
   follows) · agent-ui #1150/PR #1161 · 2026-08-17 · [worked instance].
 
+- **A claim posted by a coordinator ON BEHALF OF a build it is dispatching NAMES the dispatched
+  builder.** A generically-worded claim comment reads as a competing peer to the very seat it was
+  posted for, not a claim held for it — e.g. "Claim held FOR the build-leader dispatch launching
+  now — the dispatched seat should treat this as its own claim," never a bare "Fleet peers: skip"
+  with no addressee. · #542's abandoned pre-claim (a build read its own coordinator's unnamed
+  claim as a peer's, costing a full re-dispatch); corrected wording proven the same night on
+  #568, #577, #581 · 2026-08-17 · [incident]
+
 **Stale-claim handling stays `repo-cleaner`'s** (harness) — this protocol only states when to
 claim and what to check before dispatching, never how to detect or clear an abandoned one.
 
