@@ -129,6 +129,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.27 · 2026-08-17 · `routing-judge` states its inlined-input contract loudly and refuses path-shaped dispatches instead of fabricating verdicts (closes #489).
 v3.8.26 · 2026-08-17 · `find-open-questions` Step 1 sweeps dispatched seats' handback Open-questions blocks + needed-input items too (closes #483); batched-round mechanics untouched.
 
 v3.8.25 · 2026-08-17 · closes #478, #479 (#295's ablation follow-ups): `thinking-depth-rules` dieted to its uniquely-owned content, reciprocal NOT-fence vs `docs:research-methods` added both sides; `find-intent`'s description broadened for a raw under-specified ask (rt1-class), guarded by no-theft cases. Routing-judge proof clean on all three touched suites.
