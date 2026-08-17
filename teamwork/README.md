@@ -105,6 +105,22 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.5 · assembled 2026-08-17 · residual description diet (closes #475, #373 Phase-6
+re-measure): the six teamwork artifacts still over the 700-char routable budget after #468/#471
+— skill `leading-product` (879→699, boilerplate-trim style matching #468's leading-planning/
+leading-review edits, NOT-fences kept in the description) and agents `build-leader` (1,038→584),
+`planning-leader` (1,028→620), `review-leader` (979→643), `code-checker` (840→620), `planner`
+(818→503) (trailing NOT-for disambiguation sentence moved into the body, #471's harness pattern).
+Fresh-context `skill-checker`/`agent-checker` passes on all six surfaced two real findings fixed
+in the same change: `review-leader`'s description carried a stale claim that `/leading-review` is
+`disable-model-invocation: true` (it's actually `false` — corrected to a mechanism-neutral
+statement), and `planner`'s body grew past its 60-line cap from the moved NOT-for paragraph
+(trimmed Priority 1/2 restated doctrine to clear it). Blind `routing-judge` proof over the five
+`leading-*` suites (40 cases) surfaced one contested case — `leading-product`'s spec-lock gate
+phrasing leaked into a `leading-teams`-owned "gate this build dispatch" prompt — tuned the
+NOT-fence to name the "gating a dispatch" verb explicitly; the 3-judge revote cleared it. All
+five suites 0/0 stolen/leaked/dead/hung after the tune.
+
 v2.17.4 · assembled 2026-08-17 · plugin-shipped hooks retired (#466, Kim's remove-all-hooks
 directive): `hooks/hooks.json` deleted (the `worktree_prebash_guard.py` PreToolUse ASK-only
 compound-cd guard and the `session_end_worktree_check.py` SessionEnd passive log). Both scripts

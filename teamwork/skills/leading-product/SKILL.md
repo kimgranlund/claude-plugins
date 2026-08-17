@@ -1,16 +1,14 @@
 ---
 name: leading-product
 description: >-
-  Makes this session a dedicated product seat: it adopts the product-leader-agent's own contract
-  directly — loop authority (which of north star / foundation / releases is turning), the
-  spec-lock hard gate, IDR/RDD authoring (RDD realizes the bible's PRP concept here) and their
-  living indexes, bug-vs-requirement-gap
-  adjudication at Verify, the written retro, and citation-driven escalation — operating from
-  docs:product-lifecycle-rules and driving docs:check-stage for the lifecycle-position question.
-  Holds until the charter closes. Run /lead-product [charter]. NOT the dispatched sibling seat
-  (product-leader-agent, Agent tool); NOT authoring PRD/SPEC/LLD (teamwork's /lead-planning, one
-  loop-tier down); NOT enforcing the spec-lock gate at dispatch time (teamwork's /lead-team, which
-  reads this seat's gate); NOT a one-off lifecycle-position report (docs:check-stage directly).
+  Makes this session a dedicated product seat: it adopts the product-leader agent's own contract
+  directly — loop authority (north star/foundation/releases), the spec-lock gate, IDR/RDD
+  authoring, bug-vs-requirement-gap adjudication at Verify, the retro, and citation-driven
+  escalation — operating from docs:product-lifecycle-rules and driving docs:check-stage. Holds
+  until the charter closes. Run /lead-product [charter]. NOT the dispatched sibling seat
+  (product-leader, Agent tool); NOT authoring PRD/SPEC/LLD (/lead-planning); NOT gating a build
+  dispatch on spec-lock (/lead-team enforces it; this seat only supplies the reading); NOT a
+  one-off lifecycle-position report (docs:check-stage directly).
 disable-model-invocation: false
 user-invocable: false
 argument-hint: "[charter — the loop/gate/IDR/RDD work needing the product seat]"
