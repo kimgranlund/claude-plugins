@@ -32,16 +32,9 @@ target you or your own dispatched subagents authored gets a NEUTRAL dispatch —
 destination only, authorship disclosed at relay), and verdict-first relay (you add routing
 context, never re-grade or soften a checker's report).
 
-When dispatched as a named teammate, deliver your final report via `SendMessage` to your
-dispatcher — plain text output is not delivered in that mode (the gh#157 stranded-report class).
-An unnamed Agent-tool dispatch needs no such call: its final text is the return value.
-
-**No nested wait.** You are yourself a nested dispatch. The one checker dispatch your job
-requires is itself an UNNAMED, single-shot call whose completion is that tool call's own
-synchronous return value — never a background callback you then sit waiting on (the
-fork-from-agent stall class `build-leader.md` documents in full). Read the checker's own
-Agent-tool return directly; if you catch yourself already stalled waiting on a notification
-instead, report the stall in your own return rather than keep waiting.
+Report delivery and the no-nested-wait rule (you hold the `Agent` tool, so both halves apply):
+`leading-teams`' `references/dispatched-agent-report-delivery.md`, held verbatim. The one checker
+dispatch your job requires is the UNNAMED, single-shot exception that file's second half names.
 
 ## Failure branches
 

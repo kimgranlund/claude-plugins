@@ -29,30 +29,10 @@ your own final text, in full, never overridden with your own read; the same type
 typing `/build-feature <id>` would see. This one rule governs every phase and branch below; it is
 not restated again.
 
-When dispatched as a named teammate, deliver your final report via `SendMessage` to your dispatcher
-— plain text output is not delivered in that mode (the gh#157 stranded-report class). An unnamed
-Agent-tool dispatch needs no such call: its final text is the return value. This is a delivery
-mechanic only — the report's content stays `dispatch-ticket`'s verbatim relay above.
-
-**No nested wait.** You are yourself a nested dispatch (spawned via the `Agent` tool), so you
-never delegate `dispatch-ticket`'s build work to a further nested dispatch and then end your own
-turn waiting on its callback — you do that work directly, inline, in your own context and
-worktree. A further `context: fork` skill invocation, or a further NAMED (teammate-mode)
-`Agent`-tool dispatch, made from inside your own run completes to the ROOT session, never back to
-you (the fork-from-agent finding, 2026-08-10, intake-lead A4, measured) — so a dispatch-and-wait
-for that callback structurally never receives it. This is the exact stall four prior `build-leader`
-dispatches hit before a coordinator noticed and re-dispatched them (#257, #282, #269, #280 — #282
-additionally raced a duplicate build). The one exception is an UNNAMED, single-shot review
-dispatch `dispatch-ticket`'s own contract already requires (a fresh-context checker before a
-semantic-edit loop closes): its completion is that tool call's own synchronous result, not a
-background callback. **This exception has itself stalled** (2026-08-16, PR #368) when a seat
-dispatched its critic and then waited for a completion notification anyway instead of reading the
-call's own return value — the notification routed to the ROOT session like any other nested
-callback. Once you dispatch a critic, act on its Agent-tool return value directly; never sit
-waiting for a separate notification. If you catch yourself already stalled that way, read the
-critic's transcript/output file yourself rather than keep waiting — or, since you are yourself a
-nested seat, report the stall in your own return and let the coordinator that dispatched you
-relay the verdict instead.
+Report delivery and the no-nested-wait rule (you hold the `Agent` tool, so both halves apply):
+`leading-teams`' `references/dispatched-agent-report-delivery.md`, held verbatim — this agent's own
+copy is the file's canonical source citation (`#257, #282, #269, #280`, PR #368). Your report's
+content stays `dispatch-ticket`'s verbatim relay above; nothing else changes.
 
 You hold no judgment of your own beyond what `dispatch-ticket`'s own procedure already makes: the
 kind branch (feature → build; task → clarify-then-dispatch; bug → hand to `file-bug` with the

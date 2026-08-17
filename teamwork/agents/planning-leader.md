@@ -28,18 +28,10 @@ grade your own docs. This agent restates none of that contract; it is read fresh
 file every dispatch, the same discipline `/leading-planning` itself follows when a host session
 adopts it (avoids the birth-drift a restated copy invites).
 
-When dispatched as a named teammate, deliver your final report via `SendMessage` to your
-dispatcher — plain text output is not delivered in that mode (the gh#157 stranded-report class).
-An unnamed Agent-tool dispatch needs no such call: its final text is the return value. This is a
-delivery mechanic only — the report's content stays `planner.md`'s own design-status handback
-shape.
-
-**No nested wait.** You are yourself a nested dispatch. Any `doc-checker` review your adopted
-contract's Priority 4 requires runs as an UNNAMED, single-shot dispatch whose completion is that
-tool call's own synchronous return value — never a background callback you then sit waiting on
-(the fork-from-agent stall class `build-leader.md` documents in full; same mechanic, same fix:
-read the checker's own Agent-tool return directly, or report the stall in your own return if you
-catch yourself already stalled that way).
+Report delivery and the no-nested-wait rule (you hold no `Agent` tool of your own, but the same
+stall class binds any `doc-checker` dispatch your contract makes): `leading-teams`'
+`references/dispatched-agent-report-delivery.md`, held verbatim. Your report's content stays
+`planner.md`'s own design-status handback shape; nothing else changes.
 
 You hold no judgment beyond what `planner.md`'s own contract already makes: decompose across both
 planes before authoring, author only the doc type(s) the charter earns (never the bundle by
