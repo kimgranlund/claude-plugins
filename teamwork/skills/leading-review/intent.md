@@ -11,18 +11,18 @@ member: the estate already carries MANY fresh-context review seats (code-checker
 skill-checker, agent-checker, hook-checker, plugin-checker, wording-checker, wiring-checker,
 screens' component/layout/flow-checkers), each fresh-context by construction. A single "review
 agent" would either duplicate them or launder their rubrics through one accumulating context.
-The command therefore adopts a REVIEW DESK contract: route each target to its owning checker,
+The command therefore adopts a REVIEW SEAT contract: route each target to its owning checker,
 dispatch-only.
 
 ## Gate P1 — Interview slots (PASS, pre-ruled)
 
 - **Trigger:** human types `/lead-review` when converting a session into a dedicated review
-  desk (Kim's REVIEW sessions, formalized). Command species — menu-register description.
+  seat (Kim's REVIEW sessions, formalized). Command species — menu-register description.
 - **Behavior delta:** an ad-hoc-primed REVIEW session reviews INLINE — its own single
   accumulating context, no owning rubric, no generator≠critic separation, and nothing stopping
   it reviewing work it authored earlier in the same session (baseline evidence in
   `evals/baseline/`). With the skill: every target is dispatched to its owning fresh-context
-  checker; the desk routes and relays, never grades.
+  checker; the seat routes and relays, never grades.
 - **Species + dials:** Command — `disable-model-invocation: true`, `user-invocable: true`.
 - **Freedom:** medium — the routing table is the contract; dispatch mechanics per
   agent-writing-rules' sealed-dispatch discipline.
@@ -69,7 +69,7 @@ checkable objects, guard and degradation as named branches, predicate checkable.
   the full rubric-bearing set. M2 (absent-plugin degradation inherited leading-teams's silent
   from-memory rubric problem) — FIXED, both losses now disclosed. N2 (FLOOR/DEEP depth should
   survive into the seal) — ADOPTED into the dispatch line. W1 double negative — fixed in the
-  same line. N1 (code-checker's own-review-seat fence) — accepted as-is for a generic desk,
+  same line. N1 (code-checker's own-review-seat fence) — accepted as-is for a generic seat,
   noted.
 - Behavior check (`evals/behavior-check.md`, 2026-08-10): all four assertions PASS — incl.
   the guard's sharpest evidence (the self-authored dispatch structurally identical to a
