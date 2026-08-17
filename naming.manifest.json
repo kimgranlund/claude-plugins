@@ -1,5 +1,5 @@
 {
-  "$schema_note": "nonoun-plugins repo-root naming manifest (ADR-0011, D8: grandfather + ratchet). Every name shipped before this manifest's seeding date (2026-08-14) is EXEMPT verbatim -- no rename campaign runs against this estate (D8). New mints conform in full from day one. The array may only shrink, never grow (CI-checked). Lexicons seed from naming-rules' own ratified verb registry + manifest-authoring's template defaults + ADR-0011 D10's seed list (shared starter vocabulary across the estates this convention spans). Orchestrator agents mint as {scope}-{role} per ADR-0015 (2026-08-16); the -agent tail on that production is legacy spelling, still conformant.",
+  "$schema_note": "nonoun-plugins repo-root naming manifest (ADR-0011, D8: grandfather + ratchet). Every name shipped before this manifest's seeding date (2026-08-14) is EXEMPT verbatim -- no rename campaign runs against this estate (D8). New mints conform in full from day one. The array may only shrink, never grow (CI-checked). Lexicons seed from naming-rules' own ratified verb registry + manifest-authoring's template defaults + ADR-0011 D10's seed list (shared starter vocabulary across the estates this convention spans). Orchestrator agents mint as {scope}-{role} per ADR-0015 (2026-08-16); the -agent tail on that production is legacy spelling, still conformant. Commands mint as lead-{scope} under the reserved lead- head per ADR-0016 (2026-08-16); scope resolves against the orchestrator scope pool (ObjectVocab union ProcessLex), and the head is recognized on both the command and skill parse branches (the /lead-* surfaces ship as command-species skills).",
   "schema_scope": "grammar",
   "verb_lex": [
     "break-down",
@@ -157,7 +157,9 @@
     {
       "canonical": "fleet",
       "plural": null,
-      "banned_aliases": ["swarm"]
+      "banned_aliases": [
+        "swarm"
+      ]
     },
     {
       "canonical": "naming",
@@ -468,11 +470,7 @@
     "intake-lead",
     "issue-sorter",
     "layout-checker",
-    "lead-build",
     "lead-intake",
-    "lead-planning",
-    "lead-review",
-    "lead-team",
     "lettering-facts",
     "llm-gateway-facts",
     "llm-streaming-facts",

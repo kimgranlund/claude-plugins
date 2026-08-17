@@ -48,6 +48,7 @@ Three kinds, partitioned by **invoker** — the one axis the platform actually e
 
 ```
 command   := object "-" verb                    skill-create, work-start
+          |  "lead" "-" scope                   lead-team            (reserved head, §14.5, ADR-0016)
 skill     := object "-" process                 skills-audit, ui-layout-planning
           |  nominal-phrase                     naming-conventions   (looser production)
 agent     := skill-name "-" "agent"             skills-audit-agent   (primary)
@@ -63,6 +64,14 @@ One reserved head: `-agent`. Mandatory on the primary agent production and on sk
 Commands are object-first (`skill-create`, not `create-skill`) so that slash autocomplete groups operations by object: `/skill-<tab>` surfaces `skill-create`, `skill-review`, `skill-lint` together. Discovery ergonomics outrank reading-as-English for a user-invoked surface.
 
 The terminal token must be a member of `VerbLex`.
+
+One reserved verb-first head: `lead-` (§14.5, ADR-0016). `lead-{scope}` conforms when
+`{scope}` resolves against the orchestrator scope pool (`ObjectVocab ∪ ProcessLex`, ADR-0015
+D2's pool) — a `/lead-{scope}` command makes the host session adopt the orchestrator seat
+whose scope that is, so the command surface and the agent seats share one scope vocabulary.
+`lead` is a literal (like §14.2's `check-`), not a `VerbLex` member. Because the live
+`/lead-*` surfaces ship as command-species skills and §6 decides kind by directory, the
+validator recognizes the head on both the command and skill parse branches (§14.5).
 
 #### 3.2 Skills — nominal, process head preferred
 
@@ -567,3 +576,51 @@ existing exemption (124 → 124, none retired or admitted by this change).
 
 **Exemption count:** unchanged (124 → 124) — this amendment admits `{scope}-{role}` names
 by grammar conformance, never by exemption; D8's ratchet is untouched.
+
+### 14.5 `lead-` reserved verb-first head on the command grammar (2026-08-17, issue #433, ADR-0016)
+
+**Ruling authority:** ADR-0016 (`.claude/docs/adr/0016-lead-reserved-head-for-commands.md`),
+ratified 2026-08-17 by Kim (live AskUserQuestion via plugins-team-lead, confirming the
+overnight standing-directive authorization), superseding one clause of
+ADR-0011 D7 only (the command production's verb-terminal requirement as §3.1 adopted it).
+ADR-0011 and ADR-0015 are not edited — accepted ADRs are append-only (T4).
+
+**Grammar change (D1):** the command grammar gains one reserved verb-first head:
+
+```
+command := "lead" "-" scope        lead-team, lead-review
+```
+
+`lead` is a literal (like §14.2's `check-`), not a `VerbLex` member. `scope` resolves via
+the same greedy longest-match algorithm against the orchestrator scope pool `ObjectVocab ∪
+ProcessLex` (ADR-0015 D2's pool, shared deliberately: a `/lead-{scope}` command makes the
+host session adopt the orchestrator seat whose scope that is — one vocabulary for what a
+seat coordinates, whether the seat is a dispatched agent or the host itself). No `TopicLex`.
+
+**Validator change (D2):** `naming-audit/scripts/validate.py`'s `Grammar.parse` recognizes
+the head on BOTH the `kind == "command"` and `kind == "skill"` branches, reusing
+`resolve_orchestrator_scope` — the live `/lead-*` surfaces are command-species skills
+(`user-invocable: true`, `disable-model-invocation: true`, no `commands/` dir), and §6
+decides kind by directory, exactly the placement logic that put ADR-0014's `check-` head on
+the skill branch. On the skill branch the check sits BEFORE the object-process check
+(`lead-review`/`lead-planning` have `ProcessLex` terminals — the §14.2 dead-code hazard).
+
+**Selftest fixtures** (mirroring §14.1/§14.2/§14.4's triad): positive — `lead-team`,
+`lead-product`, `lead-build` (ObjectVocab scopes) and `lead-planning`, `lead-review`
+(ProcessLex scopes) parse clean as skills, and `lead-team` parses clean as a command;
+negative — a non-`lead` verb-first command (`audit-team`) still fails; negative —
+`lead-{unregistered}` (`lead-intake`'s class) fails on both branches; regression —
+object-first commands and object-process skills unaffected.
+
+**Exemption count:** 124 → 120. Four exemptions retire (`lead-build`, `lead-planning`,
+`lead-review`, `lead-team` — they conform by grammar from ADR-0016 on); `lead-intake` stays
+exempt (`intake` resolves in no lexicon or vocab, and registering a word solely to clear one
+exemption is the dilution ADR-0014 Alt B / ADR-0015 Alt E rejected); `lead-product` mints as
+a new conforming name (unblocking issue #433's product-seat command leg). D8's shrink-only
+ratchet is honored in its burn-down direction and untouched in its rule.
+
+**Non-goal:** this amendment does not touch `VerbLex` (no verb-first production generalizes
+from this literal), skill grammar otherwise (§3.2, §14.1, §14.2), agent grammar (§3.3,
+§14.4), the `-agent` reserved head, or the wrapper production. `lead-*` names in `agents/`
+still fail; the agent seats (`team-lead`, `build-lead`, `intake-lead`) stay exempt exactly
+as ADR-0015 D4 left them.

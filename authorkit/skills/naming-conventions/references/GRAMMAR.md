@@ -5,6 +5,7 @@
 ```
 command   := object "-" verb              skill-create, rename-execute
           |  wrapper: skill-name          naming-audit  (iff wraps: that skill)
+          |  "lead" "-" scope             lead-team, lead-review (reserved head, §14.5, ADR-0016)
 skill     := object "-" process           skills-audit, rename-planning
           |  topic-phrase "-" "rules"     agent-writing-rules  (§14.2, ADR-0014 D1)
           |  "check" "-" object-phrase    check-routing        (§14.2, ADR-0014 D2)
@@ -15,7 +16,9 @@ agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
 ```
 
 Reserved heads/tails on a skill name: `-agent` (agents only, illegal on a skill), `-rules`
-(reserved tail, §14.2), `check-` (reserved head, §14.2).
+(reserved tail, §14.2), `check-` (reserved head, §14.2), `lead-` (reserved head, §14.5,
+ADR-0016 — defined on the command grammar and recognized on the skill parse too, since the
+`/lead-*` surfaces ship as command-species skills).
 
 ## Kind decision
 
@@ -29,6 +32,12 @@ failure. Frontmatter never breaks a tie.
 object (`/skill-<tab>` surfaces every skill operation together). Terminal
 token ∈ VerbLex. Objects of imperatives pluralize where natural
 (`sweep-issues`); attributive objects do not (`issue-triage`).
+
+**`lead-` reserved head (§14.5, ADR-0016):** `lead-{scope}` conforms when `{scope}`
+resolves against the orchestrator scope pool (ObjectVocab ∪ ProcessLex, ADR-0015 D2's pool —
+a `/lead-{scope}` command makes the session adopt the orchestrator seat whose scope that
+is). `lead` is a literal, exactly like `check-`: not a VerbLex member, never a template for
+other verbs.
 
 **Wrapper production:** a command whose sole job is exposing a skill to the
 user carries the skill's exact name and declares `wraps:` it. The `/` surface
