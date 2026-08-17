@@ -1,6 +1,6 @@
 {
  "skill": "fleet-rules",
- "note": "Trigger-routing suite for the merged default-orchestration-protocol pack (ADR-0020 D5 / #524, 2026-08-17): team-or-solo-rules' composition/wiring-design cases folded in alongside the original #480 fleet-protocol cases (minted from the #373 overnight campaign). Positives span both classes the merged description now owns — the six fleet-ops areas (coordination scope ladder, work-claim protocol, communication routing, version-slot/merge-order, session-death resilience, pin-race playbook) and the composition-design class (unit choice, wiring review, dispatch shape). The two negatives that used to fence each half against the other (fleet-rules' n03/n04/n10 pointing at team-or-solo-rules; team-or-solo-rules' n13 pointing at fleet-rules) are removed as self-references post-merge, not renumbered into positives — the merged suite fences only against genuinely external siblings now: parallel-work-rules (isolation decision / live collision), loop-rules (continuation timing), mobilize-chores (which tickets are mobilizable), big-change-git-rules (stacked-PR/rename git mechanics, cross-plugin), agent-writing-rules (same-plugin, encoding a delivery clause into an agent file), and harness's check-all-skills/check-all-agents/write-handoff/break-down-problem (corpus-wide sweeps and the handback contract, cross-plugin). Known accepted-leak class carried over from team-or-solo-rules (check-routing 2026-07-09): 'do my agents leverage the right skills' leaks here when check-all-agents (its owner, a user-only command) is off the model menu — benign; do not tune to chase it.",
+ "note": "Trigger-routing suite for the merged default-orchestration-protocol pack (ADR-0020 D5 / #524, 2026-08-17): team-or-solo-rules' composition/wiring-design cases folded in alongside the original #480 fleet-protocol cases (minted from the #373 overnight campaign). Positives span both classes the merged description now owns — the seven fleet-ops areas (coordination scope ladder, work-claim protocol, communication routing, version-slot/merge-order, session-death resilience, pin-race playbook, route-anything-incoming triage — the last added #577, 2026-08-17) and the composition-design class (unit choice, wiring review, dispatch shape). The two negatives that used to fence each half against the other (fleet-rules' n03/n04/n10 pointing at team-or-solo-rules; team-or-solo-rules' n13 pointing at fleet-rules) are removed as self-references post-merge, not renumbered into positives — the merged suite fences only against genuinely external siblings now: parallel-work-rules (isolation decision / live collision), loop-rules (continuation timing), mobilize-chores (which tickets are mobilizable), big-change-git-rules (stacked-PR/rename git mechanics, cross-plugin), agent-writing-rules (same-plugin, encoding a delivery clause into an agent file), docs' file-bug/file-feature/file-task (cross-plugin — filing the record itself, never this skill's job, only naming WHERE), and harness's check-all-skills/check-all-agents/write-handoff/break-down-problem (corpus-wide sweeps and the handback contract, cross-plugin). Known accepted-leak class carried over from team-or-solo-rules (check-routing 2026-07-09): 'do my agents leverage the right skills' leaks here when check-all-agents (its owner, a user-only command) is off the model menu — benign; do not tune to chase it.",
  "cases": [
   {
    "id": "t01",
@@ -110,6 +110,21 @@
   {
    "id": "t22",
    "prompt": "my subagent never gets selected - is the wiring between capabilities wrong",
+   "expect": "trigger"
+  },
+  {
+   "id": "t23",
+   "prompt": "a fresh bug report with no ticket yet just landed on the orchestrator - where does it go and how fast",
+   "expect": "trigger"
+  },
+  {
+   "id": "t24",
+   "prompt": "what's the routing precedence when a malformed handback and a peer message both show up on the orchestrator at once",
+   "expect": "trigger"
+  },
+  {
+   "id": "t25",
+   "prompt": "a dispatched seat owed a report an hour ago and never sent one, what's the default response instead of just waiting",
    "expect": "trigger"
   },
   {
@@ -225,6 +240,12 @@
    "prompt": "should this subagent use isolation: worktree",
    "expect": "no-trigger",
    "comment": "owner: parallel-work-rules"
+  },
+  {
+   "id": "n20",
+   "prompt": "file a bug report for this crash",
+   "expect": "no-trigger",
+   "comment": "owner: docs' file-bug (cross-plugin) — filing the record itself, not this skill's routing job"
   }
  ]
 }

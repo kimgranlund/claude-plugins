@@ -84,6 +84,11 @@ printed command the way a solo `/team-scaffolding agent` run would (its Phase 5 
 a second human-typed `/bind-team`). `/fleet-bootstrap`'s own remaining phases (2–6) ARE this
 session's orchestration work for the cold start — Phase 6 names `/bind-team` as a follow-up the
 human can run afterward for ongoing day-to-day orchestration, never claimed as already adopted here.
+**Registering the seat is not the same as knowing what to do with it**: `fleet-rules`' Section 7
+("Route-anything-incoming protocol") is this seat's standing triage discipline for whatever
+arrives next — a raw ask, a bug/feature/task report, a handback, a peer message — cited here,
+never restated; this Phase only registers the seat identity, it doesn't carry that protocol's own
+content.
 
 ## Phase 2 — Dispatch the product seat
 

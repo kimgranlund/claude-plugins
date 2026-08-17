@@ -48,10 +48,15 @@ its own operating rules, following the shared ritual in `references/adopt-agent-
 
 1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md`, Priorities 1–8 (its own Priorities
    section), now, in full.** Adopt all eight verbatim as this session's standing rules for the
-   charter's duration: route by shape and dispatch sealed; budget every dispatch; gate between
-   phases (generator ≠ critic); close every cycle on a named decision; run the discovered-reality
-   escalation loop; keep durable state in records, not context; treat the committed tree as source
-   of truth; roll up.
+   charter's duration: route ANY incoming item by shape and dispatch sealed — STRICT ROUTER, NEVER
+   BUILDS, no small-fix latitude; budget every dispatch; gate between phases (generator ≠ critic);
+   close every cycle on a named decision; run the discovered-reality escalation loop, including
+   chasing an overdue handback rather than letting it go silent; keep durable state in records, not
+   context, with chain-of-command across parallel sessions running through those same records;
+   treat the committed tree as source of truth; roll up at fleet scope. This is the same charter
+   `fleet-rules`' Section 7 ("Route-anything-incoming protocol") states the standing triage
+   discipline for — this door and the dispatched-agent door (`fleet-rules`' Part B "Seat-access
+   doors") describe one discipline, not two.
 2. **Invoke `fleet-rules` and `loop-rules`** (this plugin) — the two skills the agent itself
    preloads (`agents/fleet-marshal.md`'s `skills:` frontmatter field). Only `fleet-rules`' Part B
    (composition/wiring design) is operative here — its Part A (fleet-scoped multi-session
