@@ -46,14 +46,14 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
 5. **Author the evaluator with the artifact.** A spec's acceptance criteria are written alongside
    it, one-to-one with requirement IDs — a requirement with no criterion is unverifiable; a
    criterion with no requirement is scope creep in the evaluator.
-6. **Location and naming are routing.** `docs/adr/adr-0042-postgres-over-dynamo.md` — type, then
-   number/date, then slug; directory conventions are what let hooks and path-scoped rules fire.
-   The canonical directory per type (ruled 2026-07-12; make-doc and the project-docs index both
-   consume THIS map — a second map is drift): `docs/prd/` · `docs/spec/` · `docs/lld/` ·
-   `docs/adr/` · `docs/idr/` · `docs/rdd/` · `docs/plan/` · `docs/roadmap/` · `docs/brief/` ·
-   `docs/tickets/` · `docs/task/`. The two pluralization exceptions (`tickets`, `adr`) are historical and
-   load-bearing (three command skills hardcode `docs/tickets/`) — recorded, not to be "fixed".
-   `docs/idr/` and `docs/rdd/` adopt the canonical type-prefixed numbered form
+6. **Location and naming are routing.** `docs/ops/adr/adr-0042-postgres-over-dynamo.md` — root,
+   then type, then number/date, then slug; directory conventions are what let hooks and
+   path-scoped rules fire. The canonical directory per type under that root (ruled 2026-07-12;
+   make-doc and the project-docs index both consume THIS map — a second map is drift): `prd/` ·
+   `spec/` · `lld/` · `adr/` · `idr/` · `rdd/` · `plan/` · `roadmap/` · `brief/` · `tickets/` ·
+   `task/`. The two pluralization exceptions (`tickets`, `adr`) are historical and
+   load-bearing (three command skills hardcode `<root>/tickets/`) — recorded, not to be "fixed".
+   `<root>/idr/` and `<root>/rdd/` adopt the canonical type-prefixed numbered form
    (`idr-0001-<slug>.md` / `rdd-0001-<slug>.md`) rather than copying ADR's grandfathered
    exception. Aligning an EXISTING repo to this map is `/tidy-docs`'s job.
    Every canonical directory is repo-rooted, never plugin-rooted (ruled 2026-07-13): resolve
@@ -64,6 +64,31 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    doesn't disambiguate, name the resolved repo in the close-out report rather than guessing
    silently; never split one document's read (template, standards) from a different repo than its
    write (the instance file).
+
+   **Where documents live (ratified, issue #514).** `<root>` above resolves through a three-rung
+   ladder, checked in order:
+   1. **Host override** — the target repo's own entry file (CLAUDE.md) states its docs root
+      explicitly. When present, that value wins outright, no matter what the portable default
+      below would otherwise pick.
+   2. **Portable default for repo/project-level records** — `docs/ops/` (Kim's ruling, 2026-08-17:
+      "repo/project docs (ROADMAP, PLAN, IDR, ADR, RDD, etc.) generally live under `/docs/ops/`").
+      This is what every type directory in the map above hangs off when no override fires.
+   3. **Agent-specific docs** — working files an agent produces for its own use (not the
+      project's own doc corpus proper) live under `.claude/docs/`, independent of the
+      repo/project root chosen above.
+   A skill that proposes a doc path degrades gracefully through this ladder — read the host's
+   entry file first, fall back to `docs/ops/<type>/` for repo docs or `.claude/docs/` for
+   agent docs when the entry file states no override — never hardcodes one tier as the only
+   answer.
+
+   **This workspace's carve-out (Kim's ruling, 2026-08-17, issue #514).** *This* repo
+   (kimgranlund/claude-plugins) states the override at rung 1: **everything stays under
+   `.claude/docs/`**, including repo/project-level records that the portable default would
+   otherwise route to `docs/ops/`. Reason: this workspace's `docs` plugin directory already
+   owns the bare `docs/` path — a `docs/ops/` root here would collide with the plugin's own
+   name — so the carve-out keeps the existing `.claude/docs/{adr,brief,decompositions,handoff,
+   idr,lld,prd,spec}` tree as the one location, stated once in this workspace's own CLAUDE.md
+   rather than re-derived per skill.
    Delegation is legal for the **work-item tier only** (TICKET/TASK), and generalizes to a
    three-way choice (ruled 2026-07-17, ADR-0003, superseding the 2026-07-15 binary ruling): a
    workspace's entry file names Option A (local — the file default, unchanged), Option B

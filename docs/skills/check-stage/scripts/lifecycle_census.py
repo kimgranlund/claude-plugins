@@ -9,11 +9,17 @@ No args defaults the root to `.` — mirrors check-state's doc_state.py collecto
 (a deliberate, disclosed deviation from the no-args-prints-usage anatomy: the
 default target is meaningful for a collector).
 
-Walks `.claude/docs/{adr,idr,rdd}/*.md`, parses doc_lint-compatible frontmatter,
+Walks `<docs-root>/{adr,idr,rdd}/*.md`, parses doc_lint-compatible frontmatter,
 and emits per-type counts, status distributions, and the orphan-ADR (doc_lint's
 T6 WARN — no `intent-refs:` citation) count, plus ROADMAP.md presence/status at
 the repo root. Reuses docs/scripts/doc_lint.py's own TYPES/LEDGER_LOCK contract
 (sources-flow-outward) rather than re-declaring the type/status enums here.
+
+`<docs-root>` resolves per doc-writing-rules' "Where documents live" ladder
+(issue #514): `docs/ops/` if it exists at the repo root, else `.claude/docs/`
+if THAT exists, else `docs/ops/` (the portable default, reported as all-zero
+counts when nothing has been filed there yet). This script does not parse a
+host CLAUDE.md's stated override text — presence-based degrade only.
 
 This is the SCRIPT-DETECTABLE half only (PRD resolution (b)) — presence, counts,
 status distributions. The judgment-tier reading (POC boundary crossed, which loop
@@ -45,8 +51,21 @@ def load_doc_lint():
     return mod
 
 
-def census_dir(root, dtype, parse_frontmatter):
-    d = Path(root) / ".claude" / "docs" / dtype
+def resolve_docs_root(root):
+    """doc-writing-rules' host-override ladder, presence-based (no CLAUDE.md parsing):
+    `docs/ops/` wins if it exists, else `.claude/docs/` if that exists, else the
+    portable default `docs/ops/` (reported empty when nothing's filed there yet)."""
+    ops_root = Path(root) / "docs" / "ops"
+    legacy_root = Path(root) / ".claude" / "docs"
+    if ops_root.is_dir():
+        return ops_root
+    if legacy_root.is_dir():
+        return legacy_root
+    return ops_root
+
+
+def census_dir(docs_root, dtype, parse_frontmatter):
+    d = docs_root / dtype
     files = sorted(d.glob("*.md")) if d.is_dir() else []
     statuses = {}
     orphans = 0
@@ -74,7 +93,8 @@ def roadmap_state(root, parse_frontmatter):
 
 def collect(root):
     doc_lint = load_doc_lint()
-    ledger = {t: census_dir(root, t, doc_lint.parse_frontmatter) for t in LEDGER_TYPES}
+    docs_root = resolve_docs_root(root)
+    ledger = {t: census_dir(docs_root, t, doc_lint.parse_frontmatter) for t in LEDGER_TYPES}
     return {"ledger": ledger, "roadmap": roadmap_state(root, doc_lint.parse_frontmatter),
             "types_known": sorted(doc_lint.TYPES), "ledger_lock": doc_lint.LEDGER_LOCK}
 
@@ -84,7 +104,7 @@ def selftest():
     import tempfile
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
-        adr_dir = root / ".claude" / "docs" / "adr"
+        adr_dir = root / "docs" / "ops" / "adr"
         adr_dir.mkdir(parents=True)
         (adr_dir / "0001-x.md").write_text(
             "---\ndoc-type: adr\nid: ADR-0001\nstatus: accepted\n"
@@ -115,6 +135,36 @@ def selftest():
         if not (result2["roadmap"]["present"] and result2["roadmap"]["status"] == "active"):
             fails.append(f"negative control: ROADMAP.md present/status not read "
                          f"({result2['roadmap']})")
+
+    with tempfile.TemporaryDirectory() as td2:
+        legacy_root = Path(td2)
+        legacy_adr = legacy_root / ".claude" / "docs" / "adr"
+        legacy_adr.mkdir(parents=True)
+        (legacy_adr / "0001-z.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0001\nstatus: accepted\n"
+            "intent-refs: IDR-0001\n---\n## Context\n## Decision\n## Consequences\n")
+        legacy_result = collect(legacy_root)
+        if legacy_result["ledger"]["adr"]["count"] != 1:
+            fails.append("host-override ladder: .claude/docs/ fallback not read when "
+                         f"docs/ops/ absent (got {legacy_result['ledger']['adr']['count']}, want 1)")
+
+        # Precedence: when BOTH roots exist, docs/ops/ must win (catches a swapped if-order).
+        both_ops = legacy_root / "docs" / "ops" / "adr"
+        both_ops.mkdir(parents=True)
+        (both_ops / "0001-w.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0001\nstatus: proposed\n---\n"
+            "## Context\n## Decision\n## Consequences\n")
+        both_result = collect(legacy_root)
+        both_adr = both_result["ledger"]["adr"]
+        if both_adr["count"] != 1 or both_adr["status_distribution"] != {"proposed": 1}:
+            fails.append("host-override ladder: docs/ops/ did not win precedence over "
+                         f".claude/docs/ when both exist (got {both_adr})")
+
+        # Neither root exists → all-zero, never a crash.
+        with tempfile.TemporaryDirectory() as td3:
+            empty_result = collect(Path(td3))
+            if empty_result["ledger"]["adr"]["count"] != 0:
+                fails.append("host-override ladder: neither root present but reported nonzero")
 
     if fails:
         print(f"lifecycle_census · selftest FAIL · {len(fails)} fail / 0 warn")
