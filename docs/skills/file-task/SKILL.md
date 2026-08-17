@@ -44,8 +44,13 @@ never re-mint:
   Findings-first, same ordering). Closing a
   record with an EMPTY Findings section takes the close-out line as its first entry — a record
   never closes silent.
-- **New detail** (any other trailing text) → fold it into the body's matching section (or append
-  a dated `## Findings` comment when it is a result, not a scope change) and report the record.
+- **New detail** (any other trailing text, including an answer to a close-out's named
+  clarifying question) → fold it into the body's matching section, clearing the answered gap
+  from Scope/Open once folded (or append a dated `## Findings` comment when it is a result, not a
+  scope change), and report the record. To avoid an answer colliding with the status-verb grammar
+  above (a one-word `done`/`doing`/`wontfix` answer, or one starting `wontfix `, would otherwise
+  read as a status verb), Phase 4's close-out suggests the resume format
+  `/file-task <id> answer: <text>` — a prefix the status grammar can never match.
 - **Nothing after the id** → report the record's state, labels, and last Findings entry; stop.
 
 A CLOSED record resumes only as a report — state it and stop; reopening is the user's call
@@ -61,13 +66,20 @@ On the FIRST classification only (the seed carries no `[redirected-from:X]` mark
 the seed prefixed `[redirected-from:file-task]`; report which sibling was invoked and why, never
 leave the user to type the command themselves. A feature idea (new capability, needs sizing or may
 earn docs) → same move, invoke `file-feature`. Neither — the generic remainder — continues here.
-When genuinely ambiguous, ONE clarifying question via `AskUserQuestion` — a live user is the
-default assumption, and running forked (`context: fork`) does not change it: forking relieves the
-caller's session, it does not remove the person. Skip straight to capture-with-gaps only when the
-seed carries `[redirected-from:X]` (the round budget was already spent upstream) or `[unattended]`
-(no live user backs the run at all) — the shared marker protocol below — or still ambiguous after
-asking → capture here as `task` with the ambiguity named in Scope/Open (persistence beats
-taxonomy, and a question nobody can answer is not a gate).
+
+**No live clarify round — the fork has no question channel.** When genuinely ambiguous, do not
+attempt a clarifying question as a live `AskUserQuestion` call. **Measured 2026-08-17 (gh#541):**
+a `context: fork` background dispatch has no question channel at all — `AskUserQuestion` is
+unreachable from inside it (confirmed two ways: two independent thin captures, #1122 and #541's
+own filing, both minted clarify-less; and a background dispatch cannot even discover the tool).
+This is this skill's only invocation shape (`context: fork` is fixed above), so the round never
+runs live, full stop. Capture here as `task` with the ambiguity named in Scope/Open instead
+(persistence beats taxonomy), and the close-out (Phase 4) owes the question it couldn't ask live:
+it names the one clarifying question find-intent's discipline would have asked, plus the resume
+command — `/file-task <id> answer: <text>` — that folds the answer in once a person supplies it (Phase
+1's "new detail" fold-in path). Skip naming a clarify question in the close-out when the seed
+carries `[redirected-from:X]` (the round budget was already spent upstream) or `[unattended]` (no
+live session to report back to at all) — the shared marker protocol below.
 
 A seed carrying a `[redirected-from:X]` marker (naming a DIFFERENT sibling) → captured regardless
 of fit: `task` with the mismatch named in Scope/Open, per this skill's own named fallback below.
@@ -86,23 +98,25 @@ captured record, never a second redirect.
 receiver carries no conversation history, so it cannot infer "reached by redirect" from context —
 the redirecting skill says so in the seed itself. Every redirect invocation prefixes the seed
 `[redirected-from:<the redirecting skill's name>]` before the verbatim seed; every genuinely
-unattended caller (no live user backing the run at all — a scheduled/cron firing, an agent
-dispatch with no interactive channel back to a person) prefixes `[unattended]`. The two markers
-answer different questions and never substitute for each other: `[redirected-from:X]` means the
-one-clarifying-round budget was already spent upstream — skip re-asking, capture regardless of
-fit — while a live user may still very much be present (an inline `/file-task`→`/file-bug`
-redirect mid-conversation has the same user throughout, which is why the redirect skip was never
-really about user-absence). `[unattended]` means no live user backs the run at all, full stop —
-the one case where a clarifying round truly has nowhere to land. A seed carrying neither marker
-gets the default: a live user is assumed, and the clarifying round proceeds normally.
+unattended caller (no live session to ever read a close-out — a scheduled/cron firing, an agent
+dispatch with no channel back to a person at all) prefixes `[unattended]`. The two markers answer
+different questions and never substitute for each other, restated in close-out terms (no sibling
+ever runs a live clarifying round — see the resolved-assumption note below): `[redirected-from:X]`
+means the one clarifying question was already named upstream, in the redirecting skill's own
+close-out — skip naming it again here, capture regardless of fit; a person may still very well
+read this skill's own close-out too (an inline `/file-task`→`/file-bug` redirect mid-conversation
+has the same reader throughout, which is why the redirect skip was never really about
+reader-absence). `[unattended]` means no reader backs the run at all, full stop — the one case
+where naming a question in the close-out has nowhere to land. A seed carrying neither marker gets
+the default: a reader is assumed for the close-out, and this skill's own Phase 2 names its one
+question there, per the resolved assumption below — never as a live round.
 
-**Unverified assumption, flagged (2026-08-09):** this whole design rests on `AskUserQuestion`
-actually reaching the live user from a `context: fork` run — asserted per skill-writing-rules'
-documented `context: fork` behavior, not confirmed by a live test in this environment (three
-attempts to register a throwaway forked test skill via `/reload-plugins` failed to register it at
-all, for reasons unrelated to this question — inconclusive, not negative). Treat the first real
-forked clarifying round as the actual proof: if a question silently never reaches the user, that
-is the signal this assumption needs a harder look, not evidence the skill is simply slow.
+**Assumption resolved (2026-08-09 flag, closed 2026-08-17 per gh#541):** the design used to rest
+on an unverified assumption that `AskUserQuestion` reaches a live user from a `context: fork` run.
+It doesn't — measured directly (Phase 2, above, carries the finding; not restated here). Every
+sibling's Phase 2 assumes this as the default, not a risk to watch for: capture-with-gaps plus a
+close-out that names the unasked question(s) and the resume command that folds an answer in later
+is the actual contract, not a fallback for a maybe-broken channel.
 
 ## Phase 3 — Dedup: it may already exist
 
@@ -141,7 +155,10 @@ when any) · an empty `## Findings` section** for dated write-backs.
   uncaptured because the preferred store was unreachable.
 
 The close-out reports the issue URL, ticket path, or adapter-native id — the record exists before
-this skill stops; that ordering is the contract.
+this skill stops; that ordering is the contract. Where Phase 2 named an unasked clarifying
+question (no `[redirected-from:X]`/`[unattended]` marker on the seed), this close-out carries it
+verbatim plus the resume command (`/file-task <id> answer: <text>`) — this is the report the caller's
+session actually reads.
 
 `.github/ISSUE_TEMPLATE/task.yml` mirrors this contract for a human filing directly on GitHub.
 
