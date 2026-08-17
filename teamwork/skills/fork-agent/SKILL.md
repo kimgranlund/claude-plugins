@@ -29,8 +29,7 @@ reach: `bind-` (the host adopts a contract in place), `fork-` (a background fork
 and dies, this command), `sub-` (`/sub-agent`, an `Agent`-tool dispatch runs unattended). Before
 this command, the `fork-` mechanic had no generic entry point — `/build-feature` is the one
 concrete instance (it forks `dispatch-ticket`), hardcoded to that one target. This command
-generalizes the mechanic to any registered agent: `${CLAUDE_PLUGIN_ROOT}/agents/*.md` in every
-installed plugin, cross-plugin agents included, resolved by name.
+generalizes the mechanic to any registered agent.
 
 Per D4, `/fork-agent` and `/sub-agent` are parameterized-only — no per-seat aliases are minted
 for either, regardless of how often a given agent name is used through them; an alias is only
@@ -39,8 +38,12 @@ ever earned by a `/bind-*` seat (D4's own hybrid-shape ruling).
 ## Phase 1 — Resolve the target
 
 `$ARGUMENTS`' first token is the agent name; everything after it is the task/charter passed to
-that agent. Search every installed plugin's `agents/<name>.md` for an exact match (case-sensitive,
-no fuzzy resolution — an agent name collision across plugins is a named blocker, not a guess).
+that agent. `${CLAUDE_PLUGIN_ROOT}` resolves to only THIS plugin's own root, not a cross-plugin
+search path, so a name search needs the installed-plugin cache directly: glob
+`~/.claude/plugins/cache/*/*/*/agents/<name>.md` across every installed plugin, plus, when the
+charter is scoped to a specific project, that project's own `.claude/agents/<name>.md`. Exact
+match only, case-sensitive, no fuzzy resolution — an agent name collision across plugins is a
+named blocker, not a guess.
 
 ## Phase 2 — Run the target's contract, in this forked context, once
 
@@ -69,6 +72,9 @@ changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action s
   no-nested-wait rule applies exactly as it would for a real `Agent`-tool dispatch of that same
   agent: act on a nested dispatch's own return value directly, never end this fork's turn waiting
   on a separate notification.
+- **This fork edits files** (it holds `Edit`/`Write`) — a background fork is not a checkpoint
+  boundary the way a foreground turn is (`/rewind` does not undo it); git is the only revert path
+  for anything this fork writes, same as any other background dispatch.
 
 ## Done
 

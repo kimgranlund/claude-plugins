@@ -23,9 +23,10 @@ OTHER seat in the chain is still a real dispatch. Seed: `$ARGUMENTS`.
 
 This skill imports the contract of `agents/fleet-marshal.md` — a deliberate pairing in the same
 family as harness's `issue-sorter` ruling. This file is the human-typed entry point AND the full
-procedure in one artifact (skill-as-command, ADR-0020/#525) — reachable both as `/bind-team`
-and via the `Skill` tool by name (`disable-model-invocation: true, user-invocable: true`); there is
-no separate wrapper command.
+procedure in one artifact (skill-as-command, ADR-0020/#525) — reachable as `/bind-team`
+(`disable-model-invocation: true, user-invocable: true` — command-only adoption is deliberate,
+per `team-scaffolding`'s own rejected-alternatives note: a `disable-model-invocation` target is
+structurally unreachable via the `Skill` tool); there is no separate wrapper command.
 
 ## Phase 1 — Bind the charter
 
@@ -39,14 +40,16 @@ From this point until the charter closes (Phase 4), this session holds the agent
 its own operating rules, following the shared ritual in `references/adopt-agent-contract.md`
 (this skill — the canonical copy; `bind-planning` and `bind-build` cite it too):
 
-1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md`, Priorities 1–8 (its own
-   lines 22–69), now, in full.** Adopt all eight verbatim as this session's standing rules for the
+1. **Read `${CLAUDE_PLUGIN_ROOT}/agents/fleet-marshal.md`, Priorities 1–8 (its own Priorities
+   section), now, in full.** Adopt all eight verbatim as this session's standing rules for the
    charter's duration: route by shape and dispatch sealed; budget every dispatch; gate between
    phases (generator ≠ critic); close every cycle on a named decision; run the discovered-reality
    escalation loop; keep durable state in records, not context; treat the committed tree as source
    of truth; roll up.
-2. **Invoke `team-or-solo-rules` and `loop-rules`** (this plugin) — the same two skills the
-   agent itself preloads (`agents/fleet-marshal.md:15`) — so the routing rubric and the
+2. **Invoke `team-or-solo-rules` and `loop-rules`** (this plugin) — two of the three skills the
+   agent itself preloads (`agents/fleet-marshal.md`'s `skills:` frontmatter field also carries
+   `fleet-rules`, deliberately not re-invoked here since it governs fleet-scoped multi-session
+   coordination this single-host charter doesn't enter) — so the routing rubric and the
    closed decision-set Priority 4 and 6 depend on are actually loaded, not assumed.
 3. **Acknowledge adoption** before dispatching anything: one standing block naming the contract
    file read, the three host deltas below, and the duration rule ("until this charter closes").
@@ -60,7 +63,7 @@ dispatched subagent:
 - **Adversarial-review seat availability (Priority 1).** `doc-checker` is docs' — where docs
   isn't installed, review the design doc by hand against `doc-writing-rules`' own rubric
   before treating it as gated.
-- **Write scoping (agent body, line 19).** The agent's `Write` tool is structurally scoped to
+- **Write scoping (agent frontmatter's `tools:` allowlist).** The agent's `Write` tool is structurally scoped to
   coordination records by its own frontmatter allowlist. The host has no such wall — see the
   discipline below, which does the same job by rule instead of by tool restriction.
 

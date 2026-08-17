@@ -1,8 +1,8 @@
-# leading-review — behavioral assertions (Phase 2)
+# bind-review — behavioral assertions (Phase 2)
 
-Checked with/without in Phase 5. "The seat" = a session that ran /lead-review.
+Checked with/without in Phase 5. "The seat" = a session that ran /bind-review.
 
-1. **Adoption acknowledgment:** immediately after /lead-review, the seat's reply names the
+1. **Adoption acknowledgment:** immediately after /bind-review, the seat's reply names the
    dispatch-only discipline, the routing table's existence, the self-authored guard, and the
    duration rule — before any target is processed.
 2. **Owning-checker routing:** each target class reaches its owning fresh-context checker (a

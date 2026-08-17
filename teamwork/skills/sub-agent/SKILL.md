@@ -10,7 +10,7 @@ description: >-
   name as its argument and mints none of its own.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "{agent-name} [task/charter for the agent]"
+argument-hint: "{agent-name} {task/charter for the agent}"
 allowed-tools:
   - Read
   - Glob
@@ -31,7 +31,11 @@ here — `/sub-agent {name}` is the whole surface.
 ## Phase 1 — Resolve the target
 
 `$ARGUMENTS`' first token is the agent name; everything after it is the task/charter the dispatch
-carries. Resolve against every installed plugin's `agents/<name>.md`, exact match only.
+carries. `${CLAUDE_PLUGIN_ROOT}` resolves to only this plugin's own root, not a cross-plugin
+search path, so resolve against the three real agent homes instead: every installed plugin's
+cache (`~/.claude/plugins/cache/*/*/*/agents/<name>.md`), the current project's own
+`.claude/agents/<name>.md`, and the user's own `~/.claude/agents/<name>.md` — exact match only,
+case-sensitive, no fuzzy resolution.
 
 ## Phase 2 — Seal and dispatch
 
@@ -54,10 +58,13 @@ the caller knows whether to expect a synchronous return or a later message.
   guess.
 - **`$ARGUMENTS` carries no task after the agent name** → report that a task/charter is required;
   never invent one to fill the gap.
-- **This session itself is a nested dispatch** (spawned via `Agent`, no further `Agent` tool of its
-  own, or already inside a fork) → the no-nested-wait rule: do not dispatch and then end this
-  turn waiting on a background callback for the sub-agent's completion — the `Agent` tool's own
-  return is synchronous from this call's perspective; act on it directly.
+- **This session itself is a nested dispatch and holds no `Agent` tool of its own** → this command
+  cannot run at all; report the capability gap plainly rather than attempting a dispatch, and name
+  the resume path (return to a session that does hold the tool).
+- **This session itself is a nested dispatch AND holds the `Agent` tool** → the no-nested-wait
+  rule: do not dispatch and then end this turn waiting on a background callback for the
+  sub-agent's completion — the `Agent` tool's own return is synchronous from this call's
+  perspective; act on it directly.
 
 ## Done
 

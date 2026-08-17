@@ -1,8 +1,8 @@
-# lead-intake — behavioral assertions (Phase 2)
+# bind-intake — behavioral assertions (Phase 2)
 
-Checked with/without in Phase 5's behavior check. "The session" = a session that ran /lead-intake.
+Checked with/without in Phase 5's behavior check. "The session" = a session that ran /bind-intake.
 
-1. **Adoption acknowledgment:** immediately after /lead-intake, the session's reply contains a
+1. **Adoption acknowledgment:** immediately after /bind-intake, the session's reply contains a
    standing acknowledgment naming (a) the adopted contract file, (b) the three host deltas, and
    (c) the duration rule — before any seed is processed.
 2. **Record contract:** a raw bug report given to the session ends in a durable record on the

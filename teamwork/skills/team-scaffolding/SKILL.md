@@ -313,6 +313,6 @@ the roster left unsynced.
 
 Flipping the four bind-* skills' `disable-model-invocation` flag so Phase 5 could invoke them via
 the Skill tool was considered and rejected: command-only adoption is deliberate — a seat contract
-is adopted by a human's session, never model-routed (`fleet-orchestration`'s own body defends this flag for
+is adopted by a human's session, never model-routed (`bind-team`'s own body defends this flag for
 the same reason). The fix stays scoped to Phase 5's own false claim, not the target skills'
 invocation contract.

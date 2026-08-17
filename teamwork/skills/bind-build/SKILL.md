@@ -21,9 +21,11 @@ seat. This skill is the other half of the pair — the `/bind-team` ↔ `fleet-m
 makes **this session** — the one the human is typing into — hold that agent's contract directly,
 for the session's duration, with no Agent spawn. One engine, three entries, on purpose:
 `/build-feature` forks ONE target off a session; `build-leader` runs unattended for a
-programmatic caller; this skill is the live standing seat the human feeds directly, reachable both
-as `/bind-build` and via the `Skill` tool by name (skill-as-command, ADR-0020/#525 — no separate
-wrapper command). Under ADR-0006 the pair splits by species: command head = mechanic
+programmatic caller; this skill is the live standing seat the human feeds directly, reachable as
+`/bind-build` (skill-as-command, ADR-0020/#525 — no separate wrapper command; `disable-model-invocation:
+true` makes it, like its siblings, unreachable via the `Skill` tool by design — command-only
+adoption, per `team-scaffolding`'s rejected-alternatives note). Under ADR-0006 the pair splits by
+species: command head = mechanic
 (`/bind-build`), agent = role noun (`build-leader`). Seed: `$ARGUMENTS` (a target repo root; blank
 = the current working directory).
 

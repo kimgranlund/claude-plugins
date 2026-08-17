@@ -47,7 +47,7 @@ From this point until the charter closes, this session holds
 since the #433 move noted above) as its own operating rules —
 read that file and hold its seven priorities verbatim as this session's standing discipline for
 the charter's duration, rather than re-derived inline here (the drift-pair defect class
-`fleet-orchestration`'s own R5 finding named: restating a copy invites birth-drift against the source of
+`bind-team`'s own R5 finding named: restating a copy invites birth-drift against the source of
 record). Acknowledge adoption in one line before processing anything: the file read, the
 duration rule ("until this charter closes"), and the seat-tier deviation line stated verbatim
 from the agent file (fable+high, dated 2026-08-16, D08/#395 precedent).

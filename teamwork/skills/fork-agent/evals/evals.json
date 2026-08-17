@@ -1,10 +1,12 @@
 {
   "skill": "fork-agent",
-  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
+  "note": "Trigger-routing suite. Command species (disable-model-invocation: true) — every positive case is the explicit slash form; expect=no-trigger: a near-miss owned elsewhere (owner in comment).",
   "cases": [
     { "id": "t01", "prompt": "/fork-agent builder implement the checkout LLD's build sequence.", "expect": "trigger" },
-    { "id": "t02", "prompt": "Run the code-checker agent's own contract as a background fork off this session and return only its verdict.", "expect": "trigger" },
+    { "id": "t02", "prompt": "/fork-agent code-checker review this diff and return only its verdict.", "expect": "trigger" },
     { "id": "t03", "prompt": "/fork-agent wiring-checker review this agent's frontmatter.", "expect": "trigger" },
+    { "id": "t04", "prompt": "/fork-agent docs-writer regenerate the drifted docs page and return only what changed.", "expect": "trigger" },
+    { "id": "t05", "prompt": "/fork-agent product-leader tell me which loop we're in and return only the reading.", "expect": "trigger" },
     { "id": "n01", "prompt": "Dispatch the builder agent via the Agent tool for this ticket, unattended.", "expect": "no-trigger", "comment": "owner: /sub-agent — a real Agent-tool dispatch, not a background fork" },
     { "id": "n02", "prompt": "Make this session adopt the fleet-marshal agent's own contract directly for this charter.", "expect": "no-trigger", "comment": "owner: /bind-team — the host adopts the contract in place, no fork" },
     { "id": "n03", "prompt": "Build feature #240 for me right now.", "expect": "no-trigger", "comment": "owner: /build-feature — the one concrete pre-existing fork target, reached by its own name" }
