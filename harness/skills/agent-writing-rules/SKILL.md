@@ -230,6 +230,13 @@ The dispatch prompt and the body together are a fresh distribution's entire earl
 
 `agents/skill-checker.md` in this plugin is the normative worked example of the five that apply to it (a task-return subagent, no teammate-mode dispatch and no inbound `SendMessage` traffic, so items 3 and 7 don't apply there, and item 8 governs the dispatcher's own prompt rather than the agent file, so it doesn't apply here either).
 
+Items 3 and 7 are this skill's own authoring contract — encoding the delivery clause and the
+generic-identity caveat correctly INTO an agent file. The matching RUNTIME default a dispatched
+fleet seat actually follows once that clause is encoded — report-before-idle, a report
+superseding any later nudge, idle pings as no-ops — is `teamwork:fleet-rules`' Section 3, cited
+there rather than restated here; that skill's own scope is the default protocol, this one's is
+the file that encodes it.
+
 ## Failure catalog
 
 | Failure | Mechanism | Fix |

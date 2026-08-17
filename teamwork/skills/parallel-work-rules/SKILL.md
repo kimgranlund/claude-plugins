@@ -7,7 +7,8 @@ description: >-
   shared-file changes, two builders on the same files, a collided build, or committing
   before a risky move. NOT dispatch shape/cost (team-or-solo-rules); NOT next-turn
   timing — /goal, /loop (loop-rules); NOT closing out THIS session's worktree
-  (close-session).
+  (close-session); NOT the fleet's default coordination-scope/claim/comms/version-slot/
+  pin-race-unblock protocol (fleet-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -111,6 +111,12 @@
       "id": "n10",
       "prompt": "wrap up this session before we're done — check for anything left to capture in the worktree",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "the orchestrator session died mid-build last night, how do I resume as the successor",
+      "expect": "no-trigger",
+      "comment": "owner: fleet-rules (2026-08-17, #480) — session-death resilience/claim-state inventory, not the isolation decision or a live git-tree collision"
     }
   ]
 }
