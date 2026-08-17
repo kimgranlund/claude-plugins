@@ -52,7 +52,17 @@
   "role_lex": [
     "leader",
     "orchestrator",
-    "coordinator"
+    "coordinator",
+    "checker",
+    "runner",
+    "planner",
+    "watcher",
+    "finder",
+    "sorter",
+    "cleaner",
+    "judge",
+    "builder",
+    "writer"
   ],
   "topic_lex": [
     "icon",
