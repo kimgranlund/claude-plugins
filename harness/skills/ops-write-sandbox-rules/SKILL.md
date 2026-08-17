@@ -48,6 +48,17 @@ contract violation, not "nothing changed" (issue #140: a live sweep found a seat
 with no fenced block behind it; nothing landed until the dispatching session caught it by hand).
 Name every narrated-but-absent claim explicitly rather than silently absorbing it.
 
+**The payload-fence rule binds regardless of hedge language.** Narrating a path conditionally —
+"report written to X, if applicable/if written" — without ever emitting X's fenced block is the
+same narrated-but-absent violation in softer words, not an exemption from it: a seat with nothing
+to report for a path omits that path entirely rather than naming it conditionally. The rule also
+binds a LATER payload that cites an EARLIER one: a state file (e.g. `held-items.md`) may reference
+another path (e.g. a per-firing report) as existing only once that path's own fenced block has
+actually been emitted in this firing or a prior one — never on the strength of having been merely
+mentioned. A live consuming-repo sweep found exactly this gap (issue-sorter hedged a report path
+as "if written," never emitted it, and `held-items.md` went on to cite it as if it did) — the fix
+is this rule, stated once here for every ops-family seat rather than patched per-instance.
+
 ## Why state persists through the repo at all
 
 A cloud-routine checkout (a scheduled `CronCreate` firing) is isolated per firing, and now also
