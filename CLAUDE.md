@@ -48,7 +48,8 @@ No installed harness required; every check is a plain script. Run from the works
   runs manifest/structure checks, the full lint sweep, bundled selftests, a phantom-`[[handle]]`
   sweep, eval-suite validation, and docs-freshness (G10), in that order; `--package` additionally
   writes `<plugin>/dist/<name>-<version>.plugin`.
-- **Lint one file by hand** (what the PostToolUse hook runs automatically on every `Write`/`Edit`):
+- **Lint one file by hand** (all plugin-shipped hooks were retired 2026-08-17, #466 —
+  remove-all-hooks directive; nothing runs this automatically anymore):
   `python3 harness/scripts/skill_lint.py <path-to-SKILL.md-or-agent.md-or-hooks.json>`.
 - Once a plugin is installed, prefer its slash commands over raw script calls inside a session:
   `/ship-plugin`, `/check-routing`, `/check-everything`. The commands above are for scripting, CI, or

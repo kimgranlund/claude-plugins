@@ -80,7 +80,7 @@ The plugin name (`harness`, distribution taxonomy) is deliberately disjoint from
 | `scripts/adr_checkpoint.py` | Script | CLI + selftest | Cheap, deterministic ADR-corpus diff by content hash against a checkpoint: new / amended / newly-superseded (read from a declared field or table row, never inferred from loose prose) / unchanged — cost stays proportional to what changed, never to corpus size; `decision-watcher`'s only economic lever. Parses three dialects (`status:` frontmatter · an `# ADR-NNNN` H1 + blockquote status table · one file of `## ADR-NNN` sections) and FAILS LOUDLY (exit 1, "unsupported shape") rather than reporting a clean empty delta when non-empty input yields zero ADRs |
 | `scripts/adr_queue.py` | Script | CLI + selftest | Durable held-queue for ADR-review candidates: append-or-update by (adr, kind) — a re-detected candidate updates in place, never duplicates — so a scheduled firing never blocks on a live human; one batched confirm round clears however many accumulated |
 | `scripts/eval_check.py` | Script | CLI + selftest | E1–E6: suite schema, id/owner identity, prompt dedup, case-mix floors, plugin-wide coverage |
-| `hooks/hooks.json` + `scripts/skill_lint.py` | Hook + script | fires on `Write\|Edit` of any `SKILL.md`, `agents/*.md`, or `hooks.json` | Check tier: skill F/W rules; agent A1–A5 (YAML shape, thin shell, allowlist); hooks H1–H5 (wrapper, shape, portable paths); CLAUDE.md C1–C2 in CLI mode only |
+| `scripts/skill_lint.py` | Script | CLI + selftest + gate G3 (PostToolUse hook retired 2026-08-17, #466 — remove-all-hooks directive) | Check tier: skill F/W rules; agent A1–A5 (YAML shape, thin shell, allowlist); hooks H1–H5 (wrapper, shape, portable paths); CLAUDE.md C1–C2 in CLI mode only |
 
 Check/judgment split by design: everything mechanically decidable lives in `skill_lint.py` (run `python3 scripts/skill_lint.py selftest` to prove the counters); `check-skill` scores only what requires a model.
 
@@ -128,6 +128,8 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
 Directories align with plugin names (ADR-0007).
+
+v3.8.24 · 2026-08-17 · plugin-shipped hook retired (#466, Kim's remove-all-hooks directive): `hooks/hooks.json` (the `skill_lint.py` PostToolUse wiring) deleted; the script is unaffected and still runs via G3/G4 and CLI. No gate check asserted a hook must exist, so no gate amendment was needed.
 
 v3.8.23 · 2026-08-17 · agent-description diet (closes #461, #373 Wave-2 S7): 8 agent frontmatter
 descriptions (`agent-checker`, `chore-planner`, `decision-watcher`, `hook-checker`,

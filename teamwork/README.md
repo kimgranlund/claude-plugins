@@ -16,8 +16,8 @@ reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/sk
 | `skills/loop-rules` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
 | `skills/parallel-work-rules` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
 | `skills/close-session` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through file-bug/feature/issue, triggers save-lessons's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
-| `hooks/hooks.json` (`SessionEnd`) | Hook | automatic | Passive safety net for `close-session`: on actual session termination, logs a durable warning line if a git worktree was left dirty or unpushed — `SessionEnd` cannot block, so this never gates, only records |
-| `hooks/hooks.json` (`PreToolUse` · `scripts/worktree_prebash_guard.py`) | Hook | automatic | Issue #139's repo-side mitigation: flags (never blocks — `permissionDecision: ask`) a Bash command that `cd`'s or `-C`/`--prefix`'s out of a worktree cwd into the shared primary checkout and then runs a further command in the same call — the compound-command escape the platform's git-only worktree-isolation guard doesn't bind. Detects the primary-root boundary from the worktree cwd's own `.claude/worktrees/` path (no external config needed); dynamic (`$(...)`) targets are a disclosed blind spot, left silent rather than guessed. Also (#363) persists a per-session worktree-identity pin, keyed by `session_id`, self-healing on ASK — catches a cwd already wrong on a later SEPARATE call with no cd in it at all, the #359 pattern the compound-cd check alone can't see |
+| `scripts/session_end_worktree_check.py.retired` | Retired script | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly a `SessionEnd` hook: passive safety net for `close-session`, logging a durable warning line if a git worktree was left dirty or unpushed. `SessionEnd` never blocked; this was always a pure log, never a gate. Kept on disk retired, not deleted, for history |
+| `scripts/worktree_prebash_guard.py.retired` | Retired script | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly issue #139's repo-side `PreToolUse` mitigation, ASK-only: flagged (never blocked) a Bash command that `cd`'s or `-C`/`--prefix`'s out of a worktree cwd into the shared primary checkout or a sibling worktree and then ran a further command in the same call. Kept on disk retired, not deleted, for history — `parallel-work-rules` now carries this as a manual discipline instead |
 | `skills/build-feature` | Command skill | user-only (`/build-feature`) | The human-typed entry point only — delegates its full procedure to `dispatch-ticket` (issue #135: a `disable-model-invocation: true` skill can't be Skill-tool-invoked or preloaded by anything else, so the procedure had to move) |
 | `skills/dispatch-ticket` | Procedural skill | model-only | The record-first procedure for one confirmed ticket of ANY kind (ADR-0010, renamed+generalized from `dispatch-feature`): finds or mints the record, then branches by kind — feature → size by the solo-first floors (small → host inline / one sealed fork; big → the floored seats) and build under a mandatory Findings write-back; task → one find-intent round, then a solo-first Agent dispatch under the same contract; bug → hand-off to docs' `file-bug` with the `[redirected-from:]` marker. Reached by name only, from `build-feature`'s own body or the `build-lead` agent's preload — never a direct user ask |
 | `agents/build-leader` | Subagent | dispatch-only | The Agent-tool-reachable twin of `/build-feature` generalized to every ticket kind (ADR-0010, renamed from `feature-lead`; file renamed `build-lead` → `build-leader` closes #433, PENDING the naming-ADR that supersedes ADR-0011 REQ-002's `-agent` suffix rule), preloading `dispatch-ticket` — `mobilize-chores` step 5 dispatches every confirmed ticket here uniformly, per-ticket isolation being the reason this stays an agent rather than harness's `sweep-chores` shape (issue #266) |
@@ -105,6 +105,14 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.4 · assembled 2026-08-17 · plugin-shipped hooks retired (#466, Kim's remove-all-hooks
+directive): `hooks/hooks.json` deleted (the `worktree_prebash_guard.py` PreToolUse ASK-only
+compound-cd guard and the `session_end_worktree_check.py` SessionEnd passive log). Both scripts
+kept on disk retired (`.retired` suffix), not deleted, for history — no other caller depended on
+either. `parallel-work-rules` and `close-session/intent.md` updated to state the enforcement is
+retired rather than live. No gate check asserted a hook must exist, so no gate amendment was
+needed.
+
 v2.17.3 · assembled 2026-08-16 (closes #460): deduped the "report delivery" + "no nested wait"
 paragraph the four Agent-tool-reachable `*-leader` twins (`build-leader`, `planning-leader`,
 `review-leader`, `product-leader`) each restated inline — extracted verbatim into
@@ -112,7 +120,6 @@ paragraph the four Agent-tool-reachable `*-leader` twins (`build-leader`, `plann
 fix), with each agent now citing it in one line and stating inline only what's per-citer: whether
 it holds the `Agent` tool (only `product-leader` doesn't) and where its own report's content comes
 from. Fresh-context `agent-checker` passes on all four confirmed nothing load-bearing was dropped.
-
 v2.17.2 · assembled 2026-08-16 · overhaul #373 Wave-2 S3 (closes #458): centralized the
 `leading-planning`/`leading-review` description boilerplate the standing-seat charter template
 duplicated across all four `leading-*` skills (the estate's top description-collision cluster,

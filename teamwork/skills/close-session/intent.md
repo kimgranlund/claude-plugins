@@ -148,15 +148,16 @@ P5 validate:   PASS (2026-07-19)
                    intent-extract round and can hang the same way unattended — branch reworded to
                    name both. `skill_lint.py` re-run clean after both fixes.
 
-## Separate artifact — the SessionEnd log hook
+## Separate artifact — the SessionEnd log hook (retired 2026-08-17, #466)
 A non-blocking safety net, NOT part of this skill's own gates: `orchestration 0.1.0/hooks/`
-registers a `SessionEnd` hook (`scripts/session_end_worktree_check.py`) that, on real session
-termination, checks the same mechanical state (uncommitted changes, unpushed commits) in a git
-worktree and — since `SessionEnd` cannot block anything (verified, P0 above) — writes a durable,
+registered a `SessionEnd` hook (`scripts/session_end_worktree_check.py`) that, on real session
+termination, checked the same mechanical state (uncommitted changes, unpushed commits) in a git
+worktree and — since `SessionEnd` cannot block anything (verified, P0 above) — wrote a durable,
 discoverable note if state was left behind, rather than trying to prevent the session from
-ending. It exists so nothing is silently lost even when this skill was never invoked at all; it
-is documented and gated separately (own selftest, own hook-authoring-standards lint) because it is
-a different primitive, not a restatement of this skill.
+ending. It existed so nothing was silently lost even when this skill was never invoked at all.
+Enforcement retired 2026-08-17 (#466, remove-all-hooks directive) — the script is kept on disk
+as `scripts/session_end_worktree_check.py.retired` for history, but nothing wires it anymore;
+this skill's own manual verdict is the only net now.
 
 ## rulings
 - Placement: orchestration, not forge — cross-references concurrency-design (same
