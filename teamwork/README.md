@@ -108,6 +108,20 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.5 · assembled 2026-08-17 · (closes #554): `dispatch-ticket`'s no-nested-wait section
+corrected — its prose claimed an unnamed `Agent`-tool critic dispatch's synchronous tool-result
+was always the return value, "no separate signal will ever reach you." PR #547's fold observed a
+real counter-case: a fresh-context critic dispatch ran ASYNC and its all-PASS verdict arrived as a
+background task notification to the dispatching session instead. Added a dated correction
+paragraph plus a caveat inline at the earlier absolute claim: an async, notification-routed
+completion is a second valid path for an unnamed dispatch, not a stall and not grounds to
+re-dispatch — a seat now accepts whichever of the two (synchronous return or task notification)
+arrives first and reports it onward, escalating only when neither arrives within roughly 10
+minutes or the dispatch's own stated budget. Rebased onto the ADR-0020 wave chain (through #551);
+integrated cleanly against the renamed `/bind-build` surface with no further wording changes
+needed. Prose-only; fresh-context skill-checker pass rode the edit. `release_gate.py teamwork`
+clean.
+
 v2.21.4 · assembled 2026-08-17 · closes #551: two follow-ups from the wave-5 rename campaign.
 (1) `bind-product` (formerly `leading-product`, renamed under ADR-0020 W5) had two pre-existing
 leaked no-trigger cases (n02 "gate this build dispatch" → was winning over its true owner
