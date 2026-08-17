@@ -32,6 +32,13 @@ Gate order (plugin-writing-rules §Release discipline):
       in --scope grammar over a repo-root naming.manifest.json; gates naming-grammar findings
       only, structural (schema/provenance) findings stay informational; no manifest or no
       validator on this checkout -> not applicable
+  G12b bundled-manifest parity (issue #562): when the gated plugin ships its OWN bundled
+      naming.manifest.json (today: authorkit's self-dogfood copy), the same validator is
+      re-run BARE (no --manifest, so it discovers that bundled copy) in --scope grammar --
+      catches a root-manifest entry the plugin's own artifact names need but the bundled
+      copy never mirrored (the drift PR #560 found by hand twice); schema_scope full-vs-
+      grammar is a deliberate divergence this leg never grades (the explicit --scope grammar
+      overrides it); no bundled copy on this plugin -> not applicable
   G13 marketplace coverage (2026-08-14): when the workspace root carries
       .claude-plugin/marketplace.json, the gated plugin must appear in its plugins list
       (the authorkit-invisible-in-/plugin incident); no manifest -> not applicable
@@ -660,6 +667,49 @@ def gate(root: Path, package: bool = False):
         warn("G12", "naming.manifest.json present but authorkit's validator is not on this checkout "
                     "-> naming-grammar gate unproven locally")
 
+    # G12b bundled-manifest parity (issue #562) — a plugin that ships its OWN bundled
+    # naming.manifest.json (today: authorkit's self-dogfood copy) dogfoods that bundled
+    # copy directly; G12 above only ever validates against the WORKSPACE-ROOT manifest
+    # explicitly passed via --manifest, so a bundled copy drifting stale (5 object_vocab
+    # entries missing at PR #560's build, grown from 3 at LLD-0004's -- both times a
+    # HAND-noticed incident, never gate-caught) never failed a run. Re-running the SAME
+    # validator BARE (no --manifest) makes it discover and grade the plugin's OWN bundled
+    # copy instead. --scope grammar is explicit here, never inherited from the bundled
+    # manifest's own schema_scope field (deliberately "full" -- authorkit's own stricter
+    # self-dogfood tier, ADR-0011/D9's structural-schema divergence): grading that broader
+    # tier here would fail this gate on authorkit's deliberate stricter posture instead of
+    # an actual naming-grammar drift ("schema_scope full-vs-grammar is a KNOWN deliberate
+    # divergence, never a failure" -- issue #562's own acceptance). A vocab entry the
+    # plugin's own artifact names actually need, but the bundled copy never mirrored,
+    # surfaces as a grammar_errors finding exactly the way #560's drift did -- grounded in
+    # real usage, not a structural diff of the two files (which has no way to define
+    # "scoped to this plugin" for a lexicon entry the plugin's own names never exercise).
+    # No bundled copy for this plugin -> not applicable, skip silently (most plugins carry
+    # none).
+    bundled_manifest = root / "naming.manifest.json"
+    if bundled_manifest.is_file() and naming_validator.is_file():
+        rb = subprocess.run(
+            [sys.executable, str(naming_validator), "--target", str(root),
+             "--json", "--scope", "grammar"],
+            capture_output=True, text=True, cwd=ws, timeout=60)
+        try:
+            db = json.loads(rb.stdout)
+        except (json.JSONDecodeError, ValueError):
+            fail("G12b", f"bundled-manifest validator produced no parseable JSON -> "
+                          f"{(rb.stdout or rb.stderr)[-300:]}")
+        else:
+            gb_errs = db.get("grammar_errors", [])
+            if gb_errs:
+                detail = "; ".join(f"{n}: {m}" for n, _, m, _ in gb_errs[:3])
+                fail("G12b", f"{len(gb_errs)} bundled-manifest parity finding(s) -> {detail} "
+                            f"-> {bundled_manifest} is missing vocab {root.name}'s own artifacts "
+                            "need; resync it from the root manifest")
+            else:
+                ok(f"bundled naming.manifest.json parity clean ({bundled_manifest.name} self-check)")
+    elif bundled_manifest.is_file() and not naming_validator.is_file():
+        warn("G12b", "bundled naming.manifest.json present but authorkit's validator is not on "
+                     "this checkout -> bundled-manifest parity gate unproven locally")
+
     # G13 marketplace coverage (2026-08-14: authorkit shipped through the gate, landed on main,
     # and was invisible in /plugin for a day — the root marketplace.json enumerates plugins
     # explicitly, exactly like gate.yml's loop, and nothing checked it; the same
@@ -852,7 +902,9 @@ def selftest():
         stub.write_text(
             "import json, os, sys\n"
             "target = sys.argv[sys.argv.index('--target') + 1]\n"
-            "bad = os.path.exists(os.path.join(target, 'TRIGGER'))\n"
+            "bare = '--manifest' not in sys.argv\n"
+            "trigger = 'BUNDLED_TRIGGER' if bare else 'TRIGGER'\n"
+            "bad = os.path.exists(os.path.join(target, trigger))\n"
             "out = {'grammar_errors': [['x', 'error', 'stub grammar violation', 'grammar']] if bad else [],\n"
             "       'structural_errors': []}\n"
             "print(json.dumps(out))\n"
@@ -865,6 +917,25 @@ def selftest():
         (r / "TRIGGER").unlink()
         code, _ = gate(r)
         assert code == 0, "removing the trigger file restores a clean G12"
+        # G12b bundled-manifest parity leg (issue #562): a plugin's OWN
+        # naming.manifest.json (self-dogfood copy, today only authorkit's) is graded by a
+        # BARE (no --manifest) call to the same validator — the seeded-drift negative
+        # control this ticket's acceptance names. BUNDLED_TRIGGER is deliberately a
+        # DIFFERENT file than G12's own TRIGGER (the stub's `bare` branch above), so the
+        # two legs stay independently provable and never cross-fire each other.
+        bundled_mf = r / "naming.manifest.json"
+        bundled_mf.write_text('{"exemptions": []}')
+        code, _ = gate(r)
+        assert code == 0, "synced bundled manifest (no seeded drift) must keep the gate clean"
+        (r / "BUNDLED_TRIGGER").write_text("x")
+        code, _ = gate(r)
+        assert code == 1, "seeded bundled-manifest drift must fail G12b (the negative control)"
+        (r / "BUNDLED_TRIGGER").unlink()
+        code, _ = gate(r)
+        assert code == 0, "removing the seeded drift restores a clean G12b"
+        bundled_mf.unlink()
+        code, _ = gate(r)
+        assert code == 0, "no bundled manifest -> G12b not applicable, gate stays clean"
         stub.unlink()
         stub_dir.rmdir()
         (r.parent / "authorkit" / "skills" / "naming-audit").rmdir()
