@@ -39,6 +39,12 @@ The repo-cleaner agent also preloads `big-change-git-rules` for the operational 
 placement, merge semantics, the silent-failure catalog, the reconcile protocol) and `github-facts`
 for platform facts (draft-PR/review/merge-queue mechanics) — cited, never restated here.
 
+**State-checkpoint ownership (ruled 2026-08-17):** `.claude/ops/state-checkpoint.json` is
+repo-cleaner's checkpoint home — the seat that reads and advances it, in any host repo where a
+prior `/check-state` run has not already claimed the same path for its own delta section (this
+plugin's own `check-state` skill is that existing claim here; this ruling does not reassign it,
+it names the default owner for a repo where the file sits unclaimed, as in gen-ui-kit today).
+
 Where the HOST repo has ruled its own ticket-claim convention (docs' `doc-writing-rules`' ADR-0005
 names the generic `claim` ticket operation this plugin ships with — a named mention, not a
 preload — but a host repo may rule the identical convention under its OWN numbered ADR instead,

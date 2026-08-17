@@ -90,6 +90,19 @@ dialect per file) — pass whichever `<adr-source>` the repo actually has:
   forward-declaring signal — never `complements`/other verbs, which name a relationship, not a
   supersession.
 
+**The supersession contract (ruled 2026-08-17):** the formal marker — `supersedes:` frontmatter,
+the blockquote status table's `Supersedes / Superseded by` cell, or the monolithic dialect's
+heading annotation — IS the supersession contract this classifier honors, together with the one
+named active-voice body-clause exception above. A prose claim made only in body text ("superseded
+by", "replaced by") outside that named exception is out-of-contract and deliberately not
+detected — not a bug to fix, a boundary to keep, since open-ended prose-supersession detection is
+exactly what the frontmatter dialect's own body-clause signal is a NAMED, bounded exception to,
+never a precedent to widen. Evidence: adr-0048 stated its supersession only as body prose with no
+marker and outside the named pattern, so it was correctly missed; adr-0071's supersession of
+adr-0043, recorded with the marker, classified cleanly the same day. ADR authors who want a
+supersession detected must set the marker (or use the one named active-voice body pattern) — this
+is a contract for the AUTHOR to satisfy, not a gap for the classifier to close.
+
 Whichever the shape, `classify_delta` reads exactly the extracted `status`/`supersedes`/
 `body_supersedes` fields — never infers supersession from prose it wasn't told to parse (the
 frontmatter dialect's body-clause signal above is a NAMED, bounded exception — it parses one

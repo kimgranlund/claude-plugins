@@ -75,9 +75,13 @@ git history).
    --search`, `gh pr list`; Linear MCP once connected) — read-only. A source that fails to reach
    does not advance ITS checkpoint entry; a source that succeeds does, independently — a partial
    firing never silently drops the window on the source that failed.
-2. Classify each item's shape (defect / feature idea / generic task) per `github-issue-pr-
-   primitives`' Bug/Task/Feature axis and this workspace's own `issue` skill's Phase-2 rule, cited
-   not restated.
+2. Classify each item's shape (defect / feature idea / generic task / ruling-shaped) per
+   `github-issue-pr-primitives`' Bug/Task/Feature axis and this workspace's own `issue` skill's
+   Phase-2 rule, cited not restated. **Ruling-shaped (ruled 2026-08-17):** an item that names a
+   decision only an operator can make — not a bug, feature, or task any seat can just build —
+   gets the `needs-ruling` label instead of a kind label, mints the same as any other trusted
+   item (step 4), and is never carried as a restated prose lane in `chore-planner`'s plan; the
+   plan references the labeled issue by id instead.
 3. Check the filing author against `friendlies.json`.
 4. Trusted → mint or resume the record directly, per the Scope section's record shape and the same
    dedup-before-mint sweep the capture skills already run — no human step.
