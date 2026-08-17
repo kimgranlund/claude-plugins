@@ -77,7 +77,7 @@ this."
 ## Boundaries — this pack ANSWERS; it routes ALL making
 
 - **Design or review the wiring itself — which unit (skill/subagent/team), frontmatter, `skills:`
-  preloads** in YOUR project → your project's own team-or-solo-rules seat/skill (this pack
+  preloads** in YOUR project → your project's own fleet-rules seat/skill (this pack
   teaches the composition PATTERN across agents; it does not own any project's frontmatter).
 - **One skill's own trigger/description routing** (why a single skill triggers or doesn't, how to write
   its trigger phrases) → [[chat-harness-routing-facts]] (the sibling pack in this plugin) —

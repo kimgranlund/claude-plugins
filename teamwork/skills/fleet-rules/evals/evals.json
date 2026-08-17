@@ -1,6 +1,6 @@
 {
  "skill": "fleet-rules",
- "note": "Trigger-routing suite for the new default-orchestration-protocol pack (issue #480, minted from the #373 overnight campaign). Positives across the six areas (coordination scope ladder, work-claim protocol, communication routing, version-slot/merge-order, session-death resilience, pin-race playbook). Negatives drawn from the fenced siblings' own trigger vocabulary: parallel-work-rules (isolation decision / live collision), team-or-solo-rules (dispatch shape/wiring), loop-rules (continuation timing), mobilize-chores (which tickets are mobilizable), and big-change-git-rules (stacked-PR/rename git mechanics, cross-plugin) — plus a same-plugin agent-writing-rules probe (encoding the delivery clause into an agent file, not applying the runtime default).",
+ "note": "Trigger-routing suite for the merged default-orchestration-protocol pack (ADR-0020 D5 / #524, 2026-08-17): team-or-solo-rules' composition/wiring-design cases folded in alongside the original #480 fleet-protocol cases (minted from the #373 overnight campaign). Positives span both classes the merged description now owns — the six fleet-ops areas (coordination scope ladder, work-claim protocol, communication routing, version-slot/merge-order, session-death resilience, pin-race playbook) and the composition-design class (unit choice, wiring review, dispatch shape). The two negatives that used to fence each half against the other (fleet-rules' n03/n04/n10 pointing at team-or-solo-rules; team-or-solo-rules' n13 pointing at fleet-rules) are removed as self-references post-merge, not renumbered into positives — the merged suite fences only against genuinely external siblings now: parallel-work-rules (isolation decision / live collision), loop-rules (continuation timing), mobilize-chores (which tickets are mobilizable), big-change-git-rules (stacked-PR/rename git mechanics, cross-plugin), agent-writing-rules (same-plugin, encoding a delivery clause into an agent file), and harness's check-all-skills/check-all-agents/write-handoff/break-down-problem (corpus-wide sweeps and the handback contract, cross-plugin). Known accepted-leak class carried over from team-or-solo-rules (check-routing 2026-07-09): 'do my agents leverage the right skills' leaks here when check-all-agents (its owner, a user-only command) is off the model menu — benign; do not tune to chase it.",
  "cases": [
   {
    "id": "t01",
@@ -63,6 +63,56 @@
    "expect": "trigger"
   },
   {
+   "id": "t13",
+   "prompt": "should this be a subagent or a team",
+   "expect": "trigger"
+  },
+  {
+   "id": "t14",
+   "prompt": "how do my skills and agents connect",
+   "expect": "trigger"
+  },
+  {
+   "id": "t15",
+   "prompt": "review my frontmatter",
+   "expect": "trigger"
+  },
+  {
+   "id": "t16",
+   "prompt": "design how my agents and skills compose",
+   "expect": "trigger"
+  },
+  {
+   "id": "t17",
+   "prompt": "review my orchestration",
+   "expect": "trigger"
+  },
+  {
+   "id": "t18",
+   "prompt": "audit how this agent system integrates",
+   "expect": "trigger"
+  },
+  {
+   "id": "t19",
+   "prompt": "should I preload skills on this subagent or let discovery route them",
+   "expect": "trigger"
+  },
+  {
+   "id": "t20",
+   "prompt": "is a team fan-out worth the cost here or would one subagent do",
+   "expect": "trigger"
+  },
+  {
+   "id": "t21",
+   "prompt": "wire up this new capability - skill, subagent, or team",
+   "expect": "trigger"
+  },
+  {
+   "id": "t22",
+   "prompt": "my subagent never gets selected - is the wiring between capabilities wrong",
+   "expect": "trigger"
+  },
+  {
    "id": "n01",
    "prompt": "should I work in a worktree for this, or is the shared tree fine",
    "expect": "no-trigger",
@@ -76,51 +126,105 @@
   },
   {
    "id": "n03",
-   "prompt": "should this be a subagent or a team for this task",
-   "expect": "no-trigger",
-   "comment": "owner: team-or-solo-rules — dispatch shape/unit choice"
-  },
-  {
-   "id": "n04",
-   "prompt": "review my agent frontmatter and skills: preload wiring",
-   "expect": "no-trigger",
-   "comment": "owner: team-or-solo-rules — wiring review"
-  },
-  {
-   "id": "n05",
    "prompt": "write a /goal for this migration with a verifiable end state",
    "expect": "no-trigger",
    "comment": "owner: loop-rules — continuation timing"
   },
   {
-   "id": "n06",
+   "id": "n04",
    "prompt": "my /loop keeps re-running work that's already finished",
    "expect": "no-trigger",
    "comment": "owner: loop-rules — continuation timing"
   },
   {
-   "id": "n07",
+   "id": "n05",
    "prompt": "sweep the ops queue and tell me which tickets are actually mobilizable right now",
    "expect": "no-trigger",
    "comment": "owner: mobilize-chores — ticket discovery/mobilizability, not the claim-guard default this skill cites from it"
   },
   {
-   "id": "n08",
+   "id": "n06",
    "prompt": "a stacked child PR got auto-closed when its parent's branch was deleted, how do I recover it",
    "expect": "no-trigger",
    "comment": "owner: harness's big-change-git-rules (cross-plugin) — the git mechanics themselves"
   },
   {
-   "id": "n09",
+   "id": "n07",
    "prompt": "write the SendMessage delivery clause into this new teammate-mode agent's own body",
    "expect": "no-trigger",
    "comment": "owner: harness's agent-writing-rules (cross-plugin) — authoring the mechanic into an agent file, not applying the runtime default"
   },
   {
-   "id": "n10",
-   "prompt": "decompose this system across the planning and execution planes before we spec it",
+   "id": "n08",
+   "prompt": "write a /goal",
    "expect": "no-trigger",
-   "comment": "owner: planner / team-or-solo-rules territory — decomposition, not fleet protocol"
+   "comment": "owner: loop-rules"
+  },
+  {
+   "id": "n09",
+   "prompt": "my goal loop never stops",
+   "expect": "no-trigger",
+   "comment": "owner: loop-rules"
+  },
+  {
+   "id": "n10",
+   "prompt": "write a subagent for code review",
+   "expect": "no-trigger",
+   "comment": "owner: harness's make-agent"
+  },
+  {
+   "id": "n11",
+   "prompt": "review this agent definition",
+   "expect": "no-trigger",
+   "comment": "owner: harness's agent-checker"
+  },
+  {
+   "id": "n12",
+   "prompt": "is this tools list safe",
+   "expect": "no-trigger",
+   "comment": "owner: harness's agent-checker / security-review"
+  },
+  {
+   "id": "n13",
+   "prompt": "review all my skills",
+   "expect": "no-trigger",
+   "comment": "owner: harness's check-all-skills"
+  },
+  {
+   "id": "n14",
+   "prompt": "are my skill names consistent",
+   "expect": "no-trigger",
+   "comment": "owner: harness's naming-rules"
+  },
+  {
+   "id": "n15",
+   "prompt": "audit the agent team for duplicates",
+   "expect": "no-trigger",
+   "comment": "owner: harness's check-all-agents (user-only command, off the model menu)"
+  },
+  {
+   "id": "n16",
+   "prompt": "do my agents leverage the right skills",
+   "expect": "no-trigger",
+   "comment": "known accepted-leak class (check-routing 2026-07-09) — owner harness's check-all-agents is a user-only command off the model menu; benign, do not tune to chase it"
+  },
+  {
+   "id": "n17",
+   "prompt": "write the handback block for my results",
+   "expect": "no-trigger",
+   "comment": "owner: harness's write-handoff — the return contract, not composition design"
+  },
+  {
+   "id": "n18",
+   "prompt": "decompose this system into parts",
+   "expect": "no-trigger",
+   "comment": "owner: harness's break-down-problem"
+  },
+  {
+   "id": "n19",
+   "prompt": "should this subagent use isolation: worktree",
+   "expect": "no-trigger",
+   "comment": "owner: parallel-work-rules"
   }
  ]
 }

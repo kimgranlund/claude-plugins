@@ -13,7 +13,7 @@
 host alone cannot: isolation (fresh context), parallelism (genuinely concurrent slices), or
 independence (generator≠critic on a high-stakes artifact).** A task one context can hold is the
 host's own — multi-step alone does not earn a team. **Worked instance:**
-`team-or-solo-rules/SKILL.md` (the same plugin family) states this as Design step 1:
+`fleet-rules/SKILL.md` (the same plugin family) states this as Design step 1:
 "Solo-first — the host inline is the null unit and wins by default... A dispatch that costs more
 context and latency than doing the work inline is over-orchestration, whatever the task's step
 count." `team-lead.md`'s own description states the same floor for itself: "Use
@@ -102,4 +102,4 @@ The exact fields and shape of the block a seat hands back when it reports (typed
 contracts.md) · the scripted, deterministic alternative to a coordinator deciding each dispatch
 turn by turn (deterministic-workflows-vs-ad-hoc-dispatch.md) · how to design the wiring itself —
 which unit, which frontmatter keys, `skills:` preloads — for a specific project (routed to that
-project's own team-or-solo-rules seat, out of this pack's scope).
+project's own fleet-rules seat, out of this pack's scope).

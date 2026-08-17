@@ -70,7 +70,7 @@ seats are checked for shadowing and deference only; their findings file to their
   accepting the disposition.
   **Known tool limitation**: `agent_corpus_index.py`'s F-section tests agent-vs-agent only — it
   cannot see a real grab against a PRELOADED SKILL's own triggers (found in batch 2: three real
-  hits against team-or-solo-rules's triggers were invisible to the F-section and surfaced only
+  hits against fleet-rules's triggers were invisible to the F-section and surfaced only
   via the sidecar M2 corpus). Do not read a clean F-section as proof of no skill-collision; the
   sidecar corpus is the only check that covers this class today. **Second blind spot (found
   2026-07-04, experiment-runner review)**: the F-section reads only an agent's QUOTED triggers, so a

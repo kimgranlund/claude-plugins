@@ -157,7 +157,7 @@ catalog below, verified 2026-08-10, intake-lead A4: the fork completes to the ro
 prices at the dispatching agent's model, not a value the fork call itself can set). A fork is
 therefore never the mechanism for a deliberate model step-down — reach for an ad-hoc or named
 `Agent` dispatch instead when the task doesn't need the session's own tier. (Recorded home: this
-note stays in `agent-writing-rules` rather than moving to `team-or-solo-rules` because this file
+note stays in `agent-writing-rules` rather than moving to `fleet-rules` because this file
 already carries that Failure-catalog row and its citation — keeping the pricing fact beside the
 semantics fact it depends on avoids splitting one story across two skills.)
 

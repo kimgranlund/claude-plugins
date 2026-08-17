@@ -129,6 +129,15 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.38 · 2026-08-17 · ADR-0020 wave 6 companion (#524, teamwork's D5 merge): G8's phantom-`[[handle]]`
+allowlist gains `team-or-solo-rules` — the retired skill's name survives as a historical
+provenance citation in `fleet-rules`' own body/README/CHANGELOG now that it merged in, not a live
+sibling reference. Cross-plugin citer repoints in the same PR (non-version-bumping, so no own
+ledger line owed): `check-all-agents`, `check-all-skills`, `agent-writing-rules`, `write-handoff`,
+`checking-rules`, `entry-file-rules` (harness); `agent-residency-facts`,
+`chat-harness-workflow-facts` (llm). `release_gate.py teamwork` CLEAN 0/1 (the 1 warn pre-existing,
+unrelated to this merge).
+
 v3.8.37 · 2026-08-17 · `clean-git` step 1 mandates `git fetch --prune` before inventory (closes #555; incident: 17 stale refs + falsely-clean main, 18:35Z firing; fetch failure → UNMEASURED); `sweep-chores` retires its Workflow-path verification note per its own delete-when-proven clause (live proof: the 18:35Z firing ran chore-sweep.js end-to-end clean). (Rebumped past 3.8.36: PR #550's wave-5 companion shipped that slot.)
 v3.8.36 · 2026-08-17 · ADR-0020 wave 5 (#523 companion): `naming-rules`' twin-pair example updated (`/sort-issues` ↔ `issue-sorter`, `/bind-team` ↔ `fleet-marshal` — was `/lead-team` ↔ `team-lead`, both retired names).
 v3.8.35 · 2026-08-17 · G8 phantom-`[[handle]]` allowlist gains `over-orchestration`/`rubric-orchestration` (ADR-0020 wave 4, #522 companion): minting `fleet-orchestration` widened the `-orchestration` suffix into G8's inventory, catching two pre-existing prose compounds in teamwork's `team-or-solo-rules` that cite no real sibling. `release_gate.py teamwork` CLEAN 0/0 (was 1 warn).

@@ -8,7 +8,7 @@ description: >
   an autonomous run", "my goal loop never stops / spins", "it keeps retrying
   the same failure", "the agent spins / thrashes and burns turns", "make it
   keep working until clean". NOT for how the delegated work composes —
-  skill/agent wiring, dispatch, frontmatter (team-or-solo-rules); this skill
+  skill/agent wiring, dispatch, frontmatter (fleet-rules); this skill
   owns only when the next turn fires.
 disable-model-invocation: false
 user-invocable: false
@@ -56,7 +56,7 @@ Top issues: 1) … — fix: …
 | `references/best-practices.md` | Design guidance / explaining a finding |
 | `references/foundations.md` | When a finding turns on a shared model |
 | `references/self-orchestrated-looping-agentic-systems.md` | Designing an orchestrated / multi-agent loop (host + planner/creator seats), or diagnosing a loop that spins, thrashes, or can't resume across sessions |
-| [[team-or-solo-rules]] | The loop delegates work — the dispatch/composition design belongs there |
+| [[fleet-rules]] | The loop delegates work — the dispatch/composition design belongs there |
 
 ## This workspace's gates as goal conditions
 
@@ -91,7 +91,7 @@ instead of a per-invocation one — the same escalation this skill's canon (`ref
 `<source>` and `<interval>` are the operator's call, not this skill's — name a concrete source
 (an inbox, a channel, a queue) before scheduling; a source too vague to poll is a design smell the
 same way an unverifiable goal condition is. Composition (which agent watches, which agent
-dispatches) belongs to `team-or-solo-rules`; this skill owns only the trigger/stop shape above.
+dispatches) belongs to `fleet-rules`; this skill owns only the trigger/stop shape above.
 
 ## Generator ≠ critic
 

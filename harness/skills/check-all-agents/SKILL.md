@@ -6,7 +6,7 @@ description: >-
   runs the deep-review campaign against the standard of excellence (role-family templates,
   measured delegation, portfolio verdicts). NOT one agent's definition
   (agent-writing-rules/make-agent); NOT the skills corpus (check-all-skills); NOT wiring decisions
-  (team-or-solo-rules).
+  (fleet-rules).
 disable-model-invocation: true
 user-invocable: true
 ---
@@ -130,7 +130,7 @@ Portfolio: KEEP|MERGE|SPLIT|RETIRE|RE-CHARTER — <one sentence of team-level wh
 | `reshape-skill` | Executes MERGE/SPLIT/RETIRE and concept-folder moves the campaign verdicts |
 | `check-all-skills` | The sibling audit for a whole *skills* corpus (the same two-mode shape), same plugin |
 | `prompt-wording-rules` | L scoring — dispatch `wording-checker` per agent, same plugin |
-| `team-or-solo-rules` | S framing — static (`skills:` preload) vs dynamic wiring, descriptions as connective tissue — lives in the `teamwork` plugin |
+| `fleet-rules` | S framing — static (`skills:` preload) vs dynamic wiring, descriptions as connective tissue — lives in the `teamwork` plugin |
 | `make-rubric` | Author / score / repair this skill's own rubrics — lives in `docs` |
 
 ## Failure branches

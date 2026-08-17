@@ -11,7 +11,7 @@
     { "id": "n01", "prompt": "Build this feature for me.", "expect": "no-trigger", "comment": "owner: /build-feature — a raw ask, never model-routed to dispatch-ticket directly per its own description" },
     { "id": "n02", "prompt": "Sweep the ops queue and mobilize whatever's buildable.", "expect": "no-trigger", "comment": "owner: teamwork:mobilize-chores — batch find-and-confirm, not one already-confirmed ticket" },
     { "id": "n03", "prompt": "There's a bug in the login flow, can you file it?", "expect": "no-trigger", "comment": "owner: docs:file-bug — a raw recordless bug report, not a confirmed ticket dispatch" },
-    { "id": "n04", "prompt": "Should this task be handled by a subagent or solo?", "expect": "no-trigger", "comment": "owner: teamwork:team-or-solo-rules" },
+    { "id": "n04", "prompt": "Should this task be handled by a subagent or solo?", "expect": "no-trigger", "comment": "owner: teamwork:fleet-rules" },
     { "id": "n05", "prompt": "Review this PR against its LLD before merge.", "expect": "no-trigger", "comment": "owner: teamwork:code-checker / leading-review — a one-off review, not a ticket build" }
   ]
 }

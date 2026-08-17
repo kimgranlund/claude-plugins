@@ -570,11 +570,16 @@ def gate(root: Path, package: bool = False):
              "single-writer", "ops-planner",
              # ADR-0020 wave 4 (#522) minted `fleet-orchestration` as a real installed skill,
              # which widened the `-orchestration` suffix into G8's live inventory and caught two
-             # pre-existing, unrelated prose compounds in team-or-solo-rules: "over-orchestration"
+             # pre-existing, unrelated prose compounds now in fleet-rules (ADR-0020 D5 merged
+             # them in from team-or-solo-rules, #524): "over-orchestration"
              # (its own routing-rubric warning against over-delegating a task one context could
              # hold) and "rubric-orchestration" (a rubric-name label in its handoff table, not a
              # citation of any sibling):
-             "over-orchestration", "rubric-orchestration"}
+             "over-orchestration", "rubric-orchestration",
+             # ADR-0020 D5 (#524) merged team-or-solo-rules into fleet-rules; the retired name
+             # survives as a historical citation in fleet-rules' own body/README/CHANGELOG
+             # provenance notes, not a live sibling reference:
+             "team-or-solo-rules"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

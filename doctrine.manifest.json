@@ -113,22 +113,22 @@
   {
    "id": "D07",
    "type": "judgment",
-   "title": "The job-evidence test (team-or-solo-rules SKILL.md:36-48, added #268/v2.12.3) has no anchor in wiring-checker's rubric D1 (teamwork team-or-solo-rules references/rubric.md), and wiring-checker's body never names the test",
+   "title": "The job-evidence test (fleet-rules SKILL.md Part B Design step 1, formerly team-or-solo-rules SKILL.md:36-48, added #268/v2.12.3) has no anchor in wiring-checker's rubric D1 (teamwork fleet-rules references/rubric.md), and wiring-checker's body never names the test",
    "severity": "minor",
-   "canon_file": "teamwork/skills/team-or-solo-rules/SKILL.md",
+   "canon_file": "teamwork/skills/fleet-rules/SKILL.md",
    "owning_checker": "teamwork:wiring-checker",
    "status": "queued, not built",
-   "source": "2026-08-16 team/coordination-surface review, finding 7, recovered verbatim via issue #395. Acknowledged in teamwork README v2.12.3's ledger as 'no natural wiring-checker rubric anchor'."
+   "source": "2026-08-16 team/coordination-surface review, finding 7, recovered verbatim via issue #395. Acknowledged in teamwork README v2.12.3's ledger as 'no natural wiring-checker rubric anchor'. [Amended 2026-08-17, issue #524: ADR-0020 D5 merged team-or-solo-rules into fleet-rules; canon_file and references/rubric.md path updated. Re-verified live: the job-evidence test survives verbatim in fleet-rules/SKILL.md's Part B Design step 1, and wiring-checker's own body still never names it -- edge stands, unresolved.]"
   },
   {
    "id": "D08",
    "type": "judgment",
-   "title": "fleet-marshal's model tier sonnet (teamwork/agents/fleet-marshal.md:14) sits below its subordinates builder (opus) and planner (fable) with no justification recorded against agent-writing-rules' Model tiering section or team-or-solo-rules' model-to-task-class rule",
+   "title": "fleet-marshal's model tier sonnet (teamwork/agents/fleet-marshal.md:14) sits below its subordinates builder (opus) and planner (fable) with no justification recorded against agent-writing-rules' Model tiering section or fleet-rules' (formerly team-or-solo-rules') model-to-task-class rule",
    "severity": "minor",
    "canon_file": "harness/skills/agent-writing-rules/SKILL.md",
    "owning_checker": "harness:agent-checker",
    "status": "queued, not built",
-   "source": "2026-08-16 team/coordination-surface review, finding 8, recovered verbatim via issue #395 -- verified live 2026-08-16: team-lead.md:14 model: sonnet; builder.md:12 model: opus; planner.md:14 model: fable; no rationale comment near team-lead's model: line. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:14 model: sonnet, builder.md:12 model: opus, planner.md:14 model: fable -- the underlying tiering-gap fact is unchanged post-rename, no rationale comment added; edge stands.] [Amended 2026-08-17, issue #521: ADR-0020 D1/D3 renamed team-leader.md -> fleet-marshal.md; path updated. Re-verified live: fleet-marshal.md:14 model: sonnet -- the underlying tiering-gap fact is unchanged post-rename, edge stands.]"
+   "source": "2026-08-16 team/coordination-surface review, finding 8, recovered verbatim via issue #395 -- verified live 2026-08-16: team-lead.md:14 model: sonnet; builder.md:12 model: opus; planner.md:14 model: fable; no rationale comment near team-lead's model: line. [Amended 2026-08-17, issue #455: #433 renamed team-lead.md -> team-leader.md; path updated. Re-verified live: team-leader.md:14 model: sonnet, builder.md:12 model: opus, planner.md:14 model: fable -- the underlying tiering-gap fact is unchanged post-rename, no rationale comment added; edge stands.] [Amended 2026-08-17, issue #521: ADR-0020 D1/D3 renamed team-leader.md -> fleet-marshal.md; path updated. Re-verified live: fleet-marshal.md:14 model: sonnet -- the underlying tiering-gap fact is unchanged post-rename, edge stands.] [Amended 2026-08-17, issue #524: ADR-0020 D5 merged team-or-solo-rules into fleet-rules; the title's cited rule survives verbatim in fleet-rules (this edge's own canon_file, agent-writing-rules, is unaffected). Edge stands.]"
   },
   {
    "id": "D09",

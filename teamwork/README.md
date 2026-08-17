@@ -12,10 +12,9 @@ reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/sk
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
 | `skills/grill-the-ask` | Declarative skill | both | Derives the load-bearing design decisions for a greenfield surface across two crossing axes (Structural / Mechanism) and cascading rounds; hands off a Ratified Design to `break-down-problem` and the document author |
-| `skills/team-or-solo-rules` | Declarative skill | both | Design or review how skills, subagents, and teams compose, and the YAML frontmatter that wires them — unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate |
 | `skills/loop-rules` | Declarative skill | both | Design or review continuation patterns — `/goal`, `/loop`, Stop hooks, auto mode — that decide *when* the next turn fires; the self-orchestrated-looping canon for a delegating loop (budgets, locus escalation, durable state) |
 | `skills/parallel-work-rules` | Declarative skill | both | Decide whether concurrent sessions/subagents touching one repo need git-tree isolation, and what to do when they collide anyway — the three-actor classification (spawned subagent / addressable peer session / opaque concurrent session) and the matching response for each |
-| `skills/fleet-rules` | Declarative skill | both | NEW (closes #480): the default operating protocol every orchestration-adjacent seat starts from instead of re-deriving it mid-run — the fleet-scoped coordination-scope ladder, the claim-then-guard sequence before dispatching, report-supersedes-nudge communication routing, one-version-bumping-build-per-plugin + merge-order rules, session-death resilience (orphaned-claim reset, resumable worktree/branch naming), and the `EnterWorktree` pin-race unblock playbook. Cites its canonical mechanics elsewhere (`dispatch-ticket`'s claim/version-collision checks, `mobilize-chores`' four-layer guard, `parallel-work-rules`' cwd-race detection, harness's `big-change-git-rules`' stacked-PR sequence) rather than restating them; preloaded by `fleet-marshal` and `build-leader` |
+| `skills/fleet-rules` | Declarative skill | both | The default operating protocol every orchestration-adjacent seat starts from instead of re-deriving it mid-run — the fleet-scoped coordination-scope ladder, the claim-then-guard sequence before dispatching, report-supersedes-nudge communication routing, one-version-bumping-build-per-plugin + merge-order rules, session-death resilience (orphaned-claim reset, resumable worktree/branch naming), and the `EnterWorktree` pin-race unblock playbook (#480) — AND (ADR-0020 D5, merged from `team-or-solo-rules`, closes #524) how skills/subagents/teams compose: unit choice (skill/subagent/team), sealed-dispatch discipline, the D2/D4 gate. Cites its canonical mechanics elsewhere (`dispatch-ticket`'s claim/version-collision checks, `mobilize-chores`' four-layer guard, `parallel-work-rules`' cwd-race detection, harness's `big-change-git-rules`' stacked-PR sequence) rather than restating them; preloaded by `fleet-marshal` and `build-leader` |
 | `skills/close-session` | Procedural skill | both | Wraps up a session's own worktree before it ends: checks mechanical git state, routes real findings through file-bug/feature/issue, triggers save-lessons's detection pass, verifies every write via read-back, and states a mandatory two-shape verdict |
 | `scripts/session_end_worktree_check.py.retired` | Retired script | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly a `SessionEnd` hook: passive safety net for `close-session`, logging a durable warning line if a git worktree was left dirty or unpushed. `SessionEnd` never blocked; this was always a pure log, never a gate. Kept on disk retired, not deleted, for history |
 | `scripts/worktree_prebash_guard.py.retired` | Retired script | none (hooks removed 2026-08-17, #466 — remove-all-hooks directive) | Formerly issue #139's repo-side `PreToolUse` mitigation, ASK-only: flagged (never blocked) a Bash command that `cd`'s or `-C`/`--prefix`'s out of a worktree cwd into the shared primary checkout or a sibling worktree and then ran a further command in the same call. Kept on disk retired, not deleted, for history — `parallel-work-rules` now carries this as a manual discipline instead |
@@ -26,14 +25,14 @@ reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/sk
 | `skills/bind-build` | Skill-as-command | user-only (`/bind-build`) | Makes THIS session the standing build seat: adopts `agents/build-leader`'s contract directly (the `/bind-team` ↔ `fleet-marshal` pattern) — every ticket id or build ask drives through `dispatch-ticket` via the Skill tool (the engine carries no `context: fork`, so it runs inline in this session's own turn) with the interactive branches ALIVE: the Phase-1 ambiguity question and the task clarify round fire live instead of the unattended blocker/SKIPPED. One engine, three entries: forked one-shot (`/build-feature`), unattended seat (`build-leader`), live standing seat (this). ADR-0020/#525 (closes #523): renamed from `lead-build`, folded into skill-as-command shape — no separate wrapper command |
 | `skills/bind-review` | Skill-as-command | user-only (`/bind-review`) | Makes THIS session a standing review seat — now paired with a standing dispatched `agents/review-leader` (closes #433) that runs the same routing table unattended: the estate's eleven fresh-context checkers ARE the review capacity, so the seat (or the agent) routes each target to its owning checker (sealed dispatch, FLOOR/DEEP depth carried, verdict-first relay) and never grades anything itself — dispatch-only IS generator≠critic made structural. Self-authored targets get a NEUTRAL dispatch with authorship disclosed at relay. ADR-0020/#525 (closes #523): renamed from `lead-review`, folded into skill-as-command shape |
 | `skills/init-repo` | Command skill | user-only (`/init-repo`) | The `/bind-*` family's composer — one command arms a work session: conditional built-in `/init`, direct fleet-marshal adoption (the session IS the charter — `/bind-team`'s mechanism, carried here because dmi:true blocks Skill-invoking it), the standing INTAKE sibling spawned (docs' intake-leader; its missing-seed return IS the liveness ack, zero contract-bending), and per-ticket build-leader capacity wired (no idle standing build spawn — the seat's own one-ticket contract). Per-session: siblings die with the session; re-run each sit-down |
-| `skills/bind-team` | Skill-as-command | user-only (`/bind-team`) | Makes THIS host session adopt `agents/fleet-marshal.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides team-or-solo-rules's solo-first default for the charter's duration; paired with the seat it imports per ADR-0006's species split — command head = mechanic (`/bind-team`), agent = role noun (`fleet-marshal`); like harness's `issue-sorter` pairing, inverted (host adopts, never dispatches). ADR-0020/#525 (closes #523): renamed from `lead-team`, folded into skill-as-command shape |
+| `skills/bind-team` | Skill-as-command | user-only (`/bind-team`) | Makes THIS host session adopt `agents/fleet-marshal.md`'s own contract directly for one stated charter — no separate agent spawn, deliberately overrides fleet-rules's solo-first default for the charter's duration; paired with the seat it imports per ADR-0006's species split — command head = mechanic (`/bind-team`), agent = role noun (`fleet-marshal`); like harness's `issue-sorter` pairing, inverted (host adopts, never dispatches). ADR-0020/#525 (closes #523): renamed from `lead-team`, folded into skill-as-command shape |
 | `agents/fleet-marshal` | Subagent | dispatch-only | The apex seat: chain-of-command, dispatch order, the review gate between phases, the discovered-reality escalation loop, rollups to the host |
 | `agents/planner` | Subagent | dispatch-only | The design seat: decomposes a problem across both planes, authors/maintains PRD/SPEC/LLD/ADR |
 | `skills/bind-planning` | Skill-as-command | user-only (`/bind-planning`) | Makes THIS session adopt `agents/planner.md`'s own contract directly for one named planning charter — fifth `/bind-*` member, paired per ADR-0006's species split (command head = mechanic `/bind-planning`, agent = role noun `planner`). Write discipline INVERTS relative to `/bind-team`: authoring the PRD/SPEC/LLD/ADR the charter earns is this seat's own deliverable, so the host writes them directly — but never grades one it wrote: every authored/revised doc rides to `docs:doc-checker` fresh-context, review-by-hand against `doc-writing-rules`' rubric where docs isn't installed. Roll-up audience is the invoking human; closes on a named `loop-rules` decision. Now also paired with a standing dispatched `agents/planning-leader` (closes #433) backing `planner`'s own procedure for unattended dispatch. ADR-0020/#525 (closes #523): renamed from `lead-planning`, folded into skill-as-command shape |
 | `agents/builder` | Subagent | dispatch-only | The build seat: implements an approved LLD's build sequence, runs mechanical checks, escalates design conflicts rather than editing the contract |
 | `agents/docs-writer` | Subagent | dispatch-only | Owns a documentation site: derives pages from their canonical source, makes drift a failing gate, reports soft drift a static check can't see |
 | `agents/code-checker` | Subagent | dispatch-only | Independent critic for one bounded code change, scored against the contract it was built to; generator ≠ critic for the delivery loop |
-| `agents/wiring-checker` | Subagent | dispatch-only | Independent critic for how skills/subagents/teams compose and the frontmatter that wires them, scored against `team-or-solo-rules`'s rubric; a real gap closed post-migration (see below) |
+| `agents/wiring-checker` | Subagent | dispatch-only | Independent critic for how skills/subagents/teams compose and the frontmatter that wires them, scored against `fleet-rules`'s rubric; a real gap closed post-migration (see below) |
 | `agents/planning-leader` | Subagent | dispatch-only | NEW (closes #433): standing dispatched form of `planner`'s procedure, pairing with `/bind-planning` the way `build-leader` pairs with `/bind-build` — PENDING the naming-ADR that supersedes ADR-0011 REQ-002's `-agent` suffix rule |
 | `agents/review-leader` | Subagent | dispatch-only | NEW (closes #433): standing dispatched form of `bind-review`'s dispatch-to-owning-checker routing table, pairing with `/bind-review` — the family's previously agent-less member now has a standing seat — PENDING the naming-ADR that supersedes ADR-0011 REQ-002's `-agent` suffix rule |
 | `agents/product-leader` | Subagent | dispatch-only | NEW HOME (closes #433): moved from `docs/agents/product-leader-agent.md`, dropping the `-agent` suffix, to sit beside the `bind-product` skill it pairs with; docs-plugin preloads degraded to soft named mentions per the hard plugin-boundary rule — PENDING the naming-ADR that supersedes ADR-0011 REQ-002's `-agent` suffix rule |
@@ -51,7 +50,7 @@ longer live in this plugin boundary. Fixing this was the bulk of the porting wor
 - **`team-lead`** preloaded `write-handoff` (now in harness). Dropped from the
   preload list; the body now soft-mentions harness's `write-handoff` block with an inline
   Status/Summary/Files changed/Tests/checks run/Evidence/Risks/Open questions/Recommended next action
-  fallback wherever it names a handback. `skills:` is now `[team-or-solo-rules, loop-rules]` —
+  fallback wherever it names a handback. `skills:` is now `[loop-rules, fleet-rules]` —
   the two preloads that are still same-plugin, real preloads.
 - **`planner`** preloaded `break-down-problem` (now in harness) plus `prd-author`, `spec-author`,
   `lld-author`, `adr-author` — four names that no longer exist anywhere as skills: docs
@@ -84,13 +83,13 @@ action shape inline — six independent copies to keep in sync by hand. Since ag
 a harness skill across the plugin boundary (the hard-preload rule above), the fix follows the
 same `references/`-file pattern `bind-team`/`bind-planning`/`bind-build` already use for
 `adopt-agent-contract.md`: the shape now lives once at
-`teamwork/skills/team-or-solo-rules/references/handoff-fallback.md`, and each of the six agent
-bodies cites that path (`${CLAUDE_PLUGIN_ROOT}/skills/team-or-solo-rules/references/handoff-fallback.md`)
+`teamwork/skills/fleet-rules/references/handoff-fallback.md`, and each of the six agent
+bodies cites that path (`${CLAUDE_PLUGIN_ROOT}/skills/fleet-rules/references/handoff-fallback.md`)
 instead of restating the fields. `write-handoff` itself also gained a precedence rule for which
 channel carries the finished block: a sealed, record-first dispatch's dated `## Findings` entry
 IS the handoff (no separate mailbox message), while a named teammate-mode seat still sends the
 full block to its coordinator — stated once in `write-handoff`'s "Before you hand back" section
-and pointed to from `team-or-solo-rules`'s reference table, so no citing agent re-derives it.
+and pointed to from `fleet-rules`'s reference table, so no citing agent re-derives it.
 
 `loop-rules/scripts/harness_checks.py` shipped in the source library as a symlink to a sibling
 skill (`skill-author`) outside this plugin boundary — a second, quieter instance of the same
@@ -108,6 +107,31 @@ mint.
 Directories align with plugin names (ADR-0007).
 
 ## Version ledger
+
+v2.21.0 · assembled 2026-08-17 · ADR-0020 wave 6 (closes #524, D5): `team-or-solo-rules` merges
+into `fleet-rules` — the widest single-name blast radius in the estate (116 hits / 54 files).
+`fleet-rules` keeps its name and both preload edges (`fleet-marshal`, `wiring-checker`); its
+SKILL.md gains a Part A (unchanged fleet-ops protocol) / Part B (composition & wiring design,
+folded verbatim from `team-or-solo-rules`) split, one merged description (~700 chars, down from
+~1100 summed — net rent win per D5's recorded check), one merged `evals/evals.json` (22→41 cases,
+self-fencing negatives dropped as now-internal). `references/{best-practices,foundations,
+handoff-fallback,rubric}.md` moved from `team-or-solo-rules/references/` into `fleet-rules/
+references/`; the retired skill directory relocated to `.refactor-attic/20260817T185430Z/
+team-or-solo-rules/` (undo, not deletion — reshape-skill's own convention). Every live citer
+repointed: `fleet-marshal`/`planning-leader`/`wiring-checker` `skills:` preloads (now
+`[loop-rules, fleet-rules]` / `[fleet-rules]` / `[fleet-rules]`); the four agents citing the
+`${CLAUDE_PLUGIN_ROOT}/skills/.../handoff-fallback.md` hard path (`builder`, `code-checker`,
+`docs-writer`, `planner`); `dispatch-ticket`, `parallel-work-rules`, `loop-rules`, `bind-team`,
+`init-repo`, `team-scaffolding` SKILL.md bodies and NOT-fences; six `evals/evals.json` sibling-fence
+comments (`dispatch-ticket`, `team-scaffolding`, `fleet-bootstrap`, `bind-team`, `loop-rules`,
+`parallel-work-rules`). `bind-team`'s Phase 2 step 2 got a real content fix, not just a rename:
+`fleet-marshal` now preloads only two skills post-merge, so the old "two of the three, deliberately
+not re-invoking fleet-rules" reasoning no longer parses — rewritten to name `fleet-rules`' Part B
+as the operative half for a single-host charter, Part A as the one that doesn't bind. Historical
+records left untouched per the append-only convention: `doctrine.manifest.json` D07 gets a dated
+amendment (canon_file repointed) rather than a rewrite; dated ops reports, handoff docs, ADR-0014/
+ADR-0020, `authorkit/renames.json`'s ADR-0006-era ledger, and prior ledger lines/`intent.md`/
+`audit-report*.md` narratives are left verbatim.
 
 v2.20.0 · assembled 2026-08-17 · ADR-0020 wave 5 (closes #523; teamwork slice of #525's
 skill-as-command ruling): the five `commands/lead-*.md` wrapper commands (`lead-team`,

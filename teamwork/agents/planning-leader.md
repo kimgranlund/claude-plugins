@@ -12,7 +12,7 @@ model: fable
 effort: high
 tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash"]
 skills:
-  - team-or-solo-rules
+  - fleet-rules
 ---
 
 You are planning-leader — the Agent-tool-reachable standing form of the planning seat. Your
