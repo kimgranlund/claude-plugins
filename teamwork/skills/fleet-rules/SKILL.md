@@ -2,11 +2,11 @@
 name: fleet-rules
 description: >-
   Default fleet protocol, AND how skills/subagents/teams compose: coordination scope,
-  claim-then-guard, comms routing, version-slot/merge-order, session-death resilience, pin-race
-  playbook, sealed dispatch, `skills:` preload/frontmatter. Use for "which
-  peers can this orchestrator talk to", "orchestrator died mid-build", "cwd pin stuck", "subagent
-  or team", "how do my skills/agents connect", "review my wiring frontmatter", "fan-out worth the
-  cost". NOT isolation/collisions (parallel-work-rules); NOT next-turn timing (loop-rules); NOT
+  claim-then-guard, comms routing, version-slot/merge-order, session-death, pin-race,
+  incoming-item triage, sealed dispatch, `skills:` preload/frontmatter. Use for "which peers can
+  this orchestrator talk to", "orchestrator died mid-build", "cwd pin stuck", "subagent or team",
+  "how do my skills/agents connect", "review my wiring", "where does this bug report go". NOT
+  isolation/collisions (parallel-work-rules); NOT next-turn timing (loop-rules); NOT
   mobilizability (mobilize-chores); NOT stacked-PR (big-change-git-rules); NOT corpus audits
   (check-all-agents/-skills); NOT one agent (agent-writing-rules).
 disable-model-invocation: false
@@ -16,8 +16,8 @@ user-invocable: false
 # fleet-rules — the fleet's default operating protocol, and how it composes
 
 **Two joined questions, one skill (ADR-0020 D5, 2026-08-17: merged from `team-or-solo-rules`).**
-Sections 1–6 state the DEFAULT a fleet seat starts from before a run — the fleet-operations
-doctrine, asked at run time, by a bound seat. Sections 7–9 (Design/Review/Improve/Update) answer
+Sections 1–7 state the DEFAULT a fleet seat starts from before a run — the fleet-operations
+doctrine, asked at run time, by a bound seat. Sections 8–10 (Design/Review/Improve/Update) answer
 the design-time substrate question anyone can ask before a seat exists at all: should this be a
 skill, a subagent, or a team, and is the wiring right? Different questions, different readers,
 different moments, joined here because `team-or-solo-rules`' natural family name collided with
@@ -274,11 +274,72 @@ only the missing UNBLOCK step, not a restatement of the detection mechanics:
    (issue/PR comment, label edit) never depends on a local cwd pin at all — landing a durable
    record via the API sidesteps the git-write path entirely when the pin itself won't cooperate.
 
+### 7. Route-anything-incoming protocol
+
+Minted from #577 (2026-08-17): `fleet-bootstrap` Phase 1 registers the host session as "the
+orchestrator seat" but nothing gave that seat a standing protocol for what to do with whatever
+arrives next — no triage discipline, no routing precedence, no enforcement posture. This section
+closes that gap. It binds both doors of the same seat identically (`fleet-rules`' own Part B
+"Seat-access doors" — the dispatched `agents/fleet-marshal.md` form and the host-adopted
+`/bind-team` form): same discipline, cited from each, never re-derived per door.
+
+**Enforcement posture: STRICT ROUTER, NEVER BUILDS.** The orchestrator routes every incoming item
+to an owning seat/skill/door within one turn; it never absorbs the work itself, however small —
+no "just this one small fix inline" latitude, no exception for a one-line change. Small-fix
+latitude belongs to the seat the item routes TO (e.g. `[[dispatch-ticket]]`'s own solo-first
+sizing), never to the router itself.
+
+**Triage-within-one-turn.** Every incoming item — a raw user ask, a bug/feature/task report with
+no record yet, a handback from a dispatched seat, a peer message from another fleet session, an
+overdue report — gets classified and routed in the SAME turn it arrives, never deferred to "I'll
+look into this later" or left to accumulate in context. A turn that receives an item and does
+nothing but acknowledge it has not routed it.
+
+**Routing precedence** (first match wins — check in this order, never skip ahead on a guess):
+1. **A malformed or incomplete handback from a seat this orchestrator dispatched** → bounce it
+   back to that same seat immediately, naming the contract it failed (`harness:write-handoff`'s
+   own typed fields, or `[[dispatch-ticket]]`'s Findings-write-back contract) — never silently
+   patch the gap yourself, never route it onward as if it were complete.
+2. **A peer message from another session** → Section 1's coordination scope ladder (fleet-scoped
+   only, unless a same-user cross-repo status poll or an explicit global-coordination instruction)
+   — never absorbed as this orchestrator's own work regardless of what it asks for.
+3. **An item already carrying a ticket/record id** (a `TKT-####`, a bare issue number, an
+   adapter-native id) → `[[dispatch-ticket]]` (one confirmed ticket, any kind) or, for a batch,
+   `mobilize-chores`.
+4. **A raw report with no record yet** → route by shape to its owning intake skill, never guessed
+   at inline: a bug report → `docs:file-bug`; a feature idea → `docs:file-feature`; a chore/task/
+   follow-up → `docs:file-task`; several dropped items surfaced at once → `docs:file-leftovers`.
+   The orchestrator names which intake skill and hands off — it does not classify further than
+   shape-matching, and it never drafts the record's content itself.
+5. **A decision that belongs to the user** (a ratification, a batched confirm, an ADR call) →
+   Section 3's one-decision-one-channel rule: put it to the user through this session if this
+   session is the one that reached them first with it; a session that discovers the same decision
+   already pending elsewhere stops and routes to the first asker instead of re-asking.
+6. **Anything else genuinely ambiguous after 1–5** → the same unattended failure branches
+   `[[dispatch-ticket]]`'s own Phase 1/2 already name (report a named blocker on an ambiguous
+   match; report SKIPPED on a task that isn't concretely actionable) — never guessed at, and never
+   absorbed as a default catch-all.
+
+**Escalation.** An overdue handback — a dispatched seat that owed a report and hasn't produced one
+within its stated budget — gets CHASED, not silently re-queued or forgotten: re-check the seat's
+own durable state first (Section 5's own default of inventorying from durable state — a live worktree/branch
+with recent commits is still working; nothing durable and no live dispatch is orphaned, per
+Section 5's reset-orphaned-seats bullet), then either re-dispatch under the same sealed contract
+or escalate the locus per the discovered-reality loop. A chase is itself an incoming item and
+re-enters this same triage — it does not get a side channel. Escalation to the human never skips
+the coordinator (Section 3's never-escalate-straight-to-the-human default) except when the
+coordinator itself is confirmed gone.
+
+Chain-of-command across parallel sessions, overdue-handback chasing, and budget/rollup discipline
+at fleet scope are this protocol's worked realization in `agents/fleet-marshal.md`'s own
+Priorities and `bind-team`'s host-adopted mirror of them — cited there, not restated here as a
+second copy of the same rules.
+
 ## Part B — Composition & wiring design/review
 
 Design how capabilities compose, or review an arrangement. The unit is chosen by task shape: skill (procedure), subagent (result-only delegation), team (collaboration).
 
-### 7. Operating model (essentials; depth in `references/foundations.md`)
+### 8. Operating model (essentials; depth in `references/foundations.md`)
 - Discovery (descriptions select, every turn) vs continuation (`/goal`,`/loop`,hooks decide when the next turn fires) — never conflated.
 - Descriptions are the connective tissue: the orchestrator routes on them, not on file cross-references.
 - Static vs dynamic wiring: `skills:` preload hard-wires standing expertise; leave the rest to discovery.
@@ -327,7 +388,7 @@ which door. Rejected as a naming fix (ADR-0020, gh#518): renaming the doors does
 one a given caller can structurally use — the fix is knowing the three exist and picking by who's
 calling, not a vocabulary change.
 
-### 8. Design
+### 9. Design
 1. **Solo-first — the host inline is the null unit and wins by default.** A seat must buy
    something the host cannot provide: isolation (fresh context), parallelism (genuinely
    concurrent slices), or independence (generator≠critic on a high-stakes artifact). A team must
@@ -361,7 +422,7 @@ calling, not a vocabulary change.
 5. For a parallel BUILD team, dispatch the disjoint same-tree fan-out (`references/best-practices.md`): file- and import-disjoint slices concurrently in one tree, each worker self-gating its own path, the host running the whole-tree gate + negative controls at the wave boundary; worktrees only when slices must mutate overlapping files. **Precondition — the HOST owns git; workers only edit files.** A worker that drives its own branch/commit/PR lifecycle (e.g. a `build-lead`/`dispatch-ticket` dispatch) is outside this shape entirely: two such workers race on the shared index/HEAD regardless of file disjointness, so they take per-worker worktree isolation whenever concurrent — file-disjointness licenses parallel timing there, never same-tree sharing (incident 2026-08-11: this step's conclusion copied without the precondition shipped a blocking same-tree race in a sibling skill).
 6. Self-score (below); fix until every gate dimension (D2, D4) ≥ 3.
 
-### 9. Review
+### 10. Review
 1. This skill's gates are systemic judgment, not a single-file mechanical check — there is no `harness_checks` subcommand: D2 is judgment because whether a description is a precise interface only shows against the sibling set (no string test sees it); D4's YAML-validity half IS mechanizable — its checker is queued, not built — so until it lands, score D4 by inspection and mark uninspected fields skipped-not-passed. Score against `references/rubric.md`, citing evidence on the 1–5 anchors.
 2. Check plane separation first (the top failure: expecting `/goal` to select capabilities).
    For any NEW seat or multi-seat flow in the arrangement, check the job-evidence test (Design
@@ -394,6 +455,8 @@ Top issues: 1) … — fix: …
 | `harness:agent-writing-rules` | Encoding the teammate-mode delivery clause and the generic-identity caveat (Section 3) into an actual agent file |
 | `team-scaffolding` / `fleet-bootstrap` (this plugin) | The worked realization of Section 1's coordination scope ladder (fleet-scoped introduction, #429) |
 | `.claude/ops/fleet.json` / `fleet-roster.md` | The durable records Sections 1, 3, and 5 all read from and write to |
+| `agents/fleet-marshal.md` / `bind-team` (this plugin) | Section 7's worked realization on the seat's two doors — the dispatched and host-adopted forms of the same route-anything-incoming discipline |
+| `docs:file-bug` / `docs:file-feature` / `docs:file-task` / `docs:file-leftovers` | Section 7's owning intake skills for a raw report with no record yet — cross-plugin soft mentions, degrade gracefully where docs isn't installed |
 | `references/rubric.md` | Scoring dimensions and anchors for Part B's Review (judgment-based) |
 | `references/best-practices.md` | Part B design guidance / explaining a finding |
 | `references/foundations.md` | When a Part B finding turns on a shared model (discovery vs continuation) |
@@ -404,11 +467,13 @@ Top issues: 1) … — fix: …
 guard-checks before dispatching, reports before going idle and treats a report as superseding any
 later nudge, names its plugin version slot before a build starts, leaves worktree/branch state a
 successor can inventory, answers a stuck pin with `EnterWorktree` re-pin rather than manual cd
-repair, AND every unit matches its task shape (the null unit respected — no seat doing host-inline
-work), every description is a precise fenced interface, frontmatter is verified against the build,
-dispatches are sealed and typed, both Part B gate dimensions (D2, D4) score ≥ 3, and a high-stakes
-arrangement carries its independent wiring-checker pass. **NOT done** while any of the six Part A
-areas is being re-derived from first principles mid-run instead of applied as the default it
-already is, or while a Part B description starves the router, a fence is one-way, a dispatch leaks
-history or lacks a budget, planes are conflated, or the only score an arrangement has is its
+repair, routes every incoming item to its owning seat/skill/door within the turn it arrived rather
+than absorbing it, AND every unit matches its task shape (the null unit respected — no seat doing
+host-inline work), every description is a precise fenced interface, frontmatter is verified
+against the build, dispatches are sealed and typed, both Part B gate dimensions (D2, D4) score
+≥ 3, and a high-stakes arrangement carries its independent wiring-checker pass. **NOT done** while
+any of the seven Part A areas is being re-derived from first principles mid-run instead of applied
+as the default it already is, while an orchestrator absorbs a "just this once" small fix instead
+of routing it, or while a Part B description starves the router, a fence is one-way, a dispatch
+leaks history or lacks a budget, planes are conflated, or the only score an arrangement has is its
 designer's.

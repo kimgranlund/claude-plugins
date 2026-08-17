@@ -108,6 +108,43 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.7 · assembled 2026-08-17 · closes #577: fleet-marshal charter/role-name mismatch fixed.
+Root cause: ADR-0020 Wave 3 (#521) renamed `team-leader`→`fleet-marshal` as a pure data-only edit
+— the agent body still carried team-leader's single-team plan→build→review charter, and no
+doctrine gave the orchestrator seat a route-anything-incoming protocol. Both surfaces landed in
+one change: (a) `agents/fleet-marshal.md` rewritten into a fleet-command charter — STRICT ROUTER,
+NEVER BUILDS enforcement (routes every incoming item — raw ask, bug/feature/task report, handback,
+peer message — to its owning seat/skill/door within one turn, no small-fix latitude), chain-of-
+command across parallel sessions, overdue-handback chasing, and fleet-scope budget/rollup
+discipline — trimmed to a thin shell citing (b) `fleet-rules`' new Section 7
+("Route-anything-incoming protocol": triage-within-one-turn, a 6-step routing precedence table,
+escalation) rather than duplicating it, keeping the agent body under the thin-shell line cap. Part
+B's three sections renumbered 7/8/9 → 8/9/10 to make room (Sections 1–6's own numbers, and every
+external citation to "Section 3", stayed untouched — only Part B's outer numbers moved, `Design
+step N`/`Part B` citations elsewhere are number-independent so nothing else broke). `fleet-bootstrap`
+Phase 1 gained a one-line pointer to Section 7 (cite, don't restate). `/bind-team`'s Phase 2 gloss
+of the agent's Priorities 1–8 updated to match, and both files now cross-cite `fleet-rules`' "Seat-
+access doors" section explicitly — the agent file (door 3, dispatched) and `/bind-team` (door 1,
+host-adopted) state they describe one discipline, not two. `fleet-rules`' description gained
+"incoming-item triage" (kept ≤700 chars); `evals/evals.json` gained 3 positive cases (t23–t25) and
+1 reciprocal negative fence against docs' `file-bug` (cross-plugin — filing the record is never
+this skill's job). Fresh-context `harness:agent-checker` (fleet-marshal.md) found 3 majors — banned
+persona opener (converted to third person), `/bind-team`'s Phase 2 contradicting Section 7's own
+"binds both doors" claim (carved out explicitly), and a missing teammate-mode delivery clause /
+`team-lead` identity caveat (added, plus a `SendMessage` tool grant) — all three fixed, plus 2
+minors (tool-wall overstatement reworded to by-rule; `effort: xhigh`→`high` per the
+orchestration-coordinator seat-ladder default). `harness:skill-checker` (fleet-rules) passed clean,
+naming one owed proof: `/check-routing teamwork` on the description boundary change. That run
+followed: fleet-rules' own 45-case suite and the two siblings carrying a reciprocal
+`fleet-rules`/`NOT`-fence (loop-rules, parallel-work-rules) all dispatched to independent blind
+`routing-judge`s, contested cases taken to a 3-judge majority vote — fleet-rules 45/45 pass
+(t16/t20 needed the vote, 2-of-3 fleet-rules each; n07/n16/n17/n18 are the same pre-existing
+cross-plugin structural leak n16 already carries as an accepted class — the true owner isn't in a
+single-plugin menu, unrelated to this diff), loop-rules 25/25 clean, parallel-work-rules 22/23
+(t10 "design a protocol for running several Claude Code terminals" loses 3-of-3 to grill-the-ask —
+pre-existing, neither skill touched by this PR, filed as a follow-up rather than blocking here).
+`release_gate.py teamwork` clean (1 pre-existing G8 warn, unrelated phantom-handle-shaped prose).
+
 v2.21.6 · assembled 2026-08-17 · closes #574: `bind-team`, `bind-planning`, and `bind-product`
 each defaulted a blank invocation instead of erroring — Phase 1 in all three now binds a default
 charter on `$ARGUMENTS` blank ("adopt against cwd, hold for the first unit of work fed in"),
