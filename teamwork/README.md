@@ -106,6 +106,21 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.9 · assembled 2026-08-17 · `dispatch-ticket` gate-run time budget (gh#1485, adiahealth/
+gen-ui-kit): Phase 5 stage 2's local gate-aggregate run (`npm run check` or the host repo's own
+equivalent) now runs under the same feature-detected 900s wrapper as stage 2b's CI-watch
+(`timeout`/`gtimeout`/perl-alarm fallback), defaulting to ~15 minutes and overridable by the
+dispatch prompt. On exhaustion the seat records which gates already passed, names the aggregate
+partially-run in Findings, and proceeds to PR-open — CI authoritative, a timeout read as a
+`flaky-gates` contention verdict, never an implicit pass. Closes the gap that let build-leader
+seats grind the aggregate indefinitely under host load (measured: a 4h no-progress seat, a
+second killed by the stream watchdog at 600s). Version-slot note: this branch was cut when
+`main` was 2.17.7 and PR #499 held an open claim on 2.17.8 — bumped to 2.17.9 to sequence behind
+it rather than race the same slot (`version_claim_check.py` V1). #499 merged mid-build (`main`
+is now 2.17.8); re-checked via a fresh `origin/main` re-read (the VALUE race, #445) — 2.17.9
+still clears cleanly against 2.17.8, no rebump needed, rebased onto `main` to resolve the
+resulting `plugin.json`/ledger conflict.
+
 v2.17.8 · assembled 2026-08-17 · new pack `fleet-rules` (closes #480, #373 overnight-campaign
 evidence): default operating protocol every orchestration-adjacent teamwork skill/agent starts
 from instead of re-deriving mid-run — coordination scope ladder (fleet-scoped only, status-only
