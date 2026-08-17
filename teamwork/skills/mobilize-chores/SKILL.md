@@ -1,7 +1,8 @@
 ---
 name: mobilize-chores
 description: >-
-  Sweeps this repo's ops queue via /sweep-chores, then handles whatever's genuinely mobilizable —
+  Sweeps this repo's ops queue via /sweep-chores (or, given a ticket-id list instead of a scope,
+  skips the sweep and mobilizes exactly those ids), then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
   adapter) labeled feature, bug, or task with no build in flight and no open `Blocked-by:`
   dependency (#193) — after one batched confirm (a leading `auto` argument skips it, for /goal
@@ -16,7 +17,7 @@ description: >-
   inside the sweep this wraps).
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[blank for a full sweep-and-mobilize | 'auto' to skip the confirm round for unattended/loop use | a scope instruction, optionally prefixed with 'auto ']"
+argument-hint: "[blank for a full sweep-and-mobilize | 'auto' to skip the confirm round for unattended/loop use | a scope instruction, optionally prefixed with 'auto ' | a comma/space-separated ticket-id list ('423, 426' or 'auto 423 426') to mobilize only those ids, skipping the sweep]"
 allowed-tools: ["Read", "Glob", "Write", "Edit", "Bash(gh issue list *)", "Bash(gh issue view *)", "Bash(gh issue comment *)", "Bash(gh api graphql *)", "Bash(gh repo view *)", "Bash(node harness/scripts/chore_sweep_apply.mjs *)", "Agent", "Workflow", "Skill", "AskUserQuestion"]
 ---
 
@@ -28,19 +29,33 @@ sweep surfaced that's actually buildable.
 
 ## Procedure
 
-0. **Parse `$ARGUMENTS` for the unattended flag.** If `$ARGUMENTS` starts with the literal
-   whitespace-delimited token `auto` (case-sensitive) — bare `auto`, or `auto <scope
-   instruction>` — this run is UNATTENDED: strip that leading token and carry only the remainder
-   forward as the scope instruction in step 1 (empty remainder → full sweep, same as blank
+0. **Parse `$ARGUMENTS` for the unattended flag, then classify what's left.** If `$ARGUMENTS`
+   starts with the literal whitespace-delimited token `auto` (case-sensitive) — bare `auto`, or
+   `auto <scope instruction>` — this run is UNATTENDED: strip that leading token and carry only
+   the remainder forward as the scope instruction (empty remainder → full sweep, same as blank
    `$ARGUMENTS` today). Skip step 4's `AskUserQuestion` entirely; see step 4's UNATTENDED branch.
    No leading `auto` token → this run is INTERACTIVE, today's existing behavior, completely
-   unchanged: `$ARGUMENTS` forwards whole, step 4 runs as written. This is the literal entry point
-   a `/goal` loop or scheduled routine calls (`/mobilize-chores auto`) to get a confirm-free pass —
+   unchanged: the whole of `$ARGUMENTS` is the remainder. This is the literal entry point a
+   `/goal` loop or scheduled routine calls (`/mobilize-chores auto`) to get a confirm-free pass —
    never inferred from "no human appears to be watching," always this explicit token, so the same
    invocation behaves identically whether a human or a loop types it.
-1. **Sweep.** Invoke harness's `sweep-chores` skill directly — `Skill(skill: "harness:sweep-chores",
-   args: "<the step-0 scope instruction>")` — carrying the step-0 scope instruction verbatim (empty
-   → full sweep). Issue #266 retired the `chore-lead` coordinator agent this step used to dispatch
+
+   **Then classify the remainder itself (#449).** Split it on commas and whitespace into tokens.
+   A non-empty remainder where EVERY token matches a ticket-id shape — a bare integer, `#` +
+   integer, or `tkt-####` (case-insensitive) — is a **TICKET FILTER**, never a scope instruction:
+   `/mobilize-chores "423, 426, 427"` and `/mobilize-chores auto 423 426` both name tickets to
+   mobilize, not a seat or hygiene scope for the sweep to narrow onto. Anything else (blank, a
+   seat name — `reviewer`/`planner`/`product`/`repo-cleaner`/etc. — a prose hygiene instruction,
+   or a MIX of id-shaped and non-id-shaped tokens) is a **SWEEP SCOPE**, forwarded to
+   `sweep-chores` exactly as before this fix — only a seat-name (or other sweep-shaped) scope
+   ever reaches step 1's `Skill` call. On a TICKET FILTER, step 1 does not run the sweep at all
+   and step 2 discovers only the named ids, never the full backend listing.
+1. **Sweep — SWEEP SCOPE only.** On a TICKET FILTER (step 0), skip this step entirely: report "0.
+   sweep skipped — ticket filter `<ids>` named directly" and go straight to step 2's per-id
+   discovery below. Otherwise invoke harness's `sweep-chores` skill directly —
+   `Skill(skill: "harness:sweep-chores", args: "<the step-0 scope instruction>")` — carrying the
+   step-0 scope instruction verbatim (empty → full sweep). Issue #266 retired the `chore-lead`
+   coordinator agent this step used to dispatch
    (its whole job was a deterministic dispatch graph — #265 measured that model-in-the-loop chain
    at 1.92× output tokens / 3.6× wall-clock vs. solo for equivalent outcome quality); `sweep-chores`
    now carries that choreography directly and was reclassified from command-only
@@ -57,7 +72,15 @@ sweep surfaced that's actually buildable.
 2. **Find mobilizable tickets.** Resolve this repo's ticket backend once (`doc-writing-rules`'
    backend resolver, `references/backend-resolver.md`, where `docs` is installed; not installed,
    or no ruling → git-native, this workspace's own ADR-0002 instance, unchanged from before this
-   resolver call). Then discover per the resolved backend:
+   resolver call). **On a TICKET FILTER (step 0), discovery is narrowed to exactly the named
+   ids** — read each one directly (git-native: `gh issue view <id> --json
+   number,title,labels,assignees`; local: `Read` that ticket's file; adapter: its own `read`
+   operation) instead of listing the full backend by label; an id that fails to resolve (no such
+   issue/file/record) is reported in step 6 as "not found," excluded, never silently dropped. Every
+   other exclusion below (label ambiguity, active claim, in-flight PR, `Blocked-by:`) still applies
+   to each named id exactly as it would in a full sweep — a filter only narrows WHICH ids are
+   considered, never which checks run on them. Otherwise (SWEEP SCOPE) discover per the resolved
+   backend:
    - **Git-native (Option B):** `gh issue list --state open --label feature --json
      number,title,labels,assignees`, the same for `--label bug`, and the same for `--label task`.
      For each candidate, check whether an open PR already references it via `gh api graphql`
@@ -254,8 +277,9 @@ sweep surfaced that's actually buildable.
 
 ## Failure branches
 
-- `/sweep-chores` itself fails to return → report that failure plainly; never run steps 2–6
-  against a sweep that didn't happen.
+- `/sweep-chores` itself fails to return (SWEEP SCOPE only) → report that failure plainly; never
+  run steps 2–6 against a sweep that didn't happen. A TICKET FILTER run legitimately skips the
+  sweep by design (step 1) — this branch never applies there.
 - The resolved backend's own listing call is unreachable (`gh issue list` fails on git-native; a
   Glob/Read error on local; the adapter call errors on Option C) → report ticket-discovery as
   UNMEASURED for this run; the sweep's own report still stands on its own.
@@ -289,10 +313,19 @@ sweep surfaced that's actually buildable.
   there to decline it) → dispatch it anyway; it returns SKIPPED from `build-lead` per that seat's
   own unattended contract, the identical outcome a human declining it in step 4 would have
   produced — never treated as an error unique to the unattended path.
+- **A TICKET FILTER names an id that doesn't resolve** (#449) → report "not found" for that id in
+  step 6, exclude it, and continue with the rest of the filter; never fail the whole run over one
+  bad id. A remainder MIXING id-shaped and non-id-shaped tokens (step 0) is a SWEEP SCOPE, not a
+  filter — it forwards to `sweep-chores` whole, exactly like a seat name or prose scope.
 
-Done when `/sweep-chores` has run (via the direct Skill-tool call step 1 names, not a duplicated
-fan-out), every open `feature`/`bug`/`task` ticket with no build in flight, no active
-claim, AND no open `Blocked-by:` dependency (#193) has been considered, every dispatch was gated
+Done when, on a SWEEP SCOPE, `/sweep-chores` has run (via the direct Skill-tool call step 1
+names, not a duplicated fan-out) — or, on a TICKET FILTER (#449), step 1 states the sweep was
+skipped and step 2 discovered each named id directly, never forwarding the id list into
+`sweep-chores`' own seat-scope slot — and every ticket IN THIS RUN'S SCOPE has been considered
+(a SWEEP SCOPE's scope is every open `feature`/`bug`/`task` ticket; a TICKET FILTER's scope is
+exactly its named ids) with no build
+in flight, no active
+claim, AND no open `Blocked-by:` dependency (#193), every dispatch was gated
 by the human's one batched confirm
 (INTERACTIVE) or by step 2's own filtering under the explicit `auto` token (UNATTENDED) — never by
 neither — and the final report names every considered ticket's outcome — a mobilized ticket's
@@ -309,4 +342,6 @@ instead of the safer serial default (isolation itself is no longer this step's c
 `dispatch-ticket`'s own unconditional Phase 3, per #183 — but a foreseeable merge conflict from
 overlapping targets still is), a dispatch leaving no Findings-equivalent entry goes unnoticed, step
 1 duplicates the fan-out in its own prose instead of the direct `Skill(harness:sweep-chores)` call, or an UNATTENDED run
-is inferred from context rather than the explicit `auto` token.
+is inferred from context rather than the explicit `auto` token, or a TICKET FILTER (#449) is
+forwarded into `sweep-chores`' own seat-scope slot instead of narrowing step 2's discovery
+directly.

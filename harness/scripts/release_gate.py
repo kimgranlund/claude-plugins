@@ -473,7 +473,28 @@ def gate(root: Path, package: bool = False):
              # pre-existing, unrelated prose (GitHub's own plural term, cited from a real
              # references/sub-issues-and-task-lists.md file) newly caught by that suffix — the
              # standing false-positive class, same shape as -flow/-systems/-discipline above:
-             "sub-issues"}
+             "sub-issues",
+             # issue #433's fleet-lead renames (2026-08-16, issue #450): `lead-planning`,
+             # `lead-review`, `lead-product` are teamwork's own COMMAND names
+             # (commands/lead-*.md), not skills — G8's inventory only sweeps `skills/*/SKILL.md`,
+             # so a live command name is a structural false positive here, same class as every
+             # other command-not-skill citation this list already carries.
+             # `product-leader-agent` is docs' AGENT name (docs/agents/product-leader-agent.md),
+             # cited in prose describing the dispatched sibling seat — not a skill.
+             # `product-authoring` is leading-product's own PRE-RENAME name (issue #433 moved
+             # it from docs to teamwork and renamed it), cited as deliberate historical
+             # provenance — the knowledge-forge/skill-forge class above.
+             # `same-plugin` is prose ("now same-plugin", "a same-plugin command") describing
+             # the #433 move, not a sibling name.
+             # `big-feature` is prose ("a task or big-feature dispatch") describing a Size-class
+             # dispatch, not a skill name.
+             # `index-bootstrap` is prose ("gates its index-bootstrap offer") describing
+             # file-feature's own optional offer, not a skill name.
+             # `fleet-state` is prose ("naming one of the three fleet-state files") describing
+             # the fleet manifest's on-disk state, not a skill name.
+             "lead-planning", "lead-review", "lead-product", "product-leader-agent",
+             "product-authoring", "same-plugin", "big-feature", "index-bootstrap",
+             "fleet-state"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

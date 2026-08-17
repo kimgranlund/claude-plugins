@@ -129,6 +129,12 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.22 · 2026-08-16 · `release_gate.py`'s G8 allowlist gains 9 entries surfaced by #433's
+renames (closes #450): `lead-planning`/`lead-review`/`lead-product` (teamwork commands, not
+skills), `product-leader-agent` (docs' agent name), `product-authoring` (leading-product's
+pre-rename name, historical citation), `same-plugin`/`big-feature`/`index-bootstrap`/
+`fleet-state` (prose compounds) — all false positives against the skill-only inventory.
+
 v3.8.21 · 2026-08-17 · `naming-rules`' estate-rename-map.md paradigm-name table updated to
 `leading-teams` (was `lead-team`), reflecting #433's rename (mechanical, no doctrine change).
 
