@@ -129,6 +129,9 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.8.21 · 2026-08-17 · `naming-rules`' estate-rename-map.md paradigm-name table updated to
+`leading-teams` (was `lead-team`), reflecting #433's rename (mechanical, no doctrine change).
+
 v3.8.20 · 2026-08-16 · closes #443: the stacked-PR merge rule (PR #437 auto-closed as child of
 #424 when its parent branch was deleted, re-opened as PR #439) is now recorded in
 `big-change-git-rules/references/merge-semantics.md` (new section + failure-catalog row, consult

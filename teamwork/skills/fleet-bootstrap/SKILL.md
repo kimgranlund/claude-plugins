@@ -79,7 +79,7 @@ target).
    the existing `live_state.joined` entry as-is — the roster row is the takeover's own durable
    record; `fleet.json` never carries two `agent` entries for one still-live role.
 
-This registers the seat; it does not separately adopt `teamwork:lead-team`'s contract via a
+This registers the seat; it does not separately adopt `teamwork:leading-teams`'s contract via a
 printed command the way a solo `/team-scaffolding agent` run would (its Phase 5 hands that off to
 a second human-typed `/lead-team`). `/fleet-bootstrap`'s own remaining phases (2–6) ARE this
 session's orchestration work for the cold start — Phase 6 names `/lead-team` as a follow-up the
@@ -179,7 +179,7 @@ honored (one of: "none — confirmed default", "reviewer/planner — confirmed",
 planner already held", or "confirm skipped — no live user, nothing spawned"), the `fleet.json`
 path as the durable record a later session reads
 to resume orientation, and — since Phase 1 only registered the orchestrator seat, not the
-`teamwork:lead-team` contract itself — name `/lead-team` as the follow-up command for the human to
+`teamwork:leading-teams` contract itself — name `/lead-team` as the follow-up command for the human to
 run in this session when they want that contract's ongoing day-to-day discipline.
 
 ## Failure branches

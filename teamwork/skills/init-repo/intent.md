@@ -6,7 +6,7 @@ Slots ruled across the family design session; recorded, not re-asked.
 ## Gate P0 — Route (PASS)
 
 Primitive = **skill, command species**. A composer over shipped parts (the built-in /init, the
-team-lead adoption mechanism, the intake-lead standing sibling, per-ticket build-lead
+team-lead adoption mechanism, the intake-lead standing sibling, per-ticket build-leader
 dispatches) — nothing here is a hook, an always-true rule, or a new agent.
 
 ## Gate P1 — Interview slots (PASS, pre-ruled)
@@ -34,23 +34,23 @@ case) were considered and rejected. Kim named it `init-repo` in the originating 
 **The composition rulings (settled across the session's design rounds):**
 1. **Host adopts team-lead; no team-lead spawn** (Kim's AskUserQuestion answer). Mechanically:
    /lead-team is dmi:true — NOT Skill-invocable from inside this command (the #134/#135
-   class) — so this body carries the adoption step itself: read agents/team-lead.md and adopt
+   class) — so this body carries the adoption step itself: read agents/team-leader.md and adopt
    per /lead-team's Phase 2, with one deviation, the CHARTER: /lead-team binds one bounded
    charter; here the charter IS the work session ("this session's incoming work on <repo>"),
    closing at session end or stand-down. Named deviation, not silent drift.
 2. **INTAKE spawns standing; BUILD is per-ticket — the asymmetry is the seats' own contracts.**
    intake-lead's shipped description names the long-lived-sibling shape ("typically spawned as
-   a long-lived sibling named INTAKE"). build-lead's shipped contract is one-ticket-per-
+   a long-lived sibling named INTAKE"). build-leader's shipped contract is one-ticket-per-
    dispatch — spawning it idle as a standing mailbox would deviate from its own contract and
    deadlock its report shape. So: the INTAKE sibling is spawned at arming; build capacity is
-   the armed host dispatching build-lead per confirmed ticket (its designed shape, serial per
+   the armed host dispatching build-leader per confirmed ticket (its designed shape, serial per
    mobilize-chores' rule). Kim's original "intake and build sibling" vision realized honestly
    rather than literally; flagged in the ship report for his veto.
 3. **Per-session arming, not durable infrastructure** (the wiring review's return-channel
    finding, 2026-08-10): Agent-tool siblings die with the session that spawned them. The
    command arms ONE work session and says so; re-run per session — the estate's session-scoped
    cron re-arm precedent (repo-cleaner/decision-watcher).
-4. **Home: teamwork** — composes team-lead (this plugin), build-lead (this plugin), and the
+4. **Home: teamwork** — composes team-lead (this plugin), build-leader (this plugin), and the
    /lead-team mechanism; `docs:intake-lead` is a named cross-plugin Agent dispatch (soft,
    degrades gracefully when docs is absent — the arming reports the missing seat and
    continues).

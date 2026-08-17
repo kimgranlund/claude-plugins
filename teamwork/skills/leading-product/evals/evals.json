@@ -1,0 +1,15 @@
+{
+  "skill": "leading-product",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). disable-model-invocation: true means this is a command-species skill, but routing intent is still documented.",
+  "cases": [
+    { "id": "t01", "prompt": "/lead-product is this release spec-locked yet?", "expect": "trigger" },
+    { "id": "t02", "prompt": "Adopt the product seat's contract and tell me which loop we're in.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Author the IDR for this north-star question and keep the roadmap current.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Is this Verify-stage finding a bug or a requirement gap? Adjudicate it as the product seat.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Author the LLD for this build.", "expect": "no-trigger", "comment": "owner: teamwork:leading-planning (HOW-grade design docs, one loop-tier down)" },
+    { "id": "n02", "prompt": "Gate this build dispatch — has it earned spec-lock?", "expect": "no-trigger", "comment": "owner: teamwork:leading-teams (enforces the gate at dispatch time; this seat only supplies the reading)" },
+    { "id": "n03", "prompt": "What lifecycle stage is this project in right now?", "expect": "no-trigger", "comment": "owner: docs:check-stage directly (a one-off report, not the standing seat)" },
+    { "id": "n04", "prompt": "What's an IDR for, in general terms?", "expect": "no-trigger", "comment": "owner: docs:product-lifecycle-rules (portable doctrine, not this seat's live operation)" },
+    { "id": "n05", "prompt": "Review this PR against its LLD.", "expect": "no-trigger", "comment": "owner: docs:doc-checker / teamwork:leading-review" }
+  ]
+}

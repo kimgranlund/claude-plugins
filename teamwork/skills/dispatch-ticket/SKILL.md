@@ -1,7 +1,7 @@
 ---
 name: dispatch-ticket
 description: >-
-  Use when invoked by name from /build-feature's body, the build-lead agent, or a /lead-build
+  Use when invoked by name from /build-feature's body, the build-leader agent, or a /lead-build
   session driving its targets — never model-routed from a raw ask. Finds or mints the target's
   record, then branches by kind: feature → size solo-first and build under a mandatory Findings
   write-back contract; task → clarify with one find-intent round, then dispatch under the same
@@ -14,17 +14,17 @@ user-invocable: false
 
 # dispatch-ticket
 
-The procedure behind `/build-feature`, the `build-lead` agent, and `/lead-build`'s standing seat
+The procedure behind `/build-feature`, the `build-leader` agent, and `/lead-build`'s standing seat
 — one engine, three entries. `/build-feature` is `disable-model-invocation: true` (command-only,
 unreachable via the Skill tool or agent preload — issue #134/#135's shared defect class), so this
 skill carries the actual procedure and both callers invoke it rather than duplicating it.
 Generalized from `dispatch-feature` per ADR-0010: one confirmed ticket of ANY kind — feature,
 task, or bug — the kind branch below picks the path. Carries no `context: fork` of its own (no
-double hop from `/build-feature`, no third hop from `build-lead` — rationale in `/build-feature`'s
+double hop from `/build-feature`, no third hop from `build-leader` — rationale in `/build-feature`'s
 body). Seed: $ARGUMENTS.
 
 **No nested wait.** A seat already running as a nested dispatch when it executes this procedure —
-`build-lead`, spawned via the `Agent` tool (`/lead-build`'s own standing seat runs no Agent
+`build-leader`, spawned via the `Agent` tool (`/lead-build`'s own standing seat runs no Agent
 spawn — the host session itself, not nested — and is unaffected by this rule) — performs Phase
 3's isolate work and Phase 4's `small` build DIRECTLY in its own context and worktree. It never
 spawns a further nested `context: fork` skill, or a further NAMED (teammate-mode) `Agent`-tool
@@ -53,7 +53,7 @@ and act on it; no separate signal will ever reach you. If a stall like this is a
 critic dispatched, no verdict in hand, the turn sitting idle), do not keep waiting it out: read the
 critic's own transcript or output file directly instead of polling for a callback that
 structurally will not arrive, or, for an already-nested seat with a coordinator watching it
-(`build-lead`), report the stall and let the coordinator relay the verdict.
+(`build-leader`), report the stall and let the coordinator relay the verdict.
 
 ## Phase 1 — Find or make the record
 
@@ -95,7 +95,7 @@ report that routing and stop; docs' seats own it.
   (`file-task`'s scope is deliberately heterogeneous), so run `find-intent` (harness, where
   installed; inline otherwise) on the ticket's full body first — ONE batched clarifying round
   maximum, only when genuinely ambiguous AND an interactive user is present (Phase 1's
-  ambiguous-match test; `build-lead` has no one to ask — an already-clear ticket needs zero
+  ambiguous-match test; `build-leader` has no one to ask — an already-clear ticket needs zero
   rounds). Still not concretely actionable → report SKIPPED with the named gap, never dispatch on
   an unclear brief — no claim taken, since no build effort was ever starting. Otherwise run Phase
   3 (claim, then isolate) first, then dispatch via the `Agent` tool — `subagent_type:
@@ -133,7 +133,7 @@ is what actually contains its inline-fix path.
   established `<domain>/<id>-<slug>` convention), then take ADR-0005's `claim` operation
   (`doc-writing-rules`' `references/backend-resolver.md`, its seventh operation; this dispatch is
   its first real caller): git-native — `gh issue edit --add-assignee @me` plus a `gh issue
-  comment` naming the claimant (`build-lead`/`dispatch-ticket`), a UTC timestamp, and the branch
+  comment` naming the claimant (`build-leader`/`dispatch-ticket`), a UTC timestamp, and the branch
   name; file backend — the record's `claimed-by`/`claimed-at` pair; an adapter — its own
   realization. **Re-read the record** (Phase 6's `read` verb) before proceeding: an
   earlier-timestamped competing claim means this caller lost the race (ADR-0005 tie-break: lower
@@ -155,6 +155,16 @@ is what actually contains its inline-fix path.
   can appear mid-build. Where harness isn't installed, this check is skipped — named as such,
   never silently assumed clean, with the manual equivalent named in its place: `gh pr list
   --state open --json files` filtered to the plugin's own `.claude-plugin/plugin.json`.
+  **A second, distinct race survives even a clean `version_claim_check.py` result: the VALUE
+  race.** That check only catches a sibling OPEN PR claiming the same next version; it says
+  nothing about a version already MERGED to `origin/main` since this branch was cut (issue #445 —
+  two same-night PRs both shipped the same version because each bumped from its own stale
+  branch-cut number, with no competing open PR to catch it — G14's monotonicity check now
+  mechanizes this at the gate, but that fails LATE, at the gate, not before the PR is opened). So
+  the Phase 5 stage-2 re-run (below) does two things, not one: re-run `version_claim_check.py` for
+  the claim race, AND fetch + re-read every touched plugin's `plugin.json` straight off
+  `origin/main` and bump from THAT value — never from the branch-cut version — carrying its
+  README ledger line along with the same rebumped number.
 - **Once the claim wins, make it LIST-VISIBLE too (#199)** — the claim comment is durable but
   invisible in the LIST view (Kim: "I cannot tell that Issues are claimed"). Git-native only: `gh
   issue edit --add-label in-flight`. `in-flight` shares hex `FBCA04` with `doing` by coincidence,
@@ -192,7 +202,7 @@ is what actually contains its inline-fix path.
   required or create: (1) cwd is a linked worktree, not the primary checkout (a decided-name match
   IN the primary checkout never licenses reuse — the #180/#182 residue below is exactly a stale
   branch left checked out there); AND (2) that worktree's checked-out branch matches the decided
-  name (a resumed `build-lead`/`lead-build` re-entering its own isolation — the name embeds the
+  name (a resumed `build-leader`/`leading-builds` re-entering its own isolation — the name embeds the
   ticket id, so a match is identity, not shape). "cwd sits under `.claude/worktrees/`" alone
   satisfies NEITHER conjunct (#191: a caller's own long-lived worktree for an unrelated purpose,
   e.g. `mobilize-chores`'s, matches that shape too — reusing it on shape alone checks the wrong
@@ -258,7 +268,7 @@ caller's side:
   host→fork→coordinator→seats — a third level past `team-or-solo-rules`' default depth ≤2, named
   deliberately: the fork isolates the CALLER's session, the coordinator isolates the multi-seat
   chain — two different things, not one dispatch nested for no reason. Same shape on a
-  `build-lead` dispatch, with the agent context taking the fork's place.
+  `build-leader` dispatch, with the agent context taking the fork's place.
 
 ## Phase 5 — Dispatch under contract: the four lifecycle stages
 
@@ -268,7 +278,11 @@ discover and repair branch/worktree residue by hand):
 
 1. **Isolated execution by default, or the explicit host-checkout skip (#204)** — Phase 3's
    claim-then-isolate (or claim-then-skip), already done before this phase starts.
-2. **Branch + commits + PR opened**, per ADR-0002. Commit meaningfully as work lands, push the
+2. **Branch + commits + PR opened**, per ADR-0002. **Immediately before opening the PR, run
+   Phase 3's version-collision re-checks — both of them**: re-run `version_claim_check.py` (the
+   CLAIM race) AND fetch + re-read every touched plugin's version off `origin/main` and bump from
+   THAT value (the VALUE race, #445) — see Phase 3 for why one check doesn't catch the other.
+   Commit meaningfully as work lands, push the
    claimed branch, and open exactly one PR against `main` carrying `Closes #<id>` (every id this
    dispatch closes, on a folded campaign), a plain what/why, the gate output for every touched
    plugin, an integration-notes line naming any known overlap with other open PRs (adopt
@@ -369,12 +383,14 @@ discover and repair branch/worktree residue by hand):
    eight conjunct results>`. When stage 2b evaluated and MISSED, the handoff names the failed
    conjunct and states the fallback plainly — PR opened, awaiting a human merge, today's behavior
    unchanged. When no grant was present, the handoff says nothing about auto-merge at all.
-   `build-lead`'s own return contract (`agents/build-lead.md`) carries these lines through
+   `build-leader`'s own return contract (`agents/build-leader.md`) carries these lines through
    verbatim to whatever dispatched it.
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
-enumerated inputs + budget + the typed return + stage 2's own `--remove-label in-flight` call at
-the moment the PR opens (named explicitly on a task or big-feature dispatch, since the dispatched
+enumerated inputs + budget + the typed return + stage 2's own `--remove-label in-flight` call,
+its **`version_claim_check.py` re-run (the CLAIM race)**, and its **origin/main version
+re-read-and-rebump (the VALUE race)** at
+the moment the PR opens (all three named explicitly on a task or big-feature dispatch, since the dispatched
 agent/seat opening the PR never loaded this file), and a **mandatory dated `## Findings`
 write-back at each significant result** (slice built, gate green, PR opened), not only at the
 end, so an interrupted build still left evidence — the entry that closes the ticket
@@ -425,7 +441,7 @@ conversational summary never substitutes for the entry the record was owed.
   which, one question, then proceed. A `/build-feature`-initiated call counts as having one even
   inside that command's fork — forking relieves the caller's session, it does not remove the
   person, and `AskUserQuestion` still reaches them directly. **No interactive user** (e.g. via
-  `build-lead`, from `mobilize-chores`) → report the ambiguity as a named blocker instead — the
+  `build-leader`, from `mobilize-chores`) → report the ambiguity as a named blocker instead — the
   batch confirm already spent the user's one gate for this run, so a mid-dispatch question has
   nowhere sanctioned to land (same discipline as this plugin's other unattended failure branches:
   `close-session`, `mobilize-chores`); never guess which record was meant.

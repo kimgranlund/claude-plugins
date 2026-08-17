@@ -4,7 +4,7 @@ Scope: `teamwork/skills/init-repo/` (SKILL.md, intent.md, evals/assertions.md) a
 skill-writing-rules, with composition accuracy checked against the shipped parts on disk:
 `teamwork/skills/lead-team/SKILL.md`, `docs/agents/intake-lead.md` + `intake-lead.intent.md`,
 `teamwork/agents/build-lead.md`, `teamwork/skills/mobilize-chores/SKILL.md`, sibling commands
-`lead-build`/`lead-review`, `harness/skills/naming-rules/SKILL.md`, issues #134/#135.
+`leading-builds`/`leading-review`, `harness/skills/naming-rules/SKILL.md`, issues #134/#135.
 Mechanics: `skill_lint.py` clean.
 
 ## Verdict
@@ -71,8 +71,8 @@ both files to the canonical shape: the Markers field is named, its value at spaw
 
 The done-when predicate ("the adoption acknowledged before any spawn") and assertion #2
 ("acknowledged … before any sibling spawns") both test for an explicit acknowledgment, but
-step 3 never instructs one. Both siblings carry it as a numbered instruction (`lead-build`
-Phase 2.3, `lead-review` Phase 2 opening: "Acknowledge adoption before processing any
+step 3 never instructs one. Both siblings carry it as a numbered instruction (`leading-builds`
+Phase 2.3, `leading-review` Phase 2 opening: "Acknowledge adoption before processing any
 target: one standing block…"). Add the one line to step 3 so the predicate tests something
 the body actually orders.
 
