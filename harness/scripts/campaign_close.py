@@ -31,14 +31,25 @@ incident on every one of them — ten stale remote branches accumulated before a
             `big-change-git-rules/references/merge-semantics.md` carries the full rule) — C4
             only WARNS (never blocks the delete) because a false positive here must never strand
             a branch that genuinely has no children left.
+  C5 [FAIL] the branch about to be deleted is not the HEAD of any OTHER open PR — branch-name
+            reuse (gh#1483), proven live twice: PR #1419 (MERGED) and PR #1449 (OPEN) both had
+            head `bot/corpus-resync`; running this script against #1419 would have deleted
+            #1449's own live branch. Earlier: `design/1334-site-a2ui-retirement` (same class,
+            caught by repo-cleaner's manual judgment, not by a gate). C1 cannot catch this — it
+            only inspects the PR passed in, never asks whether some OTHER open PR reused its
+            branch name. Unlike C4, this FAILS fail-closed: a live PR losing its head branch is a
+            worse outcome than a stale branch left standing (the inverse of C4's own reasoning,
+            deliberately), and an inconclusive lookup (the `gh` call itself failing) also refuses
+            the delete rather than assuming no reuse exists.
 
-The four checks are pure functions (`verify_*`) fed by real `gh`/`git` calls in `run()` —
+The five checks are pure functions (`verify_*`) fed by real `gh`/`git` calls in `run()` —
 selftest proves the checks bite on fixture inputs, never on live network state; the negative
 control is exactly C2's "still present after delete" case, the incident this script encodes.
 
 Exit 0 all clean, 1 on any FAIL (C3 and C4 warn, never fail — a red gate is the owner's call, not
 a reason to leave a branch dangling, and an open child PR is the operator's call to retarget and
-rebase, not a reason to refuse a delete that may genuinely have no children left).
+rebase, not a reason to refuse a delete that may genuinely have no children left). C5 joins C1/C2
+as a hard FAIL — reused-branch deletion is never left to operator judgment alone again.
 """
 import json
 import subprocess
@@ -99,6 +110,32 @@ def verify_no_open_children(child_prs: list, branch: str):
                     "main + `git rebase --onto origin/main <parent-old-tip>` BEFORE deleting")
 
 
+def verify_no_reused_head(head_prs, lookup_ok: bool, branch: str, exclude_pr: str = None):
+    """head_prs: list of {'number': int, ...} from `gh pr list --head <branch> --state open
+    --json number`, or None when lookup_ok is False. exclude_pr is the PR this run is closing —
+    `--state open` already excludes it (it's MERGED by the time C1 passes), but the exclusion is
+    a defensive second layer, never load-bearing on its own.
+
+    FAILS fail-closed (unlike C4's warn) — gh#1483: a branch name reused across PRs (an OLD
+    MERGED PR and a NEW OPEN PR sharing the same head branch — proven live: #1419 MERGED /
+    #1449 OPEN, both `bot/corpus-resync`) means the branch about to be deleted is NOT this
+    campaign's leftover, it is a live PR's own head. C1 (this PR is MERGED) cannot catch this —
+    it only inspects the PR passed in, never asks whether some OTHER open PR reused its branch
+    name. A lookup failure (lookup_ok=False) also refuses the delete — never assume no reuse
+    exists just because the check that would have caught it couldn't run."""
+    if not lookup_ok:
+        return False, (f"could not verify whether {branch} is the head of any OPEN PR "
+                        "(gh lookup failed) -> refusing delete fail-closed, never assume no reuse")
+    others = [p for p in (head_prs or [])
+              if exclude_pr is None or str(p.get("number")) != str(exclude_pr)]
+    if not others:
+        return True, f"no OPEN PR has {branch} as its head"
+    numbers = ", ".join(f"#{p['number']}" for p in others)
+    return False, (f"branch {branch} is the HEAD of OPEN PR(s) {numbers} -> refusing delete "
+                    "(branch-name reuse, gh#1483: #1419 MERGED / #1449 OPEN shared head "
+                    "bot/corpus-resync) - deleting it would kill a live PR's own head branch")
+
+
 def verify_gate_clean(gate_output_returncode: int, root: str):
     if gate_output_returncode != 0:
         return False, f"{root} is not release_gate-clean at HEAD -> fix before the next campaign"
@@ -126,6 +163,23 @@ def _open_child_prs(branch: str, repo: str = None) -> list:
         return json.loads(r.stdout)
     except (ValueError, TypeError):
         return []
+
+
+def _open_head_prs(branch: str, repo: str = None):
+    """Returns (prs, lookup_ok). lookup_ok=False (prs=None) on any `gh` failure or unparsable
+    output — fail-closed by design: unlike `_open_child_prs` (C4, warn-only, safe to treat a
+    lookup failure as "no children"), this check exists precisely to catch a destructive
+    branch-name reuse (gh#1483), so a failed lookup must never be silently read as 'no reuse'."""
+    cmd = ["gh", "pr", "list", "--head", branch, "--state", "open", "--json", "number"]
+    if repo:
+        cmd += ["--repo", repo]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        return None, False
+    try:
+        return json.loads(r.stdout), True
+    except (ValueError, TypeError):
+        return None, False
 
 
 def _remote_branch_exists(branch: str, repo: str = None) -> bool:
@@ -179,6 +233,15 @@ def run(pr_number: str, repo=None, gate_roots=None):
         return 1
 
     branch = pr["headRefName"]
+
+    head_prs, lookup_ok = _open_head_prs(branch, repo)
+    ok, msg = verify_no_reused_head(head_prs, lookup_ok, branch, exclude_pr=pr_number)
+    findings.append(("C5", ok, msg))
+    if not ok:
+        ok_all = False
+        _report(findings)
+        return 1  # refuse the delete outright — never reached the delete attempt below
+
     ok, msg = verify_no_open_children(_open_child_prs(branch, repo), branch)
     findings.append(("C4", ok, msg))  # C4 never flips ok_all — warn, never block the delete
 
@@ -287,11 +350,33 @@ def selftest():
     ok, _ = verify_gate_clean(0, "screens")
     assert ok, "a clean gate must pass"
 
-    print("campaign_close selftest · PASS · merge/delete/gate/stacked-children checks bite, incl. "
-          "the ten-branch silent-delete-failure negative control, the #102 async-propagation race "
-          "(lag resolves ok and is disclosed; a stranded branch still fails after the window), "
-          "the #188 parser controls (unknown token and dangling flag rejected, never swallowed), "
-          "and the 2026-08-16 stacked-PR C4 warning (#437->#439)")
+    # C5 — the gh#1483 negative control: this is exactly the #1419/#1449 live repro. A branch
+    # name reused as an OPEN PR's head must FAIL fail-closed, never pass silently the way C4's
+    # base-only check let it through the first two times (#1419 MERGED reused `bot/corpus-resync`,
+    # which was also #1449's OPEN head; campaign_close(1419) would have deleted #1449's branch).
+    ok, msg = verify_no_reused_head([{"number": 1449}], True, "bot/corpus-resync",
+                                    exclude_pr="1419")
+    assert not ok and "#1449" in msg and "branch-name reuse" in msg, \
+        "an OPEN PR reusing this head branch must refuse the delete, named by number"
+    ok, msg = verify_no_reused_head([], True, "bot/corpus-resync", exclude_pr="1419")
+    assert ok, "no OPEN PR sharing this head branch must pass cleanly"
+    # the PR being closed must never count as "reusing" its own branch — state:open already
+    # excludes a MERGED PR, but exclude_pr is a defensive second layer, proven here directly
+    ok, msg = verify_no_reused_head([{"number": 1419}], True, "bot/corpus-resync",
+                                    exclude_pr="1419")
+    assert ok, "the PR being closed must never be counted as reusing its own branch"
+    # a failed gh lookup must refuse the delete too — fail-closed, never assume no reuse exists
+    # just because the check that would have caught it couldn't run
+    ok, msg = verify_no_reused_head(None, False, "bot/corpus-resync")
+    assert not ok and "could not verify" in msg, \
+        "a lookup failure must refuse the delete, not assume safety"
+
+    print("campaign_close selftest · PASS · merge/delete/gate/stacked-children/reused-head checks "
+          "bite, incl. the ten-branch silent-delete-failure negative control, the #102 "
+          "async-propagation race (lag resolves ok and is disclosed; a stranded branch still "
+          "fails after the window), the #188 parser controls (unknown token and dangling flag "
+          "rejected, never swallowed), the 2026-08-16 stacked-PR C4 warning (#437->#439), and the "
+          "gh#1483 reused-head C5 negative control (#1419 MERGED / #1449 OPEN, same head)")
     return 0
 
 
