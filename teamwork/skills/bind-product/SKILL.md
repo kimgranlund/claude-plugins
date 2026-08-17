@@ -2,13 +2,14 @@
 name: bind-product
 description: >-
   Makes this session a dedicated product seat: it adopts the product-leader agent's own contract
-  directly — loop authority (north star/foundation/releases), the spec-lock gate, IDR/RDD
-  authoring, bug-vs-requirement-gap adjudication at Verify, the retro, and citation-driven
-  escalation — operating from docs:product-lifecycle-rules and driving docs:check-stage. Holds
-  until the charter closes. Run /bind-product [charter]. NOT the dispatched sibling seat
-  (product-leader, Agent tool); NOT authoring PRD/SPEC/LLD (/bind-planning); NOT gating a build
-  dispatch on spec-lock (/bind-team enforces it; this seat only supplies the reading); NOT a
-  one-off lifecycle-position report (docs:check-stage directly).
+  directly — loop authority (north star/foundation/releases), reading whether spec-lock has been
+  earned, IDR/RDD authoring, bug-vs-requirement-gap adjudication at Verify, the retro, and
+  citation-driven escalation — operating from docs:product-lifecycle-rules. Holds until the
+  charter closes. Run /bind-product [charter]. NOT the dispatched sibling seat (product-leader,
+  Agent tool); NOT authoring PRD/SPEC/LLD (/bind-planning); NOT the build dispatch itself gating
+  on spec-lock (/bind-team enforces the gate; this seat only supplies the reading when asked as
+  its own charter); NOT a one-off lifecycle-position report run standalone (docs:check-stage
+  directly — this seat only drives it as one step inside an open product charter).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[charter — the loop/gate/IDR/RDD work needing the product seat]"
@@ -49,8 +50,9 @@ read that file and hold its seven priorities verbatim as this session's standing
 the charter's duration, rather than re-derived inline here (the drift-pair defect class
 `bind-team`'s own R5 finding named: restating a copy invites birth-drift against the source of
 record). Acknowledge adoption in one line before processing anything: the file read, the
-duration rule ("until this charter closes"), and the seat-tier deviation line stated verbatim
-from the agent file (fable+high, dated 2026-08-16, D08/#395 precedent).
+duration rule ("until this charter closes"), and the seat-tier line stated verbatim from the
+agent file — fable+high, the planning-tier ceiling's own default for this seat's class, no
+deviation recorded (product-leader.md's own line, not a claim this file restates from memory).
 
 ## Phase 3 — Work the charter
 

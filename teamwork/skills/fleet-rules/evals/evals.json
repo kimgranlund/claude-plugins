@@ -14,7 +14,7 @@
   },
   {
    "id": "t03",
-   "prompt": "what should I check on a ticket before I dispatch a build for it",
+   "prompt": "what's the claim-then-guard check I run against a seat's existing claim before dispatching more work at it",
    "expect": "trigger"
   },
   {

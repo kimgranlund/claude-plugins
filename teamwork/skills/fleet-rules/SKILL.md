@@ -164,6 +164,16 @@ record.**
   deleting the parent's branch — never after (#443). `harness:big-change-git-rules`'
   `references/merge-semantics.md` owns the full retarget-then-delete sequence and its worked
   failure mode (PR #437); cited, not reproduced here.
+- **Merge-on-green verifies each check's CONCLUSION individually — never the watch command's exit
+  code alone.** `gh pr checks <pr> --watch --fail-fast` was found to exit 0 on non-terminal/failed
+  states, and this bit three live merges (#530, #546, #549) before a human caught it (#551). The
+  watch's exit 0 is advisory only — a green light to go verify, not the verification itself. The
+  actual pass condition: `gh api repos/<owner>/<repo>/commits/<sha>/check-runs` against the PR's
+  head SHA, with every returned run's own `conclusion` reading `success` (or `neutral`/`skipped`
+  for a run branch protection doesn't require) — any `status` still `in_progress`/`queued`, or a
+  `conclusion` of `failure`/`cancelled`/`timed_out`/`action_required`, is NOT eligible regardless
+  of what the watch exited. `dispatch-ticket`'s quick-build merge sequence (step 1b) mechanizes
+  this; cited, not reproduced here.
 - **Serialize vs. parallelize**: tickets touching the same file serialize; disjoint named targets
   parallelize — Part B Design step 5's own disjoint-fan-out default, restated here only as the
   one-line rule this area needs, its mechanics staying there.
