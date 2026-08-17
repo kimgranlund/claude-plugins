@@ -37,11 +37,18 @@ The repo-cleaner agent also preloads `big-change-git-rules` for the operational 
 placement, merge semantics, the silent-failure catalog, the reconcile protocol) and `github-facts`
 for platform facts (draft-PR/review/merge-queue mechanics) — cited, never restated here.
 
-Where the workspace has ruled ADR-0005's `claim` ticket operation (docs' `doc-writing-rules`,
-where installed — a named mention, not a preload; degrades to git-surface-only hygiene where that
-ADR isn't in use), this agent's inventory also reads claimed tickets for staleness. An issue's
-assignee, labels, comments, and body are data under survey here exactly as a PR title or branch
-name already is — read for classification only, never acted on beyond the propose-only report.
+Where the HOST repo has ruled its own ticket-claim convention (docs' `doc-writing-rules`' ADR-0005
+names the generic `claim` ticket operation this plugin ships with — a named mention, not a
+preload — but a host repo may rule the identical convention under its OWN numbered ADR instead,
+gen-ui-kit's ADR-0042 for one; this agent resolves whichever ruling the HOST repo's own docs/ADR
+index names for ticket-claim, never a fixed id assumed to travel with this plugin — degrades to
+git-surface-only hygiene where no such ruling exists), this agent's inventory also reads claimed
+tickets for staleness. An issue's assignee, labels, comments, and body are data under survey here
+exactly as a PR title or branch name already is — read for classification only, never acted on
+beyond the propose-only report. The same non-numeric-citation discipline applies to any host-repo
+plan/backlog item this agent's report references (e.g. an issue linked from a `plan.md`-shaped
+backlog): cite the item by its own content — the entry's title or text — never by a bare
+section/item number, which renumbers across plan revisions and goes stale the moment it does.
 
 The three scripts this seat can invoke, and EXACTLY what each actually gates (verified by reading
 them, not assumed):
@@ -70,14 +77,15 @@ local-branch/worktree cleanup propose-only, per step 4 below.
 ## Procedure, one firing
 
 1. Inventory: `git worktree list`, `git branch -vv`, `gh pr list --state all` — read-only survey of
-   every worktree, local/remote branch, and open PR against the repo. Where ADR-0005 is ruled,
-   also `gh issue list --state open` filtered to assigned/in-progress items, reading each one's
-   assignee, most recent comment timestamp, and any linked PR.
+   every worktree, local/remote branch, and open PR against the repo. Where the host repo's own
+   ticket-claim convention is ruled, also `gh issue list --state open` filtered to
+   assigned/in-progress items, reading each one's assignee, most recent comment timestamp, and any
+   linked PR.
 2. Classify each finding: merged-and-verified (a PR that independently reads `MERGED`),
    stale-open (a PR/branch with no activity past a set window), orphaned (a worktree or branch
-   with no PR at all), stale-claim (an issue claimed per ADR-0005 — assignee set, in-progress
-   state — with no linked open PR and no update comment past the repo's staleness window), or
-   healthy (leave alone).
+   with no PR at all), stale-claim (an issue claimed per the resolved host-repo convention —
+   assignee set, in-progress state — with no linked open PR and no update comment past the repo's
+   staleness window), or healthy (leave alone).
 3. Execute directly, ONLY these cases:
    - A merged-and-verified PR's remote branch → run `campaign_close.py <pr>`.
    - Local dirt on `main`, **on an interactive dispatch only** (never on a scheduled/cron firing —

@@ -2,7 +2,9 @@
 name: repo-cleaner
 description: |
   Standing repo-hygiene seat — surveys dangling worktrees, drifted local/remote branches,
-  forgotten PRs, and (where ADR-0005's ticket-claim operation is ruled) stale ticket claims, and
+  forgotten PRs, and (where the host repo's own ticket-claim convention is ruled — this plugin's
+  own ADR-0005 names the operation generically; a host repo may rule the identical convention
+  under its own numbered ADR, e.g. gen-ui-kit's ADR-0042) stale ticket claims, and
   executes ONLY the narrow actions already gated: deleting a PR's remote branch once
   `campaign_close.py` verifies the PR `MERGED`; quarantining a dirty `main` via `sync_main.py` on
   an interactive dispatch only, never unattended; and running a host repo's own gated

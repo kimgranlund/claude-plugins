@@ -76,11 +76,18 @@ named it as a live routing target has been repointed to this skill in the same c
    `harness:issue-sorter` / `harness:repo-cleaner`), never the bare seat name, and WITHOUT a
    `name` (`agent-writing-rules`' Failure catalog: a bare `subagent_type` resolves ambiguously,
    and a named dispatch switches into teammate/mailbox mode and strands the report — gh#154 /
-   gh#157). A seat's dispatch failing to return → UNMEASURED for this sweep, others proceed. At
-   least one seat returned → hand the bundle to `chore-planner` — one more `Agent` call,
-   `subagent_type: "harness:chore-planner"`, also unnamed, the returned reports as context,
-   naming every UNMEASURED seat. No seat returned at all → skip the planner dispatch; report the
-   failed sweep, per-seat status and all.
+   gh#157). Each dispatch's own prompt states three things explicitly, never left implicit: the
+   resolved scope this sweep is running under, any seat step 2 excluded from it by name (so a
+   seat's own report carries the context of what else did-or-didn't run alongside it), and this
+   firing's own UTC timestamp — the sequence key this sweep and everything downstream of it
+   (chore-planner's plan header, the eventual report filename) key on, never an incrementing sweep
+   count (a count is only ever a program's OWN local tally, drifts the moment two sessions sweep
+   concurrently, and this estate has already seen that drift surface as an informal "sweep #N"
+   label in unrelated changelog prose — never repeat that pattern here). A seat's dispatch failing
+   to return → UNMEASURED for this sweep, others proceed. At least one seat returned → hand the
+   bundle to `chore-planner` — one more `Agent` call, `subagent_type: "harness:chore-planner"`,
+   also unnamed, the returned reports as context, naming every UNMEASURED seat. No seat returned
+   at all → skip the planner dispatch; report the failed sweep, per-seat status and all.
 
    **Script-not-found escape hatch.** This skill's paths (`harness/workflows/chore-sweep.js`,
    `harness/scripts/chore_sweep_apply.mjs`) are workspace-relative, deliberately scoped to THIS
@@ -112,10 +119,11 @@ named it as a live routing target has been repointed to this skill in the same c
    own report the same way — it also returns its rewritten `.claude/ops/plan.md` as a fenced,
    target-pathed block.
 6. **Verify, then relay.** `Read` confirms `.claude/ops/plan.md` exists before the queue is
-   relayed as real. Report: the banner (if shown), which path ran (Workflow or fallback), the
-   scope swept, per-seat status (returned · UNMEASURED · refused — read off each
-   `chore_sweep_apply.mjs` run's own findings), any narrated-but-absent claims named explicitly,
-   and the planner's queue unmodified.
+   relayed as real. Report: this firing's own UTC timestamp (the sequence key, per step 4 —
+   never a sweep count), the banner (if shown), which path ran (Workflow or fallback), the scope
+   swept and any seats it excluded by name, per-seat status (returned · UNMEASURED · refused —
+   read off each `chore_sweep_apply.mjs` run's own findings), any narrated-but-absent claims named
+   explicitly, and the planner's queue unmodified.
 
 ## The banner
 
