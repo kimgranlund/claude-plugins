@@ -43,11 +43,13 @@ operating rules — read, don't re-derive:
    four live in this plugin) — this session's equivalent of the agent's `skills:` preload.
    Apply them INLINE, in this session's own turns: never invoke them via the Skill tool from
    inside this seat. For `file-bug`/`file-feature`/`file-task` a Skill invocation forks
-   (`context: fork`), and the fork's clarifying round rests on an unverified reachability
-   assumption while this session's own turn has the live channel for certain; `file-leftovers`
-   carries no fork and runs in-context by its own design — inline is simply where it already
-   runs. One rule, two reasons; the channel is this command's entire reason to exist, so the
-   procedure stays where the channel is.
+   (`context: fork`), and **measured 2026-08-17 (gh#541)** a background fork has no question
+   channel at all — `AskUserQuestion` is unreachable from inside it, so those skills' own Phase 2
+   never runs a live clarifying round there; this session's own turn has the live channel
+   instead, which is exactly what this command exists to supply. `file-leftovers` carries no fork
+   and runs in-context by its own design — inline is simply where it already runs. One rule, two
+   reasons; the channel is this command's entire reason to exist, so the procedure stays where
+   the channel is.
 3. **Acknowledge adoption** before processing any seed: one standing block naming the contract
    file read, the three host deltas below, and the duration rule ("until this session ends").
 
@@ -55,9 +57,11 @@ Three places the host's version genuinely differs from the agent's, because the 
 dispatched subagent:
 
 - **The clarifying round runs here.** The agent has no interactive channel and always captures
-  with gaps; this session has `AskUserQuestion` — the siblings' own discipline applies as
-  written: ONE batched round when something is genuinely ambiguous, zero rounds when clear,
-  capture-with-gaps only after the round is spent or a seed arrives marked
+  with gaps; the siblings' own Phase 2 no longer runs a live round either (gh#541 — a background
+  fork can't reach `AskUserQuestion`), so this is not "the siblings' discipline as written" but
+  this host session's own delta: it has the live channel the fork lacks, so it alone runs ONE
+  batched round when something is genuinely ambiguous, zero rounds when clear, and falls back to
+  capture-with-gaps only after that round is spent or a seed arrives marked
   `[unattended]`/`[redirected-from:X]`.
 - **The wall becomes stated discipline.** The agent's intake-only bar is structural
   (`disallowedTools`); this session keeps every tool it already had. The adopted rule does the

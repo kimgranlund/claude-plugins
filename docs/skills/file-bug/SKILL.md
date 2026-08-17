@@ -34,7 +34,8 @@ in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolvin
 `TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`, REQ-010)
 — → this is a resume. Extra text follows the id (new detail, a repro that did not exist before,
 or an answer to a clarifying question Phase 4 named in a prior close-out) → fold it into the
-ticket's Repro/Classification FIRST, unconditionally — this composes with every branch below, not
+ticket's Repro/Classification FIRST, unconditionally, clearing the answered gap from
+Classification once folded — this composes with every branch below, not
 an alternative to them; a Findings entry already existing (the fork ran Phase 5 before the person
 replied) does not swallow the fold-in, it only decides what happens next once folding is done.
 Then branch by the record's own state, never re-dispatch blindly:
