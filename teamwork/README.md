@@ -108,6 +108,42 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.1 · assembled 2026-08-17 · closes #543: the gen-ui-kit CLI-tier fleet-ops harvest
+(agent-ui#1115, comment 5317746661, 25 claim·evidence·date·confidence lessons) folds into its
+actual owning doctrine, `fleet-rules` and `parallel-work-rules`, now that #524/D5 (above) has
+settled the post-merge section layout this ticket was queued behind. `fleet-rules` gains: §1 a
+two-host ratified-lane-split bullet (lesson 12); §2 a remote-absence-never-proves-stale
+refinement (lesson 8); §3 a dead-mailbox-not-dead-agent bullet (lesson 9) and a
+ruling-scoped-to-its-utterance bullet (lesson 15); §4 a hot-shared-file merge-then-rebase-next
+nuance (lesson 6), a derived/generated-artifact merge-marshal-and-class-split cluster (lessons
+1–3, 5, citing this workspace's own `dist/` as an existing Class-C instance), a
+credentialed-steps-don't-run-in-seats bullet (lesson 19), and a worktree-installer-shapes-bytes
+citation into `harness:big-change-git-rules` (lesson 18); §5 a peer-worktree-hygiene bullet, a
+caffeinate/keep-awake bullet (lesson 22), and a fleet-ledger-anatomy elaboration (lesson 25);
+Part B Design step 1 a worked release-authorization precedent for the solo-first default (lesson
+14). `parallel-work-rules` gains one Decide-step-2 bullet: a pinned host poisons its plain-Bash
+subagents, `isolation:"worktree"` is the fix (lesson 11). **Skipped by name as already covered,
+no re-fold**: lesson 4 (regen-bot force-rebuild) and lesson 17 (isolation-worktree bootstrap) by
+`dispatch-ticket`'s own VALUE-race/bootstrap-on-isolation mechanics (cited from fleet-rules §4);
+lesson 7 by §4's own serialize-vs-parallelize + Part B Design step 5's disjoint-fan-out default;
+lesson 10 by `dispatch-ticket` Phase 3's re-read-before-proceeding tie-break (cited from §2);
+lesson 13 by this workspace's own ADR-0002/CLAUDE.md ticket-routing invariant; lesson 16 by
+`.claude/rules/docs-mutability.md`'s accepted-ADR append-only rule; lesson 20 by
+`harness:checks-that-bite`'s pre-PR-gate-with-auto-fix domain; lesson 21 by
+`harness:flaky-gates`'s contention-vs-regression doctrine; lessons 23–24 by `dispatch-ticket`
+Phase 5 stage 2b's verify-merge-by-state and mandatory Findings write-back (both already cited
+from fleet-rules). The agent-ui#1115 "Scope-conformant revision v2" Excluded-list's own 7
+whole-lesson + 3 split-dev-half items (relayed onto #543 as a second input source) are disposed
+the same way: the worktree/branch peer-hygiene item folds alongside lesson 25 above; "seats never
+merge, one host verifies serially" and "owner rulings park as affordances" skip as already
+covered by ADR-0002/§3's one-decision-one-channel section respectively; "red gates under fleet
+load aren't evidence," "hooks are a separate enforcement layer," and "generator≠critic as
+residency law" skip as already covered by `harness:flaky-gates`, `harness:hook-writing-rules`,
+and this estate's own generator-≠-critic invariant (`.claude/rules/plugin-authoring.md`) in turn;
+the 3 split dev-side halves (a daily zero-SDK grep gate, a repo-internal dev-proxy trip-wire, a
+prompt-drift/equivalence CI gate) are gen-ui-kit product-plumbing specific enough that they don't
+generalize into this estate's CLI-harness doctrine — noted, not forced into a fold. Full
+disposition table lives in #543's Findings. `harness/scripts/release_gate.py teamwork` green.
 v2.21.0 · assembled 2026-08-17 · ADR-0020 wave 6 (closes #524, D5): `team-or-solo-rules` merges
 into `fleet-rules` — the widest single-name blast radius in the estate (116 hits / 54 files).
 `fleet-rules` keeps its name and both preload edges (`fleet-marshal`, `wiring-checker`); its

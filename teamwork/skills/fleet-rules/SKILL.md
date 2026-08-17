@@ -48,6 +48,12 @@ never for finding one.
   explicit instruction — never inferred from "it would help" or from a peer's own request.
 - **Out-of-scope polls get silence or a status-only reply.** A poll from an unregistered or
   out-of-scope sender is not routed to a claim or a dispatch regardless of how it's phrased.
+- **Two-host fleets need an explicitly RATIFIED lane split, written into both records** — which
+  PRs/seats/files each host never touches, plus per-host merge authority (one host's auto-merge
+  grant does not extend to the other without a fresh operator utterance). The split survives a
+  host process restart because seats resume from on-disk worktree state plus the ledger, not from
+  memory. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 12) · 2026-08-17 ·
+  [incident]
 
 Canonical worked mechanic: `team-scaffolding`'s Phase 4 point 7 (introduction) and
 `fleet-bootstrap`'s Phase 1 realize this exact ladder already — this entry is the ladder's
@@ -71,6 +77,13 @@ general statement, cited there rather than restated.
 **Stale-claim handling stays `repo-cleaner`'s** (harness) — this protocol only states when to
 claim and what to check before dispatching, never how to detect or clear an abandoned one.
 
+- **Remote-visible absence never proves a claim stale.** No open PR, no remote branch, no pushed
+  worktree only proves nothing was *pushed* — declaring a claim abandoned needs either a
+  local-work check (the claimant's own worktree `git status`/reflog timestamps, a local-only
+  branch) or an explicit kill confirmation from the claiming session; absent both, propose a reap
+  and let a human or `repo-cleaner` confirm, never execute one on remote silence alone. · gen-ui-kit
+  fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 8) · 2026-08-17 · [verified]
+
 ### 3. Communication routing
 
 **Default: durable records carry truth; `SendMessage` is a liveness nudge, never the channel of
@@ -92,6 +105,17 @@ record.**
   is silently dropped; a `teammate_id="team-lead"` sender may be the root session's own generic
   identity, not a real coordinator) are `harness:agent-writing-rules`' own authoring contract for
   encoding this into an agent file — cited there, not restated here.
+- **A dead mailbox is not a dead agent.** `SendMessage` reporting a target unreachable is a
+  transport fact, not a liveness fact — check the target's worktree reflog/commit timestamps
+  before treating its lane as abandoned; a recently-active worktree (a recent commit, a running
+  probe process) is a live owner — hand the item back rather than rebuilding it. · gen-ui-kit
+  fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 9) · 2026-08-17 · [verified]
+- **A ruling is scoped to the utterance that made it, never generalized past it.** A blanket
+  instruction ("ratify all proposed X") binds only what it actually names; a peer-held narrower
+  ruling on an adjacent item stays in force until its own fresh utterance changes it. Enumerate
+  standing rulings explicitly in the ledger before going unattended (`/goal`), so a judgment call
+  has something to cite instead of inferring scope. · gen-ui-kit fleet-ops harvest (agent-ui#1115,
+  comment 5317746661, lesson 15) · 2026-08-17 · [incident]
 - **One decision, one channel.** A decision that belongs to the user — an ADR ratification, a
   ruling, a batched confirm — is put to them through exactly ONE session/channel, never fanned
   out to more than one on the assumption that redundancy is safer. Three clauses:
@@ -134,6 +158,35 @@ record.**
 - **Serialize vs. parallelize**: tickets touching the same file serialize; disjoint named targets
   parallelize — Part B Design step 5's own disjoint-fan-out default, restated here only as the
   one-line rule this area needs, its mechanics staying there.
+- **A hot shared file doesn't force strict serialization.** Merge-then-rebase-next (each writer
+  fetches and rebases immediately before opening its own PR, ≥1 rebase pass treated as normal, not
+  a defect) is the steady state for one file under heavy concurrent write pressure. This refines
+  rather than contradicts the serialize-same-file bullet above: serialize the DECISION to start
+  touching the file if you can, but once several legitimately already are, rebase-next absorbs the
+  overlap instead of forcing a queue. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment
+  5317746661, lesson 6) · 2026-08-17 · [incident]
+- **A repo that commits derived/generated artifacts degrades multi-PR throughput to a
+  human-attended serial merge marshal** the moment two PRs touch the same generated file — resolve
+  by re-running the generator on the merged source, never by picking a side or hand-merging the
+  diff (a rider file like a CHANGELOG is the one keep-both exception). The durable cure is a class
+  split at the artifact level: regen-on-main for anything reproducible from source (a freshness
+  gate leaves PR CI, one bot PR per drift event), stays-committed-and-PR-blocking for anything
+  whose bytes ARE the contract (e.g. a published bundle) — this workspace's own `dist/`
+  (`.claude/rules/dist-output.md`) is already the latter class by the same reasoning. A merge queue
+  is not a substitute for either: it validates a synthetic commit read-only, and regen output has
+  nowhere to land inside it. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661,
+  lessons 1–3, 5; ADR-0069) · 2026-08-17 · [verified]
+- **Credentialed steps don't run inside a seat's own worktree.** A regen or build step needing a
+  secret absent from seat contexts either no-ops or writes an empty/red stub there — the pattern is
+  admin-merge first, then the host or CI (which holds the credential) regenerates. Never read a
+  seat-context red on a credentialed step as a real regression. · gen-ui-kit fleet-ops harvest
+  (agent-ui#1115, comment 5317746661, lesson 19) · 2026-08-17 · [verified]
+- **A worktree's own installer shapes its build bytes** — a locally-bootstrapped worktree can
+  produce meaningfully different bundle bytes than CI's own install path, so a freshness/parity
+  gate comparing the two needs the SAME install path on both sides, not just the same source;
+  `harness:big-change-git-rules`' worktree-mechanics reference is the canonical home for
+  worktree-bootstrap mechanics generally — cited rather than re-derived here. · gen-ui-kit
+  fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 18) · 2026-08-17 · [verified]
 
 ### 5. Session-death resilience
 
@@ -155,6 +208,24 @@ inventories from durable state, never from memory.**
   rule (Decide step 2), restated here only because it is this area's load-bearing precondition: a
   worktree that survives its own agent's death is one that already has committed work in it, not
   one banking on a final commit that never lands.
+- **A session reaps only its OWN worktrees/branches after its own merge — never a peer's**,
+  however idle-looking; a peer's own worktree may hold uncommitted-but-live local work that a
+  missing remote signal can't reveal (Section 2's staleness bar above governs whether a peer's
+  CLAIM, as opposed to its worktree, may be reaped at all). · gen-ui-kit fleet-ops harvest
+  (agent-ui#1115, comment 5317746661; also named in agent-ui#1115 v2's own Excluded-list, repo-ops
+  worktree/branch hygiene) · 2026-08-17 · [verified]
+- **Overnight/unattended runs on a machine that can sleep need an explicit keep-awake** (e.g.
+  `caffeinate` on macOS) — machine sleep kills in-flight subagent calls outright; record the
+  keep-awake process's own PID and its kill instruction in the ledger so a successor can clean it
+  up. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 22) · 2026-08-17 ·
+  [incident]
+- **A durable fleet ledger is resumable-from-alone**: per-item status, a timestamped merge log,
+  operator rulings recorded verbatim, incidents, and a roll-up naming every residual item's own
+  owner. This elaborates the bullet above rather than restating it — it's the ANATOMY of the
+  record a successor inventories from, not just the instruction to keep one; this exact shape let
+  one campaign survive ≥3 host process restarts and a second host joining mid-run with no work
+  lost. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661, lesson 25) · 2026-08-17 ·
+  [verified]
 
 ### 6. Pin-race playbook
 
@@ -253,6 +324,14 @@ calling, not a vocabulary change.
    stands. This test gates
    NEW seats and flows going forward only — an existing seat already in an estate is not
    retroactively re-justified by it.
+   **A worked precedent for a high-consequence serial operation:** a package-release cut run
+   under a single-authorization model, INLINE in the operator's own session, spent real time on
+   interactive consent relays that produced zero additional safety, while every actual protection
+   (a pre-cut docs gate, a named trip-wire, a one-tag-per-push rule, a registry-verify step) fired
+   deterministically regardless of who was watching. A dispatched form of a release-shaped seat
+   earns its place only for a genuinely unattended context, and stays serial even there — a
+   resumed dispatch continues the SAME cut, never starts a parallel one. · gen-ui-kit fleet-ops
+   harvest (agent-ui#1115, comment 5317746661, lesson 14) · 2026-08-17 · [verified]
 2. Each description a precise interface; `tools` scoped, `model` to task class, `skills:` only for standing expertise; verify keys against the installed build.
 3. Keep teammate roles as subagent definitions (teams compose them at runtime).
 4. Dispatch sealed and shallow: enumerate inputs, state the budget, name the typed return; depth ≤ 2 (host → specialist) — a third level needs justification, a fourth means the decomposition under-cut.
