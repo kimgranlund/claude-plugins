@@ -17,7 +17,7 @@ argument-hint: "[optional target repo root — defaults to the current working d
 # leading-builds — the host runs the build seat, not a dispatched copy of it
 
 `build-leader` (this plugin, `agents/build-leader.md`) is the dispatched form of the standing build
-seat. This command is the other half of the pair — the `/lead-team` ↔ `team-leader` pattern: it
+seat. This command is the other half of the pair — the `/lead-team` ↔ `fleet-marshal` pattern: it
 makes **this session** — the one the human is typing into — hold that agent's contract directly,
 for the session's duration, with no Agent spawn. One engine, three entries, on purpose:
 `/build-feature` forks ONE target off a session; `build-leader` runs unattended for a

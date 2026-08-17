@@ -34,7 +34,7 @@ case) were considered and rejected. Kim named it `init-repo` in the originating 
 **The composition rulings (settled across the session's design rounds):**
 1. **Host adopts team-lead; no team-lead spawn** (Kim's AskUserQuestion answer). Mechanically:
    /lead-team is dmi:true — NOT Skill-invocable from inside this command (the #134/#135
-   class) — so this body carries the adoption step itself: read agents/team-leader.md and adopt
+   class) — so this body carries the adoption step itself: read agents/fleet-marshal.md and adopt
    per /lead-team's Phase 2, with one deviation, the CHARTER: /lead-team binds one bounded
    charter; here the charter IS the work session ("this session's incoming work on <repo>"),
    closing at session end or stand-down. Named deviation, not silent drift.
