@@ -27,8 +27,8 @@ mechanics rather than restating them, and names the incident it closes.
 
 ## 1. Coordination scope ladder
 
-**Default: this repo's registered fleet only.** A seat's coordination surface is `.claude/ops/
-fleet.json` + `fleet-roster.md` plus its own spawned subagents — never `ListAgents` for
+**Default: this repo's registered fleet only.** A seat's coordination surface is
+`.claude/ops/fleet.json` + `fleet-roster.md` plus its own spawned subagents — never `ListAgents` for
 discovery (that surfaces arbitrary unregistered peers: other repos' sessions, other worktrees —
 issue #429 explicitly rules these out as introduction/coordination targets). `ListAgents` stays
 legitimate for one narrow use: confirming liveness of a session ALREADY named in the roster,
@@ -54,13 +54,12 @@ general statement, cited there rather than restated.
    operation): write identity + a timestamped comment, then re-read to confirm the write wasn't
    outraced. `[[dispatch-ticket]]` (this plugin) Phase 3 is the first real caller and stays the
    canonical realization — cited here, not re-derived.
-2. **Guard** — the four-layer double-dispatch guard any orchestrator runs before dispatching,
-   canonically defined in `mobilize-chores` step 2 and reused verbatim, never re-derived per
-   caller: the `in-flight` label as a cheap pre-filter (#199) · the ticket's own `assignees`/
-   `claimed-by` array as the actual correctness gate (#184) · the GraphQL
-   `closedByPullRequestsReferences` open-PR check (the flattened `gh issue view --json` form
-   silently lies here — verified 2026-08-07, use GraphQL only) · an open `Blocked-by:` dependency
-   (#193). All four independent; none subsumes another.
+2. **Guard** — the four-layer double-dispatch guard any orchestrator runs before dispatching:
+   `in-flight` label pre-filter (#199), `assignees`/`claimed-by` correctness gate (#184), open-PR
+   check (#184's GraphQL requirement), open `Blocked-by:` dependency (#193) — all four
+   independent, none subsumes another. Canonically defined in `mobilize-chores` step 2, including
+   its own mechanical caveats (the flattened open-PR query form's silent lie); cited here, never
+   re-derived per caller.
 
 **Stale-claim handling stays `repo-cleaner`'s** (harness) — this protocol only states when to
 claim and what to check before dispatching, never how to detect or clear an abandoned one.
@@ -96,18 +95,17 @@ record.**
   discover its version from a possibly-stale `main` at claim time — the informal mitigation that
   held zero-collision across ~19 PRs immediately after issue #290
   (`harness:big-change-git-rules`' `references/who-ships-what.md`, "What actually stopped the
-  collisions"). This build's own dispatch names its version explicitly (e.g. "number from
-  2.17.7 — PR #487 already claims 2.17.6") for exactly this reason.
+  collisions"). A coordinator's dispatch prompt names the version slot explicitly (e.g. "number
+  from N+1 — a sibling PR already claims N") rather than leaving each build to discover it late.
 - `[[dispatch-ticket]]`'s Phase 3/5 mechanize the check this rule depends on:
   `version_claim_check.py` (the CLAIM race — a sibling OPEN PR already on the target version) AND
   a re-read of the touched plugin's `plugin.json` straight off `origin/main` immediately before
   PR-open (the VALUE race, #445 — a version already MERGED since branch-cut, which the claim
   check alone can't see). Re-derive neither here; both live in `dispatch-ticket` already.
-- **Merge order**: `harness:big-change-git-rules`' `references/merge-semantics.md` owns the
-  stacked-PR retarget-then-delete sequence (#443) — merge parent → retarget every open child to
-  `main` → rebase each child onto the parent's new squashed commit → only then delete the
-  parent's branch. Skipping the retarget-and-rebase and deleting first is the failure mode
-  (`merge-semantics.md`'s own worked incident, PR #437).
+- **Merge order**: for a stacked PR chain, retarget and rebase every open child onto `main` before
+  deleting the parent's branch — never after (#443). `harness:big-change-git-rules`'
+  `references/merge-semantics.md` owns the full retarget-then-delete sequence and its worked
+  failure mode (PR #437); cited, not reproduced here.
 - **Serialize vs. parallelize**: tickets touching the same file serialize; disjoint named targets
   parallelize
   — `team-or-solo-rules`' Design step 5's own disjoint-fan-out default, restated here only as the
@@ -125,11 +123,10 @@ inventories from durable state, never from memory.**
   still matters. The #373 run's orchestrator did this three times in one night for orphaned seats
   — resetting is the default response to a dead claim with no PR, not an escalation.
 - **Name the worktree/branch at claim time, every time** (Section 2's claim comment already
-  carries this — see this build's own claim comment on this issue as a live example) — the
-  durable record a successor reads to inventory: `git worktree list` for what's physically
-  checked out, cross-referenced against each ticket's claim comment for what SHOULD be there.
-  A worktree with no matching claim, or a claim with no matching worktree, is the drift a
-  successor session is inventorying for.
+  carries this) — the durable record a successor reads to inventory: `git worktree list` for
+  what's physically checked out, cross-referenced against each ticket's claim comment for what
+  SHOULD be there. A worktree with no matching claim, or a claim with no matching worktree, is
+  the drift a successor session is inventorying for.
 - **Commit early, commit small, per gate-green unit of work** — `[[parallel-work-rules]]`'s own
   rule (Decide step 2), restated here only because it is this area's load-bearing precondition: a
   worktree that survives its own agent's death is one that already has committed work in it, not

@@ -126,13 +126,20 @@ net five-sixths mismatch. Reciprocal NOT-clause fences added to `team-or-solo-ru
 cross-plugin citation added to harness's `agent-writing-rules` (its own authoring-mechanics scope
 left untouched — no description/evals change there); `fleet-rules` preloaded into `team-leader`
 and `build-leader`'s `skills:` lists with a body citation at each seat's own durable-state/claim
-priority. Version-slot VALUE race caught mid-build (#445's own class): the dispatch's own
-instruction numbered this from 2.17.7 on the expectation that open `PR #487` would land 2.17.6 —
-it merged 2.17.6 to `main` while this build was in flight, confirmed via a fresh
-`version_claim_check.py` + an `origin/main` re-read immediately before this PR opened; 2.17.7
-still clears both checks cleanly (no rebump needed). Fresh-context `skill-checker`/`agent-checker`
-passes before merge (no model override, per plugin-authoring's semantic-edit invariant);
-`release_gate.py teamwork` result recorded in the PR body ·
+priority. Version-slot renumbered TWICE, both caught live (this pack's own §4 subject matter,
+first-hand): dispatched to number from 2.17.7 on the expectation that open `PR #487` would land
+2.17.6 first — it merged 2.17.6 to `main` mid-build (confirmed via a fresh
+`version_claim_check.py` + an `origin/main` re-read; 2.17.7 still cleared cleanly, no rebump
+needed at that point); a fleet coordinator then flagged a second collision in flight — sibling
+`PR #495` (S8 lexicon) held a now-stale 2.17.6 claim (`version_claim_check.py` V2, verified
+independently before acting on the coordinator's message) that would rebump to 2.17.7 and merge
+first — so this build took the coordinator's explicit hand-assigned slot and renumbered to
+2.17.8, the exact per-plugin version-slot discipline §4 documents, demonstrated on itself.
+Fresh-context `skill-checker`/`agent-checker` passes before merge (no model override, per
+plugin-authoring's semantic-edit invariant) — skill-checker's two MINOR findings (§2's guard
+detail and §4's own merge-order sequence both drifted toward restating their cited owner files)
+fixed by trimming to citation + one-line rule; `release_gate.py teamwork` result recorded in the
+PR body ·
 
 v2.17.7 · assembled 2026-08-17 · issue #477 sibling reference fix (docs' S8 lexicon amendment, ADR-0017/ADR-0018): `docs' intake-lead` renamed `docs' intake-leader` in `init-repo`'s SKILL.md dispatch step, README's live table row, and its own eval assertion — the docs-side agent rename's cross-plugin mention, updated in the same PR since preloads/dispatches are hard plugin boundaries, mentions are soft but still get fixed when the target renames. No behavior change; the dispatched Agent tool call already used the string literal
 
