@@ -1,34 +1,37 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-16 ~01:12Z window (UTC),
-main at `0dd62b6`, in sync with origin, no scope lens this sweep. Evidence: all three
-seat reports attached (none UNMEASURED) — decision-watcher (adr-0013 new, one narrow
-Consequences-bullet supersession of adr-0012; TWO candidates queued in `adr-queue.json`),
-issue-sorter (12 open issues / 0 open PRs, all labeled, zero triage debt, 20 issues +
-15 PRs closed in-window all by trusted author), repo-cleaner (abbreviated report at
-`.claude/ops/reports/2026-08-16T01-12-00Z-repo-cleaner.md`; zero stray branches,
-worktrees, or stale claims; nothing executed, nothing proposed). Prior plan
-(2026-08-15 ~21:15Z) is 7/9 resolved between sweeps — the Batch C/D/E mobilize
-campaign drained #276/#283/#282/#280/#257 and PRs #288/#291/#292 landed; the executed
-adr-0012 harvest was cleared from the queue (commit `c2d248a`). Carried forward: the
-#258 deferred-by-ruling entry and the standing rulings (see Not queued). Queue
-rebuilds 9 → 4.
+Rewritten whole by `chore-planner`, SWEEP dispatch, 2026-08-17 ~11:42Z window (UTC).
+Checkout at plan time: branch `fix-423-fleet-bootstrap-phase1` @ `fc3942c` (NOT main; local
+`main` is behind `origin/main` by 31 — see entry 5). Evidence: all three seat reports attached,
+none UNMEASURED — decision-watcher (`reports/2026-08-17T11-39-56Z-decision-watcher.md`: 0
+candidates, adr-0014 rejected as already-harvested duplicate, checkpoint advanced, ADR queue
+empty), issue-sorter (`reports/2026-08-17T11-39-41Z-issue-sorter.md`: 92 issues touched
+in-window, 90 closed; exactly 2 open — #475 small/unclaimed/buildable, #295 big/active-WIP;
+0 open PRs; nothing minted or held), repo-cleaner
+(`reports/2026-08-17T11-41-41Z-repo-cleaner.md`: executed `campaign_close.py 441` clean —
+merged PR's remote branch deleted and reverified gone; 23 fully-merged worktrees + ~8
+superseded scratch branches PROPOSED for human cleanup; locked `issue-475-teamwork-diet`
+worktree flagged distinctly; gitignore WARN `harness-audit-*/` stale, no edit proposed).
 
-**Blocked-by (#193):** no `Blocked-by:` line appears in any evidence this sweep —
-issue-sorter names zero dependency edges across the 12 open issues. Ordering below is
+Prior plan (2026-08-16 ~01:12Z) is fully resolved: ops commit landed; the adr-0013+adr-0012
+batched confirm EXECUTED between sweeps (decision-watcher: queue still empty, 0 pending);
+#258 CLOSED (its defer-ruling retires with it); the 11-issue backlog drained to 2 (90 closed
+in-window). Queue rebuilds 4 → 5.
+
+**Blocked-by (#193):** no `Blocked-by:` line in any evidence this sweep — ordering below is
 pure class ranking.
 
-**In-flight context (not a queue item):** `.claude/ops/charter-batch-cde.md` is the
-LIVE coordination record for the in-progress Batch C/D/E mobilize campaign (Batch C
-closed, Batch D in progress). It stays untracked and untouched; the campaign owns its
-lifecycle. Entry 1's commit pathspec deliberately excludes it.
+**Drain note (this dispatch):** unattended overnight drain, PR-opened ceiling, no auto-merge.
+Class-3 entries below WAIT for Kim — the drain skips them and proceeds to entry 4, the sole
+buildable item. Skipping a human-decision entry to reach a buildable one is expected, not a
+violation of queue order.
 
-## Human-decision call-outs — nothing below executes autonomously next sweep
+## Human-decision call-outs — nothing below executes autonomously
 
-1. **ADR-queue batched confirm** (entry 2) — one AskUserQuestion round covering BOTH
-   pending candidates; only Kim confirms before anything touches
-   `who-ships-what.md`.
-2. **Ops commit** (entry 1) — human-run if the dispatching session lacks Bash.
+1. **Worktree/branch batch cleanup** (entry 2) — propose-only per repo-cleaner's contract (no
+   host reap script named in this repo's docs); only Kim runs the removals.
+2. **Locked-worktree ruling** (entry 3) — a lock is normally deliberate; only Kim decides
+   stale vs. intentional.
 
 ## Queue
 
@@ -37,108 +40,106 @@ lifecycle. Entry 1's commit pathspec deliberately excludes it.
 ### 1. Commit this firing's ops artifacts — explicit pathspec only
 - **Action:** Read `git status --porcelain` first, then stage exactly
   `git add .claude/ops/plan.md .claude/ops/adr-checkpoint.json
-  .claude/ops/adr-queue.json .claude/ops/watch-checkpoint.json
-  .claude/ops/reports/2026-08-16T01-12-00Z-repo-cleaner.md`, read the status
-  output, commit as a separate step (gate ≠ commit), push. These five paths are this
-  firing's whole delta (seat payloads applied by chore-lead per the write-sandbox
-  contract). Never `git add -A` — and never sweep in `charter-batch-cde.md` (live
-  campaign record, see In-flight context above).
+  .claude/ops/watch-checkpoint.json
+  .claude/ops/reports/2026-08-17T11-39-56Z-decision-watcher.md
+  .claude/ops/reports/2026-08-17T11-39-41Z-issue-sorter.md
+  .claude/ops/reports/2026-08-17T11-41-41Z-repo-cleaner.md`, read the status output, commit
+  as a separate step (gate ≠ commit), push. Never `git add -A` — the same checkout carries
+  this session's own live edits (`.claude/ops/fleet-roster.md`, `.claude/settings.json`,
+  `attention-trend.csv`), which repo-cleaner classified as in-progress session state, not
+  this firing's delta. Note the commit rides branch `fix-423-fleet-bootstrap-phase1`, not
+  main — it reaches main with that branch's own PR.
 - **Owner:** the dispatching session if Bash-capable, else human (Kim).
-- **Evidence:** `git status --porcelain` at plan time shows exactly the three
-  modified state files + the one untracked report (+ the excluded charter file);
-  repo-cleaner confirms main otherwise clean and in sync at `0dd62b6`.
+- **Evidence:** repo-cleaner's checkout inventory names exactly these seat-payload files +
+  reports as this sweep's delta and the three session-live files as out of scope.
 - **Size:** ~2 min.
 
-(No other class-1 work: zero open PRs, zero surviving remote branches, zero stale
-worktrees — repo-cleaner verified all clean; nothing left to mutate.)
+(`campaign_close.py 441` — the only other class-1 candidate this sweep — was already executed
+by repo-cleaner and reverified clean. Recorded under Resolved, not queued.)
 
 **Class 2 — items blocking other work:**
 
-(None this sweep. Prior entry #276 — the EnterWorktree naming-hook blindspot that led
-the last plan — is CLOSED. No open item is named as blocking any other.)
+(None. Zero open PRs, zero `Blocked-by:` edges, nothing named as blocking anything.)
 
 **Class 3 — human decisions:**
 
-### 2. Batched confirm of the two pending ADR-queue candidates (adr-0013 + adr-0012)
-- **Action:** One AskUserQuestion round on both rows in `adr-queue.json`, surfaced
-  via `adr_queue.py pending` in a session that HAS AskUserQuestion (decision-watcher
-  deferred — its seat lacks the tool). The two candidates converge on one file and
-  are almost certainly ONE edit:
-  (a) **adr-0013 harvest** — extend
-  `harness/skills/big-change-git-rules/references/who-ships-what.md` with the
-  empirical finding: the auto-mode classifier denies the Agent tool call at
-  dispatch-creation time the moment the sealed prompt carries
-  `auto-merge: authorized` — earlier and stricter than ADR-0012 predicted.
-  Dispatch-tier is verified; merge-tier (the `autoMode.allow` rule, commit
-  `40dd5c3`) remains UNMEASURED and the harvested text must say so.
-  (b) **adr-0012 stale citation** — the same file's lines 88–92 quote verbatim the
-  exact Consequences bullet adr-0013 supersedes ("deployment prerequisite...
-  theoretical pending that rule"); repair or retire the quote via save-lessons
-  Phase 6 routing. Lines 38–81 (QB0–QB7 predicate) are unaffected — do not touch.
-  If confirmed: `/make-pack` extend-in-place (or `/make-skill` if Kim's Phase 2
-  pass judges otherwise), then a fresh-context checker pass per the semantic-edit
-  invariant before the loop closes.
-- **Owner:** human (Kim) — the confirm; then `/make-pack` executes the combined
-  edit.
-- **Evidence:** decision-watcher this sweep — adr-0013 ratified ~1h before the
-  sweep (`0013-adr-0012-automode-allow-verification.md:44-58`); both candidates
-  queued 2026-08-16T01:12:21Z, queue previously empty; stale-citation scope
-  verified narrow (single bullet, every other ADR-0012 line stands).
-- **Size:** ~2 min (confirm); ~30–60 min (the combined edit + checker pass).
+### 2. Batched confirm + run: remove 23 fully-merged worktrees and ~8 superseded scratch branches
+- **Action:** One batched confirm over repo-cleaner's proposed list, then human-run
+  `git worktree remove` + `git branch -D` per item. The full itemized list (each independently
+  diffed 0-unique-commits vs. `origin/main`, remote branches already pruned) lives in
+  `.claude/ops/reports/2026-08-17T11-41-41Z-repo-cleaner.md` — 23 worktrees under
+  `.claude/worktrees/` plus scratch branches `build-425-work`, `restack-425-work`,
+  `build-429-orchestrator-introduction`, `build-430-work`, `build-432-work`,
+  `restack-432-work`, `restack-437-work`, `worktree-build-426-seat-retirement`, and the
+  `pr442-finalize` worktree/branch (5 "ahead" commits are pre-squash lineage of merged #442 —
+  superseded, same disposition). EXCLUDES `issue-475-teamwork-diet` (entry 3 owns it).
+- **Owner:** human (Kim) — no gated mutation path exists for local worktrees/branches here.
+- **Evidence:** repo-cleaner this sweep — per-item merge verification, `gh pr list --state
+  open` → zero, both fetch-prunes clean.
+- **Size:** ~10–15 min.
 
-**Class 4 — hygiene debt:**
+### 3. Locked worktree `issue-475-teamwork-diet` — rule the lock stale or intentional
+- **Action:** Decide whether the lock is a live claim or leftover. Commit evidence says safe
+  (0 unique commits vs. `origin/main`, content fully merged), but issue #475 is open and was
+  updated 10 min before the sweep — if the lock was a deliberate claim, removing it destroys
+  a signal. If ruled stale: unlock + remove alongside entry 2. Until ruled, entry 4's build
+  must not reuse or remove this worktree.
+- **Owner:** human (Kim).
+- **Evidence:** repo-cleaner's distinct flag (locked, 0 unique commits, matching open issue).
+- **Size:** ~2 min.
 
-### 3. #258 — bloat-audit sweep of the four never-audited plugins — DEFERRED BY RULING
-- **Action:** Run authorkit's `/bloat-audit` over screens/design/agent-protocols/llm
-  — in a FUTURE mobilize round. Kim's explicit 2026-08-15 ruling: defer; recorded
-  here so it stops resurfacing as a question. Do not start this cycle.
-- **Owner:** build seat via a future `/mobilize-chores` round (Kim batches it in).
-- **Evidence:** still open in issue-sorter's 12-issue enumeration this sweep;
-  ruling carried from the prior plan (task + small per its own labels).
-- **Size:** ~30–60 min when it runs.
+**Class 4 — hygiene debt / backlog drain:**
 
-### 4. Remaining 11 open issues — healthy labeled backlog
-- **Action:** #265, #266, #273, #274, #286, #293, #294, #295, #296, #297, #300 —
-  every open issue carries a correct kind label, zero unlabeled findings, none held
-  or stuck; #300 and #297 spot-checked well-formed. Drain via future
-  `/mobilize-chores` rounds in normal priority order (the in-flight Batch C/D/E
-  campaign is already consuming this backlog — 20 issues closed in-window). No
-  per-item entry owed until a sweep lens or a `Blocked-by:` edge elevates one.
-- **Owner:** Kim batches into mobilize rounds; issue-sorter re-triages each sweep.
-- **Evidence:** issue-sorter this sweep — full 12-issue enumeration, backlog-only
-  state matches expectation, held-items.md and friendlies.json unchanged.
-- **Size:** n/a (tracking entry; each item sized by its own label at pickup).
+### 4. Build #475 — teamwork residual description diet (size:small, unclaimed, buildable)
+- **Action:** Dispatch via teamwork's `build-leader`, ceiling PR-opened (no auto-merge — no
+  `auto-merge: authorized` grant in this dispatch). Fresh branch + fresh worktree ONLY: the
+  existing locked `issue-475-teamwork-diet` worktree is entry 3's to rule on — do not reuse,
+  unlock, or remove it. Description edits are routing-surface edits: same-change
+  `evals/evals.json` updates and the fresh-context checker pass per the semantic-edit
+  invariant apply inside the build loop.
+- **Owner:** dispatching session → teamwork `build-leader` seat.
+- **Evidence:** issue-sorter this sweep — #475 open, size:small, unclaimed, buildable; the
+  only idle buildable item (the other open issue, #295, is active WIP — see Not queued).
+- **Size:** ~30–60 min.
+
+### 5. Refresh local `main` — behind `origin/main` by 31
+- **Action:** In an ATTENDED session, `python3 harness/scripts/sync_main.py` (quarantine any
+  dirt as a named stash, `--ff-only` pull, reverify HEAD by SHA). Interactive-only per its
+  contract — repo-cleaner correctly skipped it unattended; not for the overnight drain.
+- **Owner:** human (Kim), or any attended session.
+- **Evidence:** repo-cleaner inventory — `main` behind by 31, no worktree of its own, healthy
+  but stale.
+- **Size:** ~2 min.
 
 ## Not queued (checked, found clean or deliberately left — standing rulings carried)
 
-- **PR estate:** zero open; all in-window PRs (15) MERGED clean; no surviving remote
-  branches.
-- **Worktrees/branches:** zero beyond main; zero stray locals or remotes.
-- **ADR-0005 ticket claims:** zero — all 12 open issues have empty assignees.
-- **`charter-batch-cde.md`:** live Batch C/D/E campaign record — in-flight context,
-  not cruft, not this plan's to commit or clean (repo-cleaner concurs).
-- **`.gitignore` G1 WARNs** (`dist/`, `harness-audit-*/`): same two repeats,
-  on-demand-generated, reviewed and accepted every firing. Recorded judgment, not a
-  task.
-- **Friendlies/held items:** all in-window activity by kimgranlund (allow-listed);
-  held-items.md unchanged, nothing held.
-- **Root entry-file freshness CI gate:** deliberate NO (Kim, 2026-08-15) — do not
-  re-propose (ruling carried).
-- **Checkpoint-bypass:** accepted one-off (Kim, 2026-08-14); re-litigate only on
-  recurrence (ruling carried).
+- **#295 (Doctrine ablation program):** open and size:big but carrying active in-progress
+  ablation-agent Findings under a standing overnight directive — NOT idle. Do not dispatch
+  build-leader at it; it owns its own lifecycle. Issue-sorter re-checks each sweep.
+- **ADR queue:** empty — adr-0014 correctly rejected as duplicate (already harvested verbatim
+  into authorkit's GRAMMAR.md). No confirm owed.
+- **PR estate:** zero open; #437 CLOSED-unmerged is a recorded duplicate of merged #439, not
+  a finding.
+- **Session-live tracked edits** (`fleet-roster.md`, `settings.json`, `attention-trend.csv`)
+  on `fix-423-fleet-bootstrap-phase1`: live in-progress state, not cruft (repo-cleaner
+  concurs); excluded from entry 1's pathspec.
+- **`.gitignore` WARN `harness-audit-*/`:** stale-looking (matches nothing in-tree) but
+  on-demand-generated; no edit proposed (repo-cleaner concurs). If the generating path is
+  ever retired for real, repair the rule in that same change per
+  `.claude/rules/gitignore-repair.md`. Recorded judgment, not a task.
+- **Root entry-file freshness CI gate:** deliberate NO (Kim, 2026-08-15) — ruling carried, do
+  not re-propose.
+- **Checkpoint-bypass:** accepted one-off (Kim, 2026-08-14); re-litigate only on recurrence —
+  ruling carried.
+- **#258 defer-ruling:** RETIRED — the issue closed between sweeps; nothing left to defer.
 
-## Resolved since the prior plan (2026-08-15, ~21:15Z sweep)
+## Resolved since the prior plan (2026-08-16 ~01:12Z sweep)
 
-- Prior entry 1 (commit ops artifacts) — DONE (state files tracked and clean at this
-  sweep's start).
-- Prior entry 2 (#276 EnterWorktree hook blindspot) — CLOSED between sweeps.
-- Prior entry 3 (adr-0012 harvest confirm) — EXECUTED and cleared from the queue
-  (commit `c2d248a`); who-ships-what.md now carries the harvest — which is exactly
-  where this sweep's new stale-citation candidate landed (entry 2b).
-- Prior entries 4–7 (#283, #282, #280, #257) — all CLOSED (PRs #288/#291/#292
-  among the 15 merged in-window).
-- Prior entry 8 (#258) — carries forward as entry 3, ruling intact.
-- Prior entry 9 (backlog tracking) — drained 20 → 12 open; rebuilt as entry 4.
-- New since prior plan: ADR-0013 ratified (~1h pre-sweep), superseding one ADR-0012
-  Consequences bullet; two fresh ADR-queue candidates (entry 2); Batch C/D/E
-  mobilize campaign live (Batch C closed, Batch D in progress).
+- Prior entry 1 (commit ops artifacts) — DONE.
+- Prior entry 2 (adr-0013 harvest + adr-0012 stale-citation batched confirm) — EXECUTED
+  between sweeps; decision-watcher confirms the ADR queue empty, 0 pending.
+- Prior entry 3 (#258 bloat-audit, deferred by ruling) — issue CLOSED between sweeps.
+- Prior entry 4 (11-issue backlog tracking) — drained 11 → 2 open (90 issues closed
+  in-window, all by trusted author).
+- New this sweep, already executed by its seat: `campaign_close.py 441` — merged PR #441's
+  remote branch deleted and reverified gone; 24 stale remote-tracking refs pruned.
