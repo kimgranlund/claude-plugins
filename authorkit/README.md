@@ -3,8 +3,11 @@
 A meta plugin used to refactor existing and author new skills/commands/agents against one
 naming convention (ADR-0011, **accepted** 2026-08-13) — grammar, frontmatter schema, folder
 layout, and migration tooling — plus a separate busy-work/over-specification audit. Dogfoods
-its own spec: `skills/naming-audit/scripts/validate.py` validates this plugin clean against
-itself with an empty exemptions array.
+its own spec: `skills/naming-audit/scripts/validate.py` validates this plugin clean against its
+own bundled `naming.manifest.json` (full schema, one grandfathered exemption — `fix-old-names`,
+mirroring the workspace-root manifest's own D8 treatment of that legacy name; see the version
+ledger's v0.19.5 entry for why this file is separate from, and deliberately not a copy of, the
+workspace-root `naming.manifest.json` the release gate itself runs against).
 
 **Enabled** in this workspace's own `.claude/settings.json` (`enabledPlugins` carries
 `"authorkit@nonoun-plugins": true`; issue #197 is CLOSED) — the earlier disable-here boundary
@@ -84,6 +87,30 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.19.5 · 2026-08-17 · Bundled `naming.manifest.json` resynced, not deleted (issue #553, PR #545's
+risk finding). Evidence first: `release_gate.py`'s G12 always passes `--manifest naming.manifest.json`
+(the workspace-root file) explicitly, regardless of which plugin is gated — the bundled copy is
+never read by the real gate. It IS read by a bare `validate.py --target authorkit` (no
+`--manifest`; the CLI's own candidate search looks inside the target first) — the deliberate
+self-dogfood path MIGRATION.md documents (`schema_scope` absent → `"full"`, so this file dogfoods
+the full schema on itself, stricter than the estate's own `"grammar"`-scoped root manifest) and
+LLD-0004's Acceptance predicate 4 exercises with its own separately-tracked baseline. Deleting it
+would have silently dropped that full-schema self-check; resync was the evidence-driven call.
+Registered the 3 object_vocab entries authorkit's own tree needed but the bundled copy never
+picked up (`attention`, `overhaul`, `repo` — mirrored verbatim from the root manifest's own
+entries) and grandfathered `fix-old-names` into the bundled `exemptions` array, mirroring root's
+own D8 treatment of that legacy name (root conforms it via exemption, not real grammar, so the
+bundled copy now does too) — bare `--target authorkit` goes from 5 grammar errors to 0.
+**Mechanism, not just a fix:** the two manifests are DELIBERATELY not identical (different scope,
+different `schema_scope`, different `brand_tokens`) and will keep drifting apart on THIS axis
+specifically — a new authorkit skill/command registered in the root manifest's `object_vocab`/
+`verb_lex` is not automatically mirrored into the bundled copy, and nothing gates that parity today
+(this is the second time it's drifted: 3 stale entries at LLD-0004's build, grown to 5 by this
+one). Chosen mechanism is PROCESS, not code: register the token in `authorkit/naming.manifest.json`
+in the same change that registers it in the root manifest, per this entry's own worked example — a
+mechanized gate check (extending `release_gate.py`'s G12, or a new selftest) was considered and
+rejected for this ticket as disproportionate blast radius for a `size:small` fix touching a
+cross-plugin shared script; flagged as a candidate follow-up if the drift recurs a third time.
 v0.19.4 · 2026-08-17 · ADR-0020 wave 5 (closes #523): with all six former `/lead-*` surfaces
 renamed to `bind-*` in the same campaign (teamwork's five + docs' `lead-intake` → `bind-intake`,
 riding alongside rather than a separate PR — splitting would leave a real gap between merges
