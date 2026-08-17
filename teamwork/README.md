@@ -105,6 +105,14 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.17.3 · assembled 2026-08-16 (closes #460): deduped the "report delivery" + "no nested wait"
+paragraph the four Agent-tool-reachable `*-leader` twins (`build-leader`, `planning-leader`,
+`review-leader`, `product-leader`) each restated inline — extracted verbatim into
+`teamwork/skills/leading-teams/references/dispatched-agent-report-delivery.md` (home per #468's
+fix), with each agent now citing it in one line and stating inline only what's per-citer: whether
+it holds the `Agent` tool (only `product-leader` doesn't) and where its own report's content comes
+from. Fresh-context `agent-checker` passes on all four confirmed nothing load-bearing was dropped.
+
 v2.17.2 · assembled 2026-08-16 · overhaul #373 Wave-2 S3 (closes #458): centralized the
 `leading-planning`/`leading-review` description boilerplate the standing-seat charter template
 duplicated across all four `leading-*` skills (the estate's top description-collision cluster,
