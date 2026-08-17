@@ -198,7 +198,11 @@ inventories from durable state, never from memory.**
   release the claim per `dispatch-ticket`'s own abandonment bullet (never leave a stale claim or
   `in-flight` label standing for the next sweep to misread as active) and re-dispatch if the work
   still matters. The #373 run's orchestrator did this three times in one night for orphaned seats
-  — resetting is the default response to a dead claim with no PR, not an escalation.
+  — resetting is the default response to a dead claim with no PR, not an escalation. Subject to
+  Section 2's staleness bar above: "no open PR and no live dispatch holding it" is itself the
+  local-work check for a TICKET claim (no worktree exists to inspect once none is holding it) —
+  this bullet and Section 2's don't conflict, they're the same bar applied to two different
+  resources (the claim here, a worktree there).
 - **Name the worktree/branch at claim time, every time** (Section 2's claim comment already
   carries this) — the durable record a successor reads to inventory: `git worktree list` for
   what's physically checked out, cross-referenced against each ticket's claim comment for what
@@ -211,9 +215,9 @@ inventories from durable state, never from memory.**
 - **A session reaps only its OWN worktrees/branches after its own merge — never a peer's**,
   however idle-looking; a peer's own worktree may hold uncommitted-but-live local work that a
   missing remote signal can't reveal (Section 2's staleness bar above governs whether a peer's
-  CLAIM, as opposed to its worktree, may be reaped at all). · gen-ui-kit fleet-ops harvest
-  (agent-ui#1115, comment 5317746661; also named in agent-ui#1115 v2's own Excluded-list, repo-ops
-  worktree/branch hygiene) · 2026-08-17 · [verified]
+  CLAIM, as opposed to its worktree, may be reaped at all). · agent-ui#1115 v2's "Scope-conformant
+  revision" Excluded-list, unnumbered (repo-ops worktree/branch hygiene item) · 2026-08-17 ·
+  [verified]
 - **Overnight/unattended runs on a machine that can sleep need an explicit keep-awake** (e.g.
   `caffeinate` on macOS) — machine sleep kills in-flight subagent calls outright; record the
   keep-awake process's own PID and its kill instruction in the ledger so a successor can clean it
