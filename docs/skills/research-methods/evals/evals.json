@@ -157,6 +157,12 @@
       "prompt": "the same lint false-positive has recurred after three separate fixes — propose the next step",
       "expect": "no-trigger",
       "comment": "owner: harness:thinking-depth-rules (issue #478, #295's ablation finding) — a recurring finding despite fixes is 5th-order evidence the RULE needs scrutiny, judged without a scorer; it is not this skill's baseline→change→remeasure loop"
+    },
+    {
+      "id": "n17",
+      "prompt": "how would an agent test this system without a human clicking through screenshots — what harness do I build",
+      "expect": "no-trigger",
+      "comment": "owner: docs:agent-harness-rules (issue #542) — designing a verification harness for a not-yet-scorable system is upstream of this skill's own baseline→change→remeasure loop, which presupposes a scorer already exists"
     }
   ]
 }

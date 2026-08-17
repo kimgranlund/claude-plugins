@@ -1,6 +1,6 @@
 {
   "skill": "check-doc",
-  "note": "Authored with the plugin 2026-07-07.",
+  "note": "Authored with the plugin 2026-07-07. 2026-08-17 (issue #542): n04 added as the reciprocal fence against the new sibling pack `agent-harness-rules` — designing a harness is that pack's HOW; check-doc only JUDGES whether a doc's own `## Agent verification` answer (J7) is present and real.",
   "cases": [
     {
       "id": "t01",
@@ -51,6 +51,11 @@
       "id": "t07",
       "prompt": "review this vision memo against its rubric before I share it",
       "expect": "trigger"
+    },
+    {
+      "id": "n04",
+      "prompt": "how do I design a JSON-payload-layer test harness for this chat system",
+      "expect": "no-trigger"
     }
   ]
 }

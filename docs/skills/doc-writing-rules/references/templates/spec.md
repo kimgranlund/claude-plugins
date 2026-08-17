@@ -24,3 +24,11 @@ prd: prd-<slug>         # the intent this contracts
 ## Acceptance
 <!-- One criterion per requirement, same IDs (AC-001 ↔ REQ-001). Authored WITH the spec,
      never after. A requirement with no criterion is unverifiable. -->
+
+## Agent verification
+<!-- How the coding agent autonomously exercises this system and checks each Acceptance
+     criterion, without a human in the loop: which layer it asserts at (JSON payload / API /
+     browser / human), with what harness or fixtures — one line per AC-ID where the layer isn't
+     obvious. A criterion that genuinely needs a human is named here as an explicit exception,
+     never silently left unverifiable. See docs' agent-harness-rules for how to choose the
+     layer and design the harness. -->
