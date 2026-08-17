@@ -5,8 +5,9 @@ description: >-
   skips the sweep and mobilizes exactly those ids), then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
   adapter) labeled feature, bug, or task with no build in flight and no open `Blocked-by:`
-  dependency (#193) — after one batched confirm (a leading `auto` argument skips it, for /goal
-  loops and scheduled runs).
+  dependency (#193) — a blocked ticket whose blocker is itself mobilizable gets the blocker
+  dispatched dependency-first instead of a bare skip (#558) — after one batched confirm (a
+  leading `auto` argument skips it, for /goal loops and scheduled runs).
   Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
   (ADR-0010), whose dispatch-ticket procedure owns the kind branch; an
   under-specified task comes back SKIPPED — no clarify round runs unattended. Everything else
@@ -133,16 +134,29 @@ sweep surfaced that's actually buildable.
    canonically, in `references/blocked-by-convention.md` (this skill's own definition, cited here
    rather than restated — the same file harness's `chore-planner` cites for its own ordering
    rule): resolve each candidate's own `Blocked-by:` line and its named blockers' state per that
-   file's realization table. ANY named blocker still open excludes the candidate this run —
-   reported in step 6 as blocked-and-why, never silently dropped. All named blockers closed, or no
-   line present → the exclusion doesn't apply; the candidate proceeds through the rest of this
-   step's checks normally.
-3. **Nothing mobilizable → stop here.** Report the sweep's own findings (step 1) plus "0 tickets
-   mobilizable this run" and why (no open feature/bug/task tickets, or all already in flight). No
-   confirm round, no further steps — an empty mobilize pass is a normal, quiet outcome.
+   file's realization table. ANY named blocker still open excludes the candidate from the PLAIN
+   mobilizable set — it then enters chain resolution per `references/unstick-ordering.md`, which
+   classifies each blocker (that file's B0–B5 taxonomy) and emits unstick candidates, sequenced
+   dependents, and the still-stuck set (#558) — never silently dropped. All named blockers closed,
+   or no line present → the exclusion doesn't apply; the candidate proceeds through the rest of
+   this step's checks normally.
+3. **Nothing mobilizable → stop here.** Stops only when the plain mobilizable set AND the unstick
+   candidate set (`references/unstick-ordering.md`) are both empty. Report the sweep's own
+   findings (step 1) plus "0 tickets mobilizable this run" and why (no open feature/bug/task
+   tickets, or all already in flight or still-stuck with no unstick candidate). No confirm round,
+   no further steps — an empty mobilize pass, including one that only surfaces a
+   still-stuck-and-why report, is a normal, quiet outcome (#558).
 4. **One batched confirm — INTERACTIVE only (step 0 found no `auto` token).** List every
    mobilizable ticket found (id, title, kind) in ONE `AskUserQuestion` round — never per-ticket,
-   never split by kind. The human picks which to mobilize now, all, some, or none. Nothing
+   never split by kind. **The same round gains a second listed section for unstick chains
+   (#558):** each chain resolved by `references/unstick-ordering.md` renders as ONE entry —
+   "unstick chain: #B (blocker, dispatches now) → #A (sequenced; dispatches this run only if #B
+   closes in-run via the ADR-0012 quick-build carve-out, else next run)", multi-level chains
+   rendering the full ordered path (`#C → #B → #A`). Confirming the entry confirms the WHOLE
+   chain — the blocker's dispatch plus the dependent's conditional dispatch — so no second round
+   ever exists; declining declines the chain whole. A human wanting only one member of a chain
+   re-runs with a ticket filter naming it directly. The human picks which entries (plain tickets
+   and/or chains) to mobilize now, all, some, or none. Nothing
    dispatches before this round returns. A disclosed limitation of the uniform dispatch, stated
    here because this round is the one place to act on it: `dispatch-ticket`'s task-clarifying
    round requires an interactive user and `build-lead` is an unattended seat, so NO clarify round
@@ -152,9 +166,11 @@ sweep surfaced that's actually buildable.
    them here instead of paying a dispatch that will skip.
 
    **UNATTENDED (step 0 found a leading `auto` token): skip `AskUserQuestion` entirely.** Every
-   ticket step 2 found mobilizable is auto-confirmed — step 2's own filtering (label ambiguity
+   ticket step 2 found mobilizable, AND every unstick chain `references/unstick-ordering.md`
+   resolved, is auto-confirmed — step 2's own filtering (label ambiguity
    excluded on every backend; on git-native, in-flight PRs also excluded via the GraphQL check;
-   the sweep's own human-decision/blocker items excluded on every backend) is the actual
+   the sweep's own human-decision/blocker items excluded on every backend), now including the
+   unstick-ordering classification (#558), is the actual
    correctness gate, not this step, on either branch — this step was never the gate even for a
    human, only a selection point over an already-filtered set. **Option A (local tickets) has no
    in-flight-PR check at all — step 2's own disclosed limitation.** On that backend, UNATTENDED
@@ -167,7 +183,8 @@ sweep surfaced that's actually buildable.
    green critic, a green local gate, green CI, and no overlapping open PR — may land MERGED.
    Everything else still waits for a human, and merging stays a human act (ADR-0002's merge gate,
    unamended — the carve-out keeps the PR and every gate, it only pre-authorizes the click).
-   Review is never automated in any mode: nothing here, in `build-lead`, or in `dispatch-ticket`
+   Unsticking a blocker never widens this ceiling, never opens a second auto-merge path, and never
+   automates review: nothing here, in `build-lead`, or in `dispatch-ticket`
    approves or reviews a PR on its own. Still
    name every visibly under-specified task ticket in the step-6 report exactly as the interactive
    branch would have flagged it in the confirm round — it comes back SKIPPED from `build-lead` (no
@@ -229,6 +246,18 @@ sweep surfaced that's actually buildable.
    disjointness without a named, non-overlapping target on both sides — `parallel-work-rules`' own
    rule holds here too: unconfirmed disjointness routes to the safer (serial) default, not to an
    assumption.
+
+   **Wave re-check (#558) — bounded, read-only, never a wait.** After all of a wave's dispatches
+   RETURN, run one read-only re-check pass over any sequenced dependents from an unstick chain
+   (`references/unstick-ordering.md`): re-read each named blocker's state once. All named
+   blockers now CLOSED → the dependent was already confirmed conditionally in step 4, so it
+   dispatches in the next wave; anything short of all-CLOSED stays sequenced-for-next-run. Max 3
+   waves total; a pass that unlocks nothing ends the loop immediately. Never sleep, never watch a
+   PR (`gh pr checks --watch` or equivalent), never re-poll an id already re-read this pass — a
+   chain member's dispatch carries no extra authority of its own: the quick-build predicate and
+   the `auto-merge: authorized` grant line are evaluated by `dispatch-ticket` stage 2b exactly as
+   for any other ticket, and unsticking never constitutes a second auto-merge path or any review
+   act.
 6. **Report.** Verdict-first: name which branch ran — INTERACTIVE, or UNATTENDED with the exact
    `auto`-prefixed argument as parsed in step 0 — so a step-0 misparse (a scope instruction that
    happens to start with the literal word "auto") is observable in the artifact of record, never
@@ -239,8 +268,20 @@ sweep surfaced that's actually buildable.
    wrong/ambiguous label, too vague to build unattended — the seat SKIPPED, no clarify round
    available on this path — or excluded by the sweep's own judgment).
 
+   **Unstick outcome vocabulary (#558).** A ticket caught by step 2's `Blocked-by:` exclusion is
+   reported under exactly one of three classes instead of the old bare "blocked" row:
+   `unstuck-this-run` (a dependent actually dispatched in wave ≥ 2, or a blocker whose own
+   dispatch and dependent's dispatch both landed this run), `sequenced-for-next-run` (a blocker
+   dispatched or already in-flight; the dependent waits on its close), or `still-stuck-and-why`
+   (an unresolvable, cycle, too-deep, or human-shape blocker — `references/unstick-ordering.md`'s
+   B1/B2/B4 classes). Each row cites the classifying B-class (B1–B5) so a misclassification is
+   observable in the artifact of record. A cycle gets ONE paragraph naming every member, never one
+   per member. A TICKET FILTER run that pulled in an off-filter blocker via a chain names it
+   "pulled in by #A's chain" rather than reporting it as an unrelated candidate.
+
    **Blocker breakdown.** Every ticket whose outcome is a named blocker (`dispatch-ticket`'s own
-   distinct outcome, not a plain SKIPPED) gets one paragraph, not just a table row: the ticket id
+   distinct outcome, not a plain SKIPPED) — plus, as of #558, every `still-stuck-and-why` ticket —
+   gets one paragraph, not just a table row: the ticket id
    and title, what's actually blocking it (`build-lead`'s own stated reason, quoted or
    paraphrased — never re-derived from scratch), which shape it is (name the shape in the
    paragraph, not just internally), and a proposed action that fits that shape. Classify before
@@ -296,8 +337,12 @@ sweep surfaced that's actually buildable.
 - A ticket's `Blocked-by:` line names an id that doesn't resolve (deleted issue, typo, `gh`
   unreachable for that lookup) → treat as OPEN, the same fail-closed default
   `blocked-by-rules` uses on its own read side, and exclude — reported in step 6 as "blocked —
-  #NN unresolvable, treated as open," never guessed at or silently dropped. All named blockers
-  already closed → not blocking; the candidate proceeds normally (#193).
+  #NN unresolvable, treated as open," never guessed at or silently dropped
+  (`references/unstick-ordering.md`'s B1 class). All named blockers already closed → not blocking;
+  the candidate proceeds normally (#193).
+- A blocker chain contains a cycle, or exceeds the 5-level depth cap → report the whole cycle (or
+  the too-deep chain) as one `still-stuck-and-why` paragraph, naming every member; NEVER dispatch
+  any member of it (`references/unstick-ordering.md`'s B2 class, #558).
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
 - `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
@@ -323,20 +368,31 @@ names, not a duplicated fan-out) — or, on a TICKET FILTER (#449), step 1 state
 skipped and step 2 discovered each named id directly, never forwarding the id list into
 `sweep-chores`' own seat-scope slot — and every ticket IN THIS RUN'S SCOPE has been considered
 (a SWEEP SCOPE's scope is every open `feature`/`bug`/`task` ticket; a TICKET FILTER's scope is
-exactly its named ids) with no build
+exactly its named ids, plus any blocker ids its unstick chains pulled in per
+`references/unstick-ordering.md`, each disclosed in step 6 as "pulled in by #A's chain" (#558))
+with no build
 in flight, no active
-claim, AND no open `Blocked-by:` dependency (#193), every dispatch was gated
+claim, AND no open `Blocked-by:` dependency (#193) left unresolved by chain classification, every
+dispatch was gated
 by the human's one batched confirm
 (INTERACTIVE) or by step 2's own filtering under the explicit `auto` token (UNATTENDED) — never by
 neither — and the final report names every considered ticket's outcome — a mobilized ticket's
-relayed `build-lead` result, a skip-and-why, or (for a named blocker) the classified breakdown
-paragraph, never just a table row. NOT done while a dispatch fires before the confirm round on an
-INTERACTIVE run, a named blocker gets only a table row with no classified paragraph, a blocker
+relayed `build-lead` result, a skip-and-why, one of the three unstick outcome classes (#558:
+unstuck-this-run / sequenced-for-next-run / still-stuck-and-why), or (for a named blocker or a
+still-stuck ticket) the classified breakdown paragraph, never just a table row. NOT done while a
+dispatch fires before the confirm round on an
+INTERACTIVE run, a named blocker or still-stuck ticket gets only a table row with no classified
+paragraph, a blocker
 breakdown proposes a build attempt instead of the shape its category actually calls for, an
 unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the
 per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
 regression), a ticket already in flight OR already claimed OR carrying an open `Blocked-by:`
-dependency is dispatched anyway, two concurrent
+dependency with no B5-mobilizable resolution is dispatched anyway, a cycle member or human-shape
+(B2/B4) blocker is EVER dispatched, a dependent is dispatched while any of its named blockers
+still reads OPEN, a second confirm round is opened for a chain, any wait/watch/poll on a PR runs
+between waves, the wave loop runs past 3 waves, or any unstick action other than the single
+`build-lead` dispatch is taken (a `Blocked-by:` line edited, a label changed, a stale claim
+reclaimed, a ratify comment posted), two concurrent
 feature/task dispatches with overlapping or unstated edit targets are pushed to run in parallel
 instead of the safer serial default (isolation itself is no longer this step's call — that's
 `dispatch-ticket`'s own unconditional Phase 3, per #183 — but a foreseeable merge conflict from

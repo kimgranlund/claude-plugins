@@ -46,7 +46,8 @@ Blocked-by: #196, #201
 
 ## The two named consumers (no others, per #193's own scope)
 
-1. **`mobilize-chores` step 2** (this skill) — exclusion semantics: that skill's own step 2, above.
+1. **`mobilize-chores` step 2** (this skill) — exclusion + unstick-ordering semantics: step 2 and
+   `references/unstick-ordering.md` (#558).
 2. **`chore-planner`** (harness) — ordering semantics: harness's preloaded `blocked-by-rules`
    skill.
 
