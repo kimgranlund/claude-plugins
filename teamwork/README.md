@@ -108,6 +108,19 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.21.3 · assembled 2026-08-17 · closes #548: `dispatch-ticket`'s Phase 1 ambiguous-match failure
+branch and the `[nested-intake]` marker rationale still carried the falsified 2026-08-09 canon
+("forking relieves the caller's session, it does not remove the person, and `AskUserQuestion`
+still reaches them directly") — measured false by gh#541 (a `context: fork` background dispatch
+has no question channel at all). Rewritten to the capture-with-gaps + named-blocker shape docs'
+`file-bug`/`file-feature` (PR #546) already landed: only `/bind-build`'s own standing seat (the
+live host session, never forked) gets a real `AskUserQuestion`; `/build-feature`'s fork,
+`build-leader`, and `mobilize-chores` all report the ambiguity as a named blocker naming both
+candidate ids plus the resume path (re-invoke with the explicit id). The `[nested-intake]` marker
+note corrected the same way — its rationale no longer claims a live round budget that never
+existed past this point. Fresh-context skill-checker pass: PASS. `release_gate.py teamwork`
+clean. No evals touched (description unchanged). Companion docs-half PR: #549.
+
 v2.21.2 · assembled 2026-08-17 · closes #539: `fleet-rules` §3 (Communication routing) gains a
 duty-report/work-order guarantee bullet, placed right after the "one decision, one channel"
 bullet — every seat's duty report (or done/what's-next report) to the coordinator now must get
