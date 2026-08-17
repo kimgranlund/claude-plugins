@@ -356,7 +356,7 @@ class Grammar:
         hits = [t for t in tokens if t in self.brand_tokens]
         return f"brand token(s) in local name: {hits}" if hits else None
 
-    def parse(self, kind, name, skills, wraps_target=None, commands=None):
+    def parse(self, kind, name, skills, wraps_target=None, commands=None, user_invocable=False):
         """Returns list of grammar errors for this name."""
         errs = []
         tokens = name.split("-")
@@ -487,10 +487,20 @@ class Grammar:
             if len(tokens) >= 2 and tokens[-1] in self.process_lex:
                 ok, why = self.resolve_objects(tokens[:-1])
                 return errs if ok else errs + [f"skill object: {why}"]
-            # Reverse-wrapper amendment (spec-naming-convention.md §14.1, issue #241): an
-            # object-verb skill name is legal IFF an identically-named command exists in the
-            # same plugin root (the command wraps it) — never on the skill's say-so alone.
-            if len(tokens) >= 2 and tokens[-1] in self.verb_lex and name in (commands or ()):
+            # Reverse-wrapper amendment (spec-naming-convention.md §14.1, issue #241,
+            # extended §14.9, issue #525): an object-verb skill name is legal IFF EITHER an
+            # identically-named command exists in the same plugin root (the command wraps
+            # it — §14.1's original realization) OR the skill itself carries
+            # `user-invocable: true` with no sibling command at all (§14.9's skill-as-command
+            # realization, ratified 2026-08-17: the successor dual-access shape retires the
+            # wrapper command, so its ABSENCE is no longer evidence against the object-verb
+            # name it used to license — the skill's own `user-invocable: true` is the same
+            # "one procedure, two surfaces" fact, just carried on one file instead of two).
+            # Never on the skill's say-so alone either way — object resolution below still
+            # applies in both branches.
+            if len(tokens) >= 2 and tokens[-1] in self.verb_lex and (
+                name in (commands or ()) or user_invocable
+            ):
                 ok, why = self.resolve_objects(tokens[:-1])
                 return errs if ok else errs + [f"skill object (reverse-wrapper): {why}"]
             ok, why = self.resolve_objects(tokens)  # nominal production
@@ -719,7 +729,8 @@ def run(target: Path, manifest: dict, scope: str = "full", own_root: Path = None
         def X(m, cat="structural"): findings.append((name, "exempt-note", m, cat))
 
         # 1–2: grammar (exemptions skip; recorded for burn-down)
-        errs = g.parse(kind, name, skills, wraps_target=fm.get("wraps"), commands=commands)
+        errs = g.parse(kind, name, skills, wraps_target=fm.get("wraps"), commands=commands,
+                        user_invocable=bool(fm.get("user-invocable", False)))
         for e in errs:
             (X if exempt else E)(e, "grammar")
 
@@ -1559,6 +1570,31 @@ def selftest():
         result = run(r, reverse_manifest)
         assert not result["grammar_errors"], \
             f"existing nominal skill names must be unaffected by the reverse-wrapper amendment: {result['grammar_errors']}"
+
+    # Reverse-wrapper amendment, extended (spec-naming-convention.md §14.9, issue #525): a
+    # verb-terminal skill name is ALSO legal with `user-invocable: true` and NO sibling
+    # command at all — the skill-as-command dual-access shape that supersedes the
+    # command-wrapper realization §14.1 originally licensed. Same triad: positive (the
+    # skill alone, `user-invocable: true`, no commands/ dir whatsoever, passes), negative
+    # (the identical skill with `user-invocable: false` and still no wrapper still fails —
+    # the extension must not make the dial irrelevant), regression (the §14.1 command-wrapper
+    # path above still passes unchanged now that this second path exists too).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-execute").mkdir(parents=True)
+        (r / "skills" / "demo-execute" / "SKILL.md").write_text(
+            skill_md("demo-execute", extra_fm="user-invocable: true\n"))
+        result = run(r, reverse_manifest)
+        assert not result["grammar_errors"], \
+            f"verb-terminal skill with user-invocable:true and no wrapper must pass grammar: {result['grammar_errors']}"
+
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "demo-execute").mkdir(parents=True)
+        (r / "skills" / "demo-execute" / "SKILL.md").write_text(skill_md("demo-execute"))
+        result = run(r, reverse_manifest)
+        assert result["grammar_errors"], \
+            "verb-terminal skill with user-invocable:false and no wrapper must still fail grammar"
 
     # D1 — `-rules` reserved-tail production (spec-naming-convention.md §14.2, ADR-0014):
     # positive (topic-phrase resolves via the union pool: an ObjectVocab noun + a

@@ -11,9 +11,9 @@ description: >
   correctness, routing fidelity, or standards compliance (harness's check-skill).
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-13
+last_updated: 2026-08-17
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -30,9 +30,10 @@ and what's hand-holding a capable model doesn't need.
 
 ## Procedure
 
-1. Resolve the target: a skill/agent/command directory, a whole plugin
-   root, or any directory of markdown files (frontmatter optional — files
-   with no `kind` are measured as plain instruction documents).
+1. Resolve the target: `$ARGUMENTS` (default: the current project) — a
+   skill/agent/command directory, a whole plugin root, or any directory of
+   markdown files (frontmatter optional — files with no `kind` are measured
+   as plain instruction documents).
 2. Run: `python3 <this skill>/scripts/measure.py --target <path> --json`
 3. Judge each flagged file against references/CALIBRATION.md's test: does
    cutting this content lose a real instruction (a dated gotcha, a safety

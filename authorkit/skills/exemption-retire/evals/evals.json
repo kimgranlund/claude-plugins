@@ -1,0 +1,15 @@
+{
+  "skill": "exemption-retire",
+  "note": "Moved in from the command-only commands/exemption-retire.md wrapper (issue #525, skill-as-command conversion). Freshly authored suite — the command surface it replaces carried no evals.json (commands aren't model-routed), so there is no prior eval history to migrate.",
+  "cases": [
+    {"id": "t01", "prompt": "Retire this exemption while we're already touching the file.", "expect": "trigger"},
+    {"id": "t02", "prompt": "Since we're renaming this anyway, clear its exemption entry too.", "expect": "trigger"},
+    {"id": "t03", "prompt": "Burn down this one exempt artifact's grammar violation now.", "expect": "trigger"},
+    {"id": "t04", "prompt": "Chain the plan, confirm, and apply for this exempt name in one go.", "expect": "trigger"},
+    {"id": "t05", "prompt": "Clear this exemption from the manifest opportunistically.", "expect": "trigger"},
+    {"id": "n01", "prompt": "Run the full exemption burn-down across the whole estate.", "expect": "no-trigger", "comment": "owner: overhaul-execute — a bulk, many-member campaign, not one opportunistic artifact"},
+    {"id": "n02", "prompt": "Just plan this rename, I'm not ready to apply it.", "expect": "no-trigger", "comment": "owner: rename-planning — plan without intent to execute"},
+    {"id": "n03", "prompt": "Apply this already-approved rename plan.", "expect": "no-trigger", "comment": "owner: rename-execute — the mutation itself, this skill only hands off to it"},
+    {"id": "n04", "prompt": "Seed the naming manifest for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"}
+  ]
+}

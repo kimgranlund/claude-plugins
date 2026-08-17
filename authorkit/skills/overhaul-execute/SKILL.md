@@ -6,16 +6,16 @@ description: >
   execution through rename-planning/rename-execute, reshape-skill, and build-lead. The execution
   counterpart of overhaul-planning: that skill generates the plan, this one drives it, through
   three confirm gates that each need a live user (no user -> stops SKIPPED, never self-approves).
-  Use for driving or running an already-approved overhaul plan through its execution waves. Ships
-  with an identical-name command wrapper (/overhaul-execute). NOT for generating the plan
+  Use for driving or running an already-approved overhaul plan through its execution waves, or
+  via /overhaul-execute directly. NOT for generating the plan
   (overhaul-planning); NOT for one artifact rename (rename-planning, rename-execute); NOT for a
   plain audit (naming-audit, bloat-audit).
 author: kim
 created: 2026-08-14
-last_updated: 2026-08-16
-requires: [naming-audit, bloat-audit, overhaul-planning, rename-planning, manifest-authoring, fix-old-names, pattern-audit, doctrine-audit]
+last_updated: 2026-08-17
+requires: [naming-audit, bloat-audit, overhaul-planning, rename-planning, rename-execute, manifest-authoring, fix-old-names, pattern-audit, doctrine-audit]
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -35,9 +35,12 @@ allowed-tools:
 
 The DRIVES half of the `overhaul-planning` pair: that skill generates the plan; this skill runs
 the campaign — discover, measure, plan, execute approved waves — composing the existing
-instruments and reimplementing none. Ships as a skill with an identically-named command wrapper
-(`/overhaul-execute`, `commands/overhaul-execute.md`) per the reverse-wrapper grammar amendment
-(`.claude/docs/spec/spec-naming-convention.md` §14.1, issue #241). The three gates below all need
+instruments and reimplementing none. Ships `user-invocable: true` directly — `/overhaul-execute`
+is this skill, no separate command wrapper (issue #525: skill-as-command is the estate's
+dual-access successor to the command-wrapper pattern §14.1 originally licensed this name shape
+through; §14.9 extends that licence to cover this exact shape — a verb-terminal skill name with
+no sibling command at all — and the superseded `commands/overhaul-execute.md` retired in the
+same change). The three gates below all need
 a live user regardless of which surface invoked this procedure: a run where `AskUserQuestion` is
 unavailable, errors, or gets auto-answered under momentum counts as no live user — it stops at
 its first open gate and reports SKIPPED, leaving the decision to a human. This procedure is
@@ -122,11 +125,11 @@ campaign killed 7 of 8 proposed moves).
 
 Run only Gate-A-approved waves, in plan order. Per row kind:
 
-- **rename** → `rename-planning` (Skill tool) for the plan, then read
-  `${CLAUDE_PLUGIN_ROOT}/commands/rename-execute.md` in full and follow its procedure exactly
-  — it is command-only, no companion skill, invoked by reading and following its body rather
-  than through the Skill tool; its own touched-file confirm still runs, verifying the enumerated
-  blast radius the Gate-A decision already approved.
+- **rename** → `rename-planning` (Skill tool) for the plan, then `rename-execute` (Skill tool)
+  for the confirmed mutation — both are `user-invocable: true` skills as of issue #525 (no more
+  command-only `rename-execute`, no more reading a command file's body by hand); its own
+  touched-file confirm still runs, verifying the enumerated blast radius the Gate-A decision
+  already approved.
 - **merge/split (Wave 0 seeds)** → `harness:reshape-skill` where harness is installed and the
   command is Skill-tool-reachable; where it is `disable-model-invocation: true` or harness is
   absent, name the exact `/reshape-skill …` invocation for the human to run now and hold the

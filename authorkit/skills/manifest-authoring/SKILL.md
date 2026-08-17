@@ -9,10 +9,10 @@ description: >
   array must be enumerated or retired from.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-13
+last_updated: 2026-08-17
 requires: [naming-conventions]
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -25,7 +25,12 @@ allowed-tools:
 
 The manifest belongs to the TARGET estate, never to authorkit — lexicons,
 vocab, and exemptions are estate-local facts. This skill writes exactly one
-file per estate.
+file per estate. Target: `$ARGUMENTS` (blank = the current project).
+
+**Before writing `naming.manifest.json`, present the proposed change (seed contents, the
+vocab/lexicon entry, or the exemption(s) to enumerate/retire) and wait for explicit
+confirmation** — mutating, so this gate is not a suggestion (issue #525). No live user to
+confirm with → stop and report the gate SKIPPED rather than writing unconfirmed.
 
 ## Procedure
 
@@ -44,3 +49,6 @@ file per estate.
    rename has landed and the validator passes — never speculatively.
 5. Every edit ends by running the validator against the estate; a manifest
    edit that creates new errors is reverted, not shipped.
+
+Report: the file path written (or the gate reported SKIPPED, per above), the validator's
+verdict, and the exemption count before → after.

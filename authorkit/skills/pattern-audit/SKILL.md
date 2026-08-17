@@ -14,9 +14,9 @@ description: >
   emits a dataset, never rewrites.
 author: kim
 created: 2026-08-15
-last_updated: 2026-08-16
+last_updated: 2026-08-17
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -33,8 +33,10 @@ optionally judging the resulting matches. It never mutates target files.
 
 ## Procedure
 
-1. Resolve the instruction. Given as a param → use it. Omitted → ask: what
-   to find, where (subtree/glob), and what counts as a false positive.
+1. Resolve the instruction and target from `$ARGUMENTS`
+   (`[pattern-or-instruction] [path-to-target]`). Given as a param → use it.
+   Omitted → ask: what to find, where (subtree/glob), and what counts as a
+   false positive.
 2. Compile the instruction into one or more labeled probes (`LABEL=REGEX` +
    optional globs). A literal regex passes through as a single probe. A
    natural-language instruction may fan out to several labeled probes;

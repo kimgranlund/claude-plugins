@@ -1,0 +1,16 @@
+{
+  "skill": "rename-execute",
+  "note": "Moved in from the command-only commands/rename-execute.md wrapper (issue #525, skill-as-command conversion). Freshly authored suite — the command surface it replaces carried no evals.json (commands aren't model-routed), so there is no prior eval history to migrate.",
+  "cases": [
+    {"id": "t01", "prompt": "Apply this rename plan now.", "expect": "trigger"},
+    {"id": "t02", "prompt": "Execute the rename we just planned for this skill.", "expect": "trigger"},
+    {"id": "t03", "prompt": "Go ahead and land this artifact's rename.", "expect": "trigger"},
+    {"id": "t04", "prompt": "Rename this violating skill to its conforming target name.", "expect": "trigger"},
+    {"id": "t05", "prompt": "Confirmed — mutate the folder and every reference for this rename.", "expect": "trigger"},
+    {"id": "t06", "prompt": "This old command name needs to actually move to its new name now.", "expect": "trigger"},
+    {"id": "n01", "prompt": "Plan the rename for this naming violation, but don't apply anything yet.", "expect": "no-trigger", "comment": "owner: rename-planning — plan-only, never mutates"},
+    {"id": "n02", "prompt": "Audit this estate for naming violations.", "expect": "no-trigger", "comment": "owner: naming-audit"},
+    {"id": "n03", "prompt": "Run the full waved overhaul campaign across all these members.", "expect": "no-trigger", "comment": "owner: overhaul-execute — this skill is one row inside that campaign, not the driver"},
+    {"id": "n04", "prompt": "Retire this exemption while we're already touching the artifact.", "expect": "no-trigger", "comment": "owner: exemption-retire — chains this skill, doesn't replace it"}
+  ]
+}

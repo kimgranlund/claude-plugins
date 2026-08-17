@@ -11,10 +11,10 @@ description: >
   referenced, not whether current names conform to the grammar.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-14
+last_updated: 2026-08-17
 requires: [naming-conventions]
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 allowed-tools:
   - Read
   - Glob
@@ -30,7 +30,8 @@ output.
 
 ## Procedure
 
-1. Locate the target's `naming.manifest.json` (estate root or `.claude/`).
+1. Target: `$ARGUMENTS` (default: the current project). Locate the target's
+   `naming.manifest.json` (estate root or `.claude/`).
    If absent, stop and offer to seed one via manifest-authoring — do not
    audit an ungoverned estate against invented rules.
 2. Run: `python3 <this skill>/scripts/validate.py --target <estate> --json`

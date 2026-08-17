@@ -9,7 +9,7 @@
     {"id": "t05", "prompt": "Draft a rename plan for this exempt artifact before we execute it.", "expect": "trigger"},
     {"id": "t06", "prompt": "This artifact name violates the grammar — plan its fix.", "expect": "trigger"},
     {"id": "t07", "prompt": "What's the full blast radius of renaming this agent?", "expect": "trigger"},
-    {"id": "n01", "prompt": "Apply this already-approved rename plan now.", "expect": "no-trigger", "comment": "owner: rename-execute (command) — this skill only plans, never mutates"},
+    {"id": "n01", "prompt": "Apply this already-approved rename plan now.", "expect": "no-trigger", "comment": "owner: rename-execute (skill, issue #525 — was command-only) — this skill only plans, never mutates"},
     {"id": "n02", "prompt": "Audit this estate for naming violations in the first place.", "expect": "no-trigger", "comment": "owner: naming-audit"},
     {"id": "n03", "prompt": "Seed the manifest for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
     {"id": "n04", "prompt": "What does the grammar say about command name shape?", "expect": "no-trigger", "comment": "owner: naming-conventions"},
