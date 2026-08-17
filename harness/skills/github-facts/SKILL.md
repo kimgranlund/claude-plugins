@@ -29,7 +29,7 @@ the question a reader arrives with, not the literature's own page structure.
 | GitHub's native Issue Types vs. labels vs. the newer Issue Fields; GA dates; query syntax | `references/issue-types-and-labels.md` |
 | Sub-issues vs. task-list checkboxes; nesting depth; the retired tasklist-block feature | `references/sub-issues-and-task-lists.md` |
 | `Closes`/`Fixes`/`Resolves #N` syntax, the default-branch gate, the unresolved merge-strategy gap | `references/linking-and-closing-keywords.md` |
-| Draft PRs, review states, CODEOWNERS, required checks, merge queue, the three merge strategies | `references/pr-lifecycle-and-review.md` |
+| Draft PRs, review states, CODEOWNERS, required checks, merge queue, the three merge strategies, an unreopenable/force-pushed closed PR, gh verbs failing in a GitHub outage/503 storm (REST vs GraphQL) | `references/pr-lifecycle-and-review.md` |
 | GitHub Projects v2 — structure, fields, GraphQL-only API, multi-repo/org spanning | `references/projects-v2.md` |
 | Mapping Bug/Task/Feature onto these primitives; where THIS workspace's own convention aligns or diverges | `references/bug-task-feature-mapping-nuances.md` |
 | Citation trust tiers and the grounding-marker legend | `references/sources.md` |

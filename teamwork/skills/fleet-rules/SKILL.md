@@ -74,6 +74,13 @@ general statement, cited there rather than restated.
    its own mechanical caveats (the flattened open-PR query form's silent lie); cited here, never
    re-derived per caller.
 
+- **Write every claim assuming a guard-skipping peer may act on it.** A claim comment naming the
+  branch is a lock, but a live fleet has hosts that read claims as work signals — put enough brief
+  in the claim (or the record it sits on) that a duplicate build is at least a CORRECT build, and
+  name the branch every time so a duplicate detects itself at checkout, not at PR time
+  (`parallel-work-rules` `references/unattended-collision-protocol.md` §2 owns the stand-down that
+  follows) · agent-ui #1150/PR #1161 · 2026-08-17 · [worked instance].
+
 **Stale-claim handling stays `repo-cleaner`'s** (harness) — this protocol only states when to
 claim and what to check before dispatching, never how to detect or clear an abandoned one.
 

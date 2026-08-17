@@ -108,6 +108,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.22.1 · assembled 2026-08-17 · fleet-rules SKILL §2 gains the guard-skipping-peer claim bullet; parallel-work-rules unattended-collision §2 gains the agent-ui #1150/PR #1161 checkout-time-self-detect instance.
 v2.22.0 · assembled 2026-08-17 · closes #558: `mobilize-chores` now works the stuck set instead of
 only reporting it. Root cause: step 2's `Blocked-by:` exclusion (#193) was a hard skip with no
 executed follow-through — a per-shape proposed action in step 6 that was never acted on, even when
