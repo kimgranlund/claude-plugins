@@ -27,6 +27,47 @@ Design how capabilities compose, or review an arrangement. The unit is chosen by
 - Every dispatch is a sealed contract: charter + enumerated inputs + budget + typed return (`references/best-practices.md` "The dispatch is a sealed contract"); the worker never sees the host's deliberation or sibling transcripts.
 - The return channel is session-bound, durable state isn't: a completion notification reaches only the live session that made that dispatch, and dies with it. A durable-effect dispatch (PR, branch, ticket) must be discoverable from that state alone by a later session — never solely from having witnessed the notification (`references/best-practices.md` "The return channel doesn't survive the session").
 
+## Seat-access doors
+
+A seat's own contract (what `dispatch-ticket` and its kin actually do) is one thing; HOW a
+caller reaches it is a separate design question this skill owns too — three structurally
+different doors, none a synonym for another, and nothing in a bare seat name reveals which one a
+given caller gets:
+
+1. **Session adoption** — a `/lead-*` command (`/lead-build`, `/lead-team`, `/lead-planning`) and
+   its paired `leading-*` skill make the CURRENT session hold a standing agent's contract
+   in-place, with no `Agent` spawn and no fork. Nothing left the session, so its interactive
+   branches — a live clarifying question, an `AskUserQuestion` round — stay reachable turn after
+   turn for as long as the session runs. Pick this door when a human is going to feed the seat
+   more than one target in a row.
+2. **`context: fork` execution** — a `disable-model-invocation: true`, `user-invocable: true`
+   command (`/build-feature`) runs its target's procedure as a fork (background by default) off
+   the caller's own session, one target at a time. Forking relieves the CALLER's context, not the
+   human: a fork can still reach the live user directly via `AskUserQuestion` mid-run. Pick this
+   door for one known target, right now, from a session that wants to stay clean for whatever
+   comes next.
+3. **`Agent`-tool dispatch via a `*-leader` agent** (`build-leader`, `planning-leader`,
+   `review-leader`) — the only door open to a genuinely unattended, programmatic caller with no
+   live user at all: a coordinator, `mobilize-chores`, a `/goal` loop. No clarify round is
+   possible here, so the dispatched engine's own unattended failure branches take over instead
+   (report a named blocker, report SKIPPED) rather than asking anyone.
+
+**Why three doors exist instead of one command serving every caller.** A
+`disable-model-invocation: true` command is invisible to the `Skill` tool (issue #134/#135's
+shared defect class) and to any agent's `skills:` preload (the same platform rule
+`skill-writing-rules` names). That combined mechanical fact is why a door-2 command can never BE
+door 3: nothing with `Agent`-tool access can reach it directly. So
+the actual procedure lives once in a plain, Skill-tool-reachable skill (e.g. `dispatch-ticket`),
+and each door is a thin wrapper invoking that same engine inline — this is the **`*-leader` twin
+rationale**: every command shaped like door 2 earns a same-shaped `*-leader` agent as door 3, not
+because the two ever duplicate logic, but because a command's own `disable-model-invocation` flag
+structurally forecloses the one door a programmatic dispatcher needs. Confusing the doors is a
+recorded defect class, not a hypothetical: #134/#135 is the mechanical unreachability itself, and
+the pattern recurs anywhere a new standing seat is designed without asking which callers need
+which door. Rejected as a naming fix (ADR-0020, gh#518): renaming the doors doesn't change which
+one a given caller can structurally use — the fix is knowing the three exist and picking by who's
+calling, not a vocabulary change.
+
 ## Design
 1. **Solo-first — the host inline is the null unit and wins by default.** A seat must buy
    something the host cannot provide: isolation (fresh context), parallelism (genuinely
