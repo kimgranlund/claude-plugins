@@ -7,18 +7,15 @@ description: >-
   every finding naming its owning command. Use for "what's the state of the project",
   "where are we", "what's blocked on me", "give me a project state report", "what can be
   merged or deleted", "catch me up on this repo", or reviewing all roadmap/plan/backlog
-  items and open tickets. Add `--fleet <repo1,repo2,...>` for a cross-repo rollup — open
-  work and in-flight claims per named repo, plugin-cache version drift against a
-  marketplace source repo's own plugin.json (the #582 stale-copy case), and cross-repo
-  consolidating-record citation edges — for "give me a state rollup across the repos our
-  fleet touches" or "check for version drift between this repo and gen-ui-kit". NOT for
-  choosing next work (chore-planner), executing cleanup
+  items and open tickets. `--fleet` adds a cross-repo rollup — open work, plugin-cache
+  drift, cross-repo citations, across a named repo list. NOT for choosing next work
+  (chore-planner), executing cleanup
   (repo-cleaner), plugin health (/check-everything), one PR/issue's status (plain gh
   lookup), or which lifecycle loop/build-turn stage the project is in — the
   lifecycle-POSITION axis, not work-state (docs:check-stage, where installed).
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[repo-root] [--artifact] [--fleet <repo1,repo2,...>] [--trackers <path>]"
+argument-hint: "[repo-root] [--artifact] [--fleet repo1,repo2,...] [--trackers path]"
 ---
 
 # check-state
@@ -86,12 +83,14 @@ a 🟢 header licenses skipping that section, not the rest of the report:
    docs / release drift / armed automation.
 6. **Fleet rollup** (only rendered when `--fleet` was passed) — one sub-block per named
    repo: open work + in-flight claims, plugin-cache drift (`in-sync` /
-   `stale-cache` / `repo-behind-cache` for a marketplace source repo, or
-   `not-a-source-repo` — N/A, not a finding — for a plain consumer repo), and any
-   cross-repo consolidating-record citation edges found in its open issues. Then one
-   trackers block (platform-defect pairs, e.g. this repo's own vs. an upstream
-   `anthropics/claude-code` tracker) or "no trackers file given". Headed 🟢/🟡/🔴 per
-   repo like every other section; an unreachable repo's row is 🟡 by construction.
+   `stale-cache` / `repo-behind-cache` for a marketplace source repo, `UNMEASURED` when
+   a plugin's own version can't be read, or `not-a-source-repo` — N/A, not a finding —
+   for a plain consumer repo), and any cross-repo citation edges found in its open
+   issues (every `owner/repo#NN` or bare `repo#NN` reference, not filtered to a
+   particular record class). Then one trackers block (platform-defect pairs, e.g. this
+   repo's own vs. an upstream `anthropics/claude-code` tracker) or "no trackers file
+   given". Headed 🟢/🟡/🔴 per repo like every other section; an unreachable repo's row
+   is 🟡 by construction.
 
 Every 🟡/🔴 line carries `→ <owning command or seat>`. A finding with no owner is
 reported as exactly that — "no owner in the routing table" — which is itself a finding.
