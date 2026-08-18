@@ -151,8 +151,8 @@ PR #343's scope note, PR #347's no-split writeup — both surfaced a real altern
 would otherwise have had to ask about. `dispatch-ticket`'s (teamwork) Findings write-back contract
 carries the same requirement for its build path.
 
-**Which type?** Route by the question being answered: what do we believe, before any choice →
-IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
+**Which type?** Route by the question being answered: what do we believe about the whole
+product, before any choice → IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
 what order → PLAN/ROADMAP; who does what next → TICKET/TASK; what release commitment did we lock
 in, cited to which decisions → RDD; where do our ratified beliefs index, one pointer per IDR →
 BRIEF. A document answering two of these questions is usually two documents joined by IDs.
