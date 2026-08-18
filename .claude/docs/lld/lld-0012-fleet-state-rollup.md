@@ -1,6 +1,6 @@
 ---
 doc-type: lld
-id: lld-0011-fleet-state-rollup
+id: lld-0012-fleet-state-rollup
 status: draft
 version: 0.1.0
 date: 2026-08-18

@@ -6,7 +6,7 @@ Usage:
                                     print the JSON snapshot (issues zero mutating git/gh command)
   fleet_state.py selftest           prove the classifiers on inline fixtures (no live gh/network)
 
-No implicit repo discovery — every repo in scope is named explicitly (lld-0011 ruling 2, #620):
+No implicit repo discovery — every repo in scope is named explicitly (lld-0012 ruling 2, #620):
 never `ListAgents`-style discovery, never a filesystem walk. Degrades gracefully per repo: an
 unreachable path never aborts the run, it reports UNMEASURED with a reason and the other repos'
 rows still render (Acceptance: "degrade gracefully when a listed repo is unreachable (UNMEASURED
@@ -16,7 +16,7 @@ Collects, per `--repos` entry:
   open_work        open issues / PRs / `in-flight`-labeled claims (`gh issue list`)
   marketplace      per-plugin repo-version vs. locally cached version directories under
                     `~/.claude/plugins/cache/<marketplace>/<plugin>/` — the #582 stale-copy case
-                    (lld-0011 ruling 3). "not-a-source-repo" (N/A, never UNMEASURED) for a repo
+                    (lld-0012 ruling 3). "not-a-source-repo" (N/A, never UNMEASURED) for a repo
                     with no `.claude-plugin/marketplace.json` of its own.
   citation_edges    OPEN issue bodies matching a cross-repo reference — `owner/repo#NN` or the
                     bare-repo shorthand `repo#NN` (same owner implied, e.g. `gen-ui-kit#1593`) —
