@@ -1,132 +1,140 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-18T01:44Z** (UTC,
+Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-18T02:19Z** (UTC,
 repo-cleaner's report timestamp — the latest seat). Evidence: all three seat reports attached
 and complete — **no seat UNMEASURED this firing** (dispatch-named UNMEASURED list: empty).
-The prior firing's one UNMEASURED fact is now measured: `primary_checkout_check.py` ran
-against the primary for the first time (wrapping `git -C` in a Python `subprocess` call is
-not caught by the Bash-tool isolation guard — verified live by repo-cleaner) → `clean`, on
-`main`. decision-watcher: clean no-op (20 ADRs, hashes match checkpoint, candidate queue
-empty — no payloads owed). issue-sorter: checkpoint advance only (window 00:19:09Z→01:40:09Z;
-2 new PRs — #606 merged closing #604, #607 open docs-authoring with nothing TICKET-shaped;
-no new issues; 0 unknown authors, 0 held, 0 needs-ruling; one payload block —
-`watch-checkpoint.json`). repo-cleaner: **executed `sync_main.py` at the primary** (gated,
-interactive dispatch, main genuinely dirty — 5 files quarantined as `stash@{0}`, 10 commits
-pulled, HEAD reverified by SHA at `b18a011b0`, exact match to `origin/main`); counter reset
-to 0; one payload block (its report).
+decision-watcher: clean no-op (20 ADRs scanned, 20 previously known, no delta, checkpoint
+correctly not advanced, no payloads owed). issue-sorter: checkpoint-advance only (window
+01:40:09Z→02:17:47Z; 4 new issues — #613/#612/#611 feature+size:big, #609 bug+major, all
+already record-shaped and kind-labeled at discovery; #608 closed via merged #610; #607
+merged; 0 unknown authors, 0 held, 0 needs-ruling; one payload block —
+`watch-checkpoint.json`). repo-cleaner: gated `git fetch --prune` (pruned
+`origin/608-...`), `primary_checkout_check.py` → clean on `main` @ `b18a011` (5 behind
+`origin/main`, tree clean — not a sync_main case), `campaign_close.py 610` and `606` → all
+checks pass, remotes confirmed gone; classification set changed, counter reset to 0; one
+payload block (its report).
 
-Prior plan (2026-08-18T00:22Z firing): entry 1 (sync main) DONE — repo-cleaner ran
-`sync_main.py` this firing, primary now clean on `main` @ `b18a011b0`. Entry 2 (apply the
-00:22Z payloads + commit) RESOLVED-BY-EVENTS — a parallel session already committed the same
-content via merged PRs (repo-cleaner diffed the stash: both report files byte-identical to
-HEAD, checkpoint/plan at HEAD strictly newer than the stashed copies; checkpoint continuity —
-this firing's window opens at the applied 00:19:09Z mark — proves persistence). Entry 3
-(build-554 worktree removal) carries forward below.
+Prior plan (2026-08-18T01:44Z firing): entry 1 (apply the 01:44Z payloads + commit + push)
+DONE — issue-sorter's window this firing opens at exactly 01:40:09Z, the prior firing's
+checkpoint value, proving that payload landed and persisted; the remote `main` advanced
+`7af35e7..315f66e`. Entry 2 (stash@{0} resolution) CARRIES FORWARD below — this firing's
+repo-cleaner report carries no stash inventory, so its current state is unverified (not
+evidence it resolved). Entry 3 (build-554 worktree removal) carries forward, now split per
+repo-cleaner's fresh inventory: the worktree sits on a NEW since-merged branch (`608-...`),
+and the old branch (`604-...`) survives as a stray local branch with no worktree.
 
 **Blocked-by (#193):** no literal `Blocked-by:` line in any evidence this firing (no issue
-bodies attached; no report names a #193 edge) — nothing reordered by the convention. No
-operational dependency edges between this firing's entries either: main is already synced,
-so the payload apply (entry 1) is unblocked.
+bodies attached; no report names a #193 edge) — nothing reordered by the convention. One
+operational dependency, named inline on its own entry: the build-554 worktree removal is
+blocked by this live session's own close.
 
-**needs-ruling lane:** empty — no `needs-ruling` label on either open issue (#605, #490);
-issue-sorter reports 0 held / 0 needs-ruling.
+**needs-ruling lane:** empty — issue-sorter reports 0 needs-ruling, 0 held.
 
 ## Queue
 
 **Class 1 — gated mutations verified safe:**
 
-### 1. Apply this firing's payload blocks AT THE SHARED CHECKOUT, commit + push
-- **Action:** write the fenced payloads verbatim to their target paths at
-  `/Users/kimba/Projects/nonoun/plugins` (freshly-synced `main` @ `b18a011b0`, working tree
-  clean — dirt already quarantined as `stash@{0}`):
-  `.claude/ops/watch-checkpoint.json` (issue-sorter — new checkpoint 01:40:09Z, strictly
-  newer than HEAD's 00:19:09Z), `.claude/ops/reports/2026-08-18T01-44-06Z-repo-cleaner.md`
-  (repo-cleaner), plus this rewritten `.claude/ops/plan.md`. Then `git status --porcelain`,
-  stage exactly those three paths, read the output, commit as a separate step (gate ≠
-  commit), push. Never `git add -A` — `stash@{0}` and `sweep-in-flight.json` handling stay
-  out of this commit (entry 2). decision-watcher declared both its state files unchanged —
-  no block owed, none staged. Apply at the shared checkout, not this worktree (the
-  write-sandbox stranding hazard, per ops-write-sandbox-rules).
-- **Owner:** the dispatching session (coordinator); falls to Kim if the coordinator's writes
-  to the shared checkout are blocked.
+### 1. Pull the clean primary current, then apply this firing's payload blocks, commit + push
+- **Action:** at `/Users/kimba/Projects/nonoun/plugins` (clean, on `main` @ `b18a011`, 5
+  commits behind): `git pull --ff-only` first (repo-cleaner: tree clean, resolves on an
+  ordinary pull — no quarantine case), then write the fenced payloads verbatim to their
+  target paths: `.claude/ops/watch-checkpoint.json` (issue-sorter — checkpoint 02:17:47Z,
+  strictly newer than the applied 01:40:09Z), `.claude/ops/reports/2026-08-18T02-19-25Z-repo-cleaner.md`
+  (repo-cleaner), plus this rewritten `.claude/ops/plan.md`. Stage exactly those three paths
+  (never `git add -A` — `stash@{0}`, if still present, stays out; see entry 2), read the
+  status output, commit as a separate step (gate ≠ commit), push. decision-watcher owes no
+  block — none staged. Apply at the shared checkout, not this worktree
+  (ops-write-sandbox-rules stranding hazard).
+- **Owner:** the dispatching session (coordinator); falls to Kim if writes to the shared
+  checkout are blocked.
 - **Evidence:** ops-write-sandbox-rules (state persists through the repo or the next firing
   starts blind); both fenced blocks present in their seats' reports; repo-cleaner §Executed
-  (primary clean on `main` @ `b18a011b0` post-sync, exact match to `origin/main`).
+  (primary clean on `main`, ff-pull safe, no dirt).
 - **Size:** ~3 min.
 
-**Class 2 — blocking other work:** none this firing — main already synced by repo-cleaner's
-gated `sync_main.py` run; nothing measured as blocking anything queued.
+**Class 2 — blocking other work:** none this firing — no open PRs, no seat blocked, nothing
+measured as blocking anything queued.
 
 **Class 3 — human decisions:**
 
-### 2. Resolve `stash@{0}` ("sync_main quarantine") at the primary checkout
-- **Action:** per repo-cleaner's per-file diff evidence: selectively restore ONLY
-  `.claude/ops/sweep-in-flight.json` (foreign-only, a live lock file whose session UUID
-  matches this very sweep's dispatching session — safe to reapply as-is), then
-  `git -C /Users/kimba/Projects/nonoun/plugins stash drop`. The other four stashed entries
-  need nothing reapplied: both report files are byte-identical to HEAD (already committed by
-  a parallel session), and the stashed `watch-checkpoint.json`/`plan.md` are strictly older
-  than HEAD's freshly-pulled versions. Stash resolution is judgment, outside repo-cleaner's
-  gated calls — it diffed and recommended, never popped or dropped.
+### 2. Resolve `stash@{0}` ("sync_main quarantine") at the primary — carried forward, state unverified this firing
+- **Action:** first `git -C /Users/kimba/Projects/nonoun/plugins stash list` — this firing's
+  repo-cleaner report carries no stash inventory, so whether `stash@{0}` still exists is
+  unmeasured. If gone, close this entry as resolved-by-events. If present, per the prior
+  firing's per-file diff evidence: selectively restore ONLY
+  `.claude/ops/sweep-in-flight.json` (foreign-only, session-matched live lock), then
+  `git stash drop` — the other four stashed files were byte-identical to or superseded by
+  HEAD. Stash resolution is judgment, outside repo-cleaner's gated calls.
 - **Owner:** Kim (or the dispatching session, with Kim's confirm — one batched decision).
-- **Evidence:** repo-cleaner §Stash — OVERLAP set (2 report files + `watch-checkpoint.json`)
-  diffed byte-identical or superseded; foreign-only set (`plan.md` superseded,
-  `sweep-in-flight.json` live and session-matched).
+- **Evidence:** prior plan entry 2 (carried forward — the carry-forward source, not fresh
+  evidence); prior firing's repo-cleaner §Stash diffs; this firing's repo-cleaner report is
+  silent on the stash (unverified, not resolved).
 - **Size:** ~3 min.
 
 **Class 4 — hygiene debt:**
 
-### 3. Remove orphaned worktree `build-554` + local branch — AFTER this session closes
-- **Action:** from the shared checkout root: `git worktree remove
-  .claude/worktrees/build-554`, then delete local branch
-  `604-repo-cleaner-off-main-finding` (upstream already gone, PR #606 MERGED), then verify
-  with `git worktree list` and `git branch -vv`. **Do not run mid-session** — the directory
-  is this live session's own worktree. Carried forward from the prior plan's entry 3; the
-  branch component re-appeared this firing (the worktree now sits on
-  `604-repo-cleaner-off-main-finding` @ `9d1f2f2`, tracking a gone remote).
+### 3. Delete stray local branch `604-repo-cleaner-off-main-finding` — runnable now
+- **Action:** from the shared checkout: `git branch -D 604-repo-cleaner-off-main-finding`
+  (@ `9d1f2f2`), then verify with `git branch -vv`. No worktree is attached, so this does
+  not wait on session close. Stays propose-only from the seat: no host-repo reap script is
+  named in this workspace's CLAUDE.md/README to gate it — a human or coordinator runs it
+  deliberately.
+- **Owner:** Kim (or the dispatching session, with Kim's confirm).
+- **Evidence:** repo-cleaner §Inventory/§Proposed — PR #606 MERGED, `campaign_close.py 606`
+  all checks pass, remote branch confirmed gone, no worktree attached.
+- **Size:** ~1 min.
+
+### 4. Remove worktree `build-554` + local branch `608-dispatch-ticket-file-bug-claim-fix` — blocked by this session's own close (named inline; do not start before it)
+- **Action:** AFTER this live session closes: from the shared checkout root,
+  `git worktree remove .claude/worktrees/build-554`, then
+  `git branch -D 608-dispatch-ticket-file-bug-claim-fix`, then verify with
+  `git worktree list` and `git branch -vv`. Carried forward from the prior plan's entry 3;
+  the branch component changed this firing (the worktree moved from `604-...` to the
+  since-merged `608-...`).
 - **Owner:** Kim (or the next coordinator session, post-close).
-- **Evidence:** repo-cleaner §Inventory/§Classification — orphaned (remote branch gone, PR
-  #606 MERGED, working tree clean); no host-repo reap script named in this workspace's
-  CLAUDE.md/README, so this stays propose-only.
+- **Evidence:** repo-cleaner §Inventory/§Proposed — PR #610 MERGED, `campaign_close.py 610`
+  all checks pass, upstream gone, worktree tree clean; same no-reap-script constraint.
 - **Size:** ~2 min (post-session).
 
 ## Narrated-but-absent audit
 
-- **decision-watcher:** clean — no-op firing, both state files declared unchanged with the
-  no-op clause cited; no path named without a block.
-- **issue-sorter:** clean — `watch-checkpoint.json` block present; `friendlies.json` /
-  `held-items.md` / `.mcp.json` explicitly declared unchanged and omitted, no conditional
-  hedging, no per-firing report path narrated.
-- **repo-cleaner:** clean — its per-firing report block present. Its `sync_main.py` run is a
-  gated git mutation at the primary (executed and evidenced by SHA), not a `.claude/ops/`
-  file write — outside the sandbox contract, correctly narrated as executed.
+- **decision-watcher:** clean — no-op clause cited explicitly ("no file-payload fences,
+  names no report path"); no path narrated without a block.
+- **issue-sorter:** clean — `watch-checkpoint.json` block present; `held-items.md` /
+  `friendlies.json` explicitly declared unchanged and omitted; the per-firing report path
+  explicitly declined ("this dispatch's own text response is the report"), not hedged.
+- **repo-cleaner:** clean — its per-firing report block present; its gated git operations
+  (fetch/campaign_close) are executed-and-evidenced git calls, not `.claude/ops/` writes —
+  outside the sandbox contract, correctly narrated as executed.
 
-## Not queued (checked, found clean or deliberately left — standing rulings carried)
+## Not queued (checked, found clean or deliberately left)
 
-- **PR #607** (`docs: IDR-0007 solo-first composition`): OPEN, brand-new, healthy,
-  no closing-issue reference, nothing TICKET-shaped — a doc-authoring PR awaiting its own
-  ratification flow, not ops work.
-- **2 open unassigned issues:** #605's latest comment (01:15:20Z) re-homes the work to the
-  `agent-ui` repo and pulls it from this repo's queue — not stale, not this repo's action.
-  #490 stays open by design (upstream pin-race tracking, anthropics/claude-code#87349;
-  active evidence comment 23:51:07Z). No stale claims under ADR-0005.
-- **Merged-PR branch reaping:** nothing pending — #606/#602/#601 remote branches already
-  gone; `git ls-remote` shows only `main` and `docs-idr-0007-solo-first-composition`.
+- **4 new work items** (#613/#612/#611 feature+size:big, #609 bug+major): all fully
+  record-shaped and kind-labeled at discovery, zero assignees, no stale claims under
+  ADR-0005 — buildable backlog, not ops actions. The entry point to drive them to builds is
+  teamwork's `/mobilize-chores` (with its own batched confirm), outside this queue's scope.
+- **#605** — re-homed to `agent-ui`, pulled from this repo's queue (informational). **#490**
+  — open by design (upstream pin-race tracking, anthropics/claude-code#87349), active
+  evidence comments, not stale.
+- **Open PRs:** none (`gh pr list --state open` → empty); `git ls-remote` shows only
+  `refs/heads/main` — every merged PR's remote branch confirmed gone, nothing to reap
+  remotely.
+- **Primary 5 commits behind `origin/main`:** folded into entry 1's ff-pull, not its own
+  entry — tree clean, no gate covers clean-but-stale, per repo-cleaner.
 - **`gitignore_check.py` WARNs:** the two standing accepted WARNs (`dist/`,
-  `harness-audit-*/`) unchanged at the primary; the worktree's two extra WARNs
-  (`.DS_Store`, `.claude/worktrees/`) are nested-worktree run artifacts. No G2 FAIL.
-- **ADR corpus:** 20 ADRs, all hashes match the checkpoint, candidate queue empty — clean
-  no-op, no payload owed.
-- **Batched confirms:** one owed and queued above (entry 2, the stash resolution); nothing
-  else held by any seat.
+  `harness-audit-*/`) at the primary; the worktree's two extras (`.DS_Store`,
+  `.claude/worktrees/`) are nested-worktree artifacts — identical set to last firing, no
+  G2 FAIL.
+- **ADR corpus:** 20/20 previously known, no delta, checkpoint correctly un-advanced —
+  clean no-op.
 
-## Resolved since the prior plan (2026-08-18T00:22Z firing)
+## Resolved since the prior plan (2026-08-18T01:44Z firing)
 
-- Prior entry 1 (run `sync_main.py` at the primary) — DONE: repo-cleaner executed it this
-  firing (gated; 5 dirty files quarantined, 10 commits pulled, HEAD `b18a011b0` verified by
-  SHA against `origin/main`).
-- Prior entry 2 (apply the 00:22Z payloads + commit + push) — RESOLVED-BY-EVENTS: a parallel
-  session already committed identical content (stash diffs prove it); checkpoint continuity
-  (this firing's issue-sorter window opens at 00:19:09Z) proves persistence.
-- Prior entry 3 (build-554 worktree removal) — CARRIED FORWARD as entry 3, now including the
-  reborn local branch `604-repo-cleaner-off-main-finding` (upstream gone).
+- Prior entry 1 (apply the 01:44Z payloads + commit + push) — DONE: checkpoint continuity
+  proves it (this firing's issue-sorter window opens at the applied 01:40:09Z mark); remote
+  `main` advanced `7af35e7..315f66e`.
+- Prior entry 2 (stash@{0} resolution) — CARRIED FORWARD as entry 2, state unverified this
+  firing (no stash inventory in this firing's evidence).
+- Prior entry 3 (build-554 worktree + branch removal) — CARRIED FORWARD, split into entries
+  3 and 4: the `604-...` branch is now stray with no worktree (runnable now); the worktree
+  itself sits on since-merged `608-...` (post-session).
