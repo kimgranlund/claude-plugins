@@ -39,3 +39,8 @@ estate is the working test of that bet.
 - When does a real release-grain commitment land? Until then, releases-loop homes (a `roadmap`
   index, a first RDD) stay unminted — deferred 2026-08-16 (Kim, ratification round), not an
   oversight.
+- 2026-08-18 (Kim, resolved via find-intent, gh#611): the HOMES half of the line above is lifted —
+  the `roadmap` index is minted at `.claude/docs/roadmap/roadmap-nonoun-plugins.md` and the
+  RDD↔Issue binding rule is recorded in docs' `doc-writing-rules` (RDD section). The question
+  itself stays open in its remaining half: no release-grain commitment is locked yet — the first
+  `locked` RDD (which lands in the roadmap's Now) closes this bullet whole.

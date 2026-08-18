@@ -31,6 +31,12 @@ otherwise durable state (`.claude/ops/`) plus live state (`gh` issues/PRs per th
 platform facts; `git` branches/worktrees). A standalone focus instruction reorders attention
 within the queue, never the entry contract or order below.
 
+A `backlog`/`roadmap`-labeled issue is parked strategy state, never ops debt (#611): standalone
+live-`gh` evidence excludes both labels at read time, and prior-plan carry-forward DROPS an
+entry whose id now carries either label — one "dropped: parked #NN" note in the rewritten plan,
+never a silent vanish — unless the dispatch's focus instruction names that id explicitly, which
+un-parks it for this dispatch only (still an attention scope, never a new entry contract).
+
 Queue order: (1) gated mutations already verified safe, (2) items blocking other work, (3)
 human-decision items (held approvals, batch confirms), (4) hygiene debt — refined by preloaded
 `blocked-by-rules`: a blocked entry never sits ahead of its own open blocker, named inline either

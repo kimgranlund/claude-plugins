@@ -80,6 +80,15 @@ git history).
    --search`, `gh pr list`; Linear MCP once connected) — read-only. A source that fails to reach
    does not advance ITS checkpoint entry; a source that succeeds does, independently — a partial
    firing never silently drops the window on the source that failed.
+
+   Discovery excludes parked items (#611): append `-label:backlog -label:roadmap` to each
+   `gh issue list --search` query, so a parked item edited while parked never re-enters triage on
+   its own (`gh pr list` is untouched — parking is an Issue concept). The exception takes the same
+   already-made-decision shape as an approve/deny dispatch (this seat's existing held-item
+   pattern): a dispatch that names a specific item id explicitly processes that item regardless of
+   parking labels — read it directly (`gh issue view <id>`) instead of relying on the search
+   window. No new ticket-filter concept is added; an explicit id in the dispatch prompt is the
+   whole mechanism.
 2. Classify each item's shape (defect / feature idea / generic task / ruling-shaped) per
    `github-issue-pr-primitives`' Bug/Task/Feature axis and this workspace's own `issue` skill's
    Phase-2 rule, cited not restated. **Ruling-shaped (ruled 2026-08-17):** an item that names a

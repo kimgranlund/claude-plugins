@@ -5,7 +5,8 @@ description: >-
   skips the sweep and mobilizes exactly those ids), then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
   adapter) labeled feature, bug, or task with no build in flight and no open `Blocked-by:`
-  dependency (#193) — a blocked ticket whose blocker is itself mobilizable gets the blocker
+  dependency (#193) — never a `backlog`/`roadmap`-parked ticket (#611; a ticket-id list naming
+  one still mobilizes it) — a blocked ticket whose blocker is itself mobilizable gets the blocker
   dispatched dependency-first instead of a bare skip (#558) — after one batched confirm (a
   leading `auto` argument skips it, for /goal loops and scheduled runs).
   Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
@@ -80,7 +81,11 @@ sweep surfaced that's actually buildable.
    issue/file/record) is reported in step 6 as "not found," excluded, never silently dropped. Every
    other exclusion below (label ambiguity, active claim, in-flight PR, `Blocked-by:`) still applies
    to each named id exactly as it would in a full sweep — a filter only narrows WHICH ids are
-   considered, never which checks run on them. Otherwise (SWEEP SCOPE) discover per the resolved
+   considered, never which checks run on them — with ONE deliberate exception (#611): the
+   `backlog`/`roadmap` parking exclusion does NOT apply to a filter-named id. Naming a parked id
+   explicitly is exactly how parked work gets picked up; every other check (label ambiguity,
+   claim, in-flight PR, `Blocked-by:`) still runs on it, and its pickup pays `dispatch-ticket`'s
+   Phase 3.5 de-stale before any build. Otherwise (SWEEP SCOPE) discover per the resolved
    backend:
    - **Git-native (Option B):** `gh issue list --state open --label feature --json
      number,title,labels,assignees`, the same for `--label bug`, and the same for `--label task`.
@@ -125,7 +130,14 @@ sweep surfaced that's actually buildable.
    empty `assignees`; local: no `claimed-by`), AND (git-native only) no
    `closedByPullRequestsReferences` node reads `OPEN`, **AND carries no open `Blocked-by:`
    dependency (#193)** — a THIRD, independent exclusion alongside the `in-flight` label pre-filter
-   (#199) and the open-PR check just named; neither changes or subsumes this one. Cross-check
+   (#199) and the open-PR check just named; neither changes or subsumes this one, **AND carries
+   neither parking label — `backlog`/`roadmap` (#611; git-native: the `labels` array already
+   fetched by this step's `--json` calls, a post-filter costing zero new `gh` calls; local/adapter
+   backends: no parking realization defined yet — disclosed in the step-6 report as N/A, never
+   silently assumed) — SWEEP-DISCOVERED CANDIDATES ONLY: a TICKET FILTER-named id bypasses this
+   one check per the exception carved out above, since naming a parked id explicitly is exactly
+   how parked work gets picked up; verbatim application of this predicate to a filter-named id
+   would silently defeat #611's entire pickup mechanism.** Cross-check
    `plan.md`'s own queue for the same ids; a ticket the sweep already flagged as a human-decision
    item or a blocker is excluded even if it carries a mobilizable label/kind — the sweep's own
    judgment on THAT item stands.
@@ -196,7 +208,7 @@ sweep surfaced that's actually buildable.
    record match reports as a named blocker; an under-specified task reports SKIPPED with no
    clarify round, never guessed at) apply automatically, since this dispatch never has an
    interactive user. Relay each returned typed result (path/URL, status, what shipped, a
-   recorded blocker, or a SKIPPED gap) as that ticket's mobilized outcome — the same output a
+   recorded blocker, a SKIPPED gap, or a `stale-premise` report with its evidence, #611) as that ticket's mobilized outcome — the same output a
    human running `/build-feature <id>` would see. `build-feature` stays
    `disable-model-invocation: true` — per-ticket dispatch genuinely needs `build-lead`'s own
    isolated agent context (parallel, independently-isolated builds), unlike step 1's sweep, which
@@ -262,9 +274,15 @@ sweep surfaced that's actually buildable.
    `auto`-prefixed argument as parsed in step 0 — so a step-0 misparse (a scope instruction that
    happens to start with the literal word "auto") is observable in the artifact of record, never
    silent. Then the sweep's own findings, then a table of every ticket CONSIDERED this run —
-   mobilized (dispatch + outcome: succeeded / failed / still in flight), or skipped-and-why (not
+   mobilized (dispatch + outcome: succeeded / failed / still in flight), a `stale-premise` result
+   (#611 — a relayed `build-lead` outcome distinct from SKIPPED and from a named blocker; one-line
+   evidence summary in the table, no breakdown paragraph — nothing is blocking it, the ticket
+   itself is wrong, and the evidence already sits on the record), or skipped-and-why (not
    confirmed, in flight already — an open PR, or a claim with no PR open yet (#184) — blocked by
-   an open `Blocked-by:` dependency (#193, naming the still-open blocker id) —
+   an open `Blocked-by:` dependency (#193, naming the still-open blocker id) — parked
+   (`backlog`/`roadmap` label, #611 — step 2's own label-list call fetches these ids same as any
+   other candidate, then excludes them via its post-filter; this row is that exclusion made
+   visible, not a stale hand-check — named here so a boundary case is observable, not invisible) —
    wrong/ambiguous label, too vague to build unattended — the seat SKIPPED, no clarify round
    available on this path — or excluded by the sweep's own judgment).
 
@@ -400,4 +418,5 @@ overlapping targets still is), a dispatch leaving no Findings-equivalent entry g
 1 duplicates the fan-out in its own prose instead of the direct `Skill(harness:sweep-chores)` call, or an UNATTENDED run
 is inferred from context rather than the explicit `auto` token, or a TICKET FILTER (#449) is
 forwarded into `sweep-chores`' own seat-scope slot instead of narrowing step 2's discovery
-directly.
+directly, or a parked (`backlog`/`roadmap`-labeled) ticket is mobilized from a SWEEP SCOPE (a
+TICKET FILTER naming it explicitly is the one legitimate path, #611).
