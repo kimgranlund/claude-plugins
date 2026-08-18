@@ -2,19 +2,14 @@
 name: recurrence-audit
 kind: skill
 description: >
-  Instrument IDR-0006's estate success measures — the incident-recurrence rate (primary) and
-  the /check-routing routing-eval pass-rate trend (secondary). Walks the estate's incident
-  ledger (gate checks, doctrine bullets, fixtures citing an incident id) for the seeded
-  `LEDGER-CLASS:` convention, computes per-class recurrence live, and appends a dated trend row.
-  Use for "is our incident-recurrence rate actually being measured", "walk the ledger and tell
-  me which incident classes came back", "what's IDR-0006's primary measure reading this
-  release", "check whether a mechanized gate or doctrine fix has recurred", "track the
-  routing-eval pass-rate trend release over release". Read-only, report-only, appends the trend
-  file — never rewrites doctrine or gates. NOT for the menu-rent/collision series
-  (attention-audit); NOT for naming conformance (naming-audit); NOT for prose bloat
-  (bloat-audit); NOT for running the routing simulation itself (harness check-routing — this
-  skill only persists its output); NOT for an arbitrary caller-supplied pattern with no
-  incident-class shape (pattern-audit).
+  Instrument IDR-0006's estate success measures — incident-recurrence rate (primary) and the
+  /check-routing pass-rate trend (secondary). Walks the incident ledger (gate checks, doctrine
+  bullets, fixtures) for the seeded `LEDGER-CLASS:` convention and appends a dated trend row.
+  Use for "is our incident-recurrence rate being measured", "walk the ledger for classes that
+  came back", "track the routing-eval pass-rate trend release over release". NOT
+  menu-rent/collision (attention-audit); NOT naming conformance (naming-audit); NOT prose bloat
+  (bloat-audit); NOT running check-routing itself; NOT an arbitrary pattern sweep
+  (pattern-audit).
 author: kim
 created: 2026-08-18
 last_updated: 2026-08-18
@@ -30,6 +25,8 @@ allowed-tools:
 ---
 
 # recurrence-audit
+
+Read-only, report-only — this skill appends the trend file, never rewrites doctrine or gates.
 
 Deterministic measurement lives in `scripts/` — the seeded-class inventory and the trend file's
 append both come from a script run; a count derived in prose is a defect. This skill's job is

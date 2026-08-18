@@ -202,6 +202,19 @@ BOTH.
   itself, which already blends menu-rent counts and dead/stolen/leaked routing counts in one
   row — precedent for co-locating two distinct series in one file's columns, never one blended
   quotient column.
+- **Procedure text uses `<this skill>/scripts/...`, not `${CLAUDE_PLUGIN_ROOT}`.** A
+  fresh-context skill-checker pass (2026-08-18) flagged this against `skill-writing-rules`' own
+  stated preference (line 105: `${CLAUDE_SKILL_DIR}`/`${CLAUDE_PLUGIN_ROOT}` over a hardcoded
+  path). Kept anyway: `pattern-audit`'s own LLD (lld-0004, Interfaces) already ruled this exact
+  point for this plugin family — `<this skill>` "chosen over `${CLAUDE_PLUGIN_ROOT}` for
+  consistency within the family," matching every sibling's own procedure text
+  (`bloat-audit`, `attention-audit`, `naming-audit`, `pattern-audit` all use the identical
+  phrasing). A new skill silently deviating from its own immediate siblings would be a bigger
+  inconsistency than the cited rule gap; the deviation is pattern-audit's ruling, reused, not a
+  fresh one. Frontmatter's `kind`/`author`/`created`/`last_updated` fields (also flagged, "not in
+  the runtime field set") are the same call: every authorkit sibling carries them, `skill_lint.py`
+  raises no finding against them, and sibling-parity outranks trimming inert-but-harmless fields
+  from one skill alone.
 - **Script names `scan.py`/`trend.py` reused across skills, not renamed to avoid collision.**
   `estate-audit-agent`'s own tool grants already list `Bash(python3 */scripts/scan.py *)` and
   `Bash(python3 */scripts/trend.py *)` scoped by path glob, not by skill — a second skill using
