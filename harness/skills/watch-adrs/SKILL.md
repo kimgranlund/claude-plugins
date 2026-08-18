@@ -3,8 +3,7 @@ name: watch-adrs
 description: >-
   decision-watcher's per-firing procedure — classify the ADR corpus vs a content-hash checkpoint,
   judge new/amended/superseded Decisions, queue candidates, advance the checkpoint; plus its
-  Revalidation mode — sampled round-robin RE-TEST of accepted ADR Decisions, locked IDR
-  falsification clauses + locked RDD Acceptance sections into a confirmed/falsified/untestable verdict (idr-0009). Use for how the
+  Revalidation mode — sampled round-robin RE-TEST of accepted-ADR / locked-IDR / locked-RDD claims into a confirmed/falsified/untestable verdict (idr-0009). Use for how the
   review works, ADR dialects, ratification-vs-supersession, failure branches, or revalidation
   sampling/verdict routing. NOT write-sandbox boundary (ops-write-sandbox-rules); NOT running a
   sweep (dispatch decision-watcher); NOT the ratified re-validation CONCEPT/cadence (idr-0009/
@@ -297,7 +296,7 @@ place, never runs `/make-pack` or `/make-skill` itself, never approves or declin
 its own judgment — only a human decides, this seat only executes an ALREADY-MADE decision (name
 the command, clear the queue row) exactly as `issue-sorter` executes an already-made friendlies
 decision. **The Revalidation mode above carries the identical boundary**: it never files
-`file-bug`/`file-task` itself, never edits a locked IDR or an accepted ADR (both are append-only
+`file-bug`/`file-task` itself, never edits a locked IDR, a locked RDD, or an accepted ADR (all are append-only
 under this workspace's own T4 discipline regardless), and never decides a QUEUED `falsified`/
 `untestable` finding is "resolved" on its own — only a human clearing the queue row does that.
 **The one exception, named rather than hidden:** a `confirmed` verdict IS this seat's own final
