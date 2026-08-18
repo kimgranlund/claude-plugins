@@ -122,6 +122,12 @@
       "prompt": "Is this fact knowledge worth keeping, or just conversation noise — does it earn a durable entry?",
       "expect": "no-trigger",
       "note": "owner: harness save-lessons — judging the bar, not writing the doc; reciprocal fence, 2026-08-15 (attention-audit behavior run found the unfenced twin)"
+    },
+    {
+      "id": "n13",
+      "prompt": "harvest this project's domain knowledge from its PRDs and ADRs into a scored corpus",
+      "expect": "no-trigger",
+      "note": "owner: project-facts (#612) — discovery + two-axis scoring procedure, not a plain reference-doc write-up; reciprocal fence minted with that skill, 2026-08-18"
     }
   ]
 }

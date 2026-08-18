@@ -1,0 +1,86 @@
+{
+  "skill": "project-facts",
+  "note": "Minted with the skill, ticket #612 (harvest-domain-knowledge). Positives span imperative/diagnostic/indirect phrasings of domain-knowledge harvesting. Negatives drawn from the neighbors' trigger vocabulary this skill's description fences against: make-reference, make-rubric, research-methods, save-lessons, and the (not-yet-built) project-context sibling (#613).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "extract the domain knowledge from this project",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "write up the business logic and architecture of this codebase as a reference doc",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "what does this codebase actually do, explained for a non-engineer",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "harvest what this project knows about itself into a corpus",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "score the topic zones in our domain-knowledge doc on both the outside-in and inside-out lenses",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "pull the unique business IP structures out of these PRDs and ADRs into a readable doc for stakeholders",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "discover the main topic zones this project's domain knowledge breaks into",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "write a reference doc for this skill's own references/ file",
+      "expect": "no-trigger",
+      "note": "owner: make-reference — generic reference authoring with no discovery/scoring procedure"
+    },
+    {
+      "id": "n02",
+      "prompt": "score this standalone rubric's anchors and aggregation rule",
+      "expect": "no-trigger",
+      "note": "owner: make-rubric — rubric mechanics, not this skill's harvest procedure"
+    },
+    {
+      "id": "n03",
+      "prompt": "investigate why this feature's score regressed and find the root cause",
+      "expect": "no-trigger",
+      "note": "owner: research-methods — measured investigation of an already-scorable system"
+    },
+    {
+      "id": "n04",
+      "prompt": "is this fact worth keeping as a durable knowledge-pack entry, or just conversation noise",
+      "expect": "no-trigger",
+      "note": "owner: harness save-lessons — judging the bar, not harvesting a corpus"
+    },
+    {
+      "id": "n05",
+      "prompt": "extract this project's context so the coding agent's CLAUDE.md and rules stay current",
+      "expect": "no-trigger",
+      "note": "owner: the project-context sibling (#613, agent/harness-facing consumer) — this skill is the human/business-facing corpus"
+    },
+    {
+      "id": "n06",
+      "prompt": "generate an llms.txt index for our docs site",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "capture this bug report as a durable ticket",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "audit this prompt's wording for potency",
+      "expect": "no-trigger"
+    }
+  ]
+}

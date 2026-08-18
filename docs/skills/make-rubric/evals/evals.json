@@ -121,6 +121,12 @@
       "id": "n12",
       "prompt": "review my CLAUDE.md — it is being ignored",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "score every topic zone in this domain-knowledge corpus through both the outside-in and inside-out lenses",
+      "expect": "no-trigger",
+      "note": "owner: project-facts (#612) — runs its own harvest-core.md rubric via its own harvest procedure, not a bare rubric authoring/evaluate ask; reciprocal fence minted with that skill, 2026-08-18"
     }
   ]
 }
