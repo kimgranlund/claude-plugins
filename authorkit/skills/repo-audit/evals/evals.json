@@ -13,6 +13,7 @@
     {"id": "n04", "prompt": "Drive the approved overhaul plan through its execution waves.", "expect": "no-trigger", "comment": "owner: overhaul-execute — mutates through gated waves; this skill never mutates"},
     {"id": "n05", "prompt": "Sweep the ops queue and give me a prioritized action list.", "expect": "no-trigger", "comment": "owner: harness sweep-chores — live ops/work-state, not authorkit's static audit instruments"},
     {"id": "n06", "prompt": "What's the current state of this repo — branches, open PRs, drift since last check?", "expect": "no-trigger", "comment": "owner: harness check-state — point-in-time work-state, not the audit battery"},
-    {"id": "n07", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — one instrument, and only when a concrete pattern is supplied"}
+    {"id": "n07", "prompt": "Sweep the repo for every match of this caller-supplied regex and give me the dataset.", "expect": "no-trigger", "comment": "owner: pattern-audit — one instrument, and only when a concrete pattern is supplied"},
+    {"id": "n08", "prompt": "Check this estate against ADR-0022's reconstructibility contract — what would a fresh clone not recover?", "expect": "no-trigger", "comment": "owner: harness:check-reconstructibility (2026-08-18, gh#627) — estate RECOVERY, a different axis from this skill's naming/bloat/attention/pattern/doctrine GOVERNANCE battery"}
   ]
 }

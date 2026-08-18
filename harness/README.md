@@ -30,6 +30,7 @@ The plugin name (`harness`, distribution taxonomy) is deliberately disjoint from
 | `skills/check-entry-file` | Command | user-only (`/check-entry-file`) | Classify every line → approval → migrate (landing artifact first) → cut → verify |
 | `skills/check-everything` | Orchestrator | user-only (`/check-everything`) | Wave 2: inventory → lint sweep → standards-preloading fan-out → boundary-validated aggregation → terminal triage with three-strikes promotion |
 | `skills/check-state` | Procedural skill | both (`/check-state`) | Read-only work-state report: four bundled collectors (git branches/worktrees/stashes · tickets/PRs via gh · ROADMAP/PLAN/TICKET docs · checkpoint delta) cross-referenced into Blocked-on-you → Ready-to-close → Drift → Delta → Counts, every finding naming its owning command; the run's one write is `.claude/ops/state-checkpoint.json` |
+| `skills/check-reconstructibility` | Procedural skill | both | ADR-0022's own instrument ("the repo is the backup"): a read-only sweep reporting what a fresh machine + clone of `origin/main` could NOT recover today, classified into the ADR's own trichotomy (committed / enrolled-with-mitigation / defect) plus an OPEN bucket for exception 4's own still-unruled mitigation mechanism — `scripts/audit_reconstructibility.py` sweeps git-ignored-and-present paths, `.claude/ops/` tracking, a global `core.excludesFile` dependency (explicit AND git's own implicit `~/.config/git/ignore` default), and the four named exceptions (memory dir, plugin cache, credentials, user-scoped state) |
 | `skills/what-shipped` | Procedural skill | both (`/what-shipped`) | Windowed activity report: bundled `collect_github.py` (PR merged/opened/open-now + issues, release-bot noise counted but excluded via `.author.type`, saturation-guarded, `## OK` trailer as the completeness signal) + the doc-writing-rules backend-resolver seam for tickets (local files / GitHub Issues / adapter), joined ticket↔PR with the residue — tickets with no PR — surfaced; report groups ≤5 workstreams with owners and grounded line counts |
 | `skills/plugin-writing-rules` | Declarative skill | model-only | Plugins: atomic load, version-as-cache-key, reload semantics, paths/state, trust; the three load-failure classes as a ledger |
 | `skills/adopt-plugin` | Procedural | both (`/adopt-plugin`) | Declare external plugins/marketplaces in a repo's `.claude/settings.json` (`extraKnownMarketplaces` + self-hosted marketplace.json wrapper for bare plugin repos) so contributors who trust the repo get the install prompt — portable past the authoring machine |
@@ -128,6 +129,17 @@ This plugin is the **source of record** for the `skill-*` family *and*, as of v1
 If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the lint path from a skill body becomes `${CLAUDE_SKILL_DIR}/../../scripts/skill_lint.py`.
 
 Directories align with plugin names (ADR-0007).
+
+v3.12.0 · 2026-08-18 · closes #627 (head of the six-instrument wave, #622–#627): new skill
+`check-reconstructibility` — ADR-0022's own instrument, a read-only sweep classifying every
+load-bearing item a fresh machine + clone of `origin/main` could not recover into the ADR's own
+trichotomy (committed / enrolled-with-mitigation / defect) plus an OPEN bucket for exception 4's
+still-unruled mitigation mechanism; `scripts/audit_reconstructibility.py` (selftested) sweeps
+git-ignored-and-present paths, `.claude/ops/` tracking, and a global `core.excludesFile`
+dependency (both the explicit config AND git's own implicit `~/.config/git/ignore` default — the
+day-one run against this estate found `.claude/settings.local.json`'s own ignore rule resolves
+entirely through the implicit path, invisible to a fresh clone). Reciprocal no-trigger fences
+added to `clean-git` and authorkit's `repo-audit` evals suites.
 
 v3.11.0 · 2026-08-18 · closes #620: `check-state` gains a `--fleet <repo1,repo2,...>` scope — a
 fourth collector, `fleet_state.py` (selftested), rolling up per-repo open work/in-flight claims,
