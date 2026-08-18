@@ -44,3 +44,10 @@ estate is the working test of that bet.
   RDD↔Issue binding rule is recorded in docs' `doc-writing-rules` (RDD section). The question
   itself stays open in its remaining half: no release-grain commitment is locked yet — the first
   `locked` RDD (which lands in the roadmap's Now) closes this bullet whole.
+- 2026-08-18 gap-review draft spine, awaiting one batched ratification round (gh#622–#627; the
+  tickets are the review's durable record): `idr-0008` user signal path (gh#622) · `idr-0009`
+  doctrine re-validation (gh#623) · `idr-0010` estate economy (gh#624) · `idr-0011` estate
+  rhythm (gh#626) · `adr-0021` trust tiers (gh#625) · `adr-0022` repo-is-the-backup (gh#627).
+  The user+economy+truth trio (idr-0008/0010/0009) is one outer-loop family. On Kim's lock each
+  IDR line moves to Confirmed (the idr-0007 pattern) and each ADR flips to accepted; each
+  record's first instrument is a follow-up seed in its ticket, not part of the draft PR.
