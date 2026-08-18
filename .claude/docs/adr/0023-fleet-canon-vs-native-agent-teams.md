@@ -1,7 +1,7 @@
 ---
 doc-type: adr
 id: adr-0023
-status: proposed
+status: accepted
 date: 2026-08-18
 owner: kim.granlund
 supersedes: null
@@ -159,3 +159,7 @@ condition under which it is superseded, and nothing ruled here forecloses adopti
 
 <!-- LEDGER CLASS: once status: accepted, this file is append-only. To change the decision,
      write a new ADR with supersedes: this id — the hook blocks edits here. -->
+
+## Ratification
+
+Ratified by Kim Granlund via a live `AskUserQuestion` round on 2026-08-18 (marshal session), decision presented verbatim: (a) fleet stays canon, (b) fact-shaped re-evaluation trigger + #673 re-check, (c) fleet-native plan-approval write-gate pursued as a follow-up ticket minted by the marshal. Accepted → append-only from this point (T4).
