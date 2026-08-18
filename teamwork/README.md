@@ -108,6 +108,20 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.23.1 · 2026-08-18 · closes #608: `dispatch-ticket`'s bug branch (Phase 2's `kind: bug` bullet)
+gains claim-provenance forwarding — live repro adiahealth/gen-ui-kit#1593 showed the redirect to
+`docs:file-bug` deadlocking against its own lane's claim (a coordinator's own on-behalf-of claim,
+per `fleet-rules`' Section 2 amendment, read by file-bug's dedup as a competing seat). Fix:
+the `[redirected-from:dispatch-ticket]` marker now carries the claim comment's URL
+(`claim:<claim-comment-url>`) when one already sits on the record at hand-off, so file-bug's
+Phase 5 can tell this lane's own authorization from a stranger's rather than standing down either
+way. Rejected alternative (recorded inline): deferring this skill's own claim until after
+file-bug adopts the record — this skill's bug branch already claims nothing of its own to defer,
+so an ordering fix can't repair a claim it never makes, and reordering would reopen the
+double-dispatch window Phase 3's claim-then-isolate discipline exists to close (#183/#184).
+Docs' `file-bug` gains the matching Phase 5 read-and-compare clause in the same PR (docs
+1.15.2 → 1.15.3). Fresh skill-checker pass on this skill's own diff; no evals touched (no
+description change).
 v2.23.0 · assembled 2026-08-17 · closes #586: orchestrator seat naming converged on ADR-0020's
 marshal vocabulary — the session-name convention moves `{repo}-team-lead` → `{repo}-marshal`
 across every live canon surface: `fleet-bootstrap` SKILL.md (Phase 1, its 3 print/append sites),

@@ -86,9 +86,9 @@ report that routing and stop; docs' seats own it.
 
 - **`kind: bug`** → this is `file-bug`'s work; isolate BEFORE handing off (Phase 3's isolate
   bullet runs now — no claim, `file-bug` owns its own record lifecycle), then invoke `file-bug`
-  via the Skill tool with the ticket id, seed prefixed `[redirected-from:dispatch-ticket]`
-  (file-bug's marker protocol — the round budget was already spent here, and its forked run has
-  no other way to know). Safe: a `context: fork` skill invoked inside a worktree-isolated context
+  via the Skill tool with the ticket id, seed prefixed `[redirected-from:dispatch-ticket]` — or the
+  verified form `references/bug-claim-provenance.md` names, if a claim sits on the record. Safe: a
+  `context: fork` skill invoked inside a worktree-isolated context
   never escapes it (measured 2026-08-11) — so file-bug's fork stays contained. The RECORD is the
   return channel, not the transcript: a fork invoked from inside an agent dispatch runs in the
   background and its completion routes to the ROOT session, not the invoking seat (verified A4,
