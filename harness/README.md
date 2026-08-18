@@ -130,7 +130,24 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.13.0 · 2026-08-18 · closes #623: `decision-watcher`/`watch-adrs` gains a Revalidation mode
+(idr-0009) — a sampled, round-robin RE-TEST of already-accepted ADR Decisions and locked IDR
+falsification clauses into a confirmed/falsified/untestable verdict per claim, distinct from the
+existing forward classify-new/amended/superseded procedure. New bundled script
+`scripts/revalidation_checkpoint.py` (selftested against the real corpus's phrasing variance —
+idr-0001's Proof section never uses the word "Falsifies" at all) imports and reuses
+`adr_checkpoint.py`'s dialect parsers rather than re-deriving them; falsified/untestable verdicts
+queue with a mandatory named owner, never rewritten by this agent — the amend/supersede path stays
+human-ratified; a `confirmed` verdict is the one call this mode resolves entirely on its own, so
+the report lists every confirmed claim individually rather than folding it into a bare tally.
+Cadence deliberately unassigned (idr-0011/gh#626 owns it). Design: lld-0016 (renumbered twice —
+lld-0014 and lld-0015 were both claimed by #627/#626's own concurrently-merged instruments before
+this PR opened). Instrument shape decided against a sibling seat per idr-0007's job-evidence test.
+`watch-adrs` description/evals + `decision-watcher` agent description/examples updated in the same
+change.
+
 v3.12.1 · 2026-08-18 · closes #633 (harness slice, docs+teamwork siblings same PR; renumbered 3.11.1 -> 3.12.1: open PR #636 claims 3.12.0 for this plugin, version_claim_check.py's rebase-and-rebump rule applied — this is the later claimant): `docs_check.py` gains R7 — a duplicate `id:` frontmatter check across `.claude/docs/**`'s adr/idr/lld/rdd families, keyed on (family, number) not the full string, reproducing the 2026-08-18 incident where two parallel builds both minted `lld-0011`. Runs via G10's existing wiring (no new release_gate G-check) for every plugin's gate; a deliberate, documented self-contained duplicate of `docs/scripts/doc_lint.py`'s own new T10 (same rule) rather than a cross-plugin import, per the hard plugin-boundary rule. Selftest fixtures added (positive + two negative controls). `release_gate.py harness` clean.
+
 v3.12.0 · 2026-08-18 · closes #627 (head of the six-instrument wave, #622–#627): new skill
 `check-reconstructibility` — ADR-0022's own instrument, a read-only sweep classifying every
 load-bearing item a fresh machine + clone of `origin/main` could not recover into the ADR's own
