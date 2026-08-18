@@ -1,14 +1,14 @@
 ---
 name: watch-adrs
 description: >-
-  The decision-watcher agent's own per-firing procedure — classify the ADR corpus against a
-  content-hash checkpoint, judge every new/amended/newly-superseded Decision, queue candidates
-  (harvest or stale-citation), then advance the checkpoint. Use when asked how decision-watcher's
-  ADR review actually works, what its three supported ADR-corpus dialects are, how it tells a
-  ratification from a supersession, or what its failure branches are for an unreadable corpus or
-  an unattended firing. NOT for the write-sandbox boundary (ops-write-sandbox-rules); NOT for
-  running a sweep (dispatch the decision-watcher agent); NOT for issue-sorter's own watch/trust
-  flow (watch-tickets).
+  decision-watcher's per-firing procedure — classify the ADR corpus vs a content-hash checkpoint,
+  judge new/amended/superseded Decisions, queue candidates, advance the checkpoint; plus its
+  Revalidation mode — sampled round-robin RE-TEST of accepted ADR Decisions + locked IDR
+  falsification clauses into a confirmed/falsified/untestable verdict (idr-0009). Use for how the
+  review works, ADR dialects, ratification-vs-supersession, failure branches, or revalidation
+  sampling/verdict routing. NOT write-sandbox boundary (ops-write-sandbox-rules); NOT running a
+  sweep (dispatch decision-watcher); NOT the ratified re-validation CONCEPT/cadence (idr-0009/
+  idr-0011 — this is the instrument, not the ruling).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -195,13 +195,107 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
    declined candidate" rule). The updated scratch content supersedes step 6's payload in the final
    report — a batched confirm always leaves the report carrying the POST-confirm state.
 
+## Revalidation mode, one firing (idr-0009 — re-test accepted doctrine, don't just accumulate it)
+
+A DIFFERENT verb from the classify/judge/queue procedure above, on the SAME agent — a mode, not a
+sibling seat (`lld-0016` carries the job-evidence reasoning). Where the forward procedure judges
+**new/changed** Decisions for knowledge-pack worthiness, this mode RE-TESTS **already-accepted**
+Decisions and locked IDR falsification clauses against present-day reality, on a sampled rotation —
+never the whole corpus every firing (idr-0010's own economy concern: cost proportional to a bounded
+sample, not to how large the doctrine ledger has grown). The concept this mode instruments is
+ratified at `idr-0009` (locked, append-only — never edited by this agent or by anyone; a
+falsification of the CONCEPT itself routes to a superseding IDR, never a patch here). Cadence
+(how often this mode should fire) is **explicitly out of scope** — `idr-0011` owns it, open at
+gh#626; this mode is invokable on-demand or via the same session-scoped `CronCreate` the forward
+mode already uses, with an optional `--n` sample size (default 5). **Directory sources only** —
+unlike the forward mode, this mode's `<adr-source>`/`<idr-source>` args do not accept the
+monolithic dialect (`revalidation_checkpoint.py` raises `SourceUnreadable` on a bare file path;
+report that as an unsupported shape, never as a missing source).
+
+1. **Sample the next claims due for re-test — don't advance yet.** `python3
+   "${CLAUDE_PLUGIN_ROOT}/scripts/revalidation_checkpoint.py" sample <adr-source> <idr-source>
+   --checkpoint .claude/ops/revalidation-checkpoint.json --n <N>` — non-mutating, deterministic
+   round-robin over a combined, sorted list of every ACCEPTED ADR's id and every LOCKED IDR's id.
+   The report names each sampled claim's id, kind (`adr-decision` | `idr-proof`), source path, and
+   its FULL claim text — the whole `## Decision` section for an ADR, the whole `## Proof` section
+   for an IDR, never a narrower "just the Falsifies clause" extraction (why: `revalidation_
+   checkpoint.py`'s own module docstring — the real corpus falsified that narrower design during
+   authoring). `sample` and `advance` are two separate calls, the same
+   crash-safe split as the forward mode's `classify`/`advance` — a firing that dies mid-judgment
+   leaves the cursor untouched, so the same claims are re-sampled next firing rather than silently
+   skipped.
+2. **Judge each sampled claim, tri-state.** For each claim's text, test its own stated condition
+   against the live estate as it actually stands today — this is real judgment, not a mechanical
+   check, and the whole point of the mode: **confirmed** (the claim still holds, nothing to do —
+   deliberately NOT queued anywhere, since a queue that grew a row per confirmed claim would bury
+   idr-0009's own falsification signal — repeated all-confirmed sweeps alongside independently
+   discovered doctrine drift — in noise); **falsified** (the claim's own stated condition no longer
+   holds against present reality — a concrete, named reason, not a vague doubt); **untestable**
+   (the claim's text does not actually let you check it — too vague, no stated falsification
+   condition, or empty extraction because the record carries no `## Proof`/`## Decision` section at
+   all). An empty claim text (the extraction found nothing) is reported `untestable` immediately,
+   never silently skipped or defaulted to `confirmed`.
+3. **Queue every `falsified`/`untestable` verdict — against a scratch copy, always with a named
+   owner.** Copy `.claude/ops/revalidation-queue.json` to a scratch path first, then `python3
+   "${CLAUDE_PLUGIN_ROOT}/scripts/revalidation_checkpoint.py" queue-add <scratch-path> --claim <id>
+   --kind falsified|untestable --evidence "<what broke, or why it resists a check>" --owner
+   <name>` — idempotent by (claim, kind), same discipline as the forward mode's `adr_queue.py`.
+   **`--owner` is mandatory, not a convenience field** — idr-0009's own open question ("who
+   executes a falsified verdict") is closed structurally here: read the claim's own record
+   frontmatter `owner:` field and pass it through, never leave a queued finding ownerless. **No
+   `owner:` field on the record** (the table/bold-metadata ADR dialects carry no frontmatter at
+   all, so this is only ever an ADR claim, never an IDR one) → pass the dispatching human's own
+   name (or `unassigned` on an unattended firing), and say so explicitly in `--evidence` — never a
+   fabricated name and never a silent stall waiting for one. A `confirmed` verdict queues nothing.
+4. **Advance the cursor — against a scratch copy, only after every sampled claim has been judged
+   and queued.** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/revalidation_checkpoint.py" advance
+   <adr-source> <idr-source> --checkpoint <scratch-path> --n <the count actually sampled>`.
+5. **Report — payload, not a write**, same fenced target-pathed contract as the forward mode's
+   step 6 (`.claude/ops/revalidation-checkpoint.json`, `.claude/ops/revalidation-queue.json`).
+   **A tri-state TALLY alone is never the contract** — idr-0009's own Confirms condition
+   (a machine-readable report of per-claim verdicts) requires every sampled claim listed by id,
+   naming its verdict and a one-line reason, `confirmed` rows included: a `confirmed` verdict is
+   the one call this mode makes and resolves entirely on its own (Boundaries, below), so it is the
+   row most in need of a visible, auditable trace — the exact rubber-stamp failure mode idr-0009's
+   own Proof section names. **On a `falsified` candidate**, name `file-bug`/`file-task` (whichever
+   the finding's shape earns) as the next command — the queued row's owner + evidence are the seed
+   — never run by this agent (Boundaries, below, extended not re-derived). **On an `untestable`
+   candidate**, name a `file-task` ticket against the owning record asking for an appended
+   amendment (or superseding record — both stay append-only per T4) restating the clause
+   checkably — idr-0009's own lean ("flag-for-rewrite, never silent exemption"). If a human is
+   present, offer the batched confirm exactly as the forward mode does (`queue-pending` on the
+   scratch path, then ONE `AskUserQuestion` round for everything outstanding — never one per
+   candidate).
+6. **Clear resolved rows** the same way the forward mode's step 9 does — `queue-clear <scratch-path>
+   --ids <id[:kind],...>`, bare id or precise `id:kind`.
+
+**Failure branches, this mode only** (the forward mode's own catalog above still applies where it
+overlaps — an unreadable ADR/IDR source, a halt between sample and advance):
+
+- Either named source directory doesn't exist → `SourceUnreadable`, reported 🔴 blocked, never a
+  quiet "nothing to sample" (same discipline as the forward mode's loud unsupported-shape guard).
+- A sampled claim's extraction is empty → `untestable` immediately (step 2), never `confirmed` by
+  default and never silently dropped from the report.
+- Dispatched unattended (no interactive user) → steps 1–4 and the report still run in full; step
+  5's batched confirm is named as deferred, never attempted blind — identical to the forward mode.
+- A claim already queued `falsified`/`untestable` comes up again on a LATER rotation before its
+  candidate was resolved → `queue-add`'s idempotent update-in-place (step 3) refreshes the evidence
+  rather than growing a duplicate row, same as the forward mode's candidate idempotency.
+
 ## Boundaries — detect and queue only
 
 Never writes a `references/*.md` file, never writes a `SKILL.md`, never fixes a stale citation in
 place, never runs `/make-pack` or `/make-skill` itself, never approves or declines a candidate on
 its own judgment — only a human decides, this seat only executes an ALREADY-MADE decision (name
 the command, clear the queue row) exactly as `issue-sorter` executes an already-made friendlies
-decision. Work-item intake routes to `issue-sorter`; repo hygiene routes to `repo-cleaner`; a fact
+decision. **The Revalidation mode above carries the identical boundary**: it never files
+`file-bug`/`file-task` itself, never edits a locked IDR or an accepted ADR (both are append-only
+under this workspace's own T4 discipline regardless), and never decides a QUEUED `falsified`/
+`untestable` finding is "resolved" on its own — only a human clearing the queue row does that.
+**The one exception, named rather than hidden:** a `confirmed` verdict IS this seat's own final
+call, made and closed with no human gate at all — which is exactly why step 5 requires every
+confirmed row listed in the report with its reason, never folded into a bare tally. Work-item
+intake routes to `issue-sorter`; repo hygiene routes to `repo-cleaner`; a fact
 that isn't from a ratified ADR routes to `save-lessons`'s own standing detectors directly.
 
 ## Failure branches
@@ -236,3 +330,13 @@ report-path mention at all (step 6's no-op clause)**. NOT done while an ADR's de
 a candidate is queued twice, a stale citation is found but not named, the checkpoint advances
 before its delta was queued, this agent writes any knowledge-pack or state path itself instead of
 returning it as payload, or a no-op firing's report narrates a report path it never fences.
+
+**Revalidation mode is done** when every sampled claim carries a tri-state verdict, every
+`falsified`/`untestable` verdict is queued (new or updated, with a named owner) on the scratch
+copy, the scratch cursor has advanced only after that queueing succeeded, and the report carries a
+per-claim verdict table (id · kind · verdict · one-line reason, `confirmed` rows included) plus
+both revalidation files' full content as target-pathed payload — naming the next `file-bug`/
+`file-task` command per queued candidate, never run by this agent. NOT done while a sampled claim
+goes unjudged, a claim text extracted empty gets defaulted to `confirmed` instead of `untestable`,
+a falsified/untestable row queues with no owner, a `confirmed` verdict is folded into a bare tally
+with no per-claim row, or the cursor advances before every sampled claim was judged and queued.

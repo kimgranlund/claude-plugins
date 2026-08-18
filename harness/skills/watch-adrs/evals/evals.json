@@ -1,6 +1,6 @@
 {
   "skill": "watch-adrs",
-  "note": "New 2026-08-13 (issue #205) — decision-watcher's per-firing procedure, extracted out of the 240-line agent body into a preloaded skill. Negatives: the write-sandbox mechanism (ops-write-sandbox-rules), and actually running the seat (dispatch decision-watcher directly, no skill trigger).",
+  "note": "New 2026-08-13 (issue #205) — decision-watcher's per-firing procedure, extracted out of the 240-line agent body into a preloaded skill. Gained the Revalidation mode 2026-08-18 (issue #623, idr-0009) — a sampled re-test of already-accepted doctrine, a different verb on the same agent. Negatives: the write-sandbox mechanism (ops-write-sandbox-rules), actually running the seat (dispatch decision-watcher directly, no skill trigger), and the ratified re-validation CONCEPT/cadence themselves (idr-0009/idr-0011 — this skill is the instrument, not the ruling).",
   "cases": [
     { "id": "t01", "prompt": "how does decision-watcher tell a ratification from a supersession", "expect": "trigger" },
     { "id": "t02", "prompt": "what are the three ADR corpus dialects decision-watcher's checkpoint script supports", "expect": "trigger" },
@@ -8,9 +8,14 @@
     { "id": "t04", "prompt": "what happens when decision-watcher's classify script exits 1 with an unsupported shape", "expect": "trigger" },
     { "id": "t05", "prompt": "how does decision-watcher decide a newly superseded ADR has a stale citation somewhere", "expect": "trigger" },
     { "id": "t06", "prompt": "what does decision-watcher do differently on an unattended scheduled firing vs an interactive one", "expect": "trigger" },
+    { "id": "t07", "prompt": "how does decision-watcher's revalidation mode sample which ADR Decisions and IDR clauses to re-test", "expect": "trigger" },
+    { "id": "t08", "prompt": "what happens when a re-validation sweep finds a falsified or untestable claim", "expect": "trigger" },
+    { "id": "t09", "prompt": "why does the revalidation mode extract the whole Proof section instead of just the Falsifies clause", "expect": "trigger" },
     { "id": "n01", "prompt": "why doesn't decision-watcher just write its checkpoint file directly", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules (2026-08-15, issue #280: description's NOT-clause trimmed to reference that skill by name only)" },
     { "id": "n02", "prompt": "run the decision-watcher sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, not a skill trigger" },
     { "id": "n03", "prompt": "how does issue-sorter classify a filed item's shape", "expect": "no-trigger", "comment": "owner: watch-tickets" },
-    { "id": "n04", "prompt": "which repo-cleaner scripts are gated to run directly vs propose-only", "expect": "no-trigger", "comment": "owner: clean-git" }
+    { "id": "n04", "prompt": "which repo-cleaner scripts are gated to run directly vs propose-only", "expect": "no-trigger", "comment": "owner: clean-git" },
+    { "id": "n05", "prompt": "should re-validation sweeps be a mode on decision-watcher or its own seat", "expect": "no-trigger", "comment": "owner: idr-0009/idr-0007 (the ratified design question, not this skill's instrument procedure)" },
+    { "id": "n06", "prompt": "how often should the doctrine re-validation sweep run", "expect": "no-trigger", "comment": "owner: idr-0011 / gh#626 (cadence ruling), explicitly deferred by this skill" }
   ]
 }
