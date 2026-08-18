@@ -1,7 +1,8 @@
 ---
 doc-type: adr
 id: adr-0022
-status: proposed
+status: accepted
+ratified: 2026-08-18 (Kim, live AskUserQuestion round, all-six batch gh#622–#627, PR #628)
 date: 2026-08-18
 owner: kim.granlund
 supersedes: null
@@ -10,9 +11,8 @@ intent-refs: idr-0002 (git substrate as the durable cold-start memory — this A
 ---
 # ADR-0022 — The repo is the backup: everything operationally load-bearing is reconstructible from origin/main
 
-> DRAFT — `status: proposed`, awaiting Kim's ratification (one batched round with
-> idr-0008/0009/0010/0011 and adr-0021, per gh#622–#627). The accepted-ADR append-only rule
-> binds only after acceptance; until then this text may be revised freely.
+> ACCEPTED 2026-08-18 — ratified by Kim (live AskUserQuestion round, all-six batch gh#622–#627,
+> PR #628). The accepted-ADR append-only rule binds from this commit: supersede, never edit.
 > Record-type note (confirming ADR against the standing ADR-default-no ruling, as gh#627 asks):
 > ADR is correct — this is a CONTRACT binding every operationally load-bearing artifact to a
 > reconstructibility requirement with an enumerated exception list, not a hypothesis; gh#627's
@@ -72,6 +72,12 @@ concentration itself is NOT solved here — this ADR makes the estate restorable
 the account, not resilient to losing the account; that larger question stays open below.
 
 ## Open questions
+
+Status at ratification (2026-08-18): none of the bullets below were individually ruled in the
+all-six batch round; each stays open at ratification, tracked at gh#627 (the ops-committed
+question in bullet 2 was already folded to fact pre-lock — the remainder of that bullet stays
+open). The owed-at-lock deliverables (exceptions 2–3's mitigation docs) are now DUE — seeded at
+gh#627 and unblocked by this acceptance.
 
 - Audit instrument home: lean is harness `scripts/` (a workspace-generic sweep in the toolchain
   plugin); routing owes the anti-matrix check before minting (gh#627 names authorkit/ops as the

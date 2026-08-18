@@ -1,7 +1,7 @@
 ---
 doc-type: idr
 id: idr-0010
-status: draft
+status: locked
 date: 2026-08-18
 owner: kim.granlund
 proof-ref: gh#624 (economy seed; the ticket is the durable record of the 2026-08-18 estate gap
@@ -12,8 +12,8 @@ supersedes: null
 ---
 # IDR-0010 — Estate economy: recurring spend is priced, or it grows until it eats its yield
 
-> DRAFT — awaiting Kim's ratification (one batched round with idr-0008/0009/0011 and
-> adr-0021/0022, per gh#622–#627). Lock is a human act; this record never self-locks.
+> LOCKED 2026-08-18 — ratified by Kim (live AskUserQuestion round, all-six batch gh#622–#627,
+> PR #628). Append-only from here: supersede, never edit.
 
 ## Claim
 
@@ -56,6 +56,9 @@ Supersede on falsification, never edit once locked.
 
 ## Open questions
 
+Status at ratification (2026-08-18): none of the bullets below were individually ruled in the
+all-six batch round; each stays open at ratification, tracked at gh#624.
+
 - Ledger scope and columns: lean is sweeps + dispatched builds first (not every fork), one row
   per firing — date, event-kind, seat/command, tokens, outcome, verdict — shaped like
   `attention-trend.csv` and living under `.claude/ops/`. Named as a follow-up seed in gh#624
@@ -69,4 +72,5 @@ Supersede on falsification, never edit once locked.
   (gh#624's acceptance says yes; the bullets land with the instrument wave, not this draft).
 - Ticket-claim discrepancy, recorded rather than resolved: gh#624's charter note says intake
   already placed a roadmap row, but origin/main's roadmap file carries no such row and gh#624
-  bears no `roadmap` label as of this draft — reconcile at ratification.
+  bears no `roadmap` label as of this draft — unaddressed in the all-six ratification round,
+  carried at gh#624.

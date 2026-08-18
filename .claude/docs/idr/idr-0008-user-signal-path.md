@@ -1,19 +1,18 @@
 ---
 doc-type: idr
 id: idr-0008
-status: draft
+status: locked
 date: 2026-08-18
 owner: kim.granlund
-proof-ref: gh#622 (user-signal-path seed; the ticket is the durable record of the 2026-08-18
-  estate gap review, conceptual hole #1) + idr-0005 (the external-audience hypothesis this
-  record gives a sense organ)
+proof-ref: https://github.com/kimgranlund/claude-plugins/issues/622#issuecomment-5323801483
 provenance: derived-from-evidence
 supersedes: null
 ---
 # IDR-0008 — A user signal path: the estate must be able to hear anyone using it
 
-> DRAFT — awaiting Kim's ratification (one batched round with idr-0009/0010/0011 and
-> adr-0021/0022, per gh#622–#627). Lock is a human act; this record never self-locks.
+> LOCKED 2026-08-18 — ratified by Kim (live AskUserQuestion round, all-six batch gh#622–#627,
+> PR #628). Append-only from here: supersede, never edit. The proof-ref points at the named
+> instrument seed (the feedback-intake door, gh#622 seed comment) — the proof vehicle.
 
 ## Claim
 
@@ -57,6 +56,9 @@ user signal arriving that the intake spine structurally cannot ingest (that is t
 a new door would need). Supersede on falsification, never edit once locked.
 
 ## Open questions
+
+Status at ratification (2026-08-18): none of the bullets below were individually ruled in the
+all-six batch round; each stays open at ratification, tracked at gh#622.
 
 - Which first instrument ships: the lean is the **feedback-intake door** (an issue template +
   routing into issue-sorter's friendlies gate) over an adoption probe — it reuses the spine

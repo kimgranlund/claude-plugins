@@ -1,20 +1,19 @@
 ---
 doc-type: idr
 id: idr-0009
-status: draft
+status: locked
 date: 2026-08-18
 owner: kim.granlund
-proof-ref: gh#623 (truth-maintenance seed; the ticket is the durable record of the 2026-08-18
-  estate gap review, conceptual hole #2) + the workspace invariant "falsified claims are
-  amended in place with a dated note" (CLAUDE.md, Sources of record flow outward — a duty with
-  no initiating mechanism today)
+proof-ref: https://github.com/kimgranlund/claude-plugins/issues/623#issuecomment-5323801673
 provenance: derived-from-evidence
 supersedes: null
 ---
 # IDR-0009 — Doctrine truth maintenance: accepted records are re-tested, not just accumulated
 
-> DRAFT — awaiting Kim's ratification (one batched round with idr-0008/0010/0011 and
-> adr-0021/0022, per gh#622–#627). Lock is a human act; this record never self-locks.
+> LOCKED 2026-08-18 — ratified by Kim (live AskUserQuestion round, all-six batch gh#622–#627,
+> PR #628). Append-only from here: supersede, never edit. The proof-ref points at the named
+> instrument seed (the re-validation mode on decision-watcher, gh#623 seed comment) — the proof
+> vehicle.
 
 ## Claim
 
@@ -54,11 +53,17 @@ never edit once locked.
 
 ## Open questions
 
+Status at ratification (2026-08-18): none of the bullets below were individually ruled in the
+all-six batch round; each stays open at ratification, tracked at gh#623.
+
 - Instrument shape: the lean is a **re-validation MODE on decision-watcher**, not a sibling
   seat — a new seat fails idr-0007's job-evidence test until the mode is tried and proves
   insufficient. Named as a follow-up seed in gh#623, deliberately not built in this PR.
 - Sampling policy and cadence: lean is sampled (not full-sweep) on a cadence the rhythm ruling
-  (idr-0011) assigns — the two records lock together or this one carries its own interim cadence.
+  (idr-0011) assigns. At lock, the "two records lock together" branch FIRED — idr-0011 locked in
+  the same 2026-08-18 round, so no interim cadence is minted here; the concrete cadence
+  assignment rides idr-0011's calendar ruling round (tracked at gh#626, with this sweep's slot
+  tracked at gh#623).
 - Untestable-verdict handling: lean is flag-for-rewrite (a ticket against the owning record),
   never silent exemption.
 - Who executes a falsified verdict: lean is the sweep files the work item (`file-bug`/

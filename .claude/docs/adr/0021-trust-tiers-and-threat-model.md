@@ -1,7 +1,8 @@
 ---
 doc-type: adr
 id: adr-0021
-status: proposed
+status: accepted
+ratified: 2026-08-18 (Kim, live AskUserQuestion round, all-six batch gh#622–#627, PR #628)
 date: 2026-08-18
 owner: kim.granlund
 supersedes: null
@@ -10,9 +11,8 @@ intent-refs: idr-0005 (the external-audience hypothesis this model must grow int
 ---
 # ADR-0021 — Trust tiers per input surface, and injection hardening for record-text-into-prompt flows
 
-> DRAFT — `status: proposed`, awaiting Kim's ratification (one batched round with
-> idr-0008/0009/0010/0011 and adr-0022, per gh#622–#627). The accepted-ADR append-only rule
-> binds only after acceptance; until then this text may be revised freely.
+> ACCEPTED 2026-08-18 — ratified by Kim (live AskUserQuestion round, all-six batch gh#622–#627,
+> PR #628). The accepted-ADR append-only rule binds from this commit: supersede, never edit.
 > Record-type note: ADR, not IDR — this rules a CONTRACT that binds concrete input surfaces
 > across plugins (which tier each surface sits in, what each tier may influence), not a
 > hypothesis; the standing ADR-default-no ruling is met by that binding.
@@ -76,6 +76,9 @@ standing yolo-with-tripwires posture; this ADR tiers inputs, it does not re-open
 default.
 
 ## Open questions
+
+Status at ratification (2026-08-18): none of the bullets below were individually ruled in the
+all-six batch round; each stays open at ratification, tracked at gh#625.
 
 - Exact input-surface inventory: the seed names four (SendMessage, record text into prompts,
   gh-api landings, bypassPermissions); this draft's judgment additionally assigns artifact/

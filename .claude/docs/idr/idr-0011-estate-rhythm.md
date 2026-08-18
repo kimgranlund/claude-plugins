@@ -1,7 +1,7 @@
 ---
 doc-type: idr
 id: idr-0011
-status: draft
+status: locked
 date: 2026-08-18
 owner: kim.granlund
 proof-ref: gh#626 (rhythm seed; the ticket is the durable record of the 2026-08-18 estate gap
@@ -12,8 +12,8 @@ supersedes: null
 ---
 # IDR-0011 — Estate rhythm: standing loops carry ruled cadences; the human gate is a managed queue
 
-> DRAFT — awaiting Kim's ratification (one batched round with idr-0008/0009/0010 and
-> adr-0021/0022, per gh#622–#627). Lock is a human act; this record never self-locks.
+> LOCKED 2026-08-18 — ratified by Kim (live AskUserQuestion round, all-six batch gh#622–#627,
+> PR #628). Append-only from here: supersede, never edit.
 > Record-type note (builder-of-record call, gh#626 left it open): IDR, not ADR — the CLAIM
 > (loops need ruled cadences; the human gate is a queue) is a testable founding hypothesis,
 > while the cadence VALUES themselves are living state that will be tuned continually; an
@@ -65,6 +65,7 @@ on falsification, never edit once locked.
   (survives sessions); builds immediately after lock.
 - Kim-queue batching — lean: daily digest via `held-items.md`; channel and priority order open
   per gh#626.
-- At-lock disposition: each bullet above is either ruled in the ratification round or carried
-  forward as a dated open question on this record; the brief's spine line then moves this record
-  to Confirmed (the idr-0007 pattern).
+- At-lock disposition, EXECUTED 2026-08-18: none of the bullets above were individually ruled in
+  the all-six batch round — each carries forward as a dated open question, tracked at gh#626 —
+  and the brief's spine line has moved this record to Confirmed (the idr-0007 pattern). The
+  calendar ruling round (bullet 1) is the named next step after lock.
