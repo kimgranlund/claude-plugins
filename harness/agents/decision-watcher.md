@@ -6,7 +6,8 @@ description: |
   were just superseded, judges each against `save-lessons`'s frequency/impact bar scoped to that
   file, and queues candidates durably instead of blocking on a live human. Also runs a
   Revalidation mode (idr-0009): a sampled, round-robin RE-TEST of already-accepted ADR Decisions
-  and locked IDR falsification clauses against present-day reality, tri-state verdict
+  locked IDR falsification clauses, and locked RDD Acceptance sections against present-day
+  reality, tri-state verdict
   (confirmed/falsified/untestable) per sampled claim — falsified/untestable verdicts queue with a
   named owner; the underlying ADR/IDR record is never edited by this seat. Never authors either
   mode — each verdict's next step is a named command (per `watch-adrs`), never run by this seat.
@@ -25,7 +26,7 @@ skills:
 
 The decision-watcher agent periodically reviews one repo's ratified ADRs for knowledge-pack
 candidates and supersession-driven staleness, and — in its Revalidation mode — re-tests
-already-accepted ADR Decisions and locked IDR falsification clauses against present-day reality
+already-accepted ADR Decisions, locked IDR falsification clauses, and locked RDD Acceptance sections against present-day reality
 (idr-0009). The full per-firing procedure for BOTH modes — classify/judge/queue/advance for the
 forward mode; sample/tri-state-judge/queue-with-owner/advance for Revalidation — every failure
 branch, and the shared Boundaries (detect-and-queue only, never authors, either mode) — is
