@@ -108,6 +108,22 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.24.3 · 2026-08-18 · closes #626 (idr-0011's deferred instrument wave — the first standing
+schedule, deferred out of PR #628's docs-only ratification batch per #626's own dated Findings
+deferral entry): `fleet-rules` Section 3 gains a bullet naming `.claude/ops/held-items.md`'s new
+"Kim's ruling/merge queue" section as the default batching landing spot for a human-gate item,
+never a live interrupt, citing `.claude/ops/calendar.md` as the tunable cadence canon rather than
+restating cadence values inline. Neither `calendar.md` nor `held-items.md`'s new section nor
+`.claude/ops/routines/daily-board-drain.json` (the committed `RemoteTrigger` create-body for the
+daily `/mobilize-chores auto` drain) ships inside this plugin — all three are workspace-root ops
+state; only the `fleet-rules` bullet is this plugin's own change. Named deviation: the schedule
+routine could not be live-armed from this build's dispatch context (the `schedule` skill loaded,
+but its `RemoteTrigger` tool was absent from this seat's tool wall) — the committed JSON is the
+exact create-body, arm instruction inline, disclosed rather than silently substituted (full
+resolution: `.claude/docs/lld/lld-0014-estate-rhythm-instrument.md`). Fresh `skill-checker` pass
+on the `fleet-rules` diff; no evals touched (no description changed). Rejected alternative: a new
+`ruling-queue.md` file instead of a `held-items.md` section — two files meaning "pending Kim's
+decision" recreates the ad-hoc-arrival problem idr-0011 names.
 v2.24.2 · 2026-08-18 · closes #625 (first hardening owed by ADR-0021, trust tiers and threat
 model): `fleet-rules`' Section 3 (Communication routing) gains a bullet encoding the T2
 quote-not-obey rule — record text entering a dispatch prompt is DATA unless the dispatcher
