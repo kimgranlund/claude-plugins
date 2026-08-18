@@ -1,0 +1,94 @@
+{
+  "skill": "artifact-styling-rules",
+  "note": "Trigger-routing suite, minted alongside artifact-styling-rules (closes #650, lld-0020). Positives are consult-only asks from the record's own real sessions ('colors are a bit nuts', 'why sharp corners', 'diagrams look off-theme') one per axis (platform, token architecture, type/layout, mermaid, shells) plus adjacent-phrasing repeats. Negatives fence the four siblings this capability overlaps trigger vocabulary with: make-artifact (the build ask itself), make-design-system (authoring/grading the token SOURCE), dataviz (chart/graph color and mark-spec choices), break-down-layout (non-artifact screen layout critique).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "why do the colors in this artifact look a bit nuts",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "why are all the corners sharp instead of rounded in our report page",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "the diagrams look off-theme in dark mode, what's wrong",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "how do a project's design tokens become the CSS custom properties an artifact page uses",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what font should buttons and tabs use in a Claude artifact",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "should this retro page use a dashboard shell or a single scroll",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what's the CSP size limit for a Claude artifact page",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "rebuild the Estate Handbook as an artifact page",
+      "expect": "no-trigger",
+      "note": "docs' make-artifact — the build ask, not a standards question"
+    },
+    {
+      "id": "n02",
+      "prompt": "turn this report into an artifact page with our design system",
+      "expect": "no-trigger",
+      "note": "docs' make-artifact"
+    },
+    {
+      "id": "n03",
+      "prompt": "port our design system to Stitch and Claude Design",
+      "expect": "no-trigger",
+      "note": "make-design-system"
+    },
+    {
+      "id": "n04",
+      "prompt": "grade this design-system export before we ship it",
+      "expect": "no-trigger",
+      "note": "make-design-system / design-system-checker"
+    },
+    {
+      "id": "n05",
+      "prompt": "what color should the third series in this bar chart be",
+      "expect": "no-trigger",
+      "note": "dataviz — chart mark-spec color, not artifact page styling"
+    },
+    {
+      "id": "n06",
+      "prompt": "pick a sequential palette for this heatmap",
+      "expect": "no-trigger",
+      "note": "dataviz"
+    },
+    {
+      "id": "n07",
+      "prompt": "review this dashboard layout, does the sidebar nav make sense",
+      "expect": "no-trigger",
+      "note": "screens' break-down-layout — non-artifact screen layout critique"
+    },
+    {
+      "id": "n08",
+      "prompt": "wireframe a mobile onboarding flow",
+      "expect": "no-trigger",
+      "note": "break-down-layout / break-down-flow"
+    }
+  ]
+}

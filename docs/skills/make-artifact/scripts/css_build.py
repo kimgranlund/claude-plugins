@@ -2,7 +2,8 @@
 """css_build.py — the make-artifact token->CSS build mechanism. Self-contained (stdlib only).
 
 Token consumption is DETERMINISTIC DERIVATION, not judgment (artifact-rules'
-design-system-consumption.md describes the mapping; this script IS the check — script-writing-
+script-interface.md describes the mapping's interface; design:artifact-styling-rules'
+token-architecture.md describes the doctrine WHY; this script IS the check — script-writing-
 rules' mechanization test). Accepts JSON in EITHER of a design system's two legal shapes and
 normalizes both into one internal role -> value model before emitting CSS:
 
@@ -226,9 +227,9 @@ def normalize(data):
 # --- CSS emission ------------------------------------------------------------------------------
 
 MERMAID_REHEME_BLOCK = """
-/* Mermaid house re-theme (artifact-rules/references/mermaid-style.md): the rendered SVG ships
-   its own inline styles, so re-theming requires token-driven !important overrides bound to the
-   same --c-* roles as the rest of the page — one mechanism, both schemes. */
+/* Mermaid house re-theme (design:artifact-styling-rules' mermaid-reference.md): the rendered SVG
+   ships its own inline styles, so re-theming requires token-driven !important overrides bound to
+   the same --c-* roles as the rest of the page — one mechanism, both schemes. */
 .mermaid svg .node rect,
 .mermaid svg .node circle,
 .mermaid svg .node polygon {
@@ -249,7 +250,8 @@ MERMAID_REHEME_BLOCK = """
   color: var(--c-neutral-on-surface-variant) !important;
 }
 
-/* Width-preserving hidden-tab-panel technique (mermaid-style.md): never display:none a panel
+/* Width-preserving hidden-tab-panel technique (design:artifact-styling-rules'
+   mermaid-reference.md / type-and-layout.md): never display:none a panel
    holding a mermaid diagram -- it corrupts the measured container permanently, even after the
    tab is shown again. */
 [data-tab-panel][hidden] {

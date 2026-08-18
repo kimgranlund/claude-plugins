@@ -112,6 +112,12 @@
       "id": "n11",
       "prompt": "pick an accessible color palette for the dashboard",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n12",
+      "prompt": "why do the colors and mermaid diagrams look off in this Claude artifact page",
+      "expect": "no-trigger",
+      "comment": "design:artifact-styling-rules (#650) — Artifact-page-specific styling doctrine (theme/token/mermaid/shell), not general (non-artifact) screen layout critique; already covered by the existing 'visual/color design' NOT-clause, this case only proves the boundary holds"
     }
   ]
 }
