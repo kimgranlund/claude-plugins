@@ -118,9 +118,9 @@ What each type is *for*, its class, and the sections `doc_lint.py` requires (tem
 
 | Type | One-line purpose | Class | Required sections |
 |---|---|---|---|
-| IDR | One testable founding hypothesis/outcome claim, upstream of any decision — plural, numbered (`idr-NNNN`), ADR-parallel lifecycle | ledger | Claim · Why · Proof |
+| IDR | One testable founding hypothesis/outcome claim about the WHOLE APP/PRODUCT, upstream of any decision — plural, numbered (`idr-NNNN`), ADR-parallel lifecycle | ledger | Claim · Why · Proof |
 | ADR | One decision, its context, its consequences — forever | ledger | Context · Decision · Consequences |
-| PRD | The problem and outcomes, before any how | versioned contract | Problem · Users · Outcomes · Non-goals |
+| PRD | The problem and outcomes, before any how — valid at BOTH app and feature scope | versioned contract | Problem · Users · Outcomes · Non-goals |
 | SPEC | Intent as testable contract — the highest-leverage doc | versioned contract | Requirements · Non-goals · Examples · Acceptance |
 | LLD | How it's built: components, interfaces, tradeoffs | versioned contract | Components · Interfaces · Data · Risks |
 | PLAN | Sequenced steps, each with "done when" and a status | living state | Steps · Validation · Rollback |
@@ -151,8 +151,8 @@ PR #343's scope note, PR #347's no-split writeup — both surfaced a real altern
 would otherwise have had to ask about. `dispatch-ticket`'s (teamwork) Findings write-back contract
 carries the same requirement for its build path.
 
-**Which type?** Route by the question being answered: what do we believe, before any choice →
-IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
+**Which type?** Route by the question being answered: what do we believe about the whole
+product, before any choice → IDR; recording a decision → ADR; why build → PRD; what exactly → SPEC; how internally → LLD; in
 what order → PLAN/ROADMAP; who does what next → TICKET/TASK; what release commitment did we lock
 in, cited to which decisions → RDD; where do our ratified beliefs index, one pointer per IDR →
 BRIEF. A document answering two of these questions is usually two documents joined by IDs.
@@ -160,7 +160,18 @@ BRIEF. A document answering two of these questions is usually two documents join
 **IDR — Intent Decision Record.** Sits upstream of ADR on the ID spine (more foundational, not
 "instead of"): a testable belief about what's true, minted before any architecture choice exists
 — admission-tested at authoring time ("would two reasonable builds differ on it?"), same spirit as
-ADR's own "a choice someone will later ask why about" gate. Lifecycle mirrors ADR's proven
+ADR's own "a choice someone will later ask why about" gate.
+
+**Scope (ruled #652, Kim's verbatim statement): IDR is whole-app/product-thesis scope only.** One
+IDR per testable hypothesis ABOUT THE WHOLE PRODUCT — a claim that could only be argued or
+falsified at the level of the entire app's thesis, not one of its parts. A feature-, component-,
+screen-, or endpoint-grain claim ("this button should…", "the checkout flow should…") is never an
+IDR even if it passes the falsifiability admission test above — it fails scope instead, and routes
+to PRD (the outcome it should achieve) or SPEC (the testable contract for the feature itself). PRD
+is the type that spans BOTH scopes — valid at whole-app grain (a product-level PRD) and at
+feature grain (a feature's own PRD) — the dual-scope statement IDR deliberately lacks. Mechanically
+guarded by `doc_lint.py`'s T11: a Claim naming a feature/component/screen/endpoint grain FAILs.
+Lifecycle mirrors ADR's proven
 two-phase mechanic exactly: `draft` (freely editable, the harvest window) → `locked` (committed-HEAD
 edits blocked — T4, same mechanism as an accepted ADR) → `superseded` (terminal; a new IDR cites
 `supersedes:`). An ADR **may** cite `≥1` IDR via its own `intent-refs:` frontmatter field (parallel
