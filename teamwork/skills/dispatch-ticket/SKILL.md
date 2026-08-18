@@ -263,7 +263,11 @@ caller's side:
   SKILL.md body, an agent definition, a hook prompt) still gets a fresh-context checker pass
   before the loop closes — lint and gates prove mechanics, not semantics (2026-08-11 estate
   audit: every unaudited semantic edit carried a real gap); pure code/config under the repo's own
-  test gates needs no checker seat.
+  test gates needs no checker seat. **Dispatch that checker UNNAMED and synchronous — a named
+  dispatch strands the report** (a fix fork's own checker dispatched `chk667` stranded its
+  verdict at the root session, 2026-08-18 — the gh#154/#157 class, re-proven), per harness's
+  `agent-writing-rules` never-name rule (cited, not restated) — the same discipline the skill's
+  own no-nested-wait preamble above already names.
 - **big** — the delivery seats, each already floored: `planner` authors what the change earns
   (the record's Links may already carry the docs — don't re-author), `builder` implements to the
   approved LLD, `code-checker` grades the slice before merge. The coordinator seat only when the
