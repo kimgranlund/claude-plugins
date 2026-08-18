@@ -35,8 +35,7 @@ raced a duplicate build). This narrows Phase 4's `small` "one sealed fork/agent"
 TOP-LEVEL host only, and makes Phase 2's task-kind dispatch always UNNAMED — its synchronous
 tool-result IS the return value, not mailbox-routed. Not a rule against dispatching generally: an
 UNNAMED, single-shot review dispatch (Phase 4's checker, Phase 5 stage 2b's critic) isn't this
-failure, since completion is normally the tool call's own synchronous result — one dated exception
-below.
+failure, since completion is normally the tool call's own synchronous result — one dated exception below.
 
 **The critic step still stalls the same way — read the return value yourself, but a notification
 can be the real verdict too.** Read a synchronous return if the call gives you one; if a
@@ -50,7 +49,7 @@ needed to apply the rule above.
 
 - `$ARGUMENTS` resolves to a ticket id (`TKT-####`, a bare issue number on the git-native backend,
   or an adapter-native id) → that's the record. Branch on STATE first: `done`/`wontfix`/closed →
-  report and stop (reopening is the user's call); otherwise read kind/Size/Scope/Links and
+  report and stop (reopening is the user's call); otherwise read kind/Size/Scope/Links/labels and
   continue to Phase 2.
 - Otherwise sweep the three surfaces `/file-feature`'s dedup names (records, codebase, existing
   docs/corpora): a queued match → build from it; a match that already shipped → report where it
@@ -251,9 +250,10 @@ is what actually contains its inline-fix path.
 
 Runs between Phase 3 and Phase 4's sizing (feature path), or between Phase 3 and the Agent
 dispatch (task path, named verbatim in Phase 2 above). **Trigger:** the record carries `backlog`
-or `roadmap` (#611; git-native: labels Phase 1 already read; file backend: N/A, disclosed). Label
-absent → this phase does not exist, skip silently. The Phase 2 bug hand-off never runs it
-(`file-bug` owns its own lifecycle). Full procedure — the premise-check algorithm, the
+or `roadmap` (#611; git-native: labels Phase 1 already read; file backend: N/A there, no parking
+realization yet — disclosed in the seat's report, never silent). Label absent → this phase does
+not exist, skip silently. The Phase 2 bug hand-off never runs it (`file-bug` owns its own
+lifecycle). Full procedure — the premise-check algorithm, the
 proceed/`stale-premise` outcome branches, and the outcome-class rationale — lives in
 `references/de-stale-premise-check.md` (F6 split); read it in full before running this phase.
 

@@ -29,7 +29,7 @@ supersedes: null                 # rdd-NNNN when replacing a prior release commi
 <!-- Ordering/dependencies across the bundled TICKETs — plain prose links. TICKET is a work item,
      not an ID-spine citee, so this stays outside `decision-refs:`. Roadmap-labeled Issues bind
      here the same way: a plain `Tracked at <owner>/<repo>#NNN` line per bundled Issue (ruled
-     gh#611) — never a frontmatter field. -->
+     issue #611) — never a frontmatter field. -->
 
 ## Completion
 <!-- The completion clause: what "shipped-and-archived" or "superseded-with-reason" concretely

@@ -5,9 +5,8 @@ description: >-
   skips the sweep and mobilizes exactly those ids), then handles whatever's genuinely mobilizable —
   open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C
   adapter) labeled feature, bug, or task with no build in flight and no open `Blocked-by:`
-  dependency (#193) — and never a ticket parked under a `backlog` or `roadmap` label (#611):
-  parked ids are invisible to a sweep; a ticket-id list naming one explicitly still mobilizes it
-  (naming IS the pickup) — a blocked ticket whose blocker is itself mobilizable gets the blocker
+  dependency (#193) — never a `backlog`/`roadmap`-parked ticket (#611; a ticket-id list naming
+  one still mobilizes it) — a blocked ticket whose blocker is itself mobilizable gets the blocker
   dispatched dependency-first instead of a bare skip (#558) — after one batched confirm (a
   leading `auto` argument skips it, for /goal loops and scheduled runs).
   Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
@@ -135,7 +134,10 @@ sweep surfaced that's actually buildable.
    neither parking label — `backlog`/`roadmap` (#611; git-native: the `labels` array already
    fetched by this step's `--json` calls, a post-filter costing zero new `gh` calls; local/adapter
    backends: no parking realization defined yet — disclosed in the step-6 report as N/A, never
-   silently assumed).** Cross-check
+   silently assumed) — SWEEP-DISCOVERED CANDIDATES ONLY: a TICKET FILTER-named id bypasses this
+   one check per the exception carved out above, since naming a parked id explicitly is exactly
+   how parked work gets picked up; verbatim application of this predicate to a filter-named id
+   would silently defeat #611's entire pickup mechanism.** Cross-check
    `plan.md`'s own queue for the same ids; a ticket the sweep already flagged as a human-decision
    item or a blocker is excluded even if it carries a mobilizable label/kind — the sweep's own
    judgment on THAT item stands.
@@ -278,8 +280,9 @@ sweep surfaced that's actually buildable.
    itself is wrong, and the evidence already sits on the record), or skipped-and-why (not
    confirmed, in flight already — an open PR, or a claim with no PR open yet (#184) — blocked by
    an open `Blocked-by:` dependency (#193, naming the still-open blocker id) — parked
-   (`backlog`/`roadmap` label, #611 — only reachable via a stale hand-check, since SWEEP discovery
-   never lists parked ids; named here so a boundary case is observable, not invisible) —
+   (`backlog`/`roadmap` label, #611 — step 2's own label-list call fetches these ids same as any
+   other candidate, then excludes them via its post-filter; this row is that exclusion made
+   visible, not a stale hand-check — named here so a boundary case is observable, not invisible) —
    wrong/ambiguous label, too vague to build unattended — the seat SKIPPED, no clarify round
    available on this path — or excluded by the sweep's own judgment).
 
