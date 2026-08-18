@@ -161,26 +161,12 @@ is what actually contains its inline-fix path.
   `origin/main` and bump from THAT value — never from the branch-cut version — carrying its
   README ledger line along with the same rebumped number. Doc spine ids race identically (#633) — `references/spine-id-value-race.md`.
 - **Once the claim wins, make it LIST-VISIBLE too (#199)** — the claim comment is durable but
-  invisible in the LIST view (Kim: "I cannot tell that Issues are claimed"). Git-native only: `gh
-  issue edit --add-label in-flight`. `in-flight` shares hex `FBCA04` with `doing` by coincidence,
-  not relation — a shared color is never evidence two labels mean the same; a repo without
-  `in-flight` creates it with that name and a distinct hex. Additive to the assignee+comment claim
-  (assignee stays required per ADR-0005) — the label only supplies list-visibility.
-  **`in-flight` is the ONE canonical claim label — never mint a synonym.** `doing` is a DIFFERENT,
-  load-bearing label — the `open`→`doing`→`done` status verb, unrelated to claiming; #192 shows
-  the confusion: `doing` applied alongside `in-flight` mid-claim looked like a duplicate but
-  wasn't. The two coexist ("is this claimed" vs. "what lifecycle stage") — `doing` is never
-  deleted or reused as a claim signal.
-  **Label = display, comment = record.** `in-flight` is hand-editable and never the correctness
-  gate alone: `mobilize-chores` step 2 may read it as a cheap pre-filter, but the claim comment —
-  plus, once a PR exists, that step's own GraphQL PR-linkage check — stays authoritative.
-  **Removed on every terminal outcome:** Phase 5 stage 2 removes it the moment a PR opens (the
-  open PR becomes the visible signal instead — named explicitly in a task/big-feature dispatch's
-  sealed prompt, since the seat opening the PR never loaded this file); the Release-on-abandonment
-  bullet removes it on a mid-flight abandon and on Phase 6's recorded-loss ending (as dead as an
-  abandonment). A task SKIPPED in Phase 2 never reaches this bullet, so owes no removal. A
-  coordinator running a serial chain (`mobilize-chores`) may also carry the pre-existing `queued`
-  label (`C5DEF5`) for chain position ahead of its own claim — nothing here touches its lifecycle.
+  invisible in the LIST view. Git-native only: `gh issue edit --add-label in-flight` (additive to
+  the assignee+comment claim, never a substitute for it — `doing` is a separate, load-bearing
+  status label, never reused as a claim signal). Removed the moment a PR opens (Phase 5 stage 2)
+  or on any abandonment/recorded-loss ending. Full rationale — the color-coincidence note, the
+  label-vs-comment authority split, `mobilize-chores`'s own `queued` label — lives in
+  `references/in-flight-label-semantics.md` (F6 split).
 - **Isolate second — now CONDITIONAL, not unconditional (#204).** Decide the branch name FIRST:
   the claim bullet's decided name (feature/task), or a lightweight `bug/<id>` (bug hand-off, no
   claim ran). **Skip isolation only when ALL FOUR hold** — sized `small`; no concurrent mutating
@@ -216,8 +202,8 @@ is what actually contains its inline-fix path.
   deeply nested (#191).
 - **Release on abandonment — post-claim exits only.** Only a failure AFTER the claim landed has
   anything to release: a discovered design fork routed back to planner, an unresolved gate failure
-  (both mid-flight, Failure branches below), a stale-premise exit (Phase 3.5), or Phase 6's
-  recorded-loss ending (a dispatched agent returned with no Findings, the re-dispatch also came
+  (both mid-flight, Failure branches below), a stale-premise exit (Phase 3.5), a spec-lock blocker
+  (Phase 3.6), or Phase 6's recorded-loss ending (a dispatched agent returned with no Findings, the re-dispatch also came
   back empty — nothing is ever coming back to open a PR, as dead as a mid-flight abandonment).
   Each releases the claim before returning: git-native — `gh issue edit --remove-assignee @me --remove-label in-flight` plus a `gh issue comment` naming the release and why; file backend —
   clear `claimed-by`/`claimed-at`; an adapter — its own realization. **The label release is not
@@ -230,21 +216,11 @@ is what actually contains its inline-fix path.
   sweep — `mobilize-chores` step 2 excludes on an active claim the same way it excludes an open in-flight PR.
 - **Tear down a no-longer-needed scratch branch/worktree — verified, never raw.** Two cases reach
   this: the abandonment bullet above (claim already released), and Phase 2's bug hand-off, only
-  once the post-hand-off read-back (Phase 6's verbs) shows a terminal state (issue closed, or a
-  `file-bug` Findings entry marking its own run done) with nothing landed on the branch. Short of
-  that, the worktree stays standing, reported as residue — never torn down while `file-bug`'s own
-  fork may still be live inside it. Never retire with a raw `git branch -D` plus worktree removal
-  — that force-deletes work on this seat's own say-so alone. Feature-detect the host repo's own
-  gated reap script (reference shape: gen-ui-kit's `scripts/ops/reap-branches.mjs
-  --verify-branch <name>` — a differently-located script counts only if the host repo's own docs
-  declare the same 0/1/2 contract) and gate the delete on its exit code alone. Order: `git
-  worktree remove` first (refuses on a dirty tree, so nothing is lost on a wrong call), THEN
-  `--verify-branch`, THEN — only on exit 0 (a merge-base ancestor of `origin/main`, or an
-  exactly-matching MERGED PR) — `git branch -d` (never `-D`, even after a verified 0). Exit 1
-  (KEPT/PROPOSED), or either verb refusing outright, → leave standing and report why, never
-  force. Exit 2 is a usage error, not a verdict — report it. No such script → fall back to an
-  unverified `git worktree remove` then `git branch -d`, never silently — name what went
-  unverified.
+  once its post-hand-off read-back shows a terminal state with nothing landed on the branch. Short
+  of that, the worktree stays standing, reported as residue. Never retire with a raw `git branch
+  -D` — full procedure (the reap-script feature-detect, its exit-code gating, the unverified
+  fallback) lives in `references/worktree-teardown.md` (F6 split); read it before tearing anything
+  down.
 
 ## Phase 3.5 — De-stale a parked ticket (backlog/roadmap labels only)
 
@@ -257,7 +233,23 @@ lifecycle). Full procedure — the premise-check algorithm, the
 proceed/`stale-premise` outcome branches, and the outcome-class rationale — lives in
 `references/de-stale-premise-check.md` (F6 split); read it in full before running this phase.
 
+## Phase 3.6 — Spec-lock gate (draft/unlocked upstream, or a missing owed citation)
+
+Runs immediately before Phase 4's sizing, feature path only, sibling to Phase 3.5. **Trigger,
+either independently (ratified 2026-08-18):** a Links-cited upstream IDR/SPEC/ADR/RDD whose own
+frontmatter `status:` is still pre-lock (a prose-only mention in the ticket never triggers), or
+the owed ladder (`docs:doc-writing-rules`' Owed chain, full chain in
+`references/spec-lock-gate.md`, cited not restated here) naming a rung with no citation at all.
+Either → a named blocker, never a build — Phase 1's ambiguous-match class, not a new outcome
+type. Full algorithm: `references/spec-lock-gate.md` (F6 split); read it before running this
+phase.
+
 ## Phase 4 — Size the dispatch (solo-first, feature path)
+
+**The owed upstream-doc ladder** — the record's Size/materiality signals also fix which upstream
+doc types it owes beyond the ticket itself (ratified #655 decision 2; canon owned by
+`docs:doc-writing-rules`' Owed chain, full chain in `references/spec-lock-gate.md`). Phase 3.6,
+just before this phase, already gated a missing/unlocked citation against it.
 
 The record's Size class picks the machinery — the seats' own materiality floors, applied from the
 caller's side:
@@ -503,6 +495,9 @@ conversational summary never substitutes for the entry the record was owed.
   state. Name the failed conjunct or the blocker in the handoff, leave the PR for a human, keep
   the claim as-is, and never retry the sequence or widen the predicate to get past it.
 - Phase 3.5 finds a falsified premise → `stale-premise` is a reported outcome, not a failure: claim released, evidence on the record, ticket left open for re-triage.
+- Phase 3.6 fires → a named blocker, never a build: claim released, worktree torn down (or N/A
+  under the #204 skip), evidence named on the record exactly like any other blocker — never a
+  new outcome type, never silently patched by authoring the missing doc inline.
 
 Done when the record's `## Findings` carries dated evidence of the shipped work (or the recorded
 blocker/skip/stale-premise report), status reflects reality, a PR this dispatch opened carries an explicit
