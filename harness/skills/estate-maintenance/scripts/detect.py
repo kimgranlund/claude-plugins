@@ -15,16 +15,26 @@ Exit: 0 clean run (findings may be 0 or more; that's not a failure) · 1 --verif
 evidence pointer · 2 usage error.
 
 Detector thresholds (flag-tunable via the constants below, cited beside every finding they fire):
-  D1 — memory entries `metadata.type: feedback`, clustered on (name+description) token Jaccard
-       >= JACCARD_D1 (0.3) with >= MIN_SHARED_D1 (2) shared non-stopword tokens; a cluster of
-       size >= 2, OR a single entry whose description matches RECURRENCE_LEXICON, is a finding.
+  D1 — memory entries `metadata.type: feedback`, clustered on (name+description) token OVERLAP
+       COEFFICIENT (shared tokens / min(len_a, len_b), NOT Jaccard — raw Jaccard punishes length
+       asymmetry between a short first-telling and a long third-telling too hard to ever fire on
+       real prose, gh#645 MAJOR-2) >= OVERLAP_D1 (0.2) with >= MIN_SHARED_D1 (3) shared
+       non-stopword tokens; a cluster of size >= 2, OR a single entry whose description matches
+       RECURRENCE_LEXICON, is a finding. Matches the DESCRIPTION only, never the body (LLD
+       lld-0019 said body; description-only is what shipped and is cheaper to keep correct —
+       body text pulls in template boilerplate ("Why:", "How to apply:", dates) that inflates
+       overlap between otherwise-unrelated entries; dated correction on the LLD itself, 2026-08-18).
   D2 — issue titles normalized (lowercase, punctuation/stopwords/#NNN stripped), pairwise
        Jaccard >= JACCARD_D2 (0.5) -> a cluster; a member created after another member's
        `closedAt` = re-filed (major); same-window overlap with no created-after-closed edge =
        dedup-miss (minor).
-  D3 — per METRIC_REGISTRY key present in the bundle: a series column monotonic non-decreasing
-       across >= MIN_ROWS_D3 (3) rows with >= GROWTH_PCT_D3 (5%) total growth -> rent-growth; a
-       column `absent` in 100% of >= MIN_ROWS_D3 rows -> instrument-half-blind; a source with
+  D3 — per METRIC_REGISTRY key present in the bundle: rows are GROUPED by that key's own
+       registered `key_columns` first (e.g. one series per `plugin` for attention_trend — never
+       iterated ungrouped across interleaved rows from multiple keys, gh#645 MAJOR-1), then for
+       each `series_columns` entry: a column monotonic non-decreasing within its group across
+       >= MIN_ROWS_D3 (3) rows with >= GROWTH_PCT_D3 (5%) total growth -> rent-growth (one finding
+       per key+column); a column `absent` in 100% of >= MIN_ROWS_D3 rows across the WHOLE source
+       (never never-fed-ness is a per-key question) -> instrument-half-blind; a source with
        exactly 1 row older than `--window-days` -> series-not-firing; recurrence_trend's latest
        row `seeded_classes == 0` -> ratchet-unadopted.
   D4 — entry files (any `CLAUDE.md` under root) > ENTRY_FILE_LINE_THRESHOLD (200, skill_lint.py
@@ -45,8 +55,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from collect import ENTRY_FILE_LINE_THRESHOLD  # noqa: E402  (sibling, same scripts/ dir)
 
-JACCARD_D1 = 0.3
-MIN_SHARED_D1 = 2
+OVERLAP_D1 = 0.2  # overlap coefficient (gh#645 MAJOR-2), NOT Jaccard — see module docstring
+MIN_SHARED_D1 = 3
 JACCARD_D2 = 0.5
 MIN_ROWS_D3 = 3
 GROWTH_PCT_D3 = 5.0
@@ -59,7 +69,9 @@ RECURRENCE_LEXICON = re.compile(
 STOPWORDS = set("""a an and are as at be but by can do for from has have how i in is it its my
 not of on one or our so that the their these this those to use used using we what when where
 which who will with you your never always only also this's it's fix fixes fixed add adds added
-closes close closed update updates updated bug feature issue ticket demo""".split())
+closes close closed update updates updated bug feature issue ticket demo per via""".split())
+# "per"/"via" added (gh#645 MAJOR-2): generic prepositions, not informative shared vocabulary —
+# they inflated overlap between otherwise-unrelated memory entries under the new D1 calibration.
 
 ISSUE_HEAD_RE = re.compile(r"#\d+")
 WORD_RE = re.compile(r"[a-z0-9]+")
@@ -81,10 +93,21 @@ def jaccard(a, b):
     return inter / union if union else 0.0
 
 
-def cluster_pairs(items, get_tokens, threshold, min_shared=0):
+def overlap_coefficient(a, b):
+    """shared tokens / min(len_a, len_b) — unlike Jaccard, doesn't punish a short first-telling
+    paired against a long third-telling description (gh#645 MAJOR-2: real feedback-memory pairs
+    run 20-30 informative tokens with wildly different lengths; Jaccard's union-sized denominator
+    made a real third-telling trio invisible)."""
+    if not a or not b:
+        return 0.0
+    minlen = min(len(a), len(b))
+    return len(a & b) / minlen if minlen else 0.0
+
+
+def cluster_pairs(items, get_tokens, threshold, min_shared=0, metric=jaccard):
     """items: list of arbitrary objects. get_tokens(item) -> set of tokens.
     Returns a list of clusters (each a list of the original items), connected-components style
-    over the "collides" graph (pairwise Jaccard >= threshold AND shared-token count >= min_shared).
+    over the "collides" graph (pairwise `metric` >= threshold AND shared-token count >= min_shared).
     Deterministic: items processed in input order, clusters returned in first-member order."""
     n = len(items)
     toks = [get_tokens(it) for it in items]
@@ -104,7 +127,7 @@ def cluster_pairs(items, get_tokens, threshold, min_shared=0):
     for i in range(n):
         for j in range(i + 1, n):
             shared = toks[i] & toks[j]
-            if len(shared) >= min_shared and jaccard(toks[i], toks[j]) >= threshold:
+            if len(shared) >= min_shared and metric(toks[i], toks[j]) >= threshold:
                 union(i, j)
 
     groups = {}
@@ -197,7 +220,7 @@ def detect_d1(bundle):
     def get_tokens(e):
         return tokenize((e.get("name") or "") + " " + (e.get("description") or ""))
 
-    clusters = cluster_pairs(entries, get_tokens, JACCARD_D1, MIN_SHARED_D1)
+    clusters = cluster_pairs(entries, get_tokens, OVERLAP_D1, MIN_SHARED_D1, metric=overlap_coefficient)
     seen_files = set()
     idx = 0
     memory_path = bundle.get("memory", {}).get("path")
@@ -342,6 +365,32 @@ def _num(v):
         return None
 
 
+def _group_rows(rows, key_columns):
+    """[(key_tuple_or_None, [(orig_idx0based, row), ...])] — groups `rows` (in append order) by
+    `key_columns` (e.g. ["plugin"]), preserving first-seen-group order. `orig_idx0based` is the
+    row's index into the FULL `rows` list (never a group-relative index) so evidence pointers
+    (`csv-row:N`) stay verifiable against the real file, which `detect.py --verify` re-reads
+    whole (gh#645 MAJOR-1). An empty `key_columns` (no grouping registered, e.g. recurrence_trend)
+    yields exactly one group spanning all rows — the pre-fix, ungrouped behavior."""
+    if not key_columns:
+        return [(None, list(enumerate(rows)))]
+    groups = {}
+    order = []
+    for i, row in enumerate(rows):
+        key = tuple(row.get(c) for c in key_columns)
+        if key not in groups:
+            groups[key] = []
+            order.append(key)
+        groups[key].append((i, row))
+    return [(k, groups[k]) for k in order]
+
+
+def _group_label(key_columns, gkey):
+    if not key_columns or gkey is None:
+        return ""
+    return " (" + ", ".join(f"{k}={v}" for k, v in zip(key_columns, gkey)) + ")"
+
+
 def detect_d3(bundle, window_days, now):
     findings = []
     metrics = bundle.get("metrics", {})
@@ -352,16 +401,16 @@ def detect_d3(bundle, window_days, now):
             continue
         rows = source.get("rows", [])
         path = source.get("path")
-        columns = source.get("columns") or []
+        series_columns = source.get("series_columns") or []
+        key_columns = source.get("key_columns") or []
 
-        # rent-growth / instrument-half-blind: per series column
+        # instrument-half-blind: a registered series column literally "absent" in every row of
+        # the WHOLE source — never-fed-ness is a source-wide question, not a per-key one, so this
+        # check stays ungrouped (gh#645 MAJOR-1's fix only groups the MONOTONIC-GROWTH check).
         if len(rows) >= MIN_ROWS_D3:
-            for col in columns:
-                if col in ("date", "plugin"):
-                    continue
+            for col in series_columns:
                 values = [row.get(col) for row in rows]
-                # instrument-half-blind: column is literally "absent" in every row
-                if all(v == "absent" for v in values):
+                if values and all(v == "absent" for v in values):
                     idx += 1
                     ev = [make_csv_row_evidence(path, i + 1, f"{col}=absent")
                           for i in range(min(3, len(rows)))]
@@ -375,28 +424,38 @@ def detect_d3(bundle, window_days, now):
                         "proposed_diff": None, "size": "ticket", "status": "proposed",
                     })
                     continue
-                nums = [_num(v) for v in values]
-                if any(v is None for v in nums):
-                    continue
-                monotonic = all(nums[i] <= nums[i + 1] for i in range(len(nums) - 1))
-                if not monotonic or nums[0] == 0:
-                    continue
-                growth_pct = (nums[-1] - nums[0]) / nums[0] * 100 if nums[0] else 0
-                if monotonic and growth_pct >= GROWTH_PCT_D3:
-                    idx += 1
-                    ev = [make_csv_row_evidence(path, 1, f"{col}={nums[0]:g}"),
-                          make_csv_row_evidence(path, len(rows), f"{col}={nums[-1]:g}")]
-                    findings.append({
-                        "id": f"D3-{idx}", "class": "D3", "severity": "minor",
-                        "summary": f"rent-growth: '{col}' in {Path(path).name} grew {growth_pct:.1f}% "
-                                   f"({nums[0]:g} -> {nums[-1]:g}) monotonically over {len(rows)} rows, "
-                                   f"no decrease.",
-                        "evidence": ev,
-                        "artifact": {"path": path, "kind": "trend-csv"},
-                        "owning_command": "authorkit:attention-audit (structural-fix set: reciprocal "
-                                          "fence / demote-to-wiring / merge / centralize-boilerplate / retire)",
-                        "proposed_diff": None, "size": "ticket", "status": "proposed",
-                    })
+
+                # rent-growth: monotonic non-decreasing GROUPED by key_columns (gh#645 MAJOR-1) —
+                # e.g. one series per `plugin`, never iterated across interleaved rows from
+                # multiple plugins (the bug: growth is real per-key but invisible ungrouped).
+                for gkey, indexed in _group_rows(rows, key_columns):
+                    if len(indexed) < MIN_ROWS_D3:
+                        continue
+                    nums = [_num(row.get(col)) for _, row in indexed]
+                    if any(v is None for v in nums):
+                        continue
+                    monotonic = all(nums[i] <= nums[i + 1] for i in range(len(nums) - 1))
+                    if not monotonic or nums[0] == 0:
+                        continue
+                    growth_pct = (nums[-1] - nums[0]) / nums[0] * 100 if nums[0] else 0
+                    if growth_pct >= GROWTH_PCT_D3:
+                        idx += 1
+                        first_i, _ = indexed[0]
+                        last_i, _ = indexed[-1]
+                        ev = [make_csv_row_evidence(path, first_i + 1, f"{col}={nums[0]:g}"),
+                              make_csv_row_evidence(path, last_i + 1, f"{col}={nums[-1]:g}")]
+                        label = _group_label(key_columns, gkey)
+                        findings.append({
+                            "id": f"D3-{idx}", "class": "D3", "severity": "minor",
+                            "summary": f"rent-growth: '{col}' in {Path(path).name}{label} grew "
+                                       f"{growth_pct:.1f}% ({nums[0]:g} -> {nums[-1]:g}) "
+                                       f"monotonically over {len(indexed)} rows, no decrease.",
+                            "evidence": ev,
+                            "artifact": {"path": path, "kind": "trend-csv"},
+                            "owning_command": "authorkit:attention-audit (structural-fix set: reciprocal "
+                                              "fence / demote-to-wiring / merge / centralize-boilerplate / retire)",
+                            "proposed_diff": None, "size": "ticket", "status": "proposed",
+                        })
 
         # series-not-firing: exactly 1 row, older than window_days
         if len(rows) == 1:
@@ -565,12 +624,65 @@ def selftest():
     d1 = [f for f in result["findings"] if f["class"] == "D1"]
     assert len(d1) >= 1, "D1 must fire on the fixture's feedback trio"
 
+    # gh#645 MAJOR-2: the realistic (long, varied-length) model-tiering trio must cluster into
+    # ONE D1 finding spanning all three files — proving the overlap-coefficient calibration, not
+    # just the near-identical toy trio, which any threshold would catch.
+    tiering_files = {"feedback-model-tiering-1.md", "feedback-model-tiering-2.md",
+                     "feedback-model-tiering-3.md"}
+    tiering_finding = next(
+        (f for f in d1 if tiering_files <= {Path(ev["path"]).name for ev in f["evidence"]}), None)
+    assert tiering_finding is not None, \
+        f"the realistic model-tiering trio must cluster as one D1 finding: {d1}"
+
+    # regression proof, mechanical not asserted-by-eye: under the OLD calibration (raw Jaccard
+    # >= 0.3) this exact trio would NEVER have clustered — every pairwise Jaccard stays below the
+    # old threshold, while the new overlap coefficient clears 0.2 with >= 3 shared tokens on
+    # every pair. This is the concrete "old missed it, new catches it" evidence gh#645 asked for.
+    tiering_descs = {
+        "1": "checker-model-pin-note Checker agents already pin fable at medium in their own "
+             "frontmatter; a per-dispatch model override on a checker is redundant and can "
+             "detach effort from the agent definition.",
+        "2": "orchestration-model-drift-report Kim observed several subagents riding the "
+             "orchestrating session's higher-priced model tier during a busy stretch; the root "
+             "cause traced back to per-dispatch model overrides plus inherit-class agents that "
+             "carry no pin of their own.",
+        "3": "review-tier-pin-reminder Review and critic agents should run at their own "
+             "already-pinned tier — never pass a model override on a checker dispatch, only pin "
+             "the model explicitly on ad-hoc general-purpose calls.",
+    }
+    tiering_toks = {k: tokenize(v) for k, v in tiering_descs.items()}
+    for a, b in (("1", "2"), ("1", "3"), ("2", "3")):
+        old_jaccard = jaccard(tiering_toks[a], tiering_toks[b])
+        new_overlap = overlap_coefficient(tiering_toks[a], tiering_toks[b])
+        shared_n = len(tiering_toks[a] & tiering_toks[b])
+        assert old_jaccard < 0.3, \
+            f"regression fixture {a}-{b} must stay BELOW the old raw-Jaccard 0.3 bar: {old_jaccard}"
+        assert new_overlap >= OVERLAP_D1 and shared_n >= MIN_SHARED_D1, \
+            f"regression fixture {a}-{b} must clear the new calibration: overlap={new_overlap} shared={shared_n}"
+
     d2 = [f for f in result["findings"] if f["class"] == "D2"]
     assert any("re-filed" in f["summary"].lower() or "Re-filed" in f["summary"] for f in d2), d2
 
     d3 = [f for f in result["findings"] if f["class"] == "D3"]
     d3_kinds = {f["summary"].split(":")[0] for f in d3}
     assert {"rent-growth", "instrument-half-blind", "series-not-firing", "ratchet-unadopted"} <= d3_kinds, d3_kinds
+
+    # gh#645 MAJOR-1: rent-growth must fire PER PLUGIN GROUP, not once for an ungrouped blob —
+    # both fixture plugins' routable_chars growth show up as distinct findings.
+    rent_growth = [f for f in d3 if f["summary"].startswith("rent-growth")]
+    rent_growth_routable = [f for f in rent_growth if "'routable_chars'" in f["summary"]]
+    assert any("plugin=demo-plugin)" in f["summary"] and "demo-plugin-two" not in f["summary"]
+               for f in rent_growth_routable), rent_growth_routable
+    assert any("plugin=demo-plugin-two)" in f["summary"] for f in rent_growth_routable), rent_growth_routable
+
+    # negative-control proof that grouping is load-bearing: the UNGROUPED interleaved series
+    # (both plugins' routable_chars in raw file order) is NOT monotonic — if detect_d3 iterated
+    # rows ungrouped (the pre-fix bug) it could never find this growth at all.
+    at_rows = bundle["metrics"]["attention_trend"]["rows"]
+    ungrouped_routable = [int(r["routable_chars"]) for r in at_rows]
+    assert not all(ungrouped_routable[i] <= ungrouped_routable[i + 1]
+                   for i in range(len(ungrouped_routable) - 1)), \
+        f"fixture must exercise the ungrouped-is-not-monotonic case: {ungrouped_routable}"
 
     d4 = [f for f in result["findings"] if f["class"] == "D4"]
     assert any("entry-file-oversized" in f["summary"] for f in d4), d4
@@ -587,9 +699,13 @@ def selftest():
             assert ok, f"{f['id']}: {ev} -> {why}"
 
     # same-date-row ordering (append order, never date sort) — attention_trend's rows preserve
-    # file order regardless of any date value
-    at_rows = bundle["metrics"]["attention_trend"]["rows"]
-    assert [r["routable_chars"] for r in at_rows] == ["10000", "10300", "10600", "10800"], at_rows
+    # file order regardless of any date value. gh#645 minor-8: the fixture's rows 1-2 (and every
+    # subsequent pair) genuinely share the same `date` — this is the real CSV's actual shape
+    # (multiple plugins logged the same day), not an untested claim.
+    assert [r["routable_chars"] for r in at_rows] == \
+        ["10000", "5000", "10300", "5400", "10600", "5900", "10800", "6200"], at_rows
+    assert at_rows[0]["date"] == at_rows[1]["date"], "fixture must have a same-date row pair"
+    assert at_rows[0]["plugin"] != at_rows[1]["plugin"], at_rows[:2]
 
     # negative control: an empty bundle -> zero findings
     empty_bundle = collect_mod.collect(Path(__file__).resolve().parent, memory_dir=None,

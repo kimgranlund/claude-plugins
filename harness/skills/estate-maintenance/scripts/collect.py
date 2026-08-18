@@ -129,20 +129,26 @@ def collect_memory(memory_dir):
 
 
 def collect_metric_source(root, entry):
-    """One METRIC_REGISTRY entry -> {present, reason, path, columns, rows, ordering}."""
+    """One METRIC_REGISTRY entry -> {present, reason, path, columns, rows, ordering,
+    key_columns, series_columns}. `key_columns`/`series_columns` ride through UNCONDITIONALLY
+    (present or not) so detect.py's D3 can group rows by key regardless of which branch fired —
+    the metric-source registry (Resolution b) is the only seam a future metric input touches,
+    and detect.py never re-derives these from raw CSV headers (gh#645 MAJOR-1 fix)."""
     path = Path(root) / entry["path"]
+    common = {"ordering": entry["ordering"], "key_columns": entry["key_columns"],
+              "series_columns": entry["series_columns"]}
     if not path.is_file():
         return {"present": False, "path": str(path),
                 "reason": f"{entry['path']} not found (registered, not yet present)",
-                "columns": None, "rows": [], "ordering": entry["ordering"]}
+                "columns": None, "rows": [], **common}
     text = _read_text(path)
     if not text or not text.strip():
         return {"present": False, "path": str(path), "reason": "file present but empty",
-                "columns": None, "rows": [], "ordering": entry["ordering"]}
+                "columns": None, "rows": [], **common}
     reader = csv.DictReader(text.splitlines())
     rows = list(reader)
     return {"present": True, "path": str(path), "reason": None,
-            "columns": reader.fieldnames or [], "rows": rows, "ordering": entry["ordering"]}
+            "columns": reader.fieldnames or [], "rows": rows, **common}
 
 
 def collect_metrics(root):
@@ -151,7 +157,9 @@ def collect_metrics(root):
         if entry["key"] == "cost_ledger" and not (Path(root) / entry["path"]).is_file():
             bundle[entry["key"]] = {"present": False, "path": str(Path(root) / entry["path"]),
                                      "reason": "cost ledger not yet shipped (gh#624)",
-                                     "columns": None, "rows": [], "ordering": entry["ordering"]}
+                                     "columns": None, "rows": [], "ordering": entry["ordering"],
+                                     "key_columns": entry["key_columns"],
+                                     "series_columns": entry["series_columns"]}
             continue
         bundle[entry["key"]] = collect_metric_source(root, entry)
     return bundle
@@ -233,14 +241,21 @@ def _line_count(path):
     return len(text.splitlines()) if text is not None else 0
 
 
-SKIP_DIRS = {".git", "node_modules", "dist", ".refactor-attic", "worktrees", ".ruff_cache"}
+SKIP_DIRS = {".git", "node_modules", "dist", ".refactor-attic", "worktrees", ".ruff_cache",
+             "fixture-estate"}  # this skill's own assets/fixture-estate/CLAUDE.md is a fixture
+                                # input, never a real entry file (gh#645 minor-4)
 
 
 def collect_census(root, metrics):
-    root = Path(root)
+    root = Path(root).resolve()
     entry_files = []
     for p in root.rglob("CLAUDE.md"):
-        if any(part in SKIP_DIRS for part in p.parts):
+        # Only the directory SEGMENTS BETWEEN root and the file are checked against SKIP_DIRS —
+        # never root's own name — so a selftest that points `root` directly AT a fixture dir
+        # (e.g. assets/fixture-estate/ itself) still sees its own positive-control CLAUDE.md;
+        # only a NESTED fixture-estate/ (the real-workspace case, gh#645 minor-4) is skipped.
+        rel_dirs = p.resolve().relative_to(root).parts[:-1]
+        if any(part in SKIP_DIRS for part in rel_dirs):
             continue
         n = _line_count(p)
         entry_files.append({"path": str(p), "lines": n, "over_threshold": n > ENTRY_FILE_LINE_THRESHOLD})
@@ -357,6 +372,24 @@ def selftest():
     over = [e for e in bundle["census"]["entry_files"] if e["over_threshold"]]
     assert len(over) >= 1, bundle["census"]["entry_files"]
     assert bundle["census"]["rules_count"] == 2, bundle["census"]
+
+    # gh#645 minor-4: scanning a root that CONTAINS assets/fixture-estate/ as a nested
+    # subdirectory must exclude the fixture's own CLAUDE.md from the census — the skill must
+    # never flag its own fixture as a D4 finding about itself. (The assertion just above proves
+    # the OPPOSITE case still works: pointing `root` directly AT fixture-estate still sees its
+    # own positive-control CLAUDE.md, since only NESTED occurrences are skipped.)
+    skill_root = Path(__file__).resolve().parents[1]  # harness/skills/estate-maintenance/
+    nested = collect(skill_root, memory_dir=None, issues_path=None, window_days=90,
+                      now="2026-08-25")
+    nested_paths = [e["path"] for e in nested["census"]["entry_files"]]
+    assert not any("fixture-estate" in p for p in nested_paths), nested_paths
+
+    # gh#645 MAJOR-1: key_columns/series_columns ride through into the bundle for every metric
+    # source (present or absent) — detect.py's D3 grouping depends on this, never re-derived.
+    assert bundle["metrics"]["attention_trend"]["key_columns"] == ["plugin"]
+    assert bundle["metrics"]["attention_trend"]["series_columns"] == [
+        "routable_chars", "agent_chars", "dead", "stolen", "leaked"]
+    assert bundle["metrics"]["cost_ledger"]["key_columns"] == ["event-kind"]
 
     # decisions: absent adr-queue/revalidation-queue in the fixture -> present:false, never raises
     assert bundle["decisions"]["adr_queue"]["present"] is False
