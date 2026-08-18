@@ -55,15 +55,16 @@ on falsification, never edit once locked.
 
 ## Open questions
 
-- Which loops are IN the first calendar and at what cadences (candidates: daily board drain,
-  weekly doctrine re-validation sample per idr-0009, monthly brief review, release-boundary
-  snapshot refresh) — this is the ratification round's core question; the draft deliberately
-  rules the CONCEPT, not the timetable.
-- Calendar canon location — lean: a living-state ops file (`.claude/ops/calendar.md`), one
-  canonical copy with an owner, per the living-state class; not the IDR (ledger), not fleet.json
-  (a roster, not a schedule). Open per gh#626.
-- First standing schedule mechanics — lean: a cloud `/schedule` routine (survives sessions) over
-  a re-arm-on-open convention; named as a follow-up seed in gh#626, deliberately not built in
-  this PR.
-- Kim-queue batching: cadence (daily digest lean), channel (`held-items.md` vs PushNotification),
-  and priority order — needs the ruling round.
+- Which loops + cadences are in the first calendar — the ratification round's core question; the
+  draft rules the CONCEPT, not the timetable. Open per gh#626.
+- Calendar canon location — lean: a living-state ops file (`.claude/ops/calendar.md`). Open per
+  gh#626.
+- First standing schedule — gh#626's Acceptance requires it to EXIST alongside the ruling;
+  deferred out of this docs-only draft PR per the dated deferral Findings entry on gh#626
+  (2026-08-18), which is the durable record of that deviation. Lean: a cloud `/schedule` routine
+  (survives sessions); builds immediately after lock.
+- Kim-queue batching — lean: daily digest via `held-items.md`; channel and priority order open
+  per gh#626.
+- At-lock disposition: each bullet above is either ruled in the ratification round or carried
+  forward as a dated open question on this record; the brief's spine line then moves this record
+  to Confirmed (the idr-0007 pattern).

@@ -40,11 +40,20 @@ mitigation, or it is a defect. The named exceptions, each with its mitigation:
 1. **Memory directory** (`~/.claude/projects/.../memory/`) — session-derived judgment, not
    canon. Mitigation: anything in memory that has become load-bearing doctrine is promoted into
    a committed record (skill, rule, ADR/IDR); the residue is accepted as lossy by design.
-2. **Plugin cache / installed-plugin state** — regenerable from source. Mitigation: a documented
-   reinstall path from this repo's plugin roots; the repo's manifests are the canon.
+2. **Plugin cache / installed-plugin state** — regenerable from source; the repo's manifests are
+   the canon. Mitigation (owed at lock, does not exist yet): a documented reinstall path from
+   this repo's plugin roots — a deliverable this ADR's acceptance creates, seeded as a ticket
+   line in gh#627.
 3. **Credentials** (gh auth, API keys, `.env`-class material) — never committed, by standing
-   deny rules. Mitigation: a re-issuance runbook naming each credential and where it is
-   re-obtained, committed in place of the secrets themselves.
+   deny rules. Mitigation (owed at lock, does not exist yet): a re-issuance runbook naming each
+   credential and where it is re-obtained, committed in place of the secrets themselves — same
+   owed-at-lock deliverable class, seeded in gh#627.
+4. **User-scoped `~/.claude` / `~/.config` state** — the global CLAUDE.md, the `settings.json`
+   deny tripwires (the rm/dotenv guards), and the git-ignore convention keeping
+   `settings.local.json` untracked: operationally load-bearing, entirely outside any repo.
+   Mitigation lean: a committed canonical copy or dotfiles pointer for the global CLAUDE.md and
+   the deny-rule set, plus a re-derivation note for the remainder — exact mechanism ruled at
+   ratification (open question 2).
 
 The ruling's instrument (named, not shipped in this PR — follow-up seed in gh#627): a
 **read-only reconstructibility audit** — a selftest-bearing script that sweeps the estate and
@@ -67,9 +76,13 @@ the account, not resilient to losing the account; that larger question stays ope
 - Audit instrument home: lean is harness `scripts/` (a workspace-generic sweep in the toolchain
   plugin); routing owes the anti-matrix check before minting (gh#627 names authorkit/ops as the
   alternative).
-- Scope edges to ratify: lean is `.claude/ops/` IN scope (it is load-bearing — commit it or
-  enroll it), `settings.local.json` OUT with a documented re-derivation note; worktrees
-  themselves out (regenerable by definition).
+- Scope edges to ratify: `.claude/ops/` is ALREADY fully committed — verified on this branch,
+  11 top-level ops files (fleet.json, friendlies.json, plan.md, held-items.md, roster and
+  checkpoints) plus the tracked `reports/` archive — so it sits inside the rule, not the
+  exception list; that is a fact, not a lean. Still to rule: `settings.local.json` OUT with a
+  documented re-derivation note (lean), worktrees OUT (regenerable by definition), and the
+  exact mitigation mechanism for exception 4's user-scoped state (committed canonical copy vs
+  dotfiles pointer vs enroll-with-re-derivation-note).
 - Whether the account/organization single-point (one GitHub account owns the canon) gets its own
   mitigation line or is explicitly accepted — the seed is silent; drafted here as accepted-for-now.
 - Exact exception list at lock: the three above are the seed's; ratification may add or strike.

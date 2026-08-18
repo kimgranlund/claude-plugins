@@ -18,8 +18,10 @@ supersedes: null
 ## Claim
 
 Loops have token budgets; the estate has none. A single day now runs on the order of five sweep
-firings (~200k tokens each) plus a dozen 150–400k-token builds with no ledger, no cost-per-outcome
-notion, and no doctrine for when a firing is worth its tokens. The claim: **every recurring
+firings (~200k tokens each) plus a dozen 150–400k-token builds — figures that are
+order-of-magnitude estimates, unmeasured, itself an instance of the very gap this record names —
+with no ledger, no cost-per-outcome notion, and no doctrine for when a firing is worth its
+tokens. The claim: **every recurring
 firing class — sweeps, dispatched builds, standing seats — must be priced**: a per-firing ledger
 row carrying at minimum tokens-spent and outcome, and a worth-firing test any recurring
 automation must pass to keep its cadence. Unpriced automation grows monotonically until it

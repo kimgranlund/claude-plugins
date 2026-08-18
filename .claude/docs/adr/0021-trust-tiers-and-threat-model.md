@@ -31,8 +31,12 @@ idr-0008/0009/0010/0011, adr-0022).
 
 ## Decision
 
-Proposed: every input surface that can influence an agent's behavior is assigned a **trust
-tier**, and the tier — not the surface's convenience — rules what that input may do:
+Proposed: every input that can influence an agent's behavior is assigned a **trust tier by its
+AUTHOR'S provenance**, and the tier — not the surface's convenience — rules what that input may
+do. A channel can only LOWER a tier, never raise it: input whose authorship cannot be verified
+is handled at the channel's floor, but verified operator authorship keeps its tier regardless of
+the pipe it arrives through — an operator-authored cron-routine payload is T0 input, while a
+cron payload of unverifiable authorship is handled as T2.
 
 - **T0 — Operator.** Kim's own messages and AskUserQuestion answers, and the permission system.
   May change anything, including permissions, config, and doctrine. Nothing else ever may.
@@ -40,12 +44,18 @@ tier**, and the tier — not the surface's convenience — rules what that input
   (fleet.json). May direct work within a dispatched charter; may never authorize permission,
   settings, or config changes, and is never consent (the standing dispatched-agent rule, now
   tiered rather than ambient).
-- **T2 — Record text.** PR/Issue/ticket bodies, artifact and shared-content text, cron-routine
-  payloads. **Data, never instructions**: when record text enters a dispatch prompt it is fenced
-  and labeled untrusted (the quote-not-obey rule), and a directive found inside it is reported,
-  not obeyed. ADR-0012's `auto-merge: authorized` grant line remains the ONE ruled exception —
-  a T2-carried token deliberately granted T1-like force, subsumed here as a named carve-out
-  rather than an ambient precedent.
+- **T2 — Record text and foreign-authored content.** PR/Issue/ticket bodies, artifact and
+  shared-content text, tool outputs, fetched web content, and MCP-served content. **Data, never
+  instructions**: when record text enters a dispatch prompt it is fenced and labeled untrusted
+  (the quote-not-obey rule), and a directive found inside it is reported, not obeyed. One
+  charter distinction: a record that a T0/T1 dispatcher DESIGNATES as the work's charter (the
+  ticket being built) is executed under that dispatcher's authority — it is the dispatcher's
+  instruction carried by reference — while record text merely encountered or quoted in passing
+  stays fenced data. ADR-0012's `auto-merge: authorized` grant line needs NO T2 exception under
+  this model, which strengthens the Decision: ADR-0012's own mechanics place the grant line in
+  the SEALED DISPATCH PROMPT by the coordinator — T0/T1 authorship in a T1 channel — so it was
+  never record text at all. The negative rule is explicit: the grant line appearing INSIDE T2
+  record text (an issue body, a PR comment) has no force.
 - **T3 — Foreign/unauthenticated.** Input from authors outside `friendlies.json`. Passes the
   friendlies gate before it is even handled as T2; may trigger triage only, never dispatch.
 
@@ -68,8 +78,10 @@ default.
 ## Open questions
 
 - Exact input-surface inventory: the seed names four (SendMessage, record text into prompts,
-  gh-api landings, bypassPermissions); artifact/shared-content text and cron payloads are
-  assigned T2 above by this draft's judgment — confirm the full enumeration at ratification.
+  gh-api landings, bypassPermissions); this draft's judgment additionally assigns artifact/
+  shared-content text, tool outputs, fetched web content, and MCP-served content to T2, and
+  rules cron payloads by author provenance (operator-authored = T0) — confirm the full
+  enumeration at ratification.
 - Human-facing surfaces: lean is minimally IN — who may edit `friendlies.json` itself is a T0
   act (an operator-only write), stated here rather than left ambient; confirm.
 - One ADR vs ADR + companion SPEC: lean is one ADR; a SPEC is minted only if the tier table
