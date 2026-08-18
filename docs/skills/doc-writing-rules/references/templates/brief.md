@@ -5,6 +5,8 @@ status: active
 date: YYYY-MM-DD
 owner: 
 review-cadence: monthly
+scope: app              # app only — whole-product living index (#657)
+audience: human, product-seat  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657)
 ---
 # BRIEF — <scope>
 

@@ -214,6 +214,54 @@ same ADR" — is a deferred `decision-watcher` (harness) extension, out of this 
 (judgment-tier, cross-corpus, not a single-file lint). Full scoping: `prd-rdd-framework.md`;
 concept authority: `product-lifecycle-bible.md` Part 4.
 
+## Scope grain + audience frontmatter (ratified #655/#657, 2026-08-18)
+
+Two frontmatter fields cut across every type, both lint-enforced (`doc_lint.py`'s T12/T13) on NEW
+mints only — a document with no committed HEAD version (grandfather + ratchet below).
+
+**`scope:`** — the grain a document's claim is made at, one of `app | feature | component`. Eight
+types are grain-constrained by the ratified table; TICKET, TASK, and PLAN are deliberately
+absent — execution trackers (a shippable unit, a sitting, a sequenced step) that make no
+product-grain claim of their own, unlike BRIEF/ROADMAP's own living-state index over IDRs (which
+DOES claim `app` grain, row below) — so the three carry no `scope:` requirement:
+
+| Type | Grain |
+|---|---|
+| BRIEF · IDR · ROADMAP | `app` only — whole-product, whole-app scope (IDR: ruled #652) |
+| PRD · RDD | `app` or `feature` — the one pair spanning both scopes |
+| SPEC · LLD | `feature` or `component` — the contract/design tier, never whole-app |
+| ADR | decision-scoped — any of the three; a decision can be made at any grain |
+
+**`audience:`** — the seat-class(es) a document is written FOR, one-or-more of `human |
+product-seat | planner | builder | reviewer | any-agent`, comma/space-separated on one line
+(`parse_frontmatter` is a scalar parser — the same convention RDD's `decision-refs:` already
+established). Applies to every type, including TICKET/TASK/PLAN. **Required, explicit, on every
+new mint — `doc_lint.py`'s T13 FAILs an absent value; there is no any-agent default** (ratified
+2026-08-18): a document silently read by whichever seat happens across it is exactly the
+ambiguity this field exists to remove.
+
+**Grandfather + ratchet (ADR-0011 D8 precedent).** Both fields are enforced on NEW mints only. The
+existing, already-committed corpus is exempt from the PRESENCE requirement — nothing is
+retrofitted by this ticket; a grandfathered document that DOES carry either field is still held
+to the same value validation (grain membership, audience vocabulary) as a new one — grandfather
+waives presence, never correctness. `doc_lint.py`'s `is_new_mint()` realizes the test: the same
+git-HEAD-aware shape as T4's `head_is_locked_ledger()`, inverted — untracked/new -> enforce
+presence; already committed -> exempt.
+
+## Owed chain (ratified #655 decision 2 — canon text only; mechanization owed to `teamwork:dispatch-ticket`, a later wave)
+
+A ticket owes progressively more upstream documentation as its materiality rises — the sized
+ladder that `teamwork:dispatch-ticket`'s own sizing phase will encode mechanically, in a later
+wave not yet built; this skill owns only the canon text that future mechanism will cite:
+
+`ticket only` → **+LLD** (`size: big`) → **+ADR** (a contract-changing decision) → **+SPEC** (an
+externally-consumed surface) → **+PRD entry** (a product-visible capability) → **+RDD** (a
+release-grain commitment).
+
+Each rung is additive, never a replacement for the rung below it — a release-grain RDD still
+cites the ADR/IDR beneath it (its own `decision-refs:`), never floats free of the ladder's lower
+rungs.
+
 ## Bug-shaped tickets
 
 A bug report is a TICKET, not a ninth type: `kind: bug` in frontmatter (optional, filterable, not

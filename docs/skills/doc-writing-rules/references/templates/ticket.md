@@ -4,6 +4,7 @@ id: tkt-0000
 status: open            # open | doing | done | wontfix
 date: YYYY-MM-DD
 owner: 
+audience: builder, reviewer  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657); TICKET carries no scope: — not grain-governed
 ---
 # TKT-0000 — <one shippable unit>
 
