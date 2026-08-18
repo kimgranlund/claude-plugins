@@ -495,6 +495,11 @@
       "canonical": "artifact",
       "plural": "artifacts",
       "banned_aliases": []
+    },
+    {
+      "canonical": "spend",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

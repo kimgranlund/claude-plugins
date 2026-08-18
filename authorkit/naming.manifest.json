@@ -116,6 +116,11 @@
       "canonical": "recurrence",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "spend",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

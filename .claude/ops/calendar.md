@@ -25,6 +25,7 @@ should fire, not what it costs to.
 | Release-boundary handbook/artifact refresh | Event-triggered, not calendar-time: at each release boundary of the source design system, or whenever its source doc/content changes | Re-run `/make-artifact` (docs plugin, lld-0013 — #619) against current inputs; provenance footer makes staleness detectable | Whoever ships the release | **Standing procedure, human-fired** — not a `/schedule` routine (a hook would only nag, never rebuild; #619's Resolution 4 rejects that shape) |
 | Monthly brief review | Monthly | Human review against `review-cadence: monthly` frontmatter | Kim | `.claude/docs/brief/brief-nonoun-plugins.md` — human-assert per gh#626's Acceptance (final ratification/cadence fitness is human-assert, not agent-checkable) |
 | Monthly roadmap review | Monthly | Human review against `review-cadence: monthly` frontmatter | Kim | `.claude/docs/roadmap/roadmap-nonoun-plugins.md` — same human-assert tier as the brief |
+| Spend-ledger review | Monthly (tunable) | Human review of `.claude/ops/spend-ledger.csv` via `spend-audit`'s Audit procedure | Kim | human-assert cadence, alongside the brief review — `lld-0018-estate-economy-ledger.md` Resolution 6 |
 
 ## First standing schedule
 
