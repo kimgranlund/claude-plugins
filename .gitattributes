@@ -1,0 +1,7 @@
+# .claude/ops/spend-ledger.csv is an append-only, multi-writer ledger (idr-0010,
+# lld-0018-estate-economy-ledger.md Resolution 4): two branches each appending a row at EOF
+# would otherwise conflict on a 3-way merge. `merge=union` keeps both sides' lines — honored
+# by local merges/rebases and sync_main.py (GitHub's own web merge does NOT honor custom
+# merge drivers, so a PR-side conflict on this file is still possible; it resolves by keeping
+# both rows, same outcome).
+.claude/ops/spend-ledger.csv merge=union

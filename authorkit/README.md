@@ -55,6 +55,9 @@ this exact dial pair before this ticket (§ below) — the pattern is not new, o
 | `skills/recurrence-audit` | Command skill | both | Instruments IDR-0006's two success measures — per-class incident-recurrence rate (primary) and the `/check-routing` pass-rate trend (secondary). Walks the estate for the seeded `LEDGER-CLASS:` citation convention, runs the live `gh issue` conjunct-A check, and appends a dated row to `recurrence-trend.csv`. Read-only; reports, never rewrites doctrine or gates |
 | `skills/recurrence-audit/scripts/scan.py` | Script | invoked by recurrence-audit | Deterministic ledger inventory: seeded `LEDGER-CLASS:` tags grouped by class, plus a bare `#NNN`-citation baseline over `.md` files. `selftest` mode proves seeded/bare/multi-id/multi-class/malformed-tag/skip-dir/binary/empty-target/verdict/stability counters bite |
 | `skills/recurrence-audit/scripts/trend.py` | Script | invoked by recurrence-audit | Appends one dated row to `recurrence-trend.csv` — the recurrence-class count/verdict and the routing-eval pass-rate, kept as separate columns, never blended. `selftest` mode proves the zero-vs-absent distinction, the routing degraded mode, and append semantics |
+| `skills/spend-audit` | Command skill | both | Instruments idr-0010's estate economy claim — a per-firing token-spend ledger at `.claude/ops/spend-ledger.csv` (attention-trend.csv-shaped, append-only). Appends one validated row per sweep/build firing (tokens, provenance, outcome, verdict), re-validates an existing ledger standalone, and runs a Collector/backfill procedure plus a per-class worth-firing Audit render. Read-only over doctrine/gates; reports and appends only |
+| `skills/spend-audit/scripts/validate.py` | Script | invoked by spend-audit | The schema owner: `HEADER`, the closed enums, `DATE_RE`, `validate_row`/`validate_file`. Deterministic, stdlib-only. `selftest` mode proves clean/foreign-header/per-field/cross-field/tokens-shape/ref-shape/duplicate-key-WARN/no-blended-column/missing-file counters bite |
+| `skills/spend-audit/scripts/trend.py` | Script | invoked by spend-audit | Appends exactly one validated row to `spend-ledger.csv` — imports `validate.py` as a sibling module so the schema exists in one file. Validates BEFORE writing: a malformed row or a foreign-header file is refused outright, nothing written. `selftest` mode proves append semantics, the write-refusal negative control (byte-identical file), the schema-mismatch path, and `--dry-run` |
 | `scripts/fix_old_names.py` | Script | CLI + selftest | Moved from harness 2026-08-14 (issue #197). Classifies each stale-name hit LIVE (rewrite) vs HISTORICAL (byte-identical) vs AMBIGUOUS (escalated); report-only by default, `--write` applies, exit 1 on live hits. `derive` regenerates `renames.json` from git rename detection |
 
 ## Invocation dials
@@ -89,6 +92,40 @@ agent's own backing skill, carries no procedure but the same model-invocable dia
 was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
+
+v0.22.0 · 2026-08-18 · Wave 1 of idr-0010's estate economy claim (gh#624,
+lld-0018-estate-economy-ledger.md): `spend-audit` joins as a seventh audit-family sibling — a
+per-firing token-spend ledger at `.claude/ops/spend-ledger.csv` (attention-trend.csv-shaped:
+dated CSV, append-only, the literal `absent` for anything unmeasured). Row schema is Kim's six
+base columns (`date`/`event_kind`/`seat`/`tokens`/`outcome`/`verdict`) plus two this design adds
+and flags for veto: `ref` (the firing's durable artifact — the `(date, event_kind, seat, ref)`
+dedupe key the backfill path needs) and `tokens_source` (`measured`\|`estimated`\|`absent` — a
+provenance flag on `tokens`, never a derived number). `scripts/validate.py` is the schema owner
+(`HEADER` + closed enums + `validate_row`/`validate_file`); `scripts/trend.py` imports it as a
+sibling module and validates before it writes — a malformed row or a foreign-header file is
+refused outright, nothing written, not even the header on a fresh file. Both scripts' selftests
+assert the family's no-blended-column law (no `ratio`/`quotient`/`per_token` column) and carry
+negative + reverse controls (foreign header, cross-field tokens/tokens_source both directions,
+negative/non-integer tokens, bad `ref`, exact-duplicate-key WARN vs. `ref none` reverse control,
+write-refusal byte-identical-file check, missing-file → exit 0 "no ledger yet"). The write path
+is hook-free by construction (#466): a close-out convention (the seat owning a firing's close-out
+appends its own row as its last step; a sealed dispatched seat's dispatcher appends on its
+behalf) plus a Collector/backfill procedure as the fallback, no new agent. `spend` registered in
+ObjectVocab (both this plugin's bundled manifest and the repo-root one) — `spend-audit` parses as
+`{object: spend}-{process: audit}`, `audit` already in ProcessLex; 0 grammar errors under both.
+One-sided reciprocal fence against `attention-audit` (Resolution 1: its description is 692/700
+chars, no room for a NOT-clause) — the fence lives on `spend-audit`'s own suite plus one new
+sibling-suite no-trigger case (n12) in `attention-audit`'s evals; `attention-audit`'s description
+itself is NOT edited. Ledger seeded with this build's own row via a real `trend.py` run (never
+hand-written): `2026-08-18,build,dispatch-ticket,#624,absent,absent,pr-opened,undetermined`.
+`.gitattributes` created at the repo root (`.claude/ops/spend-ledger.csv merge=union`) for the
+shared-CSV append-collision class; `.claude/ops/calendar.md` gains one "Spend-ledger review"
+standing-loop row (monthly, human-assert cadence). **Scope, stated (not a corner cut):** gh#624's
+acceptance criterion 3 — `fleet-rules`/`loop-rules` pricing bullets — is Wave 2, DEFERRED to a
+separate PR blocked on teamwork's version slot being clear (PR #639 held it at authoring time);
+gh#624 stays OPEN after this ships. `estate-audit-agent` is NOT extended in Wave 1 (its scripts
+already ride the agent's existing `validate.py`/`trend.py` path-glob grants by name, no allowlist
+edit needed). Fresh-context skill-checker pass recorded in the build's PR.
 
 v0.21.0 · 2026-08-18 · closes #627 (harness's new `check-reconstructibility` skill, ADR-0022's
 own instrument): `repo-audit`'s evals suite gains one reciprocal no-trigger fence (n08) naming

@@ -1,0 +1,66 @@
+{
+  "skill": "spend-audit",
+  "note": "This skill owns idr-0010's estate-economy axis — a per-firing token-spend ledger (tokens/provenance/outcome/verdict) and its worth-firing render — distinct from attention-audit's always-on menu-rent/description-collision axis, recurrence-audit's incident-recurrence axis, bloat-audit's prose-economy axis, and teamwork loop-rules' loop-budget design, even though attention-audit and this skill share nearby vocabulary (cost/economy/spend) and both append a per-release-shaped CSV. Authored fresh at mint (2026-08-18, gh#624, lld-0018-estate-economy-ledger.md) — no prior eval history. attention-audit gains the reciprocal no-trigger case in its own evals.json (Resolution 1's one-sided fence — its description is 692/700 chars, no room for a NOT-clause, so the fence lives on this suite's side plus that sibling-suite case).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Append a spend-ledger row for the sweep that just ran.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Is the hourly issue-sorter worth its tokens?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Which of our recurring sweeps cost more than they yield?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Validate .claude/ops/spend-ledger.csv",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Backfill ledger rows for yesterday's builds.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Price this build firing per idr-0010.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Which skills and plugins tax Claude's performance the most, and are any descriptions colliding in routing?",
+      "expect": "no-trigger",
+      "comment": "owner: attention-audit — menu rent / description collisions"
+    },
+    {
+      "id": "n02",
+      "prompt": "Walk the ledger and tell me which incident classes came back after we fixed them.",
+      "expect": "no-trigger",
+      "comment": "owner: recurrence-audit — incident recurrence"
+    },
+    {
+      "id": "n03",
+      "prompt": "Does this skill need to be this long? Audit it for busy-work and prose bloat.",
+      "expect": "no-trigger",
+      "comment": "owner: bloat-audit — prose bloat"
+    },
+    {
+      "id": "n04",
+      "prompt": "Design the token budget for a /goal loop.",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork loop-rules — loop budget design, not a per-firing spend ledger"
+    },
+    {
+      "id": "n05",
+      "prompt": "How much does this description cost per turn?",
+      "expect": "no-trigger",
+      "comment": "owner: attention-audit — the nearest twin phrase, deliberately included: always-on menu rent, not a per-firing spend row"
+    }
+  ]
+}
