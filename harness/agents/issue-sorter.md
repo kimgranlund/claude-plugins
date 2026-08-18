@@ -59,7 +59,8 @@ This is the primary deployment shape: unattended, bounded, idempotent per firing
 <example>
 Context: A maintainer reviewed held-items.md and wants to act on one entry.
 user: "approve the item from @newcontributor in held-items.md — it's legit"
-assistant: "Dispatching issue-sorter carrying that approval: mints the record and grows
+assistant: "Dispatching issue-sorter carrying that approval: mints the record, tags it
+user-signal (the hold already proved foreign origin, watch-tickets step 5), and grows
 friendlies.json for that author."
 <commentary>
 The human decision is external to any firing; this dispatch executes an ALREADY-MADE decision,

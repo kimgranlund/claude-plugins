@@ -28,7 +28,10 @@ every phase below follows whichever option it returns.
 in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
 `gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
 `TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`,
-REQ-010) — → resume by that record's state. Trailing text that is EXACTLY the Phase 6 offer's own
+REQ-010) — → resume by that record's state. On the git-native backend, apply `doc-writing-rules`'
+Provenance-tagging convention (`references/backend-resolver.md`) to the resolved record right
+here, before any branch below — every branch that follows exits this phase, so the tag is applied
+at resolution time, not deferred to a phase a given resume might never reach. Trailing text that is EXACTLY the Phase 6 offer's own
 resume word (verbatim `install-docs-index`, case-insensitive, nothing else trailing it) → skip
 straight to Phase 6's write regardless of open/closed state — accepting the index offer is not a
 scope change and needs no sizing. Anything more than the bare word (new detail, an answer, the
@@ -148,7 +151,11 @@ for the eventual build's write-back.
   operation and reports the fallback in the close-out; never leave the idea uncaptured because the
   preferred store was unreachable.
 
-`.github/ISSUE_TEMPLATE/feature.yml` mirrors this contract for a human filing directly on GitHub.
+`.github/ISSUE_TEMPLATE/feature.yml` mirrors this contract for a human filing directly on GitHub —
+this template, plus its `bug`/`task` siblings, IS the feedback intake door idr-0008 names; no
+separate door exists or is owed. On Option B, apply `doc-writing-rules`' Provenance-tagging
+convention (`references/backend-resolver.md`) at this record's creation — Phase 1 above applies
+the same convention on resume.
 
 Place it: add the line to ROADMAP (Now/Next/Later) or PLAN **only where those docs already
 exist** — never mint living-state docs unprompted (both backends; queue docs stay files).

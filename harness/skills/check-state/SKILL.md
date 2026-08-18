@@ -80,7 +80,9 @@ a 🟢 header licenses skipping that section, not the rest of the report:
    for a stale plan).
 4. **Delta** — added/removed per layer since the checkpoint, or "first run — no delta".
 5. **Counts** — one line per layer: branches / worktrees / stashes / issues / PRs /
-   docs / release drift / armed automation.
+   docs / release drift / armed automation / **user-signal records** (idr-0008/adr-0021's
+   foreign-origin-record instrument, gh#622 — `ticket_state.py`'s `user_signal` field, read
+   directly: "N total (M open)"; `0 total` is a real, reportable value, not an omitted line).
 6. **Fleet rollup** (only rendered when `--fleet` was passed) — one sub-block per named
    repo: open work + in-flight claims, plugin-cache drift (`in-sync` /
    `stale-cache` / `repo-behind-cache` for a marketplace source repo, `UNMEASURED` when

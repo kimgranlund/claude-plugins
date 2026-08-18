@@ -30,7 +30,10 @@ every phase below follows whichever option it returns.
 `gh issue view`), `tkt-####` (file backend), or under Option C an id in the resolved adapter's own
 native format (Linear: `TEAM-123`) resolving via that adapter's `read` operation
 (`references/linear-adapter.md`, REQ-010) — → this is a RESUME; branch on what follows the id,
-never re-mint:
+never re-mint. On the git-native backend, apply `doc-writing-rules`' Provenance-tagging
+convention (`references/backend-resolver.md`) to the resolved record right here, before any
+branch below — every branch that follows exits this phase, so the tag is applied at resolution
+time, not deferred to a phase a given resume might never reach.
 
 - **A status verb** — fires ONLY when the entire trailing text is one token from
   `done` · `doing` · `wontfix` (case-insensitive), with the single exception
@@ -160,7 +163,11 @@ question (no `[redirected-from:X]`/`[unattended]` marker on the seed), this clos
 verbatim plus the resume command (`/file-task <id> answer: <text>`) — this is the report the caller's
 session actually reads.
 
-`.github/ISSUE_TEMPLATE/task.yml` mirrors this contract for a human filing directly on GitHub.
+`.github/ISSUE_TEMPLATE/task.yml` mirrors this contract for a human filing directly on GitHub —
+this template, plus its `bug`/`feature` siblings, IS the feedback intake door idr-0008 names; no
+separate door exists or is owed. On Option B, apply `doc-writing-rules`' Provenance-tagging
+convention (`references/backend-resolver.md`) at this record's creation — Phase 1 above applies
+the same convention on resume.
 
 ## Failure branches
 

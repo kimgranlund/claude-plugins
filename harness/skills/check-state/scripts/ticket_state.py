@@ -20,6 +20,10 @@ Collects (open issues + PRs, last 30 merged PRs, remote heads, viewer login):
           awaiting_my_review (viewer named in reviewRequests)
   merged_branch_survivors  merged PRs whose remote head branch still exists —
           the silent-delete-failure class campaign_close.py exists to kill
+  user_signal  ALL-STATE (not just open) count of issues carrying the `user-signal` label —
+          idr-0008/adr-0021's foreign-origin-record instrument (gh#622); deliberately a
+          separate, all-state query from the open-only `issues` collection above, since a
+          closed foreign-origin record must still count toward the running total
 
 Exit: 0 snapshot printed · 1 gh/git failure · 2 usage, gh absent/unauthenticated,
 or non-GitHub backend.
@@ -117,6 +121,20 @@ def find_survivors(merged_prs, remote_heads):
             for p in merged_prs if p.get("headRefName") in remote_heads]
 
 
+def classify_user_signal(issues):
+    """issues: the `gh issue list --label user-signal --state all` shape
+    ([{'number':.., 'state':'OPEN'|'CLOSED'}, ...]). Pure — idr-0008/adr-0021's foreign-origin
+    instrument tally. `state` values arrive upper-cased from `gh`'s own JSON."""
+    out = {"total": len(issues), "open": [], "closed": []}
+    for i in issues:
+        n = i["number"]
+        if (i.get("state") or "").upper() == "CLOSED":
+            out["closed"].append(n)
+        else:
+            out["open"].append(n)
+    return out
+
+
 def collect(root, stale_days):
     if not shutil.which("gh"):
         print("ticket_state · SKIP · `gh` CLI not installed (brew install gh)"); sys.exit(2)
@@ -145,10 +163,14 @@ def collect(root, stale_days):
     heads = {ln.split("refs/heads/", 1)[1].strip()
              for ln in _run(["git", "ls-remote", "--heads", "origin"], cwd=root).splitlines()
              if "refs/heads/" in ln}
+    user_signal_issues = json.loads(_run(
+        ["gh", "issue", "list", "--label", "user-signal", "--state", "all", "--limit", "500",
+         "--json", "number,state,createdAt"], cwd=root))
     return {"backend": "github", "stale_days": stale_days, "viewer": viewer,
             "issues": classify_issues(issues, now, stale_days),
             "prs": classify_prs(prs, viewer),
-            "merged_branch_survivors": find_survivors(merged, heads)}
+            "merged_branch_survivors": find_survivors(merged, heads),
+            "user_signal": classify_user_signal(user_signal_issues)}
 
 
 def selftest():
@@ -200,6 +222,16 @@ def selftest():
                           {"main", "left-behind"})
     if surv != [{"pr": 20, "branch": "left-behind"}]:
         fails.append("negative/reverse control: survivor detection wrong")
+    # user_signal (gh#622/idr-0008): all-state tally, open+closed both counted
+    us = classify_user_signal([
+        {"number": 30, "state": "OPEN"},
+        {"number": 31, "state": "CLOSED"},
+        {"number": 32, "state": "open"},
+    ])
+    if us["total"] != 3 or us["open"] != [30, 32] or us["closed"] != [31]:
+        fails.append("negative control: user_signal open/closed split wrong (or case-sensitive)")
+    if classify_user_signal([])["total"] != 0:
+        fails.append("reverse control: empty user-signal set must total 0, not error")
     if fails:
         print(f"ticket_state · selftest FAIL · {len(fails)} fail / 0 warn")
         [print(f"  - {f}") for f in fails]; sys.exit(1)
