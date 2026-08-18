@@ -1,0 +1,10 @@
+[
+  {
+    "local": "kimgranlund/claude-plugins#490",
+    "upstream": "anthropics/claude-code#87349"
+  },
+  {
+    "local": "kimgranlund/claude-plugins#609",
+    "upstream": "anthropics/claude-code#87349"
+  }
+]
