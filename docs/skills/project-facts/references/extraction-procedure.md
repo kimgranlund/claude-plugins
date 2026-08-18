@@ -50,7 +50,7 @@ For each discovered zone, fill in both lenses from `harvest-core.md`'s rubric:
   from (R6).
 - **Inside-Out**: what the zone actually does mechanically — its operations, what it binds to,
   what signals success/failure. Cite the source passage this came from too; a zone's Inside-Out
-  read is frequently thinner for a domain-knowledge corpus than a project-context one (this
+  read is frequently thinner for a domain-knowledge corpus than a harness-facts one (this
   corpus's own weighting, below, is exactly this fact made explicit rather than left implicit).
 
 ## Step 4 — Apply this corpus's weighting
@@ -59,7 +59,7 @@ For each discovered zone, fill in both lenses from `harvest-core.md`'s rubric:
 each zone's weighted score as `0.6 * OutsideIn + 0.4 * InsideOut`; the corpus's own top-level
 summary ranks zones by this weighted score, so a reader scanning the corpus sees the
 business-relevance ordering the human/business consumer actually needs, not a mechanism-first
-ordering that would suit the project-context sibling instead.
+ordering that would suit the harness-facts sibling instead.
 
 ## Step 5 — Write the corpus
 

@@ -7,8 +7,8 @@ description: >
   for "extract domain knowledge from this project", "write up the business logic as a reference
   doc", "what this codebase does, for a non-engineer". NOT for a
   plain reference doc with no discovery/scoring (docs:make-reference); NOT for an already-scorable
-  system's investigation (docs:research-methods); NOT for the agent-facing sibling corpus
-  (project-context, #613 — shares `references/harvest-core.md`, opposite weight).
+  system's investigation (docs:research-methods); NOT for the harness-facing sibling
+  (docs:harness-facts — shares harvest-core.md, opposite weight).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -21,7 +21,7 @@ rather than forced into a fixed template.
 
 ## Operating model (essentials; depth in `references/`)
 
-- Two siblings, one core: this skill and the project-context capability (#613) share ONE
+- Two siblings, one core: this skill and the harness-facts capability (#613) share ONE
   definition + rubric core (`references/harvest-core.md`) — cited by both, duplicated by neither.
 - Topic zones are **discovered per project**, never a fixed taxonomy — a zone earns its place by
   recurring across at least two independent harvest sources.
@@ -60,7 +60,7 @@ Eval (eval-harness.md): <pass/fail> — <top misses, if any>
 
 | Path | Use when |
 |---|---|
-| `references/harvest-core.md` | The shared definition core (both corpora) + the two-axis rubric — canonical, cited by the project-context sibling too |
+| `references/harvest-core.md` | The shared definition core (both corpora) + the two-axis rubric — canonical, cited by the harness-facts sibling too |
 | `references/extraction-procedure.md` | This corpus's own step-by-step harvest procedure and weighting arithmetic |
 | `references/eval-harness.md` | Deliverable (c): the eval prompt set, sample project, and scored-report shape |
 
