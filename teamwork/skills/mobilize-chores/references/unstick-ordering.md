@@ -25,7 +25,7 @@ class, evaluated top-down:
 | B2 | CYCLE / TOO-DEEP | B is already on the current resolution path, or chain depth from the original candidate exceeds 5 | Report-only; name every member of the cycle (or the too-deep chain) in one paragraph. Nothing on a cycle is ever dispatched. A → still-stuck |
 | B3 | IN-FLIGHT | B has an open PR (the GraphQL `closedByPullRequestsReferences` check — never the flattened form) OR a non-empty `assignees`/`claimed-by` (#184) | Someone owns it — A → sequenced-for-next-run; B reported as the awaited work. No dispatch, no check-in comment |
 | B4 | HUMAN-SHAPE | B is unlabeled, ambiguously labeled (not exactly one of feature/bug/task), sweep-flagged human-decision/blocker, an ops/hygiene item, or matches any of step 6's five blocker shapes | Report-only, step 6's existing classified-paragraph discipline. A → still-stuck |
-| B5 | MOBILIZABLE | B passes step 2's FULL existing mobilizable predicate (exactly one of feature/bug/task, no active claim, no open PR, not sweep-excluded) AND B's own `Blocked-by:` line is absent, all-closed, or resolvable within this same walk (depth ≤ 5, no cycle) | Unstick candidate — dispatch B (subject to the one confirm round); A → sequenced, conditionally dispatchable per the wave loop below |
+| B5 | MOBILIZABLE | B passes step 2's FULL existing mobilizable predicate (exactly one of feature/bug/task, no active claim, no open PR, not sweep-excluded, not parked (#611)) AND B's own `Blocked-by:` line is absent, all-closed, or resolvable within this same walk (depth ≤ 5, no cycle) | Unstick candidate — dispatch B (subject to the one confirm round); A → sequenced, conditionally dispatchable per the wave loop below |
 
 Two invariants:
 
