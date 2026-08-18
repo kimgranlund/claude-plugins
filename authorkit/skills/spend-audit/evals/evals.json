@@ -33,6 +33,16 @@
       "expect": "trigger"
     },
     {
+      "id": "t07",
+      "prompt": "What's the measured per-archetype cost gradient vs solo?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "How much more does a fleet/coordinator hop cost than doing it solo, per PR shipped?",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "Which skills and plugins tax Claude's performance the most, and are any descriptions colliding in routing?",
       "expect": "no-trigger",
@@ -61,6 +71,12 @@
       "prompt": "How much does this description cost per turn?",
       "expect": "no-trigger",
       "comment": "owner: attention-audit — the nearest twin phrase, deliberately included: always-on menu rent, not a per-firing spend row"
+    },
+    {
+      "id": "n06",
+      "prompt": "Is this fleet's wiring — the frontmatter, preloads, and dispatch arrangement — correct?",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork wiring-checker — judges an arrangement's wiring, not its measured token cost"
     }
   ]
 }

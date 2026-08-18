@@ -18,17 +18,25 @@ canonical `HEADER` is refused too (never append under a foreign schema — run
 Usage:
   trend.py --out <ledger.csv> --event-kind <sweep|build> --seat <slug>
            --ref <#NNN|path|none> [--tokens <N|absent>] [--tokens-source <measured|estimated|absent>]
-           --outcome <enum> --verdict <enum> [--date YYYY-MM-DD] [--dry-run]
+           --outcome <enum> --verdict <enum> --archetype <A1..A8|UNMEASURED> [--date YYYY-MM-DD]
+           [--dry-run]
   trend.py selftest
 
 Exit codes: 0 appended (or, with --dry-run, printed without writing) / 1 row invalid
 (a validate_row finding — nothing written) / 2 usage error or schema mismatch (an
 existing file's header is not HEADER).
+
+`--archetype` (gh#673, lld-0021) is REQUIRED like `--event-kind`/`--seat`/`--ref`/`--outcome`/
+`--verdict` — an omitted flag is a usage error (exit 2), same tier as the other required
+fields; an out-of-enum VALUE (an invalid-but-supplied archetype) still routes through
+validate_row for the exit-1 write-refusal path, same reasoning as every other enum column
+(see main()'s own comment on why none of these carry argparse `choices=`).
 """
 import argparse
 import csv
 import datetime
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -58,6 +66,7 @@ def build_row(args):
         "tokens_source": tokens_source,
         "outcome": args.outcome or "",
         "verdict": args.verdict or "",
+        "archetype": args.archetype or "",
     }
     return row, None
 
@@ -114,7 +123,7 @@ def selftest():
     good = {
         "date": "2026-08-18", "event_kind": "build", "seat": "dispatch-ticket",
         "ref": "#624", "tokens": "absent", "tokens_source": "absent",
-        "outcome": "pr-opened", "verdict": "undetermined",
+        "outcome": "pr-opened", "verdict": "undetermined", "archetype": "A3",
     }
 
     # Fresh file -> header + one row (positive); second append does not rewrite the first.
@@ -178,7 +187,7 @@ def selftest():
         return argparse.Namespace(
             date=good["date"], event_kind=good["event_kind"], seat=good["seat"],
             ref=good["ref"], outcome=good["outcome"], verdict=good["verdict"],
-            tokens=tokens, tokens_source=tokens_source,
+            archetype=good["archetype"], tokens=tokens, tokens_source=tokens_source,
         )
 
     ns = make_ns(None, None)
@@ -206,6 +215,36 @@ def selftest():
     # No blended/ratio column, ever (the family's Goodhart rule, extended to this schema
     # too — validate.HEADER is the one canon both scripts assert against).
     assert not any(("ratio" in c or "quotient" in c or "per_token" in c) for c in validate.HEADER)
+
+    # gh#673: an invalid archetype value -> exit-1 write-refusal path (same tier as a bad
+    # outcome/verdict), never a usage error.
+    with tempfile.TemporaryDirectory() as td:
+        out = os.path.join(td, "ledger.csv")
+        code, msg, row = run(dict(good, archetype="A9"), out)
+        assert code == 1 and row is None, (code, msg, row)
+
+    # `UNMEASURED` is a valid archetype value end-to-end (the retroactive-backfill escape
+    # hatch) — a positive control, not just a validate.py-level enum membership check.
+    with tempfile.TemporaryDirectory() as td:
+        out = os.path.join(td, "ledger.csv")
+        code, _, row = run(dict(good, archetype="UNMEASURED"), out)
+        assert code == 0, row
+        readback = list(csv.reader(open(out)))[1]
+        assert readback[validate.HEADER.index("archetype")] == "UNMEASURED", readback
+
+    # A live CLI call with no `--archetype` at all is a usage error (exit 2) — required like
+    # `--outcome`/`--verdict`, not silently defaulted. A real tempdir path, never `/dev/null`
+    # (correct today only because the missing-flag check runs before any file access — a
+    # tempdir path stays correct even if that ordering ever changes).
+    with tempfile.TemporaryDirectory() as td:
+        target = os.path.join(td, "x.csv")
+        proc = subprocess.run(
+            [sys.executable, __file__, "--out", target, "--event-kind", "build",
+             "--seat", "t", "--ref", "none", "--outcome", "acted", "--verdict", "undetermined"],
+            capture_output=True, text=True,
+        )
+        assert proc.returncode == 2 and "--archetype" in proc.stderr, (proc.returncode, proc.stderr)
+        assert not os.path.isfile(target), "a usage error must never create the file"
 
     # verdict is passed through verbatim — the script never rewrites it from tokens.
     with tempfile.TemporaryDirectory() as td:
@@ -237,6 +276,7 @@ def main():
     ap.add_argument("--tokens-source", dest="tokens_source", default=None)
     ap.add_argument("--outcome")
     ap.add_argument("--verdict")
+    ap.add_argument("--archetype")
     ap.add_argument("--date", default=datetime.date.today().isoformat())
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
@@ -247,6 +287,7 @@ def main():
     missing = [f"--{name}" for name, val in (
         ("out", a.out), ("event-kind", a.event_kind), ("seat", a.seat),
         ("ref", a.ref), ("outcome", a.outcome), ("verdict", a.verdict),
+        ("archetype", a.archetype),
     ) if not val]
     if missing:
         print(f"trend.py: required flags missing: {', '.join(missing)} (or `selftest`)",

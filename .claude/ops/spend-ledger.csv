@@ -1,2 +1,2 @@
-date,event_kind,seat,ref,tokens,tokens_source,outcome,verdict
-2026-08-18,build,dispatch-ticket,#624,absent,absent,pr-opened,undetermined
+date,event_kind,seat,ref,tokens,tokens_source,outcome,verdict,archetype
+2026-08-18,build,dispatch-ticket,#624,absent,absent,pr-opened,undetermined,UNMEASURED
