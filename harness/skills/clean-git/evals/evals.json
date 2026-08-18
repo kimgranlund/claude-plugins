@@ -8,6 +8,7 @@
     { "id": "t04", "prompt": "what does repo-cleaner do when a host repo ships its own gated branch-reap script", "expect": "trigger" },
     { "id": "t05", "prompt": "what happens when campaign_close.py refuses because the PR isn't actually merged", "expect": "trigger" },
     { "id": "t06", "prompt": "walk me through repo-cleaner's inventory-classify-execute procedure for one firing", "expect": "trigger" },
+    { "id": "t07", "prompt": "what does repo-cleaner do when the shared primary checkout isn't on main", "expect": "trigger" },
     { "id": "n01", "prompt": "why doesn't repo-cleaner just write its own report file", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules (2026-08-15, issue #280: description's NOT-clause trimmed to reference that skill by name only)" },
     { "id": "n02", "prompt": "run the repo-cleaner hygiene sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, not a skill trigger" },
     { "id": "n03", "prompt": "clean up the duplicated instruction trees and stale corpus in this repo", "expect": "no-trigger", "comment": "owner: /clean-repo — instruction-tree/corpus drift, not git-surface hygiene" },

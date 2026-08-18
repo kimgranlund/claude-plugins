@@ -96,12 +96,19 @@ local-branch/worktree cleanup propose-only, per step 4 below.
    every worktree, local/remote branch, and open PR against the repo. Where the host repo's own
    ticket-claim convention is ruled, also `gh issue list --state open` filtered to
    assigned/in-progress items, reading each one's assignee, most recent comment timestamp, and any
-   linked PR.
+   linked PR. **Also check the shared PRIMARY checkout's own branch** (fleet-rules' "shared
+   primary checkout stays on `main`, always" rule, #592/PR#600): run `python3
+   "${CLAUDE_PLUGIN_ROOT}/skills/clean-git/scripts/primary_checkout_check.py" <primary-root>` (the
+   primary root — the workspace root, never a `.claude/worktrees/` entry) — a FAIL names the
+   branch and its ahead/behind count against `origin/main`, the mechanical form of the #592
+   incident (a session checked out `fix/harness-ops-rulings` on the primary while peers were live,
+   stranding a concurrent commit until PR#591's manual recovery).
 2. Classify each finding: merged-and-verified (a PR that independently reads `MERGED`),
    stale-open (a PR/branch with no activity past a set window), orphaned (a worktree or branch
    with no PR at all), stale-claim (an issue claimed per the resolved host-repo convention —
    assignee set, in-progress state — with no linked open PR and no update comment past the repo's
-   staleness window), or healthy (leave alone).
+   staleness window), off-main-primary (`primary_checkout_check.py` reads FAIL — the shared
+   primary checkout is checked out on something other than `main`), or healthy (leave alone).
 3. Execute directly, ONLY these cases:
    - A merged-and-verified PR's remote branch → run `campaign_close.py <pr>`.
    - Local dirt on `main`, **on an interactive dispatch only** (never on a scheduled/cron firing —
@@ -111,11 +118,16 @@ local-branch/worktree cleanup propose-only, per step 4 below.
      in ITS OWN `CLAUDE.md`/`README`, never assumed) → dry-run it, then `--apply` on exactly what
      its own dry output classified as reapable.
 4. Everything else — worktree removal or local-branch deletion where no host-repo reap script
-   exists, stale-open, orphaned, stale-claim, anything a script's own gate refuses, dirty `main` on
-   a scheduled firing — → propose only: a triage report naming each finding, its classification,
-   and the specific recommended action (for stale-claim: which issue, whose claim, how old, and the
-   recommended reclaim comment — never posted directly). No mutation. (No script gates reclaiming a
-   stale ticket claim yet; until one does, that stays a plan for a human to execute.)
+   exists, stale-open, orphaned, stale-claim, off-main-primary, anything a script's own gate
+   refuses, dirty `main` on a scheduled firing — → propose only: a triage report naming each
+   finding, its classification, and the specific recommended action (for stale-claim: which issue,
+   whose claim, how old, and the recommended reclaim comment — never posted directly; for
+   off-main-primary: the branch name and ahead/behind count `primary_checkout_check.py` reported,
+   plus the recommended `git checkout main` a human runs — never executed directly, since
+   switching the primary's branch out from under a live peer is exactly the #592 mistake this
+   finding exists to catch, not a mutation to repeat under a different name). No mutation. (No
+   script gates reclaiming a stale ticket claim yet, or switching the primary back to `main`;
+   until one does, both stay a plan for a human to execute.)
 5. Before composing the report, read the most recent file in `.claude/ops/reports/` (by filename —
    they sort chronologically; a read, never a write). If this firing's classification set is
    identical to that report's (same findings, same executed/proposed split), return an abbreviated
@@ -147,13 +159,21 @@ corpus drift routes to `/clean-repo`.
 - A host repo's reap script exits non-zero, or its dry output is ambiguous about which branches
   are actually reapable → do not run `--apply`; report the script's own output as evidence and
   propose instead, same discipline as any other refused gate.
+- `primary_checkout_check.py` exits 2 (`rev-parse` itself fails — no repo at the given path, or
+  an unborn HEAD) → report the check itself as UNMEASURED for this firing, same tier as a `git
+  fetch --prune` failure above; never guess the branch from a stale prior report. (A detached
+  HEAD is not this case — `rev-parse --abbrev-ref HEAD` succeeds there and prints the literal
+  string `HEAD`, so a detached primary checkout still surfaces as an ordinary off-main-primary
+  finding naming branch `HEAD`, exit 1.)
 
-Done when every inventoried worktree/branch/PR/claimed-ticket carries a classification, every
-merged-and-verified PR's remote branch has run through `campaign_close.py` (or been reported as
-refused), a dirty `main` on an interactive dispatch has run through `sync_main.py` where
-appropriate, and the report — returned as target-pathed payload, never written by this agent —
-names every proposed-only action explicitly (including every stale-claim finding). NOT done while
-a finding is silently skipped, a script's own refusal is overridden, a worktree or local branch is
+Done when every inventoried worktree/branch/PR/claimed-ticket carries a classification, the
+primary checkout's own branch has run through `primary_checkout_check.py` (or been reported
+UNMEASURED), every merged-and-verified PR's remote branch has run through `campaign_close.py` (or
+been reported as refused), a dirty `main` on an interactive dispatch has run through `sync_main.py`
+where appropriate, and the report — returned as target-pathed payload, never written by this
+agent — names every proposed-only action explicitly (including every stale-claim and
+off-main-primary finding). NOT done while a finding is silently skipped, a script's own refusal is
+overridden, a worktree or local branch is
 removed directly instead of proposed, `sync_main.py` runs against a scheduled firing's dirty tree,
 a stale ticket claim is reclaimed directly instead of proposed, or this agent writes its report
 directly instead of returning it as payload.
