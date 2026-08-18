@@ -265,21 +265,33 @@ keep the door open rather than closed:
 
 - **D1 repeated user nudge** — auto-memory entries with frontmatter `metadata.type: feedback`
   (12 of 30 files in this workspace's memory dir today) clustered by informative-token overlap
-  (name + description; Jaccard ≥ 0.3, ≥ 2 shared non-stopword tokens); a cluster of ≥ 2, or a
-  single entry whose body matches the recurrence lexicon (`third time|again|repeatedly|never
-  re-ask|stop (doing|proposing)`) → finding, `default_owner: save-lessons` (frequency detector
-  = "third telling"), `default_artifact`: the memory entry + the rule/skill line it should become.
+  **(name + description; overlap coefficient ≥ 0.2, ≥ 3 shared non-stopword tokens — corrected
+  2026-08-18, gh#645: raw Jaccard at 0.3/2 shipped in this LLD's first draft never fires on real
+  prose, since it punishes a short first-telling paired against a long third-telling too hard;
+  the overlap coefficient — shared / min(len_a, len_b) — doesn't)**; a cluster of ≥ 2, or a
+  single entry whose **description** (corrected 2026-08-18, gh#645: matches the description only,
+  never the body — cheaper to keep the doc honest than to widen the lexicon match, which pulls in
+  template boilerplate like "Why:"/"How to apply:" that inflates unrelated overlap) matches the
+  recurrence lexicon (`third time|again|repeatedly|never re-ask|stop (doing|proposing)`) →
+  finding, `default_owner: save-lessons` (frequency detector = "third telling"),
+  `default_artifact`: the memory entry + the rule/skill line it should become.
 - **D2 re-filed near-duplicate ticket** — issue titles normalized (lowercase, punctuation and
   stopwords stripped, `#NNN` removed), pairwise Jaccard ≥ 0.5 → clusters; a cluster where a member
   was CREATED after another member's `closedAt` = **re-filed** (the negative pattern); same-window
   duplicates = dedup miss (lower severity). `default_owner`: the intake's dedup-search step
   (`file-bug`/`file-feature`, backend-resolver op 2) or `issue-sorter`.
-- **D3 metric drift** — over every registry source present: per key, a series column monotonic
+- **D3 metric drift** — over every registry source present: rows are GROUPED by that source's
+  own registered `key_columns` first (corrected 2026-08-18, gh#645 MAJOR-1: the first build
+  dropped `key_columns`/`series_columns` from the bundle and iterated every CSV column across
+  ALL rows ungrouped, so on real multi-plugin data the series was never monotonic and rent-growth
+  could never fire — verified fixed: authorkit's `routable_chars` genuinely grows 6327→7959,
+  +25.8%, monotonically, once grouped by `plugin`), then per key a series column monotonic
   non-decreasing across ≥ 3 rows with ≥ 5 % total growth → `rent-growth`; a column `absent` in
-  100 % of ≥ 3 rows → `instrument-half-blind`; a source with exactly 1 row older than
-  `--window-days` → `series-not-firing`; recurrence `seeded_classes == 0` on the latest row →
-  `ratchet-unadopted`. `default_owner`: attention-audit's structural-fix set for rent; the
-  owning instrument's own procedure step for the others.
+  100 % of ≥ 3 rows of the WHOLE source (never-fed-ness stays source-wide, not per-key) →
+  `instrument-half-blind`; a source with exactly 1 row older than `--window-days` →
+  `series-not-firing`; recurrence `seeded_classes == 0` on the latest row → `ratchet-unadopted`.
+  `default_owner`: attention-audit's structural-fix set for rent; the owning instrument's own
+  procedure step for the others.
 - **D4 ceremony proxy** — context-surface census: entry files > 200 lines (the shared threshold
   is `skill_lint` C1's — one constant, cited, not a new number); `.claude/rules/` count and total
   lines; `MEMORY.md` index lines; sum of the latest `routable_chars` + `agent_chars` per plugin
@@ -426,8 +438,12 @@ dir (user-scoped, ADR-0022 exception), `attention-trend.csv`, `recurrence-trend.
   and every threshold hit renders its value beside the finding so a reader can judge. Fallback:
   tune via flags; a threshold change is a script edit under selftest, not doctrine.
 - **R-5 (the confirm becomes a rubber stamp for large diff bundles).** Detection: the report
-  caps the bundle to a `--max-diffs N` (default 8, remainder rendered as ticket lines) so one
-  round stays reviewable — same reason find-open-questions batches into ONE round.
+  caps the diff bundle at 8 (remainder rendered as ticket lines) so one round stays reviewable —
+  same reason find-open-questions batches into ONE round. **Corrected 2026-08-18, gh#645
+  minor-6:** this was originally worded as a `--max-diffs N` CLI flag; neither script ever
+  implements one, since the cap is Phase 4's own prose-rendering behavior (the host session,
+  not a script pass) — reworded here to "capped at 8" rather than adding a flag neither script's
+  own procedure would ever consume.
 - **R-6 (doctrine drift surfaced during Resolution c — NOT fixed here, routed).**
   `authorkit/skills/attention-audit/SKILL.md:75-77` describes "demote-to-wiring" as "set
   `disable-model-invocation: true` on a side reachable only by dispatch — agent-preloaded or
@@ -507,7 +523,14 @@ Two-plane manifest (`break-down-problem`, domain `technical-architecture`, `plan
 INSIDE-OUT = read five sources (a1–a5), detect four classes (a6–a9), judge (a10–a11, a24),
 propose (a12–a13), confirm/apply (a14–a15), prove on fixture (a16), route/wire/ship (a17–a21),
 future-input seam (a22), UNMEASURED discipline (a23). Every leaf carries the `accept` predicate
-that became Components' gates. The manifest JSON is the builder's plan; it lands beside this LLD
-as `.claude/docs/decompositions/estate-maintenance-manifest-v1.json` in the build PR (this
-planning dispatch was scoped to the LLD file alone, so the manifest is handed off with the
-design-status report rather than written here).
+that became Components' gates. The manifest JSON is the builder's plan; it was meant to land
+beside this LLD as `.claude/docs/decompositions/estate-maintenance-manifest-v1.json` in the
+build PR (this planning dispatch was scoped to the LLD file alone, so the manifest was to be
+handed off with the design-status report rather than written here).
+
+**Dated note (2026-08-18, gh#645 minor-9):** that manifest file was NOT produced in the build
+PR that shipped this skill (PR #645) — the builder dispatch that landed the code never received
+the planner's manifest JSON to write through, only this LLD's own summary counts above. Amending
+in place rather than fabricating a plausible-looking manifest with invented node/action/host
+detail this builder never had. If the counts above (19 nodes · 24 actions · 29 hosts · 12 edges)
+matter as a durable artifact, the planner seat is the one holding the actual manifest content.

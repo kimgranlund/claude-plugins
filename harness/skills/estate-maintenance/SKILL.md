@@ -69,6 +69,16 @@ Emits the four deterministic classes (D1-D4, thresholds in the script's own docs
 flag-tunable) plus a non-finding `fix_clusters` helper block. The script owns the count; the
 report quotes it verbatim. `findings.json`'s exact shape: `references/report-template.md`.
 
+Then verify every emitted evidence pointer re-opens clean before trusting it in Phase 3:
+
+```
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/estate-maintenance/scripts/detect.py --verify <scratch>/findings.json
+```
+
+Non-zero exit -> at least one evidence pointer is stale (the cited line/row/issue moved or
+vanished since `collect.py` ran) — re-run Phase 1's `collect.py` fresh rather than trusting a
+stale pointer into Phase 3's judgment layer.
+
 ## Phase 3 — Judge (the LLM layer, over `findings.json` only)
 
 1. **Fix-generalization.** Read `fix_clusters`; pull `gh issue view` on cluster members as needed;
@@ -102,7 +112,7 @@ A finding that ends this phase with neither `artifact` nor `owning_command` rend
 
 Render `references/report-template.md`: verdict-first summary, the findings table, then the
 **diff bundle** (one unified diff per `size: diff` finding, headed by its finding id and target
-path, capped at `--max-diffs` default 8 — R-5) and the **ticket list** (one `file-bug`/
+path, capped at 8 — R-5) and the **ticket list** (one `file-bug`/
 `file-feature`/`file-task` line per `size: ticket` finding, named, never minted here). All three
 artifacts land in the session scratchpad; `--out <dir>` persists them elsewhere for a fixture
 check. Nothing lands in the repo yet.

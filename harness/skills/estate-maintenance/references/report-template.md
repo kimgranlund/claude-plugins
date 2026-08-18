@@ -20,7 +20,7 @@ One line per absent registered input and its reason (never rendered as zero or s
 
 ## Diff bundle
 One unified diff per `size: diff` finding, headed by its finding id and target path. Capped at
-`--max-diffs` (default 8, R-5); remainder rendered as ticket lines below instead.
+8 (R-5); remainder rendered as ticket lines below instead.
 
 ## Ticket list
 One `file-bug`/`file-feature`/`file-task` line per `size: ticket` finding — named, never minted
