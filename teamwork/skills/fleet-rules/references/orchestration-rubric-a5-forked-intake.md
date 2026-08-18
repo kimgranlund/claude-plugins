@@ -14,8 +14,8 @@ Skill body runs in a background fork; NO `AskUserQuestion` channel (gh#541, fals
 | ID | Criterion | Evidence | Mechanizable |
 |---|---|---|---|
 | A5-R1 | No-question design: clarification happens pre-fork, or folds back via the resume command; a fork never blocks on a question it cannot ask | gh#541 | judgment |
-| A5-R2 | Record-first: the fork's FIRST durable act is the record — why raw `/fork` is banned for bug work (it drops the report on exit) | `file-bug`'s own doctrine | mechanizable — `orchestration-audit`'s `a5-record-first` check: the skill body creates/writes the ticket record before any other durable side effect, checked by grep ordering of the Write/`gh issue create` call relative to other mutating calls in the skill's numbered procedure |
-| A5-R3 | Resume path: every fork handback names its fold-in command (e.g. `` /file-bug #NN `` ) | — | mechanizable — grep the skill's own handback contract text for a resume-command template string |
+| A5-R2 | Record-first: the fork's FIRST durable act is the record — why raw `/fork` is banned for bug work (it drops the report on exit) | `file-bug`'s own doctrine | mechanizable — not built (would check that the skill body creates/writes the ticket record before any other durable side effect, by grep-ordering the Write/`gh issue create` call relative to other mutating calls in the skill's numbered procedure — this ordering check does not exist in `audit.py` today) |
+| A5-R3 | Resume path: every fork handback names its fold-in command (e.g. `` /file-bug <id> `` ) | — | mechanizable — built: `orchestration-audit`'s `check_resume_path` greps the skill's own handback contract text for a resume-command template carrying a real id-shaped placeholder (`<id>`, `#NN`, `#123`) — a bare command mention with nothing after it does not count |
 | A5-R4 | Unasked-question surfacing: questions the fork couldn't ask are NAMED in the handback, never guessed at | — | judgment |
 
 **Owning checker for A5:** `skill-checker` (FLOOR depth) already grades a forked intake

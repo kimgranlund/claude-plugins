@@ -27,10 +27,14 @@ allowed-tools:
 Deterministic sweep lives in `scripts/audit.py` — run it; never re-derive a syntax check or
 a durable-channel read in prose. This skill's job is locating the rubric files, running the
 sweep, and rendering the judgment layer on top — same split as `doctrine-audit`'s own
-`sweep.py` (mechanics) / skill (judgment) division, and the same tagging convention: every
-criterion in `teamwork:fleet-rules/references/orchestration-rubric-a{1-8}-*.md` is marked
-**mechanizable** or **judgment** in its own table; this script computes ONLY the
-mechanizable ones.
+`sweep.py` (mechanics) / skill (judgment) division, with a THREE-way tag in each rubric
+table (2026-08-18 code-checker review: a binary mechanizable/judgment split overclaimed what
+`audit.py` actually runs) — **mechanizable — built** (this script computes it TODAY: exactly
+six criteria, X-R3/A3-R2/A4-R1/A5-R3/A6-R2/A7-R4), **mechanizable — not built** (a real
+future check, reported "queued, not built" identically to judgment until it exists), and
+**judgment** (no lexical anchor a script can grade, ever). Never read a plausible-sounding
+check description in a rubric row as proof the script actually runs it — the tag is the only
+thing that says so, and only "built" means built.
 
 ## Procedure
 
@@ -53,11 +57,12 @@ mechanizable ones.
      (`OWNING_CHECKERS` maps it to `[]` — currently A3 and A8) reports `warn`, "no owning
      checker named yet" — this is a real gap in the estate, not a script defect; never
      silently pass it.
-   - **Judgment criteria**: every criterion NOT computed by `audit.py` (the majority — see
-     each rubric file's own table) is reported "queued, not built" to its rubric-named
-     owning checker (`wiring-checker`, `code-checker`, a human read of the durable-channel
-     evidence A3-R2 surfaced) — this instrument is read-only like its five siblings;
-     dispatching the named checker is always the caller's own decision.
+   - **Judgment and mechanizable-not-built criteria**: every criterion tagged either way in
+     the rubric table (the majority — six criteria total carry "mechanizable — built" across
+     all eight files, everything else is one of these two) is reported "queued, not built"
+     to its rubric-named owning checker (`wiring-checker`, `code-checker`, a human read of
+     the durable-channel evidence A3-R2 surfaced) — this instrument is read-only like its
+     five siblings; dispatching the named checker is always the caller's own decision.
 4. Render a report: verdict line per archetype first (`CLEAN`/`ATTENTION`/`FAIL`, the same
    `pattern-audit`-style summary string `audit.py` itself prints), then findings, then the
    judgment queue for that archetype (pulled from the rubric file's table, never invented).
@@ -82,9 +87,9 @@ same discipline `doctrine-audit` already holds for its own judgment edge type.
   verbatim; never read a usage error as a false CLEAN.
 - No `workflows/*.js` files found under root (A7) → reported `n/a`, never a silent pass and
   never a fabricated finding.
-- `node` unavailable on PATH for the A7-R4 syntax check → the check itself raises
-  (`FileNotFoundError` from `subprocess.run`); report this as a named environment gap, never
-  swallow it into a false pass.
+- `node` unavailable on PATH for the A7-R4 syntax check → `audit.py` exits 2 with a named
+  usage error (`node not found on PATH -> A7-R4's syntax check cannot run`), never an
+  unbounded traceback and never a silent false pass.
 - teamwork not installed (no rubric files to cite) → run the mechanical sweep anyway and
   say so plainly in the report header; the rubric TEXT is a citation aid, not a runtime
   dependency of `audit.py` itself.

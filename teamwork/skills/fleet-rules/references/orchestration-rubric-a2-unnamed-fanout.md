@@ -13,7 +13,7 @@ use: independent verification/judgment — generator ≠ critic.
 
 | ID | Criterion | Evidence | Mechanizable |
 |---|---|---|---|
-| A2-R1 | Unnamed discipline: a fanned-out dispatch never carries `name:` | gh#154/gh#157 — naming flips to mailbox mode and strands the report | mechanizable — grep the dispatching prompt/skill for a `name:` field on a fan-out `Agent` call |
+| A2-R1 | Unnamed discipline: a fanned-out dispatch never carries `name:` | gh#154/gh#157 — naming flips to mailbox mode and strands the report | mechanizable — not built (would grep the dispatching prompt/skill for a `name:` field on a fan-out `Agent` call) |
 | A2-R2 | Sealed dispatches: each prompt self-contained; a no-tools judge gets its menu INLINED, never a path | `routing-judge`'s own refusal contract | judgment |
 | A2-R3 | Fresh-context critic: the maker never grades its own artifact | `checking-rules` | judgment |
 | A2-R4 | Failure isolation: one failed dispatch → UNMEASURED, named; siblings proceed | — | judgment |

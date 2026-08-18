@@ -13,7 +13,7 @@ use: multi-seat campaigns where a human steers seats interactively (#410 addendu
 
 | ID | Criterion | Evidence | Mechanizable |
 |---|---|---|---|
-| A4-R1 | Registration discipline: every live seat has a roster row; takeover-vs-collision rule honored | #423 class; `fleet-bootstrap` Phase 1 | mechanizable — `orchestration-audit`'s `a4-roster` check: every entry `git worktree list` (or the caller-supplied live-session list) reports has a matching `fleet-roster.md` row, and vice versa; a mismatch either way is a named finding |
+| A4-R1 | Registration discipline: every live seat has a roster row; takeover-vs-collision rule honored | #423 class; `fleet-bootstrap` Phase 1 | mechanizable — built (partial): `orchestration-audit`'s `check_roster_rows` counts `fleet-roster.md`'s own parseable data rows and reports `fail` if none exist — it does NOT yet cross-reference against `git worktree list` or a live-session list (that reconciliation half is **mechanizable — not built**, a real future check) |
 | A4-R2 | Record over nudge: `SendMessage` is a nudge, never the record | `fleet-rules` Part A §3 | judgment |
 | A4-R3 | Peer scope: messaging only registered fleet seats | fleet-scoped coordination ruling | judgment |
 | A4-R4 | Hard gates hold unattended: no-live-user at a ratification gate → blocked, reported | — | judgment |
