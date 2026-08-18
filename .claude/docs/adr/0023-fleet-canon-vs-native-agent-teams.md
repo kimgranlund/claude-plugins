@@ -9,7 +9,10 @@ intent-refs: idr-0007 (solo-first composition — the isolation/parallelism/inde
   every added seat or substrate must buy; this ADR judges agent-teams against it), idr-0010
   (estate economy — recurring/standing decisions are priced and re-checked against evidence,
   never decided once and left to drift; this ADR's own re-evaluation trigger is that doctrine
-  applied to a substrate choice)
+  applied to a substrate choice), idr-0009 (doctrine truth maintenance — every accepted ADR
+  Decision is periodically re-tested via decision-watcher's revalidation mode; that periodic
+  sweep is the mechanism that checks whether this ADR's own fact-shaped trigger has fired, not
+  a competing date-shaped re-read this ADR overrides)
 scope: app
 audience: human, product-seat
 ---
@@ -40,8 +43,8 @@ not restart-survivable the way `fleet.json` plus GitHub claims are. It is also r
 the fleet's cost — a figure carried here as reported/folklore only, per the citation discipline
 `file-task`'s sibling ticket #671 already applies to the same source document (harvest the
 substance, never cite the source as authority): no first-party measurement of this multiple exists
-yet. Track E (#673) is running that measurement now — a soft dependency on this ADR, named in
-Links, not a hard `Blocked-by`.
+yet. Track E (#673) is running that measurement now — a soft dependency on this ADR (see
+`## Related`), not a hard `Blocked-by`.
 
 The marshal's 2026-08-18 lean, which this ADR is drafted from: keep the fleet — real isolation
 plus an auditable, restart-surviving ledger beats prompt-partitioned file ownership plus an
@@ -94,10 +97,15 @@ once ratified) when **either** of the following closes the isolation gap named i
 Independent of either firing: once **#673's measured cost gradient lands**, re-check this ruling
 against the real figure even if neither bullet above has fired — a materially lower measured
 multiple than the reported ~15x could shift the calculus on its own, and a materially higher one
-confirms the caution. #673 is a soft dependency (Links), not a blocker on drafting or ratifying
-this ADR itself. A calendar date passing with none of the above true is explicitly **not** a
-trigger — this ADR is not due for a periodic re-read, it is due when the facts it was decided on
-change.
+confirms the caution. #673 is a soft dependency (see `## Related`), not a blocker on drafting or
+ratifying this ADR itself. A calendar date passing with none of the above true is explicitly
+**not** a supersession trigger — the *decision* is due for re-opening when the facts above
+change, never on a schedule alone. `idr-0009`'s standing periodic revalidation loop
+(decision-watcher's sampled re-test of accepted ADR Decisions) still applies to this ADR like
+every other — that loop is the mechanism that PERIODICALLY CHECKS whether the fact-shaped
+trigger above has fired; it is not a second, date-shaped trigger competing with it, and a
+revalidation sampling round finding the trigger still unfired is a `confirmed` verdict, not a
+supersession.
 
 **(c) A fleet-native write-gate equivalent, meanwhile — pursue it, decoupled from (b)'s trigger.**
 The plan-approval **concept** (hold a dispatched worker's mutating writes un-landed until an
@@ -106,10 +114,12 @@ not require `agent-teams` itself or its experimental flag — it is a sequencing
 natively in the fleet's own dispatch contract (`dispatch-ticket`'s Phase 5 lifecycle stages),
 independent of whichever substrate eventually wins. Ruling: **yes, pursue a fleet-native
 equivalent**, scoped as a follow-up ticket — not designed in this ADR, which rules the substrate
-choice and the re-evaluation condition, not the gate's own mechanics. The follow-up names, at
-minimum: which dispatch-ticket stage the hold applies to (a natural candidate is between Phase 5
-stage 2's commit/push and stage 3's retirement, before a PR opens — never blocking the worker's
-own isolated worktree writes, only the point they become visible/mergeable outside it), who plays
+choice and the re-evaluation condition, not the gate's own mechanics. **Ratification mints the
+follow-up ticket** (owner: the marshal, per `fleet-rules` Section 7's routing seat) — no ticket id
+exists yet as of this draft. The follow-up names, at
+minimum: which dispatch-ticket stage the hold applies to (a natural candidate is inside Phase 5
+stage 2 itself, between the push and the PR open — never blocking the worker's own isolated
+worktree writes, only the point just before they become visible/mergeable outside it), who plays
 the "lead" accepting role for an unattended dispatch with no live human (the marshal, per
 `fleet-rules` Section 7's routing seat, is the natural candidate — never inferred to be the human
 by default), and how it composes with the existing fresh-context checker pass and ADR-0012's
@@ -131,6 +141,21 @@ equivalent ((c)) is built and adopted; peers keep coordinating over durable reco
 **Irreversible:** none. This ADR is explicitly designed to be revisited — (b) names the exact
 condition under which it is superseded, and nothing ruled here forecloses adopting `agent-teams`
 (or a hybrid) once the isolation gap closes and #673's cost data lands.
+
+## Related
+
+- **#671** — sibling Track A task (canon-fold of four agent-classes adoptions into `fleet-rules`/
+  `agent-writing-rules`); same review wave, no direct dependency either way.
+- **#672** — this ADR's own drafting ticket.
+- **#673** — Track E, the measured cost gradient this ADR's (b) names as a soft dependency
+  ("re-check even if neither bullet has fired").
+- **ADR-0002** — git-native execution (worktrees + PRs), the substrate the fleet's isolation
+  guarantee is built on.
+- **ADR-0005** — the ticket-claim protocol realizing the fleet's durable-ledger half.
+- **ADR-0012** — quick-build auto-merge; (c)'s follow-up composes with its QB5 critic-green
+  conjunct rather than duplicating it.
+- **`teamwork:fleet-rules`** — the fleet's standing operating protocol this ADR rules stays canon.
+- **`idr-0007`, `idr-0009`, `idr-0010`** — see `intent-refs` above.
 
 <!-- LEDGER CLASS: once status: accepted, this file is append-only. To change the decision,
      write a new ADR with supersedes: this id — the hook blocks edits here. -->
