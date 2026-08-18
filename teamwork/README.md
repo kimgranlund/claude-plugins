@@ -108,6 +108,8 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.24.1 · 2026-08-18 · fleet-rules' References table cites `harness:check-state --fleet` (#620) as
+the fleet-wide state-visibility concept's report-side realization — a pointer, not a restatement.
 v2.24.0 · 2026-08-17 · closes #611: backlog/roadmap parking: mobilize-chores sweep immunity
 (ticket-filter exempt), dispatch-ticket Phase 3.5 de-stale + `stale-premise` outcome.
 

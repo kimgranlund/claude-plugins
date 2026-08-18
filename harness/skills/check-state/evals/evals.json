@@ -24,6 +24,8 @@
     { "id": "n10", "prompt": "Anything still open or unanswered from our conversation?", "expect": "no-trigger", "comment": "owner: find-open-questions (session backlog, not repo state)" },
     {"id": "n11", "prompt": "Sweep this chat for leftover work", "expect": "no-trigger", "comment": "owner: docs file-leftovers (conversation evidence, not repo state)"},
     {"id": "n12", "prompt": "What shipped today? Summarize the PRs that merged.", "expect": "no-trigger", "comment": "owner: what-shipped (window of activity; this skill is the point-in-time work-state snapshot)"},
-    {"id": "n13", "prompt": "Which lifecycle loop is this project emphasizing right now — North star, Foundation, or Releases?", "expect": "no-trigger", "comment": "owner: docs:check-stage (lifecycle-position axis, not work-state; reciprocal fence added 2026-08-16, issue #336)"}
+    {"id": "n13", "prompt": "Which lifecycle loop is this project emphasizing right now — North star, Foundation, or Releases?", "expect": "no-trigger", "comment": "owner: docs:check-stage (lifecycle-position axis, not work-state; reciprocal fence added 2026-08-16, issue #336)"},
+    {"id": "t11", "prompt": "Give me a state rollup across every repo our fleet touches.", "expect": "trigger", "comment": "--fleet scope added 2026-08-18, #620"},
+    {"id": "t12", "prompt": "Check whether this repo's plugin fixes have actually landed in gen-ui-kit yet, or if it's still running the old cached copy.", "expect": "trigger", "comment": "--fleet scope's drift check (the #582 stale-copy case), #620"}
   ]
 }

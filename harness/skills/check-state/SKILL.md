@@ -7,13 +7,15 @@ description: >-
   every finding naming its owning command. Use for "what's the state of the project",
   "where are we", "what's blocked on me", "give me a project state report", "what can be
   merged or deleted", "catch me up on this repo", or reviewing all roadmap/plan/backlog
-  items and open tickets. NOT for choosing next work (chore-planner), executing cleanup
+  items and open tickets. `--fleet` adds a cross-repo rollup — open work, plugin-cache
+  drift, cross-repo citations, across a named repo list. NOT for choosing next work
+  (chore-planner), executing cleanup
   (repo-cleaner), plugin health (/check-everything), one PR/issue's status (plain gh
   lookup), or which lifecycle loop/build-turn stage the project is in — the
   lifecycle-POSITION axis, not work-state (docs:check-stage, where installed).
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[repo-root] [--artifact]"
+argument-hint: "[repo-root] [--artifact] [--fleet repo1,repo2,...] [--trackers path]"
 ---
 
 # check-state
@@ -32,6 +34,13 @@ proposed action names the owner that executes it.
    - `python3 ${CLAUDE_PLUGIN_ROOT}/skills/check-state/scripts/doc_state.py <root>`
    A collector exiting 2 marks its section UNMEASURED with the script's stated reason —
    the report still renders from the sections that ran.
+   - **When `--fleet <repo1,repo2,...>` is given**, additionally run `python3
+     ${CLAUDE_PLUGIN_ROOT}/skills/check-state/scripts/fleet_state.py --repos
+     <repo1,repo2,...> [--trackers <path>]`. Feature-detect
+     `<root>/.claude/ops/fleet-trackers.json` and pass it as `--trackers` automatically
+     when no explicit `--trackers` was given. Every repo in the list gets its own row —
+     an unreachable one reports UNMEASURED with the collector's reason, it never aborts
+     the rest of the run (Failure branches, below).
 2. **Delta.** `python3 ${CLAUDE_PLUGIN_ROOT}/skills/check-state/scripts/state_diff.py
    <git.json> <ticket.json> <doc.json> --checkpoint <root>/.claude/ops/state-checkpoint.json`
    — an UNMEASURED collector's slot takes `-` (its layers report as
@@ -72,6 +81,16 @@ a 🟢 header licenses skipping that section, not the rest of the report:
 4. **Delta** — added/removed per layer since the checkpoint, or "first run — no delta".
 5. **Counts** — one line per layer: branches / worktrees / stashes / issues / PRs /
    docs / release drift / armed automation.
+6. **Fleet rollup** (only rendered when `--fleet` was passed) — one sub-block per named
+   repo: open work + in-flight claims, plugin-cache drift (`in-sync` /
+   `stale-cache` / `repo-behind-cache` for a marketplace source repo, `UNMEASURED` when
+   a plugin's own version can't be read, or `not-a-source-repo` — N/A, not a finding —
+   for a plain consumer repo), and any cross-repo citation edges found in its open
+   issues (every `owner/repo#NN` or bare `repo#NN` reference, not filtered to a
+   particular record class). Then one trackers block (platform-defect pairs, e.g. this
+   repo's own vs. an upstream `anthropics/claude-code` tracker) or "no trackers file
+   given". Headed 🟢/🟡/🔴 per repo like every other section; an unreachable repo's row
+   is 🟡 by construction.
 
 Every 🟡/🔴 line carries `→ <owning command or seat>`. A finding with no owner is
 reported as exactly that — "no owner in the routing table" — which is itself a finding.
@@ -86,9 +105,14 @@ reported as exactly that — "no owner in the routing table" — which is itself
   output for the missing JSON.
 - Checkpoint unwritable → deliver the report with the Delta section marked "not saved";
   never skip the report over its bookkeeping.
+- A `--fleet` repo is unreachable (bad path, not a git repo, `gh` unauthenticated) →
+  that repo's row reports UNMEASURED with the reason; every other repo's row, and every
+  other section of the report, still render — one bad entry in the list never aborts
+  the run.
 
-Done when the report is delivered with all five sections present (UNMEASURED counts as
-present) and the checkpoint reflects this run — or the not-a-repo stop is reported.
+Done when the report is delivered with all five sections present (six when `--fleet` was
+passed; UNMEASURED counts as present) and the checkpoint reflects this run — or the
+not-a-repo stop is reported.
 
 ## Example
 

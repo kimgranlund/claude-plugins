@@ -129,6 +129,11 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.11.0 · 2026-08-18 · closes #620: `check-state` gains a `--fleet <repo1,repo2,...>` scope — a
+fourth collector, `fleet_state.py` (selftested), rolling up per-repo open work/in-flight claims,
+plugin-cache version drift against a marketplace source repo's own `plugin.json` (the #582
+stale-copy case), and cross-repo consolidating-record citation edges; explicit repo list only,
+never auto-discovery (`fleet.json` extension deferred as its own follow-up, lld-0012).
 v3.10.0 · 2026-08-17 · closes #611: parking immunity: `chore-planner` queueing + `watch-tickets`
 discovery exclude `backlog`/`roadmap` unless a dispatch names the id.
 v3.9.7 · 2026-08-18 · clean-git's inventory step gains a fourth propose-only classification, `off-main-primary` (closes #604): a new skill-level script, `scripts/primary_checkout_check.py` (read-only, selftested), checks whether the shared primary checkout is on `main` per fleet-rules' primary-checkout rule (#592), reporting the branch name and its ahead/behind count against `origin/main` — never a mutation, same tier as a stale-claim finding.

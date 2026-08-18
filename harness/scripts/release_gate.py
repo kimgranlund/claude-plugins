@@ -586,7 +586,13 @@ def gate(root: Path, package: bool = False):
              # ADR-0020 D5 (#524) merged team-or-solo-rules into fleet-rules; the retired name
              # survives as a historical citation in fleet-rules' own body/README/CHANGELOG
              # provenance notes, not a live sibling reference:
-             "team-or-solo-rules"}
+             "team-or-solo-rules",
+             # #620's check-state --fleet scope widened the `-repo` suffix (already live via
+             # authorkit's repo-audit) into two ordinary prose compounds in check-state's own
+             # SKILL.md: "cross-repo" (the rollup's own adjective, e.g. "cross-repo rollup") and
+             # "source-repo" ("not-a-source-repo", the marketplace-drift N/A status value) —
+             # neither names any sibling skill or agent:
+             "cross-repo", "source-repo"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

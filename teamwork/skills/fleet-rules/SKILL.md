@@ -477,6 +477,7 @@ Top issues: 1) … — fix: …
 | `[[loop-rules]]` | When the next turn fires — this skill never governs continuation timing |
 | `mobilize-chores` (this plugin) | The canonical four-layer double-dispatch guard Section 2 cites; also owns which tickets are mobilizable in the first place |
 | `[[dispatch-ticket]]` | The canonical ADR-0005 claim realization (Section 2) and the version-collision re-checks (Section 4) |
+| `harness:check-state --fleet` | The report-side realization of fleet-wide state visibility (open work, plugin-cache version drift, cross-repo consolidating-record citations) — cited here, never restated; collector logic and report shape live in `check-state` alone (lld-0012, #620) |
 | `harness:big-change-git-rules` | The stacked-PR retarget-then-delete sequence and the version-slot evidence (Section 4) — cross-plugin soft mention, degrades gracefully where harness isn't installed |
 | `harness:agent-writing-rules` | Encoding the teammate-mode delivery clause and the generic-identity caveat (Section 3) into an actual agent file |
 | `team-scaffolding` / `fleet-bootstrap` (this plugin) | The worked realization of Section 1's coordination scope ladder (fleet-scoped introduction, #429) |
