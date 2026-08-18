@@ -35,3 +35,7 @@ estate is the working test of that bet.
 - When does a real release-grain commitment land? Until then, releases-loop homes (a `roadmap`
   index, a first RDD) stay unminted — deferred 2026-08-16 (Kim, ratification round), not an
   oversight.
+- Is solo-first composition a WHY-grain claim, not just teamwork doctrine? Drafted as `idr-0007`
+  (teams are escalations, not defaults — grounded in gh#265's measured hop tax, gh#266's
+  chore-lead retirement, ADR-0010's uniform build seat), awaiting Kim's ratification; moves to
+  Confirmed on lock.
