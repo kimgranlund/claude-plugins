@@ -1,0 +1,9 @@
+date,plugin,routable_skills,routable_chars,zero_rent_skills,zero_rent_chars,agents,agent_chars,dead,stolen,leaked
+2026-08-10,demo-plugin,10,10000,2,500,3,2000,absent,absent,absent
+2026-08-10,demo-plugin-two,6,5000,1,300,2,1500,absent,absent,absent
+2026-08-12,demo-plugin,10,10300,2,500,3,2000,absent,absent,absent
+2026-08-12,demo-plugin-two,6,5400,1,300,2,1500,absent,absent,absent
+2026-08-14,demo-plugin,11,10600,2,500,3,2000,absent,absent,absent
+2026-08-14,demo-plugin-two,6,5900,1,300,2,1500,absent,absent,absent
+2026-08-16,demo-plugin,11,10800,2,500,3,2000,absent,absent,absent
+2026-08-16,demo-plugin-two,6,6200,1,300,2,1500,absent,absent,absent

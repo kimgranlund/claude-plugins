@@ -32,6 +32,7 @@ The plugin name (`harness`, distribution taxonomy) is deliberately disjoint from
 | `skills/check-state` | Procedural skill | both (`/check-state`) | Read-only work-state report: four bundled collectors (git branches/worktrees/stashes · tickets/PRs via gh · ROADMAP/PLAN/TICKET docs · checkpoint delta) cross-referenced into Blocked-on-you → Ready-to-close → Drift → Delta → Counts, every finding naming its owning command; the run's one write is `.claude/ops/state-checkpoint.json` |
 | `skills/check-reconstructibility` | Procedural skill | both | ADR-0022's own instrument ("the repo is the backup"): a read-only sweep reporting what a fresh machine + clone of `origin/main` could NOT recover today, classified into the ADR's own trichotomy (committed / enrolled-with-mitigation / defect) plus an OPEN bucket for exception 4's own still-unruled mitigation mechanism — `scripts/audit_reconstructibility.py` sweeps git-ignored-and-present paths, `.claude/ops/` tracking, a global `core.excludesFile` dependency (explicit AND git's own implicit `~/.config/git/ignore` default), and the four named exceptions (memory dir, plugin cache, credentials, user-scoped state) |
 | `skills/what-shipped` | Procedural skill | both (`/what-shipped`) | Windowed activity report: bundled `collect_github.py` (PR merged/opened/open-now + issues, release-bot noise counted but excluded via `.author.type`, saturation-guarded, `## OK` trailer as the completeness signal) + the doc-writing-rules backend-resolver seam for tickets (local files / GitHub Issues / adapter), joined ticket↔PR with the residue — tickets with no PR — surfaced; report groups ≤5 workstreams with owners and grounded line counts |
+| `skills/estate-maintenance` | Procedural skill | both (`/estate-maintenance`) | The periodic self-improvement retrospective (#629, lld-0019): mines auto-memory, the two trend CSVs, ADR/IDR decision records, and `gh` issue history for negative patterns via `scripts/collect.py` (evidence bundle, the metric-source registry, same-plugin `adr_checkpoint.py` parser reuse) and `scripts/detect.py` (D1 repeated nudge, D2 re-filed near-duplicate ticket, D3 metric drift, D4 context-surface ceremony, plus `fix_clusters` and a `--verify` evidence re-opener), proposing context-level fixes behind exactly one confirm gate — read-only until then, never `context: fork` (no `AskUserQuestion` channel in a fork). Selftested against `assets/fixture-estate/` |
 | `skills/plugin-writing-rules` | Declarative skill | model-only | Plugins: atomic load, version-as-cache-key, reload semantics, paths/state, trust; the three load-failure classes as a ledger |
 | `skills/adopt-plugin` | Procedural | both (`/adopt-plugin`) | Declare external plugins/marketplaces in a repo's `.claude/settings.json` (`extraKnownMarketplaces` + self-hosted marketplace.json wrapper for bare plugin repos) so contributors who trust the repo get the install prompt — portable past the authoring machine |
 | `skills/ship-plugin` | Command | user-only (`/ship-plugin`) | Preflight (bump on approval) → release_gate.py → package to dist/ → report |
@@ -130,6 +131,17 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.14.0 · 2026-08-18 · closes #629 (lld-0019): new skill `estate-maintenance` — the periodic
+self-improvement retrospective that mines auto-memory, the two trend CSVs, ADR/IDR decision
+records, and `gh` issue history for negative patterns (D1 repeated nudge, D2 re-filed
+near-duplicate ticket, D3 metric drift, D4 context-surface ceremony) and proposes context-level
+fixes behind one confirm gate — read-only until then, never `context: fork`. Bundled scripts
+`scripts/collect.py` (the metric-source registry + same-plugin `adr_checkpoint.py` parser reuse)
+and `scripts/detect.py` (the four detectors + `fix_clusters` + a `--verify` evidence-pointer
+re-opener), both selftested against `assets/fixture-estate/` and dry-run for real against this
+repo's own memory/metrics/issue history. `references/report-template.md` + `evals/evals.json`
+(12 trigger cases, 10 no-trigger fence cases — one per named sibling). Workspace `CLAUDE.md`
+routing row + `.claude/ops/calendar.md` row added. `release_gate.py harness` clean.
 v3.13.1 · 2026-08-18 · closes #622 (harness slice, docs sibling same PR): the feedback-intake
 door instrument for idr-0008 (LOCKED)/adr-0021. `watch-tickets` names ADR-0021's T3 tier as its
 own already-existing hold-first-filing behavior (step 3) and applies the `user-signal` provenance
