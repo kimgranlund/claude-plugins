@@ -12,12 +12,14 @@ its own rubric citation):
   external-url         a url(http...)/@import/<link href="http..."> outside the doctrine-
                         approved CDN allowlist (cdnjs.cloudflare.com, fonts.googleapis.com)  [FAIL]
   literal-outside-root a bare hex/oklch/rgb color literal used in a rule body OUTSIDE :root,
-                        instead of a var(--c-*) reference                                [FAIL]
+                        instead of a var(--<short-role>) reference                        [FAIL]
   br-in-mermaid-label  a literal <br/> or <br> inside a mermaid node-label bracket ["..."]  [FAIL]
   missing-ground       no `color-scheme` declared on :root, or no body/page-root background
                         bound to a --paper/neutral-background-family token               [FAIL]
   doctrine-font-stack  a font-family on body/interactive selectors naming neither the
-                        system-ui nor mono doctrine stack, with no override comment        [WARN]
+                        system-ui nor mono doctrine stack (a var(--font-*) token reference always
+                        counts as on-doctrine — that IS the indirection the doctrine prescribes),
+                        with no override comment                                          [WARN]
 
 Exit 0 clean, 1 on any FAIL, 2 on a usage error (no target, unreadable path). Verdict line first:
 `artifact_check · <verdict> · N fail / M warn · <path>`.
@@ -35,9 +37,18 @@ URL_RE = re.compile(r"url\(\s*['\"]?(https?://[^'\")\s]+)", re.I)
 IMPORT_RE = re.compile(r"@import\s+url\(\s*['\"]?(https?://[^'\")\s]+)", re.I)
 LINK_HREF_RE = re.compile(r"<link[^>]+href=[\"'](https?://[^\"']+)", re.I)
 COLOR_LITERAL_RE = re.compile(r"(?<![\w-])(#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|oklch\([^)]*\))")
+# A CSS comment can legitimately carry a `#NNN` issue reference (this same file's own generated
+# mermaid-block comments do, e.g. "#662") — the gh#660 prose-hash class, recurring INSIDE a CSS
+# comment rather than HTML prose text (checker finding, #662): strip comments before the literal
+# scan the same way _css_regions already strips prose.
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.S)
 MERMAID_FENCE_RE = re.compile(r"```mermaid(.*?)```", re.S)
 NODE_LABEL_BR_RE = re.compile(r"\[[^\]]*<br\s*/?>[^\]]*\]", re.I)
 COLOR_SCHEME_RE = re.compile(r"color-scheme\s*:\s*light\s+dark")
+# #662: css_build.py now emits the unprefixed --paper short role name only (never --c-paper /
+# --c-neutral-background) — the (?:c-)? acceptance PR #661 added is redundant against fresh
+# css_build output post-#662, but stays (per #662's own "harmless to keep" note) as a legacy-page
+# acceptance for content built against the pre-#662 --c-paper emission.
 BODY_BG_VAR_RE = re.compile(r"body\s*\{[^}]*background(?:-color)?\s*:\s*var\(--(?:(?:c-)?paper|[\w-]*background[\w-]*)\)", re.S | re.I)
 STYLE_BLOCK_RE = re.compile(r"<style[^>]*>(.*?)</style>", re.S | re.I)
 STYLE_ATTR_RE = re.compile(r"style\s*=\s*\"([^\"]*)\"|style\s*=\s*'([^']*)'", re.I)
@@ -46,6 +57,20 @@ DOCTRINE_SANS_RE = re.compile(r"system-ui")
 DOCTRINE_MONO_RE = re.compile(r"ui-monospace")
 FONT_FAMILY_RE = re.compile(r"font-family\s*:\s*([^;]+);")
 OVERRIDE_COMMENT_RE = re.compile(r"/\*\s*override\b", re.I)
+# A var(--font-*) reference is on-doctrine BY CONSTRUCTION (#662, third checker note) — the
+# token IS the indirection the doctrine prescribes (css_build.py emits every --font-* line with
+# its mandatory system-fallback tail already baked in); only a LITERAL off-doctrine font-family
+# value with no token indirection and no override comment should warn. Anchored to the WHOLE
+# value (never a bare `.search`) — a mixed value like `var(--font-x), 'Comic Sans MS'` still names
+# a literal fallback and must not silently escape via the token check alone (checker finding C).
+FONT_VAR_ONLY_RE = re.compile(r"^\s*var\(\s*--font-[\w-]+\s*\)\s*$")
+# The other half of the same escape: trusting ANY var(--font-*) blindly is only safe if the TOKEN
+# ITSELF actually carries the mandatory fallback tail — this checker has no way to know a
+# `--font-*` custom property was really built by css_build.py vs. hand-authored badly, so it
+# verifies the token's OWN definition directly (mirrors css_build.py's selftest invariant: every
+# emitted --font-* value ends in the sans-serif or monospace system stack).
+FONT_TOKEN_DEF_RE = re.compile(r"--font-[\w-]+\s*:\s*([^;]+);")
+FONT_FALLBACK_TAIL_RE = re.compile(r"(sans-serif|monospace)\s*$")
 
 
 def check_theme_block_only(text: str):
@@ -80,9 +105,14 @@ def _css_regions(text: str):
 
 def check_literal_outside_root(text: str):
     findings = []
-    rest = "\n".join(ROOT_BLOCK_RE.sub("", css) for css in _css_regions(text))
+    # Strip comments FIRST, :root SECOND (re-verification finding, #662): a `}` inside a :root
+    # comment would otherwise truncate ROOT_BLOCK_RE's `[^}]*` match early, leaking :root's own
+    # literals into the outside-root scan — comment-stripping first removes that `}` before
+    # ROOT_BLOCK_RE ever sees it.
+    regions = [CSS_COMMENT_RE.sub("", css) for css in _css_regions(text)]
+    rest = "\n".join(ROOT_BLOCK_RE.sub("", css) for css in regions)
     for m in COLOR_LITERAL_RE.finditer(rest):
-        findings.append(("FAIL", "literal-outside-root", f"color literal outside :root, not a var(--c-*) reference: {m.group(0)}"))
+        findings.append(("FAIL", "literal-outside-root", f"color literal outside :root, not a var(--<short-role>) reference: {m.group(0)}"))
     return findings
 
 
@@ -107,12 +137,22 @@ def check_doctrine_font_stack(text: str):
     findings = []
     for m in FONT_FAMILY_RE.finditer(text):
         value = m.group(1)
+        if FONT_VAR_ONLY_RE.match(value):
+            continue  # a PURE token reference is on-doctrine (#662) — never a literal-stack question
         start = max(0, m.start() - 120)
         preceding = text[start : m.start()]
         if OVERRIDE_COMMENT_RE.search(preceding):
             continue
         if not (DOCTRINE_SANS_RE.search(value) or DOCTRINE_MONO_RE.search(value)):
             findings.append(("WARN", "doctrine-font-stack", f"font-family off doctrine, no override comment: {value.strip()}"))
+    # Definition-side half of the same rule (checker finding C): a --font-* token itself must
+    # carry the mandatory fallback tail — trusting its USE via var() is only safe if the token
+    # was actually built right.
+    for m in FONT_TOKEN_DEF_RE.finditer(text):
+        value = m.group(1)
+        if not FONT_FALLBACK_TAIL_RE.search(value.strip().rstrip("'\"")):
+            findings.append(("WARN", "doctrine-font-stack",
+                             f"--font-* token defined without the mandatory system-fallback tail: {value.strip()}"))
     return findings
 
 
@@ -154,6 +194,10 @@ def run(paths):
 
 # --- selftest fixtures -------------------------------------------------------
 
+# NOTE: this fixture's :root deliberately still models the pre-#662 `--c-*` naming — it exists to
+# prove the checker's GENERIC grep-gates (theme/external-url/br/font checks) hold regardless of
+# which naming generation a page's :root happens to use, not to model the current contract. The
+# CURRENT contract (unprefixed short role names) is what `CSS_BUILD_OUTPUT_FIXTURE` below proves.
 GOOD_FIXTURE = """
 :root {
   color-scheme: light dark;
@@ -219,6 +263,137 @@ BAD_FIXTURE_FONT = """
 body { background-color: var(--paper); font-family: 'Comic Sans MS', cursive; }
 """
 
+# #662 third checker-alignment note: font-family via var(--font-*) token indirection is
+# on-doctrine BY CONSTRUCTION — css_build.py's own --font-* lines always carry the mandatory
+# system-fallback tail (docs' script-interface.md), so a page reading the token is definitionally
+# conforming even though neither "system-ui" nor "ui-monospace" appears literally at the point of
+# use. Reverse control: zero doctrine-font-stack findings on a page that only ever references
+# the token, never the literal stack.
+GOOD_FIXTURE_FONT_VAR = """
+:root { color-scheme: light dark; --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237)); }
+body { background-color: var(--paper); font-family: var(--font-gt-america); }
+button { font-family: var(--font-gt-america-mono); }
+"""
+
+# CROSS-SCRIPT REGRESSION FIXTURE (#662 Acceptance criterion 2) — the FULL, VERBATIM
+# `css_build.py` output for its own FIXTURE_TOKENS fixture (docs/skills/make-artifact/scripts/
+# css_build.py's `build(FIXTURE_TOKENS)`, captured 2026-08-18 — every line, comments included,
+# nothing trimmed), plus the synthetic body/font rule `make-artifact`'s own page assembly phase
+# adds on top of a css_build :root block. Bundled scripts cannot import across a plugin boundary
+# (.claude/rules/plugin-authoring.md's hard-boundary rule), so this is a literal, dated, cited
+# COPY, not a live import — if css_build.py's emission shape ever changes, BOTH this fixture and
+# css_build.py's own selftest (which asserts the same property names from the emitter's side)
+# update in the same change, per #662's Acceptance criterion 2. A prior draft of this fixture
+# TRIMMED the generated comments/spacing/radii/mermaid blocks and so silently missed a real
+# regression that only the full output exposes (checker finding, #662): css_build's own generated
+# mermaid comment used to cite "#662" literally in-line, which `#[0-9a-fA-F]{3,8}` reads as a
+# 3-hex-digit color literal outside :root — fixed two ways, at the source (the citation was
+# dropped from the emitted comment, `css_build.py`'s MERMAID_REHEME_BLOCK) and at the checker
+# (comments are now stripped before the literal scan, `CSS_COMMENT_RE` above) — this fixture, now
+# genuinely verbatim, is what would have caught it.
+CSS_BUILD_OUTPUT_FIXTURE = """
+/* Generated by make-artifact's css_build.py (docs plugin) — do not hand-edit. */
+
+:root {
+  color-scheme: light dark;
+  --accent: light-dark(oklch(0.5837 0.1265 236.48), oklch(0.6716 0.1414 234.43));
+  --card: light-dark(oklch(0.9335 0.0017 247.84), oklch(0.2597 0.0024 247.92));
+  --ink: light-dark(oklch(0.1776 0 0), oklch(1 0 0));
+  --on-accent: light-dark(oklch(1 0 0), oklch(1 0 0));
+  --paper: light-dark(oklch(0.9807 0 90), oklch(0.1421 0.0022 247.9));
+  --text-body-md-size: 16px;
+  --text-body-md-weight: 440;
+  --text-body-md-lh: 1.5;
+  --text-display-sm-size: 72px;
+  --text-display-sm-weight: 700;
+  --text-display-sm-lh: 0.806;
+  --text-display-sm-ls: -0.02em;
+  --font-gt-america: 'GT America', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-gt-america-mono: 'GT America Mono', ui-monospace, 'SF Mono', monospace;
+  --space-none: 0px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+  --space-5xl: 96px;
+  --r-none: 0px;
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 28px;
+  --r-full: 9999px;
+}
+
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+
+/* Mermaid house re-theme (design:artifact-styling-rules' mermaid-reference.md): the rendered SVG
+   ships its own inline styles, so re-theming requires token-driven !important overrides bound to
+   the same short role custom properties as the rest of the page — one mechanism, both schemes,
+   unprefixed short names, no legacy prefix. */
+.mermaid svg .node rect,
+.mermaid svg .node circle,
+.mermaid svg .node polygon {
+  fill: var(--card) !important;
+  stroke: var(--line) !important;
+}
+.mermaid svg .node text,
+.mermaid svg .nodeLabel {
+  fill: var(--ink) !important;
+  color: var(--ink) !important;
+}
+.mermaid svg .edgePath .path,
+.mermaid svg .flowchart-link {
+  stroke: var(--line) !important;
+}
+.mermaid svg .edgeLabel {
+  background-color: var(--card) !important;
+  color: var(--muted) !important;
+}
+
+/* Width-preserving hidden-tab-panel technique (design:artifact-styling-rules'
+   mermaid-reference.md / type-and-layout.md): never display:none a panel
+   holding a mermaid diagram -- it corrupts the measured container permanently, even after the
+   tab is shown again. */
+[data-tab-panel][hidden] {
+  visibility: hidden;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+body { background-color: var(--paper); color: var(--ink); font-family: var(--font-gt-america); }
+button { font-family: var(--font-gt-america-mono); }
+"""
+
+# NEGATIVE CONTROL (checker finding, #662): a CSS comment carrying a `#NNN` issue reference must
+# never read as a color literal — the exact class the fixture above's history just proved bites
+# for real, reproduced directly so a future regression on either side (the comment-strip fix, or
+# a future edit that reintroduces a bare issue ref into generated CSS) is caught.
+BAD_FIXTURE_HASH_IN_CSS_COMMENT = """
+/* see issue #123 and #4096 for background */
+:root { color-scheme: light dark; --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237)); }
+body { background-color: var(--paper); font-family: system-ui; }
+"""
+
+# NEGATIVE CONTROL (re-verification finding, #662): a `}` inside a :root comment must not
+# truncate ROOT_BLOCK_RE's match and leak :root's own literals into the outside-root scan —
+# proves the comment-strip-before-root-strip ORDER, not just that comments strip at all.
+GOOD_FIXTURE_BRACE_IN_ROOT_COMMENT = """
+:root {
+  /* legacy } note: this brace used to truncate the :root match early */
+  color-scheme: light dark;
+  --x: #abcdef;
+  --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237));
+}
+body { background-color: var(--paper); font-family: system-ui; }
+"""
+
 
 def selftest():
     assert check_text(GOOD_FIXTURE) == [], f"clean fixture must have zero findings, got {check_text(GOOD_FIXTURE)}"
@@ -246,7 +421,9 @@ def selftest():
     codes = {c for _, c, _ in check_missing_ground(BAD_FIXTURE_GROUND)}
     assert "missing-ground" in codes, "missing-ground must bite when color-scheme/body-token binding are absent"
     assert check_missing_ground(GOOD_FIXTURE) == [], "reverse control: clean fixture has both color-scheme and body token binding"
-    # gh#660 negative control: css_build.py emits var(--c-paper) — a conforming page must pass ground
+    # gh#660 negative control: a legacy pre-#662 page binds var(--c-paper) (fresh css_build.py
+    # output now emits var(--paper) instead — accepted per #662's own harmless-to-keep note,
+    # see the BODY_BG_VAR_RE comment above) — either way a conforming page must pass ground
     assert check_missing_ground(GOOD_FIXTURE_PROSE_HASH) == [], "body background var(--c-paper) must satisfy missing-ground"
 
     codes = {c for _, c, _ in check_doctrine_font_stack(BAD_FIXTURE_FONT)}
@@ -257,7 +434,56 @@ def selftest():
     overridden = "/* override: brand requires this face */\nbody { font-family: 'Custom Brand Font', serif; }"
     assert check_doctrine_font_stack(overridden) == [], "an explicit override comment must suppress the font-stack warning"
 
-    print("artifact_check selftest · PASS · 6 checks, negative + reverse controls, override-comment path")
+    # #662 third checker-alignment note: var(--font-*) token indirection is on-doctrine, no
+    # override comment needed — the false-warn this note reports (10 warns on a conforming page)
+    assert check_doctrine_font_stack(GOOD_FIXTURE_FONT_VAR) == [], (
+        "a font-family reading var(--font-*) must never warn — token indirection IS the doctrine")
+    assert check_text(GOOD_FIXTURE_FONT_VAR) == [], (
+        "the var(--font-*) fixture must be clean end to end, not just on the font check")
+
+    # checker finding C — the var(--font-*) skip must be ANCHORED to the whole value: a MIXED
+    # value naming a literal fallback alongside the token must still warn, never silently escape
+    mixed_font = ":root { color-scheme: light dark; --paper: light-dark(#fff, #000); }\n" \
+                 "body { background: var(--paper); font-family: var(--font-x), 'Comic Sans MS'; }"
+    codes = {c for _, c, _ in check_doctrine_font_stack(mixed_font)}
+    assert "doctrine-font-stack" in codes, (
+        "a mixed var(--font-*)+literal-fallback value must still warn — the anchor must be whole-value")
+
+    # checker finding C, other half — trusting var(--font-*) is only safe if the TOKEN ITSELF
+    # carries the mandatory fallback tail; a badly-defined token must warn even though every USE
+    # of it looks like clean token indirection
+    bad_font_token = ":root { color-scheme: light dark; --paper: light-dark(#fff, #000);\n" \
+                      "  --font-bad: 'Comic Sans MS', cursive; }\n" \
+                      "body { background: var(--paper); font-family: var(--font-bad); }"
+    codes = {c for _, c, _ in check_doctrine_font_stack(bad_font_token)}
+    assert "doctrine-font-stack" in codes, (
+        "a --font-* token defined without the mandatory fallback tail must warn even via var() use")
+
+    # #662 Acceptance criterion 2 — the FULL verbatim css_build.py output (+ the synthetic
+    # body/font rule make-artifact's own assembly phase adds) must pass artifact_check clean
+    findings = check_text(CSS_BUILD_OUTPUT_FIXTURE)
+    assert findings == [], (
+        "verbatim css_build.py output must pass artifact_check with zero findings — the #662 "
+        "cross-script regression fixture; got: %r" % (findings,))
+
+    # checker finding A — a CSS comment's own `#NNN` issue reference must never read as a color
+    # literal (the exact bug a trimmed fixture missed); reverse control alongside the negative
+    assert check_literal_outside_root(BAD_FIXTURE_HASH_IN_CSS_COMMENT) == [], (
+        "a #NNN issue ref inside a CSS COMMENT must never be read as a color literal (#662)")
+    real_literal_still_bites = ":root { color-scheme: light dark; }\n" \
+        "/* see #123 */\nbody { background: var(--paper); color: #ff00ff; font-family: system-ui; }"
+    codes = {c for _, c, _ in check_literal_outside_root(real_literal_still_bites)}
+    assert "literal-outside-root" in codes, (
+        "a real literal must still bite even when a #NNN-carrying comment sits right next to it")
+
+    # re-verification finding — a `}` inside a :root comment must not truncate ROOT_BLOCK_RE
+    # and leak :root's own --x: #abcdef literal into the outside-root scan
+    assert check_literal_outside_root(GOOD_FIXTURE_BRACE_IN_ROOT_COMMENT) == [], (
+        "a `}` inside a :root comment must not truncate the :root match and leak its own literal")
+
+    print("artifact_check selftest · PASS · 6 checks, negative + reverse controls, override-comment "
+          "path, font-var-indirection path (anchored + token-definition halves), cross-script "
+          "(#662) regression fixture (full verbatim + comment-hash negative control)")
     return 0
 
 

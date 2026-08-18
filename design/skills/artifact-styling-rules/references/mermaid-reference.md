@@ -34,7 +34,8 @@ with `!important` and scoped to the SVG's own element id — a page-level styles
 specificity cannot touch them, and community reports confirm external CSS targeting mermaid's
 `.node`/`.edgePath .path`/`.edgeLabel`/`.cluster`/`.label` classes at ordinary specificity is
 silently overridden. **The fix is symmetric**: the page's own re-theme block must ALSO carry
-`!important`, bound to the same `--c-*` custom properties as the rest of the page — this is the
+`!important`, bound to the same short role custom properties as the rest of the page (`--card`,
+`--ink`, … — never `--c-*`, superseded #662) — this is the
 one mechanism that re-themes both light and dark schemes together, never a second hand-maintained
 palette for the diagram.
 
@@ -57,7 +58,7 @@ targets, each bound to a page token:
 — `classDef`/`class` statements, or per-node `style` keyword — are mermaid's OWN recommended way
 to customize a single diagram's colors, and they DO reliably win against mermaid's base theme.
 This pack does not use them as the primary mechanism because neither binds to the PAGE's live
-`--c-*` custom properties — a `classDef` bakes a literal hex at diagram-authoring time, so it
+short role custom properties — a `classDef` bakes a literal hex at diagram-authoring time, so it
 cannot re-theme when the viewer's tri-state (`platform-facts.md`) flips. The CSS-override-with-
 `!important` approach is the one mechanism that stays theme-reactive; `classDef`/`style` are noted
 here as the mermaid-native alternative, not adopted.
@@ -85,7 +86,7 @@ set `rx`/`ry` (8px, "rounded sm" per the reference implementation) via CSS; a di
 is user-modifiable through it (`default`/`neutral`/`dark`/`forest` are static). The colors it sets
 are BAKED at parse/render time — a diagram authored with a `themeVariables` init block renders
 ONE static theme and cannot re-theme when the page's viewer flips light/dark afterward. A CSS
-override block, by contrast, binds to the page's own `--c-*` custom properties, which already
+override block, by contrast, binds to the page's own short role custom properties, which already
 re-theme via `light-dark()`/`color-scheme` — the diagram re-themes FOR FREE the instant the page
 does, with no re-render and no second config surface to keep in sync. `themeVariables`' own
 derived-variable hierarchy (`primaryColor` → `primaryBorderColor`/`secondaryColor`, etc. — [verified,
