@@ -183,7 +183,10 @@ prompt — gets a fresh-context checker pass (the matching `*-checker` agent) be
 closes**, the same gate make-skill's P5 applies at forge time: lint and release gates prove
 mechanics, not semantics, and a 2026-08-11 estate audit found every recent unaudited inline
 semantic edit carrying a real gap. A pure code/config fix under the repo's own test gates needs
-no checker seat.
+no checker seat. **Dispatch that checker UNNAMED and synchronous — a named dispatch strands the
+report** (a fix fork's own checker dispatched `chk667` stranded its verdict at the root session,
+2026-08-18 — the gh#154/#157 class, re-proven), per harness's `agent-writing-rules` never-name
+rule (cited, not restated).
 
 Otherwise, decide fork vs. agent: an agent only when the investigation needs tool restriction,
 parallelism, or multi-skill preload; a fork for everything else (harness's fork-vs-agent gate; apply

@@ -131,6 +131,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.15.1 · 2026-08-18 · closes #670 (harness slice, folded with docs/teamwork siblings in one PR, precedent #639): `make-skill`'s Phase 5 fresh-context audit step dispatches the `skill-checker` agent UNNAMED and synchronous — a named dispatch strands the report at the root session instead of this phase (a fix fork's own checker dispatched `chk667` stranded its verdict this way, 2026-08-18 — the gh#154/#157 class, re-proven), citing this plugin's own `agent-writing-rules` never-name rule as canon (soft mention, no restatement). Body-only edit, no description/evals change. Fresh-context `skill-checker` pass.
 v3.15.0 · 2026-08-18 · closes #677: `pattern-sweeping` gains a `/batch`-backed transform path for
 large censuses — step 3's Transform bullet documents a PROVISIONAL threshold (>20 sites OR >10
 independent files, ratcheted on the first two real runs), routing guidance (`/batch` for
