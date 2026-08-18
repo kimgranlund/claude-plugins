@@ -1,7 +1,7 @@
 # Harvest core — shared definitions + the two-axis rubric
 
 **Canonical home.** This file is the single shared core for two sibling harvest capabilities
-(#612 `project-facts`, this skill; #613 project-context, not yet built) — it lives here because
+(#612 `project-facts`, this skill; #613 `harness-facts`) — it lives here because
 #612 is first in the serial build chain and mints it. The sibling skill cites this file by
 relative path (`../project-facts/references/harvest-core.md`) rather than duplicating its body —
 cross-skill citation within one plugin is an ordinary mention, not a plugin-boundary violation
@@ -16,7 +16,7 @@ logic, technical architectures, and unique-IP structures, discovered from functi
 PRDs, intent records (brief/IDRs), ADRs, and roadmaps. They differ only in **who consumes the
 output** and **which axis that consumer needs weighted higher**:
 
-| | Domain knowledge (`project-facts`, #612) | Project context (#613) |
+| | Domain knowledge (`project-facts`, #612) | Harness facts (`harness-facts`, #613) |
 |---|---|---|
 | **Definition** | The project-specific business logic, technical architectures, and unique-IP structures — structured and filled in by main topic zone, written for a human or business reader to understand *what this project is and why it works the way it does*. | The same harvestable substance, reframed for a coding agent's own harness — the output feeds CLAUDE.md-grade entry files, path-scoped rules, knowledge packs, and dispatch context, never human reading. |
 | **Consumer** | Humans / business | A coding agent and its harness |
@@ -70,8 +70,8 @@ usable harvest, whichever corpus it's feeding.
 
 **Per-corpus weighting — the mechanism, not just the label.** Each corpus states its own weight as
 a simple ratio applied to the two raw per-zone axis scores (R2, R3) before aggregating: this
-corpus (`project-facts`, #612) weights Outside-In 60/Inside-Out 40; #613 mirrors it at
-Inside-Out 60/Outside-In 40. The ratio is a starting point, not a law — a harvest run may record a
+corpus (`project-facts`, #612) weights Outside-In 60/Inside-Out 40; `harness-facts` (#613) mirrors
+it at Inside-Out 60/Outside-In 40. The ratio is a starting point, not a law — a harvest run may record a
 different split when a project's own shape warrants it, as long as R5 requires the split be
 stated and the aggregate be computably derived from it, never asserted without the arithmetic
 behind it.
@@ -83,7 +83,7 @@ was never actually checked from the other side.
 
 ## Sources
 
-- Ticket #612 (`harvest-domain-knowledge`) and its sibling #613 (`harvest-project-context`), both
+- Ticket #612 (`harvest-domain-knowledge`) and its sibling #613 (`harness-facts`), both
   minted via `find-intent` 2026-08-18, Kim's rulings quoted verbatim above.
 - `docs:make-rubric`'s rubric-for-rubrics governs this table's own shape (criteria × levels ×
   descriptors × aggregation); `docs:make-reference`'s reference-authoring standard governs this

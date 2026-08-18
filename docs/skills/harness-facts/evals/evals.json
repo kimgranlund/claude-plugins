@@ -1,0 +1,86 @@
+{
+  "skill": "harness-facts",
+  "note": "Minted with the skill, ticket #613 (harness-facts, project-context harvest — the agent/harness-facing sibling of project-facts, #612). Positives span imperative/diagnostic/indirect phrasings of harness-context harvesting: CLAUDE.md sections, path-scoped rules, pack seeds, dispatch context. Negatives drawn from the neighbors' trigger vocabulary this skill's description fences against: project-facts (reciprocal), entry-file-rules/check-entry-file, make-pack, agent-harness-rules, save-lessons, plus unrelated skills (llms-txt generation, bug filing, prompt-wording audit).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "harvest this project's context so the coding agent's CLAUDE.md and rules stay current",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "produce CLAUDE.md sections and path-scoped rules from what this codebase already does",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "build a dispatch-context digest for the next builder seat working this ticket",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "extract this project's context into ready-to-install harness artifacts",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what does a coding agent need to know about this repo before it can work here, staged as install-ready files",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "seed knowledge-pack candidates from this project's ADRs and PRDs, for the harness to pick up",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "score this codebase's topic zones inside-out for the coding agent's own operating context",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "extract the domain knowledge from this project, for a business reader",
+      "expect": "no-trigger",
+      "note": "owner: project-facts — human/business-facing sibling, opposite weight, same core file"
+    },
+    {
+      "id": "n02",
+      "prompt": "audit this existing CLAUDE.md for staleness and slim it down",
+      "expect": "no-trigger",
+      "note": "owner: harness entry-file-rules/check-entry-file — auditing an EXISTING entry file is not harvesting one"
+    },
+    {
+      "id": "n03",
+      "prompt": "fill in this knowledge pack with new entries",
+      "expect": "no-trigger",
+      "note": "owner: harness make-pack — filling an already-created pack is not seeding candidates"
+    },
+    {
+      "id": "n04",
+      "prompt": "design a new eval harness for this feature from scratch",
+      "expect": "no-trigger",
+      "note": "owner: docs agent-harness-rules — designing a test-harness method, not producing harness context"
+    },
+    {
+      "id": "n05",
+      "prompt": "is this fact worth a durable knowledge-pack entry, or just conversation noise",
+      "expect": "no-trigger",
+      "note": "owner: harness save-lessons — judging one fact's durability bar is not a corpus harvest"
+    },
+    {
+      "id": "n06",
+      "prompt": "generate an llms.txt index for our docs site",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "capture this bug report as a durable ticket",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "audit this prompt's wording for potency",
+      "expect": "no-trigger"
+    }
+  ]
+}
