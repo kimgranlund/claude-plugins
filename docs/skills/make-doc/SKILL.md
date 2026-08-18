@@ -6,7 +6,8 @@ description: >-
   record, or spec out a document — "write the PRD for this feature", "mint the founding IDR for
   this project", "lock in the RDD for this release". Runs via /make-doc [type and intent]. NOT for
   the rules themselves (doc-writing-rules); NOT for reviewing (check-doc); NOT for feature intake
-  (file-feature).
+  (file-feature); NOT for building a rendered Artifact/report page from a design system
+  (make-artifact).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[type] [one-line intent]"

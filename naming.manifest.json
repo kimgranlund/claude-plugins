@@ -485,6 +485,11 @@
       "canonical": "llms-txt",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "artifact",
+      "plural": "artifacts",
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

@@ -1,0 +1,78 @@
+{
+  "skill": "artifact-rules",
+  "note": "Trigger-routing suite, minted alongside artifact-rules 2026-08-17 (closes #619, LLD-0011). Positives are consult-only asks — a standards question arriving without a build verb, one per axis (design-system consumption, shell doctrine, mermaid house style, refresh procedure) plus two adjacent-phrasing repeats. Negatives fence the four siblings this capability overlaps trigger vocabulary with: make-artifact (the build ask itself), make-design-system (authoring/grading the token SOURCE), markdown-to-markup (plain markdown rendering), make-doc (drafting a functional document).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "should a retro page use tabs or a single scroll",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "how do design tokens turn into light and dark CSS custom properties",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "when should we refresh the Estate Handbook artifact",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "why does my mermaid SVG stay light-themed even in dark mode",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what shell should a multi-chapter reference handbook use",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "rebuild the Estate Handbook as an artifact page",
+      "expect": "no-trigger",
+      "note": "make-artifact — the build ask, not a standards question"
+    },
+    {
+      "id": "n02",
+      "prompt": "turn this report into an artifact page with our design system",
+      "expect": "no-trigger",
+      "note": "make-artifact"
+    },
+    {
+      "id": "n03",
+      "prompt": "port our design system to Stitch and Claude Design",
+      "expect": "no-trigger",
+      "note": "design's make-design-system"
+    },
+    {
+      "id": "n04",
+      "prompt": "grade this design-system export before we ship it",
+      "expect": "no-trigger",
+      "note": "design's make-design-system / design-system-checker"
+    },
+    {
+      "id": "n05",
+      "prompt": "render this markdown onto the docs page",
+      "expect": "no-trigger",
+      "note": "markdown-to-markup"
+    },
+    {
+      "id": "n06",
+      "prompt": "write the PRD for this feature",
+      "expect": "no-trigger",
+      "note": "make-doc"
+    },
+    {
+      "id": "n07",
+      "prompt": "add bold and links to the doc renderer",
+      "expect": "no-trigger",
+      "note": "markdown-to-markup"
+    }
+  ]
+}

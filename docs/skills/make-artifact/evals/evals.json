@@ -1,0 +1,78 @@
+{
+  "skill": "make-artifact",
+  "note": "Trigger-routing suite, minted alongside make-artifact 2026-08-17 (closes #619, LLD-0011). Positives are BUILD asks — turn/rebuild/render/regenerate an artifact/report page from a design system. Negatives fence the four siblings this capability overlaps trigger vocabulary with: artifact-rules (a standards question with no build ask), make-design-system (authoring/grading the token SOURCE), make-doc (drafting a functional document), markdown-to-markup (plain markdown rendering, no design-system consumption).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "turn this report into an artifact page",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "rebuild the Estate Handbook",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "render this with our design system",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "build an artifact page from our DESIGN.md and this retro",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "make a rendered report page using our tokens.json",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "regenerate the handbook artifact now that the design system updated",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
+      "expect": "no-trigger",
+      "note": "artifact-rules — a standards question, no build ask"
+    },
+    {
+      "id": "n02",
+      "prompt": "port our design system to Stitch and Claude Design",
+      "expect": "no-trigger",
+      "note": "design's make-design-system"
+    },
+    {
+      "id": "n03",
+      "prompt": "grade this design-system export before we ship it",
+      "expect": "no-trigger",
+      "note": "design's make-design-system / design-system-checker"
+    },
+    {
+      "id": "n04",
+      "prompt": "write the PRD for this feature",
+      "expect": "no-trigger",
+      "note": "make-doc"
+    },
+    {
+      "id": "n05",
+      "prompt": "render this markdown onto the docs page",
+      "expect": "no-trigger",
+      "note": "markdown-to-markup"
+    },
+    {
+      "id": "n06",
+      "prompt": "should a retro page use tabs or a single scroll",
+      "expect": "no-trigger",
+      "note": "artifact-rules"
+    },
+    {
+      "id": "n07",
+      "prompt": "add bold and links to the doc renderer",
+      "expect": "no-trigger",
+      "note": "markdown-to-markup"
+    }
+  ]
+}
