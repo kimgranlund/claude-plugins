@@ -22,6 +22,26 @@ fork sees no conversation history — `$ARGUMENTS` is the only channel in. Seed:
 **Backend seam (Phase 0):** resolve once via doc-writing-rules' `references/backend-resolver.md`;
 every phase below follows whichever option it returns.
 
+**Pre-fork grill for big/open-decision-space seeds only (ruled 2026-08-18, gh#654) — runs OUTSIDE
+this fork, in the caller's live session, never as a phase below.** This skill is fixed at
+`context: fork` above; Phase 2 below's gh#541 finding (the fork has no question channel at all)
+is why the round can never run live once this skill's own body starts executing, no matter which
+phase claimed it. So for a seed that is BIG or genuinely open in its decision space (not already a
+small, concrete ask — a rough, caller-side call made before invocation; Phase 4 below still sizes
+the eventual record formally, and the two need not agree), the session about to invoke
+`/file-feature` — a human typing the command, or the model routing here via the Skill tool — runs
+`teamwork:grill-the-ask` (soft cross-plugin mention, degrading gracefully to the phases below on
+the raw seed where teamwork isn't installed) FIRST, live, before this skill is ever invoked, then
+hands the sharpened result in as `$ARGUMENTS`. A seed that already reads small and concrete skips
+this round entirely. `file-bug` and `file-task` keep their own existing intake shapes — this
+ruling is `file-feature`'s alone.
+
+**This fork cannot verify the grill ran — it only sees `$ARGUMENTS`.** A seed that reads BIG or
+open-decision-space yet carries no sign the round above ran (no grilled/sharpened framing, no
+`[grilled]` marker) is captured anyway, same as any other gap this fork can't resolve live (Phase
+2's own discipline) — name "pre-fork grill skipped" in Scope/Open and in the close-out's batched
+list, never block the mint on a caller that skipped the round.
+
 ## Phase 1 — Route: fresh idea, or resume by record state
 
 `$ARGUMENTS` contains a record id — `tkt-####`/`TKT-####` (case-insensitive) resolving to a file
