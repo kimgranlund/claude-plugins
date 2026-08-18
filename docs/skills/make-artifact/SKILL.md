@@ -77,8 +77,9 @@ human render check: does the shell actually look right, does a themed mermaid di
 re-theme in both schemes. This is the stated human/browser-layer exception
 (`agent-harness-rules`' assert-layer-choice) — named here, never silently skipped.
 
-**Done** = `css_build.py selftest` green, the emitted CSS carries the expected `--c-*`/
-`--text-*`/`--font-*`/`--space-*`/`--r-*` custom properties, the shell matches the content class,
+**Done** = `css_build.py selftest` green, the emitted CSS carries the expected unprefixed short
+role custom properties (`--paper`/`--ink`/`--accent`/… — never `--c-<role>`, superseded #662)/
+`--text-*`/`--font-*`/`--space-*`/`--r-*`, the shell matches the content class,
 the provenance footer is stamped, and the human render check is named (passed or explicitly
 deferred — never silently assumed). **NOT done** = CSS hand-edited past what `css_build.py`
 emitted, a report page shipped as a dashboard/tile shell, a mermaid diagram assembled inside a

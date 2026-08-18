@@ -18,14 +18,28 @@ normalizes both into one internal role -> value model before emitting CSS:
                        (role -> {fontFamily, fontSize, fontWeight, lineHeight, letterSpacing?},
                        CSS-flavored strings); `spacing`/`rounded` objects of named px strings.
 
-Emission (Resolution 6, lld-0013): `:root { color-scheme: light dark; --c-<role>:
-light-dark(<light>, <dark>); ... }` plus `[data-theme="light|dark"]` one-line toggles (never a
-duplicated variable block); `--text-<role>-{size,weight,lh,ls}` per type role; `--font-<slug>`
-per distinct font family, ALWAYS with a system-fallback tail (sans-serif or monospace, chosen by
-whether the family name contains "mono", case-insensitive — never invented per family); `--space-
-<name>` / `--r-<name>` for the spacing/radii scales; a fixed mermaid re-theme block
-(`!important` overrides bound to the same `--c-*` roles, referencing artifact-rules' Adia neutral
-family names — the first-citizen system).
+Emission (Resolution 6, lld-0013 — **superseded 2026-08-18, #662's supersede note**: colors now
+emit the UNPREFIXED artifact-page short role names, never `--c-<role>`): `:root { color-scheme:
+light dark; --<short-role>: light-dark(<light>, <dark>); ... }` plus `[data-theme="light|dark"]`
+one-line toggles (never a duplicated variable block); `--text-<role>-{size,weight,lh,ls}` per type
+role; `--font-<slug>` per distinct font family, ALWAYS with a system-fallback tail (sans-serif or
+monospace, chosen by whether the family name contains "mono", case-insensitive — never invented
+per family); `--space-<name>` / `--r-<name>` for the spacing/radii scales; a fixed mermaid
+re-theme block (`!important` overrides bound to the same short role custom properties, referencing
+artifact-rules' Adia neutral family names — the first-citizen system).
+
+Color role naming (#662): a source color role (the design system's own resolved semantic name,
+e.g. `neutral-background`, `primary`) is mapped to the artifact page's UNPREFIXED short property
+name (`--paper`, `--accent`) via `ROLE_ALIASES` below — a mechanical lookup table transcribing
+`design:artifact-styling-rules`' `token-architecture.md` 14-live-roles table (its "Aliases"
+column), the authority per Kim's 2026-08-18 ruling. A source role absent from the table passes
+through unchanged, unprefixed (e.g. a consuming project's own `tertiary` role stays `--tertiary`)
+— never re-derived, never dropped. Two source roles that alias to the SAME short property (the
+`on-intent` collapse, `mono-bg`'s chip alias) must resolve to the identical `(light, dark)` pair or
+the build fails (exit 1) naming the conflict — never a silent last-write-wins. The
+`--c-{family}-{slot}` naming grammar `token-architecture.md` also describes is a DIFFERENT thing:
+the design-system's OWN internal token grammar (how the CONSUMING project may name its own
+resolved custom properties before this script aliases them) — never this script's output grammar.
 
 Judgment stays with the model (make-artifact's SKILL.md): choosing the page shell, assembling
 content, the human render-fidelity check. This script never chooses a shell or writes prose — it
@@ -48,6 +62,7 @@ import contextlib
 import io
 import json
 import os
+import re
 import sys
 
 # Canonical scale name orders (DESIGN.md's own spacing/rounded keys; tokens.json's `spacing` array
@@ -57,6 +72,69 @@ RADII_NAMES = ["none", "xs", "sm", "md", "lg", "xl", "full"]
 
 SANS_FALLBACK = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
 MONO_FALLBACK = "ui-monospace, 'SF Mono', monospace"
+
+# Source-role -> artifact-page short-property-name lookup, transcribed from
+# design:artifact-styling-rules' token-architecture.md 14-live-roles table (its "Aliases" column) —
+# the authority per Kim's 2026-08-18 ruling (#662, superseding lld-0013 Resolution 6's --c-<role>
+# emission). A source role NOT in this table passes through unchanged, unprefixed (never
+# re-derived, never invented) — this is why the map only lists roles whose SHORT NAME differs from
+# the source role (the intent families — `danger`/`success`/`warning`/`info`, each `+-soft` — and
+# `tertiary` are also in the doctrine's table, but as identity pass-throughs: their short name
+# already equals their source role name, so they need no entry here at all).
+ROLE_ALIASES = {
+    "neutral-background": "paper",
+    "neutral-surface": "card",
+    "neutral-surface-high": "chip",
+    "neutral-surface-low": "card-low",
+    "neutral-on-surface": "ink",
+    "neutral-on-surface-variant": "muted",
+    "neutral-placeholder": "fine",
+    "neutral-outline-variant": "line",
+    "neutral-outline": "line-strong",
+    "primary": "accent",
+    "primary-hover": "accent-hover",
+    "primary-soft": "accent-soft",
+    "primary-on-primary": "on-accent",
+    # The four intent families' on-color roles collapse onto ONE shared --on-intent property
+    # (token-architecture.md: "text on any intent fill") — both plausible source-naming
+    # conventions covered; ALIAS_COLLISION_CHECK below enforces they actually agree.
+    "danger-on-danger": "on-intent",
+    "success-on-success": "on-intent",
+    "warning-on-warning": "on-intent",
+    "info-on-info": "on-intent",
+    "on-danger": "on-intent",
+    "on-success": "on-intent",
+    "on-warning": "on-intent",
+    "on-info": "on-intent",
+}
+
+# Roles with no source-role literal of their own — derived from an already-aliased short property
+# once the alias pass completes (token-architecture.md: "--mono-bg | alias of --chip").
+DERIVED_ALIASES = {"mono-bg": "chip"}
+
+
+def alias_colors(colors):
+    """Map each source role's (light, dark) pair onto its artifact-page short property name.
+
+    Roles absent from ROLE_ALIASES pass through under their own (unprefixed) name — the mechanical,
+    never-invented fallback. Two source roles aliasing to the SAME short name must resolve to an
+    identical pair; a genuine conflict is a NormalizeError (never silently last-write-wins) naming
+    both source roles and their differing values."""
+    out = {}
+    sources = {}
+    for role in sorted(colors):
+        short = ROLE_ALIASES.get(role, role)
+        pair = colors[role]
+        if short in out and out[short] != pair:
+            raise NormalizeError(
+                "color roles %r and %r both alias to --%s but resolve to different (light, dark) "
+                "pairs: %r vs %r" % (sources[short], role, short, out[short], pair))
+        out[short] = pair
+        sources[short] = role
+    for derived, source_short in DERIVED_ALIASES.items():
+        if derived not in out and source_short in out:
+            out[derived] = out[source_short]
+    return out
 
 
 class NormalizeError(ValueError):
@@ -216,7 +294,7 @@ def normalize_radii(data, shape):
 
 def normalize(data):
     shape = detect_shape(data)
-    colors = normalize_colors(data, shape)
+    colors = alias_colors(normalize_colors(data, shape))
     type_roles, fonts = normalize_type(data, shape)
     spacing = normalize_spacing(data, shape)
     radii = normalize_radii(data, shape)
@@ -229,25 +307,26 @@ def normalize(data):
 MERMAID_REHEME_BLOCK = """
 /* Mermaid house re-theme (design:artifact-styling-rules' mermaid-reference.md): the rendered SVG
    ships its own inline styles, so re-theming requires token-driven !important overrides bound to
-   the same --c-* roles as the rest of the page — one mechanism, both schemes. */
+   the same short role custom properties as the rest of the page — one mechanism, both schemes,
+   unprefixed short names, no legacy prefix. */
 .mermaid svg .node rect,
 .mermaid svg .node circle,
 .mermaid svg .node polygon {
-  fill: var(--c-neutral-surface) !important;
-  stroke: var(--c-neutral-outline-variant) !important;
+  fill: var(--card) !important;
+  stroke: var(--line) !important;
 }
 .mermaid svg .node text,
 .mermaid svg .nodeLabel {
-  fill: var(--c-neutral-on-surface) !important;
-  color: var(--c-neutral-on-surface) !important;
+  fill: var(--ink) !important;
+  color: var(--ink) !important;
 }
 .mermaid svg .edgePath .path,
 .mermaid svg .flowchart-link {
-  stroke: var(--c-neutral-outline-variant) !important;
+  stroke: var(--line) !important;
 }
 .mermaid svg .edgeLabel {
-  background-color: var(--c-neutral-surface) !important;
-  color: var(--c-neutral-on-surface-variant) !important;
+  background-color: var(--card) !important;
+  color: var(--muted) !important;
 }
 
 /* Width-preserving hidden-tab-panel technique (design:artifact-styling-rules'
@@ -268,7 +347,7 @@ def build_css(norm):
              "", ":root {", "  color-scheme: light dark;"]
     for role in sorted(norm["colors"]):
         light, dark = norm["colors"][role]
-        lines.append("  --c-%s: light-dark(%s, %s);" % (role, light, dark))
+        lines.append("  --%s: light-dark(%s, %s);" % (role, light, dark))
     for role in sorted(norm["type_roles"]):
         spec = norm["type_roles"][role]
         if spec["size"] is not None:
@@ -308,12 +387,14 @@ FIXTURE_TOKENS = {
     "colors": {
         "primary": "oklch(0.5837 0.1265 236.48)",
         "primary-on-primary": "oklch(1 0 0)",
+        "neutral-background": "oklch(0.9807 0 90)",
         "neutral-surface": "oklch(0.9335 0.0017 247.84)",
         "neutral-on-surface": "oklch(0.1776 0 0)",
     },
     "colorsDark": {
         "primary": "oklch(0.6716 0.1414 234.43)",
         "primary-on-primary": "oklch(1 0 0)",
+        "neutral-background": "oklch(0.1421 0.0022 247.9)",
         "neutral-surface": "oklch(0.2597 0.0024 247.92)",
         "neutral-on-surface": "oklch(1 0 0)",
     },
@@ -334,6 +415,8 @@ FIXTURE_FRONTMATTER = {
         "primary-dark": "oklch(0.6716 0.1414 234.43)",
         "primary-on-primary": "oklch(1 0 0)",
         "primary-on-primary-dark": "oklch(1 0 0)",
+        "neutral-background": "oklch(0.9807 0 90)",
+        "neutral-background-dark": "oklch(0.1421 0.0022 247.9)",
         "neutral-surface": "oklch(0.9335 0.0017 247.84)",
         "neutral-surface-dark": "oklch(0.2597 0.0024 247.92)",
         "neutral-on-surface": "oklch(0.1776 0 0)",
@@ -368,8 +451,20 @@ def selftest():
     norm, css = build(FIXTURE_TOKENS)
     if norm["shape"] != "tokens":
         errs.append("tokens fixture must detect shape 'tokens', got %r" % norm["shape"])
-    if "--c-primary: light-dark(oklch(0.5837 0.1265 236.48), oklch(0.6716 0.1414 234.43));" not in css:
-        errs.append("tokens build missing the expected --c-primary light-dark() pair")
+    if "--accent: light-dark(oklch(0.5837 0.1265 236.48), oklch(0.6716 0.1414 234.43));" not in css:
+        errs.append("tokens build missing the expected --accent (aliased from 'primary') light-dark() pair")
+    if "--card: light-dark(oklch(0.9335 0.0017 247.84), oklch(0.2597 0.0024 247.92));" not in css:
+        errs.append("tokens build missing the expected --card (aliased from 'neutral-surface') pair")
+    if "--paper: light-dark(oklch(0.9807 0 90), oklch(0.1421 0.0022 247.9));" not in css:
+        errs.append("tokens build missing the expected --paper (aliased from 'neutral-background') pair")
+    if "--ink: light-dark(oklch(0.1776 0 0), oklch(1 0 0));" not in css:
+        errs.append("tokens build missing the expected --ink (aliased from 'neutral-on-surface') pair")
+    if "--on-accent: light-dark(oklch(1 0 0), oklch(1 0 0));" not in css:
+        errs.append("tokens build missing the expected --on-accent (aliased from 'primary-on-primary') pair")
+    # #662 negative control — the retired --c-<role> prefix must never appear anywhere in output
+    if "--c-" in css:
+        errs.append("build output must never emit a --c-<role> custom property post-#662: %r"
+                    % [ln for ln in css.splitlines() if "--c-" in ln])
     if "--space-none: 0px;" not in css or "--space-5xl: 96px;" not in css:
         errs.append("tokens build missing expected --space-none/--space-5xl values")
     if "--r-full: 9999px;" not in css or "--r-none: 0px;" not in css:
@@ -382,6 +477,8 @@ def selftest():
         errs.append("tokens build missing expected type-role custom properties")
     if ".mermaid svg" not in css or "[data-tab-panel][hidden]" not in css:
         errs.append("tokens build missing the mermaid re-theme / tab-panel-hiding block")
+    if "var(--card)" not in css or "var(--line)" not in css or "var(--ink)" not in css:
+        errs.append("mermaid re-theme block must bind to the new short role properties (--card/--line/--ink), not --c-*")
 
     # 2. the SAME fixture's facts, reached through the OTHER representation, must normalize
     #    to the equivalent role set (both color representations handled — Resolution 6)
@@ -391,12 +488,36 @@ def selftest():
     if set(norm["colors"]) != set(norm2["colors"]):
         errs.append("tokens vs frontmatter fixtures normalized to different role sets: %s vs %s"
                     % (sorted(norm["colors"]), sorted(norm2["colors"])))
-    if norm["colors"]["primary"] != norm2["colors"]["primary"]:
-        errs.append("tokens vs frontmatter fixtures disagree on the primary role's (light, dark) pair")
+    if norm["colors"]["accent"] != norm2["colors"]["accent"]:
+        errs.append("tokens vs frontmatter fixtures disagree on the accent role's (light, dark) pair")
     if "--space-lg: 16px;" not in css2 or "--r-xl: 28px;" not in css2:
         errs.append("frontmatter build missing expected --space-lg/--r-xl values")
     if "--text-kicker-md-ls: 0.14em;" not in css2:
         errs.append("frontmatter build missing expected letterSpacing-bearing type role")
+
+    # 2b. alias-collision negative control — two source roles aliasing to the same short property
+    #     with DIFFERING values must bite (never silent last-write-wins)
+    def _collide_on_intent(d):
+        d["colors"]["danger-on-danger"] = "oklch(1 0 0)"
+        d["colors"]["success-on-success"] = "oklch(0.5 0 0)"  # deliberately different
+        d["colorsDark"]["danger-on-danger"] = "oklch(1 0 0)"
+        d["colorsDark"]["success-on-success"] = "oklch(0.5 0 0)"
+    colliding = _fixture(FIXTURE_TOKENS, _collide_on_intent)
+    try:
+        normalize(colliding)
+        errs.append("two roles aliasing to the same short property with differing values must raise NormalizeError")
+    except NormalizeError as e:
+        if "on-intent" not in str(e):
+            errs.append("the alias-collision error must name the colliding short property: %s" % e)
+
+    # 2c. mono-bg derivation — a role with no source literal of its own is derived from --chip
+    def _add_chip(d):
+        d["colors"]["neutral-surface-high"] = "oklch(0.9 0 90)"
+        d["colorsDark"]["neutral-surface-high"] = "oklch(0.3 0 90)"
+    with_chip = _fixture(FIXTURE_TOKENS, _add_chip)
+    norm_chip, css_chip = build(with_chip)
+    if "--mono-bg: light-dark(oklch(0.9 0 90), oklch(0.3 0 90));" not in css_chip:
+        errs.append("--mono-bg must be derived from --chip's value when no explicit source role provides it")
 
     # 3. font fallback invariant — EVERY emitted --font-* line carries a system fallback tail;
     #    a mono-named family gets the monospace stack, everything else the sans-serif stack
@@ -500,8 +621,8 @@ def selftest():
             errs.append("--out must write the CSS file")
         else:
             with open(out_path, encoding="utf-8") as f:
-                if "--c-primary: light-dark(" not in f.read():
-                    errs.append("--out file must contain the built CSS")
+                if "--accent: light-dark(" not in f.read():
+                    errs.append("--out file must contain the built CSS with the aliased short role name")
 
         bad_path = os.path.join(td, "broken.json")
         with open(bad_path, "w", encoding="utf-8") as f:
@@ -521,6 +642,30 @@ def selftest():
         code, _, _ = _run_main([notjson_path])
         if code != 2:
             errs.append("an unparseable JSON file must exit 2 (usage error)")
+
+    # 8. CROSS-SCRIPT REGRESSION FIXTURE (#662 Acceptance) — verbatim css_build output, wrapped in
+    #    a minimal page shell, must satisfy design:artifact-styling-rules' artifact_check.py
+    #    ground checks. Bundled scripts cannot import across a plugin boundary
+    #    (.claude/rules/plugin-authoring.md's hard-boundary rule), so this mirrors
+    #    artifact_check.py's own missing-ground/literal-outside-root regexes as a literal,
+    #    dated, cited duplicate — kept in sync manually; if either script's naming contract
+    #    changes, BOTH copies (this one and artifact_check.py's own selftest fixture) update in
+    #    the same change, per #662's Acceptance criterion.
+    _mirror_color_scheme_re = re.compile(r"color-scheme\s*:\s*light\s+dark")
+    _mirror_body_bg_var_re = re.compile(
+        r"body\s*\{[^}]*background(?:-color)?\s*:\s*var\(--(?:paper|[\w-]*background[\w-]*)\)",
+        re.S | re.I)
+    page = css + "\nbody { background: var(--paper); color: var(--ink); }\n"
+    if not _mirror_color_scheme_re.search(page):
+        errs.append("cross-script regression: css_build output must satisfy artifact_check's "
+                    "color-scheme ground check")
+    if not _mirror_body_bg_var_re.search(page):
+        errs.append("cross-script regression: a body rule binding background to var(--paper) "
+                    "(css_build's own --paper alias) must satisfy artifact_check's missing-ground "
+                    "check — see design:artifact-styling-rules/scripts/artifact_check.py")
+    if "--paper:" not in css:
+        errs.append("cross-script regression: css_build must emit --paper for the 'neutral-background' "
+                    "role — artifact_check's ground check binds to this exact name")
 
     return errs
 

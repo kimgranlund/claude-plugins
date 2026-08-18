@@ -154,7 +154,23 @@ its residue against ObjectVocab alone; ProcessLex-terminal names take an ObjectV
 
 ## Resolution 6 — CSS emission contract: `light-dark()`, per the source doc's own guide
 
-**Resolved:** the emitted CSS uses `:root { color-scheme: light dark; }` +
+> **Superseded in part, 2026-08-18 (#662, Kim's ruling) — append-only note, original resolution
+> preserved below unedited.** The color-naming half of this resolution — emitting
+> `--c-<role>: light-dark(...)` — is superseded: `css_build.py` now emits the artifact page's own
+> UNPREFIXED short role names (`--paper`, `--ink`, `--accent`, … — design:artifact-styling-rules'
+> `token-architecture.md` 14-live-roles table, the authority) via a mechanical `ROLE_ALIASES`
+> lookup, never `--c-<role>`. Root cause: this resolution's `--c-{family}-{slot}` grammar is the
+> DESIGN-SYSTEM SIDE's own token grammar (how a consuming project may already name its own
+> resolved custom properties) — conflated at authoring time with the artifact PAGE's own output
+> grammar, which is `token-architecture.md`'s separate 14-role inventory. Everything else in this
+> resolution stands unchanged: the `light-dark()` build-time pattern, the `[data-theme]` manual
+> toggle, both color representations handled, mandatory font fallback, the scale mappings, and the
+> mermaid re-theme block (now bound to the short role names instead of `--c-*`). See #662's PR for
+> the full reconciliation across `css_build.py`, `token-architecture.md`, and
+> `docs/skills/artifact-rules/references/script-interface.md`.
+
+**Resolved (2026-08-17, see supersede note above for the 2026-08-18 amendment):** the emitted CSS
+uses `:root { color-scheme: light dark; }` +
 `--c-<role>: light-dark(<light>, <dark>)` — this is the Adia DESIGN.md's **own Agent Prompt
 Guide** pattern (verified in the source file:
 `--c-primary: light-dark(oklch(0.5837 0.1265 236.48), oklch(0.6716 0.1414 234.43));`), and its

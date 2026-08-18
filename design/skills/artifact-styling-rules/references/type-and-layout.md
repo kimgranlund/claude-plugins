@@ -68,7 +68,8 @@ An injected third-party inline style (a syntax highlighter's own `style="color: 
 span, a markdown-render library's inline attributes) can out-specificity a page-level custom-
 property rule the same way mermaid's own inline SVG styles do (`mermaid-reference.md`). The fix is
 identical: an `!important` override scoped to that library's own emitted class, bound to the
-page's `--c-*` tokens — never a blanket page-wide `!important`, and never hand-patching the
+page's own short role tokens (never `--c-<role>`, superseded #662) — never a blanket page-wide
+`!important`, and never hand-patching the
 third-party output directly (that drifts the moment the library's own markup changes).
 
 ## Width-preserving tab hiding — general, not mermaid-specific

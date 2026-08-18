@@ -30,6 +30,12 @@ prior verification, 2026-08-17]**
 [data-theme="dark"]  { color-scheme: dark; }
 ```
 
+(The `--c-primary` name above is quoted verbatim from the SOURCE DESIGN.md's own Agent Prompt
+Guide — the design-system side's own grammar, see the grammar section below. `css_build.py`
+aliases this same value onto the artifact page's own short name instead, e.g. `--accent`; the
+`light-dark()`/`color-scheme` PATTERN illustrated here is what carries over, not the `--c-*`
+property name itself.)
+
 Every role emits ONE `light-dark(<light-value>, <dark-value>)` pair under `:root`, resolved
 automatically by the tri-state described in `platform-facts.md`. This retires the
 `@media (prefers-color-scheme)` triple-block pattern (one block for light, one for dark, one for
@@ -86,18 +92,39 @@ and `dark` VALUES (not a single `light-dark()` pair), switched by toggling a `da
 the document root (`documentElement.classList.toggle('dark')`) rather than a `[data-theme]`
 attribute + `color-scheme`. The naming grammar is compatible in spirit (purpose-driven role names
 mapped to both a fill and an on-fill class, e.g. `primary` → `bg-primary`/`text-primary` — the
-same shape this pack's `--c-{family}-on-{family}` grammar already uses) — this pack does NOT adopt
+same shape the design-system-side `--c-{family}-on-{family}` grammar this file documents already
+uses) — this pack does NOT adopt
 the class-toggle mechanism, since `light-dark()` + `color-scheme` already covers the tri-state
 (`platform-facts.md`) with zero JS and one variable block, where a class-toggle needs a script to
 flip it and still needs the tri-state's third (unstamped) state handled separately.
 
-## The naming grammar — `--c-{family}-{slot}`
+## Two different grammars, never conflated (#662 clarification)
+
+**This section describes the DESIGN-SYSTEM SIDE's own token grammar — never the artifact page's
+own custom-property names.** The 14-live-roles table above (`--paper`, `--ink`, `--accent`, …) IS
+the artifact page's own inventory; `css_build.py` emits exactly those unprefixed short names
+(Kim's 2026-08-18 ruling, #662, superseding lld-0013 Resolution 6's `--c-<role>` emission — see
+that LLD's supersede note). The `--c-{family}-{slot}` grammar below describes a DIFFERENT
+thing: how the CONSUMING project itself may already name its own resolved semantic custom
+properties (e.g. the Adia system's own `--c-primary`) BEFORE `css_build.py` reads and aliases
+that value onto the artifact's short name (`--accent`). A build never emits `--c-{family}-{slot}`
+onto the artifact page itself — that grammar belongs to the source system, cited here only
+because `css_build.py`'s `ROLE_ALIASES` table (docs' `script-interface.md`) is keyed against
+role names that a design system in this grammar would use.
+
+## The naming grammar — `--c-{family}-{slot}` (design-system-side only)
 
 Family name alone is the fill (`--c-primary`); text/icons ON a family fill are
 `--c-{family}-on-{family}`; states suffix the fill (`-hover`/`-active`/`-disabled`); app surfaces
-live in the neutral family. Prefix-adaptive — a consumer using a different host prefix
-(`--md-sys-*`, `--color-*`) does a mechanical find/replace on the emitted names, never a
-re-derivation.
+live in the neutral family. This is the shape a CONSUMING project's own token export may already
+carry — never the artifact page's own output. The historical "prefix-adaptive... mechanical
+find/replace" framing this section used to carry (find/replacing the emitted `--c-*` prefix for a
+different host prefix) is retired as a required regen step post-#662: `css_build.py`'s
+`ROLE_ALIASES` table now performs the short-name mapping directly from the source role name,
+mechanically, at build time — no hand pass needed. The note survives here only as a legacy
+pointer for a source system whose own resolved custom properties still carry a DIFFERENT
+family-side prefix (`--md-sys-*`, `--color-*`); that system's own internal find/replace, if any,
+is its own concern and happens before its values ever reach `css_build.py`'s input JSON.
 
 ## The role-mapping file shape — the mechanized authority
 
