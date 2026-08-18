@@ -15,6 +15,14 @@ follow from loop depth, not just visual containment.
 
 [verified] bible Part 2, source table, checked 2026-08-16.
 
+**IDR's scope binding (ruled #652, 2026-08-18):** the North star loop's alignment doc is IDR
+because the loop's own Focus/Objective are whole-product — the product thesis, not one feature or
+component of it. This is not incidental: an IDR minted at feature or component grain does not
+belong to this loop at all, whatever its falsifiability, because the North star loop itself never
+turns on a feature-grain claim — that evidence belongs to the Releases loop's RDD/roadmap
+machinery instead (see "Escalation" below). A feature/component-grain hypothesis is PRD/SPEC
+territory in the Releases loop, never an IDR promoted "up" a loop it doesn't actually occupy.
+
 ## Loop mechanics
 
 - **Containment.** Inner loops work inside the outer loops' standing decisions and never edit them

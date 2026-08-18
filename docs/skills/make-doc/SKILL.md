@@ -38,9 +38,15 @@ non-goals, and the same question at Outcome grain — how an agent would tell ea
 achieved; for an LLD, the components/interfaces and which existing instrument (evals suite, script
 selftest, release-gate check) already verifies the design, or what harness this build must create
 first; for an ADR, the alternatives actually considered; for a PLAN, each step's done-when; for a
-TICKET, what it traces to; for an IDR, the admission test — "would two reasonable
-builds differ on it?" — same spirit as ADR's own "a choice someone will later ask why about" gate;
-a claim that fails it isn't an IDR, and the round ends there rather than minting one; for an RDD,
+TICKET, what it traces to; for an IDR, TWO admission tests, both must pass: falsifiability —
+"would two reasonable builds differ on it?" — same spirit as ADR's own "a choice someone will
+later ask why about" gate; AND scope (ruled #652) — "is this a claim about the WHOLE APP/PRODUCT,
+or about one feature/component/screen/endpoint of it?" A claim failing falsifiability isn't an IDR
+at all, full stop. A claim passing falsifiability but naming a feature/component/screen/endpoint
+grain fails scope instead — this is never a silent rejection: name the mismatch and redirect to
+PRD (valid at both app and feature scope) or SPEC (the feature's own testable contract), same
+redirect discipline `file-bug`'s Phase 3 already applies for a shape mismatch. Either failure ends
+the round rather than minting an IDR; for an RDD,
 the Scope admission test — "could two reasonable teams ship different releases from this roadmap
 line?" — a line that fails it doesn't earn its own RDD, and the round ends there before minting
 one, same as IDR's own gate. Consult docs' `agent-harness-rules` for how to choose the assert layer or design the harness —

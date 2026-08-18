@@ -51,6 +51,16 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             this check to ship. SPEC-only for now — PRD/LLD carry the same template section but
             check-doc's J7 judgment criterion covers them instead of a doc_lint presence rule
             (the PRD's own D3: SPEC gets the mechanical rule, PRD/LLD stay judgment-only).
+  T11 [FAIL] an IDR whose `## Claim` names a feature/component/screen/endpoint grain — IDR is
+            whole-app/product-thesis scope only (ruled #652, Kim's verbatim scope statement:
+            "IDR = whole-app scope only; PRD = valid at app AND feature scope"); a feature- or
+            component-grain hypothesis is PRD/SPEC territory, not an IDR. Heuristic, not a parser:
+            a bare `\bfeature(s)?\b`/`component(s)?\b`/`screen(s)?\b`/`endpoint(s)?\b` word-boundary
+            match inside the Claim section's PROSE (inline-code spans and fenced blocks are
+            stripped first, so a skill-name mention like `` `file-feature` `` never false-positives
+            — the #652 investigation's own idr-0008 near-miss). FAIL, not WARN: the existing corpus
+            (idr-0001..0011) passes clean, so there is no retrofit debt to excuse a soft landing,
+            same posture as T7/T8's own FAIL tier for a small, fully-authored IDR instance set.
   T10 [FAIL] `--spine` mode only: two adr/idr/lld/rdd documents under the doc spine claim the
             same (family, number) — the 2026-08-18 incident (#633): two parallel builds both
             minted `lld-0011` (one kept it, `lld-0011-recurrence-audit`; the other's draft was
@@ -109,6 +119,10 @@ PROVENANCE_VALUES = {"derived-from-evidence", "inferred", "decided-by-human"}
 SPINE_FAMILIES = {"adr", "idr", "lld", "rdd"}
 SPINE_ID_RE = re.compile(r"^(adr|idr|lld|rdd)-(\d+)\b")
 
+# T11's scope: the feature/component/screen/endpoint grain nouns an IDR's `## Claim` must never
+# name (#652) — IDR is whole-app/product-thesis scope only.
+IDR_SCOPE_GRAIN_RE = re.compile(r"\b(feature|features|component|components|screen|screens|endpoint|endpoints)\b", re.I)
+
 
 def parse_frontmatter(text):
     if not text.startswith("---"):
@@ -122,6 +136,24 @@ def parse_frontmatter(text):
         if m:
             fm[m.group(1)] = m.group(2).strip()
     return fm
+
+
+def strip_code_spans(text):
+    """T11's own noise filter: drop fenced code blocks and inline `code spans` before a keyword
+    match, so a skill/command mention (`` `file-feature` ``) inside a Claim's prose never trips
+    the scope heuristic — the #652 investigation's own idr-0008 near-miss."""
+    text = re.sub(r"```.*?```", " ", text, flags=re.S)
+    return re.sub(r"`[^`]*`", " ", text)
+
+
+def extract_section(text, name):
+    """The `## <name>` section's body text, up to the next `## ` heading or EOF; "" if absent."""
+    m = re.search(rf"^##\s+{re.escape(name)}\s*$", text, re.M)
+    if not m:
+        return ""
+    rest = text[m.end():]
+    m2 = re.search(r"^##\s+", rest, re.M)
+    return rest[:m2.start()] if m2 else rest
 
 
 def lint_text(text):
@@ -171,6 +203,12 @@ def lint_text(text):
             findings.append(("FAIL", "T8", f"`provenance:` missing or not one of {sorted(PROVENANCE_VALUES)} "
                                             "-> every IDR claim needs a machine-readable source label, "
                                             "not just prose in `## Why`"))
+        claim_prose = strip_code_spans(extract_section(text, "Claim"))
+        grain = IDR_SCOPE_GRAIN_RE.search(claim_prose)
+        if grain:
+            findings.append(("FAIL", "T11", f"Claim names a `{grain.group(1)}`-grain hypothesis -> "
+                                             "IDR is whole-app/product-thesis scope only; a feature- "
+                                             "or component-grain claim is PRD/SPEC territory (#652)"))
     return findings
 
 
@@ -397,10 +435,34 @@ def selftest():
         assert not any(f[1] == "T10" for f in check_spine(spine.parent)), "distinct numbers must NOT FAIL T10"
         # negative control: a docs_root that doesn't exist is not a failure (repo hasn't adopted the spine)
         assert check_spine(Path(td) / "nope") == [], "a missing docs_root must return no findings, not fail"
+    # T11 IDR scope FAIL (#652): a Claim naming a feature/component/screen/endpoint grain FAILs;
+    # a whole-app/product-thesis Claim doesn't; a code-span skill-name mention (`file-feature`)
+    # must not false-positive; this repo's own locked IDRs (idr-0001..0011) MUST pass clean.
+    idr_scope_base = ("---\ndoc-type: idr\nid: idr-0099\nstatus: draft\ndate: 2026-08-18\nowner: k\n"
+                       "proof-ref: n/a\nprovenance: decided-by-human\nsupersedes: null\n---\n"
+                       "# I\n## Claim\n{claim}\n## Why\nw\n## Proof\np\n")
+    idr_feature_grain = idr_scope_base.format(claim="The checkout feature should validate coupon codes before submit.")
+    assert any(f[1] == "T11" for f in lint_text(idr_feature_grain)), "feature-grain IDR Claim must FAIL T11"
+    idr_component_grain = idr_scope_base.format(claim="The nav bar component should collapse under 600px.")
+    assert any(f[1] == "T11" for f in lint_text(idr_component_grain)), "component-grain IDR Claim must FAIL T11"
+    idr_app_level = idr_scope_base.format(claim="This estate's self-hosted toolchain converts every "
+                                                 "incident class into a lint rule, gate check, or selftest "
+                                                 "fixture before the fix ships.")
+    assert not any(f[1] == "T11" for f in lint_text(idr_app_level)), "app-level IDR Claim must NOT FAIL T11"
+    idr_code_mention = idr_scope_base.format(claim="User signal enters through the existing intake spine "
+                                                    "(`file-bug`/`file-feature`/issue-sorter), not a new door.")
+    assert not any(f[1] == "T11" for f in lint_text(idr_code_mention)), \
+        "a code-span skill name containing 'feature' must NOT FAIL T11 (idr-0008 near-miss)"
+    real_idr_dir = Path(__file__).resolve().parent.parent.parent / ".claude" / "docs" / "idr"
+    if real_idr_dir.is_dir():
+        for p in sorted(real_idr_dir.glob("*.md")):
+            fs = [f for f in (lint_text(p.read_text(encoding="utf-8", errors="replace")) or []) if f[1] == "T11"]
+            assert not fs, f"locked IDR {p.name} must pass T11 clean (#652 acceptance), got {fs}"
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
           "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites; "
           "T9 SPEC agent-verification WARN bites; T10 spine id-collision FAIL bites (#633); "
+          "T11 IDR scope FAIL bites, code-span mentions don't false-positive, this repo's own IDRs pass clean (#652); "
           "T5 REQ-<INFIX>- prefixed ids (uppercase) pass, lowercase infix still warns (#634)")
     return 0
 
