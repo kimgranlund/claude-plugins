@@ -138,6 +138,34 @@ later return from dispatch.
 
 ## Phase 5 — Dispatch, or fix inline
 
+**A pre-existing claim on the record is not, by itself, a competing seat (gh#608, live repro
+adiahealth/gen-ui-kit#1593).** `dispatch-ticket`'s bug hand-off never claims a ticket on its own
+account before redirecting here — but a claim (an assignee, a claim comment, an `in-flight`
+label) can still already sit on the record at this exact point regardless, most often a
+coordinator's own claim posted ON BEHALF OF the very dispatch that redirected here
+(`teamwork:fleet-rules`' Section 2 amendment). Before this phase's fork-vs-agent decision below
+(or the inline-fix branch), check the seed for a `claim:` token: a seed carrying
+`[redirected-from:dispatch-ticket claim:<claim-comment-url>]` names exactly which claim comment
+authorizes this redirect — read the record's own current claim trail (`gh issue view --comments`
+git-native; the resolved adapter's `read` operation under Option C; the file backend's
+`claimed-by`/`claimed-at` frontmatter, which carries no comment URL so any populated pair there
+counts as a match) and compare. That comment is still the record's most recent claim → this is
+the SAME lane resuming its own hand-off, not a stranger: proceed under that existing claim, never
+re-claiming and never standing down over it. That comment is missing, superseded by a LATER
+claim, or the trail shows a different claimant → this is the dedup this rule exists to preserve: a
+genuine third party already holds the record — stand down, report the conflicting claim in the
+close-out, and do not dispatch a duplicate investigation. A bare `[redirected-from:dispatch-ticket]`
+marker with no `claim:` token vouches for nothing either way — no claim existed at redirect time,
+OR one existed but didn't verifiably name this dispatch (`references/bug-claim-provenance.md` in
+`dispatch-ticket`'s own skill, the marker's producing side, names both cases as sending the bare
+form). An assignee/claim comment/`in-flight` label found here anyway is an unnamed claim this
+marker cannot vouch for either way: treat it like any other unexplained existing claim (name it,
+stand down) rather than assuming it is safe. **Rejected alternative:** treating the
+`[redirected-from:dispatch-ticket]` marker alone (with no claim token) as blanket authorization to
+always proceed — rejected because it would erase dedup entirely for every dispatch-ticket-sourced
+bug, including the genuine third-party case the acceptance criteria explicitly preserve; the fix
+has to distinguish, not disable, the check.
+
 Root cause already evident from Phase 2/3 → fix inline; file-bug itself appends the dated
 `## Findings` entry naming the fix's location before closing. No investigation to dispatch, but
 the ticket-first ordering is unchanged — only the dispatch step is skipped. **An inline fix that
