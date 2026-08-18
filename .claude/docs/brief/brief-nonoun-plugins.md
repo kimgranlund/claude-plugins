@@ -33,6 +33,24 @@ estate is the working test of that bet.
 - Solo-first composition is a WHY-grain claim: teams are escalations, not defaults — `idr-0007`
   (locked 2026-08-18, ratified by Kim; grounded in gh#265's measured hop tax, gh#266's
   chore-lead retirement, ADR-0010's uniform build seat).
+- User signal is defined (any non-estate party's trace on a shipped artifact) and enters via the
+  existing intake spine; until an instrument carries nonzero signal, idr-0005 is untested —
+  `idr-0008` (locked 2026-08-18, ratified by Kim; gh#622).
+- Accepted doctrine is periodically re-tested tri-state (confirmed/falsified/untestable);
+  falsified routes to the amend/supersede duty with a named owner — `idr-0009` (locked
+  2026-08-18, ratified by Kim; gh#623).
+- Every recurring firing class is priced: per-firing ledger rows plus a worth-firing test;
+  idr-0007's coordination tax is unenforceable unmeasured — `idr-0010` (locked 2026-08-18,
+  ratified by Kim; gh#624).
+- Standing loops carry ruled cadences in living state; the operator's ratification/merge
+  attention is a managed, batching queue — `idr-0011` (locked 2026-08-18, ratified by Kim;
+  gh#626).
+- Trust tiers ride author provenance (T0 operator / T1 registered seats / T2 record text,
+  quote-not-obey / T3 foreign), channel only ever lowers — `adr-0021` (accepted 2026-08-18,
+  ratified by Kim; gh#625).
+- The repo is the backup: everything operationally load-bearing is reconstructible from
+  origin/main, with four named exceptions and mitigations — `adr-0022` (accepted 2026-08-18,
+  ratified by Kim; gh#627).
 
 ## Open Questions
 
@@ -44,3 +62,11 @@ estate is the working test of that bet.
   RDD↔Issue binding rule is recorded in docs' `doc-writing-rules` (RDD section). The question
   itself stays open in its remaining half: no release-grain commitment is locked yet — the first
   `locked` RDD (which lands in the roadmap's Now) closes this bullet whole.
+- The 2026-08-18 gap-review spine ratified whole (all six, Kim, live round) — the six lines
+  moved to Confirmed above (the idr-0007 pattern). What stays open here: each record's first
+  INSTRUMENT is now due, seeded in its ticket (gh#622–#627) — the feedback-intake door, the
+  re-validation mode, the cost ledger, the standing schedule + calendar ruling round, the
+  fleet-rules quoting bullet, the reconstructibility audit + two owed-at-lock mitigation docs.
+  This bullet closes when each ticket's instrument lands (per-record open questions live in the
+  records themselves, tracked at their tickets). The user+economy+truth trio (idr-0008/0010/
+  0009) is one outer-loop family.
