@@ -2,9 +2,9 @@
 """revalidation_checkpoint — sampled, round-robin re-test of accepted doctrine (idr-0009 / #623).
 
 Usage:
-  revalidation_checkpoint.py sample <adr-source> <idr-source> [--checkpoint <path>] [--n N]
+  revalidation_checkpoint.py sample <adr-source> <idr-source> <rdd-source> [--checkpoint <path>] [--n N]
       report the next N claims due for re-test; never writes the checkpoint
-  revalidation_checkpoint.py advance <adr-source> <idr-source> [--checkpoint <path>] --n N
+  revalidation_checkpoint.py advance <adr-source> <idr-source> <rdd-source> [--checkpoint <path>] --n N
       persist the cursor bump — run ONLY after the N claims `sample` reported have been judged
   revalidation_checkpoint.py queue-add <path> --claim <id> --kind falsified|untestable
       --evidence <text> --owner <name>
@@ -23,7 +23,8 @@ leaves the cursor untouched, so the same claims are re-sampled next firing rathe
 skipped) and adr_queue.py's add/pending/clear pattern (a scheduled firing never blocks on a live
 human; a candidate lands here until a batched confirm resolves it).
 
-**Claim corpus, two kinds, sampled together:**
+**Claim corpus, three kinds, sampled together (locked RDDs joined the rotation per #656/#655
+decision 7 — the ADR+IDR sampling pool from here on always means ADR+IDR+RDD):**
 - Every ADR whose live status is `accepted` — claim text is the WHOLE `## Decision` (+
   `## Amendment*` / `## Supersession*`) section, reusing `adr_checkpoint.decision_content()`
   verbatim (dialect-generic: frontmatter, H1+blockquote-table, H1+bold-metadata all work unchanged).
@@ -34,13 +35,21 @@ human; a candidate lands here until a batched confirm resolves it).
   at all ("falsified by a ledger entry...", passive voice). A keyword extractor would miss idr-0001
   outright; the whole Proof section costs nothing extra and hands judgment the Confirms condition
   for free (needed anyway to reason about the untestable branch).
+- Every RDD whose live status is `locked` — claim text is the WHOLE `## Acceptance` section, RDD's
+  own IDR-grammar criteria and the type's Proof-equivalent (`doc-writing-rules`' RDD template: "each
+  phrased as a testable claim that could fail... mirrors IDR's own `## Claim` discipline"). Same
+  whole-section extraction as the IDR resolution above, for the same reason — a criteria line's own
+  phrasing varies claim to claim, so a narrower keyword anchor would be exactly as fragile here as
+  the falsified "Falsifies:"-anchored extractor was for IDR. PRD/SPEC staleness is deliberately
+  OUT OF SCOPE for this mode — it stays de-staling's job (#655 decision 7); this mode's own tri-state
+  verdict machinery is otherwise unchanged by adding the third kind.
 
 **Sampling: round-robin over a lexicographically sorted, combined id list**, one persisted integer
-cursor. The ADR/IDR corpora are append-only under this workspace's own T4 discipline (an accepted
-ADR's frontmatter never changes post-ratification; a locked IDR is append-only), so the sorted list
-only grows at its tail (or narrows slightly when an ADR is superseded) — round-robin handles a
-growing, mostly-stable corpus without needing to special-case "new" vs. "old" claims the way the
-forward classifier does. `sample --n N` never duplicates a claim within one call, even when N
+cursor. The ADR/IDR/RDD corpora are append-only under this workspace's own T4 discipline (an
+accepted ADR's frontmatter never changes post-ratification; a locked IDR or locked RDD is
+append-only), so the sorted list only grows at its tail (or narrows slightly when an ADR is
+superseded) — round-robin handles a growing, mostly-stable corpus without needing to special-case
+"new" vs. "old" claims the way the forward classifier does. `sample --n N` never duplicates a claim within one call, even when N
 exceeds the corpus size (it caps at corpus size). Cadence (how often `sample` should be invoked) is
 explicitly out of this script's scope — idr-0011 owns it, still open at gh#626.
 
@@ -48,11 +57,11 @@ explicitly out of this script's scope — idr-0011 owns it, still open at gh#626
 dropped (no queue growth — keeping repeated-confirmed sweeps cheap is itself part of idr-0009's own
 falsification test). `falsified`/`untestable` queue via `queue-add`, always carrying a named
 `--owner` (idr-0009's own "who executes a falsified verdict" open question, closed structurally: the
-field exists on every row). This script never files a GitHub Issue, never edits a locked IDR or an
+field exists on every row). This script never files a GitHub Issue, never edits a locked IDR, a locked RDD, or an
 accepted ADR, and never decides a verdict itself — verdicts are a judgment step's output, handed to
 this script only to be queued.
 
-Exit codes: 0 clean · 1 a named ADR/IDR source path doesn't exist or isn't a directory · 2 usage error.
+Exit codes: 0 clean · 1 a named ADR/IDR/RDD source path doesn't exist or isn't a directory · 2 usage error.
 """
 import json
 import re
@@ -69,11 +78,13 @@ from adr_checkpoint import (  # noqa: E402  (sibling script, same harness/script
     parse_status_table,
 )
 
-IDR_FIELD_RE = re.compile(r"^(doc-type|id|status)\s*:\s*(.+?)\s*$", re.MULTILINE)
+DOC_FIELD_RE = re.compile(r"^(doc-type|id|status)\s*:\s*(.+?)\s*$", re.MULTILINE)
+# Reused by both parse_idr_frontmatter and parse_rdd_frontmatter below — the same three scalar
+# fields, gated per-caller on the doc-type value each expects (never a shared parse of both kinds).
 
 
 class SourceUnreadable(Exception):
-    """A named ADR/IDR source path doesn't exist or isn't a directory — never a silent empty scan."""
+    """A named ADR/IDR/RDD source path doesn't exist or isn't a directory — never a silent empty scan."""
 
 
 def extract_section(text, prefix):
@@ -98,7 +109,7 @@ def parse_idr_frontmatter(text):
     m = FRONTMATTER_RE.match(text)
     if not m:
         return None
-    fields = dict(IDR_FIELD_RE.findall(m.group(1)))
+    fields = dict(DOC_FIELD_RE.findall(m.group(1)))
     if fields.get("doc-type", "").strip() != "idr":
         return None
     return {"id": fields.get("id", "").strip(), "status": fields.get("status", "").strip()}
@@ -111,6 +122,32 @@ def parse_idr_file(text):
     if not fm or not fm["id"]:
         return None
     return {"id": fm["id"], "status": fm["status"], "proof_text": extract_section(text, "proof") or ""}
+
+
+def parse_rdd_frontmatter(text):
+    """Extract id/status from an RDD's frontmatter, gated on `doc-type: rdd` — an ADR/IDR file
+    (same frontmatter shape) must never be misread as an RDD. Pure."""
+    m = FRONTMATTER_RE.match(text)
+    if not m:
+        return None
+    fields = dict(DOC_FIELD_RE.findall(m.group(1)))
+    if fields.get("doc-type", "").strip() != "rdd":
+        return None
+    return {"id": fields.get("id", "").strip(), "status": fields.get("status", "").strip()}
+
+
+def parse_rdd_file(text):
+    """Parse one RDD file: id/status from frontmatter, claim text from the whole `## Acceptance`
+    section — RDD's own IDR-grammar criteria, the type's Proof-equivalent (same whole-section
+    extraction discipline as parse_idr_file's Resolution 3, applied to Acceptance instead of Proof).
+    Returns None for a non-RDD file. Pure."""
+    fm = parse_rdd_frontmatter(text)
+    if not fm or not fm["id"]:
+        return None
+    return {
+        "id": fm["id"], "status": fm["status"],
+        "acceptance_text": extract_section(text, "acceptance") or "",
+    }
 
 
 def scan_adr_claims(adr_dir):
@@ -156,11 +193,29 @@ def scan_idr_claims(idr_dir):
     return claims
 
 
-def combined_claims(adr_dir, idr_dir):
-    """Union of both corpora, keyed by claim id — `adr-NNNN` and `idr-NNNN` ids never collide."""
+def scan_rdd_claims(rdd_dir):
+    """Every LOCKED RDD in rdd_dir -> {rdd_id: {"kind": "rdd-acceptance", "text", "source"}}
+    (#656 — locked RDDs join the idr-0009 sampling rotation alongside ADR Decisions and locked IDR
+    falsification clauses; PRD/SPEC staleness stays out of scope, de-staling's own job)."""
+    claims = {}
+    for f in sorted(Path(rdd_dir).glob("*.md")):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        rec = parse_rdd_file(text)
+        if not rec or rec["status"] != "locked":
+            continue
+        claims[rec["id"]] = {
+            "kind": "rdd-acceptance", "text": rec["acceptance_text"], "source": str(f),
+        }
+    return claims
+
+
+def combined_claims(adr_dir, idr_dir, rdd_dir):
+    """Union of all three corpora, keyed by claim id — `adr-NNNN`/`idr-NNNN`/`rdd-NNNN` ids never
+    collide."""
     claims = {}
     claims.update(scan_adr_claims(adr_dir))
     claims.update(scan_idr_claims(idr_dir))
+    claims.update(scan_rdd_claims(rdd_dir))
     return claims
 
 
@@ -228,23 +283,24 @@ def clear_ids(candidates, ids_to_clear):
     ]
 
 
-def _require_dirs(adr_source, idr_source):
-    for label, src in (("ADR", adr_source), ("IDR", idr_source)):
+def _require_dirs(adr_source, idr_source, rdd_source):
+    for label, src in (("ADR", adr_source), ("IDR", idr_source), ("RDD", rdd_source)):
         if not Path(src).is_dir():
             raise SourceUnreadable(f"{label} source not found or not a directory: {src}")
 
 
-def run_sample(adr_source, idr_source, checkpoint_path, n):
+def run_sample(adr_source, idr_source, rdd_source, checkpoint_path, n):
     """Report the next N claims due for re-test — never writes the checkpoint (same crash-safety
     split as adr_checkpoint's classify/advance)."""
-    _require_dirs(adr_source, idr_source)
+    _require_dirs(adr_source, idr_source, rdd_source)
     checkpoint = load_checkpoint(checkpoint_path)
-    claims = combined_claims(adr_source, idr_source)
+    claims = combined_claims(adr_source, idr_source, rdd_source)
     ids = sorted(claims.keys())
     sampled = pick_sample(ids, checkpoint.get("cursor", 0), n)
 
     print(f"revalidation_checkpoint sample · {len(ids)} claim(s) in corpus "
-          f"({len(scan_adr_claims(adr_source))} ADR, {len(scan_idr_claims(idr_source))} IDR)")
+          f"({len(scan_adr_claims(adr_source))} ADR, {len(scan_idr_claims(idr_source))} IDR, "
+          f"{len(scan_rdd_claims(rdd_source))} RDD)")
     if not sampled:
         print("  nothing to sample — empty corpus")
         return 0
@@ -258,12 +314,12 @@ def run_sample(adr_source, idr_source, checkpoint_path, n):
     return 0
 
 
-def run_advance(adr_source, idr_source, checkpoint_path, n, sampled_at):
+def run_advance(adr_source, idr_source, rdd_source, checkpoint_path, n, sampled_at):
     """Persist the cursor bump — call only after `sample`'s claims have actually been judged and any
     falsified/untestable verdicts queued."""
-    _require_dirs(adr_source, idr_source)
+    _require_dirs(adr_source, idr_source, rdd_source)
     checkpoint = load_checkpoint(checkpoint_path)
-    claims = combined_claims(adr_source, idr_source)
+    claims = combined_claims(adr_source, idr_source, rdd_source)
     ids = sorted(claims.keys())
     new_cursor = (checkpoint.get("cursor", 0) + n) % len(ids) if ids else 0
     save_checkpoint(checkpoint_path, new_cursor, sampled_at)
@@ -287,18 +343,18 @@ def run(argv):
     cmd, rest = argv[0], argv[1:]
 
     if cmd in ("sample", "advance"):
-        if len(rest) < 2:
-            print(f"{cmd} requires <adr-source> <idr-source>"); return 2
-        adr_source, idr_source, opts = rest[0], rest[1], rest[2:]
+        if len(rest) < 3:
+            print(f"{cmd} requires <adr-source> <idr-source> <rdd-source>"); return 2
+        adr_source, idr_source, rdd_source, opts = rest[0], rest[1], rest[2], rest[3:]
         checkpoint_path = _opt(opts, "checkpoint", required=False,
                                 default=".claude/ops/revalidation-checkpoint.json")
         if cmd == "sample":
             n = int(_opt(opts, "n", required=False, default="5"))
-            return run_sample(adr_source, idr_source, checkpoint_path, n)
+            return run_sample(adr_source, idr_source, rdd_source, checkpoint_path, n)
         n = int(_opt(opts, "n"))
         import datetime
         sampled_at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        return run_advance(adr_source, idr_source, checkpoint_path, n, sampled_at)
+        return run_advance(adr_source, idr_source, rdd_source, checkpoint_path, n, sampled_at)
 
     if cmd == "queue-add":
         if not rest:
@@ -455,11 +511,60 @@ def selftest():
     rec_no_proof = parse_idr_file(idr_no_proof_text)
     assert rec_no_proof == {"id": "idr-0099", "status": "locked", "proof_text": ""}, rec_no_proof
 
-    # ---- scan_adr_claims / scan_idr_claims — accepted/locked filters, real dialect reuse ------
+    # ---- parse_rdd_frontmatter / parse_rdd_file — gated on doc-type: rdd, never an ADR/IDR (#656:
+    # locked RDDs join the idr-0009 sampling rotation) -------------------------------------------
+    assert parse_rdd_file(adr_frontmatter_text) is None, \
+        "an ADR's frontmatter (doc-type: adr) must never be misread as an RDD"
+    assert parse_rdd_file(idr_0009_text) is None, \
+        "an IDR's frontmatter (doc-type: idr) must never be misread as an RDD"
+
+    rdd_0001_text = (
+        "---\ndoc-type: rdd\nid: rdd-0001\nstatus: locked\ndate: 2026-08-18\nowner: kim.granlund\n"
+        "dri: kim.granlund\ndecision-refs: idr-0009\nsupersedes: null\n---\n"
+        "# RDD-0001 — Locked RDDs join the idr-0009 revalidation rotation\n\n"
+        "## Scope\n\nLocked RDDs are sampled alongside accepted ADR Decisions and locked IDR "
+        "falsification clauses on the same round-robin rotation.\n\n"
+        "## Acceptance\n\n"
+        "Every locked RDD in the corpus is included in the combined sampling pool; a falsified or "
+        "untestable verdict on a sampled RDD claim always queues with a named owner, same as an "
+        "ADR/IDR claim. PRD/SPEC staleness stays de-staling's own job, explicitly out of scope.\n\n"
+        "## Sequencing\n\nWave 1 of #655.\n\n"
+        "## Completion\n\nShipped once this selftest proves RDD sampling end to end.\n"
+    )
+    rec_rdd_0001 = parse_rdd_file(rdd_0001_text)
+    assert rec_rdd_0001 == {
+        "id": "rdd-0001", "status": "locked",
+        "acceptance_text": (
+            "## Acceptance\n\n"
+            "Every locked RDD in the corpus is included in the combined sampling pool; a falsified or "
+            "untestable verdict on a sampled RDD claim always queues with a named owner, same as an "
+            "ADR/IDR claim. PRD/SPEC staleness stays de-staling's own job, explicitly out of scope.\n\n"
+        ),
+    }, rec_rdd_0001
+    assert parse_idr_file(rdd_0001_text) is None, \
+        "an RDD's frontmatter (doc-type: rdd) must never be misread as an IDR"
+
+    # negative control: a DRAFT (not locked) RDD is excluded from the claim corpus
+    rdd_draft_text = rdd_0001_text.replace("status: locked", "status: draft")
+    assert parse_rdd_file(rdd_draft_text)["status"] == "draft"
+
+    # negative control: an RDD with no ## Acceptance heading at all extracts empty text, never
+    # crashes, and is never silently dropped from parse_rdd_file's return (untestable is the
+    # caller's call, same discipline as the missing-Proof-heading IDR control above)
+    rdd_no_acceptance_text = (
+        "---\ndoc-type: rdd\nid: rdd-0099\nstatus: locked\n---\n# RDD-0099 — Malformed\n\n"
+        "## Scope\n\nSomething with no Acceptance section.\n"
+    )
+    rec_rdd_no_acceptance = parse_rdd_file(rdd_no_acceptance_text)
+    assert rec_rdd_no_acceptance == {"id": "rdd-0099", "status": "locked", "acceptance_text": ""}, \
+        rec_rdd_no_acceptance
+
+    # ---- scan_adr_claims / scan_idr_claims / scan_rdd_claims — accepted/locked filters, real ----
+    # ---- dialect reuse --------------------------------------------------------------------------
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
-        adr_dir, idr_dir = Path(tmp) / "adr", Path(tmp) / "idr"
-        adr_dir.mkdir(); idr_dir.mkdir()
+        adr_dir, idr_dir, rdd_dir = Path(tmp) / "adr", Path(tmp) / "idr", Path(tmp) / "rdd"
+        adr_dir.mkdir(); idr_dir.mkdir(); rdd_dir.mkdir()
         (adr_dir / "0002-x.md").write_text(adr_frontmatter_text, encoding="utf-8")
         (adr_dir / "0003-superseded.md").write_text(
             "---\ndoc-type: adr\nid: adr-0003\nstatus: superseded\n---\n# ADR-0003 — Y\n\n"
@@ -468,6 +573,8 @@ def selftest():
         )
         (idr_dir / "0009-x.md").write_text(idr_0009_text, encoding="utf-8")
         (idr_dir / "0099-proposed.md").write_text(idr_proposed_text, encoding="utf-8")
+        (rdd_dir / "0001-x.md").write_text(rdd_0001_text, encoding="utf-8")
+        (rdd_dir / "0099-draft.md").write_text(rdd_draft_text, encoding="utf-8")
 
         adr_claims = scan_adr_claims(adr_dir)
         assert set(adr_claims) == {"adr-0002"}, \
@@ -480,8 +587,13 @@ def selftest():
             f"a proposed (not locked) IDR must be excluded from the claim corpus: {idr_claims}"
         assert idr_claims["idr-0009"]["kind"] == "idr-proof"
 
-        combined = combined_claims(adr_dir, idr_dir)
-        assert set(combined) == {"adr-0002", "idr-0009"}, combined
+        rdd_claims = scan_rdd_claims(rdd_dir)
+        assert set(rdd_claims) == {"rdd-0001"}, \
+            f"a draft (not locked) RDD must be excluded from the claim corpus: {rdd_claims}"
+        assert rdd_claims["rdd-0001"]["kind"] == "rdd-acceptance"
+
+        combined = combined_claims(adr_dir, idr_dir, rdd_dir)
+        assert set(combined) == {"adr-0002", "idr-0009", "rdd-0001"}, combined
 
     # ---- pick_sample — round-robin, no duplicates within one call, wraps correctly ------------
     ids = ["adr-0001", "adr-0002", "idr-0001", "idr-0002", "idr-0003"]
@@ -499,8 +611,8 @@ def selftest():
 
     # ---- sample/advance end-to-end against a real temp corpus — cursor persists correctly -----
     with tempfile.TemporaryDirectory() as tmp:
-        adr_dir, idr_dir = Path(tmp) / "adr", Path(tmp) / "idr"
-        adr_dir.mkdir(); idr_dir.mkdir()
+        adr_dir, idr_dir, rdd_dir = Path(tmp) / "adr", Path(tmp) / "idr", Path(tmp) / "rdd"
+        adr_dir.mkdir(); idr_dir.mkdir(); rdd_dir.mkdir()
         (adr_dir / "0001-a.md").write_text(
             "---\ndoc-type: adr\nid: adr-0001\nstatus: accepted\n---\n# ADR-0001 — A\n\n"
             "## Decision\n\nFirst.\n", encoding="utf-8",
@@ -510,28 +622,33 @@ def selftest():
             "## Decision\n\nSecond.\n", encoding="utf-8",
         )
         (idr_dir / "0001-c.md").write_text(idr_0001_text, encoding="utf-8")
+        (rdd_dir / "0001-d.md").write_text(
+            "---\ndoc-type: rdd\nid: rdd-0001\nstatus: locked\n---\n# RDD-0001 — D\n\n"
+            "## Acceptance\n\nThird.\n", encoding="utf-8",
+        )
         checkpoint_path = Path(tmp) / "checkpoint.json"
 
         assert not checkpoint_path.exists()
-        assert run_sample(str(adr_dir), str(idr_dir), str(checkpoint_path), 2) == 0
+        assert run_sample(str(adr_dir), str(idr_dir), str(rdd_dir), str(checkpoint_path), 2) == 0
         assert not checkpoint_path.exists(), "sample must never write the checkpoint"
-        assert run_advance(str(adr_dir), str(idr_dir), str(checkpoint_path), 2,
+        assert run_advance(str(adr_dir), str(idr_dir), str(rdd_dir), str(checkpoint_path), 2,
                             "2026-08-18T00:00:00Z") == 0
         assert checkpoint_path.exists()
         cp = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         assert cp["cursor"] == 2, f"cursor must advance by exactly the judged count: {cp}"
 
         # a SECOND sample against the advanced checkpoint starts where the first left off — the
-        # 3-claim corpus (adr-0001, adr-0002, idr-0001) wraps back to adr-0001 at cursor 2
+        # 4-claim corpus (adr-0001, adr-0002, idr-0001, rdd-0001) continues at cursor 2 with no
+        # wrap needed this time (2 + 2 == 4, the corpus's own length)
         checkpoint2 = load_checkpoint(str(checkpoint_path))
-        claims2 = combined_claims(str(adr_dir), str(idr_dir))
+        claims2 = combined_claims(str(adr_dir), str(idr_dir), str(rdd_dir))
         second_sample = pick_sample(sorted(claims2), checkpoint2["cursor"], 2)
-        assert second_sample == ["idr-0001", "adr-0001"], \
-            f"round-robin must continue from the persisted cursor, wrapping the 3-claim corpus: {second_sample}"
+        assert second_sample == ["idr-0001", "rdd-0001"], \
+            f"round-robin must continue from the persisted cursor over the 4-claim corpus: {second_sample}"
 
     # ---- a genuinely missing source path fails loudly, never a silent empty scan --------------
     try:
-        run_sample("/no/such/adr/dir", "/no/such/idr/dir", "/tmp/x.json", 5)
+        run_sample("/no/such/adr/dir", "/no/such/idr/dir", "/no/such/rdd/dir", "/tmp/x.json", 5)
         raise AssertionError("a missing source directory must raise SourceUnreadable")
     except SourceUnreadable as exc:
         assert "ADR source not found" in str(exc), exc
@@ -573,10 +690,13 @@ def selftest():
           "IDR-vs-ADR frontmatter gate, three real-corpus phrasing-variance fixtures "
           "(idr-0009 colon-anchored, idr-0006 mid-sentence no-boilerplate/EOF-bounded, idr-0001 "
           "passive-voice with no 'Falsifies' token at all), proposed-IDR and missing-Proof-heading "
-          "negative controls, accepted/locked corpus filters (superseded ADR + proposed IDR "
-          "excluded), round-robin sampling (no duplicates, wraps, caps at corpus size, empty-corpus "
-          "no-op), sample/advance cursor persistence across two firings, missing-source loud "
-          "failure, and the queue's append/idempotent-update/precise-clear/bare-clear/kind-validation")
+          "negative controls, RDD-vs-ADR/IDR frontmatter gate (#656: locked RDDs join the "
+          "revalidation rotation), a locked-RDD Acceptance-section fixture, draft-RDD and "
+          "missing-Acceptance-heading negative controls, accepted/locked corpus filters (superseded "
+          "ADR + proposed IDR + draft RDD excluded), round-robin sampling (no duplicates, wraps, "
+          "caps at corpus size, empty-corpus no-op), sample/advance cursor persistence across two "
+          "firings over the 4-claim ADR+IDR+RDD corpus, missing-source loud failure, and the "
+          "queue's append/idempotent-update/precise-clear/bare-clear/kind-validation")
     return 0
 
 

@@ -3,8 +3,7 @@ name: watch-adrs
 description: >-
   decision-watcher's per-firing procedure — classify the ADR corpus vs a content-hash checkpoint,
   judge new/amended/superseded Decisions, queue candidates, advance the checkpoint; plus its
-  Revalidation mode — sampled round-robin RE-TEST of accepted ADR Decisions + locked IDR
-  falsification clauses into a confirmed/falsified/untestable verdict (idr-0009). Use for how the
+  Revalidation mode — sampled round-robin RE-TEST of accepted-ADR / locked-IDR / locked-RDD claims into a confirmed/falsified/untestable verdict (idr-0009). Use for how the
   review works, ADR dialects, ratification-vs-supersession, failure branches, or revalidation
   sampling/verdict routing. NOT write-sandbox boundary (ops-write-sandbox-rules); NOT running a
   sweep (dispatch decision-watcher); NOT the ratified re-validation CONCEPT/cadence (idr-0009/
@@ -200,25 +199,30 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
 A DIFFERENT verb from the classify/judge/queue procedure above, on the SAME agent — a mode, not a
 sibling seat (`lld-0016` carries the job-evidence reasoning). Where the forward procedure judges
 **new/changed** Decisions for knowledge-pack worthiness, this mode RE-TESTS **already-accepted**
-Decisions and locked IDR falsification clauses against present-day reality, on a sampled rotation —
-never the whole corpus every firing (idr-0010's own economy concern: cost proportional to a bounded
-sample, not to how large the doctrine ledger has grown). The concept this mode instruments is
+Decisions, locked IDR falsification clauses, and locked RDDs' Acceptance criteria against
+present-day reality, on a sampled rotation — never the whole corpus every firing (idr-0010's own
+economy concern: cost proportional to a bounded sample, not to how large the doctrine ledger has
+grown). Locked RDDs joined this sampling pool per #655 decision 7 / #656 — the tri-state verdict
+machinery below is unchanged by the third kind; **PRD/SPEC staleness stays de-staling's own job,
+explicitly out of scope for this mode**. The concept this mode instruments is
 ratified at `idr-0009` (locked, append-only — never edited by this agent or by anyone; a
 falsification of the CONCEPT itself routes to a superseding IDR, never a patch here). Cadence
 (how often this mode should fire) is **explicitly out of scope** — `idr-0011` owns it, open at
 gh#626; this mode is invokable on-demand or via the same session-scoped `CronCreate` the forward
 mode already uses, with an optional `--n` sample size (default 5). **Directory sources only** —
-unlike the forward mode, this mode's `<adr-source>`/`<idr-source>` args do not accept the
-monolithic dialect (`revalidation_checkpoint.py` raises `SourceUnreadable` on a bare file path;
-report that as an unsupported shape, never as a missing source).
+unlike the forward mode, this mode's `<adr-source>`/`<idr-source>`/`<rdd-source>` args do not
+accept the monolithic dialect (`revalidation_checkpoint.py` raises `SourceUnreadable` on a bare
+file path; report that as an unsupported shape, never as a missing source).
 
 1. **Sample the next claims due for re-test — don't advance yet.** `python3
    "${CLAUDE_PLUGIN_ROOT}/scripts/revalidation_checkpoint.py" sample <adr-source> <idr-source>
-   --checkpoint .claude/ops/revalidation-checkpoint.json --n <N>` — non-mutating, deterministic
-   round-robin over a combined, sorted list of every ACCEPTED ADR's id and every LOCKED IDR's id.
-   The report names each sampled claim's id, kind (`adr-decision` | `idr-proof`), source path, and
-   its FULL claim text — the whole `## Decision` section for an ADR, the whole `## Proof` section
-   for an IDR, never a narrower "just the Falsifies clause" extraction (why: `revalidation_
+   <rdd-source> --checkpoint .claude/ops/revalidation-checkpoint.json --n <N>` — non-mutating,
+   deterministic round-robin over a combined, sorted list of every ACCEPTED ADR's id, every LOCKED
+   IDR's id, and every LOCKED RDD's id.
+   The report names each sampled claim's id, kind (`adr-decision` | `idr-proof` | `rdd-acceptance`),
+   source path, and its FULL claim text — the whole `## Decision` section for an ADR, the whole
+   `## Proof` section for an IDR, the whole `## Acceptance` section for an RDD, never a narrower
+   "just the Falsifies clause" (or "just one criterion line") extraction (why: `revalidation_
    checkpoint.py`'s own module docstring — the real corpus falsified that narrower design during
    authoring). `sample` and `advance` are two separate calls, the same
    crash-safe split as the forward mode's `classify`/`advance` — a firing that dies mid-judgment
@@ -232,9 +236,9 @@ report that as an unsupported shape, never as a missing source).
    discovered doctrine drift — in noise); **falsified** (the claim's own stated condition no longer
    holds against present reality — a concrete, named reason, not a vague doubt); **untestable**
    (the claim's text does not actually let you check it — too vague, no stated falsification
-   condition, or empty extraction because the record carries no `## Proof`/`## Decision` section at
-   all). An empty claim text (the extraction found nothing) is reported `untestable` immediately,
-   never silently skipped or defaulted to `confirmed`.
+   condition, or empty extraction because the record carries no `## Proof`/`## Decision`/
+   `## Acceptance` section at all). An empty claim text (the extraction found nothing) is reported
+   `untestable` immediately, never silently skipped or defaulted to `confirmed`.
 3. **Queue every `falsified`/`untestable` verdict — against a scratch copy, always with a named
    owner.** Copy `.claude/ops/revalidation-queue.json` to a scratch path first, then `python3
    "${CLAUDE_PLUGIN_ROOT}/scripts/revalidation_checkpoint.py" queue-add <scratch-path> --claim <id>
@@ -244,12 +248,15 @@ report that as an unsupported shape, never as a missing source).
    executes a falsified verdict") is closed structurally here: read the claim's own record
    frontmatter `owner:` field and pass it through, never leave a queued finding ownerless. **No
    `owner:` field on the record** (the table/bold-metadata ADR dialects carry no frontmatter at
-   all, so this is only ever an ADR claim, never an IDR one) → pass the dispatching human's own
-   name (or `unassigned` on an unattended firing), and say so explicitly in `--evidence` — never a
-   fabricated name and never a silent stall waiting for one. A `confirmed` verdict queues nothing.
+   all, so this is only ever an ADR claim, never an IDR or RDD one — both of those dialects always
+   carry frontmatter, per `revalidation_checkpoint.py`'s own IDR/RDD scan gate) → pass the
+   dispatching human's own name (or `unassigned` on an unattended firing), and say so explicitly in
+   `--evidence` — never a fabricated name and never a silent stall waiting for one. A `confirmed`
+   verdict queues nothing.
 4. **Advance the cursor — against a scratch copy, only after every sampled claim has been judged
    and queued.** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/revalidation_checkpoint.py" advance
-   <adr-source> <idr-source> --checkpoint <scratch-path> --n <the count actually sampled>`.
+   <adr-source> <idr-source> <rdd-source> --checkpoint <scratch-path> --n <the count actually
+   sampled>`.
 5. **Report — payload, not a write**, same fenced target-pathed contract as the forward mode's
    step 6 (`.claude/ops/revalidation-checkpoint.json`, `.claude/ops/revalidation-queue.json`).
    **A tri-state TALLY alone is never the contract** — idr-0009's own Confirms condition
@@ -272,7 +279,7 @@ report that as an unsupported shape, never as a missing source).
 **Failure branches, this mode only** (the forward mode's own catalog above still applies where it
 overlaps — an unreadable ADR/IDR source, a halt between sample and advance):
 
-- Either named source directory doesn't exist → `SourceUnreadable`, reported 🔴 blocked, never a
+- Any of the three named source directories doesn't exist → `SourceUnreadable`, reported 🔴 blocked, never a
   quiet "nothing to sample" (same discipline as the forward mode's loud unsupported-shape guard).
 - A sampled claim's extraction is empty → `untestable` immediately (step 2), never `confirmed` by
   default and never silently dropped from the report.
@@ -289,7 +296,7 @@ place, never runs `/make-pack` or `/make-skill` itself, never approves or declin
 its own judgment — only a human decides, this seat only executes an ALREADY-MADE decision (name
 the command, clear the queue row) exactly as `issue-sorter` executes an already-made friendlies
 decision. **The Revalidation mode above carries the identical boundary**: it never files
-`file-bug`/`file-task` itself, never edits a locked IDR or an accepted ADR (both are append-only
+`file-bug`/`file-task` itself, never edits a locked IDR, a locked RDD, or an accepted ADR (all are append-only
 under this workspace's own T4 discipline regardless), and never decides a QUEUED `falsified`/
 `untestable` finding is "resolved" on its own — only a human clearing the queue row does that.
 **The one exception, named rather than hidden:** a `confirmed` verdict IS this seat's own final

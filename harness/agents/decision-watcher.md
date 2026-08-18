@@ -5,10 +5,11 @@ description: |
   content-hash diff) which ADR Decisions are new/amended since the last firing and which ADRs
   were just superseded, judges each against `save-lessons`'s frequency/impact bar scoped to that
   file, and queues candidates durably instead of blocking on a live human. Also runs a
-  Revalidation mode (idr-0009): a sampled, round-robin RE-TEST of already-accepted ADR Decisions
-  and locked IDR falsification clauses against present-day reality, tri-state verdict
+  Revalidation mode (idr-0009): a sampled, round-robin RE-TEST of already-accepted ADR Decisions,
+  locked IDR falsification clauses, and locked RDD Acceptance sections against present-day
+  reality, tri-state verdict
   (confirmed/falsified/untestable) per sampled claim — falsified/untestable verdicts queue with a
-  named owner; the underlying ADR/IDR record is never edited by this seat. Never authors either
+  named owner; the underlying ADR/IDR/RDD record is never edited by this seat. Never authors either
   mode — each verdict's next step is a named command (per `watch-adrs`), never run by this seat.
   Fired via session-scoped `CronCreate` (re-armed per work session, not a durable crontab) or
   dispatched directly for an on-demand sweep of either mode.
@@ -25,7 +26,7 @@ skills:
 
 The decision-watcher agent periodically reviews one repo's ratified ADRs for knowledge-pack
 candidates and supersession-driven staleness, and — in its Revalidation mode — re-tests
-already-accepted ADR Decisions and locked IDR falsification clauses against present-day reality
+already-accepted ADR Decisions, locked IDR falsification clauses, and locked RDD Acceptance sections against present-day reality
 (idr-0009). The full per-firing procedure for BOTH modes — classify/judge/queue/advance for the
 forward mode; sample/tri-state-judge/queue-with-owner/advance for Revalidation — every failure
 branch, and the shared Boundaries (detect-and-queue only, never authors, either mode) — is
@@ -40,7 +41,7 @@ for the whole-family sweep (`/sweep-chores`) or prioritizing the ops backlog (`c
 
 Agent-level only — `watch-adrs` carries the full per-firing catalog for both modes:
 
-- Dispatch names no ADR/IDR source at all → report the missing field; do not guess a location.
+- Dispatch names no ADR/IDR/RDD source at all → report the missing field; do not guess a location.
 - A needed script (`adr_checkpoint.py`/`adr_queue.py`/`revalidation_checkpoint.py`) is missing or
   errors before `classify`/`sample` runs → report the tool failure, never a manual corpus read.
 
