@@ -185,6 +185,10 @@ record.**
   a re-read of the touched plugin's `plugin.json` straight off `origin/main` immediately before
   PR-open (the VALUE race, #445 — a version already MERGED since branch-cut, which the claim
   check alone can't see). Re-derive neither here; both live in `dispatch-ticket` already.
+- **Every recurring firing class is priced too** — a per-firing row in
+  `.claude/ops/spend-ledger.csv` via `authorkit:spend-audit`'s close-out convention (idr-0010,
+  LOCKED; cited, never restated). WORTH-FIRING test: a class whose rows repeatedly show cost with
+  no outcome is a retire/re-scope candidate — #266's precedent, fed by #265's measured hop tax.
 - **Merge order**: for a stacked PR chain, retarget and rebase every open child onto `main` before
   deleting the parent's branch — never after (#443). `harness:big-change-git-rules`'
   `references/merge-semantics.md` owns the full retarget-then-delete sequence and its worked
@@ -200,15 +204,10 @@ record.**
   feature branch instead of `main` — stranded, requiring manual reconciliation. · #592 incident ·
   2026-08-17 · [incident]
 - **Merge-on-green verifies each check's CONCLUSION individually — never the watch command's exit
-  code alone.** `gh pr checks <pr> --watch --fail-fast` was found to exit 0 on non-terminal/failed
-  states, and this bit three live merges (#530, #546, #549) before a human caught it (#551). The
-  watch's exit 0 is advisory only — a green light to go verify, not the verification itself. The
-  actual pass condition: `gh api repos/<owner>/<repo>/commits/<sha>/check-runs` against the PR's
-  head SHA, with every returned run's own `conclusion` reading `success` (or `neutral`/`skipped`
-  for a run branch protection doesn't require) — any `status` still `in_progress`/`queued`, or a
-  `conclusion` of `failure`/`cancelled`/`timed_out`/`action_required`, is NOT eligible regardless
-  of what the watch exited. `dispatch-ticket`'s quick-build merge sequence (step 1b) mechanizes
-  this; cited, not reproduced here.
+  code alone** (#551: `gh pr checks <pr> --watch --fail-fast` exits 0 on non-terminal/failed
+  states, biting three live merges — #530, #546, #549). The watch's exit 0 is advisory only;
+  `dispatch-ticket`'s step 1b mechanizes the real pass condition (a `check-runs` API query
+  against the head SHA); cited, not reproduced here.
 - **Serialize vs. parallelize**: tickets touching the same file serialize; disjoint named targets
   parallelize — Part B Design step 5's own disjoint-fan-out default, restated here only as the
   one-line rule this area needs, its mechanics staying there.
@@ -486,6 +485,7 @@ Top issues: 1) … — fix: …
 | `[[loop-rules]]` | When the next turn fires — this skill never governs continuation timing |
 | `mobilize-chores` (this plugin) | The canonical four-layer double-dispatch guard Section 2 cites; also owns which tickets are mobilizable in the first place |
 | `[[dispatch-ticket]]` | The canonical ADR-0005 claim realization (Section 2) and the version-collision re-checks (Section 4) |
+| `authorkit:spend-audit` | The close-out convention Section 4's pricing bullet cites — per-firing rows in `.claude/ops/spend-ledger.csv` (idr-0010); cross-plugin soft mention, degrades gracefully where authorkit isn't installed |
 | `harness:check-state --fleet` | The report-side realization of fleet-wide state visibility (open work, plugin-cache version drift, cross-repo consolidating-record citations) — cited here, never restated; collector logic and report shape live in `check-state` alone (lld-0012, #620) |
 | `harness:big-change-git-rules` | The stacked-PR retarget-then-delete sequence and the version-slot evidence (Section 4) — cross-plugin soft mention, degrades gracefully where harness isn't installed |
 | `harness:agent-writing-rules` | Encoding the teammate-mode delivery clause and the generic-identity caveat (Section 3) into an actual agent file |
