@@ -1,11 +1,13 @@
 ---
 doc-type: lld
-id: lld-0011-make-artifact-artifact-rules
+id: lld-0013-make-artifact-artifact-rules
 status: draft
 version: 0.1.0
 date: 2026-08-17
 owner: kim.granlund
-ticket: nonoun-plugins#619  # renumbered from lld-0619 to keep the sequential LLD spine (0001-0010); resolves ticket #619
+ticket: nonoun-plugins#619  # renumbered twice: lld-0619 (ticket-keyed draft) -> lld-0011 (to fit the
+  # then-current 0001-0010 spine) -> lld-0013, because origin/main advanced mid-build and minted its
+  # own real lld-0011 (recurrence-audit) and lld-0012 (fleet-state-rollup) first; resolves ticket #619
 spec: none — same routing as lld-0008/lld-0009: the ticket's own Acceptance section carries the
   checkable criteria and its Scope/Open section names the exact four design questions this LLD
   resolves (home plugin, shape split, assert layer, refresh mechanism), so a standalone SPEC would

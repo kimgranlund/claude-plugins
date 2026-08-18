@@ -17,7 +17,7 @@ normalizes both into one internal role -> value model before emitting CSS:
                        (role -> {fontFamily, fontSize, fontWeight, lineHeight, letterSpacing?},
                        CSS-flavored strings); `spacing`/`rounded` objects of named px strings.
 
-Emission (Resolution 6, lld-0011): `:root { color-scheme: light dark; --c-<role>:
+Emission (Resolution 6, lld-0013): `:root { color-scheme: light dark; --c-<role>:
 light-dark(<light>, <dark>); ... }` plus `[data-theme="light|dark"]` one-line toggles (never a
 duplicated variable block); `--text-<role>-{size,weight,lh,ls}` per type role; `--font-<slug>`
 per distinct font family, ALWAYS with a system-fallback tail (sans-serif or monospace, chosen by
@@ -31,7 +31,7 @@ content, the human render-fidelity check. This script never chooses a shell or w
 turns tokens into custom properties, nothing else.
 
 A role present in one color representation but missing its dark counterpart is a build failure
-(exit 1), never a silent light-only variable (R-2, lld-0011) — the negative control below proves
+(exit 1), never a silent light-only variable (R-2, lld-0013) — the negative control below proves
 it bites; a complete fixture builds clean with every expected pair present (the reverse control).
 
   python3 scripts/css_build.py selftest
