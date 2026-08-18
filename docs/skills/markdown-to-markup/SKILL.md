@@ -7,7 +7,8 @@ description: >-
   rendering safe from injection, it uses innerHTML" — inline/block grammar built via
   textContent, never innerHTML. NOT for converting HTML into markdown source, or
   defects a CONVERTER produced — stray divs, converted text re-rendering wrong
-  (html-to-markdown).
+  (html-to-markdown). NOT for building a full design-system-styled Artifact page
+  (make-artifact — that consumes tokens; this renders markdown grammar).
 disable-model-invocation: false
 user-invocable: true
 ---
