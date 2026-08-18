@@ -130,6 +130,16 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.13.1 · 2026-08-18 · closes #622 (harness slice, docs sibling same PR): the feedback-intake
+door instrument for idr-0008 (LOCKED)/adr-0021. `watch-tickets` names ADR-0021's T3 tier as its
+own already-existing hold-first-filing behavior (step 3) and applies the `user-signal` provenance
+tag at both mint points (trusted direct mint, step 4; approval-of-a-held-item mint, step 5) —
+`agents/issue-sorter.md`'s approve-example gains the matching one-line cross-reference.
+`check-state`'s `ticket_state.py` gains an all-state `user-signal`-labeled-issue tally
+(`classify_user_signal`, selftest-proven with open/closed + case-normalization controls),
+surfaced as a new Counts-section line — the instrument's required VISIBLE count (gh#622's own
+Acceptance). Full design + the clause-(a) resolution in `lld-0017` (docs). Fresh-context
+`harness:wording-checker` pass over the semantic body edits. `release_gate.py harness` clean.
 v3.13.0 · 2026-08-18 · closes #623: `decision-watcher`/`watch-adrs` gains a Revalidation mode
 (idr-0009) — a sampled, round-robin RE-TEST of already-accepted ADR Decisions and locked IDR
 falsification clauses into a confirmed/falsified/untestable verdict per claim, distinct from the

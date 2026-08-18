@@ -32,7 +32,11 @@ every phase below follows whichever option it returns.
 in `docs/tickets/`, on the git-native backend `#NN`/a bare issue number resolving via
 `gh issue view`, or under Option C an id in the resolved adapter's own native format (Linear:
 `TEAM-123`) resolving via that adapter's `read` operation (`references/linear-adapter.md`, REQ-010)
-— → this is a resume. Extra text follows the id (new detail, a repro that did not exist before,
+— → this is a resume. On the git-native backend, apply `doc-writing-rules`' Provenance-tagging
+convention (`references/backend-resolver.md`) to the resolved record right here, before any
+branch below — every branch that follows exits this phase (Phase 6, the closed-state stop, or
+Phase 5), so the tag is applied at resolution time, not deferred to a phase a given resume might
+never reach. Extra text follows the id (new detail, a repro that did not exist before,
 or an answer to a clarifying question Phase 4 named in a prior close-out) → fold it into the
 ticket's Repro/Classification FIRST, unconditionally, clearing the answered gap from
 Classification once folded — this composes with every branch below, not
@@ -134,7 +138,12 @@ here carries them verbatim plus the resume command (`/file-bug <id> <answers>`) 
 report the caller's session actually reads; do not defer it to Phase 6, which only fires on a
 later return from dispatch.
 
-`.github/ISSUE_TEMPLATE/bug.yml` mirrors this contract for a human filing directly on GitHub.
+`.github/ISSUE_TEMPLATE/bug.yml` mirrors this contract for a human filing directly on GitHub —
+this template, plus its `feature`/`task` siblings, IS the feedback intake door idr-0008 names;
+no separate door exists or is owed. On Option B, apply `doc-writing-rules`' Provenance-tagging
+convention (`references/backend-resolver.md`) at this record's creation — Phase 1 above applies
+the same convention on resume, so a foreign-authored issue this skill only picks up mid-flight
+still owes the tag either way.
 
 ## Phase 5 — Dispatch, or fix inline
 

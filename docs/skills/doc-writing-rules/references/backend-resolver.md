@@ -72,6 +72,36 @@ unchanged by adopting it.
 Linear's realization of all seven lives in `references/linear-adapter.md`; a bring-your-own
 Option-C adapter documents its own realization the same way, in its own workspace.
 
+## Provenance tagging — user signal (idr-0008, adr-0021)
+
+Option B (git-native) only — Option A has no filing-author concept to compare against, and
+Option C is a named gap (its adapter's own `create`/`read` operations don't yet surface a
+foreign-author field) rather than something built around. **Foreign-origin**, for this tagging
+purpose, is operationalized as: the record's filing author's login (`gh issue view --json
+author`) differs from the estate operator's own login, recorded at `.claude/ops/friendlies.json`'s
+existing `policy.confirmed_by` field — the narrowest, zero-new-state proxy for idr-0008's Claim
+("any trace from a party other than this estate's own seats"), deliberately not the full claim
+(a future second trusted, non-operator collaborator is still foreign by that fuller reading —
+out of scope for this proxy, `lld-0017`'s own Risk R-2).
+
+Wherever a `create` or `read`(-resume) operation runs against the git-native backend and the
+result is foreign by that check, apply the `user-signal` label if it is not already present:
+`gh issue edit <id> --add-label user-signal`; if the label does not exist yet in the repo, `gh
+label create user-signal --color 1D76DB --description "provenance: filed by a login other than
+the estate operator (idr-0008, adr-0021)"` once, then retry the edit — the same missing-label
+create-once fallback `file-task` already documents for its own kind label and `harness:watch-tickets`
+applies for this very label (neither `file-bug` nor `file-feature` documents a missing-label path
+of their own, so this convention owns the fallback uniformly rather than assuming those two
+self-heal it), never worked around or silently skipped. A held item (ADR-0021's T3: an author outside
+`friendlies.json`, held for a human decision rather than minted) was foreign at filing time by
+construction — no login comparison is needed once it is later approved and minted; tag it
+unconditionally at that mint.
+
+`harness:watch-tickets` cannot preload this file across the plugin boundary (same limit its own
+text already states for the payload contract one paragraph above this convention in that skill) —
+it carries its own short restatement of this exact rule, citing `idr-0008`/`adr-0021` by id
+rather than this file by path.
+
 ## Failure fallback (REQ-008)
 
 If the resolved backend is Option C and any operation fails partway through (auth failure, API

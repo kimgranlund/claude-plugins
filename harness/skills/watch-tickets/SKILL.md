@@ -96,13 +96,26 @@ git history).
    gets the `needs-ruling` label instead of a kind label, mints the same as any other trusted
    item (step 4), and is never carried as a restated prose lane in `chore-planner`'s plan; the
    plan references the labeled issue by id instead.
-3. Check the filing author against `friendlies.json`.
+3. Check the filing author against `friendlies.json`. This IS ADR-0021's T3 tier realized in
+   full: an author outside `friendlies.json` "passes the friendlies gate before it is even
+   handled as T2; may trigger triage only, never dispatch" — steps 5–6 below already are that
+   triage-only handling; nothing new is built at this step, only named.
 4. Trusted → mint or resume the record directly, per the Scope section's record shape and the same
-   dedup-before-mint sweep the capture skills already run — no human step.
+   dedup-before-mint sweep the capture skills already run — no human step. **Provenance tag
+   (idr-0008, adr-0021):** if the filing author's login differs from `.claude/ops/friendlies.json`'s
+   `policy.confirmed_by` (the estate operator's own login — a trusted, non-operator collaborator is
+   still foreign by idr-0008's Claim), apply `user-signal` via `gh issue edit <id> --add-label
+   user-signal` (issue items only — a PR discovered in step 1 carries no ticket-record concept
+   and is out of scope for this tag), creating the label once (`gh label create user-signal --color 1D76DB
+   --description "provenance: filed by a login other than the estate operator (idr-0008,
+   adr-0021)"`) if it doesn't yet exist in the repo — same missing-label create-once fallback this
+   skill's own Scope section already documents owning for kind/severity labels.
 5. Unknown → hold: label the item `needs-triage-approval`, append it to `held-items.md`, create no
    record. This agent NEVER approves or denies a held item itself, scheduled or on-demand — only a
    human decides; a later dispatch carrying that decision (the approve-a-held-item `<example>` in
-   `agents/issue-sorter.md`) executes it: mint + grow `friendlies.json` on approval, or mark denied
+   `agents/issue-sorter.md`) executes it: mint + grow `friendlies.json` on approval — **and applies
+   `user-signal` unconditionally at that mint** (the hold itself already proved foreign origin at
+   filing time, per step 4's convention above; no login comparison needed here) — or mark denied
    on the ledger with no record and no allow-list change. A denied item is never re-surfaced.
 6. Genuinely ambiguous shape after step 2, on an INTERACTIVE dispatch only → one `find-intent`
    clarifying round. A scheduled (unattended) firing has no one to ask — it skips straight to
