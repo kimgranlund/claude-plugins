@@ -62,6 +62,12 @@
       "prompt": "Design a brand-new coordination seat for this multi-repo campaign.",
       "expect": "no-trigger",
       "comment": "owner: teamwork:fleet-rules Part B (Design) -- forward design-time question, not a sweep of an existing instance"
+    },
+    {
+      "id": "n07",
+      "prompt": "Which of authorkit's audit instruments should I use for this ask, and what instrument value does estate-audit-agent take?",
+      "expect": "no-trigger",
+      "comment": "owner: estate-audit -- the family index that names which instrument fits, never runs a sweep itself"
     }
   ]
 }

@@ -3,20 +3,19 @@ name: repo-audit
 kind: skill
 description: >
   One umbrella sweep across the full audit battery — Phase-0-style discover/scope-confirm, then
-  fans out all five authorkit instruments plus, where installed, harness's cross-plugin axes —
+  fans out all six authorkit instruments plus, where installed, harness's cross-plugin axes —
   into ONE verdict-first 🟢/🟡/🔴 roll-up per estate per axis. Read-only: reports, never mutates.
   Use for "audit this repo", "run the full audit battery", "give me one verdict across naming,
   bloat, attention, and routing". Ships with an identical-name command wrapper (/repo-audit). NOT
-  for one instrument alone (naming-audit/bloat-audit/attention-audit/pattern-audit/doctrine-audit,
-  or estate-audit's single-instrument index — this skill composes all five, never reimplements);
-  NOT for driving an approved overhaul's execution waves (overhaul-execute mutates through gated
+  one instrument alone (naming/bloat/attention/pattern/doctrine/orchestration-audit, or
+  estate-audit's single-instrument index — this skill composes all six, never reimplements); NOT
+  for driving an approved overhaul's execution waves (overhaul-execute mutates through gated
   waves, this one only ever reports); NOT for the ops chore queue (harness:sweep-chores — live
-  work-state, not static audit instruments); NOT for a point-in-time work-state report
-  (harness:check-state — branches/PRs/drift, not audit axes).
+  work-state); NOT a point-in-time work-state report (harness:check-state — branches/PRs/drift).
 author: kim
 created: 2026-08-16
-last_updated: 2026-08-17
-requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, estate-audit]
+last_updated: 2026-08-18
+requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, orchestration-audit, estate-audit]
 disable-model-invocation: false
 user-invocable: true
 allowed-tools:
@@ -34,6 +33,7 @@ allowed-tools:
   - Bash(python3 */scripts/trend.py *)
   - Bash(python3 */scripts/scan.py *)
   - Bash(python3 */scripts/sweep.py *)
+  - Bash(python3 */scripts/audit.py *)
 ---
 
 # repo-audit
@@ -62,16 +62,19 @@ question nobody can answer. An ungoverned in-scope estate is reported UNGOVERNED
 axis (its own instrument's own contract) rather than routed through `manifest-authoring` — this
 skill never mutates, so it never seeds governance on an estate's behalf.
 
-## Phase 1 — FAN OUT the five authorkit instruments
+## Phase 1 — FAN OUT the six authorkit instruments
 
-Per in-scope estate: `naming-audit`, `bloat-audit`, `attention-audit`, `pattern-audit` (only when
-the dispatch or the user supplied a concrete pattern/instruction to sweep — otherwise skip it,
-named as SKIPPED no-pattern-supplied, never invented), and `doctrine-audit` (only on a target
-carrying a `doctrine.manifest.json` — otherwise SKIPPED no-manifest, mirroring that skill's own
-contract). More than 3 estates in scope, or any single estate over 40 members, dispatches
-`estate-audit-agent` (Agent tool) once per applicable instrument with the batch — the same
-threshold `overhaul-execute`'s own Phase 1 and `estate-audit`'s own routing note use. Record each
-axis's raw finding count per estate for Phase 3's roll-up.
+Per in-scope estate: `naming-audit`, `bloat-audit`, `attention-audit`, `orchestration-audit`
+(`--archetype all`, no caller input needed — same always-run shape as naming/bloat/attention),
+`pattern-audit` (only when the dispatch or the user supplied a concrete pattern/instruction to
+sweep — otherwise skip it, named as SKIPPED no-pattern-supplied, never invented), and
+`doctrine-audit` (only on a target carrying a `doctrine.manifest.json` — otherwise SKIPPED
+no-manifest, mirroring that skill's own contract). More than 3 estates in scope, or any single
+estate over 40 members, dispatches `estate-audit-agent` (Agent tool) once per applicable
+instrument with the batch — the same threshold `overhaul-execute`'s own Phase 1 and
+`estate-audit`'s own routing note use. Record each axis's raw finding count per estate for
+Phase 3's roll-up; `orchestration-audit`'s own judgment-queue entries ride along as their own
+named UNMEASURED-style note, never folded into the mechanizable finding count.
 
 ## Phase 2 — CROSS-PLUGIN AXES, where installed
 
@@ -91,7 +94,8 @@ axis's raw finding count per estate for Phase 3's roll-up.
 ## Phase 3 — ONE verdict-first roll-up
 
 Render exactly one table: rows = in-scope estates, columns = every axis that ran this pass
-(naming, bloat, attention, pattern, doctrine, check-routing, skill-checker, agent-checker) —
+(naming, bloat, attention, orchestration, pattern, doctrine, check-routing, skill-checker,
+agent-checker) —
 🟢 clean / 🟡 attention (named findings, non-blocking) / 🔴 blocked (errors, violations, or a
 failed gate) / `UNMEASURED (<reason>)` for a degraded or skipped axis. Below the table: one
 sentence per non-🟢 cell citing its instrument's own evidence (error count, exemption count,
