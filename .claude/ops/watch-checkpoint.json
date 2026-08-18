@@ -6,11 +6,11 @@
       "adapter": "git-native (gh CLI, no MCP/Linear adapter shipped yet)",
       "mechanism": "on-demand gh issue list / gh pr list (no polling interval or MCP subscription configured yet -- REQ-002's entry-mode choice has not been made for this repo)",
       "status": "reachable",
-      "last_successful_check_at": "2026-08-18T02:28:59Z",
+      "last_successful_check_at": "2026-08-18T17:18:08Z",
       "bootstrap_note": "First-ever firing -- no prior checkpoint existed. Treated as discovering everything currently open plus full closed history for classification/dedup context (16 issues, 20 PRs, gh issue/pr list --state all, 2026-07-18). The checkpoint below is the discovery high-water mark going forward: the next firing's window is 'changed since this timestamp', not 'since repo creation' again.",
-      "last_firing_note": "2026-08-18T02:28:59Z firing (issue-sorter solo, unattended). Prior checkpoint 2026-08-18T02:17:47Z. 0 new issues, 0 new/updated PRs in this window. 1 item touched: #612 (feature/size:big, already record-shaped and minted at a prior firing) picked up an 'in-flight' label only (claimed by a build dispatch, not a new filing) -- nothing new to triage. Full open-issue sweep (#613, #612, #611, #609, #605, #490) confirmed every open issue already carries a kind label; 0 open PRs untriaged. Every touched item authored by kimgranlund, already on friendlies.json -- 0 unknown authors, 0 items held, 0 held-items.md changes, 0 friendlies.json changes. Steps 7/8 not-applicable: friendlies.json already bootstrapped; github_mcp_offer already recorded (accepted, with the 2026-07-25 same-day override on record) and .mcp.json already carries the matching entry -- no re-offer.",
-      "issues_checkpoint": "2026-08-18T02:28:59Z",
-      "prs_checkpoint": "2026-08-18T02:28:59Z"
+      "last_firing_note": "2026-08-18T17:18:08Z firing (issue-sorter solo, unattended). Prior checkpoint 2026-08-18T02:28:59Z. Search window (17 issues, 18 PRs touched) swept in full: all but one item already closed via merged closes-#NNN PRs from the intervening build-drain, nothing left to triage on those. Only #647 (bug/minor, 'attention-audit demote-to-wiring wrong lever') was a new open filing this window -- already fully record-shaped and labeled at filing time (kind+severity present), author kimgranlund (== friendlies.json confirmed_by, no user-signal tag needed, already on allow-list) -- dedup-before-mint resumed the existing record, no mint, no PR/issue action taken (out of scope for this seat; PR #648 already open against it from a prior build dispatch). Missing-kind-label sweep of all 5 currently-open issues (#647, #617, #609, #605, #490): 0 missing -- #617 correctly backlog-excluded per #611's parking rule. 0 unknown authors, 0 items held, 0 held-items.md changes, 0 friendlies.json changes. Steps 7/8 not-applicable: friendlies.json already bootstrapped; github_mcp_offer already recorded (accepted, 2026-07-25 override on record) and .mcp.json already carries the matching entry -- no re-offer.",
+      "issues_checkpoint": "2026-08-18T17:18:08Z",
+      "prs_checkpoint": "2026-08-18T17:18:08Z"
     }
   }
 }
