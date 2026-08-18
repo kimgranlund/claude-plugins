@@ -10,13 +10,16 @@ Q&A run measures directly without needing any UI or human in the loop.
 
 ## Sample project
 
-**This workspace itself** (`kimgranlund/claude-plugins`) — its own brief, IDRs, ADRs, PRDs, and
-roadmap already constitute a rich, known-answer corpus: every fact the harvest should surface has
-a ratified, checkable source already sitting in `.claude/docs/`. A sample project chosen from
-outside this workspace would need its own known-answer key authored from scratch before any eval
-could run; this workspace already has one. (Rejected alternative: a synthetic toy project — would
-need a hand-authored answer key with no independent ratification behind it, weaker grounding than
-this repo's own accepted ADRs/IDRs.)
+**This workspace itself** (`kimgranlund/claude-plugins`) — its own brief, IDRs, ADRs, and PRDs
+already constitute a rich, known-answer corpus: every fact the harvest should surface has a
+ratified, checkable source already sitting in `.claude/docs/`. (This workspace carries no
+`ROADMAP`-type record as of this writing — named here rather than silently assumed, per
+`extraction-procedure.md`'s own "skipped, not faked" rule: E2's known-answer key below draws on
+recurring ADR/PRD subjects alone, not roadmap phase boundaries, until one exists.) A sample
+project chosen from outside this workspace would need its own known-answer key authored from
+scratch before any eval could run; this workspace already has one. (Rejected alternative: a
+synthetic toy project — would need a hand-authored answer key with no independent ratification
+behind it, weaker grounding than this repo's own accepted ADRs/IDRs.)
 
 ## The eval procedure
 
@@ -37,7 +40,7 @@ this repo's own accepted ADRs/IDRs.)
 | # | Prompt | Axis it probes | Known-answer source |
 |---|---|---|---|
 | E1 | "What business problem does this project solve, in one paragraph a non-engineer would understand?" | Outside-In | the workspace's own brief |
-| E2 | "Name the main topic zones this project's domain knowledge breaks into, and why each one is a zone (not just a file)." | Zone discovery (R1) | roadmap phase boundaries + recurring ADR/PRD subjects |
+| E2 | "Name the main topic zones this project's domain knowledge breaks into, and why each one is a zone (not just a file)." | Zone discovery (R1) | recurring ADR/PRD subjects (plus roadmap phase boundaries, once one exists — this workspace has none as of this writing) |
 | E3 | "For zone X [substitute a real discovered zone], who benefits from it and what would break for them if it were removed?" | Outside-In (R2) | the PRD/brief passage that motivated that zone |
 | E4 | "For zone X, what does it actually do mechanically, and what does it depend on?" | Inside-Out (R3) | the ADR/implementation passage for that zone |
 | E5 | "Which zone does this corpus treat as most business-critical, and how is that ranking computed?" | Weighting (R5) | the weighted-score ordering from `extraction-procedure.md` Step 4 |

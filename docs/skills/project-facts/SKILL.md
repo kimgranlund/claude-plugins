@@ -1,14 +1,14 @@
 ---
 name: project-facts
 description: >
-  Harvest a project's DOMAIN KNOWLEDGE corpus — business logic, architectures, unique-IP
-  structures — for a human/business reader. Discovers topic zones from prototypes, PRDs,
-  brief/IDRs, ADRs, roadmaps; scores each zone two-axis (Outside-In x Inside-Out, weighted
-  Outside-In-higher). Use for "extract domain knowledge from this project", "write up the
-  business logic as a reference doc", "what this codebase does, for a non-engineer". NOT a plain
-  reference doc with no discovery/scoring (docs:make-reference); NOT an already-scorable system's
-  investigation (docs:research-methods); NOT the agent-facing sibling corpus (project-context,
-  #613 — shares `references/harvest-core.md`, opposite weighting).
+  Harvest a project's DOMAIN KNOWLEDGE — business logic, architectures, unique-IP structures
+  for a human/business reader. Discovers topic zones from prototypes, PRDs, brief/IDRs, ADRs,
+  roadmaps; scores each zone two-axis (Outside-In x Inside-Out, weighted Outside-In-higher). Use
+  for "extract domain knowledge from this project", "write up the business logic as a reference
+  doc", "what this codebase does, for a non-engineer". NOT for a
+  plain reference doc with no discovery/scoring (docs:make-reference); NOT for an already-scorable
+  system's investigation (docs:research-methods); NOT for the agent-facing sibling corpus
+  (project-context, #613 — shares `references/harvest-core.md`, opposite weight).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -34,7 +34,8 @@ rather than forced into a fixed template.
 ## Procedure
 
 1. **Gather** the five harvest sources in intent-first order (prototypes → brief/IDRs → PRDs →
-   ADRs → roadmaps) — `references/extraction-procedure.md` Step 1.
+   ADRs → roadmaps) — `references/extraction-procedure.md` Step 1. None of the five exist at all
+   → stop and report the gap; never discover zones from application code alone.
 2. **Discover** topic zones from what recurs across those sources — Step 2.
 3. **Score** every zone on both axes, citing the source passage for each finding — Step 3.
 4. **Weight** each zone's score per this corpus's Outside-In-higher ratio and rank the corpus by

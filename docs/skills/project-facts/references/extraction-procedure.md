@@ -24,6 +24,14 @@ A source that doesn't exist for this project is skipped, not faked — an absent
 harvest leans harder on prototypes + ADRs for that zone's Outside-In read, and the gap is named in
 the corpus rather than silently backfilled.
 
+**Zero-source exit.** If none of the five source kinds exist for this project at all — no
+prototype, no brief/IDR, no PRD, no ADR, no roadmap/PLAN — stop here and report the gap; do not
+proceed to Step 2 and discover zones from reading application code alone. Code-only discovery is
+a materially different procedure (it substitutes inference for the sources' own stated intent)
+and is out of scope for this skill unless a future revision explicitly sanctions it — this
+extraction is a HARVEST of what the project already said about itself, not a from-scratch reverse
+engineering pass.
+
 ## Step 2 — Discover topic zones
 
 Per `harvest-core.md`'s discovery rule: extract every recurring subject the sources treat as a
