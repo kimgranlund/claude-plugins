@@ -25,6 +25,21 @@ load-bearing `min-width: 0` flex-truncation idioms and collapsing a search input
 spec asserting element presence while the rendered property broke; a census regex undercounting a
 registry 98→54 and shipping a confidently wrong filed finding.
 
+## Pre-flight — grill the ask
+
+Before parameter-binding, gate on how open the decision space still is. **Fires** when the sweep
+is MUTATING (any transform phase is being authorized, now or later in the run) or the decision
+space is large/open — deriving census scope + exclusions, the classification policy (which match
+kinds are load-bearing vs. deletable — the `min-width: 0` incident class), transform design and
+authorization, or verify criteria/ratchet target. **Skips** for a small, read-only,
+fully-specified census — a settled decision space earns no grill (over-grilling is the mirror
+failure of skipping it). Interactive: run `teamwork:grill-the-ask` (soft cross-plugin mention,
+degrades gracefully where teamwork isn't installed — fall back to one `find-intent`-style batched
+`AskUserQuestion` round). Unattended: an under-specified, mutating sweep reports **blocked**,
+naming the missing fork(s), rather than guessing at scope/classification/authorization/
+verify-criteria — matching `mobilize-chores`' own convention for an under-specified task; an unattended
+sweep whose seed is already fully specified proceeds directly, same as the interactive skip.
+
 ## 0 — Bind the four parameters
 
 A sweep is fully defined by four named values; the run states all four before any search:
@@ -82,6 +97,37 @@ from reading its context is load-bearing until proven otherwise. The classificat
   unaccounted markup; verify preserved values survive verbatim). Transform decorative hits only;
   load-bearing relocations are their own reviewed change, never batched silently into the
   mechanical wave.
+
+  **Solo vs. `/batch`.** Below a PROVISIONAL threshold — **>20 sites OR >10 independent files**
+  (ratcheted on the first two real runs' evidence, not a priori debate) — transform solo, in-host,
+  as above. Above it, the gated transform hands the CLASSIFIED census (step 2's table, decorative
+  bucket only) to the bundled `/batch` skill as its decomposition input instead of transforming
+  serially: `/batch <instruction>` researches, decomposes into 5–30 independent units, presents
+  the plan for approval, then runs one subagent per unit in its own git worktree (acceptEdits mode
+  with the inherited tool allowlist), each unit opening its own PR. Its concurrency cap is
+  UNDOCUMENTED at the platform level — state that plainly rather than inventing a number.
+
+  **Routing guidance:** `/batch` when the classified hits partition into independent units and N
+  reviewable PRs are wanted; this skill's own solo transform (Workflow shape — one verification
+  topology, one verified result) below the threshold, or whenever the hits don't partition
+  independently regardless of count.
+
+  **Cautions:**
+  - `/batch`'s acceptEdits mode plus its inherited allowlist is a pilot-scope rule, same as any
+    other acceptEdits dispatch — scope the pilot before trusting the full sweep to it.
+  - N parallel PRs against ONE plugin's version slot collide (one version-bumping build in flight
+    per plugin at a time) — partition units by plugin, or serialize the version-bump commits
+    across units that target the same plugin.
+  - N PRs needing merge is real merge-on-green load — budget for it before choosing `/batch` over
+    a single-PR solo transform.
+
+  **Verify runs per-PR** (each `/batch` unit's own PR carries step 4's verification evidence for
+  its slice) **plus the ratchet after merges** (step 5, run once against the merged whole, never
+  once per unit).
+
+  A structured match dataset (e.g. `authorkit:pattern-audit`'s id/file/line/col/match/context/kind
+  output) is the natural `/batch` decomposition payload once classified — soft cross-plugin
+  mention, degrading gracefully where authorkit isn't installed.
 
 ## 4 — Verify the claim, not a proxy
 

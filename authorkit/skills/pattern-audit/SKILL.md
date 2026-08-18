@@ -53,7 +53,11 @@ optionally judging the resulting matches. It never mutates target files.
    false-positive` and a one-line `reason`, citing the `context` field —
    never delete records, never renumber ids.
 5. Hand the dataset (raw or judged) to whatever the caller names next —
-   review, bulk edit, migration, an overhaul-planning Phase 0 row. This
+   review, bulk edit, migration, an overhaul-planning Phase 0 row. Its
+   structured id/file/line/col/match/context/kind dataset is also the
+   natural decomposition payload for `harness:pattern-sweeping`'s
+   `/batch`-backed transform path once classified — a soft cross-plugin
+   mention, degrading gracefully where harness isn't installed. This
    skill never mutates target files.
 6. Recurrence ratchet: the same instruction asked twice → recommend
    `harness:make-script` — pattern-audit owns the ad-hoc sweep, never a
