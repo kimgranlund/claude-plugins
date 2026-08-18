@@ -94,6 +94,12 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.23.1 · 2026-08-18 · closes #677 (authorkit slice, harness sibling same PR): `pattern-audit`
+gains a reciprocal soft named mention — its structured id/file/line/col/match/context/kind
+dataset is the natural decomposition payload for `harness:pattern-sweeping`'s new `/batch`-backed
+transform path, once classified. Mention only, no path/preload; degrades gracefully where harness
+isn't installed. Body-only edit — description/frontmatter unchanged, no evals/`/check-routing`
+owed. `release_gate.py authorkit` clean.
 v0.23.0 · 2026-08-18 · `spend-audit` gains per-archetype cost attribution (issue #673,
 lld-0021-archetype-cost-gradient.md): the ledger's `HEADER` gains a REQUIRED ninth column,
 `archetype` (one of the estate's eight orchestration archetypes, #666's taxonomy, or the literal

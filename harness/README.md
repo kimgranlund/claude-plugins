@@ -131,6 +131,18 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.15.0 · 2026-08-18 · closes #677: `pattern-sweeping` gains a `/batch`-backed transform path for
+large censuses — step 3's Transform bullet documents a PROVISIONAL threshold (>20 sites OR >10
+independent files, ratcheted on the first two real runs), routing guidance (`/batch` for
+independent partitions wanting N PRs, solo/Workflow below the threshold or when hits don't
+partition), and cautions (acceptEdits pilot-scope, N-PRs-vs-one-plugin-version-slot, merge-on-green
+load); concurrency cap stated as platform-UNDOCUMENTED rather than invented. Verify runs per-PR
+plus the ratchet after merges. A new unnumbered Pre-flight section adds a `grill-the-ask` gate
+(fires on mutating sweeps or a large/open decision space; skips for a small read-only
+fully-specified census; soft `teamwork:grill-the-ask` mention degrading to a `find-intent`-style
+round; unattended + under-specified + mutating reports blocked, never guessed) per the #654/PR
+#665 precedent. Body-only edit — description/frontmatter unchanged, no evals/`/check-routing`
+owed. `release_gate.py harness` clean.
 v3.14.1 · 2026-08-18 · closes #656 (campaign #655 decision 7): locked RDDs join idr-0009's
 revalidation rotation — `revalidation_checkpoint.py` gains a third claim kind (`rdd-acceptance`,
 whole `## Acceptance` section, gated on `doc-type: rdd` + `status: locked`) and a third
