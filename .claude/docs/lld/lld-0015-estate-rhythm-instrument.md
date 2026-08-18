@@ -1,6 +1,9 @@
 ---
 doc-type: lld
-id: lld-0014-estate-rhythm-instrument
+id: lld-0015-estate-rhythm-instrument  # renumbered from lld-0014: origin/main's PR #636
+  # (#627 reconstructibility-audit) merged lld-0014-reconstructibility-audit.md minutes before
+  # this branch opened its own PR, claiming the same number this LLD had numbered against —
+  # same collision class lld-0013's own frontmatter note already documents; resolves ticket #626
 status: draft
 version: 0.1.0
 date: 2026-08-18
@@ -120,7 +123,7 @@ per this workspace's stale-context-is-a-defect doctrine — never silently repor
 5. **`teamwork/.claude-plugin/plugin.json`** — version bump (re-read off `origin/main`
    immediately before bump, per G14/#445's value-race discipline) + `teamwork/README.md` ledger
    line naming #626, the calendar file, the queue section, and the schedule deviation.
-6. **This LLD** (`lld-0014-estate-rhythm-instrument.md`) — doc_lint-clean.
+6. **This LLD** (`lld-0015-estate-rhythm-instrument.md`) — doc_lint-clean.
 
 No `object_vocab`/naming-manifest change: `calendar`, `routines`, and `held-items` are plain
 ops-file names, not skill/agent/plugin names under ADR-0011's grammar.

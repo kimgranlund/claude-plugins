@@ -120,7 +120,8 @@ state; only the `fleet-rules` bullet is this plugin's own change. Named deviatio
 routine could not be live-armed from this build's dispatch context (the `schedule` skill loaded,
 but its `RemoteTrigger` tool was absent from this seat's tool wall) — the committed JSON is the
 exact create-body, arm instruction inline, disclosed rather than silently substituted (full
-resolution: `.claude/docs/lld/lld-0014-estate-rhythm-instrument.md`). Fresh `skill-checker` pass
+resolution: `.claude/docs/lld/lld-0015-estate-rhythm-instrument.md` — renumbered from lld-0014,
+which PR #636 claimed first for #627's reconstructibility-audit). Fresh `skill-checker` pass
 on the `fleet-rules` diff; no evals touched (no description changed). Rejected alternative: a new
 `ruling-queue.md` file instead of a `held-items.md` section — two files meaning "pending Kim's
 decision" recreates the ad-hoc-arrival problem idr-0011 names.
