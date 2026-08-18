@@ -31,9 +31,10 @@ Before parameter-binding, gate on how open the decision space still is. **Fires*
 is MUTATING (any transform phase is being authorized, now or later in the run) or the decision
 space is large/open — deriving census scope + exclusions, the classification policy (which match
 kinds are load-bearing vs. deletable — the `min-width: 0` incident class), transform design and
-authorization, or verify criteria/ratchet target. **Skips** for a small, read-only,
-fully-specified census — a settled decision space earns no grill (over-grilling is the mirror
-failure of skipping it). Interactive: run `teamwork:grill-the-ask` (soft cross-plugin mention,
+authorization, or verify criteria/ratchet target. **Skips** for a read-only, fully-specified
+census at or below step 3's own threshold anchor (≤20 sites and ≤10 independent files) — a
+settled decision space earns no grill (over-grilling is the mirror failure of skipping it).
+Interactive: run `teamwork:grill-the-ask` (soft cross-plugin mention,
 degrades gracefully where teamwork isn't installed — fall back to one `find-intent`-style batched
 `AskUserQuestion` round). Unattended: an under-specified, mutating sweep reports **blocked**,
 naming the missing fork(s), rather than guessing at scope/classification/authorization/
@@ -101,16 +102,17 @@ from reading its context is load-bearing until proven otherwise. The classificat
   **Solo vs. `/batch`.** Below a PROVISIONAL threshold — **>20 sites OR >10 independent files**
   (ratcheted on the first two real runs' evidence, not a priori debate) — transform solo, in-host,
   as above. Above it, the gated transform hands the CLASSIFIED census (step 2's table, decorative
-  bucket only) to the bundled `/batch` skill as its decomposition input instead of transforming
-  serially: `/batch <instruction>` researches, decomposes into 5–30 independent units, presents
-  the plan for approval, then runs one subagent per unit in its own git worktree (acceptEdits mode
-  with the inherited tool allowlist), each unit opening its own PR. Its concurrency cap is
-  UNDOCUMENTED at the platform level — state that plainly rather than inventing a number.
+  bucket only) to Claude Code's built-in `/batch` command as its decomposition input instead of
+  transforming serially: `/batch <instruction>` researches, decomposes into 5–30 independent
+  units, presents the plan for approval, then runs one subagent per unit in its own git worktree
+  (acceptEdits mode with the inherited tool allowlist), each unit opening its own PR. Its
+  concurrency cap is UNDOCUMENTED at the platform level — state that plainly rather than inventing
+  a number.
 
   **Routing guidance:** `/batch` when the classified hits partition into independent units and N
-  reviewable PRs are wanted; this skill's own solo transform (Workflow shape — one verification
-  topology, one verified result) below the threshold, or whenever the hits don't partition
-  independently regardless of count.
+  reviewable PRs are wanted; this skill's own solo transform (one verification pass, one verified
+  result) below the threshold, or whenever the hits don't partition independently regardless of
+  count.
 
   **Cautions:**
   - `/batch`'s acceptEdits mode plus its inherited allowlist is a pilot-scope rule, same as any
@@ -163,6 +165,9 @@ re-grep mid-run.
   from step 2 for the affected files.
 - Verification cannot run (no browser, no test harness) → report the outcome as UNMEASURED with
   the exact check a follow-up must run; never substitute a presence assertion.
+- An unattended, under-specified, mutating sweep hits the Pre-flight gate with no channel to
+  answer it → report **blocked**, naming the missing fork(s) (scope, classification policy,
+  transform authorization, or verify criteria); never guess and proceed.
 
 Done when the output contract is emitted with all six sections and, for transform disposition,
 verification passed on a current environment. Not done while any acted-on hit sits unclassified
