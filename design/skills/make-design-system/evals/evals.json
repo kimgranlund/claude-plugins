@@ -127,6 +127,12 @@
       "prompt": "turn this report into a rendered artifact page using our design system",
       "expect": "no-trigger",
       "note": "docs' make-artifact (#619) — consuming an already-authored system, not authoring/grading it"
+    },
+    {
+      "id": "n14",
+      "prompt": "why do the colors in this claude artifact look a bit nuts",
+      "expect": "no-trigger",
+      "note": "artifact-styling-rules (#650) — artifact-specific visual styling doctrine, not the token source"
     }
   ]
 }

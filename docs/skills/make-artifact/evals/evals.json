@@ -1,6 +1,6 @@
 {
   "skill": "make-artifact",
-  "note": "Trigger-routing suite, minted alongside make-artifact 2026-08-17 (closes #619, LLD-0011). Positives are BUILD asks — turn/rebuild/render/regenerate an artifact/report page from a design system. Negatives fence the four siblings this capability overlaps trigger vocabulary with: artifact-rules (a standards question with no build ask), make-design-system (authoring/grading the token SOURCE), make-doc (drafting a functional document), markdown-to-markup (plain markdown rendering, no design-system consumption).",
+  "note": "Trigger-routing suite, minted alongside make-artifact 2026-08-17 (closes #619, LLD-0011); notes updated 2026-08-18 (#650, lld-0020) after artifact-rules slimmed and design:artifact-styling-rules took over visual-styling questions. Positives are BUILD asks — turn/rebuild/render/regenerate an artifact/report page from a design system. Negatives fence the five siblings this capability overlaps trigger vocabulary with: artifact-rules (a procedure-side standards question with no build ask), design:artifact-styling-rules (a visual-styling standards question with no build ask), make-design-system (authoring/grading the token SOURCE), make-doc (drafting a functional document), markdown-to-markup (plain markdown rendering, no design-system consumption).",
   "cases": [
     {
       "id": "t01",
@@ -36,7 +36,7 @@
       "id": "n01",
       "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
       "expect": "no-trigger",
-      "note": "artifact-rules — a standards question, no build ask"
+      "note": "design:artifact-styling-rules — a visual-styling standards question, no build ask"
     },
     {
       "id": "n02",
@@ -66,13 +66,19 @@
       "id": "n06",
       "prompt": "should a retro page use tabs or a single scroll",
       "expect": "no-trigger",
-      "note": "artifact-rules"
+      "note": "design:artifact-styling-rules — shell/genre visual doctrine"
     },
     {
       "id": "n07",
       "prompt": "add bold and links to the doc renderer",
       "expect": "no-trigger",
       "note": "markdown-to-markup"
+    },
+    {
+      "id": "n08",
+      "prompt": "why do the colors in our artifact look a bit nuts",
+      "expect": "no-trigger",
+      "note": "design:artifact-styling-rules — reciprocal fence, #650/lld-0020"
     }
   ]
 }

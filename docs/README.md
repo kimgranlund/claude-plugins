@@ -66,6 +66,7 @@ frontmatter preload — the hard plugin-boundary rule), with an explicit failure
 isn't installed. This agent file is non-conforming against the CURRENTLY-LIVE naming grammar
 (ADR-0011 REQ-002's `-agent` suffix rule) until the naming-ADR Kim has ruled will supersede that
 rule lands — intentional, tracked with its 4 teamwork siblings in the same wave.
+v1.19.4 · 2026-08-18 · #650 (lld-0020): `artifact-rules` slimmed to procedure-side standards only (content classification, script interface, refresh procedure) — visual/styling doctrine (tokens, type, mermaid, shells) migrated wholesale to design's new `artifact-styling-rules` pack. `design-system-consumption.md`→`script-interface.md`, `shell-doctrine.md`→`content-structure.md` (both trimmed), `mermaid-style.md` retired. `make-artifact`'s Phase 3/4 citations updated to the new file names/pack. Both packs' evals re-scoped with reciprocal fences. `release_gate.py docs` clean (G14 only fail pre-fix; version bump resolves it).
 v1.19.3 · 2026-08-18 · closes #634: `doc_lint.py`'s T5 REQ- check widens `\bREQ-\d+` to
 `\bREQ-([A-Z]+-)?\d+` — a requirement ID may carry an uppercase infix for a distinguishable
 per-doc pool (`REQ-P-001`, `REQ-R-001`), operator-ruled 2026-08-18 on cross-repo evidence

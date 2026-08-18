@@ -1,35 +1,30 @@
 {
   "skill": "artifact-rules",
-  "note": "Trigger-routing suite, minted alongside artifact-rules 2026-08-17 (closes #619, LLD-0011). Positives are consult-only asks — a standards question arriving without a build verb, one per axis (design-system consumption, shell doctrine, mermaid house style, refresh procedure) plus two adjacent-phrasing repeats. Negatives fence the four siblings this capability overlaps trigger vocabulary with: make-artifact (the build ask itself), make-design-system (authoring/grading the token SOURCE), markdown-to-markup (plain markdown rendering), make-doc (drafting a functional document).",
+  "note": "Trigger-routing suite, re-scoped 2026-08-18 (#650, lld-0020) after the pack slimmed to procedure-side standards only (content classification, script interface, refresh procedure). Positives are consult-only asks for the 3 REMAINING axes. Visual-styling asks that used to trigger this suite (mermaid <br/>, shell taste, token/theme questions) are now NEGATIVE cases here, fencing the new design:artifact-styling-rules sibling; design's own evals.json carries them as its positives.",
   "cases": [
     {
       "id": "t01",
-      "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
+      "prompt": "is this content a report, a retro, or a handbook",
       "expect": "trigger"
     },
     {
       "id": "t02",
-      "prompt": "should a retro page use tabs or a single scroll",
+      "prompt": "what does css_build.py actually take as input and what does it emit",
       "expect": "trigger"
     },
     {
       "id": "t03",
-      "prompt": "how do design tokens turn into light and dark CSS custom properties",
-      "expect": "trigger"
-    },
-    {
-      "id": "t04",
       "prompt": "when should we refresh the Estate Handbook artifact",
       "expect": "trigger"
     },
     {
-      "id": "t05",
-      "prompt": "why does my mermaid SVG stay light-themed even in dark mode",
+      "id": "t04",
+      "prompt": "does this content source count as a handbook or a report for shell purposes",
       "expect": "trigger"
     },
     {
-      "id": "t06",
-      "prompt": "what shell should a multi-chapter reference handbook use",
+      "id": "t05",
+      "prompt": "what does the generator line in the provenance footer actually need to say",
       "expect": "trigger"
     },
     {
@@ -52,27 +47,33 @@
     },
     {
       "id": "n04",
-      "prompt": "grade this design-system export before we ship it",
-      "expect": "no-trigger",
-      "note": "design's make-design-system / design-system-checker"
-    },
-    {
-      "id": "n05",
       "prompt": "render this markdown onto the docs page",
       "expect": "no-trigger",
       "note": "markdown-to-markup"
     },
     {
-      "id": "n06",
+      "id": "n05",
       "prompt": "write the PRD for this feature",
       "expect": "no-trigger",
       "note": "make-doc"
     },
     {
-      "id": "n07",
-      "prompt": "add bold and links to the doc renderer",
+      "id": "n06",
+      "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
       "expect": "no-trigger",
-      "note": "markdown-to-markup"
+      "note": "moved to design:artifact-styling-rules — visual/styling doctrine, not procedure"
+    },
+    {
+      "id": "n07",
+      "prompt": "should a retro page use tabs or a single scroll",
+      "expect": "no-trigger",
+      "note": "moved to design:artifact-styling-rules — shell/genre visual doctrine, not classification"
+    },
+    {
+      "id": "n08",
+      "prompt": "how do design tokens turn into light and dark CSS custom properties",
+      "expect": "no-trigger",
+      "note": "moved to design:artifact-styling-rules — token architecture doctrine"
     }
   ]
 }

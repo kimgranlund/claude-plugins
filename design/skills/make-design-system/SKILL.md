@@ -10,7 +10,7 @@ description: >-
   with no platform named (defaults to make-dscard-kit); NOT for grading an export you didn't
   author (design-system-checker); NOT for the palette (make-palette) or token layer
   (token-builder); NOT for consuming an already-authored system into a rendered artifact/report
-  page (docs' make-artifact).
+  page (docs' make-artifact); NOT for artifact-specific styling doctrine (artifact-styling-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

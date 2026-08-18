@@ -37,6 +37,7 @@ when it is not — no hard preload crosses the plugin boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v1.0.16 · 2026-08-18 · #650: reciprocal no-trigger eval case added to `break-down-layout` fencing design's new `artifact-styling-rules` pack (Artifact-page-specific styling vs general screen layout critique). Evals.json only, no SKILL.md edit. `release_gate.py screens` clean.
 v1.0.15 · 2026-08-16 · ui-probe.mjs entry guard now compares realpaths, fixing the symlink-fragile string compare (closes #438, same class as #436); unitChecks() gains a symlinked-dir negative control, proven to fail pre-fix and pass post-fix
 v1.0.14 · 2026-08-16 · checker-agent description diet, tail of #357/#364 (#367): component-checker's description drops the fresh-context/read-only boilerplate #364 trimmed elsewhere; moved to body. collide.py ↔wiring-checker 59.7→48.1. Critic clean. No evals owed.
 v1.0.13 · 2026-08-16 · checker-agent description diet (#357): layout-checker/flow-checker descriptions drop the shared fresh-isolated-context / never-grades-own-work / applies-fix boilerplate (collide.py's top cross-plugin *-checker baseline, 6 agents, 103.9-158.4); doctrine moved to body. Critic pass found layout-checker's fix-owner clause lost in the trim — repaired same-round. Re-run: layout-checker↔doc-checker 136.7→62.4, ↔wiring-checker 135.6→64.0; flow-checker↔design-system-checker 115.4→101.1, rest below threshold. No evals.json owed. Siblings trimmed same PR.

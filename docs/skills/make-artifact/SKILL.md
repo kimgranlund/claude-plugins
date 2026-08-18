@@ -6,9 +6,9 @@ description: >-
   custom-property CSS, house shell, themed mermaid diagrams, provenance footer. Use for 'turn
   this report into an artifact page', 'rebuild the Estate Handbook', 'render this with our
   design system'. Runs via /make-artifact [design-system path] [content source]. NOT the
-  standards themselves (artifact-rules); NOT authoring/grading the design-system source
-  (make-design-system); NOT drafting a functional document (make-doc); NOT generic
-  markdown→DOM rendering (markdown-to-markup).
+  standards (artifact-rules; styling lives in design:artifact-styling-rules); NOT
+  authoring/grading the design-system source (make-design-system); NOT drafting a functional
+  document (make-doc); NOT generic markdown→DOM rendering (markdown-to-markup).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[design-system path] [content source]"
@@ -42,23 +42,25 @@ hand-derivation of the CSS itself:
 python3 "${CLAUDE_SKILL_DIR}/scripts/css_build.py" <tokens.json|normalized-frontmatter.json> --out page.css
 ```
 
-Exit 0 → the CSS is built; consult `artifact-rules/references/design-system-consumption.md` if
-the output shape needs explaining. Exit 1 → a role is missing its dark counterpart (or a
+Exit 0 → the CSS is built; consult `artifact-rules/references/script-interface.md` if the output
+shape needs explaining (for the doctrine WHY, `design:artifact-styling-rules`'
+`token-architecture.md`). Exit 1 → a role is missing its dark counterpart (or a
 scale-count mismatch) — the fix is in the SOURCE design system, never a hand patch of the emitted
 CSS. Exit 2 → a usage error (bad path, unparseable JSON) — fix the invocation.
 
 ## Phase 3 — Choose the shell
 
-Per `artifact-rules/references/shell-doctrine.md`: a report or retro gets the narrative
-single-scroll (never a dashboard/tile shell); a handbook (multi-section, meant for lookup, not a
-start-to-finish read) gets tabbed chapters. Content spanning both is named explicitly here, not
-silently defaulted.
+Classify per `artifact-rules/references/content-structure.md` (report/retro vs handbook vs
+spanning both); the visual doctrine for each — narrative single-scroll for reports/retros, tabbed
+chapters for handbooks — lives in `design:artifact-styling-rules`' `references/shells-and-genres.md`.
+Content spanning both is named explicitly here, not silently defaulted.
 
 ## Phase 4 — Assemble the page + mermaid diagrams
 
 Assemble the chosen shell around the content, wiring the CSS from Phase 2. Any mermaid diagram in
-the content follows `artifact-rules/references/mermaid-style.md`: single-line node labels (detail
-on edges, never `<br/>`), and — if the shell is tabbed — hidden tab panels use the
+the content follows `design:artifact-styling-rules`' `references/mermaid-reference.md` (soft
+cross-plugin mention, degrades gracefully where `design` isn't installed): single-line node labels
+(detail on edges, never `<br/>`), and — if the shell is tabbed — hidden tab panels use the
 width-preserving `visibility`-based hide the CSS already emits, never `display: none`.
 
 ## Phase 5 — Stamp the provenance footer

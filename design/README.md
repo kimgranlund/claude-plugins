@@ -33,6 +33,7 @@ Legacy per-plugin ledgers: `legacy/README-{design-kits,color,typography}.md`.
 | `skills/material-shape-facts` | Knowledge | model-only | Material geometry — control ramp, radius, space ladder |
 | `skills/material-motion-facts` | Knowledge | model-only | Material `--md-sys-motion-*` tokens |
 | `skills/material-token-facts` | Knowledge | model-only | The `--md-sys-*` token glossary across the three domains |
+| `skills/artifact-styling-rules` | Knowledge | model-only | Styling/authoring doctrine for Claude Artifacts — platform facts, token role-alias architecture, type/layout, mermaid, shells/genres (#650) |
 | `agents/token-builder.md` | Agent | dispatched | Realizes palettes/dimensions as project token layers |
 | `agents/font-choice-checker.md` | Agent | dispatched | Grades ONE typography system against pick-fonts' rubric |
 | `agents/design-system-checker.md` | Agent | dispatched | Grades ONE export bundle against the owning sibling's rubric (was `design-kit-checker`) |
@@ -49,6 +50,7 @@ ledgers, CHANGELOGs, ADRs, and the legacy READMEs.
 | `color-material-facts` | `physical-color-facts` |
 | `design-kit-checker` (agent) | `design-system-checker` |
 
+v1.1.0 · 2026-08-18 · #650: new skill `artifact-styling-rules` — 5-axis pack for Claude Artifact visual doctrine, migrated from docs' `artifact-rules` (now procedure-only) per Kim's ruling. 4-source research wave, dated 2026-08-18. New `artifact_check.py` (6 grep-gates, selftest green) + `rubric.md` (R1-R8). Reciprocal fences: make-design-system, break-down-layout. Gate clean. Full resolutions: lld-0020.
 v1.0.9 · 2026-08-17 · reciprocal fence (docs' issue #619): `make-design-system`'s description gains "NOT for consuming an already-authored system into a rendered artifact/report page (docs' make-artifact)" — docs' new `make-artifact`/`artifact-rules` pair CONSUMES this hub's exported design systems; this hub still owns authoring/grading them only. One reciprocal no-trigger eval case added (n13). Trimmed the now-redundant "Owns core+profiles architecture and doctrines" clause to hold the W8 700-char budget. skill_lint.py clean.
 v1.0.8 · 2026-08-16 · checker-agent diet tail (#367): font-choice-checker's description already had no removable boilerplate (collide.py scores unchanged, e.g. ↔doc-checker 75.5). Body opener reworded for consistency with #364's siblings. Critic clean. No evals owed.
 v1.0.7 · 2026-08-16 · checker-agent description diet (#357): design-system-checker's description drops the shared fresh-isolated-context / never-grades-own-work / gap-map boilerplate (collide.py's top cross-plugin *-checker baseline, 6 agents, 103.9-158.4); doctrine moved to body. Re-run: ↔doc-checker 158.4→78.3, ↔flow-checker 115.4→101.1, ↔code-checker 109.9→91.3, ↔wiring-checker below threshold. Batched critic pass (6 files) clean; no evals.json owed. Siblings in docs/screens/teamwork trimmed same PR.
