@@ -64,7 +64,7 @@ bands only after the ledger has data).
 > **If you are the host, or you own this firing's close-out on a real checkout** (a
 > `/mobilize-chores` or `/sweep-chores` run in your own session; a build you dispatched and
 > whose handback you just read; a sweep seat's payload you just applied): as your LAST step,
-> append exactly one row —
+> append exactly one row (run from the workspace root — both paths below are repo-relative) —
 > `python3 authorkit/skills/spend-audit/scripts/trend.py --out .claude/ops/spend-ledger.csv --event-kind <sweep|build> --seat <seat-or-command> --ref <#NNN | report path | none> --tokens <N | absent> --tokens-source <measured|estimated|absent> --outcome <pr-merged|pr-opened|acted|no-op|blocked|failed> --verdict <worth-firing|not-worth-firing|undetermined>`
 > — one row per firing; for a build you dispatched, `--tokens` is the Agent-tool completion
 > summary's token figure with `--tokens-source measured`. Never invent a count: no instrument
@@ -104,19 +104,24 @@ bands only after the ledger has data).
    3. Append one row per unrecorded key: `--tokens absent --tokens-source absent` (or
       `estimated` when the report itself states a figure) and `--verdict undetermined`.
       A firing with `ref none` cannot be backfilled — say so, don't guess a `ref`.
-   4. Report how many rows were backfilled — a persistently high backfill share is itself
-      the finding that the close-out convention is not being followed. Surface it, never
-      absorb it silently.
+   4. Report how many rows were backfilled — a backfill share above 50% of a window's new
+      rows is itself the finding that the close-out convention is not being followed.
+      Surface it, never absorb it silently.
 4. **Audit** (the worth-firing render, per `(event_kind, seat)` class, verdict-first): rows,
    outcome mix, and token range PER SOURCE CLASS (`measured` compared with `measured`,
    `estimated` with `estimated` — never averaged across source classes) for the class, then
    a recommendation drawn from a closed set — **keep / re-cadence / re-scope / retire** —
-   with the cited rows. Report the `estimated`/`absent` share as a first-class finding: a
-   ledger that is 100% `estimated`/`absent` after several cycles reads "the instrument has
-   not been found", never silently tolerated. A class whose rows are all `worth-firing`
-   while outcomes are all `no-op` is a contradiction — flag it, don't resolve it here (a
-   generator≠critic weakness this skill does not adjudicate alone; the class-level judgment
-   is re-made over history by a DIFFERENT session, per Resolution 5).
+   with the cited rows. A class earns a keep/re-cadence/re-scope/retire recommendation only
+   once it carries ≥ 3 rows; fewer than that, report `undetermined` rather than judging on
+   thin evidence. Report the `estimated`/`absent` share as a first-class finding: a ledger
+   that is still 100% `estimated`/`absent` after 3 review cycles (the calendar's monthly
+   cadence, so roughly a quarter) reads "the instrument has not been found", never silently
+   tolerated. A class whose rows are all `worth-firing` while outcomes are all `no-op` is a
+   contradiction — flag it, don't resolve it here (a generator≠critic weakness this skill
+   does not adjudicate alone; the class-level judgment is re-made over history by a
+   DIFFERENT session, per lld-0018 Resolution 5). A re-cadence/re-scope/retire
+   recommendation is applied by the human reviewer editing `.claude/ops/calendar.md`
+   directly — this skill reports the render, it does not edit ops state itself.
 
 Done when: the row is appended (or its columns honestly read `absent` per the convention),
 or the requested Validate/Audit render is produced with every source-class comparison kept
@@ -130,7 +135,7 @@ conflated with a computed judgment.
   — never a false failure.
 - **100% `absent` tokens**: rows are still judged on `outcome` + `verdict` alone — the
   cadence-vs-yield judgment survives without a token figure; the instrument gap itself is
-  the finding (Risk R-1), reported, never hidden inside a silently-skipped column.
+  the finding (lld-0018 Risk R-1), reported, never hidden inside a silently-skipped column.
 - **`gh` unavailable or rate-limited**: the Collector/backfill procedure degrades to
   `.claude/ops/reports/*.md` filenames + `git log` sources only — state the degraded mode
   plainly, never silently drop the build-firing half of the backfill without saying so.
@@ -147,5 +152,7 @@ in the first place (`lld-0011`'s ruling on `scan.py`/`trend.py` reuse, extended 
 The ledger's reader is the monthly brief review (`brief-nonoun-plugins.md`) and
 `.claude/ops/calendar.md`'s "Spend-ledger review" standing-loop row — a human diffing
 this skill's Audit render release over release, exactly as `attention-trend.csv` is read
-today. A re-cadence recommendation from the Audit step edits `calendar.md` directly
-(`lld-0015`'s Resolution 1).
+today. A re-cadence recommendation from the Audit step is applied by the human reviewer,
+who edits `calendar.md` directly (`lld-0015`'s Resolution 1 licenses the direct edit) —
+this skill itself only ever reports the render, never rewrites ops state on its own
+initiative (the identity line above).
