@@ -131,6 +131,14 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.14.1 · 2026-08-18 · closes #656 (campaign #655 decision 7): locked RDDs join idr-0009's
+revalidation rotation — `revalidation_checkpoint.py` gains a third claim kind (`rdd-acceptance`,
+whole `## Acceptance` section, gated on `doc-type: rdd` + `status: locked`) and a third
+`<rdd-source>` positional; `watch-adrs` + `decision-watcher` prose/descriptions updated; selftest
+extended (locked/draft-RDD fixtures, missing-heading negative control, 4-claim round-robin proof).
+PRD/SPEC staleness stays de-staling's job. Landed via gh Git Data API after the #490 pin race
+wedged two builder sessions.
+
 v3.14.0 · 2026-08-18 · closes #629 (lld-0019): new skill `estate-maintenance` — the periodic
 self-improvement retrospective that mines auto-memory, the two trend CSVs, ADR/IDR decision
 records, and `gh` issue history for negative patterns (D1 repeated nudge, D2 re-filed
