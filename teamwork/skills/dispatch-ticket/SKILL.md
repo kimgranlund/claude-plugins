@@ -23,37 +23,28 @@ task, or bug — the kind branch below picks the path. Carries no `context: fork
 double hop from `/build-feature`, no third hop from `build-leader` — rationale in `/build-feature`'s
 body). Seed: $ARGUMENTS.
 
-**No nested wait.** A seat already running as a nested dispatch when it executes this procedure —
-`build-leader`, spawned via the `Agent` tool (`/bind-build`'s own standing seat runs no Agent
-spawn — the host session itself, not nested — and is unaffected by this rule) — performs Phase
-3's isolate work and Phase 4's `small` build DIRECTLY in its own context and worktree. It never
-spawns a further nested `context: fork` skill, or a further NAMED (teammate-mode) `Agent`-tool
-dispatch, for that core mutating work and then treats its own turn as blocked on that dispatch's
-callback: a background/mailbox dispatch made from inside an already-dispatched agent completes to
-the ROOT session, never back to the dispatching seat (the same finding Phase 2's bug hand-off
-already cites — verified A4, 2026-08-10) — the callback structurally never arrives, stalling the
-seat until a coordinator notices and re-dispatches it (four measured incidents: #257, #282, #269,
-#280 — #282
-additionally raced a duplicate build). This narrows Phase 4's `small` bullet's "one sealed
-fork/agent" clause to a TOP-LEVEL host only — an already-nested seat always takes the inline
-branch — and it means Phase 2's task-kind `Agent`-tool dispatch is always UNNAMED: usually the
-unnamed call's synchronous tool-result IS its return value, not mailbox-routed. This is not a rule
-against dispatching at all — an UNNAMED, single-shot review dispatch (Phase 4's fresh-context
-checker, Phase 5 stage 2b's critic) is not this failure, since its completion is normally the tool
-call's own synchronous result, not a background callback to wait on — with one dated exception below.
+**No nested wait.** A seat already running as a nested dispatch (`build-leader`, via the `Agent`
+tool — not `/bind-build`'s own standing seat, which spawns no Agent and isn't nested) performs
+Phase 3's isolate work and Phase 4's `small` build DIRECTLY in its own context/worktree, never a
+further nested `context: fork` or NAMED `Agent`-tool dispatch for that core work: a
+background/mailbox dispatch from inside an already-dispatched agent completes to the ROOT
+session, never back to the dispatching seat (Phase 2's bug hand-off cites the same finding,
+verified A4, 2026-08-10) — the callback structurally never arrives, stalling the seat until a
+coordinator re-dispatches it (four measured incidents: #257, #282, #269, #280 — #282 additionally
+raced a duplicate build). This narrows Phase 4's `small` "one sealed fork/agent" clause to a
+TOP-LEVEL host only, and makes Phase 2's task-kind dispatch always UNNAMED — its synchronous
+tool-result IS the return value, not mailbox-routed. Not a rule against dispatching generally: an
+UNNAMED, single-shot review dispatch (Phase 4's checker, Phase 5 stage 2b's critic) isn't this
+failure, since completion is normally the tool call's own synchronous result — one dated exception
+below.
 
 **The critic step still stalls the same way — read the return value yourself, but a notification
-can be the real verdict too (corrected 2026-08-17, issue #554).** Being technically UNNAMED does
-not stop a seat from treating the dispatch as if it were NAMED: PR #368 (2026-08-16, the ADR-0014
-build) idled on its `docs:doc-checker` critic call by waiting for a completion notification that
-routed to the ROOT session instead, not back to the seat — a real stall; fix it by reading the
-Agent tool call's own synchronous return directly. PR #547's fold falsified this section's ONLY-
-valid-completion framing, though: its unnamed critic dispatch ran ASYNC, its all-PASS verdict
-arriving intact as a background task notification to the DISPATCHING session (not the root — the
-TOP-LEVEL-host case, not a nested seat's misrouted callback). Both paths are real: read a
-synchronous return if the call gives you one; if a notification reports completion instead, that
-notification IS the verdict — accept and relay it (report-before-idle). Escalate a stall — read
-the transcript/output file, or flag a coordinator — only when NEITHER arrives within ~10 minutes.
+can be the real verdict too.** Read a synchronous return if the call gives you one; if a
+notification reports completion instead, that notification IS the verdict — accept and relay it
+(report-before-idle). Escalate a stall only when NEITHER arrives within ~10 minutes. Full incident
+history (issue #554's correction, PR #368 and PR #547) lives in
+`references/critic-dispatch-completion-notes.md` (F6 split) — read it once for the "why", not
+needed to apply the rule above.
 
 ## Phase 1 — Find or make the record
 
@@ -225,21 +216,19 @@ is what actually contains its inline-fix path.
   four-precondition skip above, and never reuse an unrelated worktree standing in for one, however
   deeply nested (#191).
 - **Release on abandonment — post-claim exits only.** Only a failure AFTER the claim landed has
-  anything to release: a discovered design fork routed back to planner, an unresolved gate
-  failure (both mid-flight, Failure branches below), a stale-premise exit (Phase 3.5), or Phase 6's recorded-loss ending (a
-  dispatched agent returned with no Findings, the re-dispatch also came back empty — nothing is
-  ever coming back to open a PR, as dead as a mid-flight abandonment). Each releases the claim
-  before returning: git-native — `gh issue edit --remove-assignee @me --remove-label in-flight`
-  plus a `gh issue comment` naming the release and why; file backend — clear
-  `claimed-by`/`claimed-at`; an adapter — its own realization. **The label release is not
+  anything to release: a discovered design fork routed back to planner, an unresolved gate failure
+  (both mid-flight, Failure branches below), a stale-premise exit (Phase 3.5), or Phase 6's
+  recorded-loss ending (a dispatched agent returned with no Findings, the re-dispatch also came
+  back empty — nothing is ever coming back to open a PR, as dead as a mid-flight abandonment).
+  Each releases the claim before returning: git-native — `gh issue edit --remove-assignee @me --remove-label in-flight` plus a `gh issue comment` naming the release and why; file backend —
+  clear `claimed-by`/`claimed-at`; an adapter — its own realization. **The label release is not
   optional** — a dead dispatch never leaves a stale `in-flight` label behind (#199 extends #184's
   release discipline to the label; left standing, it reads as still-claimed to a human scanning
   the list and to `mobilize-chores` step 2's pre-filter). A **pre-claim** exit has nothing to
   release, since Phase 3 never ran: a task SKIPPED in Phase 2 and an ambiguous-match blocker in
   Phase 1 both end before this phase starts. A **lost claim race** also has nothing to release.
-  Post-claim release keeps a mid-flight abandonment from permanently blocking the ticket for the
-  next sweep — `mobilize-chores` step 2 excludes on an active claim the same way it excludes an
-  open in-flight PR.
+  Post-claim release keeps a mid-flight abandonment from permanently blocking the ticket for the next
+  sweep — `mobilize-chores` step 2 excludes on an active claim the same way it excludes an open in-flight PR.
 - **Tear down a no-longer-needed scratch branch/worktree — verified, never raw.** Two cases reach
   this: the abandonment bullet above (claim already released), and Phase 2's bug hand-off, only
   once the post-hand-off read-back (Phase 6's verbs) shows a terminal state (issue closed, or a
@@ -260,46 +249,13 @@ is what actually contains its inline-fix path.
 
 ## Phase 3.5 — De-stale a parked ticket (backlog/roadmap labels only)
 
-Runs on the feature path between Phase 3 and Phase 4's sizing, and on the task path between
-Phase 3 and the Agent dispatch (Phase 2's task branch names this insertion verbatim, above).
-**Trigger:** the record carries the `backlog` or `roadmap` label (#611;
-git-native: the labels Phase 1 already read; file backend: no parking realization defined —
-stage N/A, disclosed). Label absent → **this phase does not exist**: skip silently, continue —
-the same absent-field shape as stage 2b's grant line. The Phase 2 bug hand-off never runs it
-(`file-bug` owns its own record lifecycle; a parked bug's hand-off proceeds unchanged —
-disclosed non-goal).
-
-A parked ticket was written against a repo that has since moved. #583 (`campaign_close.py` C4
-unguarded against branch-name reuse) and #584 (decision-watcher prose-form supersession ruled
-out-of-contract) were both caught only because someone independently re-checked the ticket's
-premise against live state before building. Mechanize that check: enumerate the ticket's own
-load-bearing premises — files/paths it names (do they exist in the described shape: `Read`/
-`Glob`), issues/PRs it references (in the state assumed: `gh issue view`/`gh pr view`),
-current-state claims it makes ("X lacks Y", "Z is unguarded" — still true, checked against the
-live file), records it cites (ADR/IDR/RDD superseded?). Bounded to premises the ticket itself
-states — a premise audit, never a fresh design review and never a re-size.
-
-- **Every premise verified — or unverifiable but uncontradicted** → write ONE dated Findings
-  entry ("de-stale pass: N premises re-verified, M unverifiable (named), proceeding") and
-  continue to Phase 4 exactly as today. Only a POSITIVELY falsified premise stales the ticket;
-  fail-open on the merely-unverifiable, disclosed in the entry (fail-closed would make every
-  parked ticket unbuildable via one ambiguous sentence — the #583/#584 class is positive drift,
-  not ambiguity).
-- **Any premise positively falsified → `stale-premise`**, a fourth typed outcome alongside
-  built / SKIPPED / named blocker: write the evidence as a dated Findings comment (per
-  falsified premise: what the ticket asserts, what live state shows, the command or path that
-  proves it), release the claim per Phase 3's Release-on-abandonment bullet, tear down the
-  worktree per the teardown bullet, and return `stale-premise` carrying the evidence. Never
-  build past a falsified premise; never close, relabel, or rewrite the ticket (re-triage is a
-  human/planner act on the evidence left behind); never report it as SKIPPED (that means
-  under-specified) or as a named blocker (nothing external blocks it — the ticket itself is
-  wrong).
-
-Decision, recorded — **`stale-premise` is a NEW fourth outcome class**, not a reuse: SKIPPED
-already means "under-specified, clarify and re-run", a named blocker already means "something
-external must move first", and both imply the ticket text is still right. A stale premise demands
-a different human act (rewrite or retire the ticket), so overloading either existing class would
-hide that in the artifact of record.
+Runs between Phase 3 and Phase 4's sizing (feature path), or between Phase 3 and the Agent
+dispatch (task path, named verbatim in Phase 2 above). **Trigger:** the record carries `backlog`
+or `roadmap` (#611; git-native: labels Phase 1 already read; file backend: N/A, disclosed). Label
+absent → this phase does not exist, skip silently. The Phase 2 bug hand-off never runs it
+(`file-bug` owns its own lifecycle). Full procedure — the premise-check algorithm, the
+proceed/`stale-premise` outcome branches, and the outcome-class rationale — lives in
+`references/de-stale-premise-check.md` (F6 split); read it in full before running this phase.
 
 ## Phase 4 — Size the dispatch (solo-first, feature path)
 
@@ -546,8 +502,7 @@ conversational summary never substitutes for the entry the record was owed.
   build failure**: the PR is open and linked, which is this dispatch's ordinary successful end
   state. Name the failed conjunct or the blocker in the handoff, leave the PR for a human, keep
   the claim as-is, and never retry the sequence or widen the predicate to get past it.
-- Phase 3.5 finds a falsified premise → `stale-premise` is a reported outcome, not a failure:
-  claim released, evidence on the record, ticket left open for re-triage.
+- Phase 3.5 finds a falsified premise → `stale-premise` is a reported outcome, not a failure: claim released, evidence on the record, ticket left open for re-triage.
 
 Done when the record's `## Findings` carries dated evidence of the shipped work (or the recorded
 blocker/skip/stale-premise report), status reflects reality, a PR this dispatch opened carries an explicit
