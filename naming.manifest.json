@@ -126,6 +126,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "recurrence",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "issue",
       "plural": "issues",
       "banned_aliases": [

@@ -52,6 +52,9 @@ this exact dial pair before this ticket (§ below) — the pattern is not new, o
 | `skills/naming-audit/scripts/validate.py` | Script | invoked by naming-audit | Deterministic checks only: name grammar, folder layout, frontmatter schema, relation graph, policy/capability coherence, provenance. `selftest` mode proves schema/grammar/lexicon counters bite. Gained `--scope {full,grammar}` 2026-08-14 (issue #197): `grammar` gates only naming-grammar findings, leaving the broader structural/provenance checks informational — how this validator wires into an estate (nonoun-plugins) that hasn't adopted the full frontmatter schema without failing on hundreds of non-naming findings. Its `hook` subcommand (issue #276) is unused since the `PostToolUse` wiring was retired 2026-08-17 (#466 — remove-all-hooks directive); run `/naming-audit` manually instead |
 | `skills/bloat-audit/scripts/measure.py` | Script | invoked by bloat-audit | Deterministic measurement: body size, phase-heavy headings, oversized Failure sections, dense descriptions, cross-file near-duplicate paragraphs. `selftest` mode proves flag/duplicate/empty-target counters bite |
 | `skills/pattern-audit/scripts/scan.py` | Script | invoked by pattern-audit | Deterministic sweep: literal, labeled regex + glob probes in, a flat match dataset out — instruction-blind, all NL-compilation and judgment lives in the skill. `selftest` mode proves match/label/multi-probe/glob/skip-dir/binary/invalid-regex/id-stability/verdict-line counters bite |
+| `skills/recurrence-audit` | Command skill | both | Instruments IDR-0006's two success measures — per-class incident-recurrence rate (primary) and the `/check-routing` pass-rate trend (secondary). Walks the estate for the seeded `LEDGER-CLASS:` citation convention, runs the live `gh issue` conjunct-A check, and appends a dated row to `recurrence-trend.csv`. Read-only; reports, never rewrites doctrine or gates |
+| `skills/recurrence-audit/scripts/scan.py` | Script | invoked by recurrence-audit | Deterministic ledger inventory: seeded `LEDGER-CLASS:` tags grouped by class, plus a bare `#NNN`-citation baseline over `.md` files. `selftest` mode proves seeded/bare/multi-id/multi-class/malformed-tag/skip-dir/binary/empty-target/verdict/stability counters bite |
+| `skills/recurrence-audit/scripts/trend.py` | Script | invoked by recurrence-audit | Appends one dated row to `recurrence-trend.csv` — the recurrence-class count/verdict and the routing-eval pass-rate, kept as separate columns, never blended. `selftest` mode proves the zero-vs-absent distinction, the routing degraded mode, and append semantics |
 | `scripts/fix_old_names.py` | Script | CLI + selftest | Moved from harness 2026-08-14 (issue #197). Classifies each stale-name hit LIVE (rewrite) vs HISTORICAL (byte-identical) vs AMBIGUOUS (escalated); report-only by default, `--write` applies, exit 1 on live hits. `derive` regenerates `renames.json` from git rename detection |
 
 ## Invocation dials
@@ -86,6 +89,31 @@ agent's own backing skill, carries no procedure but the same model-invocable dia
 was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
+
+v0.20.0 · 2026-08-18 · New capability (issue #618, lld-0011-recurrence-audit.md): `recurrence-audit`
+joins as a sixth audit-family sibling — instruments IDR-0006's estate success measures, primary
+(per-class incident-recurrence rate) and secondary (`/check-routing` pass-rate trend), neither
+measured by any existing skill/script. Ships the `LEDGER-CLASS:` seeding convention (a
+per-incident-class citation tag: slug, ids, mechanized date) since today's estate-wide citation
+coverage (406 files cite a bare `#NNN`) carries no machine-extractable class label — this build's
+own honest computed-or-seeded verdict: 0 seeded classes at ship time, real per-class recurrence
+computable as doctrine bullets/gate checks adopt the tag going forward. `scripts/scan.py`
+(deterministic ledger inventory: seeded-class grouping + bare-citation baseline, `.md`-scoped) and
+`scripts/trend.py` (appends `recurrence-trend.csv` at the workspace root, same
+one-row-per-release pattern as `attention-trend.csv`, columns kept separate per the Goodhart
+rule — never one blended quotient) both carry full selftests with negative controls (malformed
+tag, empty target, zero-vs-absent). `recurrence` registered in ObjectVocab (both this plugin's
+bundled manifest and the repo-root one) — `recurrence-audit` parses as `{object:
+recurrence}-{process: audit}`, `audit` already in ProcessLex; 0 grammar errors under both. One
+reciprocal fence added to `attention-audit`'s suite (n11) — the two skills' trend files are a
+genuine near-neighbor, both persist a per-release CSV, though the measured axes differ (menu-rent/
+collision economy vs. IDR-0006's recurrence/routing-pass-rate series). Conjunct B of the
+recurrence definition (a gate firing red on the same class) is evidenced via a documented proxy —
+a class re-cited under ≥2 distinct ids — since no durable per-class CI-history record exists to
+query directly; stated as a proxy in the skill body, never silently upgraded to ground truth.
+Rejected: modifying `harness:check-routing` to emit JSON directly (separate-plugin scope, named
+as a future improvement); a retrofit sweep tagging existing doctrine bullets now (a much larger,
+separately-sized follow-up). Fresh-context skill-checker pass recorded in the build's PR.
 
 v0.19.6 · 2026-08-17 · Reciprocal fences for harness's new `pattern-sweeping` (#576): one no-trigger case each in naming-audit and bloat-audit suites; bundled `naming.manifest.json` gains ProcessLex `sweeping` in step with the root manifest (G12b parity).
 

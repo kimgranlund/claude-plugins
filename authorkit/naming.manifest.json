@@ -111,6 +111,11 @@
       "canonical": "repo",
       "plural": "repos",
       "banned_aliases": []
+    },
+    {
+      "canonical": "recurrence",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
