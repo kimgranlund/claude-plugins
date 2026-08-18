@@ -1,6 +1,6 @@
 {
   "skill": "attention-audit",
-  "note": "This skill owns the attention/routing-economy axis — always-on menu rent, deterministic description-collision pre-detection, usage-telemetry cross-reference, and the per-plugin trend series — distinct from bloat-audit's prose-economy axis (inside bodies) and from harness /check-routing's LLM-judged blind routing simulation (this skill is the deterministic cheap tier upstream of it). Authored at mint (2026-08-15, issues #259/#261/#264 — the 2026-08-15 context-efficiency review); should-trigger phrasings t01–t02 are the seeding user's verbatim words from that session.",
+  "note": "This skill owns the attention/routing-economy axis — always-on menu rent, deterministic description-collision pre-detection, usage-telemetry cross-reference, and the per-plugin trend series — distinct from bloat-audit's prose-economy axis (inside bodies) and from harness /check-routing's LLM-judged blind routing simulation (this skill is the deterministic cheap tier upstream of it). Authored at mint (2026-08-15, issues #259/#261/#264 — the 2026-08-15 context-efficiency review); should-trigger phrasings t01–t02 are the seeding user's verbatim words from that session. n11 added 2026-08-18 (issue #618) as the reciprocal fence against the new recurrence-audit skill — IDR-0006's incident-recurrence/routing-eval-pass-rate series, a different axis from this skill's own menu-rent/collision series even though both append a per-release trend CSV. No description change.",
   "cases": [
     {"id": "t01", "prompt": "Which of these skills and plugins tax Claude's performance the most?", "expect": "trigger"},
     {"id": "t02", "prompt": "How can we optimize for smart attention and efficient routing across our estate?", "expect": "trigger"},
@@ -21,6 +21,7 @@
     {"id": "n07", "prompt": "Prove routing still works after my description edits.", "expect": "no-trigger", "comment": "owner: harness check-routing"},
     {"id": "n08", "prompt": "Run a health sweep across all the plugins.", "expect": "no-trigger", "comment": "owner: harness check-everything"},
     {"id": "n09", "prompt": "How do I reduce token usage in my Claude Code session right now?", "expect": "no-trigger", "comment": "owner: none here — platform usage question (claude-code-guide), not an estate audit"},
-    {"id": "n10", "prompt": "Plan a description diet wave for the design plugin.", "expect": "no-trigger", "comment": "contested boundary: this skill MEASURES and nominates; the wave itself is bloat-audit + check-routing work (#263) — attention-audit output feeds it"}
+    {"id": "n10", "prompt": "Plan a description diet wave for the design plugin.", "expect": "no-trigger", "comment": "contested boundary: this skill MEASURES and nominates; the wave itself is bloat-audit + check-routing work (#263) — attention-audit output feeds it"},
+    {"id": "n11", "prompt": "Is our incident-recurrence rate being measured, and what's the routing-eval pass-rate trend against IDR-0006?", "expect": "no-trigger", "comment": "owner: recurrence-audit (issue #618) — IDR-0006's own two success measures, a different axis from this skill's menu-rent/collision economy series even though both persist a per-release trend file"}
   ]
 }

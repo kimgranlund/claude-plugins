@@ -1,0 +1,72 @@
+{
+  "skill": "recurrence-audit",
+  "note": "This skill owns IDR-0006's two success-measure axes — per-class incident-recurrence rate (primary) and the /check-routing pass-rate trend (secondary) — distinct from attention-audit's menu-rent/collision series, naming-audit's grammar-conformance axis, and pattern-audit's arbitrary caller-supplied sweep, even though all four are read-only report skills over overlapping artifact kinds. Authored fresh at mint (2026-08-18, issue #618, lld-0011-recurrence-audit.md) — no prior eval history.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Is our incident-recurrence rate actually being measured anywhere?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Walk the ledger and tell me which incident classes came back after we fixed them.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "What is IDR-0006's primary success measure reading this release?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Check whether any mechanized gate or doctrine fix has recurred since it shipped.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Track the routing-eval pass-rate trend release over release for us.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Append this release's recurrence and routing numbers to the trend file.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Which skills are charging us the most attention rent, and are any descriptions colliding?",
+      "expect": "no-trigger",
+      "comment": "owner: attention-audit"
+    },
+    {
+      "id": "n02",
+      "prompt": "Audit this estate for naming convention violations.",
+      "expect": "no-trigger",
+      "comment": "owner: naming-audit"
+    },
+    {
+      "id": "n03",
+      "prompt": "Does this skill need to be this long? Audit it for busy-work.",
+      "expect": "no-trigger",
+      "comment": "owner: bloat-audit"
+    },
+    {
+      "id": "n04",
+      "prompt": "Run the routing simulation and show me the stolen/leaked/dead matrix for this plugin.",
+      "expect": "no-trigger",
+      "comment": "owner: harness:check-routing — this skill only persists that run's own output, never runs the simulation itself"
+    },
+    {
+      "id": "n05",
+      "prompt": "Sweep the repo for every occurrence of this arbitrary regex and give me a dataset.",
+      "expect": "no-trigger",
+      "comment": "owner: pattern-audit — an arbitrary caller-supplied pattern with no incident-class shape"
+    },
+    {
+      "id": "n06",
+      "prompt": "Sweep the estate against our doctrine.manifest.json and tell me which canon-to-dependent edges are broken.",
+      "expect": "no-trigger",
+      "comment": "owner: doctrine-audit — a governed, persisted canon-to-dependent edge sweep, not an incident-recurrence ledger walk"
+    }
+  ]
+}
