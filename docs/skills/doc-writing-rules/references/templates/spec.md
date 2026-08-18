@@ -6,6 +6,8 @@ version: 0.1.0
 date: YYYY-MM-DD
 owner: 
 prd: prd-<slug>         # the intent this contracts
+scope: feature          # feature | component (#657)
+audience: builder, reviewer  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657)
 ---
 # SPEC — <the contract, one line>
 

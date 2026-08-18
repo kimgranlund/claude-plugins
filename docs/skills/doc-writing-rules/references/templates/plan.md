@@ -5,6 +5,7 @@ status: active          # active | complete | abandoned
 date: YYYY-MM-DD
 owner: 
 review-cadence: weekly
+audience: builder, planner  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657); PLAN carries no scope: — not grain-governed
 ---
 # PLAN — <the delivery, one line>
 

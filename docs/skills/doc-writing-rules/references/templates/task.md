@@ -5,6 +5,7 @@ status: todo            # todo | doing | done
 date: YYYY-MM-DD
 owner: 
 ticket: tkt-0000
+audience: builder       # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657); TASK carries no scope: — not grain-governed
 ---
 # TASK — <one actor, one sitting>
 

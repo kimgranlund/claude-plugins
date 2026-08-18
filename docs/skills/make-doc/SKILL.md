@@ -50,7 +50,12 @@ mismatch — either failure ends the round rather than minting an IDR; for an RD
 the release-grain Scope admission test — "could two reasonable teams ship different releases from
 this roadmap line?" — a line that fails it doesn't earn its own RDD, and the round ends there
 before minting
-one, same as IDR's own gates. Consult docs' `agent-harness-rules` for how to choose the assert layer or design the harness —
+one, same as IDR's own gates. **Same round, every type: the document's `scope:` grain (for the
+grain-governed types — doc-writing-rules' table) and its `audience:` seat-class(es) (one-or-more,
+required — no any-agent default)** — decide both now, not as an afterthought at draft time;
+`doc_lint.py`'s T12/T13 FAIL a new mint that skips either.
+
+Consult docs' `agent-harness-rules` for how to choose the assert layer or design the harness —
 this phase only asks the question, that pack answers how. Where the harness plugin's find-intent and break-down-problem are
 installed, use them here; where not, apply
 their discipline inline — ambiguities surfaced as multiple-choice, structure before prose.

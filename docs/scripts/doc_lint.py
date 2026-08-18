@@ -61,6 +61,24 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             — the #652 investigation's own idr-0008 near-miss). FAIL, not WARN: the existing corpus
             (idr-0001..0011) passes clean, so there is no retrofit debt to excuse a soft landing,
             same posture as T7/T8's own FAIL tier for a small, fully-authored IDR instance set.
+  T12 [FAIL] `scope:` frontmatter grain, new-mints-only (#657, ratified 2026-08-18, decision 1):
+            eight types (BRIEF/IDR/ROADMAP=app · PRD/RDD=app+feature · SPEC/LLD=feature/component ·
+            ADR=decision-scoped, any grain) carry a fixed grain — a NEW mint (no committed HEAD
+            version) with a missing/empty `scope:` FAILs; ANY document (new or grandfathered)
+            whose present `scope:` value is out of vocabulary or out of its type's ratified grain
+            also FAILs — grandfather waives presence, never correctness. TICKET/TASK/PLAN are
+            deliberately not grain-governed (work-item/living-state trackers, not decision/
+            knowledge documents) and carry no `scope:` requirement here.
+  T13 [FAIL] `audience:` frontmatter, new-mints-only, ALL types (#657, ratified 2026-08-18,
+            decision 4): a NEW mint with a missing/empty `audience:` FAILs — one-or-more of
+            {human, product-seat, planner, builder, reviewer, any-agent}, comma/space-separated
+            on one line (`parse_frontmatter` is a scalar parser, same convention as RDD's
+            `decision-refs:`). No any-agent default: an absent value is never silently read as
+            any-agent. Grandfather + ratchet (ADR-0011 D8 precedent): the existing corpus is
+            exempt from PRESENCE on this field; a present value — new or grandfathered — is still
+            validated against the vocabulary. `is_new_mint()` realizes both T12's and T13's
+            new-mint test: the same git-HEAD-aware shape as T4's `head_is_locked_ledger()`,
+            inverted (untracked/new -> enforce presence; already committed -> exempt).
   T10 [FAIL] `--spine` mode only: two adr/idr/lld/rdd documents under the doc spine claim the
             same (family, number) — the 2026-08-18 incident (#633): two parallel builds both
             minted `lld-0011` (one kept it, `lld-0011-recurrence-audit`; the other's draft was
@@ -123,6 +141,27 @@ SPINE_ID_RE = re.compile(r"^(adr|idr|lld|rdd)-(\d+)\b")
 # name (#652) — IDR is whole-app/product-thesis scope only.
 IDR_SCOPE_GRAIN_RE = re.compile(r"\b(feature|features|component|components|screen|screens|endpoint|endpoints)\b", re.I)
 
+# T12's scope: which types carry a `scope:` frontmatter field validated against a fixed grain, and
+# what grain(s) each permits (#657, ratified 2026-08-18, grain table decision 1). TICKET/TASK/PLAN
+# are deliberately absent — the ratified grain table names only the decision/knowledge-bearing
+# eight; a work-item/living-state tracker's own `scope:` isn't grain-validated by this check.
+SCOPE_GRAIN = {
+    "brief":    {"app"},
+    "idr":      {"app"},
+    "roadmap":  {"app"},
+    "prd":      {"app", "feature"},
+    "rdd":      {"app", "feature"},
+    "spec":     {"feature", "component"},
+    "lld":      {"feature", "component"},
+    "adr":      {"app", "feature", "component"},  # decision-scoped: any grain
+}
+SCOPE_VALUES = {"app", "feature", "component"}
+
+# T13's scope: the audience seat-class vocabulary every NEW document mint must declare (#657,
+# ratified 2026-08-18, decision 4) — one-or-more, comma/space-separated (parse_frontmatter is a
+# scalar parser, no YAML block lists — same convention as RDD's `decision-refs:`).
+AUDIENCE_VALUES = {"human", "product-seat", "planner", "builder", "reviewer", "any-agent"}
+
 
 def parse_frontmatter(text):
     if not text.startswith("---"):
@@ -156,7 +195,12 @@ def extract_section(text, name):
     return rest[:m2.start()] if m2 else rest
 
 
-def lint_text(text):
+def lint_text(text, new_mint=True):
+    """`new_mint` (default True — safe for a text-only caller with no git context, e.g. selftest's
+    synthetic fixtures) gates T12/T13's PRESENCE requirement only; a present scope:/audience:
+    value is validated against its vocabulary/grain regardless of new_mint. A real file caller
+    (hook_mode, the CLI file path) computes new_mint via `is_new_mint(path)` instead of trusting
+    the default."""
     fm = parse_frontmatter(text)
     if fm is None or "doc-type" not in fm:
         return None  # not a functional document; not ours to judge
@@ -209,6 +253,28 @@ def lint_text(text):
             findings.append(("FAIL", "T11", f"Claim names a `{grain.group(1)}`-grain hypothesis -> "
                                              "IDR is whole-app/product-thesis scope only; a feature- "
                                              "or component-grain claim is PRD/SPEC territory (#652)"))
+    if dtype in SCOPE_GRAIN:
+        scope = fm.get("scope", "").strip().lower()
+        if not scope:
+            if new_mint:
+                findings.append(("FAIL", "T12", f"`scope:` missing -> every new {dtype} mint must "
+                                                  f"declare its grain, one of {sorted(SCOPE_GRAIN[dtype])} "
+                                                  "(#657, ratified grain table)"))
+        elif scope not in SCOPE_VALUES:
+            findings.append(("FAIL", "T12", f"`scope: {scope}` is not one of {sorted(SCOPE_VALUES)}"))
+        elif scope not in SCOPE_GRAIN[dtype]:
+            findings.append(("FAIL", "T12", f"`scope: {scope}` is out of {dtype}'s ratified grain "
+                                              f"{sorted(SCOPE_GRAIN[dtype])} (#657 grain table)"))
+    audience_tokens = [t.strip().lower() for t in re.split(r"[,\s]+", fm.get("audience", "")) if t.strip()]
+    if not audience_tokens:
+        if new_mint:
+            findings.append(("FAIL", "T13", "`audience:` missing -> every new mint must declare an "
+                                              f"explicit seat-class audience, one-or-more of "
+                                              f"{sorted(AUDIENCE_VALUES)} (#657 — no any-agent default)"))
+    else:
+        bad_audience = [t for t in audience_tokens if t not in AUDIENCE_VALUES]
+        if bad_audience:
+            findings.append(("FAIL", "T13", f"`audience:` token(s) {bad_audience} not in {sorted(AUDIENCE_VALUES)}"))
     return findings
 
 
@@ -256,6 +322,29 @@ def render(path, findings):
     return 1 if verdict == "FAIL" else 0
 
 
+def is_new_mint(p: Path) -> bool:
+    """T12/T13's own grandfather+ratchet test (#657, ADR-0011 D8 precedent): True (a NEW mint,
+    enforce scope:/audience: presence) when this path has no committed HEAD version; False
+    (already part of the committed corpus — grandfathered, presence not enforced) when it does.
+    Same git-HEAD-aware shape as `head_is_locked_ledger` above, inverted: there, untracked/new is
+    the ALLOWED case; here, untracked/new is the ENFORCED case. git absent / not a repo / any
+    doubt -> conservative True (still enforce) — mirrors that function's own posture of erring
+    toward the stricter branch on ambiguity, not silently exempting it."""
+    import subprocess
+    try:
+        r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
+                           text=True, cwd=p.parent, timeout=10)
+        if r.returncode != 0:
+            return True
+        top = Path(r.stdout.strip())
+        rel = p.resolve().relative_to(top.resolve())
+        r = subprocess.run(["git", "show", f"HEAD:{rel.as_posix()}"], capture_output=True,
+                           text=True, cwd=top, timeout=10)
+        return r.returncode != 0  # no HEAD version -> new mint
+    except Exception:
+        return True
+
+
 def head_is_locked_ledger(p: Path) -> bool:
     """T4's scope test (refined 2026-07-15 for ADR; generalized 2026-08-16, #316, for IDR; #332,
     for RDD): the ledger protection guards COMMITTED history. True (block) when the file's HEAD
@@ -298,7 +387,7 @@ def hook_mode():
     fm = parse_frontmatter(text)
     if fm is None or "doc-type" not in fm:
         return 0
-    findings = lint_text(text) or []
+    findings = lint_text(text, new_mint=is_new_mint(p)) or []
     dtype = fm.get("doc-type")
     locked_status = LEDGER_LOCK.get(dtype)
     if locked_status and fm.get("status") == locked_status and head_is_locked_ledger(p):
@@ -458,12 +547,83 @@ def selftest():
         for p in sorted(real_idr_dir.glob("*.md")):
             fs = [f for f in (lint_text(p.read_text(encoding="utf-8", errors="replace")) or []) if f[1] == "T11"]
             assert not fs, f"locked IDR {p.name} must pass T11 clean (#652 acceptance), got {fs}"
+    # T12/T13 scope+audience FAIL, new-mints-only (#657, ratified 2026-08-18): a SPEC fixture
+    # (grain-governed: feature|component) parameterized on scope/audience/new_mint.
+    spec_scope_base = ("---\ndoc-type: spec\nid: spec-x\nstatus: draft\n{scope}{audience}---\n"
+                        "# S\n## Requirements\nREQ-1: x\n## Non-goals\nn\n## Examples\ne\n"
+                        "## Acceptance\na\n## Agent verification\nv\n")
+    missing_scope = spec_scope_base.format(scope="", audience="audience: builder\n")
+    assert any(f[1] == "T12" for f in lint_text(missing_scope, new_mint=True)), \
+        "new-mint SPEC with no scope: must FAIL T12"
+    assert not any(f[1] == "T12" for f in lint_text(missing_scope, new_mint=False)), \
+        "grandfathered (new_mint=False) SPEC with no scope: must NOT FAIL T12"
+    bad_scope_value = spec_scope_base.format(scope="scope: whole-app\n", audience="audience: builder\n")
+    assert any(f[1] == "T12" for f in lint_text(bad_scope_value, new_mint=False)), \
+        "an out-of-vocabulary scope: value must FAIL T12 even when grandfathered"
+    out_of_grain = spec_scope_base.format(scope="scope: app\n", audience="audience: builder\n")
+    assert any(f[1] == "T12" for f in lint_text(out_of_grain, new_mint=False)), \
+        "scope: app on a SPEC (feature|component grain) must FAIL T12 even when grandfathered"
+    valid_scope = spec_scope_base.format(scope="scope: feature\n", audience="audience: builder\n")
+    assert not any(f[1] == "T12" for f in lint_text(valid_scope, new_mint=True)), \
+        "scope: feature on a SPEC must NOT FAIL T12"
+    adr_any_grain = ("---\ndoc-type: adr\nid: adr-0099\nstatus: proposed\ndate: 2026-08-18\n"
+                      "intent-refs: idr-0001\nscope: {scope}\naudience: reviewer\n---\n"
+                      "# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
+    for g in ("app", "feature", "component"):
+        assert not any(f[1] == "T12" for f in lint_text(adr_any_grain.format(scope=g), new_mint=True)), \
+            f"ADR is decision-scoped (any grain) — scope: {g} must NOT FAIL T12"
+    ticket_no_scope_requirement = ("---\ndoc-type: ticket\nid: tkt-0099\nstatus: open\ndate: 2026-08-18\n"
+                                    "audience: builder\n---\n# T\n## Summary\ns\n## Acceptance\na\n## Links\nl\n")
+    assert not any(f[1] == "T12" for f in lint_text(ticket_no_scope_requirement, new_mint=True)), \
+        "TICKET is not grain-governed — no scope: must NOT FAIL T12"
+    # T13 audience: FAIL, new-mints-only, ALL types (#657) — reuse the SPEC fixture, vary audience.
+    missing_audience = spec_scope_base.format(scope="scope: feature\n", audience="")
+    assert any(f[1] == "T13" for f in lint_text(missing_audience, new_mint=True)), \
+        "new-mint SPEC with no audience: must FAIL T13"
+    assert not any(f[1] == "T13" for f in lint_text(missing_audience, new_mint=False)), \
+        "grandfathered (new_mint=False) SPEC with no audience: must NOT FAIL T13"
+    bad_audience_value = spec_scope_base.format(scope="scope: feature\n", audience="audience: nobody\n")
+    assert any(f[1] == "T13" for f in lint_text(bad_audience_value, new_mint=False)), \
+        "an out-of-vocabulary audience: token must FAIL T13 even when grandfathered"
+    multi_audience = spec_scope_base.format(scope="scope: feature\n", audience="audience: builder, reviewer\n")
+    assert not any(f[1] == "T13" for f in lint_text(multi_audience, new_mint=True)), \
+        "a valid comma-separated multi-token audience: must NOT FAIL T13"
+    # is_new_mint() itself, git-aware, same shape as T4's head_is_locked_ledger fixture: an
+    # untracked file is a new mint; once committed, it's grandfathered.
+    if shutil.which("git"):
+        with tempfile.TemporaryDirectory() as td2:
+            repo2 = Path(td2)
+            env_git2 = lambda *a: subprocess.run(["git", *a], cwd=repo2, capture_output=True, text=True,
+                                                 env={"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+                                                      "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t",
+                                                      "PATH": __import__("os").environ["PATH"], "HOME": td2})
+            env_git2("init", "-q")
+            mint_file = repo2 / "spec-x.md"
+            mint_file.write_text(valid_scope)
+            assert is_new_mint(mint_file), "an untracked file must be a new mint -> enforce presence"
+            env_git2("add", "spec-x.md"); env_git2("commit", "-qm", "mint")
+            assert not is_new_mint(mint_file), "a committed (HEAD) file must be grandfathered -> presence not enforced"
+    # Corpus-clean proof (#657 acceptance): every real, already-committed doc under this repo's
+    # own `.claude/docs` spine must pass T12/T13 clean under its ACTUAL is_new_mint() status — the
+    # grandfather ratchet in practice, not just in a synthetic fixture.
+    real_docs_root = Path(__file__).resolve().parent.parent.parent / ".claude" / "docs"
+    if real_docs_root.is_dir():
+        for p in sorted(real_docs_root.rglob("*.md")):
+            rtext = p.read_text(encoding="utf-8", errors="replace")
+            rfm = parse_frontmatter(rtext)
+            if not rfm or "doc-type" not in rfm or rfm.get("doc-type") not in TYPES:
+                continue
+            fs = [f for f in (lint_text(rtext, new_mint=is_new_mint(p)) or []) if f[1] in ("T12", "T13")]
+            assert not fs, f"existing corpus doc {p.name} must pass T12/T13 clean (grandfather, #657), got {fs}"
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
           "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites; "
           "T9 SPEC agent-verification WARN bites; T10 spine id-collision FAIL bites (#633); "
           "T11 IDR scope FAIL bites, code-span mentions don't false-positive, this repo's own IDRs pass clean (#652); "
-          "T5 REQ-<INFIX>- prefixed ids (uppercase) pass, lowercase infix still warns (#634)")
+          "T5 REQ-<INFIX>- prefixed ids (uppercase) pass, lowercase infix still warns (#634); "
+          "T12 scope: grain FAIL bites new-mints-only, grandfather waives presence never correctness (#657); "
+          "T13 audience: FAIL bites new-mints-only, no any-agent default (#657); is_new_mint() git-aware "
+          "bites; the full existing .claude/docs corpus passes T12/T13 clean (grandfather proven in practice)")
     return 0
 
 
@@ -485,4 +645,5 @@ if __name__ == "__main__":
             sys.exit(1)
         print(f"doc_lint --spine · clean · {docs_root}")
         sys.exit(0)
-    sys.exit(max(render(a, lint_text(Path(a).read_text(encoding="utf-8", errors="replace"))) for a in args))
+    sys.exit(max(render(a, lint_text(Path(a).read_text(encoding="utf-8", errors="replace"),
+                                     new_mint=is_new_mint(Path(a)))) for a in args))

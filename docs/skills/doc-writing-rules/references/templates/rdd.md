@@ -12,6 +12,8 @@ decision-refs:                  # comma/space-separated adr-NNNN / idr-NNNN ids,
                                  # e.g. `decision-refs: adr-0002, idr-0001` — required non-empty
                                  # at `locked` or beyond (T7, FAIL)
 supersedes: null                 # rdd-NNNN when replacing a prior release commitment
+scope: feature                   # app | feature (#657)
+audience: product-seat, planner  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657)
 ---
 # RDD-0000 — <the release commitment, stated as what ships>
 

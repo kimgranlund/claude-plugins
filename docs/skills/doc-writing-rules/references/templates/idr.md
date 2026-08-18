@@ -7,6 +7,8 @@ owner:
 proof-ref:                # path/URL to the test, demo, or prototype state — fill before locking (authoring contract; not lint-gated)
 provenance: derived-from-evidence  # derived-from-evidence | inferred | decided-by-human — machine-readable, must match the ## Why prose (doc_lint T8, FAIL-gated)
 supersedes: null          # idr-NNNN when replacing a prior claim, reason in ## Why
+scope: app                # app only — whole-app/product-thesis scope (ruled #652); mechanically guarded by T11/T12 (#657)
+audience: human, product-seat, planner  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657)
 ---
 # IDR-0000 — <the testable hypothesis or outcome claim, stated so it could fail>
 

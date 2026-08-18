@@ -6,6 +6,8 @@ date: YYYY-MM-DD
 owner: 
 supersedes: null        # adr-NNNN when replacing a prior decision
 intent-refs: null        # idr-NNNN(s) — the founding claim(s) this decision serves; empty warns T6 (orphan ADR)
+scope: feature          # app | feature | component — decision-scoped, any grain (#657)
+audience: planner, reviewer  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657)
 ---
 # ADR-0000 — <decision, stated as the choice made>
 

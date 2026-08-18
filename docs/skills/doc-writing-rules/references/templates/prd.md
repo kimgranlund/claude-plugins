@@ -5,6 +5,8 @@ status: draft           # draft | approved | superseded
 version: 0.1.0
 date: YYYY-MM-DD
 owner: 
+scope: feature          # app | feature — PRD spans both scopes (#657)
+audience: human, product-seat, planner  # one-or-more of human | product-seat | planner | builder | reviewer | any-agent — required, no any-agent default (#657)
 ---
 # PRD — <product outcome, not feature name>
 
