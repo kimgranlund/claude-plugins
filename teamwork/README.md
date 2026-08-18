@@ -108,6 +108,9 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.24.0 · 2026-08-17 · closes #611: backlog/roadmap parking: mobilize-chores sweep immunity
+(ticket-filter exempt), dispatch-ticket Phase 3.5 de-stale + `stale-premise` outcome.
+
 v2.23.1 · 2026-08-18 · closes #608: `dispatch-ticket`'s bug branch (Phase 2's `kind: bug` bullet)
 gains claim-provenance forwarding — live repro adiahealth/gen-ui-kit#1593 showed the redirect to
 `docs:file-bug` deadlocking against its own lane's claim (a coordinator's own on-behalf-of claim,

@@ -129,6 +129,8 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.10.0 · 2026-08-17 · closes #611: parking immunity: `chore-planner` queueing + `watch-tickets`
+discovery exclude `backlog`/`roadmap` unless a dispatch names the id.
 v3.9.7 · 2026-08-18 · clean-git's inventory step gains a fourth propose-only classification, `off-main-primary` (closes #604): a new skill-level script, `scripts/primary_checkout_check.py` (read-only, selftested), checks whether the shared primary checkout is on `main` per fleet-rules' primary-checkout rule (#592), reporting the branch name and its ahead/behind count against `origin/main` — never a mutation, same tier as a stale-claim finding.
 v3.9.6 · 2026-08-17 · check-routing's Phase 3 excludes a command-only skill's suite from the blind menu fan-out (closes #593): a judge can't pick a menu entry that never exists, so those suites now verify via eval_check.py's static pass + doc value instead; Phase 5's report gains an `Excluded:` line.
 v3.9.5 · 2026-08-17 · watch-adrs' step 6 report contract gains a no-op-firing clause (closes #585): a clean firing with nothing new states that plainly and names no report path at all, instead of narrating a hypothetical path conditionally ("would land at X ... nothing to persist") — the same narrated-but-absent violation ops-write-sandbox-rules already rules out, extended to the seat's own report-path mention. The failure-branch bullet is qualified the same way (phrasing hardening; Kim's tie-break, #585).
