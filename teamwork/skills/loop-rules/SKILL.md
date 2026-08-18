@@ -23,6 +23,7 @@ user-invocable: false
 - Objective mode: a goal is a verifiable end-state, not a process; a separate fast evaluator judges only what the transcript surfaces.
 - Hard "don't finish until X" is a Stop hook (exit 2) + a deterministic check, not a sentence.
 - A loop that delegates work is an orchestrated system: hierarchical budgets, a closed continuation-decision set, locus escalation on repeat failure, durable state — the canon is `references/self-orchestrated-looping-agentic-systems.md`.
+- An autonomous loop's budget is a ledger row too — each firing (build or sweep) it drives is priced in `.claude/ops/spend-ledger.csv` via `authorkit:spend-audit`'s close-out convention, and idr-0010 (LOCKED, `.claude/docs/idr/idr-0010-estate-economy.md`; cited, never restated) binds loop design: a turn/time cap set with no pricing on what it repeatedly fires is unaccountable by the same doctrine every other recurring seat answers to.
 
 ## Design
 1. Pick the pattern: finish-line the agent can prove → `/goal`; recurring external check → `/loop`; enforced "until clean" → Stop hook + check; collaboration → team.
