@@ -57,7 +57,7 @@ explicitly out of this script's scope — idr-0011 owns it, still open at gh#626
 dropped (no queue growth — keeping repeated-confirmed sweeps cheap is itself part of idr-0009's own
 falsification test). `falsified`/`untestable` queue via `queue-add`, always carrying a named
 `--owner` (idr-0009's own "who executes a falsified verdict" open question, closed structurally: the
-field exists on every row). This script never files a GitHub Issue, never edits a locked IDR or an
+field exists on every row). This script never files a GitHub Issue, never edits a locked IDR, a locked RDD, or an
 accepted ADR, and never decides a verdict itself — verdicts are a judgment step's output, handed to
 this script only to be queued.
 
