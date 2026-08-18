@@ -108,6 +108,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.24.4 · 2026-08-18 · closes #633 (teamwork slice, docs+harness siblings same PR; renumbered 2.24.3 -> 2.24.4: open PR #638 claims 2.24.3 for this plugin, version_claim_check.py's rebase-and-rebump rule applied — this is the later claimant): `dispatch-ticket`'s Phase 3 VALUE-race bullet gains a companion line — a dispatch minting a new adr/idr/lld/rdd record re-reads the spine's highest id for that family off `origin/main` immediately before numbering it, same discipline as the plugin-version re-read, named after the 2026-08-18 incident where two parallel builds both minted `lld-0011`. Canonical rule stays in `docs:doc-writing-rules`' ID-spine section; `doc_lint.py --spine` (T10) / `docs_check.py`'s R7 catch a miss mechanically, at gate time. No description change, no evals ride-along owed.
 v2.24.3 · 2026-08-18 · closes #626 (idr-0011's deferred instrument wave — the first standing
 schedule, deferred out of PR #628's docs-only ratification batch per #626's own dated Findings
 deferral entry): `fleet-rules` Section 3 gains a bullet naming `.claude/ops/held-items.md`'s new

@@ -5,6 +5,8 @@ Usage:
   doc_lint.py <file.md> [...]      lint documents (files without `doc-type:` frontmatter are skipped)
   doc_lint.py --hook               hook mode: read {"tool_input":{"file_path":...}} from stdin;
                                    silent pass for non-documents; emits a block decision on findings
+  doc_lint.py --spine [docs-root]  sweep docs-root (default: this repo's `.claude/docs`) for
+                                   duplicate adr/idr/lld/rdd `id:` values (T10); FAIL on collision
   doc_lint.py selftest             prove the counters bite
 
 Rules ("no validator, no type" — Vol 3 §3.1):
@@ -49,6 +51,21 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             this check to ship. SPEC-only for now — PRD/LLD carry the same template section but
             check-doc's J7 judgment criterion covers them instead of a doc_lint presence rule
             (the PRD's own D3: SPEC gets the mechanical rule, PRD/LLD stay judgment-only).
+  T10 [FAIL] `--spine` mode only: two adr/idr/lld/rdd documents under the doc spine claim the
+            same (family, number) — the 2026-08-18 incident (#633): two parallel builds both
+            minted `lld-0011` (one kept it, `lld-0011-recurrence-audit`; the other's draft was
+            renumbered before merge, caught only by a coordinator's manual pre-merge read, not by
+            any gate — nothing existed to catch it mechanically). Keyed on (family, number), not
+            the full `id:` string — two colliding drafts plausibly differ only in their
+            descriptive slug, so an exact-string dedup would let the real incident straight
+            through. Reaches release_gate.py's G10 through `harness/scripts/docs_check.py`'s own
+            self-contained R7 (a duplicate, not an import, per the hard plugin-boundary rule —
+            see that script's own comment) rather than a new G-check; this CLI mode is the
+            dev-time/standalone entry point, same relationship T1-T9 have to `check-doc`'s
+            mechanical pass. The companion dispatch-rule half (re-read the spine's highest id off
+            `origin/main` immediately before numbering) lives in `doc-writing-rules` and
+            `teamwork:dispatch-ticket`, not here — this check only ever catches a miss after the
+            fact.
 """
 import json
 import re
@@ -86,6 +103,11 @@ RDD_CITED_STATUSES = {"locked", "superseded"}
 
 # T8's scope: the vocabulary a `provenance:` key on an IDR must take.
 PROVENANCE_VALUES = {"derived-from-evidence", "inferred", "decided-by-human"}
+
+# T10's scope: the four ledger families the doc spine numbers, and the (family, number) pattern
+# their `id:` frontmatter values carry (`lld-0011-recurrence-audit` -> ("lld", "0011")).
+SPINE_FAMILIES = {"adr", "idr", "lld", "rdd"}
+SPINE_ID_RE = re.compile(r"^(adr|idr|lld|rdd)-(\d+)\b")
 
 
 def parse_frontmatter(text):
@@ -149,6 +171,39 @@ def lint_text(text):
             findings.append(("FAIL", "T8", f"`provenance:` missing or not one of {sorted(PROVENANCE_VALUES)} "
                                             "-> every IDR claim needs a machine-readable source label, "
                                             "not just prose in `## Why`"))
+    return findings
+
+
+def check_spine(docs_root: Path):
+    """T10: sweep docs_root for two adr/idr/lld/rdd documents claiming the same (family, number).
+    Keyed on the (family, number) pair, never the full `id:` string (see module docstring, T10).
+    Returns [] when docs_root doesn't exist -- a repo that hasn't adopted the `.claude/docs`
+    spine yet is not a failure, same posture as T5's/T9's own conditional triggers."""
+    if not docs_root.is_dir():
+        return []
+    seen = {}
+    findings = []
+    for p in sorted(docs_root.rglob("*.md")):
+        try:
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        fm = parse_frontmatter(text)
+        if not fm or fm.get("doc-type") not in SPINE_FAMILIES:
+            continue
+        doc_id = fm.get("id", "")
+        m = SPINE_ID_RE.match(doc_id)
+        if not m:
+            continue  # T1/T2 already own a missing/malformed id on the file itself
+        key = (m.group(1), m.group(2))
+        if key in seen:
+            prev_path, prev_id = seen[key]
+            findings.append(("FAIL", "T10",
+                              f"id collision: {p} (`{doc_id}`) and {prev_path} (`{prev_id}`) both "
+                              f"claim {key[0]}-{key[1]} -> re-read the spine's highest id off "
+                              f"origin/main before numbering (dispatch-ticket's own discipline)"))
+        else:
+            seen[key] = (p, doc_id)
     return findings
 
 
@@ -314,10 +369,29 @@ def selftest():
             h.write_text(rdd.format(s="draft"))
             env_git("add", "rdd-0001-x.md"); env_git("commit", "-qm", "rdd amended to draft")
             assert not head_is_locked_ledger(h), "committed-draft RDD must be ALLOWED to edit — negative"
+    # T10 spine id-collision FAIL (#633): reproduces the 2026-08-18 incident — two lld-0011
+    # files (different slugs, same family+number) must FAIL; a clean spine, and an id-less/
+    # malformed-id doc (T1/T2's own territory, not this check's), must not.
+    import tempfile as _tempfile
+    with _tempfile.TemporaryDirectory() as td:
+        spine = Path(td) / ".claude" / "docs" / "lld"
+        spine.mkdir(parents=True)
+        lld_tpl = ("---\ndoc-type: lld\nid: {id}\nstatus: draft\ndate: 2026-08-18\nowner: k\n"
+                   "ticket: n/a\nsupersedes: null\n---\n# L\n"
+                   "## Components\nc\n## Interfaces\ni\n## Data\nd\n## Risks\nr\n")
+        (spine / "lld-0011-recurrence-audit.md").write_text(lld_tpl.format(id="lld-0011-recurrence-audit"))
+        (spine / "lld-0011-fleet-state-rollup-draft.md").write_text(lld_tpl.format(id="lld-0011-fleet-state-rollup"))
+        collision = check_spine(spine.parent)
+        assert any(f[1] == "T10" for f in collision), "two lld-0011 files (any slug) must FAIL T10 — the #633 incident"
+        # negative control: renumber the second file's id -> clean spine, no T10
+        (spine / "lld-0011-fleet-state-rollup-draft.md").write_text(lld_tpl.format(id="lld-0012-fleet-state-rollup"))
+        assert not any(f[1] == "T10" for f in check_spine(spine.parent)), "distinct numbers must NOT FAIL T10"
+        # negative control: a docs_root that doesn't exist is not a failure (repo hasn't adopted the spine)
+        assert check_spine(Path(td) / "nope") == [], "a missing docs_root must return no findings, not fail"
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
           "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites; "
-          "T9 SPEC agent-verification WARN bites")
+          "T9 SPEC agent-verification WARN bites; T10 spine id-collision FAIL bites (#633)")
     return 0
 
 
@@ -329,4 +403,14 @@ if __name__ == "__main__":
         sys.exit(selftest())
     if args[0] == "--hook":
         sys.exit(hook_mode())
+    if args[0] == "--spine":
+        docs_root = Path(args[1]) if len(args) > 1 else Path(__file__).resolve().parent.parent.parent / ".claude" / "docs"
+        findings = check_spine(docs_root)
+        if findings:
+            print(f"doc_lint --spine · FAIL · {docs_root}")
+            for sev, code, msg in findings:
+                print(f"  {sev:5} {code}  {msg}")
+            sys.exit(1)
+        print(f"doc_lint --spine · clean · {docs_root}")
+        sys.exit(0)
     sys.exit(max(render(a, lint_text(Path(a).read_text(encoding="utf-8", errors="replace"))) for a in args))

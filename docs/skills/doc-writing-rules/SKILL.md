@@ -41,6 +41,13 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    opening is the only part guaranteed to survive compaction and fan-out.
 3. **The ID spine.** Requirements get IDs (`REQ-012`); plan steps, criteria, tickets, and tasks
    reference them. Reference, never restate — restated content is a drift pair with a countdown.
+   **Re-read the spine's highest id off `origin/main` immediately before numbering a new
+   adr/idr/lld/rdd record** — the same version-re-read discipline `dispatch-ticket` already
+   applies to a plugin's version field, applied here to doc ids: a branch-cut number goes stale
+   the moment a concurrent build mints its own record against the same then-current spine (the
+   2026-08-18 incident, #633 — two parallel builds both minted `lld-0011`, caught only by a
+   coordinator's manual pre-merge read). `doc_lint.py --spine` (T10) / `docs_check.py`'s R7 catch
+   a miss mechanically after the fact; this bullet is the discipline that avoids minting one.
 4. **Non-goals are load-bearing.** Agents scope-creep enthusiastically; the out-of-scope section
    is the fence, and for agent consumers it may be the most valuable section in the document.
 5. **Author the evaluator with the artifact.** A spec's acceptance criteria are written alongside

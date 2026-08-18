@@ -20,7 +20,9 @@ Gate order (plugin-writing-rules §Release discipline):
      (the version is the update cache key — same version means nobody receives the ship)
   G7 evals: every suite passes eval_check; model-invocable skills without a suite WARN
   G10 docs: README/MANUAL cover every skill, README ledger version matches the manifest,
-      CLAUDE.md counts reconcile (composes docs_check.py; accuracy stays human)
+      CLAUDE.md counts reconcile, and no two adr/idr/lld/rdd records under `.claude/docs`
+      collide on (family, number) (R7, closes #633) — composes docs_check.py; accuracy stays
+      human
   G9 packs: every skill with references/INDEX.md passes corpus_check (K1 FAILs fail the gate)
   G8 sibling names: kebab tokens in SKILL.md files that carry one of this plugin's own
      name-suffixes but match no installed skill OR agent -> WARN (rename drift, phantom
