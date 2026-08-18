@@ -12,6 +12,7 @@
     { "id": "n01", "prompt": "why doesn't repo-cleaner just write its own report file", "expect": "no-trigger", "comment": "owner: ops-write-sandbox-rules (2026-08-15, issue #280: description's NOT-clause trimmed to reference that skill by name only)" },
     { "id": "n02", "prompt": "run the repo-cleaner hygiene sweep now", "expect": "no-trigger", "comment": "dispatches the agent directly, not a skill trigger" },
     { "id": "n03", "prompt": "clean up the duplicated instruction trees and stale corpus in this repo", "expect": "no-trigger", "comment": "owner: /clean-repo — instruction-tree/corpus drift, not git-surface hygiene" },
-    { "id": "n04", "prompt": "how does issue-sorter classify a filed item's shape", "expect": "no-trigger", "comment": "owner: watch-tickets" }
+    { "id": "n04", "prompt": "how does issue-sorter classify a filed item's shape", "expect": "no-trigger", "comment": "owner: watch-tickets" },
+    { "id": "n05", "prompt": "what would a fresh machine and a clone of origin/main NOT be able to recover today", "expect": "no-trigger", "comment": "owner: harness:check-reconstructibility (2026-08-18, gh#627) — the fresh-clone recoverability delta, not THIS machine's git-surface hygiene" }
   ]
 }
