@@ -1,0 +1,26 @@
+[
+  {
+    "number": 501,
+    "title": "Fix flaky retry timeout in sweep guard",
+    "state": "CLOSED",
+    "createdAt": "2026-06-01T10:00:00Z",
+    "closedAt": "2026-06-05T10:00:00Z",
+    "labels": []
+  },
+  {
+    "number": 588,
+    "title": "flaky retry timeout sweep guard keeps firing",
+    "state": "OPEN",
+    "createdAt": "2026-07-01T10:00:00Z",
+    "closedAt": null,
+    "labels": []
+  },
+  {
+    "number": 512,
+    "title": "Add dark mode toggle to settings page",
+    "state": "CLOSED",
+    "createdAt": "2026-06-10T09:00:00Z",
+    "closedAt": "2026-06-12T09:00:00Z",
+    "labels": []
+  }
+]

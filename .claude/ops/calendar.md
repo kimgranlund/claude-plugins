@@ -26,6 +26,7 @@ should fire, not what it costs to.
 | Monthly brief review | Monthly | Human review against `review-cadence: monthly` frontmatter | Kim | `.claude/docs/brief/brief-nonoun-plugins.md` — human-assert per gh#626's Acceptance (final ratification/cadence fitness is human-assert, not agent-checkable) |
 | Monthly roadmap review | Monthly | Human review against `review-cadence: monthly` frontmatter | Kim | `.claude/docs/roadmap/roadmap-nonoun-plugins.md` — same human-assert tier as the brief |
 | Spend-ledger review | Monthly (tunable) | Human review of `.claude/ops/spend-ledger.csv` via `spend-audit`'s Audit procedure | Kim | human-assert cadence, alongside the brief review — `lld-0018-estate-economy-ledger.md` Resolution 6 |
+| Estate maintenance retrospective | on-demand; cadence unassigned (tunable, idr-0011's ruling round pending) | `/estate-maintenance` | Kim / any interactive session | standing procedure, human-fired |
 
 ## First standing schedule
 

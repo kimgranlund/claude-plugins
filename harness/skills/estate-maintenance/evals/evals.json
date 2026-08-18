@@ -1,0 +1,28 @@
+{
+  "skill": "estate-maintenance",
+  "note": "Trigger-routing suite (gh#629, lld-0019). expect=trigger: fires in a fresh session; expect=no-trigger: a near-miss owned by the named sibling — heavy steal-risk flagged at intake, so every fenced neighbor named in the description gets its own no-trigger case here, checked with /check-routing before this skill ships.",
+  "cases": [
+    { "id": "t01", "prompt": "Run the self-improvement retrospective on this estate.", "expect": "trigger" },
+    { "id": "t02", "prompt": "What keeps going wrong in this project? I want a retrospective on it.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Why do I keep correcting you about the same thing over and over?", "expect": "trigger" },
+    { "id": "t04", "prompt": "We keep re-filing the same ticket — can you check why and fix it?", "expect": "trigger" },
+    { "id": "t05", "prompt": "Our context keeps growing every release — what's actually driving it?", "expect": "trigger" },
+    { "id": "t06", "prompt": "It's time for periodic upkeep of the harness/estate — mine memory and issues for negative patterns.", "expect": "trigger" },
+    { "id": "t07", "prompt": "Mine our memory, metrics, and issue history for patterns we haven't fixed yet.", "expect": "trigger" },
+    { "id": "t08", "prompt": "Do a self-improvement pass over this repo's decision records and trend data.", "expect": "trigger" },
+    { "id": "t09", "prompt": "Find repeated user nudges we haven't captured as a rule yet.", "expect": "trigger" },
+    { "id": "t10", "prompt": "Check if we've re-filed any near-duplicate tickets recently.", "expect": "trigger" },
+    { "id": "t11", "prompt": "estate maintenance", "expect": "trigger" },
+    { "id": "t12", "prompt": "Propose context-level fixes for whatever negative patterns you find across our history.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Sweep this repo's instruction files for a regex pattern we're trying to stamp out.", "expect": "no-trigger", "comment": "owner: authorkit pattern-audit (a static regex/instruction sweep, not a behavioural retrospective)" },
+    { "id": "n02", "prompt": "Measure this estate's routing rent and collisions across every skill description.", "expect": "no-trigger", "comment": "owner: authorkit attention-audit — estate-maintenance READS its trend CSV, never re-measures rent itself" },
+    { "id": "n03", "prompt": "Score this skill's prose for ceremony and tell me if it should be trimmed.", "expect": "no-trigger", "comment": "owner: authorkit bloat-audit — estate-maintenance hands D4 prose judgment to it, never re-derives" },
+    { "id": "n04", "prompt": "Check whether our doctrine citations are stale or contradict the current canon.", "expect": "no-trigger", "comment": "owner: authorkit doctrine-audit" },
+    { "id": "n05", "prompt": "Which static-audit instrument fits this job — help me pick one.", "expect": "no-trigger", "comment": "owner: authorkit repo-audit (the umbrella instrument-picker, not this skill's own temporal join)" },
+    { "id": "n06", "prompt": "Run the plugin health sweep and check every plugin's lint state.", "expect": "no-trigger", "comment": "owner: harness check-everything (plugin lint health, not negative-pattern mining)" },
+    { "id": "n07", "prompt": "What's the state of the project right now — what's blocked on me?", "expect": "no-trigger", "comment": "owner: harness check-state (work-state axis, not this skill's history-mining axis)" },
+    { "id": "n08", "prompt": "This is the third time I've told you this — capture it as a knowledge-pack entry now.", "expect": "no-trigger", "comment": "owner: harness save-lessons (a direct single-fact harvest request); estate-maintenance instead SWEEPS for uncaptured patterns across the whole memory dir on its own cadence" },
+    { "id": "n09", "prompt": "Check this conversation for any dropped work items before we close the session.", "expect": "no-trigger", "comment": "owner: docs file-leftovers (this session's leftovers, not the estate's history)" },
+    { "id": "n10", "prompt": "Run the committing campaign to tidy up duplicated instruction trees across this repo.", "expect": "no-trigger", "comment": "owner: harness clean-repo (a committing repo-alignment campaign, not a proposing retrospective)" }
+  ]
+}
