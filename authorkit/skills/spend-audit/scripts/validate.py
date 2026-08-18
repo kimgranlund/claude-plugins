@@ -11,11 +11,19 @@ schema change is one edit here and both scripts' selftests move together
 (lld-0018-estate-economy-ledger.md, Resolution 2 / Interfaces).
 
 The ledger row (`.claude/ops/spend-ledger.csv`) is one line per firing (a sweep or a
-dispatched build): `date,event_kind,seat,ref,tokens,tokens_source,outcome,verdict`.
+dispatched build): `date,event_kind,seat,ref,tokens,tokens_source,outcome,verdict,archetype`.
 `tokens_source` is a categorical provenance flag on `tokens` (`measured` | `estimated` |
 `absent`), never a derived number; `verdict` is the closing seat's ingested judgment for
 that firing, never computed here (Resolution 5) — this validator checks SHAPE only,
-never grades a row's worth.
+never grades a row's worth. `archetype` (gh#673, lld-0021) attributes the firing to one of
+the estate's eight orchestration archetypes (#666's taxonomy: A1 solo · A2 unnamed sync
+fan-out · A3 named background/teammate seats · A4 fleet terminal seats · A5 forked intake ·
+A6 scheduled routines + `/goal` loops · A7 Workflow scripts · A8 `/batch`) or the literal
+`UNMEASURED` — REQUIRED (never empty) on every row, but `UNMEASURED` is reserved for
+best-effort RETROACTIVE backfill of an ambiguous historical firing; a live/new firing's own
+closing seat always knows its own shape and states it, never `UNMEASURED` by default
+(policy, not a shape rule this validator enforces — it only checks the value is in the
+closed set).
 
 No blended column, ever (the family's Goodhart rule, `attention-audit`/`recurrence-audit`
 `trend.py`'s own selftest-asserted law, extended here): the header carries no
@@ -42,12 +50,34 @@ import subprocess
 import sys
 from pathlib import Path
 
-HEADER = ["date", "event_kind", "seat", "ref", "tokens", "tokens_source", "outcome", "verdict"]
+HEADER = ["date", "event_kind", "seat", "ref", "tokens", "tokens_source", "outcome", "verdict",
+          "archetype"]
 
 EVENT_KINDS = {"sweep", "build"}
 TOKENS_SOURCES = {"measured", "estimated", "absent"}
 OUTCOMES = {"pr-merged", "pr-opened", "acted", "no-op", "blocked", "failed"}
 VERDICTS = {"worth-firing", "not-worth-firing", "undetermined"}
+
+# gh#673 (lld-0021) — the estate's eight orchestration archetypes, #666's taxonomy comment,
+# plus the retroactive-only escape hatch. Never add a ninth without also adding it to #666's
+# own taxonomy first — this validator is a consumer of that taxonomy, not its source.
+ARCHETYPE_NAMES = {
+    "A1": "solo — host session + skills, no dispatch",
+    "A2": "unnamed sync fan-out — an unnamed Agent-tool/fork dispatch, synchronous return",
+    "A3": "named background/teammate seats — SendMessage-routed, mailbox delivery",
+    "A4": "fleet terminal seats — joined via team-scaffolding/fleet-bootstrap, marshal-coordinated",
+    "A5": "forked intake — a `context: fork` command (file-bug/file-feature/build-feature)",
+    "A6": "scheduled routines + `/goal` loops — CronCreate-armed or loop-driven",
+    "A7": "Workflow scripts — `harness/workflows/*.js`",
+    "A8": "`/batch` — decompose + one subagent per unit + PR-per-unit",
+}
+ARCHETYPES = set(ARCHETYPE_NAMES) | {"UNMEASURED"}
+# per-outcome-class normalization (gh#673's own definition — it existed nowhere before this
+# ticket): kept simple and stated against the EXISTING closed `outcome` enum, no new column.
+OUTCOME_CLASSES = {
+    "pr-shipped": {"pr-merged"},
+    "record-minted": {"acted"},
+}
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 REF_ISSUE_RE = re.compile(r"^#\d+$")
@@ -131,6 +161,10 @@ def validate_row(row):
     verdict = row.get("verdict", "")
     if verdict not in VERDICTS:
         findings.append(f"verdict {verdict!r} not in {sorted(VERDICTS)}")
+
+    archetype = row.get("archetype", "")
+    if archetype not in ARCHETYPES:
+        findings.append(f"archetype {archetype!r} not in {sorted(ARCHETYPES)}")
 
     return findings
 
@@ -235,10 +269,10 @@ def selftest():
 
     clean_rows = [
         HEADER,
-        ["2026-08-18", "build", "dispatch-ticket", "#624", "absent", "absent", "pr-opened", "undetermined"],
+        ["2026-08-18", "build", "dispatch-ticket", "#624", "absent", "absent", "pr-opened", "undetermined", "UNMEASURED"],
         ["2026-08-17", "sweep", "issue-sorter", ".claude/ops/reports/2026-08-17T00-00-00Z.md",
-         "absent", "absent", "acted", "undetermined"],
-        ["2026-08-16", "build", "build-leader", "#626", "117950", "measured", "pr-merged", "worth-firing"],
+         "absent", "absent", "acted", "undetermined", "A2"],
+        ["2026-08-16", "build", "build-leader", "#626", "117950", "measured", "pr-merged", "worth-firing", "A1"],
     ]
 
     # Clean 3-row fixture -> 0 findings (reverse control); verdict line pinned exactly.
@@ -270,7 +304,7 @@ def selftest():
             assert any(expect_substr in f["message"] for f in fails), (bad_row, fails)
             return result
 
-    base = ["2026-08-18", "build", "dispatch-ticket", "#624", "absent", "absent", "pr-opened", "undetermined"]
+    base = ["2026-08-18", "build", "dispatch-ticket", "#624", "absent", "absent", "pr-opened", "undetermined", "A3"]
 
     def with_field(field, value):
         row = list(base)
@@ -282,6 +316,16 @@ def selftest():
     one_bad_row(with_field("event_kind", "audit"), "event_kind")
     one_bad_row(with_field("outcome", "meh"), "outcome")
     one_bad_row(with_field("verdict", "great"), "verdict")
+
+    # gh#673: unknown archetype -> FAIL; every one of the eight archetypes plus the
+    # `UNMEASURED` escape hatch stays clean (positive + reverse control, every closed value).
+    one_bad_row(with_field("archetype", "A9"), "archetype")
+    one_bad_row(with_field("archetype", ""), "archetype")
+    for good_archetype in sorted(ARCHETYPES):
+        with tempfile.TemporaryDirectory() as td:
+            out = write(td, [HEADER, with_field("archetype", good_archetype)])
+            result = validate_file(out)
+            assert result["findings"] == [], (good_archetype, result["findings"])
 
     # tokens/tokens_source cross-field FAIL, both directions.
     row = with_field("tokens", "absent")
