@@ -1,0 +1,32 @@
+{
+  "_comment": "Estate rhythm's first standing schedule (idr-0011, gh#626). Deviation named at .claude/ops/calendar.md's 'First standing schedule' section: this build dispatch could not call RemoteTrigger directly (no ToolSearch in its tool wall), so this is the exact create-body definition instead of a live-armed routine. Arm with: RemoteTrigger {action: 'create', body: <the object below, minus this _comment key>} from a session that carries the RemoteTrigger tool, or via /schedule pointed at this file. Re-generate the events[].data.uuid at arm time if this definition is reused for a second routine — one uuid per routine, never copied across two.",
+  "name": "daily-board-drain",
+  "cron_expression": "0 9 * * *",
+  "enabled": true,
+  "job_config": {
+    "ccr": {
+      "environment_id": "env_01EHSARYCEQf7X8tiCZJbNV6",
+      "session_context": {
+        "model": "claude-sonnet-5",
+        "sources": [
+          {"git_repository": {"url": "https://github.com/kimgranlund/claude-plugins"}}
+        ],
+        "allowed_tools": ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "Skill", "Agent"]
+      },
+      "events": [
+        {
+          "data": {
+            "uuid": "f2a90a13-c701-497b-85b0-f1deb6b11615",
+            "session_id": "",
+            "type": "user",
+            "parent_tool_use_id": null,
+            "message": {
+              "content": "This is the daily unattended board-drain routine for kimgranlund/claude-plugins (idr-0011 estate rhythm, gh#626's first standing schedule). Run /mobilize-chores auto against this repo's own root: it fans out the ops sweep, then drives every buildable ticket the sweep surfaces through a full build dispatch, confirm-free (the leading 'auto' token). Do not widen scope beyond what /mobilize-chores auto itself does — no manual ticket picking, no interactive prompts (there is no one to answer them). If the sweep finds nothing buildable, report that plainly; do not invent work. This routine's own definition and the cadence it runs on are tunable living state at .claude/ops/calendar.md — if that file's 'Daily board drain' row is ever retired or its cadence changed, a human updates this routine (via /schedule) to match rather than leaving it drifted.",
+              "role": "user"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
