@@ -79,13 +79,19 @@ Per-repo row (never omitted, always present even when unreachable):
 | `owner_repo` | parsed from `git remote get-url origin`, or `null` when unreachable/non-GitHub |
 | `open_work` | `{issues_open, prs_open, in_flight: [...]}` — `in_flight` reads the `in-flight` label (ADR-0005/`fleet-rules` §2) via `gh issue list --label in-flight --json number,title,url`; `null` when unreachable |
 | `marketplace` | `{name, plugins: [{name, repo_version, cache_versions: [...], status}]}` when the repo carries its own `.claude-plugin/marketplace.json`; else the literal string `"not-a-source-repo"` (N/A, not UNMEASURED, per ruling 3) |
-| `citation_edges` | `[{from_issue, to, target_state}]` — every OPEN issue's body matching the cross-repo reference pattern `[\w.-]+/[\w.-]+#\d+`, each resolved via one `gh issue view <owner/repo> <num> --json state,title,url`; an unresolvable target reports `target_state: "UNMEASURED"` with the raw ref preserved, never dropped |
+| `citation_edges` | `[{from_issue, to, target_state}]` — every OPEN issue's body matching a cross-repo reference (I3's amended pattern below), each resolved via one `gh issue view <owner/repo> <num> --json state,title,url`; an unresolvable target reports `target_state: "UNMEASURED"` with the raw ref preserved, never dropped. Resolution is memoized per run keyed on the fully-resolved `owner/repo#number` — never the raw match text, so the same bare shorthand cited under two DIFFERENT default owners (two different fleet repos both citing `gen-ui-kit#5`, implying different owners) resolves independently rather than colliding on one cache slot (code-checker finding, 2026-08-18) |
 
-`status` values for a marketplace plugin row: `in-sync` (repo version present among cache
-versions AND is the highest), `stale-cache` (repo version absent from cache, or a lower version is
-the highest cached — the #582 case: a fix shipped in the repo, the local cache hasn't picked it
-up), `repo-behind-cache` (a HIGHER version exists in the cache than the repo's own — the repo's
-working copy hasn't pulled a release the cache already has).
+`status` values for a marketplace plugin row, precisely (amended 2026-08-18 per code-checker
+review — the implementation's actual overlap handling, not the flattened summary this table
+originally carried): `in-sync` (repo version present among cache versions AND is the highest);
+`stale-cache` when EITHER the cache is empty, OR the repo version is absent from the cache and
+numerically HIGHER than the highest cached version (the #582 case: a fix shipped in the repo,
+ahead of what the local cache has ever seen); `repo-behind-cache` when EITHER the repo version is
+absent from the cache and numerically LOWER than the highest cached version (the repo's working
+copy hasn't pulled a release the cache already has), OR the repo version IS present in the cache
+but a strictly higher version also exists there. The absent-and-lower case is not a second
+"stale-copy" instance — it is the repo, not the cache, that's behind — so it takes the
+behind-cache reading rather than folding into stale-cache.
 
 ### C2 — Trackers (platform-defect pairing)
 
@@ -167,9 +173,21 @@ simple by duplication of ~5 lines rather than a cross-boundary import).
 
 ### I3 — Citation-edge resolution
 
-Regex `[\w.-]+/[\w.-]+#\d+` over every OPEN issue body already fetched for `open_work`; each match
-resolved via `gh issue view <owner/repo> <number> --json state,title,url` once, memoized per run
-(no id re-fetched twice within one `fleet_state.py` invocation).
+**Amended 2026-08-18 (code-checker review), widening the pattern from the original owner/repo-only
+draft.** Regex `\b(?:[\w.-]+/)?[A-Za-z][\w.-]*#\d+\b` over every OPEN issue body already fetched
+for `open_work`, matching BOTH this workspace's actual citation shapes — a full `owner/repo#NN`
+form (`anthropics/claude-code#87349`) and the bare-repo shorthand implying the SAME owner as the
+citing repo (`gen-ui-kit#1593`, as #620's own body demonstrates live) — while a plain in-repo `#NN`
+(no repo-name segment at all) never matches. Ruled in rather than reverted to the narrower
+owner/repo-only form because the bare shorthand is this workspace's own attested convention (#620
+Links: "gen-ui-kit#1593"), and reverting would silently miss the single concrete example the
+ticket's own Acceptance section names. Accepted trade-off (Risk 2, amended): the wider pattern
+raises the false-positive surface slightly (e.g. a stray `word#NN`-shaped token in prose) — a
+false match resolves to `UNMEASURED` on a failed `gh issue view`, never crashes and never
+misreports a wrong state as real. Each match resolved via `gh issue view <owner/repo> <number>
+--json state,title,url` once, memoized per run keyed on the fully-resolved `owner/repo#number`
+(never the raw match text — a bare shorthand's true owner varies by which repo is citing it, so
+keying on raw text would collide two different targets under one cache slot).
 
 ## Data
 
@@ -218,6 +236,19 @@ Acceptance predicates, checkable before the PR is called done:
    location convention (`.claude/ops/fleet-trackers.json`) mirrors `fleet.json`'s existing
    neighbor without ratifying a new durable-record contract — RA1 already defers the bigger
    fleet-roster question whole.
+5. **Findings from the fresh-context `code-checker` pass (2026-08-18), fixed in the same change:**
+   a slow or hung `gh` call inside citation/tracker resolution could raise
+   `subprocess.TimeoutExpired` past the narrower except tuples and abort the WHOLE run instead of
+   marking one edge/pair `UNMEASURED` — fixed by adding it to both catch sites; `gh auth status`
+   ran once PER REPO (redundant subprocesses) and a missing `gh` binary raised `FileNotFoundError`
+   out of `collect_repo` instead of a per-row reason — fixed by hoisting the check to once per
+   run in `collect()`, with the binary-missing case folded into the same reason string; a
+   malformed trackers-file pair (missing `local`/`upstream`, or a non-dict entry) raised an
+   uncaught `KeyError`/`TypeError` — fixed by validating pair shape and reporting a
+   `malformed pair` row instead of crashing. The G8 allowlist edit in `release_gate.py`
+   (`cross-repo`, `source-repo`) was independently verified legitimate — neither token names any
+   real skill or agent, both are ordinary prose the `-repo` suffix (already live via authorkit's
+   `repo-audit`) would otherwise flag as phantom sibling citations.
 
 ## Rejected alternatives
 

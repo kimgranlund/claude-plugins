@@ -149,24 +149,40 @@ def resolve_ref(owner_repo, number):
         data = json.loads(_run(["gh", "issue", "view", str(number), "--repo", owner_repo,
                                 "--json", "state,title,url"]))
         return data.get("state", "UNMEASURED")
-    except (RuntimeError, json.JSONDecodeError):
+    except (RuntimeError, json.JSONDecodeError, subprocess.TimeoutExpired, OSError):
         return "UNMEASURED"
 
 
-def collect_citation_edges(issues, cache, default_owner):
+def collect_citation_edges(issues, cache, default_owner, resolver=resolve_ref):
+    """resolver is injectable (selftest passes a stub — no live gh/network in fixtures).
+    cache is keyed by the RESOLVED owner/repo#number, never the raw match text: two repos
+    both citing a same-named bare shorthand (e.g. "gen-ui-kit#5") under DIFFERENT implied
+    owners must not collide on one cache entry (the cross-owner memo-collision finding,
+    code-checker review 2026-08-18)."""
     edges = []
     for i in issues:
         for m in CITATION_RE.findall(i.get("body") or ""):
             ref, _, num = m.rpartition("#")
             owner_repo = ref if "/" in ref else f"{default_owner}/{ref}"
-            key = m
+            key = f"{owner_repo}#{num}"
             if key not in cache:
-                cache[key] = resolve_ref(owner_repo, num)
+                cache[key] = resolver(owner_repo, num)
             edges.append({"from_issue": i["number"], "to": m, "target_state": cache[key]})
     return edges
 
 
-def collect_repo(path, ref_cache):
+def gh_auth_reason():
+    """Checked ONCE per run (not once per repo — the redundant-subprocess finding, code-checker
+    review 2026-08-18). Returns None when authenticated, else the reason string. A missing `gh`
+    binary is caught here too, never left to propagate FileNotFoundError out of a repo row."""
+    try:
+        auth = subprocess.run(["gh", "auth", "status"], capture_output=True, text=True, timeout=30)
+    except (FileNotFoundError, OSError):
+        return "`gh` CLI not installed"
+    return None if auth.returncode == 0 else "gh unauthenticated"
+
+
+def collect_repo(path, ref_cache, gh_reason):
     row = {"path": path, "reachable": False, "reason": None, "owner_repo": None,
            "open_work": None, "marketplace": None, "citation_edges": []}
     if not Path(path).is_dir():
@@ -183,13 +199,12 @@ def collect_repo(path, ref_cache):
         return row
     row["owner_repo"] = owner_repo
     row["marketplace"] = collect_marketplace(path, owner_repo)
-    auth = subprocess.run(["gh", "auth", "status"], capture_output=True, text=True, timeout=30)
-    if auth.returncode != 0:
-        row["reason"] = "gh unauthenticated"
+    if gh_reason:
+        row["reason"] = gh_reason
         return row
     try:
         open_work, issues = collect_open_work(path)
-    except (RuntimeError, json.JSONDecodeError) as e:
+    except (RuntimeError, json.JSONDecodeError, subprocess.TimeoutExpired) as e:
         row["reason"] = f"gh call failed: {e}"
         return row
     row["open_work"] = open_work
@@ -199,7 +214,7 @@ def collect_repo(path, ref_cache):
     return row
 
 
-def collect_trackers(path):
+def collect_trackers(path, resolver=resolve_ref):
     if not path:
         return "no trackers file given"
     try:
@@ -208,17 +223,23 @@ def collect_trackers(path):
         return f"trackers file unreadable: {path}"
     out = []
     for pair in pairs:
+        if not isinstance(pair, dict) or "local" not in pair or "upstream" not in pair:
+            out.append({"local": pair, "local_state": "UNMEASURED",
+                        "upstream": None, "upstream_state": "UNMEASURED",
+                        "note": "malformed pair — expected {'local':..., 'upstream':...}"})
+            continue
         local_owner, _, local_num = pair["local"].rpartition("#")
         up_owner, _, up_num = pair["upstream"].rpartition("#")
-        out.append({"local": pair["local"], "local_state": resolve_ref(local_owner, local_num),
+        out.append({"local": pair["local"], "local_state": resolver(local_owner, local_num),
                     "upstream": pair["upstream"],
-                    "upstream_state": resolve_ref(up_owner, up_num)})
+                    "upstream_state": resolver(up_owner, up_num)})
     return out
 
 
 def collect(repos, trackers_path):
     ref_cache = {}
-    rows = [collect_repo(p, ref_cache) for p in repos]
+    gh_reason = gh_auth_reason()
+    rows = [collect_repo(p, ref_cache, gh_reason) for p in repos]
     return {"repos": rows, "trackers": collect_trackers(trackers_path)}
 
 
@@ -235,7 +256,7 @@ def selftest():
         fails.append("reverse control: empty cache should read stale-cache, not in-sync")
     if classify_drift("2.9.0", ["2.10.0"]) != "repo-behind-cache":
         fails.append("negative control: '2.10.0' > '2.9.0' numerically must not string-sort wrong")
-    # citation edges
+    # citation edges (extraction shape — offline, no resolver call at all)
     cache = {}
     issues = [{"number": 620, "body": "See gen-ui-kit#1593 and anthropics/claude-code#87349 for context."}]
     edges = collect_citation_edges_offline(issues, cache)
@@ -245,6 +266,40 @@ def selftest():
     edges2 = collect_citation_edges_offline(plain, cache)
     if edges2:
         fails.append("reverse control: bare #NN (no owner/repo) must not be treated as cross-repo")
+    # citation edges (RESOLUTION path — a stub resolver stands in for `gh issue view`, so the
+    # real collect_citation_edges function, its owner-defaulting, and its memo cache all get
+    # exercised, not just the extraction regex; a broken gh-arg order would show here)
+    calls = []
+    def stub_resolver(owner_repo, num):
+        calls.append((owner_repo, num))
+        return "CLOSED" if owner_repo == "kimgranlund/gen-ui-kit" else "OPEN"
+    resolved = collect_citation_edges(
+        [{"number": 1, "body": "gen-ui-kit#5 and anthropics/claude-code#87349"}],
+        {}, default_owner="kimgranlund", resolver=stub_resolver)
+    states = {e["to"]: e["target_state"] for e in resolved}
+    if states != {"gen-ui-kit#5": "CLOSED", "anthropics/claude-code#87349": "OPEN"}:
+        fails.append("negative control: resolved citation states wrong (owner-default or resolver call broken)")
+    # cross-owner memo-collision fix: the SAME bare shorthand under two DIFFERENT default
+    # owners must resolve independently, never share one cache slot keyed on raw text
+    shared_cache = {}
+    calls2 = []
+    def stub2(owner_repo, num):
+        calls2.append((owner_repo, num))
+        return "CLOSED" if owner_repo == "kimgranlund/gen-ui-kit" else "OPEN"
+    r1 = collect_citation_edges([{"number": 1, "body": "gen-ui-kit#5"}], shared_cache,
+                                 default_owner="kimgranlund", resolver=stub2)
+    r2 = collect_citation_edges([{"number": 2, "body": "gen-ui-kit#5"}], shared_cache,
+                                 default_owner="someoneelse", resolver=stub2)
+    if r1[0]["target_state"] != "CLOSED" or r2[0]["target_state"] != "OPEN":
+        fails.append("negative control (cross-owner memo collision): same bare shorthand under "
+                     "different default owners must not share one cache entry")
+    if len(calls2) != 2:
+        fails.append(f"cross-owner refs must each earn their own resolver call — got {len(calls2)}, expected 2")
+    # memoization: a SECOND citation of the same already-cached key must not re-call the resolver
+    r1_again = collect_citation_edges([{"number": 3, "body": "gen-ui-kit#5"}], shared_cache,
+                                       default_owner="kimgranlund", resolver=stub2)
+    if r1_again[0]["target_state"] != "CLOSED" or len(calls2) != 2:
+        fails.append("negative control: a re-seen (owner,repo,number) key must hit the memo cache, not re-resolve")
     # marketplace row shape without a live repo (no I/O — collect_marketplace requires a real
     # path only when marketplace.json exists; absence is a pure filesystem check)
     import tempfile
@@ -259,12 +314,34 @@ def selftest():
     if parse_args([]) is not None or parse_args(["--repos", ""]) is not None:
         fails.append("reverse control: empty/missing --repos must be a usage error")
     # collect_repo: unreachable path
-    row = collect_repo("/definitely/not/a/real/path/xyz", {})
+    row = collect_repo("/definitely/not/a/real/path/xyz", {}, gh_reason=None)
     if row["reachable"] or row["reason"] != "path not found":
         fails.append("negative control: nonexistent path must report reachable=false, reason set")
+    # collect_repo: gh_reason short-circuits after marketplace (no open_work collected, no crash)
+    with tempfile.TemporaryDirectory() as td2:
+        import subprocess as _sp
+        _sp.run(["git", "init", "-q"], cwd=td2)
+        _sp.run(["git", "remote", "add", "origin", "git@github.com:x/y.git"], cwd=td2)
+        row2 = collect_repo(td2, {}, gh_reason="gh unauthenticated")
+        if row2["reachable"] or row2["reason"] != "gh unauthenticated" or row2["open_work"] is not None:
+            fails.append("negative control: a hoisted gh_reason must short-circuit before collect_open_work")
     # collect_trackers: no file given
     if collect_trackers(None) != "no trackers file given":
         fails.append("reverse control: absent trackers path must report the disclosed-scope string")
+    # collect_trackers: OPEN/CLOSED/mismatched via a stub resolver, plus a malformed-pair control
+    import json as _json
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tf:
+        _json.dump([{"local": "x/y#1", "upstream": "a/b#2"}, {"local": "x/y#3"},
+                    "not-a-dict"], tf)
+        tf_path = tf.name
+    def tracker_stub(owner_repo, num):
+        return {"x/y#1": "OPEN", "a/b#2": "CLOSED"}.get(f"{owner_repo}#{num}", "UNMEASURED")
+    tr = collect_trackers(tf_path, resolver=tracker_stub)
+    os.unlink(tf_path)
+    if not (isinstance(tr, list) and tr[0]["local_state"] == "OPEN" and tr[0]["upstream_state"] == "CLOSED"):
+        fails.append("negative control: tracker pair OPEN/CLOSED resolution wrong")
+    if not any(row.get("note", "").startswith("malformed") for row in tr if isinstance(row, dict)):
+        fails.append("negative control: a malformed tracker pair must report a malformed-pair row, not crash")
     if fails:
         print(f"fleet_state · selftest FAIL · {len(fails)} fail / 0 warn")
         [print(f"  - {f}") for f in fails]; sys.exit(1)
