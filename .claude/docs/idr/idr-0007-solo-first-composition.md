@@ -1,8 +1,8 @@
 ---
 doc-type: idr
 id: idr-0007
-status: draft
-date: 2026-08-17
+status: locked
+date: 2026-08-18
 owner: kim.granlund
 proof-ref: gh#265 (measured hop tax, 2026-08-16 Findings) + teamwork/skills/fleet-rules/SKILL.md (Part B Design rule 1 — the solo-first gate and its job-evidence test)
 provenance: derived-from-evidence
