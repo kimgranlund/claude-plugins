@@ -1,16 +1,16 @@
 ---
 name: estate-audit-agent
 kind: agent
-description: Batch estate-audit sweeps — audits N estates, plugins, or corpuses in an isolated context using one named instrument (naming, bloat, attention, pattern, or doctrine) and aggregates one report. Delegate to it when a sweep would pollute the working session's context. Read-only; reports, never rewrites or renames.
+description: Batch estate-audit sweeps — audits N estates, plugins, or corpuses in an isolated context using one named instrument (naming, bloat, attention, pattern, doctrine, or orchestration) and aggregates one report. Delegate to it when a sweep would pollute the working session's context. Read-only; reports, never rewrites or renames.
 author: kim
 created: 2026-08-15
-last_updated: 2026-08-16
+last_updated: 2026-08-18
 performs: estate-audit
-requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit]
+requires: [naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, orchestration-audit]
 autonomous_write: false
 context: isolated
 model: sonnet
-tools: Read, Glob, Grep, Bash(python3 */scripts/validate.py *), Bash(python3 */scripts/measure.py *), Bash(python3 */scripts/rent.py *), Bash(python3 */scripts/collide.py *), Bash(python3 */scripts/usage.py *), Bash(python3 */scripts/trend.py *), Bash(python3 */scripts/scan.py *), Bash(python3 */scripts/sweep.py *)
+tools: Read, Glob, Grep, Bash(python3 */scripts/validate.py *), Bash(python3 */scripts/measure.py *), Bash(python3 */scripts/rent.py *), Bash(python3 */scripts/collide.py *), Bash(python3 */scripts/usage.py *), Bash(python3 */scripts/trend.py *), Bash(python3 */scripts/scan.py *), Bash(python3 */scripts/sweep.py *), Bash(python3 */scripts/audit.py *)
 ---
 
 The estate-audit-agent is the batch form of the estate-audit family — one
@@ -44,10 +44,20 @@ skill's own written procedure exactly, not this summary:
   on a target → list that target as skipped (no manifest), never seed one
   from this seat; this batch context has no live user for the skill's own
   "offer to seed one" branch.
+- `orchestration` → `authorkit/skills/orchestration-audit/SKILL.md`: locate
+  the target's `teamwork/skills/fleet-rules/references/orchestration-
+  rubric-a{1-8}-*.md` rubric files (degrade gracefully, mechanical sweep
+  still runs, if teamwork isn't installed on the target), run `audit.py
+  --root <target> --archetype {a1..a8|all} --json`, classify findings by
+  criterion/status, and report every judgment-tier criterion "queued, not
+  built" to its rubric-named owning checker — never dispatch one from this
+  seat. Never claim a color-for-color reproduction of a prior narrative
+  review beyond what the mechanizable criteria actually compute (the
+  skill's own "Reproducing a review's verdicts" section).
 
 Dispatch missing `instrument`, or naming a value outside
-naming/bloat/attention/pattern/doctrine → report the bad field and stop;
-never guess an instrument.
+naming/bloat/attention/pattern/doctrine/orchestration → report the bad
+field and stop; never guess an instrument.
 
 Aggregate into one report ordered by the instrument's own natural severity
 axis (error count / recoverable chars / routable chars / match count / finding

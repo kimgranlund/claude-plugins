@@ -94,6 +94,7 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.24.0 · 2026-08-18 · closes #666 (orchestration-audit campaign, authorkit half; teamwork half same PR): new sixth instrument `orchestration-audit` — the mechanizable slice of fleet-rules' eight per-archetype rubrics (A1..A8): `scripts/audit.py` computes A3's durable-channel evidence reader (G1, `fleet.json`/`fleet-roster.md` reconciliation) and A7's `workflows/*.js` syntax lint tier (G2, splits at the Workflow-tool loader's `export const meta = {...}` boundary per issue #529, `node --check`s each half under its own real grammar), plus review-coverage/grant-literal/resume-path presence checks. Judgment-tier criteria report "queued, not built" per `doctrine-audit`'s own edge-type split. Registered on `estate-audit-agent`; `estate-audit`/`repo-audit` counts repaired five->six. Root + bundled `naming.manifest.json` gain the `orchestration` object_vocab token (G12). `audit.py selftest`: all pass, two regressions caught live (dict-shaped `live_state.joined`, a `Role`-headed roster table). Fresh-context `skill-checker`/`agent-checker`/`code-checker` passes, findings fixed same-change.
 v0.23.1 · 2026-08-18 · closes #677 (authorkit slice, harness sibling same PR): `pattern-audit`
 gains a reciprocal soft named mention — its structured id/file/line/col/match/context/kind
 dataset is the natural decomposition payload for `harness:pattern-sweeping`'s new `/batch`-backed
