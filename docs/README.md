@@ -66,16 +66,7 @@ frontmatter preload — the hard plugin-boundary rule), with an explicit failure
 isn't installed. This agent file is non-conforming against the CURRENTLY-LIVE naming grammar
 (ADR-0011 REQ-002's `-agent` suffix rule) until the naming-ADR Kim has ruled will supersede that
 rule lands — intentional, tracked with its 4 teamwork siblings in the same wave.
-v1.19.0 · 2026-08-17 · closes #619: new skills `make-artifact` (procedural; bundled `css_build.py`
-selftest-proven token→CSS build, `light-dark()` pairs, mandatory font fallbacks) + `artifact-rules`
-(4-axis references corpus: design-system consumption, shell doctrine, mermaid house style, refresh
-procedure — the 2026-07-16/2026-08-18 memory rulings now shipped rules). Full resolutions in
-`lld-0011` (renumbered from the ticket-keyed `lld-0619` draft to keep the sequential LLD spine
-0001-0010 intact). Reciprocal fences in `make-doc`/`markdown-to-markup` (+ design's
-`make-design-system`, shipped as design v1.0.9). New `object_vocab` entry `artifact` proposed but
-NOT registered this pass — `naming.manifest.json`'s confirm gate (manifest-authoring, #525) has no
-live human to confirm with in this build; flagged as an open follow-up, not silently substituted.
-`release_gate.py docs` clean.
+v1.19.0 · 2026-08-17 · closes #619: new skills `make-artifact` (procedural; bundled `css_build.py` selftest-proven token→CSS build, `light-dark()` pairs, mandatory font fallbacks) + `artifact-rules` (4-axis references corpus: design-system consumption, shell doctrine, mermaid house style, refresh procedure — the 2026-07-16/2026-08-18 memory rulings now shipped rules). Full resolutions in `lld-0011` (renumbered from the ticket-keyed `lld-0619` draft to keep the sequential LLD spine 0001-0010 intact). Reciprocal fences in `make-doc`/`markdown-to-markup` (+ design's `make-design-system`, shipped as design v1.0.9). New `object_vocab` entry `artifact` proposed but NOT registered this pass — `naming.manifest.json`'s confirm gate (manifest-authoring, #525) has no live human to confirm with in this build; flagged as an open follow-up, not silently substituted. `release_gate.py docs`: G12 red pending the `artifact` object_vocab confirm (#525); every other gate (lint, structure, selftests, evals, G14 monotonicity) clean.
 v1.18.0 · 2026-08-17 · closes #611: RDD↔Issue binding ruled (prose citation in `## Sequencing`, never
 frontmatter): `doc-writing-rules` RDD section + `rdd.md` template comment.
 v1.17.0 · 2026-08-18 · closes #613 (2nd of the serial 2-ticket chain, #612→#613, shared docs slot): new skill `skills/harness-facts` harvests the same substance as `project-facts` (v1.16.0 below), reframed for a coding agent's harness — cites the shared `harvest-core.md` core, weighted Inside-Out-higher. New vs the sibling: an install-ready output contract (entry-file section, `.claude/rules/` files, pack seed candidates, dispatch-context digest, run manifest — staged, never installed in place) and a WITH-vs-WITHOUT delta eval. Full resolutions in `lld-0009` (doc-checker ratified). Named `harness-facts` not the ticket's `harvest-project-context` lean — same unattended G12 constraint as `project-facts`; already-registered vocabulary, rejecting a `project-`-prefixed name and a `*-rules` tail. Reciprocal fences both directions; sibling's stale `#613` placeholders corrected, name-only. `release_gate.py docs` clean.

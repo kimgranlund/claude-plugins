@@ -410,6 +410,14 @@ def selftest():
     sans_line = next((ln for ln in font_lines if "mono" not in ln), None)
     if sans_line is None or not sans_line.rstrip(";").endswith(SANS_FALLBACK):
         errs.append("the 'GT America' family must resolve to the sans-serif fallback stack")
+    # Literal-string checks alongside the constant-based ones above — a regression INSIDE
+    # SANS_FALLBACK/MONO_FALLBACK themselves (e.g. hollowed to a bare "serif") would pass the
+    # constant-comparison asserts above unnoticed; these anchor to actual expected substrings so
+    # the fallback stacks' own content is under test, not just their presence.
+    if mono_line is not None and "ui-monospace" not in mono_line:
+        errs.append("mono font-fallback tail must literally contain 'ui-monospace': %r" % mono_line)
+    if sans_line is not None and not sans_line.rstrip(";").endswith(", sans-serif"):
+        errs.append("sans font-fallback tail must literally end with ', sans-serif': %r" % sans_line)
 
     # 4. NEGATIVE CONTROL — a role missing its dark counterpart must bite (exit 1 at the CLI
     #    layer; a NormalizeError naming the role at the function layer)
@@ -570,11 +578,16 @@ def main(argv):
         sys.stderr.write("css_build · usage-error · %s\n" % e)
         return 2
 
-    print("css_build · ok · 0 fail")
     if out_path:
-        with open(out_path, "w", encoding="utf-8") as f:
-            f.write(css)
+        try:
+            with open(out_path, "w", encoding="utf-8") as f:
+                f.write(css)
+        except OSError as e:
+            sys.stderr.write("css_build: --out write failed: %s\n" % e)
+            return 2
+        print("css_build · ok · 0 fail")
     else:
+        print("css_build · ok · 0 fail")
         print(css)
     return 0
 
