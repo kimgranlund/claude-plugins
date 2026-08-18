@@ -31,6 +31,19 @@ Install, then `/reload-plugins`. Everything below is invoked as `/harness:<name>
 
 **`pattern-sweeping` (also `/pattern-sweeping [scope — pattern — criterion]`)** — the safe repo/corpus sweep method for code/DOM patterns: bind scope/pattern-tier/criterion/disposition, census with known-member and known-nonmember proofs (`scripts/pattern_census.py`), classify every hit decorative/load-bearing/idiom before touching any, act audit-first (transform is a separately gated disposition), verify a rendered/computed property (never element presence), then ratchet a CI baseline so residue fails mechanically. Model-invocable: "sweep the repo for X", "find every page that still does Y", "codemod this pattern away". Funded by four adiav2 production incidents (issue #576); NOT the ops-queue sweep (`/sweep-chores`) and NOT instruction-markdown audits (authorkit).
 
+**`/check-reconstructibility [repo-root]`** — ADR-0022's own instrument ("the repo is the
+backup"): a read-only sweep reporting what a fresh machine + clone of `origin/main` could NOT
+recover today, classified into the ADR's own trichotomy (committed / enrolled-with-mitigation /
+defect) plus an OPEN bucket for exception 4's still-unruled mitigation mechanism. Sweeps
+git-ignored-and-present paths, `.claude/ops/` tracking, a global `core.excludesFile` dependency
+(explicit AND git's own implicit `~/.config/git/ignore` default), and the four named exceptions
+(memory dir, plugin cache, credentials, user-scoped state). Also model-invocable: "what would we
+lose from a fresh clone", "run the reconstructibility audit", "check the estate against
+ADR-0022". Report-only; mitigations ride tickets, never this skill.
+> `/check-reconstructibility` — estate GOVERNANCE (naming/bloat/attention/pattern/doctrine) is
+> authorkit's audit family; THIS machine's git-surface hygiene is `clean-git`/`repo-cleaner`; this
+> is the fresh-clone recoverability delta only
+
 **`/what-shipped [window]`** — the windowed activity report: bundled `collect_github.py` sweeps PRs merged/opened/open-now and issues for a UTC date window (release-bot noise counted but excluded, saturation guarded, `## OK` trailer = completeness), the resolved ticket backend adds records updated in the window, and the report groups real work into ≤5 owner-named workstreams with the ticket↔PR join's residue — tickets with no PR — called out. Windows: bare = today, `yesterday`, `this week`, `36h`, `YYYY-MM-DD[..YYYY-MM-DD]`. Also model-invocable: "what shipped today", "standup summary", "what landed in the last 24 hours".
 > `/what-shipped` · `/what-shipped this week` — current work-state (branches, blocked-on-you) is `/check-state`'s job; this is a window of activity
 

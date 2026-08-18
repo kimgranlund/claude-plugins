@@ -90,6 +90,13 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.21.0 · 2026-08-18 · closes #627 (harness's new `check-reconstructibility` skill, ADR-0022's
+own instrument): `repo-audit`'s evals suite gains one reciprocal no-trigger fence (n08) naming
+the new skill as the owner for estate-RECOVERY prompts, distinct from this plugin's own naming/
+bloat/attention/pattern/doctrine GOVERNANCE battery. `reconstructibility` registered in the
+repo-root `naming.manifest.json`'s ObjectVocab (no authorkit-local registration needed — the new
+skill lives in harness, which carries no per-plugin manifest of its own).
+
 v0.20.0 · 2026-08-18 · New capability (issue #618, lld-0011-recurrence-audit.md): `recurrence-audit`
 joins as a sixth audit-family sibling — instruments IDR-0006's estate success measures, primary
 (per-class incident-recurrence rate) and secondary (`/check-routing` pass-rate trend), neither

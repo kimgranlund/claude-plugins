@@ -1,0 +1,20 @@
+{
+  "skill": "check-reconstructibility",
+  "note": "New 2026-08-18 (gh#627, ADR-0022's own instrument) — a read-only estate-recoverability sweep: what a fresh machine + clone of origin/main could NOT recover today, against ADR-0022's own trichotomy. Negatives: authorkit's naming/bloat/attention/pattern/doctrine conformance family (a governance axis, not recovery), clean-git/repo-cleaner's git-surface hygiene on THIS machine (never a fresh-clone question), check-state's point-in-time work-state report, check-everything's plugin-packaging health sweep.",
+  "cases": [
+    { "id": "t01", "prompt": "What would a fresh machine and a clone of origin/main NOT be able to recover today?", "expect": "trigger" },
+    { "id": "t02", "prompt": "Run the reconstructibility audit against this repo.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Check this estate against ADR-0022's reconstructibility contract.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Is anything operationally load-bearing sitting uncommitted right now?", "expect": "trigger" },
+    { "id": "t05", "prompt": "Did the plugin-reinstall-path and credential-runbook mitigations actually land, or are they still missing?", "expect": "trigger" },
+    { "id": "t06", "prompt": "Sweep for any git-ignored file that's present locally but not accounted for by the ADR's exception list.", "expect": "trigger" },
+    { "id": "t07", "prompt": "Give me the day-one reconstructibility delta report for this repo.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Audit this repo for naming-convention conformance and report the exemption burn-down.", "expect": "no-trigger", "comment": "owner: authorkit:naming-audit" },
+    { "id": "n02", "prompt": "Run the full audit battery — naming, bloat, attention, pattern, doctrine — one verdict roll-up.", "expect": "no-trigger", "comment": "owner: authorkit:repo-audit (estate GOVERNANCE axis, not recovery)" },
+    { "id": "n03", "prompt": "Sweep for dangling worktrees, drifted branches, and forgotten PRs, and clean them up.", "expect": "no-trigger", "comment": "owner: harness clean-git/repo-cleaner (THIS machine's git surface hygiene, not fresh-clone recoverability)" },
+    { "id": "n04", "prompt": "What's the state of the project — what's blocked on me, what can be merged or deleted?", "expect": "no-trigger", "comment": "owner: harness:check-state (point-in-time work-state, not the ADR-0022 recovery delta)" },
+    { "id": "n05", "prompt": "Is the plugin estate healthy? Run the health sweep.", "expect": "no-trigger", "comment": "owner: harness:check-everything (plugin packaging/release health)" },
+    { "id": "n06", "prompt": "Review this skill for busy-work and ceremony disproportionate to its task.", "expect": "no-trigger", "comment": "owner: authorkit:bloat-audit" },
+    { "id": "n07", "prompt": "Draft the ADR ratifying the repo-is-the-backup principle for Kim's approval.", "expect": "no-trigger", "comment": "owner: docs:make-doc — ADR-0022 already ratified; this skill is the instrument, not the doc-drafting seat" }
+  ]
+}
