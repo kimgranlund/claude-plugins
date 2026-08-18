@@ -47,6 +47,12 @@ ends or is explicitly stood down —
 nothing was ever owed to the doc spine. Check for an existing intent layer (product brief, IDRs, roadmap) here: none found means
 the agent file's cold-start branch runs first, ahead of the seven priorities — see that file's
 own pointer for the flow, not restated here — a first-class entry, never treated as an error.
+**Cold-start seeds the full ladder in a fresh repo (#655 d6)** — every seeded artifact named
+here, not left implicit: a draft product **brief**, the harvest-surfaced draft **IDRs**, and an
+empty **ROADMAP** index (homes, not content — the flow's own day-0 guardrail). Each lands per
+`docs:doc-writing-rules`' own docs-root ruling (issue #514) and carries that same skill's
+**`scope:`/`audience:`** frontmatter per its per-type grain table and enum — cited here, never
+restated.
 
 ## Phase 2 — Adopt the contract as the host's own standing discipline
 
