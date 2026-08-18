@@ -6,6 +6,9 @@ Artifact/report page actually uses?** The contract below is the prose descriptio
 (script-writing-rules' mechanization test); this file explains the shape, it does not re-derive
 the arithmetic.
 
+**Sections:** Two input representations · The `light-dark()` pattern · Font fallback ·
+Scale mapping · The naming grammar · The mermaid re-theme block · The mechanized authority
+
 ## Two input representations, either legal
 
 [verified against `~/Projects/adia/_shared/adia-design-system-files/design-system-for-claude-code/`,

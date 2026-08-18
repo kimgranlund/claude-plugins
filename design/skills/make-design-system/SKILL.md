@@ -5,7 +5,8 @@ description: >-
   Figma Make. Use for any ask spanning platforms or naming none: "which design tool should get
   our design system", "port our design system to Claude, Stitch, and Make", "our exports
   drifted apart", "add a platform profile", "our design agent output is generic — fix the
-  context". NOT for a single-platform export
+  context", "teach the design agent our token naming grammar". Owns core+profiles architecture
+  and doctrines. NOT for a single-platform export
   with no platform named (defaults to make-dscard-kit); NOT for grading an export you didn't
   author (design-system-checker); NOT for the palette (make-palette) or token layer
   (token-builder); NOT for consuming an already-authored system into a rendered artifact/report

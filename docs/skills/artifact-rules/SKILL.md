@@ -31,8 +31,12 @@ below, no `references/INDEX.md` (the table IS the retrieval map).
 
 ## How to use it
 
-1. **Classify the ask** against the table above; read only the matching file.
-2. **`make-artifact` invokes this pack at each build phase** — token consumption at Phase 2,
+1. **Classify the ask** against the table above; Grep the matching file for the specific term
+   first, then Read the section it lands in — this is a catalog, not a linear read.
+2. **Answer with the claim, the cited file, and any stated exception** — e.g. "narrative
+   single-scroll, per `shell-doctrine.md`'s 2026-07-16 taste ruling; tabbed chapters are the
+   handbook case, not this one." Never a bare assertion with no citation back to the ruling file.
+3. **`make-artifact` invokes this pack at each build phase** — token consumption at Phase 2,
    shell choice at Phase 3, mermaid assembly at Phase 4, the provenance footer at Phase 5. This
    pack carries the standards; `make-artifact` carries the procedure that applies them (the
    `make-doc` → `doc-writing-rules` contract, adopted verbatim).
