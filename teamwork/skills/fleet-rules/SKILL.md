@@ -428,7 +428,7 @@ calling, not a vocabulary change.
    concurrent slices), or independence (generator≠critic on a high-stakes artifact). A team must
    buy it twice. A dispatch that costs more context and latency than doing the work inline is
    over-orchestration, whatever the task's step count — then match the unit to the task and
-   justify team fan-out by genuine parallel value.
+   justify team fan-out by genuine parallel value. First, consult `references/organizing-axis.md` (F6 split).
    **The job-evidence test (new seats/flows only) — modeled directly on `plan-plugin-split`'s
    job-evidence rule, same shape, same rigor:** before a NEW coordination seat or multi-seat flow
    is added, its design records the evidence for why the main loop plus at most one
@@ -493,7 +493,7 @@ Top issues: 1) … — fix: …
 | `.claude/ops/fleet.json` / `fleet-roster.md` | The durable records Sections 1, 3, and 5 all read from and write to |
 | `agents/fleet-marshal.md` / `bind-team` (this plugin) | Section 7's worked realization on the seat's two doors — the dispatched and host-adopted forms of the same route-anything-incoming discipline |
 | `docs:file-bug` / `docs:file-feature` / `docs:file-task` / `docs:file-leftovers` | Section 7's owning intake skills for a raw report with no record yet — cross-plugin soft mentions, degrade gracefully where docs isn't installed |
-| `references/rubric.md` | Scoring dimensions and anchors for Part B's Review (judgment-based); the sibling `references/orchestration-rubric-a{1-8}-*.md` files score one orchestration INSTANCE per archetype instead (A1 solo host · A2 unnamed fan-out · A3 named seats/G1 · A4 fleet terminal · A5 forked intake · A6 scheduled loops · A7 workflow scripts/G2 · A8 `/batch`) — a1's header holds the shared method + cross-cutting X-R1..X-R4 every sibling cites |
+| `references/rubric.md` | Scoring dimensions and anchors for Part B's Review (judgment-based); the sibling `references/orchestration-rubric-a{1-8}-*.md` files score one orchestration INSTANCE per archetype instead (A1 solo host · A2 unnamed fan-out · A3 named seats/G1 · A4 fleet terminal · A5 forked intake · A6 scheduled loops · A7 workflow scripts/G2 · A8 `/batch`) — a1's header holds the shared method + cross-cutting X-R1..X-R4 every sibling cites; `references/organizing-axis.md` holds X-R4's own "who holds the plan" table + 6-line topology tree, Design step 1's design-step aid |
 | `references/best-practices.md` | Part B design guidance / explaining a finding |
 | `references/foundations.md` | When a Part B finding turns on a shared model (discovery vs continuation) |
 | `harness:write-handoff` | The return contract a composed agent hands back — the other half of composition; its "Sealed vs. messaging" note states which channel carries the block (a sealed dispatch's Findings entry, or a named teammate's mailbox message) — never re-derive that split here |

@@ -34,6 +34,42 @@ Route here only when the task needs a property `context: fork` on a skill cannot
 3. **Multi-skill preload** — a fork carries one body; an agent injects several skills whole at startup.
 4. **Distinct configuration** — `model`, `effort`, `maxTurns` per task type [drift-prone: field set moves].
 
+## Fan-out contracts: bounded rejection, synthesis budget
+
+"What only an agent buys" point 2 above (Parallelism) is a green light to fan out; it says
+nothing about what happens when a worker's output doesn't match its own contract, or what happens
+to the lead's own context once N workers report back. Two authoring rules close that gap — both
+standing lines a fan-out lead's OWN body/dispatch prompt encodes (this file's own encode-vs-
+runtime split, same as items 3 and 7 in "The body — cold-start language" below), not a runtime
+protocol restated here — and both score as `teamwork:fleet-rules`'
+`references/orchestration-rubric-a2-unnamed-fanout.md` criteria A2-R6/A2-R7, cited there rather
+than restated.
+
+**Bounded rejection — re-dispatch the unit ONCE, then flag UNMEASURED, never hand-patch.** A
+worker whose output violates its own stated contract (wrong field shape, a missing sentinel, a
+claim outside its declared scope) gets exactly one re-dispatch of that same unit under the same
+contract. A second miss is not a second re-dispatch — record that unit UNMEASURED, name it
+explicitly in the synthesis output, and let the merge proceed without it. The lead never
+hand-patches a malformed worker output into shape inside its own context: doing so silently
+substitutes the lead's own guess for what the worker actually found, and the next fan-out over the
+same contract never learns the worker's output was wrong in the first place. This is the
+fan-out-specific instance of the same discipline `teamwork:dispatch-ticket` and `fleet-rules`
+Section 5 apply to a dead dispatch generally — a bounded retry, then a named loss, never a silent
+substitute standing in for the real result.
+
+**Synthesis-budget doctrine — merge-cheap contracts, batched sizing, chunked merges past ~10.**
+Every worker's summary lands in the lead's own context at the merge step; a fan-out whose output
+contract is prose (a paragraph per worker) pays a synthesis cost that scales with worker count
+regardless of how cheap each individual dispatch was. Author the output contract as ROWS, not
+essays — delimited fields a merge step can concatenate or table, not narrative the lead has to
+re-read and re-derive. Batch rather than flood: size a fan-out wave at roughly 5–10 workers for
+most tasks, splitting a larger unit count into successive batches rather than one dispatch-all
+step. Past roughly 10 workers (or whenever per-worker output runs long), merge in CHUNKS —
+synthesize each chunk down to a running table, then merge the chunks — rather than holding every
+raw worker report in context until the last one lands. The synthesis step is a loop cost like any
+other (`teamwork:loop-rules`' turn/time axis, applied here to the context axis): a fan-out that
+saves dispatch time but floods the merge step has moved the cost, not removed it.
+
 ## Preload semantics — verified 2026-07 [drift-prone]
 
 - `skills:` injects **full skill content at startup** — not progressive disclosure, not descriptions.
@@ -208,6 +244,29 @@ artifacts, not redundant ones). None share #293's parameterizable-instrument sha
 
 This section is the durable test for the next time a new checker seat is proposed, or an existing
 fleet is re-audited for consolidation — apply it before minting the next one.
+
+## Workflow guidance (interim home)
+
+No dedicated workflow-guidance skill exists yet for the `Workflow` tool's own `agent()` fan-out
+scripts (`workflows/*.js` — `teamwork:fleet-rules`' A7 archetype,
+`references/orchestration-rubric-a7-workflow-scripts.md`); this section is the interim home for
+the one authoring note that surfaced ahead of that skill existing, ruled 2026-08-18 (#671) — not
+this file taking on workflow-script authorship generally. #666's G2 fold-in shipped a syntax-lint
+tier for `workflows/*.js` (`authorkit:orchestration-audit`'s `check_workflow_syntax`), not a new
+canon home; this note stays here until a change deliberately creates one and migrates it there in
+that same change.
+
+**The permission-model note** [drift-prone; unverified against live docs as of 2026-08-18 —
+carried forward from the folded #671 answer and consistent with prior art
+(`orchestration-rubric-a8-batch.md`'s own pre-#671 mention of the same fact); re-verify against
+code.claude.com/docs on the next `Workflow`-tool version bump, same discipline as this file's
+other dated platform facts]. A workflow's `agent()` dispatches always run in `acceptEdits` mode
+and inherit the calling session's own tool allowlist, regardless of the session's own permission
+mode — this is the `Workflow` tool's own behavior, not something the workflow script configures.
+Every file edit any dispatched worker makes during that run is therefore auto-approved with no
+per-edit confirmation. Pilot a new workflow script on ONE directory before pointing a run at the
+whole repo — the auto-approval means a bad dispatch spec applies its damage to every matching file
+in the run's scope before anyone reviews the first edit, not after.
 
 ## Naming
 
