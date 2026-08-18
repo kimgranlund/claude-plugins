@@ -1,0 +1,73 @@
+{
+  "skill": "orchestration-audit",
+  "note": "New at mint (2026-08-18, issue #666): owns the mechanizable slice of the eight per-archetype orchestration rubrics (teamwork:fleet-rules/references/orchestration-rubric-a{1-8}-*.md) -- durable-channel evidence reading, workflows/*.js syntax lint, review-coverage existence, grant-literal and resume-path presence. Fenced against wiring-checker (judges ONE arrangement's own composition/wiring, not an archetype-class sweep), estate-audit-agent (the batch dispatch form, owns no logic of its own), fleet-rules (the doctrine home authoring the rubrics -- this skill only consumes them), and doctrine-audit (canon-to-dependent drift, a different edge shape entirely).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Audit this estate's orchestration archetypes against the fleet-rules rubrics and tell me which criteria fail.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Does harness/workflows/chore-sweep.js still pass its syntax lint tier?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Check whether the A3 named-seat conduct evidence (fleet.json/fleet-roster.md) is readable and reconciled.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Re-run the orchestration review mechanically and see if it reproduces the same verdicts.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Which archetypes have no owning checker on disk yet?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Is this specific fan-out dispatch's wiring correct -- generator vs critic, sealed prompts, depth?",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork:wiring-checker -- judges ONE arrangement's own composition, not an archetype-class sweep"
+    },
+    {
+      "id": "n02",
+      "prompt": "Batch-audit these five plugins for naming conformance in one isolated context.",
+      "expect": "no-trigger",
+      "comment": "owner: estate-audit-agent -- the batch dispatch form; it can name this instrument but owns none of its logic"
+    },
+    {
+      "id": "n03",
+      "prompt": "Add a ninth archetype rubric for this new dispatch pattern we're using.",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork:fleet-rules -- authors/amends the rubric canon; this skill only consumes it by path"
+    },
+    {
+      "id": "n04",
+      "prompt": "Sweep the estate for doctrine drift -- a canon rule a dependent violates or paraphrases away from.",
+      "expect": "no-trigger",
+      "comment": "owner: doctrine-audit -- canon-to-dependent verbatim/ledger-sync/vocab-term edges, a different shape"
+    },
+    {
+      "id": "n05",
+      "prompt": "Is this skill too long? Audit it for busy-work and ceremony.",
+      "expect": "no-trigger",
+      "comment": "owner: bloat-audit"
+    },
+    {
+      "id": "n06",
+      "prompt": "Design a brand-new coordination seat for this multi-repo campaign.",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork:fleet-rules Part B (Design) -- forward design-time question, not a sweep of an existing instance"
+    },
+    {
+      "id": "n07",
+      "prompt": "Which of authorkit's audit instruments should I use for this ask, and what instrument value does estate-audit-agent take?",
+      "expect": "no-trigger",
+      "comment": "owner: estate-audit -- the family index that names which instrument fits, never runs a sweep itself"
+    }
+  ]
+}
