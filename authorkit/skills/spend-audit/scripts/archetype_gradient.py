@@ -35,6 +35,7 @@ Exit codes: 0 rendered (including "no ledger yet", the expected first-run state 
 failure, same posture as `validate.py`) / 2 usage (no path given) or an unreadable existing file.
 This script never FAILs on an all-UNMEASURED table — an honestly-reported gap is not an error.
 """
+import csv
 import json
 import statistics
 import sys
@@ -98,8 +99,14 @@ def compute_gradient(rows):
             baseline_tokens = measured_tokens(rows, BASELINE, cls)
             arch_tokens = measured_tokens(rows, arch, cls)
             n_baseline, n_arch = len(baseline_tokens), len(arch_tokens)
-            if n_baseline and n_arch:
-                ratio = statistics.mean(arch_tokens) / statistics.mean(baseline_tokens)
+            baseline_mean = statistics.mean(baseline_tokens) if n_baseline else 0
+            # n_baseline/n_arch both >0 is necessary but not sufficient — a `measured` row
+            # legitimately carries `tokens: 0` (validate.py's own valid_tokens allows it), and
+            # dividing by a zero mean must never raise. Guard explicitly rather than relying on
+            # a bare `if n_baseline and n_arch` to also mean "non-zero mean" (#673 code-checker
+            # finding: reproduced ZeroDivisionError on an all-zero-tokens measured baseline).
+            if n_baseline and n_arch and baseline_mean > 0:
+                ratio = statistics.mean(arch_tokens) / baseline_mean
                 tokens_multiplier = round(ratio, 3)
             else:
                 tokens_multiplier = "UNMEASURED"
@@ -111,12 +118,6 @@ def compute_gradient(rows):
                 "wall_clock_multiplier": "UNMEASURED (not instrumented)",
             }
     return table
-
-
-def render_rows_from_csv_dicts(reader_rows):
-    """`reader_rows`: list of dicts already keyed by validate.HEADER (from a csv.DictReader
-    over a validated ledger). Thin wrapper so selftest and main() share one path."""
-    return compute_gradient(reader_rows)
 
 
 def render_text(table, rows_considered):
@@ -139,21 +140,35 @@ def render_text(table, rows_considered):
 
 def run(ledger_path, as_json=False):
     """Returns (exit_code, rendered_text_or_None, payload_dict). Mirrors validate.py's own
-    no-ledger-yet honesty: a missing ledger is exit 0, never a false failure."""
+    no-ledger-yet honesty: a missing ledger is exit 0, never a false failure. Delegates the
+    ENTIRE shape check to `validate.validate_file` — never re-derives header/row validity —
+    and REFUSES to compute over an invalid ledger (#673 code-checker finding: a FAIL row, e.g.
+    a bad `archetype`/`verdict` value, previously still fed the multiplier math silently;
+    this script imports `validate.py` as the schema canon and must honor its own verdict, the
+    same discipline `trend.py` already applies on the WRITE path, now applied on the READ path
+    too)."""
     result = validate.validate_file(ledger_path)
     if result.get("no_ledger_yet"):
         payload = {"no_ledger_yet": True, "path": str(ledger_path)}
         text = f"archetype-gradient · no ledger yet · {ledger_path}"
         return 0, (json.dumps(payload, indent=2) if as_json else text), payload
 
+    if not result["header_ok"]:
+        payload = {"error": f"foreign/reordered header — run validate.py to see why: "
+                             f"{[f['message'] for f in result['findings'] if f['level'] == 'FAIL']}"}
+        text = f"archetype-gradient: {payload['error']}"
+        return 2, (json.dumps(payload, indent=2) if as_json else text), payload
+
+    if result["summary"]["fail"] > 0:
+        payload = {"error": f"ledger has {result['summary']['fail']} invalid row(s) — "
+                             "run validate.py to see why; a multiplier is never computed over "
+                             "rows the schema itself rejects"}
+        text = f"archetype-gradient: {payload['error']}"
+        return 2, (json.dumps(payload, indent=2) if as_json else text), payload
+
     with open(ledger_path, newline="") as fh:
-        import csv
         reader = csv.reader(fh)
-        header = next(reader, [])
-        if header != validate.HEADER:
-            payload = {"error": f"foreign/reordered header: expected {validate.HEADER}, got {header}"}
-            text = f"archetype-gradient: {payload['error']} — run validate.py to see why"
-            return 2, (json.dumps(payload, indent=2) if as_json else text), payload
+        next(reader, None)  # header — already proven == validate.HEADER above
         rows = [dict(zip(validate.HEADER, r)) for r in reader if len(r) == len(validate.HEADER)]
 
     table = compute_gradient(rows)
@@ -169,7 +184,6 @@ def run(ledger_path, as_json=False):
 
 
 def selftest():
-    import csv
     import tempfile
 
     def write_ledger(td, rows):
@@ -225,6 +239,44 @@ def selftest():
         assert other["tokens_multiplier"] == "UNMEASURED", other
         # An archetype with zero rows at all (A3 here) -> every cell UNMEASURED too.
         assert payload["archetypes"]["A3"]["pr-shipped"]["tokens_multiplier"] == "UNMEASURED"
+        # The anchor-is-external reverse control, checked HERE too (not just the all-absent
+        # fixture above) — its literal values never move even in a ledger with real computed
+        # ratios, proving it is genuinely never derived from rows, not merely untouched by
+        # coincidence on an empty ledger (#673 code-checker finding).
+        assert payload["anchor"]["source"] == "#265", payload["anchor"]
+        assert payload["anchor"]["tokens_multiplier"] == 1.92, payload["anchor"]
+        assert payload["anchor"]["wall_clock_multiplier"] == 3.6, payload["anchor"]
+
+    # gh#673 code-checker finding: a ledger row that fails validate.py's own shape check
+    # (here, an out-of-enum verdict) must NEVER feed a multiplier — reproduced pre-fix as a
+    # silent exit-0 computing a real ratio from a row the schema rejects. Now: exit 2, no
+    # `archetypes` table at all.
+    with tempfile.TemporaryDirectory() as td:
+        out = write_ledger(td, [
+            ["2026-08-18", "build", "s1", "#1", "100000", "measured", "pr-merged", "bogus-verdict", "A1"],
+            ["2026-08-18", "build", "s2", "#2", "300000", "measured", "pr-merged", "worth-firing", "A2"],
+        ])
+        code, text, payload = run(out, as_json=True)
+        assert code == 2, (code, text)
+        assert "archetypes" not in payload, payload
+        assert "invalid row" in payload["error"], payload
+
+    # gh#673 code-checker finding: a `measured` row legitimately carrying `tokens: 0` on the
+    # baseline side must never raise ZeroDivisionError — reproduced pre-fix as an uncaught
+    # exception (caught only by the top-level handler as a spurious exit-2 "error"). Now:
+    # UNMEASURED, same as any other under-measured cell, never a crash.
+    with tempfile.TemporaryDirectory() as td:
+        out = write_ledger(td, [
+            ["2026-08-18", "build", "s1", "#1", "0", "measured", "pr-merged", "worth-firing", "A1"],
+            ["2026-08-18", "build", "s2", "#2", "300000", "measured", "pr-merged", "worth-firing", "A2"],
+        ])
+        code, _, payload = run(out, as_json=True)
+        assert code == 0, payload
+        cell = payload["archetypes"]["A2"]["pr-shipped"]
+        assert cell["tokens_multiplier"] == "UNMEASURED", cell
+        # the zero-tokens row still COUNTS as a measured n (it IS a real measurement, just of
+        # zero) — only the DIVISION is guarded, never the row's own membership in n_baseline.
+        assert cell["n_baseline_measured"] == 1, cell
 
     # Negative/reverse control: `estimated`/`absent` rows never feed the ratio, even when
     # plentiful — only `measured` counts (the comparability rule, reused from lld-0018).

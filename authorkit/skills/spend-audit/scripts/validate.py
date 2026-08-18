@@ -60,7 +60,13 @@ VERDICTS = {"worth-firing", "not-worth-firing", "undetermined"}
 
 # gh#673 (lld-0021) — the estate's eight orchestration archetypes, #666's taxonomy comment,
 # plus the retroactive-only escape hatch. Never add a ninth without also adding it to #666's
-# own taxonomy first — this validator is a consumer of that taxonomy, not its source.
+# own taxonomy first — this validator is a consumer of that taxonomy, not its source. NOTE:
+# A8 (`/batch`) is itself still PROVISIONAL as of this ticket — #666's own taxonomy amendment
+# comment (2026-08-18) words it as "gains it as an eighth entry (OR an A2×A7 hybrid)", not yet
+# a settled distinct-vs-hybrid call; ticket #673's body still says "seven archetypes". Shipped
+# here as its own closed-set member because gh#666's comment already commits to SOME eighth
+# slot and this ledger needs one value to write, but a future #666 ruling that folds A8 into
+# an A2×A7 hybrid is a taxonomy-side decision, not a code change here.
 ARCHETYPE_NAMES = {
     "A1": "solo — host session + skills, no dispatch",
     "A2": "unnamed sync fan-out — an unnamed Agent-tool/fork dispatch, synchronous return",

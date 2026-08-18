@@ -233,13 +233,18 @@ def selftest():
         assert readback[validate.HEADER.index("archetype")] == "UNMEASURED", readback
 
     # A live CLI call with no `--archetype` at all is a usage error (exit 2) — required like
-    # `--outcome`/`--verdict`, not silently defaulted.
-    proc = subprocess.run(
-        [sys.executable, __file__, "--out", "/dev/null", "--event-kind", "build",
-         "--seat", "t", "--ref", "none", "--outcome", "acted", "--verdict", "undetermined"],
-        capture_output=True, text=True,
-    )
-    assert proc.returncode == 2 and "--archetype" in proc.stderr, (proc.returncode, proc.stderr)
+    # `--outcome`/`--verdict`, not silently defaulted. A real tempdir path, never `/dev/null`
+    # (correct today only because the missing-flag check runs before any file access — a
+    # tempdir path stays correct even if that ordering ever changes).
+    with tempfile.TemporaryDirectory() as td:
+        target = os.path.join(td, "x.csv")
+        proc = subprocess.run(
+            [sys.executable, __file__, "--out", target, "--event-kind", "build",
+             "--seat", "t", "--ref", "none", "--outcome", "acted", "--verdict", "undetermined"],
+            capture_output=True, text=True,
+        )
+        assert proc.returncode == 2 and "--archetype" in proc.stderr, (proc.returncode, proc.stderr)
+        assert not os.path.isfile(target), "a usage error must never create the file"
 
     # verdict is passed through verbatim — the script never rewrites it from tokens.
     with tempfile.TemporaryDirectory() as td:
