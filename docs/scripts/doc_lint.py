@@ -145,7 +145,7 @@ def lint_text(text):
             findings.append(("FAIL", "T3", f"required section `## {sec}` missing -> the template is the contract"))
     if dtype == "plan" and "Steps" in heads and "done-when" not in text.lower():
         findings.append(("WARN", "T5", "no `done-when` found in the plan -> steps without one are guesses"))
-    if dtype == "spec" and "Requirements" in heads and not re.search(r"\bREQ-\d+", text):
+    if dtype == "spec" and "Requirements" in heads and not re.search(r"\bREQ-([A-Z]+-)?\d+", text):
         findings.append(("WARN", "T5", "no REQ- IDs in the spec -> the ID spine starts here"))
     if dtype == "spec" and "Agent verification" not in heads:
         findings.append(("WARN", "T9", "no `## Agent verification` section -> the spec doesn't say "
@@ -290,6 +290,15 @@ def selftest():
     cited_adr = orphan_adr.replace("intent-refs: null", "intent-refs: idr-0001")
     assert not any(f[1] == "T6" for f in lint_text(cited_adr)), "ADR citing an IDR must NOT warn T6"
     assert any(f[1] == "T5" for f in lint_text(bad.replace("status: shipped", "status: draft"))), "REQ-less spec must warn T5"
+    # T5 REQ-<INFIX>- prefixed IDs (#634, operator-ruled 2026-08-18, gen-ui-kit#1625/#1627):
+    # per-doc pools distinguished by an uppercase infix (REQ-P-001, REQ-R-001) must NOT warn;
+    # a lowercase infix is a negative control and must still warn.
+    spec_req_infix = ("---\ndoc-type: spec\nid: spec-x\nstatus: draft\n---\n# S\n"
+                       "## Requirements\nREQ-P-001: x\n## Non-goals\nn\n## Examples\ne\n## Acceptance\na\n"
+                       "## Agent verification\nv\n")
+    assert not any(f[1] == "T5" for f in lint_text(spec_req_infix)), "REQ-<INFIX>- (uppercase) must NOT warn T5"
+    spec_req_lowercase_infix = spec_req_infix.replace("REQ-P-001", "REQ-p-001")
+    assert any(f[1] == "T5" for f in lint_text(spec_req_lowercase_infix)), "REQ- with a lowercase infix must still warn T5 (negative control)"
     # T9 SPEC agent-verification WARN (#542): no `## Agent verification` -> warn; section present -> silent.
     spec_no_av = ("---\ndoc-type: spec\nid: spec-x\nstatus: draft\n---\n# S\n"
                   "## Requirements\nREQ-1: x\n## Non-goals\nn\n## Examples\ne\n## Acceptance\na\n")
@@ -391,7 +400,8 @@ def selftest():
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
           "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites; "
-          "T9 SPEC agent-verification WARN bites; T10 spine id-collision FAIL bites (#633)")
+          "T9 SPEC agent-verification WARN bites; T10 spine id-collision FAIL bites (#633); "
+          "T5 REQ-<INFIX>- prefixed ids (uppercase) pass, lowercase infix still warns (#634)")
     return 0
 
 
