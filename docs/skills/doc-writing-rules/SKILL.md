@@ -41,6 +41,12 @@ The class lives in frontmatter and is enforced mechanically, not requested polit
    opening is the only part guaranteed to survive compaction and fan-out.
 3. **The ID spine.** Requirements get IDs (`REQ-012`); plan steps, criteria, tickets, and tasks
    reference them. Reference, never restate — restated content is a drift pair with a countdown.
+   **A requirement ID may carry an uppercase infix for a distinguishable per-doc pool** — `REQ-P-001`,
+   `REQ-R-001` — when a spec's requirements split into more than one numbered sequence (operator-
+   ruled 2026-08-18, cross-repo evidence gen-ui-kit#1625/#1627; mechanized in `doc_lint.py`'s T5
+   check, ticket #634). The infix is uppercase only — a lowercase infix (`REQ-p-001`) doesn't match
+   the grammar at all: T5 sees no REQ ID there, which is the point: one grammar, no silent second
+   dialect.
    **Re-read the spine's highest id off `origin/main` immediately before numbering a new
    adr/idr/lld/rdd record** — the same version-re-read discipline `dispatch-ticket` already
    applies to a plugin's version field, applied here to doc ids: a branch-cut number goes stale

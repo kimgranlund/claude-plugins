@@ -66,6 +66,12 @@ frontmatter preload — the hard plugin-boundary rule), with an explicit failure
 isn't installed. This agent file is non-conforming against the CURRENTLY-LIVE naming grammar
 (ADR-0011 REQ-002's `-agent` suffix rule) until the naming-ADR Kim has ruled will supersede that
 rule lands — intentional, tracked with its 4 teamwork siblings in the same wave.
+v1.19.3 · 2026-08-18 · closes #634: `doc_lint.py`'s T5 REQ- check widens `\bREQ-\d+` to
+`\bREQ-([A-Z]+-)?\d+` — a requirement ID may carry an uppercase infix for a distinguishable
+per-doc pool (`REQ-P-001`, `REQ-R-001`), operator-ruled 2026-08-18 on cross-repo evidence
+(gen-ui-kit#1625/#1627); selftest gains both forms plus a negative control (a lowercase infix
+still warns). `doc-writing-rules`' ID-spine bullet (Standards item 3) documents the convention.
+`release_gate.py docs` clean.
 v1.19.2 · 2026-08-18 · closes #622 (docs slice, harness sibling same PR): the feedback-intake
 door instrument for idr-0008 (LOCKED)/adr-0021 — no new door: `.github/ISSUE_TEMPLATE/
 {bug,feature,task}.yml` already are it. `doc-writing-rules`' `references/backend-resolver.md`
