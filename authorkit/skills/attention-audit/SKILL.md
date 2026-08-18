@@ -72,9 +72,13 @@ rewards deleting the fences that protect rare-but-expensive misroutes.
 
    **Structural-fix category set (issue #297)** — a collision or rent
    finding names ONE fix: **reciprocal fence** (default — a NOT-clause on
-   each side) · **demote-to-wiring** (narrow, or set
-   `disable-model-invocation: true` on, a side reachable only by dispatch —
-   agent-preloaded or Skill-tool-only, with no human-typed trigger) ·
+   each side) · **demote-to-wiring** (narrow the description to a wiring
+   stub on a side reachable only by dispatch — agent-preloaded or
+   Skill-tool-only, with no human-typed trigger; NOT
+   `disable-model-invocation: true`, which blocks exactly those two paths
+   — the flag is a valid demotion lever only for a side whose surviving
+   consumer is the human-typed command. Corrected 2026-08-18, gh#647, per
+   skill-writing-rules' verified flag mechanics) ·
    **merge** (the pair does near-duplicate work; fold one into the other) ·
    **centralize-boilerplate** (the shared text is template, not twin
    intent) · **retire** (one side already clears step 5's ≥2-signal retire
