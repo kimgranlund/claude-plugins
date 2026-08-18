@@ -38,19 +38,14 @@ COLOR_LITERAL_RE = re.compile(r"(?<![\w-])(#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|ok
 MERMAID_FENCE_RE = re.compile(r"```mermaid(.*?)```", re.S)
 NODE_LABEL_BR_RE = re.compile(r"\[[^\]]*<br\s*/?>[^\]]*\]", re.I)
 COLOR_SCHEME_RE = re.compile(r"color-scheme\s*:\s*light\s+dark")
-BODY_BG_VAR_RE = re.compile(r"body\s*\{[^}]*background(?:-color)?\s*:\s*var\(--(?:paper|[\w-]*background[\w-]*)\)", re.S | re.I)
+BODY_BG_VAR_RE = re.compile(r"body\s*\{[^}]*background(?:-color)?\s*:\s*var\(--(?:(?:c-)?paper|[\w-]*background[\w-]*)\)", re.S | re.I)
+STYLE_BLOCK_RE = re.compile(r"<style[^>]*>(.*?)</style>", re.S | re.I)
+STYLE_ATTR_RE = re.compile(r"style\s*=\s*\"([^\"]*)\"|style\s*=\s*'([^']*)'", re.I)
+HTML_TAG_RE = re.compile(r"<[a-zA-Z][^>]*>")
 DOCTRINE_SANS_RE = re.compile(r"system-ui")
 DOCTRINE_MONO_RE = re.compile(r"ui-monospace")
 FONT_FAMILY_RE = re.compile(r"font-family\s*:\s*([^;]+);")
 OVERRIDE_COMMENT_RE = re.compile(r"/\*\s*override\b", re.I)
-
-
-def _strip_root(text: str):
-    """Return (root_block_text, text_with_root_block_removed)."""
-    m = ROOT_BLOCK_RE.search(text)
-    if not m:
-        return "", text
-    return m.group(1), text[: m.start()] + text[m.end() :]
 
 
 def check_theme_block_only(text: str):
@@ -69,9 +64,23 @@ def check_external_url(text: str):
     return findings
 
 
+def _css_regions(text: str):
+    """CSS-only slices of the input: <style> blocks + style=\"\" attrs on an HTML
+    page; the whole text when it carries no HTML tags (a bare stylesheet).
+    Prose is never CSS — a GitHub issue ref like `#541` in body text is not a
+    color literal (gh#660)."""
+    blocks = STYLE_BLOCK_RE.findall(text)
+    attrs = [a or b for a, b in STYLE_ATTR_RE.findall(text)]
+    if blocks or attrs:
+        return blocks + attrs
+    if HTML_TAG_RE.search(text):
+        return []
+    return [text]
+
+
 def check_literal_outside_root(text: str):
-    _, rest = _strip_root(text)
     findings = []
+    rest = "\n".join(ROOT_BLOCK_RE.sub("", css) for css in _css_regions(text))
     for m in COLOR_LITERAL_RE.finditer(rest):
         findings.append(("FAIL", "literal-outside-root", f"color literal outside :root, not a var(--c-*) reference: {m.group(0)}"))
     return findings
@@ -188,6 +197,23 @@ BAD_FIXTURE_GROUND = """
 body { color: black; font-family: system-ui; }
 """
 
+GOOD_FIXTURE_PROSE_HASH = """
+<style>
+:root { color-scheme: light dark; --c-paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237)); }
+body { background: var(--c-paper); font-family: system-ui, sans-serif; }
+</style>
+<p>Fixed in #123 and #541; see also issue #1122 for the follow-up.</p>
+<p style="color: var(--c-primary)">Styled prose, still no literal.</p>
+"""
+
+BAD_FIXTURE_STYLE_BLOCK_LITERAL = """
+<style>
+:root { color-scheme: light dark; }
+body { background: var(--c-paper); color: #ff00ff; font-family: system-ui; }
+</style>
+<p>Prose mentioning #123 must not add findings.</p>
+"""
+
 BAD_FIXTURE_FONT = """
 :root { color-scheme: light dark; }
 body { background-color: var(--paper); font-family: 'Comic Sans MS', cursive; }
@@ -208,6 +234,10 @@ def selftest():
     codes = {c for _, c, _ in check_literal_outside_root(BAD_FIXTURE_LITERAL)}
     assert "literal-outside-root" in codes, "literal-outside-root must bite on a bare hex outside :root"
     assert check_literal_outside_root(GOOD_FIXTURE) == [], "reverse control: clean fixture uses only var() outside :root"
+    # gh#660 negative control: prose issue refs (#123, #541) on an HTML page are not color literals
+    assert check_literal_outside_root(GOOD_FIXTURE_PROSE_HASH) == [], "prose #NNN issue refs must not report as color literals"
+    hits = check_literal_outside_root(BAD_FIXTURE_STYLE_BLOCK_LITERAL)
+    assert len(hits) == 1 and "#ff00ff" in hits[0][2], "a real literal inside <style> must still bite exactly once (prose #123 excluded)"
 
     codes = {c for _, c, _ in check_br_in_mermaid_label(BAD_FIXTURE_BR)}
     assert "br-in-mermaid-label" in codes, "br-in-mermaid-label must bite on a <br/> inside a node label"
@@ -216,6 +246,8 @@ def selftest():
     codes = {c for _, c, _ in check_missing_ground(BAD_FIXTURE_GROUND)}
     assert "missing-ground" in codes, "missing-ground must bite when color-scheme/body-token binding are absent"
     assert check_missing_ground(GOOD_FIXTURE) == [], "reverse control: clean fixture has both color-scheme and body token binding"
+    # gh#660 negative control: css_build.py emits var(--c-paper) — a conforming page must pass ground
+    assert check_missing_ground(GOOD_FIXTURE_PROSE_HASH) == [], "body background var(--c-paper) must satisfy missing-ground"
 
     codes = {c for _, c, _ in check_doctrine_font_stack(BAD_FIXTURE_FONT)}
     assert "doctrine-font-stack" in codes, "doctrine-font-stack must warn on an off-doctrine font with no override comment"
