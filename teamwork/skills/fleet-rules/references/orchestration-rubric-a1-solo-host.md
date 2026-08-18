@@ -53,7 +53,7 @@ cites this section by path rather than repeating it.
 |---|---|---|---|
 | X-R1 | Intent traceability: an IDR/ADR names when this archetype is the right tool | — | judgment |
 | X-R2 | Incident→infrastructure closure: each incident on this archetype produced a guard/lint/fixture the same day, or has an open tracked record | CLAUDE.md's "Incident → infrastructure, same day" invariant | judgment |
-| X-R3 | Review coverage: a checker/audit exists that can grade an instance of this archetype | — | mechanizable — the named owning-checker file exists on disk (per archetype, see each file's own "Owning checker" row) |
+| X-R3 | Review coverage: a checker/audit exists that can grade an instance of this archetype | — | mechanizable — built: the named owning-checker file exists on disk (per archetype, see each file's own "Owning checker" row) |
 | X-R4 | Plan-holder axis honored: the arrangement's own "who holds the plan" answer (plan holder · worker↔worker comms · file isolation · lifetime) plus the 6-line topology decision tree are consulted at design time | #671 (canon text lands there; cited here, not restated) | judgment |
 
 **Owning checker for A1:** none dedicated — A1 instances ride the repo's own standing gates
