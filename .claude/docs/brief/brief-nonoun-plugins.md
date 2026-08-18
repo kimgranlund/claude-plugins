@@ -30,12 +30,12 @@ estate is the working test of that bet.
   anti-matrix contract — this ruling scopes an existing gate rather than minting a new claim, so
   no IDR.
 
+- Solo-first composition is a WHY-grain claim: teams are escalations, not defaults — `idr-0007`
+  (locked 2026-08-18, ratified by Kim; grounded in gh#265's measured hop tax, gh#266's
+  chore-lead retirement, ADR-0010's uniform build seat).
+
 ## Open Questions
 
 - When does a real release-grain commitment land? Until then, releases-loop homes (a `roadmap`
   index, a first RDD) stay unminted — deferred 2026-08-16 (Kim, ratification round), not an
   oversight.
-- Is solo-first composition a WHY-grain claim, not just teamwork doctrine? Drafted as `idr-0007`
-  (teams are escalations, not defaults — grounded in gh#265's measured hop tax, gh#266's
-  chore-lead retirement, ADR-0010's uniform build seat), awaiting Kim's ratification; moves to
-  Confirmed on lock.
