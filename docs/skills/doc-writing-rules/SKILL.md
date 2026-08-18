@@ -163,7 +163,16 @@ instance per product/repo — `<scope>` names the product, never a second copy. 
 
 **RDD — Roadmap Decision Record.** Sits downstream of both ADR and IDR on the ID spine — a locked
 release commitment (scope, IDR-grammar acceptance criteria, sequencing, DRI) that **cites** `≥1`
-ADR/IDR via its own `decision-refs:` frontmatter field, never the reverse. Realizes the corpus's
+ADR/IDR via its own `decision-refs:` frontmatter field, never the reverse.
+
+**RDD↔work-item binding (ruled 2026-08-18, gh#611):** the `roadmap`-labeled Issues an RDD
+bundles bind in `## Sequencing` as plain prose citations — one `Tracked at
+<owner>/<repo>#NNN` line per bundled Issue — exactly the template's existing TICKET
+precedent (work items are backend-scoped and mutable, so they never enter `decision-refs:`,
+which cites immutable in-repo records only); the reverse edge is the Issue's own `## Links`
+line naming the RDD id.
+
+Realizes the corpus's
 product-lifecycle-bible (Part 4) PRP concept as a docs type, named RDD rather than PRP to complete
 the `_DR` family grammar IDR/ADR already established. Lifecycle mirrors ADR/IDR's proven two-phase
 mechanic: `draft` (freely editable, citations/DRI not yet required) → `locked` (T4 blocks
