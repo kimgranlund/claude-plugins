@@ -15,6 +15,19 @@ Rules (the checkable slice; description *accuracy* stays with /ship-plugin and /
   R6 [WARN] footer ledger entries stay one physical line each (plugin-writing-rules' cap,
             issue #203: no more than one `vX.Y.Z · date ·` marker per line, no line past
             600 chars — the unbounded-paragraph-append shape caught once at 157 KB)
+  R7 [FAIL] two adr/idr/lld/rdd documents under this repo's `.claude/docs` doc spine claim the
+            same (family, number) — the 2026-08-18 incident (#633): two parallel builds both
+            minted `lld-0011`, caught only by a coordinator's manual pre-merge read, nothing
+            mechanical. Runs once per plugin-gate invocation (this check already runs for every
+            plugin via G10), so every plugin's gate inherits the same protection with no new
+            G-check. The sweep/parse logic here is a deliberate, self-contained DUPLICATE of
+            `docs/scripts/doc_lint.py`'s own T10 (same rule, same incident) — not an import: this
+            script is harness's plugin-agnostic gate machinery, and a script-path reach into the
+            docs plugin's `scripts/` would violate the hard plugin-boundary rule
+            (`.claude/rules/plugin-authoring.md`). `doc_lint.py --spine` stays the canonical,
+            dev-time-invocable copy; this one exists only so G10 enforces it universally.
+            Skipped (no findings) when no `.claude/docs` directory is found walking up from the
+            plugin root — a repo that hasn't adopted the doc spine yet is not a failure.
 
 Exit 0 clean/warnings, 1 on any FAIL.
 """
@@ -22,6 +35,80 @@ import json
 import re
 import sys
 from pathlib import Path
+
+# R7's scope: the four ledger families the doc spine numbers, and the (family, number) pattern
+# their `id:` frontmatter values carry (`lld-0011-recurrence-audit` -> ("lld", "0011")). Mirrors
+# docs/scripts/doc_lint.py's own SPINE_FAMILIES/SPINE_ID_RE verbatim (kept in sync by hand — see
+# R7's docstring above for why this is a duplicate, not a shared import).
+_SPINE_FAMILIES = {"adr", "idr", "lld", "rdd"}
+_SPINE_ID_RE = re.compile(r"^(adr|idr|lld|rdd)-(\d+)\b")
+
+
+def _repo_docs_root(root: Path):
+    """Walk upward from a plugin root looking for `.claude/docs` — this workspace's shared
+    functional-doc spine (CLAUDE.md's docs-root override). No git dependency: plugin roots sit
+    directly under the repo root in every observed layout, but walking up (rather than assuming
+    exactly one level) tolerates a nested plugin root too. Returns None within 6 levels — a repo
+    that hasn't adopted the doc spine yet, not a failure."""
+    cur = root.resolve()
+    for _ in range(6):
+        candidate = cur / ".claude" / "docs"
+        if candidate.is_dir():
+            return candidate
+        if cur.parent == cur:
+            break
+        cur = cur.parent
+    return None
+
+
+def _spine_frontmatter(text):
+    """Minimal doc-type/id frontmatter read — see R7's docstring for why this duplicates
+    doc_lint.py's `parse_frontmatter` instead of importing it."""
+    if not text.startswith("---"):
+        return {}
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        return {}
+    fm = {}
+    for line in parts[1].splitlines():
+        m = re.match(r"^([\w-]+):\s*(.*?)(\s+#.*)?$", line)
+        if m:
+            fm[m.group(1)] = m.group(2).strip()
+    return fm
+
+
+def _spine_duplicate_ids(root: Path):
+    """R7: sweep `.claude/docs/**` for two adr/idr/lld/rdd documents claiming the same
+    (family, number). Keyed on (family, number), never the full `id:` string — two colliding
+    drafts plausibly differ only in their descriptive slug, so an exact-string dedup would let
+    the real #633 incident straight through."""
+    docs_root = _repo_docs_root(root)
+    if docs_root is None:
+        return []
+    seen = {}
+    findings = []
+    for p in sorted(docs_root.rglob("*.md")):
+        try:
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        fm = _spine_frontmatter(text)
+        if fm.get("doc-type") not in _SPINE_FAMILIES:
+            continue
+        doc_id = fm.get("id", "")
+        m = _SPINE_ID_RE.match(doc_id)
+        if not m:
+            continue  # doc_lint's own T1/T2 own a missing/malformed id; not this rule's job
+        key = (m.group(1), m.group(2))
+        if key in seen:
+            prev_path, prev_id = seen[key]
+            findings.append(("FAIL", "R7",
+                              f"id collision: {p} (`{doc_id}`) and {prev_path} (`{prev_id}`) both "
+                              f"claim {key[0]}-{key[1]} -> re-read the spine's highest id off "
+                              f"origin/main before numbering (dispatch-ticket's own discipline)"))
+        else:
+            seen[key] = (p, doc_id)
+    return findings
 
 
 def check(root: Path):
@@ -76,6 +163,7 @@ def check(root: Path):
             findings.append(("WARN", "R6",
                               f"ledger entry line is {len(line)} chars -> compress to one-line-per-version "
                               f"(plugin-writing-rules' cap, issue #203) ({line[:60]}...)"))
+    findings.extend(_spine_duplicate_ids(root))
     return findings
 
 
@@ -129,7 +217,36 @@ def selftest():
             "map: demo-review demo-forge demo_check.py\n\nv1.2.0 · ledger\n\n" + overlong
         )
         assert any(f[1] == "R6" for f in check(r)), "a >600-char single entry must fire R6"
-    print("docs_check selftest · PASS · coverage both docs, version ledger, stale count, script mentions, ledger one-liner cap")
+
+    # R7 spine id-collision FAIL (#633): reproduces the 2026-08-18 incident — two lld-0011 files
+    # (different slugs, same family+number) under `<workspace>/.claude/docs/lld/`, with `root`
+    # standing in for a plugin dir sitting directly under that same workspace root.
+    with tempfile.TemporaryDirectory() as td:
+        workspace = Path(td)
+        plugin_root = workspace / "demo-plugin"
+        plugin_root.mkdir()
+        spine = workspace / ".claude" / "docs" / "lld"
+        spine.mkdir(parents=True)
+        lld_tpl = ("---\ndoc-type: lld\nid: {id}\nstatus: draft\ndate: 2026-08-18\nowner: k\n"
+                   "ticket: n/a\nsupersedes: null\n---\n# L\n"
+                   "## Components\nc\n## Interfaces\ni\n## Data\nd\n## Risks\nr\n")
+        (spine / "lld-0011-a.md").write_text(lld_tpl.format(id="lld-0011-recurrence-audit"))
+        (spine / "lld-0011-b.md").write_text(lld_tpl.format(id="lld-0011-fleet-state-rollup"))
+        assert any(f[1] == "R7" for f in _spine_duplicate_ids(plugin_root)), \
+            "two lld-0011 files (any slug) must FAIL R7 — the #633 incident"
+        # negative control: renumber the second file's id -> clean spine, no R7
+        (spine / "lld-0011-b.md").write_text(lld_tpl.format(id="lld-0012-fleet-state-rollup"))
+        assert not any(f[1] == "R7" for f in _spine_duplicate_ids(plugin_root)), \
+            "distinct numbers must NOT FAIL R7"
+    # negative control: an isolated tree with no reachable .claude/docs at all -> no findings
+    with tempfile.TemporaryDirectory() as td2:
+        lonely = Path(td2) / "elsewhere" / "plugin"
+        lonely.mkdir(parents=True)
+        assert _repo_docs_root(lonely) is None, "an isolated tempdir must have no reachable .claude/docs"
+        assert _spine_duplicate_ids(lonely) == [], \
+            "a plugin root with no reachable .claude/docs must return no R7 findings"
+    print("docs_check selftest · PASS · coverage both docs, version ledger, stale count, script mentions, "
+          "ledger one-liner cap, spine id-collision FAIL bites (#633)")
     return 0
 
 

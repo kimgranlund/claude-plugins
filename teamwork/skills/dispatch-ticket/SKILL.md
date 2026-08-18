@@ -159,7 +159,7 @@ is what actually contains its inline-fix path.
   the Phase 5 stage-2 re-run (below) does two things, not one: re-run `version_claim_check.py` for
   the claim race, AND fetch + re-read every touched plugin's `plugin.json` straight off
   `origin/main` and bump from THAT value — never from the branch-cut version — carrying its
-  README ledger line along with the same rebumped number.
+  README ledger line along with the same rebumped number. Doc spine ids race identically (#633) — `references/spine-id-value-race.md`.
 - **Once the claim wins, make it LIST-VISIBLE too (#199)** — the claim comment is durable but
   invisible in the LIST view (Kim: "I cannot tell that Issues are claimed"). Git-native only: `gh
   issue edit --add-label in-flight`. `in-flight` shares hex `FBCA04` with `doing` by coincidence,
