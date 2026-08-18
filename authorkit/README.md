@@ -93,6 +93,9 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.22.1 · 2026-08-18 · attention-audit: corrected demote-to-wiring's dmi:true claim to match
+skill-writing-rules' verified flag mechanics (#647).
+
 v0.22.0 · 2026-08-18 · Wave 1 of idr-0010's estate economy claim (gh#624,
 lld-0018-estate-economy-ledger.md): `spend-audit` joins as a seventh audit-family sibling — a
 per-firing token-spend ledger at `.claude/ops/spend-ledger.csv` (attention-trend.csv-shaped:
