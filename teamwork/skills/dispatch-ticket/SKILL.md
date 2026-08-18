@@ -103,7 +103,7 @@ report that routing and stop; docs' seats own it.
   ambiguous-match test; `build-leader` has no one to ask — an already-clear ticket needs zero
   rounds). Still not concretely actionable → report SKIPPED with the named gap, never dispatch on
   an unclear brief — no claim taken, since no build effort was ever starting. Otherwise run Phase
-  3 (claim, then isolate) first, then dispatch via the `Agent` tool — `subagent_type:
+  3 (claim, then isolate) first, then Phase 3.5, then dispatch via the `Agent` tool — `subagent_type:
   general-purpose` by default (`fleet-rules`' solo-first/null-unit reasoning: a generic
   task needs no tool restriction, parallelism, or multi-skill preload); a named `subagent_type`
   only when the clarified brief genuinely needs one of those three. Never a NAMED (teammate-mode,
@@ -226,7 +226,7 @@ is what actually contains its inline-fix path.
   deeply nested (#191).
 - **Release on abandonment — post-claim exits only.** Only a failure AFTER the claim landed has
   anything to release: a discovered design fork routed back to planner, an unresolved gate
-  failure (both mid-flight, Failure branches below), or Phase 6's recorded-loss ending (a
+  failure (both mid-flight, Failure branches below), a stale-premise exit (Phase 3.5), or Phase 6's recorded-loss ending (a
   dispatched agent returned with no Findings, the re-dispatch also came back empty — nothing is
   ever coming back to open a PR, as dead as a mid-flight abandonment). Each releases the claim
   before returning: git-native — `gh issue edit --remove-assignee @me --remove-label in-flight`
@@ -257,6 +257,49 @@ is what actually contains its inline-fix path.
   force. Exit 2 is a usage error, not a verdict — report it. No such script → fall back to an
   unverified `git worktree remove` then `git branch -d`, never silently — name what went
   unverified.
+
+## Phase 3.5 — De-stale a parked ticket (backlog/roadmap labels only)
+
+Runs on the feature path between Phase 3 and Phase 4's sizing, and on the task path between
+Phase 3 and the Agent dispatch (Phase 2's task branch names this insertion verbatim, above).
+**Trigger:** the record carries the `backlog` or `roadmap` label (#611;
+git-native: the labels Phase 1 already read; file backend: no parking realization defined —
+stage N/A, disclosed). Label absent → **this phase does not exist**: skip silently, continue —
+the same absent-field shape as stage 2b's grant line. The Phase 2 bug hand-off never runs it
+(`file-bug` owns its own record lifecycle; a parked bug's hand-off proceeds unchanged —
+disclosed non-goal).
+
+A parked ticket was written against a repo that has since moved. #583 (`campaign_close.py` C4
+unguarded against branch-name reuse) and #584 (decision-watcher prose-form supersession ruled
+out-of-contract) were both caught only because someone independently re-checked the ticket's
+premise against live state before building. Mechanize that check: enumerate the ticket's own
+load-bearing premises — files/paths it names (do they exist in the described shape: `Read`/
+`Glob`), issues/PRs it references (in the state assumed: `gh issue view`/`gh pr view`),
+current-state claims it makes ("X lacks Y", "Z is unguarded" — still true, checked against the
+live file), records it cites (ADR/IDR/RDD superseded?). Bounded to premises the ticket itself
+states — a premise audit, never a fresh design review and never a re-size.
+
+- **Every premise verified — or unverifiable but uncontradicted** → write ONE dated Findings
+  entry ("de-stale pass: N premises re-verified, M unverifiable (named), proceeding") and
+  continue to Phase 4 exactly as today. Only a POSITIVELY falsified premise stales the ticket;
+  fail-open on the merely-unverifiable, disclosed in the entry (fail-closed would make every
+  parked ticket unbuildable via one ambiguous sentence — the #583/#584 class is positive drift,
+  not ambiguity).
+- **Any premise positively falsified → `stale-premise`**, a fourth typed outcome alongside
+  built / SKIPPED / named blocker: write the evidence as a dated Findings comment (per
+  falsified premise: what the ticket asserts, what live state shows, the command or path that
+  proves it), release the claim per Phase 3's Release-on-abandonment bullet, tear down the
+  worktree per the teardown bullet, and return `stale-premise` carrying the evidence. Never
+  build past a falsified premise; never close, relabel, or rewrite the ticket (re-triage is a
+  human/planner act on the evidence left behind); never report it as SKIPPED (that means
+  under-specified) or as a named blocker (nothing external blocks it — the ticket itself is
+  wrong).
+
+Decision, recorded — **`stale-premise` is a NEW fourth outcome class**, not a reuse: SKIPPED
+already means "under-specified, clarify and re-run", a named blocker already means "something
+external must move first", and both imply the ticket text is still right. A stale premise demands
+a different human act (rewrite or retire the ticket), so overloading either existing class would
+hide that in the artifact of record.
 
 ## Phase 4 — Size the dispatch (solo-first, feature path)
 
@@ -503,9 +546,11 @@ conversational summary never substitutes for the entry the record was owed.
   build failure**: the PR is open and linked, which is this dispatch's ordinary successful end
   state. Name the failed conjunct or the blocker in the handoff, leave the PR for a human, keep
   the claim as-is, and never retry the sequence or widen the predicate to get past it.
+- Phase 3.5 finds a falsified premise → `stale-premise` is a reported outcome, not a failure:
+  claim released, evidence on the record, ticket left open for re-triage.
 
 Done when the record's `## Findings` carries dated evidence of the shipped work (or the recorded
-blocker/skip), status reflects reality, a PR this dispatch opened carries an explicit
+blocker/skip/stale-premise report), status reflects reality, a PR this dispatch opened carries an explicit
 environment-clean line proving worktree/branch/host-checkout state (or the #204 skip-branch's own
 one-line statement), an abandoned claim was released rather than left standing, and no build
 effort was spent before the record existed — or the bug branch isolated first and then handed
