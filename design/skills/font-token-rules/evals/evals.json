@@ -147,6 +147,12 @@
       "prompt": "what md-sys type token for this heading",
       "expect": "no-trigger",
       "note": "material-type-facts owns md-sys typescale asks (ADR-0008 seam)"
+    },
+    {
+      "id": "n16",
+      "prompt": "what font should buttons and tabs use in a Claude artifact",
+      "expect": "no-trigger",
+      "note": "2026-08-19 (issue #719, check-routing sweep #676): mirrors artifact-styling-rules t05 verbatim — Artifact font/type choice is its own type/layout doctrine (mono interactive), not this skill's, even though the ask sounds like a token question"
     }
   ]
 }

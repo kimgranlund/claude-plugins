@@ -4,11 +4,13 @@ description: >-
   Use when SIZING or SPACING any UI whose dimension tokens use the Material `--md-sys-size-*` /
   `--md-sys-radius-*` / `--md-sys-space-*` naming — a control's height/padding/radius, a card's
   inset, gaps, icon sizes, focus rings, borders ("what size/spacing token", "how tall should
-  this control be", "make the layout denser"). Consumption guide for Material 3's dimensional
-  layer: the control ramp, corner scale, space/inset/gap ladders, the centering law. A control's
-  own text-SIZE is this skill's `--md-sys-size-{step}-font` field. Never hardcode px. NOT for
-  color (material-color-facts); NOT for non-control text (material-type-facts); NOT for motion
-  (material-motion-facts).
+  this control be", "make the layout denser", "how big must the touch target around a 24dp icon
+  be"). Consumption guide for Material 3's dimensional layer: the control ramp, corner scale,
+  space/inset/gap ladders, the centering law, the touch-target minimum around a small icon. A
+  control's own text-SIZE is this skill's `--md-sys-size-{step}-font` field. Never hardcode px.
+  NOT for color (material-color-facts); NOT for non-control text (material-type-facts); NOT for
+  motion (material-motion-facts); NOT icon style/stroke/tappability judgment, e.g. "is this icon
+  big enough to tap" (icon-rules — this skill owns only the DP token behind the answer).
 disable-model-invocation: false
 user-invocable: false
 ---

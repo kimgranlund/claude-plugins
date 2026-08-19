@@ -6,10 +6,11 @@ description: >
   or button ("which voice/level", "why is this text the wrong size/weight"). Bind
   `--md-sys-typescale-*` + `--font-*` on the fifteen-voice scale extending M3: pick
   VOICE (READ prose vs OPERATE chrome) and LEVEL, apply the baked leading/tracking
-  rhythm — never hardcode px, line-height, tracking, or family. NOT text-SIZE or
-  radius/spacing (material-shape-facts); NOT color (material-color-facts); NOT the
-  default `--type-*` grammar (font-token-rules); NOT DESIGNING a type scale
-  (lettering-facts); NOT motion tokens (material-motion-facts).
+  rhythm — never hardcode px, line-height, tracking, or family. NOT a control's own
+  text size (material-shape-facts' `--md-sys-size-{step}-font` field, e.g. "what font
+  size for this button"); NOT other radius/spacing (material-shape-facts); NOT color
+  (material-color-facts); NOT the default `--type-*` grammar (font-token-rules); NOT
+  DESIGNING a type scale (lettering-facts); NOT motion tokens (material-motion-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

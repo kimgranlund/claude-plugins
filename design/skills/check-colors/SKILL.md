@@ -3,11 +3,18 @@ name: check-colors
 description: >-
   Verify a candidate OKLCH palette or semantic color mapping against contrast, hue stability,
   perceptual evenness, and CVD-safety, emitting a ColorProof. Use for "verify this palette",
-  "does this palette pass", "check the contrast ratio of this text on this background", "is
-  this color scheme safe for color-blind users", or any WCAG AA/AAA or APCA pass-fail check
-  across every fg/bg pair. NOT for building a ramp or dark scheme (make-palette); NOT for
-  contrast/CVD theory (color-contrast-facts); NOT for color-space math (color-space-facts); NOT
-  for harmony/meaning (color-theory-facts).
+  "does this palette pass", any full-sweep WCAG AA/AAA or APCA pass-fail check across every
+  fg/bg pair in a declared card, AND any pass/fail VERDICT against a threshold for even a single
+  ad-hoc pair — "check the contrast ratio of this text on this background", "does it meet the
+  accessibility contrast floor", "does this clear 3:1 once composited" are imperative CHECK asks,
+  not a value lookup. NOT for a raw contrast-ratio/Lc NUMBER with no verdict asked, e.g.
+  "calculate the WCAG contrast ratio between these two colors" or "what's the actual Lc value"
+  (color-contrast-facts); NOT for a one-off CVD simulation on a described palette with no card,
+  e.g. "simulate deuteranopia on this palette and tell me what changes" (color-contrast-facts);
+  NOT for focus-ring visibility, e.g. "the focus ring is invisible in dark mode" (screens'
+  check-focus — an indicator-visibility check, not a color-pair contrast check, even where the
+  cause happens to be color); NOT for building a ramp or dark scheme (make-palette); NOT for
+  color-space math (color-space-facts); NOT for harmony/meaning (color-theory-facts).
 disable-model-invocation: false
 user-invocable: true
 ---

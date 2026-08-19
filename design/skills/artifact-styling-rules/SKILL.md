@@ -6,7 +6,8 @@ description: >-
   (light-dark() build-time CSS, never a re-ramp); type/layout doctrine (system-ui body, mono
   interactive, width/spacing/radius scales); the mermaid authoring + re-theming contract;
   shell/genre doctrine (narrative vs tabbed, hero-as-thesis). Use for "why do the colors look
-  off", "why sharp corners", "diagrams look off-theme", or any Artifact styling question with
+  off", "why sharp corners", "diagrams look off-theme", "what font/type for buttons, tabs,
+  interactive elements in an Artifact", or any Artifact styling question with
   no build ask. NOT the build (make-artifact); NOT the token source (make-design-system); NOT
   chart color (dataviz).
 disable-model-invocation: false
