@@ -87,3 +87,13 @@ model → the **`a2ui-chat-agent-facts`** pack (live; over `a2ui-live-agent.spec
 record format / admission / retrieval → the **`a2ui-training-facts`** pack (live; over
 `a2ui-training-facts.spec.md`) · transport interop (AG-UI/A2A/MCP) →
 `a2ui-streaming-pipeline.spec.md` (mostly unbuilt, ADR-0067).
+
+## Harvest note — 2026-08-19 (surface-lifecycle conduct + card anatomy)
+
+`message-lifecycle.md`'s two 2026-08-19 UPDATE sections are grounded in: the byte-pinned producer
+grammar (`packages/agent-ui/a2ui/src/agent/prompts/grammar.md` at head `26742a9c` — root-once,
+surface-reuse, card-anatomy clauses), `renderer/validate.ts`'s `checkContainment` read at the same
+head, ADR-0198's ratified amendments (fetched verbatim from `kimgranlund/agent-ui` via the GitHub
+contents API, 2026-08-19), and the field evidence PR #1326 / PR #1342 / GH #1262 (bodies read
+2026-08-19). [verified], that date. These are REPO-mechanism/conduct claims, not v1.0 wire
+mandates — the wire-facts vs repo-mechanisms split in this file's Deviation doctrine applies.

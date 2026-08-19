@@ -1,5 +1,19 @@
 # Changelog — a2ui-training-corpus
 
+## 2026-08-19 — field-doctrine harvest (agent-ui ADR wave)
+
+- `judge-and-verdict-adapter.md` UPDATE: ADR-0165's durable admission disposition (the archived
+  `VerdictsFile`, latest-date precedence, refusals never expire, the `unjudgedAdmissions` gate leg),
+  the GH #1346 fail-closed importer law (a bare run is legal only as the all-`E_DUP` no-op), the
+  MIN-fold in the field (GH #1262's P9 rubric fold + re-judge), and repair-then-replace over
+  discard (PR #1326's nine-record wave).
+- `canonicalization-and-dedup.md`: the ID-spelling bullet gains its drift consequence (ids-only
+  edits hash identical → `E_DUP`, PR #1342 instance).
+- `retrieval-and-repair-loop.md` UPDATE: producer-grammar teaching — bind BOTH axes (the GH #1279
+  sentence-length-badge lesson) and the four teaching lanes (grammar clause / mini-skill /
+  node-idioms card / judged exemplar), with ADR-0207 A2 as the worked lane-choice decision.
+- No description/evals change (routing surface untouched).
+
 ## 2026-07-07 — minted (v1.0)
 
 Net-new global knowledge pack, one of the 4-way A2UI split (siblings: `a2ui-protocol`,

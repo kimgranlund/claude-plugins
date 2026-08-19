@@ -128,3 +128,57 @@ one-off exception argued in a bug thread.
 - **The §5.2 usage-guidance pattern** (ADR-0087 Fork-A style): a row that competes with existing
   vocabulary lands WITH a when-to-use note (the chart four-way: tile for a latest value ·
   Sparkline for a series' shape · BarChart for comparing magnitudes · List table for exact values).
+
+---
+
+## UPDATE 2026-08-19 — the wire-mark shape law, append-only enum widening, and two validates-cleanly defect classes
+
+**[verified]** 2026-08-19 against the ADR texts fetched verbatim from `kimgranlund/agent-ui`
+(ADR-0211, ADR-0207 — both `accepted`), `catalog/conformance.ts` read at head `26742a9c`, and the
+GH #1328/#1329 → PR #1404 field wave.
+
+**The wire-mark shape law (ADR-0211): a `value` mark is legal ONLY where a real readback accessor
+exists.** The `value: {prop, event}` contract above has a precondition the row author must verify,
+not assume: the renderer's generic two-way controller reads `el[prop]` SYNCHRONOUSLY at the commit
+event. If the control never writes its committed state back onto that accessor, the mark does not
+merely fail — it **corrupts the data model**, writing `undefined` (uncontrolled) or the STALE
+pre-commit value (controlled) on every commit. ADR-0211's Drill mint is the worked proof: a jsdom
+probe against the real control showed `commit()` writes only a private signal in uncontrolled mode
+and never self-mutates in controlled mode, so the row ships `path` as a FORWARD-ONLY bindable prop
+with **no value mark** — the agent drives navigation by writing the bound pointer via
+`updateDataModel` on its own turn. "Not a style choice; a data-corruption class" (ADR-0211 Alt. A).
+Sibling precedent, different root cause: the Toggle mint's Fork T1 (pre-commit event ordering).
+Re-entry condition, recorded in the ADR: a future public readback accessor reopens the mark by
+amendment. Answer conduct: "should this prop get a value mark?" is answered by probing the
+control's readback, never by symmetry with sibling rows.
+
+**Append-only enum widening (ADR-0207, the second application of the GH #808 mechanism).** A wire
+enum widens by APPENDING members, preserving every existing member's position — `Text.variant` grew
+`h1…label` → `+ kicker · overline · quote · lead` this way. Why append-only is load-bearing, not
+pedantry: (1) every existing payload, exemplar, fixture, and corpus shard stays byte-identical;
+(2) an unanchored drift pin (`toContain('variant: h1|h2|…|body')`) passes UNEDITED — the pin is
+verified, never loosened; (3) the byte-pinned prompt's golden baseline recaptures ONCE, deliberately
+(`RECAPTURE_BASELINE=1`), with the delta verified to be exactly the widening; (4) ADR-0098's generic
+enum gate covers the new members with ZERO validator code — an excluded value keeps failing
+`CATALOG` exactly as any unknown member does.
+
+**Two validates-cleanly-still-renders-wrong classes** — both answer "the payload passed validation,
+why is the render wrong?":
+
+- **The schema-omission class.** Conformance's `matchesSchemaType` checks `enum` membership plus the
+  PRIMITIVE `type` keyword only (`conformance.ts:115-130`) — it never descends into an object/array
+  prop's inner keys (`properties`/`required`/`additionalProperties` are outside the declared minimal
+  subset). A typo'd inner key (`rows: [{lable: …}]`) therefore validates cleanly; the component's
+  hardening codec then DROPS the malformed entry (the ADR-0201 `cleanDescriptionRows` posture:
+  malformed → `[]`/omitted, never a throw), so the defect presents as silently-missing content, not
+  an error. Never claim conformance checks object shape — the codec is the safety net, and the fix
+  is producer-side.
+- **The mount-context probe-artifact class.** Before blaming a render path, EQUALIZE the mount
+  context of the two sides of the comparison — a shared page shell's ambient CSS and differing mount
+  roots manufacture path-specific illusions. Worked instances (GH #1328/#1329, both closed by
+  PR #1404, 2026-08-19): the "Ladder degrades on the A2UI path" report was the docs shell's unscoped
+  `[data-part='bar']` CSS leaking into the card — the comparison shot mounted the native control
+  OUTSIDE the shell, manufacturing a "native right / A2UI wrong" illusion (fix: a zero-specificity
+  `:where` fence in the SHELL; no A2UI defect existed); the "Drawer panel empty" report was not
+  reproducible at head — the renderer builds subtrees detached, so child adoption is order-safe by
+  construction.

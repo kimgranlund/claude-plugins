@@ -24,3 +24,10 @@ extension-activation mechanism).
 the spec wins and the pack gets repaired — but fetch and QUOTE the spec (the repo-absence ≠
 spec-absence rule); never resolve a conflict from memory. New spec facts enter via a new/updated
 HV row first, then the pack cites the row.
+
+## Harvest note — 2026-08-19 (discovery hygiene)
+
+`discovery-and-agent-card.md`'s "Discovery hygiene" section cites agent-ui ADR-0203 (incl. its
+ratified 2026-08-18 amendment), fetched verbatim from `kimgranlund/agent-ui` via the GitHub
+contents API on 2026-08-19 — an `[estate]`-tier worked instance (a design choice where the v0.3.0
+spec is silent on card content policy), NOT a new spec fact; no HV row is touched or needed.

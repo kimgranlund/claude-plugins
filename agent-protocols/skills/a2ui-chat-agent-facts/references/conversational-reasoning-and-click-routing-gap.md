@@ -20,6 +20,11 @@ provably NOT an `A2uiServerMessage`, a demo-transport framing convention, not pr
 - `produce()` peels the FIRST non-empty line before heal/validate (`tools/agent/produce.ts:180-187`,
   called at `:297`) — a blank-line-tolerant refinement over ADR-0088's literal "leading line" — and
   yields the re-composed meta-line FIRST, then the validated A2UI lines (`produce.ts:336-340`).
+- *(Dated note 2026-08-19: the `{ note?, ask?, trace? }` shape above is the 2026-07-08 snapshot; the
+  envelope has since grown to SIX reserved model-authored arms — see the UPDATE section below. The
+  toolkit core also moved `tools/agent/` → `src/agent/` (ADR-0137 portable core), so this file's
+  older `tools/agent/*` cites read as `packages/agent-ui/a2ui/src/agent/*` today — grep the symbol,
+  not the old path.)*
 - **A note-only turn is a clean success, not a halt** (empty ≠ invalid): zero remaining A2UI lines
   returns after yielding the meta-line alone (`produce.ts:303-311`; ADR-0088 Consequences).
 - The page filters the meta-line before `host.ingest`/`allLines`/the JSON tab
@@ -124,6 +129,89 @@ Open fork, resolved 2026-07-07): absent or `true` ⇒ today's full visible turn 
 (`canvas-button.ts:27`, no `wantResponse`) keeps turning. The renderer's RPC-correlation reading of
 the same flag is untouched — two documented, non-colliding layer-local meanings
 (`session.ts:59-66`; ADR-0088 Consequences).
+
+## UPDATE 2026-08-19 — the meta-line reserved vocabulary: SIX model-authored arms, four laws, one principle
+
+**[verified]** against the ADR texts fetched from `kimgranlund/agent-ui` 2026-08-19 (ADR-0097 /
+0174 / 0178 / 0198 incl. both ratified amendments / 0204 / 0206 — every one `accepted`) and the
+shipped `src/agent/meta-line.ts` header comments, which restate each arm's law per-arm. §1's
+`{ note?, ask?, trace? }` was the 2026-07-08 snapshot; the reserved MODEL-authored vocabulary is now
+**`ask · plan · personaPatch · flowEnd · team · target`** (ADR-0206 Consequences names all six so
+"the next envelope audit finds a cited decision"). `trace`/`progress`/`error` are the
+RUNTIME-composed siblings — composed by `produce()`/the host, never declared by the model
+(ADR-0174 Context draws this line explicitly).
+
+| Arm | Shape | Decision | Consumer |
+|---|---|---|---|
+| `ask` | `{ surfaceId }` — this turn's A2UI carries a feed-embedded ask | ADR-0097 | the page's ask registry (§2) |
+| `plan` | `{ steps: [{id, description}] }` — a declared step list | ADR-0174 | host-side plan runner, projected onto status-stream grouping |
+| `personaPatch` | partial persona-store record | ADR-0178 | host-side apply gate (key-enumeration + per-key sanitizer), builder-scoped modality gate |
+| `flowEnd` | literal `true` — this turn closes an ask-flow | ADR-0198 | page chrome appends the done/start-over row |
+| `team` | `{ label, tagline?, members: [{name, role, routingDescription}] }` | ADR-0204 | `ui-agent-admin`'s `onTeamDeclared` seam ONLY; unregistered ⇒ silently dropped |
+| `target` | `{ surfaceId }` — the existing surface this turn is about to mutate | ADR-0206 | `beginAgentTurn` sets `working` on THAT host at turn start |
+
+**The four envelope laws every arm obeys** (each ADR restates them; cite the arm's own ADR when
+asked "is this validated?"):
+
+1. **Versionless, additive-only.** The envelope never carries `version`, so it is provably NOT an
+   `A2uiServerMessage`; every widening is a new optional field. `AgentTransport.turn` stays a
+   byte-identical contract through all six widenings, and no arm ever enters the validator or the
+   corpus path (SPEC-N3 wire purity — "restated for the sixth time", ADR-0206 Non-goals).
+2. **Whole-arm shallow validation.** Per-field independence: a malformed arm drops ONLY itself,
+   never the envelope — every sibling field on the same line still parses. AND the arm validates as
+   a WHOLE: `team` with any member missing a string field drops the ENTIRE arm (never a partial
+   roster — "the one shape a host mint loop must never be handed", ADR-0204 cl.2); `target` with a
+   missing/non-string `surfaceId` drops whole ("a malformed routing fact is worse than no routing
+   fact" — a wrong-but-present target would breathe the WRONG card with full apparent authority,
+   ADR-0206 cl.2); `flowEnd` accepts literal `true` only (ADR-0198 cl.1).
+3. **Gate-blind producer pass-through.** `produce()` peels and re-emits each arm with NO integrity
+   check, no re-validation, no verification that a stated target is later mutated or a declared
+   team is sensible — structural validation (law 2) is the only guard this layer owns; whether an
+   arm is CONSUMED is entirely the host's call (ADR-0204 cl.3, ADR-0206 cl.5).
+4. **Degrade floor: absence is a neutral no-signal state.** A model that never emits an arm sees no
+   regression (`target` absent ⇒ no early breathe, `working` set at the line burst — "late but
+   never wrong", ADR-0206 cl.4); a consumer never infers a missing arm heuristically (ADR-0198
+   Non-goals bans completion inference in chrome outright). An unknown/stale `target.surfaceId`
+   simply never matches an open registry entry — no halt, no user-visible error (ADR-0206 Non-goals).
+
+**The principle the sixth arm proves: a truthful model-stated early signal beats any host
+heuristic.** Under validate-then-stream every content line lands in one late burst; the leading
+meta-line is structurally the ONE line that arrives before it. GH #1134/PR #1138 tried the
+heuristic route — "exactly one surface open ⇒ it's probably the target" — and GH #1259's live repro
+showed the wrong-guess branch firing in the COMMON case (a one-card chat, an unrelated question).
+Kim's ruling retired the heuristic for the stated `target` arm: "a heuristic, however narrower, is
+still a GUESS about a fact the model already knows and could simply state; only (c) makes the
+signal TRUTHFUL rather than merely less-often-wrong" (ADR-0206 Context). Same lesson as ADR-0187's
+atFinalize: the missing fact lives only with the party that holds it — for a conversation flow,
+the MODEL. Answer conduct: when a consumer needs an early routing fact, the fix is a new meta-line
+arm the model states, never a smarter host guess.
+
+## UPDATE 2026-08-19 — flow-completion conduct: the ADR-0198 laws (accepted record + both ratified amendments)
+
+**[verified]** against ADR-0198's full text incl. the 2026-08-17 and 2026-08-18 amendments (both
+ratified; fetched 2026-08-19). These are producer-grammar CONDUCT laws taught mode-invariantly in
+`grammar.md` (never a mini-skill — completion must be unconditional default behavior, ADR-0198 cl.2):
+
+- **`flowEnd: true` fires on ALL flow-terminal paths** (amendment A1): happy completion, escalation
+  /early-stop (the escalation prose turn IS the closing turn — the observed urgent-triage gap), and
+  model-visible abandonment ("never mind"). A silently closed tab is not a turn; chrome still never
+  infers.
+- **The user takes the final action** (A2): before any conclusive action the agent presents a final
+  proposed-outcome artifact (the existing summary card — no new component) carrying an ORDINARY
+  confirm ask; **ordering law: `flowEnd` comes AFTER the user's commit, never on the
+  proposed-outcome turn**.
+- **The answered-ask freeze begins at flow-final confirm, not before** (amendment B1): mid-flow
+  Next/Back commits are SCENE TRANSITIONS on ONE still-open ask — the producer's `updateComponents`
+  swaps the scene container's children on the SAME surface, the ask keeps its one `ask-<n>` id for
+  the whole wizard, and draft state lives under a `/draft/*` prefix that survives every swap (Back
+  is free because nothing is committed until the flow-final confirm). Only after that confirm does
+  the fresh-id freeze law govern.
+- **The closing turn emits NO A2UI — except exactly ONE settling `updateComponents`** (A3 + B2):
+  the courtesy-close prose `note` + `flowEnd: true`, no new ask, and at most one update against the
+  already-confirmed receipt's surface (strip Back/Confirm, add a settled Badge), never a fresh
+  surface, never `deleteSurface` on a confirmed receipt. The five-part courtesy close (did / you
+  made it happen / sent / thanks / offer) is prose guidance — the SIGNAL, not the prose, is
+  load-bearing.
 
 ## What this file does NOT cover
 

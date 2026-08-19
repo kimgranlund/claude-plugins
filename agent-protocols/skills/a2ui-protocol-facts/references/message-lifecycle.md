@@ -87,9 +87,66 @@ surface or stop the stream. A malformed line emits `PARSE` and continues to the 
 the rest of the tree renders (SPEC-R9 AC2). This "emit + placeholder + continue" discipline is the
 same one every error path in this protocol follows — see errors-and-versioning.
 
+---
+
+## UPDATE 2026-08-19 — surface lifecycle as producer CONDUCT: root-once, scene swaps, slot retirement
+
+**[verified]** 2026-08-19 against the shipped producer grammar
+(`packages/agent-ui/a2ui/src/agent/prompts/grammar.md`, byte-pinned), `renderer/validate.ts`'s
+`checkContainment`, ADR-0198's ratified 2026-08-18 amendment (B1), and the field wave
+PR #1326 / GH #1262. The renderer facts above (one
+root, IDGRAPH on a second delivery, whole-record replacement) have hardened into producer LAWS —
+answer payload-lifecycle asks from these, not just from the renderer's tolerance:
+
+- **Root-once / root-immutability.** `id:"root"` is delivered ONCE per surface; resending it is an
+  id-graph error that **silently keeps the OLD root, never your change** (the SPEC-R3 AC2 fact
+  above, stated as the failure a producer actually experiences). The conduct: give root one stable
+  wrapper child up front and put every growing container under ITS OWN id one level down — never
+  root itself (grammar.md's root-immutability rule).
+- **Scene swaps are whole-container resends, never appends.** Resending an id REPLACES its ENTIRE
+  record — every prop still wanted plus the FULL children list; there is no partial-prop patch. A
+  continuing flow (wizard step, game round, dashboard refresh) REUSES its surface: the producer
+  swaps the scene container's children with one `updateComponents` on the SAME `surfaceId`, resends
+  ONLY the changed subtree, and reserves `createSurface` for a genuinely PARALLEL artifact
+  (grammar.md's surface-reuse law; ADR-0198 amendment B1 rules mid-flow Next/Back as exactly this —
+  scene transitions, with draft state under a `/draft/*` data-model prefix surviving each swap).
+- **The wire has no node-delete verb — retiring a slot needs a referenced-but-EMPTY node.**
+  `updateComponents` only upserts; a node dropped from a parent's `children` still sits in the
+  merged component set. For a Card region that matters concretely: `checkContainment`
+  (`validate.ts:332`) fails ANY `CardHeader`/`CardContent`/`CardFooter` whose parent in the merged
+  set is not a `Card` — an UNREFERENCED region counts as parentless and fails `CONTAINMENT` too. So
+  "remove the footer's buttons" is a resend of the footer with its children emptied — the
+  CONTAINMENT-safe empty node — never dropping the footer id from the Card (the worked instance:
+  PR #1326's "CONTAINMENT-safe empty footer on its summary scene").
+
+## UPDATE 2026-08-19 — card anatomy as conduct (the P9 wave)
+
+**[verified]** 2026-08-19 against grammar.md's card-anatomy clause, Kim's 2026-08-18 ruling
+(PR #1342), and the GH #1262 rubric fold + PR #1326 repair wave — the anatomy is graded corpus
+doctrine (rubric dimension P9), not style advice:
+
+- **`CardFooter` is THE action row.** Every action `Button` rides it — one solid primary, at most
+  one ghost secondary — never scattered loose in `CardContent` (the field instance that minted P9:
+  `frontier-image-hero-card`'s View-listing Button sat in CardContent with no footer and the record
+  FAILED its re-judge, GH #1262).
+- **Identity titles ride `CardHeader`, never `CardContent`** (Kim's ruling, one grammar sentence +
+  a 7-record convergence sweep, PR #1342). A single-fact card may omit the header entirely —
+  nothing requires all three regions.
+- **A gated card is FormProvider-as-root, Card-non-root.** Two constraints compose: the
+  `FormProvider` submit gate blocks only `submit:true` actions among its DESCENDANTS, and the Card's
+  regions must be the Card's DIRECT children (`CONTAINMENT` above — `ui-card`'s region CSS assumes
+  the same). A FormProvider wrapped around the fields only, sitting BESIDE the footer that holds the
+  submit Button, leaves the gate inert — the button submits regardless of validity. The repaired
+  shape is `FormProvider > Card > (CardHeader · CardContent · CardFooter)`; PR #1326's wave
+  converted the gated records to exactly this ("FormProvider-as-root/Card-non-root … gating
+  verified preserved"), and the seed family is named after it (PR #1342).
+
 ## What this file does NOT cover
 
 Binding resolution and the data model (bindings-and-data-model) · dynamic list templates
 (dynamic-lists) · actions, `actionResponse` correlation, two-way input
 (actions-and-two-way-input) · function evaluation, `checks`, `callRendererFunction` (functions-and-checks) ·
-the error taxonomy and version rejection detail (errors-and-versioning).
+the error taxonomy and version rejection detail (errors-and-versioning) · WHERE the producer
+grammar teaching itself lives — grammar clause vs mini-skill vs exemplar
+([[a2ui-training-facts]]'s teaching-lane rubric; the live agent's prompt composition is
+[[a2ui-chat-agent-facts]]).

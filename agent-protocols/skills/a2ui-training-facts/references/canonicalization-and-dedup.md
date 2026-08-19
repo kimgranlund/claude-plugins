@@ -17,7 +17,13 @@
 - Component *declaration order* across `updateComponents` messages (refs are by id, `canonical.ts:5`).
 - Object *key order* — `encode` sorts keys recursively (`canonical.ts:220`).
 - Insignificant *whitespace* — the encoder emits none.
-- *ID spelling* — every id is renumbered `c0…cN` (`canonical.ts:79`).
+- *ID spelling* — every id is renumbered `c0…cN` (`canonical.ts:79`). *(Consequence, dated
+  2026-08-19 [verified against PR #1342]: an ids-ONLY edit of a stored seed does not register as
+  content drift — the alpha-rename makes the canonical hash identical, so a re-import hits `E_DUP`
+  rather than minting a "new" record. Field instance: the 2026-08-19 card-anatomy sweep renamed
+  seed ids `root_content`/`root_footer` → `card_content`/`card_footer` freely BECAUSE the renames
+  rode real content repairs already bound for the judged `--replace` path — an ids-only "cleanup"
+  re-import would have been a pure `E_DUP` no-op, changing nothing.)*
 
 **What is SIGNIFICANT (preserved)** — SPEC-R6 AC2, so these differ:
 - **Child order WITHIN a container** — declared order is semantic and preserved (`canonical.ts:171`, `canonical.ts:6`).

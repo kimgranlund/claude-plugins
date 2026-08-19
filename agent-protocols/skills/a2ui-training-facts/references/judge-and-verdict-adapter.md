@@ -58,3 +58,50 @@ Without these, a plain re-import would silently erase a quarantine: `warmDedupIn
 ## The phase-1 debt this clears
 
 Before this wave, 11 seed-imported records sat honestly unjudged (absent `qualityScore` — ADR-0060's marker). After the back-score run the "absent `qualityScore`" count goes 11 → 0 (or the quarantine delta is itemized), and the ADR-0060 marker retires from active duty (ADR-0068 Consequences).
+
+---
+
+## UPDATE 2026-08-19 — the refusal becomes durable (ADR-0165), the importer fails closed (GH #1346), and the MIN-fold in the field
+
+**[verified]** 2026-08-19 against ADR-0165's accepted text (fetched verbatim from
+`kimgranlund/agent-ui`), the repo-local `a2ui-corpus-curation` skill's halt catalog at head
+`26742a9c`, and GH #1262 / PR #1326 / PR #1342 bodies. The 2026-07-07 sections above still hold;
+these extend them.
+
+**The `VerdictsFile` is now a COMMITTED artifact, and archive precedence is dated (ADR-0165).**
+ADR-0068's Consequences claimed all three outcomes "are queryable" — verified FALSE for the
+admission-reject arm: an `E_QUALITY` refusal returned from `admit()` before any store write, so it
+was recorded NOWHERE (the named casualty: `retreat-reschedule`, rejected `qualityScore 2`, surviving
+only as prose in three source comments). The repair: a judged run ARCHIVES its own verdicts file
+verbatim into `corpus/verdicts/<date>--<slug>.json` in the same all-or-nothing step as `saveStore` —
+"zero admissions is not zero record" (an all-refused wave still archives; that is the single
+highest-value archive in the design). Read side: one pure merge (`verdict-archive.ts`), precedence =
+**latest `date` wins**; two same-date files disagreeing on one name = structured error, halt.
+**An archived refusal does not expire** — a `passed:false` scored against an OLDER `rubricVersion`
+still blocks and still reds; clearing it takes a fresh judged run whose newer-dated verdict wins by
+precedence. And the coverage gate now reads JUDGED-ness off the shard (the `unjudgedAdmissions`
+leg), so a silent re-admission can no longer turn the gate green — the refused seed is RED on both
+branches of its future.
+
+**The fail-closed importer law (GH #1346).** ADR-0068 cl.2's fail-closed only bit when a judge WAS
+wired; a BARE run (no `--verdicts`) used to pass unchecked. The closed form: a bare run is legal only as the
+all-`E_DUP` no-op — the moment ANY candidate clears dedup (a new seed, OR the **source-drifted
+content of an already-admitted name**), the run HALTS with nothing written ("N candidate(s) reached
+the judge tier with no judge wired"). Without this, routine re-imports silently re-admit
+source-drifted seeds unjudged — exactly the class the archive exists to catch, arriving through the
+front door. Resolve by re-running with `--verdicts`; a bare run can never admit anything.
+
+**MIN-fold consequences, worked (GH #1262).** `qualityScore = MIN over gate dimensions` means one
+weak dimension sinks the record — and it also means the RUBRIC's dimension list is load-bearing
+shared state: the payload rubric grew P9 (card anatomy) without the corpus rubric bumping, so
+judges graded P1–P8 and could only report P9 advisory. Kim's ruling folded P9 in (corpus rubric →
+1.2, `D1 = MIN P1–P9`) and re-judged ONLY the affected seeds; `frontier-image-hero-card` — a
+5-scoring record on every other dimension — failed D1 on P9 alone (action Button in CardContent,
+no footer). Conduct: a judge that grades against a stale dimension list reports the gap to the
+RUBRIC owner; it never averages, and never scores a dimension the rubric version doesn't carry.
+
+**Repair-then-replace over discard, worked (PR #1326).** The nine Tier-A back-scored records were
+repaired AT SOURCE (actions into CardFooter; gated records to FormProvider-as-root with gating
+verified preserved), re-validated (`validate-payload 9/9 exit 0`), then re-admitted through the
+FULL judged pipeline via `--replace` — never hand-edited in the shard, never discarded. The shard
+diff + run report + git history stay the audit trail; `status` is recomputed honestly by admission.

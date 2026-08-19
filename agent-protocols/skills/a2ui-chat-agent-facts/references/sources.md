@@ -77,3 +77,13 @@ This pack answers the live-agent system; it does not restate its neighbors. The 
 component authority is [[a2ui-catalog-facts]]; the corpus + `retrieve()` internals the loop CALLS
 is [[a2ui-training-facts]]. A claim here that drifts from those owners is a bug to fix HERE — they
 own their layers; this pack owns how the live agent composes them.
+
+## Harvest note — 2026-08-19 (the meta-line six-arm + flow-completion wave)
+
+The two 2026-08-19 UPDATE sections in `conversational-reasoning-and-click-routing-gap.md` are
+grounded one rung ABOVE this pack's original working-tree reads: the ADR texts themselves
+(ADR-0097/0174/0178/0198 + both ratified amendments/0204/0206) fetched verbatim from
+`kimgranlund/agent-ui` via the GitHub contents API on 2026-08-19, cross-checked against
+`packages/agent-ui/a2ui/src/agent/meta-line.ts`'s per-arm header comments at head (`26742a9c`).
+[verified], that date. The ADR-0137 relocation (`tools/agent/` → `src/agent/`) post-dates this
+pack's older `tools/agent/*` cites — grep the symbol, not the old path.
