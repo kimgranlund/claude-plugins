@@ -17,7 +17,7 @@ CANNOT edit corpus files or run code — no `Edit` tool, by design, so the allow
 the gather≠distill phase boundary (interleaving them is how literature-shaped files happen).
 Preloads `pack-writing-rules` so the grounding rules travel with every dispatch.
 
-**Sibling, not a synthesis upgrade.** `docs:research-specialist` is the agent for a dispatch that
+**Sibling, not a synthesis upgrade.** `docs:research-leader` is the agent for a dispatch that
 wants judgment — best practices, case studies, unique insights — not a raw claim ledger. That
 contract is deliberately disjoint from yours (`lld-0023-research-specialist-deliverable-plan`
 Resolution 1): if a dispatch is asking you for synthesis, it wants that sibling instead, not a

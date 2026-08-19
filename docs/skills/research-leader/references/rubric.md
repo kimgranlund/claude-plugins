@@ -1,6 +1,6 @@
 # Rubric — Research-specialist deliverable
 
-Scores one `research-specialist` deliverable file — a typed, dated, sourced findings record, one
+Scores one `research-leader` deliverable file — a typed, dated, sourced findings record, one
 row per finding — against the four axes `lld-0023-research-specialist-deliverable-plan` closed
 (Resolution 2). Built via `make-rubric`. All four dimensions are `[review]`: no dimension here is
 mechanically gate-able — `doc_lint.py`'s own T-checks (where the deliverable is stored under

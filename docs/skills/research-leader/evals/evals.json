@@ -1,30 +1,30 @@
 {
-  "skill": "research-specialist",
-  "note": "New suite authored alongside the research-specialist agent + rubric (gh#721, lld-0023). Positives cover dispatching the agent, authoring/reviewing its deliverable, and grading it against the rubric. Negatives are adversarial against the closest neighbors: harness:fact-finder (gather-only, no synthesis), research-methods/experiment-runner (fixed-scorer measured loop), make-rubric (general rubric authoring), check-doc/doc-checker (generic document review with no deliverable-schema angle).",
+  "skill": "research-leader",
+  "note": "New suite authored alongside the research-leader agent + rubric (gh#721, lld-0023). Positives cover dispatching the agent, authoring/reviewing its deliverable, and grading it against the rubric. Negatives are adversarial against the closest neighbors: harness:fact-finder (gather-only, no synthesis), research-methods/experiment-runner (fixed-scorer measured loop), make-rubric (general rubric authoring), check-doc/doc-checker (generic document review with no deliverable-schema angle).",
   "cases": [
     {
       "id": "t01",
-      "prompt": "what fields does a research-specialist deliverable need per finding",
+      "prompt": "what fields does a research-leader deliverable need per finding",
       "expect": "trigger"
     },
     {
       "id": "t02",
-      "prompt": "score this research-specialist findings record against its rubric",
+      "prompt": "score this research-leader findings record against its rubric",
       "expect": "trigger"
     },
     {
       "id": "t03",
-      "prompt": "dispatch research-specialist to look into real-world case studies on X",
+      "prompt": "dispatch research-leader to look into real-world case studies on X",
       "expect": "trigger"
     },
     {
       "id": "t04",
-      "prompt": "what are the four axes the research-specialist rubric grades on",
+      "prompt": "what are the four axes the research-leader rubric grades on",
       "expect": "trigger"
     },
     {
       "id": "t05",
-      "prompt": "is this confidence marker used correctly in the research-specialist deliverable",
+      "prompt": "is this confidence marker used correctly in the research-leader deliverable",
       "expect": "trigger"
     },
     {
@@ -39,14 +39,14 @@
     },
     {
       "id": "t08",
-      "prompt": "what does the research-specialist owning skill bundle for doc-checker to grade against",
+      "prompt": "what does the research-leader owning skill bundle for doc-checker to grade against",
       "expect": "trigger"
     },
     {
       "id": "n01",
       "prompt": "gather dated, sourced findings for this /make-pack wave, no synthesis",
       "expect": "no-trigger",
-      "note": "owner: harness:fact-finder / pack-writing-rules — gather-only ledger, the exact contract research-specialist deliberately does not touch"
+      "note": "owner: harness:fact-finder / pack-writing-rules — gather-only ledger, the exact contract research-leader deliberately does not touch"
     },
     {
       "id": "n02",
@@ -64,7 +64,7 @@
       "id": "n04",
       "prompt": "write a rubric for grading model outputs",
       "expect": "no-trigger",
-      "note": "owner: make-rubric — general rubric authoring, no research-specialist deliverable angle"
+      "note": "owner: make-rubric — general rubric authoring, no research-leader deliverable angle"
     },
     {
       "id": "n05",
@@ -87,7 +87,7 @@
       "id": "n08",
       "prompt": "build an expert pack on color science",
       "expect": "no-trigger",
-      "note": "owner: make-pack — gather+distill corpus building, a different shape than one research-specialist dispatch"
+      "note": "owner: make-pack — gather+distill corpus building, a different shape than one research-leader dispatch"
     }
   ]
 }

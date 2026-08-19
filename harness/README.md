@@ -133,7 +133,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 Directories align with plugin names (ADR-0007).
 
 v3.16.1 · 2026-08-19 · closes #721 (harness slice, docs sibling same PR): `fact-finder`'s body
-gains a two-sentence disjointness note naming `docs:research-specialist` as the sibling agent for
+gains a two-sentence disjointness note naming `docs:research-leader` as the sibling agent for
 a synthesis-required dispatch — the `lld-0023-research-specialist-deliverable-plan` Resolution 1
 R-1 mitigation ("stated explicitly in both agents' own descriptions once built"), realized in the
 BODY rather than the resident `description` per this file's own A8 dispatch-only-agent rule

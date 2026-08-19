@@ -1,8 +1,8 @@
-# Deliverable schema — research-specialist findings record
+# Deliverable schema — research-leader findings record
 
 One row per finding, six fields beyond the claim itself. Fixed by
 `lld-0023-research-specialist-deliverable-plan`'s `## Data` section — this file transcribes it
-verbatim as the schema `research-specialist` writes to and `rubric.md` grades against; it does
+verbatim as the schema `research-leader` writes to and `rubric.md` grades against; it does
 not re-derive or extend it.
 
 | Field | Type | Required | Notes |

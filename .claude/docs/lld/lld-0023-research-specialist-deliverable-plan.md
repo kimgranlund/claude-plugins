@@ -146,6 +146,16 @@ used against their own upstream ADRs/IDRs.
 
 ### `docs/agents/research-specialist.md` (future build, sketched here — NOT shipped by this PR)
 
+**Amended 2026-08-19 (gh#721's own build, dated note, no history rewritten):** the follow-up
+build shipped this sketch as `docs/agents/research-leader.md` / `docs:research-leader`, not
+`research-specialist` — G12's naming-grammar gate rejected the sketch's own name (neither
+`research` nor `specialist` resolved in any lexicon at build time); Kim's live ruling registered
+`research` in `topic_lex` only and directed the rename to `research-leader` (`leader` ∈
+`RoleLex`, the `*-leader` dispatched-seat production this agent's shape already fits — `research-
+finder` was rejected as colliding semantically with `fact-finder`'s own no-synthesis contract).
+Every other decision below (tools, model, skills, seed-prompt shape, the deliverable schema and
+rubric in `## Data`) shipped as sketched, unchanged by the rename.
+
 A new sibling agent, docs-plugin-scoped (beside `research-methods`, `make-rubric`, and
 `experiment-runner`, whose doctrine it reconciles against rather than reimplements):
 
