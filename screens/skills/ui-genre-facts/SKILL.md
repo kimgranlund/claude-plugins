@@ -1,7 +1,7 @@
 ---
 name: ui-genre-facts
 description: >-
-  Answers which patterns, modules, and conventions a product CATEGORY expects — the genre world
+  Answers which patterns and conventions a product CATEGORY expects — the genre world
   model behind "is this the right pattern for THIS kind of product". Use for "what genre is this
   app", "what do users expect in a dashboard/collab tool/habit tracker/AI chat app", "which
   patterns does this category demand", "is this convention-violation acceptable here". Covers
