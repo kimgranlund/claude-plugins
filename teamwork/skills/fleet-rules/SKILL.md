@@ -244,7 +244,7 @@ record.**
 ### 5. Session-death resilience
 
 **Default: an orchestrator that resumes after a session death (its own, or a seat it dispatched)
-inventories from durable state, never from memory.**
+inventories from durable state, never from memory.** This worktree-isolation-plus-durable-ledger shape is a ruled substrate choice, not an assumed default — kept over Claude Code's native `agent-teams` (prompt-partitioned file ownership, an in-memory task list) per ADR-0023; ruling, reusable fact-shaped-re-evaluation-trigger pattern, and the #686 write-gate pointer (now shipped): `references/substrate-choice.md`.
 
 - **Reset orphaned in-flight seats.** A successor orchestrator session finds a ticket claimed
   (Section 2) with no corresponding open PR and no live dispatch holding it → treat as orphaned:
@@ -493,7 +493,7 @@ Top issues: 1) … — fix: …
 | `.claude/ops/fleet.json` / `fleet-roster.md` | The durable records Sections 1, 3, and 5 all read from and write to |
 | `agents/fleet-marshal.md` / `bind-team` (this plugin) | Section 7's worked realization on the seat's two doors — the dispatched and host-adopted forms of the same route-anything-incoming discipline |
 | `docs:file-bug` / `docs:file-feature` / `docs:file-task` / `docs:file-leftovers` | Section 7's owning intake skills for a raw report with no record yet — cross-plugin soft mentions, degrade gracefully where docs isn't installed |
-| `references/rubric.md` | Scoring dimensions and anchors for Part B's Review (judgment-based); the sibling `references/orchestration-rubric-a{1-8}-*.md` files score one orchestration INSTANCE per archetype instead (A1 solo host · A2 unnamed fan-out · A3 named seats/G1 · A4 fleet terminal · A5 forked intake · A6 scheduled loops · A7 workflow scripts/G2 · A8 `/batch`) — a1's header holds the shared method + cross-cutting X-R1..X-R4 every sibling cites; `references/organizing-axis.md` holds X-R4's own "who holds the plan" table + 6-line topology tree, Design step 1's design-step aid |
+| `references/rubric.md` | Scoring dimensions and anchors for Part B's Review (judgment-based); the sibling `references/orchestration-rubric-a{1-8}-*.md` files score one orchestration INSTANCE per archetype instead (A1 solo host · A2 unnamed fan-out · A3 named seats/G1 · A4 fleet terminal · A5 forked intake · A6 scheduled loops · A7 workflow scripts/G2 · A8 `/batch`) — a1's header holds the shared method + cross-cutting X-R1..X-R4 every sibling cites; `references/organizing-axis.md` holds X-R4's own "who holds the plan" table + 6-line topology tree, Design step 1's design-step aid; `references/substrate-choice.md` holds ADR-0023's fleet-vs-`agent-teams` substrate ruling, the fact-shaped re-evaluation-trigger pattern, and the #686 write-gate pointer (Section 5's own citation) |
 | `references/best-practices.md` | Part B design guidance / explaining a finding |
 | `references/foundations.md` | When a Part B finding turns on a shared model (discovery vs continuation) |
 | `harness:write-handoff` | The return contract a composed agent hands back — the other half of composition; its "Sealed vs. messaging" note states which channel carries the block (a sealed dispatch's Findings entry, or a named teammate's mailbox message) — never re-derive that split here |
