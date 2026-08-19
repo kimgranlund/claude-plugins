@@ -5,7 +5,9 @@ description: >-
   it's really knowledge to encode. Use when the user proposes a new capability or pitches an
   idea — "can we add a dark mode", "what if we supported CSV export". Intake only, never builds.
   /file-feature [idea, or a TKT-/#issue/adapter id] resumes. NOT for bugs (file-bug); NOT for
-  chores (file-task); NOT for authoring docs (make-doc).
+  chores (file-task); NOT for authoring docs (make-doc); NOT the UI-shaped intake SCHEMAS
+  themselves (screens:feature-intake-rules, design:token-feature-intake-rules) — this skill only
+  routes to them.
 disable-model-invocation: false
 user-invocable: true
 context: fork
@@ -141,6 +143,23 @@ decision-ratifying.
 - **Defect** (this "feature" is actually a bug) or **generic chore** (nothing to size or shape) →
   neither Work nor Knowledge; redirect instead (Failure branches) rather than forcing a size/shape
   decision onto something that isn't one.
+
+**UI-shape detection (gh#711, lld-0024) — a Work-shaped seed only, soft named mention, degrades
+gracefully.** A Work-shaped seed that reads as a component/module, a layout/shell, a UX-flow, or
+a cross-cutting UX (motion/focus/i18n) ask consults `screens:feature-intake-rules` for its
+per-shape intake schema; one that reads as a token/palette/typography seed consults
+`design:token-feature-intake-rules` instead — both by SOFT named mention
+(`.claude/rules/plugin-authoring.md`'s hard boundary: no preload, no `${CLAUDE_PLUGIN_ROOT}`
+cross-plugin path). Either pack's schema fields, once filled, become this record's own
+Acceptance/Scope content directly — both plane columns answered or a named open fork (the
+packs' own both-planes capture-completeness rule), plus the shape's `build-owner`/`dod-checker`
+pair carried into this record's own frontmatter (a forward claim: `dispatch-ticket` reading and
+routing on those fields is lld-0024's own follow-up, not yet a live consumer). **Degrade branch,
+named explicitly:** `screens`/`design` not installed, or the seed doesn't read as any of the five
+UI shapes (four screens' + one design's) → classify proceeds on this phase's own plain Size/Shape
+decision alone, the gap named in Scope/Open ("UI-shape schema not consulted — plugin absent" or
+"not UI-shaped") rather than silently skipped. This paragraph never fires for a
+Knowledge/Defect/chore-shaped seed.
 
 ## Phase 5 — Record, lint, place
 
