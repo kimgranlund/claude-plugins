@@ -27,7 +27,13 @@ Detector thresholds (flag-tunable via the constants below, cited beside every fi
   D2 — issue titles normalized (lowercase, punctuation/stopwords/#NNN stripped), pairwise
        Jaccard >= JACCARD_D2 (0.5) -> a cluster; a member created after another member's
        `closedAt` = re-filed (major); same-window overlap with no created-after-closed edge =
-       dedup-miss (minor).
+       dedup-miss (minor). Two exclusions (gh#694, run-2 finding: 4/5 D2 hits were false
+       positives) run before/during clustering: (a) a title carrying a FIXTURE prefix or "do not
+       build" marker is filtered out before any comparison — a deliberate probe fixture, never a
+       real near-dup candidate; (b) a pairwise edge is never unioned, even at Jaccard >=
+       JACCARD_D2, when both titles share an identical wave NUMBER ("wave N") or an identical
+       ADR-id token — a deliberate same-campaign wave-sibling/multi-ADR capture set, not a
+       dedup-search miss.
   D3 — per METRIC_REGISTRY key present in the bundle: rows are GROUPED by that key's own
        registered `key_columns` first (e.g. one series per `plugin` for attention_trend — never
        iterated ungrouped across interleaved rows from multiple keys, gh#645 MAJOR-1), then for
@@ -104,11 +110,14 @@ def overlap_coefficient(a, b):
     return len(a & b) / minlen if minlen else 0.0
 
 
-def cluster_pairs(items, get_tokens, threshold, min_shared=0, metric=jaccard):
+def cluster_pairs(items, get_tokens, threshold, min_shared=0, metric=jaccard, exclude_edge=None):
     """items: list of arbitrary objects. get_tokens(item) -> set of tokens.
     Returns a list of clusters (each a list of the original items), connected-components style
-    over the "collides" graph (pairwise `metric` >= threshold AND shared-token count >= min_shared).
-    Deterministic: items processed in input order, clusters returned in first-member order."""
+    over the "collides" graph (pairwise `metric` >= threshold AND shared-token count >= min_shared,
+    AND, when `exclude_edge` is given, `not exclude_edge(items[i], items[j])` — an edge that would
+    otherwise cluster but is known to be a deliberate same-source pair, e.g. D2's fixture/wave-
+    sibling exclusions, never unions). Deterministic: items processed in input order, clusters
+    returned in first-member order."""
     n = len(items)
     toks = [get_tokens(it) for it in items]
     parent = list(range(n))
@@ -128,6 +137,8 @@ def cluster_pairs(items, get_tokens, threshold, min_shared=0, metric=jaccard):
         for j in range(i + 1, n):
             shared = toks[i] & toks[j]
             if len(shared) >= min_shared and metric(toks[i], toks[j]) >= threshold:
+                if exclude_edge and exclude_edge(items[i], items[j]):
+                    continue
                 union(i, j)
 
     groups = {}
@@ -274,6 +285,41 @@ def detect_d1(bundle):
 
 
 # ------------------------------------------------------------------------------------------- D2
+FIXTURE_MARKER_RE = re.compile(r"^\s*FIXTURE\b|do not build", re.I)
+# gh#694 exclusion (a): a title carrying a FIXTURE prefix or a "do not build" marker is a
+# deliberate probe fixture, never a real near-duplicate candidate — the run-2 false positive was
+# exactly two such fixtures (#617/#616) clustering with EACH OTHER, not with anything real.
+
+WAVE_TOKEN_RE = re.compile(r"\bwave\s*#?\s*(\d+)\b", re.I)
+ADR_TOKEN_RE = re.compile(r"\bADR-(\d{3,5})\b", re.I)
+# gh#694 exclusion (b): same-campaign wave siblings. Raw-text regexes, not `tokenize()` — a bare
+# wave NUMBER ("2") is 1 char and `tokenize()`'s `len(t) > 2` filter would silently drop it, so the
+# wave-number identity has to be read straight off the title text instead.
+
+
+def _is_fixture_marked(title):
+    """D2 exclusion (a) predicate — see FIXTURE_MARKER_RE above."""
+    return bool(FIXTURE_MARKER_RE.search(title or ""))
+
+
+def _campaign_token_sets(title):
+    """Extract same-campaign identity tokens from a raw title: wave numbers and ADR ids."""
+    title = title or ""
+    waves = set(WAVE_TOKEN_RE.findall(title))
+    adrs = {m.upper() for m in ADR_TOKEN_RE.findall(title)}
+    return waves, adrs
+
+
+def _same_campaign(item_a, item_b):
+    """D2 exclusion (b) predicate: a shared wave NUMBER or a shared ADR-id token in both titles
+    means the pair is a deliberate multi-wave/multi-ADR capture set, not a dedup-search miss —
+    the run-2 false positives were #613/#612 (sibling captures) and #523/#520 + #522/#521
+    (ADR-0020 wave tickets)."""
+    waves_a, adrs_a = _campaign_token_sets(item_a.get("title"))
+    waves_b, adrs_b = _campaign_token_sets(item_b.get("title"))
+    return bool(waves_a & waves_b) or bool(adrs_a & adrs_b)
+
+
 def _norm_title_tokens(title):
     return tokenize(title or "")
 
@@ -294,7 +340,15 @@ def detect_d2(bundle):
     if not items:
         return findings
 
-    clusters = cluster_pairs(items, lambda it: _norm_title_tokens(it.get("title")), JACCARD_D2, 1)
+    # exclusion (a): fixture-marked titles never enter clustering at all — filtered before any
+    # pairwise comparison runs, so two fixtures can never cluster with each other or with anything
+    # real.
+    items = [it for it in items if not _is_fixture_marked(it.get("title"))]
+    if not items:
+        return findings
+
+    clusters = cluster_pairs(items, lambda it: _norm_title_tokens(it.get("title")), JACCARD_D2, 1,
+                              exclude_edge=_same_campaign)
     idx = 0
     for cluster in clusters:
         if len(cluster) < 2:
@@ -662,6 +716,48 @@ def selftest():
 
     d2 = [f for f in result["findings"] if f["class"] == "D2"]
     assert any("re-filed" in f["summary"].lower() or "Re-filed" in f["summary"] for f in d2), d2
+
+    # gh#694 positive control: the real re-filed near-dup (#501/#588, the #332/#318 class) must
+    # still fire after the two exclusions below are wired in — proving neither exclusion is
+    # overbroad.
+    d2_issue_numbers = {int(ev["locator"].split(":", 1)[1])
+                        for f in d2 for ev in f["evidence"]}
+    assert {501, 588} <= d2_issue_numbers, \
+        f"the real re-filed near-dup #501/#588 must still fire: {d2_issue_numbers}"
+
+    # gh#694 exclusion (a): fixture-marked probe pair (#900/#901) — near-identical titles that
+    # would otherwise cluster (same Jaccard shape as #501/#588) — must NEVER appear in a D2
+    # finding at all.
+    assert not ({900, 901} & d2_issue_numbers), \
+        f"fixture-marked titles #900/#901 must be excluded from D2 entirely: {d2_issue_numbers}"
+
+    # gh#694 exclusion (b): same-campaign wave siblings (#910/#911, both ADR-0020 wave 2) share
+    # enough vocabulary to clear JACCARD_D2 on raw tokens alone — proven by the negative control
+    # below — yet must NEVER appear in a D2 finding once the exclusion is wired in.
+    wave_a_tokens = _norm_title_tokens("ADR-0020 wave 2: fleet orchestrator seat rollout")
+    wave_b_tokens = _norm_title_tokens("ADR-0020 wave 2: build-leader seat rollout")
+    assert jaccard(wave_a_tokens, wave_b_tokens) >= JACCARD_D2, \
+        "the wave-sibling fixture must genuinely clear JACCARD_D2 on tokens alone — otherwise " \
+        "the exclusion test proves nothing"
+    assert _same_campaign({"title": "ADR-0020 wave 2: fleet orchestrator seat rollout"},
+                           {"title": "ADR-0020 wave 2: build-leader seat rollout"}), \
+        "_same_campaign must fire on a shared wave number and a shared ADR-id token"
+    assert not ({910, 911} & d2_issue_numbers), \
+        f"same-campaign wave siblings #910/#911 must be excluded from D2 entirely: {d2_issue_numbers}"
+
+    # negative control: _same_campaign must NOT fire on two unrelated titles sharing neither a
+    # wave number nor an ADR-id token (the exclusion predicate must not be so loose it eats real
+    # near-dups too — this is the reverse of the #501/#588 positive control above).
+    assert not _same_campaign({"title": "flaky retry timeout sweep guard keeps firing"},
+                               {"title": "Fix flaky retry timeout in sweep guard"}), \
+        "_same_campaign must not fire on a real near-dup pair with no wave/ADR token at all"
+
+    # _is_fixture_marked — direct unit coverage, including the negative control (a title merely
+    # containing "fixture" as a normal English word, not the marker, must not match)
+    assert _is_fixture_marked("FIXTURE #890 — D2 near-duplicate probe seed (do not build)")
+    assert _is_fixture_marked("some title mentioning we should do not build this yet")
+    assert not _is_fixture_marked("Add a fixture-loading helper to the test harness"), \
+        "a title merely mentioning 'fixture' as an ordinary word must not match the marker"
 
     d3 = [f for f in result["findings"] if f["class"] == "D3"]
     d3_kinds = {f["summary"].split(":")[0] for f in d3}
