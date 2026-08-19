@@ -32,9 +32,21 @@ per-seat alias is minted here — `/sub-agent {name-or-instructions}` is the who
 **2026-08-19 amendment (Kim's live ruling).** This skill absorbs the free-instruction dispatch
 originally shipped as a separate sibling, `sub-task` (#745/#746, retired same-day, zero adoption)
 — `sub-agent` is now dual-mode rather than registered-agent-only. This slightly amends ADR-0020
-D3's `sub-` head semantics (D4's no-per-seat-alias rule is untouched); recorded here rather than
-in a fresh ADR supersession per Kim's own instruction — escalate to a real supersession only if a
-reviewer judges this contract-changing enough to owe one.
+D3's `sub-` head semantics (D4's no-per-seat-alias rule is untouched); recorded here as an inline
+dated note rather than a fresh ADR supersession, per Kim's own explicit 2026-08-19 ruling — a
+fresh-context skill-checker pass flagged this contract change as ADR-supersession-worthy and Kim
+ruled otherwise: D3's reserved heads themselves are untouched (`sub-` still names the one
+mechanic), so the inline note stays the durable record.
+
+**Naming-default is a deliberate, Kim-ruled deviation from `fleet-rules` A3-R1 (2026-08-19), not an
+oversight.** A3-R1 asks whether continuation is genuinely needed PER CHARTER before naming a
+dispatch; this skill's free-instruction path instead defaults every no-match dispatch to named,
+demoting the unnamed/synchronous form to an explicit opt-out (the literal word "one-shot" or
+"quick" in the charter — see Phase 2b below). The same fresh-context skill-checker pass flagged
+this as a live tension against A3-R1's own per-instance-judgment posture; Kim's ruling (interactive,
+2026-08-19) was to keep the default-to-named design as drafted rather than redesign it to a
+per-charter judgment call. Read this paragraph as that ruling's own citation, not a routing
+ambiguity to resolve independently later.
 
 ## Phase 1 — Resolve the target: registered agent, or free instructions
 

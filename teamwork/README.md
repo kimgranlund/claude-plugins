@@ -110,6 +110,30 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.8 · 2026-08-19 · closes #751 (Kim's live correction: `/sub-task` shipped a one-shot
+unnamed subagent; the intended default was a continuable named session): `sub-task` (#745/#746,
+merged same day, zero adoption) is retired — its free-instruction dispatch is absorbed into
+`sub-agent` as a second resolution branch rather than kept as a standalone sibling, per a
+coordinator mid-flight course-correction. `sub-agent`'s Phase 1 is now dual-mode: an exact-match
+registered agent name dispatches unchanged; no match seals the whole `$ARGUMENTS` as a
+free-instruction charter and dispatches it as a NAMED, continuable, clean-context
+`general-purpose` session by default (mailbox semantics stated in the reply: addressable by
+name, result arrives as a completion notification, continuable with follow-ups), falling back to
+the prior UNNAMED/synchronous form only on an explicit "one-shot"/"quick" ask. A typo-guard
+(edit-distance ~2 confirm via `AskUserQuestion`) covers the original overload hazard that argued
+against merging the two commands in the first place. `fork-agent`'s SKILL.md/evals reverted to
+pre-#746 (its `sub-task` reciprocal fence is now dead). Two contract questions were escalated to
+a fresh-context `harness:skill-checker` (FLOOR) pass and then to Kim directly (interactive
+ruling, 2026-08-19): (1) whether defaulting to named contradicts `fleet-rules` A3-R1's
+per-charter continuation judgment — Kim ruled KEEP the default-to-named design, recorded inline
+in `sub-agent`'s own body as a deliberate, dated deviation, not an oversight; (2) whether this
+change is big enough to owe a fresh ADR-0020 D3 supersession — Kim ruled NO, D3's reserved heads
+are untouched, the inline dated note is the durable record. `skill_lint.py` clean on both touched
+skills; `eval_check.py` static gate + full coverage clean (15/15 suites, `sub-task` cleanly gone
+from the corpus). Routing proof: both touched skills are `disable-model-invocation: true`,
+structurally excluded from `check-routing`'s blind judge fan-out (`sub-agent`/`fork-agent` never
+enter the model-invocable menu), so the clean static gate is the complete routing proof for this
+diff's actual blast radius — zero model-invocable descriptions were touched.
 v2.28.7 · 2026-08-19 · closes #736, #740 (folded campaign, filed by agent-ui-marshal): three
 harvest folds, no contract change. **#736** — `mobilize-chores` step 2's git-native in-flight
 discovery gains a branch-name fallback: the existing GraphQL `closedByPullRequestsReferences`
