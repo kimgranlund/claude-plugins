@@ -90,14 +90,20 @@ then:
 
 ```
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/check-routing/scripts/write_routing_report.py" <plugin-name> \
-  --dead <n> --stolen <n> --leaked <n> --out <workspace-root>/.claude/ops/routing-report.json
+  --dead <n> --stolen <n> --leaked <n> --out <git-root>/.claude/ops/routing-report.json
 ```
+
+`<git-root>` is this plugin's enclosing git repository root (`git rev-parse --show-toplevel`),
+never `<root>` itself — `<root>` may be the plugin directory or a bare `.claude/skills` tree
+(Phase 1), and in either case the workspace's `.claude/ops/` sits above it, not under it.
 
 One stable, non-dated, git-tracked file — never the gitignored `harness-audit-*/` family (that
 convention is `check-everything`'s own dated, local-only audit scratch space, per its own
 `.gitignore` line; it was never check-routing's own path and stays out of scope here). Each run
-overwrites only its own plugin's entry, so the file always holds every plugin's *latest* known
-counts with no dated-directory globbing required on the reading side.
+overwrites only its own plugin's entry, so the file holds the latest known counts for every
+plugin that has ever run this phase, with no dated-directory globbing required on the reading
+side. (The script's own on-disk shape also carries an `as_of` date per plugin — the illustrative
+JSON above elides it since `trend.py`'s reader ignores extra keys.)
 
 **Estate run** (`--estate`, no single owning plugin) → skip this phase; name it skipped in the
 report ("Persist: skipped, estate run has no single plugin key") rather than inventing one.
