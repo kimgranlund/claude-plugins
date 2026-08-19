@@ -1,14 +1,14 @@
 ---
 name: design-md-rules
 description: >-
-  Ground-truth knowledge of the DESIGN.md design-system spec format consumed by Claude Design
-  and Claude Code. Use when reading, explaining, extending, or validating a DESIGN.md ("design
-  spec", "design system file"): file anatomy, the frontmatter schema, the
-  --{prefix}-{family}-{slot} grammar, light/dark scheme pairing, @dsCard preview cards,
-  disclosure-over-correction. Also the knowledge substrate for creating a design system from a
-  corpus of design files. NOT for the end-to-end authoring workflow (make-dscard-kit); NOT for
-  grading a bundle someone else authored (design-system-checker agent). Never
-  framework-prescriptive; accessibility is disclosed, never enforced.
+  Ground-truth knowledge of the DESIGN.md spec format consumed by Claude Design and Claude Code.
+  Use for reading, explaining, extending, or validating a DESIGN.md ("design spec", "design
+  system file"): anatomy, frontmatter schema, --{prefix}-{family}-{slot} grammar, light/dark
+  pairing, @dsCard cards, disclosure-over-correction; the substrate for creating a system from
+  a corpus. NOT any DESIGN.md lint ask — "fails lint", "orphan warnings", @google/design.md —
+  that vocabulary is Stitch's lint gate even with Stitch unnamed (make-stitch-kit); NOT the
+  authoring workflow (make-dscard-kit); NOT cross-platform strategy
+  (make-design-system); NOT grading someone else's bundle (design-system-checker).
 disable-model-invocation: false
 user-invocable: true
 ---

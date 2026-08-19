@@ -6,8 +6,9 @@ description: >-
   Make", "Make output ignores our design system — fix the guidelines", "check this guidelines
   folder before shipping". Covers the routed-folder shape (Guidelines.md + foundations/ +
   components/), the React+Tailwind+shadcn/ui flavor, the naming grammar — Make validates
-  nothing, so this is the gate. NOT for Claude Design (make-dscard-kit); NOT for Google Stitch
-  (make-stitch-kit); NOT for cross-platform strategy (make-design-system).
+  nothing, so this is the gate. NOT Claude Design (make-dscard-kit); NOT Google Stitch
+  (make-stitch-kit); NOT cross-platform strategy (make-design-system); NOT the Figma Plugin
+  API — variables, sandbox, token JSON (figma-plugin-facts).
 disable-model-invocation: false
 user-invocable: true
 ---
