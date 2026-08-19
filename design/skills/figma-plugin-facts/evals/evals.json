@@ -96,6 +96,12 @@
       "id": "n06",
       "prompt": "call the figma REST API to list a team's files",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n07",
+      "prompt": "create the Figma Make design system guidelines for our brand",
+      "expect": "no-trigger",
+      "note": "#760 pair 5 — make-figma-make-kit's own authoring workflow, not the Plugin API"
     }
   ]
 }

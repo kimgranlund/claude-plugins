@@ -116,6 +116,12 @@
       "id": "n10",
       "prompt": "fill the Iconography section of our DESIGN.md",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n11",
+      "prompt": "why all these orphan warnings in my DESIGN.md",
+      "expect": "no-trigger",
+      "note": "#760 pair 3 — Stitch's own lint-error phrasing with no 'Stitch' named; routes to make-stitch-kit, not here"
     }
   ]
 }

@@ -121,6 +121,12 @@
       "id": "n12",
       "prompt": "grade this design system export someone else generated",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n13",
+      "prompt": "how do I alias a raw variable to a semantic variable in my figma plugin",
+      "expect": "no-trigger",
+      "note": "#760 pair 5 — figma-plugin-facts' Plugin-API territory, not this guidelines authoring workflow"
     }
   ]
 }

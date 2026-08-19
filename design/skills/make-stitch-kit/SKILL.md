@@ -6,10 +6,10 @@ description: >
   "port tokens to Stitch", "why all these orphan warnings". Covers the alpha frontmatter
   schema, section order, OKLCH values, -dark scheme siblings, the
   --{prefix}-{family}-{slot} naming grammar, and the lint gate (npx @google/design.md
-  lint, zero errors). NOT for DESIGN.md format Q&A (design-md-rules); NOT for Claude
-  Design bundles (make-dscard-kit); NOT for Figma Make guidelines (make-figma-make-kit);
-  NOT for cross-platform strategy (make-design-system); NOT for grading an export you
-  didn't author (design-system-checker).
+  lint, zero errors). NOT Claude Design DESIGN.md format Q&A (design-md-rules); NOT
+  Claude Design bundles (make-dscard-kit); NOT Figma Make guidelines (make-figma-make-kit);
+  NOT cross-platform strategy (make-design-system); NOT grading an export you didn't author
+  (design-system-checker).
 disable-model-invocation: false
 user-invocable: true
 ---
