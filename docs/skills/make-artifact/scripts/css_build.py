@@ -24,9 +24,15 @@ light dark; --<short-role>: light-dark(<light>, <dark>); ... }` plus `[data-them
 one-line toggles (never a duplicated variable block); `--text-<role>-{size,weight,lh,ls}` per type
 role; `--font-<slug>` per distinct font family, ALWAYS with a system-fallback tail (sans-serif or
 monospace, chosen by whether the family name contains "mono", case-insensitive — never invented
-per family); `--space-<name>` / `--r-<name>` for the spacing/radii scales; a fixed mermaid
-re-theme block (`!important` overrides bound to the same short role custom properties, referencing
-artifact-rules' Adia neutral family names — the first-citizen system).
+per family); `--space-<name>` / `--r-<name>` for the spacing/radii scales; a fixed
+**type-doctrine default-binding block** (lld-0013 v2 Resolution 10, #649: body/reading text binds
+`system-ui`, interactive elements — buttons, links, tabs, badges, kickers — bind `ui-monospace`,
+by default, regardless of the source system's own faces; a source's `--font-*` custom properties
+stay available as the opt-in override vehicle, never bound to body/interactive text unless a
+page-assembly rule deliberately does so with an adjacent `/* override: <reason> */` comment — the
+suppression path `design:artifact-styling-rules`' `artifact_check.py` already honors); a fixed
+mermaid re-theme block (`!important` overrides bound to the same short role custom properties,
+referencing artifact-rules' Adia neutral family names — the first-citizen system).
 
 Color role naming (#662): a source color role (the design system's own resolved semantic name,
 e.g. `neutral-background`, `primary`) is mapped to the artifact page's UNPREFIXED short property
@@ -82,6 +88,14 @@ RADII_NAMES = ["none", "xs", "sm", "md", "lg", "xl", "full"]
 
 SANS_FALLBACK = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
 MONO_FALLBACK = "ui-monospace, 'SF Mono', monospace"
+
+# lld-0013 v2 Resolution 10 (#649) — the artifact type doctrine's own fixed faces
+# (design:artifact-styling-rules' type-and-layout.md: "system-ui body, mono interactive"), bound
+# by DEFAULT regardless of the source design system's own faces. Distinct from SANS_FALLBACK/
+# MONO_FALLBACK above (the fallback TAIL appended after a source system's own named custom font);
+# these are the doctrine's own literal stacks, used as-is with no font name prepended.
+DOCTRINE_BODY_STACK = "system-ui, -apple-system, 'Segoe UI', sans-serif"
+DOCTRINE_INTERACTIVE_STACK = "ui-monospace, 'SF Mono', Menlo, monospace"
 
 # Source-role -> artifact-page short-property-name lookup, transcribed from
 # design:artifact-styling-rules' token-architecture.md 14-live-roles table (its "Aliases" column) —
@@ -390,6 +404,26 @@ def normalize(data):
 
 # --- CSS emission ------------------------------------------------------------------------------
 
+TYPE_DOCTRINE_BLOCK = """
+/* Artifact type doctrine (lld-0013 v2 Resolution 10, #649; design:artifact-styling-rules'
+   type-and-layout.md is the authority): body/reading text binds system-ui by default;
+   interactive elements (buttons, links, tabs, badges, kickers) bind the mono stack by default --
+   regardless of the source design system's own faces. Color still flows from the source system
+   (or the missing-system fallback); faces are the doctrine's. Any --font-* custom property
+   emitted above from the source system is still available as the OPT-IN override vehicle -- it is
+   never bound to body/interactive text by this default block. To deliberately bind a source face
+   to body or interactive text instead, add an adjacent `/* override: <stated reason> */` comment
+   immediately before the overriding rule -- design:artifact-styling-rules' artifact_check.py's
+   doctrine-font-stack check honors exactly that comment as its suppression path. */
+body, p, li, td, th, blockquote, figcaption {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+button, a, [role="tab"], .badge, .kicker {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+""".strip("\n")
+
+
 MERMAID_REHEME_BLOCK = """
 /* Mermaid house re-theme (design:artifact-styling-rules' mermaid-reference.md): the rendered SVG
    ships its own inline styles, so re-theming requires token-driven !important overrides bound to
@@ -456,6 +490,8 @@ def build_css(norm):
     lines.append("")
     lines.append('[data-theme="light"] { color-scheme: light; }')
     lines.append('[data-theme="dark"] { color-scheme: dark; }')
+    lines.append("")
+    lines.append(TYPE_DOCTRINE_BLOCK)
     lines.append("")
     lines.append(MERMAID_REHEME_BLOCK)
     return "\n".join(lines) + "\n"
@@ -841,6 +877,61 @@ def selftest():
     if "--paper:" not in css:
         errs.append("cross-script regression: css_build must emit --paper for the 'neutral-background' "
                     "role — artifact_check's ground check binds to this exact name")
+
+    # 9. TYPE-DOCTRINE EMIT-SIDE BINDING (lld-0013 v2 Resolution 10, #649) — mirrors
+    #    artifact_check.py's doctrine-font-stack check the same way test 8 mirrors its
+    #    missing-ground checks: a literal, dated, cited duplicate (never an import across the
+    #    plugin boundary), kept in sync manually with artifact_check.py's own selftest fixture.
+    _mirror_doctrine_sans_re = re.compile(r"system-ui")
+    _mirror_doctrine_mono_re = re.compile(r"ui-monospace")
+    _mirror_override_comment_re = re.compile(r"/\*\s*override\b", re.I)
+
+    # 9a. doctrine-default assert — the DEFAULT block binds body/reading selectors to the
+    #     system-ui stack and interactive selectors (button/a/[role=tab]/.badge/.kicker) to the
+    #     mono stack, with no override comment anywhere near either rule (none is needed: both are
+    #     already on-doctrine).
+    if not _mirror_doctrine_sans_re.search(TYPE_DOCTRINE_BLOCK):
+        errs.append("type-doctrine block must bind body/reading text to the system-ui stack by default")
+    if not _mirror_doctrine_mono_re.search(TYPE_DOCTRINE_BLOCK):
+        errs.append("type-doctrine block must bind interactive elements to the ui-monospace stack by default")
+    if "button, a" not in TYPE_DOCTRINE_BLOCK or '[role="tab"]' not in TYPE_DOCTRINE_BLOCK:
+        errs.append("type-doctrine block must name the doctrine's interactive selectors "
+                    "(buttons, links, tabs, badges, kickers)")
+    if TYPE_DOCTRINE_BLOCK not in css:
+        errs.append("build_css output must include the type-doctrine default-binding block")
+
+    # 9b. NEGATIVE CONTROL — the default block must never bind a source system's own brand font
+    #     (a --font-* custom property, or any quoted family name) to body/interactive text with
+    #     no override comment; the default binding is ALWAYS the literal doctrine stack, never an
+    #     indirection through the source system's opt-in override vehicle.
+    # Strip the leading doc comment first — it legitimately NAMES "--font-*" in prose (explaining
+    # the escape hatch); the negative control below checks the actual emitted RULES, never the
+    # explanatory comment about them.
+    _doctrine_rules_only = re.sub(r"/\*.*?\*/", "", TYPE_DOCTRINE_BLOCK, flags=re.S)
+    if "--font-" in _doctrine_rules_only:
+        errs.append("type-doctrine default block's actual RULES must never reference a source "
+                    "--font-* custom property — the default binding is the literal doctrine "
+                    "stack, not an override")
+    _default_body_rule = re.search(r"body,[^{]*\{[^}]*\}", TYPE_DOCTRINE_BLOCK)
+    if _default_body_rule and "Custom Brand" in _default_body_rule.group(0):
+        errs.append("the default body rule must never bind a brand font literal")
+
+    # 9c. override path — a page that DELIBERATELY binds a source brand face to body text, with
+    #     an adjacent `/* override: <reason> */` comment, must be recognized as justified by the
+    #     same override-detection logic artifact_check.py applies (comment precedes the rule).
+    #     Mirrors artifact_check.py's own selftest override fixture (see its docstring), proving
+    #     this script's understanding of the suppression path matches the checker's.
+    overridden_fixture = ("/* override: brand requires this face for the masthead */\n"
+                          "body { font-family: 'Custom Brand Font', serif; }")
+    _rule_match = re.search(r"font-family\s*:\s*([^;]+);", overridden_fixture)
+    _preceding = overridden_fixture[: _rule_match.start()] if _rule_match else ""
+    if not _mirror_override_comment_re.search(_preceding):
+        errs.append("an adjacent '/* override: <reason> */' comment must be detected preceding "
+                    "the overriding font-family rule — the suppression path artifact_check.py "
+                    "honors (#684)")
+    if _mirror_doctrine_sans_re.search(_rule_match.group(1)) or _mirror_doctrine_mono_re.search(_rule_match.group(1)):
+        errs.append("the override fixture's brand face must itself be OFF doctrine (proving the "
+                    "override path is actually exercised, not accidentally on-doctrine already)")
 
     return errs
 

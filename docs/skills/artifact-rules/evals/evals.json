@@ -28,6 +28,16 @@
       "expect": "trigger"
     },
     {
+      "id": "t06",
+      "prompt": "how does the composition phase map our project's ADRs and LLDs into artifact chapters",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "what happens to the provenance footer when the target project has no design system at all",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "rebuild the Estate Handbook as an artifact page",
       "expect": "no-trigger",
@@ -74,6 +84,18 @@
       "prompt": "how do design tokens turn into light and dark CSS custom properties",
       "expect": "no-trigger",
       "note": "moved to design:artifact-styling-rules — token architecture doctrine"
+    },
+    {
+      "id": "n09",
+      "prompt": "compose a handbook from our project's ADRs and LLDs",
+      "expect": "no-trigger",
+      "note": "make-artifact — the build ask itself, not a standards question about how composition works"
+    },
+    {
+      "id": "n10",
+      "prompt": "synthesize a color palette for our brand",
+      "expect": "no-trigger",
+      "note": "design's make-palette — a palette ask alone, no artifact/provenance question"
     }
   ]
 }
