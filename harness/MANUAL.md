@@ -44,6 +44,18 @@ ADR-0022". Report-only; mitigations ride tickets, never this skill.
 > authorkit's audit family; THIS machine's git-surface hygiene is `clean-git`/`repo-cleaner`; this
 > is the fresh-clone recoverability delta only
 
+**`/runtime-state [--repo-root PATH] [--slug S] [--session-id ID] [--limit N] [--copy] [--json]`**
+— a LOCATOR over existing session `.jsonl` transcripts, never an export bundle: resolves the
+CURRENT session's own transcript path plus its recent subagent transcripts (`agent-*.jsonl`
+under the project/worktree-scoped `~/.claude/projects/<slug>` dir), or a PAST session's given its
+repo path or slug. No args resolves the live session (cwd-derived slug + the
+`CLAUDE_CODE_SESSION_ID` env var) — the whole point is one command, no per-session setup. Prints
+or clipboard-copies the resolved path(s); writes zero new data. Also model-invocable: "where is
+my transcript", "find this session's jsonl", "give me the path to grab for a bug report".
+> `/runtime-state` — NOT the maximal debug-export bundle (settings snapshot, task outputs,
+> workflow journals — fenced out, no owning skill yet); NOT a Stop hook (#466's estate-wide
+> retirement stands); NOT reading or summarizing transcript content, paths only
+
 **`/what-shipped [window]`** — the windowed activity report: bundled `collect_github.py` sweeps PRs merged/opened/open-now and issues for a UTC date window (release-bot noise counted but excluded, saturation guarded, `## OK` trailer = completeness), the resolved ticket backend adds records updated in the window, and the report groups real work into ≤5 owner-named workstreams with the ticket↔PR join's residue — tickets with no PR — called out. Windows: bare = today, `yesterday`, `this week`, `36h`, `YYYY-MM-DD[..YYYY-MM-DD]`. Also model-invocable: "what shipped today", "standup summary", "what landed in the last 24 hours".
 > `/what-shipped` · `/what-shipped this week` — current work-state (branches, blocked-on-you) is `/check-state`'s job; this is a window of activity
 
