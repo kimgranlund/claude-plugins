@@ -83,8 +83,7 @@
     "big-change-git",
     "prompt",
     "wording",
-    "styling",
-    "research"
+    "styling"
   ],
   "object_vocab": [
     {
@@ -500,6 +499,11 @@
     },
     {
       "canonical": "spend",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "research",
       "plural": null,
       "banned_aliases": []
     }
