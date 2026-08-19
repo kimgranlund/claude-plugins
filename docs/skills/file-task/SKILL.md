@@ -52,8 +52,9 @@ time, not deferred to a phase a given resume might never reach.
   from Scope/Open once folded (or append a dated `## Findings` comment when it is a result, not a
   scope change), and report the record. To avoid an answer colliding with the status-verb grammar
   above (a one-word `done`/`doing`/`wontfix` answer, or one starting `wontfix `, would otherwise
-  read as a status verb), Phase 4's close-out suggests the resume format
-  `/file-task <id> answer: <text>` — a prefix the status grammar can never match.
+  read as a status verb), the resume format is `/file-task <id> answer: <text>` — a prefix the
+  status grammar can never match (the terse close-out, gh#713, no longer echoes this string; it
+  lives here and in Phase 4's own record-payload description).
 - **Nothing after the id** → report the record's state, labels, and last Findings entry; stop.
 
 A CLOSED record resumes only as a report — state it and stop; reopening is the user's call
@@ -78,8 +79,9 @@ own filing, both minted clarify-less; and a background dispatch cannot even disc
 This is this skill's only invocation shape (`context: fork` is fixed above), so the round never
 runs live, full stop. Capture here as `task` with the ambiguity named in Scope/Open instead
 (persistence beats taxonomy), and the close-out (Phase 4) owes the question it couldn't ask live:
-it names the one clarifying question find-intent's discipline would have asked, plus the resume
-command — `/file-task <id> answer: <text>` — that folds the answer in once a person supplies it (Phase
+it reports the count (0 or 1) in its one-line terse form (gh#713) — the question's own text
+already stands in Scope/Open, above, never restated in the close-out; the resume command —
+`/file-task <id> answer: <text>` — folds the answer in once a person supplies it (Phase
 1's "new detail" fold-in path). Skip naming a clarify question in the close-out when the seed
 carries `[redirected-from:X]` (the round budget was already spent upstream) or `[unattended]` (no
 live session to report back to at all) — the shared marker protocol below.
@@ -118,8 +120,9 @@ question there, per the resolved assumption below — never as a live round.
 on an unverified assumption that `AskUserQuestion` reaches a live user from a `context: fork` run.
 It doesn't — measured directly (Phase 2, above, carries the finding; not restated here). Every
 sibling's Phase 2 assumes this as the default, not a risk to watch for: capture-with-gaps plus a
-close-out that names the unasked question(s) and the resume command that folds an answer in later
-is the actual contract, not a fallback for a maybe-broken channel.
+close-out that counts the unasked question(s) in its one-line terse form (gh#713) and the resume
+command that folds an answer in later is the actual contract, not a fallback for a maybe-broken
+channel.
 
 ## Phase 3 — Dedup: it may already exist
 
@@ -157,11 +160,14 @@ when any) · an empty `## Findings` section** for dated write-backs.
   backend for this operation and reports the fallback in the close-out; never leave the item
   uncaptured because the preferred store was unreachable.
 
-The close-out reports the issue URL, ticket path, or adapter-native id — the record exists before
-this skill stops; that ordering is the contract. Where Phase 2 named an unasked clarifying
-question (no `[redirected-from:X]`/`[unattended]` marker on the seed), this close-out carries it
-verbatim plus the resume command (`/file-task <id> answer: <text>`) — this is the report the caller's
-session actually reads.
+The record exists before this skill stops; that ordering is the contract. **The close-out is the
+terse one-line form (gh#713, uniform across all three intake siblings):** `Filed: <id> ·
+kind:task · owed-questions:<N>` — `<id>` is whichever the backend resolved (issue URL, ticket
+path, or adapter-native id), `<N>` counts whatever Phase 2 named as an unasked clarifying question
+(0 or 1); the question's own full text stays where Phase 2 already wrote it, in Scope/Open, never
+restated here. This one line is the head line and the whole close-out in the normal case;
+exception notes this skill names elsewhere (a skipped Issue Type, a backend-create fallback)
+append as extra lines only when they occur.
 
 `.github/ISSUE_TEMPLATE/task.yml` mirrors this contract for a human filing directly on GitHub —
 this template, plus its `bug`/`feature` siblings, IS the feedback intake door idr-0008 names; no
