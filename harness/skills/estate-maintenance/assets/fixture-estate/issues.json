@@ -22,5 +22,37 @@
     "createdAt": "2026-06-10T09:00:00Z",
     "closedAt": "2026-06-12T09:00:00Z",
     "labels": []
+  },
+  {
+    "number": 900,
+    "title": "FIXTURE #890 — D2 near-duplicate probe seed (do not build)",
+    "state": "OPEN",
+    "createdAt": "2026-07-25T10:00:00Z",
+    "closedAt": null,
+    "labels": []
+  },
+  {
+    "number": 901,
+    "title": "FIXTURE #890 — D2 near-duplicate probe seed, variant (do not build)",
+    "state": "OPEN",
+    "createdAt": "2026-07-25T11:00:00Z",
+    "closedAt": null,
+    "labels": []
+  },
+  {
+    "number": 910,
+    "title": "ADR-0020 wave 2: fleet orchestrator seat rollout",
+    "state": "OPEN",
+    "createdAt": "2026-07-26T10:00:00Z",
+    "closedAt": null,
+    "labels": []
+  },
+  {
+    "number": 911,
+    "title": "ADR-0020 wave 2: build-leader seat rollout",
+    "state": "OPEN",
+    "createdAt": "2026-07-26T11:00:00Z",
+    "closedAt": null,
+    "labels": []
   }
 ]
