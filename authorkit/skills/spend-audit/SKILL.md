@@ -157,15 +157,17 @@ bands only after the ledger has data).
 
 6. **Cohort report** (gh#763 — the instrument gh#759's live-lane measurement depends on):
    `python3 <this skill>/scripts/cohort_report.py --since <YYYY-MM-DD> [--label <name>]...
-   [--repo <owner/repo>] [--json]` — lists the window's merged PRs via `gh pr list` and
-   splits them into a `labeled`/`unlabeled` cohort pair when `--label` is given (repeatable
-   — a PR counts as `labeled` if it carries ANY of the named labels), each cohort reporting
-   open→merge wall-clock, additions/deletions, checker-verdict-in-body rate, revert-mention
-   rate, and a 48h follow-up-fix rate (a different merged PR within 48h sharing ≥1 changed
-   file). No `--label` → today's unchanged single `all` cohort. Use it to compare one lane
-   against the rest of the flow — e.g. `--label live-lane` for gh#759's own live-lane vs.
-   full-flow measurement — never to invent a metric beyond this split (this ticket's own
-   Non-goals: no new metrics, no ledger-schema change).
+   [--repo <owner/repo>] [--json]` — lists the window's merged PRs via `gh pr list`
+   (`--limit 500`; a window with more merged PRs than that silently truncates — narrow
+   `--since` if the count looks capped) and splits them into a `labeled`/`unlabeled` cohort
+   pair when `--label` is given (repeatable — a PR counts as `labeled` if it carries ANY of
+   the named labels), each cohort reporting open→merge wall-clock, additions/deletions,
+   checker-verdict-in-body rate (a regex heuristic over the PR body, not a certified parse),
+   revert-mention rate, and a 48h follow-up-fix rate (a different merged PR within 48h
+   sharing ≥1 changed file). No `--label` → today's unchanged single `all` cohort. Use it to
+   compare one lane against the rest of the flow — e.g. `--label live-lane` for gh#759's own
+   live-lane vs. full-flow measurement — never to invent a metric beyond this split (this
+   ticket's own Non-goals: no new metrics, no ledger-schema change).
 
 Done when: the row is appended (or its columns honestly read `absent`/`UNMEASURED` per the
 convention), or the requested Validate/Audit/Archetype-gradient/Cohort-report render is
@@ -184,6 +186,8 @@ with a computed judgment.
 - **`gh` unavailable or rate-limited**: the Collector/backfill procedure degrades to
   `.claude/ops/reports/*.md` filenames + `git log` sources only — state the degraded mode
   plainly, never silently drop the build-firing half of the backfill without saying so.
+  Cohort report (step 6) has no such fallback — it has no non-`gh` data source — and exits 2
+  with the `gh` error on stderr; say so, don't retry silently.
 - **All rows `UNMEASURED`/no `measured` tokens on either baseline or archetype side** (the
   expected early state, gh#673): every Archetype-gradient cell reads `UNMEASURED` — this is
   the honest first-emit shape, not an instrument failure; it sharpens as `measured` rows

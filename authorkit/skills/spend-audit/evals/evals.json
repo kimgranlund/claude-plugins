@@ -87,6 +87,12 @@
       "prompt": "Is this fleet's wiring — the frontmatter, preloads, and dispatch arrangement — correct?",
       "expect": "no-trigger",
       "comment": "owner: teamwork wiring-checker — judges an arrangement's wiring, not its measured token cost"
+    },
+    {
+      "id": "n07",
+      "prompt": "List the PRs labeled live-lane from the last 30 days.",
+      "expect": "no-trigger",
+      "comment": "a plain gh query for one label, not a cohort-metrics comparison — the near-miss the cohort-report axis (gh#763) deliberately does not trigger on; no owner, just a plain `gh pr list --label` lookup"
     }
   ]
 }
