@@ -6,8 +6,9 @@ description: >-
   producer-side, a disclosure knob that must stay fail-closed and independent (no accidental
   ladder), a stream that already committed 200 needing a reserved terminal error line, halting
   loudly at a retry bound, and redacting raw upstream text from errors. Grounded in
-  @agent-ui/a2ui's producer loop; answers, no build. NOT for the instruction/config layer
-  (chat-harness-guardrail-facts); NOT for retry-feedback prompt design
+  @agent-ui/a2ui's producer loop; answers, no build. NOT an implementation ask
+  (implement/build/write the code — route to your own project's build seat). NOT for the
+  instruction/config layer (chat-harness-guardrail-facts); NOT for retry-feedback prompt design
   (chat-harness-workflow-facts); NOT for provider/secret trust (llm-gateway-facts).
 disable-model-invocation: false
 user-invocable: false

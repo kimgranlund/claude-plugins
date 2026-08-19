@@ -80,6 +80,19 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
 
+v1.0.15 · assembled 2026-08-19 · #715 (the #676 sweep's implement/build/write-the-code leak): a
+passive "ANSWERS; does not build" / "answers, no build" disclaimer is not an explicit NOT-fence
+against implement/build/write verbs on a menu with no builder present — a blind routing judge
+vote-confirmed 3-0 leaked 7 no-trigger cases (7 named implement/build/write-the-code asks) to the
+nearest topic owner as fallback. Explicit `NOT an implementation ask (implement/build/write the
+code — route to your own project's build seat)` fence added to `llm-gateway-facts`,
+`llm-streaming-facts`, and `chat-harness-runtime-resilience-facts`; a config-authoring variant
+(`implement/build/write/add the config or code yourself`) added to `chat-harness-guardrail-facts`
+since its own leaking case was a settings.json edit, not pure code. `evals/evals.json` notes
+updated for all four; post-fix full-suite blind re-judge clean (110/111 across the four touched
+suites, one pre-existing hung vote unrelated to the fence wording — see #715). `wording-checker`
+pass: see PR.
+
 v1.0.14 · assembled 2026-08-19 · #706 (2026-08-19 estate sweep, #676's final matrix): the
 `chat-harness-logging-facts` / `chat-harness-routing-facts` sibling fence made reciprocal in BOTH
 descriptions, closing a 2-of-3 steal on logging-facts' own t07/t09 ("measure whether my

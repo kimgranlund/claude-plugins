@@ -5,8 +5,9 @@ description: >-
   dropped/corrupted frames), the Anthropic event contract (content_block_delta), and
   validate-then-stream: bounded self-correct retries, never an invalid partial, a mid-stream
   error without throwing in a generator. Grounded in the SSE spec + Anthropic's docs; answers,
-  no build. NOT the provider/trust-boundary seam (llm-gateway-facts); NOT the A2UI wire shape
-  (agent-protocols).
+  no build. NOT an implementation ask (implement/build/write the code — route to your own
+  project's build seat). NOT the provider/trust-boundary seam (llm-gateway-facts); NOT the A2UI
+  wire shape (agent-protocols).
 disable-model-invocation: false
 user-invocable: false
 ---

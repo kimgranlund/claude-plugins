@@ -4,8 +4,10 @@ description: >-
   The swappable multi-LLM-provider gateway pattern — project-agnostic. Use for multiple providers
   behind one interface, an API key off the client, a dev-time proxy for browser LLM calls, a key
   leaking into the bundle, one config as picker AND allowlist, a stateless conversation. Grounded
-  in a shipped implementation (`@agent-ui/a2ui`). ANSWERS; does not build. NOT for the streamed
-  wire format (llm-streaming-facts); NOT for A2UI-specific concerns (agent-protocols plugin).
+  in a shipped implementation (`@agent-ui/a2ui`). ANSWERS; does not build. NOT an implementation
+  ask (implement/build/write the code — route to your own project's build seat). NOT for the
+  streamed wire format (llm-streaming-facts); NOT for A2UI-specific concerns (agent-protocols
+  plugin).
 disable-model-invocation: false
 user-invocable: false
 ---
