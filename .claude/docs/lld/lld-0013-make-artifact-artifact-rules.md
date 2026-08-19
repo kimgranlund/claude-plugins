@@ -2,10 +2,12 @@
 doc-type: lld
 id: lld-0013-make-artifact-artifact-rules
 status: draft
-version: 0.2.0  # 0.1.0 -> 0.2.0, 2026-08-18: the "## v2 extension" section below (#649). LLD is a
+version: 0.2.0  # 0.1.0 -> 0.2.0, 2026-08-19: the "## v2 extension" section below (#649). LLD is a
   # versioned-contract class (doc-writing-rules' mutability table) — changed via versioned release,
-  # never silently; every v1 section above that marker is unchanged from 0.1.0.
-date: 2026-08-18
+  # never silently; every v1 section above that marker is unchanged from 0.1.0 EXCEPT Resolution 6's
+  # dated #662 supersession note, appended un-bumped via PR #679 (an effective, unnumbered 0.1.x —
+  # registered here retroactively so the version spine stays honest).
+date: 2026-08-19
 owner: kim.granlund
 scope: feature
 audience: builder, reviewer
@@ -33,11 +35,12 @@ asserts); shell rendering stays a stated human/browser-layer exception. One new 
 entry (`artifact`) is minted, confirm-gated per `authorkit:manifest-authoring`. The four Scope/Open
 questions are ratified below, each with its evidence.
 
-> **v2 extension (0.2.0, 2026-08-18, #649):** this document now also carries the v2 design —
+> **v2 extension (0.2.0, 2026-08-19, #649):** this document now also carries the v2 design —
 > content-aware composition, design-system extraction fallback, and the emit-side type-doctrine
 > binding — in the dated `## v2 extension (#649)` section at the end. Resolutions 1–7 and the v1
-> Components/Interfaces/Data/Risks sections are unchanged from 0.1.0; a builder working #649
-> executes the v2 section's own build sequence, not the v1 one.
+> Components/Interfaces/Data/Risks sections are unchanged from 0.1.0, except Resolution 6's dated
+> #662 supersession note (appended un-bumped via PR #679); a builder working #649 executes the v2
+> section's own build sequence, not the v1 one.
 
 ## Resolution 1 — Home plugin: `docs` (anti-matrix verdict, job evidence named)
 
@@ -419,7 +422,7 @@ Acceptance inline; no SPEC exists to cite (frontmatter's routing note).
 
 ---
 
-## v2 extension (#649) — content-aware composition, extraction fallback, doctrine binding (2026-08-18, version 0.2.0)
+## v2 extension (#649) — content-aware composition, extraction fallback, doctrine binding (2026-08-19, version 0.2.0)
 
 **Verdict, head-first:** #649's six deltas split cleanly into three to BUILD and three already
 SHIPPED by sibling tickets since #649 was minted — verified in this clone (`origin/main` @
@@ -468,7 +471,7 @@ Estate Handbook is the reference shape. The layer → section map:
   this map plus the per-layer section patterns. `content-structure.md` line 22 already reserves
   exactly this seam ("the content model composition phase will drive at scale") — it stays
   classification-only (which SHELL); `composition-model.md` owns generation (which SECTIONS from
-  which RECORDS). The consult table in `artifact-rules`' SKILL.md gains one row (5 files still
+  which RECORDS). The consult table in `artifact-rules`' SKILL.md gains one row (4 files still
   clears pack-writing-rules' enumerability rule — no INDEX.md).
 - A records tree that doesn't follow the canonical `.claude/docs/` layout degrades to the
   prose-draft path with the degradation NAMED in the page's provenance footer (Risk R-6).
@@ -508,8 +511,9 @@ and no tokens.json**, the render never fails and never falls back to unstyled:
 CHECKER side landed via siblings after #649 was minted. `design:artifact-styling-rules`'
 `references/type-and-layout.md` carries system-ui body / mono interactive
 (buttons, links, tabs, badges, kickers) / **74rem** extra-wide default (the handbook precedent,
-named per #649's acceptance); its `references/rubric.md` R3 gates faces against doctrine with the
-explicit-override seam named; `artifact_check.py`'s `doctrine-font-stack` resolves
+named per #649's acceptance); its `references/rubric.md` R3 reviews faces against doctrine
+(review-tier — the checker WARNs, never blocks) with the explicit-override seam named;
+`artifact_check.py`'s `doctrine-font-stack` resolves
 `var(--font-*)` to its declared stack before judging (#684, PR #699) and honors an adjacent
 override comment as the sanctioned suppression path. #649's acceptance criterion 3 is therefore
 discharged by citation + the payload greps in v2 Agent verification.
@@ -653,6 +657,16 @@ side, shipped) already mechanizes the doctrine greps against an assembled page, 
 `var(--font-*)` resolution and override-comment path (#684/PR #699). **(b)** `css_build.py
 selftest` gains the Resolution 10 fixtures (doctrine-default, override path, negative control).
 **(c)** Routing: the extended evals suites via `eval_check.py` + `/check-routing docs`.
+**(d)** Acceptance criterion 1's "exercised against a project with real records": the named
+demonstration target is THIS repo's own `.claude/docs/` tree — the builder runs the composition
+phase against it and checks the emitted section map layer-for-layer against
+`composition-model.md`'s table (a diffable, payload-shaped artifact; the RENDER of that page
+stays under the human exception below). **(e)** Acceptance criterion 2's "never fails or falls
+back to unstyled": `css_build.py selftest` gains a doctrine-neutral-fallback fixture — the
+Resolution 9.2 neutral role values as input must emit all 14 live roles bound (reverse control)
+and the provenance gap line's required text is grep-asserted in the skill's stated footer
+template; the design-installed synthesis arm is procedure, exercised in the builder's own verify
+run and otherwise routed to the human/procedural exception list by name.
 **Stated human-layer exception, unchanged (Q3 stays open by design):** rendered-page visual
 quality has no agent harness — named in `make-artifact`'s Done block, per v1 Resolution 3, never
 silently assumed. Open-question ledger: Q1 resolved here (Resolution 9); Q2 and Q4 resolved in
