@@ -84,3 +84,17 @@ development-side, not this pack's concern; the KEPT half of lesson 39 was evalua
 here as hard dedup — already covered by [[chat-harness-guardrail-facts]]'s own
 `config-schema-and-prompt-externalization.md`, even though v2 filed the kept half under this
 pack's own axis.
+
+## Provenance — 2026-08-19 provider-doctrine fold (agent-ui live-eval practice)
+
+`live-turn-acceptance-and-replay-ci.md` was added 2026-08-19: the replay-CI/live-acceptance
+two-tier split (agent-ui ADR-0200 clause 3 + Consequences, read via the GitHub API), the
+fresh-server/OS-allocated-port/proven-teardown acceptance shape (agent-ui `scripts/e2e-devtools.mjs`,
+GH #1145, read at that repo's HEAD 2026-08-19), and the bait-the-defect acceptance discipline
+(agent-ui #1101's closing live-verification comment, 2026-08-17, quoted verbatim from the GitHub
+API). Placement judgment, recorded: the dispatching brief offered `chat-harness-tool-facts` as the
+default home "or the pack that owns testing patterns" — this pack owns the measurement/proof
+axis (its own charter: "how a chat-agent harness proves what it actually did"), and tool-facts owns
+extension surfaces, so the axis landed here; the fence against `routing-accuracy-evals.md` (many
+judged routing cases vs. one engineered end-to-end turn) is stated in both the new file and the
+consult table.

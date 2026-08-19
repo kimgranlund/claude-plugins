@@ -33,6 +33,7 @@ file, never presented as "the only way to do this."
 | Background-task notification vs. polling — "notify instead of poll", "task-notification vs. an external CI/deploy check", "why shouldn't I sleep-loop on a background agent" | `references/background-task-notification.md` |
 | Per-turn trace + failure diagnostics — "assemble a decision trace for a chat product's own turn loop", "a halt message needs to say which member and where" | `references/turn-trace-and-failure-diagnostics.md` |
 | Metric integrity + progress delivery — "a repair-rate metric that never reads zero", "progress updates go invisible during a tool round" | `references/metric-integrity-and-progress-delivery.md` |
+| Live-turn acceptance vs. replay CI — "prove this fix with a real model turn", "deterministic replay as the standing gate", "a stale dev server answered for the new build", "the acceptance ask must bait the defect" | `references/live-turn-acceptance-and-replay-ci.md` |
 | Provenance — this harness's own verified mechanics vs. this workspace's own measured, dated worked instance | `references/sources.md` |
 
 ## Consult procedure

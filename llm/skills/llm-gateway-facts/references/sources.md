@@ -66,3 +66,18 @@ for lessons 40-45 themselves. This pack's OWN existing files, however, are cited
 target for several other lessons the export routed elsewhere: lessons 6/7 (workflow), 18
 (routing), 20 and 30 (tool and guardrail, both `[split]`) — see those packs' own `sources.md`
 Provenance notes.
+
+## Provenance — 2026-08-19 provider-doctrine fold (agent-ui field ops)
+
+`live-ops-diagnostics-and-model-tiering.md` was added 2026-08-19, folding agent-ui's field-proven
+gateway OPS doctrine: the per-model curl matrix (that project's 2026-07-16/17 live-agent triage,
+recorded in its own debug-craft ledger), the 503-storm posture (its 2026-08-17 fleet-ops incident —
+GraphQL-backed verbs dying while plain REST survived; writes verified landed before believed), and
+planning-vs-execution model tiering (its standing seat config, owner-ruled 2026-06-29,
+`.claude/agents/` frontmatter). The dev-proxy trust-boundary shape itself (registry with per-provider
+`envKey`/`endpoint`, `{provider, model}` pair validation, no secret ever client-side, stateless proxy
+with the client holding turn history) was diff-checked against agent-ui ADR-0073
+(`0073-a2ui-live-model-provider-seam.md`, accepted 2026-07-04, read via the GitHub API 2026-08-19)
+and found ALREADY fully covered by this pack's existing `registry-and-trust-boundary.md`,
+`dev-proxy-and-bundler-footguns.md`, and `stateless-session-and-turn-model.md` — no restatement was
+added; ADR-0073 stands as the ratified decision record BEHIND those files' worked instance.

@@ -31,6 +31,7 @@ to do this."
 | The conversation model — "keep the proxy stateless", "where does turn history live", "a pure reducer for the next turn" | `references/stateless-session-and-turn-model.md` |
 | Single-flight 401 refresh — "concurrent requests all hit a 401 at once", "replay after refresh with the wrong token", "a streaming body can't be replayed" | `references/single-flight-401-refresh.md` |
 | Retry policy + streaming pass-through — "should this request retry", "full jitter backoff", "no middleware may read the streamed body" | `references/retry-policy-and-streaming-passthrough.md` |
+| Live-gateway ops — "model X doesn't work in the chat" (the per-model curl matrix, first), "the upstream is 503-storming", "which model tier for which work" | `references/live-ops-diagnostics-and-model-tiering.md` |
 | Provenance — worked-example source vs platform-primitive source | `references/sources.md` |
 
 ## Consult procedure

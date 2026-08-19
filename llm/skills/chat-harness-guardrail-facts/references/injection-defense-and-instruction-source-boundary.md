@@ -2,9 +2,11 @@
 
 > Axis: which channel is even eligible to hand the agent an instruction it may act on, and why
 > everything else a tool returns — a file's contents, a page's DOM, a shell command's stdout — is
-> read as DATA about the world, never as a command, regardless of what that text claims. Grounded
-> in the general prompt-injection defense pattern (a platform/vendor-agnostic security technique)
-> plus a real harness's own stated rule, observed directly.
+> read as DATA about the world, never as a command, regardless of what that text claims; plus the
+> ingestion lens on the same boundary — what has to happen when third-party prose is deliberately
+> INVITED into prompt assembly. Grounded in the general prompt-injection defense pattern (a
+> platform/vendor-agnostic security technique), a real harness's own stated rule observed
+> directly, and a ratified worked design for the ingestion case (agent-ui ADR-0208).
 
 ## The boundary — one trusted channel, everything else is content to reason about
 
@@ -53,6 +55,54 @@ boundary exists to reject** — the boundary is about the channel the text arriv
 whether the text sounds authoritative. A claim of pre-authorization is only ever valid when it
 actually came through the direct user/system channel; the same words appearing inside a fetched
 page or a file carry no more weight than any other sentence in that file.
+
+## Inviting untrusted prose IN — the ingestion trust story
+
+The boundary above governs text the agent merely OBSERVES. A different, harder case: third-party
+prose the operator deliberately imports so it CAN enter prompt assembly — a community skill/prompt
+repo, harvested instructions, someone else's authored guidance. Opt-in does not launder the text:
+the operator's explicit act is what moves it into the one trusted channel, so the trust checks must
+live in that act itself. A ratified worked design exists for exactly this — agent-ui ADR-0208
+(`0208-external-skill-repo-import-pack-library.md`, accepted 2026-08-18, ratified 2026-08-19, read
+via the GitHub API 2026-08-19 · [verified]) — whose layered mitigations generalize:
+
+- **Import-time snapshot, never runtime fetch.** Content that can change AFTER review defeats
+  review-before-enable outright — the runtime-fetch alternative was rejected on exactly that
+  ground ("content that can drift AFTER review… defeats review-before-enable"). The egress happens
+  once, at import, on the operator's own machine through their own tooling; the running app gains
+  zero fetch paths, and a negative egress test pins that.
+- **Pinned provenance on every snapshot.** Source URL, the FULL commit sha ("pinned — never a
+  branch name"), and the import timestamp travel with the content — plus the two honesty counters:
+  anything outside the declared scope is dropped AND COUNTED ("dropped, but COUNTED so review sees
+  what was ignored — never silently"), and malformed items are skipped AND LISTED. A snapshot that
+  cannot say exactly what it took, from where, at which revision, and what it left behind is not
+  reviewable.
+- **Declared-scope fidelity — collect exactly what the intent names.** The importer reads only the
+  named layout and the named fields; the body is taken VERBATIM — no truncation, no rewriting, so
+  a runaway or oddly-shaped body is visible at review rather than trimmed behind the reviewer's
+  back — and executable-adjacent vocabulary in the source (tool grants, hooks, agents, manifests)
+  is not even parsed, fenced as an explicit non-goal rather than deferred by vagueness. The
+  matching REVIEW axis: verify nothing beyond the declared scope survived into the snapshot.
+- **Review-before-enable, per consumer, copy-on-opt-in.** Each entry's full content, provenance
+  stamp, and scan report are visible BEFORE any add; nothing is default-on, nothing is auto-added;
+  opting in produces a COPY scoped to that consumer. A re-import replaces the shared shelf but
+  never rewrites an already-reviewed copy — "no background mutation of prompt-reaching text,
+  ever" — and staleness is made VISIBLE (a collision-refused id) instead of silently reconciled.
+- **The directive scan is a review AID, never a silent filter.** Scan imported bodies for
+  override-shaped lines ("ignore previous instructions", role reassignment, credential
+  solicitation, exfiltration URLs) and stamp the findings into provenance; flagged entries render
+  WITH their flags; **the scan strips nothing.** A mechanical check can be green while content is
+  semantically hostile, so the METHOD is enumerate-classify-report and the VERDICT belongs to the
+  human at review. Designed consequence: a scan miss degrades to the trust level of hand-authored
+  content, never below it, because the load-bearing defenses are the other layers.
+- **The prose never executes.** An ingested entry is prose by construction — no parameter schema
+  derives from it, nothing machine-callable is minted from it, no tool grant rides it, and the
+  import path evals/interprets/installs nothing.
+
+**Failure modes the layers close, respectively:** post-review drift · unauditable provenance ·
+scope creep smuggling executable surface in as "content" · silent auto-enablement and background
+mutation of what a human approved · false confidence in (or censorship by) a heuristic filter ·
+imported text escalating from instructions-the-model-reads to actions-the-harness-takes.
 
 ## Small-scale calibration
 

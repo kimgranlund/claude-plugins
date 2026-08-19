@@ -59,3 +59,19 @@ citations). Lessons 1 and 5 of that same v2 export ("validate-then-stream", "emp
 were confirmed as ALREADY covered by this pack's own pre-existing
 `validate-then-stream-self-correct.md`, even though v2's own section header filed them under
 `chat-harness-workflow-facts` — see that pack's own Provenance note for the corresponding skip.
+
+## Provenance — 2026-08-19 provider-doctrine fold (agent-ui ADR-0073/0137/0200)
+
+Two files extended 2026-08-19, folding agent-ui's ratified transport-seam doctrine (the ADRs read
+via the GitHub API, never from recall): `stream-abstraction-transport-constraints.md` gained the
+ONE `turn(input) → AsyncIterable<string>` seam (ADR-0073 clause 1 at the provider grain, ADR-0137
+clause 2 at the transport grain), the three-backend shelf — deterministic replay/script as the CI
+backbone, HTTP-only proxy for live, peer-over-protocol (ADR-0200 clause 3) — the pinned
+request-body-fields rule (ADR-0200 Consequences), and the NDJSON splitter's own chunk-boundary
+contract (the existing one-splitter rule taught only the dedup law, not the split mechanic).
+`validate-then-stream-self-correct.md` gained the latency-cost/leading-meta-line section (worked
+instance: `produce.ts:297` + `src/agent/meta-line.ts`, post-ADR-0137 paths; the `flowEnd` addition
+riding the envelope per agent-ui #1101's closing comment, read 2026-08-17 evidence via the GitHub
+API 2026-08-19). Diff-checked before writing: validate-then-stream's core ordering, the bounded
+self-correct loop, the note-only-round success, and the one-NDJSON-splitter law were all already
+covered — extended around, never restated.
