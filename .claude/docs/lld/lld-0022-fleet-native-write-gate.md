@@ -2,13 +2,18 @@
 doc-type: lld
 id: lld-0022-fleet-native-write-gate
 status: draft
-version: 0.1.0
-date: 2026-08-18
+version: 0.2.0  # 0.1.0 -> 0.2.0, 2026-08-19: the "## Resolution 5" section below (gh#713). LLD
+  # is a versioned-contract class (doc-writing-rules' mutability table) — changed via versioned
+  # release, never silently; Resolutions 1-4 are unchanged from 0.1.0 except Resolution 3's
+  # dated gh#713 supersession note (append-only, original text preserved below it).
+date: 2026-08-19
 owner: kim.granlund
-ticket: nonoun-plugins#686
+ticket: nonoun-plugins#686  # gh#713 additionally resolved by Resolution 5 (version 0.2.0) — the
+  # pre-accept grant line Resolution 3's own text named as a standing revisit.
 adr: adr-0023 (accepted — .claude/docs/adr/0023-fleet-canon-vs-native-agent-teams.md,
   decision (c); cited, never edited — this LLD is the follow-up build under it, not a
-  supersession)
+  supersession); adr-0012 (accepted — .claude/docs/adr/0012-quick-build-auto-merge.md) —
+  Resolution 5's grant-line mechanics precedent, cited not amended
 spec: none — gh#686's own Acceptance section carries the checkable criteria, and ADR-0023
   decision (c) already carries the ruled claim ("pursue a fleet-native equivalent... not
   designed in this ADR... the follow-up names them"); a standalone SPEC would restate what the
@@ -120,6 +125,17 @@ present) it exists to cover was never the standard being matched.
 
 ## Resolution 3 — Unconditional at first; ADR-0012 composes on top, never bypasses
 
+> **Superseded in part, 2026-08-19 (gh#713) — append-only note, original resolution preserved
+> below unedited.** "Unconditional" here meant *not gated by ADR-0012's own auto-merge grant*
+> (the Rejected-alternatives entry directly below still holds exactly as written: 2a never fires
+> ONLY alongside an auto-merge grant). It never meant un-revisitable — this Resolution's own
+> closing clause ("revisit later if disproportionate for size:small") is the standing invitation
+> gh#713 acts on. Resolution 5 (below) adds a SEPARATE, narrower grant —
+> `accept-grant: authorized` — that composes ON TOP of this Resolution's unconditional default
+> rather than replacing it: absent the new grant, 2a still fires on every dispatch exactly as
+> decided here. Everything else in this Resolution stands unchanged. See Resolution 5 for the
+> full mechanism.
+
 **Fork:** does the gate fire on every dispatch unconditionally, or only when some condition (a
 size floor, an explicit second grant) is also present?
 
@@ -166,6 +182,62 @@ that's held-for-accept is exactly as "someone is actively working this, don't do
 one that's mid-build with no PR yet; the guard's own semantics don't change). **Rejected: a
 distinct `awaiting-accept` label.** Rejected for the cost-with-no-behavioral-payoff reason above —
 the existing `in-flight` semantics already cover the held state correctly.
+
+## Resolution 5 — Pre-accept grant line: a narrow, explicit skip of 2a's hold alone (gh#713)
+
+**Fork:** does every small, single-plugin, checker-and-gate-green build still owe a live marshal
+accept round, or does a pre-placed grant let it skip 2a's hold specifically, without touching any
+other discipline?
+
+**Decision:** a literal grant line, `accept-grant: authorized`, placed in the sealed dispatch
+prompt by the dispatching coordinator/seat AT DISPATCH TIME — same mechanics as ADR-0012's
+`auto-merge: authorized` (explicit, never inferred from `size:small`, "unattended", or tone;
+absent → the paragraph below does not exist), deliberately spelled distinct from that token so
+the two grants are never conflated in a transcript or a grep. Chosen over reusing
+`auto-merge: authorized` itself because the two authorize different acts on different clocks (one
+skips a HOLD before PR-open; the other skips a MERGE after PR-open) and a dispatch may legally
+carry one, both, or neither.
+
+**The four-part predicate, evaluated by the dispatched seat, never the placer** (mirrors ADR-0012
+Decision 2's own placer-vs-evaluator split exactly):
+
+- **AG1 — `size:small`.** The same size read QB1 already makes off the ticket's own label —
+  not a second detector.
+- **AG2 — single-plugin.** QB2's own read.
+- **AG3 — checker-green.** Phase 4's own fresh-context checker verdict, when Phase 4's
+  semantic-edit trigger applied to this dispatch — or Phase 4's own "pure code/config, no
+  checker owed" determination, when it didn't. Never a second checker pass invented for this
+  gate; AG3 reads whichever of the two Phase 4 already produced.
+- **AG4 — gate-green.** The SAME local aggregate gate run (`references/gate-run-time-budget.md`'s
+  single-run-never-ground rule) stage 2 already performs before PR-open — pulled EARLIER in wall
+  clock for a granted dispatch only (see Components, below): the gate run and Phase 4's checker
+  both already exist by the time AG1–AG4 are evaluated; nothing runs twice.
+
+All four green → **skip 2a's hold alone.** No accept marker is required or produced; the dispatch
+proceeds directly to the version-collision re-checks and PR-open (Resolution 1's existing
+mechanics, unaltered). Any conjunct absent, failing, or indeterminate → the hold stands exactly as
+Resolution 2 specifies, full accept round owed — the grant is not a retry lever and is never
+re-evaluated into eligibility on a later pass.
+
+**Explicit scope — this skips ONLY stage 2a's hold.** Stage 2b's own ADR-0012 predicate
+(QB0–QB7), the fresh-context checker pass, and the local+CI gate run are UNCHANGED and still
+mandatory on every path, granted or not — a build that clears AG1–AG4 and skips the accept round
+still needs its own separate `auto-merge: authorized` grant and all-green QB0–QB7 to also skip the
+human merge. The two grants compose independently; neither implies the other.
+
+**Composes with Resolution 3, doesn't disturb it.** Resolution 3's unconditional-by-default
+posture is unchanged for every dispatch carrying no `accept-grant` line — the overwhelming
+majority. Resolution 3's own "exactly one size-aware predicate... rather than two" concern is
+preserved in kind, not in count: AG1/AG2 are READS of the same QB1/QB2 facts stage 2b already
+computes, consulted a second TIME (pre-2a) for a second QUESTION (may the hold be skipped) —
+never a second size/plugin-count DETECTOR. This is the same "two different questions, one shared
+fact" shape Resolution 3 already used to reconcile 2a's accept marker against QB5's critic
+verdict; Resolution 5 extends it one predicate further, not a new kind of coupling.
+
+**Rejected: reusing `auto-merge: authorized` for both skips.** One token authorizing two
+independently-revocable acts on two different clocks would make revoking one silently revoke the
+other — the same "explicit, revocable" property ADR-0012 Decision 4 names as load-bearing breaks
+under overload. Two literal, greppable tokens cost one more line and buy independent revocation.
 
 ## Components
 
@@ -235,6 +307,22 @@ QB0–QB7/merge-sequence block (stage 2b) — both unrelated to this ticket's ow
 largest self-contained blocks available to cut — moved to their own reference files so the budget
 closed without under-specifying 2a itself. Each SKILL.md citation point is a short pointer, same
 convention as this skill's other F6 splits (`isolation-ladder.md`, `spec-lock-gate.md`, etc.).
+
+### gh#713 Components (version 0.2.0 addendum — Resolution 5's own build)
+
+`teamwork/skills/dispatch-ticket/SKILL.md` gains the Resolution-5 pre-accept-grant paragraph
+inserted immediately after 2a's existing FAIL-CLOSED bullet and before the "Immediately before
+opening the PR" paragraph (whose opening clause now names the granted branch too), plus one
+clause each on stage 4's typed-handoff bullet and the in-flight-label sentence covering the
+grant-triggered PR-open. `teamwork/skills/dispatch-ticket/references/plan-approval-write-gate.md`
+gains the full AG1–AG4 conjunct definitions the SKILL.md body only summarizes (same F6-split
+convention the file already uses). Two further, INDEPENDENT gh#713 levers ship in the same
+campaign but touch neither this LLD's own mechanism nor its Components list above — named here
+only for the record, never re-derived: a new `teamwork/scripts/merge_queue_watch.py` (batched
+merge-queue check-runs watcher, its own selftest) and terse one-line close-out wording across
+`docs/skills/file-bug|file-feature|file-task/SKILL.md`. Per this file's own "Canon note" above,
+the SKILL.md text shipped by this build is the standing source of truth for Resolution 5's exact
+wording going forward; this addendum records the design decision, not a live mirror.
 
 ## Interfaces
 
@@ -322,6 +410,20 @@ QB5: fresh-context checker verdict recorded, zero blocker/major findings
 9. Fresh-context `harness:skill-checker` verdict on the edited SKILL.md recorded in this build's
    Findings write-back, zero unresolved blocker/major findings.
 
+**gh#713 (Resolution 5, version 0.2.0) — continuing the numbering above:**
+
+10. `grep -n "accept-grant: authorized" teamwork/skills/dispatch-ticket/SKILL.md` shows the
+    literal grant token.
+11. `grep -n "AG1\|AG2\|AG3\|AG4" teamwork/skills/dispatch-ticket/SKILL.md` shows all four
+    conjuncts named.
+12. `grep -n "skip only this hold\|skips 2a alone" teamwork/skills/dispatch-ticket/SKILL.md`
+    shows the explicit scope-limiting statement (2b/checker/gate unchanged).
+13. `python3 docs/scripts/doc_lint.py .claude/docs/lld/lld-0022-fleet-native-write-gate.md` →
+    exit 0 (version-bump + append-only-note pass the mutability lint).
+14. `python3 harness/scripts/skill_lint.py teamwork/skills/dispatch-ticket/SKILL.md` → exit 0.
+15. Fresh-context `harness:skill-checker` verdict recorded on the edited SKILL.md (semantic edit
+    to a prompt-carrying artifact, `.claude/rules/plugin-authoring.md`'s critic invariant).
+
 ## Risks
 
 - **R-1 — a marshal that silently stops posting a fresh accept-marker after an amended branch
@@ -364,6 +466,9 @@ QB5: fresh-context checker verdict recorded, zero blocker/major findings
   to execute what a grep already proves fails `script-writing-rules`' own mechanization test.
 - **A standalone SPEC document.** Rejected — gh#686's Acceptance section plus the accepted
   ADR-0023 already carry the checkable claim; a SPEC would restate both.
+- **Reusing `auto-merge: authorized` for the pre-accept grant too (gh#713).** Rejected —
+  Resolution 5; one token authorizing two independently-revocable acts on two different clocks
+  would make revoking one silently revoke the other.
 
 ## Agent verification
 
@@ -371,7 +476,8 @@ Per `docs:agent-harness-rules`, the assert layer is the cheapest one that catche
 failure — pure text/payload, rung 1 of the ladder, no browser or live-human layer needed:
 **Mechanical layer:** `doc_lint.py` on this LLD; `skill_lint.py` on the edited SKILL.md;
 `release_gate.py teamwork --package`. **Payload layer (gh#686's own Acceptance criterion,
-satisfied directly):** the five grep predicates above, run against the SKILL.md's own Phase 5 text
+satisfied directly):** the grep predicates above (eight as of version 0.2.0: predicates 1–5 for
+gh#686, 10–12 added for gh#713's Resolution 5), run against the SKILL.md's own Phase 5 text
 and the new fixture file — no bundled script needed, `references/write-gate-dry-run.md`'s
 plain-text markers ARE the checkable payload. **Fresh-context checkers:** `docs:doc-checker` on
 this LLD before the build proceeds; `harness:skill-checker` on the edited SKILL.md before merge

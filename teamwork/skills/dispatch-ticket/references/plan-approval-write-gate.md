@@ -102,3 +102,45 @@ Reported, terminal-for-this-turn, never a build failure — the same register as
 and the SKIPPED task branch. No PR URL and no accept-marker URL ride in the handoff when this
 fires (`SKILL.md` stage 4); name the missing accepting seat and the branch/SHA awaiting
 acceptance instead. See `SKILL.md`'s Failure branches for the canonical statement.
+
+## Pre-accept grant — a narrow skip of the hold alone (gh#713, lld-0022 Resolution 5)
+
+A literal grant line, `accept-grant: authorized`, placed in the sealed dispatch prompt by the
+dispatching coordinator/seat AT DISPATCH TIME — same explicit-never-inferred mechanics as
+ADR-0012's own `auto-merge: authorized` line, deliberately a DIFFERENT token so the two grants
+are never conflated in a transcript or a grep. The two authorize different acts on different
+clocks (one skips a HOLD before PR-open; the other skips a MERGE after PR-open), so a dispatch
+may legally carry one, both, or neither.
+
+**The four conjuncts, evaluated by the dispatched seat, never the placer** (mirrors ADR-0012's
+own placer-vs-evaluator split):
+
+- **AG1 — `size:small`.** The same size read stage 2b's own QB1 already makes off the ticket's
+  own label — not a second detector.
+- **AG2 — single-plugin.** QB2's own read.
+- **AG3 — checker-green.** Phase 4's own fresh-context checker verdict, when Phase 4's
+  semantic-edit trigger applied — or Phase 4's own "pure code/config, no checker owed"
+  determination, when it didn't. Never a second checker pass invented for this gate.
+- **AG4 — gate-green.** The SAME local aggregate gate run (`gate-run-time-budget.md`'s
+  single-run-never-ground rule) stage 2 already performs before PR-open — pulled earlier in wall
+  clock for a granted dispatch only; nothing runs twice.
+
+All four green → skip 2a's hold alone: no accept marker is required or produced, and the
+dispatch proceeds directly to the version-collision re-checks and PR-open. Any conjunct absent,
+failing, or indeterminate → the hold stands exactly as the Acceptance protocol above specifies,
+full accept round owed — the grant is not a retry lever and is never re-evaluated into
+eligibility on a later pass.
+
+**Scope — this skips ONLY stage 2a's hold.** Stage 2b's own ADR-0012 predicate (QB0–QB7), the
+fresh-context checker pass, and the local+CI gate run are UNCHANGED and still mandatory on every
+path, granted or not — a build that clears AG1–AG4 and skips the accept round still needs its
+own separate `auto-merge: authorized` grant and all-green QB0–QB7 to also skip the human merge.
+The two grants compose independently; neither implies the other.
+
+**Rejected: reusing `auto-merge: authorized` for both skips.** One token authorizing two
+independently-revocable acts on two different clocks would make revoking one silently revoke the
+other — the same "explicit, revocable" property ADR-0012 names as load-bearing breaks under
+overload. Two literal, greppable tokens cost one more line and buy independent revocation.
+
+Full resolution + rejected-alternatives text: `.claude/docs/lld/lld-0022-fleet-native-write-gate.md`
+Resolution 5 (version 0.2.0).
