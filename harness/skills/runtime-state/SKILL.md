@@ -7,7 +7,7 @@ description: >-
   Use for "where is my transcript", "find this session's jsonl", "path to grab for a bug report",
   "locate the subagent logs from this run", "transcript path for that old session". NOT the
   maximal debug-export bundle (fenced out, heavier follow-up); NOT a Stop hook (#466); NOT
-  reading/summarizing transcript content (paths only).
+  reading/summarizing transcript content (paths only); NOT project work-state (check-state).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -24,9 +24,8 @@ an OS clipboard copy of a path STRING, opt-in, when asked.
 Issue #605 asked, over three folded findings, for progressively less: first a maximal custom
 debug-export bundle (2026-08-17), then a re-home to a different repo entirely (2026-08-18), then
 — on the actual `find-intent` round that made this ticket buildable (2026-08-19) — a plain
-locator over transcripts that already exist. The heavier bundle stays fenced out on the record;
-build it only if this locator turns out insufficient for filing a platform bug. No Stop hook:
-this estate retired every plugin hook (#466) and that ruling isn't reopened for this ticket.
+locator over transcripts that already exist. What's fenced out of that history stays fenced;
+see below.
 
 ## What it resolves
 
@@ -82,7 +81,6 @@ prints whatever WAS resolved. Exit 2 = a usage error.
 - **Not a hook.** No Stop-hook auto-export, ever, per #466's estate-wide retirement.
 - **Not a content reader.** This resolves and prints PATHS. Reading, summarizing, or grepping a
   transcript's own JSONL content is a different job for a different turn.
-
-## References
-None — the procedure above and the script's own docstring are the whole contract; no
-`references/` corpus earns a place here.
+- **Not project work-state.** `check-state` reports git/tickets/roadmap state for the whole
+  project; this resolves paths for one session's own transcripts. Same "state" word, disjoint
+  domains.
