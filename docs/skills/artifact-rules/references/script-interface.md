@@ -28,9 +28,10 @@ light-only variable.
 python3 "${CLAUDE_SKILL_DIR}/scripts/css_build.py" <tokens.json|normalized-frontmatter.json> --out page.css
 ```
 
-Exit 0 → CSS built. Exit 1 → a role is missing its dark counterpart or a scale-count mismatch —
-the fix is in the SOURCE design system, never a hand-patch of the emitted CSS. Exit 2 → a usage
-error (bad path, unparseable JSON).
+Exit 0 → CSS built. Exit 1 → a role is missing its dark counterpart, a scale-count mismatch, or
+(#683) a source using the alternate `-container` naming grammar is missing a doctrine-required
+role under both recognized grammars — the fix is in the SOURCE design system, never a hand-patch
+of the emitted CSS. Exit 2 → a usage error (bad path, unparseable JSON).
 
 ## Output: emitted custom-property names
 
@@ -46,6 +47,16 @@ error (bad path, unparseable JSON).
   when the input carries no EXPLICIT source role that aliases to `mono-bg` (an explicit one always
   wins), it derives from whatever `--chip` resolves to; if `--chip` itself is unbound in that
   build, `--mono-bg` is simply not emitted (never invented from nothing).
+- **Alternate naming grammar (#683)** — a source role using Material's own `-container` suffix in
+  place of the reference implementation's `-soft` (e.g. `primary-container` where the reference
+  grammar expects `primary-soft`) resolves to the SAME short property, via
+  `CONTAINER_GRAMMAR_ALIASES` — mechanically derived from `ROLE_ALIASES` itself, never a second
+  hand-authored table, so it covers every family the doctrine already documents a `-soft` tier
+  for. Once ANY source-role key contains `-container` (the generic detection signal — never keyed
+  to one hardcoded literal), the build requires every one of the doctrine's 14 live roles to
+  resolve under one grammar or the other; a role genuinely absent from both is a build failure
+  (exit 1) naming the unresolved role, never a silent drop. A source with no `-container` signal
+  at all is unaffected — the plain pass-through-if-absent behavior above still applies to it.
 - **Type roles** → `--text-<role>-size`/`-weight`/`-lh`/`-ls` + deduplicated `--font-<slug>` family
   variables (every emitted font-family carries a mandatory system-stack fallback tail — CSP blocks
   external font files, so a bare custom font with no fallback silently renders as browser default;

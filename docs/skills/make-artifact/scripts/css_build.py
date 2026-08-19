@@ -41,6 +41,16 @@ the build fails (exit 1) naming the conflict — never a silent last-write-wins.
 the design-system's OWN internal token grammar (how the CONSUMING project may name its own
 resolved custom properties before this script aliases them) — never this script's output grammar.
 
+Alternate naming grammar (#683): a source role using Material's own `-container` suffix in place
+of the reference implementation's `-soft` (e.g. `primary-container` where the reference expects
+`primary-soft`) resolves to the SAME short property — `CONTAINER_GRAMMAR_ALIASES`, mechanically
+derived from `ROLE_ALIASES` itself, never a second hand-authored table. Once a source is DETECTED
+as using this grammar (any source-role key containing `-container`), every one of the doctrine's
+14 live roles must resolve under one grammar or the other, or the build fails (exit 1) naming the
+unresolved role(s) — never a silent, undetected loss. A source showing no `-container` signal at
+all is unaffected by this gate; the plain pass-through-if-absent behavior above still applies to
+it exactly as before.
+
 Judgment stays with the model (make-artifact's SKILL.md): choosing the page shell, assembling
 content, the human render-fidelity check. This script never chooses a shell or writes prose — it
 turns tokens into custom properties, nothing else.
@@ -112,18 +122,93 @@ ROLE_ALIASES = {
 # once the alias pass completes (token-architecture.md: "--mono-bg | alias of --chip").
 DERIVED_ALIASES = {"mono-bg": "chip"}
 
+# #683 — the four intent families' reduced-tier ("soft") roles are IDENTITY pass-throughs (their
+# short name already equals their source-role name, see ROLE_ALIASES's own comment above), so they
+# carry no literal entry in that table for the reference grammar to swap from. Named here once so
+# the container-grammar derivation below can reach them too, never re-typed a second place.
+INTENT_SOFT_IDENTITY = ["danger-soft", "success-soft", "warning-soft", "info-soft"]
+
+# #683 — Material's own alternate naming grammar for the same reduced-tier/soft-fill semantic
+# (design:material-token-facts' color.md: "`{p}-container` ... A 500-stop TRANSLUCENT tint of
+# `{p}`" — the exact role token-architecture.md's `-soft` tier describes). A source design system
+# built on Material's convention spells this role `<family>-container` where the reference
+# implementation spells it `<family>-soft` — otherwise identical semantics, same short property.
+# Derived MECHANICALLY from ROLE_ALIASES + INTENT_SOFT_IDENTITY above (never a second
+# hand-authored table, and never hardcoded to one literal Material key) — a source-role suffix
+# swap, `-soft` -> `-container`, for every family the doctrine already documents a `-soft` tier
+# for; any OTHER role the reference grammar doesn't cover keeps passing through unrecognized
+# exactly as before.
+CONTAINER_SUFFIX = "-container"
+_SOFT_SUFFIX = "-soft"
+
+
+def _container_grammar_aliases():
+    variants = {}
+    for source_role, short in ROLE_ALIASES.items():
+        if source_role.endswith(_SOFT_SUFFIX):
+            variants[source_role[: -len(_SOFT_SUFFIX)] + CONTAINER_SUFFIX] = short
+    for identity_soft in INTENT_SOFT_IDENTITY:
+        variants[identity_soft[: -len(_SOFT_SUFFIX)] + CONTAINER_SUFFIX] = identity_soft
+    return variants
+
+
+CONTAINER_GRAMMAR_ALIASES = _container_grammar_aliases()
+
+# #683 — the doctrine's full 14-live-roles inventory (token-architecture.md), exploded into its
+# individual custom-property names (a row naming more than one property, e.g. "--line /
+# --line-strong", counts each). Enforced ONLY once a source is DETECTED as using the alternate
+# `-container` grammar (see `_uses_container_grammar` below) — a reference-grammar source (every
+# existing fixture in this file included) is completely unaffected; this never tightens the gate
+# for a source that never signals it's using the alternate grammar in the first place.
+REQUIRED_DOCTRINE_SHORT_ROLES = [
+    "paper", "card", "chip", "card-low", "ink", "muted", "fine", "line", "line-strong",
+    "accent", "accent-hover", "accent-soft", "on-accent", "tertiary",
+    "danger", "danger-soft", "success", "success-soft", "warning", "warning-soft",
+    "info", "info-soft", "on-intent", "mono-bg",
+]
+
+
+def _uses_container_grammar(colors):
+    """True when ANY literal source-role key carries the `-container` suffix token anywhere in
+    its name — the generic (never one-literal-hardcoded) signal that this source has adopted
+    Material's alternate reduced-tier naming grammar rather than the reference implementation's
+    `-soft` literal. A source that renames even one tier this way is presumed to use the same
+    convention for the rest of its reduced-tier ladder — #683's own repro showed that assumption
+    silently drops roles when left unchecked, hence the completeness gate this signal arms."""
+    return any(CONTAINER_SUFFIX in role for role in colors)
+
+
+def check_doctrine_completeness(aliased, source_uses_container_grammar):
+    """#683's honest-failure clause: once a source is DETECTED as using the alternate grammar,
+    every one of the doctrine's 14 live roles must resolve under EITHER grammar — a role
+    genuinely absent from both is a loud, NAMED build failure (NormalizeError, exit 1 at the CLI
+    layer), never a silent drop. A reference-grammar-only (or mixed, no `-container` signal at
+    all) source is unaffected — the existing pass-through-if-absent behavior for any role outside
+    this fixed 14 is unchanged either way."""
+    if not source_uses_container_grammar:
+        return
+    missing = [role for role in REQUIRED_DOCTRINE_SHORT_ROLES if role not in aliased]
+    if missing:
+        raise NormalizeError(
+            "source uses the '-container' alternate naming grammar (#683) but the following "
+            "doctrine-required role(s) (token-architecture.md's 14-live-roles table) resolved "
+            "under neither the reference nor the container grammar: %s" % ", ".join(missing))
+
 
 def alias_colors(colors):
     """Map each source role's (light, dark) pair onto its artifact-page short property name.
 
-    Roles absent from ROLE_ALIASES pass through under their own (unprefixed) name — the mechanical,
-    never-invented fallback. Two source roles aliasing to the SAME short name must resolve to an
-    identical pair; a genuine conflict is a NormalizeError (never silently last-write-wins) naming
-    both source roles and their differing values."""
+    A role matching the reference grammar (ROLE_ALIASES) or the alternate `-container` grammar
+    (CONTAINER_GRAMMAR_ALIASES, #683) resolves to its doctrine short name; anything else passes
+    through under its own (unprefixed) name — the mechanical, never-invented fallback. Two source
+    roles aliasing to the SAME short name must resolve to an identical pair; a genuine conflict is
+    a NormalizeError (never silently last-write-wins) naming both source roles and their differing
+    values. Once a source is detected as using the `-container` grammar (#683), every doctrine
+    role must resolve under one grammar or the other, or the build fails naming the gap."""
     out = {}
     sources = {}
     for role in sorted(colors):
-        short = ROLE_ALIASES.get(role, role)
+        short = ROLE_ALIASES.get(role, CONTAINER_GRAMMAR_ALIASES.get(role, role))
         pair = colors[role]
         if short in out and out[short] != pair:
             raise NormalizeError(
@@ -134,6 +219,7 @@ def alias_colors(colors):
     for derived, source_short in DERIVED_ALIASES.items():
         if derived not in out and source_short in out:
             out[derived] = out[source_short]
+    check_doctrine_completeness(out, _uses_container_grammar(colors))
     return out
 
 
@@ -436,6 +522,64 @@ FIXTURE_FRONTMATTER = {
                 "full": "9999px"},
 }
 
+# #683 — a genuine (non-reference) design system whose reduced-tier/soft-fill semantic uses
+# Material's `-container` naming instead of the reference implementation's `-soft` (the repro's
+# observed real-world case), providing every one of the doctrine's 14 live roles so the
+# reconciliation path can be proven end to end. Every color role listed here is REQUIRED by
+# REQUIRED_DOCTRINE_SHORT_ROLES once the `-container` signal is detected.
+FIXTURE_CONTAINER_GRAMMAR = {
+    "colors": {
+        "primary": "oklch(0.5837 0.1265 236.48)",
+        "primary-hover": "oklch(0.5200 0.1265 236.48)",
+        "primary-container": "oklch(0.8800 0.0500 236.48)",
+        "primary-on-primary": "oklch(1 0 0)",
+        "neutral-background": "oklch(0.9807 0 90)",
+        "neutral-surface": "oklch(0.9335 0.0017 247.84)",
+        "neutral-surface-high": "oklch(0.9000 0.0017 247.84)",
+        "neutral-surface-low": "oklch(0.9600 0.0017 247.84)",
+        "neutral-on-surface": "oklch(0.1776 0 0)",
+        "neutral-on-surface-variant": "oklch(0.4200 0 0)",
+        "neutral-placeholder": "oklch(0.6200 0 0)",
+        "neutral-outline-variant": "oklch(0.8200 0 0)",
+        "neutral-outline": "oklch(0.5600 0 0)",
+        "tertiary": "oklch(0.6000 0.1000 300.00)",
+        "danger": "oklch(0.5500 0.2000 25.00)",
+        "danger-container": "oklch(0.8900 0.0700 25.00)",
+        "success": "oklch(0.5500 0.1500 145.00)",
+        "success-container": "oklch(0.8900 0.0600 145.00)",
+        "warning": "oklch(0.6500 0.1700 80.00)",
+        "warning-container": "oklch(0.9100 0.0700 80.00)",
+        "info": "oklch(0.5500 0.1400 250.00)",
+        "info-container": "oklch(0.8900 0.0600 250.00)",
+        "on-danger": "oklch(1 0 0)",
+    },
+    "colorsDark": {
+        "primary": "oklch(0.6716 0.1414 234.43)",
+        "primary-hover": "oklch(0.7200 0.1414 234.43)",
+        "primary-container": "oklch(0.3200 0.0700 234.43)",
+        "primary-on-primary": "oklch(1 0 0)",
+        "neutral-background": "oklch(0.1421 0.0022 247.9)",
+        "neutral-surface": "oklch(0.2597 0.0024 247.92)",
+        "neutral-surface-high": "oklch(0.3100 0.0024 247.92)",
+        "neutral-surface-low": "oklch(0.2000 0.0024 247.92)",
+        "neutral-on-surface": "oklch(1 0 0)",
+        "neutral-on-surface-variant": "oklch(0.7400 0 0)",
+        "neutral-placeholder": "oklch(0.5400 0 0)",
+        "neutral-outline-variant": "oklch(0.3600 0 0)",
+        "neutral-outline": "oklch(0.6200 0 0)",
+        "tertiary": "oklch(0.7400 0.1000 300.00)",
+        "danger": "oklch(0.7000 0.2000 25.00)",
+        "danger-container": "oklch(0.3300 0.0700 25.00)",
+        "success": "oklch(0.7000 0.1500 145.00)",
+        "success-container": "oklch(0.3300 0.0600 145.00)",
+        "warning": "oklch(0.7800 0.1700 80.00)",
+        "warning-container": "oklch(0.3600 0.0700 80.00)",
+        "info": "oklch(0.7000 0.1400 250.00)",
+        "info-container": "oklch(0.3300 0.0600 250.00)",
+        "on-danger": "oklch(1 0 0)",
+    },
+}
+
 
 def _fixture(base, mutate=None):
     data = json.loads(json.dumps(base))  # deep copy, stdlib-only
@@ -518,6 +662,37 @@ def selftest():
     norm_chip, css_chip = build(with_chip)
     if "--mono-bg: light-dark(oklch(0.9 0 90), oklch(0.3 0 90));" not in css_chip:
         errs.append("--mono-bg must be derived from --chip's value when no explicit source role provides it")
+
+    # 2d. #683 — a source using Material's `-container` naming for the reduced-tier/soft-fill
+    #     semantic (FIXTURE_CONTAINER_GRAMMAR) must resolve every one of the doctrine's 14 live
+    #     roles, exactly as a `-soft`-grammar source would.
+    norm_cg, css_cg = build(FIXTURE_CONTAINER_GRAMMAR)
+    missing_cg = [r for r in REQUIRED_DOCTRINE_SHORT_ROLES if r not in norm_cg["colors"]]
+    if missing_cg:
+        errs.append("a complete '-container'-grammar source must resolve all 14 doctrine roles; "
+                    "missing: %s" % ", ".join(missing_cg))
+    if "--accent-soft: light-dark(oklch(0.8800 0.0500 236.48), oklch(0.3200 0.0700 234.43));" not in css_cg:
+        errs.append("'primary-container' must alias to --accent-soft (the same short property "
+                    "'primary-soft' would resolve to under the reference grammar)")
+    if "--danger-soft: light-dark(oklch(0.8900 0.0700 25.00), oklch(0.3300 0.0700 25.00));" not in css_cg:
+        errs.append("'danger-container' must alias to --danger-soft (the intent family's "
+                    "identity-pass-through short name)")
+
+    # 2e. #683 NEGATIVE CONTROL — a role genuinely absent from BOTH the reference grammar and the
+    #     '-container' grammar must still fail loudly (never silently dropped) once the source is
+    #     detected as using the '-container' grammar at all.
+    def _drop_danger_container(d):
+        del d["colors"]["danger-container"]
+        del d["colorsDark"]["danger-container"]
+    missing_role_fixture = _fixture(FIXTURE_CONTAINER_GRAMMAR, _drop_danger_container)
+    try:
+        normalize(missing_role_fixture)
+        errs.append("a '-container'-grammar source missing a doctrine-required role under both "
+                    "grammars must raise NormalizeError, never build silently")
+    except NormalizeError as e:
+        if "danger-soft" not in str(e):
+            errs.append("the doctrine-completeness error must name the unresolved role "
+                        "('danger-soft'): %s" % e)
 
     # 3. font fallback invariant — EVERY emitted --font-* line carries a system fallback tail;
     #    a mono-named family gets the monospace stack, everything else the sans-serif stack
