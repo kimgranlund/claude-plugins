@@ -13,6 +13,8 @@ because the mitigation ladder was hand-carried in each dispatch prompt as folklo
 under pressure instead of read off a standing procedure. This reference is what that folklore
 became.
 
+LEDGER-CLASS: worktree-pin-race | ids: #490, #609 | mechanized: 2026-08-18
+
 The load-bearing fact the ladder is built around: **`EnterWorktree` is a tool grant, not a
 universal capability.** It is available to a live session that adopted its seat in-place
 (`/bind-build`, `/bind-team`, a `team-scaffolding`-adopted seat) — the seat never left the
