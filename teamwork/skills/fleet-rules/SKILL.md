@@ -2,7 +2,7 @@
 name: fleet-rules
 description: >-
   Fleet protocol AND how skills/subagents/teams compose: coordination, claim-guard, comms,
-  version-slot, session-death, pin-race, incoming triage, sealed dispatch, `skills:` frontmatter.
+  version-slot, session-death, pin-race, incoming triage, sealed dispatch, preload-vs-discovery.
   Use for "which peers can this orchestrator talk to", "orchestrator died mid-build", "cwd pin stuck", "subagent or team",
   "review my wiring", "where does this bug report go". NOT isolation/collisions
   (parallel-work-rules); NOT next-turn timing (loop-rules); NOT mobilizability (mobilize-chores);
@@ -16,12 +16,11 @@ user-invocable: false
 # fleet-rules — the fleet's default operating protocol, and how it composes
 
 **Two joined questions, one skill (ADR-0020 D5, 2026-08-17: merged from `team-or-solo-rules`).**
-Sections 1–7 state the DEFAULT a fleet seat starts from before a run — the fleet-operations
-doctrine, asked at run time, by a bound seat. Sections 8–10 (Design/Review/Improve/Update) answer
-the design-time substrate question anyone can ask before a seat exists at all: should this be a
-skill, a subagent, or a team, and is the wiring right? Joined because `team-or-solo-rules`'
-family name collided with this skill's (full history: ADR-0020 D5). Each section cites its canonical mechanics
-rather than restating them, and names the incident it closes. Isolation/collision response is
+Sections 1–7 state the DEFAULT a fleet seat starts from at run time; Sections 8–10
+(Design/Review/Improve/Update) answer the design-time substrate question: skill, subagent, or
+team, and is the wiring right? Joined because `team-or-solo-rules`' family name collided with
+this skill's (ADR-0020 D5). Each section cites its canonical mechanics rather than restating
+them, and names the incident it closes. Isolation/collision response is
 `[[parallel-work-rules]]`'s, next-turn timing is `[[loop-rules]]`'s, and which tickets are
 mobilizable is `mobilize-chores`'s.
 
@@ -39,11 +38,11 @@ issue #429 explicitly rules these out as introduction/coordination targets). `Li
 legitimate for one narrow use: confirming liveness of a session ALREADY named in the roster,
 never for finding one.
 
-- **Same-user seats in other repos** (Kim's 2026-08-17 amendment): a status-only reply is allowed
-  when one of the user's seats in another repo polls this one — never a claim, never a dispatch,
-  never scope creep into that repo's own work.
-- **Truly global coordination** (across repos, beyond a status reply) fires only on the user's
-  explicit instruction — never inferred from "it would help" or from a peer's own request.
+- **Same-user seats in other repos** (Kim's 2026-08-17 amendment): a status-only reply when one
+  of the user's seats in another repo polls this one — never a claim, a dispatch, or scope creep
+  into that repo's own work.
+- **Truly global coordination** (beyond a status reply) fires only on the user's explicit
+  instruction — never inferred from "it would help" or from a peer's own request.
 - **Out-of-scope polls get silence or a status-only reply.** A poll from an unregistered or
   out-of-scope sender is not routed to a claim or a dispatch regardless of how it's phrased.
 - **Two-host fleets need an explicitly RATIFIED lane split, written into both records** — which
@@ -187,24 +186,23 @@ record.**
   Every peer's claim-and-commit assumption (Section 2, `[[dispatch-ticket]]`'s Phase 3) is that
   committing against the shared primary checkout (the workspace root, never a
   `.claude/worktrees/` entry) lands on `main`; a session that checks out a feature branch ON the
-  primary breaks that assumption for every OTHER live peer, silently. ADR-0002 already states the
-  forward half (a campaign gets its own branch + worktree); this is its unstated inverse, and the
-  gap is what let it bite: a session checked out `fix/harness-ops-rulings` on the primary
-  checkout while peers were live, and a concurrent session's ops commit (9e115cd) landed on that
-  feature branch instead of `main` — stranded, requiring manual reconciliation. · #592 incident ·
+  primary breaks that assumption for every OTHER live peer, silently. ADR-0002 states the forward
+  half (a campaign gets its own branch + worktree); this is its unstated inverse — the gap bit in
+  #592 (a feature branch checked out on the primary stranded a peer's ops commit, 9e115cd, off
+  `main`; manual reconciliation). · #592 incident ·
   2026-08-17 · [incident]
 - **Merge-on-green verifies each check's CONCLUSION individually — never the watch command's exit
-  code alone** (#551: `gh pr checks <pr> --watch --fail-fast` exits 0 on non-terminal/failed
-  states, biting three live merges — #530, #546, #549). The watch's exit 0 is advisory only;
+  code alone** (#551: `--watch --fail-fast` exits 0 on non-terminal/failed states; bit #530, #546,
+  #549). The watch's exit 0 is advisory only;
   `dispatch-ticket`'s step 1b mechanizes the real pass condition (a `check-runs` API query
   against the head SHA); cited, not reproduced here.
 - **Serialize vs. parallelize**: tickets touching the same file serialize; disjoint named targets
   parallelize — Part B Design step 5's own disjoint-fan-out default, restated here only as the
   one-line rule this area needs, its mechanics staying there.
 - **A hot shared file doesn't force strict serialization.** Merge-then-rebase-next (each writer
-  fetches and rebases immediately before opening its own PR, ≥1 rebase pass treated as normal, not
-  a defect) is the steady state for one file under heavy concurrent write pressure. This refines
-  rather than contradicts the same-file-serializes rule above: serialize the DECISION to start
+  fetches and rebases immediately before its own PR-open; ≥1 rebase pass is normal, not a defect) is the
+  steady state under heavy concurrent write pressure. Refines the same-file-serializes rule
+  above: serialize the DECISION to start
   touching the file if you can, but once several legitimately already are, rebase-next absorbs the
   overlap instead of forcing a queue. · agent-ui#1115 lesson 6 · 2026-08-17 · [incident]
 - **A repo that commits derived/generated artifacts degrades multi-PR throughput to a
@@ -238,12 +236,10 @@ inventories from durable state, never from memory.** This worktree-isolation-plu
   (Section 2) with no corresponding open PR and no live dispatch holding it → treat as orphaned:
   release the claim per `dispatch-ticket`'s own abandonment bullet (never leave a stale claim or
   `in-flight` label standing for the next sweep to misread as active) and re-dispatch if the work
-  still matters. The #373 run's orchestrator did this three times in one night for orphaned seats
-  — resetting is the default response to a dead claim with no PR, not an escalation. Subject to
-  Section 2's staleness bar above: "no open PR and no live dispatch holding it" is itself the
-  local-work check for a TICKET claim (no worktree exists to inspect once none is holding it) —
-  this bullet and Section 2's don't conflict, they're the same bar applied to two different
-  resources (the claim here, a worktree there).
+  still matters (#373: three orphan resets in one night — the default response, not an
+  escalation). Subject to Section 2's staleness bar: "no open PR and no live dispatch holding it"
+  IS the local-work check for a TICKET claim — the same bar applied to the claim here, a worktree
+  there.
 - **Name the worktree/branch at claim time, every time** (Section 2's claim comment already
   carries this) — the durable record a successor reads to inventory: `git worktree list` for
   what's physically checked out, cross-referenced against each ticket's claim comment for what
@@ -260,17 +256,13 @@ inventories from durable state, never from memory.** This worktree-isolation-plu
   revision" Excluded-list, unnumbered (repo-ops worktree/branch hygiene item) · 2026-08-17 ·
   [verified]
 - **Overnight/unattended runs on a machine that can sleep need an explicit keep-awake** (e.g.
-  `caffeinate` on macOS) — machine sleep kills in-flight subagent calls outright; record the
-  keep-awake process's own PID and its kill instruction in the ledger so a successor can clean it
-  up. · agent-ui#1115 lesson 22 · 2026-08-17 ·
+  `caffeinate` on macOS) — machine sleep kills in-flight subagent calls outright; ledger the
+  keep-awake PID + kill instruction for a successor. · agent-ui#1115 lesson 22 · 2026-08-17 ·
   [incident]
 - **A durable fleet ledger is resumable-from-alone**: per-item status, a timestamped merge log,
-  operator rulings recorded verbatim, incidents, and a roll-up naming every residual item's own
-  owner. This elaborates the bullet above rather than restating it — it's the ANATOMY of the
-  record a successor inventories from, not just the instruction to keep one; this exact shape let
-  one campaign survive ≥3 host process restarts and a second host joining mid-run with no work
-  lost. · agent-ui#1115 lesson 25 · 2026-08-17 ·
-  [verified]
+  operator rulings verbatim, incidents, and a roll-up naming every residual item's owner — the
+  ANATOMY of the record a successor inventories from; this exact shape survived ≥3 host restarts
+  and a mid-run second host with no work lost. · agent-ui#1115 lesson 25 · 2026-08-17 · [verified]
 
 ### 6. Pin-race playbook
 
@@ -305,26 +297,33 @@ from each, never re-derived per door.
 
 **Enforcement posture: STRICT ROUTER, NEVER BUILDS — with one ruled exception, the live lane.**
 The orchestrator routes every incoming item to an owning seat/skill/door within one turn; it
-never absorbs the work itself, however small — no "just this one small fix inline" latitude, no
-exception for a one-line change. Small-fix latitude belongs to the seat the item routes TO (e.g.
-`[[dispatch-ticket]]`'s own solo-first sizing), never to the router itself. **Except:**
+never absorbs the work itself, however small — small-fix latitude belongs to the seat the item
+routes TO (e.g. `[[dispatch-ticket]]`'s own solo-first sizing), never to the router. **Except:**
 
-**The live lane (Kim's ruling, 2026-08-19).** A LIVE human prompt for small, bounded work — the
-human typed the ask directly at this session and the work fits one context — executes solo
-inline, record-LAST: no intake mint, no ADR-0005 claim, no write-gate hold, no build-seat
-dispatch. The PR (or permitted direct commit) IS the record; the live prompt IS the authorization
-the write-gate substitutes for, and it pre-authorizes auto-merge on green. Never skipped: the
-repo's quality floor (lint, gates, CI, version discipline) and the semantic-edit critic invariant
-(one synchronous unnamed checker; `checking-rules` calibrates the unit). Escalate OUT — mint the
-record, take the full flow — the moment the work turns multi-seat, unattended, backlog-shaped
-("note for later" is intake, not build), touches another seat's claim, or outgrows one context; the retroactive mint
-(`[[dispatch-ticket]]` Phase 1's nested intake) costs the same as the upfront one.
+**The live lane (Kim's ruling, 2026-08-19; hardened same day).** A LIVE human prompt for small,
+bounded work — the human typed the ask directly at this session and the work fits one context —
+executes solo inline, record-LAST: no intake mint, no ADR-0005 claim, no write-gate hold, no
+build-seat dispatch. The PR (or permitted direct commit) IS the record — labeled `live-lane`
+where the backend has labels, so revert/defect rates stay measurable against full-flow PRs. The
+live prompt IS the authorization the write-gate substitutes for, and it pre-authorizes auto-merge
+on green. Never skipped: the repo's quality floor (lint, gates, CI, version discipline), the
+semantic-edit critic invariant (one synchronous unnamed checker; `checking-rules` calibrates the
+unit), and the ten-second collision look — list open PR head branches + verify the version slot
+before pushing — plus a claim scan (open assignees/`claimed-by` on records naming the same
+files, #184's claimed-no-PR window) and Section 4's two slot checks; skipping the claim is
+licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (the executor never
+self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
+line, evals sync) don't count — or a second plugin → one confirm before merge; CI red after
+push → a mechanical fix (version bump, lint trim) rides the original authorization, a semantic
+rework does not — re-confirm before re-push. Escalate
+OUT — mint the record, take the full flow — the moment the work turns multi-seat, unattended,
+backlog-shaped ("note for later" is intake, not build), touches another seat's claim, or outgrows
+one context; the retroactive mint (`[[dispatch-ticket]]` Phase 1's nested intake) costs the same
+as the upfront one.
 
-**Triage-within-one-turn.** Every incoming item — a raw user ask, a bug/feature/task report with
-no record yet, a handback from a dispatched seat, a peer message from another fleet session, an
-overdue report — gets classified and routed in the SAME turn it arrives, never deferred to "I'll
-look into this later" or left to accumulate in context. A turn that receives an item and does
-nothing but acknowledge it has not routed it.
+**Triage-within-one-turn.** Every incoming item — a raw user ask, a recordless report, a
+handback, a peer message, an overdue report — gets classified and routed in the SAME turn it
+arrives, never deferred or left to accumulate. A turn that only acknowledges has not routed.
 
 **Routing precedence** (first match wins — check in this order, never skip ahead on a guess):
 1. **A malformed or incomplete handback from a seat this orchestrator dispatched** → bounce it
