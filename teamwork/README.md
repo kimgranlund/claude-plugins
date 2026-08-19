@@ -41,8 +41,7 @@ reviews a feature. Assembled by a `plan-plugin-split` partition of `~/.claude/sk
 | `skills/bind-product` | Skill-as-command | user-only (`/bind-product`) | Makes THIS session a dedicated product seat: adopts `agents/product-leader`'s own contract directly — loop authority, spec-lock, IDR/RDD authoring, Verify-stage bug-vs-gap calls, retro, citation-driven escalation. ADR-0020/#525 (closes #523): renamed from `lead-product`, folded into skill-as-command shape |
 | `skills/team-scaffolding` | Command skill | user-only (`/team-scaffolding`) | Level 1 of the fleet bootstrap (#404, #410): names the session, walls the reviewer seat structurally, prints the dated seat-tier + comms charter, seeds/updates `.claude/ops/fleet.json` on first join, then adopts the matching `/bind-*`/`/bind-product` contract. Planner and reviewer each carry a standing-order self-check (#410 addendum 3): planner warns (never blocks) when no intent layer exists under `.claude/docs/`; reviewer notices (never blocks) style-review-only until a spec locks |
 | `skills/fork-agent` | Skill-as-command | user-only (`/fork-agent {agent-name}`) | ADR-0020 D3/D4 (closes #523): the `fork-` mechanic named as a command — runs one named agent's contract as a `context: fork` off the caller's session, returning only the typed result. Parameterized only, no per-seat aliases |
-| `skills/sub-agent` | Skill-as-command | user-only (`/sub-agent {agent-name}`) | ADR-0020 D3/D4 (closes #523): the `sub-` mechanic named as a command — dispatches one named agent unattended via the `Agent` tool. Parameterized only, no per-seat aliases |
-| `skills/sub-task` | Skill-as-command | user-only (`/sub-task {instructions}`) | Closes #745: fills the gap `sub-agent`/`fork-agent` don't cover — arbitrary instructions with no registered agent to name, dispatched unnamed and synchronous to ONE fresh clean-context `general-purpose` `Agent`-tool subagent (never a fork, which would inherit this session's own context instead). `$ARGUMENTS` is sealed whole as the charter; an unresolved deictic reference gets one inline clarifying question before dispatch, never a guess |
+| `skills/sub-agent` | Skill-as-command | user-only (`/sub-agent {agent-name-or-instructions}`) | ADR-0020 D3/D4 (closes #523; dual-mode amendment closes #751, 2026-08-19): the `sub-` mechanic named as a command — a resolved agent name dispatches that agent's own contract unattended via the `Agent` tool; no match falls through to a free-instruction charter (absorbed from the retired `sub-task`, #745/#746), spawned by default as a NAMED continuable clean-context session (mailbox semantics stated in the reply), or UNNAMED/synchronous on an explicit "one-shot"/"quick" ask. A typo-guard (edit-distance ~2 confirm) covers the original overload hazard. Parameterized only, no per-seat aliases |
 | `skills/fleet-bootstrap` | Command skill | user-only (`/fleet-bootstrap`) | Level 2: one terminal cold-starts the whole fleet — adopts orchestrator, dispatches the product seat, HARD-GATES on human ratification of the intent layer (AskUserQuestion; no live user stops and names the pending gate), then spawns an explicit spawn-list of `reviewer`/`planner` as long-lived named background agents (default empty — those two are manually operated). Schema for the shared `.claude/ops/fleet.json` manifest lives in this skill's `references/fleet-manifest-schema.md` |
 
 ## Construction note: hard cross-plugin preloads converted to soft mentions
@@ -111,6 +110,30 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.8 · 2026-08-19 · closes #751 (Kim's live correction: `/sub-task` shipped a one-shot
+unnamed subagent; the intended default was a continuable named session): `sub-task` (#745/#746,
+merged same day, zero adoption) is retired — its free-instruction dispatch is absorbed into
+`sub-agent` as a second resolution branch rather than kept as a standalone sibling, per a
+coordinator mid-flight course-correction. `sub-agent`'s Phase 1 is now dual-mode: an exact-match
+registered agent name dispatches unchanged; no match seals the whole `$ARGUMENTS` as a
+free-instruction charter and dispatches it as a NAMED, continuable, clean-context
+`general-purpose` session by default (mailbox semantics stated in the reply: addressable by
+name, result arrives as a completion notification, continuable with follow-ups), falling back to
+the prior UNNAMED/synchronous form only on an explicit "one-shot"/"quick" ask. A typo-guard
+(edit-distance ~2 confirm via `AskUserQuestion`) covers the original overload hazard that argued
+against merging the two commands in the first place. `fork-agent`'s SKILL.md/evals reverted to
+pre-#746 (its `sub-task` reciprocal fence is now dead). Two contract questions were escalated to
+a fresh-context `harness:skill-checker` (FLOOR) pass and then to Kim directly (interactive
+ruling, 2026-08-19): (1) whether defaulting to named contradicts `fleet-rules` A3-R1's
+per-charter continuation judgment — Kim ruled KEEP the default-to-named design, recorded inline
+in `sub-agent`'s own body as a deliberate, dated deviation, not an oversight; (2) whether this
+change is big enough to owe a fresh ADR-0020 D3 supersession — Kim ruled NO, D3's reserved heads
+are untouched, the inline dated note is the durable record. `skill_lint.py` clean on both touched
+skills; `eval_check.py` static gate + full coverage clean (15/15 suites, `sub-task` cleanly gone
+from the corpus). Routing proof: both touched skills are `disable-model-invocation: true`,
+structurally excluded from `check-routing`'s blind judge fan-out (`sub-agent`/`fork-agent` never
+enter the model-invocable menu), so the clean static gate is the complete routing proof for this
+diff's actual blast radius — zero model-invocable descriptions were touched.
 v2.28.7 · 2026-08-19 · closes #736, #740 (folded campaign, filed by agent-ui-marshal): three
 harvest folds, no contract change. **#736** — `mobilize-chores` step 2's git-native in-flight
 discovery gains a branch-name fallback: the existing GraphQL `closedByPullRequestsReferences`
