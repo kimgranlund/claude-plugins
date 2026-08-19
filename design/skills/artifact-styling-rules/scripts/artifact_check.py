@@ -17,9 +17,12 @@ its own rubric citation):
   missing-ground       no `color-scheme` declared on :root, or no body/page-root background
                         bound to a --paper/neutral-background-family token               [FAIL]
   doctrine-font-stack  a font-family on body/interactive selectors naming neither the
-                        system-ui nor mono doctrine stack (a var(--font-*) token reference always
-                        counts as on-doctrine — that IS the indirection the doctrine prescribes),
-                        with no override comment                                          [WARN]
+                        system-ui nor mono doctrine stack, with no override comment. A pure
+                        var(--font-*) reference is RESOLVED to the token's own definition on the
+                        page and the RESOLVED stack is judged (#684, refining #662): a token
+                        resolving to a doctrine stack passes, one resolving to an off-doctrine
+                        literal stack warns citing the resolved value, an unresolvable token
+                        warns naming it                                                   [WARN]
 
 Exit 0 clean, 1 on any FAIL, 2 on a usage error (no target, unreadable path). Verdict line first:
 `artifact_check · <verdict> · N fail / M warn · <path>`.
@@ -61,19 +64,23 @@ DOCTRINE_SANS_RE = re.compile(r"system-ui")
 DOCTRINE_MONO_RE = re.compile(r"ui-monospace")
 FONT_FAMILY_RE = re.compile(r"font-family\s*:\s*([^;]+);")
 OVERRIDE_COMMENT_RE = re.compile(r"/\*\s*override\b", re.I)
-# A var(--font-*) reference is on-doctrine BY CONSTRUCTION (#662, third checker note) — the
-# token IS the indirection the doctrine prescribes (css_build.py emits every --font-* line with
-# its mandatory system-fallback tail already baked in); only a LITERAL off-doctrine font-family
-# value with no token indirection and no override comment should warn. Anchored to the WHOLE
-# value (never a bare `.search`) — a mixed value like `var(--font-x), 'Comic Sans MS'` still names
-# a literal fallback and must not silently escape via the token check alone (checker finding C).
-FONT_VAR_ONLY_RE = re.compile(r"^\s*var\(\s*--font-[\w-]+\s*\)\s*$")
-# The other half of the same escape: trusting ANY var(--font-*) blindly is only safe if the TOKEN
-# ITSELF actually carries the mandatory fallback tail — this checker has no way to know a
-# `--font-*` custom property was really built by css_build.py vs. hand-authored badly, so it
-# verifies the token's OWN definition directly (mirrors css_build.py's selftest invariant: every
-# emitted --font-* value ends in the sans-serif or monospace system stack).
-FONT_TOKEN_DEF_RE = re.compile(r"--font-[\w-]+\s*:\s*([^;]+);")
+# #684 (marshal ruling 2026-08-19, refining #662 — NOT reversing it): a pure var(--font-*)
+# reference is no longer trusted blindly; the check FOLLOWS the indirection. The token's own
+# declaration within the page is resolved and the RESOLVED stack is judged against the doctrine
+# names — a doctrine-resolving token (#662's own locked cases) still passes with zero findings,
+# a token resolving to an off-doctrine literal stack (the Comic Sans case, or a source design
+# system's brand face used with no override comment) warns citing the resolved value, and an
+# unresolvable token warns naming it. Anchored to the WHOLE value (never a bare `.search`) — a
+# mixed value like `var(--font-x), 'Comic Sans MS'` still names a literal fallback and takes the
+# literal path (checker finding C, #662).
+FONT_VAR_ONLY_RE = re.compile(r"^\s*var\(\s*(--font-[\w-]+)\s*\)\s*$")
+# Definition-side half (checker finding C, #662): a --font-* token itself must carry the
+# mandatory fallback tail — this checker has no way to know a `--font-*` custom property was
+# really built by css_build.py vs. hand-authored badly, so it verifies the token's OWN
+# definition directly (mirrors css_build.py's selftest invariant: every emitted --font-* value
+# ends in the sans-serif or monospace system stack). #684's resolve-then-check reuses the same
+# regex to build the token→value map it resolves against.
+FONT_TOKEN_DEF_RE = re.compile(r"(--font-[\w-]+)\s*:\s*([^;]+);")
 FONT_FALLBACK_TAIL_RE = re.compile(r"(sans-serif|monospace)\s*$")
 
 
@@ -139,13 +146,30 @@ def check_missing_ground(text: str):
 
 def check_doctrine_font_stack(text: str):
     findings = []
+    # Token→value map for #684's resolve-then-check: a var(--font-*) use is judged by the
+    # RESOLVED stack its token declares on this same page, never trusted on indirection alone.
+    token_defs = {name: value for name, value in FONT_TOKEN_DEF_RE.findall(text)}
     for m in FONT_FAMILY_RE.finditer(text):
         value = m.group(1)
-        if FONT_VAR_ONLY_RE.match(value):
-            continue  # a PURE token reference is on-doctrine (#662) — never a literal-stack question
         start = max(0, m.start() - 120)
         preceding = text[start : m.start()]
-        if OVERRIDE_COMMENT_RE.search(preceding):
+        has_override = bool(OVERRIDE_COMMENT_RE.search(preceding))
+        var_m = FONT_VAR_ONLY_RE.match(value)
+        if var_m:
+            token = var_m.group(1)
+            resolved = token_defs.get(token)
+            if resolved is None:
+                if not has_override:
+                    findings.append(("WARN", "doctrine-font-stack",
+                                     f"font-family reads {token} but the token is not declared on this page — resolved stack unverifiable (#684)"))
+                continue
+            if DOCTRINE_SANS_RE.search(resolved) or DOCTRINE_MONO_RE.search(resolved):
+                continue  # the token resolves to a doctrine stack — #662's on-doctrine indirection, still PASS
+            if not has_override:
+                findings.append(("WARN", "doctrine-font-stack",
+                                 f"font-family {token} resolves off doctrine, no override comment: {resolved.strip()}"))
+            continue
+        if has_override:
             continue
         if not (DOCTRINE_SANS_RE.search(value) or DOCTRINE_MONO_RE.search(value)):
             findings.append(("WARN", "doctrine-font-stack", f"font-family off doctrine, no override comment: {value.strip()}"))
@@ -153,7 +177,7 @@ def check_doctrine_font_stack(text: str):
     # carry the mandatory fallback tail — trusting its USE via var() is only safe if the token
     # was actually built right.
     for m in FONT_TOKEN_DEF_RE.finditer(text):
-        value = m.group(1)
+        value = m.group(2)
         if not FONT_FALLBACK_TAIL_RE.search(value.strip().rstrip("'\"")):
             findings.append(("WARN", "doctrine-font-stack",
                              f"--font-* token defined without the mandatory system-fallback tail: {value.strip()}"))
@@ -285,16 +309,41 @@ BAD_FIXTURE_FONT = """
 body { background-color: var(--paper); font-family: 'Comic Sans MS', cursive; }
 """
 
-# #662 third checker-alignment note: font-family via var(--font-*) token indirection is
-# on-doctrine BY CONSTRUCTION — css_build.py's own --font-* lines always carry the mandatory
-# system-fallback tail (docs' script-interface.md), so a page reading the token is definitionally
-# conforming even though neither "system-ui" nor "ui-monospace" appears literally at the point of
-# use. Reverse control: zero doctrine-font-stack findings on a page that only ever references
-# the token, never the literal stack.
+# #662 third checker-alignment note, refined by #684 (2026-08-19): font-family via var(--font-*)
+# token indirection is the doctrine's own prescribed mechanism — and under #684's
+# resolve-then-check the check now FOLLOWS the indirection to the token's declaration and judges
+# the RESOLVED stack. Locked reverse control (#684 acceptance criterion: this fixture staying
+# PASS is the proof the change is a refinement, not a policy reversal of #662): zero
+# doctrine-font-stack findings on a page that only ever references DOCTRINE-RESOLVING tokens,
+# never the literal stack at the point of use.
 GOOD_FIXTURE_FONT_VAR = """
+:root { color-scheme: light dark; --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237));
+  --font-system-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-ui-monospace: ui-monospace, 'SF Mono', monospace; }
+body { background-color: var(--paper); font-family: var(--font-system-ui); }
+button { font-family: var(--font-ui-monospace); }
+"""
+
+# #684 bite fixtures — the three resolve-then-check outcomes beyond the doctrine-token PASS:
+# a token resolving to an off-doctrine literal stack (the Comic Sans case) warns citing the
+# RESOLVED value; the same use with an override comment is suppressed; an undeclared token warns
+# naming the token itself.
+BAD_FIXTURE_FONT_VAR_OFF_DOCTRINE = """
+:root { color-scheme: light dark; --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237));
+  --font-brand: 'Comic Sans MS', cursive, sans-serif; }
+body { background-color: var(--paper); font-family: var(--font-brand); }
+"""
+
+GOOD_FIXTURE_FONT_VAR_OVERRIDE = """
+:root { color-scheme: light dark; --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237));
+  --font-brand: 'Custom Brand Font', serif, sans-serif; }
+/* override: brand requires this face for the masthead */
+body { background-color: var(--paper); font-family: var(--font-brand); }
+"""
+
+BAD_FIXTURE_FONT_VAR_UNRESOLVABLE = """
 :root { color-scheme: light dark; --paper: light-dark(oklch(0.95 0 90), oklch(0.22 0.006 237)); }
-body { background-color: var(--paper); font-family: var(--font-gt-america); }
-button { font-family: var(--font-gt-america-mono); }
+body { background-color: var(--paper); font-family: var(--font-phantom); }
 """
 
 # CROSS-SCRIPT REGRESSION FIXTURE (#662 Acceptance criterion 2) — the FULL, VERBATIM
@@ -305,7 +354,9 @@ button { font-family: var(--font-gt-america-mono); }
 # (.claude/rules/plugin-authoring.md's hard-boundary rule), so this is a literal, dated, cited
 # COPY, not a live import — if css_build.py's emission shape ever changes, BOTH this fixture and
 # css_build.py's own selftest (which asserts the same property names from the emitter's side)
-# update in the same change, per #662's Acceptance criterion 2. A prior draft of this fixture
+# update in the same change, per #662's Acceptance criterion 2 (amended by #684, 2026-08-19:
+# zero FAILs plus exactly the one ruled doctrine-font-stack WARN on the synthetic body rule's
+# brand token — see the selftest assertion below). A prior draft of this fixture
 # TRIMMED the generated comments/spacing/radii/mermaid blocks and so silently missed a real
 # regression that only the full output exposes (checker finding, #662): css_build's own generated
 # mermaid comment used to cite "#662" literally in-line, which `#[0-9a-fA-F]{3,8}` reads as a
@@ -463,12 +514,28 @@ def selftest():
     overridden = "/* override: brand requires this face */\nbody { font-family: 'Custom Brand Font', serif; }"
     assert check_doctrine_font_stack(overridden) == [], "an explicit override comment must suppress the font-stack warning"
 
-    # #662 third checker-alignment note: var(--font-*) token indirection is on-doctrine, no
-    # override comment needed — the false-warn this note reports (10 warns on a conforming page)
+    # #662 third checker-alignment note, refined by #684: DOCTRINE-RESOLVING var(--font-*) token
+    # indirection is on-doctrine, no override comment needed — this fixture staying PASS is
+    # #684's own acceptance criterion that resolve-then-check is not a policy reversal of #662
     assert check_doctrine_font_stack(GOOD_FIXTURE_FONT_VAR) == [], (
-        "a font-family reading var(--font-*) must never warn — token indirection IS the doctrine")
+        "a font-family reading a doctrine-resolving var(--font-*) must never warn — token indirection IS the doctrine")
     assert check_text(GOOD_FIXTURE_FONT_VAR) == [], (
         "the var(--font-*) fixture must be clean end to end, not just on the font check")
+
+    # #684 resolve-then-check bites: a token resolving to an off-doctrine literal stack warns
+    # CITING THE RESOLVED VALUE (the Comic Sans case)...
+    hits = check_doctrine_font_stack(BAD_FIXTURE_FONT_VAR_OFF_DOCTRINE)
+    assert any(c == "doctrine-font-stack" and "Comic Sans MS" in msg and "--font-brand" in msg
+               for _, c, msg in hits), (
+        "a var(--font-*) resolving to an off-doctrine stack must warn citing the resolved value (#684)")
+    # ...the same use under an override comment is suppressed (the escape hatch generalizes)...
+    assert check_doctrine_font_stack(GOOD_FIXTURE_FONT_VAR_OVERRIDE) == [], (
+        "an override comment must suppress the resolved-off-doctrine warning, mirroring the literal path (#684)")
+    # ...and an undeclared token warns naming the token itself
+    hits = check_doctrine_font_stack(BAD_FIXTURE_FONT_VAR_UNRESOLVABLE)
+    assert any(c == "doctrine-font-stack" and "--font-phantom" in msg and "not declared" in msg
+               for _, c, msg in hits), (
+        "an unresolvable var(--font-*) token must warn naming the token (#684)")
 
     # checker finding C — the var(--font-*) skip must be ANCHORED to the whole value: a MIXED
     # value naming a literal fallback alongside the token must still warn, never silently escape
@@ -488,12 +555,21 @@ def selftest():
     assert "doctrine-font-stack" in codes, (
         "a --font-* token defined without the mandatory fallback tail must warn even via var() use")
 
-    # #662 Acceptance criterion 2 — the FULL verbatim css_build.py output (+ the synthetic
-    # body/font rule make-artifact's own assembly phase adds) must pass artifact_check clean
+    # #662 Acceptance criterion 2, amended by #684 (marshal ruling 2026-08-19) — the FULL
+    # verbatim css_build.py output must still pass with zero FAILs, and its --font-gt-america-mono
+    # token resolves ON-doctrine (its stack carries ui-monospace), so the button rule stays clean.
+    # The synthetic body rule's var(--font-gt-america), though, resolves to the source system's
+    # brand stack with no override comment — #684 ruled that WARN is CORRECT behavior (the
+    # artifact type doctrine owns faces; make-artifact's justification mechanism is #649's v2
+    # build, noted there, not built here). Exactly that one WARN, nothing else.
     findings = check_text(CSS_BUILD_OUTPUT_FIXTURE)
-    assert findings == [], (
-        "verbatim css_build.py output must pass artifact_check with zero findings — the #662 "
-        "cross-script regression fixture; got: %r" % (findings,))
+    assert not any(sev == "FAIL" for sev, _, _ in findings), (
+        "verbatim css_build.py output must never FAIL — the #662 cross-script regression "
+        "fixture; got: %r" % (findings,))
+    assert len(findings) == 1 and findings[0][1] == "doctrine-font-stack" \
+        and "--font-gt-america" in findings[0][2] and "GT America" in findings[0][2], (
+        "the css_build fixture must carry exactly the one #684-ruled WARN — the synthetic body "
+        "rule's brand token resolving off doctrine with no override comment; got: %r" % (findings,))
 
     # checker finding A — a CSS comment's own `#NNN` issue reference must never read as a color
     # literal (the exact bug a trimmed fixture missed); reverse control alongside the negative
@@ -511,8 +587,10 @@ def selftest():
         "a `}` inside a :root comment must not truncate the :root match and leak its own literal")
 
     print("artifact_check selftest · PASS · 6 checks, negative + reverse controls, override-comment "
-          "path, font-var-indirection path (anchored + token-definition halves), cross-script "
-          "(#662) regression fixture (full verbatim + comment-hash negative control)")
+          "path, font-var resolve-then-check path (#684: doctrine-token PASS, resolved-off-doctrine "
+          "WARN, override suppression, unresolvable-token WARN; anchored + token-definition halves), "
+          "cross-script (#662) regression fixture (full verbatim, zero FAILs + the one #684-ruled WARN "
+          "+ comment-hash negative control)")
     return 0
 
 
