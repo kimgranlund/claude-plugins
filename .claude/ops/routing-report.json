@@ -5,6 +5,12 @@
     "leaked": 6,
     "stolen": 2
   },
+  "llm": {
+    "as_of": "2026-08-19",
+    "dead": 3,
+    "leaked": 2,
+    "stolen": 4
+  },
   "teamwork": {
     "as_of": "2026-08-19",
     "dead": 0,

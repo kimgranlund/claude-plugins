@@ -80,6 +80,20 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
 
+v1.0.17 · assembled 2026-08-19 · #743 (PR #742's checker verdict 1/4 — routing debt): the 1.0.16
+upsert wave landed `llm-gateway-facts`' 7th axis (`live-ops-diagnostics-and-model-tiering.md`)
+with ZERO description edits by directive, leaving axes 5-7 (single-flight 401 refresh, retry
+policy + streaming pass-through, live-gateway ops/model tiering) invisible to routing and the
+corpus notes still reading "four axes" from the 08-17 fold. Description gains one clause
+registering all three (683/700 chars, W8; the #730/#715 implement/build/write NOT-fence
+untouched); the consult table was already complete (7 rows, no edit owed); `evals/evals.json` +
+`scripts/routing-corpus.json` notes reworded to "all seven axes" and gain t17-t22 positive
+triggers for the newly-described vocabulary (existing t01-t16/n01-n12 untouched). SKILL.md body
+gains a one-sentence ceiling note directly under the consult table: at the 7-axis
+`pack-writing-rules` ceiling; the next axis proposal triggers `plan-skill-split`/INDEX rather than
+an eighth row. `/check-routing llm-gateway-facts` + its `[[llm-streaming-facts]]`/
+`a2ui-chat-agent-facts`/`a2ui-protocol-facts` fence siblings re-judged clean.
+
 v1.0.16 · assembled 2026-08-19 · agent-ui provider/harness doctrine fold (branch
 `upsert-llm-provider-doctrine`): four packs extended from field-proven agent-ui doctrine, every
 ADR claim read at source via the GitHub API (ADR-0073/0137/0200/0208), each target diff-read first
