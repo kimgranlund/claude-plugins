@@ -5,11 +5,14 @@ description: >
   Seed or edit a target estate's naming.manifest.json — lexicon membership
   proposals, ObjectVocab registrations with the anti-ambiguity gate,
   AuthorRegistry, and exemptions enumeration. Use when an estate has no
-  manifest, when a new vocabulary token is needed, or when the exemptions
-  array must be enumerated or retired from.
+  manifest, when a new vocabulary token is needed, when the exemptions
+  array must be enumerated, or when an exemption entry must be removed
+  because its rename has already landed elsewhere. NOT for chaining
+  verify -> plan -> execute to retire an exemption whose rename hasn't
+  happened yet (exemption-retire).
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-17
+last_updated: 2026-08-19
 requires: [naming-conventions]
 disable-model-invocation: false
 user-invocable: true

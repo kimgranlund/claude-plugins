@@ -1,6 +1,6 @@
 {
   "skill": "exemption-retire",
-  "note": "Moved in from the command-only commands/exemption-retire.md wrapper (issue #525, skill-as-command conversion). Freshly authored suite — the command surface it replaces carried no evals.json (commands aren't model-routed), so there is no prior eval history to migrate.",
+  "note": "Moved in from the command-only commands/exemption-retire.md wrapper (issue #525, skill-as-command conversion). Freshly authored suite — the command surface it replaces carried no evals.json (commands aren't model-routed), so there is no prior eval history to migrate. n05 added 2026-08-19 (issue #718) as the reciprocal fence against manifest-authoring's own t04 (this skill was stealing it 3-0 in the #676 sweep) — retargeted, not flipped: manifest-authoring's own Procedure step 4 already performs a manifest-only exemption removal once the rename has landed elsewhere, so the case stays a real trigger there, not a no-trigger for exemption-retire's own suite.",
   "cases": [
     {"id": "t01", "prompt": "Retire this exemption while we're already touching the file.", "expect": "trigger"},
     {"id": "t02", "prompt": "Since we're renaming this anyway, clear its exemption entry too.", "expect": "trigger"},
@@ -10,6 +10,7 @@
     {"id": "n01", "prompt": "Run the full exemption burn-down across the whole estate.", "expect": "no-trigger", "comment": "owner: overhaul-execute — a bulk, many-member campaign, not one opportunistic artifact"},
     {"id": "n02", "prompt": "Just plan this rename, I'm not ready to apply it.", "expect": "no-trigger", "comment": "owner: rename-planning — plan without intent to execute"},
     {"id": "n03", "prompt": "Apply this already-approved rename plan.", "expect": "no-trigger", "comment": "owner: rename-execute — the mutation itself, this skill only hands off to it"},
-    {"id": "n04", "prompt": "Seed the naming manifest for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"}
+    {"id": "n04", "prompt": "Seed the naming manifest for this new estate.", "expect": "no-trigger", "comment": "owner: manifest-authoring"},
+    {"id": "n05", "prompt": "Retire this exemption now that its rename has landed.", "expect": "no-trigger", "comment": "owner: manifest-authoring (its own t04, quoted verbatim; issue #718) — the rename already landed elsewhere, so this is a manifest-only removal with nothing left to plan or execute"}
   ]
 }

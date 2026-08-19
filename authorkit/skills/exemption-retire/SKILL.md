@@ -11,10 +11,11 @@ description: >
   across many members in one pass (overhaul-execute's waved campaign); NOT
   for producing the rename plan alone with no intent to apply it
   (rename-planning); NOT for the mutation itself, which this skill only
-  hands off to (rename-execute).
+  hands off to (rename-execute); NOT a manifest-only removal once the
+  rename already landed elsewhere (manifest-authoring).
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-17
+last_updated: 2026-08-19
 requires: [rename-planning, naming-audit, rename-execute]
 disable-model-invocation: false
 user-invocable: true

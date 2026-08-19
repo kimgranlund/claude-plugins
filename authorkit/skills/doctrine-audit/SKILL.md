@@ -6,15 +6,16 @@ description: >
   omits, or paraphrases away from. Reads typed edges (verbatim-line |
   ledger-sync | vocab-term | judgment) from doctrine.manifest.json. Use
   when the user asks to audit doctrine drift, check a forge template
-  against the standard it invokes, or verify a ledger row still matches
-  its file. Read-only. NOT naming (naming-audit), NOT busy-work
-  (bloat-audit), NOT an ad-hoc unmanifested pattern (pattern-audit), NOT
+  against the standard it invokes, verify a ledger row matches
+  its file, or find bodies (agent/skill) using a stale tool name/term instead of
+  canon (the vocab-term edge). Read-only. NOT naming (naming-audit), NOT busy-work
+  (bloat-audit), NOT an unmanifested pattern (pattern-audit), NOT
   menu rent (attention-audit), NOT an overhaul plan (overhaul-planning),
   NOT the batch form (estate-audit-agent), NOT a one-off script
-  (make-script).
+  (make-script), NOT a retired handle from a rename wave (fix-old-names).
 author: kim
 created: 2026-08-16
-last_updated: 2026-08-16
+last_updated: 2026-08-19
 disable-model-invocation: false
 user-invocable: false
 allowed-tools:

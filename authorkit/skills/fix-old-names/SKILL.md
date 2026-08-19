@@ -8,10 +8,11 @@ description: >-
   "a CI check that fails when our config references a renamed agent" — that gate ships with it.
   Reads a derived manifest, never guesses. NOT for choosing a brand-new name (naming-rules); NOT
   for planning or executing a rename inside the plugin repo itself (rename-planning/rename-
-  execute, this plugin; big-change-git-rules); NOT for general repo drift (clean-repo).
+  execute, this plugin; big-change-git-rules); NOT for general repo drift (clean-repo); NOT a
+  stale term/tool name with no rename-wave provenance (doctrine-audit's vocab-term edge).
 author: kim
 created: 2026-07-26
-last_updated: 2026-08-17
+last_updated: 2026-08-19
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -1,6 +1,6 @@
 {
   "skill": "bloat-audit",
-  "note": "This skill owns the busy-work/over-specification axis (ceremony, ProseTax, restatement) — distinct from naming-audit's grammar-conformance axis, even though both are read-only report skills over the same artifact kinds. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "note": "This skill owns the busy-work/over-specification axis (ceremony, ProseTax, restatement) — distinct from naming-audit's grammar-conformance axis, even though both are read-only report skills over the same artifact kinds. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history. 2026-08-19 (issue #718): t04 was being stolen 2-of-3 by pattern-audit in the #676 sweep; description sharpened to name the cross-file-restated-content trigger explicitly and fence out pattern-audit's arbitrary-pattern-sweep case. No case changes here — pattern-audit's own evals gained the reciprocal n09 fence.",
   "cases": [
     {
       "id": "t01",

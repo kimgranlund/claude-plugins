@@ -4,14 +4,16 @@ kind: skill
 description: >
   Run the busy-work / over-specification audit over a skill, agent, command,
   or any corpus of instruction-carrying markdown — ceremony disproportionate
-  to task size, and prose that spends words without buying instruction-
-  following value. Use when asked to audit or review a skill/agent/plugin
+  to task size, prose that spends words without buying instruction-
+  following value, and content restated across files instead of cited once.
+  Use when asked to audit or review a skill/agent/plugin
   for verbosity, bloat, heavy-handedness, "does this need to be this long",
-  or busy-work root causes. Read-only: reports, never rewrites. NOT for a skill's content
-  correctness, routing fidelity, or standards compliance (harness's check-skill).
+  restated/duplicated content across files, or busy-work root causes. Read-only: reports, never rewrites. NOT for a skill's content
+  correctness, routing fidelity, or standards compliance (harness's check-skill); NOT for
+  an arbitrary pattern/regex sweep (pattern-audit).
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-17
+last_updated: 2026-08-19
 disable-model-invocation: false
 user-invocable: true
 allowed-tools:
