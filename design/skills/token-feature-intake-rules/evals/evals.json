@@ -1,0 +1,61 @@
+{
+  "skill": "token-feature-intake-rules",
+  "note": "Trigger-routing suite, minted alongside token-feature-intake-rules (closes gh#711, lld-0024). Positives cover the visual/token intake-schema ask plus adjacent phrasings. Negatives fence the three siblings this capability overlaps trigger vocabulary with: make-palette, pick-fonts (the BUILD asks themselves), and docs' file-feature (the general intake procedure this pack is consulted FROM, never absorbed into).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "what should a new-accent-color ticket capture before we build it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what fields does a typography-seed ticket need to state",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "is this token ticket capture-complete or is something missing",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "what should a ticket for a new intent role like caution capture on both planes",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what's missing from this palette-seed ticket before it's ready for make-palette",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "build a caution intent color ramp from this brand anchor",
+      "expect": "no-trigger",
+      "note": "make-palette — the build itself, not the ticket's own intake fields"
+    },
+    {
+      "id": "n02",
+      "prompt": "verify this palette passes contrast for every fg/bg pair",
+      "expect": "no-trigger",
+      "note": "check-colors — verifying a built palette, not what a ticket should capture"
+    },
+    {
+      "id": "n03",
+      "prompt": "pick fonts for the heading and body voices",
+      "expect": "no-trigger",
+      "note": "pick-fonts — the build itself"
+    },
+    {
+      "id": "n04",
+      "prompt": "can we add a dark mode toggle to settings",
+      "expect": "no-trigger",
+      "note": "docs' file-feature — a plain feature idea with no token-shape intake question asked"
+    },
+    {
+      "id": "n05",
+      "prompt": "file a feature ticket for CSV export",
+      "expect": "no-trigger",
+      "note": "docs' file-feature — general intake, not a token-shaped schema ask"
+    }
+  ]
+}

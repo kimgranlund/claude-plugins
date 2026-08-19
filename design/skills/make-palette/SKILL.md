@@ -7,7 +7,8 @@ description: >-
   chroma arcs, hue stability, gamut-safe reduction, role assignment, verified by check-colors
   before finalize. NOT for verifying an existing palette (check-colors); NOT for color-space
   math (color-space-facts); NOT for harmony/art direction (color-theory-facts); NOT for
-  realizing token layers in a repo (token-builder).
+  realizing token layers in a repo (token-builder); NOT what fields a token/palette-seed TICKET
+  should capture before build (token-feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
