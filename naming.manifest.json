@@ -506,6 +506,11 @@
       "canonical": "research",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "orchestration",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
