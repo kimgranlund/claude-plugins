@@ -133,7 +133,7 @@
       "id": "n26",
       "prompt": "explore a few variants of this button component before we commit to one",
       "expect": "no-trigger",
-      "note": "reciprocal fence vs design:explore-variants (ticket #750) — generating and voting on several unbuilt variants, not building the chosen one"
+      "note": "reciprocal fence vs design:make-variants (ticket #750, renamed from explore-variants after an ADR-0011 grammar failure) — generating and voting on several unbuilt variants, not building the chosen one"
     }
   ]
 }

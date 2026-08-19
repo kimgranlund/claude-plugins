@@ -1,6 +1,6 @@
 # feedback-schema — variant-feedback/v1
 
-The versioned JSON contract `explore-variants` serializes into every published artifact and
+The versioned JSON contract `make-variants` serializes into every published artifact and
 consumes on resume. This file is the contract's canonical source; the artifact's inline script
 carries a generated copy, never a hand-diverged one.
 

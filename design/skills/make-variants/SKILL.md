@@ -1,5 +1,5 @@
 ---
-name: explore-variants
+name: make-variants
 description: >-
   Publish an Artifact of N variants along declared axes, each card voted thumbs-up/down with a
   free-text note, serializing a live variant-feedback/v1 JSON block pasted back to resume —
@@ -13,7 +13,7 @@ disable-model-invocation: false
 user-invocable: true
 ---
 
-# explore-variants
+# make-variants
 
 Produces N design variants that differ along DECLARED axes, published as ONE artifact whose
 cards each carry a vote (up/down/unvoted) + free-text note widget, and whose page serializes a

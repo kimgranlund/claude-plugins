@@ -1,4 +1,4 @@
-# Baseline — explore-variants (documented-delta form)
+# Baseline — make-variants (documented-delta form)
 
 Per the accepted-with-note pattern the ticket's source intent record already used: this baseline
 is recorded as a description of current no-skill behavior rather than live fresh-session

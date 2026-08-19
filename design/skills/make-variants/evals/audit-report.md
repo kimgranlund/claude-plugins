@@ -1,7 +1,13 @@
-# check-skill audit — explore-variants (FLOOR)
+# check-skill audit — make-variants, reviewed as explore-variants (FLOOR)
 
 Skill: /private/tmp/claude-501/-Users-kimba-Projects-nonoun-plugins/c19ebefb-c531-4a92-a485-715a44593df1/scratchpad/explore-variants-750/design/skills/explore-variants · Standards: skill-writing-rules · Lint: clean
 Verdict: **PASS** (0 blocking, 0 major, 3 minor, 2 nit)
+
+**Post-review rename note (2026-08-19):** this skill was renamed `explore-variants` → `make-variants`
+after this audit ran, per the marshal-accepted naming ruling resolving the F-noted grammar
+blocker below (Kim's ruling on #750). Every finding, file:line citation, and the reviewed path
+above are preserved verbatim as an accurate record of what was actually reviewed, under the name
+it carried at review time — not retargeted to the new path/name after the fact.
 
 Reviewed 2026-08-19 for ticket #750. Depth: FLOOR (fresh draft). The known ADR-0011 grammar
 failure on the name `explore-variants` is separately tracked and NOT re-flagged here per the

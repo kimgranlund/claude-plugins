@@ -1,4 +1,4 @@
-# Behavioral assertions — explore-variants
+# Behavioral assertions — make-variants
 
 Checkable statements about the output of a with-skill run, compared against the documented
 no-skill baseline (`evals/baseline.md`). All five hold for a compliant run.
