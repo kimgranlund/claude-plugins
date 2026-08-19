@@ -1,6 +1,6 @@
 {
   "skill": "plugin-install-facts",
-  "note": "Trigger-routing suite, authored evals-first 2026-07-25 (make-skill Phase 2, before any body existed). Contested boundaries: adopt-plugin (declaring a plugin/marketplace in settings.json so CONTRIBUTORS can install — repo-side wiring; this skill owns the person-side HOW-to-install and the README install copy), plugin-writing-rules (authoring/shipping the plugin itself), update-config (settings.json edits with no plugin object).",
+  "note": "Trigger-routing suite, authored evals-first 2026-07-25 (make-skill Phase 2, before any body existed). Contested boundaries: adopt-plugin (declaring a plugin/marketplace in settings.json so CONTRIBUTORS can install — repo-side wiring; this skill owns the person-side HOW-to-install and the README install copy), plugin-writing-rules (authoring/shipping the plugin itself), update-config (settings.json edits with no plugin object). 2026-08-19 (#733): n10 added as the reciprocal fence against harness's own check-state --fleet — a cross-repo drift REPORT (has a fix landed elsewhere yet) is that skill's territory, not this pack's person-side own-install lifecycle ask (t14).",
   "cases": [
     {
       "id": "t01",
@@ -144,6 +144,12 @@
       "prompt": "why isn't my re-shipped plugin update being picked up by users",
       "expect": "no-trigger",
       "note": "M1 fix: AUTHOR-side ask, plugin-writing-rules owns it"
+    },
+    {
+      "id": "n10",
+      "prompt": "Check whether this repo's plugin fixes have actually landed in gen-ui-kit yet, or if it's still running the old cached copy.",
+      "expect": "no-trigger",
+      "note": "owner: harness check-state --fleet (cross-repo drift REPORT, not a person's own single-install update-lag troubleshooting). Reciprocal fence for check-state's t12, added 2026-08-19 (#733) after #720's re-judge found this skill stealing it 3-of-3 from t14's near-paraphrase."
     }
   ]
 }

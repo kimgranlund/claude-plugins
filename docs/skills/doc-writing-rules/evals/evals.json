@@ -53,6 +53,12 @@
       "expect": "trigger"
     },
     {
+      "id": "t11",
+      "prompt": "does this SPEC's Acceptance section require an Agent verification answer",
+      "expect": "trigger",
+      "comment": "Added 2026-08-19 (#733) as the reciprocal positive for agent-harness-rules' n01 — this is the REQUIRED-section question ('## Agent verification'), this skill's own WHAT-is-required type contract, not agent-harness-rules' HOW-to-design-the-harness territory."
+    },
+    {
       "id": "n01",
       "prompt": "write the PRD for this feature",
       "expect": "no-trigger"
