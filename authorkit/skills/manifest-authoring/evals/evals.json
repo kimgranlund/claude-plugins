@@ -1,6 +1,6 @@
 {
   "skill": "manifest-authoring",
-  "note": "This skill owns SEEDING or EDITING one estate's naming.manifest.json — lexicon proposals, ObjectVocab registration, AuthorRegistry, exemptions enumeration/retirement. Finding what needs governing is naming-audit's job; this skill only writes the one governance file. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history.",
+  "note": "This skill owns SEEDING or EDITING one estate's naming.manifest.json — lexicon proposals, ObjectVocab registration, AuthorRegistry, exemptions enumeration/retirement. Finding what needs governing is naming-audit's job; this skill only writes the one governance file. Authored fresh at mint (2026-08-13, issue #196) — no prior eval history. 2026-08-19 (issue #718): t04 was being stolen 3-0 by exemption-retire in the #676 sweep; RETARGETED, not flipped — this skill's own Procedure step 4 already performs a manifest-only exemption removal once the rename has ALREADY landed elsewhere (distinct from exemption-retire's verify->plan->execute chain for a rename not yet done), so t04 stays a real trigger here and description was sharpened to say so; exemption-retire's own evals gained the reciprocal n05 fence.",
   "cases": [
     {"id": "t01", "prompt": "This estate has no naming.manifest.json — seed one.", "expect": "trigger"},
     {"id": "t02", "prompt": "Register a new ObjectVocab token for this domain.", "expect": "trigger"},

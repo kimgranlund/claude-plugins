@@ -7,14 +7,15 @@ description: >
   kinds instruction-labeled) for a downstream step: review, bulk edit,
   migration, or an audit's own Phase 0. Use when asked to sweep,
   scan, or collect matches for a pattern/regex/instruction. NOT for naming
-  (naming-audit), NOT for busy-work (bloat-audit), NOT for RETIRED-name
+  (naming-audit), NOT for busy-work or restated content across files
+  (bloat-audit), NOT for RETIRED-name
   sweeps (fix-old-names), NOT for partition analysis (plan-plugin-split),
   NOT for a check that should become a script (make-script), NOT for a
   governed edge in doctrine.manifest.json (doctrine-audit). Read-only:
   emits a dataset, never rewrites.
 author: kim
 created: 2026-08-15
-last_updated: 2026-08-17
+last_updated: 2026-08-19
 disable-model-invocation: false
 user-invocable: true
 allowed-tools:
