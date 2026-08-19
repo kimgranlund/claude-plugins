@@ -8,7 +8,7 @@
     { "id": "t04", "prompt": "Give me a project state report", "expect": "trigger" },
     { "id": "t05", "prompt": "Review all roadmap, plan, and backlog items and the open tickets", "expect": "trigger" },
     { "id": "t06", "prompt": "Which branches and worktrees can be merged, deleted, or closed?", "expect": "trigger" },
-    { "id": "t07", "prompt": "What changed since I last checked in on this repo?", "expect": "no-trigger", "comment": "owner: what-shipped since 3.1.0 — ceded 2026-07-30: 'changed since I last checked' is a window-of-activity ask; check-state keeps the checkpoint-delta vocabulary via t04/t02 (blind-judged in PR #121)" },
+    { "id": "t07", "prompt": "What changed since I last checked in on this repo?", "expect": "trigger", "comment": "ruling reversed 2026-08-19 (#720): 'since I last checked in' is checkpoint-relative, not a calendar window — it matches check-state's own 'Delta since last run' verdict bullet verbatim, not what-shipped's date-bounded ask (its own boundary line names 'a window of activity' — today/yesterday/this week/36h/a date range — as its axis, and cedes 'current work-state...a point-in-time snapshot' to check-state). Supersedes the 2026-07-30 cede (PR #121); no reciprocal case existed in what-shipped's own suite to flip alongside it." },
     { "id": "t08", "prompt": "Are there any open PRs waiting on my review or failing CI?", "expect": "trigger" },
     { "id": "t09", "prompt": "Do our plan docs still match the open issues, or have they drifted?", "expect": "trigger" },
     { "id": "t10", "prompt": "I'm back after a week off — catch me up on where this repo stands.", "expect": "trigger" },

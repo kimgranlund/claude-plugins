@@ -8,7 +8,7 @@ description: >-
   extensibility, security allowlist + conformance, coverage policy. ANSWERS from the cited
   corpus; does not build. NOT for the wire shape a component renders (a2ui-protocol-facts); NOT
   for corpus exemplars (a2ui-training-facts); NOT for the dev-proxy PAIR allowlist (a2ui-chat-agent-facts); NOT for
-  catalog/renderer SOURCE (a2ui-builder).
+  catalog/renderer SOURCE (a2ui-builder); NOT grading or scoring a catalog row against its rubric.
 disable-model-invocation: false
 user-invocable: false
 ---

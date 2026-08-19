@@ -4,7 +4,8 @@ description: >-
   Sharpen the language of a prompt-carrying artifact so it *instantiates* target behavior, not
   merely describes it — a skill, agent, or tool prompt: the model ignores an instruction, a
   prompt isn't effective, harden a description, rewrite so it works. NOT for sharpening WHAT
-  is asked (find-intent); NOT for structure or why a skill isn't triggering
+  is asked (find-intent); NOT improving a BRIEF's ask/content, even when it's called a "prompt
+  brief" (find-intent); NOT for structure or why a skill isn't triggering
   (skill-writing-rules) — only the language inside it.
 disable-model-invocation: false
 user-invocable: false

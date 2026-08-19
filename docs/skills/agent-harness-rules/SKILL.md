@@ -4,8 +4,9 @@ description: >-
   Standards for designing agent-native verification — HOW an agent autonomously tests a system it
   just built, instead of a human eyeballing a screenshot. Assert-layer choice, driver agent harness
   design, assertion/fixture grammar, mapping this estate's own instruments onto a SPEC's criteria,
-  the Gen-UI grounding case. Use when designing a test harness, picking an assert layer, or judging
-  a criterion agent-runnable vs human-only. NOT the doctrine requiring the plan
+  the Gen-UI grounding case. Use when designing a test harness, picking an assert layer, judging
+  a criterion agent-runnable vs human-only, or asking what instruments we already have before
+  building a new verification harness. NOT the doctrine requiring the plan
   (doc-writing-rules' `## Agent verification`, check-doc's J7 — this is the HOW); NOT investigating
   an already-scorable system (research-methods); NOT this estate's own gate mechanics
   (script-writing-rules — cited, not re-derived).

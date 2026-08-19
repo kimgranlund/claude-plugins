@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.4 · 2026-08-19 · closes #720 (routing fences, sweep #676): `loop-rules`' description gains "NOT running or watching an already-written /goal, only designing or reviewing the pattern" (n11 no-trigger case); `fleet-rules`' description gains a folded "NOT one agent — its preloads, frontmatter, or return block (agent-writing-rules/write-handoff)" fence (n16 accepted cross-plugin leak class — the fence targets estate-scope routing, since a teamwork-scoped menu structurally lacks agent-writing-rules as a candidate; wording-checker caught the original two-fence phrasing as redundant with the pre-existing agent-writing-rules/write-handoff fence and folded them into one). Both description-only, no eval changes. Takes 2.28.4, not 2.28.3: PR #726 (`merge_queue_watch.py`, #713 lever 2, since merged) claimed the 2.28.3 slot on `origin/main`'s tip at the time — this build depended on neither #726's content nor its slot, it only yielded the number to avoid a version-claim race (`version_claim_check.py`). Fresh-context `harness:wording-checker` pass on both edits per plugin-authoring.md's semantic-edit invariant.
 v2.28.3 · 2026-08-19 · closes #713 (marshal feed noise reduction, lever 2): new
 `scripts/merge_queue_watch.py` — polls every open PR's head SHA via the `check-runs` REST
 endpoint (never `gh pr checks --watch`, whose exit code lies on non-terminal/failed states, per
