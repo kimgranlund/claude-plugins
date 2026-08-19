@@ -128,6 +128,12 @@
       "prompt": "what fields does a button component ticket need before we build it",
       "expect": "no-trigger",
       "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) — what a TICKET should capture, not the build itself"
+    },
+    {
+      "id": "n26",
+      "prompt": "explore a few variants of this button component before we commit to one",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs design:explore-variants (ticket #750) — generating and voting on several unbuilt variants, not building the chosen one"
     }
   ]
 }
