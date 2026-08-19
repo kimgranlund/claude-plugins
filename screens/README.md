@@ -37,6 +37,7 @@ when it is not — no hard preload crosses the plugin boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v1.1.0 · 2026-08-19 · gh#711 (lld-0024): new knowledge skill `feature-intake-rules` — per-shape UI-feature ticket intake schemas (component/module, layout/shell, UX flow, cross-cutting UX), fields lifted from the owning build skills' own axes, each naming its build owner + DoD checker; 4 fixture tickets. Named `feature-intake-rules`, not the ticket's `ui-feature-intake-rules` — `ui` isn't a registered ADR-0011 token (validated, zero errors). Reciprocal fences added to `make-component`/`break-down-layout`/`break-down-flow`. Lint/evals clean; `/check-routing screens` owed at PR-open.
 v1.0.16 · 2026-08-18 · #650: reciprocal no-trigger eval case added to `break-down-layout` fencing design's new `artifact-styling-rules` pack (Artifact-page-specific styling vs general screen layout critique). Evals.json only, no SKILL.md edit. `release_gate.py screens` clean.
 v1.0.15 · 2026-08-16 · ui-probe.mjs entry guard now compares realpaths, fixing the symlink-fragile string compare (closes #438, same class as #436); unitChecks() gains a symlinked-dir negative control, proven to fail pre-fix and pass post-fix
 v1.0.14 · 2026-08-16 · checker-agent description diet, tail of #357/#364 (#367): component-checker's description drops the fresh-context/read-only boilerplate #364 trimmed elsewhere; moved to body. collide.py ↔wiring-checker 59.7→48.1. Critic clean. No evals owed.

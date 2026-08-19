@@ -1,0 +1,83 @@
+{
+  "skill": "feature-intake-rules",
+  "note": "Trigger-routing suite, minted alongside feature-intake-rules (closes gh#711, lld-0024). Positives cover all four intake shapes (component/module, layout/shell, UX flow, cross-cutting UX) plus a capture-completeness check, one per shape plus adjacent-phrasing repeats. Negatives fence the four siblings this capability overlaps trigger vocabulary with: make-component, break-down-layout, break-down-flow (the BUILD asks themselves), and docs' file-feature (the general intake procedure this pack is consulted FROM, never absorbed into).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "what fields does a button component ticket need before we build it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "what should a dashboard-shell ticket capture before we design it",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "what does an onboarding-flow ticket need to state to be capture-complete",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "is this UI ticket capture-complete or is something missing",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "what's missing from this component ticket before it's ready to build",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "what motion/focus/i18n budget should a new toast ticket state",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "what fields should a layout ticket capture on both the space and behavior axes",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "build a removable chip control",
+      "expect": "no-trigger",
+      "note": "make-component — the build itself, not the ticket's own intake fields"
+    },
+    {
+      "id": "n02",
+      "prompt": "review this dashboard layout, does the sidebar nav make sense",
+      "expect": "no-trigger",
+      "note": "break-down-layout — grading an existing layout, not what a ticket should capture"
+    },
+    {
+      "id": "n03",
+      "prompt": "wireframe a settings page for the saas-dashboard shell",
+      "expect": "no-trigger",
+      "note": "break-down-layout DESIGN mode — designing the layout itself"
+    },
+    {
+      "id": "n04",
+      "prompt": "walk the password-reset flow and check for dead ends",
+      "expect": "no-trigger",
+      "note": "break-down-flow — grading/walking an existing flow"
+    },
+    {
+      "id": "n05",
+      "prompt": "map the checkout flow as a state machine",
+      "expect": "no-trigger",
+      "note": "break-down-flow DESIGN mode"
+    },
+    {
+      "id": "n06",
+      "prompt": "can we add a dark mode toggle to settings",
+      "expect": "no-trigger",
+      "note": "docs' file-feature — a plain feature idea with no UI-shape intake question asked"
+    },
+    {
+      "id": "n07",
+      "prompt": "file a feature ticket for CSV export",
+      "expect": "no-trigger",
+      "note": "docs' file-feature — general intake, not a UI-shaped schema ask"
+    }
+  ]
+}

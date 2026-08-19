@@ -1,6 +1,6 @@
 {
   "skill": "break-down-layout",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-pattern-facts owns (failed as layout's trigger in two consecutive blind runs, routing to ui-pattern-facts both times — the judges were right).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-pattern-facts owns (failed as layout's trigger in two consecutive blind runs, routing to ui-pattern-facts both times \u2014 the judges were right).",
   "cases": [
     {
       "id": "t01",
@@ -101,7 +101,7 @@
       "id": "n09",
       "prompt": "decompose this technical architecture into parts",
       "expect": "no-trigger",
-      "comment": "owner: harness break-down-problem — domain-general system decomposition, not this skill's concrete UI layout territory; reciprocal fence formalized 2026-08-15 (issue #282) — this eval case already existed and needed no new case, only the SKILL.md NOT-clause was missing"
+      "comment": "owner: harness break-down-problem \u2014 domain-general system decomposition, not this skill's concrete UI layout territory; reciprocal fence formalized 2026-08-15 (issue #282) \u2014 this eval case already existed and needed no new case, only the SKILL.md NOT-clause was missing"
     },
     {
       "id": "n10",
@@ -117,7 +117,13 @@
       "id": "n12",
       "prompt": "why do the colors and mermaid diagrams look off in this Claude artifact page",
       "expect": "no-trigger",
-      "comment": "design:artifact-styling-rules (#650) — Artifact-page-specific styling doctrine (theme/token/mermaid/shell), not general (non-artifact) screen layout critique; already covered by the existing 'visual/color design' NOT-clause, this case only proves the boundary holds"
+      "comment": "design:artifact-styling-rules (#650) \u2014 Artifact-page-specific styling doctrine (theme/token/mermaid/shell), not general (non-artifact) screen layout critique; already covered by the existing 'visual/color design' NOT-clause, this case only proves the boundary holds"
+    },
+    {
+      "id": "n13",
+      "prompt": "what should a dashboard-shell ticket capture before we design it",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) \u2014 what a TICKET should capture, not the layout critique/design itself"
     }
   ]
 }
