@@ -1,6 +1,6 @@
 {
   "skill": "spend-audit",
-  "note": "This skill owns idr-0010's estate-economy axis — a per-firing token-spend ledger (tokens/provenance/outcome/verdict) and its worth-firing render — distinct from attention-audit's always-on menu-rent/description-collision axis, recurrence-audit's incident-recurrence axis, bloat-audit's prose-economy axis, and teamwork loop-rules' loop-budget design, even though attention-audit and this skill share nearby vocabulary (cost/economy/spend) and both append a per-release-shaped CSV. Authored fresh at mint (2026-08-18, gh#624, lld-0018-estate-economy-ledger.md) — no prior eval history. attention-audit gains the reciprocal no-trigger case in its own evals.json (Resolution 1's one-sided fence — its description is 692/700 chars, no room for a NOT-clause, so the fence lives on this suite's side plus that sibling-suite case).",
+  "note": "This skill owns idr-0010's estate-economy axis \u2014 a per-firing token-spend ledger (tokens/provenance/outcome/verdict) and its worth-firing render \u2014 distinct from attention-audit's always-on menu-rent/description-collision axis, recurrence-audit's incident-recurrence axis, bloat-audit's prose-economy axis, and teamwork loop-rules' loop-budget design, even though attention-audit and this skill share nearby vocabulary (cost/economy/spend) and both append a per-release-shaped CSV. Authored fresh at mint (2026-08-18, gh#624, lld-0018-estate-economy-ledger.md) \u2014 no prior eval history. attention-audit gains the reciprocal no-trigger case in its own evals.json (Resolution 1's one-sided fence \u2014 its description is 692/700 chars, no room for a NOT-clause, so the fence lives on this suite's side plus that sibling-suite case).",
   "cases": [
     {
       "id": "t01",
@@ -56,35 +56,35 @@
       "id": "n01",
       "prompt": "Which skills and plugins tax Claude's performance the most, and are any descriptions colliding in routing?",
       "expect": "no-trigger",
-      "comment": "owner: attention-audit — menu rent / description collisions"
+      "comment": "owner: attention-audit \u2014 menu rent / description collisions"
     },
     {
       "id": "n02",
       "prompt": "Walk the ledger and tell me which incident classes came back after we fixed them.",
       "expect": "no-trigger",
-      "comment": "owner: recurrence-audit — incident recurrence"
+      "comment": "owner: recurrence-audit \u2014 incident recurrence"
     },
     {
       "id": "n03",
       "prompt": "Does this skill need to be this long? Audit it for busy-work and prose bloat.",
       "expect": "no-trigger",
-      "comment": "owner: bloat-audit — prose bloat"
+      "comment": "owner: bloat-audit \u2014 prose bloat"
     },
     {
       "id": "n04",
       "prompt": "Design the token budget for a /goal loop.",
       "expect": "no-trigger",
-      "comment": "owner: teamwork loop-rules — loop budget design, not a per-firing spend ledger"
+      "comment": "owner: teamwork loop-rules \u2014 loop budget design, not a per-firing spend ledger"
     },
     {
       "id": "n05",
       "prompt": "How much does this description cost per turn?",
       "expect": "no-trigger",
-      "comment": "owner: attention-audit — the nearest twin phrase, deliberately included: always-on menu rent, not a per-firing spend row"
+      "comment": "owner: attention-audit \u2014 the nearest twin phrase, deliberately included: always-on menu rent, not a per-firing spend row"
     },
     {
       "id": "n06",
-      "prompt": "Is this fleet's wiring — the frontmatter, preloads, and dispatch arrangement — correct?",
+      "prompt": "Is this fleet's wiring \u2014 the frontmatter, preloads, and dispatch arrangement \u2014 correct?",
       "expect": "no-trigger",
       "comment": "owner: teamwork wiring-checker — judges an arrangement's wiring, not its measured token cost"
     },
@@ -93,6 +93,12 @@
       "prompt": "List the PRs labeled live-lane from the last 30 days.",
       "expect": "no-trigger",
       "comment": "a plain gh query for one label, not a cohort-metrics comparison — the near-miss the cohort-report axis (gh#763) deliberately does not trigger on; no owner, just a plain `gh pr list --label` lookup"
+    },
+    {
+      "id": "fence-host-audit",
+      "prompt": "why is my machine slow \u2014 audit my host performance while agents run",
+      "expect": "no-trigger",
+      "note": "host-audit owns dev-host performance diagnosis"
     }
   ]
 }
