@@ -25,7 +25,7 @@ body). Seed: $ARGUMENTS.
 
 **No nested wait.** A seat already running as a nested dispatch (`build-leader`, via the `Agent`
 tool — not `/bind-build`'s own standing seat, which spawns no Agent and isn't nested) performs
-Phase 3's isolate work and Phase 4's `small` build DIRECTLY in its own context/worktree, never a
+Phase 3's isolate work and Phase 4's `small` build DIRECTLY in its own tree (worktree or scratch-clone, per Phase 3's ladder), never a
 further nested `context: fork` or NAMED `Agent`-tool dispatch for that core work: a
 background/mailbox dispatch from inside an already-dispatched agent completes to the ROOT
 session, never back to the dispatching seat (Phase 2's bug hand-off cites the same finding,
@@ -173,12 +173,11 @@ is what actually contains its inline-fix path.
   dispatch exists (checked: no other live entry under `.claude/worktrees/` for this repo right
   now); the host checkout is clean on `main` with nothing in flight (checked: `git status`); no
   isolation-forcing reason applies (a nested dispatch always forces it — #207: the child gets its
-  own worktree, or an explicit host-checkout authorization the parent names as its own line in
-  Phase 5's sealed dispatch prompt, never an inherited skip). All four hold → build directly in
+  own isolation per the mitigation ladder below, or an explicit host-checkout authorization the
+  parent names in Phase 5's sealed dispatch prompt, never an inherited skip). All four hold → build directly in
   the host checkout; the claim/write-back contract stays mandatory regardless. Never a silent
-  revert to pre-#183
-  behavior: the skip is its own named branch, and Phase 5 stage 3's environment-clean line states
-  which branch was taken.
+  revert to pre-#183 behavior: the skip is its own named branch, and Phase 5 stage 3's
+  environment-clean line states which branch was taken.
   **Otherwise, isolate** — check reuse first, keyed on IDENTITY never path shape, both conjuncts
   required or create: (1) cwd is a linked worktree, not the primary checkout (a decided-name match
   IN the primary checkout never licenses reuse — the #180/#182 residue below is exactly a stale
@@ -187,8 +186,9 @@ is what actually contains its inline-fix path.
   ticket id, so a match is identity, not shape). "cwd sits under `.claude/worktrees/`" alone
   satisfies NEITHER conjunct (#191: a caller's own long-lived worktree for an unrelated purpose,
   e.g. `mobilize-chores`'s, matches that shape too — reusing it on shape alone checks the wrong
-  ticket's branch out on top of the caller's tree). Either conjunct fails → create (`git worktree
-  add`, off a clean `main` HEAD), **then bootstrap before running anything else inside it**: a
+  ticket's branch out on top of the caller's tree). Either conjunct fails → create (a live
+  `EnterWorktree` session: `git worktree add` off clean `main`; an `Agent`-tool dispatch:
+  scratch-clone per the ladder below, never a worktree), **then bootstrap before running anything else inside it**: a
   fresh worktree is a bare checkout, not a built one (gh#498, gen-ui-kit gh#1389) — feature-detect
   the host repo's `scripts/dev/bootstrap-worktree.mjs` (or its own declared equivalent) and run it
   unconditionally when present before any gate or check inside the new worktree, or a missing
@@ -200,6 +200,7 @@ is what actually contains its inline-fix path.
   out; the coordinator repaired it by hand) — never build in the shared host checkout outside the
   four-precondition skip above, and never reuse an unrelated worktree standing in for one, however
   deeply nested (#191).
+- **The mitigation ladder (#490/#609, ratified 2026-08-18)** — an `Agent`-tool dispatch has NO `EnterWorktree` reach, so scratch-clone is its DEFAULT rung, never a worktree; run `teamwork/scripts/pin_check.py <decided-branch-name>` first. Ladder + evidence: `references/isolation-ladder.md` (F6 split); read before isolating.
 - **Release on abandonment — post-claim exits only.** Only a failure AFTER the claim landed has
   anything to release: a discovered design fork routed back to planner, an unresolved gate failure
   (both mid-flight, Failure branches below), a stale-premise exit (Phase 3.5), a spec-lock blocker

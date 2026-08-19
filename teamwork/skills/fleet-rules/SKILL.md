@@ -297,16 +297,16 @@ only the missing UNBLOCK step, not a restatement of the detection mechanics:
 1. Re-run `EnterWorktree` on the exact claimed path — this re-pins the session's cwd identity
    without recreating anything.
 2. Verify with one compound call — `pwd && git status && git rev-parse --abbrev-ref HEAD` — before
-   the next write, not only at task start (`[[parallel-work-rules]]`'s own rule, restated because
-   this is the check that actually catches a silent post-repin swap).
+   the next write, per `[[parallel-work-rules]]`'s own rule (catches a silent post-repin swap).
 3. Prefer absolute-path Bash writes and single-call compound git operations over any multi-step
    sequence that gives the pin another chance to drift between calls.
-4. `#448` closed with the reason "stale hook," not as "fixed" — the platform-level cwd drift this playbook
-   answers persisted after the hook that used to flag it was retired (2026-08-17, #466); this
-   playbook is the manual discipline standing in its place, not a mechanical guard.
+4. `#448` closed as "stale hook," not "fixed" — the drift persisted after the hook that flagged it
+   was retired (2026-08-17, #466); this playbook is the manual discipline standing in its place.
 5. **Last resort**, only once 1–3 have failed to land a write where it belongs: a `gh api` call
    (issue/PR comment, label edit) never depends on a local cwd pin at all — landing a durable
    record via the API sidesteps the git-write path entirely when the pin itself won't cooperate.
+
+**Steps 1–2 assume `EnterWorktree` reach — an `Agent`-tool-dispatched seat (`build-leader` and kin) has NONE, confirmed 2026-08-18, so scratch-clone is its DEFAULT starting rung, never a fallback reached after 1–3 fail; step 5's API landing stays RECOVERY-only for either caller class.** Proven 2026-08-18 (eight PRs), the preflight `teamwork/scripts/pin_check.py` companion, and the full mechanics: `[[dispatch-ticket]]`'s Phase 3 "mitigation ladder" bullet and its `references/isolation-ladder.md` — cited here, not restated.
 
 ### 7. Route-anything-incoming protocol
 
