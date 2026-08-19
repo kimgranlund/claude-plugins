@@ -129,12 +129,16 @@ is what actually contains its inline-fix path.
   dispatcher — `mobilize-chores` step 5, `/build-feature`, a marshal — before the `Agent` call)
   already carries the decided branch name, the version slot, and a pre-made shallow scratch clone
   with that branch checked out. Below, Claim posts its comment naming the envelope's own branch
-  rather than deciding one, and isolate skips creating a new clone — instead ONE re-read against
-  the envelope's own `clone` path before the first write: `slot.claim_clean` still true, `branch`
-  still absent from `origin`'s open PR heads, and the clone dir's `git status` still clean on the
-  envelope's own branch. Any of the three off → the envelope is stale; fall through to today's
-  path below as if it had never been carried. Absent envelope → this bullet does not exist,
-  proceed exactly as the rest of this phase already reads.
+  rather than deciding one — everything else in Claim (the race re-read, the `in-flight` label) is
+  unchanged. Isolate skips CREATING a new clone — instead ONE re-read against the envelope's own
+  `clone` path before the first write: `slot.claim_clean` still true, `branch` still absent from
+  `origin`'s open PR heads, and the clone dir's `git status` still clean on the envelope's own
+  branch — the bootstrap step of the isolate bullet still runs against that clone before any
+  gate/check, same as any other fresh isolation (gh#498's false-red class). Any of the three off →
+  the envelope is stale; fall through to today's path below as if it had never been carried, and
+  name the now-abandoned envelope clone alongside Phase 5 stage 3's own environment-clean line.
+  Absent envelope → this bullet does not exist, proceed exactly as the rest of this phase already
+  reads.
 - **Claim first.** Decide the branch name now (issue-mapped `<id>-<short-slug>`, or this repo's
   established `<domain>/<id>-<slug>` convention), then take ADR-0005's `claim` operation
   (`doc-writing-rules`' `references/backend-resolver.md`, its seventh operation; this dispatch is
