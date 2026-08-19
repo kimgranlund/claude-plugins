@@ -219,7 +219,9 @@ sweep surfaced that's actually buildable.
    green critic, a green local gate, green CI, and no overlapping open PR — may land MERGED.
    Everything else still waits for a human, and merging stays a human act (ADR-0002's merge gate,
    unamended — the carve-out keeps the PR and every gate, it only pre-authorizes the click).
-   Unsticking a blocker never widens this ceiling, never opens a second auto-merge path, and never
+   Unsticking a blocker never widens this ceiling, never opens a second auto-merge path WITHIN
+   THIS SKILL'S UNATTENDED FLOW (fleet-rules §7's live lane — live-human-authorized, ruled
+   2026-08-19 — is a separate door, not an amendment of this ceiling), and never
    automates review: nothing here, in `build-leader`, or in `dispatch-ticket`
    approves or reviews a PR on its own. Still
    name every visibly under-specified task ticket in the step-6 report exactly as the interactive
