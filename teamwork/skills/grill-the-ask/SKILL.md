@@ -57,6 +57,16 @@ ones whose answers cascade into the rest.
 3. **Ground the options in reality.** Investigate the codebase / catalog / tokens / constraints so each
    option is **concrete, not abstract** — with a recommendation + the tradeoff per option. Abstract
    forks get rubber-stamped; grounded ones get *decided*.
+   - **A user-named exemplar is a HYPOTHESIS, not settled ground — read it before decomposing.**
+     When a user points to a live artifact to ground a fork ("build demo tabs like
+     `/table-doc.html`"), that pointer is itself an unverified claim, not grounding fact. Read
+     the exemplar first and classify what it actually is: **instance-of-the-pattern** (it really
+     does what's named — ground the fork on it verbatim), or **instance-of-the-GAP** (it doesn't
+     — the named page carries no demo tab at all, so the exemplar's own *absence* of the feature
+     IS the gap being asked to close, not proof the feature already exists somewhere to copy).
+     Grounding round 1 on the unverified claim, instead of reading the exemplar first, ships a
+     decision surface built on a fact that was never true. (harvested from agent-ui's 2026-08-18
+     `/batch` run, migrated via nonoun-plugins#50)
 4. **Grill in cascading rounds.** `AskUserQuestion` (discipline below). Then **re-derive**: each answer
    reshapes the surface — a "full set" answer pulls in the stateful-composite + sequencing forks; a
    chosen mechanism closes some forks and opens others. Re-rank, ask the next round. (This is the

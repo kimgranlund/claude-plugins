@@ -111,6 +111,29 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.7 · 2026-08-19 · closes #736, #740 (folded campaign, filed by agent-ui-marshal): three
+harvest folds, no contract change. **#736** — `mobilize-chores` step 2's git-native in-flight
+discovery gains a branch-name fallback: the existing GraphQL `closedByPullRequestsReferences`
+check only sees a PR carrying a real `Closes #<id>` link, so a peer PR whose own dispatch path
+skipped that link (the agent-ui five-ticket collision, 2026-08-19: five in-flight tickets, zero
+`Closes` links, zero assignees — the GraphQL check alone read all five as "0 open PRs") stayed
+invisible to it. Step 2 now ALSO lists every open PR's head branch and matches candidate ids
+against three observed conventions (`bug/<id>`, `<id>-*`, `fix-<id>-*`), excluding a match as
+"in flight (branch-name match, no Closes link)" plus a hygiene finding for the missing link —
+guarded against a bare id-shaped substring match (id `42` must never match branch
+`423-fleet-bootstrap-phase1`) via an explicit non-digit/end-of-string boundary requirement.
+**#740** — three harvests migrated from nonoun-plugins#50 (dormant repo), folded into their
+owning skills: `grill-the-ask` gains "a user-named exemplar is a HYPOTHESIS" (read it before
+decomposing; classify instance-of-the-pattern vs. instance-of-the-gap); `parallel-work-rules`
+gains "batch gate topology" (N workers run reduced targeted gates, one full suite runs once at
+the merge desk — agent-ui's 2026-08-18 39-page `/batch` run, where the desk suite caught the one
+real red all nine reduced per-worker gates missed), "broadcast re-brief" (a mid-batch
+ship-predicate change travels via `SendMessage` to every running worker, never left to ride),
+and "second-lander-owes-recapture" (two sessions sharing a byte-pinned generated artifact
+announce who lands second; that lander owns the regen, delta-verified as exactly its own
+changes — proven twice, 2026-08-19: agent-ui PRs #1303–#1312 and #1404). Fresh-context
+`harness:skill-checker` pass on all three touched skill bodies per `plugin-authoring.md`'s
+semantic-edit invariant.
 v2.28.6 · 2026-08-19 · closes #745 (Kim's ask, ratified in-conversation): new command skill
 `skills/sub-task` — the `sub-` mechanic's generic front door, sibling to `sub-agent`
 (registered-agent dispatch) and `fork-agent` (inherited-context fork), for arbitrary

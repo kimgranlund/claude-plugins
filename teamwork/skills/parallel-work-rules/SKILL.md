@@ -160,6 +160,43 @@ plain Edit/Bash calls from one sibling can intermittently land in a different si
   Exit/EnterWorktree move doesn't nag forever) — still detection-only, still ASK-never-BLOCK,
   same posture as everything else in this section.
 
+## Batch gate topology — N workers never each run the full suite (#740)
+
+A batch build of many independent slices (a `/batch` run: N workers dispatched, one host desk
+merging the result) never has each worker run the FULL gate suite on its own host — each worker
+runs a REDUCED gate, targeted only to what it actually touched; the desk runs the ONE full suite,
+once, over the merged tree. A reduced per-worker gate catches that worker's own local
+regressions cheaply; only the desk's own full run can catch a regression that only exists as a
+CROSS-worker interaction, invisible to any single worker's own scoped gate. Worked instance:
+agent-ui's 2026-08-18 39-page `/batch` run — nine workers each ran a reduced, targeted gate (all
+nine green); the desk's own full suite, run once over the merged tree, caught the one real red
+none of the nine reduced runs could see. · agent-ui 2026-08-18 batch run · migrated via
+nonoun-plugins#50 · [incident]
+
+## Broadcast re-brief — changing a ship-predicate mid-batch (#740)
+
+A ship-predicate discovered wrong or incomplete MID-BATCH (workers already dispatched and
+running) is corrected by `SendMessage` broadcasting the revised predicate to every running
+worker — never by letting the stale brief ride to completion and catching the gap only at the
+merge desk. A broadcast re-brief changes the predicate cleanly, in place, for every worker still
+mid-flight; letting a bad brief ride means re-work discovered late, after workers already built
+to the wrong ship bar. · agent-ui 2026-08-18 batch run · migrated via nonoun-plugins#50 ·
+[incident]
+
+## Second-lander-owes-recapture — a shared byte-pinned generated artifact (#740)
+
+When two sessions share ownership of a byte-pinned generated artifact (a prompt baseline, a
+theme fixture — content whose exact bytes ARE the contract, not just its meaning), the two
+sessions agree explicitly, by announce, which one lands SECOND — and the second lander owns
+regenerating the artifact from the merged tree, delta-verified as **exactly its own changes** (a
+diff against the pre-merge baseline showing only what that session actually changed, nothing the
+first lander's own merge already contributed). Serialize by announcing intent, never by polling
+for the other side to finish — polling has no reliable signal for when the other announce should
+have landed, and a duplicated regeneration is exactly the failure this convention exists to
+avoid. Proven twice, 2026-08-19: agent-ui PRs #1303–#1312 (the original batch) and #1404 (a
+second, independent recapture instance the same convention resolved cleanly). · migrated via
+nonoun-plugins#50 · [verified]
+
 ## Output contract (when reporting a decision or a collision)
 
 ```
@@ -182,6 +219,9 @@ Action: <proceeded | escalated to: <teammate name via SendMessage | a PR/Issue c
 | docs' backend-resolver `claim` operation (ADR-0005), where installed | Preventing a duplicate claim on the SAME ticket before any file is touched — a layer beneath this skill's own git-tree collision response, not a replacement for it |
 | The Recovery section above | A nested child's worktree got auto-reaped while the parent idled on it (#207) |
 | The Standing-mitigation section above | Sibling sessions from one background job share host cwd state racily (#189) |
+| The Batch-gate-topology section above | A `/batch` run's N workers need a gate posture (#740) |
+| The Broadcast-re-brief section above | A ship-predicate must change mid-batch, workers already running (#740) |
+| The Second-lander-owes-recapture section above | Two sessions share a byte-pinned generated artifact (#740) |
 | `worktree_prebash_guard.py.retired` (teamwork `scripts/`, hook wiring retired 2026-08-17, #466 — remove-all-hooks directive) | Formerly a mechanical catch for worktree→primary and sibling→sibling cd escapes, PLUS (#363) a persisted per-session identity pin that caught a cwd already wrong on a later separate call with no cd at all — both were always blind to dynamic/wrapped targets, per its own header. No automatic catch remains; this discipline is manual now |
 | [[fleet-rules]] | The question is dispatch shape/cost (solo vs. team, how many subagents) — its own disjoint same-tree fan-out is the sanctioned default for genuinely non-overlapping slices, not a risk this skill overrides |
 | [[loop-rules]] | The question is when the next turn fires, not who else is touching the tree |

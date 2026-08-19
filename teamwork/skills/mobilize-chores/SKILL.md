@@ -96,7 +96,26 @@ sweep surfaced that's actually buildable.
      closedByPullRequestsReferences` form does NOT carry a `state` field at all** (verified
      2026-08-07: it silently returns exit 0 with no state key present, reading as "never in
      flight" regardless of the truth) — the GraphQL form is the only one that actually works; do
-     not substitute the flattened form. **Also exclude a ticket carrying a non-empty `assignees`
+     not substitute the flattened form. **Branch-name fallback (#736, 2026-08-19)** — the
+     GraphQL check above only sees a PR that actually carries a `Closes #<id>` (or
+     `Fixes`/`Resolves`) reference; a peer PR whose own dispatch path never wired that link is
+     invisible to it entirely. Live incident: an agent-ui `/goal` wave had five tickets in active
+     build (worktrees + open PRs), none of the PR bodies carrying a `Closes` link and none of the
+     tickets carrying an assignee (that dispatch path skipped the ADR-0005 claim too) — the
+     GraphQL check read all five as "0 open PRs," and only a live worktree/branch listing caught
+     the collision before double-dispatch. ALSO list every open PR's head branch (`gh pr list
+     --state open --json number,headRefName,url`) and match the candidate id against it under
+     one of this convention's three observed shapes — `bug/<id>` (this skill's own bug-kind claim
+     convention, `dispatch-ticket` Phase 3), `<id>-*` (the feature/task claim convention, same
+     phase), `fix-<id>-*` (a repo-observed variant) — any match excludes the candidate as
+     **"in flight (branch-name match, no Closes link)"**, and separately queues a hygiene finding
+     naming that PR for the missing `Closes` link (a finding for step 6's report, never a mutation
+     this step performs). **False-positive guard, load-bearing:** an id-shaped substring match
+     alone is not enough — id `42` must never match branch `423-fleet-bootstrap-phase1` (`42` is
+     a true substring of `423`). Require a non-digit (or string-boundary) delimiter on the side of
+     the id that isn't the pattern's own literal — the character immediately after `<id>` in the
+     branch name must be non-digit or end-of-string, never another digit — so a match is
+     word-boundary-discipline, never a bare substring test. **Also exclude a ticket carrying a non-empty `assignees`
      array** (2026-08-12, #184) — `dispatch-ticket`'s own Phase 3 now takes ADR-0005's `claim`
      operation (assignee + a timestamped comment) before any build effort starts, closing the
      window this check used to miss entirely: a ticket claimed but not yet PR-open was invisible
@@ -180,8 +199,9 @@ sweep surfaced that's actually buildable.
    **UNATTENDED (step 0 found a leading `auto` token): skip `AskUserQuestion` entirely.** Every
    ticket step 2 found mobilizable, AND every unstick chain `references/unstick-ordering.md`
    resolved, is auto-confirmed — step 2's own filtering (label ambiguity
-   excluded on every backend; on git-native, in-flight PRs also excluded via the GraphQL check;
-   the sweep's own human-decision/blocker items excluded on every backend), now including the
+   excluded on every backend; on git-native, in-flight PRs also excluded via the GraphQL check
+   AND the branch-name fallback (#736); the sweep's own human-decision/blocker items excluded on
+   every backend), now including the
    unstick-ordering classification (#558), is the actual
    correctness gate, not this step, on either branch — this step was never the gate even for a
    human, only a selection point over an already-filtered set. **Option A (local tickets) has no
