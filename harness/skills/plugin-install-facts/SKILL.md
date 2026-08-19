@@ -7,9 +7,9 @@ description: >-
   "install instructions", "plugin install command", "install via npx or npm", "install from a
   local path", "which install method", "my installed plugin never got the update", or writing a
   README's install section. NOT for declaring
-  a plugin/marketplace in a repo's settings.json (adopt-plugin); NOT for authoring or shipping
-  a plugin (plugin-writing-rules); NOT for settings.json edits with no plugin object
-  (update-config).
+  a plugin/marketplace in a repo's settings.json (adopt-plugin); NOT authoring/shipping
+  a plugin (plugin-writing-rules); NOT settings.json edits with no plugin object
+  (update-config); NOT whether a fix already landed in ANOTHER repo (check-state --fleet).
 disable-model-invocation: false
 user-invocable: false
 ---

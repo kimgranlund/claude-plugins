@@ -1,15 +1,15 @@
 ---
 name: agent-harness-rules
 description: >-
-  Standards for designing agent-native verification — HOW an agent autonomously tests a system it
-  just built, instead of a human eyeballing a screenshot. Assert-layer choice, driver agent harness
-  design, assertion/fixture grammar, mapping this estate's own instruments onto a SPEC's criteria,
-  the Gen-UI grounding case. Use when designing a test harness, picking an assert layer, judging
-  a criterion agent-runnable vs human-only, or asking what instruments we already have before
-  building a new verification harness. NOT the doctrine requiring the plan
-  (doc-writing-rules' `## Agent verification`, check-doc's J7 — this is the HOW); NOT investigating
-  an already-scorable system (research-methods); NOT this estate's own gate mechanics
-  (script-writing-rules — cited, not re-derived).
+  Standards for designing agent-native verification — HOW an agent tests a system it just built,
+  not a human eyeballing a screenshot. Assert-layer choice, driver-agent harness design,
+  assertion/fixture grammar, mapping this estate's instruments onto a SPEC's criteria, the Gen-UI
+  case. Use when designing a test harness, picking an assert layer, judging HOW to make a
+  criterion agent-runnable, or asking what instruments already exist before building a new
+  harness. NOT whether a SPEC's Acceptance section is REQUIRED to name an Agent-verification
+  answer (doc-writing-rules' `## Agent verification`, check-doc's J7 — this pack is HOW, not the
+  requirement); NOT investigating an already-scorable system (research-methods); NOT this estate's
+  own gate mechanics (script-writing-rules).
 disable-model-invocation: false
 user-invocable: false
 ---

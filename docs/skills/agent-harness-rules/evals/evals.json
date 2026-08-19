@@ -1,6 +1,6 @@
 {
   "skill": "agent-harness-rules",
-  "note": "Trigger-eval suite for the agent-harness-rules pack (docs plugin), minted issue #542 / PR #559. Positives span the five axes (assert-layer choice, agent-native harness design, assertion/fixture grammar, estate instrument mapping, the Gen-UI grounding case). Negatives fence the doctrine skill this pack answers to (doc-writing-rules'/check-doc's REQUIREMENT that a plan exist, vs this pack's HOW), the adjacent already-scorable-system method corpus (research-methods), and this estate's own release-gate mechanics (harness's checking-rules/script-writing-rules), which this pack cites rather than re-derives.",
+  "note": "Trigger-eval suite for the agent-harness-rules pack (docs plugin), minted issue #542 / PR #559. Positives span the five axes (assert-layer choice, agent-native harness design, assertion/fixture grammar, estate instrument mapping, the Gen-UI grounding case). Negatives fence the doctrine skill this pack answers to (doc-writing-rules'/check-doc's REQUIREMENT that a plan exist, vs this pack's HOW), the adjacent already-scorable-system method corpus (research-methods), and this estate's own release-gate mechanics (harness's checking-rules/script-writing-rules), which this pack cites rather than re-derives. 2026-08-19 (#733, surfaced by #720's re-judge): n01 leaked 2-of-3 — the description's 'judging a criterion agent-runnable vs human-only' trigger phrase paraphrased too close to n01's own REQUIREMENT wording. Reworded to 'judging HOW to make a criterion agent-runnable' and sharpened the NOT-fence to name the required-section phrasing verbatim; reciprocal positive case added to doc-writing-rules (its t11).",
   "cases": [
     {
       "id": "t01",
@@ -45,7 +45,8 @@
     {
       "id": "n01",
       "prompt": "does this SPEC's Acceptance section require an Agent verification answer",
-      "expect": "no-trigger"
+      "expect": "no-trigger",
+      "comment": "Description-fixed 2026-08-19 (#733, surfaced by #720's full-suite re-judge: 2-of-3 leaked here). Root cause: the description's own 'judging a criterion agent-runnable vs human-only' trigger phrase read as a near-paraphrase of this REQUIREMENT question, nearly winning over the NOT-fence naming doc-writing-rules/check-doc. Reworded the trigger to 'judging HOW to make a criterion agent-runnable' (design/method framing) and sharpened the fence to name the REQUIRED-section wording verbatim. Reciprocal positive case added to doc-writing-rules (its own t11)."
     },
     {
       "id": "n02",

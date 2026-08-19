@@ -8,11 +8,11 @@ description: >-
   "where are we", "what's blocked on me", "give me a project state report", "what can be
   merged or deleted", "catch me up on this repo", or reviewing all roadmap/plan/backlog
   items and open tickets. `--fleet` adds a cross-repo rollup — open work, plugin-cache
-  drift, cross-repo citations, across a named repo list. NOT for choosing next work
-  (chore-planner), executing cleanup
-  (repo-cleaner), plugin health (/check-everything), one PR/issue's status (plain gh
-  lookup), or which lifecycle loop/build-turn stage the project is in — the
-  lifecycle-POSITION axis, not work-state (docs:check-stage, where installed).
+  drift (has a fix landed in another repo yet, or is it still on the old cached copy),
+  cross-repo citations, across a named repo list. NOT for choosing next work
+  (chore-planner), executing cleanup (repo-cleaner), plugin health (/check-everything),
+  one PR/issue's status (plain gh lookup), or lifecycle-POSITION — which loop/build-turn
+  stage the project is in, not work-state (docs:check-stage, where installed).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[repo-root] [--artifact] [--fleet repo1,repo2,...] [--trackers path]"
