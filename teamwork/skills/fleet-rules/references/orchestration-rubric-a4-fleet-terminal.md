@@ -18,6 +18,7 @@ use: multi-seat campaigns where a human steers seats interactively (#410 addendu
 | A4-R3 | Peer scope: messaging only registered fleet seats | fleet-scoped coordination ruling | judgment |
 | A4-R4 | Hard gates hold unattended: no-live-user at a ratification gate → blocked, reported | — | judgment |
 | A4-R5 | Isolation reality: per-seat worktrees + the #490 pin-race mitigation ladder known and applied | tonight: 3 sessions wedged; scratch-clone + Git-Data-API rungs both exercised | judgment |
+| A4-R6 | Triage conduct: every incoming item routed within its turn (`fleet-rules` §7); the live lane is the ONE ruled inline path — a live-human prompt for small bounded work, tripwires honored, `live-lane`-labeled PR — any other inline absorption is a finding | PRs #755/#756/#757 (lane + hardening, 2026-08-19) | judgment (label presence mechanizable — not built) |
 
 **Owning checker for A4:** `wiring-checker` for the arrangement's own composition; A4-R2/A4-R3/
 A4-R4/A4-R5 are conduct/judgment calls a human or `fleet-marshal` makes in the moment, never

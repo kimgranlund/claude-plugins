@@ -219,7 +219,9 @@ sweep surfaced that's actually buildable.
    green critic, a green local gate, green CI, and no overlapping open PR — may land MERGED.
    Everything else still waits for a human, and merging stays a human act (ADR-0002's merge gate,
    unamended — the carve-out keeps the PR and every gate, it only pre-authorizes the click).
-   Unsticking a blocker never widens this ceiling, never opens a second auto-merge path, and never
+   Unsticking a blocker never widens this ceiling, never opens a second auto-merge path WITHIN
+   THIS SKILL'S UNATTENDED FLOW (fleet-rules §7's live lane — live-human-authorized, ruled
+   2026-08-19 — is a separate door, not an amendment of this ceiling), and never
    automates review: nothing here, in `build-leader`, or in `dispatch-ticket`
    approves or reviews a PR on its own. Still
    name every visibly under-specified task ticket in the step-6 report exactly as the interactive
@@ -239,6 +241,10 @@ sweep surfaced that's actually buildable.
    needs no isolation of its own and so was reclassified to a directly Skill-tool-reachable
    procedure instead (issue #266) rather than kept as a two-piece command+agent pair — two
    different fixes to the same disable-model-invocation-blocks-Skill-tool class (issue #134/#135).
+   **Before each `Agent` call, run `teamwork/scripts/dispatch_envelope.py <ticket-id>` and paste
+   its JSON verbatim into that ticket's sealed dispatch prompt** — `dispatch-ticket` Phase 3's own
+   "envelope present" branch (#758) verifies it by one re-read instead of re-deriving the slot,
+   branch, and scratch clone from scratch.
 
    **On the UNATTENDED branch only, write the grant line into each dispatch prompt** — the literal
    text `auto-merge: authorized`, on its own line, typed out in the sealed prompt. It is a field

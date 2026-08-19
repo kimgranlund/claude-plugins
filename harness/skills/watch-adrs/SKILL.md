@@ -132,10 +132,32 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
 2. **Judge each `new`/`amended` ADR's Decision** against `save-lessons`'s own Phase 1 bar, scoped
    to that single file — the preloaded skill carries the criteria and the candidate-assembly
    contract; this step supplies only the ADR's Decision clause and `file:line` as the input.
-3. **For each `newly_superseded` ADR**, grep the existing knowledge-pack corpus
-   (`skills/*/references/*.md`) for a citation of that ADR id. A hit is a stale-citation candidate
-   (the citing file + line); no hit means nothing downstream depends on the superseded Decision —
-   name that explicitly, don't manufacture a candidate. **A partial supersession's scope rides
+   **The already-covered call rides on `save-lessons`'s Phase 2 Placement grep — resolve that
+   grep against `origin/main` exactly as step 3 below prescribes** (fetch, then `git grep -l
+   --no-color -e <term> origin/main -- 'skills/*/SKILL.md' 'skills/*/references/*.md'`), never
+   the working tree alone; "already covered verbatim" on the ref rejects the candidate as a
+   duplicate exactly as Phase 2 specifies — only the resolution target changes (issue #752).
+3. **For each `newly_superseded` ADR**, check the existing knowledge-pack corpus
+   (`skills/*/references/*.md`) for a citation of that ADR id — resolved against `origin/main`'s
+   own tree, never the invoking checkout's working files (issue #752 — a worktree-isolated
+   session branched before a covering reference merged upstream greps its own stale files and
+   re-queues the exact same false positive every firing, since a session branched from an
+   earlier commit structurally cannot see a reference that landed on main afterward). `git fetch
+   origin main` first, then
+   `git grep -l --no-color -e <adr-id> origin/main -- 'skills/*/references/*.md'`
+   (or the GitHub contents/trees API where `git` isn't available) — a plain
+   local grep of the working tree is never sufficient on its own, since it cannot distinguish "no
+   one cites this" from "the citing file exists on main, this checkout just predates it."
+   `scripts/adr_queue.py`'s `citation_on_ref(term, ref, pathspec, cwd)` carries this same
+   ref-resolving primitive plus its `selftest` fixture (a real throwaway git repo: a term covered
+   on `main` but absent from a stale branch's own working tree must read as covered — the
+   regression itself — while a term covered nowhere still reads as uncovered, the negative
+   control) — this step's command is the shell-native equivalent decision-watcher runs directly,
+   not a call into that script, but the fixture is what proves the ref-vs-working-tree
+   distinction is correct. A hit (resolved against the ref, not just the working tree) is a
+   stale-citation candidate (the citing file + line); no hit even against `origin/main` means
+   nothing downstream depends on the superseded Decision — name that explicitly, don't manufacture
+   a candidate. **A partial supersession's scope rides
    into the queued evidence verbatim** — the matching `newly_superseded_edges` entry (e.g. "the
    grammar half of adr-0006") — never flattened to "adr-0006 is superseded": a citation of
    ADR-0006's OTHER half is not stale just because its grammar half now is. **Before queueing, re-read the superseding
@@ -311,6 +333,10 @@ that isn't from a ratified ADR routes to `save-lessons`'s own standing detectors
   never guess a location, and never advance the checkpoint on a halted run.
 - A `newly_superseded` ADR has no downstream citations found → state that plainly as the finding
   ("nothing cites it"), not a manufactured candidate.
+- `git fetch origin main` fails, or `origin/main` is unresolvable (steps 2/3, #752) → that ADR's
+  coverage check is UNVERIFIED (🟡), stated per candidate; a working-tree grep may be reported
+  as a lower bound labelled as such — never as "nothing cites it" / "already covered", and never
+  advanced past as a clean no-candidate finding.
 - Dispatched unattended (no interactive user) → steps 1–5 and the report still run in full; step
   6's batched confirm is named as deferred in the report, never attempted blind.
 - A queued candidate's evidence changes on a later firing (the ADR was amended again) → update the

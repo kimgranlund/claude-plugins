@@ -16,10 +16,38 @@ pending — never one round per candidate, regardless of how many firings queued
 Schema: {"candidates": [{"adr_id", "kind", "evidence", "plan", "queued_at"}]} — one row per
 (adr_id, kind) pair; re-adding the same pair updates evidence/plan in place rather than growing
 a duplicate, so a candidate re-detected on every firing until it's confirmed doesn't pile up.
+
+Also carries `citation_on_ref` (issue #752): the stale-citation coverage check watch-adrs' step 3
+prescribes must resolve a candidate ADR id against `origin/main`'s tree, never the invoking
+checkout's working files — a worktree-isolated session branched before a covering reference
+merged upstream would otherwise re-queue the same false positive every firing (the recurring
+adr-0023 harvest false positive this issue names). `citation_on_ref selftest` proves the
+ref-resolving decision against a real throwaway git fixture: a term covered on `main` but absent
+from a stale branch's working tree must read as covered (not queue); a term covered nowhere must
+still queue (negative control).
 """
 import json
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
+
+
+def citation_on_ref(term, ref, pathspec, cwd):
+    """True if `term` appears under `pathspec` as committed at git ref `ref` — reads the ref's
+    own tree via `git grep`, never the working directory, so a stale/worktree-isolated checkout
+    can't miss a citation that already merged upstream. `ref` is expected to be a ref the caller
+    has already made resolvable (e.g. `git fetch origin main` before passing `origin/main`) —
+    this function performs no fetch itself, so the CALLER owns the fetch-failure branch
+    (watch-adrs' Failure branches: an unresolvable ref is an UNVERIFIED check, never "no hit").
+    Returns False on any git error (unresolvable ref, no matches, not a git repo), never raises;
+    a caller that must distinguish "unresolvable" from "no match" checks the ref first
+    (`git rev-parse --verify <ref>`)."""
+    result = subprocess.run(
+        ["git", "grep", "-l", "--no-color", "-e", term, ref, "--", pathspec],
+        cwd=cwd, capture_output=True, text=True,
+    )
+    return result.returncode == 0 and bool(result.stdout.strip())
 
 
 def load(path):
@@ -161,8 +189,65 @@ def selftest():
     q7 = clear_ids(q5, ["adr-0002:stale-citation"])
     assert q7 == q5, "clearing a (id, kind) pair with no matching row must be a safe no-op"
 
+    # citation_on_ref (issue #752): a real throwaway git fixture proves the ref-resolving
+    # coverage check reads a candidate's ref tree, never the invoking checkout's working files —
+    # the exact recurring adr-0023 false positive. Two commits: the first has no covering
+    # reference at all; the second (advancing "main") adds one. A branch cut from the FIRST
+    # commit — a stale worktree-isolated checkout, same shape as fix-684 branched before PR #707
+    # merged — never receives that file in its own working tree.
+    with tempfile.TemporaryDirectory() as repo:
+        def git(*args, **kw):
+            return subprocess.run(
+                ["git", *args], cwd=repo, capture_output=True, text=True, check=True, **kw
+            )
+
+        git("init", "-q", "-b", "main")
+        git("config", "user.email", "selftest@example.com")
+        git("config", "user.name", "selftest")
+
+        readme = Path(repo, "README.md")
+        readme.write_text("seed\n", encoding="utf-8")
+        git("add", "README.md")
+        git("commit", "-q", "-m", "seed")
+        git("branch", "stale-worktree")  # cut BEFORE the covering reference lands
+
+        refs_dir = Path(repo, "skills", "fleet-rules", "references")
+        refs_dir.mkdir(parents=True)
+        (refs_dir / "substrate-choice.md").write_text(
+            "covers adr-0023's substrate-choice decision\n", encoding="utf-8"
+        )
+        git("add", "skills")
+        git("commit", "-q", "-m", "add covering reference (adr-0023)")
+
+        git("checkout", "-q", "stale-worktree")  # simulate the stale, worktree-isolated checkout
+        assert not (refs_dir / "substrate-choice.md").exists(), \
+            "fixture setup bug: the stale branch must not carry the covering reference"
+
+        pathspec = "skills/*/references/*.md"
+
+        # positive case: covered on main, absent from the current (stale) working tree — must
+        # read as covered, i.e. must NOT be queued as a stale-citation candidate
+        assert citation_on_ref("adr-0023", "main", pathspec, cwd=repo) is True, (
+            "a term covered on main must read as covered even when grepped from a stale branch "
+            "whose own working tree lacks the file — this is the #752 regression itself"
+        )
+
+        # negative control: a term that exists nowhere, not even on main, must still read as
+        # uncovered — the coverage check must still queue a genuine miss
+        assert citation_on_ref("adr-9999-nowhere", "main", pathspec, cwd=repo) is False, (
+            "a term covered nowhere must still read as uncovered (negative control) — proves "
+            "the True case above isn't a check that always returns True"
+        )
+
+        # sanity: the ref itself resolving to nothing (a bad ref) is a no-op miss, never a crash
+        assert citation_on_ref("adr-0023", "refs/heads/does-not-exist", pathspec, cwd=repo) is False, \
+            "an unresolvable ref must degrade to a plain no-hit, never raise"
+
     print("adr_queue selftest · PASS · append/idempotent-update/multi-kind/precise-clear/bare-clear "
-          "all correct, clearing an absent id or id:kind pair is a safe no-op")
+          "all correct, clearing an absent id or id:kind pair is a safe no-op; citation_on_ref "
+          "resolves against the given git ref (not the working tree), proven against a real "
+          "stale-branch fixture plus a nowhere-covered negative control and an unresolvable-ref "
+          "no-crash case")
     return 0
 
 

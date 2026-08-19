@@ -511,6 +511,11 @@
       "canonical": "orchestration",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "variant",
+      "plural": "variants",
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

@@ -43,6 +43,16 @@
       "expect": "trigger"
     },
     {
+      "id": "t09",
+      "prompt": "Compare the live-lane PRs against the rest of the flow over the last 30 days.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "Split merged PRs by the live-lane label and show me each cohort's metrics.",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "Which skills and plugins tax Claude's performance the most, and are any descriptions colliding in routing?",
       "expect": "no-trigger",
@@ -76,7 +86,13 @@
       "id": "n06",
       "prompt": "Is this fleet's wiring \u2014 the frontmatter, preloads, and dispatch arrangement \u2014 correct?",
       "expect": "no-trigger",
-      "comment": "owner: teamwork wiring-checker \u2014 judges an arrangement's wiring, not its measured token cost"
+      "comment": "owner: teamwork wiring-checker — judges an arrangement's wiring, not its measured token cost"
+    },
+    {
+      "id": "n07",
+      "prompt": "List the PRs labeled live-lane from the last 30 days.",
+      "expect": "no-trigger",
+      "comment": "a plain gh query for one label, not a cohort-metrics comparison — the near-miss the cohort-report axis (gh#763) deliberately does not trigger on; no owner, just a plain `gh pr list --label` lookup"
     },
     {
       "id": "fence-host-audit",

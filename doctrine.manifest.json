@@ -165,6 +165,26 @@
     }
    ],
    "source": "issue #527, amended for ADR-0020 wave 1 (issue #519). Verified live 2026-08-17: naming.manifest.json's role_lex array has exactly 14 entries, matching GRAMMAR.md:82's stated count -- this edge reports clean now, but is a regression tripwire only (a static pattern, not a live recount): the next RoleLex growth must amend both GRAMMAR.md's stated count AND this edge's pattern in the same change, or the sweep goes stale-clean instead of catching the drift. Deliberately typed verbatim-line rather than a live count computation -- doctrine-audit's sweep.py mechanizes only verbatim-line/ledger-sync/vocab-term as static pattern/path checks (no JSON-array-length arithmetic in any of the three); inventing a fifth edge type or teaching ledger-sync to count was out of scope for this fix (issue #527's own instruction: pick from the existing vocabulary)."
+  },
+  {
+   "id": "D11",
+   "type": "verbatim-line",
+   "mode": "require",
+   "title": "fleet-rules §7's live-lane exception must be acknowledged wherever STRICT ROUTER, NEVER BUILDS is restated (fleet-marshal agent, bind-team) — a bare 'never absorbs, however small' with no live-lane reference is drift",
+   "severity": "major",
+   "canon_file": "teamwork/skills/fleet-rules/SKILL.md",
+   "canon_ref": "§7 Enforcement posture: 'STRICT ROUTER, NEVER BUILDS — with one ruled exception, the live lane' + the live-lane paragraph (Kim's ruling 2026-08-19, PRs #755/#756/#757)",
+   "dependents": [
+    {
+     "file": "teamwork/agents/fleet-marshal.md",
+     "pattern": "live\\s+lane|live-lane"
+    },
+    {
+     "file": "teamwork/skills/bind-team/SKILL.md",
+     "pattern": "live\\s+lane|live-lane"
+    }
+   ],
+   "source": "2026-08-19 Kim's authorkit-drift question after the live-lane ruling; both dependents restated STRICT ROUTER with no exception — synced in teamwork 2.28.13 (this change). Edge added so doctrine-audit catches the next restatement that forgets it."
   }
  ]
 }
