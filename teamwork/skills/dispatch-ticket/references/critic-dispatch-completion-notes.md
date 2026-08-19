@@ -10,6 +10,13 @@ the dispatch as if it were NAMED: PR #368 (2026-08-16, the ADR-0014 build) idled
 session instead, not back to the seat — a real stall; fix it by reading the Agent tool call's own
 synchronous return directly.
 
+LEDGER-CLASS: stranded-named-dispatch | ids: #154, #157 | mechanized: 2026-08-18
+
+The same class re-proved itself on 2026-08-18: a fix fork's own checker dispatched `chk667`
+stranded its verdict at the root session rather than the dispatching seat (SKILL.md's Phase 4
+"small" bullet cites this incident directly) — the identical gh#154/#157 stalled-mailbox-callback
+shape, third measured occurrence.
+
 PR #547's fold falsified this section's ONLY-valid-completion framing, though: its unnamed critic
 dispatch ran ASYNC, its all-PASS verdict arriving intact as a background task notification to the
 DISPATCHING session (not the root — the TOP-LEVEL-host case, not a nested seat's misrouted
