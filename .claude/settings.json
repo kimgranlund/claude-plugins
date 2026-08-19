@@ -27,7 +27,7 @@
   "autoMode": {
     "allow": [
       "$defaults",
-      "A dispatched build-lead/teammate subagent may run gh pr merge when its own sealed dispatch prompt contains the literal line auto-merge: authorized, AND the PR CI checks are green, AND release_gate.py passed locally for the touched plugin — this is the ADR-0012 quick-build fast path (kimgranlund/claude-plugins), never a general merge grant to subagents."
+      "A dispatched build-leader/teammate subagent may run gh pr merge when its own sealed dispatch prompt contains the literal line auto-merge: authorized, AND the PR CI checks are green, AND release_gate.py passed locally for the touched plugin — this is the ADR-0012 quick-build fast path (kimgranlund/claude-plugins), never a general merge grant to subagents."
     ]
   }
 }

@@ -3,7 +3,7 @@ name: overhaul-execute
 kind: skill
 description: >
   Drive an approved estate overhaul end to end — scope confirm, measure, plan, then gated wave
-  execution through rename-planning/rename-execute, reshape-skill, and build-lead. The execution
+  execution through rename-planning/rename-execute, reshape-skill, and build-leader. The execution
   counterpart of overhaul-planning: that skill generates the plan, this one drives it, through
   three confirm gates that each need a live user (no user -> stops SKIPPED, never self-approves).
   Use for driving or running an already-approved overhaul plan through its execution waves, or
@@ -136,7 +136,7 @@ Run only Gate-A-approved waves, in plan order. Per row kind:
   wave until they report done.
 - **move/build** → mint the approved seed through its owning intake skill first (record before
   build: `docs:file-feature`/`docs:file-task` where docs is installed, a plain `gh issue create`
-  otherwise), then dispatch `teamwork:build-lead` (Agent tool) with the ticket id — worktree
+  otherwise), then dispatch `teamwork:build-leader` (Agent tool) with the ticket id — worktree
   isolation is `dispatch-ticket`'s own call (conditional since #204, never this skill's to
   decide), and the ceiling is PR-opened: merges stay the human's unless that dispatch clears
   ADR-0012's quick-build predicate in full, which no overhaul row does — a wave spans many files
@@ -201,7 +201,7 @@ fires in between.
   6's routing proof is UNMEASURED.
 - docs absent → no intake skills: emergent items mint via `gh issue create`, proposed solution
   in the body.
-- teamwork absent → no `build-lead`: move/build rows emit seeds only; the wave says so plainly.
+- teamwork absent → no `build-leader`: move/build rows emit seeds only; the wave says so plainly.
 - `gh` unreachable → emergent items stay ledger-only, flagged 🔴 manual-filing; nothing drops.
 
 ## Failure branches

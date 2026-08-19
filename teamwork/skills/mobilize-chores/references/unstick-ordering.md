@@ -31,7 +31,7 @@ Two invariants:
 
 - **The mobilizable predicate is reused, never forked or relaxed.** B5 cites step 2's own checks
   verbatim — a blocker earns zero exemptions from the label, claim, PR, or sweep-judgment gates.
-- **Only one verb exists.** The unstick action set is exactly `{dispatch to build-lead}`. Never
+- **Only one verb exists.** The unstick action set is exactly `{dispatch to build-leader}`. Never
   granted: editing or removing a `Blocked-by:` line, relabeling a ticket into mobilizability,
   reclaiming a stale claim, or posting a ratification/sign-off comment — each stays whatever it
   already was (a human act, or `repo-cleaner`'s own ruled territory).
