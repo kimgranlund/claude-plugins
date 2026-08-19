@@ -1,0 +1,17 @@
+{
+  "skill": "runtime-state",
+  "note": "New 2026-08-19 (issue #605) — a locator over existing session .jsonl transcripts, never an export bundle or a hook. Negatives: the maximal debug-export bundle (fenced out, no owning skill yet), a Stop hook (#466), check-state's project work-state report, and reading/summarizing transcript CONTENT rather than resolving its path.",
+  "cases": [
+    { "id": "t01", "prompt": "where is my transcript for this session", "expect": "trigger" },
+    { "id": "t02", "prompt": "find this session's jsonl file so I can attach it to a bug report", "expect": "trigger" },
+    { "id": "t03", "prompt": "give me the path to the subagent logs from this run", "expect": "trigger" },
+    { "id": "t04", "prompt": "what's the transcript path for that old session in the gen-ui-kit repo", "expect": "trigger" },
+    { "id": "t05", "prompt": "copy the current session's .jsonl path to my clipboard", "expect": "trigger" },
+    { "id": "t06", "prompt": "locate the agent-*.jsonl files for the subagents this session spawned", "expect": "trigger" },
+    { "id": "n01", "prompt": "give me a project state report — what's blocked on me right now", "expect": "no-trigger", "comment": "owner: check-state (project work-state, not transcript paths)" },
+    { "id": "n02", "prompt": "bundle up my full debug export — transcript, settings snapshot, task outputs, workflow journals, zip it up", "expect": "no-trigger", "comment": "owner: none yet — the maximal bundle is fenced out (2026-08-17 finding); this skill is the locator only" },
+    { "id": "n03", "prompt": "set up a Stop hook that auto-exports my transcript every session end", "expect": "no-trigger", "comment": "hooks are retired estate-wide (#466); never reopened here" },
+    { "id": "n04", "prompt": "summarize what happened in this session's transcript", "expect": "no-trigger", "comment": "content reading/summarizing, not path resolution" },
+    { "id": "n05", "prompt": "what's the current state of the harness plugin's version and README ledger", "expect": "no-trigger", "comment": "plugin/project state, not session transcript paths" }
+  ]
+}
