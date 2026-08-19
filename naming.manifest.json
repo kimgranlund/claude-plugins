@@ -87,8 +87,13 @@
   ],
   "object_vocab": [
     {
-      "canonical": "skill",
-      "plural": "skills",
+      "canonical": "a2a",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "a2ui",
+      "plural": null,
       "banned_aliases": []
     },
     {
@@ -97,152 +102,18 @@
       "banned_aliases": []
     },
     {
-      "canonical": "hook",
-      "plural": "hooks",
+      "canonical": "app",
+      "plural": "apps",
       "banned_aliases": []
     },
     {
-      "canonical": "plugin",
-      "plural": "plugins",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "pack",
-      "plural": "packs",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "doc",
-      "plural": "docs",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "script",
-      "plural": "scripts",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "repo",
-      "plural": "repos",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "recurrence",
+      "canonical": "apple",
       "plural": null,
       "banned_aliases": []
     },
     {
-      "canonical": "reconstructibility",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "issue",
-      "plural": "issues",
-      "banned_aliases": [
-        "sub-issue"
-      ]
-    },
-    {
-      "canonical": "ticket",
-      "plural": "tickets",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "feature",
-      "plural": "features",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "bug",
-      "plural": "bugs",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "task",
-      "plural": "tasks",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "chore",
-      "plural": "chores",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "harness",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "chat",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "runtime",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "resilience",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "team",
-      "plural": "teams",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "build",
-      "plural": "builds",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "leading",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "fleet",
-      "plural": null,
-      "banned_aliases": [
-        "swarm"
-      ]
-    },
-    {
-      "canonical": "naming",
-      "plural": null,
-      "banned_aliases": [
-        "names"
-      ]
-    },
-    {
-      "canonical": "conventions",
-      "plural": null,
-      "banned_aliases": [
-        "convention",
-        "standards"
-      ]
-    },
-    {
-      "canonical": "rename",
-      "plural": "renames",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "manifest",
-      "plural": "manifests",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "exemption",
-      "plural": "exemptions",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "estate",
-      "plural": "estates",
+      "canonical": "artifact",
+      "plural": "artifacts",
       "banned_aliases": []
     },
     {
@@ -263,73 +134,13 @@
       ]
     },
     {
-      "canonical": "a2ui",
-      "plural": null,
+      "canonical": "bug",
+      "plural": "bugs",
       "banned_aliases": []
     },
     {
-      "canonical": "gen-ui",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "ssr",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "compatibility",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "primitive",
-      "plural": "primitives",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "demo",
-      "plural": "demos",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "screen",
-      "plural": "screens",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "shell",
-      "plural": "shells",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "host",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "site",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "package",
-      "plural": "packages",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "project",
-      "plural": "projects",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "app",
-      "plural": "apps",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "surface",
-      "plural": "surfaces",
+      "canonical": "build",
+      "plural": "builds",
       "banned_aliases": []
     },
     {
@@ -338,18 +149,71 @@
       "banned_aliases": []
     },
     {
-      "canonical": "table",
-      "plural": "tables",
+      "canonical": "chat",
+      "plural": null,
       "banned_aliases": []
     },
     {
-      "canonical": "token",
-      "plural": "tokens",
+      "canonical": "choice",
+      "plural": "choices",
       "banned_aliases": []
     },
     {
-      "canonical": "pattern",
-      "plural": "patterns",
+      "canonical": "chore",
+      "plural": "chores",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "code",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "color",
+      "plural": "colors",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "compatibility",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "component",
+      "plural": "components",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "contrast",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "conventions",
+      "plural": null,
+      "banned_aliases": [
+        "convention",
+        "standards"
+      ]
+    },
+    {
+      "canonical": "decision",
+      "plural": "decisions",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "demo",
+      "plural": "demos",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "design",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "doc",
+      "plural": "docs",
       "banned_aliases": []
     },
     {
@@ -358,22 +222,12 @@
       "banned_aliases": []
     },
     {
-      "canonical": "llm-client",
+      "canonical": "dom",
       "plural": null,
       "banned_aliases": []
     },
     {
-      "canonical": "site-docs",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "overhaul",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "product-lifecycle",
+      "canonical": "dscard",
       "plural": null,
       "banned_aliases": []
     },
@@ -383,63 +237,13 @@
       "banned_aliases": []
     },
     {
-      "canonical": "routing",
-      "plural": null,
+      "canonical": "estate",
+      "plural": "estates",
       "banned_aliases": []
     },
     {
-      "canonical": "state",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "focus",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "safety",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "speed",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "translation",
-      "plural": "translations",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "color",
-      "plural": "colors",
-      "banned_aliases": []
-    },
-    {
-      "canonical": "isolation",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "a2a",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "ui-change",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "stage",
-      "plural": null,
-      "banned_aliases": []
-    },
-    {
-      "canonical": "product",
-      "plural": "products",
+      "canonical": "exemption",
+      "plural": "exemptions",
       "banned_aliases": []
     },
     {
@@ -448,22 +252,64 @@
       "banned_aliases": []
     },
     {
-      "canonical": "decision",
-      "plural": "decisions",
-      "banned_aliases": []
-    },
-    {
       "canonical": "fact",
       "plural": null,
       "banned_aliases": []
     },
     {
-      "canonical": "code",
+      "canonical": "feature",
+      "plural": "features",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "figma",
       "plural": null,
       "banned_aliases": []
     },
     {
-      "canonical": "wording",
+      "canonical": "fleet",
+      "plural": null,
+      "banned_aliases": [
+        "swarm"
+      ]
+    },
+    {
+      "canonical": "flow",
+      "plural": "flows",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "focus",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "font",
+      "plural": "fonts",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "gen-ui",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "genre",
+      "plural": "genres",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "harness",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "hook",
+      "plural": "hooks",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "host",
       "plural": null,
       "banned_aliases": []
     },
@@ -473,17 +319,39 @@
       "banned_aliases": []
     },
     {
-      "canonical": "reference",
-      "plural": "references",
+      "canonical": "isolation",
+      "plural": null,
       "banned_aliases": []
     },
     {
-      "canonical": "rubric",
-      "plural": "rubrics",
+      "canonical": "issue",
+      "plural": "issues",
+      "banned_aliases": [
+        "sub-issue"
+      ]
+    },
+    {
+      "canonical": "kit",
+      "plural": "kits",
       "banned_aliases": []
     },
     {
-      "canonical": "vision-memo",
+      "canonical": "layout",
+      "plural": "layouts",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "leading",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "lettering",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "llm-client",
       "plural": null,
       "banned_aliases": []
     },
@@ -493,13 +361,120 @@
       "banned_aliases": []
     },
     {
-      "canonical": "artifact",
-      "plural": "artifacts",
+      "canonical": "manifest",
+      "plural": "manifests",
       "banned_aliases": []
     },
     {
-      "canonical": "spend",
+      "canonical": "material",
       "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "mobile",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "naming",
+      "plural": null,
+      "banned_aliases": [
+        "names"
+      ]
+    },
+    {
+      "canonical": "orchestration",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "overhaul",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "pack",
+      "plural": "packs",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "package",
+      "plural": "packages",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "palette",
+      "plural": "palettes",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "pattern",
+      "plural": "patterns",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "perception",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "physical",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "plugin",
+      "plural": "plugins",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "primitive",
+      "plural": "primitives",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "product",
+      "plural": "products",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "product-lifecycle",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "project",
+      "plural": "projects",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "protocol",
+      "plural": "protocols",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "reconstructibility",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "recurrence",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "reference",
+      "plural": "references",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "rename",
+      "plural": "renames",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "repo",
+      "plural": "repos",
       "banned_aliases": []
     },
     {
@@ -508,13 +483,183 @@
       "banned_aliases": []
     },
     {
-      "canonical": "orchestration",
+      "canonical": "resilience",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "routing",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "rubric",
+      "plural": "rubrics",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "runtime",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "safety",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "screen",
+      "plural": "screens",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "script",
+      "plural": "scripts",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "shape",
+      "plural": "shapes",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "shell",
+      "plural": "shells",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "site",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "site-docs",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "skill",
+      "plural": "skills",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "space",
+      "plural": "spaces",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "speed",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "spend",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "ssr",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "stage",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "state",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "stitch",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "surface",
+      "plural": "surfaces",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "system",
+      "plural": "systems",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "table",
+      "plural": "tables",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "task",
+      "plural": "tasks",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "team",
+      "plural": "teams",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "theory",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "ticket",
+      "plural": "tickets",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "token",
+      "plural": "tokens",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "training",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "translation",
+      "plural": "translations",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "type",
+      "plural": "types",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "ui",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "ui-change",
       "plural": null,
       "banned_aliases": []
     },
     {
       "canonical": "variant",
       "plural": "variants",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "vision-memo",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "whole",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "wording",
+      "plural": null,
       "banned_aliases": []
     }
   ],
@@ -527,15 +672,9 @@
   ],
   "mutating_no_confirm_allowlist": [],
   "exemptions": [
-    "a2a-protocol-facts",
-    "a2a-training-facts",
     "a2ui-catalog-facts",
-    "a2ui-chat-agent-facts",
-    "a2ui-protocol-facts",
-    "a2ui-training-facts",
     "adopt-plugin",
     "agent-residency-facts",
-    "apple-mobile-facts",
     "break-down-flow",
     "break-down-layout",
     "break-down-problem",
@@ -549,49 +688,26 @@
     "check-all-agents",
     "check-all-skills",
     "check-everything",
-    "check-whole-ui",
     "clean-git",
     "clean-repo",
     "close-session",
-    "color-contrast-facts",
-    "color-perception-facts",
-    "color-space-facts",
-    "color-theory-facts",
-    "component-checker",
-    "design-system-checker",
     "dispatch-ticket",
-    "dom-layout-facts",
-    "figma-plugin-facts",
     "file-leftovers",
     "find-intent",
     "find-open-questions",
     "fix-old-names",
-    "flow-checker",
-    "font-choice-checker",
     "github-facts",
     "grill-the-ask",
     "html-to-markdown",
     "init-repo",
-    "layout-checker",
-    "lettering-facts",
     "llm-gateway-facts",
     "llm-streaming-facts",
     "make-a2a-agent",
     "make-agent",
-    "make-component",
-    "make-design-system",
-    "make-dscard-kit",
     "make-figma-make-kit",
-    "make-palette",
-    "make-stitch-kit",
     "markdown-to-markup",
-    "material-color-facts",
     "material-motion-facts",
-    "material-shape-facts",
-    "material-token-facts",
-    "material-type-facts",
     "mobilize-chores",
-    "physical-color-facts",
     "pick-fonts",
     "plan-chores",
     "plan-plugin-split",
@@ -606,8 +722,6 @@
     "sort-issues",
     "sweep-chores",
     "tidy-docs",
-    "ui-genre-facts",
-    "ui-pattern-facts",
     "watch-adrs",
     "watch-tickets",
     "what-shipped",
