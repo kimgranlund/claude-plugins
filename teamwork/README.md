@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.9 · 2026-08-19 · fleet-rules Section 7 gains the live lane (Kim's ruling): a live human prompt for small bounded work executes solo inline, record-last — no intake mint/claim/write-gate/dispatch; PR-as-record, auto-merge on green pre-authorized; escalates to the full flow on multi-seat/unattended/backlog/oversize discovery. Quality floor + semantic-edit checker unchanged.
 v2.28.8 · 2026-08-19 · closes #751 (Kim's live correction: `/sub-task` shipped a one-shot
 unnamed subagent; the intended default was a continuable named session): `sub-task` (#745/#746,
 merged same day, zero adoption) is retired — its free-instruction dispatch is absorbed into
