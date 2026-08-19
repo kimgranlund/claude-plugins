@@ -9,6 +9,7 @@
     { "id": "t05", "prompt": "/sub-agent code-checker review this diff, unattended.", "expect": "trigger" },
     { "id": "n01", "prompt": "Run the builder agent's own contract as a background fork off this session.", "expect": "no-trigger", "comment": "owner: /fork-agent — a background fork, not a real Agent-tool dispatch" },
     { "id": "n02", "prompt": "Make this session adopt the build-leader agent's own contract directly and hold it until I say stop.", "expect": "no-trigger", "comment": "owner: /bind-build — the host adopts the contract in place, no dispatch" },
-    { "id": "n03", "prompt": "Sweep the ops queue and mobilize whatever's buildable.", "expect": "no-trigger", "comment": "owner: /mobilize-chores — batch find-and-confirm, not one named agent dispatch" }
+    { "id": "n03", "prompt": "Sweep the ops queue and mobilize whatever's buildable.", "expect": "no-trigger", "comment": "owner: /mobilize-chores — batch find-and-confirm, not one named agent dispatch" },
+    { "id": "n04", "prompt": "/sub-task fork a subtask about whether we should cache the API response.", "expect": "no-trigger", "comment": "owner: /sub-task — no registered agent name given, arbitrary instructions instead" }
   ]
 }

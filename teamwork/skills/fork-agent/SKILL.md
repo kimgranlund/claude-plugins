@@ -7,7 +7,9 @@ description: >-
   form (`/sub-agent {agent-name}`, Agent tool — no forked context, runs as a real subagent
   instance); NOT the host-session-adopts-the-contract form (`/bind-{seat}` — no fork, no spawn,
   the host itself holds the contract until it stands down); NOT a per-seat alias — this command
-  takes any registered agent name as its argument and mints none of its own.
+  takes any registered agent name as its argument and mints none of its own; NOT arbitrary
+  unregistered instructions with no agent name to resolve (`/sub-task {instructions}` — a
+  clean-context subagent, not an inherited-context fork).
 disable-model-invocation: true
 user-invocable: true
 context: fork
