@@ -1,6 +1,6 @@
 {
   "skill": "make-palette",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Deep-review corpus (excellence campaign batch 2, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from the neighborhood's trigger vocabulary: check-colors (verify/contrast/CVD), color-space-facts (spaces/conversion), color-contrast-facts (APCA/CVD), color-theory-facts (harmony/meaning/mood), token-builder agent (token layer edits), make-component (color-picker component), brand/art-direction, and (added 2026-07-04) make-design-system — the whole-bundle ask must NOT grab this color-only skill; 'design the color system for this app' (positive) vs 'author our Claude Design design system bundle' (negative) is the boundary the reciprocal fence protects.",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. Deep-review corpus (excellence campaign batch 2, 2026-07-03; siblings re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings. Negatives drawn adversarially from the neighborhood's trigger vocabulary: check-colors (verify/contrast/CVD), color-space-facts (spaces/conversion), color-contrast-facts (APCA/CVD), color-theory-facts (harmony/meaning/mood), token-builder agent (token layer edits), make-component (color-picker component), brand/art-direction, and (added 2026-07-04) make-design-system \u2014 the whole-bundle ask must NOT grab this color-only skill; 'design the color system for this app' (positive) vs 'author our Claude Design design system bundle' (negative) is the boundary the reciprocal fence protects.",
   "cases": [
     {
       "id": "t01",
@@ -117,6 +117,12 @@
       "prompt": "make these md-sys colors work in dark mode",
       "expect": "no-trigger",
       "note": "material-color-facts owns md-sys role wiring (ADR-0008 seam)"
+    },
+    {
+      "id": "n14",
+      "prompt": "what should a new-accent-color ticket capture before we build it",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs token-feature-intake-rules (gh#711, lld-0024) \u2014 what a TICKET should capture, not the ramp build itself"
     }
   ]
 }

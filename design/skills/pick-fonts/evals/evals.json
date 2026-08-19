@@ -167,6 +167,12 @@
       "prompt": "what font for body copy in our md-sys typescale",
       "expect": "no-trigger",
       "note": "material-type-facts owns md-sys typescale asks (ADR-0008 seam)"
+    },
+    {
+      "id": "n18",
+      "prompt": "what fields does a typography-seed ticket need to state before we build it",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs token-feature-intake-rules (gh#711, lld-0024) \u2014 what a TICKET should capture, not the typography system decision itself"
     }
   ]
 }

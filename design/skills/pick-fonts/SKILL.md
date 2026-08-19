@@ -7,7 +7,9 @@ description: >-
   or turn "modern and clean" into a specific point in design space: territory, rationale,
   coherence, craft verification — font-token-rules realizes it. NOT for color ramps
   (make-palette); NOT for realizing a decided system as tokens (font-token-rules); NOT for
-  type-history knowledge (lettering-facts); NOT for Material's typescale (material-type-facts).
+  type-history knowledge (lettering-facts); NOT for Material's typescale (material-type-facts);
+  NOT what fields a typography-seed TICKET should capture before build
+  (token-feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
