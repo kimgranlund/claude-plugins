@@ -122,6 +122,12 @@
       "id": "n24",
       "prompt": "what corner radius should the inner card use inside this rounded container",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n25",
+      "prompt": "what fields does a button component ticket need before we build it",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) — what a TICKET should capture, not the build itself"
     }
   ]
 }

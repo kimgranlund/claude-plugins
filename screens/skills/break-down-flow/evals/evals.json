@@ -136,6 +136,12 @@
       "id": "n14",
       "prompt": "decompose this goal into a plan",
       "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "what does an onboarding-flow ticket need to state before we build it",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) \u2014 what a TICKET should capture, not walking/designing the flow itself"
     }
   ]
 }

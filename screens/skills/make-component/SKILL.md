@@ -11,7 +11,8 @@ description: >-
   pattern (ui-pattern-facts); NOT feature/system decomposition (break-down-problem); NOT color
   ramps (make-palette); NOT nested-surface radius/spacing — "what radius on the inner card"
   (size-and-shape-rules); NOT grading a
-  component you didn't author (component-checker).
+  component you didn't author (component-checker); NOT what fields a component TICKET should
+  capture before build (feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

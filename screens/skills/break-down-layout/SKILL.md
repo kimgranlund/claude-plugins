@@ -10,7 +10,8 @@ description: >-
   visual/color design (color-*-facts/lettering-facts), CSS/component code, or copywriting; NOT
   cross-screen journeys (break-down-flow); NOT the whole-product sweep (check-whole-ui); NOT
   naming a pattern in the abstract (ui-pattern-facts); NOT abstract decomposition with no
-  concrete screen (break-down-problem).
+  concrete screen (break-down-problem); NOT what fields a layout/shell TICKET should capture
+  before build (feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
