@@ -39,8 +39,9 @@ ruling is `file-feature`'s alone.
 **This fork cannot verify the grill ran — it only sees `$ARGUMENTS`.** A seed that reads BIG or
 open-decision-space yet carries no sign the round above ran (no grilled/sharpened framing, no
 `[grilled]` marker) is captured anyway, same as any other gap this fork can't resolve live (Phase
-2's own discipline) — name "pre-fork grill skipped" in Scope/Open and in the close-out's batched
-list, never block the mint on a caller that skipped the round.
+2's own discipline) — name "pre-fork grill skipped" in Scope/Open (it counts toward the
+close-out's terse `owed-questions` total, gh#713 — the text itself never restates there), never
+block the mint on a caller that skipped the round.
 
 ## Phase 1 — Route: fresh idea, or resume by record state
 
@@ -58,8 +59,8 @@ scope change and needs no sizing. Anything more than the bare word (new detail, 
 word plus other text) folds first under the branches below, same as any other trailing text; the
 word only triggers the direct-to-Phase-6 route when it is the ENTIRE trailing text with nothing
 else to fold. Otherwise: `done`/`wontfix`/closed → report and stop, echoing back any trailing text
-unfolded (reopening is the user's call, but an answer to a Phase 4/5 close-out's named question
-is not silently dropped); open with new detail following the id — including an answer to a named
+unfolded (reopening is the user's call, but an answer to a question the record's own Scope/Open
+names is not silently dropped); open with new detail following the id — including an answer to a named
 clarifying question — → fold it into Summary/Scope/Open (clearing the answered gap from
 Scope/Open once folded) and re-run Phase 4's sizing only if the new detail changes the size
 class; otherwise (open, no new detail) → report the record's state, size, and placement, point at
@@ -86,11 +87,12 @@ What happens instead: capture immediately from `$ARGUMENTS` alone (carries no co
 history), naming every gap the clarifying round would have surfaced — including a seed that
 references context the fork cannot see ("the idea we discussed", "what I just described"), which
 is itself a named gap, never a guess — in the record's Scope/Open section. The close-out (Phase
-5, at mint) then owes the round it couldn't run live: it lists the batched clarifying questions
-find-intent's discipline would have asked, and names the resume command —
-`/file-feature <id> <answers>` — that folds the answers into the record once a person supplies
-them (Phase 1's fold-in path already handles "open with new detail following the id"). Name no
-clarify questions in the close-out when the seed carries `[redirected-from:X]` (the round budget
+5, at mint) then owes the round it couldn't run live: it reports their count in its one-line
+terse form (gh#713) — their text already stands in the record's Scope/Open, above, never
+restated in the close-out; the resume command — `/file-feature <id> <answers>` — folds the
+answers into the record once a person supplies them (Phase 1's fold-in path already handles "open
+with new detail following the id"). Name no clarify questions in the close-out when the seed
+carries `[redirected-from:X]` (the round budget
 was already spent upstream) or `[unattended]` (no live session to report back to at all) — the
 shared marker protocol, canonical statement `file-task`'s Phase 2. Either way, a still-vague idea
 never blocks persistence — vagueness is a named gap, never a gate.
@@ -100,8 +102,8 @@ never blocks persistence — vagueness is a named gap, never a gate.
 waiting), extraction also captures *how the built result will be agent-verifiable* — which assert
 layer (payload/API/browser/human) per `docs:agent-harness-rules` — same as every other extraction
 question: the seed already answers it → capture it; it doesn't → name it as a Scope/Open gap
-("needs a harness first") and add it to Phase 5's close-out batched clarifying-questions list.
-Never a blocking live round — this phase's own no-question-channel finding above applies here
+("needs a harness first") — it counts toward Phase 5's terse `owed-questions` total (gh#713),
+never restated there. Never a blocking live round — this phase's own no-question-channel finding above applies here
 too — and never a restatement of `agent-harness-rules` itself, only a cite. Phase 4 shaping the
 idea Knowledge (or a Failure-branch redirect) moots this provisional gap — it never survives into
 a non-Work record's Scope/Open.
@@ -180,9 +182,14 @@ the same convention on resume.
 Place it: add the line to ROADMAP (Now/Next/Later) or PLAN **only where those docs already
 exist** — never mint living-state docs unprompted (both backends; queue docs stay files).
 
-Where Phase 2 named unasked clarifying questions (no `[redirected-from:X]`/`[unattended]` marker
-on the seed), the close-out reported here carries them verbatim plus the resume command
-(`/file-feature <id> <answers>`) — this is the report the caller's session actually reads.
+**The close-out is the terse one-line form (gh#713, uniform across all three intake siblings):**
+`Filed: <id> · kind:feature · owed-questions:<N>` — `<id>` is whichever the backend resolved
+(ticket path, issue URL, or adapter-native id), `<N>` counts whatever Phase 2 named as unasked
+clarifying questions (no `[redirected-from:X]`/`[unattended]` marker on the seed); the questions'
+own full text stays where Phase 2 already wrote it, in the record's Scope/Open section, never
+restated here. This one line is the head line and the whole close-out in the normal case;
+exception notes this skill names elsewhere (a skipped Issue Type, a backend-create fallback, the
+project-docs offer below) append as extra lines only when they occur.
 
 ## Phase 6 — Bootstrap the project index (opt-in, when absent)
 

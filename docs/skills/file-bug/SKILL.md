@@ -37,7 +37,7 @@ convention (`references/backend-resolver.md`) to the resolved record right here,
 branch below — every branch that follows exits this phase (Phase 6, the closed-state stop, or
 Phase 5), so the tag is applied at resolution time, not deferred to a phase a given resume might
 never reach. Extra text follows the id (new detail, a repro that did not exist before,
-or an answer to a clarifying question Phase 4 named in a prior close-out) → fold it into the
+or an answer to a clarifying question the record's own Classification section names) → fold it into the
 ticket's Repro/Classification FIRST, unconditionally, clearing the answered gap from
 Classification once folded — this composes with every branch below, not
 an alternative to them; a Findings entry already existing (the fork ran Phase 5 before the person
@@ -74,10 +74,11 @@ conversation history), naming every gap the clarifying round would have surfaced
 Classification, phrased so it stands alone in the record itself — not only in the fork's
 (ephemeral) close-out report — including a seed that references context the fork cannot see ("the
 crash above", "that test", "what we discussed"), which is itself a named gap, never a guess. The
-close-out (Phase 4, at mint) then owes the round it couldn't run live: it lists the same
-Classification-named questions verbatim and names the resume command — `/file-bug <id> <answers>`
-— that folds the answers into the record once a person supplies them (Phase 1's unconditional
-fold-in). Name no clarify questions in the close-out when the seed carries `[redirected-from:X]`
+close-out (Phase 4, at mint) then owes the round it couldn't run live: it reports their count in
+its one-line terse form (gh#713) — their text already stands in the record itself, above, never
+restated in the close-out; the resume command — `/file-bug <id> <answers>` — folds a person's
+answers into the record once supplied (Phase 1's unconditional fold-in). Name no clarify
+questions in the close-out when the seed carries `[redirected-from:X]`
 (the round budget was already spent upstream; shared marker protocol, canonical statement
 `file-task`'s Phase 2) or `[unattended]` (no live session to report back to at all, so there is
 nobody to ask). Either way, missing detail never blocks capture: write the ticket with what is
@@ -132,11 +133,16 @@ tickets" defines; use it, never invent one per ticket), and an empty Findings se
   unreachable.
 
 The record exists (on disk, or as a created issue whose URL is reported) before Phase 5 starts;
-this ordering is the entire fix, and it does not move. Where Phase 2 named unasked clarifying
-questions (no `[redirected-from:X]`/`[unattended]` marker on the seed), the close-out reported
-here carries them verbatim plus the resume command (`/file-bug <id> <answers>`) — this is the
-report the caller's session actually reads; do not defer it to Phase 6, which only fires on a
-later return from dispatch.
+this ordering is the entire fix, and it does not move. **The close-out is the terse one-line form
+(gh#713, uniform across all three intake siblings):** `Filed: <id> · kind:bug ·
+owed-questions:<N>` — `<id>` is whichever the backend resolved (ticket path, issue URL, or
+adapter-native id), `<N>` counts whatever Phase 2 named as unasked clarifying questions (no
+`[redirected-from:X]`/`[unattended]` marker on the seed); the questions' own full text stays
+where Phase 2 already wrote it, in the record's Classification section, never restated here.
+This one line is the head line and the whole close-out in the normal case; exception notes this
+skill names elsewhere (a skipped Issue Type, a backend-create fallback) append as extra lines
+only when they occur. Do not defer this line to Phase 6, which only fires on a later return from
+dispatch.
 
 `.github/ISSUE_TEMPLATE/bug.yml` mirrors this contract for a human filing directly on GitHub —
 this template, plus its `feature`/`task` siblings, IS the feedback intake door idr-0008 names;
