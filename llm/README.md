@@ -80,6 +80,16 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
 
+v1.0.14 · assembled 2026-08-19 · #706 (2026-08-19 estate sweep, #676's final matrix): the
+`chat-harness-logging-facts` / `chat-harness-routing-facts` sibling fence made reciprocal in BOTH
+descriptions, closing a 2-of-3 steal on logging-facts' own t07/t09 ("measure whether my
+descriptions route correctly", "build a held-out adversarial test suite") — routing-facts now
+explicitly owns AUTHORING a new eval corpus, logging-facts owns RE-RUNNING an existing one over
+repeated runs to track regression vs. judge noise. Both evals.json gained reciprocal negatives
+mirroring the other suite's near-duplicate positive phrasing (routing-facts n19/n20 mirror
+logging-facts' t07/t09 verbatim; logging-facts n16/n17 mirror routing-facts' t13/t14 verbatim).
+`/check-routing llm`: see PR.
+
 v1.0.13 · assembled 2026-08-17 · ADR-0020 wave 6 companion (#524): `agent-residency-facts` and
 `chat-harness-workflow-facts` repoint their `team-or-solo-rules` citations at `teamwork:fleet-rules`
 (D5 merged the former into the latter) — also fixes a stale `orchestration:` plugin-boundary

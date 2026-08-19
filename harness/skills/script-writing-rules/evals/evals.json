@@ -1,6 +1,6 @@
 {
   "skill": "script-writing-rules",
-  "note": "Knowledge skill: the deterministic-tier standard (script anatomy, selftest contract, exit codes, placement, mechanization boundary). Fences: make-script executes the authoring workflow; hook-writing-rules owns event-fired enforcement; skill-writing-rules owns the calling SKILL.md.",
+  "note": "Knowledge skill: the deterministic-tier standard (script anatomy, selftest contract, exit codes, placement, mechanization boundary). Fences: make-script executes the authoring workflow; hook-writing-rules owns event-fired enforcement; skill-writing-rules owns the calling SKILL.md. 2026-08-19 (#706, per the #676 sweep's steal of make-script's t03/t04): n06/n07 added, mirroring make-script's own t03/t04 phrasing verbatim as explicit negatives — a request to build/add something right now cedes to make-script even when it uses this suite's own selftest/mechanizability vocabulary.",
   "cases": [
     { "id": "t01", "prompt": "What does a bundled script's selftest mode actually need?", "expect": "trigger" },
     { "id": "t02", "prompt": "Should this check script live in the skill's scripts/ or the plugin's scripts/?", "expect": "trigger" },
@@ -14,6 +14,8 @@
     { "id": "n02", "prompt": "Should this rule be a hook or a skill?", "expect": "no-trigger", "note": "hook-writing-rules owns the hook-vs-skill boundary" },
     { "id": "n03", "prompt": "How long should a SKILL.md body be?", "expect": "no-trigger", "note": "skill-writing-rules" },
     { "id": "n04", "prompt": "Run the release gate on docs", "expect": "no-trigger", "note": "an execution ask — ship-plugin/none, not the standard" },
-    { "id": "n05", "prompt": "Is this fact worth capturing as project knowledge?", "expect": "no-trigger", "note": "save-lessons" }
+    { "id": "n05", "prompt": "Is this fact worth capturing as project knowledge?", "expect": "no-trigger", "note": "save-lessons" },
+    { "id": "n06", "prompt": "This verification step should really be a script", "expect": "no-trigger", "note": "make-script — an authoring-workflow ask with something to build now, not a rules lookup" },
+    { "id": "n07", "prompt": "Add a selftest to this script — it ships unproven", "expect": "no-trigger", "note": "make-script — an authoring-workflow ask with something to build now, not a rules lookup" }
   ]
 }

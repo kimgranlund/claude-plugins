@@ -1,6 +1,6 @@
 {
   "skill": "make-script",
-  "note": "Procedural maker: mechanize a check/procedure as a bundled script with a proven selftest. Fences: script-writing-rules carries the rules; make-hook owns event-fired enforcement; make-skill owns whole new skills; save-lessons owns prose knowledge capture; no owning skill covers a one-off/throwaway script (session-local, write it inline).",
+  "note": "Procedural maker: mechanize a check/procedure as a bundled script with a proven selftest. Fences: script-writing-rules carries the rules; make-hook owns event-fired enforcement; make-skill owns whole new skills; save-lessons owns prose knowledge capture; no owning skill covers a one-off/throwaway script (session-local, write it inline). 2026-08-19 (#706, per the #676 sweep's t03/t04 steal by script-writing-rules): description sharpened to lead with the authoring-workflow verbs (AUTHOR/BUILD, right now) against script-writing-rules' standards framing, and the fence now names the discriminator explicitly — a rules question 'with nothing to build yet' cedes to script-writing-rules.",
   "cases": [
     {
       "id": "t01",
