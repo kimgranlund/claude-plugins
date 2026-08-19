@@ -3,13 +3,13 @@ name: spend-audit
 kind: skill
 description: >
   Instrument idr-0010's estate economy claim — a per-firing, per-archetype token-spend
-  ledger at `.claude/ops/spend-ledger.csv` (attention-trend.csv-shaped, append-only).
-  Appends one validated row per firing and emits a measured per-archetype cost-multiplier
-  table vs the solo baseline. Use for "price a sweep/build firing", "append a spend-ledger
-  row", "is this sweep worth firing / worth its tokens", "validate the spend ledger",
-  "backfill missing firing rows", "per-archetype cost gradient". NOT menu rent /
-  description collisions (attention-audit); NOT incident recurrence (recurrence-audit);
-  NOT prose bloat (bloat-audit); NOT loop budget design (teamwork loop-rules).
+  ledger at `.claude/ops/spend-ledger.csv` (attention-trend.csv-shaped, append-only), plus
+  a merged-PR label-cohort split (`--label`) for lane-vs-rest comparison. Use for "price a
+  sweep/build firing", "append a spend-ledger row", "is this sweep worth firing / worth its
+  tokens", "validate the spend ledger", "backfill missing firing rows", "per-archetype cost
+  gradient", "compare lane PRs vs the rest". NOT menu rent / description collisions
+  (attention-audit); NOT incident recurrence (recurrence-audit); NOT prose bloat
+  (bloat-audit); NOT loop budget design (teamwork loop-rules).
 author: kim
 created: 2026-08-18
 last_updated: 2026-08-18
@@ -22,6 +22,7 @@ allowed-tools:
   - Bash(python3 */scripts/validate.py *)
   - Bash(python3 */scripts/trend.py *)
   - Bash(python3 */scripts/archetype_gradient.py *)
+  - Bash(python3 */scripts/cohort_report.py *)
   - Bash(gh pr *)
   - Bash(gh issue *)
   - Bash(git log *)
@@ -154,10 +155,23 @@ bands only after the ledger has data).
    snapshot #672's ADR and #666's rubrics cite) from this render at every authorkit release
    boundary — paste the new output in, replacing the prior snapshot's own render block.
 
+6. **Cohort report** (gh#763 — the instrument gh#759's live-lane measurement depends on):
+   `python3 <this skill>/scripts/cohort_report.py --since <YYYY-MM-DD> [--label <name>]...
+   [--repo <owner/repo>] [--json]` — lists the window's merged PRs via `gh pr list` and
+   splits them into a `labeled`/`unlabeled` cohort pair when `--label` is given (repeatable
+   — a PR counts as `labeled` if it carries ANY of the named labels), each cohort reporting
+   open→merge wall-clock, additions/deletions, checker-verdict-in-body rate, revert-mention
+   rate, and a 48h follow-up-fix rate (a different merged PR within 48h sharing ≥1 changed
+   file). No `--label` → today's unchanged single `all` cohort. Use it to compare one lane
+   against the rest of the flow — e.g. `--label live-lane` for gh#759's own live-lane vs.
+   full-flow measurement — never to invent a metric beyond this split (this ticket's own
+   Non-goals: no new metrics, no ledger-schema change).
+
 Done when: the row is appended (or its columns honestly read `absent`/`UNMEASURED` per the
-convention), or the requested Validate/Audit/Archetype-gradient render is produced with every
-source-class comparison kept separate and every `undetermined`/`absent`/`UNMEASURED` state
-reported as exactly that — never conflated with a computed judgment.
+convention), or the requested Validate/Audit/Archetype-gradient/Cohort-report render is
+produced with every source-class comparison kept separate and every
+`undetermined`/`absent`/`UNMEASURED`/`n/a` state reported as exactly that — never conflated
+with a computed judgment.
 
 ## Degraded modes
 

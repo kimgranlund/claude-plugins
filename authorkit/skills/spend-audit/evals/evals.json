@@ -43,6 +43,16 @@
       "expect": "trigger"
     },
     {
+      "id": "t09",
+      "prompt": "Compare the live-lane PRs against the rest of the flow over the last 30 days.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t10",
+      "prompt": "Split merged PRs by the live-lane label and show me each cohort's metrics.",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "Which skills and plugins tax Claude's performance the most, and are any descriptions colliding in routing?",
       "expect": "no-trigger",
