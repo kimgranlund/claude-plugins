@@ -1,18 +1,14 @@
 ---
 name: ui-pattern-facts
 description: >-
-  Answers questions about common UI patterns at macro (shells, templates), micro (modules), and
-  container (card/panel/dialog/drawer anatomy) level. Use when naming, choosing, or explaining a
-  pattern: "what pattern is this", "name this screen type", "how should a table / form / wizard
-  behave", "common layout for settings / a feed", "what does a card usually contain", "should this
-  header be sticky", "how should footer buttons lay out", "what states does a screen need", "when
-  is a modal wrong". Covers page templates, the module catalog (tables, forms, nav, pickers,
-  toolbars, overlays), container Header·Body·Footer anatomy (sticky headers, scroll bodies,
-  footer conventions, nested chrome), and screen states. ANSWERS and names patterns; does
-  not apply or build: apply to a layout: break-down-layout; build a module:
-  make-component; whole-product sweep: check-whole-ui. NOT a genre's needs (ui-genre-facts); NOT which keys
-  a widget answers (check-focus); NOT the spacing arithmetic behind composed padding
-  (size-and-shape-rules).
+  Answers UI-pattern questions — macro (templates), micro (modules), container
+  (card/panel/dialog/drawer anatomy). Use to name, choose, or explain a pattern: "what pattern
+  is this", "name this screen type", "how should a table / form / wizard behave", "common
+  layout for settings / a feed", "what does a card usually contain", "should this header stay
+  sticky", "how should footer buttons lay out", "what states does a screen need", "when is a
+  modal wrong". Answers/names only — apply: break-down-layout; build: make-component; sweep:
+  check-whole-ui. NOT a genre's needs (ui-genre-facts); NOT which keys a widget answers
+  (check-focus); NOT composed-padding spacing arithmetic (size-and-shape-rules).
 user-invocable: false
 disable-model-invocation: false
 ---

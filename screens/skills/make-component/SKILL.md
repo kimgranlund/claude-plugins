@@ -1,18 +1,14 @@
 ---
 name: make-component
 description: >-
-  Author a zero-dependency web component or composition to the standard shape. Use when building
-  or upgrading a custom element, control, or module outside a framework: "build a web
-  component/custom element", "make a checkbox/select/toolbar", "design this component's
-  API/anatomy", "wrap native or form-associated?", "tiers feel mis-cut", "renders empty after a
-  re-render", "icon-only button isn't square", "icon/caret size on the ramp". Tier, anatomy, API
-  contract, composition, geometry — Compose-then-Realize, machine-checked. NOT ui-* controls in
-  agent-ui (that repo's own build seat); NOT app shells (break-down-layout); NOT naming a UI
-  pattern (ui-pattern-facts); NOT feature/system decomposition (break-down-problem); NOT color
-  ramps (make-palette); NOT nested-surface radius/spacing — "what radius on the inner card"
-  (size-and-shape-rules); NOT grading a
-  component you didn't author (component-checker); NOT what fields a component TICKET should
-  capture before build (feature-intake-rules).
+  Author a zero-dependency web component. Use for a custom element/module outside a framework:
+  "build a web component/custom element", "make a checkbox/select/toolbar", "design this
+  component's API/anatomy", "wrap native or form-associated?", "tiers feel mis-cut", "renders
+  empty after a re-render", "icon-only button isn't square", "icon/caret size on the ramp".
+  NOT: ui-* controls in agent-ui (repo's own build seat); app shells (break-down-layout);
+  naming a pattern (ui-pattern-facts); feature/system decomposition (break-down-problem); color
+  ramps (make-palette); nested radius/spacing (size-and-shape-rules); grading a component
+  (component-checker); component ticket intake (feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

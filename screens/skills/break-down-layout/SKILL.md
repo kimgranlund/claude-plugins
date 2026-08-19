@@ -1,17 +1,14 @@
 ---
 name: break-down-layout
 description: >-
-  Decompose, evaluate, and design any UI layout via the two-axis technique — OUTSIDE-IN
-  (frame→regions→groups→atoms) × INSIDE-OUT (verbs→bindings→feedback→coherence) — gated rubric,
-  ASCII wireframes across four archetypes. Use when analyzing a screenshot/mockup, naming UI
-  regions, grading a layout, or scaffolding an app shell: "review/critique this layout",
-  "wireframe a dashboard/marketing/mobile app", "which archetype fits", "looks clean but
-  nothing does anything", "every action works but it's one giant stacked column". NOT
-  visual/color design (color-*-facts/lettering-facts), CSS/component code, or copywriting; NOT
-  cross-screen journeys (break-down-flow); NOT the whole-product sweep (check-whole-ui); NOT
-  naming a pattern in the abstract (ui-pattern-facts); NOT abstract decomposition with no
-  concrete screen (break-down-problem); NOT what fields a layout/shell TICKET should capture
-  before build (feature-intake-rules).
+  Decompose/evaluate/design any UI layout — four archetypes on two crossing axes (space ×
+  behavior). Use when analyzing a screenshot/mockup, naming regions, grading a layout, or
+  scaffolding a shell: "review/critique this layout", "wireframe a dashboard/marketing/mobile
+  app", "which archetype fits", "looks clean but nothing does anything", "every action works
+  but it's one giant stacked column". NOT: visual/color (color-*-facts/lettering-facts),
+  CSS/component code, or copywriting; cross-screen journeys (break-down-flow); whole-product
+  sweep (check-whole-ui); naming a pattern (ui-pattern-facts); domain-general decomposition
+  (break-down-problem); layout/shell ticket intake (feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
