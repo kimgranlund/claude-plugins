@@ -1,13 +1,14 @@
 ---
 name: make-script
 description: >-
-  Mechanize a check, gate, or derivation as a bundled scripts/taskname.py|mjs — qualify, plan,
-  confirm, author, validate (selftest green, negative control bites, wired to its caller and the
-  gate). Use for "turn this checklist into a script", "mechanize this check", "add a selftest to
-  this script", or "script this verification". NOT for the standard or the bare "can this check
-  be code" mechanizability question (script-writing-rules), event-fired enforcement (make-hook),
-  a whole new skill (make-skill), or a one-off/throwaway script (session-local — write it inline,
-  ship nothing).
+  AUTHOR a bundled scripts/taskname.py|mjs end to end, right now — qualify, plan, confirm, then
+  BUILD it (selftest green, negative control bites, wired to its caller and the gate). An
+  authoring-workflow ask, not a rules lookup. Use for "turn this checklist into a script",
+  "mechanize this check", "build/add a selftest to this script", or "script this verification".
+  NOT the standard itself, nor a bare "what should a selftest look like" / "is this mechanizable"
+  rules question with nothing to build yet (script-writing-rules), event-fired enforcement
+  (make-hook), a whole new skill (make-skill), or a one-off/throwaway script (session-local —
+  write it inline, ship nothing).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[the check or procedure to mechanize, or a script path to retrofit]"

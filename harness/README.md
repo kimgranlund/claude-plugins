@@ -131,6 +131,24 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.15.7 · 2026-08-19 · #706 (2026-08-19 estate sweep, #676's final matrix), two routing-tuning
+fixes plus one documented no-change ownership decision: (1) `make-script`'s description
+sharpened to lead with authoring-workflow verbs (AUTHOR/BUILD, right now) against
+`script-writing-rules`' standards framing, closing the 2-of-3 steal on its own t03/t04 —
+`script-writing-rules` evals gained n06/n07 mirroring make-script's t03/t04 verbatim as
+reciprocal negatives; (2) `save-lessons`' description gained t15's own dead-trigger phrase
+("propose a plan for capturing this decision before we write anything down") verbatim, closing
+its none-of-three dead verdict. (3) `plan-skill-split`'s own t01 ("should we split this
+knowledge pack into smaller skills") re-examined against the #676 sweep's flagged 3-way
+ambiguity with `break-down-problem`/`plan-plugin-split`: both siblings already carry an explicit
+`NOT ... (plan-skill-split)` fence naming this exact case by name, and a fresh blind-judge run
+against the full harness menu (post fixes 1-2) confirms t01 → plan-skill-split cleanly —
+verdict: the existing ownership and fence are correct, no description/evals edit made for this
+case; recorded as a dated no-change finding on #706 rather than a silent skip.
+`/check-routing` (targeted suites: make-script, script-writing-rules, save-lessons,
+plan-skill-split): all four named cases route to their intended owner — see #706's Findings for
+the full judge transcript.
+
 v3.15.6 · 2026-08-19 · closes #693 (harness slice; authorkit slice same PR): `check-routing` gains a Phase 6 "Persist" step — a plugin-rooted run now writes its Phase 4 dead/stolen/leaked counts to a stable, git-tracked `.claude/ops/routing-report.json` via a new `scripts/write_routing_report.py` (merge-by-plugin, never dated — each plugin's entry is always its own latest, no glob-latest needed on the reading side); an `--estate` run states the skip plainly instead. Verified first that no such persistence already existed: check-routing's own SKILL.md never wrote a report file, and the `harness-audit-*/routing/report.md` paths a few evals.json comments cite are `check-everything`'s own dated, gitignored audit scratch output (confirmed stale/absent by repeated `repo-cleaner` firings), never check-routing's own. Body-only SKILL.md edit (no description/frontmatter change, no evals/`/check-routing` obligation); `write_routing_report.py selftest` green; fresh-context `skill-checker` pass.
 v3.15.5 · 2026-08-18 · closes #692 (harness slice, folded with docs/teamwork siblings in one PR): `recurrence-audit`'s first incident-class seeding round (authorkit home) adds an incident-class citation tag (class `dedup-detector-false-positives`, evidence #694, seeded 2026-08-18) as a plain trailing comment in `estate-maintenance/scripts/detect.py`, next to the `JACCARD_D2` constant — additive citation only, no detector logic touched, `detect.py selftest` still green. **Version-slot note:** this PR's branch was cut before #698 merged and originally bumped 3.15.3 → 3.15.5 (skipping 3.15.4) since open PR #698 (`694-detect-d2-exclusions`) already claimed 3.15.4 for the actual D2-exclusion fix to this same file — `version_claim_check.py harness` confirmed the sibling claim; rebase-and-rebump onto it rather than race it, per `dispatch-ticket`'s cross-PR version-claim coordination rule. #698 has since merged as v3.15.4 (below); this PR was rebased onto it, and 3.15.5 stayed the correct next number. No line-level overlap in `detect.py` (v3.15.4 touches the D2 docstring/`cluster_pairs` signature; this PR's one-line comment sits at the unrelated `JACCARD_D2` constant). `release_gate.py harness` clean.
 v3.15.4 · 2026-08-19 · closes #694: `estate-maintenance`'s `detect.py` D2 near-duplicate-title detector gains two exclusions (run-2 finding, 2026-08-18: 4 of 5 D2 hits were false positives) — (a) a title carrying a FIXTURE prefix or "do not build" marker is filtered out before any pairwise comparison runs (`#617`/`#616` were two such fixtures clustering with each other); (b) a pairwise edge is never unioned, even at Jaccard >= `JACCARD_D2`, once both titles share an identical wave NUMBER or an identical ADR-id token — a deliberate same-campaign wave-sibling/multi-ADR capture set, not a dedup-search miss (`#613`/`#612`, `#523`/`#520`, `#522`/`#521`). `cluster_pairs()` gains an optional `exclude_edge` predicate (default `None`, D1/`fix_clusters` unaffected). Selftest gains fixtures for both exclusions plus a positive control proving the real re-filed near-dup (`#501`/`#588`, the `#332`/`#318` class) still fires; `detect.py selftest` and `collect.py selftest` both green.
