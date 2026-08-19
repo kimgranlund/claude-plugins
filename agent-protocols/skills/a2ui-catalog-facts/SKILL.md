@@ -1,14 +1,14 @@
 ---
 name: a2ui-catalog-facts
 description: >-
-  Answers how an A2UI catalog is designed and extended in @agent-ui/a2ui. Use for "how do I add
-  a component to the catalog", "why is this control uncatalogued", "what is our coverage
-  policy", "why did this payload fail CATALOG", "what should this bindable prop be named".
-  Covers the catalog row contract, the factory/resolution pattern, the naming law, two-tier
-  extensibility, security allowlist + conformance, coverage policy. ANSWERS from the cited
+  How an A2UI catalog is designed and extended in @agent-ui/a2ui — the row contract,
+  factory/resolution, naming law, two-tier extensibility, security allowlist + conformance,
+  coverage policy. Use for "add a component to the catalog", "why is this uncatalogued", "our
+  coverage policy", "payload fails CATALOG", "name this bindable prop". ANSWERS from the cited
   corpus; does not build. NOT for the wire shape a component renders (a2ui-protocol-facts); NOT
-  for corpus exemplars (a2ui-training-facts); NOT for the dev-proxy PAIR allowlist (a2ui-chat-agent-facts); NOT for
-  catalog/renderer SOURCE (a2ui-builder); NOT grading or scoring a catalog row against its rubric.
+  for corpus exemplars (a2ui-training-facts); NOT for the dev-proxy PAIR allowlist
+  (a2ui-chat-agent-facts); NOT for catalog/renderer SOURCE (a2ui-builder); NOT grading or scoring
+  a catalog row against its rubric.
 disable-model-invocation: false
 user-invocable: false
 ---

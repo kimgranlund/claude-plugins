@@ -4,11 +4,11 @@ description: >-
   Design and build an A2A-conformant agent — server or client side. Use for "make two agents
   talk", "build an A2A server", "write the AgentCard", "expose my agent over A2A", "wire the
   task lifecycle", "add SSE streaming to my agent", "my agent fails the other side's
-  validation". Method: outside-in from the card's advertised capabilities, inside-out from the
-  Message/Task state machine, reconciled before code; conformance is a gate. NOT for protocol
-  facts — what a field means, which method, which state (a2a-protocol-facts answers; this skill
-  builds); NOT for proving two built agents are isolated (check-a2a-isolation); NOT for the
-  payload an agent RENDERS (a2ui-* siblings).
+  validation". Method: outside-in from the card's capabilities, inside-out from the Message/Task
+  state machine, reconciled before code — conformance is a gate. NOT protocol facts
+  (a2a-protocol-facts answers; this skill builds); NOT proving two agents are isolated
+  (check-a2a-isolation); NOT the payload an agent RENDERS (a2ui-* siblings); NOT intake-schema
+  fields (screens:feature-intake-rules / design:token-feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---
