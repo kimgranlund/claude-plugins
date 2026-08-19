@@ -111,11 +111,15 @@ sweep surfaced that's actually buildable.
      **"in flight (branch-name match, no Closes link)"**, and separately queues a hygiene finding
      naming that PR for the missing `Closes` link (a finding for step 6's report, never a mutation
      this step performs). **False-positive guard, load-bearing:** an id-shaped substring match
-     alone is not enough — id `42` must never match branch `423-fleet-bootstrap-phase1` (`42` is
-     a true substring of `423`). Require a non-digit (or string-boundary) delimiter on the side of
-     the id that isn't the pattern's own literal — the character immediately after `<id>` in the
-     branch name must be non-digit or end-of-string, never another digit — so a match is
-     word-boundary-discipline, never a bare substring test. **Also exclude a ticket carrying a non-empty `assignees`
+     alone is not enough on EITHER side — id `42` must never match branch
+     `423-fleet-bootstrap-phase1` (`42` is a true substring of `423`, the AFTER side), and must
+     equally never match branch `142-foo` (`42` is a true substring of `142`, the BEFORE side).
+     Require a non-digit (or string-boundary) delimiter on whichever side of `<id>` isn't already
+     anchored by the pattern's own literal: for `bug/<id>` and `fix-<id>-*`, the literal prefix
+     (`bug/`, `fix-`) anchors the before-side, so only the after-side needs checking (non-digit or
+     end-of-string, never another digit); for the bare `<id>-*` shape, NEITHER side has a literal
+     to anchor it — `<id>` must sit at start-of-string (or immediately after a non-digit) AND be
+     followed by non-digit or end-of-string. Never a bare substring test on either side. **Also exclude a ticket carrying a non-empty `assignees`
      array** (2026-08-12, #184) — `dispatch-ticket`'s own Phase 3 now takes ADR-0005's `claim`
      operation (assignee + a timestamped comment) before any build effort starts, closing the
      window this check used to miss entirely: a ticket claimed but not yet PR-open was invisible
