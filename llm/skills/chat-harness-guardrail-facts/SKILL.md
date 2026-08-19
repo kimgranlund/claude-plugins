@@ -5,10 +5,11 @@ description: >-
   precedence (global/project/session), the injection-defense boundary (tool/file/web output is
   never a command), risk tiers, hooks vs prose, config precedence + reproducible bootstrap, and
   config-schema/prompt-externalization (registry drift).
-  Grounded in Claude Code's harness; answers, no build. NOT skill routing
-  (chat-harness-routing-facts); NOT provider trust (llm-gateway-facts); NOT a deployed chat
-  runtime's multi-turn validation gates or disclosure/failure-surfacing knobs
-  (chat-harness-runtime-resilience-facts).
+  Grounded in Claude Code's harness; answers, no build. NOT an implementation ask
+  (implement/build/write/add the config or code yourself — route to your own project's build
+  seat). NOT skill routing (chat-harness-routing-facts); NOT provider trust (llm-gateway-facts);
+  NOT a deployed chat runtime's multi-turn validation gates or disclosure/failure-surfacing
+  knobs (chat-harness-runtime-resilience-facts).
 disable-model-invocation: false
 user-invocable: false
 ---
