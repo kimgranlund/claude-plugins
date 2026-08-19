@@ -109,6 +109,21 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.2 · 2026-08-19 · closes #713 (marshal feed noise reduction, lever 1): `dispatch-ticket`'s
+Phase 5 stage 2a gains a pre-accept grant — a literal `accept-grant: authorized` line the
+dispatcher places at dispatch time (same explicit-never-inferred mechanics as ADR-0012's
+`auto-merge: authorized`), letting a build clearing a narrow four-conjunct predicate (AG1
+`size:small` · AG2 single-plugin · AG3 checker-green · AG4 gate-green) skip ONLY the plan-approval
+write-gate's hold — the fresh-context checker, the gate run, and stage 2b's own ADR-0012 merge
+predicate stay mandatory on every path, granted or not. Amends `.claude/docs/lld/lld-0022-fleet-native-write-gate.md`
+in place (versioned-contract class, 0.1.0 -> 0.2.0, dated Resolution 5, the lld-0013 v2 precedent)
+rather than a new LLD — an append-only supersession note on Resolution 3 states the composition,
+original Resolutions 1/2/4 untouched. `references/plan-approval-write-gate.md` gains the full
+AG1–AG4 conjunct definitions the SKILL.md body only summarizes (F6 split, same convention as the
+file's existing sections). Fresh-context `harness:skill-checker` pass on the SKILL.md edit and
+`docs:doc-checker` pass on the LLD amendment: both ship, minor wording/staleness findings applied
+same-change (a garbled clause, the stale "five predicates" count in Agent verification, the
+sealed-contract paragraph's missing grant citation).
 v2.28.1 · 2026-08-19 · closes #696 (ADR-0023 harvest, decision-watcher queue candidate): `fleet-rules` gains a new `references/substrate-choice.md` — the fleet-canon-vs-native-`agent-teams` ruling (worktree isolation + durable ledger beat prompt-partitioned file ownership + an in-memory task list, ADR-0023 (a)), the FACT-shaped-never-calendar re-evaluation-trigger pattern named as reusable doctrine shape beyond this one ADR (ADR-0023 (b)), and a pointer to #686's write-gate as landed (`teamwork` 2.28.0, PR #701, `lld-0022`), never restating ADR-0023's own text. `SKILL.md` gains two in-place citations (Section 5's intro line, the References & tools table's `rubric.md` row) with zero net new body lines — the F6 500-line cap had zero slack (body already at exactly 500) so both additions extend existing lines rather than inserting new ones; `skill_lint.py` confirms F6 still clean. Adjacent to, not overlapping, #671/PR #690's `references/organizing-axis.md` (tables *which unit holds the plan*, not the substrate choice). Fresh-context `harness:skill-checker` pass on the semantic reference edit: ship (no fixes owed — faithfulness to ADR-0023 (a)/(b)/(c), no organizing-axis.md overlap, wiring, and the F6 net-zero-line claim all verified).
 v2.28.0 · 2026-08-18 · closes #686 (ADR-0023 decision (c) follow-up): `dispatch-ticket`'s Phase 5
 stage 2 gains sub-stage 2a, a fleet-native plan-approval write-gate, decoupled from `agent-teams`

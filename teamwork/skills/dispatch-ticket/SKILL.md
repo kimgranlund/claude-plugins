@@ -301,7 +301,26 @@ discover and repair branch/worktree residue by hand):
    rule, dry-run traces: `references/plan-approval-write-gate.md`, `references/
    write-gate-dry-run.md` (F6 split) — read before this stage's first live firing.
 
-   **Immediately before opening the PR** (once 2a's accept marker has landed), run
+   **Pre-accept grant — a narrow, explicit skip of 2a's hold alone (gh#713, lld-0022 Resolution
+   5).** Read the sealed dispatch prompt for the literal line `accept-grant: authorized`, placed
+   at dispatch time on the same explicit-never-inferred discipline as ADR-0012's own grant — never
+   inferred from `size:small`, "unattended", or tone. **Absent → this paragraph does not exist**:
+   the hold above runs exactly as written. **Present → evaluate all four conjuncts** (AG1
+   `size:small` · AG2 single-plugin · AG3 checker-green · AG4 gate-green, each a read of what
+   QB1, QB2, Phase 4's checker, and the gate run below already produce — never a second
+   detector) once Phase 4's checker verdict and this stage's own gate run are both in hand. All
+   four green →
+   **skip only this hold** — no accept marker is produced, straight to the version-collision
+   re-checks and PR-open below. Any conjunct absent, failing, or indeterminate → the hold stands
+   unmodified, full accept round owed, never a retry lever. **This skips 2a alone** — stage 2b's
+   own ADR-0012 predicate, the fresh-context checker, and the gate run stay mandatory on every
+   path, granted or not; a build clearing AG1–AG4 still needs its own separate `auto-merge:
+   authorized` grant and all-green QB0–QB7 to also skip the human merge. Full conjunct
+   definitions: `references/plan-approval-write-gate.md` (F6 split) — read before this branch's
+   first live firing.
+
+   **Immediately before opening the PR** (once 2a's accept marker has landed, or — on a granted
+   dispatch clearing AG1–AG4 above — once those four conjuncts have), run
    Phase 3's version-collision re-checks — both of them: re-run `version_claim_check.py` (the
    CLAIM race) AND fetch + re-read every touched plugin's version off `origin/main` and bump from
    THAT value (the VALUE race, #445) — see Phase 3 for why one check doesn't catch the other.
@@ -313,10 +332,12 @@ discover and repair branch/worktree residue by hand):
    doc-writing-rules' TICKET contract, `## Rejected alternatives`; same enforcement tier as the
    Findings write-back below — a bare "nothing rejected" is a valid entry when the path was
    uncontested, an absent line at PR-open is not), and **the accept marker's own comment URL**
-   (the PR body cites what authorized its own opening). **The moment the accept-triggered PR
-   opens (git-native only), remove the `in-flight` claim label** — same removal point as before
-   this stage existed (#192/#199), just gated by one more precondition now (`lld-0022` Resolution
-   4). Claim comment and assignee stay untouched — display change only, not a release.
+   (the PR body cites what authorized its own opening — on a granted dispatch, cite the grant line
+   and the AG1–AG4 snapshot in its place; no accept marker exists to cite). **The moment the PR
+   opens (accept-triggered, or grant-triggered per the pre-accept grant above; git-native only),
+   remove the `in-flight` claim label** — same removal point as before this stage existed
+   (#192/#199), just gated by one more precondition now (`lld-0022` Resolution 4). Claim comment
+   and assignee stay untouched — display change only, not a release.
    **Gate-run time budget — the local aggregate run ONCE, never ground, under a bounded wrapper
    (~900s default, overridable).** Full mechanics, the exhaustion/partially-run handling, and the
    incidents this closes: `references/gate-run-time-budget.md` (F6 split).
@@ -343,8 +364,9 @@ discover and repair branch/worktree residue by hand):
    the host checkout (untouched when isolated; "built directly in host checkout, skip
    preconditions met" when the #204 skip ran instead) — never silently omitted.
 4. **A typed retirement handoff proving each step**: the PR URL, **the accept marker's own comment
-   URL (stage 2a)**, the Findings write-back's own comment URL on the resolved backend (below),
-   and one explicit environment-clean line naming
+   URL (stage 2a) — or, on a granted dispatch that skipped the hold (gh#713), the `accept-grant:
+   authorized` line plus the AG1–AG4 snapshot in its place**, the Findings write-back's own
+   comment URL on the resolved backend (below), and one explicit environment-clean line naming
    stage 3's three axes by result — never a silent "done". When stage 2b FIRED, three more fields
    ride along: `merge-sha: <sha>` · `campaign-close: <its summary line>` · `qb-snapshot: <the
    eight conjunct results>`. When stage 2b evaluated and MISSED, the handoff names the failed
@@ -356,7 +378,8 @@ discover and repair branch/worktree residue by hand):
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
 enumerated inputs + budget + the typed return + stage 2a's **accept-marker requirement
-(ADR-0023 (c))** + stage 2's own `--remove-label in-flight` call,
+(ADR-0023 (c)) — or, on a granted dispatch, the `accept-grant: authorized` line plus the AG1–AG4
+conjuncts (gh#713)** + stage 2's own `--remove-label in-flight` call,
 its **`version_claim_check.py` re-run (the CLAIM race)**, and its **origin/main version
 re-read-and-rebump (the VALUE race)** at
 the moment the PR opens (all four named explicitly on a task or big-feature dispatch, since the dispatched
