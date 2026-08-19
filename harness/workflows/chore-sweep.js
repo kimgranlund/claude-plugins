@@ -52,7 +52,11 @@ if (scope.length === 0) {
 // it explicitly, and the planner's returned plan is checked against it below — a planner payload
 // that is really a PRIOR firing's plan returned verbatim (the live incident this issue traces to)
 // carries that prior firing's own stamp instead, which this key catches.
-const firingKey = new Date().toISOString()
+// Date.now()/new Date() are unavailable in workflow scripts (they break resume) — the caller
+// passes the firing timestamp via args; a missing one is a usage error, never re-minted here.
+const firingKey = ARGS && typeof ARGS.timestamp === 'string' && ARGS.timestamp.length > 0
+  ? ARGS.timestamp
+  : (() => { throw new Error('chore-sweep workflow requires args.timestamp (ISO-8601 firing key)') })()
 
 phase('Sweep')
 const seatResults = await parallel(
