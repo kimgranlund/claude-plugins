@@ -3,11 +3,12 @@ name: llm-gateway-facts
 description: >-
   The swappable multi-LLM-provider gateway pattern — project-agnostic. Use for multiple providers
   behind one interface, an API key off the client, a dev-time proxy for browser LLM calls, a key
-  leaking into the bundle, one config as picker AND allowlist, a stateless conversation. Grounded
-  in a shipped implementation (`@agent-ui/a2ui`). ANSWERS; does not build. NOT an implementation
-  ask (implement/build/write the code — route to your own project's build seat). NOT for the
-  streamed wire format (llm-streaming-facts); NOT for A2UI-specific concerns (agent-protocols
-  plugin).
+  leaking into the bundle, one config as picker AND allowlist, a stateless conversation,
+  single-flight 401 refresh, retry/backoff vs. streaming pass-through, live-gateway diagnostics,
+  model tiering. Grounded in a shipped implementation (`@agent-ui/a2ui`). ANSWERS; does not build.
+  NOT an implementation ask (implement/build/write the code — route to your own project's build
+  seat). NOT for the streamed wire format (llm-streaming-facts); NOT for A2UI-specific concerns
+  (agent-protocols plugin).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -33,6 +34,9 @@ to do this."
 | Retry policy + streaming pass-through — "should this request retry", "full jitter backoff", "no middleware may read the streamed body" | `references/retry-policy-and-streaming-passthrough.md` |
 | Live-gateway ops — "model X doesn't work in the chat" (the per-model curl matrix, first), "the upstream is 503-storming", "which model tier for which work" | `references/live-ops-diagnostics-and-model-tiering.md` |
 | Provenance — worked-example source vs platform-primitive source | `references/sources.md` |
+
+The table above is at the 7-axis `pack-writing-rules` ceiling; the next axis proposal triggers a
+`plan-skill-split`/INDEX conversation rather than an eighth row.
 
 ## Consult procedure
 

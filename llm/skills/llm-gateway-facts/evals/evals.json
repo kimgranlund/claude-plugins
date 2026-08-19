@@ -1,6 +1,6 @@
 {
  "skill": "llm-gateway-facts",
- "note": "Routing corpus of record (minted 2026-07-13, not yet run). Positives: imperative / diagnostic / symptom / indirect phrasings of the gateway-pattern asks across the four axes (adapter seam, registry + trust boundary, dev-proxy + bundler footguns, stateless session/turn model). Negatives drawn adversarially from the dangerous near-neighbors: llm-streaming-facts (the sibling pack — SSE/JSONL wire-format concerns, a DIFFERENT layer), the agent-protocols plugin's a2ui-chat-agent-facts (this repo's OWN dated implementation, not the portable pattern) and a2ui-protocol-facts (the A2UI wire shape), plus a genuine build/implement ask (this pack answers, it does not build). Fixed 2026-08-19 (issue #715, check-routing sweep #676): n09-n11 (implement/build/write asks) were leaking to this pack — a passive 'ANSWERS; does not build' clause is not an explicit NOT fence for those verbs. Added an explicit 'NOT an implementation ask (implement/build/write the code)' fence; n09-n11 stay no-trigger.",
+ "note": "Routing corpus of record (minted 2026-07-13, not yet run; extended 2026-08-19 for issue #743). Positives: imperative / diagnostic / symptom / indirect phrasings of the gateway-pattern asks across all seven axes (adapter seam, registry + trust boundary, dev-proxy + bundler footguns, stateless session/turn model, single-flight 401 refresh, retry policy + streaming pass-through, live-gateway ops/model tiering — the pack's own 7-axis ceiling, pack-writing-rules). Negatives drawn adversarially from the dangerous near-neighbors: llm-streaming-facts (the sibling pack — SSE/JSONL wire-format concerns, a DIFFERENT layer), the agent-protocols plugin's a2ui-chat-agent-facts (this repo's OWN dated implementation, not the portable pattern) and a2ui-protocol-facts (the A2UI wire shape), plus a genuine build/implement ask (this pack answers, it does not build). Fixed 2026-08-19 (issue #715, check-routing sweep #676): n09-n11 (implement/build/write asks) were leaking to this pack — a passive 'ANSWERS; does not build' clause is not an explicit NOT fence for those verbs. Added an explicit 'NOT an implementation ask (implement/build/write the code)' fence; n09-n11 stay no-trigger.",
  "cases": [
   { "id": "t01", "prompt": "how do I support multiple LLM providers behind one interface", "expect": "trigger" },
   { "id": "t02", "prompt": "how do I keep an API key off the client and out of a static build", "expect": "trigger" },
@@ -18,6 +18,12 @@
   { "id": "t14", "prompt": "what's a clean way to inject a secret into an adapter without reading it at module scope", "expect": "trigger" },
   { "id": "t15", "prompt": "why does my picker UI offer a model the server then rejects", "expect": "trigger" },
   { "id": "t16", "prompt": "design the trust boundary for a browser app that calls a hosted LLM", "expect": "trigger" },
+  { "id": "t17", "prompt": "concurrent requests all hit a 401 at once, how do I refresh the token exactly once", "expect": "trigger" },
+  { "id": "t18", "prompt": "how do I replay a streaming request body after a token refresh", "expect": "trigger" },
+  { "id": "t19", "prompt": "should this failed LLM gateway request retry, and with what backoff", "expect": "trigger" },
+  { "id": "t20", "prompt": "should a failed POST request retry automatically, or does that risk a duplicate side effect", "expect": "trigger" },
+  { "id": "t21", "prompt": "model X doesn't work in the chat, what should I check first", "expect": "trigger" },
+  { "id": "t22", "prompt": "which model tier should planning vs execution work use", "expect": "trigger" },
   { "id": "n01", "prompt": "why is my SSE parser dropping text fragments", "expect": "no-trigger" },
   { "id": "n02", "prompt": "what's the exact event sequence Anthropic streams", "expect": "no-trigger" },
   { "id": "n03", "prompt": "how do I buffer a chunked SSE response correctly", "expect": "no-trigger" },

@@ -1,6 +1,6 @@
 {
   "skill": "llm-gateway-facts",
-  "_note": "Routing corpus of record (minted 2026-07-13). Positives: imperative / diagnostic / symptom / indirect phrasings of the gateway-pattern asks across the four axes (adapter seam, registry + trust boundary, dev-proxy + bundler footguns, stateless session/turn model). Negatives drawn adversarially from the dangerous near-neighbors: llm-streaming-facts (the sibling pack — SSE/JSONL wire-format concerns, a DIFFERENT layer), the agent-protocols plugin's a2ui-chat-agent-facts (this repo's OWN dated implementation, not the portable pattern) and a2ui-protocol-facts (the A2UI wire shape), plus a genuine build/implement ask (this pack answers, it does not build).",
+  "_note": "Routing corpus of record (minted 2026-07-13; extended 2026-08-19 for issue #743). Positives: imperative / diagnostic / symptom / indirect phrasings of the gateway-pattern asks across all seven axes (adapter seam, registry + trust boundary, dev-proxy + bundler footguns, stateless session/turn model, single-flight 401 refresh, retry policy + streaming pass-through, live-gateway ops/model tiering — the pack's own 7-axis ceiling, pack-writing-rules). Negatives drawn adversarially from the dangerous near-neighbors: llm-streaming-facts (the sibling pack — SSE/JSONL wire-format concerns, a DIFFERENT layer), the agent-protocols plugin's a2ui-chat-agent-facts (this repo's OWN dated implementation, not the portable pattern) and a2ui-protocol-facts (the A2UI wire shape), plus a genuine build/implement ask (this pack answers, it does not build).",
   "positives": [
     "how do I support multiple LLM providers behind one interface",
     "how do I keep an API key off the client and out of a static build",
@@ -17,7 +17,13 @@
     "how do I validate a client-chosen model against an allowlist before reading a secret",
     "what's a clean way to inject a secret into an adapter without reading it at module scope",
     "why does my picker UI offer a model the server then rejects",
-    "design the trust boundary for a browser app that calls a hosted LLM"
+    "design the trust boundary for a browser app that calls a hosted LLM",
+    "concurrent requests all hit a 401 at once, how do I refresh the token exactly once",
+    "how do I replay a streaming request body after a token refresh",
+    "should this failed LLM gateway request retry, and with what backoff",
+    "should a failed POST request retry automatically, or does that risk a duplicate side effect",
+    "model X doesn't work in the chat, what should I check first",
+    "which model tier should planning vs execution work use"
   ],
   "negatives": [
     "why is my SSE parser dropping text fragments",
