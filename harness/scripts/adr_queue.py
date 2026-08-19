@@ -211,25 +211,43 @@ def selftest():
         git("commit", "-q", "-m", "seed")
         git("branch", "stale-worktree")  # cut BEFORE the covering reference lands
 
-        refs_dir = Path(repo, "skills", "fleet-rules", "references")
+        # plugin-NESTED layout deliberately: <plugin>/skills/... — the 4th adr-0023 false
+        # positive (2026-08-19) came from an unanchored 'skills/*' pathspec that only matched a
+        # root-level skills/ dir; the fixture must exercise the layout that actually failed.
+        refs_dir = Path(repo, "teamwork", "skills", "fleet-rules", "references")
         refs_dir.mkdir(parents=True)
         (refs_dir / "substrate-choice.md").write_text(
             "covers adr-0023's substrate-choice decision\n", encoding="utf-8"
         )
-        git("add", "skills")
-        git("commit", "-q", "-m", "add covering reference (adr-0023)")
+        # root-level layout too — both must stay covered by the one pathspec
+        root_refs = Path(repo, "skills", "root-pack", "references")
+        root_refs.mkdir(parents=True)
+        (root_refs / "root-note.md").write_text("covers adr-0099 at root level\n", encoding="utf-8")
+        git("add", "teamwork", "skills")
+        git("commit", "-q", "-m", "add covering references (adr-0023 nested, adr-0099 root)")
 
         git("checkout", "-q", "stale-worktree")  # simulate the stale, worktree-isolated checkout
         assert not (refs_dir / "substrate-choice.md").exists(), \
             "fixture setup bug: the stale branch must not carry the covering reference"
 
-        pathspec = "skills/*/references/*.md"
+        pathspec = "*skills/*/references/*.md"
 
         # positive case: covered on main, absent from the current (stale) working tree — must
         # read as covered, i.e. must NOT be queued as a stale-citation candidate
         assert citation_on_ref("adr-0023", "main", pathspec, cwd=repo) is True, (
             "a term covered on main must read as covered even when grepped from a stale branch "
             "whose own working tree lacks the file — this is the #752 regression itself"
+        )
+
+        # plugin-nested layout: the 4th false positive's exact shape — an UNANCHORED
+        # 'skills/*/references/*.md' must fail this (negative control on the old pathspec),
+        # the anchored '*skills/...' must pass it
+        assert citation_on_ref("adr-0023", "main", "skills/*/references/*.md", cwd=repo) is False, (
+            "negative control: the old unanchored pathspec must NOT see the plugin-nested file — "
+            "if it does, this fixture stopped exercising the failing layout"
+        )
+        assert citation_on_ref("adr-0099", "main", pathspec, cwd=repo) is True, (
+            "root-level skills/ layout must stay covered by the anchored pathspec"
         )
 
         # negative control: a term that exists nowhere, not even on main, must still read as

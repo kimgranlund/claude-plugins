@@ -134,17 +134,17 @@ against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonou
    contract; this step supplies only the ADR's Decision clause and `file:line` as the input.
    **The already-covered call rides on `save-lessons`'s Phase 2 Placement grep — resolve that
    grep against `origin/main` exactly as step 3 below prescribes** (fetch, then `git grep -l
-   --no-color -e <term> origin/main -- 'skills/*/SKILL.md' 'skills/*/references/*.md'`), never
+   --no-color -e <term> origin/main -- '*skills/*/SKILL.md' '*skills/*/references/*.md'`), never
    the working tree alone; "already covered verbatim" on the ref rejects the candidate as a
    duplicate exactly as Phase 2 specifies — only the resolution target changes (issue #752).
 3. **For each `newly_superseded` ADR**, check the existing knowledge-pack corpus
-   (`skills/*/references/*.md`) for a citation of that ADR id — resolved against `origin/main`'s
+   (`*skills/*/references/*.md` — the leading `*` matches both a bare `.claude/skills/` estate and `<plugin>/skills/` layouts) for a citation of that ADR id — resolved against `origin/main`'s
    own tree, never the invoking checkout's working files (issue #752 — a worktree-isolated
    session branched before a covering reference merged upstream greps its own stale files and
    re-queues the exact same false positive every firing, since a session branched from an
    earlier commit structurally cannot see a reference that landed on main afterward). `git fetch
    origin main` first, then
-   `git grep -l --no-color -e <adr-id> origin/main -- 'skills/*/references/*.md'`
+   `git grep -l --no-color -e <adr-id> origin/main -- '*skills/*/references/*.md'`
    (or the GitHub contents/trees API where `git` isn't available) — a plain
    local grep of the working tree is never sufficient on its own, since it cannot distinguish "no
    one cites this" from "the citing file exists on main, this checkout just predates it."
