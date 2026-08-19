@@ -1,6 +1,6 @@
 {
  "skill": "chat-harness-routing-facts",
- "note": "Routing corpus of record (minted 2026-07-13; reciprocal negatives against tools-resources-and-services/knowledge-and-memory/observability added 2026-07-13 per independent audit, since those three siblings each explicitly name this skill as their own near-neighbor). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (skill vs hardcoded feature, model-invoked vs user-invoked species, routing + adversarial evals). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-guardrail-facts (general instruction-layering/guardrails, not skill-authoring/routing mechanics), chat-harness-workflow-facts (multi-AGENT composition/hand-offs, distinct from single-skill routing), chat-harness-tool-facts (deferring a TOOL catalog's loading shares the 'load on demand' shape but a different mechanism than a skill's own routing), chat-harness-memory-facts (persisting a fact across sessions, not routing a live request to a capability), chat-harness-logging-facts (measuring routing accuracy AFTER the fact, not the routing mechanism itself), plus a genuine build/implement ask (this pack answers, it does not build). Noted 2026-07-22 (the #79 diet re-judge, full 98-skill estate menu): t08/t11/t13/t14/t15/t16 are full-menu twins — every one is a first-person 'my skill' ask that harness's skill-writing-rules or check-routing legitimately owns when both menus are present; this suite was calibrated against the llm-only menu, where those siblings are absent. t06/t10 healed with restored dial/preload vocabulary in the same campaign. At floor; a per-plugin (llm-only) judge run remains the suite's own calibration context.",
+ "note": "Routing corpus of record (minted 2026-07-13; reciprocal negatives against tools-resources-and-services/knowledge-and-memory/observability added 2026-07-13 per independent audit, since those three siblings each explicitly name this skill as their own near-neighbor). Positives: imperative / diagnostic / symptom / indirect phrasings across the three axes (skill vs hardcoded feature, model-invoked vs user-invoked species, routing + adversarial evals). Negatives drawn adversarially from the dangerous near-neighbors: chat-harness-guardrail-facts (general instruction-layering/guardrails, not skill-authoring/routing mechanics), chat-harness-workflow-facts (multi-AGENT composition/hand-offs, distinct from single-skill routing), chat-harness-tool-facts (deferring a TOOL catalog's loading shares the 'load on demand' shape but a different mechanism than a skill's own routing), chat-harness-memory-facts (persisting a fact across sessions, not routing a live request to a capability), chat-harness-logging-facts (measuring routing accuracy AFTER the fact, not the routing mechanism itself), plus a genuine build/implement ask (this pack answers, it does not build). Noted 2026-07-22 (the #79 diet re-judge, full 98-skill estate menu): t08/t11/t13/t14/t15/t16 are full-menu twins — every one is a first-person 'my skill' ask that harness's skill-writing-rules or check-routing legitimately owns when both menus are present; this suite was calibrated against the llm-only menu, where those siblings are absent. t06/t10 healed with restored dial/preload vocabulary in the same campaign. At floor; a per-plugin (llm-only) judge run remains the suite's own calibration context. 2026-08-19 (#706, per the #676 sweep's 2-of-3 t07/t09 steal FROM chat-harness-logging-facts): n19/n20 added, mirroring logging-facts' own t07/t09 phrasing verbatim as explicit negatives here — this pack owns AUTHORING a new adversarial corpus (its own t13/t14/t16), logging-facts owns RE-RUNNING an existing one over repeated runs to track regression vs. judge noise; the description fence is now reciprocal in both packs.",
  "cases": [
   {
    "id": "t01",
@@ -175,6 +175,16 @@
   {
    "id": "n18",
    "prompt": "measure our routing accuracy over the last month of real traffic",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n19",
+   "prompt": "how do I measure whether my skill descriptions actually route correctly",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n20",
+   "prompt": "how do I build a held-out adversarial test suite for a skill's description",
    "expect": "no-trigger"
   }
  ]

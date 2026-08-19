@@ -3,10 +3,12 @@ name: chat-harness-logging-facts
 description: >-
   How a chat-agent harness makes its own behavior legible. Use for logging what the harness did,
   not what the user typed (hook tracing: PreToolUse/PostToolUse vs the transcript),
-  routing-accuracy via a held-out adversarial suite (judge noise vs regression vs structural
-  leak), and notification vs polling for background tasks. Grounded in verified hook mechanics +
-  a dated history; answers, no build. NOT agents that DO the work
-  (chat-harness-workflow-facts); NOT the routing mechanism (chat-harness-routing-facts).
+  RE-RUNNING an EXISTING held-out adversarial suite over repeated real runs to track routing
+  accuracy (judge noise vs regression vs structural leak), and notification vs polling for
+  background tasks. Grounded in verified hook mechanics + a dated history; answers, no build.
+  NOT agents that DO the work (chat-harness-workflow-facts); NOT the routing mechanism, NOR
+  authoring/writing a NEW adversarial eval corpus for one skill's own description
+  (chat-harness-routing-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

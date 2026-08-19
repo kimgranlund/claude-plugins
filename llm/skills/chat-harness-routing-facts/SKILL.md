@@ -4,10 +4,12 @@ description: >-
   How a chat-agent harness exposes capabilities as load-on-demand skills vs. an always-on cost,
   and how a request finds the right one. Use for skill-vs-hardcode, model- vs user-invoked
   (auto-trigger vs slash-only, user-invocable), what disable-model-invocation does incl. its
-  preload interaction, a skill that won't trigger, wrong skill firing, and testing that a
-  description actually routes — the measured, adversarial eval corpus. Grounded in Claude Code's mechanics. ANSWERS; does not build. NOT for guardrails
-  (chat-harness-guardrail-facts); NOT for multi-agent composition (chat-harness-workflow-facts);
-  NOT for a tool catalog's loading (chat-harness-tool-facts).
+  preload interaction, a skill that won't trigger, wrong skill firing, and AUTHORING/WRITING a
+  NEW held-out adversarial eval corpus so a description actually routes. Grounded in Claude
+  Code's mechanics. ANSWERS; does not build. NOT for guardrails (chat-harness-guardrail-facts);
+  NOT for multi-agent composition (chat-harness-workflow-facts); NOT for a tool catalog's loading
+  (chat-harness-tool-facts); NOT for RE-RUNNING an existing suite's accuracy over repeated real
+  runs / judge-noise-vs-regression triage (chat-harness-logging-facts).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -30,7 +32,7 @@ the only valid implementation.
 |---|---|
 | Skill vs hardcoded feature — "should this be a skill", "why hardcode this instead", "load-on-demand capability" | `references/authoring-a-skill-vs-a-hardcoded-feature.md` |
 | Model-invoked vs user-invoked — "should this auto-trigger or need a slash command", "disable-model-invocation", "user-invocable", "preload this into a subagent" | `references/invocation-species-model-vs-user-invoked.md` |
-| Routing + adversarial evals — "why did the wrong skill fire", "write a routing corpus", "test skill triggering", "measure routing accuracy over time" | `references/description-routing-and-adversarial-evals.md` |
+| Routing + adversarial evals — "why did the wrong skill fire", "write a routing corpus", "test skill triggering", "build a held-out adversarial eval suite" | `references/description-routing-and-adversarial-evals.md` |
 | Envelope framing / out-of-band signals — "a note vs. a trace vs. content on the same stream", "how do I tell a meta-line from a protocol message", "one bad field shouldn't break the whole envelope" | `references/envelope-framing-and-out-of-band-signals.md` |
 | Multi-producer id namespacing — "two producers writing to the same session collide on ids" | `references/multi-producer-namespacing.md` |
 | Model-declared routing facts — "the model said route to X but X doesn't exist, now what" | `references/model-declared-routing-integrity-check.md` |
