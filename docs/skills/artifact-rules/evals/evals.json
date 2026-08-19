@@ -1,6 +1,6 @@
 {
   "skill": "artifact-rules",
-  "note": "Trigger-routing suite, re-scoped 2026-08-18 (#650, lld-0020) after the pack slimmed to procedure-side standards only (content classification, script interface, refresh procedure). Positives are consult-only asks for the 3 REMAINING axes. Visual-styling asks that used to trigger this suite (mermaid <br/>, shell taste, token/theme questions) are now NEGATIVE cases here, fencing the new design:artifact-styling-rules sibling; design's own evals.json carries them as its positives.",
+  "note": "Trigger-routing suite, re-scoped 2026-08-18 (#650, lld-0020) after the pack slimmed to procedure-side standards only (content classification, script interface, refresh procedure), then extended 2026-08-19 (#649, lld-0013 v2 Resolution 8) with a 4th axis: records-tree composition. Positives are consult-only asks for the 4 declared axes. Visual-styling asks that used to trigger this suite (mermaid <br/>, shell taste, token/theme questions) are now NEGATIVE cases here, fencing the new design:artifact-styling-rules sibling; design's own evals.json carries them as its positives.",
   "cases": [
     {
       "id": "t01",

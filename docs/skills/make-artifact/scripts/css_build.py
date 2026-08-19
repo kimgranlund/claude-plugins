@@ -412,9 +412,13 @@ TYPE_DOCTRINE_BLOCK = """
    (or the missing-system fallback); faces are the doctrine's. Any --font-* custom property
    emitted above from the source system is still available as the OPT-IN override vehicle -- it is
    never bound to body/interactive text by this default block. To deliberately bind a source face
-   to body or interactive text instead, add an adjacent `/* override: <stated reason> */` comment
-   immediately before the overriding rule -- design:artifact-styling-rules' artifact_check.py's
-   doctrine-font-stack check honors exactly that comment as its suppression path. */
+   to body or interactive text instead, add an adjacent CSS comment starting with the word
+   override (followed by a colon and the stated reason) immediately before the overriding rule --
+   design:artifact-styling-rules' artifact_check.py's doctrine-font-stack check honors exactly
+   that comment as its suppression path. NOTE (never write a literal comment-close sequence inside
+   THIS comment's own text -- CSS comments do not nest, and the first such sequence encountered
+   terminates this whole block early, silently corrupting every rule below it -- #649 code-review
+   finding). */
 body, p, li, td, th, blockquote, figcaption {
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
@@ -613,6 +617,65 @@ FIXTURE_CONTAINER_GRAMMAR = {
         "info": "oklch(0.7000 0.1400 250.00)",
         "info-container": "oklch(0.3300 0.0600 250.00)",
         "on-danger": "oklch(1 0 0)",
+    },
+}
+
+# lld-0013 v2 Resolution 9.2 (#649) — the doctrine-neutral fallback: when the target project has
+# no design system AND `design` isn't installed to synthesize one, every one of the doctrine's 14
+# live roles is bound to a NEUTRAL grayscale value instead of failing or rendering unstyled. This
+# fixture is that fallback's own input shape — every REQUIRED_DOCTRINE_SHORT_ROLES role resolves
+# under the REFERENCE grammar (no `-container` signal), proving the neutral degrade builds clean
+# and complete, not just the colorful cases FIXTURE_TOKENS/FIXTURE_CONTAINER_GRAMMAR already cover.
+NEUTRAL_FALLBACK_FIXTURE = {
+    "colors": {
+        "neutral-background": "oklch(0.98 0 0)",
+        "neutral-surface": "oklch(0.94 0 0)",
+        "neutral-surface-high": "oklch(0.90 0 0)",
+        "neutral-surface-low": "oklch(0.96 0 0)",
+        "neutral-on-surface": "oklch(0.18 0 0)",
+        "neutral-on-surface-variant": "oklch(0.42 0 0)",
+        "neutral-placeholder": "oklch(0.62 0 0)",
+        "neutral-outline-variant": "oklch(0.82 0 0)",
+        "neutral-outline": "oklch(0.56 0 0)",
+        "primary": "oklch(0.40 0 0)",
+        "primary-hover": "oklch(0.34 0 0)",
+        "primary-soft": "oklch(0.88 0 0)",
+        "primary-on-primary": "oklch(1 0 0)",
+        "tertiary": "oklch(0.40 0 0)",
+        "danger": "oklch(0.40 0 0)",
+        "danger-soft": "oklch(0.88 0 0)",
+        "success": "oklch(0.40 0 0)",
+        "success-soft": "oklch(0.88 0 0)",
+        "warning": "oklch(0.40 0 0)",
+        "warning-soft": "oklch(0.88 0 0)",
+        "info": "oklch(0.40 0 0)",
+        "info-soft": "oklch(0.88 0 0)",
+        "on-danger": "oklch(1 0 0)",
+    },
+    "colorsDark": {
+        "neutral-background": "oklch(0.14 0 0)",
+        "neutral-surface": "oklch(0.20 0 0)",
+        "neutral-surface-high": "oklch(0.26 0 0)",
+        "neutral-surface-low": "oklch(0.17 0 0)",
+        "neutral-on-surface": "oklch(0.96 0 0)",
+        "neutral-on-surface-variant": "oklch(0.72 0 0)",
+        "neutral-placeholder": "oklch(0.52 0 0)",
+        "neutral-outline-variant": "oklch(0.34 0 0)",
+        "neutral-outline": "oklch(0.60 0 0)",
+        "primary": "oklch(0.70 0 0)",
+        "primary-hover": "oklch(0.76 0 0)",
+        "primary-soft": "oklch(0.30 0 0)",
+        "primary-on-primary": "oklch(0 0 0)",
+        "tertiary": "oklch(0.70 0 0)",
+        "danger": "oklch(0.70 0 0)",
+        "danger-soft": "oklch(0.30 0 0)",
+        "success": "oklch(0.70 0 0)",
+        "success-soft": "oklch(0.30 0 0)",
+        "warning": "oklch(0.70 0 0)",
+        "warning-soft": "oklch(0.30 0 0)",
+        "info": "oklch(0.70 0 0)",
+        "info-soft": "oklch(0.30 0 0)",
+        "on-danger": "oklch(0 0 0)",
     },
 }
 
@@ -884,7 +947,15 @@ def selftest():
     #    plugin boundary), kept in sync manually with artifact_check.py's own selftest fixture.
     _mirror_doctrine_sans_re = re.compile(r"system-ui")
     _mirror_doctrine_mono_re = re.compile(r"ui-monospace")
+    # Mirrors artifact_check.py's REAL OVERRIDE_COMMENT_RE + its 120-char preceding-window
+    # algorithm verbatim (checker finding, #649 code review — the prior mirror re-derived a
+    # simpler ad-hoc window that didn't actually match the checker's own bound).
     _mirror_override_comment_re = re.compile(r"/\*\s*override\b", re.I)
+    _OVERRIDE_WINDOW = 120
+
+    def _has_override_before(text, match_start):
+        start = max(0, match_start - _OVERRIDE_WINDOW)
+        return bool(_mirror_override_comment_re.search(text[start:match_start]))
 
     # 9a. doctrine-default assert — the DEFAULT block binds body/reading selectors to the
     #     system-ui stack and interactive selectors (button/a/[role=tab]/.badge/.kicker) to the
@@ -899,39 +970,103 @@ def selftest():
                     "(buttons, links, tabs, badges, kickers)")
     if TYPE_DOCTRINE_BLOCK not in css:
         errs.append("build_css output must include the type-doctrine default-binding block")
+    # NEGATIVE CONTROL (checker finding, #649 code review — the HIGH-severity bug this closes):
+    # a CSS comment never nests, so the doc comment's own text must never contain a literal
+    # comment-close sequence before its real, final one — that would silently terminate the
+    # comment early and turn the doctrine rules below it into a dropped, invalid selector. Strip
+    # exactly ONE leading comment lazily (the doc comment) and assert nothing else in the block
+    # still contains a stray close sequence.
+    _after_first_comment = re.sub(r"^\s*/\*.*?\*/", "", TYPE_DOCTRINE_BLOCK, count=1, flags=re.S)
+    _close_seq = "*" + "/"
+    if _close_seq in _after_first_comment:
+        errs.append("type-doctrine block: a stray comment-close sequence survives after the "
+                    "doc comment strips — CSS comments do not nest, and this would silently "
+                    "corrupt every rule below it (the #649 code-review HIGH finding)")
 
-    # 9b. NEGATIVE CONTROL — the default block must never bind a source system's own brand font
-    #     (a --font-* custom property, or any quoted family name) to body/interactive text with
-    #     no override comment; the default binding is ALWAYS the literal doctrine stack, never an
-    #     indirection through the source system's opt-in override vehicle.
-    # Strip the leading doc comment first — it legitimately NAMES "--font-*" in prose (explaining
-    # the escape hatch); the negative control below checks the actual emitted RULES, never the
-    # explanatory comment about them.
+    # 9b. NEGATIVE CONTROL — the default block must bind body/interactive text to EXACTLY the
+    #     doctrine's own literal stacks, never a source system's brand font (a --font-* custom
+    #     property, or any quoted family name) with no override comment. Tightened per checker
+    #     finding (a prior version only substring-checked "Custom Brand", which a real brand name
+    #     like 'GT America' would have passed): every font-family value in the default rules must
+    #     equal DOCTRINE_BODY_STACK or DOCTRINE_INTERACTIVE_STACK exactly, nothing else.
     _doctrine_rules_only = re.sub(r"/\*.*?\*/", "", TYPE_DOCTRINE_BLOCK, flags=re.S)
     if "--font-" in _doctrine_rules_only:
         errs.append("type-doctrine default block's actual RULES must never reference a source "
                     "--font-* custom property — the default binding is the literal doctrine "
                     "stack, not an override")
-    _default_body_rule = re.search(r"body,[^{]*\{[^}]*\}", TYPE_DOCTRINE_BLOCK)
-    if _default_body_rule and "Custom Brand" in _default_body_rule.group(0):
-        errs.append("the default body rule must never bind a brand font literal")
+    _default_values = re.findall(r"font-family\s*:\s*([^;]+);", _doctrine_rules_only)
+    if len(_default_values) != 2:
+        errs.append("type-doctrine default block must carry exactly 2 font-family declarations "
+                    "(body + interactive); found %d" % len(_default_values))
+    else:
+        _expected = {DOCTRINE_BODY_STACK, DOCTRINE_INTERACTIVE_STACK}
+        _actual = {v.strip() for v in _default_values}
+        if _actual != _expected:
+            errs.append("type-doctrine default block's font-family values must be EXACTLY the "
+                        "doctrine stacks (%r), never a brand literal; got %r" % (_expected, _actual))
 
     # 9c. override path — a page that DELIBERATELY binds a source brand face to body text, with
-    #     an adjacent `/* override: <reason> */` comment, must be recognized as justified by the
-    #     same override-detection logic artifact_check.py applies (comment precedes the rule).
-    #     Mirrors artifact_check.py's own selftest override fixture (see its docstring), proving
-    #     this script's understanding of the suppression path matches the checker's.
+    #     an adjacent override comment within the checker's real 120-char preceding window, must
+    #     be recognized as justified by the SAME algorithm artifact_check.py applies (mirrored via
+    #     _has_override_before above, not a re-derived simpler check — checker finding, #649 code
+    #     review: the prior version tested only its own locally-built fixture string against its
+    #     own locally-built regex, exercising no production code and unable to fail except by a
+    #     literal edit to that same fixture).
     overridden_fixture = ("/* override: brand requires this face for the masthead */\n"
                           "body { font-family: 'Custom Brand Font', serif; }")
     _rule_match = re.search(r"font-family\s*:\s*([^;]+);", overridden_fixture)
-    _preceding = overridden_fixture[: _rule_match.start()] if _rule_match else ""
-    if not _mirror_override_comment_re.search(_preceding):
-        errs.append("an adjacent '/* override: <reason> */' comment must be detected preceding "
-                    "the overriding font-family rule — the suppression path artifact_check.py "
-                    "honors (#684)")
-    if _mirror_doctrine_sans_re.search(_rule_match.group(1)) or _mirror_doctrine_mono_re.search(_rule_match.group(1)):
-        errs.append("the override fixture's brand face must itself be OFF doctrine (proving the "
-                    "override path is actually exercised, not accidentally on-doctrine already)")
+    if _rule_match is None:
+        errs.append("9c fixture must contain a font-family declaration to test against")
+    else:
+        if not _has_override_before(overridden_fixture, _rule_match.start()):
+            errs.append("an adjacent override comment within the checker's 120-char window must "
+                        "be detected preceding the overriding font-family rule — the suppression "
+                        "path artifact_check.py honors (#684)")
+        if (_mirror_doctrine_sans_re.search(_rule_match.group(1))
+                or _mirror_doctrine_mono_re.search(_rule_match.group(1))):
+            errs.append("the override fixture's brand face must itself be OFF doctrine (proving "
+                        "the override path is actually exercised, not accidentally on-doctrine "
+                        "already)")
+        # Reverse control alongside the negative controls above: a comment that exists but sits
+        # OUTSIDE the 120-char window must NOT suppress — proving _has_override_before actually
+        # bounds the search rather than scanning the whole preceding text unboundedly.
+        far_fixture = ("/* override: this is much too far away to count as adjacent under the "
+                       "checker's own 120-character window, padded well past that bound with "
+                       "filler text so the distance is unambiguous and mechanically provable "
+                       "rather than eyeballed */\n\n\n"
+                       "body { font-family: 'Custom Brand Font', serif; }")
+        far_match = re.search(r"font-family\s*:\s*([^;]+);", far_fixture)
+        if far_match is not None and _has_override_before(far_fixture, far_match.start()):
+            errs.append("an override comment sitting OUTSIDE the checker's 120-char window must "
+                        "NOT suppress — the mirror must actually bound its search, not scan "
+                        "unboundedly")
+
+    # 9d. DOCTRINE-NEUTRAL FALLBACK reverse control (lld-0013 v2 Resolution 9.2, #649) — a source
+    #     carrying neutral grayscale values for every required role must still build clean and
+    #     bind all 14 doctrine roles (checker finding: this branch had no fixture coverage at all).
+    norm_neutral, css_neutral = build(NEUTRAL_FALLBACK_FIXTURE)
+    missing_neutral = [r for r in REQUIRED_DOCTRINE_SHORT_ROLES if r not in norm_neutral["colors"]]
+    if missing_neutral:
+        errs.append("the doctrine-neutral fallback fixture must resolve all 14 doctrine roles; "
+                    "missing: %s" % ", ".join(missing_neutral))
+    for _role in REQUIRED_DOCTRINE_SHORT_ROLES:
+        if _role in norm_neutral["colors"] and ("--%s:" % _role) not in css_neutral:
+            errs.append("doctrine-neutral fallback: role --%s resolved in the normalized model "
+                        "but never appears bound in the emitted CSS" % _role)
+    # Grep-assert the provenance gap line's required text is the literal text SKILL.md documents
+    # (checker finding: the gap line existed only as unasserted prose before this). Read relative
+    # to this script's own location — never a hardcoded absolute path.
+    _skill_md_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "SKILL.md")
+    try:
+        with open(_skill_md_path, encoding="utf-8") as f:
+            _skill_md_text = " ".join(f.read().split())  # normalize whitespace/line-wraps
+    except OSError:
+        _skill_md_text = ""
+    _required_gap_text = ("design system: none — doctrine-neutral fallback; install the design "
+                          "plugin to synthesize one.")
+    if _required_gap_text not in _skill_md_text:
+        errs.append("make-artifact/SKILL.md must document the exact provenance gap line "
+                    "%r for the doctrine-neutral fallback — grep-assert failed" % _required_gap_text)
 
     return errs
 

@@ -29,7 +29,7 @@ chapters skip this phase entirely and proceed straight to Phase 2 exactly as bef
   types alone; harvest output, where it exists, folds into the Architecture chapters as additional
   source material, not a gate on whether composition runs at all.
 - **Diagrams are mechanism-first**, per `design:artifact-styling-rules`' `mermaid-reference.md`
-  (single-line node labels, detail on edges, one `:::accent`, intent classes) — this phase decides
+  (the styling doctrine, cited not restated here) — this phase decides
   WHICH mechanism earns a diagram (one per resolved decision fork or architecture, never a diagram
   per record just because a record exists); the styling pack owns how it renders. A concept or
   system chapter with nothing mechanism-shaped to diagram stays prose-only rather than manufacturing

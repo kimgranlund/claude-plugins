@@ -1,14 +1,14 @@
 ---
 name: make-artifact
 description: >-
-  Build or rebuild a rendered Artifact/report page — consume a design system
-  (DESIGN.md/tokens.json), or synthesize one via design when none exists, plus a report, handbook,
-  or project records tree (auto-composed into chapters) into one page: light/dark CSS, house
-  shell, themed mermaid, provenance footer. Use for 'turn this into an artifact page', 'rebuild
-  the Estate Handbook', 'render with our design system', 'compose a handbook from our records'.
-  Runs via /make-artifact [design-system path] [content source]. NOT the standards
+  Build/rebuild a rendered Artifact/report page — consume a design system
+  (DESIGN.md/tokens.json), or synthesize one via design if absent, plus a report, handbook, or
+  records tree (composed into chapters) into one page: light/dark CSS, house shell, themed
+  mermaid, provenance footer. Use for 'turn this into an artifact page', 'rebuild the Estate
+  Handbook', 'render with our design system', 'compose a handbook from our records'. Runs via
+  /make-artifact [design-system path] [content source]. NOT the standards
   (artifact-rules/artifact-styling-rules); NOT the source alone (make-design-system, make-palette,
-  pick-fonts); NOT make-doc; NOT markdown-to-markup.
+  pick-fonts); NOT doc drafting (make-doc); NOT plain markdown render (markdown-to-markup).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[design-system path] [content source]"
@@ -42,9 +42,10 @@ DESIGN.md nor tokens.json, render never fails and never falls back to unstyled:
   the generator line naming which skills produced it (Phase 5). Soft cross-plugin mentions only —
   invocation by name, no preload, no cross-plugin `${CLAUDE_PLUGIN_ROOT}` path.
 - **`design` NOT installed → doctrine-neutral fallback, gap named.** Emit a neutral-monochrome page
-  on the artifact type doctrine's own faces and shell (Phase 4's 14 live roles bound to neutral
-  values, system-ui body, mono interactive, doctrine widths) — never an error exit, never a bare
-  browser-default page. Name the gap in the provenance footer: "design system: none —
+  on the artifact type doctrine's own faces and shell — Phase 2's `css_build.py` binds the
+  14 live roles (`design:artifact-styling-rules`' `token-architecture.md`'s inventory) to neutral
+  values, and Phase 4 binds system-ui body / mono interactive / doctrine widths — never an error
+  exit, never a bare browser-default page. Name the gap in the provenance footer: "design system: none —
   doctrine-neutral fallback; install the design plugin to synthesize one."
 - Either branch emits **resolved literals** (a frozen projection), never a live token/ramp binding
   — portable, CSP-friendly, and exactly what `css_build.py` already emits for a real source system.

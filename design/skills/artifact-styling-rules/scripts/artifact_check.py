@@ -415,9 +415,13 @@ CSS_BUILD_OUTPUT_FIXTURE = """
    (or the missing-system fallback); faces are the doctrine's. Any --font-* custom property
    emitted above from the source system is still available as the OPT-IN override vehicle -- it is
    never bound to body/interactive text by this default block. To deliberately bind a source face
-   to body or interactive text instead, add an adjacent `/* override: <stated reason> */` comment
-   immediately before the overriding rule -- design:artifact-styling-rules' artifact_check.py's
-   doctrine-font-stack check honors exactly that comment as its suppression path. */
+   to body or interactive text instead, add an adjacent CSS comment starting with the word
+   override (followed by a colon and the stated reason) immediately before the overriding rule --
+   design:artifact-styling-rules' artifact_check.py's doctrine-font-stack check honors exactly
+   that comment as its suppression path. NOTE (never write a literal comment-close sequence inside
+   THIS comment's own text -- CSS comments do not nest, and the first such sequence encountered
+   terminates this whole block early, silently corrupting every rule below it -- #649 code-review
+   finding). */
 body, p, li, td, th, blockquote, figcaption {
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
