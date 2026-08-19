@@ -32,7 +32,7 @@ claim cites its source file:line or an ADR/SPEC clause.
 | Providers & keys — "wire a new provider", "add a model", "where's the key?", "is it safe?", "the trust boundary", "the VITE_ footgun" | `references/provider-model-seam-and-trust-boundary.md` |
 | The Anthropic SSE wire contract — "why did my SSE parsing break", "what's the exact event sequence", "why is text getting dropped mid-stream", "the buffering assumption", "the error sentinel" | `references/anthropic-sse-wire-contract.md` |
 | The switcher & overlay — "the in-chat provider/model picker", "how the live overlay is wired dev-only" | `references/switcher-and-live-overlay.md` |
-| The conversational channel & asks — "the note beside the stream", "clarify/boundary asks", "the mode axis", "mini-skills", "wantResponse routing" (ADR-0088..0091/0097) | `references/conversational-reasoning-and-click-routing-gap.md` |
+| The conversational channel & asks — "the note beside the stream", "clarify/boundary asks", "the mode axis", "mini-skills", "wantResponse routing" (ADR-0088..0091/0097), the meta-line's SIX reserved arms (ask/plan/personaPatch/flowEnd/team/target — ADR-0174/0178/0198/0204/0206) + flow-completion conduct | `references/conversational-reasoning-and-click-routing-gap.md` |
 | Provenance — where a claim comes from | `references/sources.md` |
 
 ## Consult procedure

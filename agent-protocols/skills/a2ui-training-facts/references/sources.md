@@ -56,3 +56,13 @@ client/server role-vocabulary claim existed anywhere in this pack to sweep (grep
 ## What is corpus-backed vs general knowledge
 
 Everything in this pack's references is corpus-backed (file:line or ADR/SPEC clause). Where an answer leans on general knowledge — e.g. what MinHash/TF-IDF *are* as algorithms — say so and keep the corpus-specific parameters (128 perms, k=3, θ=0.9, TF-IDF-not-embeddings) as the cited part. Anything the code marks "designed but not built" (the `repair()` orchestrator, `score()`, lift measurement — see `references/retrieval-and-repair-loop.md`) must be flagged as specced-not-shipped, never described as working.
+
+## Harvest note — 2026-08-19 (durable dispositions, importer law, teaching lanes)
+
+The 2026-08-19 UPDATE sections cite ADR texts fetched verbatim from `kimgranlund/agent-ui` via the
+GitHub contents API on 2026-08-19 (ADR-0165/0198/0207 — `accepted` at fetch), the repo-local
+`a2ui-corpus-curation` halt catalog + `meta-line.ts`/`grammar.md` reads at head `26742a9c`, and
+GH #1262/#1279/#1346/#1355 + PR #1326/#1342 bodies read the same day. [verified], that date. The
+GH #1346 halt text and the archive mechanics are shipped behavior per those records; if a cited
+`import-seeds` flag or halt message is about to be acted on, re-grep the tool source first (the
+standing line-drift discipline).

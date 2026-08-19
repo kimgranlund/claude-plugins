@@ -21,7 +21,7 @@ retrieval axes, one per reference — each answering a distinct class of ask.
 
 | Ask | Load |
 |---|---|
-| Message flow — "what happens on createSurface / updateComponents / deleteSurface?", "why isn't my tree rendering?", "how is the stream dispatched?" | `references/message-lifecycle.md` |
+| Message flow — "what happens on createSurface / updateComponents / deleteSurface?", "why isn't my tree rendering?", "how is the stream dispatched?", surface-lifecycle conduct (root-once, scene swaps, retiring a slot), card anatomy (CardHeader/CardContent/CardFooter laws, the FormProvider gate shape) | `references/message-lifecycle.md` |
 | Binding a value — "literal vs {path} vs {call}?", "how does updateDataModel propagate?", "why did only one widget update?", "is this pointer valid?" | `references/bindings-and-data-model.md` |
 | List iteration — "how do dynamic lists render?", "why no per-item key?", "how does a relative binding resolve inside a list item?" | `references/dynamic-lists.md` |
 | Interaction round-trip — "what does an action message contain?", "how does actionResponse correlate?", "how does two-way input work?", "wantResponse / sendDataModel?" | `references/actions-and-two-way-input.md` |

@@ -91,6 +91,25 @@ downstream consuming the artifact `[estate — a2a/src/protocol/validate.ts:255-
 > MAY pick any supported transport from `additionalInterfaces` otherwise; SHOULD implement
 > fallback on failure; MUST use the URL matching the selected transport.
 
+## Discovery hygiene — what deliberately does NOT go on a card `[estate]`
+
+**[verified]** 2026-08-19 against agent-ui ADR-0203 (accepted, incl. its ratified 2026-08-18
+amendment; fetched verbatim from `kimgranlund/agent-ui`). The card is a DISCOVERY surface — what a
+peer needs to select an agent and open a conversation — never a channel for orchestration-internal
+configuration. The worked boundary: agent-ui's team records carry an optional per-member
+`instructions` field (free-text GM-facing guidance — "only for on-prem dining questions", "always
+confirm dates before consulting"), consumed by the team-prompt composer ONLY; the estate's
+card-derivation mapper (`teamMemberToAgentCard`, site-side, pinned `protocolVersion: '0.3.0'`)
+**deliberately does NOT carry it** — "an instruction is GM-internal guidance, not a
+discovery-surface fact" (ADR-0203 amendment). What DOES map: `name`/`description` from the agent
+record, `skills[]`/`AgentSkill.tags` from the enabled capability labels — the fields the v0.3.0
+card declares for selection (HV-7/HV-11, above). Conduct: when asked "should X go on our
+AgentCard?", classify X — a fact a STRANGER needs to pick and address this agent (declare it) vs
+guidance for a party that already holds internal context (keep it in the internal prompt/record;
+publishing it leaks coordination internals and bloats the card without aiding selection). The same
+ADR keeps cards derivation-only in that estate — derived locally for inspection/export, never
+served — so a card claim is checkable against its source record at mint time.
+
 ## Worked example
 
 `card.referee.json` — the arena referee's validator-clean card fixture

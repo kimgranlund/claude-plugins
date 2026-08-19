@@ -86,3 +86,13 @@ user asks about formal ratification specifically.
 
 A claim naming a `file:line` is a claim about the code AT WRITING (2026-07-07). Line numbers drift;
 before recommending an action on a live claim, re-Grep the symbol rather than trusting the line.
+
+## Harvest note — 2026-08-19 (wire-mark law, enum widening, admission-design tests)
+
+The 2026-08-19 UPDATE sections in `component-definition-contract.md` and
+`coverage-policy-and-drift-gates.md` are grounded in ADR texts fetched verbatim from
+`kimgranlund/agent-ui` via the GitHub contents API on 2026-08-19 (ADR-0107/0201/0205/0207/0211 —
+all `accepted` at fetch time), `catalog/conformance.ts` + `site/lib/a2ui-catalog-tiers.ts` read at
+head `26742a9c`, and GH #1262/#1328/#1329/#1332 + PR #1326/#1342/#1404 bodies read the same day.
+[verified], that date — one trust rung above this pack's original 2026-07-07 working-tree reads for
+the cited claims.

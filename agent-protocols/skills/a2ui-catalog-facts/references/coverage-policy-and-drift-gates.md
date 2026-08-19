@@ -101,3 +101,58 @@ Without it, a drained-but-not-removed seed stays silently green forever (the typ
 catalog-covered, so the coverage checks pass; the stale entry sits inert). Lesson: a stopgap set
 needs BOTH directions gated — "nothing missing" AND "no residue" — and the standing gate must call
 the same predicate the negative control proves, never a parallel assertion form (two forms drift).
+
+---
+
+## UPDATE 2026-08-19 — three admission-design tests: mint-vs-compose (both directions), the smallest-floor, and chrome ownership
+
+**[verified]** 2026-08-19 against the ADR texts fetched verbatim from `kimgranlund/agent-ui`
+(ADR-0201, ADR-0107, ADR-0205 — all `accepted`) and GH #1332's ruled Findings (commit `46d0d4e7`,
+landed via PR #1404). Coverage says every shipped control is catalogued; these three tests decide
+what gets to EXIST as vocabulary in the first place.
+
+**Mint-vs-compose runs in BOTH directions.** The standing test (ADR-0175's reference, applied in
+ADR-0201's Context) asks whether a recurring payload shape earns a minted component or stays a
+composed grammar pattern. The forward direction is familiar; the REVERSE direction is the one
+answerers miss: **a composed grammar pattern is RETIRED by a mint when one of its laws becomes
+enforceable by construction.** Worked instance — ADR-0201's `ui-description-list`: the receipt
+lived as a taught composition (Column of label/value Rows, GH #1174, "written to be superseded")
+with three structural weaknesses — the empty-value omission law was PROMPT-enforced only, the
+gap/align rhythm was re-derived per payload (drift the validator cannot see), and a 6-field receipt
+cost ~19 nodes. The mint moved the omission law into `cleanDescriptionRows` (a valueless row is
+now UNREPRESENTABLE — dropped before it exists as property state), made the rhythm CSS, cut the
+payload to 1 node + 6 bindable data entries — and the grammar clause was repointed in ONE edit,
+its surviving laws (producer-side humanization, sentence-case headers, never `justify: between`)
+riding the new clause verbatim. Answer conduct: when a composition pattern's laws keep being
+violated by producers, that is a MINT signal, not a teach-harder signal.
+
+**The smallest-floor-that-earns-the-name scoping test — two worked instances.** When a family's
+scope explodes at a known cliff, v1 admits the SMALLEST vocabulary that still earns the type's
+name, and every escalation is fenced as a NEW intake. ADR-0107 drew the fence (charts: axis-free
+`Sparkline` + `BarChart`; "any axis-bearing type is a new intake"); ADR-0205 is that named intake
+arriving — and it ran the same test AGAIN one level down: the smallest axis vocabulary that
+distinguishes `LineChart` from `Sparkline` is a baseline line + always-shown min/max labels,
+single-series only — because multi-series drags a legend (multiple unlabeled one-color lines are
+not an accessible encoding) and a legend is the NEXT escalation the fence exists to hold.
+"Shipping multi-series without a legend would be a silent accessibility regression; shipping it
+WITH a legend re-opens exactly the scope explosion" (ADR-0205 cl.2). The floor is honest, not
+minimal-for-its-own-sake: min/max labels are mandatory precisely because an axis-bearing chart
+with no visible axis values would not earn the name.
+
+**NESTED_ONLY vs browsable: the discriminator is CHROME OWNERSHIP, not family membership.** The
+composite-exemption above says sub-parts are parent-declared; the site-tier question "does this
+type get its own browsable card?" has its own ruled test (GH #1332 Findings, 2026-08-19): a type
+whose visual identity is owned by its HOST's token chain has no standalone identity BY RULED
+ARCHITECTURE and folds into its owner's card. `Segment` folded — `segment.css` deliberately owns
+zero chrome (every sized value is the host segmented-control's own token chain, ADR-0095 cl.3), so
+a standalone Segment card rendered bare text and `checked` painted nothing, in BOTH render modes.
+`Radio` is the deliberate contrast that STAYS browsable: `radio.css` owns its own ring + dot, so a
+lone Radio is standalone-legible — same family shape, opposite verdict. The catalog side is
+untouched either way — and note the axes do NOT coincide: `Segment` ships its own descriptor
+(`segment.md`), so it rides the fleet-derived gate with its OWN catalog row exactly like `Radio`
+(it is NOT in the parent-declared exempt set, which stays
+`CardContent/CardFooter/CardHeader/Option/Tab/TabPanel` — `index.test.ts:57` + the `Segment` row
+in `catalog.json`, both [verified] against origin/main 2026-08-19; GH #1332's own "parent-declared
+like Option/Tab" phrasing is loose on this point). NESTED_ONLY is a SITE/browse disposition, not a
+wire one — a type can be fleet-derived, row-carrying, and still fold its browse card into its
+owner's.

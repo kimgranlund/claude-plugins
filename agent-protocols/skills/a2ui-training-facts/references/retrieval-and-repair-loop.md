@@ -48,3 +48,45 @@ SPEC-R13 requires: when a pinned `catalogId`/version or `protocolVersion` change
 - **Lift measurement** (SPEC-R15, with-vs-without-corpus over a fixed eval set) — the flagship PRD-G5 metric; needs the eval corpus, so deferred.
 
 If asked about any of these, say plainly: the *contract* is specced, the *mechanism* is not yet built, and the named activation trigger is the first eval record + the harness eval wave. Do not describe them as shipped.
+
+---
+
+## UPDATE 2026-08-19 — teaching a producer the grammar: bind BOTH axes, then pick one of FOUR lanes
+
+**[verified]** 2026-08-19 against ADR-0207 (accepted; its A2 fork is the worked lane-choice
+decision), ADR-0198 cl.2, ADR-0091's shipped mini-skill mechanics, and GH #1279/#1355. The judged
+exemplar (this pack's subject) is ONE of four lanes producer-grammar knowledge ships through;
+answer "where does this teaching land?" from the lane table, not by defaulting to the corpus.
+
+**First law — bind BOTH axes per component: WHEN to use it AND what CONTENT SHAPE it takes.** The
+sentence-length-badge lesson (GH #1279): an unshaped Badge clause produced sentence-length pill
+headlines — the clause said when, never how much. Every teaching artifact since bounds usage AND
+shape (word counts, cardinality, placement — ADR-0207's register clause does this per member:
+"kicker is a 2–4 word uppercase eyebrow directly ABOVE a heading, never standalone prose"). A
+judged exemplar teaches shape implicitly; the OTHER lanes must spell it.
+
+**The four lanes, and when each fits** (ADR-0207 A2 weighed all of these against each other for
+one real clause; GH #1355 routed five untaught idioms across them):
+
+1. **A grammar clause** — unconditional, mode-invariant mechanics EVERY turn must obey (flow
+   completion, ADR-0198 cl.2 — "must be unconditional default behavior"; the Text-register
+   routing, ADR-0207 D3 at a measured +220 always-on tokens). Byte-pinned: lands with a
+   golden-baseline recapture. Fits: cross-cutting conduct no trigger vocabulary reaches reliably.
+2. **A mini-skill module** (~200-token budget, cap 3/turn, TF-IDF trigger-selected on USER text —
+   ADR-0091) — an INTENT-shaped idiom ("login form", "dashboard"). Fits only when a trigger
+   vocabulary actually reaches it; ADR-0207 A2 rejected this lane for register choice precisely
+   because a cross-cutting concern has no intent-shaped trigger, and a firing evicts a real idiom
+   from one of the 3 slots.
+3. **A node-idioms card** — the authoring-reference lane (the repo's payload-authoring corpus):
+   per-component idiomatic shape, ordering traps, bindable-prop guidance for a HUMAN or seat
+   composing payloads. Zero prompt-token cost; unreachable from the producer prompt path (that
+   unreachability is exactly why ADR-0207 A2 rejected a standalone doc for model-facing teaching).
+4. **A judged exemplar** — a corpus seed through judged admission (ADR-0068; never hand-admitted),
+   retrieved per-turn by TF-IDF intent match. Fits: a whole COMPOSED shape worth conditioning on
+   (GH #1355's done-when names it for the CRUD-list idiom; ADR-0207's S4 adds one exercising the
+   new registers). Costs tokens only on the turns retrieval selects it.
+
+Lane mechanics for 1–2 (prompt composition, budgets, selection) live in [[a2ui-chat-agent-facts]];
+this pack owns lane 4 end-to-end and this choice rubric as corpus doctrine — an exemplar is the
+EXPENSIVE lane (judged admission + standing re-validation forever), so it must earn its seat over
+a clause or a card, never be the reflex.
