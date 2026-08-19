@@ -9,7 +9,10 @@ description: >-
   (Material/SF/Carbon/Atlassian/Fluent), Material Symbols axes, WCAG floors,
   mirror/never-mirror taxonomy. ANSWERS only. NOT an icon build (make-component,
   screens); NOT verifying mirroring shipped (check-translations, screens); NOT icon-size
-  tokens (material-shape-facts); NOT contrast verification (check-colors).
+  tokens, nor the touch-target DP value around an icon — "how big must the touch target
+  around a 24dp icon be" is material-shape-facts' `--md-sys-size-*` ladder, not this
+  pack; "is this icon big enough to tap" stays here; NOT contrast verification
+  (check-colors).
 user-invocable: false
 disable-model-invocation: false
 ---

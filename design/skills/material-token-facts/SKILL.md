@@ -7,9 +7,10 @@ description: >-
   semantic glossary across the color/typography/geometry consumption guides. ANSWERS
   meaning only — not binding grammar, recipes, pairing laws, or bind-check: load the
   matching material-{color,type,shape}-facts skill. NOT for a raw hex/px value (the
-  owning consumption skill); NOT for M3-vs-extension history — "is this token M3
-  baseline" (each sibling's own extension table); NOT for a non-Material `--{prefix}-*`
-  kit (decline).
+  owning consumption skill); NEVER answers whether a token is M3 baseline or an
+  extension — "is surface-container M3 baseline or one of our extensions" is each
+  sibling's own extension table, not this glossary, however close it reads to "what a
+  token MEANS"; NOT for a non-Material `--{prefix}-*` kit (decline).
 disable-model-invocation: false
 user-invocable: false
 ---

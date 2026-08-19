@@ -1,6 +1,6 @@
 {
   "skill": "check-colors",
-  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: make-palette, color-contrast-facts, color-space-facts, color-theory-facts, check-focus, check-translations, check-speed, check-safety, check-whole-ui, make-component, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json",
+  "note": "Converted from the pre-migration personal corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the design plugin port. M2 corpus of record (excellence campaign batch 3, 2026-07-03; neighbors re-aimed 2026-07-06 for the color-*-facts split). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the neighborhood: make-palette, color-contrast-facts, color-space-facts, color-theory-facts, check-focus, check-translations, check-speed, check-safety, check-whole-ui, make-component, token-builder agent. Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json. Reciprocals added 2026-08-19 (issue #716, check-routing sweep #676): n15/n16/n17 mirror color-contrast-facts' t05/t06/t10 verbatim — a single ad-hoc ratio/Lc computation or a one-off CVD simulation with no declared surface card belongs to color-contrast-facts, never here.",
   "cases": [
     {
       "id": "t01",
@@ -130,6 +130,21 @@
     {
       "id": "n14",
       "prompt": "realize the verified palette as token layers in the repo",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n15",
+      "prompt": "calculate the WCAG contrast ratio between these two colors",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n16",
+      "prompt": "our danger red on white doesn't feel legible enough - what's the actual Lc value",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n17",
+      "prompt": "simulate deuteranopia on this palette and tell me what changes",
       "expect": "no-trigger"
     }
   ]

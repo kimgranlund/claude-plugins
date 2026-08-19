@@ -8,7 +8,9 @@ description: >-
   rank, apply the baked leading/rhythm, pick a concrete font per family slot. Never hardcode a
   px size, line-height, tracking, or font family. NOT for Material's typescale
   (material-type-facts); NOT for a no-token typography question (lettering-facts); NOT for
-  building/placing a component (make-component).
+  building/placing a component (make-component); NOT font/type choice for buttons, tabs, or any
+  interactive element inside a Claude Artifact (artifact-styling-rules — its own type/layout
+  doctrine, mono interactive, wins there even when the ask sounds like "which type token").
 disable-model-invocation: false
 user-invocable: false
 ---

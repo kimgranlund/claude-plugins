@@ -82,7 +82,7 @@
       "id": "n07",
       "prompt": "Is surface-container M3 baseline or one of our extensions?",
       "expect": "no-trigger",
-      "note": "KNOWN-AMBIGUOUS (ADR-0008 re-measure, 3/3 rounds false-positive despite verbatim fence): the glossary claim saturates; recorded, not chased"
+      "note": "Was KNOWN-AMBIGUOUS (ADR-0008 re-measure, 3/3 rounds false-positive despite verbatim fence). 2026-08-19 (issue #717, check-routing sweep #676): strengthened to a NEVER-answers fence naming this exact phrase verbatim, superseding the recorded-not-chased acceptance — re-measure before reverting to accepted-ambiguous."
     },
     {
       "id": "n08",
