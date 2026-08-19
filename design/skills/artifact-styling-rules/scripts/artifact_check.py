@@ -43,6 +43,10 @@ COLOR_LITERAL_RE = re.compile(r"(?<![\w-])(#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|ok
 # scan the same way _css_regions already strips prose.
 CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.S)
 MERMAID_FENCE_RE = re.compile(r"```mermaid(.*?)```", re.S)
+# #681: the markdown fence above never matches the HTML-artifact-native embedding form
+# (`<pre class="mermaid">...</pre>`) — the primary genre this check exists to protect, per
+# artifact-styling-rules' mermaid-reference.md. Both forms are scanned in check_br_in_mermaid_label.
+MERMAID_HTML_BLOCK_RE = re.compile(r'<pre\s+class="mermaid"[^>]*>(.*?)</pre>', re.S | re.I)
 NODE_LABEL_BR_RE = re.compile(r"\[[^\]]*<br\s*/?>[^\]]*\]", re.I)
 COLOR_SCHEME_RE = re.compile(r"color-scheme\s*:\s*light\s+dark")
 # #662: css_build.py now emits the unprefixed --paper short role name only (never --c-paper /
@@ -118,7 +122,7 @@ def check_literal_outside_root(text: str):
 
 def check_br_in_mermaid_label(text: str):
     findings = []
-    for fence in MERMAID_FENCE_RE.findall(text):
+    for fence in MERMAID_FENCE_RE.findall(text) + MERMAID_HTML_BLOCK_RE.findall(text):
         for m in NODE_LABEL_BR_RE.finditer(fence):
             findings.append(("FAIL", "br-in-mermaid-label", f"<br/> inside a mermaid node label: {m.group(0)[:60]}"))
     return findings
@@ -239,6 +243,24 @@ graph TD
 
 BAD_FIXTURE_GROUND = """
 body { color: black; font-family: system-ui; }
+"""
+
+# #681: the HTML-artifact-native embedding form (`<pre class="mermaid">`) with a real <br/>
+# defect inside a node label — must bite exactly like BAD_FIXTURE_BR's markdown-fence form.
+BAD_FIXTURE_BR_HTML = """
+<pre class="mermaid">
+graph TD
+  A["Coordinator<br/>dispatches build"] --> B["Builder"]
+</pre>
+"""
+
+# Reverse control: a clean `<pre class="mermaid">` block (single-line labels) must not trip
+# br-in-mermaid-label just because it uses the HTML embedding form.
+GOOD_FIXTURE_MERMAID_HTML = """
+<pre class="mermaid">
+graph LR
+  A["Coordinator"] -->|dispatches| B["Builder"]
+</pre>
 """
 
 GOOD_FIXTURE_PROSE_HASH = """
@@ -417,6 +439,13 @@ def selftest():
     codes = {c for _, c, _ in check_br_in_mermaid_label(BAD_FIXTURE_BR)}
     assert "br-in-mermaid-label" in codes, "br-in-mermaid-label must bite on a <br/> inside a node label"
     assert check_br_in_mermaid_label(GOOD_FIXTURE) == [], "reverse control: clean fixture's mermaid label is single-line"
+
+    # #681: the HTML-artifact-native `<pre class="mermaid">` embedding form must be scanned too —
+    # the markdown-fence-only regex silently missed this genre entirely before this fix.
+    codes = {c for _, c, _ in check_br_in_mermaid_label(BAD_FIXTURE_BR_HTML)}
+    assert "br-in-mermaid-label" in codes, "br-in-mermaid-label must bite on a <br/> inside a <pre class=\"mermaid\"> node label"
+    assert check_br_in_mermaid_label(GOOD_FIXTURE_MERMAID_HTML) == [], (
+        "reverse control: a clean <pre class=\"mermaid\"> block with single-line labels must not bite")
 
     codes = {c for _, c, _ in check_missing_ground(BAD_FIXTURE_GROUND)}
     assert "missing-ground" in codes, "missing-ground must bite when color-scheme/body-token binding are absent"
