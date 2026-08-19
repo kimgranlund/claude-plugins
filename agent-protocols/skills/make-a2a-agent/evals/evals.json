@@ -1,6 +1,6 @@
 {
  "skill": "make-a2a-agent",
- "note": "Initial suite, authored 2026-07-09 (closing the A2A four's pending pre-ship gate). Positives: build/design asks, server + client side, imperative + symptom registers. Negatives adversarially from a2a-protocol-facts (facts), check-a2a-isolation (proving), a2a-training-facts, and cross-plugin build asks that must escape.",
+ "note": "Initial suite, authored 2026-07-09 (closing the A2A four's pending pre-ship gate). Positives: build/design asks, server + client side, imperative + symptom registers. Negatives adversarially from a2a-protocol-facts (facts), check-a2a-isolation (proving), a2a-training-facts, and cross-plugin build asks that must escape. n07 added 2026-08-19 (S0-B, ticket #780): reciprocal fence for the description's new intake-schema citation (screens:feature-intake-rules / design:token-feature-intake-rules).",
  "cases": [
   { "id": "t01", "prompt": "make my two agents talk to each other", "expect": "trigger" },
   { "id": "t02", "prompt": "build an A2A server around my existing agent", "expect": "trigger" },
@@ -15,6 +15,7 @@
   { "id": "n03", "prompt": "verify the seats can't see each other's context", "expect": "no-trigger" },
   { "id": "n04", "prompt": "build a web component for our design system", "expect": "no-trigger" },
   { "id": "n05", "prompt": "why was this corpus record rejected", "expect": "no-trigger" },
-  { "id": "n06", "prompt": "how is A2UI carried over A2A", "expect": "no-trigger" }
+  { "id": "n06", "prompt": "how is A2UI carried over A2A", "expect": "no-trigger" },
+  { "id": "n07", "prompt": "what fields does an A2A agent ticket need before we build it", "expect": "no-trigger", "note": "reciprocal fence vs feature-intake-rules (S0-B, ticket #780) — what a TICKET should capture, not the build itself" }
  ]
 }
