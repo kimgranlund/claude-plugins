@@ -46,6 +46,14 @@ if (scope.length === 0) {
   )
 }
 
+// This firing's own key (issue #739 — the stale-regurgitation guard). No filesystem access here,
+// so this is the one deterministic, per-invocation stamp this script can mint on its own: every
+// seat report folded into the planner bundle carries it, the planner's own dispatch prompt states
+// it explicitly, and the planner's returned plan is checked against it below — a planner payload
+// that is really a PRIOR firing's plan returned verbatim (the live incident this issue traces to)
+// carries that prior firing's own stamp instead, which this key catches.
+const firingKey = new Date().toISOString()
+
 phase('Sweep')
 const seatResults = await parallel(
   scope.map((seat) => () =>
@@ -65,18 +73,42 @@ const unmeasured = seatResults
 log(`Sweep done: ${returned.length} seat report(s), ${unmeasured.length} unmeasured`)
 
 let plannerReport = null
+let staleRegurgitation = null
 if (returned.length > 0) {
   phase('Plan')
-  const bundle = returned.map(({ seat, report }) => `## ${seat}\n\n${report}`).join('\n\n---\n\n')
+  const bundle = returned
+    .map(({ seat, report }) => `## ${seat} (firing: ${firingKey})\n\n${report}`)
+    .join('\n\n---\n\n')
   plannerReport = await agent(
-    `The following are this sweep's seat reports, verbatim — judge exactly these, refetch nothing. Produce ONE rewritten .claude/ops/plan.md exactly per your own contract (compute-only — return it as a fenced, target-pathed block, never write it yourself). Name every UNMEASURED seat in the plan itself: ${JSON.stringify(unmeasured)}.\n\n${bundle}`,
+    `This sweep's firing key is ${firingKey} — every seat report below is stamped with it. Produce ONE rewritten .claude/ops/plan.md exactly per your own contract (compute-only — return it as a fenced, target-pathed block, never write it yourself), and give that plan's own Dispatch line this exact stamp: \`Dispatch: ${firingKey}\`. That stamp is checked verbatim against this firing key afterward — a plan whose Dispatch line is missing or names a different stamp reads as a PRIOR firing's plan returned verbatim rather than a fresh one judging the reports below, so judge exactly these reports, refetch nothing, and do not reuse a stamp from an earlier dispatch. Name every UNMEASURED seat in the plan itself: ${JSON.stringify(unmeasured)}.\n\n${bundle}\n\nClose the plan with its own Dispatch line, exactly: \`Dispatch: ${firingKey}\`.`,
     { agentType: 'harness:chore-planner', label: 'planner' },
   )
+
+  // Post-agent-call, pure string check (no fs access here either) — issue #739's
+  // stale-regurgitation guard. A planner payload that verbatim-returns a prior firing's plan
+  // carries that PRIOR firing's own Dispatch stamp; this never matches the firing key just
+  // handed to it. Log it as a finding, exactly like `unmeasured` above — never throw, never
+  // abort the run: a flagged plan is still returned for the dispatching session to judge.
+  // Scoped to the fenced `.claude/ops/plan.md` block's own content (not the whole report text)
+  // so a stray "Dispatch:" mention elsewhere in the planner's prose can't pass a stale plan.
+  if (plannerReport) {
+    const planBlock = plannerReport.match(/```\.claude\/ops\/plan\.md\r?\n([\s\S]*?)\r?\n```/)
+    const planBody = planBlock ? planBlock[1] : plannerReport
+    const dispatchLine = planBody.match(/Dispatch:\s*(\S+)/)
+    if (!dispatchLine) {
+      staleRegurgitation = `planner's returned plan carries no Dispatch line at all (expected "${firingKey}") — cannot confirm this isn't a stale prior-firing plan returned verbatim; dispatching session: treat the plan as suspect and re-dispatch the planner before applying it`
+    } else if (dispatchLine[1] !== firingKey) {
+      staleRegurgitation = `planner's Dispatch stamp "${dispatchLine[1]}" does not match this firing's key "${firingKey}" — reads as a prior firing's plan returned verbatim, not this one; dispatching session: treat the plan as suspect and re-dispatch the planner before applying it`
+    }
+    if (staleRegurgitation) log(`Plan stage finding: ${staleRegurgitation}`)
+  }
 }
 
 return {
   scope,
   seatReports: Object.fromEntries(returned.map(({ seat, report }) => [seat, report])),
   unmeasured,
+  firingKey,
   plannerReport,
+  staleRegurgitation,
 }

@@ -19,9 +19,12 @@
  *
  * `chore_sweep_apply.mjs selftest` proves the two extraction/detection functions on inline
  * fixtures: a real block applies; a narrated-but-absent claim bites; a bare path mention with no
- * write verb does NOT false-positive; an out-of-sandbox target path is refused, never written; and
- * the entry guard fires when the script lives under a path containing a space (the real plugin
- * install path) — the negative control for the silent-no-op guard bug fixed 2026-08-16.
+ * write verb does NOT false-positive; an out-of-sandbox target path is refused, never written; the
+ * entry guard fires when the script lives under a path containing a space (the real plugin
+ * install path) — the negative control for the silent-no-op guard bug fixed 2026-08-16; and (issue
+ * #738) a stale payload — one whose `--firing` stamp predates the target file's own last commit —
+ * is refused by name (exit 1, nothing written) while a fresh payload still applies, and a target
+ * with no git history at all fails OPEN and DISCLOSES that in stdout rather than refusing silently.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, mkdtempSync, rmSync, realpathSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -74,9 +77,44 @@ export function detectNarratedButAbsent(reportText, sandboxedBlocks) {
   return [...new Set(findings)]
 }
 
-function applyBlocks(sandboxed, root, dryRun) {
+/**
+ * The target file's own last-commit timestamp (ISO-8601, %cI), or null when git has no history
+ * for that path (never committed) — the disclosed fail-open case, never a refusal.
+ */
+function targetCommitTime(root, relPath) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', relPath], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+    return out.length > 0 ? out : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Staleness guard (issue #738): a payload whose own firing/dispatch stamp predates the target
+ * file's last commit is refusing a rollback-over-newer-state write, mirroring the existing
+ * outside-ops-path refusal's fail-closed shape — refused by name, exit 1, other blocks in the same
+ * run still apply. No git history for the target at all (never committed) is the disclosed
+ * fail-open case: apply normally, but name it in stdout rather than passing silently.
+ */
+function applyBlocks(sandboxed, root, dryRun, firingIso) {
   const applied = []
+  const staleRefused = []
+  const noHistoryDisclosed = []
   for (const { path, content } of sandboxed) {
+    if (firingIso) {
+      const commitIso = targetCommitTime(root, path)
+      if (commitIso === null) {
+        noHistoryDisclosed.push(path)
+      } else if (new Date(firingIso).getTime() < new Date(commitIso).getTime()) {
+        staleRefused.push({ path, commitIso })
+        continue // refused: never written, other blocks in this run still proceed
+      }
+    }
     const target = join(root, path)
     if (!dryRun) {
       mkdirSync(dirname(target), { recursive: true })
@@ -84,17 +122,20 @@ function applyBlocks(sandboxed, root, dryRun) {
     }
     applied.push(path)
   }
-  return applied
+  return { applied, staleRefused, noHistoryDisclosed }
 }
 
 function usage() {
   console.log(
     [
-      'Usage: chore_sweep_apply.mjs <report-file> [--root <repo-root>] [--dry-run]',
+      'Usage: chore_sweep_apply.mjs <report-file> [--root <repo-root>] [--dry-run] [--firing <ISO-8601>]',
       '       chore_sweep_apply.mjs selftest',
       '',
       'Applies every fenced, target-pathed .claude/ops/ payload block in <report-file> and names',
-      'any narrated-but-absent write claim. Exit 0 clean, 1 findings, 2 usage error.',
+      'any narrated-but-absent write claim. --firing names this payload\'s own dispatch stamp: a',
+      'block whose target file was committed AFTER that stamp is refused as stale (never written);',
+      'a target with no git history at all fails open and discloses that. Exit 0 clean, 1 findings,',
+      '2 usage error.',
     ].join('\n'),
   )
 }
@@ -108,9 +149,11 @@ function main(argv) {
   const reportFile = argv[0]
   let root = process.cwd()
   let dryRun = false
+  let firingIso = null
   for (let i = 1; i < argv.length; i++) {
     if (argv[i] === '--root') root = resolve(argv[++i] ?? '.')
     else if (argv[i] === '--dry-run') dryRun = true
+    else if (argv[i] === '--firing') firingIso = argv[++i] ?? null
     else {
       console.error(`Unknown flag: ${argv[i]}`)
       return 2
@@ -122,7 +165,7 @@ function main(argv) {
   }
   const reportText = readFileSync(reportFile, 'utf8')
   const { sandboxed, outOfSandbox } = extractBlocks(reportText)
-  const applied = applyBlocks(sandboxed, root, dryRun)
+  const { applied, staleRefused, noHistoryDisclosed } = applyBlocks(sandboxed, root, dryRun, firingIso)
   const narrated = detectNarratedButAbsent(reportText, sandboxed)
 
   let findings = false
@@ -131,6 +174,17 @@ function main(argv) {
   if (outOfSandbox.length > 0) {
     findings = true
     for (const b of outOfSandbox) console.log(`  refused (outside ${SANDBOX_PREFIX}): ${b.path}`)
+  }
+  if (staleRefused.length > 0) {
+    findings = true
+    for (const { path, commitIso } of staleRefused) {
+      console.log(`  refused (stale: firing ${firingIso} predates ${path}'s last commit ${commitIso}): ${path}`)
+    }
+  }
+  if (noHistoryDisclosed.length > 0) {
+    for (const p of noHistoryDisclosed) {
+      console.log(`  fail-open (no git history for ${p} yet — applied without a staleness check): ${p}`)
+    }
   }
   if (narrated.length > 0) {
     findings = true
@@ -208,6 +262,73 @@ function selftest() {
     }
     assert(spacedCode === 2, `entry guard must fire when the script path contains a space (got exit ${spacedCode}, expected 2 for a missing report file)`)
     assert(spacedOut.length > 0, 'a spaced-path invocation must produce output (a silent exit 0 means the entry guard never ran main())')
+
+    // 8. Staleness guard (#738). Seed a real git repo with a target file, so its last-commit
+    //    timestamp is real and comparable.
+    const staleRoot = join(dir, 'stale-root')
+    mkdirSync(join(staleRoot, '.claude/ops'), { recursive: true })
+    execFileSync('git', ['init', '-q'], { cwd: staleRoot })
+    execFileSync('git', ['config', 'user.email', 'test@test.invalid'], { cwd: staleRoot })
+    execFileSync('git', ['config', 'user.name', 'test'], { cwd: staleRoot })
+    writeFileSync(join(staleRoot, '.claude/ops/plan.md'), '{"queue":["already-newer"]}\n')
+    execFileSync('git', ['add', '.'], { cwd: staleRoot })
+    execFileSync('git', ['commit', '-q', '-m', 'seed newer state'], { cwd: staleRoot })
+    const commitIso = execFileSync('git', ['log', '-1', '--format=%cI'], { cwd: staleRoot, encoding: 'utf8' }).trim()
+    const commitMs = new Date(commitIso).getTime()
+
+    const captureLog = (fn) => {
+      const lines = []
+      const orig = console.log
+      console.log = (...args) => lines.push(args.join(' '))
+      try {
+        return { code: fn(), lines }
+      } finally {
+        console.log = orig
+      }
+    }
+
+    // 8a. Stale payload: --firing predates the target's last commit → refused (exit 1), the
+    //     newer committed content is never overwritten.
+    const stalePayload = '```.claude/ops/plan.md\n{"queue":["rolled-back-by-stale-payload"]}\n```\n'
+    const stalePayloadFile = join(dir, 'stale-payload.md')
+    writeFileSync(stalePayloadFile, stalePayload)
+    const staleFiring = new Date(commitMs - 60_000).toISOString()
+    const { code: staleCode, lines: staleLines } = captureLog(() =>
+      main([stalePayloadFile, '--root', staleRoot, '--firing', staleFiring]),
+    )
+    assert(staleCode === 1, "a stale payload (firing predates the target's last commit) must exit 1")
+    assert(
+      readFileSync(join(staleRoot, '.claude/ops/plan.md'), 'utf8').includes('already-newer'),
+      'a stale payload must never overwrite the newer committed content',
+    )
+    assert(staleLines.some((l) => l.includes('refused (stale')), 'a stale refusal must be named by path in stdout')
+
+    // 8b. Fresh payload: --firing postdates the target's last commit → still applies (exit 0).
+    const freshFiring = new Date(commitMs + 60_000).toISOString()
+    const freshCode = main([stalePayloadFile, '--root', staleRoot, '--firing', freshFiring])
+    assert(freshCode === 0, "a fresh payload (firing after the target's last commit) must apply, exit 0")
+    assert(
+      readFileSync(join(staleRoot, '.claude/ops/plan.md'), 'utf8').includes('rolled-back-by-stale-payload'),
+      'a fresh payload must be written once its firing postdates the last commit',
+    )
+
+    // 8c. No git history for the target at all: fails OPEN (still applies) and DISCLOSES that in
+    //     stdout rather than passing silently.
+    const noHistoryPayload = '```.claude/ops/brand-new.md\n{"queue":["first-write"]}\n```\n'
+    const noHistoryFile = join(dir, 'no-history-payload.md')
+    writeFileSync(noHistoryFile, noHistoryPayload)
+    const { code: noHistoryCode, lines: noHistoryLines } = captureLog(() =>
+      main([noHistoryFile, '--root', staleRoot, '--firing', freshFiring]),
+    )
+    assert(noHistoryCode === 0, 'a target with no git history must fail open (apply), exit 0')
+    assert(
+      existsSync(join(staleRoot, '.claude/ops/brand-new.md')),
+      'a no-history target must still be written (fail-open, not refused)',
+    )
+    assert(
+      noHistoryLines.some((l) => l.includes('fail-open') && l.includes('no git history')),
+      'a no-history target must disclose the fail-open case by name in stdout, never pass silently',
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -216,7 +337,9 @@ function selftest() {
     console.log(`chore_sweep_apply selftest · FAIL · ${failures} failing assertion(s)`)
     return 1
   }
-  console.log('chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/sandbox-refusal/usage/spaced-path-entry-guard all correct')
+  console.log(
+    'chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/sandbox-refusal/usage/spaced-path-entry-guard/staleness-guard all correct',
+  )
   return 0
 }
 
