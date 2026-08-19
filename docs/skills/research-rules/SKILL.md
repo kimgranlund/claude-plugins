@@ -1,5 +1,5 @@
 ---
-name: research-leader
+name: research-rules
 description: >-
   The deliverable schema and rubric research-leader's typed findings are authored to and
   graded against — six required fields per finding, a four-axis rubric (knowledge, actionable,
@@ -11,7 +11,7 @@ disable-model-invocation: false
 user-invocable: false
 ---
 
-# research-leader — deliverable schema and rubric
+# research-rules — deliverable schema and rubric
 
 `lld-0023-research-specialist-deliverable-plan` resolved the schema and rubric a synthesis-
 permitted, web-search research agent's output is held to. This skill is where the resolution

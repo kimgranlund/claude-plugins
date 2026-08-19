@@ -1,6 +1,6 @@
 {
-  "skill": "research-leader",
-  "note": "New suite authored alongside the research-leader agent + rubric (gh#721, lld-0023). Positives cover dispatching the agent, authoring/reviewing its deliverable, and grading it against the rubric. Negatives are adversarial against the closest neighbors: harness:fact-finder (gather-only, no synthesis), research-methods/experiment-runner (fixed-scorer measured loop), make-rubric (general rubric authoring), check-doc/doc-checker (generic document review with no deliverable-schema angle).",
+  "skill": "research-rules",
+  "note": "New suite authored alongside the research-leader agent + its owning skill research-rules (gh#721, lld-0023; skill renamed from research-leader to research-rules per Kim's live ruling — the -rules ADR-0014 D1 reserved tail, since this is a knowledge/doctrine skill: the deliverable schema + rubric references). Positives cover dispatching the agent, authoring/reviewing its deliverable, and grading it against the rubric. Negatives are adversarial against the closest neighbors: harness:fact-finder (gather-only, no synthesis), research-methods/experiment-runner (fixed-scorer measured loop), make-rubric (general rubric authoring), check-doc/doc-checker (generic document review with no deliverable-schema angle).",
   "cases": [
     {
       "id": "t01",

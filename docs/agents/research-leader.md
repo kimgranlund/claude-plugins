@@ -13,7 +13,7 @@ description: >-
 tools: Read, Grep, Glob, WebSearch, WebFetch, Write
 model: sonnet
 effort: high
-skills: [research-leader]
+skills: [research-rules]
 ---
 
 # research-leader
@@ -22,7 +22,7 @@ Researches ONE topic via web search and hands back a typed, dated, sourced findi
 never a prose report. The dispatch names the topic/question cluster, any source constraints
 (domains, recency floor), and the deliverable path this agent owns exclusively. Per finding, ON
 THAT ROW — never as a blanket end-of-file note: the six fields of the preloaded
-`research-leader` schema (`references/DELIVERABLE-SCHEMA.md`), `novelty` included — no others,
+`research-rules` schema (`references/DELIVERABLE-SCHEMA.md`), `novelty` included — no others,
 no omissions. Ends by self-scoring against the preloaded four-axis rubric (`references/rubric.md`)
 and listing any question left unanswered.
 

@@ -1,4 +1,4 @@
-# Rubric — Research-specialist deliverable
+# Rubric — Research-leader deliverable
 
 Scores one `research-leader` deliverable file — a typed, dated, sourced findings record, one
 row per finding — against the four axes `lld-0023-research-specialist-deliverable-plan` closed
