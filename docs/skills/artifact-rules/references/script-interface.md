@@ -70,6 +70,16 @@ of the emitted CSS. Exit 2 → a usage error (bad path, unparseable JSON).
   as the token itself).
 - **Spacing** → `--space-<name>` for `none`/`xs`/`sm`/`md`/`lg`/`xl`/`2xl`/`3xl`/`4xl`/`5xl`.
 - **Radii** → `--r-<name>` for `none`/`xs`/`sm`/`md`/`lg`/`xl`/`full`.
+- **Type-doctrine default-binding block (lld-0013 v2 Resolution 10, #649)** — a fixed CSS section
+  binding body/reading selectors (`body`, `p`, `li`, `td`, `th`, `blockquote`, `figcaption`) to the
+  `system-ui, -apple-system, 'Segoe UI', sans-serif` stack, and interactive selectors (`button`,
+  `a`, `[role="tab"]`, `.badge`, `.kicker`) to the `ui-monospace, 'SF Mono', Menlo, monospace`
+  stack, by default — regardless of the source design system's own faces. This binds emitted
+  faces to a fixed doctrine; it never references a source `--font-*` custom property (those stay
+  the opt-in override vehicle for a page-assembly rule that deliberately overrides the default,
+  carrying its own adjacent `/* override: <reason> */` comment — design's `artifact_check.py`'s
+  `doctrine-font-stack` check's suppression path). Doctrine authority: design's
+  `type-and-layout.md`.
 - **Mermaid re-theme block** — a fixed CSS section, `!important`-scoped, bound to the same short
   role custom properties as the rest of the page (`--card`/`--line`/`--ink`/`--muted` — never
   `--c-*` post-#662; design's `mermaid-reference.md` owns the full doctrine for why this shape).

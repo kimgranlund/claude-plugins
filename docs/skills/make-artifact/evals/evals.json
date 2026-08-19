@@ -33,6 +33,16 @@
       "expect": "trigger"
     },
     {
+      "id": "t07",
+      "prompt": "compose a handbook artifact from our project's ADRs, PRDs, and LLDs",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "build an artifact page for this project even though it has no design system yet",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "why did my mermaid diagram lose its line breaks in this artifact page",
       "expect": "no-trigger",
@@ -79,6 +89,18 @@
       "prompt": "why do the colors in our artifact look a bit nuts",
       "expect": "no-trigger",
       "note": "design:artifact-styling-rules — reciprocal fence, #650/lld-0020"
+    },
+    {
+      "id": "n09",
+      "prompt": "synthesize a color palette for our brand",
+      "expect": "no-trigger",
+      "note": "design's make-palette — a palette ask alone, no artifact build ask"
+    },
+    {
+      "id": "n10",
+      "prompt": "how does the composition phase map our project's records into chapters",
+      "expect": "no-trigger",
+      "note": "artifact-rules — a standards question about composition, no build ask"
     }
   ]
 }

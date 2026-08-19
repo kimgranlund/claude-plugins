@@ -18,11 +18,11 @@ cross-plugin mention, degrades gracefully where `design` isn't installed).
 
 ## Where this feeds forward
 
-This classification is exactly the structural routing decision `#649`'s (not-yet-built) content
-model composition phase will drive at scale — mapping Intent/User-Story/Concept/System record
-layers to a chapter/section pattern is itself a repeated application of this same three-way test,
-once per section rather than once per page. This file states the test; #649 (when built) is what
-runs it programmatically across many sections.
+This classification is exactly the structural routing decision the content model composition phase
+drives at scale (`composition-model.md`, lld-0013 v2 Resolution 8, #649) — mapping
+Intent/User-Story/Concept/System record layers to a chapter/section pattern is itself a repeated
+application of this same three-way test, once per section rather than once per page. This file
+states the test; `composition-model.md` is what runs it programmatically across many sections.
 
 ## Choosing the shell
 

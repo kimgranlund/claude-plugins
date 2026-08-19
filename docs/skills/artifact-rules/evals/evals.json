@@ -1,6 +1,6 @@
 {
   "skill": "artifact-rules",
-  "note": "Trigger-routing suite, re-scoped 2026-08-18 (#650, lld-0020) after the pack slimmed to procedure-side standards only (content classification, script interface, refresh procedure). Positives are consult-only asks for the 3 REMAINING axes. Visual-styling asks that used to trigger this suite (mermaid <br/>, shell taste, token/theme questions) are now NEGATIVE cases here, fencing the new design:artifact-styling-rules sibling; design's own evals.json carries them as its positives.",
+  "note": "Trigger-routing suite, re-scoped 2026-08-18 (#650, lld-0020) after the pack slimmed to procedure-side standards only (content classification, script interface, refresh procedure), then extended 2026-08-19 (#649, lld-0013 v2 Resolution 8) with a 4th axis: records-tree composition. Positives are consult-only asks for the 4 declared axes. Visual-styling asks that used to trigger this suite (mermaid <br/>, shell taste, token/theme questions) are now NEGATIVE cases here, fencing the new design:artifact-styling-rules sibling; design's own evals.json carries them as its positives.",
   "cases": [
     {
       "id": "t01",
@@ -25,6 +25,16 @@
     {
       "id": "t05",
       "prompt": "what does the generator line in the provenance footer actually need to say",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "how does the composition phase map our project's ADRs and LLDs into artifact chapters",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "what happens to the provenance footer when the target project has no design system at all",
       "expect": "trigger"
     },
     {
@@ -74,6 +84,18 @@
       "prompt": "how do design tokens turn into light and dark CSS custom properties",
       "expect": "no-trigger",
       "note": "moved to design:artifact-styling-rules — token architecture doctrine"
+    },
+    {
+      "id": "n09",
+      "prompt": "compose a handbook from our project's ADRs and LLDs",
+      "expect": "no-trigger",
+      "note": "make-artifact — the build ask itself, not a standards question about how composition works"
+    },
+    {
+      "id": "n10",
+      "prompt": "synthesize a color palette for our brand",
+      "expect": "no-trigger",
+      "note": "design's make-palette — a palette ask alone, no artifact/provenance question"
     }
   ]
 }

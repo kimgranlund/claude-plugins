@@ -8,9 +8,15 @@ resolves #619 Scope/Open item (d), naming the Estate Handbook's own maintainer m
 
 Every artifact page `make-artifact` emits carries a **provenance footer** naming:
 
-1. The source DESIGN.md path (and/or tokens.json path) it was built from.
+1. The source DESIGN.md path (and/or tokens.json path) it was built from — or, when no design
+   system was found (lld-0013 v2 Resolution 9), the state instead: **SYNTHESIZED** (with the
+   generator line naming which `design` skills produced it), or **none — doctrine-neutral
+   fallback** (naming the gap explicitly: "install the design plugin to synthesize one"). Never a
+   silent absence of this line, whichever of the three states applies.
 2. The tokens.json `$generator` line (verbatim), when tokens.json was an input.
-3. The content source (path or description) it was assembled from.
+3. The content source (path or description) it was assembled from — or, when the composition phase
+   degraded to the prose-draft path over a non-canonical records tree (`composition-model.md`'s
+   Degradation section, R-6), that degradation named explicitly.
 4. The build date.
 5. The exact `css_build.py` invocation used to produce the CSS — so any reader, human or agent,
    can re-run the identical build.
