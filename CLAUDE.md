@@ -10,6 +10,11 @@ Work on a plugin happens in its directory; decisions that span plugins happen he
 
 ## Route the job before doing the job
 
+**Live lane first.** A LIVE human prompt — typed at this session, this turn — for bounded work
+that fits one context executes solo inline, record-last, bug- or feature-shaped asks included (PR
+labeled `live-lane`, auto-merge on green). Sizing tripwires + escalation: teamwork `fleet-rules`
+§7 decides "small", never the executor. The rows below bind only what falls outside the lane.
+
 | Job | Owner |
 |---|---|
 | New plugin from a domain | `/make-plugin` (never hand-scaffold) |
