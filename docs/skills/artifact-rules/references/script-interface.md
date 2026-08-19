@@ -65,6 +65,8 @@ error (bad path, unparseable JSON).
 
 ## Cross-script regression fixture (#662)
 
+LEDGER-CLASS: emitter-vs-checker-drift | ids: #662 | mechanized: 2026-08-18
+
 Two maintained duplicates, not a live import (`css_build.py` and `artifact_check.py` sit in
 different plugins; `.claude/rules/plugin-authoring.md`'s hard boundary forbids a bundled script
 importing across it):

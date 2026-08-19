@@ -64,6 +64,7 @@ from collect import ENTRY_FILE_LINE_THRESHOLD  # noqa: E402  (sibling, same scri
 OVERLAP_D1 = 0.2  # overlap coefficient (gh#645 MAJOR-2), NOT Jaccard — see module docstring
 MIN_SHARED_D1 = 3
 JACCARD_D2 = 0.5
+# LEDGER-CLASS: dedup-detector-false-positives | ids: #694 | mechanized: 2026-08-18
 MIN_ROWS_D3 = 3
 GROWTH_PCT_D3 = 5.0
 
