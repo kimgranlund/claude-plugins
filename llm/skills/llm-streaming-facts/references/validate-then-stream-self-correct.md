@@ -31,6 +31,29 @@ round's output has already passed validation — "progressive" here means "the c
 incrementally from a stream of already-guaranteed-valid records," never "the consumer paints
 speculatively from not-yet-validated model output."
 
+## The latency price, and the leading meta-line that pays it down
+
+**Claim — validate-then-stream forfeits the early token BY DESIGN: the consumer sees nothing from
+a round until the whole round has accumulated and validated, so the first visible output lands as
+a late burst, not a trickle.** Budget for that honestly in the product; the perceived-latency
+mitigation is a SMALL early validated unit, never a relaxation of validate-before-stream.
+
+**The mitigation — reserve the round's FIRST emitted line as a protocol-known META-LINE** carrying
+the model's one-line natural-language answer plus turn metadata, parsed as a typed envelope and
+peeled before the structured payload behind it is validated. Because it is first in the emitted
+sequence, a consumer renders the human-readable answer the instant it arrives, while the payload
+burst is still ingesting and rendering — the one-line answer beats the burst, and the
+no-early-token cost is felt as "a beat of silence, then an answer, then the UI," not "silence,
+then a wall." This does not bypass the validation ordering: nothing emits until the round
+validates; the meta-line only guarantees the first thing OUT of the pipe is the smallest, most
+immediately useful unit. The note-only round (last section of this file) is its degenerate case —
+a meta-line and zero records is a complete, clean answer. **Worked instance:** `produce.ts:297`
+(the peel) + `src/agent/meta-line.ts` (`readMetaLine`, the `A2uiMetaEnvelope` typed envelope) in
+`@agent-ui/a2ui`; the same repo treats the meta-line as a first-class wire citizen end to end —
+its debug timeline routes `meta` lines as their own event kind (ADR-0200 clause 4), and a later
+protocol addition (`flowEnd`) rode the meta-line envelope precisely because it was the established
+additive-metadata home (agent-ui #1101, closed 2026-08-17) · 2026-08-19 · [verified]
+
 ## Structured parsing before validation — heal, then check the schema
 
 **Pattern:** before schema validation, run a narrow, MECHANICAL healing pass over the model's raw

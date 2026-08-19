@@ -19,15 +19,15 @@ or cited to a real worked instance as proof-of-concept, never as the only valid 
 
 | Artifact | Type | Invocation | What it carries |
 |---|---|---|---|
-| `skills/llm-gateway-facts` | Knowledge pack | model-only | The swappable multi-provider gateway pattern: one adapter interface per vendor (secrets injected via factory, never module-scope), a registry as the single source of truth for both a picker UI and a server-side allowlist, the `resolvePair` trust-boundary check, the dev-only proxy pattern (server-side key custody), the bundler env-inlining footgun (Vite's `VITE_*` and its analogues), and the stateless-proxy + client-held-session + pure-turn-reducer conversation model |
-| `skills/llm-streaming-facts` | Knowledge pack | model-only | Streaming structured output safely: the general SSE chunk-buffering technique (partial-frame handling across `fetch` reads, blank-line event framing per spec), Anthropic's Messages API SSE contract as a fully worked instance, an error-sentinel technique for async generators, and validate-then-stream (never emit invalid output, bounded self-correct rounds feeding structured failures back to the model, halt-and-report on exhaustion) |
-| `skills/chat-harness-guardrail-facts` | Knowledge pack | model-only | Layering instructions (global < project < session precedence, a safety-floor exception), the closed instruction-source boundary (tool/file/web output is DATA never a command — prompt-injection defense), action risk tiers + confirmation gates, deterministic rule enforcement (hooks/lint) vs. prompted guidance, config precedence, reproducible setup/install, and config-schema/prompt-externalization |
+| `skills/llm-gateway-facts` | Knowledge pack | model-only | The swappable multi-provider gateway pattern: one adapter interface per vendor (secrets injected via factory, never module-scope), a registry as the single source of truth for both a picker UI and a server-side allowlist, the `resolvePair` trust-boundary check, the dev-only proxy pattern (server-side key custody), the bundler env-inlining footgun (Vite's `VITE_*` and its analogues), the stateless-proxy + client-held-session + pure-turn-reducer conversation model, and live-gateway ops (the per-model curl matrix as first diagnostic, the upstream-503-storm posture, planning-vs-execution model tiering) |
+| `skills/llm-streaming-facts` | Knowledge pack | model-only | Streaming structured output safely: the general SSE chunk-buffering technique (partial-frame handling across `fetch` reads, blank-line event framing per spec), Anthropic's Messages API SSE contract as a fully worked instance, an error-sentinel technique for async generators, validate-then-stream (never emit invalid output, bounded self-correct rounds feeding structured failures back to the model, halt-and-report on exhaustion, the leading meta-line paying down the no-early-token cost), and the ONE `turn(input) → AsyncIterable<string>` seam with its replay/live/peer backend shelf and pinned proxy body fields |
+| `skills/chat-harness-guardrail-facts` | Knowledge pack | model-only | Layering instructions (global < project < session precedence, a safety-floor exception), the closed instruction-source boundary (tool/file/web output is DATA never a command — prompt-injection defense), action risk tiers + confirmation gates, deterministic rule enforcement (hooks/lint) vs. prompted guidance, config precedence, reproducible setup/install, config-schema/prompt-externalization, and the ingestion trust story for imported third-party prose (import-time snapshot, pinned provenance, review-before-enable, a strip-nothing directive scan, prose-never-executes) |
 | `skills/chat-harness-runtime-resilience-facts` | Knowledge pack | model-only | A deployed chat runtime's producer loop staying honest across turns and failures: a per-turn validator seeded with the session's accumulated state (the two-gates deadlock), catching a cross-payload violation producer-side before it ships, fail-closed independent disclosure knobs (no accidental ladder), a reserved terminal error line for a stream that already committed 200, halting loudly at a retry bound, and byte-identical additive opt-in flags |
 | `skills/chat-harness-routing-facts` | Knowledge pack | model-only | Authoring a capability as a describe-to-route, load-on-demand skill vs. a hardcoded feature; the model-invoked vs. user-invoked species dial; description-based routing measured against a held-out adversarial eval corpus, not a felt sense |
 | `skills/chat-harness-workflow-facts` | Knowledge pack | model-only | Decomposing a large task across multiple specialized agents with a clear chain of command (coordinator/planner/builder/reviewer, generator≠critic); verifiable typed hand-off contracts; deterministic scripted pipelines (fan-out/fan-in) as a distinct alternative to ad hoc dispatch |
 | `skills/chat-harness-memory-facts` | Knowledge pack | model-only | Authoring a knowledge base as a cited, retrieval-by-search corpus (never prose dumped wholesale into context); durable cross-session memory (typed, with a hard exclusion list and a verify-before-trusting caveat) distinct from ephemeral within-conversation task state |
 | `skills/chat-harness-tool-facts` | Knowledge pack | model-only | The tool/skill/resource three-way distinction; typed tool schemas; deferring a large tool catalog's loading until needed (search-to-load); read-only resources; routing the external-service-integration axis to `llm-gateway-facts` rather than duplicating it |
-| `skills/chat-harness-logging-facts` | Knowledge pack | model-only | Hook-based logging/tracing distinguishable from user input; measuring routing/skill accuracy against a held-out adversarial suite over repeated runs (judge-noise vs. a real regression vs. a structural leak); background-task notification vs. polling, and the distinct case of polling genuinely external state |
+| `skills/chat-harness-logging-facts` | Knowledge pack | model-only | Hook-based logging/tracing distinguishable from user input; measuring routing/skill accuracy against a held-out adversarial suite over repeated runs (judge-noise vs. a real regression vs. a structural leak); background-task notification vs. polling, the distinct case of polling genuinely external state, and the replay-CI/live-acceptance two-tier proof split (deterministic replay as the standing gate; one engineered, defect-baiting live turn as a change's acceptance) |
 | `skills/agent-residency-facts` | Knowledge pack | model-only | Classifies a conversational agent as a Resident Agent (a CLI harness — persistent filesystem/git/shell host) or an Ephemeral Agent (a hosted chatbot — per-conversation sandbox, function-calling tool surface) across five axes (host/persistence, context assembly, tool use, orchestration/concurrency, trust boundary); routes to which existing pack owns each tier's actual guidance, and names the check to run before writing a cross-tier finding into either |
 
 All ten packs are `user-invocable: false` — model-only, routed by description. Each carries a
@@ -79,6 +79,32 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `chat-harness-tools-resources-and-services` | `chat-harness-tool-facts` |
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
+
+v1.0.16 · assembled 2026-08-19 · agent-ui provider/harness doctrine fold (branch
+`upsert-llm-provider-doctrine`): four packs extended from field-proven agent-ui doctrine, every
+ADR claim read at source via the GitHub API (ADR-0073/0137/0200/0208), each target diff-read first
+so upserts EXTEND, never restate. `llm-gateway-facts` +1 axis
+(`live-ops-diagnostics-and-model-tiering.md`: per-model curl matrix as the first diagnostic, the
+upstream-503-storm posture — plain REST + bounded retry + verify-writes-landed, planning-vs-
+execution model tiering as a standing config decision; ADR-0073's dev-proxy trust-boundary shape
+diff-checked and found already fully covered — no restatement). `llm-streaming-facts`: the
+stream-abstraction file gains the ONE `turn(input) → AsyncIterable<string>` seam (ADR-0073/0137),
+the three-backend shelf — deterministic replay as CI backbone / HTTP-only proxy / peer (ADR-0200
+cl.3), pinned request-body fields (proxy drift = spec diff, not silent break), and the NDJSON
+splitter's own chunk-boundary contract; validate-then-stream gains the latency-cost/leading-
+meta-line section (the one-line answer that beats the burst; agent-ui #1101's `flowEnd`-on-the-
+envelope as evidence). `chat-harness-guardrail-facts`: the injection-defense file gains the
+ADR-0208 ingestion trust story (import-time snapshot over runtime fetch, pinned commit provenance
+with dropped-and-counted honesty, declared-scope fidelity, review-before-enable + copy-on-opt-in,
+directive scan as a strip-nothing review aid, prose-never-executes) — kept as a second lens on the
+existing axis, not a seventh axis (the #552 split ruling respected). `chat-harness-logging-facts`
++1 axis (`live-turn-acceptance-and-replay-ci.md`: replay-CI vs one live acceptance turn, the
+fresh-server/OS-allocated-port/proven-teardown run shape from agent-ui `e2e-devtools.mjs`, the
+bait-the-defect acceptance ask from #1101's closing verification) — placement judged per the
+brief's own escape hatch: this pack owns the proof/measurement axis, tool-facts owns extension
+surfaces, so `chat-harness-tool-facts` is deliberately untouched. ZERO description edits (all
+routing surfaces byte-unchanged, per the merge-desk directive — the #715/#706 fences stand);
+consult tables + sources.md provenance notes updated in the same change.
 
 v1.0.15 · assembled 2026-08-19 · #715 (the #676 sweep's implement/build/write-the-code leak): a
 passive "ANSWERS; does not build" / "answers, no build" disclaimer is not an explicit NOT-fence

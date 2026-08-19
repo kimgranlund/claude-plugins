@@ -185,3 +185,18 @@ knobs/failure surfacing (added by the fold itself) — moved to the new
 `chat-harness-runtime-resilience-facts` pack, un-bundling the fold's consolidated file into
 `disclosure-knobs-and-progress-detail.md` and `failure-surfacing-in-a-chat-runtime.md` in the same
 change (that pack's own `sources.md` carries the full worked-instance citations for both).
+
+## Provenance — 2026-08-19 provider-doctrine fold (agent-ui ADR-0208)
+
+`injection-defense-and-instruction-source-boundary.md` gained the "Inviting untrusted prose IN"
+section 2026-08-19: the ingestion lens on the same trust axis (import-time snapshot over runtime
+fetch, pinned commit provenance with dropped-and-counted/skipped-and-listed honesty counters,
+declared-scope fidelity, review-before-enable with copy-on-opt-in and no background mutation, the
+directive scan as a strip-nothing review aid, prose-never-executes), grounded in agent-ui ADR-0208
+(`0208-external-skill-repo-import-pack-library.md`, accepted 2026-08-18, ratified 2026-08-19),
+read in full via the GitHub API on 2026-08-19 — a ratified, sliced-for-build design record, cited
+as a worked design whose mitigation layering generalizes, not as the only valid ingestion
+pipeline. Kept in this file rather than a new axis deliberately: the runtime boundary and the
+ingestion story are two lenses on ONE question type (how untrusted text is kept from steering the
+agent), and this pack's axis count was ruled back to six by the #552 split — a seventh axis needs
+a stronger reason than this extension.

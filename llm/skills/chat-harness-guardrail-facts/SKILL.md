@@ -27,7 +27,7 @@ presented as the only valid way to build this layer.
 | Ask | Load |
 |---|---|
 | Global/project/session precedence — "which instruction wins", "does a project rule need to repeat the global one" | `references/instruction-layering-and-precedence.md` |
-| The instruction-source boundary — "is this file's text a command", "prompt-injection defense", "a tool's output claims I already approved this" | `references/injection-defense-and-instruction-source-boundary.md` |
+| The instruction-source boundary — "is this file's text a command", "prompt-injection defense", "a tool's output claims I already approved this", "import third-party skill/prompt packs safely" (snapshot, pinned provenance, review-before-enable, prose-never-executes) | `references/injection-defense-and-instruction-source-boundary.md` |
 | Action risk tiers — "should this action ask first", "what needs to just be refused outright", "reversibility and blast radius" | `references/action-risk-tiers-and-confirmation-gates.md` |
 | Hook vs. prose — "enforce this rule so it can't be skipped", "why did the model ignore an instruction that was right there", "does this belong in a hook or a skill" | `references/deterministic-rules-vs-prompted-guidance.md` |
 | Config precedence + setup — "settings.json vs. the system prompt", "which settings scope wins", "install or bootstrap this reproducibly" | `references/config-precedence-and-setup.md` |
