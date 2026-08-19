@@ -4,7 +4,7 @@ description: >-
   How a chat-agent harness exposes capabilities as load-on-demand skills vs. an always-on cost,
   and how a request finds the right one. Use for skill-vs-hardcode, model- vs user-invoked
   (auto-trigger vs slash-only, user-invocable), what disable-model-invocation does incl. its
-  preload interaction, a skill that won't trigger, wrong skill firing, and AUTHORING/WRITING a
+  preload interaction, a skill that won't trigger, wrong skill firing, and how to AUTHOR/WRITE a
   NEW held-out adversarial eval corpus so a description actually routes. Grounded in Claude
   Code's mechanics. ANSWERS; does not build. NOT for guardrails (chat-harness-guardrail-facts);
   NOT for multi-agent composition (chat-harness-workflow-facts); NOT for a tool catalog's loading
