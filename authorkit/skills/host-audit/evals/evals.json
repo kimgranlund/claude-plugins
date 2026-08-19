@@ -1,0 +1,25 @@
+{
+  "skill": "host-audit",
+  "cases": [
+    { "id": "t01", "prompt": "why is my machine so slow when I run several agents in parallel", "expect": "trigger" },
+    { "id": "t02", "prompt": "my laptop fans are screaming and the load average is huge", "expect": "trigger" },
+    { "id": "t03", "prompt": "audit my host — figure out how to improve performance", "expect": "trigger" },
+    { "id": "t04", "prompt": "everything times out when I run parallel agent sessions, hooks hit their 10s limit", "expect": "trigger" },
+    { "id": "t05", "prompt": "run a performance audit on this machine and give me a checklist of fixes", "expect": "trigger" },
+    { "id": "t06", "prompt": "is Spotlight or Time Machine eating my CPU while npm installs run?", "expect": "trigger" },
+    { "id": "t07", "prompt": "my dev box crawls whenever the test suites run — diagnose it", "expect": "trigger" },
+    { "id": "t08", "prompt": "how do users and devs check locally what's degrading their machine during fleet runs", "expect": "trigger" },
+    { "id": "t09", "prompt": "load average 108 on a 10-core mac, what do I do", "expect": "trigger" },
+    { "id": "t10", "prompt": "check whether my worktrees and node_modules are being indexed or backed up", "expect": "trigger" },
+    { "id": "t11", "prompt": "the whole machine beachballs during agent campaigns — what's wrong with the host", "expect": "trigger" },
+    { "id": "t12", "prompt": "give me a report on my computer's health for running coding agents", "expect": "trigger" },
+    { "id": "t13", "prompt": "can I trust this red test run — the suite is flaky under load", "expect": "no-trigger", "note": "the host repo's flaky-gates owns the red-verdict question" },
+    { "id": "t14", "prompt": "audit how many tokens this campaign spent", "expect": "no-trigger", "note": "spend-audit" },
+    { "id": "t15", "prompt": "audit this repo's layout and hygiene", "expect": "no-trigger", "note": "repo-audit" },
+    { "id": "t16", "prompt": "my WEB APP is slow in production, profile the server", "expect": "no-trigger", "note": "app/server perf, not the dev host" },
+    { "id": "t17", "prompt": "make this vitest suite itself run faster", "expect": "no-trigger", "note": "test-suite optimization is the owning repo's craft, not host diagnosis" },
+    { "id": "t18", "prompt": "audit naming conventions across the estate", "expect": "no-trigger", "note": "naming-audit" },
+    { "id": "t19", "prompt": "clean up my git branches and stale worktrees", "expect": "no-trigger", "note": "repo hygiene execution, not host diagnosis — host-audit only REPORTS parked worktrees" },
+    { "id": "t20", "prompt": "why did my cloud CI runner time out", "expect": "no-trigger", "note": "remote CI, not the local host" }
+  ]
+}
