@@ -45,7 +45,10 @@ This command is the human-typed entry point only. The actual find-record/size/di
 procedure lives in `dispatch-ticket` (this plugin) — a `disable-model-invocation: true` skill like
 this one can't be Skill-tool-invoked or preloaded by anything else (issue #134/#135's shared
 defect class), so `dispatch-ticket` carries the procedure and `build-leader` (agent) reaches the
-identical logic for a programmatic caller (`mobilize-chores`). Given a non-empty seed, invoke
+identical logic for a programmatic caller (`mobilize-chores`). Given a non-empty seed resolving to a real ticket id, run `teamwork/scripts/dispatch_envelope.py
+<id>` first and fold its JSON into the seed handed to `dispatch-ticket` — `dispatch-ticket`
+Phase 3's own "envelope present" branch verifies it by one re-read instead of re-deriving the
+slot, branch, and scratch clone (#758). Invoke
 `dispatch-ticket` (Skill tool) carrying `$ARGUMENTS` verbatim, and relay its result as this command's own
 output — this IS running the procedure, mechanically, not a restatement of it. `dispatch-ticket`
 itself stays un-forked (its own frontmatter carries no `context: fork`): invoked from here it runs

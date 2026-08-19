@@ -241,6 +241,10 @@ sweep surfaced that's actually buildable.
    needs no isolation of its own and so was reclassified to a directly Skill-tool-reachable
    procedure instead (issue #266) rather than kept as a two-piece command+agent pair — two
    different fixes to the same disable-model-invocation-blocks-Skill-tool class (issue #134/#135).
+   **Before each `Agent` call, run `teamwork/scripts/dispatch_envelope.py <ticket-id>` and paste
+   its JSON verbatim into that ticket's sealed dispatch prompt** — `dispatch-ticket` Phase 3's own
+   "envelope present" branch (#758) verifies it by one re-read instead of re-deriving the slot,
+   branch, and scratch clone from scratch.
 
    **On the UNATTENDED branch only, write the grant line into each dispatch prompt** — the literal
    text `auto-merge: authorized`, on its own line, typed out in the sealed prompt. It is a field
