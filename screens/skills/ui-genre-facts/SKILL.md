@@ -1,21 +1,22 @@
 ---
 name: ui-genre-facts
 description: >-
-  Answers which patterns, modules, and conventions a product CATEGORY expects — the genre world
+  Answers which patterns and conventions a product CATEGORY expects — the genre world
   model behind "is this the right pattern for THIS kind of product". Use for "what genre is this
   app", "what do users expect in a dashboard/collab tool/habit tracker/AI chat app", "which
   patterns does this category demand", "is this convention-violation acceptable here". Covers
   dashboards, collaboration, productivity, utilities, social media, AI-native apps, games,
   health, fintech, marketplaces, travel. ANSWERS genre expectations, never applies or builds
-  them — NOT for which modules a page needs (ui-pattern-facts).
+  them (NOT "what modules/sections does a dashboard page need" — ui-pattern-facts even when a
+  genre word appears).
 user-invocable: false
 disable-model-invocation: false
 ---
 
 # ui-genre-facts — the genre world model
 
-Names what a product *category* expects — the pattern set, module inventory, signature
-conventions, and the failure modes each genre invites — so conformance review can ask "is this the
+Names what a product *category* expects — the pattern set, signature conventions, and the
+failure modes each genre invites — so conformance review can ask "is this the
 right pattern for THIS kind of product" instead of "is this a canonical table". One axis of genre
 files under `references/genres/`, indexed in `references/INDEX.md` — the canon for the genre count,
 and carrier of the harvest provenance. Each file: conventions → signature UX patterns → pitfalls →

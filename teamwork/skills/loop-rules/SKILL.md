@@ -8,8 +8,9 @@ description: >
   an autonomous run", "my goal loop never stops / spins", "it keeps retrying
   the same failure", "the agent spins / thrashes and burns turns", "make it
   keep working until clean". NOT for how the delegated work composes —
-  skill/agent wiring, dispatch, frontmatter (fleet-rules); this skill
-  owns only when the next turn fires.
+  skill/agent wiring, dispatch, frontmatter (fleet-rules); NOT running or
+  watching an already-written /goal, only designing or reviewing the
+  pattern; this skill owns only when the next turn fires.
 disable-model-invocation: false
 user-invocable: false
 ---

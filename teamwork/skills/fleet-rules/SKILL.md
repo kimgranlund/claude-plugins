@@ -8,8 +8,8 @@ description: >-
   "review my wiring", "where does this bug report go". NOT isolation/collisions
   (parallel-work-rules); NOT next-turn timing (loop-rules); NOT mobilizability (mobilize-chores);
   NOT stacked-PR (big-change-git-rules); NOT corpus audits (check-all-agents/-skills); NOT one
-  agent or its return block (agent-writing-rules/write-handoff); NOT abstract decomposition
-  (break-down-problem).
+  agent — its preloads, frontmatter, or return block (agent-writing-rules/write-handoff); NOT
+  abstract decomposition (break-down-problem).
 disable-model-invocation: false
 user-invocable: false
 ---
