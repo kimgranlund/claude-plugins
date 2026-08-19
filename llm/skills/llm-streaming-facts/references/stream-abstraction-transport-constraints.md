@@ -57,10 +57,9 @@ curl-able for an agent driver") · 2026-08-19 · [verified]
 **Claim — expose "run one model turn" to every consumer as ONE async-iterable seam —
 `turn(input) → AsyncIterable<string>`, yielding the raw emitted lines/fragments — and make every
 backend an implementation of that interface, so no consumer ever names a vendor or a transport.**
-The worked repo pins this shape at two grains, both ratified: the provider grain —
-`AgentProvider.stream({ model, system, messages, signal }) → AsyncIterable<string>`, with the
-driver depending only on that signature ("it never names a vendor", ADR-0073 clause 1) — and the
-transport grain above it — `AgentTransport.turn(input): AsyncIterable<string>`, "the ONE interface
+The worked repo pins this shape at two grains, both ratified: the provider grain, whose seam
+shape [[llm-gateway-facts]]'s provider-adapter-seam reference owns (cited, not restated here) —
+and the transport grain above it — `AgentTransport.turn(input): AsyncIterable<string>`, "the ONE interface
 every consumer binds to" (ADR-0137 clause 2; restated as the load-bearing premise of ADR-0200).
 **Failure mode:** without the single seam, each consumer couples to one backend's wire specifics,
 and every backend swap — stub for test, proxy for live — becomes a consumer rewrite instead of a
@@ -97,6 +96,8 @@ catches drift") · 2026-08-19 · [verified]
 
 ## What this file does NOT cover
 
+The PROVIDER-grain seam itself — per-vendor adapter shape, key custody, endpoint registry:
+[[llm-gateway-facts]] (provider-adapter-seam) owns it; this file stops at the transport grain.
 The SSE-specific chunk-buffering technique (a related but distinct transport, covered in more
 depth): `sse-chunk-parsing-technique.md`. WebSocket's own reconnect/heartbeat lifecycle, a
 genuinely different failure surface from SSE/EventSource's one-directional stream:

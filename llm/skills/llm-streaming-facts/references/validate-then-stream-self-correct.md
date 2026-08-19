@@ -21,8 +21,9 @@ happen safely).
 fragment stream before doing anything else with it — `raw += frag`), `:313,318` (`assembleFromRaw`
 then `validateA2ui` run over the COMPLETE accumulated output — precisely `rest`, the raw text
 minus a small A2UI-specific leading metadata line peeled off earlier in the round, `:297`; this
-pack generalizes that as "the complete accumulated output," since the peel step itself is a
-protocol-specific detail out of this pack's scope, not part of the portable pattern), `:319-341`
+pack generalizes that as "the complete accumulated output" — and note, amended 2026-08-19: the
+peel step IS part of the portable pattern as the latency answer, taught in the leading-meta-line
+section below; this sentence previously scoped it out, superseded by that section), `:319-341`
 (only on a valid verdict does the loop `yield` anything at all — one line per structured record,
 `:340`). **Caveat — this
 does not forbid progressive UI rendering entirely:** a consumer CAN render each already-validated
