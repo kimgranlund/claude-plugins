@@ -4,5 +4,11 @@
     "dead": 1,
     "leaked": 6,
     "stolen": 2
+  },
+  "teamwork": {
+    "as_of": "2026-08-19",
+    "dead": 0,
+    "leaked": 0,
+    "stolen": 0
   }
 }

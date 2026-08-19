@@ -7,7 +7,8 @@ description: >-
   runs inline in a background fork of the caller's own session, not a real subagent instance);
   NOT the host-session-adopts-the-contract form (`/bind-{seat}` — no dispatch at all, the host
   itself holds the contract); NOT a per-seat alias — this command takes any registered agent
-  name as its argument and mints none of its own.
+  name as its argument and mints none of its own; NOT arbitrary unregistered instructions with
+  no agent name to resolve (`/sub-task {instructions}`).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "{agent-name} {task/charter for the agent}"

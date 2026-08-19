@@ -9,6 +9,7 @@
     { "id": "t05", "prompt": "/fork-agent product-leader tell me which loop we're in and return only the reading.", "expect": "trigger" },
     { "id": "n01", "prompt": "Dispatch the builder agent via the Agent tool for this ticket, unattended.", "expect": "no-trigger", "comment": "owner: /sub-agent — a real Agent-tool dispatch, not a background fork" },
     { "id": "n02", "prompt": "Make this session adopt the fleet-marshal agent's own contract directly for this charter.", "expect": "no-trigger", "comment": "owner: /bind-team — the host adopts the contract in place, no fork" },
-    { "id": "n03", "prompt": "Build feature #240 for me right now.", "expect": "no-trigger", "comment": "owner: /build-feature — the one concrete pre-existing fork target, reached by its own name" }
+    { "id": "n03", "prompt": "Build feature #240 for me right now.", "expect": "no-trigger", "comment": "owner: /build-feature — the one concrete pre-existing fork target, reached by its own name" },
+    { "id": "n04", "prompt": "/sub-task spin off a side question to a fresh agent: what's the tradeoff between polling and webhooks here?", "expect": "no-trigger", "comment": "owner: /sub-task — a clean-context subagent, the opposite of this command's inherited-context fork" }
   ]
 }
