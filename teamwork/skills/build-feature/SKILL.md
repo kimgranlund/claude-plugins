@@ -44,12 +44,12 @@ own no-live-channel branches apply. Never guess a target from history the fork d
 This command is the human-typed entry point only. The actual find-record/size/dispatch/close-loop
 procedure lives in `dispatch-ticket` (this plugin) — a `disable-model-invocation: true` skill like
 this one can't be Skill-tool-invoked or preloaded by anything else (issue #134/#135's shared
-defect class), so `dispatch-ticket` carries the procedure and `build-lead` (agent) reaches the
+defect class), so `dispatch-ticket` carries the procedure and `build-leader` (agent) reaches the
 identical logic for a programmatic caller (`mobilize-chores`). Given a non-empty seed, invoke
 `dispatch-ticket` (Skill tool) carrying `$ARGUMENTS` verbatim, and relay its result as this command's own
 output — this IS running the procedure, mechanically, not a restatement of it. `dispatch-ticket`
 itself stays un-forked (its own frontmatter carries no `context: fork`): invoked from here it runs
-inline inside this command's own fork (no double hop); invoked from `build-lead` it runs inline
+inline inside this command's own fork (no double hop); invoked from `build-leader` it runs inline
 inside that agent's already-isolated context (no live user there, so forking again would only add
 a needless third hop with nothing to buy); invoked from a `/bind-build` session it runs inline in
 that session's own turn (a live user IS present and inline is exactly what keeps the engine's

@@ -147,7 +147,7 @@ plain Edit/Bash calls from one sibling can intermittently land in a different si
   belt-and-suspenders on top of the guard, never made redundant by it.
 - **#359 (2026-08-16) is a recurrence of this exact class, root-caused PLATFORM-side** — the
   same cwd/write-guard identity migration #189 already tracked, corroborated in production a
-  second time (write-guard identity hopping worktree→worktree as sibling `build-lead` dispatches
+  second time (write-guard identity hopping worktree→worktree as sibling `build-leader` dispatches
   each created their own tree). Investigated and closed with no estate lever for the RACE itself
   (the CLI's own cwd-pin mechanics, upstream `anthropics/claude-code#86584`) — the estate stays a
   detection-only bystander here, never the source, and never gets a lever inside the platform's

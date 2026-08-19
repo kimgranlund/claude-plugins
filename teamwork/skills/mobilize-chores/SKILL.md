@@ -9,7 +9,7 @@ description: >-
   one still mobilizes it) — a blocked ticket whose blocker is itself mobilizable gets the blocker
   dispatched dependency-first instead of a bare skip (#558) — after one batched confirm (a
   leading `auto` argument skips it, for /goal loops and scheduled runs).
-  Every confirmed ticket, regardless of kind, dispatches uniformly to the build-lead agent
+  Every confirmed ticket, regardless of kind, dispatches uniformly to the build-leader agent
   (ADR-0010), whose dispatch-ticket procedure owns the kind branch; an
   under-specified task comes back SKIPPED — no clarify round runs unattended. Everything else
   (ops/hygiene actions, human-decision items) is skipped, never mobilized.
@@ -171,7 +171,7 @@ sweep surfaced that's actually buildable.
    and/or chains) to mobilize now, all, some, or none. Nothing
    dispatches before this round returns. A disclosed limitation of the uniform dispatch, stated
    here because this round is the one place to act on it: `dispatch-ticket`'s task-clarifying
-   round requires an interactive user and `build-lead` is an unattended seat, so NO clarify round
+   round requires an interactive user and `build-leader` is an unattended seat, so NO clarify round
    runs inside step 5's dispatches — an under-specified task comes back SKIPPED, and clarifying it
    means the human re-runs the named command interactively afterwards. Flag visibly
    under-specified task tickets IN this confirm round (one line each), so the human can decline
@@ -196,13 +196,13 @@ sweep surfaced that's actually buildable.
    Everything else still waits for a human, and merging stays a human act (ADR-0002's merge gate,
    unamended — the carve-out keeps the PR and every gate, it only pre-authorizes the click).
    Unsticking a blocker never widens this ceiling, never opens a second auto-merge path, and never
-   automates review: nothing here, in `build-lead`, or in `dispatch-ticket`
+   automates review: nothing here, in `build-leader`, or in `dispatch-ticket`
    approves or reviews a PR on its own. Still
    name every visibly under-specified task ticket in the step-6 report exactly as the interactive
-   branch would have flagged it in the confirm round — it comes back SKIPPED from `build-lead` (no
+   branch would have flagged it in the confirm round — it comes back SKIPPED from `build-leader` (no
    clarify round runs unattended either way), never silently dispatched on a guess.
 5. **Dispatch every confirmed ticket, uniformly.** Each confirmed ticket, regardless of kind →
-   `Agent(subagent_type: "teamwork:build-lead")` carrying the confirmed ticket id. `build-lead`'s
+   `Agent(subagent_type: "teamwork:build-leader")` carrying the confirmed ticket id. `build-leader`'s
    preloaded `dispatch-ticket` procedure (ADR-0010) owns the kind branch — its own body is the
    authoritative map, not restated here — and its unattended failure branches (an ambiguous
    record match reports as a named blocker; an under-specified task reports SKIPPED with no
@@ -210,7 +210,7 @@ sweep surfaced that's actually buildable.
    interactive user. Relay each returned typed result (path/URL, status, what shipped, a
    recorded blocker, a SKIPPED gap, or a `stale-premise` report with its evidence, #611) as that ticket's mobilized outcome — the same output a
    human running `/build-feature <id>` would see. `build-feature` stays
-   `disable-model-invocation: true` — per-ticket dispatch genuinely needs `build-lead`'s own
+   `disable-model-invocation: true` — per-ticket dispatch genuinely needs `build-leader`'s own
    isolated agent context (parallel, independently-isolated builds), unlike step 1's sweep, which
    needs no isolation of its own and so was reclassified to a directly Skill-tool-reachable
    procedure instead (issue #266) rather than kept as a two-piece command+agent pair — two
@@ -275,7 +275,7 @@ sweep surfaced that's actually buildable.
    happens to start with the literal word "auto") is observable in the artifact of record, never
    silent. Then the sweep's own findings, then a table of every ticket CONSIDERED this run —
    mobilized (dispatch + outcome: succeeded / failed / still in flight), a `stale-premise` result
-   (#611 — a relayed `build-lead` outcome distinct from SKIPPED and from a named blocker; one-line
+   (#611 — a relayed `build-leader` outcome distinct from SKIPPED and from a named blocker; one-line
    evidence summary in the table, no breakdown paragraph — nothing is blocking it, the ticket
    itself is wrong, and the evidence already sits on the record), or skipped-and-why (not
    confirmed, in flight already — an open PR, or a claim with no PR open yet (#184) — blocked by
@@ -300,7 +300,7 @@ sweep surfaced that's actually buildable.
    **Blocker breakdown.** Every ticket whose outcome is a named blocker (`dispatch-ticket`'s own
    distinct outcome, not a plain SKIPPED) — plus, as of #558, every `still-stuck-and-why` ticket —
    gets one paragraph, not just a table row: the ticket id
-   and title, what's actually blocking it (`build-lead`'s own stated reason, quoted or
+   and title, what's actually blocking it (`build-leader`'s own stated reason, quoted or
    paraphrased — never re-derived from scratch), which shape it is (name the shape in the
    paragraph, not just internally), and a proposed action that fits that shape. Classify before
    proposing — never propose a build attempt for any of these, and never blend two shapes into
@@ -363,17 +363,17 @@ sweep surfaced that's actually buildable.
   any member of it (`references/unstick-ordering.md`'s B2 class, #558).
 - The confirm round returns "none" → report 0 mobilized, same as step 3's empty case; not a
   failure.
-- `build-lead` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
+- `build-leader` returns a SKIPPED (a task not concretely actionable — no clarify round runs in an
   unattended dispatch) → relay it as that ticket's outcome in the step-6 table; the skip
   discipline itself lives in `dispatch-ticket`'s own failure branches, not re-litigated here.
   A named blocker gets more than a table row — step 6's blocker-breakdown paragraph, not just
   the row.
-- `build-lead` returns with no Findings-equivalent entry visible on the ticket read-back → one
+- `build-leader` returns with no Findings-equivalent entry visible on the ticket read-back → one
   re-dispatch of the SAME seat with `dispatch-ticket`'s contract quoted, then a recorded loss on
   the ticket if still nothing — the caller-side check that the seat's own write-back contract
   actually landed.
 - UNATTENDED run auto-confirms a ticket step 2 flagged as visibly under-specified (no human was
-  there to decline it) → dispatch it anyway; it returns SKIPPED from `build-lead` per that seat's
+  there to decline it) → dispatch it anyway; it returns SKIPPED from `build-leader` per that seat's
   own unattended contract, the identical outcome a human declining it in step 4 would have
   produced — never treated as an error unique to the unattended path.
 - **A TICKET FILTER names an id that doesn't resolve** (#449) → report "not found" for that id in
@@ -395,21 +395,21 @@ dispatch was gated
 by the human's one batched confirm
 (INTERACTIVE) or by step 2's own filtering under the explicit `auto` token (UNATTENDED) — never by
 neither — and the final report names every considered ticket's outcome — a mobilized ticket's
-relayed `build-lead` result, a skip-and-why, one of the three unstick outcome classes (#558:
+relayed `build-leader` result, a skip-and-why, one of the three unstick outcome classes (#558:
 unstuck-this-run / sequenced-for-next-run / still-stuck-and-why), or (for a named blocker or a
 still-stuck ticket) the classified breakdown paragraph, never just a table row. NOT done while a
 dispatch fires before the confirm round on an
 INTERACTIVE run, a named blocker or still-stuck ticket gets only a table row with no classified
 paragraph, a blocker
 breakdown proposes a build attempt instead of the shape its category actually calls for, an
-unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-lead` (the
+unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-leader` (the
 per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
 regression), a ticket already in flight OR already claimed OR carrying an open `Blocked-by:`
 dependency with no B5-mobilizable resolution is dispatched anyway, a cycle member or human-shape
 (B2/B4) blocker is EVER dispatched, a dependent is dispatched while any of its named blockers
 still reads OPEN, a second confirm round is opened for a chain, any wait/watch/poll on a PR runs
 between waves, the wave loop runs past 3 waves, or any unstick action other than the single
-`build-lead` dispatch is taken (a `Blocked-by:` line edited, a label changed, a stale claim
+`build-leader` dispatch is taken (a `Blocked-by:` line edited, a label changed, a stale claim
 reclaimed, a ratify comment posted), two concurrent
 feature/task dispatches with overlapping or unstated edit targets are pushed to run in parallel
 instead of the safer serial default (isolation itself is no longer this step's call — that's

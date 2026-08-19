@@ -89,7 +89,7 @@ def join(skills, preloads, skill_usage, lineage):
 
 def selftest():
     skills = {"save-lessons": {}, "dispatch-ticket": {}, "truly-dead": {}}
-    preloads = {"dispatch-ticket": ["build-lead"]}
+    preloads = {"dispatch-ticket": ["build-leader"]}
     skill_usage = {"knowledge-harvest": {"usageCount": 50, "lastUsedAt": 5},
                    "save-lessons": {"usageCount": 8, "lastUsedAt": 9}}
     lineage = {"knowledge-harvest": "save-lessons"}
