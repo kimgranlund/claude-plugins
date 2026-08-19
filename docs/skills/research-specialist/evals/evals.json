@@ -1,0 +1,93 @@
+{
+  "skill": "research-specialist",
+  "note": "New suite authored alongside the research-specialist agent + rubric (gh#721, lld-0023). Positives cover dispatching the agent, authoring/reviewing its deliverable, and grading it against the rubric. Negatives are adversarial against the closest neighbors: harness:fact-finder (gather-only, no synthesis), research-methods/experiment-runner (fixed-scorer measured loop), make-rubric (general rubric authoring), check-doc/doc-checker (generic document review with no deliverable-schema angle).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "what fields does a research-specialist deliverable need per finding",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "score this research-specialist findings record against its rubric",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "dispatch research-specialist to look into real-world case studies on X",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "what are the four axes the research-specialist rubric grades on",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "is this confidence marker used correctly in the research-specialist deliverable",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "check whether this finding's novelty flag is checkable before we call the deliverable done",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "review this research deliverable's actionable notes for padding",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "what does the research-specialist owning skill bundle for doc-checker to grade against",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "gather dated, sourced findings for this /make-pack wave, no synthesis",
+      "expect": "no-trigger",
+      "note": "owner: harness:fact-finder / pack-writing-rules — gather-only ledger, the exact contract research-specialist deliberately does not touch"
+    },
+    {
+      "id": "n02",
+      "prompt": "run a measured investigation to find the root cause of this regression",
+      "expect": "no-trigger",
+      "note": "owner: research-methods / experiment-runner — fixed-scorer measured loop, not a lookup"
+    },
+    {
+      "id": "n03",
+      "prompt": "tune these parameters and report which one actually moved the score",
+      "expect": "no-trigger",
+      "note": "owner: research-methods / experiment-runner"
+    },
+    {
+      "id": "n04",
+      "prompt": "write a rubric for grading model outputs",
+      "expect": "no-trigger",
+      "note": "owner: make-rubric — general rubric authoring, no research-specialist deliverable angle"
+    },
+    {
+      "id": "n05",
+      "prompt": "review this PRD for unfalsifiable requirements",
+      "expect": "no-trigger",
+      "note": "owner: check-doc / doc-checker's generic document review"
+    },
+    {
+      "id": "n06",
+      "prompt": "why isn't my skill triggering",
+      "expect": "no-trigger",
+      "note": "owner: skill-writing-rules"
+    },
+    {
+      "id": "n07",
+      "prompt": "audit the skill corpus for naming coherence",
+      "expect": "no-trigger"
+    },
+    {
+      "id": "n08",
+      "prompt": "build an expert pack on color science",
+      "expect": "no-trigger",
+      "note": "owner: make-pack — gather+distill corpus building, a different shape than one research-specialist dispatch"
+    }
+  ]
+}

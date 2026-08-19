@@ -132,6 +132,14 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.16.1 · 2026-08-19 · closes #721 (harness slice, docs sibling same PR): `fact-finder`'s body
+gains a two-sentence disjointness note naming `docs:research-specialist` as the sibling agent for
+a synthesis-required dispatch — the `lld-0023-research-specialist-deliverable-plan` Resolution 1
+R-1 mitigation ("stated explicitly in both agents' own descriptions once built"), realized in the
+BODY rather than the resident `description` per this file's own A8 dispatch-only-agent rule
+(fact-finder's description stays exactly one sentence, unchanged). Body-only edit, no
+frontmatter/description change — no `evals.json` obligation (agents carry no eval suite).
+`release_gate.py harness` clean.
 v3.16.0 · 2026-08-19 · closes #605: new skill `runtime-state` — a LOCATOR over existing session `.jsonl` transcripts (never an export bundle, never a Stop hook per #466's estate-wide retirement). `scripts/transcript_locate.py` derives the `~/.claude/projects/<slug>` directory from the resolved cwd (every `/` and `.` becomes `-`, verified live against this machine's own worktree-scoped project-dir names — the double-dash at a `.claude` boundary is real, not a typo), resolves "current session" via the live `CLAUDE_CODE_SESSION_ID` env var (falling back to the newest top-level transcript for a past-session-by-slug lookup, always disclosing which branch fired), lists the session's recent `agent-*.jsonl` subagent transcripts (its sibling `.meta.json` files excluded, negative-control-proven), and prints or clipboard-copies the resolved path(s) — zero new data written. Naming deviation recorded: the ideal name (`find-transcripts`/a `transcript`-object production) needs "find" as a skill-grammar head and "transcript"/"session" registered in `ObjectVocab`, neither licensed for an unattended mint (`find-` is not one of the four reserved skill heads; `naming.manifest.json`'s exemptions array is shrink-only per ADR-0011 D8, so a new name cannot be grandfathered in either) — `runtime-state` (both tokens pre-registered `ObjectVocab`, nominal-phrase production) is the nearest conformant alternative; a follow-up `authorkit:manifest-authoring` PR could register `transcript`/`session` and free up a more literal name. `transcript_locate.py selftest` green (10/10, incl. the real-machine slug fixture and the meta.json-exclusion negative control); fresh-context `skill-checker` pass.
 v3.15.7 · 2026-08-19 · #706 (2026-08-19 estate sweep, #676's final matrix), two routing-tuning
 fixes plus one documented no-change ownership decision: (1) `make-script`'s description
