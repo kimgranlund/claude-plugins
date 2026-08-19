@@ -134,8 +134,19 @@ rewards deleting the fences that protect rare-but-expensive misroutes.
    carries a structural-fix category per step 3.
 6. Trend: `python3 <this skill>/scripts/trend.py --rent <rent.json>
    [--routing-report <path>] --out <root>/attention-trend.csv` — appends
-   one dated row per plugin. Missing routing report → the dead/stolen/
-   leaked columns record the literal `absent`.
+   one dated row per plugin. **Routing-report source (issue #693):** pass
+   `--routing-report <git-root>/.claude/ops/routing-report.json` when that
+   file exists, where `<git-root>` is the estate's own repo root (`git
+   rev-parse --show-toplevel`) — NOT `<root>` from step 1, which may be a
+   single plugin dir or a bare `.claude/skills` tree sitting below the repo
+   root, not above it. harness `check-routing`'s own Phase 6 "Persist" step
+   writes that file, one merged JSON keyed by plugin, each plugin's entry
+   already its latest (no dated-directory globbing needed). attention-audit
+   stays the sole row-writer either way: it reads that file, it never runs
+   check-routing itself and never calls into harness. File absent (check-routing hasn't
+   run recently enough to have written it, or the estate has no harness
+   plugin installed) → omit the flag; the dead/stolen/leaked columns record
+   the literal `absent`, same as before.
 7. Render per references/REPORT-TEMPLATE.md: verdict-first, the separate
    series, findings with evidence (file, chars, shared terms, usage
    values). Hand every fix to the owner — the owning plugin edits its

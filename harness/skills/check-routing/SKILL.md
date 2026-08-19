@@ -74,4 +74,41 @@ Tuning: <per shape: the phrasing to add, or the description whose scope to cut �
 
 Every tuning line names the file and the edit direction; recommendations without a target are the report equivalent of a phantom reference. Hung votes carry no tuning line — there is no file to point at for a 3-way split — report it and stop; chasing it with a description edit is exactly the single-judge-noise-chasing this voting round exists to contain. Done when the matrix is printed and each failure carries a shape, plus a target for every shape but hung. NOT done on a summary sentence — the matrix is the deliverable; a prose "mostly routed fine" hides exactly the confusion pairs this command exists to expose.
 
+## Phase 6 — Persist (single-plugin runs only)
+
+The Phase 4 matrix computes exactly the three numbers `authorkit:attention-audit`'s trend
+capture wants (its own `scripts/trend.py --routing-report <path>` reads a JSON shaped
+`{"<plugin>": {"dead": n, "stolen": n, "leaked": n}}`) — until this phase existed, check-routing
+never wrote them anywhere, so every attention-trend row recorded those columns `absent` (issue
+#693). Closing that gap is this phase's only job; it changes nothing about Phases 1-5's own
+procedure.
+
+**Plugin-rooted run** (the usual `/check-routing <plugin>` invocation, a `<root>` carrying its
+own `.claude-plugin/plugin.json`) → count this run's total failures by shape across every suite
+(dead/stolen/leaked; hung is not one of the three tracked columns and is never counted here),
+then:
+
+```
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/check-routing/scripts/write_routing_report.py" <plugin-name> \
+  --dead <n> --stolen <n> --leaked <n> --out <git-root>/.claude/ops/routing-report.json
+```
+
+`<git-root>` is this plugin's enclosing git repository root (`git rev-parse --show-toplevel`),
+never `<root>` itself — `<root>` may be the plugin directory or a bare `.claude/skills` tree
+(Phase 1), and in either case the workspace's `.claude/ops/` sits above it, not under it.
+
+One stable, non-dated, git-tracked file — never the gitignored `harness-audit-*/` family (that
+convention is `check-everything`'s own dated, local-only audit scratch space, per its own
+`.gitignore` line; it was never check-routing's own path and stays out of scope here). Each run
+overwrites only its own plugin's entry, so the file holds the latest known counts for every
+plugin that has ever run this phase, with no dated-directory globbing required on the reading
+side. (The script's own on-disk shape also carries an `as_of` date per plugin — the illustrative
+JSON above elides it since `trend.py`'s reader ignores extra keys.)
+
+**Estate run** (`--estate`, no single owning plugin) → skip this phase; name it skipped in the
+report ("Persist: skipped, estate run has no single plugin key") rather than inventing one.
+
+Done (this phase) when a plugin-rooted run's three counts are written and the report names the
+path, or an estate run states the skip plainly.
+
 Judgment boundary: this skill owns *running* evals. Authoring them is `skill-writing-rules` (the suite conventions live there); a failing suite that needs its skill redesigned routes to `check-skill`.
