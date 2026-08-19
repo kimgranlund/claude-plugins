@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.11 · 2026-08-19 · live lane: the semantic-edit checker is dispatched the moment the edit lands and overlapped with bump/gate/routing prep (verdict gates the push, not the prep) — lever 1 of Kim's turnaround review, ~25% per lane change.
 v2.28.10 · 2026-08-19 · live-lane hardening (Kim-confirmed review findings): mechanical tripwires (>3 files/2nd plugin → confirm; red-CI semantic rework → re-confirm), mandatory ten-second collision look, `live-lane` PR label for revert-rate measurement; mobilize-chores' "second auto-merge path" claim scoped to its unattended flow.
 v2.28.9 · 2026-08-19 · fleet-rules Section 7 gains the live lane (Kim's ruling): a live human prompt for small bounded work executes solo inline, record-last — no intake mint/claim/write-gate/dispatch; PR-as-record, auto-merge on green pre-authorized; escalates to the full flow on multi-seat/unattended/backlog/oversize discovery. Quality floor + semantic-edit checker unchanged.
 v2.28.8 · 2026-08-19 · closes #751 (Kim's live correction: `/sub-task` shipped a one-shot
