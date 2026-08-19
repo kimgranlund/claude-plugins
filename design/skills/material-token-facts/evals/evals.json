@@ -1,6 +1,6 @@
 {
   "skill": "material-token-facts",
-  "note": "Glossary skill: what a --md-sys-* token MEANS and when to reach for it. Fences: the three consumption siblings own binding/recipes/values for their axis (color/typography/geometry), motion-tokens owns easing/duration, raw values route to the owning consumption skill, non-Material prefixes have no owner here. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
+  "note": "Glossary skill: what a --md-sys-* token MEANS and when to reach for it. Fences: the three consumption siblings own binding/recipes/values for their axis (color/typography/geometry), motion-tokens owns easing/duration, raw values route to the owning consumption skill, non-Material prefixes have no owner here. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal. #723 fix (2026-08-19): n09/n10 added \u2014 border/focus-ring width CONSUMPTION asks (a \"which token\" pick, not \"what does it mean\") were stolen by this skill's own prefix list naming border/focus-ring; reciprocal fence added naming material-shape-facts as the consumption owner, description re-dieted to the W8 budget in the same change. First re-diet dropped two of the three worked trigger examples and the explicit color/typography/geometry glossary-scope framing \u2014 a fresh full-suite blind judge caught 3 regressions (t02 stolen by material-type-facts, t05 dead, t08 stolen by material-shape-facts); healed by restoring the scrim-strengths example, the glossary-scope clause, and a general \"difference between two token families\" framing, trimming the M3-baseline fence's lead-in wording (not its mandatory verbatim quoted phrase) to hold budget. A second full-suite blind judge fixed t05/t08 but t02 (\"what is the kicker voice for\") was stolen by material-type-facts on BOTH judges (2-of-2, majority locked before a 3rd vote could change it) \u2014 the description's three worked examples were all color-domain, none typography, so a typography-flavored meaning-ask read as material-type-facts' own \"which voice/level\" trigger instead. Healed by swapping in a typography-domain example (\"what's the kicker voice for\") and trimming the M3-baseline fence's supporting clause further to hold budget. A third full-suite blind judge (fresh shuffle) came back 18/18 clean, including t02 \u2014 done. Three-judge history on t02 is 1 fail (pre-heal) / 2 pass (post-heal), a clean 2-of-3 majority; every other case held clean across all three judges. Wording-checker caught a real defect the routing judges didn't (routing tolerance isn't a language-layer pass): the YAML `>-` fold's line break landed mid-identifier twice (\"focus-\\nring}-*\" and \"material-\\nshape-facts\"), so the RENDERED description carried two spurious spaces, though the worked example phrasing elsewhere stayed correct. Reflowed so no fold point falls inside a hyphenated token (whitespace-only, verified byte-identical to the intended string via yaml.safe_load); no routing re-verification owed since the intended string content is unchanged.",
   "cases": [
     {
       "id": "t01",
@@ -89,6 +89,18 @@
       "prompt": "Which scrim strength for a drawer?",
       "expect": "no-trigger",
       "note": "a choosing ask for a concrete surface \u2014 color-tokens' consumption territory (same grammar as n01); this glossary owns what the strengths MEAN (ruled 2026-07-14, check-routing round 1)"
+    },
+    {
+      "id": "n09",
+      "prompt": "the md-sys border width token",
+      "expect": "no-trigger",
+      "note": "#723: a consumption \"which token\" pick, not a meaning ask \u2014 material-shape-facts owns it (its own t10); this glossary's border/focus-ring prefix entries name what the token MEANS, not which one to reach for"
+    },
+    {
+      "id": "n10",
+      "prompt": "the md-sys focus ring token",
+      "expect": "no-trigger",
+      "note": "#723: same consumption-vs-meaning boundary as n09 \u2014 material-shape-facts owns it (its own t08)"
     }
   ]
 }
