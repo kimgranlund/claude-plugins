@@ -94,9 +94,9 @@ same one every error path in this protocol follows — see errors-and-versioning
 **[verified]** 2026-08-19 against the shipped producer grammar
 (`packages/agent-ui/a2ui/src/agent/prompts/grammar.md`, byte-pinned), `renderer/validate.ts`'s
 `checkContainment`, ADR-0198's ratified 2026-08-18 amendment (B1), and the field wave
-PR #1326 / GH #1262. The renderer facts above (one
-root, IDGRAPH on a second delivery, whole-record replacement) have hardened into producer LAWS —
-answer payload-lifecycle asks from these, not just from the renderer's tolerance:
+PR #1326 / GH #1262. The renderer facts above (one root, IDGRAPH on a second delivery) have
+hardened into producer LAWS, and grammar.md adds the whole-record replacement rule the renderer
+never states — answer payload-lifecycle asks from these, not just from the renderer's tolerance:
 
 - **Root-once / root-immutability.** `id:"root"` is delivered ONCE per surface; resending it is an
   id-graph error that **silently keeps the OLD root, never your change** (the SPEC-R3 AC2 fact
@@ -104,12 +104,15 @@ answer payload-lifecycle asks from these, not just from the renderer's tolerance
   wrapper child up front and put every growing container under ITS OWN id one level down — never
   root itself (grammar.md's root-immutability rule).
 - **Scene swaps are whole-container resends, never appends.** Resending an id REPLACES its ENTIRE
-  record — every prop still wanted plus the FULL children list; there is no partial-prop patch. A
-  continuing flow (wizard step, game round, dashboard refresh) REUSES its surface: the producer
-  swaps the scene container's children with one `updateComponents` on the SAME `surfaceId`, resends
-  ONLY the changed subtree, and reserves `createSurface` for a genuinely PARALLEL artifact
-  (grammar.md's surface-reuse law; ADR-0198 amendment B1 rules mid-flow Next/Back as exactly this —
-  scene transitions, with draft state under a `/draft/*` data-model prefix surviving each swap).
+  record — every prop still wanted plus the FULL children list; there is no partial-prop patch
+  (grammar.md's output rules — a producer law the renderer's buffer-by-id merge realizes but never
+  states). A continuing flow (wizard step, game round, dashboard refresh) REUSES its surface: the
+  producer swaps the scene container's children with one `updateComponents` on the SAME
+  `surfaceId`, resends ONLY the changed subtree, and reserves `createSurface` for a genuinely
+  PARALLEL artifact (grammar.md's surface-reuse law; ADR-0198 amendment B1 rules mid-flow Next/Back
+  as exactly this — scene transitions, with draft state under a `/draft/*` data-model prefix
+  surviving each swap; the ask-freeze half of that same B1 law — WHEN the answered-ask freeze
+  begins — lives with [[a2ui-chat-agent-facts]]'s flow-completion section).
 - **The wire has no node-delete verb — retiring a slot needs a referenced-but-EMPTY node.**
   `updateComponents` only upserts; a node dropped from a parent's `children` still sits in the
   merged component set. For a Card region that matters concretely: `checkContainment`

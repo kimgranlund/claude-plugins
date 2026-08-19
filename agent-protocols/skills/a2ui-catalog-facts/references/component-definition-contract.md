@@ -35,7 +35,11 @@ Defined at `catalog.ts:29-33`; validated by `validatePropDef` (`catalog.ts:158-1
 
 - **`type`** — a JSON-Schema fragment (`JsonSchema = Record<string,unknown> | boolean`,
   `catalog.ts:11`). The conformance validator checks only the primitive `type` keyword against the
-  JS runtime type (see `references/security-allowlist-and-conformance.md`).
+  JS runtime type (see `references/security-allowlist-and-conformance.md`). *(Amended 2026-08-19:
+  since ADR-0098, `enum` membership is ALSO enforced — strict `===` before the `type` dispatch,
+  `conformance.ts:119-124`, [verified] against origin/main 2026-08-19. "Primitive-only" still holds
+  for everything else: inner object keys are never descended into — see the schema-omission class
+  in this file's 2026-08-19 UPDATE.)*
 - **`mapsTo`** (REQUIRED, a string — `catalog.ts:161`) — the control-side target the factory writes.
   When `mapsTo` **equals** the property name, the factory sets `el[prop]` directly (the 1:1
   reflection, SPEC-R8); when it **differs** (e.g. `Button.label` → `textContent`,
@@ -166,9 +170,10 @@ enum gate covers the new members with ZERO validator code — an excluded value 
 why is the render wrong?":
 
 - **The schema-omission class.** Conformance's `matchesSchemaType` checks `enum` membership plus the
-  PRIMITIVE `type` keyword only (`conformance.ts:115-130`) — it never descends into an object/array
-  prop's inner keys (`properties`/`required`/`additionalProperties` are outside the declared minimal
-  subset). A typo'd inner key (`rows: [{lable: …}]`) therefore validates cleanly; the component's
+  PRIMITIVE `type` keyword only (`conformance.ts:115-130` — the same fact the §PropDef `type`
+  bullet above carries, with its ADR-0098 note; stated there, applied here) — it never descends
+  into an object/array prop's inner keys (`properties`/`required`/`additionalProperties` are
+  outside the declared minimal subset). A typo'd inner key (`rows: [{lable: …}]`) therefore validates cleanly; the component's
   hardening codec then DROPS the malformed entry (the ADR-0201 `cleanDescriptionRows` posture:
   malformed → `[]`/omitted, never a throw), so the defect presents as silently-missing content, not
   an error. Never claim conformance checks object shape — the codec is the safety net, and the fix

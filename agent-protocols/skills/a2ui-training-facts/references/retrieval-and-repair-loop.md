@@ -70,8 +70,8 @@ one real clause; GH #1355 routed five untaught idioms across them):
 
 1. **A grammar clause** — unconditional, mode-invariant mechanics EVERY turn must obey (flow
    completion, ADR-0198 cl.2 — "must be unconditional default behavior"; the Text-register
-   routing, ADR-0207 D3 at a measured +220 always-on tokens). Byte-pinned: lands with a golden-
-   baseline recapture. Fits: cross-cutting conduct no trigger vocabulary reaches reliably.
+   routing, ADR-0207 D3 at a measured +220 always-on tokens). Byte-pinned: lands with a
+   golden-baseline recapture. Fits: cross-cutting conduct no trigger vocabulary reaches reliably.
 2. **A mini-skill module** (~200-token budget, cap 3/turn, TF-IDF trigger-selected on USER text —
    ADR-0091) — an INTENT-shaped idiom ("login form", "dashboard"). Fits only when a trigger
    vocabulary actually reaches it; ADR-0207 A2 rejected this lane for register choice precisely

@@ -135,8 +135,9 @@ the same flag is untouched — two documented, non-colliding layer-local meaning
 **[verified]** against the ADR texts fetched from `kimgranlund/agent-ui` 2026-08-19 (ADR-0097 /
 0174 / 0178 / 0198 incl. both ratified amendments / 0204 / 0206 — every one `accepted`) and the
 shipped `src/agent/meta-line.ts` header comments, which restate each arm's law per-arm. §1's
-`{ note?, ask?, trace? }` was the 2026-07-08 snapshot; the reserved MODEL-authored vocabulary is now
-**`ask · plan · personaPatch · flowEnd · team · target`** (ADR-0206 Consequences names all six so
+`{ note?, ask?, trace? }` was the 2026-07-08 snapshot; the reserved MODEL-authored vocabulary — the
+six arms riding BESIDE `note`, which stays the base prose channel and is not counted among them —
+is now **`ask · plan · personaPatch · flowEnd · team · target`** (ADR-0206 Consequences names all six so
 "the next envelope audit finds a cited decision"). `trace`/`progress`/`error` are the
 RUNTIME-composed siblings — composed by `produce()`/the host, never declared by the model
 (ADR-0174 Context draws this line explicitly).
@@ -192,10 +193,10 @@ arm the model states, never a smarter host guess.
 ratified; fetched 2026-08-19). These are producer-grammar CONDUCT laws taught mode-invariantly in
 `grammar.md` (never a mini-skill — completion must be unconditional default behavior, ADR-0198 cl.2):
 
-- **`flowEnd: true` fires on ALL flow-terminal paths** (amendment A1): happy completion, escalation
-  /early-stop (the escalation prose turn IS the closing turn — the observed urgent-triage gap), and
-  model-visible abandonment ("never mind"). A silently closed tab is not a turn; chrome still never
-  infers.
+- **`flowEnd: true` fires on ALL flow-terminal paths** (amendment A1): happy completion,
+  escalation/early-stop (the escalation prose turn IS the closing turn — the observed urgent-triage
+  gap), and model-visible abandonment ("never mind"). A silently closed tab is not a turn; chrome
+  still never infers.
 - **The user takes the final action** (A2): before any conclusive action the agent presents a final
   proposed-outcome artifact (the existing summary card — no new component) carrying an ORDINARY
   confirm ask; **ordering law: `flowEnd` comes AFTER the user's commit, never on the
@@ -205,7 +206,8 @@ ratified; fetched 2026-08-19). These are producer-grammar CONDUCT laws taught mo
   swaps the scene container's children on the SAME surface, the ask keeps its one `ask-<n>` id for
   the whole wizard, and draft state lives under a `/draft/*` prefix that survives every swap (Back
   is free because nothing is committed until the flow-final confirm). Only after that confirm does
-  the fresh-id freeze law govern.
+  the fresh-id freeze law govern. (The wire half of the same B1 law — whole-container scene
+  resends, no per-node delete — is [[a2ui-protocol-facts]]'s message-lifecycle territory.)
 - **The closing turn emits NO A2UI — except exactly ONE settling `updateComponents`** (A3 + B2):
   the courtesy-close prose `note` + `flowEnd: true`, no new ask, and at most one update against the
   already-confirmed receipt's surface (strip Back/Confirm, add a settled Badge), never a fresh

@@ -147,6 +147,12 @@ ARCHITECTURE and folds into its owner's card. `Segment` folded — `segment.css`
 zero chrome (every sized value is the host segmented-control's own token chain, ADR-0095 cl.3), so
 a standalone Segment card rendered bare text and `checked` painted nothing, in BOTH render modes.
 `Radio` is the deliberate contrast that STAYS browsable: `radio.css` owns its own ring + dot, so a
-lone Radio is standalone-legible — same family shape, opposite verdict. The catalog row is
-untouched either way (Segment stays a parent-declared wire type like `Option`/`Tab`); NESTED_ONLY
-is a SITE/browse disposition, not a wire one.
+lone Radio is standalone-legible — same family shape, opposite verdict. The catalog side is
+untouched either way — and note the axes do NOT coincide: `Segment` ships its own descriptor
+(`segment.md`), so it rides the fleet-derived gate with its OWN catalog row exactly like `Radio`
+(it is NOT in the parent-declared exempt set, which stays
+`CardContent/CardFooter/CardHeader/Option/Tab/TabPanel` — `index.test.ts:57` + the `Segment` row
+in `catalog.json`, both [verified] against origin/main 2026-08-19; GH #1332's own "parent-declared
+like Option/Tab" phrasing is loose on this point). NESTED_ONLY is a SITE/browse disposition, not a
+wire one — a type can be fleet-derived, row-carrying, and still fold its browse card into its
+owner's.

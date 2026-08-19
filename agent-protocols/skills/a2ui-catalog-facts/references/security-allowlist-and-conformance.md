@@ -61,12 +61,18 @@ string) — so bindability is itself part of the security surface.
 (`conformance.ts:55-82`): `string`/`number`/`integer`/`boolean`/`object`/`array`/`null`. Unknown
 schema keywords return `true` — "do not over-reject" (`conformance.ts:79-81`).
 
-- **Known-tolerant caveat:** an out-of-enum `type` literal (e.g. a `TextField.type` outside the
-  12-value enum) PASSES the static validator, and the control falls back to its default — recorded
-  as tolerant, not fixed (ADR-0053 Consequences). Enum membership is NOT enforced by conformance;
-  the renderer's `applies` gate (`widget.ts:126-128`) drops a static literal that isn't a declared
-  enum member at apply-time instead. Do not tell a user conformance rejects a bad enum value — it
-  does not.
+- **Known-tolerant caveat — FALSIFIED by ADR-0098 (correction dated 2026-08-19):** this bullet's
+  original 2026-07-07 claim ("an out-of-enum `type` literal PASSES the static validator … Enum
+  membership is NOT enforced by conformance … Do not tell a user conformance rejects a bad enum
+  value") described the pre-ADR-0098 validator and is no longer true. **[verified]** against
+  `conformance.ts` fetched from `kimgranlund/agent-ui` origin/main 2026-08-19: `matchesSchemaType`
+  now checks JSON-Schema `enum` membership FIRST — strict `===`, case-sensitive, no coercion,
+  evaluated before the `type` dispatch as a narrower constraint layered on top of it
+  (`conformance.ts:119-124`); an out-of-enum literal fails `CATALOG`. Scope limits that DO still
+  hold: only primitive-member equality is evaluated (deep-equality object members are outside the
+  declared minimal subset — no shipped catalog uses them), and a bindable prop's `{path}`/`{call}`
+  arms still defer to render time as above. The renderer's `applies` gate remains as
+  defense-in-depth at apply-time.
 
 ## Validator parity — ONE implementation, two callers
 

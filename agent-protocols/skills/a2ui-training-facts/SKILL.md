@@ -28,7 +28,7 @@ admits, judges, or edits pipeline source (see Boundaries).
 | Canonical form + dedup — what normalizes vs what's preserved, exact-hash + MinHash near-dup, determinism | `references/canonicalization-and-dedup.md` |
 | Admission + healing — the 11-stage pipeline, tier-1 vs tier-2, error codes, the closed form-only healer | `references/admission-gate-and-healing.md` |
 | Judge / verdict adapter — critic-authored verdicts, qualityScore=min, fail-closed, quarantine, rescore, --replace | `references/judge-and-verdict-adapter.md` |
-| Retrieval / export / repair loop — top-k by intent, few-shot + fine-tune export, version-change coherence (+ what's designed-not-built) | `references/retrieval-and-repair-loop.md` |
+| Retrieval / export / repair loop — top-k by intent, few-shot + fine-tune export, version-change coherence (+ what's designed-not-built) · "where does producer-grammar teaching land?" (the four teaching lanes; judged exemplars are this pack's own) | `references/retrieval-and-repair-loop.md` |
 | Provenance — where a claim comes from (file:line, ADR/SPEC clause, verified upstream) | `references/sources.md` |
 
 ## Load discipline (read before opening a reference)

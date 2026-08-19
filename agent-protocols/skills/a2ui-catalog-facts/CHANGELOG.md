@@ -16,6 +16,12 @@ Two reference UPDATE sections, ADRs fetched verbatim from `kimgranlund/agent-ui`
   NESTED_ONLY-vs-browsable chrome-ownership discriminator (GH #1332, Segment vs Radio).
 - `INDEX.md`: both rows' ask-classes widened to carry the new questions. No description/evals
   change (routing surface untouched).
+- Post-checker repair (same day): the pack's pre-ADR-0098 "enum membership is NOT enforced" claims
+  (`security-allowlist-and-conformance.md`'s known-tolerant caveat + the §PropDef `type` bullet)
+  were checked against origin/main's `conformance.ts`, found falsified (enum IS enforced,
+  `conformance.ts:119-124`), and amended in place with dated notes — one answer everywhere. The
+  Segment/NESTED_ONLY paragraph also corrected: Segment rides the fleet-derived gate with its own
+  row (ships `segment.md`), NOT the parent-declared exemption.
 
 ## 2026-07-07 — minted
 

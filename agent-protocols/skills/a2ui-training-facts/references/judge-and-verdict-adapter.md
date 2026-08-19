@@ -21,7 +21,7 @@ The aggregation is: **`qualityScore` = the MINIMUM across the `[gate]`-typed dim
 
 `VerdictsFile` (`judge.ts:15-21`): `{ rubric: 'a2ui-corpus', rubricVersion, judgedBy, date, verdicts: Record<record.name, JudgeVerdict> }`. `parseVerdictsFile(text, expectedRubricVersion)` (`judge.ts:46-99`) is **total** — it batches every issue (malformed JSON, missing/wrong `rubric`, unknown top-level or per-verdict key, malformed per-name verdict) into a structured `issues[]`, never short-circuiting (mirrors `validateRecord`).
 
-**`rubricVersion` MUST equal the rubric document's `version:` marker** (`judge.ts:60-67`) — a verdict is meaningless without the standard it scored against (ADR-0068 clause 1). The pure core never reads the rubric file itself (ADR-0062): the **caller** supplies `expectedRubricVersion` — the Node shell reads `a2ui-corpus.md`'s `^version:\s*(\S+)$` marker and passes it in (`rescore.ts:36-50`, `import-seeds.ts:62-76`; the marker is currently `version: 1.0`). This is why the rubric-home path is duplicated across both shells rather than factored out — each shell independently owns "where the rubric doc lives" (`import-seeds.ts:56-60`).
+**`rubricVersion` MUST equal the rubric document's `version:` marker** (`judge.ts:60-67`) — a verdict is meaningless without the standard it scored against (ADR-0068 clause 1). The pure core never reads the rubric file itself (ADR-0062): the **caller** supplies `expectedRubricVersion` — the Node shell reads `a2ui-corpus.md`'s `^version:\s*(\S+)$` marker and passes it in (`rescore.ts:36-50`, `import-seeds.ts:62-76`; the marker read `version: 1.0` at this file's 2026-07-07 verification; amended 2026-08-19 — it is `1.2` since the GH #1262 P9 fold, see the UPDATE below). This is why the rubric-home path is duplicated across both shells rather than factored out — each shell independently owns "where the rubric doc lives" (`import-seeds.ts:56-60`).
 
 ## `createVerdictJudge` fails CLOSED on an unjudged candidate
 
@@ -95,7 +95,9 @@ front door. Resolve by re-running with `--verdicts`; a bare run can never admit 
 weak dimension sinks the record — and it also means the RUBRIC's dimension list is load-bearing
 shared state: the payload rubric grew P9 (card anatomy) without the corpus rubric bumping, so
 judges graded P1–P8 and could only report P9 advisory. Kim's ruling folded P9 in (corpus rubric →
-1.2, `D1 = MIN P1–P9`) and re-judged ONLY the affected seeds; `frontier-image-hero-card` — a
+1.2, whose D1 — the corpus rubric's payload-quality gate dimension, itself computed as the MIN
+fold over the payload rubric's P1–P9 — is the same D1 the ADR-0165 casualty above failed) and
+re-judged ONLY the affected seeds; `frontier-image-hero-card` — a
 5-scoring record on every other dimension — failed D1 on P9 alone (action Button in CardContent,
 no footer). Conduct: a judge that grades against a stale dimension list reports the gap to the
 RUBRIC owner; it never averages, and never scores a dimension the rubric version doesn't carry.
