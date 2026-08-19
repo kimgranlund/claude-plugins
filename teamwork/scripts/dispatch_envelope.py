@@ -2,7 +2,8 @@
 """dispatch_envelope — pre-compute a build dispatch's fixed setup, once, before the Agent call.
 
 Usage:
-  dispatch_envelope.py <ticket-id> [--plugin <name>]
+  dispatch_envelope.py <ticket-id> [--plugin <name>] [--scratch-dir <path>]
+  dispatch_envelope.py --help | -h
   dispatch_envelope.py selftest
 
 Ticket #758 (2026-08-19, lever 2 of Kim's turnaround review): every `build-leader` dispatch
@@ -35,6 +36,12 @@ ticket-title convention (`teamwork:`, `harness:`, ...) is tried; absent THAT too
 `slot` both emit `null` and the run still exits 0 — the builder decides, never a guess (branch,
 clone, pin_check, and the collision look are all plugin-independent and still run).
 
+Scratch-clone location (ticket #766): `--scratch-dir <path>` wins when given; absent, the
+`CLAUDE_SCRATCHPAD` env var wins when set (this workspace's own session-scoped scratchpad,
+the directory `repo-cleaner` already knows to sweep); absent both, the clone lands in the
+current `$TMPDIR`/`tempfile.gettempdir()` default, unchanged from before this fix — so an
+un-configured caller sees no behavior change at all.
+
   E1 [FAIL->exit1] slot.claim_clean is false — a sibling open PR already claims this plugin's
             next version (the CLAIM race `version_claim_check.py` itself catches); envelope is
             still emitted in full, `next` advanced past every already-claimed version, so the
@@ -44,9 +51,16 @@ clone, pin_check, and the collision look are all plugin-independent and still ru
             already existing on the remote, fetched into the clone, would land here)
   E3 [FAIL->exit1] the decided branch name collides with an existing open PR's own head branch
 
-Exit 0 clean envelope (incl. the plugin-unresolved null branch above), 1 on E1/E2/E3 (envelope
-still printed — the caller reads it for the actionable detail), 2 on a usage error or the
-envelope couldn't be built at all (ticket unreadable, clone/git failure, no `gh` auth).
+`--help`/`-h` (ticket #766, first-use finding): exits 0 with this usage text, checked BEFORE
+any argument parsing — the fix for a bare `--help` previously being read as the ticket-id
+itself, reaching `gh issue view --help`, and crashing on the resulting non-JSON output. A
+ticket-id that isn't a bare non-negative integer is likewise rejected before any `gh` call —
+exit 2, never a network round-trip spent finding out.
+
+Exit 0 clean envelope (incl. the plugin-unresolved null branch above, and `--help`/`-h`), 1 on
+E1/E2/E3 (envelope still printed — the caller reads it for the actionable detail), 2 on a usage
+error (a non-integer ticket-id, an unrecognized flag, a flag missing its value) or the envelope
+couldn't be built at all (ticket unreadable, clone/git failure, no `gh` auth).
 
 Network: `run()` calls `gh`/`git` live, same discipline as `version_claim_check.py`'s own
 `_gh_json` and `merge_queue_watch.py`'s own docstring. `selftest` never touches the network or a
@@ -66,26 +80,51 @@ import tempfile
 
 PLUGIN_PREFIX_RE = re.compile(r"^([a-z][a-z0-9-]*):\s*")
 _WORD_RE = re.compile(r"[a-z0-9]+")
+_TICKET_ID_RE = re.compile(r"^\d+$")
+HELP_FLAGS = ("--help", "-h")
 
 
 def parse_args(args):
-    """Returns (ticket_id, plugin). Raises ValueError on any unrecognized token or a flag
-    missing its value — the #188-class silent-argument-swallowing defect this house style
-    always rejects rather than risks."""
+    """Returns (ticket_id, plugin, scratch_dir). Raises ValueError on any unrecognized token, a
+    flag missing its value, or a ticket-id that isn't a bare non-negative integer (ticket #766 —
+    the caller must never reach a `gh` call on a malformed id, `--help` included; that flag is
+    intercepted by the caller BEFORE parse_args ever runs, so it never lands here at all) — the
+    #188-class silent-argument-swallowing defect this house style always rejects rather than
+    risks."""
     if not args:
         raise ValueError("ticket-id is required")
     ticket_id = args[0]
+    if not _TICKET_ID_RE.match(ticket_id):
+        raise ValueError(f"ticket-id must be a bare integer, got {ticket_id!r}")
     plugin = None
+    scratch_dir = None
     i = 1
     while i < len(args):
         flag = args[i]
-        if flag != "--plugin":
+        if flag == "--plugin":
+            if i + 1 >= len(args):
+                raise ValueError("--plugin requires a value")
+            plugin = args[i + 1]
+            i += 2
+        elif flag == "--scratch-dir":
+            if i + 1 >= len(args):
+                raise ValueError("--scratch-dir requires a value")
+            scratch_dir = args[i + 1]
+            i += 2
+        else:
             raise ValueError(f"unrecognized argument: {flag!r}")
-        if i + 1 >= len(args):
-            raise ValueError("--plugin requires a value")
-        plugin = args[i + 1]
-        i += 2
-    return ticket_id, plugin
+    return ticket_id, plugin, scratch_dir
+
+
+def resolve_dest_root(scratch_dir_arg):
+    """Pure: --scratch-dir wins when given; else CLAUDE_SCRATCHPAD when set; else today's
+    $TMPDIR/tempfile.gettempdir() default, unchanged — ticket #766's clone-location fix."""
+    if scratch_dir_arg:
+        return scratch_dir_arg
+    env = os.environ.get("CLAUDE_SCRATCHPAD")
+    if env:
+        return env
+    return tempfile.gettempdir()
 
 
 def infer_plugin(title):
@@ -97,14 +136,23 @@ def infer_plugin(title):
     return m.group(1) if m else None
 
 
-def slugify(title, max_words=4):
+def slugify(title, max_words=4, max_chars=30):
     """Pure: a ticket title -> a short branch slug. Strips a leading 'plugin:' prefix and any
     trailing ' (...)' or ' -- ...'/' - ...' commentary, then keeps the first few meaningful
-    words. Never empty — falls back to 'ticket'."""
+    words. Never empty — falls back to 'ticket'.
+
+    Ticket #766: a slug over `max_chars` truncates at the LAST HYPHEN BOUNDARY under the cap,
+    never mid-word — a naive `slug[:max_chars]` cut previously landed on fragments like
+    'audit-gains-a' or '...-pre' (a half-eaten word); this drops the trailing partial word
+    whole instead of slicing into it."""
     text = PLUGIN_PREFIX_RE.sub("", title.strip())
     text = re.split(r"\s+[—-]\s+|\s+\(", text, maxsplit=1)[0]
     words = _WORD_RE.findall(text.lower())
     slug = "-".join(words[:max_words])
+    if len(slug) > max_chars:
+        truncated = slug[:max_chars]
+        last_hyphen = truncated.rfind("-")
+        slug = truncated[:last_hyphen] if last_hyphen > 0 else truncated
     return slug or "ticket"
 
 
@@ -268,7 +316,7 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
         _gh_json(["pr", "list", "--state", "open", "--json", "number,body"], repo=repo)
     claimed_no_pr = find_claimed_no_pr(open_issues, prs_with_body, exclude_number=number)
 
-    dest_root = dest_root or tempfile.gettempdir()
+    dest_root = dest_root or resolve_dest_root(None)
     repo_name = repo.split("/")[-1]
     clone_dest = os.path.join(dest_root, f"{repo_name}-{ticket_id}")
     remote_url = _remote_url(repo)
@@ -316,6 +364,18 @@ def selftest():
         print("FAIL slugify/empty (must never be empty)"); fails += 1
     else:
         print("ok    slugify/empty")
+
+    # slugify — ticket #766's own negative control: a title whose plugin-stripped slug WOULD
+    # truncate mid-word under a naive slug[:max_chars] cut must instead land on the last full
+    # hyphen boundary under the cap
+    got = slugify("othersystem: extraordinarily long branch slugname (extra commentary)")
+    if got != "extraordinarily-long-branch":
+        print(f"FAIL slugify/hyphen_boundary_truncation (must truncate at the last hyphen "
+              f"boundary under the cap, never mid-word): {got!r}")
+        fails += 1
+    else:
+        print("ok    slugify/hyphen_boundary_truncation (mid-word cut avoided, plugin prefix "
+              "and commentary stripped)")
 
     # version_tuple / compute_next_version
     if version_tuple("2.28.11") != (2, 28, 11):
@@ -400,16 +460,21 @@ def selftest():
             fails += 1
 
     # parse_args — the #188-class negative control
-    tid, plugin = parse_args(["758", "--plugin", "teamwork"])
-    if (tid, plugin) != ("758", "teamwork"):
+    tid, plugin, scratch_dir = parse_args(["758", "--plugin", "teamwork"])
+    if (tid, plugin, scratch_dir) != ("758", "teamwork", None):
         print("FAIL parse_args/full"); fails += 1
     else:
         print("ok    parse_args/full")
-    tid, plugin = parse_args(["758"])
-    if (tid, plugin) != ("758", None):
+    tid, plugin, scratch_dir = parse_args(["758"])
+    if (tid, plugin, scratch_dir) != ("758", None, None):
         print("FAIL parse_args/bare"); fails += 1
     else:
         print("ok    parse_args/bare")
+    tid, plugin, scratch_dir = parse_args(["758", "--scratch-dir", "/tmp/somewhere"])
+    if (tid, plugin, scratch_dir) != ("758", None, "/tmp/somewhere"):
+        print("FAIL parse_args/scratch_dir"); fails += 1
+    else:
+        print("ok    parse_args/scratch_dir")
     try:
         parse_args(["758", "--bogus", "x"])
         print("FAIL parse_args/bogus (unrecognized flag must be rejected)"); fails += 1
@@ -427,18 +492,92 @@ def selftest():
         else:
             print("ok    parse_args/missing-value")
     try:
+        parse_args(["758", "--scratch-dir"])
+        print("FAIL parse_args/scratch_dir-missing-value"); fails += 1
+    except ValueError as e:
+        if "--scratch-dir" not in str(e):
+            print("FAIL parse_args/scratch_dir-missing-value (error must name the flag)")
+            fails += 1
+        else:
+            print("ok    parse_args/scratch_dir-missing-value")
+    try:
         parse_args([])
         print("FAIL parse_args/empty"); fails += 1
     except ValueError:
         print("ok    parse_args/empty")
 
+    # parse_args — ticket #766's own two first-use findings: a non-integer ticket-id must be
+    # rejected before any gh call could ever be attempted, never silently swallowed
+    try:
+        parse_args(["abc"])
+        print("FAIL parse_args/non_integer_ticket (a non-integer ticket-id must be rejected)")
+        fails += 1
+    except ValueError as e:
+        if "bare integer" not in str(e):
+            print("FAIL parse_args/non_integer_ticket (error must name the requirement)")
+            fails += 1
+        else:
+            print("ok    parse_args/non_integer_ticket")
+
+    # resolve_dest_root — --scratch-dir wins, then CLAUDE_SCRATCHPAD, then today's default
+    if resolve_dest_root("/explicit/dir") != "/explicit/dir":
+        print("FAIL resolve_dest_root/explicit"); fails += 1
+    else:
+        print("ok    resolve_dest_root/explicit (--scratch-dir wins)")
+    old_env = os.environ.get("CLAUDE_SCRATCHPAD")
+    try:
+        with tempfile.TemporaryDirectory() as fake_scratchpad:
+            os.environ["CLAUDE_SCRATCHPAD"] = fake_scratchpad
+            if resolve_dest_root(None) != fake_scratchpad:
+                print("FAIL resolve_dest_root/env (CLAUDE_SCRATCHPAD must win over the default)")
+                fails += 1
+            else:
+                print("ok    resolve_dest_root/env (honors CLAUDE_SCRATCHPAD, a real tmp dir "
+                      "standing in as the scratchpad)")
+    finally:
+        if old_env is None:
+            os.environ.pop("CLAUDE_SCRATCHPAD", None)
+        else:
+            os.environ["CLAUDE_SCRATCHPAD"] = old_env
+    os.environ.pop("CLAUDE_SCRATCHPAD", None)
+    if resolve_dest_root(None) != tempfile.gettempdir():
+        print("FAIL resolve_dest_root/default (neither flag nor env set must keep today's "
+              "$TMPDIR behavior)")
+        fails += 1
+    else:
+        print("ok    resolve_dest_root/default (unchanged $TMPDIR behavior when unset)")
+
+    # --help / -h — end-to-end against the real script file: must exit 0 with usage text,
+    # checked BEFORE argument parsing so it can never reach a `gh` call (the original crash:
+    # `--help` read as the ticket-id, `gh issue view --help` returning non-JSON)
+    script_path = os.path.abspath(__file__)
+    for flag in HELP_FLAGS:
+        r = subprocess.run([sys.executable, script_path, flag],
+                            capture_output=True, text=True, timeout=10)
+        if r.returncode != 0 or "Usage" not in r.stdout:
+            print(f"FAIL help/{flag} (expected exit 0 + usage text, got rc={r.returncode})")
+            fails += 1
+        else:
+            print(f"ok    help/{flag} (exit 0, usage text printed, never reaches a gh call)")
+
+    # non-integer ticket-id, end-to-end: exit 2, never a gh call
+    r = subprocess.run([sys.executable, script_path, "abc"],
+                        capture_output=True, text=True, timeout=10)
+    if r.returncode != 2 or "bare integer" not in r.stderr:
+        print(f"FAIL non_integer_ticket/end_to_end (expected exit 2 naming the requirement, "
+              f"got rc={r.returncode} stderr={r.stderr!r})")
+        fails += 1
+    else:
+        print("ok    non_integer_ticket/end_to_end (exit 2, never reaches a gh call)")
+
     if fails:
         print(f"-- {fails} fixture(s) failed --")
         return 1
-    print("dispatch_envelope selftest · PASS · plugin inference + branch slug, the taken-slot "
-          "negative control (claim_clean:false, next advanced past the claim), the "
-          "claimed-no-PR scan, and a REAL local clone + sibling pin_check.py wiring all proved "
-          "with no network")
+    print("dispatch_envelope selftest · PASS · plugin inference + branch slug (incl. the "
+          "hyphen-boundary truncation control), the taken-slot negative control "
+          "(claim_clean:false, next advanced past the claim), the claimed-no-PR scan, "
+          "--help/non-integer-ticket-id guards, CLAUDE_SCRATCHPAD/--scratch-dir resolution, and "
+          "a REAL local clone + sibling pin_check.py wiring all proved with no network")
     return 0
 
 
@@ -447,16 +586,21 @@ if __name__ == "__main__":
     if not argv:
         print(__doc__)
         sys.exit(2)
+    if argv[0] in HELP_FLAGS:
+        # ticket #766: checked BEFORE parse_args ever runs, so `--help` can never be read as a
+        # ticket-id and reach a `gh` call — exit 0, never 2, since asking for usage isn't an error.
+        print(__doc__)
+        sys.exit(0)
     if argv[0] == "selftest":
         sys.exit(selftest())
     try:
-        ticket_id, plugin = parse_args(argv)
+        ticket_id, plugin, scratch_dir_arg = parse_args(argv)
     except ValueError as e:
         print(f"dispatch_envelope: {e}", file=sys.stderr)
         print(__doc__, file=sys.stderr)
         sys.exit(2)
     try:
-        sys.exit(run(ticket_id, plugin))
+        sys.exit(run(ticket_id, plugin, dest_root=resolve_dest_root(scratch_dir_arg)))
     except RuntimeError as e:
         print(f"dispatch_envelope: {e}", file=sys.stderr)
         sys.exit(2)
