@@ -66,6 +66,7 @@ frontmatter preload — the hard plugin-boundary rule), with an explicit failure
 isn't installed. This agent file is non-conforming against the CURRENTLY-LIVE naming grammar
 (ADR-0011 REQ-002's `-agent` suffix rule) until the naming-ADR Kim has ruled will supersede that
 rule lands — intentional, tracked with its 4 teamwork siblings in the same wave.
+v1.20.2 · 2026-08-19 · gh#711 (lld-0024), rebased onto #713/#725's v1.20.1: `file-feature`'s Phase 4 classify step gains a UI-shape detection paragraph — a component/layout/flow-shaped seed consults `screens:feature-intake-rules`, a token/palette/typography-shaped seed consults `design:token-feature-intake-rules`, both by soft named mention (degrades gracefully with the gap named in Scope/Open where either plugin isn't installed). Reciprocal NOT-fence + one no-trigger eval case added naming both new packs. Lands alongside, not in place of, #725's terse close-out rewrite below — both edits sit in disjoint sections of `file-feature/SKILL.md` and merged clean with no manual reconciliation beyond this version-slot rebump. `skill_lint`/`eval_check` clean; `/check-routing docs` re-proof at 16/18 baseline owed post-rebase.
 v1.20.1 · 2026-08-19 · closes #713 (marshal feed noise reduction, lever 3): `file-bug`/
 `file-feature`/`file-task`'s SKILL.md close-out contracts rewritten uniformly to ONE terse line —
 `Filed: <id> · kind:<bug|feature|task> · owed-questions:<N>` — replacing a verbose form that
