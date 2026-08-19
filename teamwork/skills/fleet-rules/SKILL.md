@@ -307,19 +307,20 @@ build-seat dispatch. The PR (or permitted direct commit) IS the record — label
 where the backend has labels, so revert/defect rates stay measurable against full-flow PRs. The
 live prompt IS the authorization the write-gate substitutes for, and it pre-authorizes auto-merge
 on green. Never skipped: the repo's quality floor (lint, gates, CI, version discipline), the
-semantic-edit critic invariant (one synchronous unnamed checker; `checking-rules` calibrates the
-unit), and the ten-second collision look — list open PR head branches + verify the version slot
+semantic-edit critic invariant (one unnamed checker; `checking-rules` calibrates the unit —
+dispatched the moment the semantic edit lands and OVERLAPPED with the bump/gate/routing prep,
+never serialized after them; its verdict gates the push — no push before it arrives, a FAIL
+reworks and re-dispatches — not the prep), and the ten-second collision look — list open PR head branches + verify the version slot
 before pushing — plus a claim scan (open assignees/`claimed-by` on records naming the same
 files, #184's claimed-no-PR window) and Section 4's two slot checks; skipping the claim is
 licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (the executor never
 self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
 line, evals sync) don't count — or a second plugin → one confirm before merge; CI red after
 push → a mechanical fix (version bump, lint trim) rides the original authorization, a semantic
-rework does not — re-confirm before re-push. Escalate
-OUT — mint the record, take the full flow — the moment the work turns multi-seat, unattended,
-backlog-shaped ("note for later" is intake, not build), touches another seat's claim, or outgrows
-one context; the retroactive mint (`[[dispatch-ticket]]` Phase 1's nested intake) costs the same
-as the upfront one.
+rework does not — re-confirm before re-push. Escalate OUT — mint the record, take the full flow
+— the moment the work turns multi-seat, unattended, backlog-shaped ("note for later" is intake,
+not build), touches another seat's claim, or outgrows one context; the retroactive mint
+(`[[dispatch-ticket]]` Phase 1's nested intake) costs the same as the upfront one.
 
 **Triage-within-one-turn.** Every incoming item — a raw user ask, a recordless report, a
 handback, a peer message, an overdue report — gets classified and routed in the SAME turn it
