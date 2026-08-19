@@ -1,6 +1,6 @@
 {
   "skill": "material-shape-facts",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Checked-in routing corpus (test of record). Positives = md-sys size/space consumption queries INCLUDING a control's own text-size ('what font size for this button' — geometry owns it via --md-sys-size-{step}-font). Negatives: color, the type SCALE of non-control text, the --size-* twin. Motion fence added 2026-07-09 (reciprocal to new sibling material-motion-facts). Iconography fence added 2026-07-09 (reciprocal to the new icon-rules pack). Blind run 2026-07-09 (0.5.0): 16/18 — t09 (icon size token) stolen by the new icon-rules pack and t10 (border width token) dead after this description's fence-work trims; both phrasings restored verbatim same-change. n08 (stroke weight) routed to icon-rules as designed. t11 adopted 2026-07-09 from icon-rules's reassigned t13 (two blind runs routed it here).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Checked-in routing corpus (test of record). Positives = md-sys size/space consumption queries INCLUDING a control's own text-size ('what font size for this button' — geometry owns it via --md-sys-size-{step}-font). Negatives: color, the type SCALE of non-control text, the --size-* twin. Motion fence added 2026-07-09 (reciprocal to new sibling material-motion-facts). Iconography fence added 2026-07-09 (reciprocal to the new icon-rules pack). Blind run 2026-07-09 (0.5.0): 16/18 — t09 (icon size token) stolen by the new icon-rules pack and t10 (border width token) dead after this description's fence-work trims; both phrasings restored verbatim same-change. n08 (stroke weight) routed to icon-rules as designed. t11 adopted 2026-07-09 from icon-rules's reassigned t13 (two blind runs routed it here). #723 fix (2026-08-19): t08/t10 were lost to material-token-facts under blind judging — this description's own prefix list omitted border/focus-ring, while token-facts' prefix list named them prominently. Description now enumerates `--md-sys-{size,radius,space,border,focus-ring}-*` explicitly; n09 added as the reciprocal negative (a meaning ask about the same fields routes to token-facts, not here). Pre-fix blind judge confirmed the bug verbatim (both t08 and t10 read as material-token-facts under the OLD description); post-fix full-suite blind judge came back 20/20 clean, including t08/t10 and the new n09 — done. Wording-checker caught a real defect the routing judges didn't (routing tolerance isn't a language-layer pass): the YAML `>-` fold's line break landed mid-identifier (\"focus-\\nring}-*\"), so the RENDERED description read \"focus- ring}-*\" with a spurious space, though the worked example phrasing elsewhere stayed correct. Reflowed so no fold point falls inside a hyphenated token (whitespace-only, verified byte-identical to the intended string via yaml.safe_load); no routing re-verification owed since the intended string content is unchanged.",
   "cases": [
     {
       "id": "t01",
@@ -96,6 +96,12 @@
       "id": "t11",
       "prompt": "how big must the touch target around a 24dp icon be",
       "expect": "trigger"
+    },
+    {
+      "id": "n09",
+      "prompt": "what does the md-sys focus-ring token mean",
+      "expect": "no-trigger",
+      "note": "#723: a meaning ask, not a consumption pick — material-token-facts owns it (its own t-suite); reciprocal to n09/n10 added there"
     }
   ]
 }

@@ -1,16 +1,16 @@
 ---
 name: material-token-facts
 description: >-
-  Answers what a `--md-sys-{color,typescale,size,radius,space,inset,gap,border,focus-
-  ring}-*` token MEANS. Use when the user asks "what's surface-lowest vs surface-lower",
-  "when do I use -dim vs -low", "what's the difference between the scrim strengths" —
-  semantic glossary across the color/typography/geometry consumption guides. ANSWERS
-  meaning only — not binding grammar, recipes, pairing laws, or bind-check: load the
-  matching material-{color,type,shape}-facts skill. NOT for a raw hex/px value (the
-  owning consumption skill); NEVER answers whether a token is M3 baseline or an
-  extension — "is surface-container M3 baseline or one of our extensions" is each
-  sibling's own extension table, not this glossary, however close it reads to "what a
-  token MEANS"; NOT for a non-Material `--{prefix}-*` kit (decline).
+  Use for what a
+  `--md-sys-{color,typescale,size,radius,space,inset,gap,border,focus-ring}-*` token MEANS —
+  glossary across color/typography/geometry: "surface-lowest vs surface-lower", "-dim vs
+  -low", "what's the kicker voice for", "difference between the scrim strengths" or between
+  two token families. Meaning only; recipes/bind-check load
+  material-{color,type,shape}-facts. NOT a raw hex/px/dp value or "which token" consumption
+  ask — e.g. "the md-sys border width token", "the md-sys focus ring token" →
+  material-shape-facts. NEVER M3-baseline-vs-extension — "is surface-container M3 baseline
+  or one of our extensions" is not this glossary's job. NOT non-Material `--{prefix}-*`
+  (decline).
 disable-model-invocation: false
 user-invocable: false
 ---
