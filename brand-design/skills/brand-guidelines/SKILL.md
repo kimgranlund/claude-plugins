@@ -1,16 +1,13 @@
 ---
 name: brand-guidelines
 description: >
-  Build a high-quality brand-guidelines section in the corpus by GUIDED CHOICE — the system presents a 2×2
-  of options for each brand domain (mark · voice · color · type · expression · governance), you pick a
-  quadrant (A/B/C/D) + comments/corrections, and the choices accumulate into a provenance-traced, attributed
-  guidelines corpus. Use when building, eliciting, or structuring a brand's guidelines, design system, or
-  expression rules through an interactive multiple-choice loop. Triggers on "build brand guidelines", "brand
-  design system", "guide me through the brand system", "2x2 options for the brand", "elicit the color/type/
-  voice system", "help me decide the brand expression", "assemble a brand guidelines section". This skill
-  MAKES guidelines (the guided maker); it does NOT grade them — scoring is brand-rubrics (in-plugin) and the
-  parallel design-skills:brand-decomposer (deeper operability check, when installed). NOT for strategy /
-  positioning (brand-methodology-rules) or naming / copy (the brand-writer agent).
+  The methodology and ledger reference for building brand guidelines by GUIDED CHOICE — the six
+  brand domains, the 2×2 quadrant mechanic, the append-only choice ledger, and how choices assemble
+  into corpus docs. Use when the user asks about the mechanism itself — "what domains does the
+  guidelines loop cover", "how does the choice ledger work", "how do choices assemble into the
+  corpus". NOT for actually running the guided loop now — that's make-brand-guidelines, which owns
+  the "build brand guidelines" / "give me a 2x2" triggers and cites this pack for posture. NOT for
+  strategy (brand-methodology-rules) or copy (brand-writer).
 disable-model-invocation: false
 user-invocable: true
 ---

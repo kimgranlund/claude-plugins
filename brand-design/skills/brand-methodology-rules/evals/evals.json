@@ -1,0 +1,60 @@
+{
+  "skill": "brand-methodology-rules",
+  "note": "Minted 2026-08-19, Phase 4 of the brand-forge -> brand-design migration (closes G7's eval-coverage warn). Floor suite: the 6 trigger prompts sample the description's own trigger phrases; the 4 no-trigger cases fence the two in-plugin routes this skill states (brand-rubrics, brand-corpus) plus the two out-of-scope disciplines its own frontmatter names (marketing tactics, product strategy).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "We need to develop this brand's strategy and positioning from scratch.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Do the cultural archaeology and research before we commit to a position.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "What should our brand's point of view actually be?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Help us rebrand and redefine the category we compete in.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Design the expression system that carries this brand identity.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "How do we steward this brand so it stays coherent as it grows?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Score this brand strategy document against the rubric.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-rubrics (this skill makes the strategy, it doesn't grade it)"
+    },
+    {
+      "id": "n02",
+      "prompt": "Organize these strategy documents into the brand corpus.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-corpus (corpus structure, not strategy authoring)"
+    },
+    {
+      "id": "n03",
+      "prompt": "Plan our performance media buy and conversion funnel for next quarter.",
+      "expect": "no-trigger",
+      "comment": "out of scope: marketing tactics/performance media, an adjacent discipline this skill's own frontmatter excludes"
+    },
+    {
+      "id": "n04",
+      "prompt": "What should our product strategy and UX roadmap look like for this feature?",
+      "expect": "no-trigger",
+      "comment": "out of scope: product strategy/management/UX is product-forge's domain, not this skill's"
+    }
+  ]
+}

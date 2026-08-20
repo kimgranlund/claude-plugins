@@ -1,16 +1,13 @@
 ---
 name: brand-corpus
 description: >
-  Canonical structure and stewardship for a brand's documentation — a retained 00-sources archive
-  plus the layered 01-foundation … 08-evaluation corpus, the two output conventions (flat
-  double-hyphen filenames for a Claude Project; nested folders for a filesystem), corpus maturity
-  stages 0–6, source ingestion + retention, per-document provenance/attribution, and the
-  read-before-write discipline that keeps the corpus coherent. Use whenever organizing, structuring,
-  naming, ingesting sources into, attributing, or auditing brand files. Triggers on "brand corpus",
-  "organize brand files", "brand documentation structure", "set up brand docs", "where does this
-  brand file go", "brand file naming", "ingest source docs", "keep the source material", "who added
-  this", "brand attribution", "where did this come from". The brand-corpus MCP is the live-data
-  complement to this layout.
+  Canonical structure for a brand's documentation — a retained 00-sources archive plus the layered
+  01-foundation … 08-evaluation corpus, two naming conventions, maturity stages 0–6, source
+  ingestion, provenance, and the read-before-write discipline that keeps the corpus coherent. Use
+  whenever organizing, naming, ingesting, attributing, or auditing brand files. Triggers on "brand
+  corpus", "organize brand files", "set up brand docs", "where does this file go", "brand
+  attribution", "what maturity stage is this brand at", "set up the brand-corpus MCP server" — the
+  MCP is the live-data complement to this layout.
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -1,0 +1,60 @@
+{
+  "skill": "brand-corpus",
+  "note": "Minted 2026-08-19, Phase 4 of the brand-forge -> brand-design migration (closes G7's eval-coverage warn). Floor suite: the 6 trigger prompts sample the 11 trigger phrases in the skill's own description; the 4 no-trigger cases fence the 3 sibling packs this skill routes away from (brand-methodology-rules, brand-rubrics, brand-guidelines) plus the brand-writer agent.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Help me organize our brand documentation into a proper corpus structure.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Where should this new positioning doc live in the brand corpus?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "We just got a legacy brand book from the client — how do we ingest and retain it as a source?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Who added this file and where did it come from? I need the attribution history.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "What corpus maturity stage is this brand at right now?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Set up the brand-corpus MCP server so we can read this brand's files live.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Write our brand's positioning and point of view.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-methodology-rules (strategy authoring, not corpus organizing)"
+    },
+    {
+      "id": "n02",
+      "prompt": "Score this brand strategy against the rubric.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-rubrics (adversarial evaluation, not corpus structure)"
+    },
+    {
+      "id": "n03",
+      "prompt": "Walk me through the 2x2 options for our brand's color system.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-guidelines (the interactive guided-choice loop)"
+    },
+    {
+      "id": "n04",
+      "prompt": "Write the actual voice and copy for this brand.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-writer agent (produces the words; this skill only organizes where they live)"
+    }
+  ]
+}

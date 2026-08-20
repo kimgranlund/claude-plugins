@@ -1,11 +1,12 @@
 {
  "skill": "make-brand-guidelines",
- "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (open strategy) and check-brand-rubric (scoring) — the two skills a guided-choice ask could be confused with.",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (open strategy) and check-brand-rubric (scoring) — the two skills a guided-choice ask could be confused with. n03 added 2026-08-19 (Phase 4 routing-proof fix): brand-guidelines was narrowed to a pure reference pack after all 3 of ITS trigger cases were confirmed stolen by this skill -- this reciprocal case proves a reference-lookup ask still routes to brand-guidelines, not here.",
  "cases": [
   { "id": "t01", "prompt": "walk me through building the brand guidelines with a 2x2 choice", "expect": "trigger" },
   { "id": "t02", "prompt": "give me a 2x2 for the brand's voice domain", "expect": "trigger" },
   { "id": "t03", "prompt": "help me decide the brand's color and type expression interactively", "expect": "trigger" },
   { "id": "n01", "prompt": "let's build the brand's strategy and positioning from scratch", "expect": "no-trigger" },
-  { "id": "n02", "prompt": "score this brand's voice guidelines against the rubric", "expect": "no-trigger" }
+  { "id": "n02", "prompt": "score this brand's voice guidelines against the rubric", "expect": "no-trigger" },
+  { "id": "n03", "prompt": "what are the six brand domains the guided guidelines loop walks through", "expect": "no-trigger" }
  ]
 }

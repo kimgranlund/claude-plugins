@@ -594,7 +594,31 @@ def gate(root: Path, package: bool = False):
              # SKILL.md: "cross-repo" (the rollup's own adjective, e.g. "cross-repo rollup") and
              # "source-repo" ("not-a-source-repo", the marketplace-drift N/A status value) —
              # neither names any sibling skill or agent:
-             "cross-repo", "source-repo"}
+             "cross-repo", "source-repo",
+             # brand-design's Phase 3 migration (2026-08-19): 11 G8 warns triaged, all verified
+             # against the actual prose (no drift found, every one is a concept/prose compound
+             # or an intentional cross-marketplace mention):
+             # "brand-council"/"sub-council"/"orchestration-rubric" are check-brand-council's own
+             # prose (an agent-seat name in attribution frontmatter, the legacy retired
+             # `/brand-council` command cited historically, the sub-council concept, and
+             # `teamwork:fleet-rules`' rule-ID slug) — no skill named `brand-council` exists,
+             # the skill IS `check-brand-council`, same class as order-vs-task-flow above;
+             # "brand-stack"/"expression-system" are brand-methodology-rules'/brand-rubrics' own
+             # named concepts (the one-page Brand Stack condensation rendered by the REAL
+             # `make-brand-stack` skill; a rubric dimension) — the bare noun isn't the skill name;
+             # "cloud-skill" is file-brand's own prose ("the plugin form never carries the
+             # cloud-skill... packaging"), not a literal skill reference;
+             # "main-agent" is make-brand-muse's prose ("keeps main-agent judgment in the loop"),
+             # not a literal agent reference;
+             # "per-stage"/"real-brand" are brand-corpus's/brand-guidelines' own prose
+             # ("per-stage detail", "which real-brand exemplar");
+             # "design-skills"/"nonoun-skills" are the intentional, disclosed cross-marketplace
+             # mention of `design-skills:brand-decomposer` (a different marketplace, per
+             # brand-guidelines' own stated MAKES-vs-GRADES split) — same external-package class
+             # as adia-ui-kit/gen-ui-kit above, not a workspace sibling this estate installs:
+             "brand-council", "sub-council", "orchestration-rubric", "brand-stack",
+             "expression-system", "cloud-skill", "main-agent", "per-stage", "real-brand",
+             "design-skills", "nonoun-skills"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

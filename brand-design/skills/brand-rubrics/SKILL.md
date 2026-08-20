@@ -1,13 +1,13 @@
 ---
 name: brand-rubrics
 description: >
-  Adversarial evaluation of brand work — strategy, briefs, identity, voice, expression systems.
-  Names failures (it does not flatter), scores each dimension with evidence and the test that
-  revealed the finding, and runs the critic council. Carries a rubric library (strategic + visual
-  families) loaded on demand. Use whenever judging brand work. Triggers on "brand audit",
-  "evaluate this brand work", "is this on brand", "score this brief", "rubric", "brand critique",
-  "review this positioning", "what's wrong with this identity". Pairs with brand-methodology-rules
-  (which MAKES the work this skill REVIEWS).
+  The rubric library and evaluation-methodology reference — the four rubric families, the
+  format-fitness caveat, the trust boundary, and the cold-examiner posture every review skill
+  applies. Use when the user asks about the rubric mechanics themselves — "which rubric family
+  covers this", "explain the format-fitness caveat", "how is severity classified", "what's the
+  trust boundary for brand material". NOT for actually scoring work now — that's check-brand-rubric
+  or check-brand-council, both of which consult this library rather than reimplement it. Pairs with
+  brand-methodology-rules (which MAKES the work these review skills evaluate).
 disable-model-invocation: false
 user-invocable: true
 ---
