@@ -64,6 +64,12 @@ signals-library folklore.
   kernel level; `state-model-rules` judges whether the STORE, LAYER, or CONVENTION around that
   kernel is architecturally coherent. A "why is our app a mix of implementations" ask is
   `state-model-rules`'; a "why did this specific effect refire twice" ask is this pack's.
+- **Client-persistence facts — storage discipline tiers, dual sync/async persistence contracts,
+  the storage-specific bypass-inventory shape, URL-state sync — belong to `persistence-facts`.**
+  What gets WRITTEN to storage and when that's disciplined is that pack's law; this pack explains
+  the kernel that decides WHEN an effect or computed re-runs, unrelated to whether the resulting
+  value gets persisted anywhere. A question naming a storage key, schemaVersion, or a URL param is
+  `persistence-facts`'; a question naming a kernel primitive is this pack's.
 - **Production component code** → `make-component` — this pack explains why a kernel behaves a
   certain way; it does not write the kernel or the component consuming it.
 - **Building a signals kernel or an app-tier store from scratch has no owning builder skill in

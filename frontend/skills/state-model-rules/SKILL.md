@@ -61,6 +61,14 @@ mechanics.
   question naming a specific stacked-generations app, an unswept fix, or a doctrine/practice gap
   is this pack's; a question naming a kernel primitive (signal/computed/effect/scope/sequence
   token) is `reactivity-facts`'.
+- **Client-persistence facts belong to `persistence-facts`** — storage discipline tiers
+  (schemaVersion/RENAME_MAPS vs ad-hoc JSON.parse vs cache-buster keys), whether a sync store next
+  to an async storage seam is legitimate design or bypass drift, and URL-state sync. This pack's
+  own `audit-technique.md` bypass-inventory technique (#2) is the general, cross-domain METHOD —
+  `persistence-facts`' own audit-shape axis is the narrower storage-specific checklist built on top
+  of it, not a competing method. A question naming a specific storage key, a rename risk, or a URL
+  param is `persistence-facts`'; a question naming a whole app's mix-of-implementations symptom is
+  this pack's.
 - **Production component code, a reactivity kernel, or an app-tier store from scratch** →
   no owning builder skill in this plugin (same gap `reactivity-facts` names for its own
   territory) — derive the implementation inline against whichever axis file names the failure
