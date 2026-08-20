@@ -1,0 +1,11 @@
+{
+ "skill": "make-brand",
+ "note": "Track C initial suite (2026-08-19, brand-forge -> brand-design command conversion). Negatives adversarially from the sibling skills most likely to steal routing: check-brand-rubric (scoring) and make-brand-stack (condensation).",
+ "cases": [
+  { "id": "t01", "prompt": "let's build this brand's positioning and strategy", "expect": "trigger" },
+  { "id": "t02", "prompt": "I want to work on the brand's voice and tone", "expect": "trigger" },
+  { "id": "t03", "prompt": "help me develop this brand's identity from the ground up", "expect": "trigger" },
+  { "id": "n01", "prompt": "score this brand's brief against the rubric", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "give me the one-page brand stack summary", "expect": "no-trigger" }
+ ]
+}

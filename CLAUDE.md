@@ -20,7 +20,7 @@ what the menu can't: workspace-scoped norms, command-only surfaces, and topology
 |---|---|
 | New plugin from a domain | `/make-plugin` — never hand-scaffold |
 | A user reports a bug | docs: `/file-bug` — never raw `/fork` for bug work (it drops the report on exit) |
-| Domain topology | docs = functional docs + research artifacts · `agent-protocols` = A2UI/A2A knowledge · `design` = color/type/design-system exports · `screens` = UI structure/motion/verification · `teamwork` = multi-agent delivery · `authorkit` = estate governance (naming/bloat/renames/overhauls) |
+| Domain topology | docs = functional docs + research artifacts · `agent-protocols` = A2UI/A2A knowledge · `design` = color/type/design-system exports · `screens` = UI structure/motion/verification · `teamwork` = multi-agent delivery · `authorkit` = estate governance (naming/bloat/renames/overhauls) · `brand-design` = brand strategy/identity/voice/stewardship, the adversarial critic council |
 | Periodic health sweep | `/check-everything` (read-only; proposes) |
 | Unattended queue drain | `/mobilize-chores auto` — the explicit token, never inferred; grants + the ADR-0012 auto-merge carve-out live in that skill's own body |
 | A drifted repo campaign | harness: `/clean-repo` |

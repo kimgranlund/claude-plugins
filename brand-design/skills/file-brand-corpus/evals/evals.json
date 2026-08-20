@@ -1,0 +1,11 @@
+{
+ "skill": "file-brand-corpus",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from file-brand (distributable packaging) and make-brand-stack (one-page condensation) — the two skills whose output shape most resembles a corpus export.",
+ "cases": [
+  { "id": "t01", "prompt": "export this brand's deliverables as a navigable corpus site", "expect": "trigger" },
+  { "id": "t02", "prompt": "turn the brand docs into a shareable markdown folder", "expect": "trigger" },
+  { "id": "t03", "prompt": "build the corpus site so I can browse the brand work", "expect": "trigger" },
+  { "id": "n01", "prompt": "stamp this brand as an installable plugin", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "give me the one-page brand stack summary", "expect": "no-trigger" }
+ ]
+}

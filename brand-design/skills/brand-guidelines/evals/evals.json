@@ -1,0 +1,60 @@
+{
+  "skill": "brand-guidelines",
+  "note": "Rewritten 2026-08-19 after the Phase 4 blind-judge routing proof found this pack's ORIGINAL action-phrased triggers (\"build brand guidelines\", \"give me a 2x2\", etc.) duplicated make-brand-guidelines' own trigger set nearly verbatim, so all 3 of the original trigger cases lost to make-brand-guidelines in the blind vote. The description was narrowed to a pure methodology/ledger reference; these cases now test REFERENCE-LOOKUP phrasing (asking about the mechanism itself) instead of ACTION phrasing (asking to actually run the guided loop), with make-brand-guidelines as the no-trigger fence for the action asks this pack no longer claims.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What are the six brand domains the guided guidelines loop walks through?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "How does the choice ledger work — can a past pick ever be silently rewritten?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Explain how the 2x2 quadrant mechanic actually works for one domain.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "How do accumulated guideline choices assemble into the corpus's actual documents?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "What's the split between this pack and brand-decomposer — who makes versus who grades?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Is the guidelines assembly step dry-run by default, or does it write straight to the corpus?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Let's build out our brand guidelines section together, right now.",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand-guidelines (the action skill — this pack is now reference-only, per the routing-proof fix)"
+    },
+    {
+      "id": "n02",
+      "prompt": "Give me a 2x2 for our brand's voice domain.",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand-guidelines (the action skill that runs the loop)"
+    },
+    {
+      "id": "n03",
+      "prompt": "What should our brand's position or strategy actually be?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-methodology-rules (decided upstream, before guidelines are elicited)"
+    },
+    {
+      "id": "n04",
+      "prompt": "Score these guidelines against the rubric before we ship them.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-rubrics/check-brand-rubric (grading, not making)"
+    }
+  ]
+}

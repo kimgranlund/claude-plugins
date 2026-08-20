@@ -1,0 +1,60 @@
+{
+  "skill": "check-brand-council",
+  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Convene the brand council on this positioning brief.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Run the design sub-council against our new identity system.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Get the named critics to give this brand strategy doc an adversarial read.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "What would Luke S. and Paula S. say about this identity system?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "I want the full 14-critic panel to review this brand book before we ship it.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Run the voice sub-council on this copy platform.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Score this brand strategy against the rubric.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-rubrics (rubric scoring, not a named-practitioner critique panel)"
+    },
+    {
+      "id": "n02",
+      "prompt": "What's the aspirational pull our brand should reach for?",
+      "expect": "no-trigger",
+      "comment": "owner: muse-agent (sets the pull; never reviews or critiques)"
+    },
+    {
+      "id": "n03",
+      "prompt": "Write the full voice platform and naming set for this brand.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-writer (makes the voice; council reviews it after, cold)"
+    },
+    {
+      "id": "n04",
+      "prompt": "Organize these strategy documents into the brand corpus.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-corpus (corpus architecture/attribution, not a critique)"
+    }
+  ]
+}
