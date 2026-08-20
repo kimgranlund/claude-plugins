@@ -27,6 +27,7 @@ rather than just installing them.
 | [`screens`](<screens/README.md>) | UI structure (layouts, flows, components, patterns), the design/UI knowledge layer (spacing-scale theory, CSS box-model/flow mechanics, Apple HIG semantics, motion), and non-functional verification (focus, i18n, perf, safety, live-artifact checks). |
 | [`teamwork`](<teamwork/README.md>) | Decision-deriving, composition/continuation design, and a multi-agent feature-delivery team (planner, builder, coordinator, reviewers). |
 | [`authorkit`](<authorkit/README.md>) | Estate governance: the ratified naming grammar (ADR-0011) with its manifest + validator, naming/bloat audits, blast-radius-planned renames with an exemption ratchet, and the end-to-end estate-overhaul driver (`/overhaul-execute`: discovery → your scope gate → audits → plan → gated waved execution → routing proof). |
+| [`brand-design`](<brand-design/README.md>) | Build and evaluate brands grounded in cultural authority — strategy, identity, voice, stewardship — across three seats: an aspirational Muse, a maker (methodology + voice), and an adversarial named-critic Council (`check-brand-council`, fanning out `brand-judge` dispatches). Migrated and overhauled from the standalone `brand-forge` plugin; this estate's only MCP/`userConfig`-registered plugin. |
 
 Each plugin's own `README.md` carries its full component map and a dated version ledger in the
 footer — that's the source of truth for what changed and why, not this file.

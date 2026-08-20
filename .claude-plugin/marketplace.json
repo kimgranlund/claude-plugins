@@ -18,6 +18,12 @@
       "description": "Harness artifact governance: naming grammar, frontmatter contracts, folder layout, migration tooling, and busy-work/over-specification audits for .claude/ estates and plugins. Dogfoods its own spec \u2014 this plugin validates clean against its own validator with an empty exemptions array."
     },
     {
+      "name": "brand-design",
+      "displayName": "Brand Design",
+      "source": "./brand-design",
+      "description": "Build and evaluate brands grounded in cultural authority \u2014 strategy, identity, voice, and stewardship \u2014 across three seats: an aspirational Muse, a maker (methodology + voice), and an adversarial named-critic Council (check-brand-council, fanning out brand-judge dispatches with one persona inlined per call). Migrated and overhauled from the standalone brand-forge plugin; this estate's only MCP/userConfig-registered plugin (brand-corpus MCP, optional per-instance live retrieval)."
+    },
+    {
       "name": "design",
       "displayName": "Design",
       "source": "./design",
