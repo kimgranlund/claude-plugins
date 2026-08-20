@@ -38,11 +38,12 @@ applying it).
 
 1. **Probe.** `node "<this skill dir>/scripts/host_probe.mjs"` — one JSON object: load per core,
    memory, indexer/backup CPU, Time Machine exclusion state, worktree-home census (Spotlight
-   markers, parked counts, node_modules posture), dev-process counts with oldest etimes, disk,
+   markers, parked counts, node_modules posture, per-home package-manager mix + aggregate
+   node_modules disk MB), dev-process counts with oldest etimes, disk,
    fd limit. The probe is read-only and exit-coded (0 ran / 1 probe-failure / 2 usage); findings
    live in the JSON, never the exit code. Script won't run (no node, denied) → fall back to the
    probe commands quoted per-finding in `references/remedies.md`, and say the fallback happened.
-2. **Judge.** Grep `references/remedies.md` for each finding class F1–F9 whose threshold the
+2. **Judge.** Grep `references/remedies.md` for each finding class F1–F10 whose threshold the
    JSON crosses; consult only the matched entries. `platform != darwin` → report the portable
    classes (the catalog's Non-macOS section is the single home of that list) and name the macOS-probe gap verbatim from the catalog's Non-macOS
    section — every claim carries its verified/unverified label from the catalog.

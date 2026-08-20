@@ -42,13 +42,26 @@ Warning (changes-system-behavior): a broad `pkill node` kills LIVE agents includ
 running the audit; never suggest pattern-kills, only pid lists the user reviews.
 
 ## F5 — Per-lane npm install churn
-Trigger: `worktreeHomes[].ownNodeModules` ≥ 2 with `parked` high.
-Mechanism: each worktree install writes ~1–2 GB and re-triggers F1/F2; the incident ran seven.
+Trigger: `worktreeHomes[].ownNodeModules` ≥ 2 with `parked` high; `nodeModulesDiskMB` states the
+measured aggregate cost (null = du exceeded the probe budget — report the gap, don't guess).
+Mechanism: each worktree install writes ~1–2 GB and re-triggers F1/F2; the incident ran seven;
+a second live census (gen-ui-kit, 2026-08-20) found 17 worktrees, 7 with their own node_modules.
 Fix (safe): symlink the main checkout's node_modules into worktrees when the lockfile is
 unchanged (`git diff --quiet origin/main -- package-lock.json && ln -s <root>/node_modules ...`);
 `npm ci --prefer-offline` only when it changed.
+Fix (changes-system-behavior, pnpm repos): a shared lockfile-hash-keyed pnpm virtual store
+(`pnpm config set store-dir <shared path>` per worktree, keyed so a changed lockfile gets its own
+store) — designed live on the 2026-08-20 gen-ui-kit host but NOT yet built there; it named two
+verification steps as prerequisites (prove hard-links survive the worktree filesystem layout;
+prove a concurrent install in two worktrees doesn't corrupt the store). Side effect: every
+worktree's installs now share one on-disk store — a corruption or manual deletion there breaks
+ALL worktrees at once, not one. Recommend only as the structural option with those prerequisites
+stated — never as a one-command fix.
 Warning: resolution correctness depends on the lockfile check — a worktree that CHANGES deps
-must install for real.
+must install for real. A mixed `pkgManagers` census (some homes pnpm, some npm) is additionally
+the precondition for local-vs-CI dist drift (pnpm-bootstrapped bundles measured 25–30% larger
+than npm-ci builds, gen-ui-kit P4) — that drift is a REPO gate's job to catch, not this audit's;
+report the mix as informational and name the missing parity check.
 
 ## F6 — Parked worktrees
 Trigger: `gitWorktrees` ≫ live lanes, or `worktreeHomes[].parked` > 3.
@@ -78,8 +91,24 @@ Fix (safe): `ulimit -n 10240` in the shell profile.
 Warning (changes-system-behavior): the LaunchDaemon route (`launchctl limit maxfiles`) needs a
 reboot and SIP-aware setup — recommend the shell-profile form first.
 
+## F10 — Gate-lane oversubscription (the cause-side twin of F3)
+Trigger: `devProcs.testRunners.count` ≥ `cores` while `load.perCore1m` ≥ 1.5 — runnable test
+workers at or above core count, live at probe time (both fields already in the probe JSON; no
+new probe needed).
+Mechanism: the host repo's own check chain fans out N gate lanes with no concurrency cap, each
+lane spawning workers-per-core — F3 measures the resulting load; this class names the config
+that produces it. Incident: a 7-minute contended run observed directly (gen-ui-kit, 2026-08-20)
+on a chain with no self-limit; the forging incident's 7 lanes × workers-per-core is the same
+shape.
+Fix (safe): the durable form is REPO-side — add a lane cap to the repo's own check chain (a
+`--maxWorkers` / `-j` flag, or a queue wrapper) so the fix survives this host; the session-side
+stopgap is F3's cap. Both are scheduling discipline, no side effects.
+Fence: whether a RED run under this contention is trustworthy is the host repo's `flaky-gates`
+call (red-under-load vs green-in-isolation) — this class only reports that the host is
+oversubscribed by design; it never judges a specific red.
+
 ## Non-macOS
-Every threshold above except F3/F5/F6/F8/F9 leans on macOS-specific probes (mds, tmutil,
+Every threshold above except F3/F5/F6/F8/F9/F10 leans on macOS-specific probes (mds, tmutil,
 vm_stat). On linux/win32 the probe returns `verified: false` and `macos: null` — report the
-portable findings (F3/F5/F6/F8/F9) and NAME the gap ("indexer/backup probes unverified on this
-platform — contributions welcome"); never present improvised equivalents as verified.
+portable findings (F3/F5/F6/F8/F9/F10) and NAME the gap ("indexer/backup probes unverified on
+this platform — contributions welcome"); never present improvised equivalents as verified.
