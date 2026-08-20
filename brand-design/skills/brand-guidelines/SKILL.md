@@ -11,6 +11,8 @@ description: >
   MAKES guidelines (the guided maker); it does NOT grade them — scoring is brand-evaluate (in-plugin) and the
   parallel design-skills:brand-decomposer (deeper operability check, when installed). NOT for strategy /
   positioning (brand-methodology) or naming / copy (brand-copywriter).
+disable-model-invocation: false
+user-invocable: true
 ---
 
 # Brand Guidelines — the guided 2×2 elicitation loop

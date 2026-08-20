@@ -42,7 +42,12 @@ Working on: `$ARGUMENTS`
    voice work (a full voice platform, a naming set, a long copy run), hand off to the
    `brand-writer` agent (an isolated maker context for sustained single-voice work) via the Agent
    tool; brief tactical copy (a headline, a tone check) stays in this session.
-5. **Point at the next seat.** When the work exists and a hostile read is wanted, point the user
+5. **Lint before presenting a draft.** Once written material exists (strategy doc, expression
+   spec, voice sample), run `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/brand_lint.py" <file>...`
+   before showing it to the user. Advisory only — a clean run says "no structural tells," never
+   "this brand is good" — surface any findings (archetype language, the VMV template, personas,
+   brand-DNA word-clouds, values with no trade-off) alongside the draft rather than silently.
+6. **Point at the next seat.** When the work exists and a hostile read is wanted, point the user
    at `check-brand-rubric` or `check-brand-council`. Keep the seats distinct — the Muse
    (`make-brand-muse`) sets the pull, this skill makes, the council reviews — no seat judges its
    own work.

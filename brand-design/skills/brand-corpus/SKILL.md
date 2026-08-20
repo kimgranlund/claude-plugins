@@ -11,6 +11,8 @@ description: >
   brand file go", "brand file naming", "ingest source docs", "keep the source material", "who added
   this", "brand attribution", "where did this come from". The brand-corpus MCP is the live-data
   complement to this layout.
+disable-model-invocation: false
+user-invocable: true
 ---
 
 # Brand Corpus

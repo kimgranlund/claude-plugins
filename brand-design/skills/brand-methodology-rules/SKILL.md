@@ -1,5 +1,5 @@
 ---
-name: brand-methodology
+name: brand-methodology-rules
 description: >
   Senior-practitioner methodology for building a brand from cultural authority — not aesthetics.
   Runs the pipeline research → strategy → expression → stewardship: cultural archaeology and
@@ -9,6 +9,8 @@ description: >
   "brand identity", "expression system", "rebrand", "category design", "brand stewardship",
   "what should we stand for", "what's our point of view". NOT marketing tactics or performance media,
   and NOT product strategy, management, or UX — that is product-forge's domain.
+disable-model-invocation: false
+user-invocable: true
 ---
 
 # Brand Methodology

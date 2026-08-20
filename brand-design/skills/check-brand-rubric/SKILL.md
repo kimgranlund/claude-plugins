@@ -31,10 +31,15 @@ Artifact under review: `$ARGUMENTS`
    `rubric-brand-strategy.md`, `rubric-visual-identity.md`, `rubric-brand-voice.md`, or
    `rubric-creative-collaboration.md` (same directory). `brand-rubrics` owns the fuller library
    and the format-fitness caveat; don't re-derive either here.
-3. **Score every dimension** in the chosen rubric. For each: the score and where it lands against
-   the bar, the evidence (quote or cite the specific part of the artifact), and the test that
-   reveals it — the concrete probe a reader/customer/rival would apply.
-4. **Report honestly.** Lead with what fails and why it matters — no rounding up, no
+3. **Run the structural lint alongside scoring.** `python3
+   "${CLAUDE_PLUGIN_ROOT}/scripts/brand_lint.py" <artifact>` — advisory findings (archetype
+   language, the VMV template, personas, brand-DNA word-clouds, values with no trade-off) feed
+   the relevant dimension's evidence, they never stand alone as a verdict.
+4. **Score every dimension** in the chosen rubric. For each: the score and where it lands against
+   the bar, the evidence (quote or cite the specific part of the artifact, plus any lint finding
+   that bears on it), and the test that reveals it — the concrete probe a reader/customer/rival
+   would apply.
+5. **Report honestly.** Lead with what fails and why it matters — no rounding up, no
    participation credit. End with the few highest-leverage fixes.
 
 ## Failure branches

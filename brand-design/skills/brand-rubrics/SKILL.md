@@ -1,5 +1,5 @@
 ---
-name: brand-evaluate
+name: brand-rubrics
 description: >
   Adversarial evaluation of brand work — strategy, briefs, identity, voice, expression systems.
   Names failures (it does not flatter), scores each dimension with evidence and the test that
@@ -8,6 +8,8 @@ description: >
   "evaluate this brand work", "is this on brand", "score this brief", "rubric", "brand critique",
   "review this positioning", "what's wrong with this identity". Pairs with brand-methodology
   (which MAKES the work this skill REVIEWS).
+disable-model-invocation: false
+user-invocable: true
 ---
 
 # Brand Evaluate

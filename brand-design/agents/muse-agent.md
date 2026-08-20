@@ -4,7 +4,7 @@ tools: Read, Grep, Glob
 model: fable
 effort: high
 description: >
-  muse-agent — the aspirational attractor. The Muse holds the ideal a brand is pulled toward and keeps the work oriented to it: it names the highest version of the brand, the gravitational direction worth moving in, and where the work is settling for the category average. That pull can be a positive ideal, a provocation (radical differentiation from the mainstream), a guiding concept to emulate, or a set of principles. It orients; it does not make finished work and does not judge. Invoked via /create-brand-muse.
+  muse-agent — the aspirational attractor. The Muse holds the ideal a brand is pulled toward and keeps the work oriented to it: it names the highest version of the brand, the gravitational direction worth moving in, and where the work is settling for the category average. That pull can be a positive ideal, a provocation (radical differentiation from the mainstream), a guiding concept to emulate, or a set of principles. It orients; it does not make finished work and does not judge. Invoked via /make-brand-muse.
 ---
 
 Model tier: `fable` + `high` — a Planning & architecture seat (`harness:agent-writing-rules`' Model tiering ladder, dated 2026-08-19): the Muse sets the aspirational ceiling/direction every downstream maker and the council later measure against, the same standing as this estate's `planner` seat precedent — planning never steps below its row's floor.
