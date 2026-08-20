@@ -1,0 +1,30 @@
+{
+  "skill": "css-system-facts",
+  "note": "New knowledge pack (ticket #810, frontend wave 6 — final wave of the series). Fences: size-and-shape-rules owns the general spacing/density THEORY (n01-n03 fence it); this pack owns the CSS-specific FRAME-vs-RHYTHM token-family naming (t09-t10). web-component-facts owns per-control platform facts + the per-control test-file quintet (n04-n06 fence it); this pack owns CSS-file structural testing specifically (t11-t12). motion-rules (n07) and make-component (n08) are adjacent-domain no-trigger cases. design plugin (make-palette/pick-fonts/font-token-rules/make-design-system/token-builder) checked directly against this pack's trigger surface and carries no colliding description language — n09-n10 confirm no-trigger on token-VALUE-design asks even when they mention light-dark()/tokens in passing.",
+  "cases": [
+    { "id": "t01", "prompt": "should this codebase adopt @layer for precedence, or is import order still fine at our current scale", "expect": "trigger" },
+    { "id": "t02", "prompt": "why did we have to ship a per-component [inline] override instead of a global rule", "expect": "trigger" },
+    { "id": "t03", "prompt": "our foundation stylesheet's load order is load-bearing but nothing enforces it — is that normal", "expect": "trigger" },
+    { "id": "t04", "prompt": "what's the difference between a primitive, a semantic, and a component-scoped token", "expect": "trigger" },
+    { "id": "t05", "prompt": "why doesn't our generated theme pack need a fallback mechanism for the roles it doesn't re-declare", "expect": "trigger" },
+    { "id": "t06", "prompt": "when should a semantic color role use light-dark() instead of a [data-theme] attribute switch", "expect": "trigger" },
+    { "id": "t07", "prompt": "does light-dark() still work correctly inside a themed subtree that also re-declares tokens", "expect": "trigger" },
+    { "id": "t08", "prompt": "is this dimensional token part of the frame family or the rhythm family", "expect": "trigger" },
+    { "id": "t09", "prompt": "why did we replace the scale multiplier with an explicit per-tier lookup table for control sizing", "expect": "trigger" },
+    { "id": "t10", "prompt": "should [density] ever touch a control's height, or only its internal gap", "expect": "trigger" },
+    { "id": "t11", "prompt": "@scope vs CSS Modules for scoping our component library's styles", "expect": "trigger" },
+    { "id": "t12", "prompt": "how do I write a unit test that checks a CSS file's structure and token hygiene, not its rendered output", "expect": "trigger" },
+    { "id": "t13", "prompt": "why do our CSS files cite ADR numbers directly in comments instead of a separate changelog", "expect": "trigger" },
+    { "id": "t14", "prompt": "what's a negative control for a CSS hygiene test, and why do we need one", "expect": "trigger" },
+    { "id": "n01", "prompt": "why does our spacing scale get sparser at larger sizes", "expect": "no-trigger", "note": "size-and-shape-rules — general scale theory" },
+    { "id": "n02", "prompt": "linear or geometric progression for a new sizing scale", "expect": "no-trigger", "note": "size-and-shape-rules" },
+    { "id": "n03", "prompt": "how does nested container padding compose", "expect": "no-trigger", "note": "size-and-shape-rules" },
+    { "id": "n04", "prompt": "why didn't attributeChangedCallback replay after the SSR shim upgraded this element", "expect": "no-trigger", "note": "web-component-facts — platform lifecycle" },
+    { "id": "n05", "prompt": "what test files does a new control need before it's done", "expect": "no-trigger", "note": "web-component-facts — the per-control test-file quintet" },
+    { "id": "n06", "prompt": "is jsdom-green enough to call a component's tests done, or do we need the browser suite too", "expect": "no-trigger", "note": "web-component-facts — the general jsdom-vs-browser test-tier question, not this pack's CSS-file-structure axis" },
+    { "id": "n07", "prompt": "how long should this modal's entrance transition be", "expect": "no-trigger", "note": "motion-rules" },
+    { "id": "n08", "prompt": "what padding should this icon-only button use at the XL size", "expect": "no-trigger", "note": "make-component — derived geometry" },
+    { "id": "n09", "prompt": "pick an OKLCH color ramp anchored to our brand color", "expect": "no-trigger", "note": "design plugin — make-palette; token VALUES not CSS mechanics" },
+    { "id": "n10", "prompt": "design a 15-voice typography system from this brand brief", "expect": "no-trigger", "note": "design plugin — pick-fonts" }
+  ]
+}

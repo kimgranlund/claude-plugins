@@ -26,6 +26,7 @@
     { "id": "n07", "prompt": "what does a card usually contain — header, body, footer", "expect": "no-trigger", "note": "ui-pattern-facts" },
     { "id": "n08", "prompt": "should this chart element use data-stream-src or its own imperative fetch loop", "expect": "no-trigger", "note": "data-wiring-facts" },
     { "id": "n09", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" },
-    { "id": "n10", "prompt": "grade this component someone else built against both axes", "expect": "no-trigger", "note": "component-checker" }
+    { "id": "n10", "prompt": "grade this component someone else built against both axes", "expect": "no-trigger", "note": "component-checker" },
+    { "id": "n11", "prompt": "write a unit test that checks a CSS file's structure and token hygiene, not its rendered output", "expect": "no-trigger", "note": "css-system-facts (ticket #810 wave 6) — CSS-file structural testing, distinct from the per-control test-file quintet" }
   ]
 }
