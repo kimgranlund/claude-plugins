@@ -34,11 +34,15 @@ const FONT_ROLES = ["display", "heading", "body", "ui", "mono"];  // the five --
 // Closed voice registry, LONGEST FIRST so "sub-heading" and "sub-title" are preferred over the
 // "heading"/"title" suffixes they contain — prefix detection below depends on trying the longer
 // voice name first.
-const VOICES = ["display", "headline", "sub-heading", "title", "sub-title", "lead", "body", "code", "label", "kicker", "tiny"]
+const VOICES = ["display", "headline", "sub-heading", "title", "sub-title", "lead", "body",
+                "body-mono", "label", "label-mono", "kicker", "tiny", "tiny-mono",
+                "ui-control", "ui-widget"]
   .sort((a, b) => b.length - a.length);
 // The three voices the grammar REQUIRES to carry -line-single — seeded, not inferred, so a kit
-// that drops -line-single entirely from label/code/kicker still fails instead of silently passing.
-const BOX_VOICES = new Set(["label", "code", "kicker"]);
+// that drops -line-single entirely from kicker/ui-control/ui-widget still fails instead of
+// silently passing. `label` is explicitly STATIC (re-split 2026-08-20, TKT-0008) — it never
+// carries -line-single, so it is deliberately NOT in this set.
+const BOX_VOICES = new Set(["kicker", "ui-control", "ui-widget"]);
 // "line-single" MUST be tried before "line" or it would only ever match the "line" prefix of it.
 const PROPS = ["line-single", "size", "line", "tracking", "weight", "para"];
 
@@ -69,6 +73,34 @@ if (args[0] === "selftest") {
   const materialRedirect = run([join(dir, "material.css")]);
   const goodLint = run([join(dir, "good.css"), join(dir, "ok-ui.css")]);
   const badLint = run([join(dir, "good.css"), join(dir, "bad-ui.css")]);
+
+  // Box-voice re-split (issue #792/#798, TKT-0008): kicker/ui-control/ui-widget MUST carry
+  // -line-single on every step; label is explicitly static and must NOT be required to.
+  const boxGoodProps = (voice, step) => CORE.map((p) =>
+    `  --type-${voice}-${step}-${p}: ${p === "size" ? "1rem" : p === "weight" ? "400" : "normal"};\n`
+  ).join("") + `  --type-${voice}-${step}-line-single: 1;\n`;
+  const boxGoodCss = `:root {\n${fontLines}\n${voiceLines}\n${boxGoodProps("ui-control", "md")}}\n`;
+  const boxBadCss = `:root {\n${fontLines}\n${voiceLines}\n` +
+    CORE.map((p) => `  --type-ui-control-md-${p}: ${p === "size" ? "1rem" : p === "weight" ? "400" : "normal"};\n`).join("") +
+    `}\n`; // ui-control present but missing -line-single entirely
+  const labelNoSingleCss = `:root {\n${fontLines}\n${voiceLines}\n` +
+    CORE.map((p) => `  --type-label-md-${p}: ${p === "size" ? "1rem" : p === "weight" ? "400" : "normal"};\n`).join("") +
+    `}\n`; // label with no -line-single at all — must NOT be flagged as a missing box voice
+  writeFileSync(join(dir, "box-good.css"), boxGoodCss);
+  writeFileSync(join(dir, "box-bad.css"), boxBadCss);
+  writeFileSync(join(dir, "label-no-single.css"), labelNoSingleCss);
+  const boxGood = run([join(dir, "box-good.css")]);
+  const boxBad = run([join(dir, "box-bad.css")]);
+  const labelNoSingle = run([join(dir, "label-no-single.css")]);
+
+  // Compound voice-name parsing (body-mono/label-mono must not be mis-parsed as body/label plus
+  // a stray "mono" step) — a full body-mono voice binds clean under its own longer name.
+  const bodyMonoCss = `:root {\n${fontLines}\n${voiceLines}\n` +
+    CORE.map((p) => `  --type-body-mono-md-${p}: ${p === "size" ? "1rem" : p === "weight" ? "400" : "normal"};\n`).join("") +
+    `}\n`;
+  writeFileSync(join(dir, "body-mono.css"), bodyMonoCss);
+  const bodyMono = run([join(dir, "body-mono.css")]);
+
   rmSync(dir, { recursive: true, force: true });
   const r = {
     goodBindExit0: goodBind.code === 0,
@@ -78,9 +110,14 @@ if (args[0] === "selftest") {
     goodLintExit0: goodLint.code === 0,
     badLintExit1: badLint.code === 1,
     badLintCatchesSize: /hardcoded font-size/.test(badLint.out),
+    boxGoodExit0: boxGood.code === 0,
+    boxBadExit1: boxBad.code === 1,
+    boxBadCatchesMissingSingle: /line-single/.test(boxBad.out),
+    labelNoSingleExit0: labelNoSingle.code === 0,
+    bodyMonoExit0: bodyMono.code === 0 && /body-mono/.test(bodyMono.out),
   };
   const ok = Object.values(r).every(Boolean);
-  console.log(`type-check selftest · ${ok ? "PASS" : "FAIL"} · a full body voice + five font roles binds clean under the type- prefix, one dropped prop fails, a Material export redirects instead of false-gapping, var()-wrapped font-size lints clean, a hardcoded px size is caught`);
+  console.log(`type-check selftest · ${ok ? "PASS" : "FAIL"} · a full body voice + five font roles binds clean under the type- prefix, one dropped prop fails, a Material export redirects instead of false-gapping, var()-wrapped font-size lints clean, a hardcoded px size is caught, a box voice (ui-control) missing -line-single fails while a full one passes, label with no -line-single is NOT flagged (static, not a box voice), and a compound voice name (body-mono) binds under its own longer name`);
   if (!ok) console.log("  " + JSON.stringify(r));
   process.exit(ok ? 0 : 1);
 }

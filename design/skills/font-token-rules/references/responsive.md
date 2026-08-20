@@ -9,10 +9,12 @@ synthesized automatically when the designer configured none; other producers cho
 ladder). Because a `.type-{voice}-{step}` class reads the *variables*, the same class restyles
 automatically at each breakpoint: you write `.type-body-md` once and it grows with the viewport.
 
-The stepping is **hierarchy-aware**, not uniform: body-class text (body · label · tiny · code) is
-**frozen** across breakpoints, headings compress partially on smaller screens, and display-class
-type compresses fully (a 90px Desktop display lands near 75 on Tablet, 60 on Mobile). So don't
-"fix" a heading that shrinks on mobile while body text doesn't — that asymmetry IS the system.
+The stepping is **hierarchy-aware**, not uniform: body-class text (body · body-mono · label ·
+label-mono · tiny · tiny-mono) is **frozen** across breakpoints, `ui-control`/`ui-widget` are
+effectively frozen too (their whole ramp already sits near `bodyBase`), headings compress
+partially on smaller screens, and display-class type compresses fully (a 90px Desktop display
+lands near 75 on Tablet, 60 on Mobile). So don't "fix" a heading that shrinks on mobile while body
+text doesn't — that asymmetry IS the system.
 
 - **Do not** author fluid `clamp()` type or `vw`-based font sizes — if modes exist they are the
   responsive mechanism and land on the kit's exact quantized sizes at each breakpoint (no
@@ -26,17 +28,21 @@ type compresses fully (a 90px Desktop display lands near 75 on Tablet, 60 on Mob
 
 ## Single-line vs multi-line height
 
-The `mono`/`ui`-role BOX voices — **label, code, and kicker** — carry TWO leadings per step:
+The genuinely interactive/box voices — **`ui-control`, `ui-widget`, and `kicker`** (re-split
+2026-08-20, TKT-0008) — carry TWO leadings per step:
 
 - `--type-{voice}-{step}-line` — multi-line leading (text that wraps: helper text, tooltips, prose).
 - `--type-{voice}-{step}-line-single` — single-line leading = the size (leading 1.0), for text
-  locked in a box (buttons, inputs, cells, a kicker overline) so the box height is exact and
-  doesn't grow.
+  locked in a box (buttons, inputs, selects — `ui-control`; tags, badges, switches — `ui-widget`;
+  a kicker overline) so the box height is exact and doesn't grow.
 
-The reading voices — **display, headline, sub-heading, title, sub-title, lead, body, tiny** — have
-only `-line` (they're read as multi-line runs). This includes `sub-title` and `tiny`, which ride
-the `mono`/`ui` FONT roles like the box voices do, but are prose flow, not control text. Reach for
-`-line-single` on a label/code/kicker element whose text must not wrap.
+Every other voice — **display, headline, sub-heading, title, sub-title, lead, body, body-mono,
+label, label-mono, tiny, tiny-mono** — has only `-line` (read as multi-line runs). This includes
+`sub-title` and the mono-sibling voices, which ride the `mono` FONT role like the box voices do,
+but are prose flow, not control text — and it includes `label` itself, which is explicitly
+**static**: it names or describes interface elements but is never the operable control, so it
+never gets `-line-single`. Reach for `-line-single` only on a `ui-control`/`ui-widget`/`kicker`
+element whose text must not wrap.
 
 ## Paragraph spacing
 
@@ -44,8 +50,10 @@ the `mono`/`ui` FONT roles like the box voices do, but are prose flow, not contr
 typical export tunes it:
 
 - **~0.7× size** for the display + heading-family voices (display · headline · sub-heading · title).
-- **~0.75× size** for the prose voices on the body/ui/mono roles (body · lead · sub-title · tiny).
-- **1.0× size** for the box (control-text) voices (label · code · kicker) — `para == size`.
+- **~0.75× size** for the prose voices on the body/ui/mono roles (body · body-mono · label ·
+  label-mono · lead · sub-title · tiny · tiny-mono).
+- **1.0× size** for the three genuinely interactive box voices (`ui-control` · `ui-widget` ·
+  `kicker`) — `para == size`.
 
 Use it as `margin-block-end` between blocks of that voice; it scales with the size across
 breakpoints, so vertical rhythm stays proportional. Don't set paragraph margins by hand.

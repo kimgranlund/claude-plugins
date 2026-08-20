@@ -1,7 +1,7 @@
 ---
 name: pick-fonts
 description: >-
-  Design an opinionated 11-voice typography system from a brand brief: pick a font pairing
+  Design an opinionated 15-voice typography system from a brand brief: pick a font pairing
   ("pick a body and display pairing"), verify a chosen pairing's craft ("is this pairing
   metric-compatible"), decide which typeface fills each voice, or turn "modern and clean" into a
   specific point in design space — territory, rationale, coherence, craft verification;
@@ -71,10 +71,11 @@ palette/contrast" is a different artifact class — route to [[check-colors]].
    per-voice decision doc in the same change; a territory ruled once for this brand is never
    re-asked.
 2. **Per-voice creative decisions.** Typography-tokens' five font-family roles (`display · heading
-   · body · ui · mono`) are the concrete slots; its eleven voices ride on them (`headline`,
-   `sub-heading`, and `title` take `heading`'s face, `kicker`, `code`, and `sub-title` take
-   `mono`'s, `label` and `tiny` take `ui`'s, `lead` takes `body`'s — `font-token-rules/SKILL.md`'s
-   voice table is canonical, not restated in full here). For each of the five slots: call
+   · body · ui · mono`) are the concrete slots; its fifteen voices ride on them (`headline`,
+   `sub-heading`, and `title` take `heading`'s face; `kicker`, `sub-title`, `body-mono`,
+   `label-mono`, and `tiny-mono` take `mono`'s; `label`, `tiny`, `ui-control`, and `ui-widget` take
+   `ui`'s; `lead` and `body` take `body`'s — `font-token-rules/SKILL.md`'s voice table is
+   canonical, not restated in full here). For each of the five slots: call
    distinctive or neutral against the
    interpreted territory (usually `display`/`headline`/`kicker`/`code` earn distinctiveness;
    `body`/`label`/`tiny` usually want neutrality — the judgment framework this skill
@@ -86,7 +87,7 @@ palette/contrast" is a different artifact class — route to [[check-colors]].
    `lettering-facts/references/techniques/pairing.md`'s "Contrast Intensity and Perceived
    Intentionality" section already established (cited, not re-derived — summarized in the numbers
    table below).
-3. **Coherence pass.** Read all 11 voices as one document: does it read as ONE opinionated system,
+3. **Coherence pass.** Read all 15 voices as one document: does it read as ONE opinionated system,
    or a grab-bag of individually-defensible, collectively-incoherent picks? This is a real, named
    failure mode — a display face chosen for 1970s ski-poster energy sitting over a body face
    chosen for enterprise-dashboard neutrality, with no bridging logic, is two systems wearing one
@@ -165,7 +166,7 @@ custom properties) instead of this skill's (deciding which typeface fills the ro
 | [`references/rubric.md`](references/rubric.md) | the 6 scored dimensions + promote gate |
 | [`references/font-craft.md`](references/font-craft.md) | the deepened per-voice distinctive-vs-neutral judgment, the metrics table, the categorized font register |
 | [`references/territory-interpretation.md`](references/territory-interpretation.md) | worked point-vs-region transformations |
-| [`references/house-typescale.md`](references/house-typescale.md) | the house fixed typescale — the 11-voice size table (per breakpoint) every ask about designing a type scale starts from |
+| [`references/house-typescale.md`](references/house-typescale.md) | the house fixed typescale — the 15-voice size table (per breakpoint) every ask about designing a type scale starts from |
 | [`scripts/typeface-check.py`](scripts/typeface-check.py) | the metric-ratio + axis-apart + size-jump checker + selftest |
 | `scripts/routing-corpus.json` | the checked-in M2 routing corpus |
 | [[font-token-rules]] | the mandatory REALIZATION handoff — binds the decision as `--font-*`/`--type-*` |
