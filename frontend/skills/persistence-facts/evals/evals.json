@@ -1,0 +1,30 @@
+{
+  "skill": "persistence-facts",
+  "note": "New knowledge pack (ticket #807, frontend wave 3). Fences: state-model-rules owns app-tier state ARCHITECTURE judgment generally, incl. the general bypass-inventory METHOD (audit-technique.md) reusable across any sanctioned seam — this pack's persistence-audit-shape.md is the narrower storage-specific checklist and cites that method rather than restating it; reactivity-facts owns reactivity MECHANISM (kernel/recompute/disposal/staleness/scheduling), unrelated to what gets written to storage and when. n01-n07 and n12 are the reciprocal no-trigger cases against both siblings; n08-n11 are unrelated-domain no-trigger cases.",
+  "cases": [
+    { "id": "t01", "prompt": "does this persisted store need a schemaVersion field", "expect": "trigger" },
+    { "id": "t02", "prompt": "will renaming this field silently drop everyone's saved data on their next reload", "expect": "trigger" },
+    { "id": "t03", "prompt": "is ad-hoc JSON.parse with a try/catch good enough for this localStorage key, or does it need real migration discipline", "expect": "trigger" },
+    { "id": "t04", "prompt": "we have a synchronous settings store sitting on top of our async storage adapter — is that a bypass or legitimate", "expect": "trigger" },
+    { "id": "t05", "prompt": "when is it okay to have two non-interoperable persistence contracts in the same app", "expect": "trigger" },
+    { "id": "t06", "prompt": "audit our codebase for places that bypass the sanctioned storage seam", "expect": "trigger" },
+    { "id": "t07", "prompt": "how do I grep for storage bypasses across the whole app instead of reading file by file", "expect": "trigger" },
+    { "id": "t08", "prompt": "should this filter's search text live in the URL query string", "expect": "trigger" },
+    { "id": "t09", "prompt": "is it safe to put this patient-search text in the URL, or could that leak PHI", "expect": "trigger" },
+    { "id": "t10", "prompt": "push vs replaceState for a page-size change in the URL", "expect": "trigger" },
+    { "id": "t11", "prompt": "how should a multi-value filter be encoded into a URL query param without breaking on commas", "expect": "trigger" },
+    { "id": "t12", "prompt": "what's a cache-buster version suffix vs an actual data migration for a stored key", "expect": "trigger" },
+    { "id": "n01", "prompt": "why did this effect refire twice for one write", "expect": "no-trigger", "note": "reactivity-facts — kernel recompute mechanism, not what/when gets persisted" },
+    { "id": "n02", "prompt": "computed vs signal vs effect", "expect": "no-trigger", "note": "reactivity-facts" },
+    { "id": "n03", "prompt": "how do I guard against a stale async response overwriting a newer one", "expect": "no-trigger", "note": "reactivity-facts — sequence-token staleness guard is a kernel concern, not persistence" },
+    { "id": "n04", "prompt": "why does this app have four completely different state patterns stacked on top of each other", "expect": "no-trigger", "note": "state-model-rules — four-generations architecture judgment" },
+    { "id": "n05", "prompt": "is this data layer we built actually being used anywhere, or is it just built-but-unadopted", "expect": "no-trigger", "note": "state-model-rules — adoption-verdict judgment, layer-general not persistence-specific" },
+    { "id": "n06", "prompt": "two places in our app both claim to write the same conceptual field independently", "expect": "no-trigger", "note": "state-model-rules — one-name-two-owners" },
+    { "id": "n07", "prompt": "how do I run a general audit on our app to find where doctrine and practice have diverged", "expect": "no-trigger", "note": "state-model-rules — doctrine-vs-practice, whole-app judgment not storage-specific" },
+    { "id": "n08", "prompt": "what padding should this button use at the XL size", "expect": "no-trigger", "note": "make-component" },
+    { "id": "n09", "prompt": "what empty state copy should this list show on first run", "expect": "no-trigger", "note": "ui-pattern-facts" },
+    { "id": "n10", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" },
+    { "id": "n11", "prompt": "audit the whole app's UX before launch", "expect": "no-trigger", "note": "check-whole-ui" },
+    { "id": "n12", "prompt": "why is our state a mix of implementations across the whole app", "expect": "no-trigger", "note": "state-model-rules — the general symptom this pack's siblings own, not a specific storage-key or URL-param ask" }
+  ]
+}

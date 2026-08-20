@@ -721,6 +721,11 @@
       "canonical": "wording",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "persistence",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
