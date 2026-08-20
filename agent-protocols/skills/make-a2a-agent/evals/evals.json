@@ -1,6 +1,6 @@
 {
  "skill": "make-a2a-agent",
- "note": "Initial suite, authored 2026-07-09 (closing the A2A four's pending pre-ship gate). Positives: build/design asks, server + client side, imperative + symptom registers. Negatives adversarially from a2a-protocol-facts (facts), check-a2a-isolation (proving), a2a-training-facts, and cross-plugin build asks that must escape. n07 added 2026-08-19 (S0-B, ticket #780): reciprocal fence for the description's new intake-schema citation (screens:feature-intake-rules / design:token-feature-intake-rules).",
+ "note": "Initial suite, authored 2026-07-09 (closing the A2A four's pending pre-ship gate). Positives: build/design asks, server + client side, imperative + symptom registers. Negatives adversarially from a2a-protocol-facts (facts), check-a2a-isolation (proving), a2a-training-facts, and cross-plugin build asks that must escape. n07 added 2026-08-19 (S0-B, ticket #780): reciprocal fence for the description's new intake-schema citation (frontend:feature-intake-rules / design:token-feature-intake-rules).",
  "cases": [
   { "id": "t01", "prompt": "make my two agents talk to each other", "expect": "trigger" },
   { "id": "t02", "prompt": "build an A2A server around my existing agent", "expect": "trigger" },

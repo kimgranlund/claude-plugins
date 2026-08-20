@@ -69,12 +69,12 @@ but nothing does anything"), inside-out-only (orphan components).
 
 ## Composition
 
-- **`screens:make-component` / `break-down-layout` / `break-down-flow`** — the owning build skills
+- **`frontend:make-component` / `break-down-layout` / `break-down-flow`** — the owning build skills
   this pack's schemas cite for their axis definitions; soft in-plugin citation, never a preload,
   never a restatement of the axis doctrine itself.
-- **`screens:component-checker` / `layout-checker` / `flow-checker`** — the DoD checkers each
+- **`frontend:component-checker` / `layout-checker` / `flow-checker`** — the DoD checkers each
   schema names; reached at build-verify time, never invoked by this pack.
-- **`screens:check-focus` / `check-translations` / `motion-rules`** — the cross-cutting concern
+- **`frontend:check-focus` / `check-translations` / `motion-rules`** — the cross-cutting concern
   owners `references/cross-cutting-ux.md` cites for its own budget vocabulary.
 - **`docs:file-feature`** — the procedural intake this pack is consulted FROM (soft cross-plugin
   mention, degrades gracefully where `screens` isn't installed); this pack never restates

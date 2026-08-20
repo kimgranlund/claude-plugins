@@ -1,7 +1,7 @@
-# screens — design, critique, and verify UI structure
+# frontend — design, critique, and verify UI structure
 
 Sibling plugin to harness (the authoring toolchain) and docs (which authors functional
-documents); screens authors and reviews UI structure — layouts, flows, components, patterns — and
+documents); frontend authors and reviews UI structure — layouts, flows, components, patterns — and
 verifies it against the non-functional bars every surface owes (focus, i18n, perf, safety).
 Merges what plan-plugin-split surfaced as two candidate clusters (ui-architecture and ui-verify)
 into one plugin on explicit direction: 13 cross-mentions between them was the single
@@ -37,6 +37,7 @@ when it is not — no hard preload crosses the plugin boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v2.0.0 · 2026-08-20 · BREAKING — plugin renamed screens -> frontend (Kim's ruling 2026-08-20: one plugin absorbing the incoming front-end knowledge series — reactivity/data, app-tier state architecture, persistence/gateways, web-components, CSS/design-systems packs land here in follow-up waves). Dir, manifest name/displayName, marketplace entry, workspace topology row, settings enablement, CI plugin loop, and every live cross-plugin `screens:` handle repointed to `frontend:`; `authorkit/renames.json` maps screens->frontend so stale handles keep resolving via fix-old-names; `frontend` registered in naming.manifest ObjectVocab. History (ledgers, ADRs, ops reports, CHANGELOGs) deliberately untouched — ADR-0006's own rewrote-the-counterexamples lesson. Skill/agent member names unchanged; no behavior change.
 v1.1.3 · 2026-08-19 · closes #779 (overhaul wave S0-B+W2): S0-B — break-down-flow/break-down-layout/make-component cite `feature-intake-rules` directly instead of restating its ticket-capture sentence. W2 diets (chars, every trigger phrase + NOT-fence preserved): ui-pattern-facts 1031→696, make-component 995→700, break-down-layout 928→685, break-down-flow 731→696. Evals updated in-suite; wording-checker pass; scoped blind re-judge.
 v1.1.2 · 2026-08-19 · reciprocal no-trigger fence (n26) in make-component evals citing design:make-variants (rides PR #754, closes #750 slice).
 v1.1.1 · 2026-08-19 · closes #720 (routing fence, sweep #676): `ui-genre-facts`' description fence rephrased from "NOT for which modules a page needs (ui-pattern-facts)" to "NOT 'what modules/sections does a dashboard page need' — ui-pattern-facts even when a genre word appears" (n10 leaked 3-0 to the genre word 'dashboard'). Wording-checker pass caught a body/description tension (the body's own "module inventory" phrase contradicted the new fence) and an em-dash run-on: body phrase trimmed, description clause turned into a parenthetical. Rebased onto #727's v1.1.0 (feature-intake-rules) — no file overlap. `harness:wording-checker` pass per plugin-authoring.md's semantic-edit invariant.

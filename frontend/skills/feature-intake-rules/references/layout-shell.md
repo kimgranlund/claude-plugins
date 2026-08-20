@@ -1,6 +1,6 @@
 # Layout / shell intake schema
 
-Fields lifted verbatim from `screens:break-down-layout`'s own OUTSIDE-IN (frame → regions →
+Fields lifted verbatim from `frontend:break-down-layout`'s own OUTSIDE-IN (frame → regions →
 groups → atoms) × INSIDE-OUT (verbs → bindings → feedback → coherence) axes
 (`break-down-layout/SKILL.md`, `references/decomposition-method.md`) — reframed as intake
 QUESTIONS, never a second copy of the axis doctrine.

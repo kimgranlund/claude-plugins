@@ -5,7 +5,7 @@ a build-time OUTSIDE-IN/INSIDE-OUT split, they're a per-concern BUDGET a ticket 
 explicitly waive. Each sub-section's fields are lifted verbatim from that concern's own owning
 `check-*`/`*-rules` skill — never restated as doctrine here.
 
-## Motion (`screens:motion-rules`)
+## Motion (`frontend:motion-rules`)
 
 | Field | Question |
 |---|---|
@@ -13,7 +13,7 @@ explicitly waive. Each sub-section's fields are lifted verbatim from that concer
 | Choreography | If multiple elements move together, what's the stagger/sequencing? |
 | Reduced-motion | What's the `prefers-reduced-motion` fallback? |
 
-## Focus (`screens:check-focus`)
+## Focus (`frontend:check-focus`)
 
 | Field | Question |
 |---|---|
@@ -22,7 +22,7 @@ explicitly waive. Each sub-section's fields are lifted verbatim from that concer
 | Focus-ring tokens | Does the new surface need a focus-ring recipe that clears 3:1 under every background it can sit on? |
 | Hit targets | Do any new interactive elements need a hit-area expansion beyond their visual box? |
 
-## i18n (`screens:check-translations`)
+## i18n (`frontend:check-translations`)
 
 | Field | Question |
 |---|---|

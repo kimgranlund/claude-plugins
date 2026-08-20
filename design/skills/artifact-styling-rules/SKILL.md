@@ -62,7 +62,7 @@ actually is.
   consumption-into-an-artifact doctrine only.
 - **`dataviz`** — chart/graph color and mark-spec doctrine lives there; this pack's mermaid axis
   is diagram STRUCTURE and re-theming, never data-encoding choices.
-- **`screens:break-down-layout`** — general (non-artifact) screen layout critique lives there.
+- **`frontend:break-down-layout`** — general (non-artifact) screen layout critique lives there.
 
 ## Human/browser exception, stated
 

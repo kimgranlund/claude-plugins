@@ -7,7 +7,7 @@ description: >-
   Carries the verified table — 10 easing cubic-beziers, the 16-step duration ladder, the M3
   Expressive spring tokens — the pairing laws (entrances decelerate, exits accelerate), the
   platform-drift map. Never hardcode a ms value or bezier. NOT for platform-agnostic motion
-  science (motion-rules, screens plugin); NOT for color/geometry/type (the material-* siblings).
+  science (motion-rules, frontend plugin); NOT for color/geometry/type (the material-* siblings).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -66,7 +66,7 @@ animation sits on the project's one system — springs XOR duration+easing.
 ## Boundaries
 
 - Platform-agnostic motion questions — how long *should* something take, why springs, stagger,
-  what never animates, `prefers-reduced-motion` policy — belong to `motion-rules` (screens plugin,
+  what never animates, `prefers-reduced-motion` policy — belong to `motion-rules` (frontend plugin,
   where installed); this pack owns only the Material realization.
 - Color/sizing/type tokens: the three sibling packs. Designing a new motion system: not this pack.
 

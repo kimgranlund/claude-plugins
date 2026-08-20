@@ -10,7 +10,7 @@
     "docs@nonoun-plugins": true,
     "teamwork@nonoun-plugins": true,
     "authorkit@nonoun-plugins": true,
-    "screens@nonoun-plugins": true,
+    "frontend@nonoun-plugins": true,
     "agent-protocols@nonoun-plugins": true,
     "llm@nonoun-plugins": true,
     "design@nonoun-plugins": true

@@ -304,6 +304,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "frontend",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "gen-ui",
       "plural": null,
       "banned_aliases": []

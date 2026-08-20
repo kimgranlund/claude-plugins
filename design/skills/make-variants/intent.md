@@ -26,8 +26,8 @@ the skill's own name changed.
 - **Type/home:** design plugin (`design/skills/make-variants/`), kimgranlund/claude-plugins.
 - **Fences:** NOT for producing one finished design or a hand-editable canvas (`design` canvas
   skill / artifact-design); NOT for judging an existing artifact or component
-  (design-system-checker / screens:component-checker); NOT for building the chosen winner
-  (screens:make-component or the host repo's build skills — this skill ends at a winning spec).
+  (design-system-checker / frontend:component-checker); NOT for building the chosen winner
+  (frontend:make-component or the host repo's build skills — this skill ends at a winning spec).
 - **Done-when:** artifact renders N axis-labeled variant cards with working vote+note widgets in
   both themes; the JSON block live-updates and copies; a pasted variant-feedback/v1 blob
   regenerates round N+1 at the SAME URL with anchors preserved; unvoted ≠ downvoted in the
@@ -40,7 +40,7 @@ the skill's own name changed.
 - P2: PASS 2026-08-19 (ticket #750) — `evals/evals.json`: 22 cases (11 trigger incl. the 5
   verbatim phrasings + the JSON-paste resume trigger + 5 near-miss/resume paraphrases; 11
   no-trigger fencing the design canvas skill, artifact-design, design-system-checker,
-  screens:component-checker, screens:make-component, pick-fonts, and the broadest verbatim
+  frontend:component-checker, frontend:make-component, pick-fonts, and the broadest verbatim
   trigger's own single-design-refinement near-miss). `evals/assertions.md`: 5 behavioral
   assertions. `evals/baseline.md`: documented-delta baseline note (no live fresh-session capture —
   the delta is a structural feedback contract a no-skill run cannot partially have).

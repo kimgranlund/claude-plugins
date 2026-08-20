@@ -1,6 +1,6 @@
 {
   "name": "nonoun-plugins",
-  "description": "Claude Code plugins: the harness/docs authoring toolchain, and five domain plugins (agent-protocols, llm, design, screens, teamwork) partitioned from a legacy personal skill/agent corpus.",
+  "description": "Claude Code plugins: the harness/docs authoring toolchain and the domain plugins (agent-protocols, llm, design, frontend, teamwork, brand-design) plus authorkit's estate governance.",
   "owner": {
     "name": "Kim Granlund"
   },
@@ -48,9 +48,9 @@
       "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, the seven-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability, and a deployed runtime's own producer-loop resilience), and the Resident-Agent/Ephemeral-Agent residency taxonomy that keeps CLI-harness and hosted-chatbot findings from conflating. Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack."
     },
     {
-      "name": "screens",
-      "displayName": "Screens",
-      "source": "./screens",
+      "name": "frontend",
+      "displayName": "Frontend",
+      "source": "./frontend",
       "description": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-rules), verify it all against non-functional bars (focus, i18n, perf, safety), and capture per-shape UI-feature ticket intake schemas (feature-intake-rules) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract."
     },
     {

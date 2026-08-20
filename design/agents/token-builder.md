@@ -35,7 +35,7 @@ Priorities, in order:
    a ladder can't be made distinct + accessible without a role rename or a vocabulary change, stop and hand
    the coordinator a concrete recommendation.
 
-Focus-ring and hit-target values come from the `screens` plugin's `check-focus` skill where installed;
+Focus-ring and hit-target values come from the `frontend` plugin's `check-focus` skill where installed;
 otherwise apply WCAG 2.2 target-size and focus-visible minimums directly.
 
 Return your work via harness's `write-handoff` block where harness is installed; otherwise: Status /

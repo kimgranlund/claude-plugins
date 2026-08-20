@@ -6,7 +6,7 @@ description: >-
   idea — "can we add a dark mode", "what if we supported CSV export". Intake only, never builds.
   /file-feature [idea, or a TKT-/#issue/adapter id] resumes. NOT for bugs (file-bug); NOT for
   chores (file-task); NOT for authoring docs (make-doc); NOT the UI-shaped intake SCHEMAS
-  themselves (screens:feature-intake-rules, design:token-feature-intake-rules) — this skill only
+  themselves (frontend:feature-intake-rules, design:token-feature-intake-rules) — this skill only
   routes to them.
 disable-model-invocation: false
 user-invocable: true
@@ -146,7 +146,7 @@ decision-ratifying.
 
 **UI-shape detection (gh#711, lld-0024) — a Work-shaped seed only, soft named mention, degrades
 gracefully.** A Work-shaped seed that reads as a component/module, a layout/shell, a UX-flow, or
-a cross-cutting UX (motion/focus/i18n) ask consults `screens:feature-intake-rules` for its
+a cross-cutting UX (motion/focus/i18n) ask consults `frontend:feature-intake-rules` for its
 per-shape intake schema; one that reads as a token/palette/typography seed consults
 `design:token-feature-intake-rules` instead — both by SOFT named mention
 (`.claude/rules/plugin-authoring.md`'s hard boundary: no preload, no `${CLAUDE_PLUGIN_ROOT}`

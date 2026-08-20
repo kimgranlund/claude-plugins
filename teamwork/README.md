@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.16 · 2026-08-20 · the screens->frontend plugin rename (Kim's ruling 2026-08-20: one plugin absorbing the front-end knowledge series): live `screens:` handles and plugin-prose mentions repointed to `frontend:`/`frontend`; ledger history untouched.
 v2.28.15 · 2026-08-19 · closes #784: `dispatch_envelope.py` non-plugin-repo hardening — plugin inference is layout-gated (a `.claude-plugin/` dir at the repo toplevel decides; a `ui-rating: ...` title prefix in agent-ui is a component name, never a plugin — the 2026-08-19 mobilize crash), and a pre-existing scratch-clone destination never fails the run (own clean clone reused; a foreign occupant left untouched, fresh `mkdtemp` sibling cut instead). Selftest gains both regressions; acceptance proven live in agent-ui, twice in a row, exit 0. Pure code, no checker owed.
 v2.28.14 · 2026-08-19 · closes #766: `dispatch_envelope.py` first-use findings fixed inline — `--help`/`-h` exits 0 before arg parsing (never reaches `gh`), a non-integer ticket-id is exit 2, `slugify()` truncates at the last hyphen boundary not mid-word, clone honors `CLAUDE_SCRATCHPAD`/`--scratch-dir`. Pure code, no checker owed.
 v2.28.13 · 2026-08-19 · live-lane dependents synced to fleet-rules §7 (doctrine-audit verbatim-line class): fleet-marshal agent names the lane as host-only and routes lane-shaped asks back to the live host; bind-team carries the EXCEPT clause; A4 rubric gains A4-R6 triage-conduct row. Stacks on 2.28.12 (#761).

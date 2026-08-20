@@ -11,7 +11,8 @@
     "orchestration": "teamwork",
     "scribe": "docs",
     "typography": "design",
-    "ui": "screens"
+    "ui": "frontend",
+    "screens": "frontend"
   },
   "renames": [
     {
@@ -2051,7 +2052,7 @@
       "new": "component-checker",
       "kind": "agent",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2059,7 +2060,7 @@
       "new": "component-checker",
       "kind": "agent",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2067,7 +2068,7 @@
       "new": "flow-checker",
       "kind": "agent",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2075,7 +2076,7 @@
       "new": "flow-checker",
       "kind": "agent",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2083,7 +2084,7 @@
       "new": "layout-checker",
       "kind": "agent",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2091,7 +2092,7 @@
       "new": "layout-checker",
       "kind": "agent",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2099,7 +2100,7 @@
       "new": "apple-mobile-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2107,7 +2108,7 @@
       "new": "break-down-flow",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2115,7 +2116,7 @@
       "new": "break-down-layout",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2123,7 +2124,7 @@
       "new": "check-focus",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2131,7 +2132,7 @@
       "new": "check-safety",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2139,7 +2140,7 @@
       "new": "check-speed",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2147,7 +2148,7 @@
       "new": "check-translations",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2155,7 +2156,7 @@
       "new": "check-ui-change",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2163,7 +2164,7 @@
       "new": "check-whole-ui",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2171,7 +2172,7 @@
       "new": "make-component",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2179,7 +2180,7 @@
       "new": "make-component",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2187,7 +2188,7 @@
       "new": "dom-layout-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2195,7 +2196,7 @@
       "new": "dom-layout-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2203,7 +2204,7 @@
       "new": "break-down-flow",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2211,7 +2212,7 @@
       "new": "check-focus",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2219,7 +2220,7 @@
       "new": "size-and-shape-rules",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2227,7 +2228,7 @@
       "new": "check-translations",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2235,7 +2236,7 @@
       "new": "break-down-layout",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2243,7 +2244,7 @@
       "new": "make-component",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2251,7 +2252,7 @@
       "new": "apple-mobile-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2259,7 +2260,7 @@
       "new": "motion-rules",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2267,7 +2268,7 @@
       "new": "motion-rules",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2275,7 +2276,7 @@
       "new": "check-speed",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2283,7 +2284,7 @@
       "new": "check-safety",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2291,7 +2292,7 @@
       "new": "size-and-shape-rules",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2299,7 +2300,7 @@
       "new": "check-whole-ui",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2307,7 +2308,7 @@
       "new": "check-ui-change",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2315,7 +2316,7 @@
       "new": "ui-genre-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2323,7 +2324,7 @@
       "new": "ui-genre-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     },
     {
@@ -2331,7 +2332,7 @@
       "new": "ui-pattern-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "qualified"
     },
     {
@@ -2339,7 +2340,7 @@
       "new": "ui-pattern-facts",
       "kind": "skill",
       "old_plugin": "ui",
-      "new_plugin": "screens",
+      "new_plugin": "frontend",
       "match": "token"
     }
   ]

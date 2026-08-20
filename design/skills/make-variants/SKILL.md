@@ -7,8 +7,8 @@ description: >-
   component, show variants of X, give N takes on a layout, iterate on a design, or run a variant
   exploration — or paste a blob whose first key is "schema": "variant-feedback/v1" (resume). NOT
   for one finished design or a hand-editable canvas (design canvas skill, artifact-design); NOT
-  for grading an artifact/component (design-system-checker, screens:component-checker); NOT for
-  building the winner (screens:make-component).
+  for grading an artifact/component (design-system-checker, frontend:component-checker); NOT for
+  building the winner (frontend:make-component).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -51,16 +51,16 @@ below rather than restated here.
    held-but-uncited) and republish round `round + 1` to the same path from step 5.
 7. **Terminate.** A "pick" (a named winning id) or an all-up round is the stopping predicate —
    hand the winning axis combination as a spec to the build skill the request named, or
-   `screens:make-component` by default, then stop; no further round follows convergence.
+   `frontend:make-component` by default, then stop; no further round follows convergence.
 
 ## Fences
 
 NOT for producing one finished, hand-editable design — the design canvas skill and
 `artifact-design` own single-artifact craft; this skill's own job is running N variants through
 a vote loop. NOT for judging an existing artifact or component against a rubric
-(`design-system-checker`, `screens:component-checker` — those grade one already-built thing;
+(`design-system-checker`, `frontend:component-checker` — those grade one already-built thing;
 this skill generates and collects votes on several unbuilt ones). NOT for building the chosen
-winner (`screens:make-component`, or the host repo's own build skill) — this skill's own
+winner (`frontend:make-component`, or the host repo's own build skill) — this skill's own
 contract ends at a winning spec; the shipped component is the build skill's job.
 
 ## Failure branches
@@ -85,4 +85,4 @@ in the serialization.
 | `references/feedback-schema.md` | the `variant-feedback/v1` contract — shape, stable-id derivation, resume-mode read |
 | `artifact-design` (soft, global) | visual craft of each card and the page shell — cited, not restated |
 | `artifact-capabilities` (soft, global) | the republish-to-same-URL mechanism step 5 depends on |
-| `screens:make-component` | the default build-skill handoff at termination |
+| `frontend:make-component` | the default build-skill handoff at termination |
