@@ -1,6 +1,6 @@
 # Component / module intake schema
 
-Fields lifted verbatim from `screens:make-component`'s own Compose (whole → part) × Realize
+Fields lifted verbatim from `frontend:make-component`'s own Compose (whole → part) × Realize
 (part → whole) axes (`make-component/SKILL.md`) — never restated as doctrine here, only reframed
 as intake QUESTIONS a ticket must answer before build.
 

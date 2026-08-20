@@ -8,7 +8,7 @@ description: >-
   state machine, reconciled before code — conformance is a gate. NOT protocol facts
   (a2a-protocol-facts answers; this skill builds); NOT proving two agents are isolated
   (check-a2a-isolation); NOT the payload an agent RENDERS (a2ui-* siblings); NOT intake-schema
-  fields (screens:feature-intake-rules / design:token-feature-intake-rules).
+  fields (frontend:feature-intake-rules / design:token-feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

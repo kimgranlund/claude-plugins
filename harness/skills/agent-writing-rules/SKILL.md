@@ -235,7 +235,7 @@ PARAMETERIZABLE mechanics is.
 
 **Consulted at the same audit, no merge found:** `design-system-checker`/`font-choice-checker`
 (deliberately fenced apart by each other's own NOT-for lines — a pre-export decision-checker and a
-post-export corpus-checker, different lifecycle stages, different rubric); the `screens` trio
+post-export corpus-checker, different lifecycle stages, different rubric); the `frontend` trio
 (`component-checker`/`flow-checker`/`layout-checker` — three disjoint verification objects by
 design, each excluded from the other two in its own description); `code-checker`/`wiring-checker`
 (code diff vs. orchestration-composition — different artifact classes); `skill-checker`/

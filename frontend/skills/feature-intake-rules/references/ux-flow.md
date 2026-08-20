@@ -1,6 +1,6 @@
 # UX flow intake schema
 
-Fields lifted verbatim from `screens:break-down-flow`'s own task → journey (outside-in) ×
+Fields lifted verbatim from `frontend:break-down-flow`'s own task → journey (outside-in) ×
 transitions → whole (inside-out) axes (`break-down-flow/SKILL.md`) — reframed as intake
 QUESTIONS, never a second copy of the axis doctrine or the flow-card schema itself.
 

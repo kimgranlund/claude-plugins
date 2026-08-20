@@ -93,7 +93,7 @@
       "id": "n11",
       "prompt": "what fields does a UI ticket for a button need",
       "expect": "no-trigger",
-      "note": "reciprocal fence vs screens:feature-intake-rules (gh#711, lld-0024) \u2014 the UI-shaped schema itself, not general feature intake"
+      "note": "reciprocal fence vs frontend:feature-intake-rules (gh#711, lld-0024) \u2014 the UI-shaped schema itself, not general feature intake"
     }
   ]
 }

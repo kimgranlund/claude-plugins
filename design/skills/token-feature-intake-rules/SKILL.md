@@ -8,7 +8,7 @@ description: >-
   typography-seed ticket need", "is this token ticket capture-complete". NOT for building/grading
   the palette or type system itself (make-palette, pick-fonts, token-builder); NOT general
   feature intake (docs:file-feature, which consults this pack); NOT UI component/layout/flow
-  seeds (screens:feature-intake-rules).
+  seeds (frontend:feature-intake-rules).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -49,7 +49,7 @@ but nothing does anything"), inside-out-only (orphan components).
 ## Core invariants
 
 - **(a) Both-planes capture-completeness** — stated above, verbatim, shared with
-  `screens:feature-intake-rules`.
+  `frontend:feature-intake-rules`.
 - **(b) Fork-menu reuse** — these schema fields double as gh#654's pre-fork grill fork menu; one
   artifact, never two drifting lists.
 - **(c) Scope/owner/checker geometry** — the ticket records `scope:`, the named build owner, and
@@ -69,7 +69,7 @@ but nothing does anything"), inside-out-only (orphan components).
 - **`docs:file-feature`** — the procedural intake this pack is consulted FROM (soft cross-plugin
   mention, degrades gracefully where `design` isn't installed); this pack never restates
   `file-feature`'s own classify/dedup/size procedure.
-- **`screens:feature-intake-rules`** — the sibling pack for UI component/layout/flow seeds;
+- **`frontend:feature-intake-rules`** — the sibling pack for UI component/layout/flow seeds;
   disjoint domain, no citation between the two (each cites `file-feature` independently).
 
 Extension: governed by [[make-pack]].
