@@ -1,14 +1,14 @@
 ---
 name: color-contrast-facts
 description: >-
-  Use for color-accessibility QUESTIONS, never generates — APCA/WCAG 2.2, luminance, CVD —
-  incl. an ad-hoc ratio/Lc NUMBER, not a verdict: "calculate the WCAG contrast ratio between
-  these two colors", "what's the actual Lc value"; a CVD sim, no card: "simulate deuteranopia
-  on this palette and tell me what changes"; or a CVD-safe pick: "give me a CVD-safe pair for
-  error and success states". NOT a pass/fail VERDICT — "check the contrast ratio of this text
-  on this background", "does it meet the accessibility contrast floor", "does this clear 3:1"
-  are check-colors' asks; NOT a full VERIFICATION (check-colors); NOT space/gamut math
-  (color-space-facts); NOT vision science (color-perception-facts).
+  Use for color-accessibility QUESTIONS, never generates — APCA/WCAG 2.2, luminance, CVD,
+  low-vision — incl. an ad-hoc ratio/Lc NUMBER, not a verdict: "calculate the WCAG contrast
+  ratio between these two colors", "what's the actual Lc value"; a CVD sim, no card: "simulate
+  deuteranopia on this palette and tell me what changes"; or a CVD-safe pick: "give me a
+  CVD-safe pair for error and success states". NOT a pass/fail VERDICT — "check the contrast
+  ratio of this text on this background", "does it meet the accessibility contrast floor",
+  "does this clear 3:1" are check-colors' asks; NOT a full VERIFICATION (check-colors); NOT
+  gamut math (color-space-facts); NOT vision (color-perception-facts).
 disable-model-invocation: false
 user-invocable: false
 ---
