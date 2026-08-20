@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "agent-protocols",
-      "displayName": "Agentic UI",
+      "displayName": "Agent Protocols",
       "source": "./agent-protocols",
       "description": "A2UI knowledge packs \u2014 wire protocol/renderer, catalog design, the live conversational agent, and the training corpus \u2014 answering how @agent-ui/a2ui works from a cited repo corpus; named agent-protocols (not a2ui) to leave room for future Agent2Agent (A2A) protocol material."
     },
@@ -21,13 +21,13 @@
       "name": "design",
       "displayName": "Design",
       "source": "./design",
-      "description": "The design plugin \u2014 color science and OKLCH palettes, the 11-voice typography system, Material Design token grammar, and the design-system export bundles (Claude Design/DESIGN.md, Figma Make, Google Stitch) a generative design agent consumes."
+      "description": "The design plugin \u2014 color science and palettes, typography systems, and design-system exports in one install: OKLCH ramps and verification, the 11-voice type system, Material Design token grammar, the DESIGN.md/Figma Make/Google Stitch export bundles a generative design agent consumes, artifact-styling-rules (theme/token/type/mermaid/shell doctrine for Claude Artifacts), and token-feature-intake-rules (visual/token feature-ticket intake schema)."
     },
     {
       "name": "docs",
       "displayName": "Docs",
       "source": "./docs",
-      "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK \u2014 standards, maker, review, validator, eight type templates, and file-bug (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, make-rubric), markdown\u2194markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (make-reference, make-llms-txt, make-vision-memo \u2014 knowledge-pack authoring lives in harness's make-pack), and a fresh-context doc-checker agent alongside the experiment-runner agent."
+      "description": "Functional-document authoring: ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK, IDR, RDD \u2014 standards, maker, review, validator, ten type templates, and file-bug (capture -> classify -> record -> dispatch -> write-back for bug reports). Also covers research/measurement (research-methods, make-rubric), markdown\u2194markup conversion (markdown-to-markup, html-to-markdown), knowledge/reference authoring (make-reference, make-llms-txt, make-vision-memo \u2014 knowledge-pack authoring lives in harness's make-pack), artifact/report-page authoring (make-artifact + artifact-rules \u2014 a design system's DESIGN.md/tokens.json (or a synthesized one, or a doctrine-neutral fallback) plus report, handbook, or project-records content into a rendered Artifact page; artifact-rules now carries procedure-side standards only, citing design's artifact-styling-rules for visual doctrine), project-facts (domain-knowledge harvest: discovered topic zones scored two-axis, Outside-In x Inside-Out) and its harness-facts sibling (the same harvest reframed for a coding agent's own harness: install-ready CLAUDE.md-grade entry-file sections, path-scoped rules, pack seeds, dispatch context, weighted Inside-Out x Outside-In), product-lifecycle-rules (the general, portable build-loop/alignment doc doctrine) and check-stage (its live lifecycle-position reading \u2014 which loop/build-turn stage a repo is in), and a fresh-context doc-checker agent alongside the experiment-runner agent."
     },
     {
       "name": "harness",
@@ -39,13 +39,13 @@
       "name": "llm",
       "displayName": "LLM",
       "source": "./llm",
-      "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, and the six-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability). Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack."
+      "description": "Portable LLM-integration and chat-agent-harness knowledge, project-agnostic: the swappable-provider gateway pattern, streaming structured output over JSONL/SSE, the seven-layer construction of a mini/portable chat-agent harness (instructions/guardrails, skills/routing, orchestration/workflows, knowledge/memory, tools/resources/services, observability, and a deployed runtime's own producer-loop resilience), and the Resident-Agent/Ephemeral-Agent residency taxonomy that keeps CLI-harness and hosted-chatbot findings from conflating. Distilled from @agent-ui/a2ui's live-agent implementation and Claude Code's own current harness mechanics, taught as general technique rather than a repo-specific answer pack."
     },
     {
       "name": "screens",
       "displayName": "Screens",
       "source": "./screens",
-      "description": "Design and critique UI structure (layouts, flows, components, patterns) and verify it against non-functional bars (focus, i18n, perf, safety) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract."
+      "description": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-rules), verify it all against non-functional bars (focus, i18n, perf, safety), and capture per-shape UI-feature ticket intake schemas (feature-intake-rules) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract."
     },
     {
       "name": "teamwork",
