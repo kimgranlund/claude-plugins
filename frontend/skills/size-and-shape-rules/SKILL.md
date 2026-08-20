@@ -5,10 +5,10 @@ description: >-
   system, from a cited corpus. Use for "why 4px/8px steps", "how do I build a spacing scale",
   "linear or geometric progression", "why the scale gets sparser at larger sizes", "how nested
   containers compose their padding", "what's the right base unit". Carries base-unit
-  rationale, dense-then-sparse progression, composable-spacing theory, cross-system
-  comparison. ANSWERS the theory — does not derive one component's law (make-component) or
-  bind a platform scale (material-shape-facts); NOT CSS token-family naming
-  (css-system-facts); NOT a codebase's control-sizing/density token implementation
+  rationale, dense-then-sparse progression, cross-system comparison. ANSWERS the theory —
+  does not derive one component's law (make-component) or bind a platform scale
+  (material-shape-facts); NOT CSS token-family naming (css-system-facts); NOT per-tier
+  control-sizing lookup vs scale multiplier, or [density] scope on gap/height
   (css-system-facts).
 user-invocable: false
 disable-model-invocation: false
@@ -58,6 +58,10 @@ principle instead of copied by eye from whichever system is open in another tab.
   box-model/flow mechanics** (why a margin collapsed, what a BFC does) → [[dom-layout-facts]];
   **one component's full anatomy** → [[make-component]]. A scale question about "how much space"
   belongs here; a question about "where" or "why did the box behave that way" belongs to those.
+- **A CSS token-family NAMING question or a codebase's own control-sizing/density token
+  IMPLEMENTATION** (a per-tier lookup replacing a scale multiplier, `[density]` scoped to a
+  control's own gap vs height) → [[css-system-facts]] — this pack stays scoped to the general
+  theory beneath the scale, not one file's realized token structure.
 
 ## Extending this pack
 
