@@ -731,6 +731,11 @@
       "canonical": "data-wiring",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "web-component",
+      "plural": "web-components",
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [
