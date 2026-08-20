@@ -618,7 +618,15 @@ def gate(root: Path, package: bool = False):
              # as adia-ui-kit/gen-ui-kit above, not a workspace sibling this estate installs:
              "brand-council", "sub-council", "orchestration-rubric", "brand-stack",
              "expression-system", "cloud-skill", "main-agent", "per-stage", "real-brand",
-             "design-skills", "nonoun-skills"}
+             "design-skills", "nonoun-skills",
+             # frontend's new reactivity-facts pack (2026-08-20, issue #805): "tier-split" is a
+             # references FILE (references/tier-split.md, cited from the SKILL.md consult table
+             # and its own boundaries section) — the standing references-file false-positive
+             # class, same shape as container-patterns/scale-theory/box-model-and-flow/
+             # merge-semantics above; "whole-component" is prose ("per-part reactivity vs
+             # whole-component re-render" in the description) sharing make-component's own
+             # "-component" suffix, same class as per-component/cross-component/multi-component:
+             "tier-split", "whole-component"}
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):

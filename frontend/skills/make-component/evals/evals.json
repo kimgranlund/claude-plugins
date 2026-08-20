@@ -134,6 +134,12 @@
       "prompt": "explore a few variants of this button component before we commit to one",
       "expect": "no-trigger",
       "note": "reciprocal fence vs design:make-variants (ticket #750, renamed from explore-variants after an ADR-0011 grammar failure) — generating and voting on several unbuilt variants, not building the chosen one"
+    },
+    {
+      "id": "n27",
+      "prompt": "why did this component's effect refire twice for one signal write",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs reactivity-facts (ticket #805) — the reactivity kernel's own recompute mechanism, not the component's anatomy/API/build"
     }
   ]
 }

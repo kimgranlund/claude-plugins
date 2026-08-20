@@ -204,6 +204,12 @@
       "id": "t31",
       "prompt": "Should this be a settings modal or a full settings page?",
       "expect": "trigger"
+    },
+    {
+      "id": "n21",
+      "prompt": "How do I guard against a stale async response overwriting a newer one?",
+      "expect": "no-trigger",
+      "note": "reciprocal fence vs reactivity-facts (ticket #805) — a monotonic sequence-token async-staleness guard, not a UI pattern or the screen-state grammar"
     }
   ]
 }
