@@ -241,6 +241,42 @@
     }
    ],
    "source": "gh#776 (2026-08-19): make-figma-make-kit deliberately EXEMPT — it emits a guidelines/ folder, not a DESIGN.md (verified 2026-08-19). Kim confirmed D12+D13 2026-08-19; agent-protocols recorded no-edges-owed."
+  },
+  {
+   "id": "D14",
+   "type": "verbatim-line",
+   "mode": "require",
+   "title": "Every brand-council critic persona file must carry the citation line pointing back to brand-judge.md's own Canonical-mechanics section (trust boundary + severity classes) instead of restating it",
+   "severity": "major",
+   "canon_file": "brand-design/agents/brand-judge.md",
+   "canon_ref": "## Canonical mechanics — every persona file cites this instead of restating it (the Trust-boundary paragraph + the Severity-classes table)",
+   "dependents": [
+    {"file": "brand-design/references/critics/critic-brian-c.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-david-a.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-george-l.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-jessica-w.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-john-h.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-luke-s.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-mark-p.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-mary-n.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-massimo-v.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-matt-w.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-nick-l.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-paula-s.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-rory-s.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"},
+    {"file": "brand-design/references/critics/critic-tim-d.md", "pattern": "Shared\\s+mechanics\\s+\\(trust\\s+boundary,\\s+severity\\s+classes\\):\\s+see\\s+the\\s+`brand-judge`\\s+agent\\s+body"}
+   ],
+   "source": "brand-design Phase 2 Track A (commit 8f0fea2) de-duped the 14 brand-council critic persona files by inlining the trust-boundary + severity-classification mechanics once into brand-judge.md's own '## Canonical mechanics' section and citing it verbatim from every critic file ('Shared mechanics (trust boundary, severity classes): see the `brand-judge` agent body — cited, not restated.', verified byte-identical across all 14 files live 2026-08-19). Phase 3 Track E adds this edge so a future critic edit that drops or paraphrases the citation (re-deriving the shared mechanics per-persona) is caught mechanically instead of silently drifting."
+  },
+  {
+   "id": "D15",
+   "type": "ledger-sync",
+   "title": "brand-guidelines' SKILL.md still documents the choice-ledger CLI at the pre-hardening path `bin/guidelines-ledger`; Track B relocated + renamed the actual script to `brand-design/scripts/guidelines_ledger.py` — every citation in the skill is now a broken command path",
+   "severity": "major",
+   "canon_file": "brand-design/skills/brand-guidelines/SKILL.md",
+   "ledger_pattern": "bin/guidelines-ledger",
+   "actual_path": "brand-design/scripts/guidelines_ledger.py",
+   "source": "brand-design Phase 2 Track B (commit 9e8e275) hardened the 8 bundled scripts into brand-design/scripts/ with underscore_case names, incl. renaming `bin/guidelines-ledger` to `scripts/guidelines_ledger.py`; brand-guidelines/SKILL.md's own `bin/guidelines-ledger` citations (the Frame/Capture/Assembly sections, 4 occurrences verified live 2026-08-19) predate that move and were never repointed — same drift class as D04. Phase 3 Track E adds this edge without editing the skill body: skills/brand-guidelines/ (SKILL.md + references/) is Track D's territory in a parallel clone this same phase; this edge only records the drift for doctrine-audit to surface, the fix is Track D's or a follow-up's to land."
   }
  ]
 }
