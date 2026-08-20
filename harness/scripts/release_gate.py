@@ -630,8 +630,25 @@ def gate(root: Path, package: bool = False):
     token_re = re.compile(r"\b([a-z]{3,}(?:-[a-z]{2,})+)\b")
     stale = {}
     for sk in sorted(root.glob("skills/*/SKILL.md")):
-        for tok in set(token_re.findall(sk.read_text(encoding="utf-8", errors="replace"))):
+        text = sk.read_text(encoding="utf-8", errors="replace")
+        for tok in set(token_re.findall(text)):
             if tok in inventory or tok in allow or tok.rsplit("-", 1)[-1] not in suffixes:
+                continue
+            # verbatim file-citation class (2026-08-20, issue #814): a token immediately
+            # glued to a literal ".md" anywhere in the file (`<tok>.md`) is citing a FILE
+            # by name — this pack's own `references/<tok>.md` (the tier-split/scale-theory/
+            # container-patterns/box-model-and-flow/merge-semantics/transport-and-streaming
+            # class already hand-allowlisted above) or a verbatim external-repo filename kept
+            # for grounding fidelity (agent-ui's `select-menu-name-bug.md`, adia-v2's
+            # `url-state-sync.md`) — never a phantom SKILL name, since an installed skill is
+            # cited by its bare kebab name, never with a literal `.md` extension appended.
+            # Mechanism over allowlist growth for this class going forward; existing entries
+            # above are left in place (redundant-but-harmless, not a regression to clean up
+            # here). G8 still does NOT strip code spans generally — a bare backticked stale
+            # name with no `.md` glued to it is still rot and still fires (proven by the
+            # selftest's own "ancient-review"/"phantom-old-rule" negative controls) — only a
+            # token directly glued to `.md` is exempted.
+            if re.search(re.escape(tok) + r"\.md\b", text):
                 continue
             stale.setdefault(tok, []).append(sk.parent.name)
     if stale:
@@ -872,6 +889,34 @@ def selftest():
         body.write_text(body.read_text().replace("\nsee demo-auditor for the dispatched review seat\n", ""))
         (agents_dir / "demo-auditor.md").unlink()
         agents_dir.rmdir()
+        # G8 verbatim file-citation class (issue #814, select-menu-name-bug/url-state-sync):
+        # a token glued to a literal ".md" must go quiet with no allowlist entry — the
+        # false-positive class this ticket fixes. Same "ancient-review" token the plain
+        # positive-fire test above already proves fires bare (suffix "-review" matches the
+        # fixture's only live skill, demo-review) — here it's glued to ".md", the only
+        # variable changed, isolating the mechanism under test:
+        body.write_text(body.read_text() +
+                         "\nsee agent-ui's `ancient-review.md` for the incident\n")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "G8" not in buf.getvalue(), \
+            "a token glued to a literal .md file citation must not warn G8, no allowlist needed"
+        body.write_text(body.read_text().replace(
+            "\nsee agent-ui's `ancient-review.md` for the incident\n", ""))
+        # Negative control: a genuine phantom name inside a sources.md-shaped table row
+        # (pipe-delimited, backticked, "primary"/provenance vocabulary) but with NO ".md"
+        # glued to it must still fire — proves the fix targets the literal ".md" glue, not
+        # table-row shape or citation context generally.
+        body.write_text(body.read_text() +
+                         "\n| `some-repo` | `phantom-old-review` (primary — the case study) |\n")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert "G8" in buf.getvalue() and "phantom-old-review" in buf.getvalue(), \
+            "a phantom name with no .md glue must still warn G8 even in a sources.md-shaped row"
+        body.write_text(body.read_text().replace(
+            "\n| `some-repo` | `phantom-old-review` (primary — the case study) |\n", ""))
         # G2 subfolder conformance: a rogue topical dir warns; a sanctioned one doesn't
         rogue = r / "skills" / "demo-review" / "recipes"
         rogue.mkdir()
