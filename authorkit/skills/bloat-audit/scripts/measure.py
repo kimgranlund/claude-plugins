@@ -27,6 +27,16 @@ MIN_PARAGRAPH_WORDS = 25
 DUPLICATE_JACCARD = 0.5
 SHINGLE_SIZE = 8
 FAILURE_SECTION_CHARS = 800
+DENSE_DESCRIPTION_CHARS = 700
+# A "NOT for X (owner)" / "NOT the Y (owner)" routing-disambiguation clause, possibly
+# chaining several "... (owner)" targets under one leading NOT ("NOT A (b) or C (d).") —
+# load-bearing content a naming/routing convention packs into every description, not
+# padding (issue #798: agent-ui estate calibration, 14/19 flagged files were entirely
+# this shape). Only the parenthetical-owner shape is discounted; a NOT-clause with no
+# paren-owner ("NOT marketing tactics ... — that is X's domain") is left counted, since
+# it isn't the specific pattern the estate convention packs in and a broader strip risks
+# discounting genuine prose.
+NOT_FENCE_RE = re.compile(r"\bNOT\b(?:[^.;(]*\([^()]*\))+[.;]?", re.IGNORECASE)
 RESTATEMENT_SHINGLE_SIZE = 1
 RESTATEMENT_JACCARD = 0.15
 RESTATEMENT_MAJORITY = 0.5
@@ -267,8 +277,11 @@ def analyze(target: Path):
             flags.append(f"phase-heavy ({phases} phase/numbered-step headings)")
         if failure_chars > FAILURE_SECTION_CHARS and failure_restates is not False:
             flags.append(f"large-failure-section ({failure_chars} chars)")
-        if len(desc) > 700:
-            flags.append(f"dense-description ({len(desc)} chars)")
+        not_fence_chars = sum(len(m) for m in NOT_FENCE_RE.findall(desc))
+        desc_content_chars = len(desc) - not_fence_chars
+        if desc_content_chars > DENSE_DESCRIPTION_CHARS:
+            flags.append(f"dense-description ({len(desc)} chars, {desc_content_chars} "
+                         f"non-NOT-fence content chars)")
 
         measurements.append({
             "path": rel(path, target),
@@ -276,6 +289,7 @@ def analyze(target: Path):
             "lines": lines,
             "chars": chars,
             "description_chars": len(desc),
+            "description_content_chars": desc_content_chars,
             "failure_section_chars": failure_chars,
             "done_section_chars": done_chars,
             "phase_count": phases,
@@ -368,7 +382,11 @@ def selftest():
     NOT flagged large-failure-section even past the char threshold (negative
     control, issue #775); a failure section that genuinely restates the
     procedure stated above it is still CAUGHT (inversion fixture, issue
-    #775); a target with no markdown returns None (the usage-error case)."""
+    #775); a description over-length purely from "NOT for X (owner)"
+    routing-disambiguation clauses is NOT flagged dense-description (negative
+    control, issue #798), while a genuinely padded description with no such
+    clauses still IS (inversion fixture, issue #798); a target with no
+    markdown returns None (the usage-error case)."""
     import tempfile
 
     # Reverse control: a small, unflagged file must come back clean.
@@ -537,6 +555,49 @@ def selftest():
         (r / "skills" / "b" / "SKILL.md").write_text(f"---\nname: b\ndescription: x\n---\n{para}\n")
         result = analyze(r)
         assert result["duplicates"], "a duplicated paragraph across files must be caught"
+
+    # Negative control: a description over the raw 700-char threshold purely because
+    # it packs several legitimate "NOT for X (owner)" routing-disambiguation clauses
+    # must NOT be flagged dense-description once those clauses are discounted (issue
+    # #798: agent-ui estate calibration, 14/19 flagged files were entirely this shape).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "fenced-skill").mkdir(parents=True)
+        core = "Does the one real thing this skill owns, described plainly. " * 4
+        not_fences = (
+            "NOT for scoring or auditing brand work (brand-rubrics) or running the "
+            "named-critic council (check-brand-council). NOT the guided 2x2 "
+            "elicitation loop (make-brand-guidelines) or the one-page brand-stack "
+            "summary (make-brand-stack). NOT corpus organizing or MCP wiring "
+            "(brand-corpus). NOT strategy or positioning work (brand-methodology-"
+            "rules) or naming and copy (the brand-writer agent). NOT packaging into "
+            "a distributable plugin, skill, or MCP (file-brand) or exporting a "
+            "navigable site (file-brand-corpus)."
+        )
+        desc = core + not_fences
+        assert len(desc) > DENSE_DESCRIPTION_CHARS, "fixture must exceed the raw threshold"
+        body = f"---\nname: fenced-skill\ndescription: {desc}\n---\n# fenced-skill\n\nShort body.\n"
+        (r / "skills" / "fenced-skill" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        flags = result["measurements"][0]["flags"]
+        assert not any("dense-description" in f for f in flags), (
+            "a description over-length purely from NOT-fence clauses must not be flagged")
+
+    # Inversion fixture: a description over the threshold from genuine content (no
+    # NOT-fence clauses at all) must still be CAUGHT.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "padded-skill").mkdir(parents=True)
+        desc = ("Does the one real thing this skill owns, at excessive length, "
+                 "restating the same point in slightly different words every "
+                 "sentence purely to fill space. " * 8)
+        assert len(desc) > DENSE_DESCRIPTION_CHARS, "fixture must exceed the raw threshold"
+        body = f"---\nname: padded-skill\ndescription: {desc}\n---\n# padded-skill\n\nShort body.\n"
+        (r / "skills" / "padded-skill" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        flags = result["measurements"][0]["flags"]
+        assert any("dense-description" in f for f in flags), (
+            "a genuinely padded description with no NOT-fence content must still be flagged")
 
     # Usage-error case: no markdown discovered -> None, never a silent pass.
     with tempfile.TemporaryDirectory() as td:
