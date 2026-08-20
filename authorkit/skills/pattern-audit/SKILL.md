@@ -42,7 +42,19 @@ optionally judging the resulting matches. It never mutates target files.
    optional globs). A literal regex passes through as a single probe. A
    natural-language instruction may fan out to several labeled probes;
    state the compilation in one line before running so the user can veto a
-   bad translation.
+   bad translation. **A bare keyword probe over a codebase with a same-named,
+   sanctioned API or plain-English noun drowns in noise** (issue #798: an
+   `ENUM_USAGE=\benum\b` probe over an estate whose own API exposes
+   `prop.enum(...)` came back 91% noise — 80 of 88 hits were the sanctioned
+   call or "enum" as an ordinary word, not the pattern being swept for).
+   Guard the probe with lookaround anchored to the shape that actually
+   distinguishes a real hit — e.g. not preceded by `.` (rules out a method
+   call), not followed by `(` (rules out any call at all) — before running
+   it, not after judging 88 matches by hand. Reviewer overhead scales
+   directly with probe precision; a wider probe judged down in step 4 is
+   never a substitute for a probe that didn't need to sweep the noise in
+   the first place — unless no sharper anchor exists at all (see the
+   coarse-probe failure branch below), the one case widening is the answer.
 3. Run `python3 <this skill>/scripts/scan.py --target <path> --pattern
    <LABEL=REGEX> ... [--glob GLOB ...] --json`. Never re-derive matches in
    prose; never grep by hand what the script measures. The dataset of
