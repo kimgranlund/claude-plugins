@@ -40,6 +40,25 @@ packs' provenance records. brand-design is this estate's only MCP/`userConfig`-r
 The source repo is left untouched — no pointer edit, no deprecation notice — this migration is a
 fork, not a move.
 
+## 2026-08-16/19 — the fleet becomes governable, then fast: write-gate, live lane, and the estate that trims itself
+
+Four ratified ADRs (0020–0023) landed the fleet's governance layer: seat naming and reserved
+heads (0020), trust tiers (0021), the plan-approval write-gate every unattended builder holds at
+(0023 (c)), and the substrate ruling that the fleet stays canon over native `agent-teams` pending
+a fact-shaped trigger. The estate then proved its own routing: the full 149-suite / ~2,900-case
+blind-judge sweep (#676) with the tuning fixes it surfaced, followed by design/screens sibling-pack
+fence repairs (#760/#768). On 2026-08-19 Kim ruled the **live lane** (fleet-rules §7): a live human
+prompt for small bounded work runs solo inline, record-last, auto-merge on green — hardened same
+day with mechanical tripwires, a collision look, a `live-lane` measurement label, and a first-pass
+measurement that came back green (zero true reverts across 13 lane PRs). The dispatch pipeline got
+its **envelope** (`dispatch_envelope.py` — pre-computed slot/branch/clone/collision per dispatch),
+`/sub-agent` went dual-mode absorbing the one-day-old `sub-task`, `design:make-variants` shipped
+from a cross-repo forge handoff, and two `/overhaul-execute` campaigns ran end-to-end: the
+design/screens/agent-protocols wave (exemptions 85→54, every description ≤700 chars) and the
+workspace CLAUDE.md itself (10.8k→5.5k chars, ~1.3k tokens saved per turn per session). The
+decision-watcher's recurring false positive died twice (grep-origin/main #762, anchored pathspec
+#772), each with a regression fixture.
+
 ## 2026-08-13/15 — authorkit: the eighth plugin, two ratified ADRs, and the estate that overhauls estates
 
 The largest arc in the repo's history (~40 PRs merged across three days). **authorkit** landed as
