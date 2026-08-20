@@ -133,6 +133,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.17.4 · 2026-08-20 · `release_gate.py`'s G8 allow set gains 2 entries triaged during frontend's new `reactivity-facts` pack (issue #805): `tier-split` (a references FILE cited from the SKILL.md, the container-patterns/scale-theory class) and `whole-component` (prose sharing make-component's `-component` suffix). `release_gate.py selftest` still PASS.
 v3.17.3 · 2026-08-20 · the screens->frontend plugin rename (Kim's ruling 2026-08-20: one plugin absorbing the front-end knowledge series): live `screens:` handles and plugin-prose mentions repointed to `frontend:`/`frontend`; ledger history untouched.
 v3.17.2 · 2026-08-20 · closes #1715 (gen-ui-kit): `adr_checkpoint.py`'s body-clause supersession signal (issue #221) widened past the literal `supersedes` verb — an ADR that amends or replaces a prior decision in free prose, without either the literal clause or a frontmatter `supersedes:` field, was previously invisible to `newly_superseded` classification. `BODY_SUPERSEDES_RE` now also accepts `amends`/`replaces`, same active-voice-only discipline (passive forms never match); `body_supersedes_ids()` docstring and its own selftest fixtures updated with positive and negative controls for both new verbs. `adr_checkpoint.py selftest` PASS.
 

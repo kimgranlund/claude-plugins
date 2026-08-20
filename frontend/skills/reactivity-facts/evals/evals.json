@@ -1,0 +1,29 @@
+{
+  "skill": "reactivity-facts",
+  "note": "New knowledge pack (ticket #805, frontend wave 1). Fences: make-component owns a component's own anatomy/API/geometry realization; ui-pattern-facts owns UI-pattern naming and the screen-state grammar (loading/empty/error) — a 'reactive state' ask (signals/effects) and a 'screen state' ask share vocabulary but are different axes.",
+  "cases": [
+    { "id": "t01", "prompt": "why did this effect refire twice for one write", "expect": "trigger" },
+    { "id": "t02", "prompt": "what's the difference between a signal, a computed, and an effect", "expect": "trigger" },
+    { "id": "t03", "prompt": "how do I guard against a stale async response overwriting a newer one", "expect": "trigger" },
+    { "id": "t04", "prompt": "should this computed verify its sources or just recompute whenever it's marked dirty", "expect": "trigger" },
+    { "id": "t05", "prompt": "how do I make sure disposing this scope actually tears down every effect it created", "expect": "trigger" },
+    { "id": "t06", "prompt": "per-part reactivity vs re-rendering the whole component on any prop change", "expect": "trigger" },
+    { "id": "t07", "prompt": "why do these two clocks — rAF and the microtask flush — coalesce differently", "expect": "trigger" },
+    { "id": "t08", "prompt": "what stops a reactive write-loop between a parent and child effect from hanging the tab", "expect": "trigger" },
+    { "id": "t09", "prompt": "is a monotonic request-generation counter the right way to reject an out-of-order fetch response", "expect": "trigger" },
+    { "id": "t10", "prompt": "when should app state be one parametric doc with derive-then-render instead of fine-grained signals", "expect": "trigger" },
+    { "id": "t11", "prompt": "why does reading a signal during connectedCallback leak a subscription into the parent's render effect", "expect": "trigger" },
+    { "id": "t12", "prompt": "version-verified vs dirty-flag cut strategy for a computed value", "expect": "trigger" },
+    { "id": "n01", "prompt": "what padding should this button use at the XL size", "expect": "no-trigger", "note": "make-component — a component's own derived geometry" },
+    { "id": "n02", "prompt": "build a web component for a date picker", "expect": "no-trigger", "note": "make-component — realization, not reactivity mechanism" },
+    { "id": "n03", "prompt": "design this component's API and anatomy", "expect": "no-trigger", "note": "make-component" },
+    { "id": "n04", "prompt": "what pattern is this screen using", "expect": "no-trigger", "note": "ui-pattern-facts — pattern naming" },
+    { "id": "n05", "prompt": "what empty state copy should this list show on first run", "expect": "no-trigger", "note": "ui-pattern-facts' state-patterns.md — screen-state grammar, not data reactivity" },
+    { "id": "n06", "prompt": "is a spinner or a skeleton right for this loading state", "expect": "no-trigger", "note": "ui-pattern-facts/check-speed territory — perceived-latency UX, not reactive mechanism" },
+    { "id": "n07", "prompt": "master-detail or list-detail for our mail app", "expect": "no-trigger", "note": "ui-pattern-facts" },
+    { "id": "n08", "prompt": "should this dialog be a modal or a full page", "expect": "no-trigger", "note": "ui-pattern-facts" },
+    { "id": "n09", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" },
+    { "id": "n10", "prompt": "what corner radius should the inner card use inside this rounded container", "expect": "no-trigger", "note": "size-and-shape-rules" },
+    { "id": "n11", "prompt": "audit the whole app's UX before launch", "expect": "no-trigger", "note": "check-whole-ui" }
+  ]
+}
