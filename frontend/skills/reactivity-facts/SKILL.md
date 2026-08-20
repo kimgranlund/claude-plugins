@@ -70,6 +70,13 @@ signals-library folklore.
   the kernel that decides WHEN an effect or computed re-runs, unrelated to whether the resulting
   value gets persisted anywhere. A question naming a storage key, schemaVersion, or a URL param is
   `persistence-facts`'; a question naming a kernel primitive is this pack's.
+- **How data gets CONNECTED to a UI element or across a bridge belongs to `data-wiring-facts`** —
+  the attribute-driven streaming stack, the postMessage bridge protocol, no-DI substitutes, and the
+  need→pattern wiring menu. That pack answers what gets wired and how; this pack explains the
+  kernel that decides WHEN the resulting effect or computed re-runs, unrelated to whether the value
+  arrived via a stream, a bridge, or a plain property assignment. A question naming a stream, a
+  bridge message, or a wiring pattern is `data-wiring-facts`'; a question naming a kernel primitive
+  is this pack's.
 - **Production component code** → `make-component` — this pack explains why a kernel behaves a
   certain way; it does not write the kernel or the component consuming it.
 - **Building a signals kernel or an app-tier store from scratch has no owning builder skill in

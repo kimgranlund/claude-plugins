@@ -69,6 +69,11 @@ mechanics.
   of it, not a competing method. A question naming a specific storage key, a rename risk, or a URL
   param is `persistence-facts`'; a question naming a whole app's mix-of-implementations symptom is
   this pack's.
+- **One specific wiring decision — a stream, a bridge message, a no-DI substitute, or which of
+  the six wiring patterns fits a need — belongs to `data-wiring-facts`.** This pack judges
+  whole-app architecture drift over time; that pack answers whether one wiring choice, right now,
+  is disciplined. A question naming a specific stream/bridge/DI substitute is `data-wiring-facts`';
+  a question naming a whole app's mix-of-implementations symptom is this pack's.
 - **Production component code, a reactivity kernel, or an app-tier store from scratch** →
   no owning builder skill in this plugin (same gap `reactivity-facts` names for its own
   territory) — derive the implementation inline against whichever axis file names the failure

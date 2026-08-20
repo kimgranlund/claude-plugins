@@ -1,6 +1,6 @@
 {
   "skill": "persistence-facts",
-  "note": "New knowledge pack (ticket #807, frontend wave 3). Fences: state-model-rules owns app-tier state ARCHITECTURE judgment generally, incl. the general bypass-inventory METHOD (audit-technique.md) reusable across any sanctioned seam — this pack's persistence-audit-shape.md is the narrower storage-specific checklist and cites that method rather than restating it; reactivity-facts owns reactivity MECHANISM (kernel/recompute/disposal/staleness/scheduling), unrelated to what gets written to storage and when. n01-n07 and n12 are the reciprocal no-trigger cases against both siblings; n08-n11 are unrelated-domain no-trigger cases.",
+  "note": "New knowledge pack (ticket #807, frontend wave 3). Fences: state-model-rules owns app-tier state ARCHITECTURE judgment generally, incl. the general bypass-inventory METHOD (audit-technique.md) reusable across any sanctioned seam — this pack's persistence-audit-shape.md is the narrower storage-specific checklist and cites that method rather than restating it; reactivity-facts owns reactivity MECHANISM (kernel/recompute/disposal/staleness/scheduling), unrelated to what gets written to storage and when. n01-n07 and n12 are the reciprocal no-trigger cases against both siblings; n08-n11 are unrelated-domain no-trigger cases. Amended ticket #808 (frontend wave 4): data-wiring-facts owns how data gets CONNECTED (streaming stack, bridge protocol, no-DI substitutes, wiring-pattern menu), unrelated to what gets written to storage — n13 is the reciprocal no-trigger case.",
   "cases": [
     { "id": "t01", "prompt": "does this persisted store need a schemaVersion field", "expect": "trigger" },
     { "id": "t02", "prompt": "will renaming this field silently drop everyone's saved data on their next reload", "expect": "trigger" },
@@ -25,6 +25,7 @@
     { "id": "n09", "prompt": "what empty state copy should this list show on first run", "expect": "no-trigger", "note": "ui-pattern-facts" },
     { "id": "n10", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" },
     { "id": "n11", "prompt": "audit the whole app's UX before launch", "expect": "no-trigger", "note": "check-whole-ui" },
-    { "id": "n12", "prompt": "why is our state a mix of implementations across the whole app", "expect": "no-trigger", "note": "state-model-rules — the general symptom this pack's siblings own, not a specific storage-key or URL-param ask" }
+    { "id": "n12", "prompt": "why is our state a mix of implementations across the whole app", "expect": "no-trigger", "note": "state-model-rules — the general symptom this pack's siblings own, not a specific storage-key or URL-param ask" },
+    { "id": "n13", "prompt": "two elements share the same data-stream config attributes — do they open one connection or two", "expect": "no-trigger", "note": "data-wiring-facts — the refcounted shared-signal tier, not what gets persisted" }
   ]
 }
