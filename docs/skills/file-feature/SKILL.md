@@ -215,7 +215,7 @@ project-docs offer below) append as extra lines only when they occur.
 
 The record is durable but not yet DISCOVERABLE: a fresh session finds `docs/` only if told.
 Direct entry only — the seed carries no `[redirected-from:X]` and no `[nested-intake]`
-(`dispatch-ticket`'s marker — teamwork, renamed from `dispatch-feature` per ADR-0010 — when it
+(`dispatch-ticket`'s marker — teamwork, renamed from `dispatch-feature` per ADR-0010 <!-- fix-old-names: keep --> — when it
 runs this skill's intake as part of `/build-feature`'s
 pipeline): a nested run already owes `dispatch-ticket`'s own ambiguity question and this skill's
 own Phase 2 round — skip this offer entirely on either marker (never mind the question channel:
