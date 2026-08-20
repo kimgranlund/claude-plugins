@@ -207,6 +207,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "council",
+      "plural": "councils",
+      "banned_aliases": []
+    },
+    {
       "canonical": "decision",
       "plural": "decisions",
       "banned_aliases": []
