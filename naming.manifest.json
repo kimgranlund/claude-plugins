@@ -736,6 +736,11 @@
       "canonical": "web-component",
       "plural": "web-components",
       "banned_aliases": []
+    },
+    {
+      "canonical": "css",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

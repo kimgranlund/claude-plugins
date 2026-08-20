@@ -7,8 +7,8 @@ description: >-
   ElementInternals form association + a11y, the attributes-as-API grammar, and per-control
   testing. Use for "why didn't attributeChangedCallback replay on upgrade", "static parts vs
   tagged template vs imperative", "is a trait a mixin", "what test files does a control need".
-  ANSWERS platform facts; NOT the build PROCEDURE (make-component), NOT reactivity MECHANISM
-  (reactivity-facts).
+  ANSWERS platform facts; NOT the build (make-component), NOT the reactivity
+  (reactivity-facts); NOT CSS-file architecture/testing (css-system-facts).
 user-invocable: false
 disable-model-invocation: false
 ---

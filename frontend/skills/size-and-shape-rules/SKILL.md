@@ -7,7 +7,7 @@ description: >-
   containers compose their padding", "what's the right base unit". Carries base-unit rationale,
   the dense-then-sparse progression shape, composable-spacing/nesting theory, cross-system
   comparison. ANSWERS the theory — does not derive one component family's law (make-component)
-  or bind to an already-specified platform scale (material-shape-facts).
+  or bind to a platform scale (material-shape-facts); NOT CSS token-family naming (css-system-facts).
 user-invocable: false
 disable-model-invocation: false
 ---

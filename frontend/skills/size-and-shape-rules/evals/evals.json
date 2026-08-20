@@ -98,6 +98,12 @@
    "id": "n08",
    "prompt": "Is it okay to nest a card inside another card?",
    "expect": "no-trigger"
+  },
+  {
+   "id": "n09",
+   "prompt": "Is this dimensional token a FRAME token or a RHYTHM token?",
+   "expect": "no-trigger",
+   "note": "css-system-facts (ticket #810 wave 6) — CSS-specific token-family naming, not general scale theory"
   }
  ]
 }
