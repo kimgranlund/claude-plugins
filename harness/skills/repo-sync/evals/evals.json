@@ -1,0 +1,16 @@
+{
+  "skill": "repo-sync",
+  "note": "Moved from an adiav2 project-local skill (2026-08-19) into harness as a repo-agnostic procedure — the git-hygiene half of what a shared checkout needs on every pull/merge, distinct from clean-git's repo-cleaner-seat inventory/classify/execute.",
+  "cases": [
+    { "id": "t01", "prompt": "pull/rebase/merge so we can see current dev", "expect": "trigger" },
+    { "id": "t02", "prompt": "sync main and catch me up on merges", "expect": "trigger" },
+    { "id": "t03", "prompt": "the app looks stale after that pull, what's the deal", "expect": "trigger" },
+    { "id": "t04", "prompt": "is it safe to merge this PR right now", "expect": "trigger" },
+    { "id": "t05", "prompt": "rebase my feature branch onto current main", "expect": "trigger" },
+    { "id": "t06", "prompt": "how do I verify a PR actually merged instead of trusting the exit code", "expect": "trigger" },
+    { "id": "n01", "prompt": "create a PR for this branch", "expect": "no-trigger", "comment": "owner: the host repo's own finish-work/PR skill" },
+    { "id": "n02", "prompt": "run the repo-cleaner hygiene sweep and inventory dangling worktrees", "expect": "no-trigger", "comment": "owner: clean-git (repo-cleaner's own inventory/classify/execute procedure)" },
+    { "id": "n03", "prompt": "why does the admin dev server keep 401ing on Auth0 callbacks", "expect": "no-trigger", "comment": "owner: a host repo's own dev-server pathology reference, where one exists" },
+    { "id": "n04", "prompt": "set up a standing watcher to auto-merge PRs when their checks go green", "expect": "no-trigger", "comment": "owner: repo-cleaner / watch-tickets — a standing fleet-wide watcher, not this skill's one-shot sync" }
+  ]
+}
