@@ -23,7 +23,7 @@ import sys
 LAYERS = ("00-sources", "01-foundation", "02-positioning", "03-identity", "04-expression",
           "05-voice", "06-product", "07-guidelines", "08-evaluation")
 ATTRIB_LAYERS = ("01-foundation", "02-positioning")  # layers where missing attribution is worth a warning
-_LAYER_RE = "|".join(re.escape(l) for l in LAYERS)
+_LAYER_RE = "|".join(re.escape(layer) for layer in LAYERS)
 FLAT_RE = re.compile(rf"^({_LAYER_RE})--(.+)\.md$")
 
 
@@ -180,7 +180,7 @@ def main(argv):
         return selftest()
     if not argv or argv[0] in ("-h", "--help"):
         sys.stderr.write(__doc__ or "")
-        return 0
+        return 2
     root = argv[0]
     if not os.path.isdir(root):
         sys.stderr.write(f"corpus-provenance: '{root}' is not a directory\n")

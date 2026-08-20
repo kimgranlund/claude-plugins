@@ -418,7 +418,7 @@ def selftest():
 def main(argv):
     if not argv or argv[0] in ("-h", "--help"):
         sys.stderr.write(__doc__ or "")
-        return 0
+        return 2
     cmd = argv[0]
 
     def _ledger():

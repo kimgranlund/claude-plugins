@@ -99,7 +99,116 @@ def _hook():
     return 0  # advisory: never block a write
 
 
+def selftest():
+    import io
+    import os
+    import tempfile
+    fails = []
+
+    def expect(cond, msg):
+        if not cond:
+            fails.append(msg)
+
+    # lint_text: reverse control — ordinary brand prose must come back clean
+    clean = ("The studio ships one accent color and says no to the rest. Terracotta over blue, "
+             "always. The mark stays quiet so the work can be loud.\n")
+    expect(lint_text(clean) == [], f"clean prose flagged (false positive): {lint_text(clean)}")
+
+    # inversion fixtures — each structural smell must be caught by name
+    cases = {
+        "ARCHETYPE": "Our brand speaks as the Sage archetype, wise and knowing.\n",
+        "VMV-TEMPLATE": "Our mission is to empower creators everywhere.\n",
+        "PERSONA": "Meet Sarah, a 34-year-old marketing manager who loves productivity apps.\n",
+        "BRAND-DNA": "This captures our brand DNA in one word cloud.\n",
+    }
+    for code, text in cases.items():
+        names = {f[0] for f in lint_text(text)}
+        expect(code in names, f"missed {code} smell in {text!r}")
+
+    # VALUES-WITHOUT-TRADEOFFS: doc-level, localized to a values-shaped block
+    values_no_tradeoff = "Our values:\n- integrity\n- excellence\n- innovation\n"
+    expect(any(f[0] == "VALUES-WITHOUT-TRADEOFFS" for f in lint_text(values_no_tradeoff)),
+           "values list with no trade-off language was not flagged")
+    # reverse control: the same three empty-values words, but WITH a trade-off marker, must NOT flag
+    values_with_tradeoff = "Our values:\n- integrity\n- excellence\n- innovation, chosen over speed\n"
+    expect(not any(f[0] == "VALUES-WITHOUT-TRADEOFFS" for f in lint_text(values_with_tradeoff)),
+           "a values list WITH trade-off language was wrongly flagged")
+    # reverse control: incidental, non-values use of the same words must not trip the doc-level check
+    incidental = "The build has excellent test coverage. Quality tooling caught the innovation regression.\n"
+    expect(not any(f[0] == "VALUES-WITHOUT-TRADEOFFS" for f in lint_text(incidental)),
+           "incidental prose (not a values list) was wrongly flagged as VALUES-WITHOUT-TRADEOFFS")
+
+    # _hook(): advisory only — a smelly write is reported but NEVER blocks (always exit 0)
+    with tempfile.TemporaryDirectory() as td:
+        smelly = os.path.join(td, "brand.md")
+        open(smelly, "w", encoding="utf-8").write(cases["ARCHETYPE"])
+        event = json.dumps({"tool_input": {"file_path": smelly}})
+        old_stdin, old_stdout = sys.stdin, sys.stdout
+        sys.stdin, sys.stdout = io.StringIO(event), io.StringIO()
+        try:
+            rc = _hook()
+            hook_out = sys.stdout.getvalue()
+        finally:
+            sys.stdin, sys.stdout = old_stdin, old_stdout
+        expect(rc == 0, f"--hook mode must always exit 0 (advisory), got {rc}")
+        expect("ARCHETYPE" in hook_out, "--hook mode did not report the structural smell it found")
+
+        # a non-.md/.txt/.mdx write is skipped entirely (not brand prose)
+        pyfile = os.path.join(td, "script.py")
+        open(pyfile, "w", encoding="utf-8").write(cases["ARCHETYPE"])
+        event2 = json.dumps({"tool_input": {"file_path": pyfile}})
+        sys.stdin, sys.stdout = io.StringIO(event2), io.StringIO()
+        try:
+            rc2 = _hook()
+        finally:
+            sys.stdin, sys.stdout = old_stdin, old_stdout
+        expect(rc2 == 0, "--hook mode on a non-prose file must still exit 0")
+
+        # malformed hook event (not valid JSON) must not crash — advisory, exit 0
+        sys.stdin, sys.stdout = io.StringIO("not json{{{"), io.StringIO()
+        try:
+            rc3 = _hook()
+        finally:
+            sys.stdin, sys.stdout = old_stdin, old_stdout
+        expect(rc3 == 0, "--hook mode on a malformed event must not crash (exit 0)")
+
+    # main(): file-arg mode — a smelly file exits 1, a clean file exits 0
+    with tempfile.TemporaryDirectory() as td:
+        bad = os.path.join(td, "bad.md")
+        good = os.path.join(td, "good.md")
+        open(bad, "w", encoding="utf-8").write(cases["PERSONA"])
+        open(good, "w", encoding="utf-8").write(clean)
+        old_stdout, old_stderr = sys.stdout, sys.stderr
+        sys.stdout, sys.stderr = io.StringIO(), io.StringIO()
+        try:
+            rc_bad = main([bad])
+            rc_good = main([good])
+            # negative control: an unreadable path must not crash — reported, not a false-clean silent pass
+            missing = os.path.join(td, "does-not-exist.md")
+            rc4 = main([missing])
+            err = sys.stderr.getvalue()
+        finally:
+            sys.stdout, sys.stderr = old_stdout, old_stderr
+        expect(rc_bad == 1, "main() did not exit 1 on a file with a real structural smell")
+        expect(rc_good == 0, "main() did not exit 0 on a clean file")
+        expect(rc4 == 0, "an unreadable file alone should not itself count as a finding")
+        expect("cannot read" in err, "an unreadable file did not report a cannot-read error")
+
+    if fails:
+        sys.stderr.write("brand-lint selftest: FAIL\n")
+        for m in fails:
+            sys.stderr.write(f"  - {m}\n")
+        return 1
+    print("brand-lint selftest: OK (clean prose passes; archetype/VMV/persona/brand-DNA each caught; "
+          "values-without-trade-offs flagged, trade-off language + incidental word use both clear it; "
+          "--hook mode is always advisory (exit 0) on smelly/clean/non-prose/malformed input; "
+          "main() file mode exits 1/0 correctly and survives an unreadable path)")
+    return 0
+
+
 def main(argv):
+    if argv and argv[0] == "selftest":
+        return selftest()
     if "--hook" in argv:
         return _hook()
     args = [a for a in argv if not a.startswith("-")]

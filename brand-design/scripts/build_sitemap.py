@@ -42,7 +42,13 @@ import shutil
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+# This generator was promoted out of the static corpus-reader web app (which lives at
+# references/corpus-reader/ — index.html, lib/, its own build-sitemap.py) into a real bundled
+# script at scripts/build_sitemap.py (MIGRATION.md, Gate A ruling). ROOT stays "where index.html
+# lives" per this script's own contract above; that's no longer this file's own directory, so it
+# is computed relative to the plugin's references/corpus-reader/ sibling instead.
+ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "..", "references", "corpus-reader"))
 SKIP_DIRS = {"lib", ".git", "node_modules"}
 
 
@@ -483,5 +489,132 @@ def main():
     print("wrote %s — %d page(s), %d section(s), title=%r" % (args.out, pages, len(section_list), title))
 
 
+def selftest():
+    """Exercise the mechanized substrate (frontmatter/heading/summary/prettify/tree-nesting),
+    collect_sitemap end-to-end on a small fixture corpus, --bake against the REAL bundled
+    references/corpus-reader/ assets (the exact ROOT this script now resolves to post-move),
+    --init's site/ scaffold, and negative controls: an empty corpus and a non-directory target
+    must fail loudly (SystemExit), never silently succeed. Exit 0 = pass, 1 = fail."""
+    import shutil
+    import tempfile
+    fails = []
+
+    def expect(cond, msg):
+        if not cond:
+            fails.append(msg)
+
+    # --- unit-level: the parsing/formatting substrate ---------------------------------------
+    meta, body = split_frontmatter('---\ntitle: Hello\nstatus: active\n---\n# Hi\nbody text\n')
+    expect(meta == {"title": "Hello", "status": "active"}, f"split_frontmatter mis-parsed: {meta}")
+    expect(body.strip() == "# Hi\nbody text", f"split_frontmatter left the wrong body: {body!r}")
+    no_meta, no_body = split_frontmatter("# Just a doc\nno frontmatter here\n")
+    expect(no_meta == {}, "split_frontmatter invented metadata with no leading --- block")
+    expect(no_body == "# Just a doc\nno frontmatter here\n", "split_frontmatter mangled a doc with no frontmatter")
+
+    expect(first_heading("intro\n# Real Title\nmore\n") == "Real Title", "first_heading missed the H1")
+    expect(first_heading("no headings here\n") is None, "first_heading invented a heading")
+
+    summary = first_paragraph("# Title\n\nThis is the real summary paragraph, plain and simple.\n\nSecond para ignored.\n")
+    expect(summary == "This is the real summary paragraph, plain and simple.",
+           f"first_paragraph picked the wrong text: {summary!r}")
+    fenced = first_paragraph("# T\n\n```\ncode, not prose\n```\n\nActual prose paragraph here.\n")
+    expect(fenced == "Actual prose paragraph here.", f"first_paragraph did not skip a fenced code block: {fenced!r}")
+
+    expect(prettify("03-roadmap") == "Roadmap", f"prettify did not strip the numeric prefix: {prettify('03-roadmap')!r}")
+    expect(prettify("the-position.md") == "The position", f"prettify mishandled a filename: {prettify('the-position.md')!r}")
+    expect(section_order("01-foundation") == 1 and section_order("no-number") == 9999,
+           "section_order did not rank numbered-first, unnumbered-last")
+    expect(norm_status("Needs work") == "needed" and norm_status("Active") == "active" and norm_status(None) == "",
+           "norm_status bucketing is wrong")
+    expect(is_readme("00-README.md") and is_readme("readme.md") and not is_readme("guide.md"),
+           "is_readme did not recognize the README aliases")
+
+    # build_tree: a subfolder README is promoted to the group's label; a flat entry stays a leaf
+    entries = [
+        (["intro.md"], {"path": "01-foundation/intro.md", "title": "Intro"}),
+        (["sub", "00-README.md"], {"path": "01-foundation/sub/00-README.md", "title": "Sub"}),
+        (["sub", "detail.md"], {"path": "01-foundation/sub/detail.md", "title": "Detail"}),
+    ]
+    tree = build_tree(entries)
+    kinds = {c["type"] for c in tree}
+    expect(kinds == {"doc", "group"}, f"build_tree did not produce one doc + one group at top level: {tree}")
+    group = next(c for c in tree if c["type"] == "group")
+    expect(group.get("doc") == "01-foundation/sub/00-README.md", "build_tree did not promote the subfolder README to the group's doc")
+    expect(any(c["type"] == "doc" and c["path"].endswith("detail.md") for c in group["children"]),
+           "build_tree lost the non-README leaf inside the promoted group")
+
+    # --- collect_sitemap end-to-end on a small fixture corpus -------------------------------
+    d = tempfile.mkdtemp(prefix="build-sitemap-selftest-")
+    try:
+        os.makedirs(os.path.join(d, "01-foundation"))
+        os.makedirs(os.path.join(d, "02-voice"))
+        open(os.path.join(d, "01-foundation", "position.md"), "w", encoding="utf-8").write(
+            "---\ntitle: The Position\nstatus: active\n---\n# The Position\n\nQuiet confidence, made ownable. [KNOWN]\n")
+        open(os.path.join(d, "02-voice", "tone.md"), "w", encoding="utf-8").write(
+            "# Tone\n\nDirect, warm, a little dry.\n")
+        sitemap, theme_abs = collect_sitemap("corpus", d, d)
+        expect(theme_abs is None, "collect_sitemap invented a theme with no reader.config.json")
+        secs = {s["id"]: s for s in sitemap["sections"]}
+        expect(set(secs) == {"01-foundation", "02-voice"}, f"collect_sitemap missed a section: {set(secs)}")
+        expect(secs["01-foundation"]["pages"][0]["title"] == "The Position", "collect_sitemap lost the frontmatter title")
+        expect(secs["01-foundation"]["pages"][0].get("status") == "active", "collect_sitemap lost the frontmatter status")
+        expect(sitemap["stats"]["mode"] == "provenance", f"collect_sitemap did not detect provenance markers: {sitemap['stats']}")
+        expect(sitemap["stats"]["provenance"].get("known") == 1, "collect_sitemap miscounted the [KNOWN] marker")
+        # negative control: an empty corpus dir must fail loudly, not return an empty-but-clean sitemap
+        empty = os.path.join(d, "empty")
+        os.makedirs(empty)
+        try:
+            collect_sitemap("empty", empty, empty)
+            expect(False, "collect_sitemap on an empty corpus did not raise (silent success on no content)")
+        except SystemExit as e:
+            expect("no .md files" in str(e), f"empty-corpus SystemExit had the wrong message: {e}")
+
+        # --- --bake against the REAL bundled corpus-reader assets (this script's actual ROOT) ---
+        out_html = os.path.join(d, "reader.html")
+        bake(d, out_html)
+        expect(os.path.isfile(out_html), "--bake did not write reader.html")
+        html = open(out_html, encoding="utf-8").read()
+        expect("window.CORPUS" in html and "window.CORPUS_FILES" in html, "baked reader.html is missing the inlined sitemap/files")
+        expect("Quiet confidence" in html, "baked reader.html did not inline the page content")
+        expect("<script type=\"module\">" in html, "baked reader.html is missing the inlined module bundle")
+        # bake() itself sys.exits on a leftover top-of-line import/export in the concatenated
+        # bundle (its own internal invariant) — reaching this line at all is that check passing.
+        # negative control: baking a non-directory must fail loudly
+        try:
+            bake(os.path.join(d, "does-not-exist"), out_html)
+            expect(False, "bake on a non-directory did not raise")
+        except SystemExit:
+            pass
+
+        # --- --init: scaffold <corpus>/site/ from the real reader assets -------------------
+        scaffold_site(d)
+        site = os.path.join(d, "site")
+        expect(os.path.isfile(os.path.join(site, "index.html")), "--init did not copy index.html into site/")
+        expect(os.path.isfile(os.path.join(site, "lib", "sitemap.json")), "--init did not build site/lib/sitemap.json")
+        expect(os.path.isfile(os.path.join(d, "index.html")), "--init did not drop a corpus-root redirect index.html")
+        redirect = open(os.path.join(d, "index.html"), encoding="utf-8").read()
+        expect("site/" in redirect, "--init's corpus-root redirect does not point at site/")
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
+
+    # --- XSS-safety: _script_safe_json must neutralize a raw </script> in corpus content -----
+    escaped = _script_safe_json({"x": "</script><img onerror=alert(1)>"})
+    expect("</script>" not in escaped and "\\u003c" in escaped, "_script_safe_json did not neutralize a raw </script>")
+
+    if fails:
+        sys.stderr.write("build-sitemap selftest: FAIL\n")
+        for m in fails:
+            sys.stderr.write(f"  - {m}\n")
+        return 1
+    print("build-sitemap selftest: OK (frontmatter/heading/summary/prettify/tree-nesting correct; "
+          "collect_sitemap builds sections + stats from a fixture corpus and refuses an empty one; "
+          "--bake inlines real content from the bundled references/corpus-reader/ assets with no leftover "
+          "module statements; --init scaffolds site/ + a root redirect; a non-directory --bake target raises; "
+          "_script_safe_json neutralizes a raw </script>)")
+    return 0
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "selftest":
+        sys.exit(selftest())
     main()

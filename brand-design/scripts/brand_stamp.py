@@ -79,7 +79,7 @@ def _write_folder_corpus(dest, docs, extras, brand):
 
 
 def _ref_mcp():
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "brand-corpus-mcp.py")
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "brand_corpus_mcp.py")
 
 
 def _copy_mcp(dst):
@@ -93,7 +93,7 @@ def _write_json(path, obj):
 
 def _thin_skill(brand, docs, retrieval):
     name = f"{_kebab(brand)}-brand"
-    layers = ", ".join(sorted({l for l, _, _ in docs})) or "(none yet)"
+    layers = ", ".join(sorted({layer for layer, _, _ in docs})) or "(none yet)"
     return (
         f"---\nname: {name}\ndescription: >\n"
         f"  The {brand} brand — its cultural foundation, positioning, identity, voice, and tokens. Use when\n"
@@ -295,7 +295,7 @@ def selftest():
             fails.append(m)
 
     here = os.path.dirname(os.path.abspath(__file__))
-    corpus = os.path.normpath(os.path.join(here, "..", "evals", "stamp-smoke", "corpus"))
+    corpus = os.path.normpath(os.path.join(here, "..", "evals-source-history", "stamp-smoke", "corpus"))
     d = tempfile.mkdtemp(prefix="brand-stamp-selftest-")
     try:
         pr, _ = emit_plugin(corpus, d, "smoke", False, "0.1.0")
