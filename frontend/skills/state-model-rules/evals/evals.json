@@ -1,0 +1,30 @@
+{
+  "skill": "state-model-rules",
+  "note": "New knowledge pack (ticket #806, frontend wave 2). Fences: reactivity-facts owns reactivity MECHANISM (signal/computed/effect kernel internals, disposal, async-staleness guards, scheduling clocks) — this pack owns app-tier state ARCHITECTURE judgment (stacked generations, tagged-union-vs-same-fact, adoption verdicts, never-pulled triggers, doctrine-vs-practice divergence, one-name-two-owners). ui-pattern-facts owns UI-pattern naming and the screen-state grammar (loading/empty/error), unrelated territory. make-component owns a component's own anatomy/API realization.",
+  "cases": [
+    { "id": "t01", "prompt": "why does this app have four completely different state patterns stacked on top of each other", "expect": "trigger" },
+    { "id": "t02", "prompt": "is this a real wiring bug or are these two fields actually different facts that happen to share the word 'name'", "expect": "trigger" },
+    { "id": "t03", "prompt": "is this data layer we built actually being used anywhere, or is it just built-but-unadopted", "expect": "trigger" },
+    { "id": "t04", "prompt": "we said we'd revisit this architecture decision once a second consumer showed up — did anyone ever check that", "expect": "trigger" },
+    { "id": "t05", "prompt": "how far has our actual code drifted from what the doctrine/spec says, layer by layer", "expect": "trigger" },
+    { "id": "t06", "prompt": "two completely separate modules are both independently writing this same attribute — is that a real risk", "expect": "trigger" },
+    { "id": "t07", "prompt": "how do I audit our own app for a mix-of-implementations state problem", "expect": "trigger" },
+    { "id": "t08", "prompt": "should we unify these two stores or keep them deliberately distinct", "expect": "trigger" },
+    { "id": "t09", "prompt": "this store was clearly copied from that one and never kept in sync — how big a deal is that", "expect": "trigger" },
+    { "id": "t10", "prompt": "our state architecture feels like a mix of implementations and I don't know why", "expect": "trigger" },
+    { "id": "t11", "prompt": "grade whether this layer is load-bearing or just built and never adopted", "expect": "trigger" },
+    { "id": "t12", "prompt": "two permission-check functions exist for overlapping roles and nothing keeps them in sync", "expect": "trigger" },
+    { "id": "n01", "prompt": "why did this effect refire twice for one write", "expect": "no-trigger", "note": "reactivity-facts — kernel recompute mechanism" },
+    { "id": "n02", "prompt": "what's the difference between a signal, a computed, and an effect", "expect": "no-trigger", "note": "reactivity-facts" },
+    { "id": "n03", "prompt": "how do I guard against a stale async response overwriting a newer one", "expect": "no-trigger", "note": "reactivity-facts' sequence-tokens.md" },
+    { "id": "n04", "prompt": "how do I make sure disposing this scope actually tears down every effect it created", "expect": "no-trigger", "note": "reactivity-facts' ownership-and-teardown.md" },
+    { "id": "n05", "prompt": "per-part reactivity vs re-rendering the whole component on any prop change", "expect": "no-trigger", "note": "reactivity-facts' below-element-reactivity.md" },
+    { "id": "n06", "prompt": "what padding should this button use at the XL size", "expect": "no-trigger", "note": "make-component — a component's own derived geometry" },
+    { "id": "n07", "prompt": "build a web component for a date picker", "expect": "no-trigger", "note": "make-component — realization, not architecture judgment" },
+    { "id": "n08", "prompt": "what empty state copy should this list show on first run", "expect": "no-trigger", "note": "ui-pattern-facts' screen-state grammar" },
+    { "id": "n09", "prompt": "is a spinner or a skeleton right for this loading state", "expect": "no-trigger", "note": "ui-pattern-facts/check-speed territory" },
+    { "id": "n10", "prompt": "master-detail or list-detail for our mail app", "expect": "no-trigger", "note": "ui-pattern-facts" },
+    { "id": "n11", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" },
+    { "id": "n12", "prompt": "audit the whole app's UX before launch", "expect": "no-trigger", "note": "check-whole-ui" }
+  ]
+}
