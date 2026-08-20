@@ -1,0 +1,30 @@
+{
+  "skill": "data-wiring-facts",
+  "note": "New knowledge pack (ticket #808, frontend wave 4). Fences: reactivity-facts owns reactivity MECHANISM (kernel/recompute/disposal/staleness/scheduling), unrelated to how data gets connected in the first place; state-model-rules owns app-tier state ARCHITECTURE judgment generally, unrelated to one specific wiring decision; persistence-facts owns what gets WRITTEN to storage and when, unrelated to how data gets wired into a live element or across a bridge. n01-n03 fence reactivity-facts, n04-n06 fence state-model-rules, n07-n09 fence persistence-facts, n10-n12 are unrelated-domain no-trigger cases.",
+  "cases": [
+    { "id": "t01", "prompt": "should this chart element use data-stream-src or its own imperative fetch loop", "expect": "trigger" },
+    { "id": "t02", "prompt": "is it a bug to mix a hand-rolled setInterval fetch with a data-stream-* attribute on the same element", "expect": "trigger" },
+    { "id": "t03", "prompt": "two elements have identical data-stream config attributes — do they open two separate connections or share one", "expect": "trigger" },
+    { "id": "t04", "prompt": "our plugin's Scan and Delete buttons are stuck disabled after an error — does this busy flag have a guaranteed reset path", "expect": "trigger" },
+    { "id": "t05", "prompt": "for a sandboxed iframe bridge, does every request need a matching reply even on failure", "expect": "trigger" },
+    { "id": "t06", "prompt": "we have no DI container in this framework — what's the sanctioned way to pass this dependency down without a context API", "expect": "trigger" },
+    { "id": "t07", "prompt": "is re-reading an env helper fresh at every call site a legitimate substitute for injecting a config object", "expect": "trigger" },
+    { "id": "t08", "prompt": "should this shared picker component take a callback for resolving its data, or look it up itself", "expect": "trigger" },
+    { "id": "t09", "prompt": "which of the six wiring patterns fits populating a table's rows", "expect": "trigger" },
+    { "id": "t10", "prompt": "what does a complete Wiring Record row require before we call this state piece done", "expect": "trigger" },
+    { "id": "t11", "prompt": "is a module-level singleton registry an acceptable substitute for a context provider, if it's documented", "expect": "trigger" },
+    { "id": "t12", "prompt": "we picked Service/Controller/Command for what's really just local UI toggle state — is that the wrong pattern", "expect": "trigger" },
+    { "id": "n01", "prompt": "why did this effect refire twice for one write", "expect": "no-trigger", "note": "reactivity-facts — kernel recompute mechanism, not how data got wired in" },
+    { "id": "n02", "prompt": "computed vs signal vs effect", "expect": "no-trigger", "note": "reactivity-facts" },
+    { "id": "n03", "prompt": "how do I guard against a stale async response overwriting a newer one", "expect": "no-trigger", "note": "reactivity-facts — sequence-token staleness guard is a kernel concern" },
+    { "id": "n04", "prompt": "why does this app have four completely different state patterns stacked on top of each other", "expect": "no-trigger", "note": "state-model-rules — four-generations architecture judgment, not one wiring decision" },
+    { "id": "n05", "prompt": "is this data layer we built actually being used anywhere, or is it just built-but-unadopted", "expect": "no-trigger", "note": "state-model-rules — adoption-verdict judgment" },
+    { "id": "n06", "prompt": "two places in our app both claim to write the same conceptual field independently", "expect": "no-trigger", "note": "state-model-rules — one-name-two-owners" },
+    { "id": "n07", "prompt": "does this persisted store need a schemaVersion field", "expect": "no-trigger", "note": "persistence-facts — storage discipline tier, not how data gets wired in" },
+    { "id": "n08", "prompt": "should this filter's search text live in the URL query string", "expect": "no-trigger", "note": "persistence-facts — URL-state sync" },
+    { "id": "n09", "prompt": "is a sync store next to our async storage adapter a bypass or legitimate design", "expect": "no-trigger", "note": "persistence-facts — dual sync/async persistence contracts" },
+    { "id": "n10", "prompt": "what padding should this button use at the XL size", "expect": "no-trigger", "note": "make-component" },
+    { "id": "n11", "prompt": "what empty state copy should this list show on first run", "expect": "no-trigger", "note": "ui-pattern-facts" },
+    { "id": "n12", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" }
+  ]
+}

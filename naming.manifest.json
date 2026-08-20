@@ -726,6 +726,11 @@
       "canonical": "persistence",
       "plural": null,
       "banned_aliases": []
+    },
+    {
+      "canonical": "data-wiring",
+      "plural": null,
+      "banned_aliases": []
     }
   ],
   "brand_tokens": [

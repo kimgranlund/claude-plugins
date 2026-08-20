@@ -69,6 +69,12 @@ URL-state synchronization — from a corpus grounded in real field reports acros
   (signal/computed/effect/scope/sequence token) is `reactivity-facts`'.
 - **UI pattern naming and the screen-state grammar** (loading/empty/error) stay
   `ui-pattern-facts`' law — unrelated territory.
+- **How data gets CONNECTED to a UI element or across a bridge belongs to `data-wiring-facts`** —
+  the attribute-driven streaming stack, the postMessage bridge protocol, no-DI substitutes, and the
+  need→pattern wiring menu. That pack answers how data gets wired in; this pack answers what gets
+  WRITTEN once it's there. A question naming a stream, a bridge message, or a wiring pattern is
+  `data-wiring-facts`'; a question naming a storage key, schemaVersion, or URL param is this
+  pack's.
 - **Production storage code, a migration script, or a URL-state module from scratch** → no owning
   builder skill in this plugin (the same gap `reactivity-facts`/`state-model-rules` name for their
   own territory) — derive the implementation inline against whichever axis file names the
