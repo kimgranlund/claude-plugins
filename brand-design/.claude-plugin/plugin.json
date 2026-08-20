@@ -1,0 +1,28 @@
+{
+  "name": "brand-design",
+  "version": "0.1.0",
+  "description": "Build and evaluate brands grounded in cultural authority \u2014 strategy, identity, voice, and stewardship \u2014 across three working seats: an aspirational Muse (the gravitational pull toward an ideal, a provocation, or a guiding concept), the maker Team (the methodology's roles), and an adversarial named-critic Council (review). Modes are typed commands (/brand-build, /brand-muse, /brand-elicit, /brand-score, /brand-council, /brand-orient, /brand-stamp, /brand-stack, /brand-corpus-export); the council runs as 14 parallel isolated critic agents + an orchestrator, the Muse as a generative agent, and a Copywriter as an isolated maker agent for extended voice work; methodology/evaluation/corpus/guidelines knowledge are skills (brand-guidelines builds a guidelines section by a guided 2\u00d72 elicitation loop, validated by bin/guidelines-ledger); a brand-corpus MCP gives per-instance retrieval; and an advisory brand-lint hook surfaces structural smells on prose artifact writes (it never blocks). Self-contained.",
+  "author": {
+    "name": "Kim",
+    "email": "kim.granlund@gmail.com"
+  },
+  "homepage": "https://github.com/kimgranlund/nonoun-plugins",
+  "license": "MIT",
+  "keywords": [
+    "brand",
+    "brand-strategy",
+    "design",
+    "identity",
+    "voice",
+    "council",
+    "cultural-authority"
+  ],
+  "userConfig": {
+    "corpus_dir": {
+      "title": "Brand corpus directory",
+      "type": "directory",
+      "description": "Path to this brand's corpus (documents, tokens, strategy files) for the brand-corpus MCP. Optional \u2014 leave unset to run methodology, evaluation, and council without live corpus retrieval.",
+      "sensitive": false
+    }
+  }
+}
