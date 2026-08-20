@@ -53,9 +53,9 @@ command   := object "-" verb                    skill-create, work-start
           |  "lead" "-" scope                   lead-team            (RETIRED open production,
                                                  ADR-0020 D3; six-name closed grandfather
                                                  only, §14.8)
-skill     := object "-" process                 skills-audit, ui-layout-planning
+skill     := object "-" process                 estate-audit, ui-layout-planning
           |  nominal-phrase                     naming-conventions   (looser production)
-agent     := skill-name "-" "agent"             skills-audit-agent   (primary)
+agent     := skill-name "-" "agent"             estate-audit-agent   (primary)
           |  scope "-" role                     team-leader          (orchestrators — canonical, ADR-0015 D1)
           |  scope "-" role "-" "agent"         product-leader-agent (orchestrators — legacy spelling, ADR-0015 D1)
 ```
@@ -65,7 +65,7 @@ One reserved head: `-agent`. Mandatory on the primary agent production and on sk
 
 #### 3.1 Commands — object-first
 
-Commands are object-first (`skill-create`, not `create-skill`) so that slash autocomplete groups operations by object: `/skill-<tab>` surfaces `skill-create`, `skill-review`, `skill-lint` together. Discovery ergonomics outrank reading-as-English for a user-invoked surface.
+Commands are object-first (`skill-create`, not `create-skill`) so that slash autocomplete groups operations by object: `/skill-<tab>` surfaces `skill-create`, `skill-review`, `skill-lint` together. Discovery ergonomics outrank reading-as-English for a user-invoked surface. <!-- fix-old-names: keep --> (illustrative `/skill-`-prefixed trio; `skill-create`/`skill-lint` never existed as real artifacts and `skill-review` since renamed to `check-skill` — rewriting it here would break the shared-prefix point the sentence makes, since `check-skill` no longer groups under `/skill-<tab>`.)
 
 The terminal token must be a member of `VerbLex`.
 
@@ -83,7 +83,7 @@ grandfathered `lead-`) on both the command and skill parse branches (§14.5/§14
 
 #### 3.2 Skills — nominal, process head preferred
 
-The canonical skill production is `{object}-{process}` (`skills-audit`, `entry-file-authoring`). The terminal token should be a member of `ProcessLex`. Skills that are genuinely not object-process shaped — report generators, routers, and reference corpora — use the nominal-phrase production, but every token must still resolve in the lexicons (§4): the looseness is in the *shape*, never in the *vocabulary*.
+The canonical skill production is `{object}-{process}` (`estate-audit`, `entry-file-authoring`). The terminal token should be a member of `ProcessLex`. Skills that are genuinely not object-process shaped — report generators, routers, and reference corpora — use the nominal-phrase production, but every token must still resolve in the lexicons (§4): the looseness is in the *shape*, never in the *vocabulary*.
 
 Six literal reserved verb-first heads live on the skill grammar, closed at exactly this set — not a template for any other `VerbLex` member: `check-` (§14.2, ADR-0014), `bind-`/`fork-`/`sub-` (§14.5/§14.8, ADR-0020 D3, superseding `lead-`), the now-closed-grandfather `lead-` itself (six live names only, §14.8), and `make-`/`file-` (§14.7, ADR-0018). Each resolves its residue against `ObjectVocab` alone (`check-`/`make-`/`file-`) or the orchestrator scope pool (`bind-`/`fork-`/`sub-`/`lead-`), and each sits before the `ProcessLex` terminal check to avoid the dead-code hazard §14.2 names.
 
@@ -155,10 +155,10 @@ Invoker is decided by **location**; the grammar corroborates it.
   commands/
     skill-create.md
   skills/
-    skills-audit/SKILL.md
+    estate-audit/SKILL.md
     naming-conventions/SKILL.md      # reference-shaped: thin stub + references/
   agents/
-    skills-audit-agent.md
+    estate-audit-agent.md
 ```
 
 **Folder equals canonical name, no decoration.** One canonical string everywhere — no folder-level transforms to validate, no discovery-compatibility risk. Reference-shaped skills are visually indistinct from procedural ones in a listing; if that view is ever needed operationally, it is a derived report (`naming-audit` lists skills with no ProcessLex head), never a naming rule.
@@ -212,7 +212,7 @@ Composability comes from the **shared ObjectVocab**, not from shared name shapes
 
 | Relation | Declared by | Field | Validator check |
 |---|---|---|---|
-| agent **performs** skill | the agent | `performs: skills-audit` | value == name minus `-agent`; skill exists |
+| agent **performs** skill | the agent | `performs: estate-audit` | value == name minus `-agent`; skill exists |
 | command **wraps** skill | the command | `wraps: naming-audit` | skill exists; skill is model-invocable |
 | artifact **requires** skill | the consumer | `requires: [naming-conventions]` | each exists; compiled graph is acyclic |
 
@@ -233,10 +233,10 @@ Frontmatter is the **authoring surface** for everything the tooling reads. The r
 #### 8.1 Identity (required, all kinds)
 
 ```yaml
-name: skills-audit          # canonical; == folder; parseable per §5
+name: estate-audit          # canonical; == folder; parseable per §5
 kind: skill                 # command | skill | agent
 description: >              # the trigger contract — governed by
-  Use when …                # skill-authoring-standards, not this spec
+  Use when …                # skill-writing-rules, not this spec
 ```
 
 The validator asserts agreement, never trusts declaration: name parse + directory → **decided kind**; frontmatter must match. Disagreement is a lint failure. Frontmatter is an agreement check, never a tiebreaker — the specific defense against the rename-drift class (`entry-file-author` / `claude-md-author`) where a name silently stops meaning what the metadata claims.
@@ -244,7 +244,7 @@ The validator asserts agreement, never trusts declaration: name parse + director
 #### 8.2 Relations (per §7, on the depending artifact)
 
 ```yaml
-performs: skills-audit             # agents
+performs: estate-audit             # agents
 wraps: naming-audit                # commands (dual-access)
 requires: [naming-conventions]     # any kind — deps that must exist and be available
 ```
@@ -325,7 +325,7 @@ The live estate conforms at roughly 30%. The grammar is a target; without an exp
 - **The array may shrink and may never grow.** CI diffs the array; any addition fails the build.
 - `harness_check` reports exemption count as a burn-down metric. Renames retire exemptions opportunistically (when an artifact is otherwise being touched), never as a big-bang campaign — renames are a known drift source because invocation strings live in prompts, hooks, and workflow configs.
 
-Known exemption seeds (non-exhaustive): `handoff-to-human`, `handoff-to-agent`, `find-unused`, `team-weekly`, `team-daily`, `pylon-triage-weekly`, `linguistic-techniques`, `start-work`, `finish-work`, and all `adia-*`-prefixed local names.
+Known exemption seeds (non-exhaustive): `handoff-to-human`, `handoff-to-agent`, `find-unused`, `team-weekly`, `team-daily`, `pylon-triage-weekly`, `prompt-wording-rules`, `start-work`, `finish-work`, and all `adia-*`-prefixed local names.
 
 ---
 
@@ -357,10 +357,10 @@ Grammar and relation failures block the mint/merge; staleness warns.
 | Name | Location | Parse | Verdict |
 |---|---|---|---|
 | `skill-create` | `commands/` | object=`skill`, verb=`create` | ✓ command |
-| `skills-audit` | `skills/` | object=`skills`, process=`audit` | ✓ skill |
+| `estate-audit` | `skills/` | object=`estate`, process=`audit` | ✓ skill |
 | `naming-conventions` | `skills/` | nominal production; reference-shaped body | ✓ skill |
 | `hcc-coding` | `skills/` | nominal production (tokens resolve) | ✓ skill |
-| `skills-audit-agent` | `agents/` | strips `-agent` → extant skill `skills-audit` | ✓ agent (performs) |
+| `estate-audit-agent` | `agents/` | strips `-agent` → extant skill `estate-audit` | ✓ agent (performs) |
 | `team-leader` | `agents/` | scope=`team` ∈ ObjectVocab, role=`leader` ∈ RoleLex | ✓ agent (orchestrator, canonical, ADR-0015 D1) |
 | `team-leader-agent` | `agents/` | scope=`team`, role=`leader` ∈ RoleLex | ✓ agent (orchestrator, legacy spelling) |
 | `create-skill` | `commands/` | verb-initial — violates object-first | ✗ reject |
