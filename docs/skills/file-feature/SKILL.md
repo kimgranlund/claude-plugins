@@ -1,13 +1,14 @@
 ---
 name: file-feature
 description: >-
-  Capture a feature idea as a durable record: a ticket, design docs, or a reference corpus when
-  it's really knowledge to encode. Use when the user proposes a new capability or pitches an
-  idea — "can we add a dark mode", "what if we supported CSV export". Intake only, never builds.
-  /file-feature [idea, or a TKT-/#issue/adapter id] resumes. NOT for bugs (file-bug); NOT for
-  chores (file-task); NOT for authoring docs (make-doc); NOT the UI-shaped intake SCHEMAS
-  themselves (frontend:feature-intake-rules, design:token-feature-intake-rules) — this skill only
-  routes to them.
+  Capture a feature idea as a durable record: a ticket, design docs — or, when it's a feature
+  request that turns out to be "document/capture X as a reference corpus," it routes HERE FIRST:
+  intake classifies, then hands to make-reference. Use when the user proposes a new capability or
+  pitches an idea — "can we add a dark mode", "what if we supported CSV export". Intake only,
+  never builds. /file-feature [idea, or a TKT-/#issue/adapter id] resumes. NOT for bugs
+  (file-bug); NOT for chores (file-task); NOT for authoring docs (make-doc); NOT the UI-shaped
+  intake SCHEMAS themselves (frontend:feature-intake-rules, design:token-feature-intake-rules) —
+  this skill only routes to them.
 disable-model-invocation: false
 user-invocable: true
 context: fork
