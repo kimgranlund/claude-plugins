@@ -41,3 +41,11 @@ date,plugin,routable_skills,routable_chars,zero_rent_skills,zero_rent_chars,agen
 2026-08-17,teamwork,12,7631,5,4350,10,6299,absent,absent,absent
 2026-08-17,docs,16,8846,2,1009,3,2366,absent,absent,absent
 2026-08-17,harness,35,19707,13,5732,11,5126,absent,absent,absent
+2026-08-19,agent-protocols,8,5259,0,0,0,0,absent,absent,absent
+2026-08-19,authorkit,19,12499,0,0,1,327,absent,absent,absent
+2026-08-19,design,25,17021,0,0,3,1995,absent,absent,absent
+2026-08-19,docs,22,13457,2,1013,4,3168,1,2,6
+2026-08-19,harness,39,22721,13,5725,11,5503,absent,absent,absent
+2026-08-19,llm,10,6537,0,0,0,0,3,4,2
+2026-08-19,screens,16,10334,0,0,3,1809,absent,absent,absent
+2026-08-19,teamwork,6,4000,13,10477,10,6351,0,0,0
