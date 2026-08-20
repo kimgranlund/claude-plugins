@@ -46,3 +46,11 @@ on a clean main (hook timeouts) — pure contention masquerading as regression.
 - P5 PASS 2026-08-20 — skill_lint clean; skill-checker verdict SHIP (4 minors applied: dead Bash grant dropped, drift pair de-enumerated, selftest paths quoted; disallowed-tools deliberately NOT added per the checker's own layering argument); behavior check ran live on the incident host (caught + fixed the Chrome-Helper miscount); fences reciprocated in spend-audit + repo-audit evals (flaky-gates lives in another estate — description names it conditionally, no reciprocal possible here, noted).
 
 - P6 PASS 2026-08-20 — shipped: authorkit 0.25.0; tree = SKILL.md · intent.md · scripts/host_probe.mjs (selftested) · references/remedies.md (F1–F9) · evals/{evals.json, assertions.md, behavior-check.md, audit-report.md, baseline/×3}. Reminders honored: /doctor after install (listing budget); no snapshot mirrors exist for authorkit.
+- ENRICH 2026-08-20 (authorkit 0.26.0) — F5/F10 wave from gen-ui-kit's same-day performance
+  report (P4/P5/P6, relayed cross-session): probe worktree census gains per-home `pkgManagers`
+  (npm/pnpm mix) + `nodeModulesDiskMB` (null = du over budget); remedies catalog gains the pnpm
+  shared-virtual-store structural remedy on F5 (two verification prerequisites stated,
+  designed-not-built) and new **F10 — gate-lane oversubscription** (cause-side twin of F3,
+  computed from existing probe fields, portable, fenced against flaky-gates). The tree is now
+  F1–F10 (supersedes the F1–F9 counts in the P3/P6 lines above, which stay as dated history).
+  Fresh-context skill-checker PASS (this entry is its one minor, applied).

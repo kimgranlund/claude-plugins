@@ -25,7 +25,9 @@ function probe() {
   const [l1, l5, l15] = os.loadavg().map((x) => Math.round(x * 100) / 100)
 
   // Worktree census: agent-harness worktree dirs under the current repo (or cwd), their
-  // node_modules posture (own dir vs symlink vs absent) and Spotlight marker presence.
+  // node_modules posture (own dir vs symlink vs absent), Spotlight marker presence,
+  // package-manager mix (a mixed npm/pnpm host is the precondition for the pnpm-vs-npm-ci
+  // dist-drift class, gen-ui-kit P4 2026-08-20), and aggregate duplicated-store disk cost.
   const repoRoot = sh('git rev-parse --show-toplevel 2>/dev/null') ?? process.cwd()
   const wtDirs = (sh(`find "${repoRoot}" -maxdepth 3 -type d \\( -path '*/.claude/worktrees' -o -path '*/.agents/worktrees' \\) 2>/dev/null`) ?? '').split('\n').filter(Boolean)
   const worktreeHomes = wtDirs.map((d) => ({
@@ -33,6 +35,13 @@ function probe() {
     spotlightMarker: sh(`test -f "${d}/.metadata_never_index" && echo yes`) === 'yes',
     parked: num(sh(`find "${d}" -mindepth 1 -maxdepth 1 -type d | wc -l`)) ?? 0,
     ownNodeModules: num(sh(`find "${d}" -mindepth 2 -maxdepth 2 -name node_modules -type d ! -type l | wc -l`)) ?? 0,
+    pkgManagers: {
+      pnpm: num(sh(`find "${d}" -mindepth 2 -maxdepth 2 \\( -name pnpm-lock.yaml -o \\( -name node_modules -type d -exec test -d {}/.pnpm \\; \\) \\) 2>/dev/null | wc -l`)) ?? 0,
+      npm: num(sh(`find "${d}" -mindepth 2 -maxdepth 2 -name package-lock.json 2>/dev/null | wc -l`)) ?? 0,
+    },
+    // Aggregate MB across this home's own node_modules dirs; null = du timed out/unavailable
+    // (a large tree can exceed the 15s probe budget — report the gap, never guess).
+    nodeModulesDiskMB: num(sh(`find "${d}" -mindepth 2 -maxdepth 2 -name node_modules -type d ! -type l -exec du -sm {} + 2>/dev/null | awk '{s+=$1} END {print s+0}'`)),
   }))
   const gitWorktrees = num(sh('git worktree list 2>/dev/null | wc -l'))
 
@@ -83,6 +92,15 @@ function selftest() {
   const missing = required.filter((k) => !(k in p))
   if (missing.length) { console.error(`selftest: missing keys ${missing.join(',')}`); process.exit(1) }
   if (typeof p.load.m1 !== 'number' || typeof p.cores !== 'number') { console.error('selftest: load/cores not numeric'); process.exit(1) }
+  // Per-home schema (F5/F10 enrichment, gen-ui-kit P4/P5 2026-08-20): every census entry carries
+  // the package-manager mix + disk-cost fields. Checked on real homes when any exist; a host with
+  // zero worktree homes still proves the shape is emitted by the mapper (empty array is valid).
+  const homeKeys = ['spotlightMarker', 'parked', 'ownNodeModules', 'pkgManagers', 'nodeModulesDiskMB']
+  for (const h of p.worktreeHomes) {
+    const hm = homeKeys.filter((k) => !(k in h))
+    if (hm.length) { console.error(`selftest: worktree home ${h.dir} missing ${hm.join(',')}`); process.exit(1) }
+    if (typeof h.pkgManagers.pnpm !== 'number' || typeof h.pkgManagers.npm !== 'number') { console.error('selftest: pkgManagers counts not numeric'); process.exit(1) }
+  }
   // negative control: a bogus subcommand must exit 2, not run the probe
   const bogus = (() => { try { execSync(`"${process.execPath}" "${process.argv[1]}" bogus`, { stdio: 'ignore' }); return 0 } catch (e) { return e.status } })()
   if (bogus !== 2) { console.error(`selftest: bogus subcommand exited ${bogus}, want 2`); process.exit(1) }
