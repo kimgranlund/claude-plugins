@@ -8,8 +8,7 @@ description: >-
   (task → journey) crossed with INSIDE-OUT (transitions → whole), backed by a *.flow.json card
   whose mechanical gates run in scripts/flow-check.py. NOT for within-screen layout
   (break-down-layout — this skill owns between-screen); NOT for the whole-product sweep
-  (check-whole-ui); NOT what fields a UX-flow TICKET should capture before build
-  (feature-intake-rules).
+  (check-whole-ui); NOT UX-flow ticket intake (feature-intake-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -1,6 +1,6 @@
 {
   "skill": "break-down-flow",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, break-down-problem.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: Review-time corpus (excellence campaign batch 3, v2 delta). Positives across imperative / diagnostic / symptom / indirect. Negatives from the neighbours' trigger vocabulary: break-down-layout, check-whole-ui, ui-pattern-facts, check-speed, check-safety, break-down-problem. 2026-08-19 (ticket #779, S0-B+W2): description diet 731→696 chars — every quoted trigger phrase and NOT-fence target preserved verbatim except n15's feature-intake-rules citation, shortened from a restated ticket-capture sentence to a direct cite; wording-checker + scoped blind re-judge run same-change.",
   "cases": [
     {
       "id": "t01",
@@ -141,7 +141,7 @@
       "id": "n15",
       "prompt": "what does an onboarding-flow ticket need to state before we build it",
       "expect": "no-trigger",
-      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) \u2014 what a TICKET should capture, not walking/designing the flow itself"
+      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) \u2014 the description's NOT-clause now cites feature-intake-rules directly ('NOT UX-flow ticket intake') instead of restating the ticket-capture sentence (ticket #779, S0-B); same routing boundary, not walking/designing the flow itself"
     }
   ]
 }

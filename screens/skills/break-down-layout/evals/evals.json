@@ -1,6 +1,6 @@
 {
   "skill": "break-down-layout",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-pattern-facts owns (failed as layout's trigger in two consecutive blind runs, routing to ui-pattern-facts both times \u2014 the judges were right).",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). t04 reassigned 2026-07-09: 'what shell is this app using' is a naming ask ui-pattern-facts owns (failed as layout's trigger in two consecutive blind runs, routing to ui-pattern-facts both times \u2014 the judges were right). 2026-08-19 (ticket #779, S0-B+W2): description diet 928\u2192685 chars \u2014 every quoted trigger phrase and NOT-fence target preserved verbatim (n13's feature-intake-rules citation shortened from a restated ticket-capture sentence to a direct cite); the OUTSIDE-IN/INSIDE-OUT axis-arrow notation compressed to 'space \u00d7 behavior' (identity prose, no trigger phrase or NOT-fence rode on it); a wording-checker pass caught the first NOT-clause over-scoping CSS/component-code/copywriting under the color-*-facts/lettering-facts citation \u2014 split back into its own clause, same change; wording-checker + scoped blind re-judge run same-change.",
   "cases": [
     {
       "id": "t01",
@@ -123,7 +123,7 @@
       "id": "n13",
       "prompt": "what should a dashboard-shell ticket capture before we design it",
       "expect": "no-trigger",
-      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) \u2014 what a TICKET should capture, not the layout critique/design itself"
+      "note": "reciprocal fence vs feature-intake-rules (gh#711, lld-0024) \u2014 the description's NOT-clause now cites feature-intake-rules directly ('NOT layout/shell ticket intake') instead of restating the ticket-capture sentence (ticket #779, S0-B); same routing boundary, not the layout critique/design itself"
     }
   ]
 }
