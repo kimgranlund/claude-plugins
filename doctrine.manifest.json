@@ -185,6 +185,62 @@
     }
    ],
    "source": "2026-08-19 Kim's authorkit-drift question after the live-lane ruling; both dependents restated STRICT ROUTER with no exception — synced in teamwork 2.28.13 (this change). Edge added so doctrine-audit catches the next restatement that forgets it."
+  },
+  {
+   "id": "D12",
+   "type": "verbatim-line",
+   "mode": "require",
+   "title": "screens' check-* verification family must carry the Family-mechanics canon citation line naming check-whole-ui's verify-mechanics.md — a sibling that drops or paraphrases it re-derives the shared mechanics",
+   "severity": "major",
+   "canon_file": "screens/skills/check-whole-ui/references/verify-mechanics.md",
+   "canon_ref": "the shared verification mechanics every check-* sibling cites via '## Family mechanics (canon: [[check-whole-ui]]'s references/verify-mechanics.md — cited, not restated)'",
+   "dependents": [
+    {
+     "file": "screens/skills/check-focus/SKILL.md",
+     "pattern": "Family mechanics \\(canon: \\[\\[check-whole-ui\\]\\]"
+    },
+    {
+     "file": "screens/skills/check-safety/SKILL.md",
+     "pattern": "Family mechanics \\(canon: \\[\\[check-whole-ui\\]\\]"
+    },
+    {
+     "file": "screens/skills/check-speed/SKILL.md",
+     "pattern": "Family mechanics \\(canon: \\[\\[check-whole-ui\\]\\]"
+    },
+    {
+     "file": "screens/skills/check-translations/SKILL.md",
+     "pattern": "Family mechanics \\(canon: \\[\\[check-whole-ui\\]\\]"
+    },
+    {
+     "file": "screens/skills/check-ui-change/SKILL.md",
+     "pattern": "Family mechanics \\(canon: \\[\\[check-whole-ui\\]\\]"
+    }
+   ],
+   "source": "gh#776 (2026-08-19 overhaul emergent queue): the 3 in-scope estates had zero doctrine edges — silent by omission. The check-* family's own section header already names this canon; the edge makes the citation enforceable. Kim confirmed D12+D13 2026-08-19."
+  },
+  {
+   "id": "D13",
+   "type": "verbatim-line",
+   "mode": "require",
+   "title": "design's DESIGN.md-emitting kit exporters must reference design-md-rules (the DESIGN.md format canon) — an exporter that stops citing it drifts its output format ungoverned",
+   "severity": "major",
+   "canon_file": "design/skills/design-md-rules/SKILL.md",
+   "canon_ref": "the DESIGN.md format doctrine every DESIGN.md-emitting exporter consumes",
+   "dependents": [
+    {
+     "file": "design/skills/make-stitch-kit/SKILL.md",
+     "pattern": "design-md-rules"
+    },
+    {
+     "file": "design/skills/make-dscard-kit/SKILL.md",
+     "pattern": "design-md-rules"
+    },
+    {
+     "file": "design/skills/make-design-system/SKILL.md",
+     "pattern": "design-md-rules"
+    }
+   ],
+   "source": "gh#776 (2026-08-19): make-figma-make-kit deliberately EXEMPT — it emits a guidelines/ folder, not a DESIGN.md (verified 2026-08-19). Kim confirmed D12+D13 2026-08-19; agent-protocols recorded no-edges-owed."
   }
  ]
 }
