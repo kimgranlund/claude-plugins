@@ -1,0 +1,11 @@
+{
+ "skill": "create-brand-muse",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (the maker seat that CONVERGES toward the pull, never sets it) and check-brand-rubric (judges after the fact, never names the aspiration).",
+ "cases": [
+  { "id": "t01", "prompt": "convene the muse before we start building this brand", "expect": "trigger" },
+  { "id": "t02", "prompt": "what should this brand aspire to be at its best", "expect": "trigger" },
+  { "id": "t03", "prompt": "give me a provocation to pull this brand's work in a bolder direction", "expect": "trigger" },
+  { "id": "n01", "prompt": "let's build the brand's strategy and positioning now", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "score this brand work against the rubric", "expect": "no-trigger" }
+ ]
+}
