@@ -1,14 +1,14 @@
 ---
 name: lettering-facts
 description: >-
-  Answers typography and lettering questions. Use for comparing, explaining, classifying, or
-  specifying type — "my headings jump when the webfont swaps in", "does OpenDyslexic actually
-  help", "why does this font look boring/generic", "why does text-wrap: balance not work in my
-  browser", CSS `text-wrap: balance`/`pretty` support: type anatomy, classification (Vox-ATypI,
+  Use for typography/lettering questions — comparing, explaining, classifying, specifying type:
+  "my headings jump when the webfont swaps in", "does OpenDyslexic actually help", "why does
+  this font look boring/generic", "why does text-wrap: balance not work in my browser", CSS
+  `text-wrap: balance`/`pretty` support — covers type anatomy, classification (Vox-ATypI,
   humanist/geometric/grotesque), metric-compatible fallback stacks, font personality, world
-  scripts, OpenType features, variable-font axes, text accessibility. NOT for choosing a brand's
-  font pairing (pick-fonts); NOT for generating a type scale or tokens (font-token-rules); NOT
-  for building components (make-component). ANSWERS, does not generate.
+  scripts, OpenType features, variable-font axes, text accessibility. NOT a brand's font pairing
+  (pick-fonts); NOT generating a type scale/tokens (font-token-rules); NOT building components
+  (make-component). ANSWERS, does not generate.
 disable-model-invocation: false
 user-invocable: false
 ---

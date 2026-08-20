@@ -1,18 +1,14 @@
 ---
 name: icon-rules
 description: >-
-  Answers icon-system questions from a cited corpus — construction, sizing, style,
-  metaphor, accessibility, RTL. Use when designing or judging icons: "what size/stroke
-  weight", "filled vs outlined", "should this mirror in RTL", "is an icon-only button
-  okay", "is this icon big enough to tap", "fill the Iconography section of a
-  DESIGN.md". Carries the per-system construction table
-  (Material/SF/Carbon/Atlassian/Fluent), Material Symbols axes, WCAG floors,
-  mirror/never-mirror taxonomy. ANSWERS only. NOT an icon build (make-component,
-  screens); NOT verifying mirroring shipped (check-translations, screens); NOT icon-size
-  tokens, nor the touch-target DP value around an icon — "how big must the touch target
-  around a 24dp icon be" is material-shape-facts' `--md-sys-size-*` ladder, not this
-  pack; "is this icon big enough to tap" stays here; NOT contrast verification
-  (check-colors).
+  Use for icon-system questions from a cited corpus — construction, sizing, style, metaphor,
+  accessibility, RTL: "what size/stroke weight", "filled vs outlined", "should this mirror in
+  RTL", "is an icon-only button okay", "is this icon big enough to tap", "fill the Iconography
+  section of a DESIGN.md". Carries the per-system table (Material/SF/Carbon/Atlassian/Fluent),
+  Material Symbols axes, WCAG floor, mirror taxonomy. ANSWERS only. NOT an icon build
+  (make-component); NOT verifying mirroring shipped (check-translations); NOT icon-size
+  tokens or touch-target DP — "how big must the touch target around a 24dp icon be" is
+  material-shape-facts' `--md-sys-size-*` ladder; NOT contrast (check-colors).
 user-invocable: false
 disable-model-invocation: false
 ---

@@ -1,19 +1,14 @@
 ---
 name: color-contrast-facts
 description: >-
-  Answers color-accessibility questions — contrast standards and color-vision deficiency (CVD),
-  including computing ONE ad-hoc contrast-ratio/Lc NUMBER between two given colors (a raw value,
-  not a pass/fail verdict), or simulating CVD on one described palette with no declared surface
-  card. Use for APCA vs WCAG 2.2, contrast ratios and relative luminance, "calculate the WCAG
-  contrast ratio between these two colors", "what's the actual Lc value", low-vision legibility,
-  color-blindness simulation (protanopia/deuteranopia), "simulate deuteranopia on this palette
-  and tell me what changes", CVD-safe pairs, "which colors look identical to a colorblind user".
-  NOT for a pass/fail VERDICT against a threshold, even for a single ad-hoc pair — "check the
-  contrast ratio of this text on this background", "does it meet the accessibility contrast
-  floor", "does this clear 3:1" are check-colors' imperative CHECK asks, not a value lookup; NOT
-  for a full card-gated palette/mapping VERIFICATION producing a ColorProof across every fg/bg
-  pair (check-colors); NOT for space-conversion or gamut math (color-space-facts); NOT for vision
-  science beyond CVD (color-perception-facts). ANSWERS, does not generate.
+  Use for color-accessibility QUESTIONS, never generates — APCA/WCAG 2.2, luminance, CVD —
+  incl. an ad-hoc ratio/Lc NUMBER, not a verdict: "calculate the WCAG contrast ratio between
+  these two colors", "what's the actual Lc value"; a CVD sim, no card: "simulate deuteranopia
+  on this palette and tell me what changes"; or a CVD-safe pick: "give me a CVD-safe pair for
+  error and success states". NOT a pass/fail VERDICT — "check the contrast ratio of this text
+  on this background", "does it meet the accessibility contrast floor", "does this clear 3:1"
+  are check-colors' asks; NOT a full VERIFICATION (check-colors); NOT space/gamut math
+  (color-space-facts); NOT vision science (color-perception-facts).
 disable-model-invocation: false
 user-invocable: false
 ---

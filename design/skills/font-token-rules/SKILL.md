@@ -1,16 +1,15 @@
 ---
 name: font-token-rules
 description: >-
-  Use when setting the TYPE of any UI on the default `--type-*` token grammar (not Material's
-  `--md-sys-typescale-*`) — font/size/weight/leading/tracking for a heading, body, label, button,
-  caption, code, or kicker ("what type token for this", "which voice/step for this text", "size
-  this heading"). Eleven-voice scale: bind `--type-*`/`--font-*`, pick VOICE by job and STEP by
-  rank, apply the baked leading/rhythm, pick a concrete font per family slot. Never hardcode a
-  px size, line-height, tracking, or font family. NOT for Material's typescale
-  (material-type-facts); NOT for a no-token typography question (lettering-facts); NOT for
-  building/placing a component (make-component); NOT font/type choice for buttons, tabs, or any
-  interactive element inside a Claude Artifact (artifact-styling-rules — its own type/layout
-  doctrine, mono interactive, wins there even when the ask sounds like "which type token").
+  Use for UI TYPE on the default `--type-*` grammar (not Material's `--md-sys-typescale-*`) —
+  font/size/weight/leading/tracking for heading, body, label, button, caption, code, kicker
+  ("what type token for this", "which voice/step for this text", "size this heading").
+  Eleven-voice scale: bind `--type-*`/`--font-*`, pick VOICE/STEP by job/rank, a font per family
+  slot; never hardcode px/line-height/tracking/family. NOT Material's typescale
+  (material-type-facts); NOT no-token typography (lettering-facts); NOT building a
+  component (make-component); NOT buttons/tabs/any interactive element
+  inside a Claude Artifact (artifact-styling-rules wins there, even when it sounds like "which
+  type token").
 disable-model-invocation: false
 user-invocable: false
 ---

@@ -1,15 +1,14 @@
 ---
 name: design-system-checker
 description: >-
-  Independent critic for ONE design-system export corpus consumed by a generative design agent —
-  a Claude Design/Claude Code bundle (DESIGN.md + tokens.json + @dsCard previews), a Google
-  Stitch DESIGN.md, a Figma Make guidelines/ folder, or a cross-platform set of these — graded
-  against the owning sibling skill's bundled rubric: mechanical gates first (the sibling's
-  scripts + platform linter, real runs), then judgment. Use PROACTIVELY right after any export
-  is generated or regenerated, and whenever asked "review this design system export", "grade
-  our Stitch DESIGN.md", "is this Make guidelines folder ready to ship", "did our exports drift
-  apart". NOT for ONE component's internals (component-checker); NOT for a screen layout
-  (layout-checker); NOT for authoring or fixing an export (make-design-system and siblings).
+  Independent critic for ONE design-system export corpus — a Claude Design/Code bundle, a Stitch
+  DESIGN.md, a Figma Make guidelines/ folder, or a cross-platform set — graded against the
+  owning sibling's rubric: gates first (real runs), then judgment. Use PROACTIVELY after any
+  export is generated or regenerated, or when asked "review this design system export", "grade our
+  Stitch DESIGN.md", "is this Make guidelines folder ready to ship", "did our exports drift
+  apart". NOT for ONE component's internals
+  (component-checker); NOT a screen layout (layout-checker); NOT authoring or fixing an export
+  (make-design-system and siblings); NOT ticket-capture fields (token-feature-intake-rules).
 tools: Read, Grep, Glob, Bash
 model: fable
 effort: medium

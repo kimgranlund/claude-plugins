@@ -1,6 +1,6 @@
 {
   "skill": "artifact-styling-rules",
-  "note": "Trigger-routing suite, minted alongside artifact-styling-rules (closes #650, lld-0020). Positives are consult-only asks from the record's own real sessions ('colors are a bit nuts', 'why sharp corners', 'diagrams look off-theme') one per axis (platform, token architecture, type/layout, mermaid, shells) plus adjacent-phrasing repeats. Negatives fence the four siblings this capability overlaps trigger vocabulary with: make-artifact (the build ask itself), make-design-system (authoring/grading the token SOURCE), dataviz (chart/graph color and mark-spec choices), break-down-layout (non-artifact screen layout critique).",
+  "note": "Trigger-routing suite, minted alongside artifact-styling-rules (closes #650, lld-0020). Positives are consult-only asks from the record's own real sessions ('colors are a bit nuts', 'why sharp corners', 'diagrams look off-theme') one per axis (platform, token architecture, type/layout, mermaid, shells) plus adjacent-phrasing repeats. Negatives fence the four siblings this capability overlaps trigger vocabulary with: make-artifact (the build ask itself), make-design-system (authoring/grading the token SOURCE), dataviz (chart/graph color and mark-spec choices), break-down-layout (non-artifact screen layout critique). 2026-08-19 (#778, W2 diet): description trimmed 720->698 chars, trim-only, LOW risk; the #719 Artifact-scoped font/type trigger (t05) preserved verbatim. Blind re-judge 16/16 clean, zero new stolen/leaked/dead.",
   "cases": [
     {
       "id": "t01",
