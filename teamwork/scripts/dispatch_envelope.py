@@ -31,16 +31,30 @@ preloads and `${CLAUDE_PLUGIN_ROOT}` paths; the small amount of duplicated versi
 buys full plugin-boundary independence. `pin_check.py` is same-plugin (this file's own sibling in
 `teamwork/scripts/`) and IS invoked directly.
 
-Plugin inference: `--plugin` wins when given; absent, this workspace's own `<plugin>: <rest>`
-ticket-title convention (`teamwork:`, `harness:`, ...) is tried; absent THAT too, `plugin` and
-`slot` both emit `null` and the run still exits 0 — the builder decides, never a guess (branch,
-clone, pin_check, and the collision look are all plugin-independent and still run).
+Plugin inference: `--plugin` wins when given; absent, the `<plugin>: <rest>` ticket-title
+convention (`teamwork:`, `harness:`, ...) is tried ONLY when the repo itself has a plugin-repo
+layout — a `.claude-plugin/` directory at the git toplevel, the home of both a single-plugin
+repo's `plugin.json` and a marketplace repo's `marketplace.json` (ticket #784: layout is a
+property of the REPO, never of a ticket title — in agent-ui a `ui-rating: ...` prefix is a
+component name, and inferring a plugin from it sent `gh api contents
+ui-rating/.claude-plugin/plugin.json` into a 404, exit 2). In a non-plugin repo, or when the
+title carries no prefix, `plugin` and `slot` both emit `null`, the plugin.json lookup is skipped
+entirely, and the run still exits 0 — the builder decides, never a guess (branch, clone,
+pin_check, and the collision look are all plugin-independent and still run).
 
 Scratch-clone location (ticket #766): `--scratch-dir <path>` wins when given; absent, the
 `CLAUDE_SCRATCHPAD` env var wins when set (this workspace's own session-scoped scratchpad,
 the directory `repo-cleaner` already knows to sweep); absent both, the clone lands in the
 current `$TMPDIR`/`tempfile.gettempdir()` default, unchanged from before this fix — so an
 un-configured caller sees no behavior change at all.
+
+Scratch-clone occupancy (ticket #784): a pre-existing destination never fails the run. A prior
+aborted run's own clone — matching `origin` URL, clean working tree, the decided branch either
+already current or not yet created — is REUSED as-is; anything else (a foreign directory, a
+dirty tree, another remote, the branch parked non-current) is left untouched and a fresh unique
+sibling directory is cut instead (`tempfile.mkdtemp`, the `mktemp -d` shape — never a delete,
+since host permission walls can prevent even the CALLER cleaning `/var/folders` paths). The
+envelope's `clone` field is always the directory actually used.
 
   E1 [FAIL->exit1] slot.claim_clean is false — a sibling open PR already claims this plugin's
             next version (the CLAIM race `version_claim_check.py` itself catches); envelope is
@@ -64,9 +78,11 @@ couldn't be built at all (ticket unreadable, clone/git failure, no `gh` auth).
 
 Network: `run()` calls `gh`/`git` live, same discipline as `version_claim_check.py`'s own
 `_gh_json` and `merge_queue_watch.py`'s own docstring. `selftest` never touches the network or a
-real GitHub remote — every pure helper (`infer_plugin`, `decide_branch_name`, `version_tuple`,
-`compute_next_version`, `compute_slot`, `find_claimed_no_pr`) is proven on fixtures, and the clone
-mechanics (`_do_clone`) are proven against a REAL local git repo used as the "remote" (a `file://`
+real GitHub remote — every pure helper (`infer_plugin`, `resolve_plugin`, `repo_layout_is_plugin`,
+`decide_branch_name`, `version_tuple`, `compute_next_version`, `compute_slot`,
+`find_claimed_no_pr`) is proven on fixtures, and the clone mechanics (`_do_clone`, incl. both
+#784 occupancy regressions: reuse of a prior run's own clone, and a fresh unique dir beside a
+foreign occupant) are proven against a REAL local git repo used as the "remote" (a `file://`
 absolute path — no network), the same technique `pin_check.py`'s own selftest uses for its real
 `git worktree add` proof.
 """
@@ -134,6 +150,28 @@ def infer_plugin(title):
         return None
     m = PLUGIN_PREFIX_RE.match(title.strip())
     return m.group(1) if m else None
+
+
+def repo_layout_is_plugin(root):
+    """Ticket #784: plugin-repo layout is a property of the REPO, decided by the repo's own
+    toplevel — a `.claude-plugin/` directory there (the manifest home: `plugin.json` in a
+    single-plugin repo, `marketplace.json` in a marketplace repo) — NEVER by a ticket-title
+    prefix. An unknown/absent root reads as non-plugin: can't verify → never guess."""
+    if not root:
+        return False
+    return os.path.isdir(os.path.join(root, ".claude-plugin"))
+
+
+def resolve_plugin(plugin_arg, title, is_plugin_repo):
+    """Pure (ticket #784): `--plugin` always wins; the '<plugin>: <rest>' title inference runs
+    ONLY in a plugin-layout repo. In an ordinary repo a `ui-rating: ...`-style prefix is a
+    component name, not a plugin — inferring one sent `gh api contents
+    ui-rating/.claude-plugin/plugin.json` into a 404 on the 2026-08-19 agent-ui mobilize run."""
+    if plugin_arg:
+        return plugin_arg
+    if not is_plugin_repo:
+        return None
+    return infer_plugin(title)
 
 
 def slugify(title, max_words=4, max_chars=30):
@@ -254,10 +292,58 @@ def _main_sha(repo):
     return r.stdout.strip()
 
 
+def _git_toplevel():
+    """Impure, local-only: the invoking checkout's own toplevel (`git rev-parse
+    --show-toplevel`), the directory `repo_layout_is_plugin` reads. None outside a work tree —
+    which downgrades layout detection to non-plugin rather than crashing (ticket #784)."""
+    r = _run(["git", "rev-parse", "--show-toplevel"], check=False)
+    if r.returncode != 0:
+        return None
+    top = r.stdout.strip()
+    return top or None
+
+
+def _reusable_clone(dest, remote_url, branch):
+    """Impure, local-only (ticket #784): True iff an EXISTING dest is a prior run's own clone,
+    safe to hand out again — a git work tree whose `origin` matches remote_url, whose working
+    tree is clean, and whose decided branch is either already current (aborted after checkout,
+    or resumed work — both correct to continue) or not yet created (aborted between clone and
+    checkout). Anything else — a foreign directory, another remote, a dirty tree, the branch
+    parked non-current (state this function can't safely reconcile) — is NOT reusable."""
+    if not os.path.isdir(os.path.join(dest, ".git")):
+        return False
+    r = _run(["git", "remote", "get-url", "origin"], cwd=dest, check=False)
+    if r.returncode != 0 or r.stdout.strip() != remote_url:
+        return False
+    r = _run(["git", "status", "--porcelain"], cwd=dest, check=False)
+    if r.returncode != 0 or r.stdout.strip():
+        return False
+    r = _run(["git", "branch", "--show-current"], cwd=dest, check=False)
+    if r.returncode != 0:
+        return False
+    if r.stdout.strip() == branch:
+        return True
+    r = _run(["git", "rev-parse", "--verify", "--quiet", f"refs/heads/{branch}"],
+             cwd=dest, check=False)
+    return r.returncode != 0
+
+
 def _do_clone(remote_url, dest, branch):
-    """Impure but network-optional: a plain `git clone --depth 1` + `checkout -b`. Proven in
-    selftest against a real local repo used as the remote (a file:// absolute path), so this
-    function itself needs no network to verify."""
+    """Impure but network-optional: `git clone --depth 1` + `checkout -b`, returning the
+    directory ACTUALLY used. Ticket #784: a pre-existing dest never fails the run — a prior
+    run's own clean clone is reused (branch checked out if the earlier run died between clone
+    and checkout); any other occupant is left untouched and a fresh unique sibling is cut via
+    `tempfile.mkdtemp` (never a delete — host permission walls can prevent even the caller
+    cleaning these paths). Proven in selftest against a real local repo used as the remote (a
+    file:// absolute path), so this function itself needs no network to verify."""
+    if os.path.exists(dest):
+        if _reusable_clone(dest, remote_url, branch):
+            current = _run(["git", "branch", "--show-current"], cwd=dest).stdout.strip()
+            if current != branch:
+                _run(["git", "checkout", "-b", branch], cwd=dest)
+            return dest
+        parent = os.path.dirname(dest) or tempfile.gettempdir()
+        dest = tempfile.mkdtemp(prefix=os.path.basename(dest) + "-", dir=parent)
     _run(["git", "clone", "--depth", "1", remote_url, dest])
     _run(["git", "checkout", "-b", branch], cwd=dest)
     return dest
@@ -278,7 +364,7 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
     label_names = {lbl.get("name") for lbl in ticket.get("labels", [])}
     kind = next((k for k in ("bug", "feature", "task") if k in label_names), None)
 
-    plugin = plugin_arg or infer_plugin(title)
+    plugin = resolve_plugin(plugin_arg, title, repo_layout_is_plugin(_git_toplevel()))
     branch = decide_branch_name(ticket_id, title)
 
     findings = []
@@ -320,7 +406,9 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
     repo_name = repo.split("/")[-1]
     clone_dest = os.path.join(dest_root, f"{repo_name}-{ticket_id}")
     remote_url = _remote_url(repo)
-    _do_clone(remote_url, clone_dest, branch)
+    # #784: the returned path is the one actually used — a pre-existing dest is reused when it
+    # is verifiably this run's own prior clone, else a fresh unique sibling is cut beside it.
+    clone_dest = _do_clone(remote_url, clone_dest, branch)
 
     pin_result = _pin_check(branch, clone_dest)
     if pin_result == "fail":
@@ -352,6 +440,51 @@ def selftest():
         print("FAIL infer_plugin/none (no prefix must never be guessed)"); fails += 1
     else:
         print("ok    infer_plugin/none")
+
+    # repo_layout_is_plugin — ticket #784: layout read from the REPO root, on real directories
+    with tempfile.TemporaryDirectory() as tmp:
+        plugin_root = os.path.join(tmp, "plugin-repo")
+        os.makedirs(os.path.join(plugin_root, ".claude-plugin"))
+        plain_root = os.path.join(tmp, "plain-repo")
+        os.makedirs(plain_root)
+        if not repo_layout_is_plugin(plugin_root):
+            print("FAIL repo_layout_is_plugin/plugin (a root .claude-plugin/ dir must read as "
+                  "plugin layout)")
+            fails += 1
+        else:
+            print("ok    repo_layout_is_plugin/plugin (root .claude-plugin/ detected)")
+        if repo_layout_is_plugin(plain_root):
+            print("FAIL repo_layout_is_plugin/plain (no root .claude-plugin/ must read as "
+                  "non-plugin)")
+            fails += 1
+        else:
+            print("ok    repo_layout_is_plugin/plain")
+    if repo_layout_is_plugin(None):
+        print("FAIL repo_layout_is_plugin/unknown (unknown root must never guess plugin)")
+        fails += 1
+    else:
+        print("ok    repo_layout_is_plugin/unknown (can't verify → non-plugin)")
+
+    # resolve_plugin — ticket #784's own regression: a `word:` title prefix in a NON-plugin repo
+    # (agent-ui's `ui-rating: ...`) must resolve to None, never to a phantom plugin lookup
+    if resolve_plugin(None, "ui-rating: value renders stale on rerate", False) is not None:
+        print("FAIL resolve_plugin/non_plugin_repo (a title prefix in a non-plugin repo must "
+              "never be read as a plugin — the #784 agent-ui crash)")
+        fails += 1
+    else:
+        print("ok    resolve_plugin/non_plugin_repo (ui-rating: prefix ignored outside a "
+              "plugin-layout repo)")
+    if resolve_plugin(None, "teamwork: some scripted fix", True) != "teamwork":
+        print("FAIL resolve_plugin/plugin_repo (the title convention must still work in a "
+              "plugin-layout repo)")
+        fails += 1
+    else:
+        print("ok    resolve_plugin/plugin_repo (title convention intact where it belongs)")
+    if resolve_plugin("harness", "ui-rating: whatever", False) != "harness":
+        print("FAIL resolve_plugin/explicit_flag (--plugin must win regardless of layout)")
+        fails += 1
+    else:
+        print("ok    resolve_plugin/explicit_flag (--plugin wins regardless of layout)")
 
     # slugify / decide_branch_name — drops the plugin prefix and trailing commentary
     got = decide_branch_name(
@@ -434,14 +567,61 @@ def selftest():
 
         dest = os.path.join(tmp, "clone")
         try:
-            _do_clone(remote, dest, "758-dispatch-envelope")
+            got = _do_clone(remote, dest, "758-dispatch-envelope")
             r = _run(["git", "branch", "--show-current"], cwd=dest)
-            if r.stdout.strip() != "758-dispatch-envelope":
-                print(f"FAIL _do_clone (wrong branch: {r.stdout.strip()!r})"); fails += 1
+            if got != dest or r.stdout.strip() != "758-dispatch-envelope":
+                print(f"FAIL _do_clone (wrong branch/path: {r.stdout.strip()!r}, {got!r})")
+                fails += 1
             else:
                 print("ok    _do_clone (real local clone, branch cut off main)")
         except RuntimeError as e:
             print(f"FAIL _do_clone (raised: {e})"); fails += 1
+
+        # _do_clone — ticket #784 regression 1: the SAME dest again (a retry after an aborted
+        # dispatch) must reuse the prior run's own clean clone, never fail on its existence
+        try:
+            got = _do_clone(remote, dest, "758-dispatch-envelope")
+            r = _run(["git", "branch", "--show-current"], cwd=dest)
+            if got != dest or r.stdout.strip() != "758-dispatch-envelope":
+                print(f"FAIL _do_clone/reuse (expected the same clone back on its branch, got "
+                      f"{got!r} on {r.stdout.strip()!r})")
+                fails += 1
+            else:
+                print("ok    _do_clone/reuse (pre-existing own clone reused on retry, no crash)")
+        except RuntimeError as e:
+            print(f"FAIL _do_clone/reuse (raised on a pre-existing scratch clone — the #784 "
+                  f"retry crash: {e})")
+            fails += 1
+
+        # _do_clone — ticket #784 regression 2: a FOREIGN occupant at dest (not a reusable
+        # clone) is left untouched; a fresh unique sibling is cut and returned instead
+        occupied = os.path.join(tmp, "occupied")
+        os.makedirs(occupied)
+        stray = os.path.join(occupied, "stray.txt")
+        with open(stray, "w") as f:
+            f.write("not a clone")
+        try:
+            got = _do_clone(remote, occupied, "758-dispatch-envelope")
+            r = _run(["git", "branch", "--show-current"], cwd=got)
+            if got == occupied or not got.startswith(os.path.join(tmp, "occupied-")):
+                print(f"FAIL _do_clone/occupied (expected a fresh unique sibling dir, got "
+                      f"{got!r})")
+                fails += 1
+            elif r.stdout.strip() != "758-dispatch-envelope":
+                print(f"FAIL _do_clone/occupied (fresh clone on wrong branch: "
+                      f"{r.stdout.strip()!r})")
+                fails += 1
+            elif not os.path.exists(stray):
+                print("FAIL _do_clone/occupied (the foreign occupant must be left untouched, "
+                      "never deleted)")
+                fails += 1
+            else:
+                print("ok    _do_clone/occupied (foreign occupant untouched, fresh unique "
+                      "sibling cloned and returned)")
+        except RuntimeError as e:
+            print(f"FAIL _do_clone/occupied (raised on an occupied dest — the #784 "
+                  f"stale-dir crash: {e})")
+            fails += 1
 
         pin_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pin_check.py")
         if os.path.exists(pin_script):
@@ -574,10 +754,13 @@ def selftest():
         print(f"-- {fails} fixture(s) failed --")
         return 1
     print("dispatch_envelope selftest · PASS · plugin inference + branch slug (incl. the "
-          "hyphen-boundary truncation control), the taken-slot negative control "
-          "(claim_clean:false, next advanced past the claim), the claimed-no-PR scan, "
-          "--help/non-integer-ticket-id guards, CLAUDE_SCRATCHPAD/--scratch-dir resolution, and "
-          "a REAL local clone + sibling pin_check.py wiring all proved with no network")
+          "hyphen-boundary truncation control), the #784 layout gate (repo-root .claude-plugin/ "
+          "detection, title-prefix-in-a-non-plugin-repo resolves to None), the taken-slot "
+          "negative control (claim_clean:false, next advanced past the claim), the "
+          "claimed-no-PR scan, --help/non-integer-ticket-id guards, "
+          "CLAUDE_SCRATCHPAD/--scratch-dir resolution, and a REAL local clone + sibling "
+          "pin_check.py wiring — incl. the #784 occupancy pair (own-clone reuse on retry, "
+          "fresh unique sibling beside a foreign occupant) — all proved with no network")
     return 0
 
 
