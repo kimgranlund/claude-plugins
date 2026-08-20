@@ -1,0 +1,11 @@
+{
+ "skill": "check-brand-rubric",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (the maker seat this judges, never performs) and make-brand-muse (sets the pull before work exists; this judges after).",
+ "cases": [
+  { "id": "t01", "prompt": "score this brand work against the rubric", "expect": "trigger" },
+  { "id": "t02", "prompt": "is this positioning actually on brand", "expect": "trigger" },
+  { "id": "t03", "prompt": "audit this creative brief against the rubric", "expect": "trigger" },
+  { "id": "n01", "prompt": "let's build this brand's voice from scratch", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "convene the muse for this brand before we start", "expect": "no-trigger" }
+ ]
+}

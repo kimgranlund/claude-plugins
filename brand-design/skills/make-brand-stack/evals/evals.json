@@ -1,0 +1,11 @@
+{
+ "skill": "make-brand-stack",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from file-brand-corpus (the full site export, not a one-pager) and file-brand (packaging into a distributable, not a reading document).",
+ "cases": [
+  { "id": "t01", "prompt": "give me the brand stack one-pager for this brand", "expect": "trigger" },
+  { "id": "t02", "prompt": "condense this whole brand corpus into a one-page summary", "expect": "trigger" },
+  { "id": "t03", "prompt": "I need an executive summary of this brand for a meeting", "expect": "trigger" },
+  { "id": "n01", "prompt": "export the brand corpus as a navigable site", "expect": "no-trigger" },
+  { "id": "n02", "prompt": "package this brand as an installable plugin", "expect": "no-trigger" }
+ ]
+}
