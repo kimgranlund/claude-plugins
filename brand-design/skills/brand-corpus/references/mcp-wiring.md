@@ -1,6 +1,6 @@
 # Wiring the brand-corpus MCP
 
-The `brand-corpus` skill defines the corpus _structure_; this reference defines how to stand up the MCP that reads it, and how to choose its implementation. The bundled reference server is `bin/brand-corpus-mcp.py`.
+The `brand-corpus` skill defines the corpus _structure_; this reference defines how to stand up the MCP that reads it, and how to choose its implementation. The bundled reference server is `scripts/brand_corpus_mcp.py` in this plugin (a stamped brand's OWN plugin, per `brand-stamp.py`'s output convention, copies it in as `bin/brand-corpus-mcp.py` — see stamping.md).
 
 ## The contract is the format — not the language
 

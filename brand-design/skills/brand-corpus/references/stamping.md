@@ -66,4 +66,4 @@ Claude chat can run **skills** (with bundled files/sub-folders) and use **remote
 - **skill**: upload `<out>/skill/<brand>-brand/` to Claude chat as a skill — it carries its own corpus.
 - **mcp**: run the bundled server's `… brand-corpus-mcp.py selftest`, then follow `<out>/mcp/<brand>-brand-mcp/README.md` to wire it (`claude mcp add`), or host it as a connector.
 
-The factory feeding the factory: brand-forge stamps all three; **plugins-factory** is the standard the plugin form is validated against, and `brand-corpus` is its worked MCP exemplar.
+The factory feeding the factory: brand-design stamps all three; **plugins-factory** is the standard the plugin form is validated against, and `brand-corpus` is its worked MCP exemplar.

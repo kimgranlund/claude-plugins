@@ -83,7 +83,7 @@ Ingested brand corpora, client decks, competitor docs, and any external material
 1. **Identify the artifact type** (brief / strategy / identity / voice / system) → select the matching rubric(s) from the index.
 2. **Load the rubric(s).** If only the five shipped exemplars apply, use them; otherwise note which extension-point rubrics a fuller corpus would add.
 3. **Score each dimension** with evidence + the test; mark any dimension whose score is directional.
-4. **Run the critic council** (the plugin's critic agents — e.g. Luke / John H. / Massimo V. — via the council orchestrator) for the qualities that resist rubric scoring. The council names failures the rubric cannot.
+4. **Run `check-brand-council`** (dispatches `brand-judge` per persona — Luke / John H. / Massimo V. / etc. — with each critic's file inlined; there is no separate orchestrator agent, the skill's own procedure fans out) for the qualities that resist rubric scoring. The council names failures the rubric cannot.
 5. **Synthesize**: severity-sorted findings, the single biggest risk first, and a clear ship / fix-then-ship / rebuild verdict.
 
 ## Provenance

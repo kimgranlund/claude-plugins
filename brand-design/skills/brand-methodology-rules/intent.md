@@ -46,8 +46,11 @@ P0-P5 ladder. Track D re-verified against pack-writing-rules — 9 reference fil
 flat-consult-table threshold, so this pack is the one of the four that gained a
 `references/INDEX.md` grouping them into 4 declared axes (Foundation Canon · foundation component
 methods · creative collaboration & team operations · Brand Stack condensation) — stale
-`brand-evaluate`/`/brand-council`/`/brand-muse`/etc. names repaired to their current forms, and
-ran a fresh-context skill-checker pass over the whole 4-pack slice.
+`brand-evaluate`/`/brand-council`/`/brand-muse`/etc. names repaired to their current forms. Track
+D's own handoff disclosed it had no Agent-tool access to run the checker itself, so the real
+fresh-context `harness:skill-checker` pass ran post-merge, once Track D and Track E's work landed
+together on `phase2-integration` (agent `a50a000314dc45397`, 2026-08-19) — verdict
+PASS-with-notes, 4 majors, all resolved in that same reconciliation round.
 
 ## rulings
 - No live P0-P5 forge history exists for this skill; this record is written retrospectively from

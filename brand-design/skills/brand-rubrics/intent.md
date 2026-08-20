@@ -43,8 +43,13 @@ SHA `1e0d2d9e554b547f59260f63e31b4af2575196b0`, 2026-06-20), not authored fresh 
 make-skill's P0-P5 ladder. Track D re-verified against pack-writing-rules (4 declared axes, flat
 consult table added), repaired the stale `brand-evaluate`/bare-`brand-methodology` self-references
 left over from the earlier rename (including inside the frontmatter description — flagged for a
-`/check-routing` re-check at the Phase 4 boundary), renamed the H1 from "Brand Evaluate" to "Brand
-Rubrics" to match, and ran a fresh-context skill-checker pass over the whole 4-pack slice.
+`/check-routing` re-check at the Phase 4 boundary), and renamed the H1 from "Brand Evaluate" to
+"Brand Rubrics" to match. Track D's own handoff disclosed it had no Agent-tool access to run the
+checker itself, so the real fresh-context `harness:skill-checker` pass ran post-merge, once Track
+D and Track E's work landed together on `phase2-integration` (agent `a50a000314dc45397`,
+2026-08-19) — verdict PASS-with-notes, 4 majors (including this file's own stale line-86 critic
+reference and this pack's own false "checker already ran" claim), all resolved in that same
+reconciliation round.
 
 ## rulings
 - No live P0-P5 forge history exists for this skill; this record is written retrospectively from

@@ -40,7 +40,12 @@ ported from brand-forge's shipped `brand-corpus` skill (source
 `1e0d2d9e554b547f59260f63e31b4af2575196b0`, 2026-06-20), not authored fresh through make-skill's
 P0-P5 ladder. Track D re-verified the shipped body against pack-writing-rules (axes declared,
 consult table added, stale `bin/`/skill/command names repaired to their current forms, snapshot
-provenance recorded) and ran a fresh-context skill-checker pass over the whole 4-pack slice.
+provenance recorded). Track D's own handoff disclosed it had no Agent-tool access to run the
+checker itself, so the real fresh-context `harness:skill-checker` pass ran post-merge, once Track
+D and Track E's work landed together on `phase2-integration` (agent `a50a000314dc45397`,
+2026-08-19) — verdict PASS-with-notes, 4 majors (this pack's own stale `mcp-wiring.md` script
+path and stray "brand-forge" self-references among them), all resolved in that same
+reconciliation round.
 
 ## rulings
 - No live P0-P5 forge history exists for this skill; this record is written retrospectively from
