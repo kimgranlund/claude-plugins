@@ -1,14 +1,14 @@
 ---
 name: state-model-rules
 description: >-
-  Judges app-tier state ARCHITECTURE from a cited field-report corpus — stacked generations added
-  without retrofit, a shared name masking two live facts, built-but-unadopted vs load-bearing
-  layers, a named re-evaluation trigger nobody pulled, doctrine-vs-practice divergence per layer,
-  one field with two live write-owners. Use for "why is our state a mix of implementations", "is
-  this store actually used or just built", "did we ever revisit this decision", "two places both
-  claim to own this field", "four generations of state pattern stacked in one app", "how do I
-  audit our state architecture". ANSWERS the JUDGMENT call; NOT the reactivity MECHANISM
-  (signal/effect internals) — reactivity-facts.
+  Judges app-tier state ARCHITECTURE from a cited corpus — stacked generations, shared-name
+  pathology, built-but-unadopted layers, an un-pulled re-evaluation trigger,
+  doctrine-vs-practice divergence, two-owner fields. Use for "why is our state a mix of
+  implementations", "is this store actually used or just built", "did we ever revisit this
+  decision", "two places both claim to own this field", "four generations of state pattern
+  stacked in one app", "how do I audit our state architecture", "two fields share a name but
+  are different facts". ANSWERS the JUDGMENT call; NOT reactivity MECHANISM —
+  reactivity-facts; NOT which of the six wiring patterns fits (data-wiring-facts).
 user-invocable: false
 disable-model-invocation: false
 ---

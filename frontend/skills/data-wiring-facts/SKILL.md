@@ -1,18 +1,14 @@
 ---
 name: data-wiring-facts
 description: >-
-  Answers how declarative data actually gets WIRED into a UI, from a cited field-report corpus —
-  the 3-tier streaming stack (attribute-driven transport, refcounted shared signal, one-way bridge)
-  and its double-ownership hazard, the postMessage bridge protocol and its
-  every-busy-flag-needs-a-reset-path rule, the no-DI four-substitute taxonomy (typed handles,
-  re-derive helpers, callback injection, documented soft globals), and the six-pattern
-  need→pattern menu + Wiring Record gates. Use for "should this element use data-stream-* or its
-  own fetch", "is mixing an imperative
-  fetch with a declarative stream a bug", "does this busy flag have a guaranteed reset path",
-  "what's our pattern for passing this dependency down without a DI container", "which of the six
-  wiring patterns fits this need", "what counts as a done Wiring Record row". ANSWERS data-WIRING
-  facts; NOT reactivity MECHANISM (reactivity-facts), NOT app-tier state ARCHITECTURE judgment
-  (state-model-rules), NOT client-PERSISTENCE (persistence-facts).
+  Answers how data gets WIRED into a UI, from a cited corpus — 3-tier streaming, bridge
+  protocol, no-DI substitutes, six-pattern menu + Wiring gates. Use for "should this element
+  use data-stream-* or its own fetch", "is mixing an imperative fetch with a declarative
+  stream a bug", "does this busy flag have a guaranteed reset path", "what's our pattern for
+  passing this dependency down without a DI container", "which of the six wiring patterns fits
+  this need", "what counts as a done Wiring Record row", "is this wiring pattern
+  over-engineered for local UI state". NOT reactivity MECHANISM (reactivity-facts), NOT state
+  ARCHITECTURE (state-model-rules), NOT PERSISTENCE (persistence-facts).
 user-invocable: false
 disable-model-invocation: false
 ---

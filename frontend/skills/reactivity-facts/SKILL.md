@@ -1,12 +1,12 @@
 ---
 name: reactivity-facts
 description: >-
-  Answers how UI reactivity/state-propagation works, from a cited field-report corpus —
-  signal/computed/effect kernels + write-loop guard, version-verified vs dirty-flag recompute,
-  ownership-scope teardown, sequence-token stale-response guards, below-element (per-part)
-  reactivity vs render-clock (rAF/microtask) coexistence. Use for "why did this effect refire
-  twice", "computed vs signal vs effect", "guard a stale async response", "per-part reactivity vs
-  whole-component re-render", "ownership scope disposal", "rAF vs microtask clash".
+  Answers how UI reactivity/state-propagation works, from a cited corpus —
+  signal/computed/effect kernels, version-verified vs dirty-flag recompute, ownership-scope
+  teardown, stale-response guards, below-element reactivity vs render-clock coexistence. Use
+  for "why did this effect refire twice", "computed vs signal vs effect", "guard a stale async
+  response", "per-part reactivity vs whole-component re-render", "ownership scope disposal",
+  "rAF vs microtask clash", "parametric doc + derive-then-render vs fine-grained signals".
   ANSWERS the reactivity MECHANISM; NOT anatomy/API (make-component), pattern naming
   (ui-pattern-facts), or state ARCHITECTURE judgment (state-model-rules).
 user-invocable: false

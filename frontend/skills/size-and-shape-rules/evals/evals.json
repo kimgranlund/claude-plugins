@@ -1,6 +1,6 @@
 {
  "skill": "size-and-shape-rules",
- "note": "Answers-only knowledge pack: sizing/spacing SCALE theory. Fences: make-component owns one control family's derived law (cited as worked instance, not restated); material-shape-facts owns Material's bound-export consumption; break-down-layout owns page-region placement; dom-layout-facts owns raw CSS box-model/flow mechanics. Extended 2026-07-16 (t10): the nested-radius house lock's trigger phrase (Issue #9); /check-routing owed at the wave boundary. Extended 2026-07-21 (ADR-0006 screens re-measure): ui-pattern-facts' t29 (card-in-card pattern legality) was stolen by this pack's new name + nesting vocabulary in the post-rename blind run; thief-side fence added (legality \u2192 ui-pattern-facts, arithmetic stays here) with this reciprocal no-trigger carrying the stolen verbatim. n05 (icon/font size pairing with a button height) is a KNOWN FLIP-BY-JUDGE case as of 2026-07-21: passed the full-menu post-rename run, failed two heal re-judges on near-identical menus \u2014 the seam vs make-component's 'what icon/caret size on the ramp' is real and either owner answers defensibly (color-verify\u2194accessibility precedent); never tune to chase it. make-component sits at 1023/1024 chars \u2014 no owner-side anchor without displacing proven triggers.",
+ "note": "Answers-only knowledge pack: sizing/spacing SCALE theory. Fences: make-component owns one control family's derived law (cited as worked instance, not restated); material-shape-facts owns Material's bound-export consumption; break-down-layout owns page-region placement; dom-layout-facts owns raw CSS box-model/flow mechanics. Extended 2026-07-16 (t10): the nested-radius house lock's trigger phrase (Issue #9); /check-routing owed at the wave boundary. Extended 2026-07-21 (ADR-0006 screens re-measure): ui-pattern-facts' t29 (card-in-card pattern legality) was stolen by this pack's new name + nesting vocabulary in the post-rename blind run; thief-side fence added (legality \u2192 ui-pattern-facts, arithmetic stays here) with this reciprocal no-trigger carrying the stolen verbatim. n05 (icon/font size pairing with a button height) is a KNOWN FLIP-BY-JUDGE case as of 2026-07-21: passed the full-menu post-rename run, failed two heal re-judges on near-identical menus \u2014 the seam vs make-component's 'what icon/caret size on the ramp' is real and either owner answers defensibly (color-verify\u2194accessibility precedent); never tune to chase it. make-component sits at 1023/1024 chars \u2014 no owner-side anchor without displacing proven triggers. 2026-08-20 (ticket #821, post-campaign routing tune): this pack's t09/t10 wording stole css-system-facts' t09 (per-tier control-sizing lookup vs scale multiplier) and t10 ([density] scope \u2014 gap vs height) 3-of-3 \u2014 css-system-facts' description gained both phrasings verbatim; this pack's own reciprocal fence went through TWO revisions same-change: a first attempt named the boundary generically (\"NOT a codebase's control-sizing/density token implementation\") and n10/n11 (added as the reciprocal no-trigger carrying the two stolen prompts verbatim) still leaked 2-of-3 blind \u2014 the generic fence didn't out-compete this pack's own broad scale vocabulary on the identical prompt text. Sharpened to echo the exact disputed phrasing instead (\"NOT per-tier control-sizing lookup vs scale multiplier, or [density] scope on gap/height (css-system-facts)\") \u2014 re-verified on a scoped 3-judge re-judge covering this pack's full case list + css-system-facts' own t09/t10: n09/n10/n11 now clear 2-of-3 (n10/n11 hit 3-of-3 on two of the three runs), all ten trigger cases (t01-t10) still hold 3-of-3 own-suite, n03/n04/n06/n07 unaffected. n01/n02/n05/n08 showed judge-to-judge split on this same re-judge, but pre-date this ticket (n05's flip-by-judge status is already documented above, 2026-07-21) and don't key on any control-sizing/density vocabulary this change touched \u2014 not a regression #821 introduced, left as-is per the same never-tune-to-chase-it discipline.",
  "cases": [
   {
    "id": "t01",
@@ -104,6 +104,18 @@
    "prompt": "Is this dimensional token a FRAME token or a RHYTHM token?",
    "expect": "no-trigger",
    "note": "css-system-facts (ticket #810 wave 6) — CSS-specific token-family naming, not general scale theory"
+  },
+  {
+   "id": "n10",
+   "prompt": "why did we replace the scale multiplier with an explicit per-tier lookup table for control sizing",
+   "expect": "no-trigger",
+   "note": "css-system-facts (ticket #821) — a codebase's own control-sizing token IMPLEMENTATION, not general scale theory; this pack's t09/t10 stole this 3-of-3 pre-fix"
+  },
+  {
+   "id": "n11",
+   "prompt": "should [density] ever touch a control's height, or only its internal gap",
+   "expect": "no-trigger",
+   "note": "css-system-facts (ticket #821) — [density] scope on a control's own dimensions, not general scale theory"
   }
  ]
 }

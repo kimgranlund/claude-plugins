@@ -1,15 +1,14 @@
 ---
 name: make-component
 description: >-
-  Author a zero-dependency web component. Use for a custom element/module outside a framework:
-  "build a web component/custom element", "make a checkbox/select/toolbar", "design this
-  component's API/anatomy", "wrap native or form-associated?", "tiers feel mis-cut", "renders
-  empty after a re-render", "icon-only button isn't square", "icon/caret size on the ramp".
-  NOT: ui-* controls (agent-ui); app shells (break-down-layout);
-  naming a pattern (ui-pattern-facts); system decomposition (break-down-problem); color
-  ramps (make-palette); nested radius/spacing (size-and-shape-rules); grading it
-  (component-checker); ticket intake (feature-intake-rules); platform facts
-  (web-component-facts).
+  Author a zero-dependency web component. Use for a custom element outside a framework: "build
+  a web component/custom element", "make a checkbox/select/toolbar", "design this component's
+  API/anatomy", "wrap native or form-associated?", "tiers feel mis-cut", "renders empty after
+  a re-render", "icon-only button isn't square", "icon/caret size on the ramp". NOT: ui-*
+  controls (agent-ui); shells (break-down-layout); naming a pattern (ui-pattern-facts);
+  decomposition (break-down-problem); color ramps (make-palette); exploring variants
+  (design:make-variants); radius/spacing (size-and-shape-rules); grading it
+  (component-checker); intake (feature-intake-rules); platform facts (web-component-facts).
 disable-model-invocation: false
 user-invocable: true
 ---
