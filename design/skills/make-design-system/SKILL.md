@@ -2,15 +2,13 @@
 name: make-design-system
 description: >-
   The cross-platform hub for design-system files LLM agents consume. Use for strategy/context
-  asks spanning MULTIPLE platforms or naming none: "which design tool should get our design
-  system", "port our design system to Claude, Stitch, and Make", "our exports drifted apart",
-  "add a platform profile", "our design agent output is generic — fix the context", "teach the
-  design agent our token naming grammar". NOT one export for a SINGLE platform — Claude Design
-  (make-dscard-kit), Stitch (make-stitch-kit), Figma Make (make-figma-make-kit) — nor one
-  export naming none (make-dscard-kit); NOT DESIGN.md format Q&A (design-md-rules); NOT grading
-  an export (design-system-checker); NOT palette/tokens (make-palette, token-builder); NOT
-  rendering a system into an artifact page (docs' make-artifact); NOT artifact styling
-  (artifact-styling-rules).
+  asks spanning MULTIPLE platforms, or none: "which design tool should get our design system",
+  "port our design system to Claude, Stitch, and Make", "our exports drifted apart", "make our
+  generation prompts better", "our design agent output is generic". NOT one export for one platform
+  (make-dscard-kit/make-stitch-kit/make-figma-make-kit) or none (make-dscard-kit); NOT
+  DESIGN.md format Q&A (design-md-rules); NOT grading an export (design-system-checker); NOT
+  palette/tokens (make-palette, token-builder); NOT rendering into an artifact (docs'
+  make-artifact); NOT artifact styling (artifact-styling-rules).
 disable-model-invocation: false
 user-invocable: true
 ---

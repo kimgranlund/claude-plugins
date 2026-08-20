@@ -4,12 +4,11 @@ description: >-
   Standards for styling/authoring Claude Artifacts: runtime constraints (CSP inlining, 16MB
   cap, theme tri-state, body-ground, native mermaid); the token role-alias method
   (light-dark() build-time CSS, never a re-ramp); type/layout doctrine (system-ui body, mono
-  interactive, width/spacing/radius scales); the mermaid authoring + re-theming contract;
-  shell/genre doctrine (narrative vs tabbed, hero-as-thesis). Use for "why do the colors look
-  off", "why sharp corners", "diagrams look off-theme", "what font/type for buttons, tabs,
-  interactive elements in an Artifact", or any Artifact styling question with
-  no build ask. NOT the build (make-artifact); NOT the token source (make-design-system); NOT
-  chart color (dataviz).
+  interactive, width/spacing/radius scales); mermaid authoring + re-theming; shell/genre
+  doctrine (narrative vs tabbed, hero-as-thesis). Use for "why do the colors look off",
+  "why sharp corners", "diagrams look off-theme", "what font/type for buttons, tabs, interactive
+  elements in an Artifact", or any no-build Artifact styling question. NOT the build
+  (make-artifact); NOT the token source (make-design-system); NOT chart color (dataviz).
 disable-model-invocation: false
 user-invocable: false
 ---
