@@ -77,6 +77,13 @@ signals-library folklore.
   arrived via a stream, a bridge, or a plain property assignment. A question naming a stream, a
   bridge message, or a wiring pattern is `data-wiring-facts`'; a question naming a kernel primitive
   is this pack's.
+- **Which STAMPING STRATEGY a component uses, and the DOM-child mechanics around it (keyed
+  reconcile, the display:contents trap, adopt-or-stamp) belong to `web-component-facts`** — that
+  pack owns the stamping mechanism itself; this pack explains the kernel that decides WHEN a
+  re-stamp fires in the first place, unrelated to which of the three strategies produced the
+  stamped DOM. A question naming a stamping strategy, a slot trap, or a keyed-list mechanism is
+  `web-component-facts`'; a question naming a kernel primitive (signal/computed/effect/scope) is
+  this pack's.
 - **Production component code** → `make-component` — this pack explains why a kernel behaves a
   certain way; it does not write the kernel or the component consuming it.
 - **Building a signals kernel or an app-tier store from scratch has no owning builder skill in

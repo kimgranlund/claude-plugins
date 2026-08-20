@@ -1,0 +1,31 @@
+{
+  "skill": "web-component-facts",
+  "note": "New knowledge pack (ticket #809, frontend wave 5). Fences: make-component owns the build PROCEDURE (tier/anatomy/API/geometry/taste-gate) — n01-n03 fence it, this pack answers platform facts a builder consults alongside that procedure, never a substitute. reactivity-facts owns the reactivity KERNEL (signal/computed/effect/scope) that decides WHEN a re-stamp fires — n04-n06 fence it; this pack owns stamping STRATEGY/mechanism (which of the three, keyed reconcile, the display:contents trap). n07-n08 fence ui-pattern-facts and data-wiring-facts (unrelated domains). n09-n10 are unrelated-domain no-trigger cases.",
+  "cases": [
+    { "id": "t01", "prompt": "why didn't attributeChangedCallback replay for this attribute after the SSR shim upgraded the element", "expect": "trigger" },
+    { "id": "t02", "prompt": "does this linkedom-based SSR pass need a no-op ElementInternals shim", "expect": "trigger" },
+    { "id": "t03", "prompt": "should this component use static parts, a tagged template, or imperative createElement for its children", "expect": "trigger" },
+    { "id": "t04", "prompt": "this list-item's slotted child never renders because it's behind a conditional — what's going on", "expect": "trigger" },
+    { "id": "t05", "prompt": "is a trait basically a mixin, or something else", "expect": "trigger" },
+    { "id": "t06", "prompt": "what's the difference between a factory-based trait and a mixin that flattens this onto one prototype", "expect": "trigger" },
+    { "id": "t07", "prompt": "how does ElementInternals form association work for a custom element with no native input", "expect": "trigger" },
+    { "id": "t08", "prompt": "why does this checkbox set aria-checked to mixed instead of a boolean", "expect": "trigger" },
+    { "id": "t09", "prompt": "why can't this component-local attribute be named the same as the global size attribute", "expect": "trigger" },
+    { "id": "t10", "prompt": "what's the flip rule for naming a boolean prop so its default reads naturally", "expect": "trigger" },
+    { "id": "t11", "prompt": "does literal string false parse to JS false on a boolean attribute here", "expect": "trigger" },
+    { "id": "t12", "prompt": "what test files does a new control need before it's considered done", "expect": "trigger" },
+    { "id": "t13", "prompt": "is jsdom-green enough to call this component's tests done, or do we need the browser suite too", "expect": "trigger" },
+    { "id": "t14", "prompt": "what's the adopt-or-stamp policy for a slot that also has a matching attribute", "expect": "trigger" },
+    { "id": "t15", "prompt": "why does reading this.children miss a conditionally-rendered slotted child", "expect": "trigger" },
+    { "id": "n01", "prompt": "build a web component for a date picker", "expect": "no-trigger", "note": "make-component — the build procedure" },
+    { "id": "n02", "prompt": "design this component's API and anatomy from scratch", "expect": "no-trigger", "note": "make-component" },
+    { "id": "n03", "prompt": "what padding should this icon-only button use at the XL size", "expect": "no-trigger", "note": "make-component — derived geometry" },
+    { "id": "n04", "prompt": "why did this effect refire twice for one signal write", "expect": "no-trigger", "note": "reactivity-facts — kernel recompute mechanism" },
+    { "id": "n05", "prompt": "computed vs signal vs effect", "expect": "no-trigger", "note": "reactivity-facts" },
+    { "id": "n06", "prompt": "per-part reactivity vs re-rendering the whole component on any prop change", "expect": "no-trigger", "note": "reactivity-facts — below-element reactivity is that pack's law even though it sounds stamping-adjacent" },
+    { "id": "n07", "prompt": "what does a card usually contain — header, body, footer", "expect": "no-trigger", "note": "ui-pattern-facts" },
+    { "id": "n08", "prompt": "should this chart element use data-stream-src or its own imperative fetch loop", "expect": "no-trigger", "note": "data-wiring-facts" },
+    { "id": "n09", "prompt": "how long should this modal's entrance animation be", "expect": "no-trigger", "note": "motion-rules — unrelated domain" },
+    { "id": "n10", "prompt": "grade this component someone else built against both axes", "expect": "no-trigger", "note": "component-checker" }
+  ]
+}
