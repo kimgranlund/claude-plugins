@@ -176,7 +176,15 @@ skills as everywhere else, and it never writes the `.mcp.json` file itself eithe
 - Dispatch names no report destination (a bare scheduled firing) → target-path the report payload
   at `.claude/ops/reports/<UTC-timestamp>.md` as the standing default and let the dispatching
   session apply it; only a missing destination on an INTERACTIVE dispatch that expects one is
-  reported as a missing-field error.
+  reported as a missing-field error. **The canonical report-path convention, cited by
+  `clean-git`/`watch-adrs` rather than restated:** a firing whose own resolved scope names more
+  than one seat (a `/sweep-chores` fan-out) suffixes this seat's own name instead —
+  `.claude/ops/reports/<UTC-timestamp>-issue-sorter.md` — since two seats sharing the bare path in
+  one firing silently collide, one overwriting the other with no detection (#774: issue-sorter/
+  repo-cleaner, the 2026-08-19T21:56:06Z agent-ui firing). A firing where this is the only seat in
+  scope (dispatched standalone, or the sole seat a sweep resolved to) keeps the bare path — read
+  from the dispatch's own resolved-scope field, never guessed; no new field needed since the
+  dispatch prompt already states the full scope.
 - Resolved backend is Option C, or `github_mcp_offer` is already recorded → step 8 is skipped
   silently (not a failure — this is the normal, expected shape after the first firing, or on any
   non-GitHub backend), never re-evaluated as if unresolved.

@@ -128,14 +128,17 @@ local-branch/worktree cleanup propose-only, per step 4 below.
    finding exists to catch, not a mutation to repeat under a different name). No mutation. (No
    script gates reclaiming a stale ticket claim yet, or switching the primary back to `main`;
    until one does, both stay a plan for a human to execute.)
-5. Before composing the report, read the most recent file in `.claude/ops/reports/` (by filename —
-   they sort chronologically; a read, never a write). If this firing's classification set is
-   identical to that report's (same findings, same executed/proposed split), return an abbreviated
-   report — one paragraph, pointing at the unchanged prior report by name, plus a running count of
-   consecutive unchanged firings — instead of a full restatement. A genuinely new or changed
-   finding always gets the full report, resetting the count. This is why the report destination is
-   a directory, not a single file: each firing's own report (once the dispatching session applies
-   it) is what the next firing diffs against.
+5. Before composing the report, read the most recent file in `.claude/ops/reports/` **matching
+   this seat's own naming** — a bare `<timestamp>.md`, or a `<timestamp>-repo-cleaner.md` from a
+   multi-seat firing (the Failure branches' own convention below) — never a different seat's own
+   suffixed file, since the directory may now hold more than one seat's reports side by side
+   (#774). By filename — they sort chronologically; a read, never a write. If this firing's
+   classification set is identical to that report's (same findings, same executed/proposed split),
+   return an abbreviated report — one paragraph, pointing at the unchanged prior report by name,
+   plus a running count of consecutive unchanged firings — instead of a full restatement. A
+   genuinely new or changed finding always gets the full report, resetting the count. This is why
+   the report destination is a directory, not a single file: each firing's own report (once the
+   dispatching session applies it) is what the next firing diffs against.
 
 ## Boundaries
 
@@ -153,9 +156,10 @@ corpus drift routes to `/clean-repo`.
 - A finding is ambiguous between stale-open and orphaned, or between stale-claim and healthy (no
   repo-configured staleness window exists to check against) → propose only; ambiguity is never a
   license to execute.
-- Dispatch names no report destination (a bare scheduled firing) → target-path the report payload
-  at `.claude/ops/reports/<UTC-timestamp>.md` as the standing default and let the dispatching
-  session apply it.
+- Dispatch names no report destination (a bare scheduled firing) → the same standing-default path
+  and multi-seat suffix rule as `watch-tickets`' own Failure branches (cited there, not restated) —
+  this seat's own name (`repo-cleaner`) suffixes the timestamp whenever the resolved scope names
+  more than one seat, and the dispatching session applies it either way.
 - A host repo's reap script exits non-zero, or its dry output is ambiguous about which branches
   are actually reapable → do not run `--apply`; report the script's own output as evidence and
   propose instead, same discipline as any other refused gate.
