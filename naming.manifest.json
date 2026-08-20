@@ -406,6 +406,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "model",
+      "plural": "models",
+      "banned_aliases": []
+    },
+    {
       "canonical": "muse",
       "plural": null,
       "banned_aliases": []

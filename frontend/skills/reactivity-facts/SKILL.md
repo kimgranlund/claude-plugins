@@ -3,12 +3,12 @@ name: reactivity-facts
 description: >-
   Answers how UI reactivity/state-propagation works, from a cited field-report corpus —
   signal/computed/effect kernels + write-loop guard, version-verified vs dirty-flag recompute,
-  ownership-scope teardown, monotonic sequence-token stale-response guards, below-element
-  (per-part) reactivity vs render-clock (rAF/microtask) coexistence. Use for "why did this effect
-  refire twice", "computed vs signal vs effect", "guard a stale async response", "per-part
-  reactivity vs whole-component re-render", "ownership scope disposal", "rAF vs microtask clash".
-  ANSWERS the reactivity MECHANISM; NOT a component's own anatomy/API (make-component) or a UI
-  pattern/archetype name (ui-pattern-facts).
+  ownership-scope teardown, sequence-token stale-response guards, below-element (per-part)
+  reactivity vs render-clock (rAF/microtask) coexistence. Use for "why did this effect refire
+  twice", "computed vs signal vs effect", "guard a stale async response", "per-part reactivity vs
+  whole-component re-render", "ownership scope disposal", "rAF vs microtask clash".
+  ANSWERS the reactivity MECHANISM; NOT anatomy/API (make-component), pattern naming
+  (ui-pattern-facts), or state ARCHITECTURE judgment (state-model-rules).
 user-invocable: false
 disable-model-invocation: false
 ---
@@ -57,6 +57,13 @@ signals-library folklore.
   `ui-pattern-facts`** — a "reactive state" ask (signals/effects) and a "screen state" ask
   (empty/loading/error UX) share vocabulary but are different axes; `tier-split.md`'s own boundary
   section names this split explicitly.
+- **App-tier state ARCHITECTURE judgment belongs to `state-model-rules`** — stacked-generations
+  pathology, a shared name masking two live facts, built-but-unadopted vs load-bearing layers,
+  never-pulled re-evaluation triggers, doctrine-vs-practice divergence, and one-name-two-owners
+  contract collisions. This pack explains why an EFFECT or COMPUTED behaves a certain way at the
+  kernel level; `state-model-rules` judges whether the STORE, LAYER, or CONVENTION around that
+  kernel is architecturally coherent. A "why is our app a mix of implementations" ask is
+  `state-model-rules`'; a "why did this specific effect refire twice" ask is this pack's.
 - **Production component code** → `make-component` — this pack explains why a kernel behaves a
   certain way; it does not write the kernel or the component consuming it.
 - **Building a signals kernel or an app-tier store from scratch has no owning builder skill in
