@@ -2,9 +2,9 @@
 name: font-token-rules
 description: >-
   Use for UI TYPE on the default `--type-*` grammar (not Material's `--md-sys-typescale-*`) —
-  font/size/weight/leading/tracking for heading, body, label, button, caption, code, kicker
+  font/size/weight/leading/tracking for heading, body, label, button, caption, kicker
   ("what type token for this", "which voice/step for this text", "size this heading").
-  Eleven-voice scale: bind `--type-*`/`--font-*`, pick VOICE/STEP by job/rank, a font per family
+  15-voice scale: bind `--type-*`/`--font-*`, pick VOICE/STEP by job/rank, a font per family
   slot; never hardcode px/line-height/tracking/family. NOT Material's typescale
   (material-type-facts); NOT no-token typography (lettering-facts); NOT building a
   component (make-component); NOT buttons/tabs/any interactive element
@@ -16,8 +16,9 @@ user-invocable: false
 
 # Typography tokens (default `--type-*` grammar)
 
-An Ultimate-Tokens-style export gives eleven named **voices**, each a fixed **SM · MD · LG** ramp
-of **steps**, as CSS custom properties. Your job is never to pick a px size or a font stack — it is
+An Ultimate-Tokens-style export gives fifteen named **voices** — thirteen on a fixed **SM · MD ·
+LG** ramp, `ui-control`/`ui-widget` on the full **XS–2XL** ramp — of **steps**, as CSS custom
+properties. Your job is never to pick a px size or a font stack — it is
 to pick the right **voice** (the text's role) and **step** (its size within that role), then — only
 where a concrete font must be named — the right typeface for that voice's job.
 
@@ -44,8 +45,8 @@ the kit regenerates.)
    voice. Choosing *which* real typeface fills each role is a separate judgment call — see
    [`references/font-selection.md`](references/font-selection.md).
 3. **Know the grammar.** `--type-{voice}-{step}-{prop}` where prop ∈
-   `size · line · tracking · weight · para` (+ `line-single` on the box voices — label, code,
-   kicker). Prefer the ready-made utility class `.type-{voice}-{step}` (it wires
+   `size · line · tracking · weight · para` (+ `line-single` on the box voices — kicker,
+   ui-control, ui-widget). Prefer the ready-made utility class `.type-{voice}-{step}` (it wires
    family+size+line+tracking+weight in one) over composing the vars by hand.
 
 ## Two axes — voice (function) × step (hierarchy depth)
@@ -58,11 +59,15 @@ never a voice to hit a size, never a step to hit a px.** Choosing `display` beca
 text, or a larger step because you want line-height 26, is the mistake this split exists to
 prevent.
 
-## The eleven voices — pick by the text's FUNCTION
+## The fifteen voices — pick by the text's FUNCTION
 
-Every voice is a uniform 3-step **SM–LG** ramp — sizes are a fixed, hand-authored table, not a
-modular scale, and identical across every treatment (only font/weight/tracking/leading/case vary
-by treatment).
+Thirteen of the fifteen voices ride a uniform 3-step **SM–LG** ramp; `ui-control` and `ui-widget`
+are the exception — they ride the full 6-step **XS–2XL** ramp, because control geometry needs a
+size at every one of its six steps. Sizes are a fixed, hand-authored table, not a modular scale,
+and identical across every treatment (only font/weight/tracking/leading/case vary by treatment).
+Every `-mono` voice and `kicker` ride their non-mono sibling's EXACT sizes — a font-only variant,
+never a distinct size register (source: ultimate-tokens' `docs/reference/typography/
+intended-use.md`).
 
 | Voice | Font role | Use for |
 |---|---|---|
@@ -73,17 +78,26 @@ by treatment).
 | **sub-title** | mono (prose) | a smaller sub-heading in an alternate typeface — still prose flow, not a control label |
 | **lead** | body | the standfirst / intro paragraph, or a block quote / pull-quote — larger than body |
 | **body** | body | running prose, paragraphs, long-form reading, and fine-print/legal (body's own smallest step) |
-| **code** | mono | code, tabular figures, keyboard shortcuts, technical values — pegged to body's own sizes |
-| **label** | ui | interface text: buttons, labels, inputs, menus, table cells, badges |
+| **body-mono** | mono | body dressed in mono — code-adjacent prose, technical excerpts, docs and terminal content; pegged to body's own sizes |
+| **label** | ui | STATIC interface text: field labels, menu items, table cells, column headers, standalone descriptive labels — names or describes a UI element, never the operable control itself; may wrap (prose flow), never single-line |
+| **label-mono** | mono | label in mono — data/ID labels: table keys, hashes, machine-adjacent values; pegged to label's own sizes |
 | **kicker** | mono | the smallest overline / metadata label — mono, uppercase, tracked, pegged to label's own sizes |
 | **tiny** | ui (prose) | figure/image/media captions, table captions, chart annotations, small supporting text |
+| **tiny-mono** | mono | tiny in mono — timestamps, fine technical data; pegged to tiny's own sizes |
+| **ui-control** | ui (box voice) | every interactive control the user operates — buttons, inputs, selects; the full 6-step ramp, composing into geometry's own control-height ramp |
+| **ui-widget** | ui (box voice) | compact, dense widget chrome — tags, badges, switches; the full 6-step ramp one register under `ui-control` (9–14 vs. 12–20) |
 
-Note the split: **body** is *prose you read*; **label** is *interface chrome you operate*. A
-button label is `label`, a paragraph is `body`. **Sub-title** and **tiny** are prose too, even
-though they render in the *mono*/*ui* font respectively — they wrap (`-line`, never
-`-line-single`). Reach for `tiny` on a figure caption, not `label`. There is no separate
-"quote" / "caption" / "legal" / "ui" voice — those jobs live on `lead`, `tiny`, `body`, and
-`label` respectively.
+Note the split: **body** is *prose you read*; **label** is *static interface chrome you read
+about a control*, never the control itself — it may still wrap (prose flow, never
+`-line-single`), unlike the two dedicated UI voices below. A button's own text is `ui-control` or
+`ui-widget`, a table cell's own text is
+`label`, a paragraph is `body`. **Sub-title** and **tiny** are prose too, even though they render
+in the *mono*/*ui* font respectively — they wrap (`-line`, never `-line-single`). Reach for `tiny`
+on a figure caption, not `label`. There is no separate "quote" / "caption" / "legal" voice — those
+jobs live on `lead`, `tiny`, and `body` respectively. **`ui-control`/`ui-widget` are the only
+genuinely interactive-only voices** — `label` is explicitly static; reach for it when the text
+names or describes something in the interface, and for `ui-control`/`ui-widget` only when the
+text IS the control itself.
 
 ## Choosing a concrete font per family slot
 
@@ -102,7 +116,8 @@ heuristic (distinctiveness vs. neutrality by slot, absent any other signal).
    `.type-*` class), it doesn't belong in UI code. No `font-size: 14px`, no
    `font-family: Inter`, no `line-height: 1.5`.
 2. **Voice = function, step = rank; size is derived.** Choose the voice from what the text *is*
-   (prose → `body`, chrome → `label`, a heading → `headline`/`title`/`sub-heading`), then the step
+   (prose → `body`, static chrome → `label`, a control's own text → `ui-control`/`ui-widget`, a
+   heading → `headline`/`title`/`sub-heading`), then the step
    from its rank — the size falls out. Never reach for `display` just to get big text, a larger
    step to hit a target line-height, or `label` to get small headings. If two elements share a
    voice, the more prominent one takes the higher step; if a size feels wrong, it's the wrong
@@ -110,7 +125,8 @@ heuristic (distinctiveness vs. neutrality by slot, absent any other signal).
 3. **`line` and `para` come with the size.** Line-height (`-line`) and paragraph spacing (`-para`)
    are derived per step — use them; don't set your own. For single-line control text (a button, an
    input value, a kicker overline) use `-line-single` (leading 1.0), which exists ONLY on the box
-   voices — **label · code · kicker**; every other voice has only `-line`.
+   voices — **kicker · ui-control · ui-widget**; `label` is explicitly static (may wrap, no
+   `-line-single`); every other voice has only `-line`.
 4. **Tracking is baked and optical.** `-tracking` is tuned per step (tight/negative on display,
    open on kicker and sub-heading) — apply it; never add your own `letter-spacing`.
 5. **Weight is the voice's, case is the treatment's.** Use `-weight` (or the class); don't bold a
@@ -157,12 +173,13 @@ heuristic (distinctiveness vs. neutrality by slot, absent any other signal).
   ```
   node <skill>/scripts/type-check.mjs <path/to/type.css> <src-dir-or-files…>
   ```
-  A missing-props report means the bound export drifted from the eleven-voice assumption — re-bind
+  A missing-props report means the bound export drifted from the fifteen-voice assumption — re-bind
   before trusting the recipes. The linter catches both CSS (`font-size:`) and JS style objects
   (`fontSize:`), but a green run is necessary, not sufficient — styles built dynamically (a
   template string, a value behind a variable) are invisible to a static scan; eyeball those.
-- The voice matches the text's job (prose → `body`, chrome → `label`, headings →
-  `headline`/`title`/`sub-heading`) — one thing the linter can't see.
+- The voice matches the text's job (prose → `body`, static chrome → `label`, a control's own
+  text → `ui-control`/`ui-widget`, headings → `headline`/`title`/`sub-heading`) — one thing the
+  linter can't see.
 - Single-line controls use `-line-single`; prose and any wrapping text uses `-line`.
 - No hand-set line-height, letter-spacing, weight, or `clamp()`/`vw` sizing.
 - A distinctive font choice states its reason (brand-forward voice, editorial register); a neutral

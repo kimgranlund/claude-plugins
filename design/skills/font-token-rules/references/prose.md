@@ -1,4 +1,4 @@
-# Prose — body copy, lead, captions, legal, lists, links, code-in-text
+# Prose — body copy, lead, captions, legal, lists, links, code-in-text (`body-mono`)
 
 Running text you *read* (as opposed to interface chrome you *operate*) is the **body** voice on
 `--font-body` (see interface.md for the `label`/`body` split — it matters). Prose also has two
@@ -33,8 +33,10 @@ body sizes are tuned the way they are.
 
 `sub-title` and `tiny` render in the `mono`/`ui` font respectively, but they are **prose voices**:
 they wrap, read as multi-line runs, and use `-line` + `-para`. They deliberately have **no
-`-line-single`** (unlike the `label` voice itself). Use `tiny` for a figure/table caption and
-`body-sm` for fine print — not `label`, which is chrome tuned to sit in a box.
+`-line-single`** — same as `label` itself, which is explicitly static prose chrome (interactive
+control text lives on `ui-control`/`ui-widget`, the only `ui`-role box voices). Use `tiny` for a
+figure/table caption and `body-sm` for fine print — not `label`, which names/describes interface
+elements but never operates one.
 
 ## Lists, quotes, captions
 
@@ -51,13 +53,14 @@ Links keep the surrounding body voice/step — only the color changes (a separat
 concern: bare accent + underline). Don't bump the weight or size for a link; sizing stays with the
 type layer, color doesn't.
 
-## Inline code & code blocks
+## Inline code & code blocks (`body-mono`)
 
-- Inline code: `.type-code-sm` (or match the surrounding step) — mono family, tabular figures,
+- Inline code: `.type-body-mono-sm` (or match the surrounding step) — mono family, tabular figures,
   pegged to `body`'s own sizes.
-- Code block: `.type-code-sm` / `-md` with `--type-code-{step}-line` for comfortable multi-line
-  leading (the `code` voice carries both `-line` and `-line-single`). The type here is only the
-  mono voice + step; surface/background color is a separate concern.
+- Code block: `.type-body-mono-sm` / `-md` with `--type-body-mono-{step}-line` for comfortable
+  multi-line leading. `body-mono` is a prose voice, not a box voice — it carries only `-line` +
+  `-para`, same as `body` itself, never `-line-single`. The type here is only the mono voice +
+  step; surface/background color is a separate concern.
 
 ## Don't
 

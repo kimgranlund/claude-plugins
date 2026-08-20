@@ -22,9 +22,10 @@ for a designed decision.
 | `--font-ui` | neutral almost always — chrome legibility outweighs personality |
 | `--font-mono` | neutral almost always; distinctive only for a code-aesthetic brand (dev tools, terminal-flavored products) |
 
-The pattern: **display, headline, kicker, and code are where a distinctive face earns its keep**;
-**body, label, and tiny default to neutral** — legibility-at-small-sizes and broad script
-coverage usually outweigh personality on those voices. A project's own brand system or an existing
+The pattern: **display, headline, kicker, and body-mono are where a distinctive face earns its
+keep**; **body, label, tiny, and the two `ui`-role interactive voices (`ui-control`/`ui-widget`)
+default to neutral** — legibility-at-small-sizes and broad script coverage usually outweigh
+personality on those voices. A project's own brand system or an existing
 type spec always overrides this fallback; when it does, the obligation is to state the reason
 (a brand mandate, an existing type system, a platform constraint), not to silently default to
 whatever's familiar.

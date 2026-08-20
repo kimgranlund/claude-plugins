@@ -13,7 +13,7 @@ research grounding; this file states only the operational judgment and the data 
 ## The judgment, deepened per voice (not just per family-role slot)
 
 `font-token-rules`' five font-family roles (`display · heading · body · ui · mono`) are the
-concrete binding slots, but the eleven voices riding on them don't all carry identical stakes:
+concrete binding slots, but the fifteen voices riding on them don't all carry identical stakes:
 
 | Voice | Family role | Distinctiveness earns its keep when… | Neutrality wins when… |
 |---|---|---|---|
@@ -25,16 +25,23 @@ concrete binding slots, but the eleven voices riding on them don't all carry ide
 | `kicker` | mono | a considered overline is part of the brand's texture (dev-tool, editorial) | the mono face is purely functional (code, tabular data) |
 | `lead` | body | an editorial standfirst or pull-quote wants a touch more presence than body | matches body's neutrality call — it's still a reading voice |
 | `body` | body | long-form editorial reading where a text face sets tone | dense data UI, enterprise products, heavy i18n, extended reading at small sizes (incl. its fine-print SM step) |
+| `body-mono` | mono | a code-aesthetic brand (dev tools, terminal-flavored products) — code-adjacent prose, technical excerpts, docs and terminal content | rarely a concern — mono faces are already a narrow, legibility-first category |
 | `label` | ui | rarely — chrome legibility usually outweighs personality | almost always: dense tables, forms, admin consoles, accessibility-first products |
-| `code` | mono | a code-aesthetic brand (dev tools, terminal-flavored products) | rarely a concern — mono faces are already a narrow, legibility-first category |
+| `label-mono` | mono | a considered technical/data aesthetic is part of the brand (dev tools, data products) naming machine-adjacent values — table keys, hashes, IDs at label sizes | almost always — legibility for keys/hashes/IDs outweighs personality, same call as `label` |
 | `tiny` | ui (as prose) | almost never — captions are read, not felt | almost always — captions and small supporting text want to disappear |
+| `tiny-mono` | mono | almost never — timestamps and fine technical data are read, not felt | almost always — same as `tiny`, at technical/data content (timestamps, fine data) |
+| `ui-control` | ui (box voice) | rarely — chrome legibility outweighs personality, same call as `label` | almost always: every interactive control a user operates (buttons, inputs, selects) — the full 6-step ramp; a change here moves control geometry |
+| `ui-widget` | ui (box voice) | rarely — same call as `ui-control` | almost always — compact, dense widget chrome (tags, badges, switches); one register under `ui-control` (9–14 vs. 12–20), same box (single-line) behavior |
 
-The pattern font-token-rules' fallback heuristic already names — display/headline/kicker/code earn
-distinctiveness most often, body/label/tiny want neutrality most often — holds here too; what
-this table adds is that `sub-heading`, `title`, `sub-title`, `lead`, and `tiny` don't get an
-independent call: they inherit their family role's decision, and stating that inheritance
-explicitly (rather than silently picking a sixth font) is itself part of the coherence pass
-(SKILL.md step 3).
+The pattern font-token-rules' fallback heuristic already names — display/headline/kicker/body-mono
+earn distinctiveness most often, body/label/tiny (and their mono siblings, and the two UI voices)
+want neutrality most often — holds here too; what this table adds is that `sub-heading`, `title`,
+`sub-title`, `lead`, and `tiny` don't get an independent call: they inherit their family role's
+decision, and stating that inheritance explicitly (rather than silently picking a sixth font) is
+itself part of the coherence pass (SKILL.md step 3). `label-mono`/`tiny-mono`/`kicker` also inherit
+their non-mono sibling's font choice by the aliasing law (mono role, never a distinct size or font
+story) — the source of record for these five newer voices' intended use is ultimate-tokens'
+`docs/reference/typography/intended-use.md`.
 
 ## The metrics table (verified, cited — the checker's canon)
 

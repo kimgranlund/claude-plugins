@@ -14,7 +14,7 @@
     },
     {
       "id": "t03",
-      "prompt": "help me decide which typeface fills each of our eleven type voices",
+      "prompt": "help me decide which typeface fills each of our fifteen type voices",
       "expect": "trigger"
     },
     {

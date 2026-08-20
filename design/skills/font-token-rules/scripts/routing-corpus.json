@@ -17,7 +17,7 @@
     "our headings and sub-headings look identical, what step fixes it",
     "which font pairs well with our body typeface for a distinctive marketing hero",
     "our kicker overline is wrapping onto two lines, fix the type token",
-    "should this table cell text be the ui voice or the code voice"
+    "should this table cell text be the ui voice or the body-mono voice"
   ],
   "negatives": [
     "bind our --md-sys-typescale-* export and pick the right voice for this heading",

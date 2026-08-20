@@ -69,7 +69,7 @@
     },
     {
       "id": "t14",
-      "prompt": "should this table cell text be the --type-ui voice or the code voice",
+      "prompt": "should this table cell text be the --type-ui voice or the body-mono voice",
       "expect": "trigger"
     },
     {
