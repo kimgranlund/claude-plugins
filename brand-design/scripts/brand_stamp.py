@@ -295,7 +295,7 @@ def selftest():
             fails.append(m)
 
     here = os.path.dirname(os.path.abspath(__file__))
-    corpus = os.path.normpath(os.path.join(here, "..", "evals-source-history", "stamp-smoke", "corpus"))
+    corpus = os.path.normpath(os.path.join(here, "..", "calibration", "stamp-smoke", "corpus"))
     d = tempfile.mkdtemp(prefix="brand-stamp-selftest-")
     try:
         pr, _ = emit_plugin(corpus, d, "smoke", False, "0.1.0")
