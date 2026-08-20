@@ -1,14 +1,14 @@
 ---
 name: css-system-facts
 description: >-
-  Answers CSS ARCHITECTURE facts — @layer vs. load-order precedence, three-tier tokens +
-  generated theme packs, light-dark() as the theming primitive, the FRAME-vs-RHYTHM geometry
-  split, @scope vs CSS Modules scoping, CSS as decision logs + tested contracts. Use for "@layer
-  or import order", "theme pack needs no fallback", "light-dark() vs [data-theme]", "FRAME or
-  RHYTHM token", "@scope vs CSS Modules", "unit-test a CSS file". NOT token DESIGN — palettes,
-  type, exports (design plugin: make-palette, make-design-system, token-builder); NOT
-  spacing/density THEORY (size-and-shape-rules); NOT motion (motion-rules); NOT component anatomy
-  (make-component); NOT platform facts (web-component-facts).
+  Answers CSS ARCHITECTURE facts — @layer vs load-order, three-tier tokens + theme packs,
+  light-dark() theming, FRAME-vs-RHYTHM, @scope vs CSS Modules, CSS as decision logs + tested
+  contracts. Use for "@layer or import order", "theme pack needs no fallback", "light-dark()
+  vs [data-theme]", "FRAME or RHYTHM token", "@scope vs CSS Modules", "unit-test a CSS file",
+  "per-tier control-sizing lookup vs scale multiplier", "[density] scope — gap vs height". NOT
+  token DESIGN (design plugin: make-palette, make-design-system, token-builder); NOT
+  spacing/density THEORY (size-and-shape-rules); NOT motion (motion-rules); NOT component
+  anatomy (make-component); NOT platform facts (web-component-facts).
 user-invocable: false
 disable-model-invocation: false
 ---

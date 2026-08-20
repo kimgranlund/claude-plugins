@@ -1,13 +1,15 @@
 ---
 name: size-and-shape-rules
 description: >-
-  Answers sizing and spacing SCALE design questions — the theory beneath any dimensional token
+  Answers sizing and spacing SCALE questions — the theory beneath any dimensional token
   system, from a cited corpus. Use for "why 4px/8px steps", "how do I build a spacing scale",
   "linear or geometric progression", "why the scale gets sparser at larger sizes", "how nested
-  containers compose their padding", "what's the right base unit". Carries base-unit rationale,
-  the dense-then-sparse progression shape, composable-spacing/nesting theory, cross-system
-  comparison. ANSWERS the theory — does not derive one component family's law (make-component)
-  or bind to a platform scale (material-shape-facts); NOT CSS token-family naming (css-system-facts).
+  containers compose their padding", "what's the right base unit". Carries base-unit
+  rationale, dense-then-sparse progression, composable-spacing theory, cross-system
+  comparison. ANSWERS the theory — does not derive one component's law (make-component) or
+  bind a platform scale (material-shape-facts); NOT CSS token-family naming
+  (css-system-facts); NOT a codebase's control-sizing/density token implementation
+  (css-system-facts).
 user-invocable: false
 disable-model-invocation: false
 ---
