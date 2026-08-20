@@ -342,13 +342,14 @@ that isn't from a ratified ADR routes to `save-lessons`'s own standing detectors
 - A queued candidate's evidence changes on a later firing (the ADR was amended again) → update the
   existing row in place (step 4's idempotency), never queue a second row for the same (adr, kind).
 - Dispatch names no report destination (a bare scheduled firing) with something to actually report
-  (any queued candidate or checkpoint advance) → target-path the report payload at
-  `.claude/ops/reports/<UTC-timestamp>.md` as the standing default (`issue-sorter`/
-  `repo-cleaner`'s own convention) and let the dispatching session apply it; only a missing
-  destination on an interactive dispatch that expects one is reported as a missing-field error. A
-  bare scheduled firing that turns out to be a clean no-op names no such path at all (step 6,
-  above) — the standing-default path exists for a payload that ships, never as a placeholder for
-  one that doesn't.
+  (any queued candidate or checkpoint advance) → the same standing-default path and multi-seat
+  suffix rule as `watch-tickets`' own Failure branches (cited there, not restated) — this seat's
+  own name (`decision-watcher`) suffixes the timestamp whenever the resolved scope names more than
+  one seat — and let the dispatching session apply it; only a missing destination on an
+  interactive dispatch that expects one is reported as a missing-field error. A bare scheduled
+  firing that turns out to be a clean no-op names no such path at all (step 6, above) — the
+  standing-default path exists for a payload that ships, never as a placeholder for one that
+  doesn't.
 - A halt occurs between step 1 (classify) and step 5 (advance) → the checkpoint is simply never
   reached; nothing to revert, since `classify` never wrote it. The same delta re-classifies next
   firing and re-queues harmlessly into the same idempotent rows.
