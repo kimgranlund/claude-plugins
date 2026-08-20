@@ -13,7 +13,8 @@
     "frontend@nonoun-plugins": true,
     "agent-protocols@nonoun-plugins": true,
     "llm@nonoun-plugins": true,
-    "design@nonoun-plugins": true
+    "design@nonoun-plugins": true,
+    "brand-design@nonoun-plugins": true
   },
   "extraKnownMarketplaces": {
     "nonoun-plugins": {
