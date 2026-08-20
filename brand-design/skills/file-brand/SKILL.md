@@ -1,18 +1,18 @@
 ---
-name: seed-brand
+name: file-brand
 description: >-
   Stamps a finished (or partial) brand corpus into a distributable — an installable plugin, a
   Claude-chat cloud skill, or a standalone MCP — and runs the brand-lint structural check before
   ratifying. Always asks which form; never defaults. Use when the user wants to package, ship,
   stamp, or ratify a brand as a plugin/skill/MCP — "stamp this brand", "package the brand as a
   plugin", "ship this as a skill", "make this brand corpus deployable". NOT the corpus-as-site
-  export (save-brand-corpus) and NOT the one-page summary (make-brand-stack).
+  export (file-brand-corpus) and NOT the one-page summary (make-brand-stack).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[plugin|skill|mcp] [corpus path] [brand name]"
 ---
 
-# seed-brand
+# file-brand
 
 Packages a finished brand corpus into a shareable, host-appropriate artifact. This is the
 mutability-class ratification point — the corpus is treated as an accepted record from here on,

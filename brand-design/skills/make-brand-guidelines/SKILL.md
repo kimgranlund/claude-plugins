@@ -1,5 +1,5 @@
 ---
-name: run-brand-elicit
+name: make-brand-guidelines
 description: >-
   Builds a brand-guidelines section by guided 2x2 choice — presents four concrete options for a
   domain (mark, voice, color, type, expression, governance), the designer picks a quadrant +
@@ -14,7 +14,7 @@ user-invocable: true
 argument-hint: "[domain — mark|voice|color|type|expression|governance; default: resume the frontier]"
 ---
 
-# run-brand-elicit
+# make-brand-guidelines
 
 Guided-choice mode: builds a brand-guidelines section by presenting a 2x2 of concrete options per
 domain and letting the designer pick + comment. Posture is maker — options are proposed, the
@@ -34,7 +34,7 @@ Domain to work, or resume the frontier if blank: `$ARGUMENTS` (one of `mark | vo
    `${CLAUDE_PLUGIN_ROOT}/skills/brand-guidelines/references/the-loop.md` for it.
 3. **Ground in the corpus first.** Before generating any option, `brand-guidelines`'s own
    procedure reads `01-foundation` plus the existing choice-ledger under the default corpus root
-   `./brand-corpus` (the same default `save-brand-corpus` and `make-brand-stack` use) — this skill
+   `./brand-corpus` (the same default `file-brand-corpus` and `make-brand-stack` use) — this skill
    doesn't re-check that; it's `brand-guidelines`'s own Step 2.
 4. **Report the round.** Relay the domain worked, the pick captured, and the coverage state
    `brand-guidelines` returns; don't re-summarize the mechanism.

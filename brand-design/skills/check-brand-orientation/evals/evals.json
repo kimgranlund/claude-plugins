@@ -1,5 +1,5 @@
 {
- "skill": "run-brand-orient",
+ "skill": "check-brand-orientation",
  "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (the making mode this orients FOR, never IS) and make-brand-stack (a condensed reading, not a surveyor's inventory + gap read).",
  "cases": [
   { "id": "t01", "prompt": "I've just been handed this brand, orient me on where it stands", "expect": "trigger" },

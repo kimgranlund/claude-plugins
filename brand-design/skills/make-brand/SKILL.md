@@ -7,7 +7,7 @@ description: >-
   converges, then hands the method to brand-methodology-rules. Use when the user wants to build,
   develop, or work on a brand's strategy, positioning, identity, or voice — "let's build this
   brand", "work on the brand strategy", "develop the identity or voice". NOT the guided 2x2
-  elicitation loop (run-brand-elicit), the one-page brand-stack summary (make-brand-stack), or
+  elicitation loop (make-brand-guidelines), the one-page brand-stack summary (make-brand-stack), or
   adversarial scoring (check-brand-rubric).
 disable-model-invocation: false
 user-invocable: true
@@ -35,7 +35,7 @@ Working on: `$ARGUMENTS`
 3. **Name the pull before converging (soft gate).** State at least one sentence of direction the
    work reaches for; it will evolve. If the corpus MCP is configured, pull relevant prior brand
    material first and extend it rather than reinvent it. No aspiration stated, or the first idea
-   is already hardening into "the" answer → set a provisional pull, or invoke `create-brand-muse`
+   is already hardening into "the" answer → set a provisional pull, or invoke `make-brand-muse`
    first. Clearing this gate means naming a direction, not stopping.
 4. **Run the methodology.** Invoke the `brand-methodology-rules` skill and run the stage it names
    — it owns the method; this skill sets posture, routes, and keeps the work honest. For extended
@@ -44,7 +44,7 @@ Working on: `$ARGUMENTS`
    tool; brief tactical copy (a headline, a tone check) stays in this session.
 5. **Point at the next seat.** When the work exists and a hostile read is wanted, point the user
    at `check-brand-rubric` or `check-brand-council`. Keep the seats distinct — the Muse
-   (`create-brand-muse`) sets the pull, this skill makes, the council reviews — no seat judges its
+   (`make-brand-muse`) sets the pull, this skill makes, the council reviews — no seat judges its
    own work.
 
 ## Failure branches

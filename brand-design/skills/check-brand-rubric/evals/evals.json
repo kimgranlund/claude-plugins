@@ -1,6 +1,6 @@
 {
  "skill": "check-brand-rubric",
- "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (the maker seat this judges, never performs) and create-brand-muse (sets the pull before work exists; this judges after).",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from make-brand (the maker seat this judges, never performs) and make-brand-muse (sets the pull before work exists; this judges after).",
  "cases": [
   { "id": "t01", "prompt": "score this brand work against the rubric", "expect": "trigger" },
   { "id": "t02", "prompt": "is this positioning actually on brand", "expect": "trigger" },

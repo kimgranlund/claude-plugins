@@ -396,6 +396,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "muse",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "naming",
       "plural": null,
       "banned_aliases": [
@@ -404,6 +409,11 @@
     },
     {
       "canonical": "orchestration",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "orientation",
       "plural": null,
       "banned_aliases": []
     },

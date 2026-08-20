@@ -6,7 +6,7 @@ description: >-
   elaboration from a corpus layer. Editor posture: condense ruthlessly, cite the corpus, never
   invent. Use when the user wants a one-pager, an executive summary, or a condensed reading of a
   brand — "give me the brand stack", "one-page summary of this brand", "condense this brand
-  corpus", "executive summary of the brand". NOT the full corpus export (save-brand-corpus) and
+  corpus", "executive summary of the brand". NOT the full corpus export (file-brand-corpus) and
   NOT open-ended strategy work (make-brand).
 disable-model-invocation: false
 user-invocable: true
@@ -16,12 +16,12 @@ argument-hint: "[corpus-dir — default ./brand-corpus]"
 # make-brand-stack
 
 Produces the Brand Stack: a one-page reading of a brand — six load-bearing tiers, each condensed
-from a corpus layer. Distinct from `seed-brand` (which exports the *whole* corpus as a
+from a corpus layer. Distinct from `file-brand` (which exports the *whole* corpus as a
 distributable). Posture is editor: condense ruthlessly to one sheet, cite the corpus, never
 invent.
 
-Corpus directory: `$ARGUMENTS` (default `./brand-corpus`, the same default `save-brand-corpus` and
-`seed-brand` use).
+Corpus directory: `$ARGUMENTS` (default `./brand-corpus`, the same default `file-brand-corpus` and
+`file-brand` use).
 
 ## Procedure
 

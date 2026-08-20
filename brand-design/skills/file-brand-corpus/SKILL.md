@@ -1,25 +1,25 @@
 ---
-name: save-brand-corpus
+name: file-brand-corpus
 description: >-
   Exports a brand engagement's deliverables as a navigable Markdown corpus plus a self-contained
   site/ viewer (sticky nav, per-page ToC, GFM tables, mermaid, DOMPurify-sanitized). Use when the
   user wants to export, publish, or turn brand work into a shareable corpus or site — "export the
   brand corpus", "make this brand a shareable site", "turn the brand docs into a navigable
   folder", "build the corpus site". Requires existing brand deliverables (run make-brand first if
-  none exist yet). NOT for packaging into a distributable plugin/skill/MCP (seed-brand) and NOT
+  none exist yet). NOT for packaging into a distributable plugin/skill/MCP (file-brand) and NOT
   the one-page brand-stack summary (make-brand-stack).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[corpus dir — default ./brand-corpus]"
 ---
 
-# save-brand-corpus
+# file-brand-corpus
 
 Lays out a brand engagement's deliverables as a clean Markdown corpus, then generates a
 self-contained `site/` viewer beside it.
 
 Target corpus dir: `$ARGUMENTS` (default `./brand-corpus`, the same default `make-brand-stack` and
-`seed-brand` use).
+`file-brand` use).
 
 ## Procedure
 

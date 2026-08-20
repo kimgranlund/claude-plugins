@@ -1,5 +1,5 @@
 ---
-name: run-brand-orient
+name: check-brand-orientation
 description: >-
   Gets your bearings in a brand before doing any work — inventories the corpus, reads it against
   the methodology as working / drifting / missing, and proposes next steps by pipeline stage. Use
@@ -12,7 +12,7 @@ user-invocable: true
 argument-hint: "[optional focus]"
 ---
 
-# run-brand-orient
+# check-brand-orientation
 
 Orient mode: gets your bearings in a brand before doing any work — the right cold-start move when
 handed a brand with no context yet. Posture is surveyor — map first, opine second.

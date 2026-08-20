@@ -1,6 +1,6 @@
 {
  "skill": "make-brand-stack",
- "note": "Track C initial suite (2026-08-19). Negatives adversarially from save-brand-corpus (the full site export, not a one-pager) and seed-brand (packaging into a distributable, not a reading document).",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from file-brand-corpus (the full site export, not a one-pager) and file-brand (packaging into a distributable, not a reading document).",
  "cases": [
   { "id": "t01", "prompt": "give me the brand stack one-pager for this brand", "expect": "trigger" },
   { "id": "t02", "prompt": "condense this whole brand corpus into a one-page summary", "expect": "trigger" },

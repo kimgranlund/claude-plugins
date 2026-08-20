@@ -1,5 +1,5 @@
 ---
-name: create-brand-muse
+name: make-brand-muse
 description: >-
   Convenes the Muse — the aspirational seat that names the ideal, provocation, or guiding concept
   a brand's work should be pulled toward. Sets direction; never makes finished work, never judges.
@@ -14,7 +14,7 @@ argument-hint: "[brief or what you're exploring]"
 allowed-tools: ["Agent"]
 ---
 
-# create-brand-muse
+# make-brand-muse
 
 Convenes the Muse — the aspirational seat of the studio. Where `check-brand-council` gives the
 harshest review (judging work against the standard, after it exists), the Muse supplies the pull:

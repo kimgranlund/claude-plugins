@@ -1,6 +1,6 @@
 {
- "skill": "seed-brand",
- "note": "Track C initial suite (2026-08-19). Negatives adversarially from save-brand-corpus (a browsable site export, not a packaged host artifact) and make-brand-stack (a reading document, not a shippable plugin/skill/MCP).",
+ "skill": "file-brand",
+ "note": "Track C initial suite (2026-08-19). Negatives adversarially from file-brand-corpus (a browsable site export, not a packaged host artifact) and make-brand-stack (a reading document, not a shippable plugin/skill/MCP).",
  "cases": [
   { "id": "t01", "prompt": "stamp this brand as an installable plugin", "expect": "trigger" },
   { "id": "t02", "prompt": "package this brand corpus as a Claude chat skill", "expect": "trigger" },
