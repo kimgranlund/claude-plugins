@@ -623,6 +623,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "sync",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "system",
       "plural": "systems",
       "banned_aliases": []
