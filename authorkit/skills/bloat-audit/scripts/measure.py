@@ -26,6 +26,10 @@ PHASE_HEAVY_COUNT = 5
 MIN_PARAGRAPH_WORDS = 25
 DUPLICATE_JACCARD = 0.5
 SHINGLE_SIZE = 8
+FAILURE_SECTION_CHARS = 800
+RESTATEMENT_SHINGLE_SIZE = 1
+RESTATEMENT_JACCARD = 0.15
+RESTATEMENT_MAJORITY = 0.5
 SKIP_DIRS = {".git", "node_modules", "dist", ".claude-plugin"}
 
 
@@ -57,9 +61,10 @@ def frontmatter_field(fm_text, field):
     return val.strip("'\"")
 
 
-def section_span(body, heading_pattern):
-    """Char length of the first section whose heading matches
-    heading_pattern, from that heading to the next '## ' heading or EOF."""
+def section_bounds(body, heading_pattern):
+    """(start, end) line indices for the first section whose heading matches
+    heading_pattern — start is the heading line itself, end is the next
+    '## ' heading or EOF. Returns None if no heading matches."""
     lines = body.split("\n")
     start = None
     for i, ln in enumerate(lines):
@@ -67,13 +72,74 @@ def section_span(body, heading_pattern):
             start = i
             break
     if start is None:
-        return 0
+        return None
     end = len(lines)
     for j in range(start + 1, len(lines)):
         if re.match(r"^##\s+\S", lines[j]):
             end = j
             break
+    return start, end
+
+
+def section_span(body, heading_pattern):
+    """Char length of the first section whose heading matches
+    heading_pattern, from that heading to the next '## ' heading or EOF."""
+    bounds = section_bounds(body, heading_pattern)
+    if bounds is None:
+        return 0
+    lines = body.split("\n")
+    start, end = bounds
     return len("\n".join(lines[start:end]))
+
+
+def list_entries(section_body):
+    """Split a section's body (heading line already excluded) into
+    top-level list entries — a bullet ('-'/'*') or numbered item plus its
+    indented continuation lines. Returns [] when the section isn't
+    list-shaped (no top-level bullet/numbered markers found) — the
+    restatement exemption below only ever applies to genuinely enumerated
+    sections, never free-form prose."""
+    entries = []
+    current = []
+    for ln in section_body.split("\n"):
+        if re.match(r"^(-|\*|\d+\.)\s+\S", ln):
+            if current:
+                entries.append("\n".join(current))
+            current = [ln]
+        elif current:
+            current.append(ln)
+    if current:
+        entries.append("\n".join(current))
+    return entries
+
+
+def restates_procedure(entries, procedure_text):
+    """True when a MAJORITY of a list-shaped section's entries substantially
+    restate the procedure text stated above them in the same document —
+    CALIBRATION.md's Keep test ("would cutting this lose a real instruction,
+    or only its retelling?"), applied mechanically via shingle overlap
+    against the procedure text (RESTATEMENT_SHINGLE_SIZE=1, i.e. shared
+    vocabulary — a restated entry paraphrases the same words in a different
+    order, so a wide shingle window like the cross-file duplicate-paragraph
+    check's 8-word one misses it; a distinct edge case shares little
+    vocabulary with the procedure at all). False when entries each name
+    their own distinct, non-obvious edge case — the exact
+    enumerated-failure-list shape CALIBRATION.md's Keep test protects
+    (issue #775: 2/2 false positives on bare char count alone). None when
+    the section isn't list-shaped, or the procedure text above it is too
+    short to shingle — the caller falls back to char count alone in either
+    case."""
+    if len(entries) < 2:
+        return None
+    proc_shingles = shingles(normalize(procedure_text).split(), k=RESTATEMENT_SHINGLE_SIZE)
+    if not proc_shingles:
+        return None
+    restated = sum(
+        1 for entry in entries
+        if jaccard(shingles(normalize(entry).split(), k=RESTATEMENT_SHINGLE_SIZE), proc_shingles)
+        >= RESTATEMENT_JACCARD
+    )
+    return (restated / len(entries)) >= RESTATEMENT_MAJORITY
 
 
 def phase_count(body):
@@ -172,7 +238,17 @@ def analyze(target: Path):
         fm_text, body = split_frontmatter(text)
         desc = frontmatter_field(fm_text, "description")
         chars, lines = len(body), body.count("\n") + 1
-        failure_chars = section_span(body, r"^##+\s*Failure\s+(branches|catalog)")
+        body_lines = body.split("\n")
+        failure_bounds = section_bounds(body, r"^##+\s*Failure\s+(branches|catalog)")
+        failure_chars = 0
+        failure_restates = None
+        if failure_bounds is not None:
+            fstart, fend = failure_bounds
+            failure_chars = len("\n".join(body_lines[fstart:fend]))
+            if failure_chars > FAILURE_SECTION_CHARS:
+                entries = list_entries("\n".join(body_lines[fstart + 1:fend]))
+                procedure_text = "\n".join(body_lines[:fstart])
+                failure_restates = restates_procedure(entries, procedure_text)
         done_chars = section_span(body, r"^##+\s*Done\b")
         if not done_chars:
             # Line-initial "Done when"/"Done when:" only — an incidental
@@ -189,7 +265,7 @@ def analyze(target: Path):
             flags.append(f"long-body ({chars} chars body, > {LONG_BODY_CHARS} threshold)")
         if phases >= PHASE_HEAVY_COUNT:
             flags.append(f"phase-heavy ({phases} phase/numbered-step headings)")
-        if failure_chars > 800:
+        if failure_chars > FAILURE_SECTION_CHARS and failure_restates is not False:
             flags.append(f"large-failure-section ({failure_chars} chars)")
         if len(desc) > 700:
             flags.append(f"dense-description ({len(desc)} chars)")
@@ -286,8 +362,13 @@ def selftest():
     misread as phase-heavy, and an incidental mid-sentence "done when"
     doesn't capture to EOF (negative controls, issue #465); a genuine
     line-initial Done-when paragraph is still CAUGHT (inversion fixture); a
-    genuine cross-file duplicate paragraph is CAUGHT; a target with no
-    markdown returns None (the usage-error case)."""
+    genuine cross-file duplicate paragraph is CAUGHT; a dense-but-legitimate
+    enumerated failure list — every entry naming its own distinct,
+    non-obvious edge case, unrelated to the procedure text above it — is
+    NOT flagged large-failure-section even past the char threshold (negative
+    control, issue #775); a failure section that genuinely restates the
+    procedure stated above it is still CAUGHT (inversion fixture, issue
+    #775); a target with no markdown returns None (the usage-error case)."""
     import tempfile
 
     # Reverse control: a small, unflagged file must come back clean.
@@ -314,6 +395,87 @@ def selftest():
         flags = result["measurements"][0]["flags"]
         assert any("phase-heavy" in f for f in flags), "phase-heavy file must be flagged"
         assert any("large-failure-section" in f for f in flags), "oversized Failure section must be flagged"
+
+    # Negative control: a dense-but-legitimate enumerated failure list —
+    # every entry names a distinct, non-obvious edge case with vocabulary
+    # unrelated to the procedure text above it — must NOT be flagged
+    # large-failure-section, even past the char threshold. Modeled on the
+    # two live false positives (design/make-variants, screens/check-ui-
+    # change) — issue #775.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "enumerated-edges").mkdir(parents=True)
+        procedure = ("This skill resolves the target directory, runs the "
+                     "deterministic measurer over every markdown file, and "
+                     "renders a report citing the evidence for each finding.")
+        failure_list = "\n".join([
+            "- A user cancels mid-upload after the multipart request already "
+            "flushed its first chunk to disk — sweep the orphaned partial "
+            "blob on the next run, never leave it silently.",
+            "- The template selector receives a locale code the catalog has "
+            "never registered — fall back to the base locale instead of "
+            "raising, and log the miss once per session.",
+            "- A webhook redelivers an event after the original already "
+            "committed — dedupe by the idempotency key stored on the "
+            "transaction row, never by timestamp proximity alone.",
+            "- The batch importer hits a row whose foreign key references a "
+            "soft-deleted parent — skip that row into the rejection ledger, "
+            "never cascade-delete the still-referenced parent.",
+            "- A concurrent writer bumps the version counter between this "
+            "process's read and its write — retry once with a fresh read, "
+            "then surface a real conflict to the caller.",
+            "- The exporter is asked for a format the current build doesn't "
+            "register — return the capability list in the error body so the "
+            "caller can negotiate a supported format down.",
+        ])
+        body = (f"---\nname: enumerated-edges\ndescription: short\n---\n"
+                f"# enumerated-edges\n\n{procedure}\n\n"
+                f"## Failure branches\n\n{failure_list}\n")
+        assert len(failure_list) > FAILURE_SECTION_CHARS, "fixture must exceed the char threshold"
+        (r / "skills" / "enumerated-edges" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        flags = result["measurements"][0]["flags"]
+        assert not any("large-failure-section" in f for f in flags), (
+            "a dense-but-legitimate enumerated failure list must not be "
+            "flagged on bare char count alone")
+
+    # Inversion fixture: a failure section that genuinely restates the
+    # procedure stated above it (padding, not new edge cases) must still be
+    # CAUGHT — issue #775.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "skills" / "restating-skill").mkdir(parents=True)
+        procedure = ("Run the linter until every file is clean, verify each "
+                     "finding is real bloat and not load-bearing content, "
+                     "and render the report citing evidence for every "
+                     "flagged file before handing it off.")
+        failure_list = "\n".join([
+            "- If the linter is not run until every file is clean, the "
+            "audit is incomplete and must be redone from the start.",
+            "- If a finding is not verified as real bloat and not "
+            "load-bearing content, the classification recorded is wrong.",
+            "- If the report does not cite evidence for every flagged file "
+            "before handing it off, the finding is unusable to the reader.",
+            "- If the linter is not run until every file is clean and every "
+            "finding is not verified as real bloat, nothing here can be "
+            "trusted, so redo the whole audit and render the report again.",
+            "- Skipping the step where every finding is verified as real "
+            "bloat and not load-bearing content means the report cannot be "
+            "trusted, so run the linter until every file is clean first.",
+            "- Handing off a report that does not cite evidence for every "
+            "flagged file, after the linter has been run until every file "
+            "is clean, still leaves the finding unusable to the reader.",
+        ])
+        body = (f"---\nname: restating-skill\ndescription: short\n---\n"
+                f"# restating-skill\n\n{procedure}\n\n"
+                f"## Failure branches\n\n{failure_list}\n")
+        assert len(failure_list) > FAILURE_SECTION_CHARS, "fixture must exceed the char threshold"
+        (r / "skills" / "restating-skill" / "SKILL.md").write_text(body)
+        result = analyze(r)
+        flags = result["measurements"][0]["flags"]
+        assert any("large-failure-section" in f for f in flags), (
+            "a failure section genuinely restating the procedure above it "
+            "must still be flagged")
 
     # Negative control: a plain numbered list of bolded principles (no
     # phase/step/stage wording) must NOT be misread as phase-heavy — #465.
