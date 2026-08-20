@@ -1,6 +1,6 @@
 # Exemplars — option-generation seeds, by domain and axis
 
-When the loop generates the four design-move cards for a domain's 2×2, each card should **cite an exemplar** — a real brand whose public approach demonstrates that quadrant's *mechanism*. This file is the seed library: per-domain exemplars keyed to where they sit on the axes, so a card reads *"like X — which does Y"* rather than a generic option. It sharpens generation; it is not a grading bar (that is `brand-evaluate` and `design-skills:brand-decomposer`).
+When the loop generates the four design-move cards for a domain's 2×2, each card should **cite an exemplar** — a real brand whose public approach demonstrates that quadrant's *mechanism*. This file is the seed library: per-domain exemplars keyed to where they sit on the axes, so a card reads *"like X — which does Y"* rather than a generic option. It sharpens generation; it is not a grading bar (that is `brand-rubrics` and `design-skills:brand-decomposer`).
 
 ## The citation discipline (read first)
 

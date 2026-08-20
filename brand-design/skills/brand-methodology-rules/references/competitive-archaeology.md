@@ -14,6 +14,7 @@ A brand that obeys *enough* dominant codes to be found in-category, breaks the *
 
 ## The hard test
 
+**[inferred]** — this project's own practitioner method, not an externally verified standard.
 **The double recognition test:** cover the name and blur the logo — (1) is it still recognizable as *itself*? **and** (2) does it still read as a member of its category? A brand can be unmistakably itself yet category-illegible (broke too many entry codes), or category-legible yet interchangeable (broke none). Passing *both* is the bar.
 
 ## The anti-pattern

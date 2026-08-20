@@ -14,6 +14,7 @@ The market adopts *your words without you in the room*: analysts draw a quadrant
 
 ## The hard test
 
+**[inferred]** — this project's own practitioner method, not an externally verified standard.
 **Does anyone but you use the words?** Sharpest first: (1) if only the coining company and its paid channels say it, it's copy, not a category; (2) does it reframe a problem people *already feel*; (3) strongest — has it changed behavior *outside* the product (a budget line, an analyst category, a conference, a job title)? If you can only describe the offering as a modifier of an existing category ("the premium / AI version of X"), you are competing, not designing.
 
 ## The anti-pattern

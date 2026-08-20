@@ -14,6 +14,7 @@ A nameable before-identity → after-identity the customer would *say about them
 
 ## The hard test
 
+**[inferred]** — this project's own practitioner method, not an externally verified standard.
 Three, sharpest first: (1) **Name the two identities** — who the customer *was* and *becomes*, each an identity, not a feature gain. If the only honest "after" is "saved time," it's benefit-clarity, not a transformation. (2) **Check the casting** — is the brand the *guide*, not the hero? The protagonist of every sentence should be the customer. (3) For ambitious brands — does the after-identity resolve a tension bigger than the task?
 
 ## The anti-pattern

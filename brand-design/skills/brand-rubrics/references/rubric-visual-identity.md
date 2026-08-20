@@ -1,6 +1,6 @@
 # Rubric — Visual Identity
 
-Scores a **visual identity system**: the marks, type, color, and expression rules a brand is built from (see `brand-methodology` → `03-identity` + `04-expression`). The bar is the **de-label test** — cover the logo and the name; does any single asset still force the brand into mind? A decorative identity passes the happy path (logo present) and fails de-labeled. Recognition without the wordmark is the whole game; consistency that isn't *ownable* is tidy invisibility.
+Scores a **visual identity system**: the marks, type, color, and expression rules a brand is built from (see `brand-methodology-rules` → `03-identity` + `04-expression`). The bar is the **de-label test** — cover the logo and the name; does any single asset still force the brand into mind? A decorative identity passes the happy path (logo present) and fails de-labeled. Recognition without the wordmark is the whole game; consistency that isn't *ownable* is tidy invisibility.
 
 Score each dimension 1–5. Attach **evidence** (the asset) and **the test**. Dimensions marked _(directional)_ resist mechanical scoring — score as a lens, lean on the council.
 

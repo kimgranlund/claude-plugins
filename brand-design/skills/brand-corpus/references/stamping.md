@@ -1,6 +1,6 @@
 # Stamping a corpus into a distributable
 
-A finished (or partial) brand corpus is **stamped** into one of three forms, chosen by where it will be used. Each is produced by `bin/brand-stamp` into its **own folder** under `-o <out>`, kept **pure and separate** — the plugin never carries the cloud skill or the standalone-MCP packaging. The _judgment_ (is it ready? which form? what name?) lives in `/brand-stamp` and this skill.
+A finished (or partial) brand corpus is **stamped** into one of three forms, chosen by where it will be used. Each is produced by `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/brand_stamp.py"` into its **own folder** under `-o <out>`, kept **pure and separate** — the plugin never carries the cloud skill or the standalone-MCP packaging. The _judgment_ (is it ready? which form? what name?) lives in `file-brand` and this skill.
 
 ## Readiness — don't stamp a snapshot of nothing
 
@@ -8,7 +8,7 @@ Stamp against the corpus maturity stages (see `corpus-architecture.md`). A corpu
 
 ## The form is the user's choice — always ask
 
-`/brand-stamp` **always asks** which form; it never defaults. The three target different hosts and runtimes, so a wrong guess wastes the stamp.
+`file-brand` **always asks** which form; it never defaults. The three target different hosts and runtimes, so a wrong guess wastes the stamp.
 
 |  | **plugin** | **skill** | **mcp** |
 | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ Stamp against the corpus maturity stages (see `corpus-architecture.md`). A corpu
 
 ## Versioning — re-baking is a release
 
-A bundled corpus is a **baked snapshot**, and shipping it is a _release action_: when the corpus changes, re-stamp from the source workspace and **bump the version** (`brand-stamp plugin … --version 0.2.0`). The editable **source-of-truth corpus lives in the consumer's version-controlled workspace** — never inside the plugin (the install cache is read-only). The plugin / skill / mcp artifacts are derived, versioned outputs; the workspace is the canon.
+A bundled corpus is a **baked snapshot**, and shipping it is a _release action_: when the corpus changes, re-stamp from the source workspace and **bump the version** (`brand_stamp.py plugin … --version 0.2.0`). The editable **source-of-truth corpus lives in the consumer's version-controlled workspace** — never inside the plugin (the install cache is read-only). The plugin / skill / mcp artifacts are derived, versioned outputs; the workspace is the canon.
 
 ## Sizing the retrieval
 
@@ -60,7 +60,7 @@ Claude chat can run **skills** (with bundled files/sub-folders) and use **remote
 
 ## After stamping
 
-**Verify first, every form.** `bin/brand-stamp verify <root> --form {plugin|skill|mcp}` asserts the stamped artifact has the structure its form requires before you ship it — plugin: a valid `plugin.json`/`.mcp.json` + the bundled server + the skill; skill: `SKILL.md` frontmatter + a non-empty `references/` corpus **and no leaked MCP/scripts** (the cloud form must stay pure); mcp: the server + the `claude mcp add` recipe — plus a drift check that the bundled `brand-corpus-mcp.py` matches the canonical one. (CI runs `verify` on all three forms; `brand-stamp selftest` proves the gate.) Then:
+**Verify first, every form.** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/brand_stamp.py" verify <root> --form {plugin|skill|mcp}` asserts the stamped artifact has the structure its form requires before you ship it — plugin: a valid `plugin.json`/`.mcp.json` + the bundled server + the skill; skill: `SKILL.md` frontmatter + a non-empty `references/` corpus **and no leaked MCP/scripts** (the cloud form must stay pure); mcp: the server + the `claude mcp add` recipe — plus a drift check that the bundled `brand-corpus-mcp.py` matches the canonical one. (CI runs `verify` on all three forms; `brand_stamp.py selftest` proves the gate.) Then:
 
 - **plugin**: `validate_plugin.py plugin <out>/plugin/<brand>-brand --strict` (it's authored to pass — the deep validation `verify` complements); then add it to a marketplace or install it. `/plugin-promote` for a hostile read first.
 - **skill**: upload `<out>/skill/<brand>-brand/` to Claude chat as a skill — it carries its own corpus.

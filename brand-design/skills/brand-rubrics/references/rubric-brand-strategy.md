@@ -1,6 +1,6 @@
 # Rubric — Brand Strategy
 
-Scores a **brand strategy / foundation**: the load-bearing thinking a brand stands on (see `brand-methodology` → the Brand Foundation Canon). The bar is _exclusivity_ — could a competitor sign their name to this? If yes, it is a category description, not a strategy.
+Scores a **brand strategy / foundation**: the load-bearing thinking a brand stands on (see `brand-methodology-rules` → the Brand Foundation Canon). The bar is _exclusivity_ — could a competitor sign their name to this? If yes, it is a category description, not a strategy.
 
 Score each dimension 1–5. Attach **evidence** (quote the strategy) and **the test**. Dimensions marked _(directional)_ resist mechanical scoring — score as a lens, lean on the council, do not average the number into a single grade as if it were measured.
 

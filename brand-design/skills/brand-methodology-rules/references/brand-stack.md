@@ -7,7 +7,7 @@ model: every tier is a condensation of an existing corpus layer (`brand-corpus`'
 `08-evaluation`), so the Stack can never drift from the canon — if it can't be filled from the corpus,
 the corpus isn't done.
 
-Distinct from `/brand-stamp` (which exports the *whole* corpus as a distributable plugin/skill/MCP):
+Distinct from `file-brand` (which exports the *whole* corpus as a distributable plugin/skill/MCP):
 the Stack is the **condensed at-a-glance summary**, one printable sheet.
 
 ## The six tiers (each ↦ its corpus layer)
@@ -33,7 +33,8 @@ spine); **Expression** is the *expression* stage condensed to its idea; **Produc
    condense, don't restate the whole layer. The Stack is a reading document; keep it to one sheet.
 3. Fill `templates/brand-stack-one-pager.md`. Keep it monochrome and text-only — any polish (colour,
    logo, PDF) happens downstream in a publishing tool, never in the template.
-4. **Maturity is honest, not blocking.** A corpus that hasn't reached a layer can't fill its tier —
+4. **[inferred]** (this project's own practitioner rule, not an externally verified standard)
+   **Maturity is honest, not blocking.** A corpus that hasn't reached a layer can't fill its tier —
    render that tier as `— not yet defined (layer NN missing)` and name what's missing, rather than
    inventing it. A Stack with `Root · Position · POV` filled but `Expression`/`Product`/`Stewardship`
    blank is a *stage-2 brand* honestly shown, not a failure. (This is a surfaced reading, never a gate

@@ -53,6 +53,11 @@ The unifying defect: each artifact lets a team feel finished without ever **deci
 
 ## The 3-page minimum-viable foundation
 
+**[inferred]** — the three-page ceiling is this methodology's own practitioner rule, derived from
+repeated observation that undecided positions hide behind extra pages; it is not an externally
+verified standard, and a genuinely complex, multi-market foundation may need more without
+violating the underlying test (does every extra page still decide something, or just describe?).
+
 A real foundation fits on **three pages**:
 
 1. **The root & the enemy** — where we come from, what we stand against.

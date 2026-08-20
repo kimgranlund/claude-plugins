@@ -19,6 +19,23 @@ A brand is not a logo, a palette, or a personality deck. It is the **meaning a c
 
 This file is a table of contents. Load the reference and the role knowledge on demand.
 
+4 declared axes (pack-writing-rules' 3-7 threshold) across 9 reference files — full map:
+[`references/INDEX.md`](references/INDEX.md).
+
+## Consult table
+
+| Ask | Load |
+|---|---|
+| The six load-bearing things a foundation must contain, and what the Canon rejects (archetypes, personas, vision/mission/values triplets, "brand DNA") | `references/foundation-canon.md` |
+| How to choose and stress-test a positioning territory | `references/positioning-territories.md` |
+| How to frame the category-design narrative | `references/category-design.md` |
+| How to do cultural/competitive archaeology — primary sources, not market research | `references/competitive-archaeology.md` |
+| How to write the customer transformation story | `references/transformation-story.md` |
+| The brand's editorial voice/style discipline | `references/editorial-style-guide.md` |
+| How the three seats (Muse · Team · Council) work, and the one invariant that keeps them honest | `references/creative-collaboration.md` |
+| How the seats staff each phase of an engagement | `references/team-operations-by-phase.md` |
+| How to render the one-page Brand Stack condensation | `references/brand-stack.md` |
+
 ## First principles
 
 1. **Brand is a cultural mediator.** The operative question is never "what do we sell?" but **"who does the customer become by choosing us?"** A brand stands between a person and the identity they aspire to. Design the transformation, not the artifact.
@@ -56,13 +73,13 @@ The foundation is the small set of **load-bearing** documents a brand actually s
 
 → Full detail: [`references/foundation-canon.md`](references/foundation-canon.md). Each component has its own method reference: [`positioning-territories.md`](references/positioning-territories.md) · [`category-design.md`](references/category-design.md) · [`competitive-archaeology.md`](references/competitive-archaeology.md) · [`transformation-story.md`](references/transformation-story.md) · [`editorial-style-guide.md`](references/editorial-style-guide.md).
 
-→ The one-page condensation of a whole brand — the **Brand Stack** (six load-bearing tiers, each ↦ a corpus layer), rendered by `/brand-stack`: [`references/brand-stack.md`](references/brand-stack.md).
+→ The one-page condensation of a whole brand — the **Brand Stack** (six load-bearing tiers, each ↦ a corpus layer), rendered by `make-brand-stack`: [`references/brand-stack.md`](references/brand-stack.md).
 
 ## The three seats — aspire, make, review
 
 Brand work moves through three distinct seats: the **Muse** supplies the _pull_ (the aspiration the work moves toward — an ideal, a provocation, or a guiding concept), the **Team** _makes_ (converges the work, the middle), and the **Council** _reviews_ (judges it against the aspiration, after). Keep them distinct — **no seat judges its own work**, because a maker who reviews their own work grades on a curve.
 
-The **Team** is a set of on-demand making roles — Strategic Planner, Creative Director, Copywriter, Art Director, Design Director, Product/UX Designer, and Brand Steward — each adopted as the task needs and defined in the reference. The **Muse** is the aspirational attractor (the `brand-muse` agent · `/brand-muse`); the **Council** is the named-critic panel (the `brand-evaluate` skill + critic agents · `/brand-council`).
+The **Team** is a set of on-demand making roles — Strategic Planner, Creative Director, Copywriter, Art Director, Design Director, Product/UX Designer, and Brand Steward — each adopted as the task needs and defined in the reference. The **Muse** is the aspirational attractor (the `muse-agent` · `make-brand-muse`); the **Council** is the named-critic panel (the `brand-rubrics` skill + critic agents · `check-brand-council`).
 
 The loop is **aspire → make → review → remake**: the Muse names the pull, the Team converges toward it, the Council judges against it, the Team remakes or defends the line on the record. **Aspire comes first, as a precondition** — the Team does not converge toward nothing; if no pull is named, the work drifts to the category average, so name at least a light, revisable one before making (a soft gate, cleared by _naming_ a direction, not a hard stop). The handoffs are where work is won or lost — above all the **creative brief**, the strategy→expression pivot. Nothing skips to expression without a foundation, and nothing ships without surviving review.
 
@@ -78,6 +95,6 @@ The loop is **aspire → make → review → remake**: the Muse names the pull, 
 
 ## When to reach for adjacent skills
 
-- Scoring or auditing brand work, or running the critic council → **`brand-evaluate`**.
+- Scoring or auditing brand work, or running the critic council → **`brand-rubrics`**.
 - Organizing brand documents into the canonical corpus, or wiring the `brand-corpus` MCP → **`brand-corpus`**.
 - Marketing tactics, performance media, conversion, PR → out of scope; adjacent disciplines.

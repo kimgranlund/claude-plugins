@@ -15,7 +15,8 @@ A territory that is **true** (grounded in a real capability, not an aspiration),
 
 ## The hard test
 
-**The competitor-substitution test.** Write the onliness clause, then swap in your three strongest rivals' names. If it stays true for even one of them, it is not a territory — it's a category description. A real territory *breaks* the instant a competitor's name is inserted. (This is the `brand-evaluate` strategy rubric's exclusivity bar, applied at authoring time.)
+**[inferred]** — this project's own practitioner method, not an externally verified standard.
+**The competitor-substitution test.** Write the onliness clause, then swap in your three strongest rivals' names. If it stays true for even one of them, it is not a territory — it's a category description. A real territory *breaks* the instant a competitor's name is inserted. (This is the `brand-rubrics` strategy rubric's exclusivity bar, applied at authoring time.)
 
 ## The anti-pattern
 

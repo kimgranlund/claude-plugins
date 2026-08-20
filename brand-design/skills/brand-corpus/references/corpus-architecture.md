@@ -14,7 +14,7 @@ The raw material a brand is *built from*, kept verbatim and **never deleted afte
 
 ### 01 — Foundation _(load-bearing)_
 
-The strategy everything else stands on. Contents: the cultural root, the position, the point of view, the enemy/tension, the customer transformation, the editorial principles. This is the 3-page minimum-viable foundation (see `brand-methodology`). **If 01 is missing or undecided, every layer below it is decoration.**
+The strategy everything else stands on. Contents: the cultural root, the position, the point of view, the enemy/tension, the customer transformation, the editorial principles. This is the 3-page minimum-viable foundation (see `brand-methodology-rules`). **If 01 is missing or undecided, every layer below it is decoration.**
 
 ### 02 — Positioning
 
@@ -42,7 +42,7 @@ Governance and the rules of coherence: usage rules, do/don't, decision rights, a
 
 ### 08 — Evaluation
 
-The feedback loop: audits, rubric scores (see `brand-evaluate`), council reviews, and the **decision log** — what changed, when, and why. Findings here feed back into 01. This is what turns a brand from a snapshot into something stewarded.
+The feedback loop: audits, rubric scores (see `brand-rubrics`), council reviews, and the **decision log** — what changed, when, and why. Findings here feed back into 01. This is what turns a brand from a snapshot into something stewarded.
 
 ---
 
@@ -154,7 +154,7 @@ sources: [00-sources--founder-interview.md, 00-sources--2019-legacy-brandbook.md
 ---
 ```
 
-- **`contributors`** — the roles that added or shaped the document, in order, each with `who` (a person or an agent seat — `Muse`, `brand-copywriter`, `brand-council`, `brand-methodology`), a `role` (`author` · `aspiration` · `voice` · `review` · `source-owner` · `editor`), and a `date`. Append as the document evolves; do not rewrite history (the editorial supersede rule applies to attribution too).
+- **`contributors`** — the roles that added or shaped the document, in order, each with `who` (a person or an agent seat — `Muse`, `brand-writer`, `brand-council`, `brand-methodology-rules`), a `role` (`author` · `aspiration` · `voice` · `review` · `source-owner` · `editor`), and a `date`. Append as the document evolves; do not rewrite history (the editorial supersede rule applies to attribution too).
 - **`sources`** — the `00-sources` documents this artifact was synthesized from. Empty/absent is legitimate (some foundations are authored fresh), but a 01–02 artifact with named sources should link real `00-sources` files — the trace is what makes retention useful.
 
 **Why frontmatter, not git, and not a side manifest.** Git is the wrong instrument for *this* attribution: a corpus is frequently emitted to a Claude Project (no git at all), and even under git the committer is one identity ("Claude" / one human), never the **seat** that did the work — the Muse set the aspiration, the client supplied the legacy book, the copywriter shaped the voice. Frontmatter captures role-provenance git structurally cannot, travels *with* the document so it can't drift from it, and is already folded into the exported corpus-reader's search. A side manifest would be a second source of truth that diverges within a week — the anti-pattern the corpus forbids everywhere else.
@@ -181,24 +181,24 @@ The minimum coverage a layer holds before it is **mature** (fewer → still `for
 | **05 Voice** | tone · naming conventions · copy principles (we-write / we-don't) · worked examples across ≥3 contexts |
 | **06 Product** | the brand-in-use audit — surface by surface, where the experience keeps or breaks 01's promise |
 | **07 Guidelines** | usage rules + do/don't · decision rights · the "a stranger could extend this correctly" coherence test |
-| **08 Evaluation** | the latest audit · rubric scores (`brand-evaluate`) · council reviews · the decision log (append-only) |
+| **08 Evaluation** | the latest audit · rubric scores (`brand-rubrics`) · council reviews · the decision log (append-only) |
 
 Load order binds the manifest: 03–06 assets are provisional until 01's six contents are all present and decided.
 
-### 2 · Migration between the conventions — `bin/corpus-migrate`
+### 2 · Migration between the conventions — `corpus_migrate.py`
 
-The flat ⟷ folder migration is mechanical, so it's a tool, not a chore. `corpus-migrate <corpus> --to {flat|folder} [--apply]` detects the shape, **refuses a mixed corpus** (the defect §The two conventions warns against), and renames every layer asset — dry-run by default, `--apply` to perform. Run it with no `--to` to report the current shape. See `bin/corpus-migrate` (selftested).
+The flat ⟷ folder migration is mechanical, so it's a tool, not a chore. `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/corpus_migrate.py" <corpus> --to {flat|folder} [--apply]` detects the shape, **refuses a mixed corpus** (the defect §The two conventions warns against), and renames every layer asset — dry-run by default, `--apply` to perform. Run it with no `--to` to report the current shape. See `scripts/corpus_migrate.py` (selftested).
 
 ### 3 · Corpus templates per convention
 
-A new corpus is the manifest above instantiated in the chosen shape — flat: one `NN-layer--name.md` per row; folder: `NN-layer/name.md`. Pick by today's destination, not forever: `corpus-migrate` converts between them at any time.
+A new corpus is the manifest above instantiated in the chosen shape — flat: one `NN-layer--name.md` per row; folder: `NN-layer/name.md`. Pick by today's destination, not forever: `corpus_migrate.py` converts between them at any time.
 
 ### 4 · Audit checklist → `08-evaluation`
 
 The completeness audit that feeds `08-evaluation` — score each item, and the failures are the remediation list:
 
 1. **Load order holds** — 01's six contents are present and decided; nothing in 03–06 contradicts 01.
-2. **One convention** — flat or folder, never both (`corpus-migrate` reports a mixed corpus as a defect).
+2. **One convention** — flat or folder, never both (`corpus_migrate.py` reports a mixed corpus as a defect).
 3. **Each layer meets its manifest** — mark each `mature / forming / absent` against the table; the non-mature layers are the frontier.
 4. **Voice is shown, not just stated** — 05 carries worked examples in ≥3 contexts, not only principles.
 5. **Product keeps the promise** — 06 names, surface by surface, where the experience holds or breaks 01.
@@ -206,6 +206,6 @@ The completeness audit that feeds `08-evaluation` — score each item, and the f
 7. **Sources retained + traced** — `00-sources` holds the raw inputs the brand was built from (none deleted after processing), and the 01–02 artifacts `sources:`-link the real files they synthesized from.
 8. **Provenance present** — each document's frontmatter names its `contributors` (who shaped it, by role/seat), so attribution survives even where the corpus has no git.
 
-> Items 7–8 are mechanized by **`bin/corpus-provenance <corpus>`** (selftested): it **fails** on a broken `sources:` trace (a ref that resolves to no file in the corpus) and **warns** on a 01–02 artifact missing `contributors`, or a `sources:` ref that resolves outside `00-sources`. The trace is a *check*, not just a discipline.
+> Items 7–8 are mechanized by **`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/corpus_provenance.py" <corpus>`** (selftested): it **fails** on a broken `sources:` trace (a ref that resolves to no file in the corpus) and **warns** on a 01–02 artifact missing `contributors`, or a `sources:` ref that resolves outside `00-sources`. The trace is a *check*, not just a discipline.
 
-Score each layer against its matching `brand-evaluate` rubric; the weakest layer plus any load-order violation is the corpus's next work.
+Score each layer against its matching `brand-rubrics` rubric; the weakest layer plus any load-order violation is the corpus's next work.

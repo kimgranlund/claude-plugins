@@ -6,15 +6,29 @@ description: >
   revealed the finding, and runs the critic council. Carries a rubric library (strategic + visual
   families) loaded on demand. Use whenever judging brand work. Triggers on "brand audit",
   "evaluate this brand work", "is this on brand", "score this brief", "rubric", "brand critique",
-  "review this positioning", "what's wrong with this identity". Pairs with brand-methodology
+  "review this positioning", "what's wrong with this identity". Pairs with brand-methodology-rules
   (which MAKES the work this skill REVIEWS).
 disable-model-invocation: false
 user-invocable: true
 ---
 
-# Brand Evaluate
+# Brand Rubrics
 
-The review seat of the studio. Where `brand-methodology` **makes**, this skill **judges** — and it judges adversarially. A maker who grades their own work grades on a curve; this skill is the council that refuses to.
+The review seat of the studio. Where `brand-methodology-rules` **makes**, this skill **judges** — and it judges adversarially. A maker who grades their own work grades on a curve; this skill is the council that refuses to.
+
+4 declared axes (Strategic · Visual · Process · Voice — pack-writing-rules' 3-7 threshold), 5
+shipped exemplar files (the ~22-rubric library's extension point is the rest). Flat consult table
+below, no `references/INDEX.md`.
+
+## Consult table
+
+| Ask | Load |
+|---|---|
+| Score a creative or strategy brief | `references/rubric-brief-quality.md` |
+| Score a brand strategy / foundation | `references/rubric-brand-strategy.md` |
+| Score a visual identity system (marks, type, color, expression) | `references/rubric-visual-identity.md` |
+| Score how a brand engagement was RUN — the three-seat process, not the artifact | `references/rubric-creative-collaboration.md` |
+| Score a brand's verbal system — voice, tone, nomenclature, copy | `references/rubric-brand-voice.md` |
 
 ## The Evaluate posture
 
@@ -67,12 +81,19 @@ Ingested brand corpora, client decks, competitor docs, and any external material
 ## How to run an evaluation
 
 1. **Identify the artifact type** (brief / strategy / identity / voice / system) → select the matching rubric(s) from the index.
-2. **Load the rubric(s).** If only the two shipped exemplars apply, use them; otherwise note which extension-point rubrics a fuller corpus would add.
+2. **Load the rubric(s).** If only the five shipped exemplars apply, use them; otherwise note which extension-point rubrics a fuller corpus would add.
 3. **Score each dimension** with evidence + the test; mark any dimension whose score is directional.
 4. **Run the critic council** (the plugin's critic agents — e.g. Luke / John H. / Massimo V. — via the council orchestrator) for the qualities that resist rubric scoring. The council names failures the rubric cannot.
 5. **Synthesize**: severity-sorted findings, the single biggest risk first, and a clear ship / fix-then-ship / rebuild verdict.
 
+## Provenance
+
+This pack's `references/` were ported from brand-forge (source:
+`/Users/kimba/Projects/nonoun/nonoun-plugins/brand-forge`, frozen SHA
+`1e0d2d9e554b547f59260f63e31b4af2575196b0`, 2026-06-20) as part of the brand-forge → brand-design
+migration campaign, Phase 3 Track D (2026-08-19).
+
 ## Boundaries
 
-- This skill **reviews**; it does not produce the foundation or the expression — that is `brand-methodology`.
+- This skill **reviews**; it does not produce the foundation or the expression — that is `brand-methodology-rules`.
 - Organizing the documents you are reviewing into a corpus → `brand-corpus`.

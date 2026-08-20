@@ -15,6 +15,7 @@ A guide a stranger could write on-brand copy from, cold: voice attributes with b
 
 ## The hard test
 
+**[inferred]** — this project's own practitioner method, not an externally verified standard.
 Three, sharpest first: (1) **Does the guide tell you what NOT to say?** (2) **Could two different writers produce consistent copy from it, cold?** (3) **Does the voice make refusals** — things it will never do or say? A voice with no refusals isn't a voice; it's a vibe.
 
 ## The anti-pattern

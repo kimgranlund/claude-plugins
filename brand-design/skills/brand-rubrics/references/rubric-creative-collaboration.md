@@ -1,6 +1,6 @@
 # Rubric — Creative Collaboration (ways of working)
 
-Scores **how a brand engagement is run** — the three-seat discipline (Muse pulls · Team makes · Council reviews) — not the artifact it produced. Use it when a brand looks weak and you suspect the _process_ is why: the tell of a broken process is work with no aspiration pulling it, never gated, or never independently reviewed. See `brand-methodology` → the three seats and team-operations-by-phase.
+Scores **how a brand engagement is run** — the three-seat discipline (Muse pulls · Team makes · Council reviews) — not the artifact it produced. Use it when a brand looks weak and you suspect the _process_ is why: the tell of a broken process is work with no aspiration pulling it, never gated, or never independently reviewed. See `brand-methodology-rules` → the three seats and team-operations-by-phase.
 
 Score each dimension 1–5 with **evidence** (point to the actual artifacts, handoffs, or their absence) and **the test**. Dimensions marked _(directional)_ resist mechanical scoring — score as a lens, lean on judgment, do not average the number into a grade.
 

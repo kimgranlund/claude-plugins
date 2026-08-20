@@ -1,6 +1,6 @@
 # Rubric — Brand Voice
 
-Scores a **brand's verbal system**: voice, tone, nomenclature, and copy as governed craft (see `brand-methodology` → `05-voice` + `editorial-style-guide.md`). The bar is **refusal** — a voice is defined by what it *won't* say. Strip the logos and bylines: do two surfaces read as one brand, is each tonally correct for the reader's state, and could a competitor have published the same words? A voice with no refusals isn't a voice; it's a vibe.
+Scores a **brand's verbal system**: voice, tone, nomenclature, and copy as governed craft (see `brand-methodology-rules` → `05-voice` + `editorial-style-guide.md`). The bar is **refusal** — a voice is defined by what it *won't* say. Strip the logos and bylines: do two surfaces read as one brand, is each tonally correct for the reader's state, and could a competitor have published the same words? A voice with no refusals isn't a voice; it's a vibe.
 
 Score each dimension 1–5. Attach **evidence** (the copy) and **the test**. Dimensions marked _(directional)_ resist mechanical scoring — score as a lens, lean on the council.
 

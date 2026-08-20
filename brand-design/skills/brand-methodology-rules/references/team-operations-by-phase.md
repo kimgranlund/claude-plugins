@@ -6,7 +6,7 @@ Two rules carry across every phase. **The lead seat changes by phase** — the P
 
 ## Phase 1 — Research (cultural discovery)
 
-- **Leads:** Strategic Planner. The discipline is **account planning** (Stanley Pollitt at BMP and Stephen King at JWT, late 1960s) — the seat whose whole job is to find the consumer/cultural truth, not to decorate it.
+- **Leads:** Strategic Planner. The discipline is **account planning** (**[inferred]** — Stanley Pollitt at BMP and Stephen King at JWT, late 1960s; a widely cited advertising-history attribution, not independently re-verified against a primary source this session) — the seat whose whole job is to find the consumer/cultural truth, not to decorate it.
 - **Muse — the pull:** name the aspirational direction research should reach for — often via _cultural inversion_ or _the adjacent-world raid_ — pointing discovery at a real, distant root (the ritual, the subculture, the originators) rather than the five obvious competitors.
 - **Team produces:** cultural archaeology — primary sources, fieldwork, the actual world the brand will draw meaning from; an _insight_, not a trend report.
 - **Council reviews:** the `strategy` sub-council can pressure-test provenance early (Luke's "show me the receipts") — is the root real, or a desk survey dressed as discovery?
