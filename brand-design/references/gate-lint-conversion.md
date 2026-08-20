@@ -17,7 +17,7 @@ inside each of these three command-skills' own procedures, at the named gate ste
 |---|---|---|
 | `make-brand` | before presenting a draft to the user | the draft brand doc(s) just written |
 | `check-brand-rubric` | before presenting a draft to the user | the doc(s) under review |
-| `save-brand-corpus` | before export | the corpus doc(s) about to be written to `references/` / exported |
+| `file-brand-corpus` | before export | the corpus doc(s) about to be written to `references/` / exported |
 
 This is **advisory, never blocking** (the script's own docstring: "a clean brand-lint says 'no
 structural tells,' never 'this brand is good'" — cultural-authority judgment stays with the

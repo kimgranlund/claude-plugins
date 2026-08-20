@@ -36,7 +36,7 @@
       "id": "n01",
       "prompt": "Score this brand strategy against the rubric.",
       "expect": "no-trigger",
-      "comment": "owner: brand-evaluate (rubric scoring, not a named-practitioner critique panel)"
+      "comment": "owner: brand-rubrics (rubric scoring, not a named-practitioner critique panel)"
     },
     {
       "id": "n02",

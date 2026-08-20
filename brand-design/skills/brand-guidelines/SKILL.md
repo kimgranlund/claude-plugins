@@ -8,9 +8,9 @@ description: >
   expression rules through an interactive multiple-choice loop. Triggers on "build brand guidelines", "brand
   design system", "guide me through the brand system", "2x2 options for the brand", "elicit the color/type/
   voice system", "help me decide the brand expression", "assemble a brand guidelines section". This skill
-  MAKES guidelines (the guided maker); it does NOT grade them — scoring is brand-evaluate (in-plugin) and the
+  MAKES guidelines (the guided maker); it does NOT grade them — scoring is brand-rubrics (in-plugin) and the
   parallel design-skills:brand-decomposer (deeper operability check, when installed). NOT for strategy /
-  positioning (brand-methodology) or naming / copy (brand-copywriter).
+  positioning (brand-methodology-rules) or naming / copy (the brand-writer agent).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -45,7 +45,7 @@ Each pick appends a typed entry to a **choice-ledger** (the cumulative knowledge
 
 ## Assembly + scoring (the loop closes)
 
-Check progress with **`bin/guidelines-ledger coverage`** (per-domain resolved/absent + the frontier). When the domains are covered, **`bin/guidelines-ledger assemble [--out <corpus>] [--apply]`** (defaults to **`./brand-corpus`**, like `/brand-corpus-export`) compiles the live ledger into corpus docs in their layers (dry-run by default; matches the corpus's flat/folder convention; refuses a mixed corpus; **non-destructive** — never clobbers a hand-authored layer doc, writing a flagged `.elicited.md` sibling instead, `--force` to replace, re-assembly idempotent) — each choice a typed rule (`must/should/may`), carrying **`sources:`** + **`contributors:`** frontmatter — so **`corpus-provenance` gates the trace** and **`brand-evaluate` scores** the result. The build loop closes into the provenance + evaluate loops.
+Check progress with **`bin/guidelines-ledger coverage`** (per-domain resolved/absent + the frontier). When the domains are covered, **`bin/guidelines-ledger assemble [--out <corpus>] [--apply]`** (defaults to **`./brand-corpus`**, like `/brand-corpus-export`) compiles the live ledger into corpus docs in their layers (dry-run by default; matches the corpus's flat/folder convention; refuses a mixed corpus; **non-destructive** — never clobbers a hand-authored layer doc, writing a flagged `.elicited.md` sibling instead, `--force` to replace, re-assembly idempotent) — each choice a typed rule (`must/should/may`), carrying **`sources:`** + **`contributors:`** frontmatter — so **`corpus_provenance.py` gates the trace** and **`brand-rubrics` scores** the result. The build loop closes into the provenance + evaluate loops.
 
 **The brand-decomposer seam:** `bin/guidelines-ledger card <ledger> --idea "<from 01-foundation>" -o card.json` projects a `*.brand.json` card that `design-skills:brand-decomposer` can GRADE + operability-check (`brand-spec-check.py lint card.json`) when installed — the optional make→grade handoff (verified: a projected card clears brand-decomposer's operability gate). brand-forge stays self-contained.
 
@@ -55,7 +55,7 @@ Check progress with **`bin/guidelines-ledger coverage`** (per-domain resolved/ab
 
 ## Boundaries
 
-- **Makes, doesn't grade** — scoring is `brand-evaluate` (in-plugin) + `brand-decomposer` (when installed).
-- **Guidelines, not strategy** — the position/POV is `brand-methodology` (this loop *descends from* `01-foundation`, it doesn't decide it).
-- **Structure, not copy** — voice *behavior* here; the actual words are `brand-copywriter`.
+- **Makes, doesn't grade** — scoring is `brand-rubrics` (in-plugin) + `brand-decomposer` (when installed).
+- **Guidelines, not strategy** — the position/POV is `brand-methodology-rules` (this loop *descends from* `01-foundation`, it doesn't decide it).
+- **Structure, not copy** — voice *behavior* here; the actual words are the `brand-writer` agent.
 - → Full mechanism, the design-move card, drill-down, coherence graph, assembly, the seam: [`references/the-loop.md`](references/the-loop.md).

@@ -6,7 +6,7 @@ description: >
   (Critical/Major/Minor/Noise) with cited evidence, cross-critic synthesis to one verdict. Use
   for "convene the brand council", "get the critics on this", "run the design/voice/strategy
   sub-council", "adversarial review from named practitioners", "what would Luke S. / Paula S.
-  say about this". NOT a rubric score (`brand-evaluate`); NOT the aspirational pull
+  say about this". NOT a rubric score (`check-brand-rubric`); NOT the aspirational pull
   (`muse-agent`); NOT making the voice itself (`brand-writer`); NOT corpus organizing
   (`brand-corpus`).
 argument-hint: "[strategy|design|voice|full] [artifact]"

@@ -26,7 +26,10 @@ Target corpus dir: `$ARGUMENTS` (default `./brand-corpus`, the same default `mak
 1. **Check the precondition.** There must be real brand work products to export. If the
    engagement hasn't produced any yet, say so and stop — point at `make-brand`; never invent
    deliverables to fill sections.
-2. **Write the corpus.** Author the real deliverables as Markdown into `<corpus>/`, grouped into
+2. **Lint before export.** `find "<corpus>" -name '*.md' | xargs python3
+   "${CLAUDE_PLUGIN_ROOT}/scripts/brand_lint.py"` — advisory only (a clean run says "no structural
+   tells," never "this is ready"); surface any findings alongside the export rather than silently.
+3. **Write the corpus.** Author the real deliverables as Markdown into `<corpus>/`, grouped into
    ordered top-level sections (a leading `NN-` orders a section and is stripped from the display
    name; include only what exists):
    - `00-strategy/` — positioning, brand strategy, the Foundation Canon
@@ -38,7 +41,7 @@ Target corpus dir: `$ARGUMENTS` (default `./brand-corpus`, the same default `mak
    Give each page a frontmatter `title:` (else its first `# H1` is used). Add `<corpus>/README.md`
    whose H1 is the brand name — it becomes the site title + home hero. Keep the corpus root clean
    Markdown, browsable and diffable on its own — no app files mixed in.
-3. **Generate the viewer**, in one command:
+4. **Generate the viewer**, in one command:
    ```sh
    python3 "${CLAUDE_PLUGIN_ROOT}/scripts/build_sitemap.py" --init "<corpus>"
    ```
@@ -47,7 +50,7 @@ Target corpus dir: `$ARGUMENTS` (default `./brand-corpus`, the same default `mak
    Re-run it after editing the corpus. Optional polish: a `<corpus>/reader.config.json`
    (`{"title": "…", "sections": {"00-strategy": "one-line description"}}`) sets the site title and
    the home cards' section descriptions.
-4. **Serve + verify.** `cd "<corpus>" && python3 -m http.server`, open
+5. **Serve + verify.** `cd "<corpus>" && python3 -m http.server`, open
    `http://localhost:8000/site/`. Confirm the home cards list your sections (with descriptions if
    configured), and that a doc containing a raw `<script>` produces no dialog (DOMPurify strips
    it).
