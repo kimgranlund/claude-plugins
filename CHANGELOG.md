@@ -13,6 +13,33 @@ to duplicate their per-version detail.
 > touched plugin's own README ledger — not backfilled here to avoid restating detail from memory
 > that the ADRs themselves already carry as the source of record.
 
+## 2026-08-19 — brand-design: the ninth plugin, migrated and overhauled from a standalone repo
+
+**brand-design** landed as the ninth plugin — not partitioned from within this estate like the
+first seven, and not hand-authored fresh like authorkit, but migrated from a standalone sibling
+repo (`brand-forge` v0.4.36, source `/Users/kimba/Projects/nonoun/nonoun-plugins/brand-forge`,
+frozen at SHA `1e0d2d9e554b547f59260f63e31b4af2575196b0`) under an explicit overhaul-not-just-port
+mandate, run as a five-phase campaign (`.claude/overhaul-run-2026-08-19-brand-design.md` carries
+the full ledger). The council restructure was the largest single change: 17 agents (14 named
+critics + muse + copywriter + a `brand-council` orchestrator) collapsed to 3 (`brand-judge`, a
+read-only critic shell dispatched with ONE persona inlined per call; `muse-agent`; `brand-writer`)
+plus a `check-brand-council` skill whose own procedure fans out host-side — never a nested
+dispatch, citing this estate's own #266 chore-lead retirement and a same-campaign #778
+nested-dispatch-stranding incident as precedent. The 4 knowledge packs (`brand-corpus`,
+`brand-guidelines`, `brand-methodology-rules`, `brand-rubrics`) were restructured to
+`pack-writing-rules` and gained eval suites; a full blind-judge routing proof then found two of
+those packs (`brand-rubrics`, `brand-guidelines`) losing every one of their own trigger cases to a
+same-plugin action-twin skill — both had copied near-duplicate action-phrased triggers onto the
+skill that actually performs the action — fixed by reframing both as
+mechanics/methodology-lookup-only, re-verified live at 10/10 and 9/10. Two parallel-builder waves
+(local-clone pattern, no GitHub remote yet at the time) plus two rounds of independent
+fresh-context-checker reconciliation caught real defects a single pass would have missed: a
+pre-hardening `.mcp.json` bug that would have broken the bundled MCP server on install, a missed
+`bin/`-path rename across two reference files, and a false "checker already ran" claim in all 4
+packs' provenance records. brand-design is this estate's only MCP/`userConfig`-registered plugin.
+The source repo is left untouched — no pointer edit, no deprecation notice — this migration is a
+fork, not a move.
+
 ## 2026-08-16/19 — the fleet becomes governable, then fast: write-gate, live lane, and the estate that trims itself
 
 Four ratified ADRs (0020–0023) landed the fleet's governance layer: seat naming and reserved

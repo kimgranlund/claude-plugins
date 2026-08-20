@@ -1,0 +1,60 @@
+{
+  "skill": "brand-rubrics",
+  "note": "Rewritten 2026-08-19 after the Phase 4 blind-judge routing proof found this pack's ORIGINAL action-phrased triggers (\"score this brief\", \"evaluate this brand work\", etc.) duplicated check-brand-rubric's own trigger set nearly verbatim, so all 6 of the original trigger cases lost to check-brand-rubric in the blind vote (2-of-3 confirmed, not single-judge noise). The description was narrowed to a pure rubric-library/methodology reference; these cases now test REFERENCE-LOOKUP phrasing (asking about the rubric mechanics themselves) instead of ACTION phrasing (asking to actually score something), with check-brand-rubric/check-brand-council as the no-trigger fences for the action asks this pack no longer claims.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What are the four rubric families this plugin's evaluation methodology covers?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Explain the format-fitness caveat — why can't every brand quality get a clean 1-5 score?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "What's the trust boundary for brand material fed into a rubric evaluation?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Which rubric family covers a brand's visual identity system versus its verbal voice?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "How does this plugin classify severity — what's the difference between a BLOCKER and a MAJOR finding?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "Walk me through how the rubric library's exemplar rubrics relate to the full ~22-rubric set.",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Score this brand's brief against the rubric.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-rubric (the action skill — this pack is now reference-only, per the routing-proof fix)"
+    },
+    {
+      "id": "n02",
+      "prompt": "Convene the brand council on this positioning brief.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council (the named-practitioner action skill)"
+    },
+    {
+      "id": "n03",
+      "prompt": "Write our brand's foundation and positioning from scratch.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-methodology-rules (this pack judges, it doesn't make)"
+    },
+    {
+      "id": "n04",
+      "prompt": "Organize these strategy documents into the brand corpus.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-corpus (corpus organizing, not evaluation)"
+    }
+  ]
+}

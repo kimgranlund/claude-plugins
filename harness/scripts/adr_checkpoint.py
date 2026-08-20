@@ -104,13 +104,18 @@ ADR_ID_RE = re.compile(r"adr-\d+")
 
 # The second detection signal (issue #221): a forward supersession clause in an accepted ADR's
 # own BODY prose, read only when the frontmatter `supersedes:` field is null. Active voice only —
-# `supersedes` never matches `superseded`/`superseding`, same discipline as the table dialect's
-# TABLE_SUPERSEDES_RE below. The optional scope group captures an italicized noun phrase between
-# "the" and "of" ("supersedes the *grammar* halves of ADR-0001 and ADR-0006") for a PARTIAL
-# supersession; its absence ("supersedes ADR-0002") is a full one. One or more ids may follow,
-# joined by "," or "and".
+# none of the three accepted verbs ever match their passive form ("superseded by"/"amended by"/
+# "replaced by"), same discipline as the table dialect's TABLE_SUPERSEDES_RE below. issue #1715
+# widened the verb set beyond literal "supersedes" — free prose that amends or replaces a prior
+# ADR without the literal clause was previously invisible to this classifier. The three ratified
+# phrasings — `supersedes`, `amends`, `replaces` — are extracted identically; the optional scope
+# group (present or absent) is what actually distinguishes a partial edge from a full one, not the
+# verb choice. The scope group captures an italicized noun phrase
+# between "the" and "of" ("supersedes the *grammar* halves of ADR-0001 and ADR-0006") for a
+# PARTIAL supersession; its absence ("supersedes ADR-0002") is a full one. One or more ids may
+# follow, joined by "," or "and".
 BODY_SUPERSEDES_RE = re.compile(
-    r"(?i)\bsupersedes\b\s+"
+    r"(?i)\b(?:supersedes|amends|replaces)\b\s+"
     r"(?:the\s+\*(?P<scope>[^*]+)\*\s+\w+\s+of\s+)?"
     r"(?P<ids>ADR-\d+(?:\s*(?:,|and)\s*ADR-\d+)*)"
 )
@@ -161,13 +166,14 @@ def superseded_ids(supersedes_value):
 
 
 def body_supersedes_ids(text):
-    """The second detection signal (issue #221): extract forward supersession clause(s) from an
-    ADR's own BODY prose — never the frontmatter block, which is handled separately by
-    `superseded_ids()`. Returns a list of (target_adr_id, scope|None) tuples, one per id named in
-    a matched clause: scope is the italicized noun phrase in a partial clause ("supersedes the
-    *grammar* halves of ADR-0006" -> ("adr-0006", "grammar")), or None for a bare full
-    supersession ("supersedes ADR-0002" -> ("adr-0002", None)). Active voice only — "superseded
-    by"/"supersessions" never match `\bsupersedes\b`. Pure — no I/O."""
+    """The second detection signal (issue #221, verb set widened by issue #1715): extract forward
+    supersession clause(s) from an ADR's own BODY prose — never the frontmatter block, which is
+    handled separately by `superseded_ids()`. Recognizes `supersedes`, `amends`, and `replaces` as
+    equally valid active-voice verbs. Returns a list of (target_adr_id, scope|None) tuples, one per
+    id named in a matched clause: scope is the italicized noun phrase in a partial clause
+    ("supersedes the *grammar* halves of ADR-0006" -> ("adr-0006", "grammar")), or None for a bare
+    full supersession ("replaces ADR-0002" -> ("adr-0002", None)). Active voice only — "superseded
+    by"/"amended by"/"replaced by"/"supersessions" never match. Pure — no I/O."""
     edges = []
     for m in BODY_SUPERSEDES_RE.finditer(text):
         scope = m.group("scope")
@@ -640,6 +646,17 @@ def selftest():
     # "supersessions" must never match
     assert body_supersedes_ids("This was superseded by ADR-0009.") == []
     assert body_supersedes_ids("No supersessions occurred here.") == []
+
+    # issue #1715 — widened verb set: "amends" and "replaces" extract identically to "supersedes"
+    assert body_supersedes_ids("This amends ADR-0037 in part.") == [("adr-0037", None)]
+    assert body_supersedes_ids("This replaces ADR-0002 outright.") == [("adr-0002", None)]
+    assert body_supersedes_ids(
+        "This amends the *sizing* axis of ADR-0037."
+    ) == [("adr-0037", "sizing")]
+
+    # active-voice-only control for the two new verbs — passive forms must never match
+    assert body_supersedes_ids("This was amended by ADR-0040.") == []
+    assert body_supersedes_ids("This was replaced by ADR-0009.") == []
 
     # hash_adr — deterministic, content-sensitive
     assert hash_adr("x") == hash_adr("x")

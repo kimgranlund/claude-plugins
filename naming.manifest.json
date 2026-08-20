@@ -134,6 +134,11 @@
       ]
     },
     {
+      "canonical": "brand",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "bug",
       "plural": "bugs",
       "banned_aliases": []
@@ -195,6 +200,16 @@
         "convention",
         "standards"
       ]
+    },
+    {
+      "canonical": "corpus",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "council",
+      "plural": "councils",
+      "banned_aliases": []
     },
     {
       "canonical": "decision",
@@ -299,6 +314,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "guidelines",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "harness",
       "plural": null,
       "banned_aliases": []
@@ -371,7 +391,17 @@
       "banned_aliases": []
     },
     {
+      "canonical": "methodology",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "mobile",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "muse",
       "plural": null,
       "banned_aliases": []
     },
@@ -384,6 +414,11 @@
     },
     {
       "canonical": "orchestration",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "orientation",
       "plural": null,
       "banned_aliases": []
     },
@@ -563,6 +598,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "stack",
+      "plural": "stacks",
+      "banned_aliases": []
+    },
+    {
       "canonical": "stage",
       "plural": null,
       "banned_aliases": []
@@ -580,6 +620,11 @@
     {
       "canonical": "surface",
       "plural": "surfaces",
+      "banned_aliases": []
+    },
+    {
+      "canonical": "sync",
+      "plural": null,
       "banned_aliases": []
     },
     {
@@ -708,6 +753,7 @@
     "markdown-to-markup",
     "material-motion-facts",
     "mobilize-chores",
+    "muse-agent",
     "pick-fonts",
     "plan-chores",
     "plan-plugin-split",
