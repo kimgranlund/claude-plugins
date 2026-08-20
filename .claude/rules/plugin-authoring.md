@@ -22,6 +22,4 @@ below.
   installed; an agent preload or script path crossing plugins is a defect (plan-plugin-split's
   `surface_map.py check` kills it).
 
-Moved from the workspace CLAUDE.md's Invariants section (issue #262, 2026-08-16) — three
-invariants that only bind while editing a skill, agent, hook, evals suite, or a bundled script's
-plugin-boundary references; noise on every other turn.
+Split from CLAUDE.md (issue #262, 2026-08-16).

@@ -10,7 +10,9 @@ per-write. Supersede, never edit, an accepted ADR.
 `.refactor-attic/` directories are the undo for non-git-reversible merges — never deleted
 casually.
 
-Moved from the workspace CLAUDE.md's "Docs and ledgers" invariant (issue #262, 2026-08-16) — the
-work-items-are-GitHub-Issues fact stayed in CLAUDE.md as always-relevant core (it governs where
-any task's own record lives, not just doc-tree edits); this file carries only the part that's
-true specifically inside the doc tree or a refactor-attic directory.
+**Docs-root override (ruled 2026-08-17, issue #514).** docs' `doc-writing-rules` ladder defaults
+repo-level records to `docs/ops/`; THIS workspace overrides that at rung 1 — everything stays
+under `.claude/docs/`, because the `docs` plugin directory already owns the bare `docs/` path and
+a `docs/ops/` root would collide with the plugin's own name.
+
+Split from CLAUDE.md (issue #262, 2026-08-16).
