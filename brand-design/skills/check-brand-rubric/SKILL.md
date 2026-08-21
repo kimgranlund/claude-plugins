@@ -5,12 +5,10 @@ description: >-
   Foundation Canon, an expression system, voice/tone, a brief, a full identity. Cold-examiner
   posture: names failures with evidence and the test that reveals them, never flatters. Use when
   the user wants a rubric-scored VERDICT on real, provided work — "score this brand work",
-  "evaluate this brief", "is this on brand", "audit this positioning against the rubric", "grade
-  this identity". NOT for making the work (`make-brand`), the named-critic panel
-  (`check-brand-council`), or a knowledge question about what a specific critic's lens catches —
-  "does our house style hold consistent across writers" asked as a lens/knowledge question, no
-  artifact in hand — that's the matching `brand-voice-facts`/`brand-strategy-facts`/
-  `brand-identity-facts`/`brand-advertising-facts` pack.
+  "evaluate this brief", "is this on brand", "audit this positioning", "grade this identity". NOT
+  making the work (`make-brand`). NOT the named-critic panel
+  (`check-brand-council`). NOT a lens/knowledge question with no artifact in hand
+  (`brand-voice-facts`/`brand-strategy-facts`/`brand-identity-facts`/`brand-advertising-facts`).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[path or description of the artifact]"

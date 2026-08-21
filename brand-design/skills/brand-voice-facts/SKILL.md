@@ -21,24 +21,11 @@ written voice — copy, house style, individual sentences. This is `make-critic`
 corpus for minting a new voice-family critic; it is not a procedure and does not itself run a
 review.
 
-4 declared axes (pack-writing-rules' 3-7 threshold) across 4 reference files, flat corpus — this
-table is the retrieval map (no INDEX needed at this size).
-
-Enter by search: Grep the mapped file for the term, then Read that section — never read the
-folder start-to-finish. Every consult answers as claim + the cited reference file + its
-grounding marker ([verified] against a persona file, or [inferred] and marked as such) — e.g.
-"an adjective with no supplied fact behind it fails David A.'s underline test ([verified],
-`references/canonical-tests.md`)."
-
-## Consult table
-
-| Ask | Load |
-|---|---|
-| The three lenses themselves — what each critic interrogates and why | `references/lenses.md` |
-| The specific defects this family catches | `references/failure-modes.md` |
-| The concrete, repeatable diagnostic tests | `references/canonical-tests.md` |
-| The family's shared working vocabulary | `references/vocabulary.md` |
-| Provenance — trust order, what's verified vs. general knowledge | `references/sources.md` |
+For the declared-axes framing, retrieval discipline, and Ask/Load table shape, see `council-
+rules`' `references/role-pack-scaffolding.md` (the single home; not repeated here). Locally: this
+family covers **3** lenses over `lenses.md`/`failure-modes.md`/`canonical-tests.md`/
+`vocabulary.md`/`sources.md`. Worked example: "an adjective with no supplied fact behind it fails
+David A.'s underline test ([verified], `references/canonical-tests.md`)."
 
 ## The clustering evidence (why these three sit together)
 

@@ -71,26 +71,26 @@ lexicon, the exact defect authorkit's manifest discipline exists to prevent).
 - none — no move survived Phase 1
 
 #### Wave 2 — species changes (semantic — critic pass + eval rewrite required)
-- [ ] S1 — description diets ×3: make-critic (813 content chars), brand-methodology-rules
+- [x] S1 — description diets ×3: make-critic (813 content chars), brand-methodology-rules
   (857), check-brand-rubric (776) → ≤700 each, evals updated in-change + scoped blind
   re-judge per suite (the v1.0.4/t05 dead-trigger class guards the trims — recorded in
   design/README.md's ledger v1.0.4 entry and make-variants' evals.json dated note, 2026-08-21)
   (Blocked-by: #838 —
-  it edits make-critic's routing surface) — status: todo — done-when: all three ≤700 content
+  it edits make-critic's routing surface) — status: **done** (`#844`, 2026-08-21) — done-when: all three ≤700 content
   chars, skill_lint W8 clean, scoped re-judge shows no dead/stolen trigger, checker pass clean
-- [ ] S2 — dedup the shared scaffolding (~14 000 recoverable chars, all 20 duplicate pairs
+- [x] S2 — dedup the shared scaffolding (~14 000 recoverable chars, all 20 duplicate pairs
   cited): the 4 `*-facts` packs' three repeated blocks → one shared home (cite council-rules
   or one shared reference), fixing the three-vs-four-lens drift as part of the move; the
   corpus/guidelines/rubrics provenance sentence → stated once (`.provenance/` or one pack),
   cited from the other two (Blocked-by: none, but NOTE — #838 touches council-rules in-flight;
-  land after it or pick the `.provenance/` home that avoids the file) — status: todo —
-  done-when: measure.py
+  land after it or pick the `.provenance/` home that avoids the file) — status: **done**
+  (`#845`, 2026-08-21) — done-when: measure.py
   duplicate_pairs = 0 for the cited pairs, no content lost (each block's single home carries
   the union), checker pass clean, gate green
-- [ ] S3 — post-#838 long-body re-measure: check-brand-council, make-critic, make-council,
+- [x] S3 — post-#838 long-body re-measure: check-brand-council, make-critic, make-council,
   brand-judge, muse-agent re-measured on the merged tree; trim ONLY what still flags, per
-  bloat-audit's CALIBRATION.md load-bearing test (Blocked-by: #838, S2) — status: todo —
-  done-when: re-measured numbers recorded here with a dated note; every member either under
+  bloat-audit's CALIBRATION.md load-bearing test (Blocked-by: #838, S2) — status: **done**
+  (`#846`, 2026-08-21) — done-when: re-measured numbers recorded here with a dated note; every member either under
   6 000 or its overage justified line-by-line as load-bearing
 #### Wave 3 — contested
 - [ ] S4 — spec-naming-convention §6.1 closed folder set is stale: `evals/` (20/20 here,
@@ -104,9 +104,10 @@ lexicon, the exact defect authorkit's manifest discipline exists to prevent).
   the spec to match the estate's real name+description(+model/tools) convention (Blocked-by:
   none) — status: todo — done-when: a human rules one way and the follow-up work item (if
   any) is minted
-- [ ] S6 — authorkit instrument gap: `validate.py --target <plugin>` reports "ungoverned"
+- [x] S6 — authorkit instrument gap: `validate.py --target <plugin>` reports "ungoverned"
   without checking for a governing manifest at an ancestor estate root — today's
-  false-violation source (Blocked-by: none) — status: todo — done-when: filed to authorkit
+  false-violation source (Blocked-by: none) — status: **filed** (`#842`, 2026-08-21; the
+  authorkit fix itself remains open there) — done-when: filed to authorkit
   as a bug with this run's repro; validate.py resolves the nearest governing manifest or
   names the scoping rule explicitly
 
@@ -124,11 +125,77 @@ parallel.
 
 How the whole plan proves itself, per wave, once its tickets land:
 
-- [ ] `/check-routing` clean for every touched plugin (S1's trims re-judged scoped; a full
-  brand-design run at campaign close)
+- [x] `/check-routing` clean for every touched plugin (S1's trims re-judged scoped, 2026-08-21 —
+  see below; a full brand-design run still owed at campaign close)
 - [ ] `fix-old-names` sweep run against consumer repos
 - [ ] Records amended with dated supersession notes (never rewritten)
-- [ ] S3's re-measured bloat numbers recorded in this doc with a dated note
+- [x] S3's re-measured bloat numbers recorded in this doc with a dated note — see below
+
+**S1 scoped blind re-judge (2026-08-21, wave-2 batch #844/#845/#846).** Three suites
+(make-critic, check-brand-rubric, brand-methodology-rules) re-judged blind against the full
+20-skill brand-design menu after the description trims. All three clean: 0 dead, 0 stolen, 0
+leaked, once one contested case was fixed and re-voted — make-critic's t05 (".name-map.md
+attribution convention") initially routed to `council-rules` after the first trim dropped the
+word "attribution"; restoring it (word-for-word "`.name-map.md` attribution discipline") fixed
+the case, confirmed 2-of-3 on a follow-up vote. This is exactly the v1.0.4/t05 dead-trigger class
+the seed's own done-when named — caught by the re-judge it mandated, not by inspection.
+
+**S2 dedup (2026-08-21, `#845`).** `measure.py duplicate_pairs` for the 20 cited pairs (the 4
+`*-facts` packs' three shared blocks + the corpus/guidelines/rubrics provenance sentence): 20 → 0.
+Shared home: `council-rules`' new `references/role-pack-scaffolding.md` (declared-axes framing,
+retrieval discipline, the Ask/Load table, and a table stating each pack's own lens count —
+advertising 3, identity 4, strategy 4, voice 3 — so the count can't drift again) for the three
+`*-facts` blocks; the plugin root README's existing "Provenance and disposition" § Phase 3 Track D
+for the provenance sentence (brand-corpus/brand-guidelines/brand-rubrics now point there instead
+of each carrying their own copy). Fresh-context `skill-checker` pass found one real gap (a "4
+reference files" vs. "five reference files" self-contradiction inside the new shared file, from
+centralizing two sentences that used to live in different packs) and two nits (a stale "each pack
+states" tense, and the roster-vs-role-family count needing the `creative`/`advisory` sub-councils
+named) — all fixed in the same change. Investigating that distinction also surfaced a real,
+separate finding, not fixed here: the roster's `creative` sub-council (seeded empty, VACANT lead)
+appears to be the intended eventual home for the advertising-creative critics (george-l, nick-l,
+rory-s), who currently still sit in their legacy `strategy`/`voice` rows — a re-seat, not a dedup,
+and out of this seed's scope; worth its own ticket.
+
+**S3 re-measure (2026-08-21, `#846`).** Numbers below are BEFORE (mid-#838, this plan's original
+measurement) → AFTER (post-#845 dedup, post-S3 trim):
+
+| Member | Before (plan) | After trim | Status |
+|---|---|---|---|
+| `agents/brand-judge.md` | 6 749 | 5 991 | under 6 000 — clean |
+| `agents/muse-agent.md` | 6 704 | 5 991 | under 6 000 — clean |
+| `skills/check-brand-council/SKILL.md` | 14 834 | 15 010 | still >6 000 — justified overage (below) |
+| `skills/make-council/SKILL.md` | 10 157 | 9 677 | still >6 000 — justified overage (below) |
+| `skills/make-critic/SKILL.md` | 10 732 | 8 763 | still >6 000 — justified overage (below) |
+
+check-brand-council's after-number is HIGHER than the plan's stale before-number because the
+plan's 14 834 was measured mid-#838 with roster content still inline (S3's own caveat #1); #838's
+later merge moved that content out, then #840's role-agents work and #845's own small additive fix
+(a genuine dropped "no artifact named" failure branch, restored after a checker pass) added it
+back. The real before-in-this-session number (pre-trim, post-#845) was 16 735; the trim recovered
+1 829 chars from it (11%).
+
+**Overage justifications (CALIBRATION.md's load-bearing test — cutting would lose a real
+instruction, not its retelling):**
+- `check-brand-council/SKILL.md` (15 010) — a two-phase orchestration procedure carrying the 2-of-3
+  contested-severity vote, the `advisory` sub-council's exclusion rule applied at three separate
+  points, the phase-2 anonymization contract's one deliberate exception, two dated incident
+  citations gating the no-nested-dispatch rule, and five distinct synthesis-shape definitions
+  (B-S1–B-S5) — each a non-inferable procedural rule, not a restatement of another.
+- `make-council/SKILL.md` (9 677) — a 10-step minting procedure where each step is structurally
+  distinct (domain intake, skill minting, roster seeding with its bijection contract, chair reuse,
+  two differently-reserved-named agent-minting patterns, calibration seeding, run-mode disclosure,
+  the mandatory fresh-context check, reporting); no step restates another.
+- `make-critic/SKILL.md` (8 763) — 8 numbered steps each carrying a distinct non-default
+  convention (advisory-seating as the *ordinary* path, not a fallback; the three-way sub-council
+  branching logic; the roster row schema; the mandatory-checker-pass rule with its degraded-mode
+  branch) plus specific file-path citations a capable model can't infer.
+
+Both `check-brand-council` and `make-council` trims each dropped one real citation/edge case in
+their first pass (a "no artifact named" failure branch, and two file citations — `severity-and-
+voting.md` and `roster_check.py`'s `scripts/` path) — caught by fresh-context `skill-checker`
+passes and restored in the same change; recorded here per the incident→infrastructure invariant
+rather than silently fixed.
 
 ## Rollback
 

@@ -1,16 +1,14 @@
 ---
 name: brand-methodology-rules
 description: >
-  Senior-practitioner methodology REFERENCE for building a brand from cultural authority — not
-  aesthetics: the pipeline research → strategy → expression → stewardship, archaeology and
-  positioning, the load-bearing Brand Foundation Canon, an expression system, and the rules
-  keeping a brand coherent over time. Use when the user asks about the methodology or its
-  mechanics — "what are the six foundation components", "what does the Canon reject", "how do
-  the three seats work", "how do you stress-test a positioning territory", "what's cultural
-  archaeology vs. market research". NOT for actually running a build now — that's `make-brand`,
-  which owns the "build/develop/work on this brand's strategy, positioning, identity, voice"
-  triggers and cites this pack for method. NOT marketing/performance media, and NOT product
-  strategy or UX — product-forge's domain.
+  Senior-practitioner methodology REFERENCE for building a brand from cultural authority, not
+  aesthetics: research → strategy → expression → stewardship, archaeology, positioning, the
+  Brand Foundation Canon, an expression system, staying coherent over time. Use when the user
+  asks about the methodology itself — "what are the six foundation components", "what does the
+  Canon reject", "how do the three seats work", "how do you stress-test a positioning territory",
+  "cultural archaeology vs. market research". NOT running a build now — owns
+  "build/develop/work on this brand's strategy, positioning, identity, voice" (`make-brand`). NOT
+  marketing/performance or product strategy/UX (product-forge).
 disable-model-invocation: false
 user-invocable: true
 ---

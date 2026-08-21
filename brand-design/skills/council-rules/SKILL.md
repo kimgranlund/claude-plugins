@@ -23,7 +23,7 @@ mints next) configures it rather than reinventing it. `check-brand-council` is t
 instance: its roster is brand-specific configuration; its mechanics are this pack, cited not
 restated.
 
-This file is a table of contents. 8 axes across 8 reference files — full map:
+This file is a table of contents. 9 axes across 9 reference files — full map:
 [`references/INDEX.md`](references/INDEX.md).
 
 ## Consult table
@@ -42,6 +42,7 @@ instead of citing it (restated machinery, or a collapsed blind-phase independenc
 | Why and how a council proves it still works (calibration fixtures, promoted scripts) | `references/calibration-discipline.md` |
 | The two-phase model — blind, then deliberation — and why the order is load-bearing | `references/two-phase-model.md` |
 | What a role agent is, its scoped convene semantics, empty-bench handling, and the reserved-name rule | `references/role-agents.md` |
+| The shared template behind the four `*-facts` role-family grounding packs (declared-axes framing, retrieval discipline, the Ask/Load table with each pack's lens count) | `references/role-pack-scaffolding.md` |
 
 ## First principles
 

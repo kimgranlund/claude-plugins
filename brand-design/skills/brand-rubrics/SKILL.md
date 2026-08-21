@@ -72,8 +72,9 @@ verdict. → Full step detail: [`references/evaluation-posture.md`](references/e
 
 ## Provenance
 
-This pack's `references/` were ported from brand-forge, Phase 3 Track D — full citation (source
-repo, frozen SHA, date) in the plugin root README's "Provenance and disposition" section.
+This pack's `references/` were part of the same brand-forge migration as `brand-corpus`'s and
+`brand-guidelines`'s — the frozen-SHA/date citation lives once in the plugin root README's
+"Provenance and disposition" § Phase 3 Track D, not duplicated per pack.
 
 ## Boundaries
 
