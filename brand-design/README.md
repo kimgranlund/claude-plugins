@@ -24,7 +24,7 @@ seam: no seat judges its own work.
 | `skills/check-brand-rubric` | Procedural | both (`/check-brand-rubric`) | Adversarially scores existing brand work against `brand-rubrics`' library — names failures with evidence and the test that reveals them, never flatters |
 | `skills/council-rules` | Knowledge pack | model-only | What a council IS, domain-neutral: roster/persona contract, the roster FILE contract (`roster.md`'s table + `## Groups` + `## Role agents` schema, bijection, `VACANT`-lead convention), sub-councils, blind fan-out mechanics, severity taxonomy + 2-of-3 contested voting, the five synthesis shapes, calibration discipline, the two-phase model (blind first, chair-moderated deliberation second), and (new, `#840`) the role-agent contract (`references/role-agents.md`) — one addressable agent per role, its scoped convene semantics, and the `full`/`advisory` reserved-name rule — the machinery `check-brand-council` is an instance of, and what `make-council`/`make-critic` mint against. 8 reference files under `references/INDEX.md` (8 declared axes) |
 | `skills/check-brand-council` | Procedural (orchestrator) | both (`/check-brand-council`) | Convenes the named-practitioner council as an INSTANCE of `council-rules`' machinery — roster membership is DATA (`references/roster.md`, roster-as-data, `#838`; role→agent mapping, `#840`), cited by this SKILL.md rather than restated in prose. Phase 1 (blind, unchanged): fans out unnamed `brand-judge` dispatches per persona (`skills/check-brand-council/references/critics/critic-*.md`, 14 files) by sub-council (strategy/design/voice/full) or a named roster group (e.g. `leads`) — this procedure's own sub-council enumeration is unchanged by `#840`'s new `creative` sub-council, which is convened directly via `agents/creative-convener` instead, 2-of-3 contested-severity voting, cross-critic synthesis (convergence, highest severity, productive tension, blind spot, verdict + 3 revisions). Phase 2 (`--deliberate`, new): dispatches `council-chair-agent` (renamed from `council-marshal`, `#840`) as Chair to moderate a deliberation round over the anonymized phase-1 findings. This procedure IS the phase-1 orchestrator — no separate agent for phase 1; phase 2 delegates to the Chair |
-| `skills/file-brand` | Procedural | both (`/file-brand`) | Stamps a finished corpus into a distributable (plugin/Claude-chat skill/standalone MCP) via `scripts/brand_stamp.py`, running `brand_lint.py` before ratifying. Always asks which form |
+| `skills/file-brand` | Procedural | both (`/file-brand`) | Stamps a finished corpus into a distributable (plugin/Claude-chat skill/standalone MCP), or stamps the corpus repo itself into a Claude-ready seat (`project` form — `#841`), via `scripts/brand_stamp.py`, running `brand_lint.py` before ratifying. Always asks which form |
 | `skills/file-brand-corpus` | Procedural | both (`/file-brand-corpus`) | Exports brand deliverables as a navigable Markdown corpus + self-contained site viewer (sticky nav, per-page ToC, GFM tables, mermaid, DOMPurify-sanitized) |
 | `agents/brand-judge` | Agent | dispatched (unnamed, one persona inlined per call) | The read-only critic shell `check-brand-council` fans out to for phase 1, `council-chair-agent` fans out to for phase 2, and each `council-*-agent` role agent fans out to for its own scoped convene — carries the shared Critical/Major/Minor/Noise severity convention, the trust-boundary rule every persona file cites rather than restating, and the deliberation-round contract: respond to named peer findings, revise severity only with stated cause, propose a joint finding |
 | `agents/council-chair-agent` | Agent | dispatched (unnamed, one call per council run with `--deliberate`) | The Chair — strict router/moderator for phase 2, patterned on `teamwork:fleet-marshal`'s contract (named mention only, no cross-plugin preload). Renamed from `council-marshal` (`#840`, plain-English naming ruling; contract/body unchanged). Routes the anonymized phase-1 finding set to each participating critic, collects each response through a channel that returns to it (never a named/mailbox dispatch — the stranding failure `council-rules` documents), and rolls up. Never judges, never revises a severity, never votes |
@@ -33,7 +33,7 @@ seam: no seat judges its own work.
 | `agents/brand-writer` | Agent | dispatched | Extended voice/copy work — the words themselves, as distinct from `brand-guidelines`' voice *behavior* |
 | `scripts/brand_corpus_mcp.py` | Script (MCP server) | `.mcp.json` (bundled) | ~160-line JSON-RPC 2.0 reference server: `list_brand_documents`, `search_brand`, `fetch_brand_section`, `outline_brand_document`, `get_brand_tokens` — read-only, path-guarded, scoped via `BRAND_CORPUS_DIR` |
 | `scripts/brand_lint.py` | Script | CLI + selftest | Structural corpus check run before `file-brand`/`file-brand-corpus` ratify |
-| `scripts/brand_stamp.py` | Script | CLI + selftest | Stamps a corpus into a plugin/skill/MCP distributable, per `file-brand` |
+| `scripts/brand_stamp.py` | Script | CLI + selftest | Stamps a corpus into a plugin/skill/MCP distributable, or (`project` form) in place into the corpus repo's own `.claude/` scaffold — a facts consult skill, `/ask-brand`, `agents/brand-liaison.md`, `.mcp.json` — per `file-brand` |
 | `scripts/build_sitemap.py` | Script | CLI + selftest | Builds the corpus site viewer's navigation, per `file-brand-corpus` |
 | `scripts/guidelines_ledger.py` | Script | CLI + selftest | The append-only choice ledger + card-projection interface (`card` subcommand) `make-brand-guidelines` writes through and the `design-skills:brand-decomposer` seam (`nonoun-skills` marketplace, optional, when installed) reads |
 | `scripts/corpus_migrate.py` | Script | CLI + selftest | Migrates a legacy corpus layout into the current numbered-layer convention |
@@ -80,6 +80,35 @@ consulted for a deeper operability grade `brand-guidelines`/`make-brand-guidelin
 hand off to.
 
 ---
+
+v0.10.0 · 2026-08-21 · `brand_stamp.py` gains a fourth form, `project` (`#841`, modality 6+7):
+stamps the corpus repo itself IN PLACE (no `-o`) into its own Claude-ready seat — `.claude/skills/
+<brand>-facts/SKILL.md` (a consult skill reading the live in-repo corpus), `.claude/skills/
+ask-brand/SKILL.md` (the `/ask-brand` command surface), `.claude/agents/brand-liaison.md` (the
+judgment surface for cross-session perspective asks — cited, read-only, never invents a brand
+position outside the corpus), and `.mcp.json` wiring the bundled `brand-corpus-mcp.py` at the
+in-repo corpus. `--linked` (the live corpus, not a snapshot) is the effective default for this
+form — the corpus already lives in the repo being stamped, so bundling a copy of a repo into
+itself is the special case (`--snapshot`); repo root is derived by walking up from `<corpus>` to
+the nearest `.git`, overridable with `--repo-root`. The modality-7 cross-session contract (message
+the project's own session, or dispatch its `brand-liaison`; the MCP serves data only, never
+opinion) is documented in `skills/brand-corpus/references/stamping.md`, per that file's
+conventions — no separate PRD/SPEC. Ride-along fix: `brand_stamp.py --help`'s stale `/brand-stamp`
+handle corrected to `/file-brand` (readiness/quality judgment line). `file-brand`'s "always asks
+which form" step now offers four forms. New selftest fixtures for the `project` form (derive-root,
+`--repo-root` override, `--snapshot`, a missing-liaison negative control, drift detection on the
+in-repo MCP copy) — the existing `plugin`/`skill`/`mcp` fixtures untouched and still green.
+Mechanical scaffolding only, per the existing contract — `verify`'s `_frontmatter_keys` helper
+also gained hyphen support (`user-invocable:` wasn't matching before; needed for the new
+`ask-brand` check, and a latent gap for every prior form's own hyphenated keys). A fresh-context
+`skill-checker`/`agent-checker` pass on the generated templates (generator ≠ critic) caught real
+gaps, folded in before ship: the facts skill was missing `disable-model-invocation`/
+`user-invocable` dials entirely (lint-blocking) and had no `NOT for` fence; `ask-brand` competed
+with the facts skill for model routing instead of staying a pure command surface (now
+`disable-model-invocation: true`); `brand-liaison` cited a path that doesn't exist inside a
+stamped repo, claimed a skill-loading capability the agent structurally lacks, stated `INDEX.md`
+as unconditional when it's `--snapshot`-only, and had no dispatch-shape clause for its own
+stated cross-session use. Semantic + structural change — minor bump.
 
 v0.9.0 · 2026-08-21 · Council role agents (`#840`): one addressable agent per council role, the
 EXTERNAL seat surface for fleets/sessions, distinct from the dispatch-only critic shell/Chair. NEW
