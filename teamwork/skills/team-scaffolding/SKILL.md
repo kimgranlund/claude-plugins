@@ -131,13 +131,15 @@ Branch on role:
      verification fails, STOP here and report the failure — do not proceed to Phase 4 believing the
      seat is walled when it might not be.
   4. **Live-probe the wall (I2, `lld-0006`'s own acceptance criterion) — content verification alone
-     never earns a "wall applied" claim (issue #852).** Immediately after step 3 passes, attempt two
-     trivial calls in THIS SAME session: (a) a `Write` to a throwaway scratch path in this worktree
-     (e.g. `.claude/ops/.wall-probe-<UTC-timestamp>`); (b) a `Bash` command matching none of C1a's
-     allowlist shapes (e.g. `echo wall-probe-<UTC-timestamp> > /tmp/wall-probe-<UTC-timestamp>` —
-     `/tmp`, never a worktree path, so a successful write leaves no repo residue). Clean up
-     whichever scratch path actually got written afterward — a denied attempt needs no cleanup, a
-     succeeded one does; never leave probe residue behind either way.
+     never earns a "wall applied" claim (issue #852).** Immediately after step 3 passes, attempt
+     three trivial calls in THIS SAME session: (a) a `Write` to a throwaway scratch path in this
+     worktree (e.g. `.claude/ops/.wall-probe-<UTC-timestamp>`); (b) a `Bash` command matching none
+     of C1a's allowlist shapes (e.g. `echo wall-probe-<UTC-timestamp> > /tmp/wall-probe-<UTC-timestamp>`
+     — `/tmp`, never a worktree path, so a successful write leaves no repo residue); (c) a `Bash`
+     command that DOES match C1a's allowlist (e.g. `gh pr view <any-open-PR-number>` — I2's own
+     "a legitimate allowed command must still pass" leg, proving the hook isn't over-blocking).
+     Clean up whichever scratch path actually got written afterward — a denied attempt needs no
+     cleanup, a succeeded one does; never leave probe residue behind either way.
      **Platform constraint, confirmed live (issue #852; the same session-scoped-config-load
      behavior `harness:hook-writing-rules` already documents for plugin hooks — "Hook config
      changes need `/reload-plugins`; SKILL.md live-reloads, hooks do not" — one root cause, two
@@ -146,17 +148,19 @@ Branch on role:
      session** — only against a genuinely separate process (a fresh `claude -p` invocation, a new
      terminal, or `Agent`'s `isolation: "remote"`) started with the wall already in place. Since
      `/team-scaffolding reviewer` always runs in the same live session that just wrote the file,
-     **both probe calls are expected to SUCCEED here** — that is the platform fact this step exists
-     to surface honestly, not a probe bug. State the result plainly, one of:
-     - Both calls DENIED → state `Wall applied and verified structural (I2 live probe: both Write
-       and Bash attempts denied)` and quote both denial texts.
-     - Either call SUCCEEDED (the expected same-session outcome) → state `Wall content-verified but
-       NOT enforced against this session (I2 live probe: <Write succeeded | Bash succeeded | both
-       succeeded>) — same-session self-walling cannot be platform-enforced (issue #852); this
-       session's own further Edit/Write/denied-Bash calls remain unblocked for the rest of its
-       lifetime. Enforcement only applies to a genuinely new process started after this wall is
-       written (lld-0006 Interface I2; issue #852's Findings) — closing that gap structurally is
-       follow-up issue #853, out of scope here.`
+     **(a) and (b) are expected to SUCCEED here** — that is the platform fact this step exists to
+     surface honestly, not a probe bug; (c) is expected to succeed regardless of wall enforcement,
+     since it's testing the allowlist's own shape, not the deny. State the result plainly, one of:
+     - (a) and (b) both DENIED → state `Wall applied and verified structural (I2 live probe: both
+       Write and Bash attempts denied; allowed command (c) still passed)` and quote both denial
+       texts plus (c)'s pass.
+     - Either of (a)/(b) SUCCEEDED (the expected same-session outcome) → state `Wall
+       content-verified but NOT enforced against this session (I2 live probe: <Write succeeded |
+       Bash succeeded | both succeeded>) — same-session self-walling cannot be platform-enforced
+       (issue #852); this session's own further Edit/Write/denied-Bash calls remain unblocked for
+       the rest of its lifetime. Enforcement only applies to a genuinely new process started after
+       this wall is written (lld-0006 Interface I2; issue #852's Findings) — closing that gap
+       structurally is follow-up issue #853, out of scope here.`
      Never report or imply the wall is "applied" from step 3's grep alone — this step's live result
      is what a reader can trust.
 - **`agent` / `planner` / `product`** — no additional deny profile; these seats need their normal

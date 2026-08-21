@@ -170,10 +170,13 @@ For each role in the confirmed list (skip entirely if empty — proceed straight
    steps into the dispatch prompt rather than naming the skill as a callable: the naming line
    (`Seat: {repo}-<role>`), for `reviewer` the worktree precondition and the structural
    `deny: ["Edit", "Write"]` + `Bash`-gating wall (`team-scaffolding` Phase 1's worktree check,
-   Phase 3's C1–C1a steps, re-read-and-verify included, PLUS Phase 3's own step 4 I2 live probe
-   (a `Write` and a denied-pattern `Bash` attempt, both in this same dispatched session, before
-   ever reporting a wall outcome — issue #852) — `planner` carries no wall; state that
-   explicitly per Phase 3's own rule), and the comms charter (Phase 4). **`team-scaffolding`
+   Phase 3's C1–C1a steps, re-read-and-verify included — `planner` carries no wall; state that
+   explicitly per Phase 3's own rule), and the comms charter (Phase 4). **For `reviewer`, the
+   dispatch prompt MUST also quote Phase 3's own step 4 — the I2 live probe (a `Write` attempt and
+   a denied-pattern `Bash` attempt, both run in this same dispatched session) — as a mandatory step
+   before this seat ever reports a wall outcome; skipping straight from the re-verify to step 3's
+   `fleet.json` append is exactly the false-positive `wall_applied: true` issue #852 found.**
+   **`team-scaffolding`
    Phase 2's own `fleet-roster.md` row append and `live_state.joined` append are excluded from what
    this dispatch performs — step 3 below is this seat's only writer for both**, so the two
    never race or diverge on `mode`/`agent_name`. Then hold its adopted `/bind-review` or
