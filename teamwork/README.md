@@ -110,6 +110,8 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.22 · 2026-08-21 · save-lessons harvest: `dispatch-ticket/references/plan-approval-write-gate.md` gains a "Marshal-side response procedure" section — extract the seat's fenced PR body, post the accept marker, open the PR, watch CI to green, merge, verify via campaign_close, pull main forward before the next same-plugin dispatch — grounded in 11 real write-gate-blocked dispatches from one session (#824-#829, #842, #850, #852, #853, #855, #856), none of which carried a size:small label so the AG1-AG4 pre-accept skip never fired. No SKILL.md/routing surface touched.
+
 v2.28.21 · 2026-08-21 · closes #856: the recurring reviewer-spawn scheduler that #853 deliberately
 left unbuilt — new `teamwork/scripts/reviewer_scheduler.py`, one scheduling pass per invocation
 over an explicit `--tasks-file`. Spawns one `claude -p` child per review task (cwd pinned into an
