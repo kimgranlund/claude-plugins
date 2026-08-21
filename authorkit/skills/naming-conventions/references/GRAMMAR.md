@@ -95,8 +95,29 @@ coordinates a thing or a process); RoleLex is disjoint from ObjectVocab ∪
 ProcessLex (ADR-0015 D3) and covers execution seats as well as coordinators
 (ADR-0017, §14.6, 2026-08-17) — `leader`, `orchestrator`, `coordinator`,
 `checker`, `runner`, `planner`, `watcher`, `finder`, `sorter`, `cleaner`,
-`judge`, `builder`, `writer`, `marshal` (ADR-0020, 2026-08-17). A bare RoleLex word with no scope token still
-fails — the production always requires `{scope}-{role}`, never a bare role.
+`judge`, `builder`, `writer`, `marshal`, `chair`, `convener` (ADR-0020, 2026-08-17; `chair`/`convener`
+added 2026-08-21 — see `naming.manifest.json`'s `role_lex`, and the resolution note below). A bare
+RoleLex word with no scope token still fails — the production always requires `{scope}-{role}`,
+never a bare role.
+
+**Resolving a RoleLex/ObjectVocab collision.** A new agent name sometimes fails to parse because
+one of its candidate tokens already sits in the OTHER lexicon — the disjointness invariant then
+makes that word permanently unreachable on the blocked side. The worked resolution, twice
+precedented: register the colliding word on the side that actually matches its nature — never
+force it through with an exemption (the exemptions array is shrink-only; grandfathering a
+brand-new name defeats the ratchet), and never leave some siblings fixed while one stays
+permanently blocked.
+- **The word IS a domain object → ObjectVocab.** `muse-agent` (S4, `#827`, 2026-08-20): `muse`
+  names a thing (the aspirational seat's own subject), so it registered to ObjectVocab to support
+  the `{skill}-agent` production — no new RoleLex word needed.
+- **The word IS a generic profession, but the RESIDUE token collides → mint a new RoleLex word
+  and shift the domain noun to `{scope}`.** `chair`/`convener` (`#843`, 2026-08-21):
+  `council-design-agent` couldn't resolve because `design` was already ObjectVocab-registered
+  elsewhere, blocking that residue from ever reaching RoleLex. `convener` (a generic profession
+  word, mirroring `marshal`/`judge`; `chair` registered in the same change for
+  `council-chair-agent`, the `{scope}-{role}-agent` legacy spelling) was registered to RoleLex
+  instead, and the four lens agents renamed to `<lens>-convener` — `design` now serves as
+  `{scope}`, where disjointness never applies.
 
 ## Lexicons
 
@@ -104,7 +125,7 @@ fails — the production always requires `{scope}-{role}`, never a bare role.
 |---|---|---|
 | VerbLex | command terminals | closed; PR to change |
 | ProcessLex | skill terminals | closed; PR to change |
-| RoleLex | orchestrator + execution-seat roles | closed; 14 entries; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3, ADR-0017, ADR-0020) |
+| RoleLex | orchestrator + execution-seat roles | closed; count/membership canonical in `naming.manifest.json`'s `role_lex` (currently 16), enumerated above; disjoint from ObjectVocab ∪ ProcessLex (ADR-0015 D3, ADR-0017, ADR-0020) |
 | ObjectVocab | domain objects | registered; anti-ambiguity gate |
 | TopicLex | `-rules` reference-doc topic words (§14.2) | closed; PR to change |
 

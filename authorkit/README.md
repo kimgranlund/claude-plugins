@@ -97,6 +97,7 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.26.3 · 2026-08-21 · GRAMMAR.md's RoleLex table repaired (save-lessons harvest, brand-design close-session): count/enumeration corrected 14->16 (`chair`/`convener` registered 2026-08-21 via #843 were undocumented); new worked-resolution note under the disjointness law — mint a new generic RoleLex word + shift the domain noun to scope, when a candidate role word collides with an existing ObjectVocab entry — citing muse-agent (#827) and chair/convener (#843) as the two precedents. Reference-doc fix only, no grammar/schema change.
 v0.26.2 · 2026-08-21 · naming-audit `validate.py` CLI manifest resolution gains a git-toplevel
 fallback (issue #842): a plugin-scoped `--target <plugin-dir>` with no manifest of its own
 and no `--manifest` flag used to exit 2 "ungoverned" even when a workspace-root
