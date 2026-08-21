@@ -41,6 +41,13 @@ artifact/context. That's three independent severity verdicts on the one finding:
   never resolved by fiat. A hung vote is evidence the finding itself is genuinely ambiguous — the
   same shape `harness:check-routing`'s own contested-case voting round takes, cited here as the
   precedent this convention mirrors rather than a coincidence.
+- **The sub-council itself seats fewer than three active handles** (too small to convene a genuine
+  third opinion) → log the contest as **hung** for the same reason, without ever dispatching a
+  substitute from a DIFFERENT sub-council — borrowing a third opinion cross-sub-council would mean
+  a lens outside the one actually convened cast a vote on it, defeating the sub-council's own
+  scoping. This is the one case a scoped convener (`role-agents.md`'s sub-council role agent) can
+  hit that a `full`-fan-out convening skill structurally cannot (`full` always seats every active
+  handle).
 
 This resolves the SEVERITY score only. It never erases or overrides a genuine stance-level
 disagreement between critics — that disagreement is still reported, verbatim, as productive

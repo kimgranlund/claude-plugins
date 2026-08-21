@@ -20,7 +20,7 @@ per family).
 `references/roster-and-chair-wiring.md`'s checklist — same input contract shape, same four-tier
 severity labels.
 
-**Chair:** `council-marshal`, reused unchanged, per the default.
+**Chair:** `council-chair-agent`, reused unchanged, per the default.
 
 **Calibration fixture (unpromoted, markdown-only):**
 
@@ -42,7 +42,7 @@ this domain's two lenses instead of brand's three).
 
 ## What this demo does not prove
 
-It does not prove a `--deliberate` phase-2 round for this domain (a `council-marshal` dispatch was
+It does not prove a `--deliberate` phase-2 round for this domain (a `council-chair-agent` dispatch was
 never actually made here — this is a disclosed dry-run walkthrough, not a live run); it does not
 register `release-notes-judge` or its critics anywhere durable in the estate. A live run through
 this exact demo, and a decision on whether it's worth actually shipping as a real convening skill,

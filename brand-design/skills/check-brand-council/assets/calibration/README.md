@@ -79,7 +79,7 @@ The fixture plants a genuine cultural root (the *horarium*) so a grounded pull i
 
 ### Deliberation fixture — `deliberation-anonymized-finding-set.md`
 
-Calibrates the new **phase-2 deliberation round** (`--deliberate`, `council-marshal` as Chair),
+Calibrates the new **phase-2 deliberation round** (`--deliberate`, `council-chair-agent` as Chair),
 scored by `calibration_check_deliberation.py`. Unlike the four fixtures above (an artifact the
 council reads cold), this fixture IS an anonymized phase-1 finding set — the exact shape
 `check-brand-council`'s own anonymization step would hand to the Chair — with one planted behavior
@@ -96,9 +96,9 @@ trigger per finding:
 
 ```text
 1. Run check-brand-council with --deliberate against any artifact, cold, but SUBSTITUTE this
-   fixture's finding set for the real phase-1 output before dispatching council-marshal (this
+   fixture's finding set for the real phase-1 output before dispatching council-chair-agent (this
    isolates phase 2's behavior from phase 1's own catch-rate, already covered above).
-2. Save council-marshal's roll-up + the critics' deliberation-round responses to a transcript file.
+2. Save council-chair-agent's roll-up + the critics' deliberation-round responses to a transcript file.
 3. Score it: python3 calibration_check_deliberation.py <transcript>   # → N/5
 4. Record the run under runs/ (date, verdict, catch-rate, any missed behavior).
 ```

@@ -5,11 +5,13 @@ Proves the roster-file contract (council-rules' references/roster-file-contract.
 handle<->persona-file bijection against the council's critics/ directory, every row's
 sub-councils cell non-empty, `full` never used as a literal sub-council value, every
 `## Groups` entry resolving to a seated active handle or the literal VACANT, role/status
-values drawn from their fixed enums, and the reserved `advisory` sub-council's exact
-pairing with `role: advisor`. A VACANT lead is a named WARNING, never a failure; a
-zero-member `advisory` sub-council is a named INFO line, never a warning or failure —
-it is that reserved sub-council's normal steady state until a user mints one via
-/make-critic.
+values drawn from their fixed enums, the reserved `advisory` sub-council's exact pairing
+with `role: advisor`, and the `## Role agents` mapping section (dangling agent handle,
+a role with no mapped agent, a reserved-name key). A VACANT lead is a named WARNING,
+never a failure; an ordinary sub-council with zero seated active critics (declared via
+a `leads:` entry) is a named WARNING at the same severity; a zero-member `advisory`
+sub-council is a named INFO line, narrower still — it is that reserved sub-council's
+normal steady state until a user mints one via /make-critic.
 
 Usage:
   roster_check.py <council-skill-dir>   # e.g. brand-design/skills/check-brand-council
@@ -25,6 +27,7 @@ import sys
 ROLE_ENUM = {"lead", "member", "advisor"}
 STATUS_ENUM = {"active", "retired"}
 ADVISORY = "advisory"
+CHAIR = "chair"
 
 
 class RosterError(Exception):
@@ -63,15 +66,20 @@ def _parse_table(text):
 
 
 def _parse_groups(text):
-    """Return {group_name: [tokens]} from the '## Groups' section's '- name: a=b, c=d' lines."""
+    """Return (groups, groups_kv). `groups`: {group_name: [tokens]} from the '## Groups'
+    section's '- name: a=b, c=d' lines (values only, as before). `groups_kv`: {group_name:
+    {key: value}} for entries actually written in 'key=value' shape — used to recover which
+    ordinary sub-councils the 'leads' entry declares (its keys), since `groups` alone keeps
+    only the values."""
     m = re.search(r"^##\s*Groups\s*$", text, re.M)
     if not m:
-        return {}
+        return {}, {}
     body = text[m.end():]
     nxt = re.search(r"^##\s+", body, re.M)
     if nxt:
         body = body[:nxt.start()]
     groups = {}
+    groups_kv = {}
     for line in body.splitlines():
         line = line.strip()
         if not line.startswith("-"):
@@ -83,14 +91,46 @@ def _parse_groups(text):
         name = name.strip()
         # entries are "sub=handle, sub2=handle2" or a plain comma list of handles
         tokens = []
+        kv = {}
         for part in rest.split(","):
             part = part.strip()
             if "=" in part:
-                part = part.split("=", 1)[1].strip()
-            if part:
+                k, v = part.split("=", 1)
+                k, v = k.strip(), v.strip()
+                if v:
+                    tokens.append(v)
+                    kv[k] = v
+            elif part:
                 tokens.append(part)
         groups[name] = tokens
-    return groups
+        if kv:
+            groups_kv[name] = kv
+    return groups, groups_kv
+
+
+def _parse_role_agents(text):
+    """Return {role: agent_handle} from the '## Role agents' section's '- role: handle' lines,
+    or None if the section is entirely absent (distinct from an empty section)."""
+    m = re.search(r"^##\s*Role agents\s*$", text, re.M)
+    if not m:
+        return None
+    body = text[m.end():]
+    nxt = re.search(r"^##\s+", body, re.M)
+    if nxt:
+        body = body[:nxt.start()]
+    mapping = {}
+    for line in body.splitlines():
+        line = line.strip()
+        if not line.startswith("-"):
+            continue
+        line = line.lstrip("-").strip()
+        if ":" not in line:
+            continue
+        role, handle = line.split(":", 1)
+        role, handle = role.strip(), handle.strip()
+        if role and handle:
+            mapping[role] = handle
+    return mapping
 
 
 def check_roster(roster_dir):
@@ -105,7 +145,8 @@ def check_roster(roster_dir):
 
     text = open(roster_path, encoding="utf-8").read()
     rows = _parse_table(text)
-    groups = _parse_groups(text)
+    groups, groups_kv = _parse_groups(text)
+    role_agents = _parse_role_agents(text)
 
     violations = []
     warnings = []
@@ -191,6 +232,50 @@ def check_roster(roster_dir):
             f"one via /make-critic"
         )
 
+    # ordinary sub-councils are enumerated from the required 'leads' group's own keys
+    # (roster-file-contract.md: "one entry per sub-council, naming that sub-council's lead
+    # handle, or VACANT") — 'full' (the computed union) and 'advisory' (no lead concept) are
+    # never leads-group keys, so this list is exactly the ordinary sub-councils.
+    ordinary_subcouncils = list(groups_kv.get("leads", {}).keys())
+    for sub in ordinary_subcouncils:
+        seated = sum(
+            1 for r in rows
+            if r.get("status") == "active"
+            and sub in [s.strip() for s in r.get("sub-councils", "").split(",") if s.strip()]
+        )
+        if seated == 0:
+            warnings.append(
+                f"sub-council '{sub}' has no seated active critics — an ordinary sub-council "
+                f"may legitimately start empty (e.g. newly declared), same severity as a "
+                f"VACANT lead"
+            )
+
+    # '## Role agents' mapping: dangling handle -> FAIL, unmapped role -> WARNING, a key that
+    # is neither 'chair' nor a declared ordinary sub-council (incl. the reserved 'advisory') ->
+    # FAIL. Section entirely absent is treated as an empty mapping (every role unmapped).
+    agents_dir = os.path.normpath(os.path.join(roster_dir, os.pardir, os.pardir, "agents"))
+    known_roles = {CHAIR} | set(ordinary_subcouncils)
+    mapping = role_agents or {}
+    for role, handle in mapping.items():
+        if role not in known_roles:
+            reason = (
+                f"'{role}' is the reserved 'advisory' sub-council, which has no role agent"
+                if role == ADVISORY
+                else f"'{role}' is neither 'chair' nor a 'leads:'-declared ordinary sub-council"
+            )
+            violations.append(f"'## Role agents' names '{role}' as a key, but {reason}")
+            continue
+        agent_path = os.path.join(agents_dir, f"{handle}.md")
+        if not os.path.isfile(agent_path):
+            violations.append(
+                f"'## Role agents' entry '{role}' -> '{handle}' has no matching "
+                f"agents/{handle}.md file"
+            )
+    for role in sorted(known_roles - set(mapping.keys())):
+        warnings.append(
+            f"role '{role}' has no '## Role agents' entry — an addressable seat not yet mapped"
+        )
+
     return violations, warnings, infos
 
 
@@ -225,13 +310,23 @@ def selftest():
         if not cond:
             fails.append(msg)
 
-    def make_council(tmp, roster_text, handles):
-        d = os.path.join(tmp, "council")
+    DEMO_AGENTS = ("demo-chair-agent", "demo-strategy-agent", "demo-design-agent")
+
+    def make_council(tmp, roster_text, handles, agent_files=DEMO_AGENTS):
+        # Mirrors the real layout: <plugin>/skills/<council>/... and <plugin>/agents/*.md,
+        # siblings — roster_check.py's agents_dir resolves two levels up from the skill dir.
+        plugin_dir = os.path.join(tmp, "plugin")
+        d = os.path.join(plugin_dir, "skills", "council")
         os.makedirs(os.path.join(d, "references", "critics"), exist_ok=True)
         with open(os.path.join(d, "references", "roster.md"), "w", encoding="utf-8") as f:
             f.write(roster_text)
         for h in handles:
             open(os.path.join(d, "references", "critics", f"critic-{h}.md"), "w").write("# x\n")
+        if agent_files:
+            agents_dir = os.path.join(plugin_dir, "agents")
+            os.makedirs(agents_dir, exist_ok=True)
+            for name in agent_files:
+                open(os.path.join(agents_dir, f"{name}.md"), "w").write("# agent\n")
         return d
 
     valid_roster = """\
@@ -244,6 +339,12 @@ def selftest():
 ## Groups
 
 - leads: strategy=a-b, design=VACANT
+
+## Role agents
+
+- chair: demo-chair-agent
+- strategy: demo-strategy-agent
+- design: demo-design-agent
 """
 
     with tempfile.TemporaryDirectory() as tmp:
@@ -251,7 +352,7 @@ def selftest():
         violations, warnings, infos = check_roster(d)
         expect(violations == [], f"valid roster wrongly flagged: {violations}")
         expect(len(warnings) == 1 and "VACANT" in warnings[0],
-               f"expected exactly one VACANT warning, got {warnings}")
+               f"expected exactly one VACANT warning (role-agent mapping is complete), got {warnings}")
         expect(len(infos) == 1 and ADVISORY in infos[0],
                f"expected exactly one advisory-empty INFO (no advisory rows in this fixture), "
                f"got {infos}")
@@ -344,6 +445,96 @@ def selftest():
         expect(any("g-h" in v and "not exactly" in v for v in violations),
                f"advisor role with wrong sub-councils not caught: {violations}")
 
+    # negative: an ordinary sub-council declared (via 'leads') with zero seated active
+    # critics -> a named WARNING, same severity as a VACANT lead, distinct from advisory's INFO
+    empty_ordinary = valid_roster.replace(
+        "- leads: strategy=a-b, design=VACANT",
+        "- leads: strategy=a-b, design=VACANT, creative=VACANT",
+    ).replace(
+        "- design: demo-design-agent",
+        "- design: demo-design-agent\n- creative: demo-creative-agent",
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(
+            tmp, empty_ordinary, ["a-b", "c-d", "e-f"],
+            agent_files=DEMO_AGENTS + ("demo-creative-agent",),
+        )
+        violations, warnings, _ = check_roster(d)
+        expect(violations == [], f"a newly-declared empty ordinary sub-council wrongly failed: {violations}")
+        expect(any("creative" in w and "no seated active critics" in w for w in warnings),
+               f"empty ordinary sub-council ('creative') not caught as a WARNING: {warnings}")
+
+    # positive: role-agent mapping complete and every handle resolves -> no mapping violations
+    # or warnings (already proven by the baseline valid_roster case above; restated here as its
+    # own explicit case so a future edit to the baseline can't silently stop covering this)
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(tmp, valid_roster, ["a-b", "c-d", "e-f"])
+        violations, warnings, _ = check_roster(d)
+        expect(not any("Role agents" in v for v in violations),
+               f"a complete, resolvable role-agent mapping was wrongly flagged: {violations}")
+        expect(not any("Role agents" in w for w in warnings),
+               f"a complete role-agent mapping wrongly warned about an unmapped role: {warnings}")
+
+    # negative: dangling role-agent handle (mapped name has no agents/<handle>.md file) -> FAIL
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(
+            tmp, valid_roster, ["a-b", "c-d", "e-f"],
+            agent_files=("demo-chair-agent", "demo-design-agent"),  # demo-strategy-agent missing
+        )
+        violations, _, _ = check_roster(d)
+        expect(any("demo-strategy-agent" in v and "no matching" in v for v in violations),
+               f"dangling role-agent handle not caught: {violations}")
+
+    # negative: a role with no '## Role agents' entry at all -> WARNING, never a FAIL
+    missing_role_entry = valid_roster.replace("- design: demo-design-agent\n", "")
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(tmp, missing_role_entry, ["a-b", "c-d", "e-f"])
+        violations, warnings, _ = check_roster(d)
+        expect(not any("design" in v and "Role agents" in v for v in violations),
+               f"an unmapped role was wrongly FAILed instead of warned: {violations}")
+        expect(any("design" in w and "no '## Role agents' entry" in w for w in warnings),
+               f"unmapped role 'design' not caught as a WARNING: {warnings}")
+
+    # negative: '## Role agents' section entirely absent -> treated as every role unmapped
+    # (warnings only, never a FAIL)
+    no_role_agents_section = valid_roster.split("\n## Role agents")[0] + "\n"
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(tmp, no_role_agents_section, ["a-b", "c-d", "e-f"])
+        violations, warnings, _ = check_roster(d)
+        expect(not any("Role agents" in v for v in violations),
+               f"an absent '## Role agents' section wrongly failed: {violations}")
+        expect(sum(1 for w in warnings if "no '## Role agents' entry" in w) == 3,
+               f"expected one unmapped-role warning each for 'chair', 'strategy', and 'design' "
+               f"(chair + this fixture's two leads keys), got {warnings}")
+
+    # negative: '## Role agents' names the reserved 'advisory' sub-council -> FAIL
+    role_agents_advisory = valid_roster.replace(
+        "- design: demo-design-agent",
+        "- design: demo-design-agent\n- advisory: demo-advisory-agent",
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(
+            tmp, role_agents_advisory, ["a-b", "c-d", "e-f"],
+            agent_files=DEMO_AGENTS + ("demo-advisory-agent",),
+        )
+        violations, _, _ = check_roster(d)
+        expect(any("advisory" in v and "reserved" in v for v in violations),
+               f"'## Role agents' naming the reserved 'advisory' sub-council not caught: {violations}")
+
+    # negative: '## Role agents' names a key that is neither 'chair' nor a declared sub-council
+    role_agents_unknown_key = valid_roster.replace(
+        "- design: demo-design-agent",
+        "- design: demo-design-agent\n- marketing: demo-marketing-agent",
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(
+            tmp, role_agents_unknown_key, ["a-b", "c-d", "e-f"],
+            agent_files=DEMO_AGENTS + ("demo-marketing-agent",),
+        )
+        violations, _, _ = check_roster(d)
+        expect(any("marketing" in v and "neither 'chair' nor" in v for v in violations),
+               f"'## Role agents' naming an undeclared role not caught: {violations}")
+
     # usage-error path: missing roster.md / missing critics dir -> exit 2
     with tempfile.TemporaryDirectory() as tmp:
         empty_dir = os.path.join(tmp, "nope")
@@ -363,7 +554,9 @@ def selftest():
     print("roster_check selftest: OK (bijection both directions, empty sub-councils, reserved "
           "'full', dangling group handle, unknown role/status, double-lead, VACANT-is-warning-"
           "not-failure, zero-advisor-is-info-not-failure, advisory<->advisor exact pairing both "
-          "directions, and both usage-error paths all correctly caught)")
+          "directions, empty-ordinary-sub-council-is-warning, '## Role agents' mapping "
+          "(dangling handle FAIL, unmapped role WARNING incl. section-absent, reserved-name and "
+          "undeclared-key FAIL), and both usage-error paths all correctly caught)")
     return 0
 
 

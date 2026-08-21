@@ -3,7 +3,7 @@
 
 The deliberation companion of `calibration_check_strategy.py`/`_design.py`/`_voice.py`/`_muse.py`.
 Where those score a BLIND-phase transcript against an artifact's planted defects, this one scores
-a phase-2 DELIBERATION transcript (a council-marshal roll-up + the critics' deliberation-round
+a phase-2 DELIBERATION transcript (a council-chair-agent roll-up + the critics' deliberation-round
 responses) against the planted behaviors in
 `skills/check-brand-council/assets/calibration/fixtures/deliberation-anonymized-finding-set.md` —
 the anonymized phase-1 finding set fed into the round. Its own fixture plants: a joint-finding

@@ -65,7 +65,9 @@
     "judge",
     "builder",
     "writer",
-    "marshal"
+    "marshal",
+    "chair",
+    "convener"
   ],
   "topic_lex": [
     "icon",
@@ -223,6 +225,11 @@
     },
     {
       "canonical": "corpus",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "creative",
       "plural": null,
       "banned_aliases": []
     },
@@ -658,6 +665,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "strategy",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "surface",
       "plural": "surfaces",
       "banned_aliases": []
@@ -734,6 +746,11 @@
     },
     {
       "canonical": "vision-memo",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "voice",
       "plural": null,
       "banned_aliases": []
     },
