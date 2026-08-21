@@ -1,30 +1,30 @@
 {
   "skill": "brand-methodology-rules",
-  "note": "Minted 2026-08-19, Phase 4 of the brand-forge -> brand-design migration (closes G7's eval-coverage warn). Floor suite: the 6 trigger prompts sample the description's own trigger phrases; the 4 no-trigger cases fence the two in-plugin routes this skill states (brand-rubrics, brand-corpus) plus the two out-of-scope disciplines its own frontmatter names (marketing tactics, product strategy). Description dieted 2026-08-20 (S2, #825: 729 -> 636 chars, cleared the dense-description bloat flag) — trigger surface unchanged in substance (archaeology/positioning/identity/expression/rebrand/category-design/stewardship/POV all still named), so no case content changed; re-verified live post-diet.",
+  "note": "Minted 2026-08-19, Phase 4 of the brand-forge -> brand-design migration (closes G7's eval-coverage warn). Description dieted 2026-08-20 (S2, #825: 729 -> 636 chars). REWRITTEN 2026-08-21 (S6, #829 campaign-proof blind re-judge): the original 5 build-action trigger cases (t01-t05: \"develop this brand's strategy\", \"do the cultural archaeology\", \"what should our point of view be\", \"help us rebrand\", \"design the expression system\") lost 2-of-3-confirmed to make-brand in the full blind fan-out + contested-vote round -- the same action-vs-reference collision brand-guidelines' own evals.json already documents against make-brand-guidelines. The description was narrowed to a pure methodology reference (mirroring that fix); these cases now test REFERENCE-LOOKUP phrasing (asking about the mechanism itself) instead of ACTION phrasing (asking to actually run the build), with make-brand as the no-trigger fence for the action asks this pack no longer claims. t06 (stewardship question) was NOT stolen in the same run -- kept as-is, since 'steward' isn't one of make-brand's own trigger verbs and the case already passed live.",
   "cases": [
     {
       "id": "t01",
-      "prompt": "We need to develop this brand's strategy and positioning from scratch.",
+      "prompt": "What are the six load-bearing components of the Brand Foundation Canon?",
       "expect": "trigger"
     },
     {
       "id": "t02",
-      "prompt": "Do the cultural archaeology and research before we commit to a position.",
+      "prompt": "What does the Foundation Canon explicitly reject?",
       "expect": "trigger"
     },
     {
       "id": "t03",
-      "prompt": "What should our brand's point of view actually be?",
+      "prompt": "How do the three seats — Muse, Team, Council — actually work together across an engagement?",
       "expect": "trigger"
     },
     {
       "id": "t04",
-      "prompt": "Help us rebrand and redefine the category we compete in.",
+      "prompt": "What's the difference between cultural archaeology and ordinary market research?",
       "expect": "trigger"
     },
     {
       "id": "t05",
-      "prompt": "Design the expression system that carries this brand identity.",
+      "prompt": "How do you stress-test a positioning territory before committing to it?",
       "expect": "trigger"
     },
     {
@@ -34,24 +34,54 @@
     },
     {
       "id": "n01",
+      "prompt": "We need to develop this brand's strategy and positioning from scratch.",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand (the action skill — this pack is now reference-only, per the S6 routing-proof fix; re-classified from a former t01 that lost 2-of-3 to make-brand)"
+    },
+    {
+      "id": "n02",
+      "prompt": "Do the cultural archaeology and research before we commit to a position.",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand (the doing skill that runs the archaeology step); re-classified from a former t02 that lost 2-of-3 to make-brand"
+    },
+    {
+      "id": "n03",
+      "prompt": "What should our brand's point of view actually be?",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand; re-classified from a former t03 that lost 2-of-3 to make-brand"
+    },
+    {
+      "id": "n04",
+      "prompt": "Help us rebrand and redefine the category we compete in.",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand; re-classified from a former t04 that lost 2-of-3 to make-brand"
+    },
+    {
+      "id": "n05",
+      "prompt": "Design the expression system that carries this brand identity.",
+      "expect": "no-trigger",
+      "comment": "owner: make-brand; re-classified from a former t05 that lost 2-of-3 to make-brand"
+    },
+    {
+      "id": "n06",
       "prompt": "Score this brand strategy document against the rubric.",
       "expect": "no-trigger",
       "comment": "owner: brand-rubrics (this skill makes the strategy, it doesn't grade it)"
     },
     {
-      "id": "n02",
+      "id": "n07",
       "prompt": "Organize these strategy documents into the brand corpus.",
       "expect": "no-trigger",
       "comment": "owner: brand-corpus (corpus structure, not strategy authoring)"
     },
     {
-      "id": "n03",
+      "id": "n08",
       "prompt": "Plan our performance media buy and conversion funnel for next quarter.",
       "expect": "no-trigger",
       "comment": "out of scope: marketing tactics/performance media, an adjacent discipline this skill's own frontmatter excludes"
     },
     {
-      "id": "n04",
+      "id": "n09",
       "prompt": "What should our product strategy and UX roadmap look like for this feature?",
       "expect": "no-trigger",
       "comment": "out of scope: product strategy/management/UX is product-forge's domain, not this skill's"

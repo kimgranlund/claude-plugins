@@ -7,7 +7,11 @@ description: >
   checker-pass it before it seats. Use for "mint a critic", "add a new critic persona", "create a
   critic for X lens", "write a new brand-council persona". NOT convening an existing council
   (`check-brand-council`); NOT the council mechanism (`council-rules`); NOT a whole new council
-  (`make-council`); NOT a generic subagent (`harness:make-agent`).
+  (`make-council`); NOT a generic subagent (`harness:make-agent`); NOT a lens-gap/knowledge
+  question about an EXISTING role family's own ground — "what does a strategy/voice critic look
+  for", "what lens gaps exist in the roster" asked as grounding, not as a live mint — that's the
+  matching `brand-strategy-facts`/`brand-identity-facts`/`brand-voice-facts`/`brand-advertising-
+  facts` pack this procedure itself consults before drafting.
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[council] [critic handle] [lens/domain the critic embodies]"

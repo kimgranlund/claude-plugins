@@ -1,11 +1,11 @@
 ---
 doc-type: plan
 id: plan-2026-08-brand-design-overhaul
-status: active
+status: complete
 date: 2026-08-20
 owner: Kim Granlund
 audience: human builder
-review-cadence: per-wave (re-reviewed whenever a wave's tickets land or the campaign resumes)
+review-cadence: per-wave (re-reviewed whenever a wave's tickets land or the campaign resumes) — closed 2026-08-21, no further review owed
 ---
 # Overhaul plan — brand-design — 2026-08-20
 
@@ -88,7 +88,7 @@ routing steal/leak survives the 2026-08-19 fix. Stated per the falsifiability ru
 - none — every design fork was closed at the find-intent round (2026-08-20)
 
 #### Wave 4 — prove
-- [ ] S6 (#829) campaign proof (Blocked-by: S2, S3, S4, S5) — status: todo — done-when: full blind /check-routing brand-design clean (routing-report row updated); fix-old-names sweep zero LIVE; the walkthrough demonstrably runs: mint a critic → seat it in a sub-council → run blind + deliberation phases in Claude Code AND the declared sequential mode
+- [x] S6 (#829) campaign proof (Blocked-by: S2, S3, S4, S5) — status: done — done-when: full blind /check-routing brand-design clean (routing-report row updated); fix-old-names sweep zero LIVE; the walkthrough demonstrably runs: mint a critic → seat it in a sub-council → run blind + deliberation phases in Claude Code AND the declared sequential mode
 
 #### Grandfathered
 - none (muse-agent's exemption retires via S4's vocab registration rather than riding)
@@ -140,3 +140,20 @@ Gate A was given 2026-08-20 ("Approve all 6"). Seeds are minted as GitHub Issues
 run serially via build-leader dispatches (PR-opened ceiling, merge-on-green). On completion
 (every wave's tickets closed), flip `status: complete` and move this file to the docs archive
 per PLAN's living-state contract — never leave a finished plan `active`.
+
+## Completion (2026-08-21)
+
+All five waved tickets (S1 #824, S2 #825, S3 #826, S4 #827, S5 #828) merged; this file's own S6
+(#829) closes the campaign with the proof wave — full blind `/check-routing brand-design` clean
+(0 dead/stolen/leaked across 20 suites/182 cases, two real stolen findings the same wave's own
+proof surfaced and fixed same-change: `brand-methodology-rules`'s build-action triggers ceded to
+`make-brand` mirroring S2's own `brand-guidelines` fix, and `make-critic`/`check-brand-rubric`
+gained NOT-clauses fencing the four role-family packs' own lens-grounding questions), a zero-LIVE
+`fix-old-names` sweep, and the mint-and-run walkthrough (a demo critic, `sam-r`, minted end to
+end and unseated after proving the pattern — see this PR's own Findings for the full run).
+**Archive-location check:** no `.claude/docs/` archive-for-completed-PLANs convention exists yet
+in this workspace (no `archive/` subdirectory under any doc type as of this date) — `status:
+complete` above is flipped in place per the fallback this file's own "Next step" names, rather
+than moved, since there is nowhere established to move it to. A future `PLAN` archive convention,
+if one is ever ratified, should sweep this file in retroactively rather than this file inventing
+one unilaterally.

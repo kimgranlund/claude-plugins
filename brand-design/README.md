@@ -79,6 +79,33 @@ hand off to.
 
 ---
 
+v0.7.0 · 2026-08-21 · S6 campaign proof (`#829`, wave 4 — the final wave of the council-as-
+platform overhaul): full blind `/check-routing brand-design` (20 suites/182 cases, all
+model-invocable, none excluded) — clean at 0 dead/0 stolen/0 leaked, `.claude/ops/
+routing-report.json` updated. The blind run surfaced two REAL routing defects, both fixed
+same-change per the standard stolen-tuning treatment: (1) `brand-methodology-rules` lost 5 of its
+own trigger cases to `make-brand` (identical action-vs-reference collision S2's own
+`brand-guidelines` fix already solved) — narrowed to a pure methodology reference, its evals.json
+rewritten reference-lookup-first with `make-brand` as the no-trigger fence; (2) `make-critic` and
+`check-brand-rubric` each leaked into two of the four role-family packs' own lens-grounding
+questions (`brand-strategy-facts`/`brand-voice-facts` "I'm minting a critic — what lens gaps
+exist" and "does our house style hold consistent" cases) — both gained a NOT-clause fencing
+grounding/knowledge questions back to the matching pack; a scoped re-judge confirmed both fixes
+live. `authorkit:fix-old-names` swept zero LIVE stale-handle references (0 FAIL/27 WARN, every
+warn a pre-existing dated/filename mention in the unrelated `docs/` plugin, none in
+`brand-design`). The mint-and-run walkthrough: minted a demonstration critic (`sam-r` —
+brand-as-lived-experience, the promise-delivery gap; a genuinely uncovered lens verified against
+all four role packs' own `failure-modes.md`/`lenses.md`), seated it in `check-brand-council`'s
+strategy sub-council, ran phase 1 (blind, 3 critics against a planted-defect sample artifact —
+independently caught its target defect, checker-passed against a sibling persona), phase 2
+(chair-moderated deliberation, the council-marshal pattern), and the declared Project
+single-context sequential mode — then unseated it (persona file, roster row, calibration fixture,
+and `.name-map.md`/`.gitignore` entry all reverted) per the mint procedure's own rollback path,
+since a one-artifact demo doesn't earn a permanent 15th seat. `.claude/docs/plan/
+plan-2026-08-brand-design-overhaul.md` flipped to `status: complete` (no `.claude/docs/` archive
+convention exists yet for a finished PLAN, so it stays in place per that file's own fallback,
+noted inline). Semantic + description + eval changes — minor bump.
+
 v0.6.0 · 2026-08-20 · S5 role-category knowledge packs (`#828`, wave 2 of the council-as-platform
 overhaul): the 14 `check-brand-council` critics clustered into 4 role families from their OWN
 personas (working hypothesis confirmed, not forced) — **strategy** (Brian C., John H., Luke S.,
