@@ -107,8 +107,8 @@ or a **standalone MCP**. → [`references/stamping.md`](references/stamping.md).
 
 ## Provenance
 
-This pack's `references/` were ported from brand-forge, Phase 3 Track D — full citation (source
-repo, frozen SHA, date) in the plugin root README's "Provenance and disposition" section.
+Full citation (repo, SHA, date): README's "Provenance and disposition" § Phase 3 Track D — stated
+once there, not here.
 
 ## Boundaries
 

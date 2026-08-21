@@ -65,8 +65,9 @@ Check progress with **`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.
 
 ## Provenance
 
-This pack's `references/` were ported from brand-forge, Phase 3 Track D — full citation (source
-repo, frozen SHA, date) in the plugin root README's "Provenance and disposition" section.
+The plugin root README carries the one citation that covers this pack too (source repo, frozen
+SHA, date) — "Provenance and disposition" § Phase 3 Track D. Read it there; this pack doesn't
+keep its own copy.
 
 ## Boundaries
 

@@ -20,24 +20,11 @@ ask, the defects they catch, the concrete tests they run, and the vocabulary the
 `make-critic`'s grounding corpus for minting a new strategy-family critic; it is not a procedure
 and does not itself run a review.
 
-4 declared axes (pack-writing-rules' 3-7 threshold) across 4 reference files, flat corpus — this
-table is the retrieval map (no INDEX needed at this size).
-
-Enter by search: Grep the mapped file for the term, then Read that section — never read the
-folder start-to-finish. Every consult answers as claim + the cited reference file + its
-grounding marker ([verified] against a persona file, or [inferred] and marked as such) — e.g.
-"a positioning that a rival could also claim fails John H.'s zag test ([verified],
-`references/canonical-tests.md`)."
-
-## Consult table
-
-| Ask | Load |
-|---|---|
-| The four lenses themselves — what each critic interrogates and why | `references/lenses.md` |
-| The specific defects this family catches | `references/failure-modes.md` |
-| The concrete, repeatable diagnostic tests | `references/canonical-tests.md` |
-| The family's shared working vocabulary | `references/vocabulary.md` |
-| Provenance — trust order, what's verified vs. general knowledge | `references/sources.md` |
+Retrieval mechanics (declared-axes framing, the search-first discipline, the Ask/Load shape) live
+once at `council-rules`' `references/role-pack-scaffolding.md`; this file only supplies the
+strategy family's own numbers — **4** lenses over `lenses.md`/`failure-modes.md`/
+`canonical-tests.md`/`vocabulary.md`/`sources.md`. Worked example: "a positioning that a rival
+could also claim fails John H.'s zag test ([verified], `references/canonical-tests.md`)."
 
 ## The clustering evidence (why these four sit together)
 

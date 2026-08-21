@@ -1,6 +1,6 @@
 # Council rules — reference index
 
-8 axes, 8 files. Grep the term first, then Read the matching section — these are catalogs, not a
+9 axes, 9 files. Grep the term first, then Read the matching section — these are catalogs, not a
 linear read. Every file below appears in the top-level skill file's consult table; every
 consult-table row names a real file here.
 
@@ -12,6 +12,9 @@ copy, and so the forthcoming `make-council`/`make-critic` (S4) have something to
 **Role agents axis added 2026-08-21 (`#840`):** one addressable agent per council role, generalized
 from the same brand instance now that `council-chair-agent` (renamed from `council-marshal`) and
 four lens conveners exist as its worked reference.
+**Role-pack scaffolding axis added 2026-08-21 (`#845`):** the shared template behind the four
+`*-facts` role-family grounding packs, centralized out of those four packs' bodies (S2 of the
+plan-2026-08-brand-design-bloat-overhaul dedup).
 
 ## Roster & personas
 
@@ -54,3 +57,10 @@ four lens conveners exist as its worked reference.
   semantics, the empty-bench clean-stop case, and the `full`/`advisory` reserved-name rule (the
   data-file mapping-section shape itself is `roster-file-contract.md`'s own axis, cited not
   duplicated here)
+
+## Role-pack scaffolding
+
+- `role-pack-scaffolding.md` — the shared template behind the four `*-facts` role-family grounding
+  packs (declared-axes framing, retrieval discipline, the Ask/Load table with each pack's own
+  lens count stated so it can't drift), and how that grouping differs from the roster's own
+  three-sub-council voting membership

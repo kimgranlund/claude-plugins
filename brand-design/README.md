@@ -81,6 +81,25 @@ hand off to.
 
 ---
 
+v0.11.0 · 2026-08-21 · Wave 2 of the bloat + spec-staleness overhaul (`plan-2026-08-brand-design-
+bloat-overhaul`, seeds S1/S2/S3, `#844`/`#845`/`#846`): **S1** dieted `make-critic` (813→≤700),
+`brand-methodology-rules` (857→≤700), `check-brand-rubric` (776→≤700) description content chars,
+each verified `skill_lint` W8-clean and re-judged blind, scoped, against the full menu (0 dead/
+stolen/leaked once one contested case — make-critic's t05, ".name-map.md attribution convention"
+— was fixed and re-voted 2-of-3, per the v1.0.4/t05 dead-trigger class). **S2** deduped the 4
+`*-facts` packs' three shared scaffolding blocks into a new `council-rules` reference
+(`references/role-pack-scaffolding.md`, stating each pack's own lens count so it can't drift
+again) and centralized the corpus/guidelines/rubrics provenance sentence onto this README's
+existing "Provenance and disposition" § Phase 3 Track D — `measure.py duplicate_pairs` for the 20
+cited pairs: 20 → 0. **S3** re-measured and trimmed the long-body flags per `bloat-audit`'s
+CALIBRATION.md load-bearing test: `brand-judge`/`muse-agent` now clean (under 6 000); `check-
+brand-council`/`make-council`/`make-critic` trimmed (16 735→15 010, 13 429→9 677, 12 929→8 763)
+but remain over threshold — each overage justified line-by-line in the plan doc's Validation
+section (dense, non-restated procedural content, not ceremony). Fresh-context checker passes on
+every semantic trim caught and fixed two real regressions in the same change (a dropped
+"no artifact named" failure branch in check-brand-council, two dropped file citations in
+make-council) before landing. Semantic/description changes — minor bump.
+
 v0.10.0 · 2026-08-21 · `brand_stamp.py` gains a fourth form, `project` (`#841`, modality 6+7):
 stamps the corpus repo itself IN PLACE (no `-o`) into its own Claude-ready seat — `.claude/skills/
 <brand>-facts/SKILL.md` (a consult skill reading the live in-repo corpus), `.claude/skills/
