@@ -1,0 +1,61 @@
+{
+  "skill": "make-critic",
+  "note": "Minted 2026-08-20/21, S4 of the brand-design council-as-platform overhaul (#827). Floor suite: routing against minting a NEW critic persona vs. convening an existing council (check-brand-council), the council mechanism itself (council-rules), standing up a whole new council (make-council), and harness's generic subagent forge (make-agent) — a critic is a persona-inlined prompt, never a standalone dispatched agent.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Mint a new critic persona for the brand council's design sub-council.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Add a new critic to the council that specifically judges accessibility as a design-integrity question.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Write a new brand-council persona file for a critic named after cultural-provenance research.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "Give the strategy sub-council a new voice on category-average thinking.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "How should the .name-map.md attribution convention work for a new critic?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Convene the brand council on this positioning brief.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council — running an existing council, not minting a new critic"
+    },
+    {
+      "id": "n02",
+      "prompt": "What makes something a council instead of a single reviewer?",
+      "expect": "no-trigger",
+      "comment": "owner: council-rules — the mechanism itself, not minting a persona"
+    },
+    {
+      "id": "n03",
+      "prompt": "Stand up a brand-new council for reviewing marketing copy end to end.",
+      "expect": "no-trigger",
+      "comment": "owner: make-council — a whole new council instance, not one critic"
+    },
+    {
+      "id": "n04",
+      "prompt": "Create a new subagent that reviews pull requests.",
+      "expect": "no-trigger",
+      "comment": "owner: harness:make-agent — a generic standalone dispatched agent, not a persona-inlined council critic"
+    },
+    {
+      "id": "n05",
+      "prompt": "What would Luke S. say about this identity system?",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council — invoking an EXISTING critic, not minting a new one"
+    }
+  ]
+}

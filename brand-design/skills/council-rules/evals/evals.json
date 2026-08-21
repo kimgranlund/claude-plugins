@@ -1,6 +1,6 @@
 {
   "skill": "council-rules",
-  "note": "Minted 2026-08-20, S3 of the brand-design council-as-platform overhaul (#826). Floor suite: routing against this pack's own trigger surface (the MECHANISM, never actually convening) vs. its action-twin (check-brand-council) and its sibling reference packs.",
+  "note": "Minted 2026-08-20, S3 of the brand-design council-as-platform overhaul (#826). Floor suite: routing against this pack's own trigger surface (the MECHANISM, never actually convening) vs. its action-twin (check-brand-council) and its sibling reference packs. Updated 2026-08-21, S4 (#827): reciprocal fences against the two new minting procedures now that they exist (n05/n06) — the description's own forward reference to a 'forthcoming make-council/make-critic' is retired.",
   "cases": [
     {
       "id": "t01",
@@ -55,6 +55,18 @@
       "prompt": "What would Luke S. and Paula S. say about this identity system?",
       "expect": "no-trigger",
       "comment": "owner: check-brand-council — a live convene request naming brand-specific critics"
+    },
+    {
+      "id": "n05",
+      "prompt": "Mint a new critic persona for the brand council.",
+      "expect": "no-trigger",
+      "comment": "owner: make-critic — minting a persona, not asking about the mechanism"
+    },
+    {
+      "id": "n06",
+      "prompt": "Stand up a whole new council instance for a different domain.",
+      "expect": "no-trigger",
+      "comment": "owner: make-council — standing up an instance, not asking about the mechanism"
     }
   ]
 }

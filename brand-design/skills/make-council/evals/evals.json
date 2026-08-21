@@ -1,0 +1,56 @@
+{
+  "skill": "make-council",
+  "note": "Minted 2026-08-20/21, S4 of the brand-design council-as-platform overhaul (#827). Floor suite: routing against standing up a whole NEW council instance vs. convening an already-existing one, minting one critic inside an existing council (make-critic), the council mechanism itself (council-rules), a generic multi-agent team (teamwork:fleet-rules), and harness's generic subagent forge (make-agent).",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "Stand up a brand-new adversarial council for reviewing pull request diffs.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "I need a council like check-brand-council but for grading marketing landing pages.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Make a council that reviews product specs with a security lens and an architecture lens.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "How do I wire the chair/deliberation round for a brand-new council domain?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Convene the brand council on this positioning brief.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council — an existing instance, nothing new to stand up"
+    },
+    {
+      "id": "n02",
+      "prompt": "Mint a new critic persona for the brand council's voice sub-council.",
+      "expect": "no-trigger",
+      "comment": "owner: make-critic — one new critic inside an EXISTING council, not a new instance"
+    },
+    {
+      "id": "n03",
+      "prompt": "What makes something a council instead of a single reviewer?",
+      "expect": "no-trigger",
+      "comment": "owner: council-rules — the mechanism itself"
+    },
+    {
+      "id": "n04",
+      "prompt": "Coordinate a team of agents to plan, build, and review this feature.",
+      "expect": "no-trigger",
+      "comment": "owner: teamwork:fleet-rules — a generic build team, not an adversarial blind-then-deliberation council"
+    },
+    {
+      "id": "n05",
+      "prompt": "Create a new subagent for running database migrations.",
+      "expect": "no-trigger",
+      "comment": "owner: harness:make-agent — a generic standalone dispatched agent, unrelated to a council instance"
+    }
+  ]
+}

@@ -8,7 +8,8 @@ description: >
   design/voice/strategy sub-council", "what would Luke S. say about this", "have the critics
   deliberate on this". NOT rubric scoring (`check-brand-rubric`); NOT the Muse/voice seats
   (`muse-agent`/`brand-writer`); NOT corpus organizing (`brand-corpus`); NOT the council mechanism
-  itself (`council-rules`).
+  itself (`council-rules`); NOT minting a new critic persona (`make-critic`) or a whole new council
+  instance for a different domain (`make-council`).
 argument-hint: "[strategy|design|voice|full] [artifact] [--deliberate]"
 disable-model-invocation: false
 user-invocable: true

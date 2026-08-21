@@ -212,6 +212,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "critic",
+      "plural": "critics",
+      "banned_aliases": []
+    },
+    {
       "canonical": "decision",
       "plural": "decisions",
       "banned_aliases": []
