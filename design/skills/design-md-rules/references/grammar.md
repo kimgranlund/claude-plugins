@@ -5,11 +5,24 @@
 Every color token is **constructed, never invented**: `--{prefix}-{family}-{slot}`.
 
 - **Prefix** — one per project (`md-sys-color`, `color`, …). The grammar is **prefix-adaptive**: under a different host prefix, swap the prefix and keep `{family}-{slot}` intact. A DESIGN.md states its prefix once.
-- **Families** — the reference set: `neutral`, `primary`, `secondary`, `tertiary`, `danger`, `success`, `warning`, `info`. A brand may add signature families; every family it declares carries the full slot inventory.
+- **Families** — the reference set: `neutral`, `primary`, `secondary`, `tertiary`, `danger`, `success`, `warning`, `info`. A brand may add signature families; every family it declares carries the full slot inventory. Family names are role positions, not mandated literals — a generator may derive them from its own palette naming (the ultimate-tokens exporter's neutral family is kit-derived), as long as the file states the mapping.
+- **Compat aliases** — a consumer dialect may require a literal family name (Stitch expects
+  `primary`): emit an alias token pointing at the brand family's values, and only when the brand
+  family isn't already literally so named — never a duplicate key (added 2026-08-20, documenting
+  the ultimate-tokens exporter's Stitch-compat alias).
 - **Slots** — the constructable vocabulary:
   - family name alone = the fill: `--md-sys-color-primary`
   - text/icons ON a fill: `{family}-on-{family}` (e.g. `primary-on-primary`)
-  - states suffix the fill: `-hover`, `-active`, `-disabled` (disabled = a 60%-alpha wash of the base, mode-independent)
+  - states suffix the fill: `-hover`, `-active`, `-disabled`. Disabled is an inert wash — either
+    a resolved role-table token (the ultimate-tokens exporter's way, preferred: it stays a real
+    token; its light and `-dark` values are identical) or a 60%-alpha wash of the base,
+    mode-independent either way (amended 2026-08-20, exporter-alignment review). `-active` is
+    required wherever a family is actually used as an interactive fill (typically the
+    neutral/chrome controls + the brand family) and omitted on families never used as
+    interactive fills; status families rarely serve as interactive fills, but when one does — a
+    danger-filled destructive-action button is legal status semantics — it too carries the
+    interactive states. (Dated correction 2026-08-20: this file's prior text enumerated `active`
+    for every family; that blanket requirement is retired.)
   - app surfaces live in **neutral**: `neutral-background`, `neutral-surface`, `neutral-surface-high`; text on them: `neutral-on-surface`, `neutral-on-surface-variant`; hairlines: `neutral-outline-variant` (translucent, often identical in both schemes)
   - extended layer (optional but standardized): `-container(-low/-high)` tints, `-scrim-{weakest…strongest}` ladders, `-surface-{dimmest…brightest}` ladders, `-outline(-hover/-active/-disabled)`, `-placeholder`, `-inverse-surface`/`-inverse-on-surface`
 
