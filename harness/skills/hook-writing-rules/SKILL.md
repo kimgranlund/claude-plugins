@@ -31,6 +31,7 @@ Judgment (skill): "does this body carry a genuine behavior delta?"       → che
 - **Output:** exit 0 = success, silent; exit 2 = block, stderr fed to Claude; or structured stdout JSON — `{"decision": "block", "reason": …}` (PostToolUse/Stop) and `hookSpecificOutput.permissionDecision: allow|deny|ask` (PreToolUse). Unmatched files and malformed events exit 0 quietly.
 - **Layering:** hooks from enterprise, project, user, local, and plugin scopes merge additively — everything that matches runs; nothing overrides. Workspace trust gates all of it.
 - **Plugin registration:** plugin `hooks/hooks.json` requires the outer `"hooks"` wrapper — a bare settings-style snippet fails *silently* (lint H2). Paths go through `${CLAUDE_PLUGIN_ROOT}`; persistent state goes to `${CLAUDE_PLUGIN_DATA}`, because updates wipe the plugin root. Hook config changes need `/reload-plugins`; SKILL.md live-reloads, hooks do not.
+- **Same never-hot-reloads shape, project scope, no escape valve:** `settings.local.json`'s own `PreToolUse` hooks and `permissions.deny` load once per OS process at session start and never hot-reload mid-session either — a session that writes its own `deny`/hook config can never make it take effect against itself; only a process started *after* the config is on disk enforces it (teamwork's `fleet-bootstrap` Phase 5, issues #852/#853, confirmed live with two independent reproductions). Unlike the plugin-hooks row above, there's no `/reload-plugins` equivalent here — a new process is the only fix.
 
 ## Hook discipline
 
@@ -73,7 +74,8 @@ Good (repair affordance):   skill-postwrite-invocation-lint · 2 fail · path
 | Blocking mid-flow on style | Constant interruption degrades the agent's work | Block on invariants; warn-and-continue on style; consider gate-at-commit |
 | Prose duplicate of a hook | Drift pair; the prose version rots | The hook is canonical; delete the prose, keep a pointer |
 | Config edited, nothing changes | Plugin hooks aren't live-reloaded | `/reload-plugins` or restart |
+| A wall/deny/hook a session wrote about itself "isn't taking effect" | Project-scope `settings.local.json` also loads once per process, no reload equivalent | Restart into a new process — see Mechanics above (#852/#853) |
 
 ## Provenance
 
-Event set, output semantics, layering, and the wrapper trap verified against code.claude.com/docs (hooks, plugins-reference) and this plugin's own build incidents, 2026-07. All mechanics [drift-prone]: re-verify on a version bump. Message language: `prompt-wording-rules` (§5, §9, §10). Routing: `skill-writing-rules` carries the skill side of the boundary.
+Event set, output semantics, layering, and the wrapper trap verified against code.claude.com/docs (hooks, plugins-reference) and this plugin's own build incidents, 2026-07. Project-scope `settings.local.json` never-hot-reloads behavior verified live, teamwork issues #852/#853, 2026-08. All mechanics [drift-prone]: re-verify on a version bump. Message language: `prompt-wording-rules` (§5, §9, §10). Routing: `skill-writing-rules` carries the skill side of the boundary.
