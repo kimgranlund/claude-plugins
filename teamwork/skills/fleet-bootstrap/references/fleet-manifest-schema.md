@@ -66,11 +66,21 @@ takeover record.
   `seats.*.tier` against the canonical table in `team-scaffolding`'s Phase 4; any mismatch missing
   a sibling `justification_date` is a finding, full stop, no judgment call needed.
 - **`seats.<role>.mode`** — `"manual"` (a human-driven terminal), `"background"` (a spawned
-  long-lived named agent), or `"dispatched"` (a synchronous `Agent` call that already returned —
-  today only the product seat's `/fleet-bootstrap` Phase 2 dispatch; distinct from `"manual"` so a
-  reader never infers a live terminal session that isn't there). Reviewer and planner default to
-  `"manual"` per #410 addendum 3; `/fleet-bootstrap`'s spawn-list argument is what flips one to
-  `"background"`.
+  long-lived named `Agent`-tool dispatch — `planner` only, as of issue #853; see below),
+  `"background-subprocess"` (a genuine `claude -p` OS process spawned with cwd already inside a
+  pre-walled worktree — `reviewer` only, issue #853), or `"dispatched"` (a synchronous `Agent`
+  call that already returned — today only the product seat's `/fleet-bootstrap` Phase 2 dispatch;
+  distinct from `"manual"` so a reader never infers a live terminal session that isn't there).
+  Reviewer and planner default to `"manual"` per #410 addendum 3; `/fleet-bootstrap`'s spawn-list
+  argument is what flips one to `"background"`/`"background-subprocess"`. **`reviewer` and
+  `planner` diverge on spawn mechanism (issue #853):** an in-process `Agent`-tool dispatch inherits
+  the parent session's permission mode instead of re-deriving one from its own cwd, so it can never
+  be a genuinely separate OS process — harmless for `planner` (carries no wall), disqualifying for
+  `reviewer` (the wall's whole point is structural enforcement). `planner` keeps `"background"`;
+  `reviewer` moved to `"background-subprocess"`, never `"background"` again — a `reviewer` row still
+  reading `"background"` predates this fix (issue #850/#852's shipped shape) and its
+  `wall_applied` field (below) must be read as unverified-by-today's-standard, not retroactively
+  trusted.
 - **`permission_profiles`** — which structural wall (per `lld-0006-fleet-permission-profile.md`)
   applies to which seat in this repo. Today only `reviewer` carries one (`deny-edit-write`); the
   key exists so a future seat's profile has a place to record without a schema change.
@@ -92,27 +102,53 @@ takeover record.
 - **`live_state.joined[].reason`** — optional, present only on a `"released"` row: the free-text
   reason argument passed to `/team-scaffolding retire <role> [reason]`, or `null` if none was
   given.
-- **`live_state.joined[].wall_applied`** — optional, present only on a `reviewer` row written by
-  `fleet-bootstrap` Phase 5 (a background spawn). One of three values (issue #852 — content
-  verification alone is never sufficient to write `true`):
-  - `true` — the `deny-edit-write` wall was written, re-verified (`team-scaffolding` Phase 3's
-    C1–C1a steps), AND confirmed enforced by Phase 3's own step-4 I2 live probe: a `Write` and a
-    denied-pattern `Bash` attempt, run in the SAME dispatched session, both came back DENIED.
-  - `"blocked-worktree"` — the seat hit Phase 1's worktree precondition, shared checkout, and
-    never attempted the write.
-  - `"same-session-unenforced"` — the write and grep-verify succeeded, but I2's own probe found
-    this same dispatched session's own subsequent `Write`/`Bash` calls still going through: the
-    platform's config-loads-once-per-OS-process behavior (confirmed live, issue #852), not a
-    defect in the write itself. Today's *expected* outcome for `fleet-bootstrap`'s background
-    spawn (an in-process `Agent`-tool dispatch inherits the parent session's permission mode
-    rather than re-deriving one from its own cwd, so it is not a genuinely new OS process) —
-    closing this structurally is tracked separately (issue #853).
+- **`live_state.joined[].wall_applied`** — optional, present only on a `reviewer` row appended by
+  `fleet-bootstrap` Phase 5's ORCHESTRATOR (the background-subprocess spawn, issue #853; formerly
+  an in-process background spawn, issue #850/#852). **The manual `/team-scaffolding reviewer` path
+  NEVER writes this field, on ANY outcome, including a declined restart** — a genuinely walled
+  restarted session structurally cannot append structured JSON to `fleet.json` either (the same
+  C1a escape-hatch charset gap issue #855 found: its positive charset excludes `{`/`}`, so no
+  literal JSON-object append can ever pass, even the reviewer's own row). The manual path reports
+  the identical vocabulary below strictly INLINE — printed to the human by `team-scaffolding`
+  Phase 3 or `bind-review`'s Phase 0 — never as a `fleet.json` write; see "Absent", below, which
+  covers it entirely. One of four values (issue #852 — content verification alone is never
+  sufficient to write `true`):
+  - `true` — the `deny-edit-write` wall was written and re-verified (`team-scaffolding` Phase 3's
+    C1–C3 steps) by the ORCHESTRATOR, in a genuinely separate `claude -p` OS process already
+    running with cwd inside the pre-walled worktree at start (issue #853), AND confirmed enforced
+    by that process's own I2 live probe: a `Write` and a denied-pattern `Bash` attempt, run inside
+    it, both came back DENIED, with an allowed `gh`-shaped `Bash` command still passing. Always
+    carries a sibling `wall_verified_via` (below).
+  - `"blocked-worktree"` — the orchestrator's own worktree precondition (Phase 5 step 1) found a
+    shared checkout before any wall write or spawn was attempted; the orchestrator appends this row
+    itself, immediately, with no wall write and no spawn ever attempted — unchanged from issue #852.
+  - `"same-session-unenforced"` — background-subprocess path only: the wall write and grep-verify
+    succeeded, but the spawned child's own I2 probe unexpectedly reported a `Write`/`Bash` attempt
+    SUCCEEDING rather than denied (named honestly rather than silently promoted to `true`). The
+    identical LABEL also names the manual path's own declined-restart outcome, but that occurrence
+    is always inline prose (per the opening paragraph above), never this field.
+  - `"spawn-unconfirmed"` (issue #853, new) — `fleet-bootstrap`'s background-subprocess spawn was
+    attempted but never reported an I2 verdict within its monitoring budget (the process may still
+    be running, or may have died silently) — distinct from `"same-session-unenforced"`: no session
+    ever continued unwalled here, there is simply no confirmed evidence yet either way. Never
+    promoted to `true` or `"same-session-unenforced"` on a guess; a later re-check that finds the
+    process has since exited may confirm one of those instead.
 
-  Absent covers both a manual `reviewer` join via `/team-scaffolding reviewer` directly (which
-  reports its own wall outcome — including its own I2 probe result — inline rather than through
-  this field) and a background join predating this field — read as "unknown", never as "applied":
-  a reader never infers success from a missing field (issue #850), and never infers success from
-  `true` without I2's own probe having actually confirmed a denial (issue #852).
+  Absent covers both a manual `reviewer` join via `/team-scaffolding reviewer`/`/bind-review`
+  directly (which ALWAYS reports its own wall outcome — including its own I2 probe result, and
+  including a confirmed `true`-equivalent restart result — inline rather than through this field,
+  per the opening paragraph above) and a background join predating this field — read as "unknown",
+  never as "applied": a reader never infers success from a missing field (issue #850), and never
+  infers success from `true` without I2's own probe having actually confirmed a denial (issue
+  #852).
+- **`live_state.joined[].wall_verified_via`** — optional, present only alongside `wall_applied:
+  true` (issue #853). Since only `fleet-bootstrap`'s orchestrator ever writes `wall_applied` (see
+  above — the manual path is always inline, never a field write), this field's only recorded value
+  today is `"subprocess-spawn"` — `fleet-bootstrap` Phase 5's own `claude -p` child, spawned by the
+  orchestrator with cwd already inside the pre-walled worktree. The manual path's own restart
+  confirmation uses the identical "via restart" wording when `team-scaffolding`/`bind-review`
+  report it, but strictly as spoken/printed text, never as this field's value — there is no
+  `"restart"` entry to find in a real `fleet.json` file today, by design, not omission.
 - **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.

@@ -31,6 +31,38 @@ seals one checker dispatch, relays verdict-first. The family's prior "one delibe
 member" status is retired; the invariant that never changes is that a checker's rubric is never
 duplicated onto the seat or its dispatched twin.
 
+## Phase 0 — Confirm a pre-existing wall, if one is on disk (issue #853 restart contract)
+
+Resolve the repo root the same way Phase 1 states it back (`$ARGUMENTS`, else cwd) and check
+`.claude/settings.local.json` there for the reviewer's own entries — `permissions.deny` containing
+both `"Edit"` and `"Write"`, plus a `PreToolUse` `Bash` hook. **Absent → this phase does not
+exist**, proceed straight to Phase 1 — a bare `/bind-review` with no prior wall (reviewing outside
+the fleet `reviewer` contract entirely) is unaffected. **Present** → this session is the second
+half of `team-scaffolding`'s manual restart-then-verify contract (that skill's Phase 3 step 4,
+issue #853): a prior session wrote and content-verified this wall, then stopped and printed the
+instruction to restart into it. Run `lld-0006` I2's own three-probe sequence now, in THIS freshly
+started process, before Phase 1's own routing work begins: (a) a trivial `Write` to a throwaway
+scratch path in this worktree; (b) a `Bash` command matching none of C1a's allowlist shapes (e.g.
+`echo probe > /tmp/bind-review-probe-<UTC-timestamp>`); (c) a `Bash` command that DOES match the
+allowlist (e.g. `gh pr view <any-open-PR-number>`). Clean up any scratch path that actually got
+written; a denied attempt needs no cleanup.
+
+- **(a) and (b) both DENIED, (c) still passed** → state `Wall applied and verified structural (I2
+  live probe, via restart: both Write and Bash attempts denied; allowed command (c) still passed)`,
+  quoting both denial texts. **State this plainly to the human — it is never written into
+  `fleet.json`'s `wall_applied`/`wall_verified_via` fields**: the manual path's confirmation is
+  always inline prose, on this same "via restart" vocabulary, never a structural write
+  (`teamwork:fleet-bootstrap`'s `references/fleet-manifest-schema.md` states this explicitly — a
+  genuinely walled restarted session cannot append structured JSON to `fleet.json` either, issue
+  #855). Proceed to Phase 1.
+- **Either (a) or (b) SUCCEEDED** → this is a genuine gap, not the expected outcome for a
+  restarted process: the human was told the wall would enforce here and it didn't (wrong cwd, a
+  wall file missing entries, or this process was never actually restarted into the walled
+  worktree). **STOP here — do not proceed to Phase 1 and do not adopt the reviewer seat unwalled.**
+  State the gap plainly (which probe succeeded, the exact output) and name the likely causes above;
+  never proceed silently on the assumption the wall must be fine because a prior session verified
+  its content — content-verification and live enforcement are two different claims (issue #852).
+
 ## Phase 1 — Bind the target
 
 Resolve the repo root (`$ARGUMENTS`, else cwd) and state it back in one line.

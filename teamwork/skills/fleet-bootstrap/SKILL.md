@@ -157,92 +157,166 @@ this branch only fires if the human became unreachable after ratifying — → d
 (an unconfirmed fan-out is not "assume the argument's list"); report the spawn phase as skipped
 for the same no-live-user reason, and proceed to Phase 6.
 
-## Phase 5 — Spawn the confirmed seats as long-lived named background agents
+## Phase 5 — Spawn the confirmed seats
 
-For each role in the confirmed list (skip entirely if empty — proceed straight to Phase 6):
+For each role in the confirmed list (skip entirely if empty — proceed straight to Phase 6).
+**`planner` and `reviewer` now spawn by genuinely different mechanisms (issue #853): an in-process
+`Agent`-tool dispatch inherits the parent session's permission mode instead of re-deriving one from
+its own cwd, so it can never be a genuinely separate OS process — harmless for `planner` (carries
+no wall), disqualifying for `reviewer` (the wall's whole point is structural enforcement, and
+issue #852 found the old shared shape produced a false-positive `wall_applied: true`). Branch by
+role below.**
 
-1. Dispatch via the `Agent` tool, `name: "{repo}-<role>"`, prompt instructing it to perform
-   `team-scaffolding`'s own Phase 1, 3, and 4 mechanics directly, itself, via ordinary
-   `Read`/`Write`/`Edit`/`Bash` tool calls — **never** by invoking `/team-scaffolding <role>`
+### `planner` — in-process `Agent`-tool dispatch, unchanged
+
+1. Dispatch via the `Agent` tool, `name: "{repo}-planner"`, prompt instructing it to perform
+   `team-scaffolding`'s own Phase 1, 2, and 4 mechanics directly, itself, via ordinary
+   `Read`/`Write`/`Edit`/`Bash` tool calls — **never** by invoking `/team-scaffolding planner`
    through the Skill tool, which is structurally blocked for a dispatched agent with no live
    terminal, the same reason Phase 1 above inlines those mechanics for the orchestrator seat rather
-   than claiming that hand-off (the #421/#423/#850 class, recurring here). Quote the role's own
-   steps into the dispatch prompt rather than naming the skill as a callable: the naming line
-   (`Seat: {repo}-<role>`), for `reviewer` the worktree precondition and the structural
-   `deny: ["Edit", "Write"]` + `Bash`-gating wall (`team-scaffolding` Phase 1's worktree check,
-   Phase 3's C1–C1a steps, re-read-and-verify included — `planner` carries no wall; state that
-   explicitly per Phase 3's own rule), and the comms charter (Phase 4). **For `reviewer`, the
-   dispatch prompt MUST also quote Phase 3's own step 4 — the I2 live probe (a `Write` attempt and
-   a denied-pattern `Bash` attempt, both run in this same dispatched session) — as a mandatory step
-   before this seat ever reports a wall outcome; skipping straight from the re-verify to step 3's
-   `fleet.json` append is exactly the false-positive `wall_applied: true` issue #852 found.**
-   **`team-scaffolding`
-   Phase 2's own `fleet-roster.md` row append and `live_state.joined` append are excluded from what
-   this dispatch performs — step 3 below is this seat's only writer for both**, so the two
-   never race or diverge on `mode`/`agent_name`. Then hold its adopted `/bind-review` or
-   `/bind-planning` contract for the fleet's duration by reading that skill's own body directly and
-   following its procedure (never invoking it via the Skill tool either — `team-scaffolding` Phase
-   5: every `bind-*` target is also `disable-model-invocation: true`); state in the dispatch prompt
-   that this is a deliberate exception to `bind-*`'s own no-model-routed-adoption stance
-   (`team-scaffolding`'s Rejected alternatives), made only because a background seat has no human
-   session to hand the contract to instead.
+   than claiming that hand-off (the #421/#423/#850 class). Quote the role's own steps into the
+   dispatch prompt: the naming line (`Seat: {repo}-planner`), the comms charter (Phase 4, including
+   point 5's intent-layer self-check), and "no permission-profile deviation for this role" (Phase 3
+   never applies to `planner`). Then hold its adopted `/bind-planning` contract for the fleet's
+   duration by reading that skill's own body directly and following its procedure (never invoking
+   it via the Skill tool either — `team-scaffolding` Phase 5: every `bind-*` target is also
+   `disable-model-invocation: true`); state in the dispatch prompt that this is a deliberate
+   exception to `bind-*`'s own no-model-routed-adoption stance (`team-scaffolding`'s Rejected
+   alternatives), made only because a background seat has no human session to hand the contract to
+   instead.
 2. **Record the cloud-can't-message-back caveat explicitly in that dispatch's charter text**: "You
    are a background seat — if this session runs remotely, it cannot `SendMessage` back to a peer
    that has since exited. Route anything a peer needs to see through the durable channels
    (`fleet.json`'s live-seat state, `fleet-roster.md`, GitHub Issue/PR comments), never solely
-   through a live nudge you cannot guarantee lands." **Once the wall (or its worktree block) is
-   in place, every further write in this dispatch — including step 3's own `fleet.json` append —
-   runs as a `Bash` command inside C1a's escape hatch (`sed`/`cat`/`printf` naming one of the three
-   fleet-state files, no chaining), the same mechanism `team-scaffolding` Phase 6 spells out for
-   its own un-wall step, stated here so the first attempt isn't an `Edit` call that walks into the
-   wall it just wrote.**
-3. Append `live_state.joined` (`role`, `mode: "background"`, `agent_name`, today's date) in
-   `fleet.json`, appended by this same dispatched seat (not the orchestrator) since it is the one
-   holding the live tool context once the wall (or its block) lands — for `reviewer`, this same
-   append carries `wall_applied`, one of three values, never `true` off the write+grep alone
-   (issue #852):
-   - `true` — C1–C1a's write, re-verify, AND `team-scaffolding` Phase 3's own step-4 I2 live probe
-     all confirm the wall: both a `Write` and a denied-pattern `Bash` attempt, run in THIS same
-     dispatched session, came back DENIED. Quote both denial texts in this dispatch's own report.
-   - `"blocked-worktree"` — Phase 1's worktree precondition stopped the wall before any write was
-     attempted.
-   - `"same-session-unenforced"` — the write+grep succeeded but I2's own probe found this SAME
-     dispatched session's subsequent `Write`/`Bash` calls still going through: the platform's
-     config-loads-once-per-OS-process behavior (issue #852), not a defect in this dispatch. **This
-     is the expected outcome for this dispatch shape today** — an `Agent`-tool dispatch is
-     documented to inherit the parent session's permission mode rather than re-deriving it from its
-     own cwd, so it is not a genuinely new OS process either, the same gap the manual
-     `team-scaffolding reviewer` path hits (that skill's own Phase 3 step 4). Closing this for real
-     needs a genuinely separate process (a headless `claude -p` subprocess, a new terminal, or
-     `isolation: "remote"`) — out of scope for this dispatch shape; tracked as follow-up issue
-     #853.
+   through a live nudge you cannot guarantee lands."
+3. Append `live_state.joined` (`role: "planner"`, `mode: "background"`, `agent_name`, today's
+   date) in `fleet.json`, appended by this same dispatched seat (not the orchestrator) since it is
+   the one holding the live tool context and carries no wall to work around.
 
-   (`references/fleet-manifest-schema.md`'s `wall_applied` field.) Never left absent by choice —
-   Phase 6 surfaces this outcome per spawned seat rather than assuming success.
+### `reviewer` — a genuine `claude -p` subprocess, spawned by the orchestrator into a pre-walled worktree (issue #853)
 
-**Hybrid swap**: any background seat spawned here is replaceable at any time by a human running
-`/team-scaffolding <role>` in their own terminal — the roster (`fleet.json` + `fleet-roster.md`) is
-what a rejoining session reads to discover it's taking over an existing seat, not starting fresh.
+The old in-process shape (an `Agent`-tool dispatch that wrote its own wall mid-session) is what
+issue #852 found never actually enforces — permission/hook config loads once per OS process and
+does not hot-reload, and an `Agent`-tool dispatch inherits the parent's permission mode rather than
+re-deriving one from its own cwd, so it was never a genuinely new process either. Issue #853's own
+investigation (Findings, this issue) live-tested the fix: a `claude -p` child spawned with cwd
+already inside an ALREADY-walled worktree IS correctly denied, from inside a dispatched seat's own
+`Bash` tool, even under this machine's global `bypassPermissions` default. This dispatch realizes
+that tested shape:
+
+1. **Worktree precondition, run by the ORCHESTRATOR itself** (this session — never a dispatched
+   seat). `team-scaffolding` Phase 1's own check against the reviewer's target worktree:
+   `git rev-parse --git-common-dir` vs. `--git-dir` — differ only inside a linked worktree. Same
+   (shared checkout) → stop here: no wall write and no spawn attempted, and the ORCHESTRATOR itself
+   (never a dispatched seat) immediately appends `live_state.joined` (`role: "reviewer"`, `mode:
+   "background-subprocess"`, `agent_name: null` — no process was ever spawned, today's date,
+   `action: "joined"`, `wall_applied: "blocked-worktree"`, no `wall_verified_via`) — report per
+   Phase 6 and name `EnterWorktree` as the fix, same as the manual path.
+2. **Write and verify the wall — by the ORCHESTRATOR, entirely BEFORE any spawn.**
+   `team-scaffolding` Phase 3's own C1–C1a write (merge `deny: ["Edit","Write"]` plus the
+   `gh`/Read/Grep/Glob allow-list; merge the `PreToolUse` `Bash`-gating hook) then C3's own
+   re-read-and-grep verify, run directly with this session's own `Read`/`Write`/`Edit`/`Bash` tools
+   — this session is not walled, so it can do this cleanly, and the wall must already be ON DISK
+   before the child process starts (issue #853's Q1: a wall written before process start enforces;
+   a wall a session writes about itself never does, issue #852). Verification fails → stop, report
+   the failure (Failure branches), no spawn attempted.
+3. **Spawn exactly ONE `claude -p` child**, background `Bash` (`run_in_background: true`), cwd =
+   the pre-walled worktree, stdout+stderr redirected to a log file by THIS SESSION'S OWN shell
+   redirect — that redirect is this session's operation, not a tool call the child itself makes, so
+   the child's wall never touches it (the exact mechanism this issue's own live round-trip test
+   verified: the spawning session's redirect landed cleanly while the child's own in-process
+   `Write`/denied-`Bash` attempts were both denied). The child's prompt carries: the naming line
+   (`Seat: {repo}-reviewer`), the reviewer's charter (`team-scaffolding` Phase 4 points 1, 4, 6 —
+   tier, review-instrument roster, locked-spec self-check — quoted verbatim, no Skill-tool
+   hand-off, same reasoning as `planner`'s dispatch above), and one MANDATORY first act before any
+   review work: run `lld-0006` I2's own three-probe sequence (a denied `Write`, a denied-pattern
+   `Bash`, one allowed `gh`-shaped `Bash`) and print each result to stdout in this EXACT
+   three-line, colon-delimited format, one line per probe, no other text on those lines (the
+   orchestrator's step 4 parses these literal keys):
+   ```
+   I2-PROBE write: DENIED|SUCCEEDED
+   I2-PROBE bash-denied: DENIED|SUCCEEDED
+   I2-PROBE bash-allowed: PASSED|FAILED
+   ```
+   followed by the quoted denial/pass text on subsequent lines, free-form. **This confirm step's
+   own report channel is the child's stdout alone — captured by the orchestrator's own log
+   redirect above, never a `gh issue comment` and never a Bash-redirect write to
+   `fleet.json`/`fleet-roster.md`.** (Once this child moves on to actual REVIEW work, its output
+   channel is the normal one: `gh issue`/`pr comment` on whatever target it's reviewing,
+   `bind-review`'s own routing table — a concrete target per review task, unlike this one-shot
+   confirm which has no natural GitHub target of its own.) A Bash-redirect write to `fleet.json`
+   would additionally hit a confirmed platform gap regardless: this issue's own live build found
+   the retirement-only C1a escape hatch's charset structurally excludes `{`/`}` (verified against
+   the exact hook regex in `lld-0006-fleet-permission-profile.md` C1a), so a JSON-object append —
+   exactly what a structured `fleet.json` entry needs — is denied even when it targets one of the
+   three permitted paths; lld-0006's own C1a text already flagged this as a residual gap to widen
+   deliberately if ever needed, never silently — filed as follow-up issue #855 rather than widened
+   here. The child never attempts a `fleet.json`/roster write at all; step 4 below is the
+   orchestrator's job instead.
+4. **Monitor and collect, by the ORCHESTRATOR.** Poll the spawned process (bounded budget — ~180s
+   default, overridable; this issue's own live round trip completed in 40–48s) until it exits or
+   the budget is exhausted, then read the captured log for the I2 verdict in the fixed format the
+   prompt required.
+   - Process exited AND both denied-probe lines confirm DENIED, with the allowed-probe line
+     confirming PASSED → `wall_applied: true`, `wall_verified_via: "subprocess-spawn"`
+     (`references/fleet-manifest-schema.md`). Quote both denial texts (from the child's own report)
+     in this dispatch's Findings.
+   - Process exited but the log doesn't show the expected denial (a probe unexpectedly succeeded,
+     or the fixed format is missing/malformed) → `wall_applied: "same-session-unenforced"` — same
+     honest label issue #852 named, since the observable outcome (an unwalled write went through)
+     is identical regardless of which process shape produced it.
+   - Budget exhausted with no exit → `wall_applied: "spawn-unconfirmed"` (issue #853) — the process
+     may still be running or may have died silently; name it plainly rather than guessing, and
+     leave the background process running (never kill it blind) unless a repeat check later
+     confirms it has since exited.
+   - **Append `live_state.joined`** in `fleet.json` (`role: "reviewer"`, `mode:
+     "background-subprocess"`, `agent_name`: a name identifying the spawned process — there is no
+     fleet messaging identity for a subprocess, so its log-file path or PID-at-spawn-time is the
+     durable pointer — today's date, `action: "joined"`, `wall_applied` and, when `true`,
+     `wall_verified_via`, per the above). **This append is now done by the ORCHESTRATOR, never by
+     the spawned child** — a genuinely walled subprocess structurally cannot write it (step 3's own
+     finding), so the prior design's "the dispatched seat is its own fleet.json writer" assumption
+     no longer holds for `reviewer`.
+5. **Ongoing review work — the durable artifact is the wall on disk, not one long-lived process.**
+   `claude -p` is one-shot per invocation (this issue's Findings) and cannot itself "hold a seat
+   open" the way an interactive terminal does. The wall (step 2) persists in the worktree for the
+   fleet's duration regardless of whether any one `claude -p` process is currently running — every
+   FUTURE `claude -p` invocation spawned with cwd in that same worktree inherits the same
+   structural enforcement for free, with no re-write needed. So "holding the reviewer contract" now
+   means: further review tasks are driven by fresh, per-task `claude -p` spawns into this same
+   pre-walled worktree (dispatched by this orchestrator, a `/loop`, or a human/coordinator naming
+   the worktree), never one persistent background process. **Scoping stops here, named plainly**:
+   the actual scheduling/monitoring infrastructure for a recurring cadence of per-task spawns
+   (crash recovery, log rotation, a standing launcher) is real, separate infrastructure work this
+   ticket's own scope flagged as unscoped — filed as follow-up issue #856, not built here. What
+   this build ships is the one-shot bind-plus-I2-confirm round trip (steps 1–4), live-verified end
+   to end, which is the structural precondition any later scheduling layer builds on.
+
+**Hybrid swap**: any spawned seat (background or background-subprocess) is replaceable at any time
+by a human running `/team-scaffolding <role>` in their own terminal — the roster (`fleet.json` +
+`fleet-roster.md`) is what a rejoining session reads to discover it's taking over an existing seat,
+not starting fresh.
 
 ## Phase 6 — Report
 
-One summary: which seats are live and how (manual/background), the gate's outcome, the spawn list
-honored (one of: "none — confirmed default", "reviewer/planner — confirmed", "none — reviewer and
-planner already held", or "confirm skipped — no live user, nothing spawned"), the `fleet.json`
-path as the durable record a later session reads
+One summary: which seats are live and how (manual/background/background-subprocess), the gate's
+outcome, the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
+confirmed", "none — reviewer and planner already held", or "confirm skipped — no live user,
+nothing spawned"), the `fleet.json` path as the durable record a later session reads
 to resume orientation, and — since Phase 1 only registered the orchestrator seat, not the
 `teamwork:bind-team` contract itself — name `/bind-team` as the follow-up command for the human to
 run in this session when they want that contract's ongoing day-to-day discipline. **For any spawned
-`reviewer` seat, read its `wall_applied` field back from `fleet.json` (Phase 5 step 3,
-`references/fleet-manifest-schema.md`) and state the outcome explicitly** — one of "applied and
-verified" (`wall_applied: true`, I2's own probe denied both a `Write` and a denied-pattern `Bash`
-attempt), "content-verified but NOT enforced this session" (`wall_applied:
-"same-session-unenforced"` — same-session self-walling cannot be platform-enforced, issue #852; a
-genuinely new process is needed for real enforcement, not this dispatch shape), "not yet —
-worktree isolation required" (`wall_applied: "blocked-worktree"` — name `EnterWorktree` plus
-re-running `/team-scaffolding reviewer` there as the fix), or "unknown — no wall-outcome report
-received from the dispatched seat" (field absent) — never omitted and never assumed applied by
-default.
+`reviewer` seat, read its `wall_applied` (and, when present, `wall_verified_via`) field back from
+`fleet.json` (Phase 5's own append, `references/fleet-manifest-schema.md`) and state the outcome
+explicitly** — one of "applied and verified via subprocess spawn" (`wall_applied: true`,
+`wall_verified_via: "subprocess-spawn"` — I2's own probe, run inside the spawned `claude -p` child,
+denied both a `Write` and a denied-pattern `Bash` attempt), "content-verified but NOT enforced"
+(`wall_applied: "same-session-unenforced"` — issue #852/#853), "not yet — worktree isolation
+required" (`wall_applied: "blocked-worktree"` — name `EnterWorktree` plus re-running
+`/team-scaffolding reviewer` there as the fix), "spawn did not confirm in time" (`wall_applied:
+"spawn-unconfirmed"`, issue #853 — name the log path and state whether the background process is
+still running), or "unknown — no wall-outcome report received" (field absent) — never omitted and
+never assumed applied by default.
 
 ## Failure branches
 
@@ -253,14 +327,20 @@ default.
 - **Spawn-list argument names anything other than `reviewer`/`planner`** → report the invalid
   entries and proceed only with the valid ones (never silently drop the whole argument to the
   default).
-- **A dispatched `reviewer` seat hits the worktree precondition (shared checkout, no isolation)**
-  → it stops its own wall-write there, per `team-scaffolding` Phase 1's own worktree check — this
-  is that seat's correct behavior, not a defect; Phase 6 reports the outcome as "not yet — worktree
-  isolation required" rather than silently treating the spawn as fully walled.
-- **A dispatched `reviewer`/`planner` seat never reports back at all** (background dispatch died,
-  or is unreachable before this session's own Phase 6 runs) → report its wall/hold outcome as
-  "unknown — no report received" rather than assuming success; `fleet.json`'s own `live_state`
-  entries are the durable source a later session re-checks.
+- **The `reviewer` worktree precondition finds a shared checkout (no isolation, issue #853)** → the
+  ORCHESTRATOR's own Phase 5 step 1 check stops there, before any wall write or spawn is attempted
+  — never a dispatched seat's own check (the old in-process shape this superseded); this is
+  correct behavior, not a defect. The orchestrator itself appends `live_state.joined` immediately
+  with `wall_applied: "blocked-worktree"` (Phase 5 step 1); Phase 6 reports the outcome as "not
+  yet — worktree isolation required" rather than silently treating the spawn as fully walled.
+- **A dispatched `planner` seat never reports back at all** (background dispatch died, or is
+  unreachable before this session's own Phase 6 runs) → report its hold outcome as "unknown — no
+  report received" rather than assuming success; `fleet.json`'s own `live_state` entries are the
+  durable source a later session re-checks.
+- **A spawned `reviewer` `claude -p` child never exits within Phase 5 step 4's monitoring budget**
+  (issue #853) → `wall_applied: "spawn-unconfirmed"`, never a guessed `true` or
+  `"same-session-unenforced"`; leave the background process running (killing it blind can strand a
+  half-written report) and name the log path so a later check can resolve it either way.
 
 ## Done
 

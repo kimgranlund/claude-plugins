@@ -130,39 +130,55 @@ Branch on role:
   3. Re-read the file and grep for both deny entries AND the hook entry before continuing. If
      verification fails, STOP here and report the failure — do not proceed to Phase 4 believing the
      seat is walled when it might not be.
-  4. **Live-probe the wall (I2, `lld-0006`'s own acceptance criterion) — content verification alone
-     never earns a "wall applied" claim (issue #852).** Immediately after step 3 passes, attempt
-     three trivial calls in THIS SAME session: (a) a `Write` to a throwaway scratch path in this
-     worktree (e.g. `.claude/ops/.wall-probe-<UTC-timestamp>`); (b) a `Bash` command matching none
-     of C1a's allowlist shapes (e.g. `echo wall-probe-<UTC-timestamp> > /tmp/wall-probe-<UTC-timestamp>`
-     — `/tmp`, never a worktree path, so a successful write leaves no repo residue); (c) a `Bash`
-     command that DOES match C1a's allowlist (e.g. `gh pr view <any-open-PR-number>` — I2's own
-     "a legitimate allowed command must still pass" leg, proving the hook isn't over-blocking).
-     Clean up whichever scratch path actually got written afterward — a denied attempt needs no
-     cleanup, a succeeded one does; never leave probe residue behind either way.
-     **Platform constraint, confirmed live (issue #852; the same session-scoped-config-load
-     behavior `harness:hook-writing-rules` already documents for plugin hooks — "Hook config
-     changes need `/reload-plugins`; SKILL.md live-reloads, hooks do not" — one root cause, two
-     call sites): permission/hook config loads once per OS process at session start and does not
-     hot-reload mid-session, so a wall THIS session just wrote can never take effect against THIS
-     session** — only against a genuinely separate process (a fresh `claude -p` invocation, a new
-     terminal, or `Agent`'s `isolation: "remote"`) started with the wall already in place. Since
-     `/team-scaffolding reviewer` always runs in the same live session that just wrote the file,
-     **(a) and (b) are expected to SUCCEED here** — that is the platform fact this step exists to
-     surface honestly, not a probe bug; (c) is expected to succeed regardless of wall enforcement,
-     since it's testing the allowlist's own shape, not the deny. State the result plainly, one of:
-     - (a) and (b) both DENIED → state `Wall applied and verified structural (I2 live probe: both
-       Write and Bash attempts denied; allowed command (c) still passed)` and quote both denial
-       texts plus (c)'s pass.
-     - Either of (a)/(b) SUCCEEDED (the expected same-session outcome) → state `Wall
-       content-verified but NOT enforced against this session (I2 live probe: <Write succeeded |
-       Bash succeeded | both succeeded>) — same-session self-walling cannot be platform-enforced
-       (issue #852); this session's own further Edit/Write/denied-Bash calls remain unblocked for
-       the rest of its lifetime. Enforcement only applies to a genuinely new process started after
-       this wall is written (lld-0006 Interface I2; issue #852's Findings) — closing that gap
-       structurally is follow-up issue #853, out of scope here.`
-     Never report or imply the wall is "applied" from step 3's grep alone — this step's live result
-     is what a reader can trust.
+  4. **Restart-then-verify contract (issue #853) — the default path, ahead of the same-session
+     probe.** Content verification alone never earns a "wall applied" claim (issue #852), and issue
+     #853's own live testing found the structural fix is nearly free: a wall written before a
+     process starts enforces perfectly (`lld-0006` I2), so on this manual path "start a new
+     process" costs the human one restart, not any spawn machinery. Immediately after step 3
+     passes, present — via `AskUserQuestion` where a live user is reachable — the choice: **"Wall
+     written and content-verified. For REAL enforcement (not just written-and-verified), exit this
+     session now, run `claude` fresh from this worktree, then run `/bind-review` — its own first
+     step runs I2's live probe in the new process and confirms structural enforcement for real."**
+     Options: *Restart now (recommended)* / *Continue in this session without restarting
+     (same-session-unenforced fallback, issue #852)*.
+     - **Restart chosen** → print the exact instructions (worktree path, `claude`, then
+       `/bind-review`) and **STOP here — do not proceed to Phase 4 or 5 in this session.** State
+       plainly, as prose (never `fleet.json` field syntax — nothing is written to that file on
+       this branch): "Wall status: pending restart-confirmation — this session's own I2 probe was
+       skipped by design; run `/bind-review` in the restarted process to confirm." This is a valid
+       terminal state (Done, below), not an incomplete run.
+     - **Declined, or no live user reachable** (unattended dispatch) → fall through to the
+       same-session probe immediately below, and continue to Phase 4/5 as today once it reports.
+       Live-probe the wall (I2's own acceptance criterion) in THIS SAME session: attempt three
+       trivial calls — (a) a `Write` to a throwaway scratch path in this worktree (e.g.
+       `.claude/ops/.wall-probe-<UTC-timestamp>`); (b) a `Bash` command matching none of C1a's
+       allowlist shapes (e.g. `echo wall-probe-<UTC-timestamp> > /tmp/wall-probe-<UTC-timestamp>`
+       — `/tmp`, never a worktree path, so a successful write leaves no repo residue); (c) a `Bash`
+       command that DOES match C1a's allowlist (e.g. `gh pr view <any-open-PR-number>` — I2's own
+       "a legitimate allowed command must still pass" leg, proving the hook isn't over-blocking).
+       Clean up whichever scratch path actually got written afterward — a denied attempt needs no
+       cleanup, a succeeded one does; never leave probe residue behind either way.
+       **Platform constraint, confirmed live (issue #852; the same session-scoped-config-load
+       behavior `harness:hook-writing-rules` already documents for plugin hooks — "Hook config
+       changes need `/reload-plugins`; SKILL.md live-reloads, hooks do not" — one root cause, two
+       call sites): permission/hook config loads once per OS process at session start and does not
+       hot-reload mid-session, so a wall THIS session just wrote can never take effect against THIS
+       session.** Since this is exactly the declined-restart branch, **(a) and (b) are expected to
+       SUCCEED here** — that is the platform fact this fallback exists to surface honestly, not a
+       probe bug; (c) is expected to succeed regardless of wall enforcement, since it's testing the
+       allowlist's own shape, not the deny. State the result plainly, one of:
+       - (a) and (b) both DENIED (unexpected on this branch, but possible) → state `Wall applied
+         and verified structural (I2 live probe: both Write and Bash attempts denied; allowed
+         command (c) still passed)` and quote both denial texts plus (c)'s pass.
+       - Either of (a)/(b) SUCCEEDED (the expected declined-restart outcome) → state `Wall
+         content-verified but NOT enforced against this session (I2 live probe: <Write succeeded |
+         Bash succeeded | both succeeded>) — same-session self-walling cannot be platform-enforced
+         (issue #852); this session's own further Edit/Write/denied-Bash calls remain unblocked for
+         the rest of its lifetime. The restart-then-verify contract above (issue #853) was declined
+         or unreachable — re-running /team-scaffolding reviewer and accepting the restart is the
+         fix for real enforcement.`
+       Never report or imply the wall is "applied" from step 3's grep alone — this step's live
+       result is what a reader can trust.
 - **`agent` / `planner` / `product`** — no additional deny profile; these seats need their normal
   write access to dispatch, author docs, or maintain product records. State this explicitly
   (`No permission-profile deviation for this role — full write access retained`) so a reader never
@@ -319,6 +335,9 @@ exception as Phase 1/2) — and stop; retiring never hands off to a `/bind-*` co
   still-live entry** → report the existing holder's date and stop; never layer a second holder.
 - **Phase 3's `settings.local.json` write or verification fails for `reviewer`** → stop at Phase 3;
   never silently downgrade to a stated-only wall.
+- **Restart chosen at Phase 3 step 4's contract (issue #853)** → not a failure: this session's own
+  bootstrap is deliberately paused pending the human's restart-and-`/bind-review` follow-up (Done,
+  below), Phase 4/5 never run in this session, and there is nothing further for this session to do.
 - **`docs` not installed and role is `product`** → name the gap plainly (Phases 1–4 still ran; only
   Phase 5's command names an uninstalled plugin) and point at installing `docs`.
 - **Re-invoked in a session that already bootstrapped a different role** → name the existing role
@@ -341,6 +360,11 @@ row appended, charter printed, orchestrator introduction sent, explicitly skippe
 has named the matching bind-* skill for the human to run next — never when only the bootstrap
 layer ran with no command named, and never claiming the session itself adopted the contract
 (Skill-tool invocation is structurally impossible against a `disable-model-invocation` target).
+**For `reviewer` when Phase 3 step 4's restart contract fired (issue #853): done once the restart
+instructions are printed and the "pending restart-confirmation" status is stated as prose** — this is
+its own valid terminal state for THIS session (Phase 4/5 deliberately never run here); the bootstrap
+completes for real only once the restarted process runs `/bind-review` and its own I2 probe
+confirms the wall — that confirmation is a different session's Done, not this one's.
 For a `retire` invocation: done when all three Phase 6 steps have completed (or been reported as
 no-ops) and the one-line outcome is printed — never when only the un-wall ran with fleet.json or
 the roster left unsynced.

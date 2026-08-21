@@ -217,9 +217,9 @@ unverified wall is worse than an explicit refusal, per the same "narrated-but-ab
 A live smoke test, two paths (2026-08-16 amendment, issue #427 — the original single-path test
 covered only the first and let the second edge ship unverified):
 
-1. **Edit/Write path**: after `/team-scaffolding reviewer` completes, attempt a trivial `Write` to
-   any path in the worktree — the platform denies it without a permission prompt reaching the
-   human (a `deny` entry is a hard block, not a promptable `ask`).
+1. **Edit/Write path**: attempt a trivial `Write` to any path in the worktree — the platform
+   denies it without a permission prompt reaching the human (a `deny` entry is a hard block, not a
+   promptable `ask`).
 2. **Bash path**: attempt a trivial write-shaped `Bash` command (e.g. `echo x > /tmp/probe`) —
    C1a's `PreToolUse` hook must deny it (`permissionDecision: "deny"`), and a legitimate allowed
    command (`gh pr view <n>`) must still pass.
@@ -227,6 +227,32 @@ covered only the first and let the second edge ship unverified):
 Record both denial texts (and the one allowed-command pass) in the build's Findings write-back as
 the structural-wall proof, mirroring `docs:intake-lead`'s A4 smoke-test precedent for its own
 agent-level wall.
+
+**2026-08-21 amendment (issue #852, then #853): WHICH process runs this probe changes the
+result.** #852 found that running it in the SAME session that just wrote the wall always shows
+BOTH attempts succeeding — permission/hook config loads once per OS process at start and does not
+hot-reload mid-session, so a wall a session writes about itself never takes effect against that
+same session, regardless of C3's own content-verification passing. That is the honest
+`wall_applied: "same-session-unenforced"` status (`teamwork:fleet-bootstrap`'s
+`references/fleet-manifest-schema.md`), not a probe defect.
+
+#853 live-tested and shipped the fix: this probe DOES pass — both attempts denied, the allowed
+command still passing — when run in a genuinely SEPARATE OS process started with the wall already
+on disk, realized two ways, both now wired into `teamwork`'s own skills and carrying the identical
+enforcement guarantee (`wall_verified_via` distinguishes them for provenance only, per the schema
+reference):
+- **`"subprocess-spawn"`** — `fleet-bootstrap` Phase 5's background `reviewer` spawn: the
+  orchestrator writes+verifies the wall, then spawns a `claude -p` child with cwd already inside
+  the walled worktree; this probe runs as that child's own mandatory first act.
+- **`"restart"`** — the manual `/team-scaffolding reviewer` path: Phase 3 writes+verifies the wall,
+  then stops and instructs the human to restart `claude` fresh in that worktree and run
+  `/bind-review`; that skill's own new Phase 0 runs this probe as its first act in the restarted
+  process.
+
+`isolation: "remote"` was investigated and rejected as a THIRD path for this mechanism (#853's
+Findings): `.claude/settings.local.json` is gitignored by design (C2 above) and remote/cloud
+environments receive only committed tracked-file changes, so the wall file can never reach a
+remote environment regardless of any config-reload behavior there.
 
 ## Data
 
@@ -286,3 +312,13 @@ yes; `/team-scaffolding reviewer`'s printed charter names these five instruments
   Phase 1 stops and states the requirement rather than writing a wall it knows is mis-scoped, but
   it cannot force the human's next action — the same "printed instruction, not platform-enforced"
   shape D1 already accepts for session naming.
+- **R6 — C1a's retirement escape hatch (`sed`/`cat`/`printf` onto the three fleet-state files)
+  cannot carry a literal JSON-object append (confirmed live, issue #853/#855): its positive
+  charset excludes `{`/`}`, so `printf '{"role":...}' >> .claude/ops/fleet.json` is denied even
+  though it targets a permitted path in the documented shape.** This was already named as a
+  residual gap when C1a shipped ("a real `sed -i`/`printf >>` invocation big enough to do that
+  safely may need characters this charset doesn't admit"); #853 hit it live while building the
+  reviewer's genuinely-walled subprocess spawn and routed around it (the unwalled orchestrator
+  owns the structured `fleet.json` append, not the walled seat) rather than widening the charset
+  inline. Tracked separately as #855 — deliberate widening or an explicit "walled seats never
+  write `fleet.json` directly" ruling, not a silent workaround.
