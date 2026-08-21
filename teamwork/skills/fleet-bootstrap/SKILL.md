@@ -161,17 +161,43 @@ for the same no-live-user reason, and proceed to Phase 6.
 
 For each role in the confirmed list (skip entirely if empty — proceed straight to Phase 6):
 
-1. Dispatch via the `Agent` tool, `name: "{repo}-<role>"`, prompt instructing it to run
-   `/team-scaffolding <role>` as its first action (so it inherits level 1's own
-   naming/wall/charter discipline) then hold its adopted `/bind-review` or `/bind-planning`
-   contract for the fleet's duration.
+1. Dispatch via the `Agent` tool, `name: "{repo}-<role>"`, prompt instructing it to perform
+   `team-scaffolding`'s own Phase 1, 3, and 4 mechanics directly, itself, via ordinary
+   `Read`/`Write`/`Edit`/`Bash` tool calls — **never** by invoking `/team-scaffolding <role>`
+   through the Skill tool, which is structurally blocked for a dispatched agent with no live
+   terminal, the same reason Phase 1 above inlines those mechanics for the orchestrator seat rather
+   than claiming that hand-off (the #421/#423/#850 class, recurring here). Quote the role's own
+   steps into the dispatch prompt rather than naming the skill as a callable: the naming line
+   (`Seat: {repo}-<role>`), for `reviewer` the worktree precondition and the structural
+   `deny: ["Edit", "Write"]` + `Bash`-gating wall (`team-scaffolding` Phase 1's worktree check,
+   Phase 3's C1–C1a steps, re-read-and-verify included — `planner` carries no wall; state that
+   explicitly per Phase 3's own rule), and the comms charter (Phase 4). **`team-scaffolding`
+   Phase 2's own `fleet-roster.md` row append and `live_state.joined` append are excluded from what
+   this dispatch performs — step 3 below is this seat's only writer for both**, so the two
+   never race or diverge on `mode`/`agent_name`. Then hold its adopted `/bind-review` or
+   `/bind-planning` contract for the fleet's duration by reading that skill's own body directly and
+   following its procedure (never invoking it via the Skill tool either — `team-scaffolding` Phase
+   5: every `bind-*` target is also `disable-model-invocation: true`); state in the dispatch prompt
+   that this is a deliberate exception to `bind-*`'s own no-model-routed-adoption stance
+   (`team-scaffolding`'s Rejected alternatives), made only because a background seat has no human
+   session to hand the contract to instead.
 2. **Record the cloud-can't-message-back caveat explicitly in that dispatch's charter text**: "You
    are a background seat — if this session runs remotely, it cannot `SendMessage` back to a peer
    that has since exited. Route anything a peer needs to see through the durable channels
-   (`fleet.json`'s live-seat state, `fleet-roster.md`, GitHub Issue/PR comments), never solely through a
-   live nudge you cannot guarantee lands."
+   (`fleet.json`'s live-seat state, `fleet-roster.md`, GitHub Issue/PR comments), never solely
+   through a live nudge you cannot guarantee lands." **Once the wall (or its worktree block) is
+   in place, every further write in this dispatch — including step 3's own `fleet.json` append —
+   runs as a `Bash` command inside C1a's escape hatch (`sed`/`cat`/`printf` naming one of the three
+   fleet-state files, no chaining), the same mechanism `team-scaffolding` Phase 6 spells out for
+   its own un-wall step, stated here so the first attempt isn't an `Edit` call that walks into the
+   wall it just wrote.**
 3. Append `live_state.joined` (`role`, `mode: "background"`, `agent_name`, today's date) in
-   `fleet.json`.
+   `fleet.json`, appended by this same dispatched seat (not the orchestrator) since it is the one
+   holding the live tool context once the wall (or its block) lands — for `reviewer`, this same
+   append carries `wall_applied`: `true` once C1–C1a's write and re-verify both succeeded, or the
+   string `"blocked-worktree"` when Phase 1's worktree precondition stopped it first
+   (`references/fleet-manifest-schema.md`'s `wall_applied` field). Never left absent by choice —
+   Phase 6 surfaces this outcome per spawned seat rather than assuming success.
 
 **Hybrid swap**: any background seat spawned here is replaceable at any time by a human running
 `/team-scaffolding <role>` in their own terminal — the roster (`fleet.json` + `fleet-roster.md`) is
@@ -185,7 +211,13 @@ planner already held", or "confirm skipped — no live user, nothing spawned"), 
 path as the durable record a later session reads
 to resume orientation, and — since Phase 1 only registered the orchestrator seat, not the
 `teamwork:bind-team` contract itself — name `/bind-team` as the follow-up command for the human to
-run in this session when they want that contract's ongoing day-to-day discipline.
+run in this session when they want that contract's ongoing day-to-day discipline. **For any spawned
+`reviewer` seat, read its `wall_applied` field back from `fleet.json` (Phase 5 step 3,
+`references/fleet-manifest-schema.md`) and state the outcome explicitly** — one of "applied and
+verified" (`wall_applied: true`), "not yet — worktree isolation required" (`wall_applied:
+"blocked-worktree"` — name `EnterWorktree` plus re-running `/team-scaffolding reviewer` there as
+the fix), or "unknown — no wall-outcome report received from the dispatched seat" (field absent)
+— never omitted and never assumed applied by default.
 
 ## Failure branches
 
@@ -196,6 +228,14 @@ run in this session when they want that contract's ongoing day-to-day discipline
 - **Spawn-list argument names anything other than `reviewer`/`planner`** → report the invalid
   entries and proceed only with the valid ones (never silently drop the whole argument to the
   default).
+- **A dispatched `reviewer` seat hits the worktree precondition (shared checkout, no isolation)**
+  → it stops its own wall-write there, per `team-scaffolding` Phase 1's own worktree check — this
+  is that seat's correct behavior, not a defect; Phase 6 reports the outcome as "not yet — worktree
+  isolation required" rather than silently treating the spawn as fully walled.
+- **A dispatched `reviewer`/`planner` seat never reports back at all** (background dispatch died,
+  or is unreachable before this session's own Phase 6 runs) → report its wall/hold outcome as
+  "unknown — no report received" rather than assuming success; `fleet.json`'s own `live_state`
+  entries are the durable source a later session re-checks.
 
 ## Done
 
