@@ -2,14 +2,14 @@
 name: check-brand-council
 description: >
   Convene the brand council — adversarial critique from named practitioners, fanned out by
-  sub-council (strategy/design/voice/full), severity-classified findings, cross-critic synthesis
-  to one verdict, plus an optional chair-moderated deliberation round where critics cross-examine
-  each other's findings. Use for "convene the brand council", "get the critics on this", "run the
-  design/voice sub-council", "what would Luke S. say about this", "have the critics deliberate on
-  this". NOT rubric scoring (`check-brand-rubric`); NOT the Muse/voice seats
+  sub-council (strategy/design/voice/full/advisory) or a roster group (e.g. `leads`),
+  severity-classified findings, cross-critic synthesis to one verdict, plus an optional
+  chair-moderated deliberation round. Use for "convene the brand council", "get the critics on
+  this", "run the design/voice sub-council", "what would Luke S. say about this", "have the
+  critics deliberate on this". NOT rubric scoring (`check-brand-rubric`); NOT Muse/voice
   (`muse-agent`/`brand-writer`); NOT corpus organizing (`brand-corpus`); NOT the mechanism
-  (`council-rules`); NOT minting critics or new councils (`make-critic`/`make-council`).
-argument-hint: "[strategy|design|voice|full] [artifact] [--deliberate]"
+  (`council-rules`); NOT minting critics or councils (`make-critic`/`make-council`).
+argument-hint: "[strategy|design|voice|full|advisory|leads] [artifact] [--deliberate]"
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -22,10 +22,10 @@ studio. **The council reviews, evaluates, and guides; it does not produce.** A c
 compliments is not doing its job.
 
 **This is the brand instance of `council-rules`' general council machinery.** The roster, the
-sub-council groupings, and the 14 persona files below are this procedure's own configuration; the
-fan-out mechanics, severity taxonomy, 2-of-3 voting, synthesis shapes, and the two-phase model are
-`council-rules`' machinery, cited throughout rather than restated. Read `council-rules` first for
-the mechanism; this file states only what's brand-specific.
+sub-council groupings, and the persona files under `references/critics/` are this procedure's own
+configuration; the fan-out mechanics, severity taxonomy, 2-of-3 voting, synthesis shapes, and the
+two-phase model are `council-rules`' machinery, cited throughout rather than restated. Read
+`council-rules` first for the mechanism; this file states only what's brand-specific.
 
 **Phase 1 (blind) IS the orchestrator, host-side — no separate agent.** The fan-out below runs
 directly as this skill's own steps, never through an intermediate coordinating agent
@@ -38,17 +38,26 @@ per `council-rules`' `references/two-phase-model.md`.
 
 ## Parse the request
 
-Parse `$ARGUMENTS` as `[sub-council] [artifact] [--deliberate]`, exactly as the legacy
-`/brand-council` command did, plus the new deliberation flag:
+Parse `$ARGUMENTS` as `[sub-council|group] [artifact] [--deliberate]`, exactly as the legacy
+`/brand-council` command did, plus the new deliberation flag and group resolution:
 
-- Sub-council is one of `strategy` · `design` · `voice` · `full`. If not named, **default to
-  `strategy`**.
+- **Resolve the first token against `references/roster.md`** — read it before matching: a
+  sub-council name (`strategy` · `design` · `voice` · `full` · `advisory`), or a named `## Groups`
+  entry (e.g. `leads`, which resolves to the seated handles that group lists, skipping any
+  `VACANT` slot — a `leads` fan-out with every seat `VACANT` is an empty fan-out, reported as
+  such, never silently substituted with the full roster). If not named, **default to `strategy`**.
+- `advisory` is the reserved, user-minted sub-council (`roster-file-contract.md` — role `advisor`,
+  never adversarially voted): it is legal — and, until someone mints one via `/make-critic`,
+  expected — for it to seat zero critics. Convening `advisory` while it seats zero → report "no
+  advisors seated — mint one with `/make-critic`" and stop cleanly; this is not an error, never a
+  fallback to `strategy` or `full`.
 - `--deliberate` (or an equivalent live phrasing — "have them deliberate", "get them cross-
   examining each other") runs phase 2 after phase 1 completes. Absent → phase 1 only, exactly
   today's behavior, unchanged.
 - Everything else is the **artifact** under critique.
-- An unrecognized sub-council token (not one of the four) → report the four valid options and
-  stop; do not guess which one was meant.
+- A token matching neither a sub-council name nor a `## Groups` entry in `roster.md` → report the
+  valid sub-councils and groups actually present in the file and stop; do not guess which one was
+  meant.
 
 ## Trust boundary (state this before convening — and re-apply at synthesis and at roll-up)
 
@@ -71,15 +80,22 @@ an artifact alone and hope the critics infer the foundation.
 
 ## Roster — the critic personas you fan out to (this instance's own configuration)
 
-| Sub-council | Critic personas (`${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`) |
-| --- | --- |
-| **Strategy** (6) | `luke-s` _(lead — cultural provenance)_, `john-h`, `mark-p`, `nick-l`, `brian-c`, `rory-s` |
-| **Design** (4) | `paula-s`, `massimo-v`, `matt-w`, `jessica-w` |
-| **Voice** (4) | `david-a`, `george-l`, `tim-d`, `mary-n` |
+The roster — sub-council membership, lead seats, and the `leads` group — is data, not prose: read
+`references/roster.md` (schema: `council-rules`' `references/roster-file-contract.md`) before
+resolving any sub-council or group token ("Parse the request", above). Persona files live at
+`${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`, one per
+active roster row. `full` = every active row's union (`council-rules`' reserved union convention).
+Cultural authority is the dominant lens for the brand work this plugin addresses, so this
+council's `strategy` lead — when `roster.md` names one — carries the most weight of any single
+seat; `roster.md`'s `leads` group is the live source for who currently holds it, or whether it's
+`VACANT`, and this file is never the place that answer is restated.
 
-`full` = all 14 (`council-rules`' reserved union convention). `luke-s` carries the lead weight on
-most engagements — cultural authority is the dominant lens for the brand work this plugin
-addresses.
+`advisory` is this roster's second reserved sub-council name — `roster-file-contract.md` owns the
+full `advisor` role semantics (ride-along, ADVISORY tagging, voting/push exclusion), cited rather
+than restated here. Unlike `strategy`/`design`/`voice`, it ships seated with zero critics on
+purpose (user-minted via `/make-critic`); the instance-specific application points are phase 1
+step 4 (ADVISORY tagging), step 5 (vote exclusion), and the "Severity classes" section (push
+exclusion), below.
 
 ## Phase 1 — blind fan-out (unchanged)
 
@@ -97,7 +113,9 @@ addresses.
       not one critic at a time, so an earlier critic's findings never bias a later one.
 3. **Bounded rejection** — `council-rules`' own convention: one re-dispatch on a malformed or
    missing return, then UNMEASURED and named, never a second re-dispatch.
-4. **Collect** every critic's findings **verbatim** — never lossily paraphrased.
+4. **Collect** every critic's findings **verbatim** — never lossily paraphrased. Any critic seated
+   with role `advisor` has its findings tagged **ADVISORY** at this step, carried through every
+   later step's output.
 5. **Contested-verdict resolution — 2-of-3**
    (`council-rules`' `references/severity-and-voting.md`, cited not restated): when two critics
    in the SAME sub-council return
@@ -105,7 +123,10 @@ addresses.
    `brand-judge` call — inlining a third critic persona from the same sub-council — scoped to just
    that one contested finding. Majority (2-of-3) becomes the recorded severity; all three differ →
    log **hung**, never resolved by fiat. This resolves SEVERITY only — a genuine stance-level
-   disagreement is still reported verbatim as productive tension (B-S3 below).
+   disagreement is still reported verbatim as productive tension (B-S3 below). **ADVISORY findings
+   are excluded from this vote entirely** — never the contested finding being resolved, never one
+   of the three verdicts cast to resolve a peer's — `roster-file-contract.md`'s `advisor` role
+   never carries adversarial vote weight.
 6. **Synthesize** with the cross-critic prompts (B-S1–B-S5 below) — this is `council-rules`' five
    synthesis shapes, brand-lettered for this instance's own citation convention.
 7. **Verdict + revisions.**
@@ -164,7 +185,9 @@ Canonical table: `council-rules`' taxonomy, realized in the `brand-judge` agent 
 not restated — the same Critical / Major / Minor / Noise convention every critic persona file now
 cites instead of carrying its own copy). A panel that surfaces only Minor/Noise is reviewing
 excellent work **or** is not being adversarial enough — push for ≥1 Critical + 2 Major across the
-council, or state explicitly why the work earns a clean pass (citing the standard it meets).
+**non-advisory** council (ADVISORY findings never count toward, and are never required to satisfy,
+this push — advisory informs, it does not adversarially gate), or state explicitly why the work
+earns a clean pass (citing the standard it meets).
 
 ## Run modes
 
@@ -196,8 +219,13 @@ is a failure branch (below), not a mode switch.
 - Corpus context missing → ask for it before convening; never run the fan-out on the artifact
   alone.
 - No artifact named → ask what to review; a council needs something to critique.
-- Unrecognized sub-council token → report the four valid options (`strategy` · `design` · `voice`
-  · `full`), stop.
+- Token matches neither a sub-council name nor a `roster.md` group → report the sub-councils and
+  groups actually present in `roster.md`, stop.
+- A resolved `## Groups` fan-out (e.g. `leads`) has every seat `VACANT` → report the empty
+  fan-out explicitly and stop; never substitute the full roster silently.
+- `advisory` convened directly with zero seated critics → report "no advisors seated — mint one
+  with `/make-critic`" and stop cleanly; this is the reserved sub-council's expected steady state,
+  not an error, and never falls back to `strategy` or `full`.
 - A critic dispatch fails outright (not just contract-violating — no return at all) → treat as the
   bounded-rejection case (phase 1 step 3): one re-dispatch, then UNMEASURED, named, and the
   synthesis proceeds with the remaining critics.

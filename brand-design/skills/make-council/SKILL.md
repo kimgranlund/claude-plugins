@@ -18,9 +18,9 @@ argument-hint: "[domain name] [what's being judged]"
 Stands up a brand-new council instance — the domain-neutral minting procedure for everything
 `council-rules` leaves to per-instance configuration, at the INSTANCE level rather than the
 single-persona level `make-critic` mints at. `check-brand-council` is this procedure's own worked
-reference instance throughout: its file layout, its Roster table shape, its `council-marshal` chair
-wiring, and its calibration assets directory are what a new domain instance mirrors, not what it
-restates.
+reference instance throughout: its file layout, its `references/roster.md` (cited by its SKILL.md,
+never restated in prose), its `council-marshal` chair wiring, and its calibration assets directory
+are what a new domain instance mirrors, not what it restates.
 
 Parse `$ARGUMENTS` as `[domain name] [what's being judged]` — e.g. `code-review "pull request
 diffs"`, `product-copy "marketing landing pages"`.
@@ -42,20 +42,27 @@ diffs"`, `product-copy "marketing landing pages"`.
 2. **Mint the new convening skill — the domain's own action-twin of `council-rules`, mirroring
    `check-brand-council`'s own dual role (roster home + orchestrator + convening surface, all one
    file).** New skill directory: `domain-council` or `check-domain-council` (substitute the actual
-   domain name; pick whichever form actually resolves against
-   actually resolves against the naming manifest's ObjectVocab — run the estate's naming validator
-   before committing to a name, never assume). Its SKILL.md:
-   - States the domain's own Roster table (sub-council → member handles), its own trust-boundary
-     restatement of `council-rules`' principle applied to the new artifact type, and its own Phase
-     1/Phase 2 procedure — copied in SHAPE from `check-brand-council`'s own body, never its brand-
-     specific content.
+   domain name; pick whichever form resolves against the naming manifest's ObjectVocab — run the
+   estate's naming validator before committing to a name, never assume). Its SKILL.md:
+   - Carries a "Roster" section that **cites `references/roster.md`** (seeded in step 3) — never a
+     prose sub-council table (`roster-file-contract.md`'s "cite, never restate" rule applies to the
+     new instance from its first draft, exactly as it binds `check-brand-council`) — plus its own
+     trust-boundary restatement of `council-rules`' principle applied to the new artifact type, and
+     its own Phase 1/Phase 2 procedure — copied in SHAPE from `check-brand-council`'s own body,
+     never its brand-specific content.
    - Cites `council-rules` for fan-out mechanics, severity/voting, synthesis shapes, calibration
      discipline, and the two-phase model — the same six citations `check-brand-council` already
      makes, never restated locally.
    - Houses its own critics at `<new-skill>/references/critics/critic-<handle>.md` — each one
      minted via `make-critic`, pointed at this new council as its target, never hand-authored here.
-3. **Sub-council groupings** — a table in the new skill's own body, one row per role family from
-   step 1, `full` reserved as the union (per `council-rules`' own reserved-name convention).
+3. **Seed `references/roster.md`** — `council-rules`' `references/roster-file-contract.md` schema
+   (table + `## Groups`), one row per critic minted in step 2, `role`/`status`/`seated`/`fixture`
+   filled in as each critic seats. A role family with no lead yet gets its own `## Groups` `leads:`
+   entry naming that seat `VACANT` — the contract requires one `leads:` entry per sub-council, so
+   this is never left undeclared, never invented. Run `roster_check.py <new-skill-dir>` (this
+   plugin's `scripts/roster_check.py`, the new convening skill's own directory as the argument)
+   against the seeded file before step 8's checker pass — a bijection or schema failure here is
+   fixed and re-run, never carried into the checker pass.
 4. **Chair wiring — reuse `council-marshal` by default.** `council-marshal`'s own input contract
    already parameterizes the critic-shell agent by name (`agents/council-marshal.md`'s "the
    critic-shell agent's name (e.g. `brand-judge`)") — it carries no brand-specific logic anywhere in
@@ -88,9 +95,10 @@ diffs"`, `product-copy "marketing landing pages"`.
    critic-shell agent file, before either is reported done (`plugin-authoring.md`'s semantic-edit
    invariant, same as any new SKILL.md or agent body). Dispatch `harness:skill-checker` for the
    skill and `harness:agent-checker` for the agent, unnamed, fresh context, never self-graded.
-9. **Report.** The new skill's path, its roster (handles + sub-councils), the critic-shell agent
-   minted, confirmation `council-marshal` was reused unchanged, the calibration fixture's location
-   and promotion state, and both checkers' verdicts.
+9. **Report.** The new skill's path, its `roster.md` (handles + sub-councils + any `VACANT` leads)
+   plus `roster_check.py`'s exit status, the critic-shell agent minted, confirmation
+   `council-marshal` was reused unchanged, the calibration fixture's location and promotion state,
+   and both checkers' verdicts.
 
 ## What this procedure does NOT do
 
@@ -122,22 +130,27 @@ back in Full mode; the checker passes become self-review, disclosed as non-indep
   `council-marshal`'s body in place for one domain.
 - A checker dispatch FAILs on the new skill or agent → fix and re-dispatch; never report the new
   council done on an unresolved FAIL.
+- `roster_check.py` fails on the step-3 seeded roster (a bijection gap, an empty sub-councils
+  cell, a dangling `## Groups` handle) → fix the data file and re-run before proceeding to step 8;
+  never carry a failing roster into the checker pass or report the new council done on it.
 
 ## Done / NOT done
 
 **Done** when the new convening skill exists, cites `council-rules` for every shared mechanic
 (fan-out, severity/voting, synthesis, calibration discipline, two-phase model) without restating
-any of them, carries its own roster + sub-council table, has a critic-shell agent patterned off
-`brand-judge`, reuses `council-marshal` for chairing (or names why it genuinely could not), carries
-one calibration fixture, and passed independent fresh-context checks on both the new skill and the
-new agent. **NOT done** when the new instance restates council-rules' machinery locally, mints a
-redundant Chair agent where `council-marshal` would have served unchanged, or reports success with
-an unresolved checker FAIL.
+any of them, carries its own `roster.md` (schema: `roster-file-contract.md`) passing
+`roster_check.py`, has a critic-shell agent patterned off `brand-judge`, reuses `council-marshal`
+for chairing (or names why it genuinely could not), carries one calibration fixture, and passed
+independent fresh-context checks on both the new skill and the new agent. **NOT done** when the
+new instance restates council-rules' machinery locally, carries its roster in SKILL.md prose
+instead of `roster.md`, mints a redundant Chair agent where `council-marshal` would have served
+unchanged, or reports success with an unresolved checker FAIL or a failing `roster_check.py`.
 
 ## References
 
 | File | Use when |
 |---|---|
 | `references/domain-intake.md` | Step 1's full worked domain-intake checklist |
+| `[[council-rules]]`'s `references/roster-file-contract.md` | Step 3's `roster.md` schema — table + `## Groups` shape, bijection, `VACANT`-lead convention |
 | `references/roster-and-chair-wiring.md` | Steps 4–5's chair-reuse default and the critic-shell-agent-is-configuration exception |
 | `references/calibration-worked-example.md` | Step 6's worked two-critic demo council example |
