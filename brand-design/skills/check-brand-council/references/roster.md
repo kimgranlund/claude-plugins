@@ -13,11 +13,11 @@ rather than restating the table. Seating a new critic is a row appended here (`m
 | nick-l | strategy | member | active | ported — brand-forge migration | unpromoted, inline |
 | brian-c | strategy | member | active | ported — brand-forge migration | unpromoted, inline |
 | rory-s | strategy | member | active | ported — brand-forge migration | unpromoted, inline |
-| paula-s | design | member | active | ported — brand-forge migration | unpromoted, inline |
+| paula-s | design | lead | active | ported — brand-forge migration | unpromoted, inline |
 | massimo-v | design | member | active | ported — brand-forge migration | unpromoted, inline |
 | matt-w | design | member | active | ported — brand-forge migration | unpromoted, inline |
 | jessica-w | design | member | active | ported — brand-forge migration | unpromoted, inline |
-| david-a | voice | member | active | ported — brand-forge migration | unpromoted, inline |
+| david-a | voice | lead | active | ported — brand-forge migration | unpromoted, inline |
 | george-l | voice | member | active | ported — brand-forge migration | unpromoted, inline |
 | tim-d | voice | member | active | ported — brand-forge migration | unpromoted, inline |
 | mary-n | voice | member | active | ported — brand-forge migration | unpromoted, inline |
@@ -47,10 +47,11 @@ expected to fill. Do not invent a row here to clear the warning.
 
 ## Groups
 
-- leads: strategy=luke-s, design=VACANT, voice=VACANT, creative=VACANT
+- leads: strategy=luke-s, design=paula-s, voice=david-a, creative=VACANT
 
-Design, voice, and creative carry no designated lead as of this roster's creation/extension
-(2026-08-21, `#838`/`#840`) — Kim designates them later; do not invent a lead to fill the cell.
+Design (`paula-s`) and voice (`david-a`) leads designated 2026-08-21 (`#840`, post-build scope
+addition). `creative` carries no designated lead — its bench itself is VACANT (ruled 2026-08-21,
+`#840`: bench-seating ownership stays open, Kim seats it later) — do not invent one to fill the cell.
 
 ## Role agents
 

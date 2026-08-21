@@ -113,8 +113,11 @@ sub-council enumeration are UNCHANGED — `creative` is convened today only via
 `council-creative-agent`, never through `/check-brand-council` directly; no advisory role agent (no
 lead, no adversarial vote weight — `advisory` never gets one). Calibration coverage for the
 convene behavior itself stays a named open (payload/script layer — `roster_check.py` + the fresh
-agent-checker passes — is the whole harness this round). Semantic + description changes throughout
-(`council-rules`, `make-council`) — minor bump.
+agent-checker passes — is the whole harness this round). **Post-build scope addition, same
+ticket:** Kim designated the two prior `VACANT` leads — `paula-s` (design) and `david-a` (voice) —
+leaving `creative` as the roster's only remaining `VACANT` seat (its bench itself stays open, per
+the ruling above). Semantic + description changes throughout (`council-rules`, `make-council`) —
+minor bump.
 
 v0.8.1 · 2026-08-21 · Closing-pass fix on the merged `#838` roster-as-data + advisory work: a
 final independent fresh-context `harness:skill-checker` re-read (requested at handback, since
