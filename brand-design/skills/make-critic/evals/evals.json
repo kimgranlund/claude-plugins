@@ -1,6 +1,6 @@
 {
   "skill": "make-critic",
-  "note": "Minted 2026-08-20/21, S4 of the brand-design council-as-platform overhaul (#827). Floor suite: routing against minting a NEW critic persona vs. convening an existing council (check-brand-council), the council mechanism itself (council-rules), standing up a whole new council (make-council), and harness's generic subagent forge (make-agent) — a critic is a persona-inlined prompt, never a standalone dispatched agent.",
+  "note": "Minted 2026-08-20/21, S4 of the brand-design council-as-platform overhaul (#827). Floor suite: routing against minting a NEW critic persona vs. convening an existing council (check-brand-council), the council mechanism itself (council-rules), standing up a whole new council (make-council), and harness's generic subagent forge (make-agent) — a critic is a persona-inlined prompt, never a standalone dispatched agent. Updated 2026-08-20, S5 (#828): reciprocal fences against the four new role-category knowledge packs this skill now cites as grounding (n06-n09) — a plain lens/failure-mode question routes to the pack, not to the minting procedure.",
   "cases": [
     {
       "id": "t01",
@@ -56,6 +56,30 @@
       "prompt": "What would Luke S. say about this identity system?",
       "expect": "no-trigger",
       "comment": "owner: check-brand-council — invoking an EXISTING critic, not minting a new one"
+    },
+    {
+      "id": "n06",
+      "prompt": "What does a brand-strategy critic actually look for in a positioning document?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-strategy-facts — a lens/knowledge question, not a minting request"
+    },
+    {
+      "id": "n07",
+      "prompt": "What's the three-level coherence test a brand-identity critic runs?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-identity-facts — a lens/knowledge question, not a minting request"
+    },
+    {
+      "id": "n08",
+      "prompt": "What failure modes does a brand-voice critic catch in house style guides?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-voice-facts — a lens/knowledge question, not a minting request"
+    },
+    {
+      "id": "n09",
+      "prompt": "What's the cheap-alchemy test an advertising-creative critic runs?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-advertising-facts — a lens/knowledge question, not a minting request"
     }
   ]
 }

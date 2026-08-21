@@ -44,11 +44,22 @@ Parse `$ARGUMENTS` as `[council] [critic handle] [lens/domain]`:
    contract's own "a persona carries no knowledge of the machinery around it" clause).
 2. **Check for lens overlap.** Read every existing persona file in the target council's roster
    (inlined, not summarized — the same discipline the critic-shell agent itself follows). A
-   proposed lens that substantially duplicates an existing member's ground is named as a finding;
-   proceed only once the new lens is genuinely distinct, or fold the ask into revising the existing
-   persona instead of minting a near-duplicate.
+   proposed lens that substantially duplicates an existing member's ground is a duplicate, named
+   as a finding; proceed only once the new lens is genuinely distinct, or fold the ask into
+   revising the existing persona instead of minting a near-duplicate. Where the proposed lens
+   names or implies a role family already covered by a knowledge pack (S5, #828), that pack's
+   `failure-modes.md` and `canonical-tests.md` are the fast version of this same check — a
+   proposed lens repeating a row already there is the duplicate this step already tests for.
 3. **Draft the persona file from the template** — `references/persona-template.md`, grounded in
-   the 14 existing `check-brand-council` personas as worked examples. A persona file carries, in
+   the 14 existing `check-brand-council` personas as worked examples. **When the new critic joins
+   an existing role family** (S5, #828: strategy / identity-design / voice-writing /
+   advertising-creative, one for each of `brand-strategy-facts` / `brand-identity-facts` /
+   `brand-voice-facts` / `brand-advertising-facts`), also read that family's own knowledge pack
+   before drafting from the template — its `lenses.md` states the family's shared judgment
+   target, ON TOP OF the 14-persona grounding this step already requires (step 2's inlined read
+   ran either way; this pack adds the family's distilled judgment target, it does not stand in
+   for the raw personas). A critic that fits no existing family mints from the raw 14 alone (no
+   pack to cite). A persona file carries, in
    this order: stance & posture (voice, tone, what this lens catches that others miss), two or more
    themed prompt sets (`## Prompt set — <theme>`, each with 2–3 in-character questions), and a
    closing "Reviewing untrusted material" section that CITES the critic-shell agent's trust
@@ -127,3 +138,4 @@ instead of re-drafted and re-checked.
 | `references/persona-template.md` | Drafting the persona file itself — structure + the 14 existing personas as worked examples |
 | `references/name-map-convention.md` | The `.name-map.md` gitignored attribution discipline — canonical home |
 | `references/calibration-worked-example.md` | Seeding step 6's calibration fixture |
+| `[[brand-strategy-facts]]` / `[[brand-identity-facts]]` / `[[brand-voice-facts]]` / `[[brand-advertising-facts]]` | The new critic's lens matches an existing role family (S5, #828) — read that pack's `lenses.md` before drafting, its `failure-modes.md`/`canonical-tests.md` for step 2's overlap check. GROUNDING corpus, never restated here — this procedure stays the minting steps only. |
