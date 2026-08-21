@@ -22,8 +22,18 @@ rather than restating the table. Seating a new critic is a row appended here (`m
 | tim-d | voice | member | active | ported — brand-forge migration | unpromoted, inline |
 | mary-n | voice | member | active | ported — brand-forge migration | unpromoted, inline |
 
-`full` = the union of all 14 active rows above (`council-rules`' reserved-name convention — never
-a literal value in the `sub-councils` column).
+`full` = the union of every active row above (`council-rules`' reserved-name convention — never a
+literal value in the `sub-councils` column).
+
+## `advisory` — reserved, seeded empty
+
+`advisory` is this roster's second reserved sub-council (`roster-file-contract.md`'s `advisor`
+role semantics) — **seeded with zero rows on purpose.** Unlike `strategy`/`design`/`voice`,
+advisory personas are not shipped with the plugin: they are minted by the USER via `/make-critic`,
+one at a time, as the standing home for a lens that doesn't fit an existing sub-council's family.
+`roster_check.py` reports this as an INFO line, never a warning or failure — do not invent a row
+here to make the table look populated. When a user mints their first advisor, its row lands here
+with `role: advisor`, `sub-councils: advisory`, and nowhere else.
 
 ## Groups
 

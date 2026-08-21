@@ -15,7 +15,8 @@ copy, and so the forthcoming `make-council`/`make-critic` (S4) have something to
 - `roster-and-personas.md` — what a persona/critic contract is, what a roster is, how sub-councils
   group a roster, the "full" union convention
 - `roster-file-contract.md` — the roster FILE schema: a per-instance roster data file's table +
-  `## Groups` shape, handle↔persona-file bijection, `VACANT`-lead-is-a-warning, why seating a
+  `## Groups` shape, handle↔persona-file bijection, `VACANT`-lead-is-a-warning, the reserved
+  `advisory` sub-council/`advisor` role (user-minted, non-voting, legal-empty), why seating a
   critic is a data edit
 
 ## Fan-out mechanics

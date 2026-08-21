@@ -4,23 +4,27 @@
 Proves the roster-file contract (council-rules' references/roster-file-contract.md):
 handle<->persona-file bijection against the council's critics/ directory, every row's
 sub-councils cell non-empty, `full` never used as a literal sub-council value, every
-`## Groups` entry resolving to a seated active handle or the literal VACANT, and
-role/status values drawn from their fixed enums. A VACANT lead is a named WARNING,
-never a failure.
+`## Groups` entry resolving to a seated active handle or the literal VACANT, role/status
+values drawn from their fixed enums, and the reserved `advisory` sub-council's exact
+pairing with `role: advisor`. A VACANT lead is a named WARNING, never a failure; a
+zero-member `advisory` sub-council is a named INFO line, never a warning or failure —
+it is that reserved sub-council's normal steady state until a user mints one via
+/make-critic.
 
 Usage:
   roster_check.py <council-skill-dir>   # e.g. brand-design/skills/check-brand-council
   roster_check.py selftest
 
-Exit codes: 0 = clean (warnings allowed), 1 = a real violation found, 2 = usage error
-(missing roster.md, missing critics/ dir, bad arguments). Stdlib only (Python 3.8+).
+Exit codes: 0 = clean (warnings/infos allowed), 1 = a real violation found, 2 = usage
+error (missing roster.md, missing critics/ dir, bad arguments). Stdlib only (Python 3.8+).
 """
 import os
 import re
 import sys
 
-ROLE_ENUM = {"lead", "member"}
+ROLE_ENUM = {"lead", "member", "advisor"}
 STATUS_ENUM = {"active", "retired"}
+ADVISORY = "advisory"
 
 
 class RosterError(Exception):
@@ -91,7 +95,7 @@ def _parse_groups(text):
 
 def check_roster(roster_dir):
     """roster_dir: a council skill's directory (e.g. .../check-brand-council).
-    Returns (violations, warnings) — both lists of strings."""
+    Returns (violations, warnings, infos) — three lists of strings."""
     roster_path = os.path.join(roster_dir, "references", "roster.md")
     critics_dir = os.path.join(roster_dir, "references", "critics")
     if not os.path.isfile(roster_path):
@@ -105,6 +109,7 @@ def check_roster(roster_dir):
 
     violations = []
     warnings = []
+    infos = []
 
     roster_handles = {r["handle"] for r in rows if r.get("handle")}
     file_handles = set()
@@ -130,7 +135,20 @@ def check_roster(roster_dir):
             violations.append(f"'{handle}' lists reserved name 'full' as a sub-council")
         role = r.get("role", "")
         if role not in ROLE_ENUM:
-            violations.append(f"'{handle}' has unknown role '{role}' (expected lead|member)")
+            violations.append(
+                f"'{handle}' has unknown role '{role}' (expected lead|member|advisor)"
+            )
+        # advisory <-> advisor pairing is exact and bidirectional
+        if ADVISORY in subs and role != "advisor":
+            violations.append(
+                f"'{handle}' lists '{ADVISORY}' in sub-councils but role is '{role}', "
+                f"not 'advisor'"
+            )
+        if role == "advisor" and subs != [ADVISORY]:
+            violations.append(
+                f"'{handle}' has role 'advisor' but sub-councils is {subs!r}, "
+                f"not exactly ['{ADVISORY}']"
+            )
         status = r.get("status", "")
         if status not in STATUS_ENUM:
             violations.append(f"'{handle}' has unknown status '{status}' (expected active|retired)")
@@ -160,7 +178,20 @@ def check_roster(roster_dir):
                     f"group '{gname}' references '{tok}', which is not a seated active handle"
                 )
 
-    return violations, warnings
+    # advisory: zero active advisors is legal-by-design (user-minted, never shipped seated) —
+    # reported as a named INFO line, never a warning or failure
+    advisor_count = sum(
+        1 for r in rows
+        if r.get("status") == "active" and ADVISORY in
+        [s.strip() for s in r.get("sub-councils", "").split(",") if s.strip()]
+    )
+    if advisor_count == 0:
+        infos.append(
+            f"'{ADVISORY}' sub-council has no seated critics — expected until a user mints "
+            f"one via /make-critic"
+        )
+
+    return violations, warnings, infos
 
 
 def main(argv):
@@ -170,17 +201,19 @@ def main(argv):
         sys.stderr.write("usage: roster_check.py <council-skill-dir>|selftest\n")
         return 2
     try:
-        violations, warnings = check_roster(argv[0])
+        violations, warnings, infos = check_roster(argv[0])
     except RosterError as e:
         sys.stderr.write(f"roster-check: {e}\n")
         return 2
+    for i in infos:
+        print(f"INFO: {i}")
     for w in warnings:
         print(f"WARN: {w}")
     if violations:
         for v in violations:
             print(f"FAIL: {v}")
         return 1
-    print(f"roster-check: OK ({len(warnings)} warning(s))")
+    print(f"roster-check: OK ({len(warnings)} warning(s), {len(infos)} info line(s))")
     return 0
 
 
@@ -215,24 +248,27 @@ def selftest():
 
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, valid_roster, ["a-b", "c-d", "e-f"])
-        violations, warnings = check_roster(d)
+        violations, warnings, infos = check_roster(d)
         expect(violations == [], f"valid roster wrongly flagged: {violations}")
         expect(len(warnings) == 1 and "VACANT" in warnings[0],
                f"expected exactly one VACANT warning, got {warnings}")
+        expect(len(infos) == 1 and ADVISORY in infos[0],
+               f"expected exactly one advisory-empty INFO (no advisory rows in this fixture), "
+               f"got {infos}")
         rc = main([d])
         expect(rc == 0, f"main() should exit 0 on a valid roster with only a VACANT warning, got {rc}")
 
     # negative: orphan persona file (no roster row)
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, valid_roster, ["a-b", "c-d", "e-f", "g-h"])
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("g-h" in v and "no roster.md row" in v for v in violations),
                f"orphan persona file not caught: {violations}")
 
     # negative: roster row with no matching file
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, valid_roster, ["a-b", "c-d"])  # missing e-f
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("e-f" in v and "no matching critic" in v for v in violations),
                f"dangling roster row not caught: {violations}")
 
@@ -240,7 +276,7 @@ def selftest():
     empty_subs = valid_roster.replace("| e-f | design | member", "| e-f |  | member")
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, empty_subs, ["a-b", "c-d", "e-f"])
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("empty sub-councils" in v for v in violations),
                f"empty sub-councils cell not caught: {violations}")
 
@@ -248,7 +284,7 @@ def selftest():
     full_literal = valid_roster.replace("| e-f | design |", "| e-f | full |")
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, full_literal, ["a-b", "c-d", "e-f"])
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("reserved name 'full'" in v for v in violations),
                f"literal 'full' sub-council value not caught: {violations}")
 
@@ -256,7 +292,7 @@ def selftest():
     dangling_group = valid_roster.replace("design=VACANT", "design=nobody")
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, dangling_group, ["a-b", "c-d", "e-f"])
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("nobody" in v for v in violations),
                f"dangling group handle not caught: {violations}")
 
@@ -264,7 +300,7 @@ def selftest():
     bad_role = valid_roster.replace("| c-d | strategy | member |", "| c-d | strategy | chair |")
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, bad_role, ["a-b", "c-d", "e-f"])
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("unknown role" in v for v in violations),
                f"unknown role value not caught: {violations}")
 
@@ -272,9 +308,41 @@ def selftest():
     two_leads = valid_roster.replace("| c-d | strategy | member |", "| c-d | strategy | lead |")
     with tempfile.TemporaryDirectory() as tmp:
         d = make_council(tmp, two_leads, ["a-b", "c-d", "e-f"])
-        violations, _ = check_roster(d)
+        violations, _, _ = check_roster(d)
         expect(any("more than one lead" in v for v in violations),
                f"double-lead sub-council not caught: {violations}")
+
+    # positive: a correctly-seated advisor row -> clean, and the empty-advisory INFO disappears
+    with_advisor = valid_roster.replace(
+        "|---|---|---|---|---|---|\n",
+        "|---|---|---|---|---|---|\n"
+        "| g-h | advisory | advisor | active | 2026-08-21 | unpromoted, inline |\n",
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(tmp, with_advisor, ["a-b", "c-d", "e-f", "g-h"])
+        violations, _, infos = check_roster(d)
+        expect(violations == [], f"a correctly-seated advisor row was wrongly flagged: {violations}")
+        expect(infos == [], f"a seated advisor should clear the empty-advisory INFO, got {infos}")
+
+    # negative: 'advisory' in sub-councils but role isn't 'advisor'
+    advisory_wrong_role = with_advisor.replace(
+        "| g-h | advisory | advisor |", "| g-h | advisory | member |"
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(tmp, advisory_wrong_role, ["a-b", "c-d", "e-f", "g-h"])
+        violations, _, _ = check_roster(d)
+        expect(any("g-h" in v and "not 'advisor'" in v for v in violations),
+               f"advisory row with non-advisor role not caught: {violations}")
+
+    # negative: role 'advisor' but sub-councils isn't exactly ['advisory']
+    advisor_wrong_subs = with_advisor.replace(
+        "| g-h | advisory | advisor |", "| g-h | strategy | advisor |"
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        d = make_council(tmp, advisor_wrong_subs, ["a-b", "c-d", "e-f", "g-h"])
+        violations, _, _ = check_roster(d)
+        expect(any("g-h" in v and "not exactly" in v for v in violations),
+               f"advisor role with wrong sub-councils not caught: {violations}")
 
     # usage-error path: missing roster.md / missing critics dir -> exit 2
     with tempfile.TemporaryDirectory() as tmp:
@@ -294,7 +362,8 @@ def selftest():
         return 1
     print("roster_check selftest: OK (bijection both directions, empty sub-councils, reserved "
           "'full', dangling group handle, unknown role/status, double-lead, VACANT-is-warning-"
-          "not-failure, and both usage-error paths all correctly caught)")
+          "not-failure, zero-advisor-is-info-not-failure, advisory<->advisor exact pairing both "
+          "directions, and both usage-error paths all correctly caught)")
     return 0
 
 

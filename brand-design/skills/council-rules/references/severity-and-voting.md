@@ -24,6 +24,11 @@ first.
 
 ## 2-of-3 contested-finding voting
 
+**Eligibility.** A row seated with `role: advisor` (the reserved `advisory` sub-council,
+`roster-file-contract.md`) is never eligible here — not as the contested finding being resolved,
+and not as one of the three verdicts cast to resolve a peer's. Advisory informs a council's
+synthesis; it carries no adversarial vote weight (cited from the roster contract, not restated).
+
 When two critics in the SAME sub-council return genuinely conflicting severity for the SAME cited
 finding — the same quoted excerpt or claim, scored at materially different severity tiers, not a
 stance-level disagreement (that's `synthesis-shapes.md`'s productive tension, never resolved by a

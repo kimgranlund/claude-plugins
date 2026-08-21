@@ -23,10 +23,13 @@ new critic becomes a row appended to `roster.md`, a data edit, never a SKILL.md 
   `strategy,voice` for a handle spanning two). **Never empty** — every seated handle sits in at
   least one sub-council. **`full` is RESERVED** and never appears as a value in this column: it is
   the computed union of every active row (`roster-and-personas.md`'s reserved-name convention),
-  not a membership a row opts into.
-- **`role`** — `lead` or `member`. At most one `lead` row per sub-council. A sub-council may
-  legitimately have no `lead` row (an unfilled seat) — see Groups below for how that's declared,
-  never left implicit.
+  not a membership a row opts into. **`advisory` is the second RESERVED sub-council name** — unlike
+  `full`, it DOES appear as a literal value, but only on `advisor`-role rows — see "Reserved:
+  `advisory` and the `advisor` role" below.
+- **`role`** — `lead`, `member`, or `advisor`. At most one `lead` row per sub-council. A sub-council
+  may legitimately have no `lead` row (an unfilled seat) — see Groups below for how that's
+  declared, never left implicit. `role: advisor` is reserved for `advisory`-seated rows — see
+  below; it never appears alongside `lead`/`member`'s ordinary sub-councils.
 - **`status`** — `active` or `retired`. A `retired` handle's persona file stays on disk as
   history but is excluded from `full` and from every sub-council's live fan-out.
 - **`seated`** — the date or provenance note this critic joined (`2026-08-13`, or a migration note
@@ -49,6 +52,31 @@ literal `VACANT` when the seat is unfilled:
 A group entry resolves only to handles already present in the table (or the literal `VACANT`) —
 never a bare sub-council name, never an invented handle not seated in the table above.
 
+## Reserved: `advisory` and the `advisor` role
+
+`advisory` is a second reserved sub-council name, alongside `full`, but with the opposite default:
+where `full` is always non-empty (the union of everything else), `advisory` is legitimately —
+and, until a user mints its first member, expectedly — **empty**. It exists for personas a USER
+mints via `make-critic` rather than ones the plugin ships seated: a lens that doesn't fit an
+existing sub-council's own family lands here by default (`make-critic`'s own procedure), never
+forced into an ill-fitting `strategy`/`design`/`voice` row and never left unminted for want of a
+home.
+
+A row seated in `advisory` carries `role: advisor` — and the pairing is exact and bidirectional: a
+row's `sub-councils` cell contains `advisory` **if and only if** its `role` is `advisor` (an
+advisor never also carries `lead`/`member` in some other sub-council on the same row; a
+`lead`/`member` row never lists `advisory`). There is no `advisory` lead — the sub-council is not
+adversarial, so it has no seat to contest for leadership.
+
+An advisor rides along in the fan-out whenever `full` is convened (an active `advisory` row is an
+active roster row like any other) and whenever `advisory` is convened directly. Its findings are
+marked **ADVISORY** at collection and feed every domain instance's synthesis shapes on the same
+footing as any other finding — advisory informs the verdict. But an advisor's finding is **excluded
+from 2-of-3 contested-severity voting** (`references/severity-and-voting.md`) — never itself the
+contested finding, never one of the three votes cast to resolve a peer's — and excluded from
+whatever adversarial-calibration floor a domain instance's own severity section states (e.g. a
+"push for ≥1 Critical + 2 Major" convention): advisory never gates the verdict, it only informs it.
+
 ## Bijection & mechanical validation
 
 This plugin's `scripts/roster_check.py` (selftest-carrying, per this workspace's semantic-edit
@@ -62,11 +90,18 @@ invariant for bundled scripts) is the exit-code proof — invoked as
 - `full` never appears as a literal value in the `sub-councils` column,
 - every `## Groups` entry resolves to a seated, active handle or the literal `VACANT` — a dangling
   handle fails,
-- `role` and `status` values are drawn from their fixed enums (`lead`/`member`,
-  `active`/`retired`).
+- `role` and `status` values are drawn from their fixed enums (`lead`/`member`/`advisor`,
+  `active`/`retired`),
+- the `advisory`↔`advisor` pairing holds exactly: a row naming `advisory` in `sub-councils` but not
+  `role: advisor` fails, and a `role: advisor` row whose `sub-councils` is anything other than
+  exactly `advisory` fails.
 
-A `VACANT` lead is reported as a **named warning**, not a failure — an unfilled seat is a fact to
-surface, never a defect that blocks the check. Everything else above fails the check on violation.
+A `VACANT` slot in ANY `## Groups` entry (not only `leads`) is reported as a **named warning**, not
+a failure — an unfilled seat is a fact to surface, never a defect that blocks the check. A
+zero-member `advisory` sub-council is reported as
+a **named INFO line** — narrower than a warning, since it is the reserved sub-council's normal
+steady state, not a gap anyone needs to fill — never a warning and never a failure. Everything else
+above fails the check on violation.
 
 ## Why a data edit, not a semantic edit
 
@@ -81,7 +116,8 @@ statement, etc.) still earns the checker pass it always did.
 ## What a domain instance supplies vs. inherits
 
 Same split `roster-and-personas.md` already states, sharpened for the file itself: the roster
-**content** (which handles, which sub-councils, who leads, what groups exist) is the domain
-instance's own data in its own `roster.md`; the **schema** above — column set, the `full`
-reservation, the bijection, the `VACANT`-is-a-warning convention — is this pack's machinery, cited
-by every instance's SKILL.md, never restated as a second copy of the rules.
+**content** (which handles, which sub-councils, who leads, what groups exist, and whether any
+`advisory` seats are filled yet) is the domain instance's own data in its own `roster.md`; the
+**schema** above — column set, the `full` and `advisory` reservations, the `advisor` role's voting
+exclusion, the bijection, the `VACANT`/zero-advisor-is-not-a-failure conventions — is this pack's
+machinery, cited by every instance's SKILL.md, never restated as a second copy of the rules.

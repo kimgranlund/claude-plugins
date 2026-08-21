@@ -37,7 +37,11 @@ Parse `$ARGUMENTS` as `[council] [critic handle] [lens/domain]`:
   (`luke-s`, `paula-s`) — never a full real name (the attribution discipline below is exactly why).
 - **Lens/domain** — the specific point of view this critic holds that no existing roster member
   already covers. A lens that duplicates an existing critic's ground is a finding to surface, not
-  silently mint past.
+  silently mint past. Names a specific lens sub-council (`strategy`/`design`/`voice` for
+  `check-brand-council`, or whatever the target council's own families are) only when the user
+  explicitly wants that specialization; unstated → step 5 seats the new critic into `advisory` by
+  default (`council-rules`' `references/roster-file-contract.md` — the reserved, user-minted
+  sub-council), never forced into an ill-fitting existing family.
 
 ## Procedure
 
@@ -76,17 +80,31 @@ Parse `$ARGUMENTS` as `[council] [critic handle] [lens/domain]`:
    persona's opening disclaimer line, and update the target council's own gitignored
    `.name-map.md` with the new entry — never commit that file, and never let a real practitioner's
    name, bio, or sourcing leak into the tracked persona file itself.
-5. **Register in the roster.** Append one row to the target council's own `references/roster.md`
-   (`council-rules`' `references/roster-file-contract.md` — handle, sub-councils, `role` (usually
-   `member` — a mint seating a `lead` must not displace an existing lead without saying so),
-   `status: active`, `seated` (today's date), and a placeholder `fixture` cell of
+5. **Register in the roster, into the sub-council the lens actually belongs to.** Three cases,
+   in order:
+   - **The user named a specific lens sub-council** (the argument-parsing bullet above) → seat
+     there: `role: member` (or `lead` only if explicitly displacing/filling a stated vacancy —
+     never silently), `sub-councils: <that sub-council>`.
+   - **The user named no specific sub-council and isn't explicitly asking for a whole new one**
+     (the ordinary case — including a lens that DOES fit an existing family's knowledge pack, step
+     3, but the user still didn't name that family as the destination) → **seat into `advisory` by
+     default**: `role: advisor`, `sub-councils: advisory` (exactly — `roster-file-contract.md`'s
+     exact `advisory`↔`advisor` pairing; never mixed with `lead`/`member` or another sub-council on
+     the same row). This is the expected, ordinary path for a user-minted persona — not a fallback
+     of last resort, and not conditioned on whether step 3 found a knowledge pack to cite (pack
+     membership is a grounding question for drafting, never a seating rule).
+   - **The lens genuinely earns a whole NEW lens sub-council** (rare — the user is explicit that
+     this isn't an advisory add-on but a new specialization) → propose the new sub-council grouping
+     by name (never silently folded into the nearest existing group), and give it its own
+     `## Groups` `leads:` entry — the contract requires one per sub-council, so name the new lead
+     handle or the literal `VACANT`, never omit the entry.
+
+   In every case, append one row to the target council's own `references/roster.md`
+   (`council-rules`' `references/roster-file-contract.md`): handle, the resolved `sub-councils` and
+   `role` above, `status: active`, `seated` (today's date), and a placeholder `fixture` cell of
    `unpromoted, inline` — the contract requires the cell non-empty at every point, so write the
-   placeholder now and replace it with step 6's real fixture location once that step runs), under
-   the sub-council the lens belongs to — or propose a new sub-council grouping, named explicitly,
-   if the lens doesn't fit an existing one (never silently folded into the nearest group; a
-   genuinely new sub-council also gets its own `## Groups` `leads:` entry — the contract requires
-   one per sub-council, so name the new lead handle or the literal `VACANT`, never omit the entry).
-   This is a **data edit to `roster.md`, not a SKILL.md change** — the convening skill's own prose
+   placeholder now and replace it with step 6's real fixture location once that step runs. This is
+   a **data edit to `roster.md`, not a SKILL.md change** — the convening skill's own prose
    is untouched by seating a critic, so it does not re-trigger `plugin-authoring.md`'s semantic-
    edit checker-pass invariant on its own account (step 7 below still runs, but against the new
    persona file, not against the roster edit). Save the persona file at
