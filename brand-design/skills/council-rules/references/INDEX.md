@@ -1,6 +1,6 @@
 # Council rules — reference index
 
-6 axes, 6 files. Grep the term first, then Read the matching section — these are catalogs, not a
+7 axes, 7 files. Grep the term first, then Read the matching section — these are catalogs, not a
 linear read. Every file below appears in the top-level skill file's consult table; every
 consult-table row names a real file here.
 
@@ -14,6 +14,9 @@ copy, and so the forthcoming `make-council`/`make-critic` (S4) have something to
 
 - `roster-and-personas.md` — what a persona/critic contract is, what a roster is, how sub-councils
   group a roster, the "full" union convention
+- `roster-file-contract.md` — the roster FILE schema: a per-instance roster data file's table +
+  `## Groups` shape, handle↔persona-file bijection, `VACANT`-lead-is-a-warning, why seating a
+  critic is a data edit
 
 ## Fan-out mechanics
 

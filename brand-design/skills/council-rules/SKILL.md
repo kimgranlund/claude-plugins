@@ -22,7 +22,7 @@ mints next) configures it rather than reinventing it. `check-brand-council` is t
 instance: its roster is brand-specific configuration; its mechanics are this pack, cited not
 restated.
 
-This file is a table of contents. 6 axes across 6 reference files — full map:
+This file is a table of contents. 7 axes across 7 reference files — full map:
 [`references/INDEX.md`](references/INDEX.md).
 
 ## Consult table
@@ -34,6 +34,7 @@ instead of citing it (restated machinery, or a collapsed blind-phase independenc
 | Ask | Load |
 |---|---|
 | What a roster/persona is, how sub-councils group it | `references/roster-and-personas.md` |
+| The roster FILE schema (`roster.md` table + `## Groups`, bijection, `VACANT` leads) | `references/roster-file-contract.md` |
 | How the blind fan-out actually executes (dispatch shape, concurrency, bounded rejection) | `references/blind-fanout-mechanics.md` |
 | The severity taxonomy and 2-of-3 contested-finding voting | `references/severity-and-voting.md` |
 | The five synthesis shapes a council's findings resolve into | `references/synthesis-shapes.md` |

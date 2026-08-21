@@ -2,14 +2,14 @@
 name: check-brand-council
 description: >
   Convene the brand council — adversarial critique from named practitioners, fanned out by
-  sub-council (strategy/design/voice/full), severity-classified findings, cross-critic synthesis
-  to one verdict, plus an optional chair-moderated deliberation round where critics cross-examine
-  each other's findings. Use for "convene the brand council", "get the critics on this", "run the
-  design/voice sub-council", "what would Luke S. say about this", "have the critics deliberate on
-  this". NOT rubric scoring (`check-brand-rubric`); NOT the Muse/voice seats
-  (`muse-agent`/`brand-writer`); NOT corpus organizing (`brand-corpus`); NOT the mechanism
-  (`council-rules`); NOT minting critics or new councils (`make-critic`/`make-council`).
-argument-hint: "[strategy|design|voice|full] [artifact] [--deliberate]"
+  sub-council (strategy/design/voice/full) or a roster group (e.g. `leads`), severity-classified
+  findings, cross-critic synthesis to one verdict, plus an optional chair-moderated deliberation
+  round. Use for "convene the brand council", "get the critics on this", "run the design/voice
+  sub-council", "what would Luke S. say about this", "have the critics deliberate on this". NOT
+  rubric scoring (`check-brand-rubric`); NOT Muse/voice (`muse-agent`/`brand-writer`); NOT corpus
+  organizing (`brand-corpus`); NOT the mechanism (`council-rules`); NOT minting critics or councils
+  (`make-critic`/`make-council`).
+argument-hint: "[strategy|design|voice|full|leads] [artifact] [--deliberate]"
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -22,10 +22,10 @@ studio. **The council reviews, evaluates, and guides; it does not produce.** A c
 compliments is not doing its job.
 
 **This is the brand instance of `council-rules`' general council machinery.** The roster, the
-sub-council groupings, and the 14 persona files below are this procedure's own configuration; the
-fan-out mechanics, severity taxonomy, 2-of-3 voting, synthesis shapes, and the two-phase model are
-`council-rules`' machinery, cited throughout rather than restated. Read `council-rules` first for
-the mechanism; this file states only what's brand-specific.
+sub-council groupings, and the persona files under `references/critics/` are this procedure's own
+configuration; the fan-out mechanics, severity taxonomy, 2-of-3 voting, synthesis shapes, and the
+two-phase model are `council-rules`' machinery, cited throughout rather than restated. Read
+`council-rules` first for the mechanism; this file states only what's brand-specific.
 
 **Phase 1 (blind) IS the orchestrator, host-side — no separate agent.** The fan-out below runs
 directly as this skill's own steps, never through an intermediate coordinating agent
@@ -38,17 +38,21 @@ per `council-rules`' `references/two-phase-model.md`.
 
 ## Parse the request
 
-Parse `$ARGUMENTS` as `[sub-council] [artifact] [--deliberate]`, exactly as the legacy
-`/brand-council` command did, plus the new deliberation flag:
+Parse `$ARGUMENTS` as `[sub-council|group] [artifact] [--deliberate]`, exactly as the legacy
+`/brand-council` command did, plus the new deliberation flag and group resolution:
 
-- Sub-council is one of `strategy` · `design` · `voice` · `full`. If not named, **default to
-  `strategy`**.
+- **Resolve the first token against `references/roster.md`** — read it before matching: a
+  sub-council name (`strategy` · `design` · `voice` · `full`), or a named `## Groups` entry (e.g.
+  `leads`, which resolves to the seated handles that group lists, skipping any `VACANT` slot — a
+  `leads` fan-out with every seat `VACANT` is an empty fan-out, reported as such, never silently
+  substituted with the full roster). If not named, **default to `strategy`**.
 - `--deliberate` (or an equivalent live phrasing — "have them deliberate", "get them cross-
   examining each other") runs phase 2 after phase 1 completes. Absent → phase 1 only, exactly
   today's behavior, unchanged.
 - Everything else is the **artifact** under critique.
-- An unrecognized sub-council token (not one of the four) → report the four valid options and
-  stop; do not guess which one was meant.
+- A token matching neither a sub-council name nor a `## Groups` entry in `roster.md` → report the
+  valid sub-councils and groups actually present in the file and stop; do not guess which one was
+  meant.
 
 ## Trust boundary (state this before convening — and re-apply at synthesis and at roll-up)
 
@@ -71,15 +75,15 @@ an artifact alone and hope the critics infer the foundation.
 
 ## Roster — the critic personas you fan out to (this instance's own configuration)
 
-| Sub-council | Critic personas (`${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`) |
-| --- | --- |
-| **Strategy** (6) | `luke-s` _(lead — cultural provenance)_, `john-h`, `mark-p`, `nick-l`, `brian-c`, `rory-s` |
-| **Design** (4) | `paula-s`, `massimo-v`, `matt-w`, `jessica-w` |
-| **Voice** (4) | `david-a`, `george-l`, `tim-d`, `mary-n` |
-
-`full` = all 14 (`council-rules`' reserved union convention). `luke-s` carries the lead weight on
-most engagements — cultural authority is the dominant lens for the brand work this plugin
-addresses.
+The roster — sub-council membership, lead seats, and the `leads` group — is data, not prose: read
+`references/roster.md` (schema: `council-rules`' `references/roster-file-contract.md`) before
+resolving any sub-council or group token ("Parse the request", above). Persona files live at
+`${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`, one per
+active roster row. `full` = every active row's union (`council-rules`' reserved union convention).
+Cultural authority is the dominant lens for the brand work this plugin addresses, so this
+council's `strategy` lead — when `roster.md` names one — carries the most weight of any single
+seat; `roster.md`'s `leads` group is the live source for who currently holds it, or whether it's
+`VACANT`, and this file is never the place that answer is restated.
 
 ## Phase 1 — blind fan-out (unchanged)
 
@@ -196,8 +200,10 @@ is a failure branch (below), not a mode switch.
 - Corpus context missing → ask for it before convening; never run the fan-out on the artifact
   alone.
 - No artifact named → ask what to review; a council needs something to critique.
-- Unrecognized sub-council token → report the four valid options (`strategy` · `design` · `voice`
-  · `full`), stop.
+- Token matches neither a sub-council name nor a `roster.md` group → report the sub-councils and
+  groups actually present in `roster.md`, stop.
+- A resolved `## Groups` fan-out (e.g. `leads`) has every seat `VACANT` → report the empty
+  fan-out explicitly and stop; never substitute the full roster silently.
 - A critic dispatch fails outright (not just contract-violating — no return at all) → treat as the
   bounded-rejection case (phase 1 step 3): one re-dispatch, then UNMEASURED, named, and the
   synthesis proceeds with the remaining critics.

@@ -1,6 +1,6 @@
 {
   "skill": "check-brand-council",
-  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Updated 2026-08-20, S3 of the council-as-platform overhaul (#826): now an instance of council-rules' general machinery, gains a --deliberate phase-2 round via council-marshal (t07/t08) and a reciprocal fence against council-rules itself (n05). Updated 2026-08-21, S4 (#827): reciprocal fences against the two new minting procedures, make-critic (n06) and make-council (n07). Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
+  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Updated 2026-08-20, S3 of the council-as-platform overhaul (#826): now an instance of council-rules' general machinery, gains a --deliberate phase-2 round via council-marshal (t07/t08) and a reciprocal fence against council-rules itself (n05). Updated 2026-08-21, S4 (#827): reciprocal fences against the two new minting procedures, make-critic (n06) and make-council (n07). Updated 2026-08-21, roster-as-data (#838): roster moved to references/roster.md (data), description gains group-fan-out phrasing (e.g. 'leads'); t09 covers the new trigger phrase. Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
   "cases": [
     {
       "id": "t01",
@@ -40,6 +40,11 @@
     {
       "id": "t08",
       "prompt": "Run the full brand council, then get the critics cross-examining each other's findings before the verdict.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t09",
+      "prompt": "Run the leads committee against this repositioning brief.",
       "expect": "trigger"
     },
     {
