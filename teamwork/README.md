@@ -110,6 +110,34 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.21 · 2026-08-21 · closes #856: the recurring reviewer-spawn scheduler that #853 deliberately
+left unbuilt — new `teamwork/scripts/reviewer_scheduler.py`, one scheduling pass per invocation
+over an explicit `--tasks-file`. Spawns one `claude -p` child per review task (cwd pinned into an
+already-walled worktree), refusing to spawn at all when `verify_wall_present` finds no confirmed
+`deny-edit-write` wall there (fail-closed, never repeats #852's false-positive class at this
+layer). Crash recovery: `1 + --max-retries` attempts per task (default 1 retry), a fresh log file
+per attempt, a failed task named explicitly in the index and on stderr rather than silently
+dropped. Log rotation: `rotate_logs` retains the newest `--keep-logs` (default 20) log files per
+pass, the retention policy #853's one-ad-hoc-log-per-spawn shape never had. Report collection: a
+local `index.jsonl` row per completed spawn (task, attempts, outcome, log path, and the child's
+own posted `gh` comment URL when present) — "which spawn covered which review task, with what
+outcome," never a second copy of the review content itself, which stays on GitHub via the
+child's own `gh issue`/`pr comment` post per #855's ruling. Cadence is driven externally
+(`/loop`/`/schedule` re-invoking one pass) rather than reimplemented as a bespoke daemon. Also
+rules the ticket's own open re-verification-cadence question moot: the wall is a durable
+file-on-disk artifact that does not degrade, so no periodic re-probe is ever needed — stated
+explicitly in `fleet-bootstrap` Phase 5 step 5 and the new reference doc rather than left
+implicit. `fleet-bootstrap/SKILL.md` Phase 5 step 5 updated to point at the scheduler instead of
+naming the scheduling layer as unbuilt; new
+`fleet-bootstrap/references/reviewer-scheduler.md` documents the full contract. Selftest: 8
+pure-function groups incl. the `classify_outcome` timeout-wins-over-clean-exit control, the
+`rotate_logs` keep<=0 no-op control, and `verify_wall_present`'s missing-file/missing-hook
+negative controls — no network, no real subprocess spawn. Fresh-context `skill-checker` pass
+(FLOOR): fix-before-ship, 2 majors (a ruling-fidelity drift — the ref doc's "in a shared
+checkout" qualifier narrowed Kim's ruling — and two script invocations using a repo-relative
+path instead of `${CLAUDE_PLUGIN_ROOT}`) + 2 minor/nits (an exit-code description overstating
+"verified" for a content-only check; a POSTED-line phrasing mismatch with the actual parser),
+all four fixed pre-merge, re-verified via selftest+ruff re-run.
 v2.28.20 · 2026-08-21 · closes #855: `lld-0006` C1a's Bash escape-hatch charset (`sed`/`cat`/
 `printf` onto the three fleet-state files) excludes `{`/`}`, so a literal JSON-object append (e.g.
 `printf '{"role":...}' >> .claude/ops/fleet.json`) is denied even on a permitted path — confirmed

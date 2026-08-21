@@ -282,15 +282,19 @@ that tested shape:
    open" the way an interactive terminal does. The wall (step 2) persists in the worktree for the
    fleet's duration regardless of whether any one `claude -p` process is currently running — every
    FUTURE `claude -p` invocation spawned with cwd in that same worktree inherits the same
-   structural enforcement for free, with no re-write needed. So "holding the reviewer contract" now
-   means: further review tasks are driven by fresh, per-task `claude -p` spawns into this same
-   pre-walled worktree (dispatched by this orchestrator, a `/loop`, or a human/coordinator naming
-   the worktree), never one persistent background process. **Scoping stops here, named plainly**:
-   the actual scheduling/monitoring infrastructure for a recurring cadence of per-task spawns
-   (crash recovery, log rotation, a standing launcher) is real, separate infrastructure work this
-   ticket's own scope flagged as unscoped — filed as follow-up issue #856, not built here. What
-   this build ships is the one-shot bind-plus-I2-confirm round trip (steps 1–4), live-verified end
-   to end, which is the structural precondition any later scheduling layer builds on.
+   structural enforcement for free, with no re-write needed, and does NOT need periodic
+   re-verification against that same wall (Kim's ruling, issue #856, 2026-08-21 — a file-on-disk
+   artifact does not degrade, so no re-probe after a `/team-scaffolding retire` cycle or on a fixed
+   interval). So "holding the reviewer contract" now means: further review tasks are driven by
+   fresh, per-task `claude -p` spawns into this same pre-walled worktree, via
+   `teamwork/scripts/reviewer_scheduler.py` (issue #856) — one scheduling pass per invocation over
+   an explicit `--tasks-file`, handling the spawn/crash-recovery/log-rotation/index mechanics; drive
+   its recurring cadence with `/loop` (a live session) or `/schedule` (unattended), never a
+   bespoke daemon this plugin reimplements. Full mechanics, the per-task prompt contract, and the
+   local index shape: `references/reviewer-scheduler.md`. What #853 itself shipped was the one-shot
+   bind-plus-I2-confirm round trip (steps 1–4) that the scheduler's own `verify_wall_present`
+   precondition now composes on top of — it refuses to spawn anything against a worktree whose wall
+   was never confirmed written.
 
 **Hybrid swap**: any spawned seat (background or background-subprocess) is replaceable at any time
 by a human running `/team-scaffolding <role>` in their own terminal — the roster (`fleet.json` +
