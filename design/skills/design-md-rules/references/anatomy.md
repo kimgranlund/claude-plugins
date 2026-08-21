@@ -26,7 +26,7 @@ colors:
   primary-hover: "oklch(0.496 0.0966 227.89)"
   primary-hover-dark: "oklch(0.7657 0.1409 221.45)"   # hover darkens in light scheme, brightens in dark
   primary-on-primary: "oklch(1 0 89.88)"
-  # …neutral surfaces, outline, on-surface(-variant), every family × {fill, on, hover, active, disabled}
+  # …neutral surfaces, outline, on-surface(-variant), every family × {fill, on, hover, disabled}; -active on interactive-fill families
 typography:
   body-md:
     fontFamily: Inter
@@ -57,7 +57,7 @@ Hard properties of the layer:
 - **Scheme parity**: the light inventory and the `-dark` sibling inventory are identical key sets.
 - **High-resolution color**: OKLCH (or another wide-gamut notation), never bare rounded hex. Alpha rides inline: `oklch(L C H / 30%)`.
 - **Typography levels are indivisible**: size + lineHeight + weight (+ tracking) set together; a level missing one is broken.
-- **Component recipes are state-complete**: every interactive recipe ships `-hover` (and ideally `-active`) siblings.
+- **Component recipes are state-complete**: every interactive recipe ships `-hover` siblings; `-active` is required where the recipe's family serves as an interactive fill (see grammar.md's state rule, amended 2026-08-20).
 
 ### Layer 2 — Markdown prose (the spine)
 
@@ -79,9 +79,9 @@ The reference spine, in order — each section earns its place by changing agent
 The spine above is a **floor, not a ceiling**. A DESIGN.md admits any section the brand needs an agent to know — this is the "it's a SKILL" property. Sections that routinely earn their place:
 
 - **Voice & Tone** — person, casing, punctuation, emoji policy, with verbatim example phrasings.
-- **Iconography** — the glyph system, stroke weight, sizing ramp, emoji/unicode policy.
+- **Iconography** — the glyph system, stroke weight, sizing ramp, emoji/unicode policy. (A generator whose every kit ships an icon system may emit this always-on — the ultimate-tokens exporter does, inserting it with Motion between Shapes and Components; noted 2026-08-20.)
 - **Imagery** — photographic treatment, color temperature, grain, when illustration vs photo.
-- **Motion** — durations, easings, what never animates.
+- **Motion** — durations, easings, what never animates. (Like Iconography, legally always-on for a generator whose kits all carry motion tokens.)
 - **Data visualization** — categorical palettes, axis treatment.
 - **Cultural references** — the design lineage that anchors taste (see `brand-architecture.md`).
 - **Copy examples** — real product strings an agent can pattern-match.
