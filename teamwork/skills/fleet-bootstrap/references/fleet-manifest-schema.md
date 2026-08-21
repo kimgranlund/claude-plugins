@@ -92,6 +92,14 @@ takeover record.
 - **`live_state.joined[].reason`** — optional, present only on a `"released"` row: the free-text
   reason argument passed to `/team-scaffolding retire <role> [reason]`, or `null` if none was
   given.
+- **`live_state.joined[].wall_applied`** — optional, present only on a `reviewer` row written by
+  `fleet-bootstrap` Phase 5 (a background spawn). One of `true` (the `deny-edit-write` wall was
+  written and re-verified — `team-scaffolding` Phase 3's C1–C1a steps) or the string
+  `"blocked-worktree"` (the seat hit Phase 1's worktree precondition, shared checkout, and never
+  attempted the write). Absent covers both a manual `reviewer` join via `/team-scaffolding
+  reviewer` directly (which reports its own wall outcome inline rather than through this field)
+  and a background join predating this field — read as "unknown", never as "applied": a reader
+  never infers success from a missing field (issue #850).
 - **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.
