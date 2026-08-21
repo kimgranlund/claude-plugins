@@ -25,7 +25,12 @@ carries a generated copy, never a hand-diverged one.
       "note": ""
     }
   ],
-  "overall": ""
+  "overall": "",
+  "grounding": {
+    "sources": ["DESIGN.md", "src/tokens.css"],
+    "resolved_version": "1.3.2",
+    "hash": "sha256:9f2a…"
+  }
 }
 ```
 
@@ -48,13 +53,21 @@ round — no card is ever omitted from the list, voted or not. `overall` is opti
   discards untouched variants the user simply hadn't gotten to yet.
 - **`verdicts` is exhaustive per round.** Resume mode cannot infer a dropped card's axes from a
   partial list — every card rendered that round has exactly one entry.
+- **`grounding` is a pointer, never a payload** (optional, additive 2026-08-21 — the schema
+  stays `/v1`; a blob without it is a legal ungrounded exploration). `sources` lists the
+  substrate paths the round-1 Ground step resolved, `resolved_version` any version those
+  sources declare, `hash` a content hash over them. The token VALUES live inlined in the
+  artifact page itself — never in this blob, which travels through chat. Constant across
+  rounds unless the user chooses to re-ground on a surfaced drift.
 - **One schema key names one contract.** A pasted blob is resume-mode input only when its first
   top-level key is literally `"schema": "variant-feedback/v1"`. A differently-shaped or
   differently-versioned blob is not this skill's input — never guess-parse it into this contract.
 
 ## Resume-mode read
 
-1. Parse `round`, `target`, `verdicts` from the pasted blob.
+1. Parse `round`, `target`, `verdicts` (and `grounding`, when present) from the pasted blob.
+   With `grounding`: re-hash its `sources` — match → reuse the pinned snapshot; mismatch → ask
+   (re-ground or hold the pin) before rendering anything; missing sources → same question.
 2. Partition verdicts by vote: `"up"` -> **anchor**, axes held fixed next round. `"down"` ->
    **reject**, axes mutated next round (pick a new value along at least one losing axis; never
    re-render the identical rejected combination). `null` -> **unvoted**, axes held fixed exactly
