@@ -21,6 +21,14 @@ file's plugin (the PostToolUse blocking convention); everything unexpected —
 malformed/wrong-shape event, no derivable root, unreadable manifest — exits 0
 silently (fail open, hook-writing-rules).
 
+Manifest resolution for a plugin-scoped `--target` (issue #842, 2026-08-21): probes
+`<target>/naming.manifest.json`, then `<target>/.claude/naming.manifest.json`, then
+falls back once to `<git toplevel of target>/naming.manifest.json` via
+`find_repo_root` — so a workspace-root manifest governing a plugin one or more
+levels below it is found without a directory walk (that walk was tried and
+rejected for a different case; see `find_repo_root`'s docstring). `--manifest`
+always overrides all three probes.
+
 `hook` mode (issue #276, 2026-08-15): a write-time PostToolUse hook that hardcodes
 `--target "$CLAUDE_PROJECT_DIR/$plugin"` for a fixed plugin roster is blind to
 EnterWorktree sessions — `$CLAUDE_PROJECT_DIR` names the PRIMARY checkout for the whole
@@ -935,8 +943,29 @@ def main():
             if cand.is_file():
                 mpath = cand
                 break
+    if mpath is None:
+        # Neither direct probe found a manifest AT `target` itself. Issue #842: a
+        # plugin-scoped `--target <plugin-dir>` under a workspace-governed estate (the
+        # manifest sitting one or more levels ABOVE the plugin, e.g. at the git
+        # toplevel) was invisible here, so every such run fell through to "ungoverned"
+        # and recommended seeding a plugin-local manifest — forking the estate lexicon.
+        #
+        # This is deliberately NOT the directory-walk-to-nearest-manifest that
+        # `find_repo_root`'s own docstring rejects: that rejection is scoped to HOOK
+        # target derivation (`resolve_hook_target`), where authorkit's own nested
+        # self-dogfood manifest copy makes a walk stop at the wrong ancestor for a
+        # write inside authorkit itself. Here we reuse `find_repo_root`'s single
+        # `git rev-parse --show-toplevel` call (no walk, no marker-file search) and
+        # probe the git toplevel exactly once — the outermost governing manifest, never
+        # authorkit's own nested copy, because that copy is never AT the toplevel.
+        repo_root = find_repo_root(target)
+        if repo_root is not None and repo_root != target:
+            cand = repo_root / "naming.manifest.json"
+            if cand.is_file():
+                mpath = cand
     if mpath is None or not mpath.is_file():
-        msg = "no naming.manifest.json found — estate is ungoverned"
+        msg = ("no naming.manifest.json found at <target>/, <target>/.claude/, or the "
+               "git toplevel — estate is ungoverned")
         if args.hook:
             print(f"authorkit: {msg}; skipping (governance is opt-in)")
             sys.exit(0)
@@ -1967,6 +1996,67 @@ def selftest():
             f"the caught finding must name the offending artifact: {bad_hook.stderr}"
 
         _git(r, "worktree", "remove", "-f", str(wt))
+
+    # CLI `--target` ancestor-manifest fallback (issue #842, 2026-08-21): a plugin two
+    # directories below the git toplevel, with NO manifest of its own and NO --manifest
+    # flag passed, must resolve GOVERNED via the toplevel manifest — not exit 2
+    # "ungoverned". A real git repo (not a simulated tree), same rationale as the hook
+    # fixture above: the fix's own claim is "git's toplevel is the resolution root".
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td).resolve()
+        _git(r, "init", "-q")
+        (r / "naming.manifest.json").write_text(json.dumps(manifest))
+        # Two directories up from the target: r -> estate -> plugin-dir.
+        plugin_dir = r / "estate" / "plugin-dir"
+        (plugin_dir / "skills" / "demo-review").mkdir(parents=True)
+        (plugin_dir / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        _git(r, "add", "-A")
+        _git(r, "commit", "-q", "-m", "seed")
+
+        governed = subprocess.run(
+            [sys.executable, __file__, "--target", str(plugin_dir)],
+            capture_output=True, text=True,
+        )
+        assert governed.returncode == 0, (
+            "a plugin two dirs below a governed git toplevel, no --manifest flag, must "
+            f"resolve GOVERNED (not ungoverned): {governed.returncode} {governed.stdout} "
+            f"{governed.stderr}"
+        )
+        assert "ungoverned" not in governed.stdout, \
+            f"a governed toplevel manifest must never read back as ungoverned: {governed.stdout}"
+
+        # Regression control: an explicit --manifest flag still overrides every probe,
+        # ancestor fallback included.
+        explicit = subprocess.run(
+            [sys.executable, __file__, "--target", str(plugin_dir),
+             "--manifest", str(r / "naming.manifest.json")],
+            capture_output=True, text=True,
+        )
+        assert explicit.returncode == 0, \
+            f"--manifest must still override cleanly: {explicit.returncode} {explicit.stderr}"
+
+    # Negative control: no manifest ANYWHERE (not at target, not at the git toplevel) —
+    # the ancestor fallback must never manufacture governance that doesn't exist; still
+    # exits 2 ungoverned, and the refusal names all three probes it tried.
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td).resolve()
+        _git(r, "init", "-q")
+        plugin_dir = r / "estate" / "plugin-dir"
+        (plugin_dir / "skills" / "demo-review").mkdir(parents=True)
+        (plugin_dir / "skills" / "demo-review" / "SKILL.md").write_text(skill_md("demo-review"))
+        _git(r, "add", "-A")
+        _git(r, "commit", "-q", "-m", "seed")
+
+        ungoverned_cli = subprocess.run(
+            [sys.executable, __file__, "--target", str(plugin_dir)],
+            capture_output=True, text=True,
+        )
+        assert ungoverned_cli.returncode == 2, (
+            "no manifest at target, target/.claude, or the git toplevel must still exit "
+            f"2 ungoverned: {ungoverned_cli.returncode} {ungoverned_cli.stdout}"
+        )
+        assert "git toplevel" in ungoverned_cli.stdout, \
+            f"the refusal must name the toplevel probe it tried: {ungoverned_cli.stdout}"
 
     # Fail-open controls: malformed event, a write with no naming.manifest.json at its
     # repo's own top-level, and a write outside any git repo at all — all three must
