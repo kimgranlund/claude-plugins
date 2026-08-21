@@ -2,8 +2,8 @@
 doc-type: lld
 id: lld-0006-fleet-permission-profile
 status: draft
-version: 0.2.0
-date: 2026-08-16
+version: 0.3.0
+date: 2026-08-21
 owner: kim.granlund
 ticket: nonoun-plugins#404
 adr: none
@@ -149,12 +149,27 @@ no fleet path, still matched. That's fixed: every `sed`/`cat`/`printf` invocatio
 must end in one of the three literal paths, full stop. `$CMD` is captured once and tested against
 both patterns from the variable — the command is never re-read from stdin a second time, which
 would silently starve the second test (an earlier draft piped `jq` into two chained `grep`s and
-had exactly that bug). **Known residual gap, named rather than hidden**: `fleet.json`'s append is a
-structured JSON array entry (Phase 6 step 2), not a flat text append — a real `sed -i`/`printf >>`
-invocation big enough to do that safely may need characters this charset doesn't admit (e.g. `jq`
-piped through a temp-file-and-`mv` shape). If Phase 6's live execution finds the charset too narrow
-for that one step, widening it is a follow-up, done deliberately and re-verified the same way, not
-silently worked around with a broader escape hatch.
+had exactly that bug). **Resolved (2026-08-21, issue #855): the escape hatch is retirement-only by
+design — a walled seat never writes a structured `fleet.json` entry directly, and the charset
+stays as shipped.** `fleet.json`'s append is a structured JSON array entry (Phase 6 step 2), not a
+flat text append, and this charset's positive-charset design deliberately excludes `{`/`}` — a
+literal `printf '{"role":...}' >> .claude/ops/fleet.json` is denied even though it targets a
+permitted path in the documented shape, confirmed live twice (#853's build, then #855's own
+re-check): a genuinely walled `claude -p` child's JSON-object append was denied by the shipped
+hook regex both times. Rather than widen `ESCAPE` to admit `{`/`}` (and whatever else a
+`jq`-free JSON-object append would need), the standing design ruling is the one #853 already
+shipped and #856's own scoping note independently converges on: the ORCHESTRATOR — never
+walled — owns every `fleet.json` append, reading it from the walled child's captured stdout
+(`fleet-bootstrap` Phase 5, PR #857) or from the reviewer's own `gh issue comment` channel (its
+one allowed structured-report path under `$ALLOW` above). A walled seat's only durable-write
+paths stay `gh` (`$ALLOW`) and the retirement escape hatch's flat-text shapes (`sed`/`cat`/`printf`
+ending in one of the three fleet-state paths) — never a `{`/`}`-bearing structured append. No
+concrete flow needing a walled seat to self-report structured data directly was found at the time
+of this ruling (#856's recurring-spawn scheduler explicitly designs around the same constraint
+rather than against it); should one surface later, widening `ESCAPE` stays available as a
+deliberate follow-up, re-verified the same way C1a's original three drafts were
+(`bash`/`python3 re` against explicit ALLOW/DENY cases, never merely inspected) — never a silent
+workaround.
 
 `/team-scaffolding reviewer` now writes this hook into the same `.claude/settings.local.json`
 (Phase 3), verified the same way as C3 verifies the deny entries. **Residual risk, stated honestly
@@ -313,12 +328,14 @@ yes; `/team-scaffolding reviewer`'s printed charter names these five instruments
   it cannot force the human's next action — the same "printed instruction, not platform-enforced"
   shape D1 already accepts for session naming.
 - **R6 — C1a's retirement escape hatch (`sed`/`cat`/`printf` onto the three fleet-state files)
-  cannot carry a literal JSON-object append (confirmed live, issue #853/#855): its positive
-  charset excludes `{`/`}`, so `printf '{"role":...}' >> .claude/ops/fleet.json` is denied even
-  though it targets a permitted path in the documented shape.** This was already named as a
-  residual gap when C1a shipped ("a real `sed -i`/`printf >>` invocation big enough to do that
+  cannot carry a literal JSON-object append (confirmed live, issue #853, re-confirmed #855): its
+  positive charset excludes `{`/`}`, so `printf '{"role":...}' >> .claude/ops/fleet.json` is
+  denied even though it targets a permitted path in the documented shape.** This was already named
+  as a residual gap when C1a shipped ("a real `sed -i`/`printf >>` invocation big enough to do that
   safely may need characters this charset doesn't admit"); #853 hit it live while building the
   reviewer's genuinely-walled subprocess spawn and routed around it (the unwalled orchestrator
   owns the structured `fleet.json` append, not the walled seat) rather than widening the charset
-  inline. Tracked separately as #855 — deliberate widening or an explicit "walled seats never
-  write `fleet.json` directly" ruling, not a silent workaround.
+  inline. **Resolved (2026-08-21, #855): ruled retirement-only by design (C1a above)** — the
+  charset is unchanged, and a walled seat never gets a direct `fleet.json` write path; accepted as
+  the honest permanent shape rather than a residual gap, since no concrete flow needing one was
+  found and #856's own future scheduler already designs around the same constraint.
