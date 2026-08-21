@@ -79,6 +79,52 @@ hand off to.
 
 ---
 
+v0.6.0 · 2026-08-20 · S5 role-category knowledge packs (`#828`, wave 2 of the council-as-platform
+overhaul): the 14 `check-brand-council` critics clustered into 4 role families from their OWN
+personas (working hypothesis confirmed, not forced) — **strategy** (Brian C., John H., Luke S.,
+Mark P. — substance-over-assembly tests on the strategic artifact: becoming/transformation,
+zag-vs-zig, primary-source provenance, the language bow tie), **identity-design** (Jessica W.,
+Massimo V., Matt W., Paula S. — the visual/systemic identity: find-the-weird/human-signature,
+three-level coherence, editorial typography as recurring grammar, liquid identity/editorial
+refusal), **voice-writing** (David A., Mary N., Tim D. — the written voice: respect for the
+reader, query-not-assertion house style, the premium brief), **advertising-creative** (George L.,
+Nick L., Rory S. — creative execution: the Big Idea/word-image collision, inventive-vs-expressive
++ creative infrastructure, psycho-logic/cheap alchemy). Full per-critic evidence lines recorded in
+each pack's own `references/lenses.md`. NEW knowledge packs `brand-strategy-facts`,
+`brand-identity-facts`, `brand-voice-facts`, `brand-advertising-facts` — pack-writing-rules
+conformant (4 declared axes each: lenses/failure-modes/canonical-tests/vocabulary, flat corpus, no
+INDEX at this size, `sources.md` provenance in trust order distinguishing `[verified]`
+persona-file quotes from explicitly marked `[inferred]` general-knowledge parallels, none
+fabricated); own eval suites. Fresh-context `harness:skill-checker` pass on all four new
+SKILL.md files plus a `harness:wording-checker` pass on the `make-critic` edit — all 5 **PASS**,
+zero `[verified]`-claim mismatches against the 14 persona files on spot-check; each pack carried
+2-3 minor fixes (description fence reformatted to the parseable `NOT for <thing> (<owner>)` form,
+a Grep-first consult-entry line + one-line answer contract added, one "mint a new brand-X critic"
+use-phrase reworded to "grounding for minting an X critic" to de-conflict with `make-critic`'s own
+eval, a typo, and a fragile hardcoded step-number citation loosened) — every fix applied before
+this version closed (full per-pack verdicts: issue #828 Findings). Scoped blind re-judge (3
+unnamed `harness:routing-judge` dispatches, full 20-skill brand-design menu post-fix) over the 5
+new/fence-touched suites (the 4 packs + `make-critic`, 58 cases): 57/58 clean on the first pass;
+one contested case (`brand-strategy-facts` t02, "why did the council flag...") stolen once by
+`check-brand-council` on single-judge noise, resolved 2-of-3 for the expected owner on the vote
+round — annotated in `evals.json` per the re-judge convention, no description chase since the
+vote resolved clean. Fenced against each other (disjoint role/critic
+coverage), against `council-rules` (machinery vs. role knowledge), against
+`brand-methodology-rules` (the maker's method vs. the judge's lens on the same territory — e.g.
+`brand-voice-facts` vs. `references/editorial-style-guide.md`, `brand-advertising-facts` vs.
+`references/creative-collaboration.md`), and against `make-critic` (procedure vs. grounding
+corpus) — reciprocal: `make-critic` now reads the matching family pack before drafting a
+same-family persona (additive to, never a replacement for, its existing 14-persona grounding
+read), its overlap check now reads a pack's `failure-modes.md`/
+`canonical-tests.md` directly, and its References table + evals gained the four packs (4 new
+no-trigger cases). 4 new `ObjectVocab` entries registered in the root `naming.manifest.json` —
+`brand-strategy`, `brand-identity`, `brand-voice`, `brand-advertising` (multi-token, `{object}-
+facts` production per REQ-002 §3.2/ADR-0011; anti-ambiguity checked against the full 129-entry
+`object_vocab` plus `VerbLex`/`ProcessLex`/`TopicLex`/`RoleLex` — no collision, no shadowing of the
+existing single-token `brand`/`critic` entries under longest-match resolution) — grammar-clean
+per `authorkit:naming-audit` (24 artifacts, 0 errors, exemptions unchanged at 55). Semantic
+changes throughout — minor bump.
+
 v0.5.0 · 2026-08-21 · S4 minting (`#827`, wave 2 of the council-as-platform overhaul): NEW
 procedure `make-critic` — mints one new critic persona end to end (persona template grounded in
 the 14 existing `check-brand-council` files as worked examples; the `.name-map.md` gitignored

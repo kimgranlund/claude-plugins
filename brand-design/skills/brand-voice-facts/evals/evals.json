@@ -1,0 +1,67 @@
+{
+  "skill": "brand-voice-facts",
+  "note": "Minted 2026-08-20, S5 of the brand-design council-as-platform overhaul (#828). Floor suite: routing against this pack's own trigger surface (voice-family critic knowledge) vs. its three sibling role-family packs, council-rules, brand-methodology-rules, and make-critic.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What does a brand-voice critic actually look for in this copy?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Is this headline condescending to the reader or genuinely respectful?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Does our house style guide actually hold consistent across ten different writers?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "I'm minting a new brand-voice critic — what lens gaps exist in the current roster?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "Will this hero line still be running in thirty years, or is it disposable?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Is this positioning a real zag or just a zig in better clothing?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-strategy-facts — strategic substance lens"
+    },
+    {
+      "id": "n02",
+      "prompt": "Does this typography system hold together at scale?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-identity-facts — visual identity lens"
+    },
+    {
+      "id": "n03",
+      "prompt": "Does this campaign have a real Big Idea?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-advertising-facts — campaign/creative execution lens"
+    },
+    {
+      "id": "n04",
+      "prompt": "What does a council chair do during the deliberation phase?",
+      "expect": "no-trigger",
+      "comment": "owner: council-rules — the domain-neutral council mechanism, not a role lens"
+    },
+    {
+      "id": "n05",
+      "prompt": "Help me write our brand's editorial style guide from scratch.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-methodology-rules — the maker's own method, not the judge's lens"
+    },
+    {
+      "id": "n06",
+      "prompt": "Mint a new critic persona for the brand council.",
+      "expect": "no-trigger",
+      "comment": "owner: make-critic — the minting procedure; this pack is grounding it consults, not the mint itself"
+    }
+  ]
+}

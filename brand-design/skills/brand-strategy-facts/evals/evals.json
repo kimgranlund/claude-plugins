@@ -1,0 +1,68 @@
+{
+  "skill": "brand-strategy-facts",
+  "note": "Minted 2026-08-20, S5 of the brand-design council-as-platform overhaul (#828). Floor suite: routing against this pack's own trigger surface (strategy-family critic knowledge) vs. its three sibling role-family packs, council-rules, brand-methodology-rules, and make-critic.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What does a brand-strategy critic actually look for in a positioning document?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Why did the council flag this positioning as a zig dressed up as a zag?",
+      "expect": "trigger",
+      "comment": "re-judged 2026-08-20: contested in the scoped S5 blind re-judge (single-judge noise, stolen by check-brand-council once — the prompt's 'flagged by the council' framing reads as a live convene request to one judge); 2-of-3 vote confirmed brand-strategy-facts. Kept as-is per check-routing's own rule — a resolved vote is not a description defect to chase."
+    },
+    {
+      "id": "t03",
+      "prompt": "What's the bow-tie test a strategy critic runs?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "I'm minting a new brand-strategy critic — what lens gaps exist in the current roster?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "What's the difference between primary-source cultural provenance and a brand-landscape survey?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Review this typography system for coherence and scale.",
+      "expect": "no-trigger",
+      "comment": "owner: brand-identity-facts — visual identity lens, not strategy"
+    },
+    {
+      "id": "n02",
+      "prompt": "Is this copy respecting the reader, or talking down to them?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-voice-facts — copy/voice craft lens"
+    },
+    {
+      "id": "n03",
+      "prompt": "Does this campaign have a real Big Idea, or just a nice picture and some words?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-advertising-facts — campaign/creative execution lens"
+    },
+    {
+      "id": "n04",
+      "prompt": "What are the five synthesis shapes a council's findings resolve into?",
+      "expect": "no-trigger",
+      "comment": "owner: council-rules — the domain-neutral council mechanism, not a role lens"
+    },
+    {
+      "id": "n05",
+      "prompt": "How do I write a positioning territory for this brand?",
+      "expect": "no-trigger",
+      "comment": "owner: brand-methodology-rules — the maker's own method, not the judge's lens"
+    },
+    {
+      "id": "n06",
+      "prompt": "Mint a new critic persona for the brand council.",
+      "expect": "no-trigger",
+      "comment": "owner: make-critic — the minting procedure; this pack is grounding it consults, not the mint itself"
+    }
+  ]
+}

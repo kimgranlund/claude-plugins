@@ -139,6 +139,26 @@
       "banned_aliases": []
     },
     {
+      "canonical": "brand-advertising",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "brand-identity",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "brand-strategy",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "brand-voice",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "bug",
       "plural": "bugs",
       "banned_aliases": []
