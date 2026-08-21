@@ -1,19 +1,13 @@
 ---
 name: make-council
 description: >
-  Stand up a NEW council instance end-to-end for a domain that doesn't have one yet: domain intake
-  (what's being judged, which role families the roster needs), the roster's file home under the new
-  council's own skill directory, sub-council groupings, chair wiring (reusing `council-marshal`'s
-  already-generic contract, or patterning a new critic-shell agent off `brand-judge`), a calibration
-  seed, and both run modes (full Agent-tool fan-out + Project sequential persona simulation). Cites
-  `council-rules` for every mechanic; never restates it. Use for "stand up a new council for X",
-  "make a council that reviews Y", "give me an adversarial critic panel for Z", "I need a council
-  like check-brand-council but for a different domain". NOT convening an already-existing council
-  instance (that instance's own `check-<domain>-council` skill); NOT minting one critic inside an
-  EXISTING council (`make-critic`); NOT the council mechanism itself (`council-rules`); NOT a
-  generic multi-agent team (`teamwork:fleet-rules` — a council is a specific adversarial blind-then-
-  deliberation panel shape, not a generic coordination pattern); NOT a generic subagent
-  (`harness:make-agent`).
+  Stand up a NEW council instance for a domain with none yet: domain intake, roster home,
+  sub-council groupings, chair wiring (reuse `council-marshal`; pattern a new critic-shell agent off
+  `brand-judge`), a calibration seed, both run modes. Cites `council-rules`; never restates it. Use
+  for "stand up a new council for X", "make a council that reviews Y", "give me a critic panel for
+  Z", "I need a council like check-brand-council but for a different domain". NOT convening an
+  existing council; NOT minting one critic inside one (`make-critic`); NOT the council mechanism
+  (`council-rules`); NOT a generic team or subagent (`teamwork:fleet-rules`, `harness:make-agent`).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[domain name] [what's being judged]"
@@ -43,11 +37,12 @@ diffs"`, `product-copy "marketing landing pages"`.
      sub-councils at all (state that explicitly rather than inventing a split with one member).
    - **Minimum viable roster size** — `council-rules`' `references/roster-and-personas.md` fixes no
      number; as a floor, a sub-council needs enough members that a 2-of-3 contested-finding vote
-     (`references/severity-and-voting.md`) is even possible within that sub-council OR a documented
-     fallback to a cross-sub-council third opinion.
+     (council-rules' `references/severity-and-voting.md`) is even possible within that sub-council OR
+     a documented fallback to a cross-sub-council third opinion.
 2. **Mint the new convening skill — the domain's own action-twin of `council-rules`, mirroring
    `check-brand-council`'s own dual role (roster home + orchestrator + convening surface, all one
-   file).** New skill directory: `<domain>-council` or `check-<domain>-council` (pick the name that
+   file).** New skill directory: `domain-council` or `check-domain-council` (substitute the actual
+   domain name; pick whichever form actually resolves against
    actually resolves against the naming manifest's ObjectVocab — run the estate's naming validator
    before committing to a name, never assume). Its SKILL.md:
    - States the domain's own Roster table (sub-council → member handles), its own trust-boundary

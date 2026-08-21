@@ -23,6 +23,11 @@
       "expect": "trigger"
     },
     {
+      "id": "t05",
+      "prompt": "We need an adversarial panel for grading onboarding flows — nothing like it exists yet, set one up.",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "Convene the brand council on this positioning brief.",
       "expect": "no-trigger",

@@ -1,17 +1,13 @@
 ---
 name: make-critic
 description: >
-  Mint a NEW critic persona end-to-end for a council: draft the persona file (stance/posture voice,
-  themed prompt sets, an untrusted-material section citing the critic-shell agent's severity
-  convention rather than restating it), apply the `.name-map.md` attribution discipline, register
-  the persona in the owning council's roster + sub-council groupings, seed one calibration fixture,
-  and route the new file through a fresh-context checker before it seats. Use for "mint a critic",
-  "add a new critic persona to the council", "create a critic for X lens", "give the council a
-  voice on Y", "write a new brand-council persona". NOT convening an existing council
-  (`check-brand-council`); NOT the council mechanism itself (`council-rules`); NOT standing up a
-  whole new council instance (`make-council`); NOT a generic subagent file
-  (`harness:make-agent` — a critic is a persona-inlined prompt fanned out through an existing
-  critic-shell agent, never a standalone dispatched agent of its own).
+  Mint a NEW critic persona for a council: draft the persona file (stance/posture, prompt sets, a
+  severity section citing the critic-shell agent, never restating it), apply the `.name-map.md`
+  attribution discipline, register it in the roster + sub-councils, seed a calibration fixture, and
+  checker-pass it before it seats. Use for "mint a critic", "add a new critic persona", "create a
+  critic for X lens", "write a new brand-council persona". NOT convening an existing council
+  (`check-brand-council`); NOT the council mechanism (`council-rules`); NOT a whole new council
+  (`make-council`); NOT a generic subagent (`harness:make-agent`).
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[council] [critic handle] [lens/domain the critic embodies]"
@@ -69,8 +65,8 @@ Parse `$ARGUMENTS` as `[council] [critic handle] [lens/domain]`:
    `check-brand-council`'s SKILL.md), under the sub-council the lens belongs to — or propose a new
    sub-council grouping, named explicitly, if the lens doesn't fit an existing one (never silently
    folded into the nearest group). Save the persona file at
-   `<council-skill>/references/critics/critic-<handle>.md`, matching the existing 14 files' own
-   path convention exactly.
+   `references/critics/critic-<handle>.md` under the target council's own skill directory,
+   matching the existing 14 files' own path convention exactly.
 6. **Seed one calibration fixture.** A brief new-critic proof, per `council-rules`' `references/
    calibration-discipline.md`'s "a new phase earns its own fixture" principle applied at persona
    granularity: one short artifact planting the ONE defect this critic's lens exists to catch, plus
@@ -84,7 +80,10 @@ Parse `$ARGUMENTS` as `[council] [critic handle] [lens/domain]`:
    edit invariant), so it earns the same independent pass as a SKILL.md or agent body. Dispatch
    `harness:wording-checker`, unnamed, sealed with the new persona file's full text plus one
    existing sibling persona for comparison — never self-graded by this procedure. A FAIL routes
-   back to step 3, never seats a persona a checker rejected.
+   back to step 3, never seats a persona a checker rejected. `harness` not installed in the current
+   plugin set (Full mode, filesystem reachable) → disclose a self-review in its place explicitly as
+   non-independent, and mark the persona provisionally seated pending a real pass once `harness` is
+   available — never silently treat the self-review as equivalent to the real dispatch.
 8. **Report.** The persona file's path, the roster row added (or the new sub-council proposed),
    the `.name-map.md` entry made (never its contents — that file stays gitignored and out of any
    report), the calibration fixture's location and promotion state, and the checker verdict.

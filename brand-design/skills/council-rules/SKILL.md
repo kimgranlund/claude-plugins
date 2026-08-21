@@ -6,11 +6,8 @@ description: >
   and the load-bearing two-phase model (blind, then chair-moderated deliberation). Use for the
   MECHANISM itself — "what makes something a council instead of a single reviewer", "why does
   blind fan-out run before deliberation", "how does 2-of-3 voting work", "what are the five
-  synthesis shapes", "what a council chair does and doesn't do". NOT convening a council now (the
-  domain action-twin does — `check-brand-council`); NOT minting a new critic persona
-  (`make-critic`) or standing up a whole new council instance (`make-council`) — both cite this
-  pack for every shared mechanic rather than restating it, the same discipline
-  `check-brand-council` already follows.
+  synthesis shapes", "what a council chair does and doesn't do". NOT convening one now
+  (`check-brand-council`); NOT minting a critic or a new instance (`make-critic`/`make-council`).
 disable-model-invocation: false
 user-invocable: true
 ---
