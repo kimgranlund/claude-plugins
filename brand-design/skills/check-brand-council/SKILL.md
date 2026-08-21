@@ -5,10 +5,10 @@ description: >
   sub-council (strategy/design/voice/full), severity-classified findings, cross-critic synthesis
   to one verdict, plus an optional chair-moderated deliberation round where critics cross-examine
   each other's findings. Use for "convene the brand council", "get the critics on this", "run the
-  design/voice/strategy sub-council", "what would Luke S. say about this", "have the critics
-  deliberate on this". NOT rubric scoring (`check-brand-rubric`); NOT the Muse/voice seats
-  (`muse-agent`/`brand-writer`); NOT corpus organizing (`brand-corpus`); NOT the council mechanism
-  itself (`council-rules`).
+  design/voice sub-council", "what would Luke S. say about this", "have the critics deliberate on
+  this". NOT rubric scoring (`check-brand-rubric`); NOT the Muse/voice seats
+  (`muse-agent`/`brand-writer`); NOT corpus organizing (`brand-corpus`); NOT the mechanism
+  (`council-rules`); NOT minting critics or new councils (`make-critic`/`make-council`).
 argument-hint: "[strategy|design|voice|full] [artifact] [--deliberate]"
 disable-model-invocation: false
 user-invocable: true

@@ -1,6 +1,6 @@
 {
   "skill": "check-brand-council",
-  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Updated 2026-08-20, S3 of the council-as-platform overhaul (#826): now an instance of council-rules' general machinery, gains a --deliberate phase-2 round via council-marshal (t07/t08) and a reciprocal fence against council-rules itself (n05). Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
+  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Updated 2026-08-20, S3 of the council-as-platform overhaul (#826): now an instance of council-rules' general machinery, gains a --deliberate phase-2 round via council-marshal (t07/t08) and a reciprocal fence against council-rules itself (n05). Updated 2026-08-21, S4 (#827): reciprocal fences against the two new minting procedures, make-critic (n06) and make-council (n07). Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
   "cases": [
     {
       "id": "t01",
@@ -71,6 +71,18 @@
       "prompt": "Why does a council's blind phase have to run before its deliberation phase?",
       "expect": "no-trigger",
       "comment": "owner: council-rules (the mechanism's own rationale, not a live convene request)"
+    },
+    {
+      "id": "n06",
+      "prompt": "Mint a new critic persona for the design sub-council.",
+      "expect": "no-trigger",
+      "comment": "owner: make-critic (minting a NEW critic, not convening the existing roster)"
+    },
+    {
+      "id": "n07",
+      "prompt": "Stand up a brand-new council instance for reviewing marketing landing pages.",
+      "expect": "no-trigger",
+      "comment": "owner: make-council (a whole new council instance for a different domain)"
     }
   ]
 }

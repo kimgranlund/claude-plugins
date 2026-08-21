@@ -79,6 +79,42 @@ hand off to.
 
 ---
 
+v0.5.0 · 2026-08-21 · S4 minting (`#827`, wave 2 of the council-as-platform overhaul): NEW
+procedure `make-critic` — mints one new critic persona end to end (persona template grounded in
+the 14 existing `check-brand-council` files as worked examples; the `.name-map.md` gitignored
+real-practitioner attribution discipline gains its canonical documented home here; roster + sub-
+council registration; a calibration fixture; a mandatory fresh-context `harness:wording-checker`
+pass before a persona seats); NEW procedure `make-council` — stands up a whole new council
+instance (domain intake, the new instance's own roster file home mirroring `check-brand-council`'s
+layout, sub-council groupings, chair wiring that REUSES `council-marshal` unchanged by default —
+its input contract already parameterizes the critic-shell agent by name — a new critic-shell agent
+patterned off `brand-judge`'s structure, a calibration seed, both run modes); both new procedures
+cite `council-rules` for every shared mechanic throughout, never restating it, and reciprocally
+fence against each other, `council-rules`, `check-brand-council`, and `harness:make-agent`
+(a critic is a persona-inlined prompt fanned out through an existing critic-shell agent, never a
+standalone dispatched agent of its own) — `council-rules`' own description retires its "forthcoming
+make-council/make-critic" forward reference now that both exist. `critic` registered in the root
+`naming.manifest.json` ObjectVocab (anti-ambiguity checked against every existing lexicon —
+no collision) so `make-critic`'s own name conforms as a new mint (ADR-0011 D8). **`muse`
+RoleLex registration — attempted, found structurally blocked, NOT landed:** the ticket's own
+ask (register `muse` in RoleLex so `muse-agent`'s exemption retires, 0 errors, no rename) is
+mechanically unreachable as specified — verified empirically against
+`authorkit:naming-audit`'s validator two ways: (1) `muse` is already a registered `ObjectVocab`
+canonical (load-bearing for `make-brand-muse`'s own name resolution), so adding it to `RoleLex`
+violates ADR-0015 D3's RoleLex/ObjectVocab disjointness invariant outright; (2) independent of
+(1), the orchestrator `{scope}-{role}` production requires a scope token before the role
+(`authorkit/skills/naming-conventions/references/GRAMMAR.md`: "A bare RoleLex word with no scope
+token still fails — the production always requires `{scope}-{role}`, never a bare role") —
+`muse-agent`'s residue is the single bare token `muse`, which can never satisfy that production
+regardless of RoleLex membership. `authorkit:manifest-authoring`'s own procedure additionally bars
+retiring an exemption "only when the corresponding rename has landed" — no rename runs under this
+ticket's own kill-switch ruling. The exemption stays standing (55 unchanged, `muse-agent` still
+`[EXMPT]`); this is named as a discovered blocker for Kim's call (a follow-up rename ticket, e.g.
+`brand-muse` or `brand-muse-agent`, vs. leaving the exemption under D8's grandfather clause
+permanently) rather than silently forced through or silently dropped. Evals updated on
+`make-critic`/`make-council` (fresh suites) and on `council-rules`/`check-brand-council`
+(reciprocal no-trigger cases added). Semantic changes throughout — minor bump.
+
 v0.4.0 · 2026-08-20 · S3 council generalization (`#826`, wave 2 of the council-as-platform
 overhaul): NEW knowledge pack `council-rules` — the domain-neutral council machinery (roster/
 persona contract, sub-councils, blind fan-out mechanics, severity taxonomy + 2-of-3 voting, the
