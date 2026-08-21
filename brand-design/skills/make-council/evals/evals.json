@@ -1,6 +1,6 @@
 {
   "skill": "make-council",
-  "note": "Minted 2026-08-20/21, S4 of the brand-design council-as-platform overhaul (#827). Floor suite: routing against standing up a whole NEW council instance vs. convening an already-existing one, minting one critic inside an existing council (make-critic), the council mechanism itself (council-rules), a generic multi-agent team (teamwork:fleet-rules), and harness's generic subagent forge (make-agent).",
+  "note": "Minted 2026-08-20/21, S4 of the brand-design council-as-platform overhaul (#827). Floor suite: routing against standing up a whole NEW council instance vs. convening an already-existing one, minting one critic inside an existing council (make-critic), the council mechanism itself (council-rules), a generic multi-agent team (teamwork:fleet-rules), and harness's generic subagent forge (make-agent). Updated 2026-08-21, council role agents (#840): description gains the role→agent mapping section and per-sub-council role-agent minting (pattern off council-strategy-agent) as part of the same 'stand up a new council' action — the trigger surface itself (a whole NEW instance) is unchanged, so no new/changed cases; council-marshal mentions renamed to council-chair-agent throughout (mechanical).",
   "cases": [
     {
       "id": "t01",

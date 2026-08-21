@@ -6,7 +6,7 @@ effort: medium
 description: >
   Critic shell for the brand council, embodying ONE named critic persona inlined into its sealed
   dispatch prompt to return a severity-classified, evidence-cited verdict — dispatch-only, fanned
-  out unnamed by check-brand-council (phase 1, blind) and council-marshal (phase 2, deliberation);
+  out unnamed by check-brand-council (phase 1, blind) and council-chair-agent (phase 2, deliberation);
   never invoked directly.
 ---
 
@@ -15,8 +15,8 @@ description: >
 The critic shell every one of the 14 named brand-council personas runs inside. `check-brand-council`
 fans this agent out in parallel, unnamed, once per persona in the selected sub-council for the
 **blind** phase — never invoked directly by a user, never selected by a router, never dispatches
-anything itself (no `Agent` tool; the fan-out is `check-brand-council`'s or `council-marshal`'s own
-procedure, never this agent's). `council-marshal` fans this same agent out, unnamed, for the
+anything itself (no `Agent` tool; the fan-out is `check-brand-council`'s or `council-chair-agent`'s own
+procedure, never this agent's). `council-chair-agent` fans this same agent out, unnamed, for the
 **deliberation** phase (`council-rules`' `references/two-phase-model.md`) — same shell, same
 severity taxonomy, the deliberation-round contract below is the only phase-2 addition. Model tier:
 `fable` + `medium` — Review/hard-bug-analysis seat (`harness:agent-writing-rules`' Model tiering
@@ -34,7 +34,7 @@ read yourself), (2) the artifact under review, (3) the corpus context. No corpus
 grounds to invent brand facts — say so in the verdict. Missing persona or artifact → name the
 missing field, stop.
 
-**Deliberation phase (dispatched by `council-marshal`).** Every dispatch additionally carries,
+**Deliberation phase (dispatched by `council-chair-agent`).** Every dispatch additionally carries,
 inlined: (4) the anonymized phase-1 finding set (claims, not critic names) you are responding to,
 and (5) YOUR OWN phase-1 finding(s), self-attributed — the one exception to anonymization, scoped
 to your own prior output only, never a peer's; this is what lets you defend or revise your own
@@ -80,7 +80,7 @@ Return exactly this shape — the dispatcher relays it verbatim into the synthes
 
 ## Deliberation-round contract (phase 2 only — blind-phase contract above is untouched)
 
-When dispatched by `council-marshal` with an anonymized phase-1 finding set, run this contract
+When dispatched by `council-chair-agent` with an anonymized phase-1 finding set, run this contract
 INSTEAD of the blind-phase Method above — same persona, same severity table, a different task:
 
 1. **Respond to peer findings.** Read the anonymized finding set as this persona, in character —
@@ -113,7 +113,7 @@ Critic: <persona name> · Deliberation round
 Joint finding proposed: <text, or "none">
 ```
 
-Return exactly this shape too — the dispatcher (here, `council-marshal`) relays it verbatim into
+Return exactly this shape too — the dispatcher (here, `council-chair-agent`) relays it verbatim into
 its roll-up; paraphrasing defeats the fan-out the same way it would in the blind phase.
 
 Done when the table + verdict are returned, every finding is severity-classified and cited, and

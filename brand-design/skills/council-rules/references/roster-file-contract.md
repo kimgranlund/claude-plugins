@@ -77,13 +77,50 @@ contested finding, never one of the three votes cast to resolve a peer's — and
 whatever adversarial-calibration floor a domain instance's own severity section states (e.g. a
 "push for ≥1 Critical + 2 Major" convention): advisory never gates the verdict, it only informs it.
 
+## `## Role agents` — the second required section
+
+A second required section, alongside `## Groups`, names which addressable **role agent**
+(`role-agents.md` — concept and convene semantics, cited not restated) an external caller
+dispatches for each council role: the Chair, plus one per **ordinary** sub-council.
+
+```
+## Role agents
+
+- chair: council-chair-agent
+- strategy: council-strategy-agent
+- design: council-design-agent
+- voice: council-voice-agent
+- creative: council-creative-agent
+```
+
+- **Keys** — the literal `chair`, plus one row per ordinary sub-council, using the exact same
+  lowercase tokens the `sub-councils` column and the `## Groups` `leads:` entry already use. The
+  set of ordinary sub-councils this section may name is exactly the set of keys the `leads:` entry
+  declares (`## Groups`, above) — a sub-council present in one but not the other is a schema
+  mismatch. **`full` and `advisory` are never keys here** — the same reservation
+  `role-agents.md`'s "reserved-name rule" states, applied to this section: neither has a role agent
+  of its own.
+- **Value** — the agent's `name:` handle (e.g. `council-strategy-agent`), resolved against that
+  handle's own file, `agents/<handle>.md`, **under the council skill's own plugin root** (a sibling
+  of the plugin's `skills/` directory, never a path written here) — a handle with no matching file
+  is a **dangling handle: FAIL**.
+- **A role with no row at all is legal but surfaced** — an addressable seat nobody has minted yet
+  (a hand-authored roster.md predating this section, or a domain instance that deliberately hasn't
+  wired one role's agent) is reported as a **named WARNING**, never a FAIL — the same severity a
+  `VACANT` lead already gets in `## Groups`, never blocking the check.
+- A row naming `advisory` (or any value other than `chair` or a declared ordinary sub-council) as
+  its key is a **FAIL** — the reserved-name rule is mechanically enforced here, not just stated in
+  prose.
+
 ## Bijection & mechanical validation
 
 This plugin's `scripts/roster_check.py` (selftest-carrying, per this workspace's semantic-edit
 invariant for bundled scripts) is the exit-code proof — invoked as
 `roster_check.py <council-skill-dir>` (the council's own skill directory, e.g.
 `check-brand-council`; never the `roster.md` path itself), it validates that directory's
-`references/roster.md` against its `references/critics/` directory:
+`references/roster.md` against its `references/critics/` directory, and its `## Role agents`
+section against that instance's own `agents/` directory (the council skill's plugin root, e.g.
+`brand-design/agents/`):
 
 - handle ↔ persona-file bijection (both directions),
 - every row's `sub-councils` cell is non-empty,
@@ -95,13 +132,23 @@ invariant for bundled scripts) is the exit-code proof — invoked as
 - the `advisory`↔`advisor` pairing holds exactly: a row naming `advisory` in `sub-councils` but not
   `role: advisor` fails, and a `role: advisor` row whose `sub-councils` is anything other than
   exactly `advisory` fails.
+- every `## Role agents` value resolves to a real `agents/<handle>.md` file under the council's
+  own plugin root — a dangling handle fails; a role (`chair` or a declared ordinary sub-council)
+  with no `## Role agents` row at all warns; a row keyed to `advisory`, or to anything that is
+  neither `chair` nor a `leads:`-declared ordinary sub-council, fails.
 
 A `VACANT` slot in ANY `## Groups` entry (not only `leads`) is reported as a **named warning**, not
-a failure — an unfilled seat is a fact to surface, never a defect that blocks the check. A
-zero-member `advisory` sub-council is reported as
-a **named INFO line** — narrower than a warning, since it is the reserved sub-council's normal
-steady state, not a gap anyone needs to fill — never a warning and never a failure. Everything else
-above fails the check on violation.
+a failure — an unfilled seat is a fact to surface, never a defect that blocks the check. **An
+ordinary sub-council with zero seated active critics** (declared via a `leads:` entry — e.g. a
+newly-declared `creative` sub-council nobody has minted into yet) is reported at the **same WARNING
+severity as a `VACANT` lead** — an empty bench is exactly that: an unfilled seat, not a defect,
+mirroring the vacant-lead convention rather than inventing a new severity for it. This is distinct
+from `advisory`'s own empty-is-normal case, one tier lower: `advisory` is RESERVED and legitimately
+never seeded by the plugin itself (INFO, the quietest tier), where an ordinary sub-council is
+expected to fill eventually and its emptiness is worth a WARNING's visibility. A zero-member
+`advisory` sub-council is reported as a **named INFO line** — narrower than a warning, since it is
+the reserved sub-council's normal steady state, not a gap anyone needs to fill — never a warning and
+never a failure. Everything else above fails the check on violation.
 
 ## Why a data edit, not a semantic edit
 
@@ -116,8 +163,11 @@ statement, etc.) still earns the checker pass it always did.
 ## What a domain instance supplies vs. inherits
 
 Same split `roster-and-personas.md` already states, sharpened for the file itself: the roster
-**content** (which handles, which sub-councils, who leads, what groups exist, and whether any
-`advisory` seats are filled yet) is the domain instance's own data in its own `roster.md`; the
-**schema** above — column set, the `full` and `advisory` reservations, the `advisor` role's voting
-exclusion, the bijection, the `VACANT`/zero-advisor-is-not-a-failure conventions — is this pack's
-machinery, cited by every instance's SKILL.md, never restated as a second copy of the rules.
+**content** (which handles, which sub-councils, who leads, what groups exist, whether any
+`advisory` seats are filled yet, and which agent handles which role) is the domain instance's own
+data in its own `roster.md`; the **schema** above — column set, the `full` and `advisory`
+reservations, the `advisor` role's voting exclusion, the bijection, the `VACANT`/
+zero-advisor-is-not-a-failure conventions, and the `## Role agents` section's own shape and
+reserved-name enforcement — is this pack's machinery, cited by every instance's SKILL.md, never
+restated as a second copy of the rules. What a role agent actually IS and does when dispatched is
+`role-agents.md`'s own axis, cited from here rather than restated.

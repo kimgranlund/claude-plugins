@@ -1,6 +1,6 @@
 # Council rules — reference index
 
-7 axes, 7 files. Grep the term first, then Read the matching section — these are catalogs, not a
+8 axes, 8 files. Grep the term first, then Read the matching section — these are catalogs, not a
 linear read. Every file below appears in the top-level skill file's consult table; every
 consult-table row names a real file here.
 
@@ -9,6 +9,9 @@ brand-design "council-as-platform" overhaul, `#826`) — the brand instance's fa
 voting/synthesis logic already existed; this pack extracts the domain-neutral shape of it once so
 `check-brand-council` becomes a configuration of this machinery instead of the machinery's only
 copy, and so the forthcoming `make-council`/`make-critic` (S4) have something to mint against.
+**Role agents axis added 2026-08-21 (`#840`):** one addressable agent per council role, generalized
+from the same brand instance now that `council-chair-agent` (renamed from `council-marshal`) and
+four lens conveners exist as its worked reference.
 
 ## Roster & personas
 
@@ -43,3 +46,11 @@ copy, and so the forthcoming `make-council`/`make-critic` (S4) have something to
 
 - `two-phase-model.md` — blind first, deliberation second: the anchoring/groupthink rationale for
   the order, the chair's collection contract, the Project single-context degraded mode
+
+## Role agents
+
+- `role-agents.md` — one addressable agent per council role (Chair + one per ordinary sub-council):
+  what makes it different from a dispatch-only critic shell, its scoped phase-1-only convene
+  semantics, the empty-bench clean-stop case, and the `full`/`advisory` reserved-name rule (the
+  data-file mapping-section shape itself is `roster-file-contract.md`'s own axis, cited not
+  duplicated here)

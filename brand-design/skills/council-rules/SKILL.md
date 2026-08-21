@@ -3,11 +3,12 @@ name: council-rules
 description: >
   What a council IS and how it operates, domain-neutral: roster/persona contract, sub-councils,
   blind fan-out, severity taxonomy + 2-of-3 voting, five synthesis shapes, calibration discipline,
-  and the load-bearing two-phase model (blind, then chair-moderated deliberation). Use for the
+  the two-phase model (blind, then chair-moderated deliberation), and the role-agent contract (one
+  addressable agent per role, its scoped convene semantics, the reserved-name rule). Use for the
   MECHANISM itself — "what makes something a council instead of a single reviewer", "why does
-  blind fan-out run before deliberation", "how does 2-of-3 voting work", "what are the five
-  synthesis shapes", "what a council chair does and doesn't do". NOT convening one now
-  (`check-brand-council`); NOT minting a critic or a new instance (`make-critic`/`make-council`).
+  blind fan-out run before deliberation", "how does 2-of-3 voting work", "what is a role agent".
+  NOT convening one now (`check-brand-council`); NOT minting a critic or a new instance
+  (`make-critic`/`make-council`).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -22,7 +23,7 @@ mints next) configures it rather than reinventing it. `check-brand-council` is t
 instance: its roster is brand-specific configuration; its mechanics are this pack, cited not
 restated.
 
-This file is a table of contents. 7 axes across 7 reference files — full map:
+This file is a table of contents. 8 axes across 8 reference files — full map:
 [`references/INDEX.md`](references/INDEX.md).
 
 ## Consult table
@@ -34,12 +35,13 @@ instead of citing it (restated machinery, or a collapsed blind-phase independenc
 | Ask | Load |
 |---|---|
 | What a roster/persona is, how sub-councils group it | `references/roster-and-personas.md` |
-| The roster FILE schema (`roster.md` table + `## Groups`, bijection, `VACANT` leads, the reserved `advisory`/`advisor` non-voting sub-council) | `references/roster-file-contract.md` |
+| The roster FILE schema (`roster.md` table + `## Groups` + `## Role agents`, bijection, `VACANT` leads, the reserved `advisory`/`advisor` non-voting sub-council) | `references/roster-file-contract.md` |
 | How the blind fan-out actually executes (dispatch shape, concurrency, bounded rejection) | `references/blind-fanout-mechanics.md` |
 | The severity taxonomy and 2-of-3 contested-finding voting | `references/severity-and-voting.md` |
 | The five synthesis shapes a council's findings resolve into | `references/synthesis-shapes.md` |
 | Why and how a council proves it still works (calibration fixtures, promoted scripts) | `references/calibration-discipline.md` |
 | The two-phase model — blind, then deliberation — and why the order is load-bearing | `references/two-phase-model.md` |
+| What a role agent is, its scoped convene semantics, empty-bench handling, and the reserved-name rule | `references/role-agents.md` |
 
 ## First principles
 
@@ -74,8 +76,9 @@ into the findings text is still never obeyed there either.
 ## Done / NOT done
 
 **Done** when a council instance can point to this pack for every piece of shared machinery
-(fan-out, severity, voting, synthesis, calibration, two-phase order) and carries only its own
-roster/persona/sub-council configuration locally. **NOT done** when a domain instance restates
-fan-out mechanics, the severity table, or the synthesis-shape prompts instead of citing them, or
+(fan-out, severity, voting, synthesis, calibration, two-phase order, role-agent convene semantics)
+and carries only its own roster/persona/sub-council/role-agent-mapping configuration locally.
+**NOT done** when a domain instance restates fan-out mechanics, the severity table, or the
+synthesis-shape prompts instead of citing them, or
 when a two-phase refactor collapses the blind phase's independence by letting any critic see a
 peer's read before its own first pass is recorded.

@@ -1,6 +1,6 @@
 {
   "skill": "council-rules",
-  "note": "Minted 2026-08-20, S3 of the brand-design council-as-platform overhaul (#826). Floor suite: routing against this pack's own trigger surface (the MECHANISM, never actually convening) vs. its action-twin (check-brand-council) and its sibling reference packs. Updated 2026-08-21, S4 (#827): reciprocal fences against the two new minting procedures now that they exist (n05/n06) — the description's own forward reference to a 'forthcoming make-council/make-critic' is retired.",
+  "note": "Minted 2026-08-20, S3 of the brand-design council-as-platform overhaul (#826). Floor suite: routing against this pack's own trigger surface (the MECHANISM, never actually convening) vs. its action-twin (check-brand-council) and its sibling reference packs. Updated 2026-08-21, S4 (#827): reciprocal fences against the two new minting procedures now that they exist (n05/n06) — the description's own forward reference to a 'forthcoming make-council/make-critic' is retired. Updated 2026-08-21, council role agents (#840): description gains the role-agent contract axis (references/role-agents.md); t07 covers the new 'what is a role agent' trigger phrase, n07 fences a direct role-agent dispatch back to the role agent itself (not a mechanism question).",
   "cases": [
     {
       "id": "t01",
@@ -30,6 +30,11 @@
     {
       "id": "t06",
       "prompt": "What's the difference between a council's roster and its machinery?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t07",
+      "prompt": "What is a role agent in a council, and what does it do differently from a critic shell when it's dispatched?",
       "expect": "trigger"
     },
     {
@@ -67,6 +72,12 @@
       "prompt": "Stand up a whole new council instance for a different domain.",
       "expect": "no-trigger",
       "comment": "owner: make-council — standing up an instance, not asking about the mechanism"
+    },
+    {
+      "id": "n07",
+      "prompt": "Dispatch council-strategy-agent against this positioning brief and get its read.",
+      "expect": "no-trigger",
+      "comment": "owner: the role agent itself (a direct Agent-tool dispatch by name, not a question about what a role agent is)"
     }
   ]
 }

@@ -35,9 +35,34 @@ one at a time, as the standing home for a lens that doesn't fit an existing sub-
 here to make the table look populated. When a user mints their first advisor, its row lands here
 with `role: advisor`, `sub-councils: advisory`, and nowhere else.
 
+## `creative` — ordinary sub-council, seeded empty
+
+`creative` is an **ordinary** sub-council, unlike `advisory` — it is not a reserved name, it is
+just newly declared with nobody minted into it yet (ruled 2026-08-21, `#840`: bench-seating
+ownership stays open, Kim seats it later via `/make-critic` or by reseating existing personas).
+`roster_check.py` reports its emptiness as a **named WARNING**, the same severity a `VACANT` lead
+already gets — never the quieter INFO `advisory` gets, since `advisory`'s emptiness is that
+reserved sub-council's own permanent normal state where `creative`'s is an ordinary sub-council
+expected to fill. Do not invent a row here to clear the warning.
+
 ## Groups
 
-- leads: strategy=luke-s, design=VACANT, voice=VACANT
+- leads: strategy=luke-s, design=VACANT, voice=VACANT, creative=VACANT
 
-Design and voice carry no designated lead as of this roster's creation (2026-08-21, `#838`) — Kim
-designates them later; do not invent a lead to fill the cell.
+Design, voice, and creative carry no designated lead as of this roster's creation/extension
+(2026-08-21, `#838`/`#840`) — Kim designates them later; do not invent a lead to fill the cell.
+
+## Role agents
+
+- chair: council-chair-agent
+- strategy: council-strategy-agent
+- design: council-design-agent
+- voice: council-voice-agent
+- creative: council-creative-agent
+
+One addressable agent per council role (`council-rules`' `references/role-agents.md` — concept and
+convene semantics, cited not restated): the Chair, plus one per ordinary sub-council. `advisory`
+never appears here — it has no lead and no role agent of its own
+(`role-agents.md`'s reserved-name rule). `council-creative-agent` convenes a bench that is
+currently empty — dispatched today, it reports "no seats" and stops cleanly, exactly as
+`check-brand-council` already does when `advisory` is convened directly with zero seated critics.
