@@ -87,10 +87,10 @@ dispatches for each council role: the Chair, plus one per **ordinary** sub-counc
 ## Role agents
 
 - chair: council-chair-agent
-- strategy: council-strategy-agent
-- design: council-design-agent
-- voice: council-voice-agent
-- creative: council-creative-agent
+- strategy: strategy-convener
+- design: design-convener
+- voice: voice-convener
+- creative: creative-convener
 ```
 
 - **Keys** — the literal `chair`, plus one row per ordinary sub-council, using the exact same
@@ -100,7 +100,7 @@ dispatches for each council role: the Chair, plus one per **ordinary** sub-counc
   mismatch. **`full` and `advisory` are never keys here** — the same reservation
   `role-agents.md`'s "reserved-name rule" states, applied to this section: neither has a role agent
   of its own.
-- **Value** — the agent's `name:` handle (e.g. `council-strategy-agent`), resolved against that
+- **Value** — the agent's `name:` handle (e.g. `strategy-convener`), resolved against that
   handle's own file, `agents/<handle>.md`, **under the council skill's own plugin root** (a sibling
   of the plugin's `skills/` directory, never a path written here) — a handle with no matching file
   is a **dangling handle: FAIL**.

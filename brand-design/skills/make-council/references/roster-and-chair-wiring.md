@@ -54,7 +54,7 @@ model/tool tier" to the domain instance, per its own "what a domain instance sup
    is a genuinely new prompt-carrying artifact, not a citation of an existing one, so it earns the
    full independent pass `brand-judge` itself already received when it was authored.
 
-## Role-agent wiring — a second per-instance agent family, patterned off `council-strategy-agent`
+## Role-agent wiring — a second per-instance agent family, patterned off `strategy-convener`
 
 A council instance needs a critic-shell agent (above) AND a separate agent family: one **role
 agent** per ordinary sub-council, the addressable external seat `council-rules`'
@@ -66,7 +66,7 @@ per-instance configuration for the same underlying reason (`council-rules` never
 agent family as its own shared machinery — it explicitly leaves both to the domain instance), but
 they are minted, checked, and reasoned about separately.
 
-**Why `council-strategy-agent` is the pattern source, not a new invention:** it is brand's own
+**Why `strategy-convener` is the pattern source, not a new invention:** it is brand's own
 first worked instance of this agent family — read it end to end and nowhere does it mention brand
 beyond its own domain noun (`strategy`) and the `check-brand-council`/`brand-judge` names it cites
 as the roster/critic-shell it wraps. Copying its structure for a new domain is the same
@@ -75,7 +75,7 @@ agent family.
 
 ### Practical wiring checklist — one role agent per ordinary sub-council
 
-1. Copy `council-strategy-agent`'s frontmatter and body structurally: `tools: Read, Grep, Glob,
+1. Copy `strategy-convener`'s frontmatter and body structurally: `tools: Read, Grep, Glob,
    Agent`, `model: sonnet`, `effort: medium` (the same bounded collection-and-roll-up tier as
    `council-chair-agent` — this agent orchestrates, it never itself judges) unless the new domain's
    convene job is demonstrably heavier, stated explicitly if so.

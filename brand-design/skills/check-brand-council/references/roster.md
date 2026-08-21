@@ -56,14 +56,14 @@ addition). `creative` carries no designated lead — its bench itself is VACANT 
 ## Role agents
 
 - chair: council-chair-agent
-- strategy: council-strategy-agent
-- design: council-design-agent
-- voice: council-voice-agent
-- creative: council-creative-agent
+- strategy: strategy-convener
+- design: design-convener
+- voice: voice-convener
+- creative: creative-convener
 
 One addressable agent per council role (`council-rules`' `references/role-agents.md` — concept and
-convene semantics, cited not restated): the Chair, plus one per ordinary sub-council. `advisory`
-never appears here — it has no lead and no role agent of its own
-(`role-agents.md`'s reserved-name rule). `council-creative-agent` convenes a bench that is
+convene semantics, cited not restated): the Chair, plus one convener per ordinary sub-council.
+`advisory` never appears here — it has no lead and no role agent of its own
+(`role-agents.md`'s reserved-name rule). `creative-convener` convenes a bench that is
 currently empty — dispatched today, it reports "no seats" and stops cleanly, exactly as
 `check-brand-council` already does when `advisory` is convened directly with zero seated critics.

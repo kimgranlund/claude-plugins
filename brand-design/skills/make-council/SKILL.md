@@ -3,7 +3,7 @@ name: make-council
 description: >
   Stand up a NEW council instance for a domain with none yet: domain intake, roster home + its
   role→agent mapping, sub-council groupings, chair wiring (reuse `council-chair-agent`; a critic
-  shell off `brand-judge`; one role agent per sub-council off `council-strategy-agent`), a
+  shell off `brand-judge`; one role agent per sub-council off `strategy-convener`), a
   calibration seed, both run modes. Cites `council-rules`; never restates it. Use for "stand up a
   new council for X", "make a council that reviews Y", "I need a council like check-brand-council
   but for a different domain". NOT convening an existing council; NOT minting one critic inside one
@@ -21,7 +21,7 @@ Stands up a brand-new council instance — the domain-neutral minting procedure 
 single-persona level `make-critic` mints at. `check-brand-council` is this procedure's own worked
 reference instance throughout: its file layout, its `references/roster.md` (cited by its SKILL.md,
 never restated in prose, including its `## Role agents` mapping section), its `council-chair-agent`
-chair wiring, its four lens role agents (`council-strategy-agent` and siblings), and its
+chair wiring, its four lens role agents (`strategy-convener` and siblings), and its
 calibration assets directory are what a new domain instance mirrors, not what it restates.
 
 Parse `$ARGUMENTS` as `[domain name] [what's being judged]` — e.g. `code-review "pull request
@@ -88,11 +88,11 @@ diffs"`, `product-copy "marketing landing pages"`.
    COUNCIL machinery; a critic-shell agent's OWN body is per-instance configuration, exactly like
    the roster it embodies — `references/roster-and-chair-wiring.md` states why this one exception
    to "cite, don't restate" holds).
-6. **Mint ONE role agent per ordinary sub-council, patterned off `council-strategy-agent`.** Every
+6. **Mint ONE role agent per ordinary sub-council, patterned off `strategy-convener`.** Every
    sub-council needs its own addressable external seat (`council-rules`' `references/role-agents.md`
    — concept and scoped convene semantics, cited not restated): a fleet or session dispatches it
    directly, bypassing the convening skill entirely, to convene ONLY that one sub-council and
-   return a phase-1-only rolled-up read. Pattern each new agent file off `council-strategy-agent`'s
+   return a phase-1-only rolled-up read. Pattern each new agent file off `strategy-convener`'s
    body structurally verbatim (input contract, method, output contract) — only the `name:`, the
    sub-council/domain noun throughout, and the description substitute
    (`references/roster-and-chair-wiring.md`'s practical wiring checklist, extended to this second
@@ -165,7 +165,7 @@ back in Full mode; the checker passes become self-review, disclosed as non-indep
 semantics) without restating any of them, carries its own `roster.md` (schema:
 `roster-file-contract.md`, including a complete `## Role agents` mapping) passing
 `roster_check.py`, has a critic-shell agent patterned off `brand-judge`, has ONE role agent per
-ordinary sub-council patterned off `council-strategy-agent`, reuses `council-chair-agent` for
+ordinary sub-council patterned off `strategy-convener`, reuses `council-chair-agent` for
 chairing (or names why it genuinely could not), carries one calibration fixture, and passed
 independent fresh-context checks on the new skill and every new agent file. **NOT done** when the
 new instance restates council-rules' machinery locally, carries its roster in SKILL.md prose

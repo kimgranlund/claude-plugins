@@ -75,7 +75,7 @@
     },
     {
       "id": "n07",
-      "prompt": "Dispatch council-strategy-agent against this positioning brief and get its read.",
+      "prompt": "Dispatch strategy-convener against this positioning brief and get its read.",
       "expect": "no-trigger",
       "comment": "owner: the role agent itself (a direct Agent-tool dispatch by name, not a question about what a role agent is)"
     }

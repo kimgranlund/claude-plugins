@@ -65,7 +65,9 @@
     "judge",
     "builder",
     "writer",
-    "marshal"
+    "marshal",
+    "chair",
+    "convener"
   ],
   "topic_lex": [
     "icon",
@@ -223,6 +225,11 @@
     },
     {
       "canonical": "corpus",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "creative",
       "plural": null,
       "banned_aliases": []
     },
@@ -658,6 +665,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "strategy",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "surface",
       "plural": "surfaces",
       "banned_aliases": []
@@ -738,6 +750,11 @@
       "banned_aliases": []
     },
     {
+      "canonical": "voice",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
       "canonical": "whole",
       "plural": null,
       "banned_aliases": []
@@ -796,11 +813,6 @@
     "clean-git",
     "clean-repo",
     "close-session",
-    "council-chair-agent",
-    "council-creative-agent",
-    "council-design-agent",
-    "council-strategy-agent",
-    "council-voice-agent",
     "dispatch-ticket",
     "file-leftovers",
     "find-intent",
