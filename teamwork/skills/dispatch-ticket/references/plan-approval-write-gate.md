@@ -111,6 +111,24 @@ routine wait; a wait for acceptance is not different in kind), and a later run �
 coming back live, or a human posting the accept marker directly — resumes from the same pushed
 branch rather than restarting.
 
+**Observed adherence gap: the Marshal-side response procedure above was skipped, not followed
+(a separate live session, 2026-08-21, same day as that procedure's own capture).** A
+`mobilize-chores` interactive round dispatched three tickets via `build-leader`; all three
+reached stage 2a with no marshal joined and correctly reported `write-gate-blocked`, and each
+also correctly refused a relayed "the human already confirmed this" from the dispatching
+coordinator as a substitute for acceptance (per "never inferred to be the live human by default"
+and the durable-record requirement above). But the coordinator resolving them did NOT run the
+Marshal-side response procedure's own steps 1-2 — it never extracted the seat's proposed PR body
+from its Findings comment, and never posted the accept marker naming the branch's actual HEAD
+SHA. It asked the live human directly per ticket, then jumped straight to step 3 (`gh pr create`,
+composing its own PR body rather than the seat's), skipping the durable record step 2 exists to
+leave. Net effect: three tickets now have merged PRs with no accept-marker comment on their own
+issue — indistinguishable, to a later reader of the ticket alone, from a hold that was silently
+bypassed rather than one a live human genuinely authorized. The fix is adherence, not new design:
+a coordinator resolving a `write-gate-blocked` report under live human authorization should run
+the existing procedure's steps 1-2 before step 3, every time — this note exists so a future
+session recognizes the shortcut as a defect in execution, not a precedent to repeat.
+
 ## Unconditional scope, and composition with ADR-0012 (LLD Resolution 3)
 
 This stage fires on EVERY build dispatch reaching Phase 5 stage 2 — feature or task, small or
