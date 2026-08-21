@@ -11,7 +11,7 @@ description: >
   referenced, not whether current names conform to the grammar.
 author: kim
 created: 2026-08-13
-last_updated: 2026-08-17
+last_updated: 2026-08-21
 requires: [naming-conventions]
 disable-model-invocation: false
 user-invocable: true
@@ -30,11 +30,16 @@ output.
 
 ## Procedure
 
-1. Target: `$ARGUMENTS` (default: the current project). Locate the target's
-   `naming.manifest.json` (estate root or `.claude/`).
-   If absent, stop and offer to seed one via manifest-authoring — do not
-   audit an ungoverned estate against invented rules.
-2. Run: `python3 <this skill>/scripts/validate.py --target <estate> --json`
+1. Target: `$ARGUMENTS` (default: the current project). Manifest governance is
+   resolved by the script itself (step 2), not a manual pre-check: `validate.py`
+   probes the target's own `naming.manifest.json`, `target/.claude/naming.manifest.json`,
+   and — issue #842 — the git toplevel's `naming.manifest.json` as a
+   workspace-governed fallback when the target carries neither, so a plugin governed
+   by a workspace-root manifest one or more levels up resolves clean without a
+   plugin-local manifest of its own.
+2. Run: `python3 <this skill>/scripts/validate.py --target <estate> --json`.
+   Exit 2 ("ungoverned") → stop and offer to seed one via manifest-authoring — do
+   not audit an ungoverned estate against invented rules.
 3. Interpret findings against naming-conventions (load the reference file
    whose read-when matches the finding class — GRAMMAR.md for name
    violations, FRONTMATTER.md for schema/policy, LAYOUT.md for folder/index).
