@@ -93,13 +93,26 @@ takeover record.
   reason argument passed to `/team-scaffolding retire <role> [reason]`, or `null` if none was
   given.
 - **`live_state.joined[].wall_applied`** — optional, present only on a `reviewer` row written by
-  `fleet-bootstrap` Phase 5 (a background spawn). One of `true` (the `deny-edit-write` wall was
-  written and re-verified — `team-scaffolding` Phase 3's C1–C1a steps) or the string
-  `"blocked-worktree"` (the seat hit Phase 1's worktree precondition, shared checkout, and never
-  attempted the write). Absent covers both a manual `reviewer` join via `/team-scaffolding
-  reviewer` directly (which reports its own wall outcome inline rather than through this field)
-  and a background join predating this field — read as "unknown", never as "applied": a reader
-  never infers success from a missing field (issue #850).
+  `fleet-bootstrap` Phase 5 (a background spawn). One of three values (issue #852 — content
+  verification alone is never sufficient to write `true`):
+  - `true` — the `deny-edit-write` wall was written, re-verified (`team-scaffolding` Phase 3's
+    C1–C1a steps), AND confirmed enforced by Phase 3's own step-4 I2 live probe: a `Write` and a
+    denied-pattern `Bash` attempt, run in the SAME dispatched session, both came back DENIED.
+  - `"blocked-worktree"` — the seat hit Phase 1's worktree precondition, shared checkout, and
+    never attempted the write.
+  - `"same-session-unenforced"` — the write and grep-verify succeeded, but I2's own probe found
+    this same dispatched session's own subsequent `Write`/`Bash` calls still going through: the
+    platform's config-loads-once-per-OS-process behavior (confirmed live, issue #852), not a
+    defect in the write itself. Today's *expected* outcome for `fleet-bootstrap`'s background
+    spawn (an in-process `Agent`-tool dispatch inherits the parent session's permission mode
+    rather than re-deriving one from its own cwd, so it is not a genuinely new OS process) —
+    closing this structurally is tracked separately (issue #853).
+
+  Absent covers both a manual `reviewer` join via `/team-scaffolding reviewer` directly (which
+  reports its own wall outcome — including its own I2 probe result — inline rather than through
+  this field) and a background join predating this field — read as "unknown", never as "applied":
+  a reader never infers success from a missing field (issue #850), and never infers success from
+  `true` without I2's own probe having actually confirmed a denial (issue #852).
 - **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.

@@ -170,7 +170,9 @@ For each role in the confirmed list (skip entirely if empty — proceed straight
    steps into the dispatch prompt rather than naming the skill as a callable: the naming line
    (`Seat: {repo}-<role>`), for `reviewer` the worktree precondition and the structural
    `deny: ["Edit", "Write"]` + `Bash`-gating wall (`team-scaffolding` Phase 1's worktree check,
-   Phase 3's C1–C1a steps, re-read-and-verify included — `planner` carries no wall; state that
+   Phase 3's C1–C1a steps, re-read-and-verify included, PLUS Phase 3's own step 4 I2 live probe
+   (a `Write` and a denied-pattern `Bash` attempt, both in this same dispatched session, before
+   ever reporting a wall outcome — issue #852) — `planner` carries no wall; state that
    explicitly per Phase 3's own rule), and the comms charter (Phase 4). **`team-scaffolding`
    Phase 2's own `fleet-roster.md` row append and `live_state.joined` append are excluded from what
    this dispatch performs — step 3 below is this seat's only writer for both**, so the two
@@ -194,9 +196,25 @@ For each role in the confirmed list (skip entirely if empty — proceed straight
 3. Append `live_state.joined` (`role`, `mode: "background"`, `agent_name`, today's date) in
    `fleet.json`, appended by this same dispatched seat (not the orchestrator) since it is the one
    holding the live tool context once the wall (or its block) lands — for `reviewer`, this same
-   append carries `wall_applied`: `true` once C1–C1a's write and re-verify both succeeded, or the
-   string `"blocked-worktree"` when Phase 1's worktree precondition stopped it first
-   (`references/fleet-manifest-schema.md`'s `wall_applied` field). Never left absent by choice —
+   append carries `wall_applied`, one of three values, never `true` off the write+grep alone
+   (issue #852):
+   - `true` — C1–C1a's write, re-verify, AND `team-scaffolding` Phase 3's own step-4 I2 live probe
+     all confirm the wall: both a `Write` and a denied-pattern `Bash` attempt, run in THIS same
+     dispatched session, came back DENIED. Quote both denial texts in this dispatch's own report.
+   - `"blocked-worktree"` — Phase 1's worktree precondition stopped the wall before any write was
+     attempted.
+   - `"same-session-unenforced"` — the write+grep succeeded but I2's own probe found this SAME
+     dispatched session's subsequent `Write`/`Bash` calls still going through: the platform's
+     config-loads-once-per-OS-process behavior (issue #852), not a defect in this dispatch. **This
+     is the expected outcome for this dispatch shape today** — an `Agent`-tool dispatch is
+     documented to inherit the parent session's permission mode rather than re-deriving it from its
+     own cwd, so it is not a genuinely new OS process either, the same gap the manual
+     `team-scaffolding reviewer` path hits (that skill's own Phase 3 step 4). Closing this for real
+     needs a genuinely separate process (a headless `claude -p` subprocess, a new terminal, or
+     `isolation: "remote"`) — out of scope for this dispatch shape; tracked as follow-up issue
+     #853.
+
+   (`references/fleet-manifest-schema.md`'s `wall_applied` field.) Never left absent by choice —
    Phase 6 surfaces this outcome per spawned seat rather than assuming success.
 
 **Hybrid swap**: any background seat spawned here is replaceable at any time by a human running
@@ -214,10 +232,14 @@ to resume orientation, and — since Phase 1 only registered the orchestrator se
 run in this session when they want that contract's ongoing day-to-day discipline. **For any spawned
 `reviewer` seat, read its `wall_applied` field back from `fleet.json` (Phase 5 step 3,
 `references/fleet-manifest-schema.md`) and state the outcome explicitly** — one of "applied and
-verified" (`wall_applied: true`), "not yet — worktree isolation required" (`wall_applied:
-"blocked-worktree"` — name `EnterWorktree` plus re-running `/team-scaffolding reviewer` there as
-the fix), or "unknown — no wall-outcome report received from the dispatched seat" (field absent)
-— never omitted and never assumed applied by default.
+verified" (`wall_applied: true`, I2's own probe denied both a `Write` and a denied-pattern `Bash`
+attempt), "content-verified but NOT enforced this session" (`wall_applied:
+"same-session-unenforced"` — same-session self-walling cannot be platform-enforced, issue #852; a
+genuinely new process is needed for real enforcement, not this dispatch shape), "not yet —
+worktree isolation required" (`wall_applied: "blocked-worktree"` — name `EnterWorktree` plus
+re-running `/team-scaffolding reviewer` there as the fix), or "unknown — no wall-outcome report
+received from the dispatched seat" (field absent) — never omitted and never assumed applied by
+default.
 
 ## Failure branches
 
