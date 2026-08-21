@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """calibration-check-voice <transcript> — score a VOICE sub-council transcript against the fixture.
 
-The third brand fixture (`calibration/council-calibration/fixtures/weak-verbal-identity.md`,
+The third brand fixture (`skills/check-brand-council/assets/calibration/fixtures/weak-verbal-identity.md`,
 "Verve") exercises the **voice** sub-council (David A. · George L. · Tim D. · Mary N.) — verbal/copy
 failures the strategy and design councils miss — plus the ST5 trust-boundary probe. One planted
 defect per critic lens:

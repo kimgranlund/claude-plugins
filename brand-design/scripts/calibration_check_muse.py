@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """calibration-check-muse <transcript> — score a MUSE run against the category-average brief.
 
-The fourth brand fixture (`calibration/council-calibration/fixtures/category-average-brief.md`,
+The fourth brand fixture (`skills/check-brand-council/assets/calibration/fixtures/category-average-brief.md`,
 "Halcyon") is the INVERSE of the council fixtures: the council fixtures plant defects in an artifact
 and score whether the council *catches* them; this plants **traps in a brief** and scores whether the
 Muse *navigates* them. The Muse is the aspirational seat (`agents/brand-muse.md`) — it generates a

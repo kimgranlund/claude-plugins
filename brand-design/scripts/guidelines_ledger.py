@@ -8,8 +8,9 @@ gate keeps that ledger well-formed by construction (the score-record / assess-re
 choice is rejected at write time, not discovered at assembly. It also computes coverage, **assembles** the
 ledger into corpus docs, and **projects a brand-spec card** for the optional brand-decomposer grading seam.
 
-The six domains + seven axes MIRROR `design-skills:brand-decomposer` (a parallel skill, NOT a dependency —
-brand-forge MAKES, brand-decomposer GRADES); they are restated here as stable vocabulary, not imported. The
+The six domains + seven axes MIRROR `design-skills:brand-decomposer` (the `nonoun-skills` marketplace — a
+parallel skill in a separate repo, NOT a dependency — brand-forge MAKES, brand-decomposer GRADES); they
+are restated here as stable vocabulary, not imported. The
 `card` projection targets brand-decomposer's documented `*.brand.json` shape so it can be GRADED there
 (`brand-spec-check.py lint <card>`) when installed — best-effort to that shape, not a hard contract.
 
@@ -274,8 +275,9 @@ def assemble(ledger, out, ledger_path, flat=False, apply=False, force=False, log
 
 
 def project_card(ledger, idea=None):
-    """Project the live ledger into a brand-spec card matching `design-skills:brand-decomposer`'s documented
-    `*.brand.json` shape — for the optional grading seam. Each chosen design-move becomes a typed `rule`
+    """Project the live ledger into a brand-spec card matching `design-skills:brand-decomposer`'s
+    (`nonoun-skills` marketplace) documented `*.brand.json` shape — for the optional grading seam.
+    Each chosen design-move becomes a typed `rule`
     (truth `proposed`: the designer chose it; evidence points back at the ledger entry, so it's traced). The
     brand idea comes from `--idea` (the foundation); concrete tokens/contrast are left empty — the elicitation
     captures directional rules, not hex values, and brand-decomposer will honestly flag that incompleteness."""

@@ -60,7 +60,7 @@ an artifact alone and hope the critics infer the foundation.
 
 ## Roster — the critic personas you fan out to
 
-| Sub-council | Critic personas (`${CLAUDE_PLUGIN_ROOT}/references/critics/critic-<name>.md`) |
+| Sub-council | Critic personas (`${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`) |
 | --- | --- |
 | **Strategy** (6) | `luke-s` _(lead — cultural provenance)_, `john-h`, `mark-p`, `nick-l`, `brian-c`, `rory-s` |
 | **Design** (4) | `paula-s`, `massimo-v`, `matt-w`, `jessica-w` |
@@ -75,7 +75,7 @@ dominant lens for the brand work this plugin addresses.
    author rationale that isn't in the material.
 2. **Fan out in parallel, host-side, unnamed.** For every critic persona in the selected
    sub-council:
-   a. `Read` that persona's full file at `${CLAUDE_PLUGIN_ROOT}/references/critics/critic-<name>.md`.
+   a. `Read` that persona's full file at `${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`.
    b. Dispatch ONE **unnamed** `Agent`-tool call to `brand-judge` (no `name:` field — a named
       dispatch flips to mailbox/teammate mode and strands the report, per
       `teamwork:fleet-rules`' orchestration-rubric-a2, A2-R1) with a sealed prompt carrying: the

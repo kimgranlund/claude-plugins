@@ -12,7 +12,7 @@ should:      ["build brand guidelines", "brand design system", "guide me through
 should_not:  ["decide the brand's position or strategy" (routes to brand-methodology-rules),
               "write the actual voice/copy" (routes to the brand-writer agent),
               "grade or score these guidelines" (routes to brand-rubrics, or
-              design-skills:brand-decomposer when installed)]
+              design-skills:brand-decomposer — nonoun-skills marketplace — when installed)]
 
 ## delta
 Retrospective record — no live forge interview exists; this skill was ported, not freshly minted.
@@ -26,8 +26,8 @@ captured as a typed, append-only choice in a ledger; the ledger assembles into c
 ## fences
 - NOT strategy/positioning — that's decided upstream, in `brand-methodology-rules`
 - NOT the actual words — voice *behavior* lives here, the copy itself is the `brand-writer` agent
-- NOT grading — `brand-rubrics` (in-plugin) and `design-skills:brand-decomposer` (a different
-  marketplace, when installed) score what this skill makes
+- NOT grading — `brand-rubrics` (in-plugin) and `design-skills:brand-decomposer` (the
+  `nonoun-skills` marketplace, when installed) score what this skill makes
 
 ## assertions
 1. States the six domains and that the loop generates a 2x2 (not a single suggestion) per domain.

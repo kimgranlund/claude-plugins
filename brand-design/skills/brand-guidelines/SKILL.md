@@ -56,7 +56,7 @@ Each pick appends a typed entry to a **choice-ledger** (the cumulative knowledge
 
 Check progress with **`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.py" coverage`** (per-domain resolved/absent + the frontier). When the domains are covered, **`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.py" assemble [--out <corpus>] [--apply]`** (defaults to **`./brand-corpus`**, like `file-brand-corpus`) compiles the live ledger into corpus docs in their layers (dry-run by default; matches the corpus's flat/folder convention; refuses a mixed corpus; **non-destructive** — never clobbers a hand-authored layer doc, writing a flagged `.elicited.md` sibling instead, `--force` to replace, re-assembly idempotent) — each choice a typed rule (`must/should/may`), carrying **`sources:`** + **`contributors:`** frontmatter — so **`corpus_provenance.py` gates the trace** and **`brand-rubrics` scores** the result. The build loop closes into the provenance + evaluate loops.
 
-**The brand-decomposer seam:** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.py" card <ledger> --idea "<from 01-foundation>" -o card.json` projects a `*.brand.json` card that `design-skills:brand-decomposer` can GRADE + operability-check (`brand-spec-check.py lint card.json`) when installed — the optional make→grade handoff (verified: a projected card clears brand-decomposer's operability gate). brand-design stays self-contained.
+**The brand-decomposer seam:** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.py" card <ledger> --idea "<from 01-foundation>" -o card.json` projects a `*.brand.json` card that `design-skills:brand-decomposer` (the `nonoun-skills` marketplace) can GRADE + operability-check (`brand-spec-check.py lint card.json`) when installed — the optional make→grade handoff (verified: a projected card clears brand-decomposer's operability gate). brand-design stays self-contained.
 
 ## Relationship to brand-decomposer (parallel, not a dependency)
 
@@ -64,10 +64,8 @@ Check progress with **`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.
 
 ## Provenance
 
-This pack's `references/` were ported from brand-forge (source:
-`/Users/kimba/Projects/nonoun/nonoun-plugins/brand-forge`, frozen SHA
-`1e0d2d9e554b547f59260f63e31b4af2575196b0`, 2026-06-20) as part of the brand-forge → brand-design
-migration campaign, Phase 3 Track D (2026-08-19).
+This pack's `references/` were ported from brand-forge, Phase 3 Track D — full citation (source
+repo, frozen SHA, date) in the plugin root README's "Provenance and disposition" section.
 
 ## Boundaries
 

@@ -1,13 +1,13 @@
 # Exemplars — option-generation seeds, by domain and axis
 
-When the loop generates the four design-move cards for a domain's 2×2, each card should **cite an exemplar** — a real brand whose public approach demonstrates that quadrant's *mechanism*. This file is the seed library: per-domain exemplars keyed to where they sit on the axes, so a card reads *"like X — which does Y"* rather than a generic option. It sharpens generation; it is not a grading bar (that is `brand-rubrics` and `design-skills:brand-decomposer`).
+When the loop generates the four design-move cards for a domain's 2×2, each card should **cite an exemplar** — a real brand whose public approach demonstrates that quadrant's *mechanism*. This file is the seed library: per-domain exemplars keyed to where they sit on the axes, so a card reads *"like X — which does Y"* rather than a generic option. It sharpens generation; it is not a grading bar (that is `brand-rubrics` and `design-skills:brand-decomposer`, the `nonoun-skills` marketplace).
 
 ## The citation discipline (read first)
 
 - **Cite the mechanism, never the asset.** Name the brand and describe *what it does* and *why it works* — "a restrained neutral system with one signature accent." Do **not** reproduce its logo, palette hex, type, or guidelines. Public, observable approach only; fair commentary, not asset redistribution.
 - **Link-only for anything deeper.** If you point at a brand's actual guidelines, link to the public source; never bundle or paraphrase it wholesale.
 - **An exemplar is evidence the move is *possible*, not a license to copy it.** The chosen move must still descend from *this* brand's `01-foundation`. An exemplar that doesn't trace to the foundation is decoration — drop it.
-- **This is a seed list, not the catalog.** For a deep, annotated reference-deck set, `design-skills:brand-decomposer` carries the curated catalog (link-only). Cite from real knowledge of the brand; if unsure of a brand's actual approach, say so rather than invent it.
+- **This is a seed list, not the catalog.** For a deep, annotated reference-deck set, `design-skills:brand-decomposer` (the `nonoun-skills` marketplace) carries the curated catalog (link-only). Cite from real knowledge of the brand; if unsure of a brand's actual approach, say so rather than invent it.
 
 ## Per-domain exemplar seeds (by axis position)
 
