@@ -96,8 +96,10 @@ lexicon, the exact defect authorkit's manifest discipline exists to prevent).
 - [x] S4 — spec-naming-convention §6.1 closed folder set is stale: `evals/` (20/20 here,
   mandated estate-wide by plugin-authoring.md) and `intent.md` (4/20) are outside the closed
   set — ruled 2026-08-21 (close-session leftovers round): amend the spec via the ADR-0011
-  amendment path — status: **ruled, filed** (`#861`, 2026-08-21) — done-when: ADR ratified,
-  §6.1 updated to add `evals/`; `intent.md`'s in-or-routed sub-decision still owed inside #861
+  amendment path — status: **done** (`#861`, ADR-0024, 2026-08-21) — done-when: ADR-0024
+  ratified and landed; §6.1 updated to add both `evals/` and `intent.md` (§14.10) —
+  `intent.md`'s in-or-routed sub-decision ruled inside #861 itself (joins the closed set as a
+  bare top-level file, never routed into `references/`; ADR-0024 D2), not deferred further
 - [x] S5 — agent frontmatter schema (§8) unpopulated estate-wide (0/4 here; sampled
   harness/teamwork/docs agents carry none) — ruled 2026-08-21 (close-session leftovers
   round): amend the spec to match the estate's real name+description(+model/tools)
@@ -243,9 +245,11 @@ All six seeds closed same-day: S1 (`#844`), S2 (`#845`), S3 (`#846`) built and m
 `#848`, brand-design 0.11.0); S6 filed (`#842`, root-caused inline — authorkit's `validate.py`
 manifest-resolution gap, fix left to authorkit's own queue per this plan's own boundary). S4
 and S5 — the two Wave 3 rulings — were resolved in a `close-session` leftovers round the same
-day: both ruled "amend the spec" and filed as ADR-0011 amendment tasks (`#861`, `#863`); the
-ADRs themselves are not yet ratified, so brand-design's own state (evals/intent.md folders,
-unpopulated agent frontmatter) stays exactly as measured until those land — this plan's own
-job ends at the ruling + the ticket, per its Phase 2 discipline. Same archive-convention gap
+day: both ruled "amend the spec" and filed as ADR-0011 amendment tasks (`#861`, `#863`). S4
+landed same-day as ADR-0024 (`#861`): `evals/` and `intent.md` both join §6.1's closed set,
+`intent.md`'s own sub-decision ruled inside that ticket rather than deferred again. S5's ADR is
+not yet ratified, so brand-design's own unpopulated-agent-frontmatter state stays exactly as
+measured until it lands — this plan's own job ends at the ruling + the ticket, per its Phase 2
+discipline. Same archive-convention gap
 as the sibling plan: no `.claude/docs/` PLAN archive exists yet, so `status: complete` is
 flipped in place rather than moved.

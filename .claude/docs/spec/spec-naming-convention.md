@@ -173,9 +173,11 @@ skills/{name}/
   references/       # passive matter: read into context, never executed
   scripts/          # executable matter: code the procedure invokes
   assets/           # inert payload: images, fixtures, binary/static files
+  evals/            # routing-surface proof: trigger evals, behavioral assertions, baselines (§14.10, ADR-0024)
+  intent.md         # make-skill's own living build ledger, a bare top-level file like SKILL.md (§14.10, ADR-0024)
 ```
 
-Four top-level entries, nothing else. The partition axis is **how content participates when the skill runs**: `SKILL.md` is loaded into context; `references/` is selectively read into context; `scripts/` executes *outside* context — deterministic logic belongs in a script the skill calls, never in prose the model re-derives; `assets/` is neither read nor executed, only addressed by path. Every file answers one question — *context, computation, or payload?* — and the answer decides its folder.
+Six top-level entries, nothing else. The partition axis is **how content participates when the skill runs**: `SKILL.md` is loaded into context; `references/` is selectively read into context; `scripts/` executes *outside* context — deterministic logic belongs in a script the skill calls, never in prose the model re-derives; `assets/` is neither read nor executed, only addressed by path; `evals/` is proof the routing surface holds, evaluated against by a script or a judge, never itself loaded as procedure; `intent.md` is the forge's own actively-written build ledger, never passive reference matter. Every file answers one question — *context, computation, payload, routing proof, or build ledger?* — and the answer decides its folder.
 
 Boundary validation (the validator checks these and nothing deeper):
 
@@ -885,3 +887,40 @@ the first time (previously command-only, zero skill siblings, per §14.1's own "
 remaining 7 needed no grammar change (process-terminal names, always legal independent of any
 wrapper). Exemption count unchanged (85 → 85) — this section conforms names that were already
 either grammar-clean or licensed via §14.1, not previously-exempted debt.
+
+### 14.10 `evals/` and `intent.md` join the §6.1 skill-folder closed set (2026-08-21, issue #861, ADR-0024)
+
+**Ruling authority:** issue #861, tracing `plan-2026-08-brand-design-bloat-overhaul` seed S4 —
+ruled 2026-08-21 (close-session leftovers round): "amend the spec, not the practice." `evals/`
+was that ruling's direct subject; `intent.md`'s fate was the ticket's own deferred
+sub-decision (Acceptance item 4), ruled inside the same ADR rather than reopened as a second
+round.
+
+**The gap this closes:** §6.1's closed set has read `SKILL.md` / `references/` / `scripts/` /
+`assets/` since ADR-0011 landed the spec. `plugin-authoring.md`'s routing-surface invariant has
+since mandated `evals/evals.json` estate-wide, and `make-skill`'s own forge has always produced
+`intent.md` as its living build ledger — both top-level entries the closed set never named,
+20/20 and 4/20 respectively in the brand-design sample that surfaced the staleness (27/estate
+for `intent.md` at ratification). `authorkit`'s own `naming-audit` validator (`validate.py`'s
+`ALLOWED_SKILL_ENTRIES`) already allow-lists both — this amendment brings the spec's prose in
+line with code already shipped, never the reverse; no exemption or remediation debt is created,
+since nothing that conformed to the validator yesterday stops conforming today.
+
+**Ruling:** §6.1's closed skill-folder set grows from four entries to six: `SKILL.md` /
+`references/` / `scripts/` / `assets/` / `evals/` / `intent.md`. `evals/` is proof the routing
+surface holds — evaluated against by a script or judge, never itself loaded as procedure.
+`intent.md` is a bare top-level *file* (like `SKILL.md`), never routed into `references/`: it
+fails §6.2's passive-matter test for that folder on both axes (actively written to during a
+skill's own forge; never a two-hop-discoverable reference a routed session reads at trigger
+time) — full rationale, including why remediation-into-`references/` was considered and
+rejected, lives in ADR-0024 D2.
+
+**Non-goal:** this section does not touch the partition axis's other four answers, the
+no-nested-skills rule, or the validator's blind-below-the-boundary posture (§6.1's own closing
+paragraph) — all stand unamended. It does not touch §6.2's reference-index contract; `intent.md`
+staying outside `references/` means it never needs an index row, by design.
+
+**Validator change:** none owed — `ALLOWED_SKILL_ENTRIES` already reads the six-entry set this
+section ratifies (verified against `authorkit/skills/naming-audit/scripts/validate.py` at the
+ratification tree, 2026-08-21). Re-running `naming-audit --scope grammar` estate-wide is a
+confirmation step, not a migration: zero new violations open, zero close.
