@@ -33,12 +33,24 @@ Corpus directory: `$ARGUMENTS` (default `./brand-corpus`, the same default `file
    tiers, the tier↦layer map, and each tier's guards-against filter. For each tier, extract one
    thesis sentence plus a ≤50-word elaboration from its source layer(s); don't restate the whole
    layer.
-3. **Render** into `${CLAUDE_PLUGIN_ROOT}/skills/make-brand-stack/references/brand-stack-one-pager.md`.
-   Monochrome, text-only, one sheet. Any polish (colour, logo, PDF) happens downstream in a
-   publishing tool, never in the template.
+3. **Render**, using
+   `${CLAUDE_PLUGIN_ROOT}/skills/make-brand-stack/references/brand-stack-one-pager.md` as the
+   `{{TOKEN}}`-templated structure (never write to that path itself — it's the bundled template,
+   shared by every brand and overwritten on the next plugin update), into
+   `<corpus-dir>/brand-stack.md` (the same `<corpus-dir>` the inventory step read). Monochrome,
+   text-only, one sheet. Any polish (colour, logo, PDF) happens downstream in a publishing tool,
+   never in the template.
 4. **Show maturity honestly.** A tier whose layer the corpus hasn't reached → render
    `— not yet defined (layer NN missing)` and name what's missing. A Stack with the strategy tiers
    filled and the rest blank is a stage-2 brand honestly shown, not a failure.
+
+## Run modes
+
+**Full** (Claude Code / Cowork) — step 3 writes the rendered sheet to `<corpus-dir>/brand-stack.md`
+on disk (never the bundled template itself — see step 3). **Project single-context** — no
+filesystem to write to: render the one-pager directly in the chat response instead of a file,
+disclosed as the degraded substitute; step 1's corpus inventory resolves via `brand-corpus`'s
+corpus-resolution ladder (cited, not restated) at its Project-knowledge rung.
 
 ## Failure branches
 

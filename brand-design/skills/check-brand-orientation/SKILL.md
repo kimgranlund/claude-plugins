@@ -21,11 +21,11 @@ Optional focus: `$ARGUMENTS`
 
 ## Procedure
 
-1. **Inventory the corpus.** Invoke the `brand-corpus` skill (and the corpus MCP, if `corpus_dir`
-   is configured) to enumerate what's actually on hand — strategy docs, positioning, the
-   Foundation Canon, expression system, voice guidance, tokens, prior identity work. List what's
-   found by pipeline stage (`research → strategy → expression → stewardship`). MCP not configured
-   → work from whatever the user points at and say so.
+1. **Inventory the corpus, via the ladder.** Resolve what's actually on hand through
+   `brand-corpus`'s corpus-resolution ladder (cited, not restated: MCP tools → filesystem corpus
+   layout → Claude Project knowledge, queried fresh, never from memory) — strategy docs,
+   positioning, the Foundation Canon, expression system, voice guidance, tokens, prior identity
+   work. List what's found by pipeline stage (`research → strategy → expression → stewardship`).
 2. **Read the state.** Using the `brand-methodology-rules` skill as the yardstick, assess the
    corpus on three axes:
    - **Working** — solid, grounded, load-bearing.
@@ -37,12 +37,24 @@ Optional focus: `$ARGUMENTS`
    `check-brand-council` for a hostile read). Keep it tight — the user should know exactly what to
    do next.
 
+## Run modes
+
+**Full** (Claude Code / Cowork) — the ladder's first two rungs are live: MCP first, filesystem
+fallback second. **Project single-context** — only the ladder's third rung is reachable (this
+Project's own uploaded knowledge); when something can't be found there, name **which** gap it is,
+per the ladder's own orientation algorithm — **absent from the uploaded set** (it plausibly exists
+in the brand's real corpus but wasn't shared into this Project — point the user at uploading it)
+vs. **missing from the brand** (never produced anywhere — point at `make-brand` to build it).
+Never collapse the two into one generic "not found."
+
 ## Failure branches
 
 - Corpus MCP configured but returns nothing → say so explicitly rather than reporting an empty
   brand as "nothing exists yet."
-- No corpus and no user-pointed material at all → report stage 0 (per `brand-corpus`'s maturity
-  scale) and point straight at `make-brand`.
+- No corpus and no user-pointed material at all (Full mode) → report stage 0 (per `brand-corpus`'s
+  maturity scale) and point straight at `make-brand`.
+- Running in a Project with an empty upload set → that is "absent from the uploaded set," not
+  automatically stage 0 — ask before assuming the brand itself has nothing.
 
 ## Done / NOT done
 

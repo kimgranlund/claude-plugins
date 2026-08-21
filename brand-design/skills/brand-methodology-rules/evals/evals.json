@@ -1,6 +1,6 @@
 {
   "skill": "brand-methodology-rules",
-  "note": "Minted 2026-08-19, Phase 4 of the brand-forge -> brand-design migration (closes G7's eval-coverage warn). Floor suite: the 6 trigger prompts sample the description's own trigger phrases; the 4 no-trigger cases fence the two in-plugin routes this skill states (brand-rubrics, brand-corpus) plus the two out-of-scope disciplines its own frontmatter names (marketing tactics, product strategy).",
+  "note": "Minted 2026-08-19, Phase 4 of the brand-forge -> brand-design migration (closes G7's eval-coverage warn). Floor suite: the 6 trigger prompts sample the description's own trigger phrases; the 4 no-trigger cases fence the two in-plugin routes this skill states (brand-rubrics, brand-corpus) plus the two out-of-scope disciplines its own frontmatter names (marketing tactics, product strategy). Description dieted 2026-08-20 (S2, #825: 729 -> 636 chars, cleared the dense-description bloat flag) — trigger surface unchanged in substance (archaeology/positioning/identity/expression/rebrand/category-design/stewardship/POV all still named), so no case content changed; re-verified live post-diet.",
   "cases": [
     {
       "id": "t01",

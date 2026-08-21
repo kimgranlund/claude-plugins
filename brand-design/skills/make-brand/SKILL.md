@@ -33,8 +33,9 @@ Working on: `$ARGUMENTS`
    survive `check-brand-rubric` or `check-brand-council`. Offer to ground the strategy first, or
    proceed with the caveat on the record — never silently comply.
 3. **Name the pull before converging (soft gate).** State at least one sentence of direction the
-   work reaches for; it will evolve. If the corpus MCP is configured, pull relevant prior brand
-   material first and extend it rather than reinvent it. No aspiration stated, or the first idea
+   work reaches for; it will evolve. Resolve prior brand material via `brand-corpus`'s
+   corpus-resolution ladder (cited, not restated) first and extend it rather than reinvent it. No
+   aspiration stated, or the first idea
    is already hardening into "the" answer → set a provisional pull, or invoke `make-brand-muse`
    first. Clearing this gate means naming a direction, not stopping.
 4. **Run the methodology.** Invoke the `brand-methodology-rules` skill and run the stage it names
@@ -52,15 +53,26 @@ Working on: `$ARGUMENTS`
    (`make-brand-muse`) sets the pull, this skill makes, the council reviews — no seat judges its
    own work.
 
+## Run modes
+
+**Full** (Claude Code / Cowork) — the whole procedure: `brand_lint.py` in step 5, and an Agent-tool
+handoff to the `brand-writer` agent for extended voice work in step 4. **Project single-context**
+— no bundled scripts, no Agent tool: corpus state resolves via `brand-corpus`'s corpus-resolution
+ladder (cited, not restated) at its Project-knowledge rung; step 5's lint is skipped and disclosed
+as such (never silently); extended voice work that would hand off to `brand-writer` stays
+in-session instead, named as the degraded single-context substitute, not a second implementation.
+
 ## Failure branches
 
-- Corpus MCP configured but unreachable → say so, proceed from what the user states directly.
+- No rung of the corpus-resolution ladder reaches material → say so, proceed from what the user
+  states directly.
 - User insists on expression with no strategy after the flag → proceed, but the caveat goes into
   the record (a note in the response), never silently.
 
 ## Done / NOT done
 
 Done when the stage is named, the order gate has been checked (cleared or flagged), a pull is at
-least provisionally named, and the methodology skill has been invoked for the classified stage.
-NOT done if expression work started with an unflagged missing strategy, or the methodology
-handoff was skipped in favor of freelancing the method here.
+least provisionally named, the methodology skill has been invoked for the classified stage, and
+the response states the stage, the gate verdict, the pull, and (Full mode) whether lint findings
+surfaced. NOT done if expression work started with an unflagged missing strategy, or the
+methodology handoff was skipped in favor of freelancing the method here.
