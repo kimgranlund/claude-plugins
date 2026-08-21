@@ -1,7 +1,7 @@
 ---
 doc-type: plan
 id: plan-2026-08-brand-design-bloat-overhaul
-status: active
+status: complete
 date: 2026-08-21
 owner: Kim Granlund
 audience: human, builder
@@ -93,17 +93,16 @@ lexicon, the exact defect authorkit's manifest discipline exists to prevent).
   (`#846`, 2026-08-21) — done-when: re-measured numbers recorded here with a dated note; every member either under
   6 000 or its overage justified line-by-line as load-bearing
 #### Wave 3 — contested
-- [ ] S4 — spec-naming-convention §6.1 closed folder set is stale: `evals/` (20/20 here,
+- [x] S4 — spec-naming-convention §6.1 closed folder set is stale: `evals/` (20/20 here,
   mandated estate-wide by plugin-authoring.md) and `intent.md` (4/20) are outside the closed
-  set — open question: amend via the ADR-0011 amendment path (add `evals/`; rule intent.md in
-  or route it into references/) (Blocked-by: none) — status: todo — done-when: a human
-  rules and the spec's closed set and the estate's real convention agree — via an amendment
-  ADR or a ruled remediation path; either outcome satisfies this seed
-- [ ] S5 — agent frontmatter schema (§8) unpopulated estate-wide (0/4 here; sampled
-  harness/teamwork/docs agents carry none) — open question: populate every agent, or amend
-  the spec to match the estate's real name+description(+model/tools) convention (Blocked-by:
-  none) — status: todo — done-when: a human rules one way and the follow-up work item (if
-  any) is minted
+  set — ruled 2026-08-21 (close-session leftovers round): amend the spec via the ADR-0011
+  amendment path — status: **ruled, filed** (`#861`, 2026-08-21) — done-when: ADR ratified,
+  §6.1 updated to add `evals/`; `intent.md`'s in-or-routed sub-decision still owed inside #861
+- [x] S5 — agent frontmatter schema (§8) unpopulated estate-wide (0/4 here; sampled
+  harness/teamwork/docs agents carry none) — ruled 2026-08-21 (close-session leftovers
+  round): amend the spec to match the estate's real name+description(+model/tools)
+  convention, never backfill the unused schema — status: **ruled, filed** (`#863`,
+  2026-08-21) — done-when: ADR ratified, §8 rewritten to the real convention
 - [x] S6 — authorkit instrument gap: `validate.py --target <plugin>` reports "ungoverned"
   without checking for a governing manifest at an ancestor estate root — today's
   false-violation source (Blocked-by: none) — status: **filed** (`#842`, 2026-08-21; the
@@ -237,3 +236,16 @@ intake skill (`file-feature`/`file-task`), never auto-created here; S4/S5 are ru
 in front of a human before any work item exists. On completion (every wave's tickets closed
 or grandfathered), flip `status: complete` — the workspace has no PLAN archive convention yet
 (see the prior brand-design plan's Completion note); flip in place until one is ratified.
+
+## Completion (2026-08-21)
+
+All six seeds closed same-day: S1 (`#844`), S2 (`#845`), S3 (`#846`) built and merged (PR
+`#848`, brand-design 0.11.0); S6 filed (`#842`, root-caused inline — authorkit's `validate.py`
+manifest-resolution gap, fix left to authorkit's own queue per this plan's own boundary). S4
+and S5 — the two Wave 3 rulings — were resolved in a `close-session` leftovers round the same
+day: both ruled "amend the spec" and filed as ADR-0011 amendment tasks (`#861`, `#863`); the
+ADRs themselves are not yet ratified, so brand-design's own state (evals/intent.md folders,
+unpopulated agent frontmatter) stays exactly as measured until those land — this plan's own
+job ends at the ruling + the ticket, per its Phase 2 discipline. Same archive-convention gap
+as the sibling plan: no `.claude/docs/` PLAN archive exists yet, so `status: complete` is
+flipped in place rather than moved.
