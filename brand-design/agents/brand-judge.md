@@ -22,7 +22,7 @@ high→medium 2026-08-16, issue #312: fable-medium critics caught every real def
 ## Input contract — inlined only, never a path
 
 Every dispatch carries, inlined: (1) one critic persona's full file content
-(`${CLAUDE_PLUGIN_ROOT}/references/critics/critic-<name>.md`, pasted in whole by the dispatcher — never a path you
+(`${CLAUDE_PLUGIN_ROOT}/skills/check-brand-council/references/critics/critic-<name>.md`, pasted in whole by the dispatcher — never a path you
 read yourself), (2) the artifact under review, (3) the corpus context. No corpus context is not
 grounds to invent brand facts — say so in the verdict. Missing persona or artifact → name the
 missing field, stop.

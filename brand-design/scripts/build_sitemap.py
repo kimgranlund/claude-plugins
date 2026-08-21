@@ -43,12 +43,14 @@ import subprocess
 import sys
 
 # This generator was promoted out of the static corpus-reader web app (which lives at
-# references/corpus-reader/ — index.html, lib/, its own build-sitemap.py) into a real bundled
-# script at scripts/build_sitemap.py (MIGRATION.md, Gate A ruling). ROOT stays "where index.html
-# lives" per this script's own contract above; that's no longer this file's own directory, so it
-# is computed relative to the plugin's references/corpus-reader/ sibling instead.
+# skills/file-brand-corpus/assets/corpus-reader/ — index.html, lib/, its own build-sitemap.py)
+# into a real bundled script at scripts/build_sitemap.py (MIGRATION.md, Gate A ruling; re-homed
+# under file-brand-corpus's own assets/ by the S1 structure move, 2026-08-20). ROOT stays "where
+# index.html lives" per this script's own contract above; that's no longer this file's own
+# directory, so it is computed relative to the plugin's skills/file-brand-corpus/assets/
+# corpus-reader/ sibling instead.
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                      "..", "references", "corpus-reader"))
+                                      "..", "skills", "file-brand-corpus", "assets", "corpus-reader"))
 SKIP_DIRS = {"lib", ".git", "node_modules"}
 
 
@@ -492,7 +494,7 @@ def main():
 def selftest():
     """Exercise the mechanized substrate (frontmatter/heading/summary/prettify/tree-nesting),
     collect_sitemap end-to-end on a small fixture corpus, --bake against the REAL bundled
-    references/corpus-reader/ assets (the exact ROOT this script now resolves to post-move),
+    skills/file-brand-corpus/assets/corpus-reader/ assets (the exact ROOT this script now resolves to post-move),
     --init's site/ scaffold, and negative controls: an empty corpus and a non-directory target
     must fail loudly (SystemExit), never silently succeed. Exit 0 = pass, 1 = fail."""
     import shutil
@@ -608,7 +610,7 @@ def selftest():
         return 1
     print("build-sitemap selftest: OK (frontmatter/heading/summary/prettify/tree-nesting correct; "
           "collect_sitemap builds sections + stats from a fixture corpus and refuses an empty one; "
-          "--bake inlines real content from the bundled references/corpus-reader/ assets with no leftover "
+          "--bake inlines real content from the bundled skills/file-brand-corpus/assets/corpus-reader/ assets with no leftover "
           "module statements; --init scaffolds site/ + a root redirect; a non-directory --bake target raises; "
           "_script_safe_json neutralizes a raw </script>)")
     return 0

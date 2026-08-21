@@ -6,7 +6,7 @@ picks A/B/C/D + comments) PRODUCES a choice-ledger; this replays the determinist
 can gate — validate -> coverage -> coherence -> assemble -> **corpus-provenance clean** -> project a
 brand-spec card, against the recorded "Meridian" ledger (bundled inline below; the original worked
 example + its own walkthrough narrative live verbatim in
-`calibration/guidelines-walkthrough/`, incl. `meridian.ledger.json` and its README). It
+`skills/make-brand-guidelines/assets/calibration/`, incl. `meridian.ledger.json` and its README). It
 proves the loop closes on a realistic, coherent brand (with a superseded first color pass that the
 restrained palette replaces, and a `constrains` coherence edge), and doubles as the worked example.
 
@@ -31,7 +31,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 GL = os.path.join(HERE, "guidelines_ledger.py")
 CP = os.path.join(HERE, "corpus_provenance.py")
 
-# The recorded Meridian ledger — verbatim copy of calibration/guidelines-walkthrough/
+# The recorded Meridian ledger — verbatim copy of skills/make-brand-guidelines/assets/calibration/
 # meridian.ledger.json's own content, inlined so this script has no relative-path dependency on
 # where it's invoked from (a bundled scripts/ script must be self-contained).
 MERIDIAN_LEDGER = {

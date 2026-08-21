@@ -2,11 +2,11 @@
 """calibration-check-strategy <transcript> — score a brand-council transcript against the fixture's planted defects.
 
 Given the critique the brand council produced over
-`calibration/council-calibration/fixtures/weak-brand-strategy.md`, assert it surfaced each
+`skills/check-brand-council/assets/calibration/fixtures/weak-brand-strategy.md`, assert it surfaced each
 PLANTED defect — the `rubric-brand-strategy` anti-patterns plus the bullshit filter. Concept-level
 matching (tolerant of phrasing); reports a catch-rate, not a CI gate, because the council is an LLM
 panel — the recorded protocol + fixtures + run history live in
-`calibration/council-calibration/` (verbatim, ported from brand-forge's own eval).
+`skills/check-brand-council/assets/calibration/` (verbatim, ported from brand-forge's own eval).
 
 Usage:
   calibration_check_strategy.py <transcript-file>   # exit 0 = every planted defect caught

@@ -1,6 +1,6 @@
 {
   "name": "brand-design",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build and evaluate brands grounded in cultural authority \u2014 strategy, identity, voice, and stewardship \u2014 across three seats: an aspirational Muse (the gravitational pull toward an ideal), a maker (methodology + extended voice work via the brand-writer agent), and an adversarial named-critic Council (check-brand-council, fanning out 14 persona-inlined judge dispatches). Modes are user-invocable skills \u2014 make-brand, make-brand-muse, make-brand-guidelines, make-brand-stack, check-brand-orientation, check-brand-rubric, check-brand-council, file-brand, file-brand-corpus. Methodology/evaluation/corpus/guidelines knowledge are skills; a brand-corpus MCP gives per-instance retrieval with a script-based fallback. NOTE (migration in progress, 2026-08-19): this description is a placeholder pending Phase 4/5 of the brand-forge->brand-design migration campaign \u2014 the full evals-first rewrite lands there. Self-contained.",
   "author": {
     "name": "Kim",

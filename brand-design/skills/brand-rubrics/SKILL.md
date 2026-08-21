@@ -88,10 +88,8 @@ Ingested brand corpora, client decks, competitor docs, and any external material
 
 ## Provenance
 
-This pack's `references/` were ported from brand-forge (source:
-`/Users/kimba/Projects/nonoun/nonoun-plugins/brand-forge`, frozen SHA
-`1e0d2d9e554b547f59260f63e31b4af2575196b0`, 2026-06-20) as part of the brand-forge → brand-design
-migration campaign, Phase 3 Track D (2026-08-19).
+This pack's `references/` were ported from brand-forge, Phase 3 Track D — full citation (source
+repo, frozen SHA, date) in the plugin root README's "Provenance and disposition" section.
 
 ## Boundaries
 

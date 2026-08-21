@@ -2,7 +2,7 @@
 """calibration-check-design <transcript> — score a DESIGN sub-council transcript against the fixture.
 
 The companion of `calibration_check_strategy.py` for the SECOND brand fixture
-(`calibration/council-calibration/fixtures/weak-visual-identity.md`). Where the strategy
+(`skills/check-brand-council/assets/calibration/fixtures/weak-visual-identity.md`). Where the strategy
 fixture exercises the STRATEGY sub-council (6 strategy anti-patterns), this fixture exercises the
 DESIGN sub-council (Paula S. · Massimo V. · Matt W. · Jessica W.) with one planted defect per critic
 lens — visual/typographic failures the strategy council structurally MISSES (the orchestrator's

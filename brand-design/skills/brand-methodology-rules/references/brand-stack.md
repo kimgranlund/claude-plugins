@@ -31,8 +31,9 @@ spine); **Expression** is the *expression* stage condensed to its idea; **Produc
    layers, not memory.
 2. For each tier, extract **one thesis sentence + a ≤50-word elaboration** from its source layer(s) —
    condense, don't restate the whole layer. The Stack is a reading document; keep it to one sheet.
-3. Fill `templates/brand-stack-one-pager.md`. Keep it monochrome and text-only — any polish (colour,
-   logo, PDF) happens downstream in a publishing tool, never in the template.
+3. Fill `${CLAUDE_PLUGIN_ROOT}/skills/make-brand-stack/references/brand-stack-one-pager.md`. Keep
+   it monochrome and text-only — any polish (colour, logo, PDF) happens downstream in a
+   publishing tool, never in the template.
 4. **[inferred]** (this project's own practitioner rule, not an externally verified standard)
    **Maturity is honest, not blocking.** A corpus that hasn't reached a layer can't fill its tier —
    render that tier as `— not yet defined (layer NN missing)` and name what's missing, rather than
