@@ -110,6 +110,31 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.19 · 2026-08-21 · closes #853 (structural follow-up to #852): `fleet-bootstrap` Phase 5's
+`reviewer` spawn now spawns a genuine `claude -p` OS process — orchestrator writes+verifies the
+wall in the target worktree, spawns exactly one `claude -p` child with cwd already inside it
+(background `Bash`, orchestrator's own shell redirect captures its log), that child's mandatory
+first act runs `lld-0006` I2's probe and reports via `gh issue comment` (never a Bash-redirect
+write — its own charset can't carry JSON, see below), orchestrator polls and appends the confirmed
+`fleet.json` row itself. `planner` is unaffected (carries no wall, stays an in-process `Agent`
+dispatch). Live round-trip verified end to end this build (spawn, ~40–48s completion, captured
+report, denial texts confirmed) — not just a one-shot probe. `team-scaffolding`'s manual `reviewer`
+path gets the restart-then-verify contract (Q3): Phase 3 writes+verifies the wall, then offers a
+restart (exit, `claude` fresh in the worktree, `/bind-review`) instead of defaulting to the
+same-session probe; `bind-review` gains a new Phase 0 that runs I2's probe as its first act when a
+wall is already on disk. `wall_applied` gains `"spawn-unconfirmed"` (spawn didn't report within
+budget) and a sibling `wall_verified_via` (`"subprocess-spawn"` | `"restart"`) once `true`;
+`same-session-unenforced` retained as the honest declined-restart fallback only.
+`isolation: "remote"` investigated and rejected (the wall file is gitignored, never reaches a
+remote environment). Live build found a real platform gap while wiring the child's report path:
+C1a's retirement escape hatch charset excludes `{`/`}`, so a JSON-object `fleet.json` append is
+denied even on a permitted path — confirmed against the exact shipped hook regex, filed as #855
+rather than silently widened; the recurring per-task spawn scheduler (cadence, crash recovery) is
+filed as #856, not built here. `fleet-manifest-schema.md` and `lld-0006-fleet-permission-profile.md`
+(I2, new R6) updated to match. Fresh-context wording-checker pass (two rounds): first pass found 8
+findings (2 majors — a schema contradiction over who ever writes `wall_applied`/`wall_verified_via`
+for the manual restart path, and a stale Failure branch describing the pre-fix in-process flow),
+all fixed pre-merge; re-check pass: ship, one cosmetic nit (PASS→PASSED) also applied.
 v2.28.18 · 2026-08-21 · closes #852 (direct regression in the #850 fix): #850's own C3/step-3 re-verification was content-only (a grep), never proving the wall enforces — a self-written wall can't take effect against the same session that wrote it (config loads once per OS process, confirmed live; same root cause `harness:hook-writing-rules` already documents for plugin hooks). `team-scaffolding` Phase 3 and `fleet-bootstrap` Phase 5 now run `lld-0006`'s I2 live probe (a `Write` + a denied-pattern `Bash` attempt, denial texts recorded) as step 4, before ever claiming a wall outcome. `wall_applied` is a genuine tri-state now: `true` (I2 denied both), `"blocked-worktree"` (unchanged), or new `"same-session-unenforced"` (today's expected result for both paths, neither spawns a genuinely new OS process). `fleet-manifest-schema.md` updated to match. Structural process-spawn fix out of scope here — follow-up #853. Fresh-context wording-checker: ship, 2 cheap minors applied pre-merge (I2's allowed-command-pass leg added to the DENIED branch; the dispatch-prompt clause un-buried from a nested parenthetical).
 v2.28.17 · 2026-08-21 · closes #850: `fleet-bootstrap` Phase 5's dispatch prompt no longer instructs a background `reviewer`/`planner` seat to invoke command-only `/team-scaffolding <role>` (or `/bind-review`/`/bind-planning`) via the Skill tool — structurally blocked for a dispatched agent with no live terminal, the same #421/#423 class recurring at this call site. The dispatch prompt now quotes `team-scaffolding`'s own Phase 1/3/4 steps (naming, the `reviewer` worktree precondition + structural `deny-edit-write` wall, comms charter) for the seat to perform directly via `Read`/`Write`/`Edit`/`Bash`, mirroring Phase 1's own inline-mechanics fix for the orchestrator seat; Phase 2's `fleet.json`/roster appends stay a single writer (Phase 5 step 3) to avoid a double-append race. `fleet-manifest-schema.md` gains a `live_state.joined[].wall_applied` field (`true` / `"blocked-worktree"` / absent-is-unknown) so Phase 6 can report the reviewer wall's real outcome instead of assuming success; two new Failure branches name the worktree-stop and no-report cases. Fresh-context wording-checker pass: 2 majors found (no concrete wall-outcome channel; a double `fleet.json` writer) and fixed pre-close.
 v2.28.16 · 2026-08-20 · the screens->frontend plugin rename (Kim's ruling 2026-08-20: one plugin absorbing the front-end knowledge series): live `screens:` handles and plugin-prose mentions repointed to `frontend:`/`frontend`; ledger history untouched.
