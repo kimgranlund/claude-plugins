@@ -1,0 +1,60 @@
+{
+  "skill": "council-rules",
+  "note": "Minted 2026-08-20, S3 of the brand-design council-as-platform overhaul (#826). Floor suite: routing against this pack's own trigger surface (the MECHANISM, never actually convening) vs. its action-twin (check-brand-council) and its sibling reference packs.",
+  "cases": [
+    {
+      "id": "t01",
+      "prompt": "What makes something a council instead of just a single reviewer?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t02",
+      "prompt": "Why does the blind phase have to run before deliberation in a council?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t03",
+      "prompt": "Explain how 2-of-3 contested-finding voting works in a critic council.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t04",
+      "prompt": "What are the five synthesis shapes a council's findings resolve into?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t05",
+      "prompt": "What does a council chair actually do, and what is it not allowed to do?",
+      "expect": "trigger"
+    },
+    {
+      "id": "t06",
+      "prompt": "What's the difference between a council's roster and its machinery?",
+      "expect": "trigger"
+    },
+    {
+      "id": "n01",
+      "prompt": "Convene the brand council on this positioning brief.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council (running an actual council now, not the mechanism)"
+    },
+    {
+      "id": "n02",
+      "prompt": "Run the design sub-council against our new identity system.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council"
+    },
+    {
+      "id": "n03",
+      "prompt": "Score this brand strategy against the rubric.",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-rubric / brand-rubrics — rubric scoring, not council mechanics"
+    },
+    {
+      "id": "n04",
+      "prompt": "What would Luke S. and Paula S. say about this identity system?",
+      "expect": "no-trigger",
+      "comment": "owner: check-brand-council — a live convene request naming brand-specific critics"
+    }
+  ]
+}

@@ -22,10 +22,12 @@ seam: no seat judges its own work.
 | `skills/make-brand-stack` | Procedural | both (`/make-brand-stack`) | The one-page reading of a brand — six load-bearing tiers (Root/Position/Point of View/Expression/Product/Stewardship), each a thesis sentence plus a cited elaboration; condenses, never invents |
 | `skills/check-brand-orientation` | Procedural | both (`/check-brand-orientation`) | Gets your bearings before any work: inventories the corpus, reads it against the methodology as working/drifting/missing, proposes next steps by pipeline stage |
 | `skills/check-brand-rubric` | Procedural | both (`/check-brand-rubric`) | Adversarially scores existing brand work against `brand-rubrics`' library — names failures with evidence and the test that reveals them, never flatters |
-| `skills/check-brand-council` | Procedural (orchestrator) | both (`/check-brand-council`) | Convenes the named-practitioner council — fans out unnamed `brand-judge` dispatches per persona (`skills/check-brand-council/references/critics/critic-*.md`, 14 files) by sub-council (strategy/design/voice/full), 2-of-3 contested-severity voting, cross-critic synthesis (convergence, highest severity, productive tension, blind spot, verdict + 3 revisions). This procedure IS the orchestrator — no separate agent |
+| `skills/council-rules` | Knowledge pack | model-only | What a council IS, domain-neutral: roster/persona contract, sub-councils, blind fan-out mechanics, severity taxonomy + 2-of-3 contested voting, the five synthesis shapes, calibration discipline, and the two-phase model (blind first, chair-moderated deliberation second) — the machinery `check-brand-council` is an instance of, and what `make-council`/`make-critic` (S4) will mint against |
+| `skills/check-brand-council` | Procedural (orchestrator) | both (`/check-brand-council`) | Convenes the named-practitioner council as an INSTANCE of `council-rules`' machinery — the brand roster + sub-councils are this skill's own configuration. Phase 1 (blind, unchanged): fans out unnamed `brand-judge` dispatches per persona (`skills/check-brand-council/references/critics/critic-*.md`, 14 files) by sub-council (strategy/design/voice/full), 2-of-3 contested-severity voting, cross-critic synthesis (convergence, highest severity, productive tension, blind spot, verdict + 3 revisions). Phase 2 (`--deliberate`, new): dispatches `council-marshal` as Chair to moderate a deliberation round over the anonymized phase-1 findings. This procedure IS the phase-1 orchestrator — no separate agent for phase 1; phase 2 delegates to the Chair |
 | `skills/file-brand` | Procedural | both (`/file-brand`) | Stamps a finished corpus into a distributable (plugin/Claude-chat skill/standalone MCP) via `scripts/brand_stamp.py`, running `brand_lint.py` before ratifying. Always asks which form |
 | `skills/file-brand-corpus` | Procedural | both (`/file-brand-corpus`) | Exports brand deliverables as a navigable Markdown corpus + self-contained site viewer (sticky nav, per-page ToC, GFM tables, mermaid, DOMPurify-sanitized) |
-| `agents/brand-judge` | Agent | dispatched (unnamed, one persona inlined per call) | The read-only critic shell `check-brand-council` fans out to — carries the shared Critical/Major/Minor/Noise severity convention and the trust-boundary rule every persona file cites rather than restating |
+| `agents/brand-judge` | Agent | dispatched (unnamed, one persona inlined per call) | The read-only critic shell `check-brand-council` fans out to for phase 1 and `council-marshal` fans out to for phase 2 — carries the shared Critical/Major/Minor/Noise severity convention, the trust-boundary rule every persona file cites rather than restating, and (new) the deliberation-round contract: respond to named peer findings, revise severity only with stated cause, propose a joint finding |
+| `agents/council-marshal` | Agent | dispatched (unnamed, one call per council run with `--deliberate`) | The Chair — strict router/moderator for phase 2, patterned on `teamwork:fleet-marshal`'s contract (named mention only, no cross-plugin preload). Routes the anonymized phase-1 finding set to each participating critic, collects each response through a channel that returns to it (never a named/mailbox dispatch — the stranding failure `council-rules` documents), and rolls up. Never judges, never revises a severity, never votes |
 | `agents/muse-agent` | Agent | dispatched | The aspirational seat `make-brand-muse` dispatches — names the pull, never makes or judges |
 | `agents/brand-writer` | Agent | dispatched | Extended voice/copy work — the words themselves, as distinct from `brand-guidelines`' voice *behavior* |
 | `scripts/brand_corpus_mcp.py` | Script (MCP server) | `.mcp.json` (bundled) | ~160-line JSON-RPC 2.0 reference server: `list_brand_documents`, `search_brand`, `fetch_brand_section`, `outline_brand_document`, `get_brand_tokens` — read-only, path-guarded, scoped via `BRAND_CORPUS_DIR` |
@@ -36,7 +38,8 @@ seam: no seat judges its own work.
 | `scripts/corpus_migrate.py` | Script | CLI + selftest | Migrates a legacy corpus layout into the current numbered-layer convention |
 | `scripts/corpus_provenance.py` | Script | CLI + selftest | Reads/writes per-document `contributors`/`sources` provenance frontmatter, per `brand-corpus` |
 | `scripts/check_concepts.py` | Script | CLI + selftest | Checks a corpus for the Foundation Canon's rejected artifacts (archetypes, personas, vision/mission/values triplets, "brand DNA") |
-| `scripts/calibration_check_strategy.py`, `scripts/calibration_check_design.py`, `scripts/calibration_check_voice.py`, `scripts/calibration_check_muse.py` | Script | CLI + selftest | Promoted from `skills/check-brand-council/assets/calibration/` — per-sub-council calibration fixtures for `check-brand-council` |
+| `scripts/calibration_check_strategy.py`, `scripts/calibration_check_design.py`, `scripts/calibration_check_voice.py`, `scripts/calibration_check_muse.py` | Script | CLI + selftest | Promoted from `skills/check-brand-council/assets/calibration/` — per-sub-council calibration fixtures for `check-brand-council`'s blind phase, unmodified by the S3 council-generalization refactor (the regression proof) |
+| `scripts/calibration_check_deliberation.py` | Script | CLI + selftest | NEW (S3, `#826`) — calibrates the phase-2 deliberation round (`--deliberate`, `council-marshal` as Chair) against `skills/check-brand-council/assets/calibration/fixtures/deliberation-anonymized-finding-set.md`: cross-examination, defend-or-revise-with-cause, joint-finding proposal, and the trust-boundary probe |
 | `scripts/calibration_replay.py` | Script | CLI + selftest | Promoted from `skills/make-brand-guidelines/assets/calibration/` — replays a recorded guidelines-ledger walkthrough against a fixture |
 | Per-skill `assets/calibration/` (in `check-brand-council`, `make-brand-guidelines`, `file-brand`) | Fixtures | n/a | The dated calibration runs + fixtures the promoted `calibration_*` scripts above formalize — re-homed under each owning skill by the S1 structure move (2026-08-20, `#824`); originals kept alongside the promoted scripts (their own READMEs document literal invocations that would need rewriting otherwise, disclosed rather than silently duplicated) |
 | `.provenance/mcp-first-precedent.md` | Reference | n/a | brand-design is this estate's only MCP/`userConfig`-registered plugin — noted for any future plugin considering the same pattern |
@@ -75,6 +78,28 @@ consulted for a deeper operability grade `brand-guidelines`/`make-brand-guidelin
 hand off to.
 
 ---
+
+v0.4.0 · 2026-08-20 · S3 council generalization (`#826`, wave 2 of the council-as-platform
+overhaul): NEW knowledge pack `council-rules` — the domain-neutral council machinery (roster/
+persona contract, sub-councils, blind fan-out mechanics, severity taxonomy + 2-of-3 voting, the
+five synthesis shapes, calibration discipline, the two-phase model) — extracted once so
+`check-brand-council` becomes a configuration of it rather than the machinery's only copy, and so
+S4's `make-council`/`make-critic` have something to mint against; `check-brand-council` refactored
+to cite it throughout, blind-phase behavior preserved byte-for-byte (all four blind calibration
+fixtures pass unmodified); NEW agent `council-marshal` — the Chair, patterned on
+`teamwork:fleet-marshal`'s strict-router contract (named mention, no cross-plugin preload), owns
+phase-2 orchestration/collection/roll-up, never judges; two-phase council in `check-brand-council`
+(`--deliberate`): phase 1 unchanged, phase 2 chair-moderated deliberation over the anonymized
+phase-1 finding set, collected only through channels that return to the Chair (never a named/
+mailbox dispatch — the 2026-08-20 stranding incident this encodes); `brand-judge` gains the
+deliberation-round contract (respond to named peer findings, revise severity only with stated
+cause, propose a joint finding), blind-phase contract untouched; NEW deliberation calibration
+fixture + `calibration_check_deliberation.py` (selftest green); both phases declare the Project
+single-context degraded mode (sequential persona simulation, Chair as an in-context role, per S2's
+run-modes convention); `council`/`marshal`/`rules` were all already-registered manifest tokens
+(anti-ambiguity check: verified against the root `naming.manifest.json`'s 128+-entry
+`object_vocab`/`role_lex`/`process_lex` before minting — no new vocabulary required). Semantic
+changes throughout — minor bump.
 
 v0.3.0 · 2026-08-20 · S2 portability (`#825`, wave 2 of the council-as-platform overhaul): the
 corpus-resolution ladder (MCP tools → filesystem corpus layout → Claude Project knowledge, with

@@ -1,6 +1,6 @@
 {
   "skill": "check-brand-council",
-  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
+  "note": "Minted 2026-08-19, Track A of the brand-forge -> brand-design migration (closes the brand-council agent+command pair; the fan-out is now this skill's own host-side procedure, no orchestrator agent). Updated 2026-08-20, S3 of the council-as-platform overhaul (#826): now an instance of council-rules' general machinery, gains a --deliberate phase-2 round via council-marshal (t07/t08) and a reciprocal fence against council-rules itself (n05). Floor suite only — the full estate-wide fence sweep against sibling brand-design skills is Phase 4's job, not this round's.",
   "cases": [
     {
       "id": "t01",
@@ -33,6 +33,16 @@
       "expect": "trigger"
     },
     {
+      "id": "t07",
+      "prompt": "Convene the design sub-council on this identity system and have them deliberate on each other's findings.",
+      "expect": "trigger"
+    },
+    {
+      "id": "t08",
+      "prompt": "Run the full brand council, then get the critics cross-examining each other's findings before the verdict.",
+      "expect": "trigger"
+    },
+    {
       "id": "n01",
       "prompt": "Score this brand strategy against the rubric.",
       "expect": "no-trigger",
@@ -55,6 +65,12 @@
       "prompt": "Organize these strategy documents into the brand corpus.",
       "expect": "no-trigger",
       "comment": "owner: brand-corpus (corpus architecture/attribution, not a critique)"
+    },
+    {
+      "id": "n05",
+      "prompt": "Why does a council's blind phase have to run before its deliberation phase?",
+      "expect": "no-trigger",
+      "comment": "owner: council-rules (the mechanism's own rationale, not a live convene request)"
     }
   ]
 }
