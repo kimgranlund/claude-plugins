@@ -110,6 +110,20 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.20 · 2026-08-21 · closes #855: `lld-0006` C1a's Bash escape-hatch charset (`sed`/`cat`/
+`printf` onto the three fleet-state files) excludes `{`/`}`, so a literal JSON-object append (e.g.
+`printf '{"role":...}' >> .claude/ops/fleet.json`) is denied even on a permitted path — confirmed
+live during #853's build. Ruled Option B (retirement-only by design): the charset stays as
+shipped; the ORCHESTRATOR — never walled — owns every `fleet.json` append, per #853's own shipped
+pattern (`fleet-bootstrap` Phase 5, PR #857) and #856's independent future scoping (routes its own
+recurring-spawn reports through `gh issue comment`, the same conclusion, arrived at separately).
+No concrete flow needing a walled seat to self-report structured JSON directly was found in this
+build's own codebase read. `lld-0006-fleet-permission-profile.md` C1a's "known residual gap" note
+and R6 (Risks) both converted from an open gap into this explicit design ruling; doc version
+0.2.0 → 0.3.0. No hook regex changed (Option A rejected) — nothing to re-verify with ALLOW/DENY
+cases this time; no `team-scaffolding`/`fleet-bootstrap` code touched since neither carries an
+inlined copy of the hook (only `team-scaffolding/SKILL.md` references it, unchanged here).
+
 v2.28.19 · 2026-08-21 · closes #853 (structural follow-up to #852): `fleet-bootstrap` Phase 5's
 `reviewer` spawn now spawns a genuine `claude -p` OS process — orchestrator writes+verifies the
 wall in the target worktree, spawns exactly one `claude -p` child with cwd already inside it
