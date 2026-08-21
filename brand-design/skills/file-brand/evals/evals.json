@@ -5,6 +5,7 @@
   { "id": "t01", "prompt": "stamp this brand as an installable plugin", "expect": "trigger" },
   { "id": "t02", "prompt": "package this brand corpus as a Claude chat skill", "expect": "trigger" },
   { "id": "t03", "prompt": "make this brand corpus deployable as a standalone MCP", "expect": "trigger" },
+  { "id": "t04", "prompt": "make this brand repo answer its own questions as a Claude-ready project", "expect": "trigger" },
   { "id": "n01", "prompt": "export the brand corpus as a navigable site", "expect": "no-trigger" },
   { "id": "n02", "prompt": "give me the one-page brand stack summary", "expect": "no-trigger" }
  ]
