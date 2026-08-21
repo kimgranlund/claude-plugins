@@ -80,6 +80,20 @@ hand off to.
 
 ---
 
+v0.8.1 · 2026-08-21 · Closing-pass fix on the merged `#838` roster-as-data + advisory work: a
+final independent fresh-context `harness:skill-checker` re-read (requested at handback, since
+several post-review fixes had landed without a second pass) found the substantive advisory
+machinery internally consistent end to end (pairing, vote/push exclusion, zero-advisor INFO — all
+verified against a live `roster_check.py` run), with one real minor gap of its own: `make-critic`
+step 5's case 1 (seat into a user-named sub-council) didn't say what happens when the named
+sub-council doesn't exist in the target roster yet — it could read as seating directly under an
+unregistered name instead of routing to case 3's explicit new-sub-council proposal (which alone
+carries the mandatory `## Groups` `leads:` entry). One-line guard added; no other changes. The
+pass's other findings (several split code-spans in make-critic's description/body, one
+restated-not-cited passage in check-brand-council's pre-existing phase-1 step 5) predate this
+ticket entirely and are out of its scope — logged here rather than silently fixed, for a future
+pass.
+
 v0.8.0 · 2026-08-21 · Roster-as-data (`#838`): councils/committees/leadership moved out of
 SKILL.md prose tables into maintained data — `references/roster.md` per council instance (schema:
 handle↔persona-file bijection, non-empty sub-councils, `full` reserved as the union, `## Groups`
@@ -96,7 +110,16 @@ floor-tier verification (`roster_check.py`'s exit code), never a SKILL.md semant
 contract when minting a new council instance. Resolved two owed questions from the seed: the
 script forks standalone (`roster_check.py`, not a `brand_lint.py` extension — a different
 structural-smell-vs-roster-schema job) and the file format is a markdown table + `## Groups`
-section (not frontmatter-structured md).
+section (not frontmatter-structured md). **Mid-build addition (same PR/version, Kim's live
+ruling):** a reserved, user-minted `advisory` sub-council — seeded with zero critics on purpose
+(personas are minted via `/make-critic`, never shipped). `roster-file-contract.md` gains `role:
+advisor`, paired bidirectionally and exactly with `sub-councils: advisory`; advisors ride along in
+fan-out and feed synthesis but are excluded from 2-of-3 contested-severity voting and from
+`check-brand-council`'s adversarial-calibration push (`severity-and-voting.md` gained a one-line
+eligibility pointer). `check-brand-council` convenes `advisory` cleanly when empty rather than
+erroring. `make-critic` seats a new critic into `advisory` by default whenever the user names no
+specific lens sub-council. `roster_check.py` reports a zero-advisor state as a named INFO line,
+distinct from the VACANT-lead WARNING, never a failure.
 
 v0.7.0 · 2026-08-21 · S6 campaign proof (`#829`, wave 4 — the final wave of the council-as-
 platform overhaul): full blind `/check-routing brand-design` (20 suites/182 cases, all

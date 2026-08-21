@@ -82,9 +82,11 @@ Parse `$ARGUMENTS` as `[council] [critic handle] [lens/domain]`:
    name, bio, or sourcing leak into the tracked persona file itself.
 5. **Register in the roster, into the sub-council the lens actually belongs to.** Three cases,
    in order:
-   - **The user named a specific lens sub-council** (the argument-parsing bullet above) → seat
-     there: `role: member` (or `lead` only if explicitly displacing/filling a stated vacancy —
-     never silently), `sub-councils: <that sub-council>`.
+   - **The user named a specific lens sub-council that already exists in the target roster** (the
+     argument-parsing bullet above) → seat there: `role: member` (or `lead` only if explicitly
+     displacing/filling a stated vacancy — never silently), `sub-councils: <that sub-council>`. A
+     named sub-council NOT already present in the roster routes to the third case below instead —
+     it is never seated directly under a name the roster doesn't carry yet.
    - **The user named no specific sub-council and isn't explicitly asking for a whole new one**
      (the ordinary case — including a lens that DOES fit an existing family's knowledge pack, step
      3, but the user still didn't name that family as the destination) → **seat into `advisory` by
