@@ -76,13 +76,13 @@ routing steal/leak survives the 2026-08-19 fix. Stated per the falsifiability ru
 - none (verdict above)
 
 #### Wave 1 — mechanically-clean moves
-- [ ] S1 (#824) structure re-home + stale-handle repair (Blocked-by: none) — status: todo — done-when: zero stray root dirs beyond `.provenance/`; every moved path's referrers repaired; `design-skills:brand-decomposer` handles fixed; provenance paragraph centralized to one home; gate green
+- [x] S1 (#824) structure re-home + stale-handle repair (Blocked-by: none) — status: done — done-when: zero stray root dirs beyond `.provenance/`; every moved path's referrers repaired; `design-skills:brand-decomposer` handles fixed; provenance paragraph centralized to one home; gate green
 
 #### Wave 2 — species changes (semantic — critic pass + eval rewrite required)
-- [ ] S2 (#825) portability (Blocked-by: S1) — knowledge tier: move-to-references ×4 + description diet — status: todo — done-when: resolution ladder canonical in brand-corpus; every procedure declares its Project mode (or filesystem-only, disclosed); all 4 bloat flags cleared; manifest description evals-first-rewritten; checker + scoped re-judge green
-- [ ] S3 (#826) council generalization (Blocked-by: S1) — status: todo — done-when: council-rules pack live; check-brand-council is an instance of the general machinery; council-marshal seat exists; two-phase council runs (blind calibration fixtures still green + a deliberation calibration fixture); brand-judge deliberation contract; checker + re-judge green
-- [ ] S4 (#827) minting (Blocked-by: S3) — status: todo — done-when: /make-critic and /make-council produce a conforming critic/council end-to-end; `muse` registered in RoleLex, muse-agent exemption retired; checker + re-judge green
-- [ ] S5 (#828) role-category packs (Blocked-by: S1) — status: todo — done-when: ~4 packs live, clustered from the personas with the clustering recorded; pack-writing-rules conformant; evals + fences; checker + re-judge green
+- [x] S2 (#825) portability (Blocked-by: S1) — knowledge tier: move-to-references ×4 + description diet — status: done — done-when: resolution ladder canonical in brand-corpus; every procedure declares its Project mode (or filesystem-only, disclosed); all 4 bloat flags cleared; manifest description evals-first-rewritten; checker + scoped re-judge green
+- [x] S3 (#826) council generalization (Blocked-by: S1) — status: done — done-when: council-rules pack live; check-brand-council is an instance of the general machinery; council-marshal seat exists; two-phase council runs (blind calibration fixtures still green + a deliberation calibration fixture); brand-judge deliberation contract; checker + re-judge green
+- [x] S4 (#827) minting (Blocked-by: S3) — status: done — done-when: /make-critic and /make-council produce a conforming critic/council end-to-end; `muse` registered in RoleLex, muse-agent exemption retired; checker + re-judge green
+- [x] S5 (#828) role-category packs (Blocked-by: S1) — status: done — done-when: ~4 packs live, clustered from the personas with the clustering recorded; pack-writing-rules conformant; evals + fences; checker + re-judge green
 
 #### Wave 3 — contested
 - none — every design fork was closed at the find-intent round (2026-08-20)
