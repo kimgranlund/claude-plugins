@@ -42,6 +42,13 @@ Artifact under review: `$ARGUMENTS`
 5. **Report honestly.** Lead with what fails and why it matters — no rounding up, no
    participation credit. End with the few highest-leverage fixes.
 
+## Run modes
+
+**Full** (Claude Code / Cowork) — step 3's `brand_lint.py` runs alongside scoring. **Project
+single-context** — no bundled scripts reachable: step 3 is skipped and disclosed as such (never
+silently); the rubric scoring itself (steps 2, 4, 5) runs at full parity, since `brand-rubrics` is
+a portable knowledge pack with nothing filesystem-dependent in it.
+
 ## Failure branches
 
 - No rubric in the library fits the artifact type → say so explicitly and score against the

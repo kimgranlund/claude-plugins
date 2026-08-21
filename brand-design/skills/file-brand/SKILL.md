@@ -57,6 +57,14 @@ is no default form.
    (self-contained; no external plugins-factory dependency). A failure is a finding to fix before
    handing it over, never something to ship past.
 
+## Run modes
+
+**Filesystem-only (Claude Code / Cowork), disclosed — no Project mode.** Every step is
+script-load-bearing (`brand_stamp.py`, `brand_lint.py`) and the output IS files on disk (a plugin,
+skill folder, or MCP package); a Claude Project single-context session has no filesystem to write
+that output to and no way to run the scripts. State this plainly rather than attempting a
+degraded chat-only stamp — there is no meaningful in-chat equivalent to "package a distributable."
+
 ## Failure branches
 
 - Form not named → stop and ask; never guess (a wrong guess wastes the stamp — the three forms

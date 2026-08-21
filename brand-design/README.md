@@ -76,6 +76,17 @@ hand off to.
 
 ---
 
+v0.3.0 · 2026-08-20 · S2 portability (`#825`, wave 2 of the council-as-platform overhaul): the
+corpus-resolution ladder (MCP tools → filesystem corpus layout → Claude Project knowledge, with
+the absent-from-uploads vs. missing-from-the-brand orientation) defined once in `brand-corpus`,
+cited by its consumers; every procedural skill declares its run modes (Full Claude Code/Cowork vs.
+Project single-context, or filesystem-only disclosed where bundled scripts are load-bearing —
+`file-brand`, `file-brand-corpus`; `make-brand-guidelines` degrades to an in-chat ledger the user
+re-uploads); `brand-corpus`/`brand-methodology-rules`/`brand-rubrics`/`brand-guidelines` dieted
+(long-body flags cleared, nothing load-bearing cut — moved to `references/`) and
+`brand-methodology-rules`'s description diet to ≤700 chars; the manifest's migration-placeholder
+description replaced with an evals-first rewrite. Semantic/description changes — minor bump.
+
 v0.2.0 · 2026-08-20 · S1 structure re-home (`#824`, wave 1 of the council-as-platform overhaul):
 zero stray root dirs (`references/`, `calibration/`, `reviews/`, `templates/` moved under their
 owning skill or `.provenance/`), every referrer path repaired (SKILL/agent bodies, the promoted

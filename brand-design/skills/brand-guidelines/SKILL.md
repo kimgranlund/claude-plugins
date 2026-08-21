@@ -16,10 +16,11 @@ user-invocable: true
 
 Most brand-guidelines docs are written by one person guessing, then policed. This skill **builds them by guided choice**: for each brand domain the system proposes a **2×2 of concrete options**, you pick a quadrant and comment, and the choices **accumulate** into a coherent, evidence-traced guidelines section in the corpus. The model proposes the options; **you supply the taste**; code owns the accumulating state and (later) the assembly.
 
-2 declared axes — below pack-writing-rules' 3-7 floor. This pack's own retrieval surface stays
-thin because most of the mechanism (the loop, the seven axes, the ledger shape) lives in this
-SKILL.md body itself; `references/` only carries the two things too long to inline. Flat consult
-table below, no `references/INDEX.md`.
+2 declared axes — below pack-writing-rules' 3-7 floor. This SKILL.md carries a summary of the
+mechanism (the loop, the seven axes, the ledger shape); `references/the-loop.md` carries the full
+version, and `references/exemplars.md` the per-domain grounding — the retrieval surface stays thin
+because there are only two files to point at. Flat consult table below, no
+`references/INDEX.md`.
 
 ## Consult table
 
@@ -32,21 +33,21 @@ This file is the table of contents; the full mechanism is in [`references/the-lo
 
 ## The loop (per domain)
 
-The loop walks **six domains** — `mark · voice · color · type · expression · governance` — with the **brand idea** (from `01-foundation`) sitting above them as what every option must trace to. For each domain:
-
-1. **Frame** — read `01-foundation` + the accumulated choice-ledger (run **`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/guidelines_ledger.py" coherence --domain <d>`** to surface prior commitments + any contradictions); pick the domain's **two axes** (a default pair, below; the model may swap with a stated reason; you may override) → a 2×2.
-2. **Generate** — four **design-move cards** (A/B/C/D), one per quadrant, each a concrete move grounded in the foundation + a cited exemplar (per-domain/axis seeds in [`references/exemplars.md`](references/exemplars.md) — cite the mechanism, never the asset) + the quality bar. Never generic, never "on-brand" — each names a causal mechanism.
-3. **Present** — the 2×2 as a Markdown grid + the four lettered cards; ask for **A/B/C/D + free-text comments/corrections**.
-4. **Capture** — append a typed **choice** to the ledger (the chosen move, amended by your comment, with contributors + exemplar evidence). A comment like *"B but warmer"* records the amended move **and** re-renders a refined card for confirmation.
-5. **Drill or advance** — if the domain's capture spec has unresolved sub-decisions, spawn a **finer 2×2** within the chosen quadrant; else advance. Earlier choices **constrain** later domains (coherence).
-
-The ledger is the state — the loop resumes at the frontier. It MAKES; it never grades its own output (that split is below).
+Walks **six domains** — `mark · voice · color · type · expression · governance` — with the
+**brand idea** (`01-foundation`) above them as what every option must trace to. Per domain:
+**Frame** (read the foundation + ledger coherence, pick the domain's two axes → a 2×2) →
+**Generate** (four grounded, exemplar-cited design-move cards A/B/C/D, never generic) →
+**Present** (the grid + cards; ask for a pick + comments) → **Capture** (append the typed,
+amended choice to the ledger) → **Drill or advance** (a finer 2×2 within the quadrant, or move
+on — earlier choices constrain later domains). The ledger is the state; the loop resumes at the
+frontier. It MAKES; it never grades its own output.
 
 ## The seven axes (cross two → a 2×2)
 
-`functional↔expressive · product-led↔human-led · quiet↔loud · literal↔metaphorical · premium-restraint↔campaign-loudness · institutional↔conversational · systematic↔organic`
-
-Default axis pair per domain (the model may swap with a reason): **mark** literal↔metaphorical × systematic↔organic · **voice** institutional↔conversational × functional↔expressive · **color** functional↔expressive × restraint↔loudness · **type** systematic↔organic × functional↔expressive · **expression** quiet↔loud × premium-restraint↔campaign-loudness · **governance** systematic↔organic × product-led↔human-led.
+`functional↔expressive · product-led↔human-led · quiet↔loud · literal↔metaphorical ·
+premium-restraint↔campaign-loudness · institutional↔conversational · systematic↔organic` — a
+default pair per domain (swappable with a stated reason). → Full mechanism, per-domain default
+pairs, the design-move card shape, and drill-down: [`references/the-loop.md`](references/the-loop.md).
 
 ## The choice-ledger (mechanized state)
 

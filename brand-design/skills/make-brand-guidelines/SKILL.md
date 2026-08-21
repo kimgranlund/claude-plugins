@@ -39,6 +39,20 @@ Domain to work, or resume the frontier if blank: `$ARGUMENTS` (one of `mark | vo
 4. **Report the round.** Relay the domain worked, the pick captured, and the coverage state
    `brand-guidelines` returns; don't re-summarize the mechanism.
 
+## Run modes
+
+**Full** (Claude Code / Cowork) — the mechanized loop: `guidelines_ledger.py` persists the ledger
+to disk, validated by construction, with `coherence`/`coverage`/`assemble` all filesystem-backed.
+**Project single-context** (no bundled `guidelines_ledger.py` reachable — an actual environment
+class, never inferred from a transient script error in Full mode, which is a failure branch, not
+a mode switch) — this skill **degrades to an in-chat ledger**: render the accumulated choices as a
+Markdown table (columns: `domain, axes, quadrant-pick, comment, exemplar-cited, contributors`)
+in the response each round, disclosed as a degraded substitute for the mechanized ledger (not
+equivalent — no `coherence`/`assemble` gating). The user re-uploads or re-pastes that table at the
+start of a later session to resume the frontier; no table pasted → treat as an empty ledger and
+start at domain 1, never assume prior coverage. Nothing is silently lost, but nothing is silently
+persisted either.
+
 ## Failure branches
 
 - A card can only be written by asserting rather than tracing it to `01-foundation` → that's an
@@ -49,7 +63,10 @@ Domain to work, or resume the frontier if blank: `$ARGUMENTS` (one of `mark | vo
 
 ## Done / NOT done
 
-Done when `brand-guidelines`'s own stopping condition for the round is met (a choice appended and
-validated) and the coverage state is relayed. NOT done if a design-move card was generated without
-tracing it to `01-foundation`, or this skill re-implemented any part of the loop `brand-guidelines`
-already owns.
+**Full mode:** done when `brand-guidelines`'s own stopping condition for the round is met (a
+choice appended and validated) and the coverage state is relayed. **Project mode:** done when the
+round's pick is captured in the in-chat ledger table (disclosed as degraded, per Run modes) and
+the updated table is relayed in full. Either mode, NOT done if a design-move card was generated
+without tracing it to `01-foundation`, or this skill re-implemented any part of the loop mechanism
+itself instead of deferring to `brand-guidelines` (the sanctioned in-chat ledger render is the
+disclosed Project-mode substitute, not a re-implementation, and is exempt from this ban).

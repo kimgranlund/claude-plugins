@@ -55,14 +55,21 @@ Target corpus dir: `$ARGUMENTS` (default `./brand-corpus`, the same default `mak
    configured), and that a doc containing a raw `<script>` produces no dialog (DOMPurify strips
    it).
 
+## Run modes
+
+**Filesystem-only (Claude Code / Cowork), disclosed — no Project mode.** The output IS a
+`<corpus>/` folder plus a generated `site/` viewer on disk (`build_sitemap.py`), and step 5 serves
+it over a local HTTP port — none of that maps to a Claude Project's single-context chat. State
+this plainly rather than attempting a degraded chat-only export.
+
 ## Failure branches
 
 - No deliverables exist yet → stop, point at `make-brand`; never fabricate sections.
 - `build_sitemap.py --init` reports a missing or malformed `reader.config.json` → fix the JSON,
-  re-run step 3; the site still builds without it (optional polish only).
+  re-run step 4; the site still builds without it (optional polish only).
 
 ## Done / NOT done
 
 Done when `<corpus>/` is self-contained and portable (zip/share it, or host it on any static
-server) and step 4's verification passes. NOT done if the site was generated once and never
+server) and step 5's verification passes. NOT done if the site was generated once and never
 re-run after a later corpus edit — the reader reads the sitemap, not the live files.
