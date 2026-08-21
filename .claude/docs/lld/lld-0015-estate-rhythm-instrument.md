@@ -59,7 +59,7 @@ ratified.
 **Resolved:** add a "Kim's ruling/merge queue" section to the EXISTING `.claude/ops/held-items.md`
 rather than minting a new file, per idr-0011's own named lean ("channel: `held-items.md`",
 gh#626's seed comment) and per the seed comment's explicit instruction. `held-items.md` already
-exists as a human-gate-item ledger (filing-author holds for `ops-issues`) with a proven
+exists as a human-gate-item ledger (filing-author holds for `issue-sorter`) with a proven
 append-then-resolve shape; the new section reuses that shape for a structurally different but
 conceptually adjacent class of item — "something only Kim can decide" — under its own entry
 template so the two never collide. The file's own top-of-file note is edited to disclose the
