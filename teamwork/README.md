@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.30 · 2026-08-22 · closes live-lane ruling (Kim): `/sub-agent` skill-target wrap and free-instruction path default `model: sonnet` instead of inheriting the session model (fable-session cost leak); user overrides by naming a model in the task; agent targets keep their own frontmatter pins; checker C1 note — judgment-load self-escalation stays 2b-only.
 v2.28.29 · 2026-08-22 · closes #866: `fleet.json` gains a `cross_repo_coordination` array — each
 entry names the participating repos, their `{repo}-marshal` roles, the date the channel was
 established, and who authorized it, scoped per-repo (mirrors `live_state.joined`'s pattern rather

@@ -4,14 +4,14 @@ description: >-
   Dispatches unattended via the Agent tool. First token exact-matches a registered agent name, or
   a registered skill name (bare or `plugin:skill`-qualified) → that target's dispatch, optionally
   NAMED via the literal marker `as NAME` — named stays continuable (`SendMessage`), no name
-  given is one-shot and synchronous. No target match →
-  the whole $ARGUMENTS is a free-instruction charter, spawned NAMED by default (auto-derived slug)
+  given is one-shot and synchronous; skill/free-instruction dispatches default to sonnet (name a
+  model in the task to override; agent targets keep their own pins). No target match → the whole
+  $ARGUMENTS is a free-instruction charter, spawned NAMED by default (auto-derived slug)
   — say "one-shot"/"quick" for synchronous instead. Run
   /sub-agent {agent-or-skill-name} [as name] {task}, or /sub-agent {free-instructions}. NOT the
   forked form (`/fork-agent {name}` — background fork, registered agents only); NOT the
-  host-adopts-contract form (`/bind-{seat}`); NOT a per-seat alias — mints none of its own; NOT
-  batch find-and-confirm across many tickets (`/mobilize-chores`, which already names its own
-  per-ticket build-leader dispatches — this command is for one ad-hoc target, not a queue).
+  host-adopts-contract form (`/bind-{seat}`); NOT a per-seat alias; NOT batch find-and-confirm
+  across many tickets (`/mobilize-chores` — this command is one ad-hoc target, not a queue).
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "{agent-or-skill-name} [as name] {task}, or {free-instructions}"
@@ -125,6 +125,15 @@ same "out of scope, left to the dispatched target" posture as the agent path. Na
 Phase 2a-agent's rule identically: explicit name → `name:` set, mailbox semantics stated; no name
 → unnamed, synchronous.
 
+**Model default (Kim's ruling, 2026-08-22): pin `model: sonnet` on this wrap.** `general-purpose`
+carries no frontmatter pin, so without this the dispatch silently inherits the SESSION model — a
+fable session prices every routine skill run at fable, the exact leak this default closes. The
+task text naming a model ("use opus", "on fable", "haiku is fine") overrides the pin; the
+registered-AGENT path (2a-agent) is untouched — a resolved agent's own frontmatter tier IS its
+model, never overridden or defaulted here. Effort cannot be set on a plain `Agent` dispatch
+(`agent-writing-rules`' dispatch-time mechanics — frontmatter or Workflow only), so no effort
+claim is made; state the chosen model in the reply.
+
 ### Phase 2b — Seal and dispatch a free-instruction session (absorbed from `sub-task`)
 
 Seal the whole `$ARGUMENTS` as a self-contained charter — no conversation history, no implicit
@@ -139,8 +148,12 @@ tokens → `subagent-color-audit`), unique via a short random suffix when a coll
 ruling reserves `ListAgents` for confirming liveness of an already-known name, never for finding
 or probing one, and a per-dispatch collision check reads too close to that discouraged "find" use
 to risk; the random-suffix path is the resolution, not a fallback. Pin `model: sonnet` per the
-ad-hoc-dispatch doctrine (`agent-writing-rules` §Model tiering), unless the charter's own judgment
-load plainly earns more — state whichever was chosen.
+ad-hoc-dispatch doctrine (`agent-writing-rules` §Model tiering) — the same session-model-inherit
+leak Phase 2a-skill's model default closes — unless the charter itself names a model (the user's
+override) or its judgment load plainly earns more; state whichever was chosen. The judgment-load
+escalation channel is THIS path's alone (an unbounded free charter can genuinely earn a higher
+tier); Phase 2a-skill deliberately has no such clause — a bounded skill run overrides only by the
+user naming a model, never by self-escalation, or the fable leak reopens by the back door.
 
 This naming is the CANON-SANCTIONED deliberate-continuation case, not the fan-out class gh#154/
 gh#157 ban: it names a single seat the user explicitly means to resume, never a fanned-out worker
