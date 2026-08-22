@@ -1,6 +1,6 @@
 {
   "skill": "sub-agent",
-  "note": "Trigger-routing suite. Command species (disable-model-invocation: true) — every positive case is the explicit slash form; expect=no-trigger: a near-miss owned elsewhere (owner in comment). t06-t08 (2026-08-19) cover the dual-mode free-instruction/continuation path absorbed from the retired sub-task sibling (#751) — same command surface, no registered agent name given.",
+  "note": "Trigger-routing suite. Command species (disable-model-invocation: true) — every positive case is the explicit slash form; expect=no-trigger: a near-miss owned elsewhere (owner in comment). t06-t08 (2026-08-19) cover the dual-mode free-instruction/continuation path absorbed from the retired sub-task sibling (#751) — same command surface, no registered agent name given. t09-t12 (2026-08-22) cover skill-target dispatch and the explicit-name token grammar added the same day.",
   "cases": [
     { "id": "t01", "prompt": "/sub-agent build-leader ship ticket #240 end to end, unattended.", "expect": "trigger" },
     { "id": "t02", "prompt": "/sub-agent review-leader review this one target, unattended.", "expect": "trigger" },
@@ -10,8 +10,12 @@
     { "id": "t06", "prompt": "/sub-agent audit our onboarding flow for accessibility gaps and report back — no registered agent for this.", "expect": "trigger" },
     { "id": "t07", "prompt": "/sub-agent start a session about whether we should switch our color token pipeline to OKLCH — keep it open, I'll follow up.", "expect": "trigger" },
     { "id": "t08", "prompt": "/sub-agent spin up a sub-agent session to review this PR's diff line by line, one-shot, just tell me what you find.", "expect": "trigger" },
+    { "id": "t09", "prompt": "/sub-agent mobilize-chores run the ops sweep and mobilize whatever's buildable.", "expect": "trigger", "comment": "skill target (Phase 2a-skill), no explicit name — unnamed, one-shot dispatch" },
+    { "id": "t10", "prompt": "/sub-agent mobilize-chores as plugins-chores-agent run the ops sweep and mobilize whatever's buildable.", "expect": "trigger", "comment": "skill target plus explicit `as <name>` marker — named, continuable dispatch" },
+    { "id": "t11", "prompt": "/sub-agent teamwork:mobilize-chores run the ops sweep.", "expect": "trigger", "comment": "plugin:skill-qualified target form, no name — unnamed one-shot" },
+    { "id": "t12", "prompt": "/sub-agent build-leader as my-fix ship ticket #240 end to end.", "expect": "trigger", "comment": "agent target plus `as <name>` marker — named, continuable; contrast t01, same target with no marker, unnamed" },
     { "id": "n01", "prompt": "Run the builder agent's own contract as a background fork off this session.", "expect": "no-trigger", "comment": "owner: /fork-agent — a background fork, not a real Agent-tool dispatch" },
     { "id": "n02", "prompt": "Make this session adopt the build-leader agent's own contract directly and hold it until I say stop.", "expect": "no-trigger", "comment": "owner: /bind-build — the host adopts the contract in place, no dispatch" },
-    { "id": "n03", "prompt": "Sweep the ops queue and mobilize whatever's buildable.", "expect": "no-trigger", "comment": "owner: /mobilize-chores — batch find-and-confirm, not one named agent dispatch" }
+    { "id": "n03", "prompt": "Sweep the ops queue and mobilize whatever's buildable.", "expect": "no-trigger", "comment": "owner: /mobilize-chores — batch find-and-confirm across a whole queue, not one named ad-hoc target" }
   ]
 }
