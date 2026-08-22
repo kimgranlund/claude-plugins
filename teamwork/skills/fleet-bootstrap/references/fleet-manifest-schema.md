@@ -7,6 +7,11 @@ first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a ful
 
 ## Shape
 
+The `cross_repo_coordination` array below is illustrative, shown populated with this repo's own
+real standing channel (issue #866) for concreteness rather than a placeholder — most repos'
+`fleet.json` carry no such array at all, and a fresh entry names its own repos/roles/date/
+authorizer, never copies this one's values.
+
 ```json
 {
   "version": 1,
@@ -28,7 +33,15 @@ first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a ful
     ],
     "loop_position": null,
     "gate": null
-  }
+  },
+  "cross_repo_coordination": [
+    {
+      "repos": ["gen-ui-kit", "signup", "plugins", "adiav2"],
+      "marshal_roles": ["gen-ui-kit-marshal", "signup-marshal", "plugins-marshal", "adiav2-marshal"],
+      "established": "2026-08-22",
+      "authorized_by": "Kim, confirmed live in the plugins mobilize-chores session (issue #866)"
+    }
+  ]
 }
 ```
 
@@ -152,6 +165,23 @@ takeover record.
 - **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.
+- **`cross_repo_coordination`** (optional, defaults absent/empty — most repos never carry a
+  standing cross-repo channel) — an array of standing coordination channels this repo's fleet
+  participates in, alongside other repos' own fleets. Each entry:
+  - `repos` — the participating repo names (e.g. `"gen-ui-kit"`, `"signup"`, `"plugins"`,
+    `"adiav2"`).
+  - `marshal_roles` — the `{repo}-marshal` session names authorized to relay across this channel,
+    one per participating repo (mirrors the printed orchestrator session name, not the schema's
+    `agent` role key — see the "Schema key vs. printed session name" field above).
+  - `established` — the date the channel was stood up.
+  - `authorized_by` — free text naming who/what ratified standing the channel up (a human's own
+    words, a ticket id, or both).
+
+  Scope: **per-repo local**, matching `live_state.joined`'s existing pattern — each participating
+  repo's own `fleet.json` carries its own entry naming the same channel, rather than one shared
+  cross-repo store. A shared/synced surface across repos is a bigger design question, deliberately
+  out of scope here (issue #866's own Scope/Open). Append-only, same discipline as `live_state.joined` —
+  a channel that lapses gets a new entry noting it, never a silent deletion of the old one.
 
 ## Why there is no `builder` seat here (Kim's ruling, 2026-08-21 session)
 
