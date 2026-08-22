@@ -35,6 +35,10 @@ empty `live_state.joined`) — no interview, matching `team-scaffolding`'s own r
 command invocation with no role question asked is itself the human's act of declining one; running
 `/fleet-bootstrap` at all is that same explicit act. Present → read it as the record of who has
 already joined and at what tier/mode; do not overwrite existing `live_state` entries, only append.
+**Then run the tier reconcile** (`references/fleet-manifest-schema.md` §"Tier reconcile on every
+bind" — canonical there, never re-derived here): diff every `seats.<role>.tier` against the
+current canonical ladder; a stale-or-unjustified mismatch is flagged to the human with an
+interactive fix-or-keep question, never silently rewritten and never silently passed over.
 
 **Discover or join a standing cross-repo coordination channel.** Read `cross_repo_coordination`
 (schema: `references/fleet-manifest-schema.md`) alongside the rest of this Phase's read. A
@@ -83,9 +87,9 @@ target).
    in the former case (`team-scaffolding` Phase 2).
 3. `agent` carries no permission-profile deviation (`team-scaffolding` Phase 3) — state that
    explicitly: `No permission-profile deviation for this role — full write access retained`.
-4. Print the comms charter (`team-scaffolding` Phase 4): the `agent` seat-tier deviation
-   (fable+low vs. the canonical sonnet+high orchestration tier, justified by forks being
-   unpinnable per #313 — team-scaffolding Phase 4 point 1's own wording), the
+4. Print the comms charter (`team-scaffolding` Phase 4): the `agent` seat tier (sonnet+high,
+   the canonical orchestration row since the 2026-08-22 ladder retier — which also keeps this
+   seat's unpinnable `context: fork` dispatches at sonnet price, #313), the
    SendMessage-is-a-nudge doctrine, and the peer roster read from `fleet-roster.md`.
 5. **Fresh join only** (no live entry found in step 1): append `live_state.joined`
    (`role: agent`, `mode: manual`, today's date) in `fleet.json`, per Phase 0. **Takeover**: leave

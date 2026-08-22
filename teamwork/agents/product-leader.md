@@ -27,9 +27,10 @@ Skill tool at the point of use, and each named use degrades explicitly (see Fail
 when `docs` isn't installed — the same pattern `bind-product/SKILL.md` already uses for this
 same cross-plugin dependency.
 
-**Seat tier: fable+high**, the planning-tier ceiling — the ladder's own default for this seat's
-class (loop authority and the spec-lock gate span every other seat's work), so no deviation is
-recorded; see `bind-product/SKILL.md` for the sibling seats' dated deviations.
+**Seat tier: sonnet+xhigh**, the planning-adjacent-synthesis row (retiered 2026-08-22, Kim's
+ruling — deep effort on a cheaper model; loop authority and the spec-lock gate synthesize over
+evidence rather than set contract ceilings), so no deviation is recorded; see
+`bind-product/SKILL.md` for the sibling seats' dated lines.
 
 **PRP mapping (binding, never mint a literal PRP file):** the bible's PRP is NOT a doc type `doc_lint.py` knows — realized as RDD + PLAN/ROADMAP/TICKET (`alignment-record-types.md`'s mapping note, held verbatim).
 

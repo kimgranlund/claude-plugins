@@ -16,10 +16,10 @@ authorizer, never copies this one's values.
 {
   "version": 1,
   "seats": {
-    "agent":    { "tier": "fable+low",    "justification_date": "2026-08-16", "mode": "manual" },
-    "reviewer": { "tier": "fable+xhigh",  "justification_date": "2026-08-16", "mode": "manual" },
-    "planner":  { "tier": "fable+medium", "justification_date": "2026-08-16", "mode": "manual" },
-    "product":  { "tier": "fable+high",   "justification_date": "2026-08-16", "mode": "manual" }
+    "agent":    { "tier": "sonnet+high",  "justification_date": "2026-08-22", "mode": "manual" },
+    "reviewer": { "tier": "sonnet+high",  "justification_date": "2026-08-22", "mode": "manual" },
+    "planner":  { "tier": "fable+medium", "justification_date": "2026-08-22", "mode": "manual" },
+    "product":  { "tier": "sonnet+xhigh", "justification_date": "2026-08-22", "mode": "manual" }
   },
   "permission_profiles": {
     "reviewer": "deny-edit-write"
@@ -71,8 +71,10 @@ takeover record.
   same-file text edit. The split stays as designed — schema key `agent`, printed name now
   `{repo}-marshal` — confirmed schema-stable, not migrated.
 - **`seats.<role>.tier`** — the model/effort tier this seat runs at in THIS repo. Starts equal to
-  the canonical seat ladder (`team-scaffolding`'s Phase 4 point 1: agent fable+low, reviewer
-  fable+xhigh, planner fable+medium, product fable+high).
+  the canonical seat ladder (`team-scaffolding`'s Phase 4 point 1; retiered 2026-08-22, Kim's
+  ruling: agent sonnet+high, reviewer sonnet+high, planner fable+medium, product sonnet+xhigh —
+  the prior 2026-08-16 fable-heavy ladder is superseded). **A manifest seeded under a prior
+  ladder is NOT silently correct**: the reconcile step below is what surfaces it.
 - **`seats.<role>.justification_date`** — **required whenever `tier` deviates from the canonical
   ladder value.** This is the sweepable invariant Kim's ruling calls for: a tier deviation with no
   justification date is a doctrine-audit-class finding, mechanically checkable — grep every
@@ -194,6 +196,29 @@ a naming CONVENTION at the dispatch site instead — `teamwork:mobilize-chores` 
 after its first return, the same named-`Agent`-dispatch mechanism as `planner`'s `"background"` mode
 above, without needing a `fleet.json` row per build. This is not a gap to fill later; it's the
 considered shape.
+
+## Tier reconcile on every bind (2026-08-22 — the previously-future audit, now wired)
+
+The root cause this closes: the ladder is copied into each repo's `fleet.json` at seed time and
+was then treated as a read-only record forever — a doctrine retier stranded every existing
+manifest on the old tiers with nothing ever flagging it. Now, EVERY `fleet-bootstrap` Phase 0
+read of an existing manifest, and every `team-scaffolding` bind against one, diffs each
+`seats.<role>.tier` against the canonical ladder above:
+
+- **Match** → nothing printed; correct is quiet.
+- **Mismatch WITH a `justification_date` ON OR AFTER the ladder ruling date** (below) → a known,
+  deliberate per-repo deviation; print it as such, leave it. ("On or after", not strictly after —
+  a keep recorded on the ruling day itself must not re-flag forever.)
+- **Mismatch with a stale or absent justification** (the stranded-old-ladder case) → flag it to
+  the human with the diff, and — interactive runs only — offer the correction via one
+  `AskUserQuestion` (update to canon / keep as a dated deviation, recording today's
+  `justification_date` and the human's reason). Never silently rewritten; unattended runs report
+  the mismatch and leave the file untouched.
+
+**Ladder ruling date: `2026-08-22`** — the single labeled comparand for the staleness test above;
+a future ladder retier updates this one line in the same change. Note `justification_date` is
+also written on CANONICAL rows at seed/update time (the example above dates every seat), so its
+mere presence never implies a deviation — only a tier MISMATCH starts this classification at all.
 
 ## Doctrine-audit hook
 

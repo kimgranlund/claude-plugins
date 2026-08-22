@@ -64,8 +64,9 @@ the charter's duration, rather than re-derived inline here (the drift-pair defec
 `bind-team`'s own R5 finding named: restating a copy invites birth-drift against the source of
 record). Acknowledge adoption in one line before processing anything: the file read, the
 duration rule ("until this charter closes"), and the seat-tier line stated verbatim from the
-agent file — fable+high, the planning-tier ceiling's own default for this seat's class, no
-deviation recorded (product-leader.md's own line, not a claim this file restates from memory).
+agent file — sonnet+xhigh, the planning-adjacent-synthesis row's default for this seat's class
+(retiered 2026-08-22), no deviation recorded (product-leader.md's own line, not a claim this
+file restates from memory).
 
 ## Phase 3 — Work the charter
 
