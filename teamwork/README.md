@@ -110,6 +110,22 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.26 · 2026-08-22 · `fleet-bootstrap` Phase 1 now inlines `bind-team`'s contract by default —
+previously it only registered the `{repo}-marshal` seat identity in `fleet.json`, leaving the
+orchestration/routing/gating discipline itself for a second, separately human-typed `/bind-team`;
+a live session confirmed the gap in the wild (registered on the roster, "operating under my normal
+rules — not that contract," per its own words: "I haven't run /bind-team, so I'm not currently
+routing/gating/chasing handbacks as a standing discipline; I'm just a session with the marshal's
+name on the roster"). Fix binds `bind-team`'s Phase 1 with an explicit fleet-scoped charter
+("this fleet's operation, for its duration") rather than its default blank charter — the default
+only holds for one unit of work and then needs a rebind per `bind-team`'s own closing rule, so a
+fleet-duration hold requires stating that override explicitly — then runs Phase 2 unchanged.
+Kept `team-scaffolding`'s generic single-seat join path untouched (still correctly leaves
+`bind-team` for a separate human turn there); only `/fleet-bootstrap`'s own cold-start premise
+earns the default. `wording-checker` pass caught and fixed the charter-duration contradiction in
+the first draft (fable+medium). Retroactive note: a session already registered under the OLD
+`/fleet-bootstrap` before this version lands still needs to run `/bind-team` by hand once — the
+fix only takes effect on fresh cold starts.
 v2.28.25 · 2026-08-22 · closes PR #868 (live-lane): `/sub-agent` gains skill targets (bare or `plugin:skill`-qualified, wrapped in an Agent dispatch) and the explicit `as NAME` marker — named stays continuable, unnamed is one-shot (Kim's ruling, converse default to 2b's named-by-default free-instruction path); checker killed the shape-heuristic first draft (name-vs-verb ambiguity), literal marker per its own recommendation; evals t09–t12.
 v2.28.24 · 2026-08-22 · closes PR #867 (live-lane): `mobilize-chores` step 5 now NAMES every build-leader dispatch (`build-<ticket-id>`) — live-observed #861/#863 write-gate round trips cleared cheaply only because seats were named; stale synchronous-return wording fixed (named seats deliver via SendMessage); `fleet-bootstrap/references/fleet-manifest-schema.md` gains the why-no-builder-seat note (plural per-ticket dispatches, convention over schema row).
 v2.28.23 · 2026-08-21 · save-lessons harvest: `dispatch-ticket/references/plan-approval-write-gate.md` gains an "Observed adherence gap" note — a separate live session (gen-ui-kit, same day as v2.28.22's own Marshal-side response procedure capture) resolved 3 write-gate-blocked dispatches by skipping that procedure's own steps 1-2 (extract the seat's PR body, post the accept marker naming HEAD SHA) and jumping straight to PR-open under live human authorization, leaving 3 merged PRs with no accept-marker record on their own issues. Documented as an execution defect to recognize and avoid, not a new design question — the procedure already answers it. No SKILL.md/routing surface touched.

@@ -78,17 +78,43 @@ target).
    (`role: agent`, `mode: manual`, today's date) in `fleet.json`, per Phase 0. **Takeover**: leave
    the existing `live_state.joined` entry as-is — the roster row is the takeover's own durable
    record; `fleet.json` never carries two `agent` entries for one still-live role.
+6. **Adopt `teamwork:bind-team`'s contract inline, by default, as this Phase's own last step** —
+   the same inlining mechanic Phase 5 uses for `planner`'s `/bind-planning` contract (read the
+   target skill's own body directly, follow its procedure, never a Skill-tool hand-off against a
+   `disable-model-invocation` target), extended here to the orchestrator's own standing contract.
+   Unlike `planner`'s case, the justification isn't "no human session to hand it to" — this
+   session IS a live human session — it's that `/fleet-bootstrap` is already the one explicit
+   human-typed invocation cold-starting a WHOLE fleet under orchestration; requiring a *second*
+   typed `/bind-team` to hold the discipline that running a fleet cold-start already implies is
+   the same needless-extra-turn defect class step 1's own takeover reasoning above already names
+   (#421/#422/#850). Run `bind-team`'s Phase 1 and Phase 2 verbatim, right here, with one
+   deliberate substitution: bind Phase 1's charter EXPLICITLY as "this fleet's operation, for its
+   duration" rather than `bind-team`'s own default (blank) charter — the default only holds for
+   the first unit of work and then requires a fresh `/bind-team` per `bind-team`'s own "When this
+   rule ends" closing rule (a new charter needs a new invocation); a fleet cold-start needs the
+   wider, fleet-scoped charter instead, so this step supersedes that per-charter rebind rule for
+   THIS seat by binding a charter that IS the fleet's whole duration up front, never the default.
+   Then run Phase 2 unchanged (read `agents/fleet-marshal.md` Priorities 1–8 in full, invoke
+   `fleet-rules` and `loop-rules`, print the acknowledgment block naming the substituted charter).
+   **This is a `/fleet-bootstrap`-specific default, not a change to `bind-team`'s own invocation
+   contract** — `team-scaffolding`'s single-seat join path (any role, not just orchestrator, and
+   not necessarily inside a fleet cold-start) still correctly leaves `bind-team` for a separate
+   human turn; only this command's own Phase 1 inlines it, because only this command's own premise
+   (stand up the whole fleet) already implies wanting it.
 
-This registers the seat; it does not separately adopt `teamwork:bind-team`'s contract via a
-printed command the way a solo `/team-scaffolding agent` run would (its Phase 5 hands that off to
-a second human-typed `/bind-team`). `/fleet-bootstrap`'s own remaining phases (2–6) ARE this
-session's orchestration work for the cold start — Phase 6 names `/bind-team` as a follow-up the
-human can run afterward for ongoing day-to-day orchestration, never claimed as already adopted here.
-**Registering the seat is not the same as knowing what to do with it**: `fleet-rules`' Section 7
-("Route-anything-incoming protocol") is this seat's standing triage discipline for whatever
-arrives next — a raw ask, a bug/feature/task report, a handback, a peer message — cited here,
-never restated; this Phase only registers the seat identity, it doesn't carry that protocol's own
-content.
+This registers the seat AND holds the `bind-team` contract from this point forward, under the
+fleet-scoped charter step 6 bound — the routing/gating/budget/rollup discipline in
+`agents/fleet-marshal.md`'s Priorities 1–8 governs this session's handling of every subsequent
+phase and everything that arrives after Phase 6 reports, closing only on an explicit stand-down
+(never on the first unit of work, since step 6 bound the fleet's own duration as the charter, not
+`bind-team`'s default) — state a stand-down explicitly rather than letting it go silently
+ambiguous. **This command's own remaining phases (2–6) are the seat's bootstrap mechanics —
+coordination records (`fleet.json`, `fleet-roster.md`, the reviewer wall) rather than a charter
+deliverable — so Priority 1's STRICT-ROUTER/NEVER-BUILDS rule binds incoming work from Phase 6
+onward, not these steps themselves.** **Registering the seat is not the same as knowing what to do
+with it**: `fleet-rules`' Section 7 ("Route-anything-incoming protocol") is this seat's standing
+triage discipline for whatever arrives next — a raw ask, a bug/feature/task report, a handback, a
+peer message — already adopted by step 6's own Phase-2 read, cited here, never restated.
 
 ## Phase 2 — Dispatch the product seat
 
@@ -307,9 +333,10 @@ One summary: which seats are live and how (manual/background/background-subproce
 outcome, the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
 confirmed", "none — reviewer and planner already held", or "confirm skipped — no live user,
 nothing spawned"), the `fleet.json` path as the durable record a later session reads
-to resume orientation, and — since Phase 1 only registered the orchestrator seat, not the
-`teamwork:bind-team` contract itself — name `/bind-team` as the follow-up command for the human to
-run in this session when they want that contract's ongoing day-to-day discipline. **For any spawned
+to resume orientation, and confirm the `bind-team` contract Phase 1 step 6 already adopted is
+holding — this session runs under `agents/fleet-marshal.md`'s Priorities 1–8 for the fleet's
+duration until explicitly stood down; never re-invoke `/bind-team` to start it, it is already
+live. **For any spawned
 `reviewer` seat, read its `wall_applied` (and, when present, `wall_verified_via`) field back from
 `fleet.json` (Phase 5's own append, `references/fleet-manifest-schema.md`) and state the outcome
 explicitly** — one of "applied and verified via subprocess spawn" (`wall_applied: true`,
