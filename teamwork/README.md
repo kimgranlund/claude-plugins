@@ -110,6 +110,14 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.29 · 2026-08-22 · closes #866: `fleet.json` gains a `cross_repo_coordination` array — each
+entry names the participating repos, their `{repo}-marshal` roles, the date the channel was
+established, and who authorized it, scoped per-repo (mirrors `live_state.joined`'s pattern rather
+than a shared cross-repo store). `fleet-manifest-schema.md` documents the field; `fleet-bootstrap`'s
+Phase 0 gains a discover-or-join read step so a later session finds an existing channel without
+someone relaying it live. This repo's own `.claude/ops/fleet.json` seeded with the real
+four-repo channel (gen-ui-kit/signup/plugins/adiav2) the motivating example (gen-ui-kit
+gh#1836/#1839) already ran through informally.
 v2.28.28 · 2026-08-22 · agent model retier (Kim's estate-wide ruling, live session): product-leader → sonnet+xhigh; planner/planning-leader/review-leader → fable+medium; code/wiring-checker → sonnet+high; team-scaffolding stale checker-baseline cite fixed (2.28.27 left for in-flight #866).
 v2.28.26 · 2026-08-22 · `fleet-bootstrap` Phase 1 now inlines `bind-team`'s contract by default —
 previously it only registered the `{repo}-marshal` seat identity in `fleet.json`, leaving the
