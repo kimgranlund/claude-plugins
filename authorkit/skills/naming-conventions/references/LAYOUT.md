@@ -9,11 +9,17 @@ skills/{name}/
   scripts/          # executable matter: code the procedure invokes
   assets/           # inert payload: addressed by path, neither read nor run
   evals/            # evals.json — the trigger-eval suite, model-invocable skills only
+  intent.md         # bare top-level file — a skill's own living build-state record
 ```
 
-Five top-level entries, nothing else. Partition axis: how content
-participates at run time — context, computation, payload, or regression
-proof. Deterministic logic belongs in scripts/, never re-derived in prose.
+Six top-level entries, nothing else (ADR-0024, 2026-08-21 — supersedes ADR-0011
+§6.1's four-entry set: `evals/` was already an enforced, cross-plugin invariant
+the spec had fallen behind; `intent.md` joins as the second bare top-level file,
+alongside `SKILL.md`, because it is actively *written to* during a skill's own
+forge and fails `references/`'s passive-matter test on both axes). Partition
+axis: how content participates at run time — context, computation, payload,
+regression proof, or build-state ledger. Deterministic logic belongs in
+scripts/, never re-derived in prose.
 
 Boundary validation (and no deeper): SKILL.md exists; no stray top-level
 entries; nothing in scripts/ referenced from outside the skill; **no nested

@@ -3,6 +3,9 @@
 Frontmatter is the authoring surface for everything the tooling reads.
 **Every field in the schema is validated; no field enters the schema unless
 something reads it.** Fields nothing validates are prohibited, not optional.
+This posture holds for commands and skills; agents carry a common-but-not-
+schema-enforced tier alongside it — see the Invocation policy and Provenance
+caveats below (ADR-0025).
 
 ## Identity (required, all kinds)
 
@@ -12,6 +15,11 @@ kind: skill                 # command | skill | agent — must match directory
 description: >              # the trigger contract (see skill-authoring
   Use when ...              # standards; not restated here)
 ```
+
+**Agents (ADR-0025 D1):** `kind` is not a declared frontmatter field for
+agents — it is decided by directory + name-parse (§5/§6) exactly as before,
+never something an agent declares. Required for an agent is only `name` and
+`description`; see the estate-wide-agent caveat under Invocation policy below.
 
 ## Relations (on the depending artifact — never a central registry)
 
@@ -64,7 +72,23 @@ Rules (all validated):
 - Net effect: the estate's mutation topology is grep-decidable from
   frontmatter alone.
 
-## Provenance (required, all kinds)
+**Agents, estate-wide (ADR-0025, 2026-08-21 — supersedes ADR-0011 §8):**
+`performs`, `autonomous_write`, and `context` above are NOT part of the
+estate-wide agent schema. Measured 2026-08-21 across every agent in this
+workspace (40 files, one plugin's own dogfooding copy excluded): 39/40
+carry none of `performs`/`autonomous_write`/`context` — `performs`'s
+relation is already checked structurally from the name itself (§5's parse),
+and the platform's own dispatch mechanics (tool grant, fresh-context vs.
+fork) already express the distinction `autonomous_write`/`context` would
+restate. Required for an agent, estate-wide: `name`, `description`. Common,
+not schema-enforced: `model`, `tools`, `effort`, `skills` (an agent's
+preloaded skill dependencies — the real analogue of `requires`), `color`,
+`disallowedTools`. `performs`/`autonomous_write`/`context` remain valid
+ONLY as authorkit's own internal `schema_scope: "full"` dogfood
+(`estate-audit-agent.md`) — a deliberate single-plugin convention, not
+estate law.
+
+## Provenance (required, all kinds — commands and skills; agents, authorkit-internal only)
 
 ```yaml
 author: kim                 # ∈ AuthorRegistry in the manifest
@@ -75,6 +99,13 @@ review_after: 180d          # optional override of the estate default
 
 Staleness past the review window is a warning tier — stale files are drift's
 incubation stage.
+
+**Agents, estate-wide (ADR-0025 D3):** this whole provenance block —
+`author`/`created`/`last_updated`/`review_after` — drops out of the
+estate-wide agent schema. Zero adoption outside authorkit's own
+`schema_scope: "full"` self-dogfood; the staleness-tracking rationale is
+reasonable but was never wired to anything outside that one plugin's own
+validator. Commands and skills are unaffected — this caveat is agents-only.
 
 ## What stays out
 
