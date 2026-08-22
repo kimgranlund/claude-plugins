@@ -22,6 +22,8 @@
     "adr-0020": {"hash": "e14480a269c4c37aeb75fdc88093d43ff594f26f3e48a7dda06d967b210f4dc6", "status": "accepted"},
     "adr-0021": {"hash": "d73cf742ac22de42bd379b6461e25f84a50cf5172a6d3974cb5221d4a3bde944", "status": "accepted"},
     "adr-0022": {"hash": "cc87fe362038aaa64f2daf6193f8172af567fa825589e85b9f8e46da205fd68c", "status": "accepted"},
-    "adr-0023": {"hash": "fdc9b07fbfc75cf6dad4d3d403cf048e15564d3462c2bdfb5e7022f528d5e40c", "status": "accepted"}
+    "adr-0023": {"hash": "fdc9b07fbfc75cf6dad4d3d403cf048e15564d3462c2bdfb5e7022f528d5e40c", "status": "accepted"},
+    "adr-0024": {"hash": "3ab127441db15d9d43c8f5fe87060649a619d468cf3039c8cc42c621e8327a71", "status": "accepted"},
+    "adr-0025": {"hash": "7c724ea453896b064d721fb68c3aaa3b9385a173374ece0328a5a1fb6526155e", "status": "accepted"}
   }
 }

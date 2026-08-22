@@ -53,7 +53,11 @@ resolve, a merge decision outside an auto-merge grant, an ADR/IDR ratification r
 pass over this section is the digest; Kim clears an entry by editing its Status line in place
 (the durable record stays, per this file's own append-then-resolve shape above).
 
-*(empty — no items queued yet)*
+### 2026-08-22T13:55:27Z — issue #866's request provenance: secondhand relay, confirm before prioritizing
+- Source: issue #866 (fleet-bootstrap cross-repo coordination channel in fleet.json), filed by kimgranlund
+- Kind: ambiguous-claim
+- Why it's queued here rather than resolved unattended: #866's own body discloses the ask arrived secondhand — relayed by gen-ui-kit's marshal via a cross-session SendMessage citing what it says was Kim's own instruction to file this against plugins. GitHub authorship reads as kimgranlund (matches friendlies.json's confirmed_by, so issue-sorter's own login-comparison provenance check finds no mismatch and applies no user-signal tag) — but the underlying INSTRUCTION's provenance is unconfirmed at the source, a distinct question the login-comparison mechanism doesn't cover. The filing itself asks for a quick confirm before being treated as prioritized.
+- Status: queued
 
 <!--
 Entry template (one per queued ruling/merge item):
@@ -64,4 +68,3 @@ Entry template (one per queued ruling/merge item):
 - Why it's queued here rather than resolved unattended: <reason>
 - Status: queued | resolved <date> — <what Kim decided>
 -->
-

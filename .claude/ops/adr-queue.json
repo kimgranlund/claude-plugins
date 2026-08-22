@@ -1,3 +1,25 @@
 {
-  "candidates": []
+  "candidates": [
+    {
+      "adr_id": "adr-0024",
+      "evidence": "D2: skill-folder closed set grows to six (evals/, intent.md). authorkit/skills/naming-conventions/references/LAYOUT.md already covers this axis but is now stale (says 'Five top-level entries, nothing else', missing evals/ D1 antecedent + intent.md D2) — extend, not new-file (save-lessons Phase 2 outcome: covered-but-sharpens).",
+      "kind": "harvest",
+      "plan": "",
+      "queued_at": "2026-08-22T13:57:06Z"
+    },
+    {
+      "adr_id": "adr-0025",
+      "evidence": "D1-D3: §8 agent frontmatter schema narrows to name/description (required) + model/tools/effort/color/skills/disallowedTools (measured convention); kind/performs/autonomous_write/context/author/created/last_updated/review_after drop from the ESTATE-WIDE schema (authorkit's own schema_scope:full stays untouched). authorkit/skills/naming-conventions/references/FRONTMATTER.md already covers this axis but presents performs/autonomous_write/context/author/created/last_updated as validated for 'all kinds' with no authorkit-internal-only caveat — extend, not new-file (covered-but-sharpens).",
+      "kind": "harvest",
+      "plan": "",
+      "queued_at": "2026-08-22T13:57:06Z"
+    },
+    {
+      "adr_id": "adr-0011",
+      "evidence": "Two content-based hits on origin/main (no literal 'adr-0011' id-citation in either file, found via the same placement grep step 2 ran for adr-0024/0025's harvest judgment, not the literal id-grep step 3 prescribes — named explicitly since it's outside that grep's letter): (1) authorkit/skills/naming-conventions/references/LAYOUT.md 'Five top-level entries, nothing else' — stale against the §6.1 closed-set scope adr-0024 superseded (D2: six entries, adds intent.md). (2) authorkit/skills/naming-conventions/references/FRONTMATTER.md 'Rules (all validated)' block on performs/autonomous_write/context/author/created/last_updated — stale against the §8 agent-schema scope adr-0025 superseded (D1-D3: these drop from the estate-wide schema; authorkit's own schema_scope:full dogfood is untouched but FRONTMATTER.md states no such caveat). Edges: adr-0024 -> adr-0011 [§6.1 skill-folder closed set], adr-0025 -> adr-0011 [§8 agent frontmatter schema]. adr-0011's D8/D9 (migration ratchet, standards succession) are cited elsewhere (authorkit GRAMMAR.md, PLAN-TEMPLATE.md, harness estate-rename-map.md) but those scopes stand unamended by either superseding ADR — not stale.",
+      "kind": "stale-citation",
+      "plan": "",
+      "queued_at": "2026-08-22T13:57:07Z"
+    }
+  ]
 }
