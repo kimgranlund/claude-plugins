@@ -1,8 +1,8 @@
 ---
 name: brand-judge
 tools: Read, Grep, Glob
-model: fable
-effort: medium
+model: sonnet
+effort: high
 description: >
   Critic shell for the brand council, embodying ONE named critic persona inlined into its sealed
   dispatch prompt to return a severity-classified, evidence-cited verdict — dispatch-only, fanned

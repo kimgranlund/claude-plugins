@@ -7,8 +7,8 @@ description: |
   sweep), it plans from those; dispatched standalone, it reads durable ops state
   (`.claude/ops/`) plus live `gh` evidence directly, and may carry a focus instruction that
   reorders attention, never a new entry contract. Plans only — executes nothing it queues.
-model: fable
-effort: high
+model: sonnet
+effort: xhigh
 color: magenta
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

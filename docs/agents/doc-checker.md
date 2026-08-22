@@ -10,8 +10,8 @@ description: >-
   SKILL.md files (skill-checker) or subagent definitions (agent-checker); NOT for a code change
   (code-checker).
 tools: Read, Grep, Glob, Bash
-model: fable
-effort: medium
+model: sonnet
+effort: high
 skills: [check-doc, doc-writing-rules]
 ---
 

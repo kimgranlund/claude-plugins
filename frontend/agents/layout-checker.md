@@ -9,8 +9,8 @@ description: >-
   (component-checker) or a cross-screen flow (flow-checker); NOT for designing a new layout
   (break-down-layout DESIGN mode) — this seat only judges an existing artifact.
 tools: Read, Grep, Glob
-model: fable
-effort: medium
+model: sonnet
+effort: high
 skills: [break-down-layout]
 ---
 

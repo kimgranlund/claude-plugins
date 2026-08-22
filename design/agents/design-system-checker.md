@@ -10,8 +10,8 @@ description: >-
   (component-checker); NOT a screen layout (layout-checker); NOT authoring or fixing an export
   (make-design-system and siblings); NOT ticket-capture fields (token-feature-intake-rules).
 tools: Read, Grep, Glob, Bash
-model: fable
-effort: medium
+model: sonnet
+effort: high
 skills: [make-design-system]
 ---
 

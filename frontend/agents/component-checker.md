@@ -9,8 +9,8 @@ description: >-
   button's anatomy and API". NOT for a whole screen (layout-checker) or a cross-screen flow
   (flow-checker); NOT for building or authoring a component (make-component).
 tools: Read, Grep, Glob, Bash
-model: fable
-effort: medium
+model: sonnet
+effort: high
 skills: [make-component]
 ---
 

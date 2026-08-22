@@ -195,7 +195,8 @@ State, as one standing block before any real work:
      unpinnable (#313); this seat's `context: fork` dispatches ride fable+low by construction, so
      anything needing a different tier routes through a pinned `Agent` dispatch instead of relying
      on the seat's own tier.
-   - `reviewer` — fable+xhigh (vs. the *-checker agent family's fable+medium baseline). Justification: this
+   - `reviewer` — fable+xhigh (vs. the *-checker agent family's sonnet+high baseline, retiered
+     2026-08-22). Justification: this
      seat spans EVERY artifact class in one project, not one bounded checker
      rubric — the broader judgment surface earns the higher tier the same way `marshal` runs
      sonnet+high above the checker baseline.
