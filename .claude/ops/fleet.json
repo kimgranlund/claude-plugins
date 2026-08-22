@@ -2,23 +2,23 @@
   "version": 1,
   "seats": {
     "agent": {
-      "tier": "fable+low",
-      "justification_date": "2026-08-16",
+      "tier": "sonnet+high",
+      "justification_date": "2026-08-22",
       "mode": "manual"
     },
     "reviewer": {
-      "tier": "fable+xhigh",
-      "justification_date": "2026-08-16",
+      "tier": "sonnet+high",
+      "justification_date": "2026-08-22",
       "mode": "manual"
     },
     "planner": {
       "tier": "fable+medium",
-      "justification_date": "2026-08-16",
+      "justification_date": "2026-08-22",
       "mode": "manual"
     },
     "product": {
-      "tier": "fable+high",
-      "justification_date": "2026-08-16",
+      "tier": "sonnet+xhigh",
+      "justification_date": "2026-08-22",
       "mode": "manual"
     }
   },
@@ -63,8 +63,18 @@
   },
   "cross_repo_coordination": [
     {
-      "repos": ["gen-ui-kit", "signup", "plugins", "adiav2"],
-      "marshal_roles": ["gen-ui-kit-marshal", "signup-marshal", "plugins-marshal", "adiav2-marshal"],
+      "repos": [
+        "gen-ui-kit",
+        "signup",
+        "plugins",
+        "adiav2"
+      ],
+      "marshal_roles": [
+        "gen-ui-kit-marshal",
+        "signup-marshal",
+        "plugins-marshal",
+        "adiav2-marshal"
+      ],
       "established": "2026-08-22",
       "authorized_by": "Kim, confirmed live in the plugins mobilize-chores session (issue #866); motivating example gen-ui-kit gh#1836/#1839"
     }

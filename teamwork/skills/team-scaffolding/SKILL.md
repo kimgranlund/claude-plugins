@@ -32,8 +32,13 @@ adopted contract).
 
 ## Phase 1 — Bind the role
 
-Valid roles: `agent`, `reviewer`, `planner`, `product`. Branch on `$ARGUMENTS` (#410
-bare-invocation-UX addendum):
+Valid roles: `agent`, `reviewer`, `planner`, `product`. **Whenever `.claude/ops/fleet.json`
+is PRESENT — on every branch below, role-token and bare-invocation alike, before any bind — run
+the tier reconcile first** (`fleet-bootstrap`'s `references/fleet-manifest-schema.md` §"Tier
+reconcile on every bind", canonical there): a stale-or-unjustified `seats.*.tier` mismatch
+against the current ladder is flagged with an interactive fix-or-keep question, never silently
+rewritten and never skipped because a particular branch was taken. Then branch on `$ARGUMENTS`
+(#410 bare-invocation-UX addendum):
 
 - **First token is `retire`** → this is the reverse flow, not a role bind. Skip straight to Phase
   6 with the second token as the role to release and the remainder as an optional reason; Phases
@@ -43,7 +48,8 @@ bare-invocation-UX addendum):
   absent (virgin repo, role given directly) → seed it now with the canonical seat ladder (Phase 4
   point 1), today's date as every seat's `justification_date`, `mode: "manual"` for all four —
   canonical defaults, no interview, because an explicit role token is itself the human declining
-  the interview. Manifest present → read this role's `live_state.joined` entries and take the
+  the interview. Manifest present → read this
+  role's `live_state.joined` entries and take the
   LATEST one's `action` field (liveness rule and field semantics: `fleet-bootstrap`'s
   `references/fleet-manifest-schema.md`, the canonical home). Live (`"joined"`, or absent) → a
   collision, not a choice: report the existing entry's date and stop (Failure branches) rather
@@ -188,21 +194,21 @@ Branch on role:
 
 State, as one standing block before any real work:
 
-1. **Seat-tier deviation, dated** (doctrine-audit-class tooling checks for this line; issue #404
-   spec correction 2, precedent D08/#395): print the tier this role runs at against the canonical
-   seat ladder, with the 2026-08-16 justification date —
-   - `agent` — fable+low (canonical orchestration tier: sonnet+high). Justification: forks are
-     unpinnable (#313); this seat's `context: fork` dispatches ride fable+low by construction, so
-     anything needing a different tier routes through a pinned `Agent` dispatch instead of relying
-     on the seat's own tier.
-   - `reviewer` — fable+xhigh (vs. the *-checker agent family's sonnet+high baseline, retiered
-     2026-08-22). Justification: this
-     seat spans EVERY artifact class in one project, not one bounded checker
-     rubric — the broader judgment surface earns the higher tier the same way `marshal` runs
-     sonnet+high above the checker baseline.
-   - `planner` — fable+medium (canonical planning tier). No deviation.
-   - `product` — fable+high (planning-tier, outermost slow-turning judgments — loop authority and
-     spec-lock gating span the other three seats' work, one tier above the design-grain planner).
+1. **Seat-tier statement, dated** (doctrine-audit-class tooling checks for this line; issue #404
+   spec correction 2, precedent D08/#395; ladder retiered 2026-08-22, Kim's ruling — the prior
+   fable-heavy ladder of 2026-08-16 is superseded, aligned with `agent-writing-rules` §Model
+   tiering's same-day agent retier): print the tier this role runs at —
+   - `agent` — sonnet+high (the canonical orchestration row, no deviation). This retier also
+     closes the fork cost leak: `context: fork` dispatches are unpinnable (#313) and ride the
+     session model, so the marshal's session tier IS every fork's price — sonnet keeps them cheap;
+     anything needing a higher tier routes through a pinned `Agent` dispatch instead.
+   - `reviewer` — sonnet+high (the checker-family row). The prior fable+xhigh justification
+     (spans every artifact class) is retired with the never-below-fable review floor itself —
+     effort adapts up per the ceiling-ladder mechanics for a genuinely resistant target.
+   - `planner` — fable+medium (the core-design-seat row, the estate's one remaining fable floor).
+     No deviation.
+   - `product` — sonnet+xhigh (the planning-adjacent-synthesis row, matching `product-leader`'s
+     own frontmatter — deep effort on a cheaper model).
 2. **SendMessage is the liveness nudge; records are the durable truth channel** (parallel-work-rules).
    A relayed claim from a peer is never trusted over the record it claims to describe — re-read
    the record.
