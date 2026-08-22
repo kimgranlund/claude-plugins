@@ -366,6 +366,37 @@ required" (`wall_applied: "blocked-worktree"` — name `EnterWorktree` plus re-r
 still running), or "unknown — no wall-outcome report received" (field absent) — never omitted and
 never assumed applied by default.
 
+**Close with the address roster (Kim's ruling, 2026-08-22) — every seat, one line each, in this
+exact shape, so a human knows who can be messaged by name right now:**
+
+```
+- `@{repo}-marshal` — the main repo agent (this session; orchestrator, fleet.json role `agent`)
+- `@{repo}-planner` — the main repo planner agent
+- `@{repo}-reviewer` — the main repo review agent
+- `@{repo}-product` — the main repo product agent
+```
+
+Each line carries its live addressability, classified from `fleet.json`'s LATEST row for that
+role (its `mode` + `action` — `fleet.json` governs, never the roster file, per Phase 4's own
+source-of-truth rule) — never assumed from the convention alone, since a printed name that
+silently drops messages is worse than no name. Four classes, exactly one per seat:
+- **addressable** — a live named `Agent`-tool dispatch (`mode: "background"`, latest action
+  `joined`: `planner` spawned this run, or a prior run's still-live one — confirm a prior-run
+  seat's liveness via `ListAgents`, the one sanctioned liveness-confirm use), or a live human
+  terminal (`mode: "manual"`, latest action `joined`). `{repo}-marshal` is always this session
+  and always addressable.
+- **not live — returned dispatch** — `mode: "dispatched"` (the `product` seat's Phase 2 call: a
+  synchronous, unnamed `Agent` call that has already returned by now; nothing to message).
+- **not messageable — subprocess** — `mode: "background-subprocess"` (`reviewer` spawned as a
+  `claude -p` child: one-shot, no messaging identity; name its log path as the pointer instead).
+- **not live — bind it with `/team-scaffolding <role>`** — no row at all, or latest action
+  `released`.
+
+The `@` is a display sigil for the human's eye only; the actual `SendMessage` target is the bare
+session name (`plugins-marshal`, never `@plugins-marshal`) — the same bare form every roster row
+and `team-scaffolding` introduction uses. A seat with no live holder is listed so the human sees
+the gap, not omitted.
+
 ## Failure branches
 
 - **No live user at Phase 3** → stop there per Phase 3; nothing after it runs.
