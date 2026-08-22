@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.31 · 2026-08-22 · closes #873: `mobilize-chores` gains a minimal `evals/evals.json` trigger suite (its `evals/` previously held only audit reports + baseline files) — 4 positive slash-form cases plus 3 no-trigger cases carrying the sibling flagship phrasings this skill's own description NOT-fences against (`/sub-agent`, `/sweep-chores`, `/build-feature`), closing `sub-agent`'s n03 reciprocal fence which had no suite here to land on.
 v2.28.30 · 2026-08-22 · closes live-lane ruling (Kim): `/sub-agent` skill-target wrap and free-instruction path default `model: sonnet` instead of inheriting the session model (fable-session cost leak); user overrides by naming a model in the task; agent targets keep their own frontmatter pins; checker C1 note — judgment-load self-escalation stays 2b-only.
 v2.28.29 · 2026-08-22 · closes #866: `fleet.json` gains a `cross_repo_coordination` array — each
 entry names the participating repos, their `{repo}-marshal` roles, the date the channel was
