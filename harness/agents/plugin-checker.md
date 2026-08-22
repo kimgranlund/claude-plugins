@@ -4,8 +4,8 @@ description: |
   Fresh-context critic for ONE Claude Code plugin's packaging — the manifest, layout, wiring, and
   versioning — generator ≠ critic, so the maker never grades their own release. Use before a
   plugin ships, or whenever a plugin fails to load and the packaging is suspect.
-model: fable
-effort: medium
+model: sonnet
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

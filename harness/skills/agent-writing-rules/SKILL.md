@@ -132,25 +132,31 @@ simpler tier for a routine dispatch — happens at dispatch time, never by editi
 
 | Seat class | Frontmatter default | Effort range | Model step-downs |
 |---|---|---|---|
-| Planning & architecture | `fable` + `high` | high–xhigh | never below `fable` |
-| Review / hard-bug analysis | `fable` + `medium` | low–xhigh | never below `fable` |
+| Planning & architecture (core design seats) | `fable` + `medium` | medium–xhigh | never below `fable` |
+| Planning-adjacent synthesis | `sonnet` + `xhigh` | high–xhigh | — |
+| Review / hard-bug analysis | `sonnet` + `high` | low–xhigh | `haiku` never |
 | Coding / execution | `opus` + `xhigh` | low–xhigh | `sonnet`, `haiku` |
 | Orchestration / coordination | `sonnet` + `high` | low–xhigh | — |
 | Mechanical / fully-specified | cheapest correct (`haiku`) | — | — |
 
-- **Planning & architecture** — decomposition, contracts, LLDs. `planner` (`fable` +
-  `high`) is the worked example. Planning sets the ceiling on everything downstream; it never
-  steps below its row's floor.
+- **Planning & architecture (core design seats)** — decomposition, contracts, LLDs, and the
+  review-leader's cross-artifact judgment. `planner`, `planning-leader`, and `review-leader` hold
+  `fable` + `medium` (retiered 2026-08-22, Kim's ruling — down from `fable`+`high`/the review
+  seat's prior tiers: fable stays reserved for the seats whose judgment sets the ceiling on
+  everything downstream, at medium effort). This row keeps the estate's only hard model floor —
+  never below `fable`.
+- **Planning-adjacent synthesis** — measured-loop, queue-synthesis, product-loop, and aspiration
+  seats (`experiment-runner`, `chore-planner`, `product-leader`, `muse-agent`) → `sonnet` +
+  `xhigh` (retiered 2026-08-22, Kim's ruling, down from `fable`+`high`): deep effort on a cheaper
+  model, since these seats synthesize over evidence rather than set contract ceilings.
 - **Review / hard-bug analysis** — scoring against a rubric, weighing severity, deciding a
-  portfolio verdict, root-causing a resistant defect → `fable` + `medium` as the standing default
-  (retiered high→medium 2026-08-16, Kim's ruling, issue #312: the 2026-08-15/16 rounds showed
-  medium-effort fable critics catching every real defect while xhigh-inherited review runs added
-  cost, not findings); the model floor is hard — never below `fable` — and effort adapts up per
-  the ceiling-ladder mechanics for a genuinely resistant defect. The estate's `*-checker` critic
-  seats pin the row explicitly — a verdict must not depend on the caller's tier, so `inherit` is
-  reserved for the rare seat that *means* to ride the session. (`experiment-runner` and
-  `chore-planner` deliberately hold `fable` + `high` — measured-loop and queue-synthesis seats,
-  not rubric critics.)
+  portfolio verdict, root-causing a resistant defect → `sonnet` + `high` as the standing default
+  (retiered 2026-08-22, Kim's ruling, superseding both the 2026-08-16 `fable`+`medium` retier
+  (issue #312) and its never-below-`fable` floor for this row — the floor now lives on the core
+  design seats' row alone). The estate's `*-checker` critic seats pin the row explicitly — a
+  verdict must not depend on the caller's tier, so `inherit` is reserved for the rare seat that
+  *means* to ride the session. Effort adapts up per the ceiling-ladder mechanics for a genuinely
+  resistant defect; the step-down floor is `sonnet` — a checker never drops to `haiku`.
 - **Coding / execution** — implementing an approved plan (technical decisions, edge cases, no
   adversarial stance toward its own output): `opus` + `xhigh` is the ceiling (`builder`);
   a seat whose standing work is routine pins a step-down instead (`docs-writer`, `sonnet` +

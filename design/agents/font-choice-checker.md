@@ -10,8 +10,8 @@ description: >-
   tokens (font-token-rules); NOT for a design-system export or DESIGN.md
   (design-system-checker); NOT for designing a new system (pick-fonts).
 tools: Read, Grep, Glob, Bash
-model: fable
-effort: medium
+model: sonnet
+effort: high
 skills: [pick-fonts]
 ---
 

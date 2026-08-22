@@ -9,7 +9,7 @@ description: |
   one charter; runs `planner`'s own procedure against it verbatim and returns the same typed
   design-status handback the dispatched `planner` agent itself returns.
 model: fable
-effort: high
+effort: medium
 tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash"]
 skills:
   - fleet-rules

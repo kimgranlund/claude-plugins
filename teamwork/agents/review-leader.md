@@ -10,7 +10,7 @@ description: |
   against the same dispatch-to-owning-checker routing table `/bind-review` carries, seals ONE
   fresh-context checker dispatch, and relays the verdict verbatim.
 model: fable
-effort: high
+effort: medium
 tools: ["Read", "Grep", "Glob", "Bash", "Agent"]
 ---
 

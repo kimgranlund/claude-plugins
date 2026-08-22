@@ -42,6 +42,7 @@ when it is not — no hard preload crosses the plugin boundary.
 
 Directories align with plugin names (ADR-0007).
 
+v2.6.3 · 2026-08-22 · agent model retier (Kim's estate-wide ruling, live session): component/flow/layout-checker → sonnet+high.
 v2.6.2 · 2026-08-20 · apple-mobile-facts t08 rework (the hung case from the post-series routing proof): the prompt "What belongs in the nav bar vs the bottom toolbar here?" hung a 3-way vote (ui-pattern-facts / apple-mobile-facts / break-down-layout — shell-region ambiguity in the phrasing itself, not a description gap; check-routing doctrine says a hung case gets no description tuning), reworded to the HIG-semantics-shaped "Per Apple's HIG, which actions belong in the navigation bar vs the bottom toolbar on this iOS screen?" per Kim's ruling (2026-08-20); dated rework note on the case; blind re-judge 3-of-3 to apple-mobile-facts with all four decoy prompts routing correctly; eval_check clean; no description edits, no other suites touched.
 
 v2.6.1 · 2026-08-20 · closes #821 (post-campaign routing tune): fixed the 6 tunable failures

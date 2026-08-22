@@ -7,8 +7,8 @@ description: |
   campaign dispatches it, or someone asks to "deep-review this agent's place in the estate",
   "check this agent's composition edges" — measured delegation, role-family template check,
   portfolio verdict). A dispatch that says deep is answered at deep, never silently downgraded.
-model: fable
-effort: medium
+model: sonnet
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

@@ -7,8 +7,8 @@ description: |
   score a skill "as an organ of the corpus" or "against the standard of excellence" — measured
   routing, portfolio verdict). A dispatch that says deep is answered at deep, never silently
   downgraded. Dispatch with the target skill directory and a report destination path.
-model: fable
-effort: medium
+model: sonnet
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Write", "Bash"]
 skills:

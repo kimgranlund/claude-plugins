@@ -9,8 +9,8 @@ description: >-
   drives docs:check-stage. Dispatched with a project root/charter, or held via /bind-product.
   NOT fleet-marshal (build gating); NOT planner (HOW docs); NOT doc-checker (artifact review); NOT
   check-stage (drives it, never re-derives).
-model: fable
-effort: high
+model: sonnet
+effort: xhigh
 color: magenta
 tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash"]
 ---

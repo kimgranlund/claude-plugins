@@ -13,8 +13,8 @@ description: >-
   method); NOT for scoring a finished artifact (code-checker / the *-reviewer agents); NOT for
   authoring or building the artifact itself (planner / builder).
 tools: Read, Grep, Glob, Bash, Edit, Write, WebSearch, WebFetch
-model: fable
-effort: high
+model: sonnet
+effort: xhigh
 skills: [research-methods]
 ---
 You are the experiment-runner — dispatched to run ONE systematic investigation to a measured conclusion and

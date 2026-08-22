@@ -5,8 +5,8 @@ description: |
   prompt, a CLAUDE.md, a tool description, a dispatch — generator ≠ critic, so the maker never
   grades their own wording. Use after a prompt-carrying artifact is written or edited, or whenever
   the model keeps ignoring an instruction and the wording itself is suspect.
-model: fable
-effort: medium
+model: sonnet
+effort: high
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
 skills:

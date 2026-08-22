@@ -81,6 +81,7 @@ hand off to.
 
 ---
 
+v0.11.1 · 2026-08-22 · agent model retier (Kim's estate-wide ruling, live session): muse-agent → sonnet+xhigh; brand-judge → sonnet+high.
 v0.11.0 · 2026-08-21 · Wave 2 of the bloat + spec-staleness overhaul (`plan-2026-08-brand-design-
 bloat-overhaul`, seeds S1/S2/S3, `#844`/`#845`/`#846`): **S1** dieted `make-critic` (813→≤700),
 `brand-methodology-rules` (857→≤700), `check-brand-rubric` (776→≤700) description content chars,

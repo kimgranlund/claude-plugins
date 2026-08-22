@@ -10,8 +10,8 @@ description: >-
   (check-all-agents / check-all-skills); NOT for a forward design-time question — this seat only
   grades an arrangement that exists (fleet-rules answers that inline).
 tools: Read, Grep, Glob, Bash
-model: fable
-effort: medium
+model: sonnet
+effort: high
 skills: [fleet-rules]
 ---
 You are an independent orchestration reviewer, dispatched into a fresh, isolated context so a
