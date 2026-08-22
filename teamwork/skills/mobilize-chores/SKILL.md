@@ -227,15 +227,38 @@ sweep surfaced that's actually buildable.
    name every visibly under-specified task ticket in the step-6 report exactly as the interactive
    branch would have flagged it in the confirm round — it comes back SKIPPED from `build-leader` (no
    clarify round runs unattended either way), never silently dispatched on a guess.
-5. **Dispatch every confirmed ticket, uniformly.** Each confirmed ticket, regardless of kind →
-   `Agent(subagent_type: "teamwork:build-leader")` carrying the confirmed ticket id. `build-leader`'s
+5. **Dispatch every confirmed ticket, uniformly — NAMED, always.** Each confirmed ticket, regardless
+   of kind → `Agent(subagent_type: "teamwork:build-leader", name: "build-<ticket-id>")` carrying the
+   confirmed ticket id. The dispatch prompt states the concrete return address (this session, or
+   the marshal seat relaying for it) per `agent-writing-rules`' never-name-without-an-address rule.
+   The name is not optional and not cosmetic: `dispatch-ticket`'s Phase 5 stage 2a write-gate
+   (ADR-0023(c), `references/plan-approval-write-gate.md`) holds every build at "pushed, not
+   PR-opened" until the marshal posts an accept marker read off the build-leader seat's own
+   proposed PR body — and when that Findings comment is missing or malformed, a NAMED seat clears
+   it with one `SendMessage` nudge; an UNNAMED one forces the marshal into a costlier fallback
+   (composing the PR body itself from whatever the seat's synchronous return carried, or a fresh
+   re-dispatch) — a real cost delta, not a hard block (`plan-approval-write-gate.md`'s own
+   "Observed adherence gap" note records three unnamed-era builds whose holds were resolved that
+   costlier way the same day). Live-observed 2026-08-21 (tickets #861/#863, this same session):
+   both builds reached the write-gate hold, and both cleared cheaply because they were named — one
+   `SendMessage` each got the missing Findings comment posted. Convention: `build-<ticket-id>`,
+   matching the ticket the dispatch is confirmed for; no random suffix needed since one ticket is
+   claimed by exactly one dispatch (Phase 3's claim/isolate already rules out a second concurrent
+   dispatch on the same id) — and the same name doubles as the resume target for step 5's own
+   one-re-dispatch-max rule below, when a retry targets the identical seat rather than a fresh one.
+   `build-leader`'s
    preloaded `dispatch-ticket` procedure (ADR-0010) owns the kind branch — its own body is the
    authoritative map, not restated here — and its unattended failure branches (an ambiguous
    record match reports as a named blocker; an under-specified task reports SKIPPED with no
    clarify round, never guessed at) apply automatically, since this dispatch never has an
-   interactive user. Relay each returned typed result (path/URL, status, what shipped, a
-   recorded blocker, a SKIPPED gap, or a `stale-premise` report with its evidence, #611) as that ticket's mobilized outcome — the same output a
-   human running `/build-feature <id>` would see. `build-feature` stays
+   interactive user. Relay each typed result (path/URL, status, what shipped, a
+   recorded blocker, a SKIPPED gap, or a `stale-premise` report with its evidence, #611) as that
+   ticket's mobilized outcome — the same content a human running `/build-feature <id>` would see.
+   **Named seats deliver via `SendMessage`, not a synchronous return** (`agent-writing-rules`'
+   teammate-mode delivery clause): since step 5's dispatch is always named, wait for that seat's
+   own completion notification or message rather than treating this `Agent` call's own return as
+   the final answer — relaying its plain-text final without waiting would report a premature or
+   empty result. `build-feature` stays
    `disable-model-invocation: true` — per-ticket dispatch genuinely needs `build-leader`'s own
    isolated agent context (parallel, independently-isolated builds), unlike step 1's sweep, which
    needs no isolation of its own and so was reclassified to a directly Skill-tool-reachable
@@ -290,7 +313,9 @@ sweep surfaced that's actually buildable.
    assumption.
 
    **Wave re-check (#558) — bounded, read-only, never a wait.** After all of a wave's dispatches
-   RETURN, run one read-only re-check pass over any sequenced dependents from an unstick chain
+   have DELIVERED (each named seat's completion notification/message received, per step 5's own
+   delivery clause — never inferred from the `Agent` call's own return), run one read-only
+   re-check pass over any sequenced dependents from an unstick chain
    (`references/unstick-ordering.md`): re-read each named blocker's state once. All named
    blockers now CLOSED → the dependent was already confirmed conditionally in step 4, so it
    dispatches in the next wave; anything short of all-CLOSED stays sequenced-for-next-run. Max 3
@@ -434,7 +459,9 @@ paragraph, a blocker
 breakdown proposes a build attempt instead of the shape its category actually calls for, an
 unlabeled item is mobilized, a confirmed ticket is dispatched anywhere but `build-leader` (the
 per-kind routing that once lived here belongs to `dispatch-ticket` now — re-growing it here is the
-regression), a ticket already in flight OR already claimed OR carrying an open `Blocked-by:`
+regression), a `build-leader` dispatch is fired UNNAMED (step 5 — the write-gate accept-marker
+round trip has no seat left to nudge once an unnamed dispatch's one synchronous return has already
+been relayed), a ticket already in flight OR already claimed OR carrying an open `Blocked-by:`
 dependency with no B5-mobilizable resolution is dispatched anyway, a cycle member or human-shape
 (B2/B4) blocker is EVER dispatched, a dependent is dispatched while any of its named blockers
 still reads OPEN, a second confirm round is opened for a chain, any wait/watch/poll on a PR runs

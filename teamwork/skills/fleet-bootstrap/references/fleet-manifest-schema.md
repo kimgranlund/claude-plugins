@@ -153,6 +153,18 @@ takeover record.
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.
 
+## Why there is no `builder` seat here (Kim's ruling, 2026-08-21 session)
+
+The canonical roster is deliberately four singular roles — one live holder per role, collision-
+checked. Build capacity doesn't fit that shape: a repo normally runs several build-leader
+dispatches concurrently, one per in-flight ticket, not one standing "the builder" seat. Rather than
+force a plural concept into this schema's singular-seat model, persistence for build work lives as
+a naming CONVENTION at the dispatch site instead — `teamwork:mobilize-chores` step 5 names every
+`build-leader` dispatch `build-<ticket-id>`, which keeps each one idle-and-resumable (`SendMessage`)
+after its first return, the same named-`Agent`-dispatch mechanism as `planner`'s `"background"` mode
+above, without needing a `fleet.json` row per build. This is not a gap to fill later; it's the
+considered shape.
+
 ## Doctrine-audit hook
 
 A future `authorkit:doctrine-audit` edge can point at this schema directly: read every
