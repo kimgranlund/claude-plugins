@@ -62,11 +62,13 @@ estate is the working test of that bet.
   RDD↔Issue binding rule is recorded in docs' `doc-writing-rules` (RDD section). The question
   itself stays open in its remaining half: no release-grain commitment is locked yet — the first
   `locked` RDD (which lands in the roadmap's Now) closes this bullet whole.
-- The 2026-08-18 gap-review spine ratified whole (all six, Kim, live round) — the six lines
-  moved to Confirmed above (the idr-0007 pattern). What stays open here: each record's first
-  INSTRUMENT is now due, seeded in its ticket (gh#622–#627) — the feedback-intake door, the
-  re-validation mode, the cost ledger, the standing schedule + calendar ruling round, the
-  fleet-rules quoting bullet, the reconstructibility audit + two owed-at-lock mitigation docs.
-  This bullet closes when each ticket's instrument lands (per-record open questions live in the
-  records themselves, tracked at their tickets). The user+economy+truth trio (idr-0008/0010/
-  0009) is one outer-loop family.
+- CLOSED 2026-08-21 (verified against repo state): all six 2026-08-18 gap-review instruments have
+  landed — gh#622–#627 are all CLOSED and each named instrument exists — feedback-intake door
+  (`lld-0017-feedback-intake-door.md`), decision-watcher's re-validation mode (idr-0009, wired in
+  `harness/agents/decision-watcher.md`), the cost ledger (`lld-0018-estate-economy-ledger.md`,
+  `.claude/ops/spend-ledger.csv`), the standing schedule + calendar (`lld-0015-estate-rhythm-
+  instrument.md`, `.claude/ops/calendar.md`), the trust-tier ruling (`adr-0021-trust-tiers-and-
+  threat-model.md`, fleet-rules' quoting bullet), and the reconstructibility audit
+  (`lld-0014-reconstructibility-audit.md`, `harness:check-reconstructibility`). Per-record open
+  questions, if any remain, live in the records themselves. The user+economy+truth trio
+  (idr-0008/0010/0009) is confirmed as one outer-loop family with all first instruments in place.
