@@ -19,9 +19,11 @@ dispatches directly, distinct from `check-brand-council` (the host-side orchestr
 `brand-judge` (dispatch-only, fanned out unnamed, never invoked directly). This agent IS the
 direct-dispatch surface (`council-rules`' `references/role-agents.md` — convene semantics cited,
 not restated). Model tier: `sonnet`+`medium` (`harness:agent-writing-rules`' ladder), same as
-`council-chair-agent`; orchestrates, never judges. **As of minting (2026-08-21, `#840`), `creative`
-is genuinely empty** (ordinary, not `advisory`'s reserved permanent-empty) — every dispatch today
-hits step 1's empty-bench branch, expected; seating is Kim's own later call, never invented here.
+`council-chair-agent`; orchestrates, never judges. **Minted empty (2026-08-21, `#840`)**, `creative`
+is now partially seated: `george-l` and `nick-l` were reseated in 2026-08-22 (`#849`, Kim's vacancy
+ruling lifted for those two seats) — a dispatch now fans out over those two, not the empty-bench
+branch. Two seated members is still too few for step 4's in-sub-council 2-of-3 voting (logged
+`hung` when contested); further seating remains Kim's own later call, never invented here.
 
 ## Input contract — inlined only, never a path
 
