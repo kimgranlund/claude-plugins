@@ -1,58 +1,26 @@
-# check-skill audit — mobilize-chores (FLOOR)
+# Floor-tier audit — mobilize-chores step-5 NAMED-dispatch amendment (2026-08-22)
 
-Skill: /Users/kimba/Projects/nonoun/plugins/teamwork/skills/mobilize-chores/SKILL.md · Standards: skill-writing-rules · Lint: clean
-Verdict: FAIL (one blocking finding)
+Skill: /Users/kimba/Projects/nonoun/plugins/teamwork/skills/mobilize-chores/SKILL.md · Standards: skill-writing-rules, checking-rules · Lint: over (W1, pre-existing)
+Verdict: PASS (no blocking finding; one major)
 
-Audited 2026-08-07 against `check-skill` + `skill-writing-rules` + `checking-rules`, with the
-intent record (intent.md) read for design context. All runtime claims below were checked against
-`gh version 2.97.0 (2026-07-31)` on the live workspace repo.
+Scope: targeted review of the step-5 naming requirement (`name: "build-<ticket-id>"`, SKILL.md:230–243) and the amended NOT-done clause (SKILL.md:450–452). Not a full-file or estate-position review.
+
+Lint: `skill_lint.py` → 0 fail / 1 warn. W1: description 1336 chars > 1024 portable cap (SKILL.md:3–19). **Pre-existing** — this edit touched body + stopping predicate only, not the description; not chargeable to this change, but it is the file's standing debt.
 
 | ID | Verdict | Severity | Evidence (file:line) | Fix |
 |----|---------|----------|----------------------|-----|
-| R1 | FAIL | **blocking** | SKILL.md:30-33 — both step-2 mechanics are invalid against real `gh` 2.97.0. (a) `--json number,title,labels,linkedBranches` errors: `Unknown JSON field: "linkedBranches"` (verified by running it; the field is not in `gh issue list`'s field set). Step 2 dies every run → the skill's entire delta (mobilize) never executes; the "unreachable → UNMEASURED" branch (:57) launders it into a permanent sweep-only degrade. (b) `gh pr list --search "linked:<id>"` — GitHub's `linked:` qualifier accepts only `pr`/`issue`, never an id; the query silently returns wrong/empty results → every ticket reads as not-in-flight → double-dispatch, the exact hazard step 2 exists to prevent, failing *silently* | Rewrite step 2 with verified mechanics: `gh issue list --state open --label feature --json number,title,labels` (same for `bug`); in-flight check = `gh issue view <id> --json closedByPullRequestsReferences` non-empty (field verified present and returning on this repo). Before shipping, verify against one live issue with an open linked PR that the field includes open PRs; if it proves closed-only, fall back to `gh pr list --state open --search "<id> in:body"` |
-| R1 (delta) | PASS | — | Sampled 3 load-bearing lines beyond the broken mechanics: :41-43 (one batched confirm, nothing dispatches before it) — deletion → per-item confirms or auto-dispatch; :44-47 (dispatch by kind, bug→file-bug never build-feature) — deletion → default routes bugs to build-feature, which redirects (verified: build-feature/SKILL.md:24 "`kind: bug` → this is file-bug's work, hand it over"); :55-56 (sweep fails → never run 2-6). All three survive | — |
-| R2 | N/A | — | SKILL.md:14 `disable-model-invocation: true` — the description never enters model context; per skill-writing-rules it is slash-menu documentation. Nit: it is written in full trigger-contract register (~900 chars of fences and phrasings) where the standard says spend zero trigger keywords; harmless here since the fences double as human menu docs | Optional trim, never blocking |
-| R3 | PASS | — | Command species story consistent three ways: side-effectful human-timed workflow (:22-24), dials explicit `true`/`true` (:14-15), imperative-verb name head `mobilize-`. Not preloaded anywhere (command species is un-preloadable and none references it) | — |
-| R4 | PASS | — | Standing spec-present register throughout: "Nothing dispatches before this round returns" (:43), "Every dispatch is independent; one failing never blocks the others" (:47), "ambiguity is never a license to dispatch" (:60). Lint clean → W7 gate count within budget; uppercase salience spent only on ONE/BOTH/NOT-done emphasis | — |
-| R5 | PASS | nit | Wraps `/sweep-chores` by reference, never reimplements (:22-24, :28-29 — verified sweep-chores owns `.claude/ops/plan.md`, sweep-chores/SKILL.md:24,42). Nit: build-feature's bug-redirect rationale is restated three times (:6-7, :45-46, :67-68) — a drift trio against build-feature/SKILL.md:24; one statement in step 5 suffices | Keep the step-5 parenthetical; cut the description and Done-section repeats |
-| R6 | PASS | — | 68-line body; procedure, failure branches, and stopping predicate all in the head, no tail examples needed; zero `references/` (correctly, under the split threshold) | — |
-| R7 | PASS | — | Output contract :48-51 (verdict-first, table of every ticket CONSIDERED with per-ticket disposition); 4 named failure branches :53-62; checkable stopping predicate + NOT-done clauses :64-68 matching intent.md's 4 assertions | — |
-| R8 | PASS | minor | Anchors present: "ONE AskUserQuestion round — never per-ticket" (:41-42), "0 tickets mobilizable" (:38). Minor: the label→kind mapping is implicit — step 2 filters by *label* (:32), step 5 dispatches by *kind* (:44); a ticket carrying both `feature` and `bug` labels has no named disposition (the ambiguity branch :59-60 plausibly covers it, but doesn't name the label-set case) | Add one line: "kind = the ticket's single `feature`/`bug` label; both or neither → the ambiguity branch (exclude)" |
+| F1 | FAIL | major | SKILL.md:240 ("an unnamed dispatch would have had no way to resolve either hold") vs dispatch-ticket/references/plan-approval-write-gate.md:108–112 ("a later run — the marshal coming back live, or a human posting the accept marker directly — resumes from the same pushed branch rather than restarting") and :114–130 (the 2026-08-21 adherence-gap note: three unnamed-era `mobilize-chores` builds hit the hold and WERE resolved coordinator-side, no seat nudged) | Overclaim of degree, not of direction. Reword :240 to state the true delta: an unnamed dispatch's hold is resolvable only by manual marshal-side composition (write-gate ref steps 1–3) or a costlier fresh dispatch resuming from the pushed branch; a named seat resolves a missing/malformed Findings comment with one `SendMessage`. The mandate stands on that honest ground — the current absolute wording contradicts the very reference it cites and invites a future editor to build unnecessary "unrecoverable hold" machinery |
+| F2 | FAIL | minor | SKILL.md:230–243 mandates `name:` but never states the coordinator's return address in the sealed prompt; harness/skills/agent-writing-rules/SKILL.md:318 (never-name rule): "when named, state the coordinator's own concrete return address in the dispatch prompt explicitly, never left implicit" (gh#157: ~100% first-report misaddress to `to: "main"`) | Add one clause to step 5: the sealed prompt states the return address. Severity capped at minor, with the check cited: `mobilize-chores` is `disable-model-invocation: true` + `user-invocable: true` (SKILL.md:20–21) and runs inline in the host session (its own step 1, :72–73, "a Skill-tool call has no isolated context of its own"), so the documented `to: "main"` fallback happens to land at the actual coordinator — the doctrine half is missing, the failure it guards is structurally masked here |
+| F3 | FAIL | minor | SKILL.md:249 ("Relay each returned typed result"), :305–306 ("After all of a wave's dispatches RETURN") — synchronous-return language left standing from the unnamed era; a named (teammate-mode) dispatch's plain-text final is silently dropped and its report arrives via `SendMessage` (agent-writing-rules SKILL.md:283; build-leader.md:28–31 carries the delivery clause via bind-team's dispatched-agent-report-delivery.md:12–14) | Propagate the edit: state once in step 5 that results now arrive as each named seat's `SendMessage` report (per build-leader's own held delivery contract), and the wave re-check fires when all of a wave's REPORTS are in, not on synchronous returns. The behavior is already correct via build-leader's contract; the residual wording is the stale text this review was asked to hunt |
+| F4 | PASS (gap noted) | nit | SKILL.md:230–243 vs dispatch-ticket SKILL.md:99–104 ("Never a NAMED … dispatch here … a `name:` buys mailbox routing with nothing to address it to") | No contradiction — checked in context: dispatch-ticket's never-name text sits inside its own task-kind INTERNAL dispatch branch (its :96–109, before the `kind: feature` arm at :110), a different dispatch than the caller-side build-leader seat; and agent-writing-rules :318 itself carves the exception this edit uses ("Reserve teammate-mode naming for seats that genuinely need mid-run resumption"). Optional hardening: cite that exception in step 5 so a grep for naming doctrine doesn't read the two files as fighting |
+| F5 | PASS (dismissed) | — | Collision claim SKILL.md:241–243 ("no random suffix needed since one ticket is claimed by exactly one dispatch") | Dismissal check performed: (a) concurrent — Phase 3's claim (assignees/claimed-by, SKILL.md:122–127, dispatch-ticket Phase 3) plus step 2's in-flight exclusions rule out a second live dispatch on the same id; (b) same-session sequential — the one re-dispatch branch (SKILL.md:414–417) deliberately targets "the SAME seat", so name reuse there is resumption, not collision — the naming convention makes that previously-incoherent branch (an unnamed seat cannot be re-addressed) actually realizable; (c) cross-session — Agent-tool names are session-scoped, no shared namespace. `build-<ticket-id>` is collision-safe as claimed |
+| F6 | PASS | — | Justification-vs-requirement fit: SKILL.md:232–241 grounds the mandate in the write-gate's Findings-comment round trip (plan-approval-write-gate.md:56–77, marshal-side steps 1–2) and the live #861/#863 observation | The requirement follows from the justification once F1's wording is honest-sized: a mid-run resumption need is exactly agent-writing-rules' sanctioned reason to name. Steelman run: the counter-rebuttal ("the fail-closed design never needs a live seat") does NOT survive — it resolves the marker but not a missing Findings comment, which only the seat (nudged) or a fresh dispatch can repost. F1 survives its own steelman as a degree overclaim only |
+| F7 | PASS | — | NOT-done amendment SKILL.md:450–452 consistent with step 5's mandate; description (:12–15) unchanged and unaffected — "dispatches uniformly to the build-leader agent" remains true; no evals.json update owed (no routing-surface edit) | none |
 
-Secondary finding, no rubric row: **allowed-tools omits the pr-list verb.** SKILL.md:17 grants
-`Bash(gh issue list *)` and `Bash(gh issue view *)` but step 2 (:33) runs `gh pr list` —
-a mid-run permission prompt in the middle of the discovery step. Severity: minor. Fix travels
-with the R1 rewrite: grant exactly the verbs the fixed step 2 uses (per skill-writing-rules'
-Command rule, `allowed-tools` pre-approves exactly the workflow's verbs).
+Also noted (pre-existing, not this edit): the referenced plan-approval-write-gate.md discusses reviewer/marshal naming semantics but never build-leader seat naming — this edit is now the only home of that convention, which is acceptable (mobilize-chores owns its own dispatch shape) but means the write-gate reference's marshal-side step 1 "nudging the seat" implication has no canonical statement on its own side. Optional: a one-line pointer there, owner's call.
 
-## Dismissed findings (checks named, per checking-rules)
+Checking-rules compliance: every dismissal above (F4, F5) cites the file:line check that cleared it; the #861/#863 "live-observed" claim in the edit is taken as UNVERIFIED-but-consistent — it is a session observation, not reproducible from the tree, and the tree's own same-day adherence-gap note (plan-approval-write-gate.md:114–130) records the compatible unnamed-era failure shape; steelman pass recorded inline in F1/F6.
 
-- **"The `feature` label doesn't exist in this repo, so the filter can never match"** — drafted,
-  then dismissed. Check: `gh label list` shows only GitHub defaults (no `feature`), but
-  file-feature/SKILL.md:100 ("labels `feature` + `size:small`/`size:big`") and
-  file-bug/SKILL.md:88 ("labels `bug` + the severity") prove `feature`/`bug` IS the estate's
-  filing convention — the label appears when the first such ticket is filed. Environment state,
-  not a skill defect. (Steelman-pass proof: this is the finding whose author-rebuttal survived,
-  so it was dropped before filing.)
-- **"file-bug resume path may not dispatch investigation as claimed"** — dismissed. Check:
-  file-bug/SKILL.md:4 ("then dispatch the investigation"), :7 ("resumes"), :30-38 (resume routing
-  by record state). The claim at SKILL.md:7 and :45-46 is accurate.
-- **"`allowed-tools` restricts the skill from running `/sweep-chores`"** — dismissed. Check:
-  skill-writing-rules' frontmatter rule — `allowed-tools` grants, never restricts; `Skill` is
-  granted at :17 anyway.
+Top 3: 1) F1 — soften :240's "no way to resolve" to the true cost delta (one SendMessage vs manual composition/fresh dispatch); it currently contradicts its own cited reference. 2) F3 — update step 5's return/relay language to SendMessage-report delivery so the wave-gate mechanics match teammate mode. 3) F2 — add the explicit return-address clause the never-name rule requires of every named dispatch.
 
-Steelman on the blocking finding: could `linkedBranches` work on a newer gh, or `linked:<id>` be
-valid search syntax? Ran both against gh 2.97.0 (released 2026-07-31, current): the field is
-rejected outright, and GitHub's documented `linked:` qualifier is value-less (`linked:pr`/
-`linked:issue` only). The finding survives its rebuttal.
-
-## Top 3
-
-1. **(blocking)** Step 2's discovery/in-flight mechanics are fictional against real `gh` —
-   `linkedBranches` is not a `gh issue list` field and `linked:<id>` is not a search qualifier.
-   Rewrite with `--json number,title,labels` + `closedByPullRequestsReferences`, and verify the
-   open-PR case live before P5.
-2. **(minor)** Grant `Bash(gh pr list *)` (or whatever the fixed step 2 actually runs) in
-   `allowed-tools` — the current grant list doesn't cover the workflow's own verbs.
-3. **(minor)** State the label→kind mapping once and name the both-labels case as an explicit
-   exclusion under the ambiguity branch.
+Reviewer: skill-checker (fresh context, floor tier). Maker applies the fixes.
