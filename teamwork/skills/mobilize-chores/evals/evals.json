@@ -1,0 +1,13 @@
+{
+  "skill": "mobilize-chores",
+  "note": "Trigger-routing suite. Command species (disable-model-invocation: true) — every positive case is an explicit slash form; expect=no-trigger cases carry the sibling flagship phrasings this skill's own description NOT-fences against (owner named in each comment). Authored #873 to close sub-agent's n03 reciprocal fence, which had no suite here to land on.",
+  "cases": [
+    { "id": "t01", "prompt": "/mobilize-chores", "expect": "trigger" },
+    { "id": "t02", "prompt": "/mobilize-chores auto", "expect": "trigger" },
+    { "id": "t03", "prompt": "/mobilize-chores auto 423 426", "expect": "trigger" },
+    { "id": "t04", "prompt": "/mobilize-chores 423, 426", "expect": "trigger" },
+    { "id": "n01", "prompt": "/sub-agent build-leader ship ticket #240 end to end, unattended.", "expect": "no-trigger", "comment": "owner: /sub-agent — one named, already-known ad-hoc target, not a queue-wide sweep-and-mobilize" },
+    { "id": "n02", "prompt": "Run one ops sweep on demand against this repo and give me the prioritized queue — don't build anything.", "expect": "no-trigger", "comment": "owner: /sweep-chores — report-only, this skill's own NOT-fence line 1" },
+    { "id": "n03", "prompt": "Build this one already-known ticket, #423, end to end.", "expect": "no-trigger", "comment": "owner: /build-feature — single-known-ticket build, this skill's own NOT-fence line 2" }
+  ]
+}
