@@ -23,8 +23,6 @@ review-cadence: monthly
 - `product-management` plugin migration (product-forge fold-in) — deliberate roster growth per the
   brief's Confirmed roster bullet (ratified 2026-08-16); gated by `harness:plan-plugin-split`'s
   anti-matrix rule before minting.
-- `brand-design` plugin migration (brand-forge fold-in) — same Confirmed bullet, same anti-matrix
-  gate.
 
 ## Later
 <!-- Intent, explicitly reversible. Items here carry no promises. -->

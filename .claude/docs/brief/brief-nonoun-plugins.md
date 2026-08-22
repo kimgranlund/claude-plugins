@@ -25,10 +25,11 @@ estate is the working test of that bet.
 - Success measure: incident-recurrence rate (primary), routing-eval trend (secondary) → `idr-0006`.
 - Roster growth is deliberate strategy, not accretion — ratified 2026-08-16 (Kim, ratification
   round): `harness:plan-plugin-split`'s anti-matrix rule (a distinct domain surface per plugin)
-  is confirmed as a binding gate on every roster addition, including the planned
-  `product-management` / `brand-design` migrations. Home: `harness:plan-plugin-split`'s own
-  anti-matrix contract — this ruling scopes an existing gate rather than minting a new claim, so
-  no IDR.
+  is confirmed as a binding gate on every roster addition; the `brand-design` migration was the
+  gate's first test and landed 2026-08-21 (bloat-overhaul complete, self-contained plugin,
+  0.7.0+); the `product-management` migration (product-forge fold-in) is still pending the same
+  gate. Home: `harness:plan-plugin-split`'s own anti-matrix contract — this ruling scopes an
+  existing gate rather than minting a new claim, so no IDR.
 
 - Solo-first composition is a WHY-grain claim: teams are escalations, not defaults — `idr-0007`
   (locked 2026-08-18, ratified by Kim; grounded in gh#265's measured hop tax, gh#266's

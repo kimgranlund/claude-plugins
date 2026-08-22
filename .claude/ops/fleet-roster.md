@@ -17,3 +17,4 @@ Repaired 2026-08-17 (issue #586, ADR-0020 convergence): the two `agent` rows abo
 read `plugins-agent` — stale even under the prior `{repo}-team-lead` convention (#434), since the
 printed session name for role `agent` was never the bare role token. Corrected in place to
 `plugins-marshal`, the current convention's printed name for this role.
+| agent | plugins-marshal (takeover) | 2026-08-22 | plugins |

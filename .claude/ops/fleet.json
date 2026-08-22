@@ -56,6 +56,13 @@
         "mode": "manual",
         "date": "2026-08-16",
         "agent_name": null
+      },
+      {
+        "role": "product",
+        "mode": "dispatched",
+        "date": "2026-08-22",
+        "action": "joined",
+        "agent_name": "plugins-product"
       }
     ],
     "loop_position": null,
