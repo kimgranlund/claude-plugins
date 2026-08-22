@@ -45,17 +45,19 @@ roster again** (the live three-vs-four-lens copy-drift this centralization fixes
 | `brand-voice-facts` | 3 | david-a, mary-n, tim-d |
 
 **This is a different grouping than the roster's own sub-council seating** (`check-brand-council`'s
-`references/roster.md`): today the 14 ported critics sit in three POPULATED ordinary sub-councils
-(`strategy`: 6, `design`: 4, `voice`: 4), plus a fourth ordinary sub-council, `creative` — seeded
-empty, VACANT lead — that is the roster's own reserved slot for the advertising-creative role
-family this pack (`brand-advertising-facts`) grounds; its three critics (george-l, nick-l, rory-s)
-haven't yet been re-seated out of their legacy `strategy`/`voice` rows into `creative`. There is
+`references/roster.md`): today the 14 ported critics sit in four ordinary sub-councils
+(`strategy`: 5, `design`: 4, `voice`: 3, `creative`: 2) — `creative`, declared 2026-08-21 (`#840`)
+seeded empty, is the roster's own slot for the advertising-creative role family this pack
+(`brand-advertising-facts`) grounds; two of its three critics, george-l and nick-l, were re-seated
+out of their legacy `voice`/`strategy` rows into `creative` 2026-08-22 (`#849`, Kim's vacancy
+ruling lifted for those two seats). The third, rory-s, stays in `strategy` — not yet re-seated,
+still a live call for a future ticket. `creative` carries no designated lead (VACANT). There is
 also the reserved, non-voting `advisory` sub-council (seeded with zero critics on purpose). The two
 axes are deliberately independent: role-family packs group by JUDGMENT LENS (what a critic reads
-before drafting or overlap-checking), sub-councils group by VOTING MEMBERSHIP — but `creative`
-existing as a fourth ordinary sub-council means the roster is already structured to converge on
-the same four-family shape once that re-seat lands. Neither table restates the other; a "why isn't
-george-l/nick-l/rory-s seated in `creative` yet" question routes to `roster-file-contract.md`'s
+before drafting or overlap-checking), sub-councils group by VOTING MEMBERSHIP — `creative` now
+seating two of its three role-family critics means the roster is most of the way to converging on
+the same four-family shape once rory-s's re-seat lands, if it does. Neither table restates the
+other; a "why isn't rory-s seated in `creative` yet" question routes to `roster-file-contract.md`'s
 sub-council model and a live re-seat ticket, not here.
 
 ## Extending this template

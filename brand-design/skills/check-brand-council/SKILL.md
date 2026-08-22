@@ -51,6 +51,11 @@ Parse `$ARGUMENTS` as `[sub-council|group] [artifact] [--deliberate]`, exactly a
   expected — for it to seat zero critics. Convening `advisory` while it seats zero → report "no
   advisors seated — mint one with `/make-critic`" and stop cleanly; this is not an error, never a
   fallback to `strategy` or `full`.
+- `creative` is deliberately **not** one of this procedure's own tokens (`#840`) even though
+  `roster.md` now declares seated `creative` rows (`#849`) — it is convened only as the EXTERNAL
+  seat `agents/creative-convener`, never through this skill directly. A `creative` first token here
+  → report "convene `creative` via `creative-convener`, not `/check-brand-council`" and stop; never
+  silently fan out over it.
 - `--deliberate` (or an equivalent live phrasing — "have them deliberate", "get them cross-
   examining each other") runs phase 2 after phase 1 completes. Absent → phase 1 only, exactly
   today's behavior, unchanged.
