@@ -232,31 +232,51 @@ Derived-graph audits (all mechanical): dangling endpoints (relation references a
 
 Frontmatter is the **authoring surface** for everything the tooling reads. The rule that keeps it from rotting: **every field in this schema is validated; no field enters the schema unless something reads it.** Fields nothing validates are prohibited, not optional — ungoverned metadata is where frontmatter lies accumulate.
 
+**Agent schema, amended to the measured convention (ADR-0025, §14.11):** the field list below for commands and skills is unchanged; the agent schema in 8.1–8.4 reflects what every agent in this estate actually carries (measured 2026-08-21, 40 files), not the earlier aspirational draft — `kind`, `performs`, `autonomous_write`, `context`, and the provenance block (`author`/`created`/`last_updated`/`review_after`) are dropped from the agent schema; nothing here changes command/skill frontmatter.
+
 #### 8.1 Identity (required, all kinds)
 
 ```yaml
 name: estate-audit          # canonical; == folder; parseable per §5
-kind: skill                 # command | skill | agent
 description: >              # the trigger contract — governed by
   Use when …                # skill-writing-rules, not this spec
 ```
 
-The validator asserts agreement, never trusts declaration: name parse + directory → **decided kind**; frontmatter must match. Disagreement is a lint failure. Frontmatter is an agreement check, never a tiebreaker — the specific defense against the rename-drift class (`entry-file-author` / `claude-md-author`) where a name silently stops meaning what the metadata claims.
+Commands and skills also declare `kind: command | skill` per their own frontmatter contract
+(`skill-writing-rules`); an agent's kind is decided by directory + name-parse (§5/§6) and is
+never itself a declared frontmatter field — no agent in the estate declares one, and nothing
+reads it if it did. The validator asserts agreement, never trusts declaration, for the kinds
+that do declare it: name parse + directory → **decided kind**; frontmatter must match.
+Disagreement is a lint failure. Frontmatter is an agreement check, never a tiebreaker — the
+specific defense against the rename-drift class (`entry-file-author` / `claude-md-author`) where
+a name silently stops meaning what the metadata claims.
+
+**Agent identity, measured (ADR-0025):** `name` and `description` are the only fields every
+agent carries. `model` and `tools` are carried by every agent sampled too — common convention,
+not a schema-enforced requirement — with `effort` (paired with `model`, `harness:
+agent-writing-rules`' tiering ladder), `skills` (preloaded skill dependencies — the real
+analogue of §7's `requires` edge, under the name agents actually use), `color` (cosmetic
+grouping), and `disallowedTools` (a negative tool grant) as measured optional fields.
 
 #### 8.2 Relations (per §7, on the depending artifact)
 
 ```yaml
-performs: estate-audit             # agents
 wraps: naming-audit                # commands (dual-access)
 requires: [naming-conventions]     # any kind — deps that must exist and be available
+skills: [naming-conventions]       # agents — the same edge, under the field name agents use
 ```
 
-#### 8.3 Invocation policy and tool grants (required for agents and mutating commands)
+**`performs` is dropped from the agent schema (ADR-0025 D2).** §7 still documents the
+agent-performs-skill relation and its structural check (name minus `-agent` equals an extant
+skill) — that check runs against the name itself via §5's parse algorithm, with no frontmatter
+field needed, and zero agents duplicate it in frontmatter. §7's relation table is unamended;
+this section only corrects the earlier claim that agents *declare* `performs` in frontmatter.
+
+#### 8.3 Invocation policy and tool grants
 
 ```yaml
 # agents
-autonomous_write: false     # agent may not mutate the estate; report-only
-context: isolated           # isolated | inherited
+model: sonnet
 tools: Read, Glob, Grep, Bash(python */scripts/validate.py *)
 
 # commands
@@ -268,28 +288,35 @@ allowed-tools:
   - Bash(git mv *)
 ```
 
-Policy fields are **enforced contracts, not documentation**: the validator asserts `mutates: true ⇒ confirm: required` unless the command is in a reviewed allowlist, and any agent lacking `autonomous_write` fails closed (treated as `false`). This transposes the product-side hard invariant into the harness: no artifact acquires write authority by omission.
+**`autonomous_write` and `context` (`isolated`/`inherited`) are dropped from the agent schema
+(ADR-0025 D2).** No agent declares either — the platform's own dispatch mechanics (an agent's
+tool grant; whether it runs via a fresh context or a fork) already carry the distinction these
+fields would have restated. The command policy fields (`mutates`/`confirm`/`allowed-tools`) are
+unamended: the validator asserts `mutates: true ⇒ confirm: required` unless the command is in a
+reviewed allowlist.
 
-**Tool grants are where policy materializes** — and declaring them also removes runtime permission interruptions, so least-privilege and ergonomics are the same move. Rules:
+**Tool grants are where agent policy actually materializes** — and declaring them also removes
+runtime permission interruptions, so least-privilege and ergonomics are the same move. Rules:
 
 - Every artifact declares the minimum tool set its body actually uses. `Bash` grants are always **scoped patterns** (`Bash(git mv *)`), never blanket — enumerate the legal set, reject by default, same as the lexicons.
-- **Policy/capability coherence is validated:** `autonomous_write: false` ⇒ no `Edit`, `Write`, or unscoped `Bash` in the agent's tools. `mutates: true` ⇒ the command declares a write-capable tool; `mutates: false` ⇒ it declares none. Divergence between the policy fields and the grants is a lint failure — policy asserts, grants enforce, and neither may drift from the other.
-- The estate's mutation topology becomes grep-decidable: which artifacts can write is answered from frontmatter alone, never from reading procedure bodies.
+- The estate's mutation topology is answered from an agent's `tools` grant directly (no `Edit`/`Write`/unscoped `Bash` ⇒ report-only in practice), never from reading procedure bodies — the same grep-decidability goal the earlier `autonomous_write` field aimed at, achieved by the grant itself rather than a second field asserting what the grant already shows.
 
-#### 8.4 Provenance (required, all kinds)
+#### 8.4 Provenance
 
-```yaml
-author: kim                 # ∈ AuthorRegistry in the manifest
-created: 2026-08-13
-last_updated: 2026-08-13    # staleness input, not trivia
-review_after: 180d          # optional per-artifact override of the default
-```
-
-`last_updated` is load-bearing: `harness_check` flags any artifact whose `last_updated` exceeds its review window as **stale** — a warning tier alongside the exemption burn-down, because stale files are drift's incubation stage. The field is validated against git history (declared date may not postdate the last commit touching the artifact), so it cannot be cosmetically bumped without an actual change.
+**Dropped from the agent schema only (ADR-0025 D3); commands and skills are out of this
+amendment's scope.** For agents, `author`/`created`/`last_updated`/`review_after` had zero
+adoption outside one plugin's own internal dogfooding copy (`authorkit`'s `schema_scope:
+"full"` self-check, issue #226/#224 ruling b) — restating them as estate-wide agent schema when
+no estate-wide gate ever enforced them was aspiration standing in for reality. `authorkit`'s own
+internal convention is untouched by this drop; a plugin may still track its own provenance
+fields on its own agents as an internal choice. Whether commands and skills carry this block at
+a rate that still earns it as documented schema is a separate, unmeasured question this ADR does
+not rule on — ADR-0025's own evidence (§14.11) is agents-only; the block below stands unamended
+for those two kinds pending that separate measurement.
 
 #### 8.5 What stays out
 
-`version` (git is the version authority), `tags` (the grammar + description are the routing surface; a parallel folksonomy forks it), free-form `notes` (body content, not metadata). If a future field earns validation, it enters by manifest PR like a lexicon entry.
+`version` (git is the version authority), `tags` (the grammar + description are the routing surface; a parallel folksonomy forks it), free-form `notes` (body content, not metadata), and — for agents specifically, per ADR-0025 — `kind`, `performs`, `autonomous_write`, `context`, `author`, `created`, `last_updated`, `review_after`: none read by anything outside one plugin's own internal self-check. If a future field earns estate-wide validation, it enters by manifest PR like a lexicon entry, the same door ADR-0025 leaves open to re-admit any of these should a real consumer materialize.
 
 ---
 
@@ -342,10 +369,20 @@ Checks, in order:
 1. **AC-001** (REQ-001) Name ∈ `exemptions` → grammar checks skip (record for burn-down); frontmatter checks (4–7) still apply.
 2. **AC-002** (REQ-004) Parse per §5; all tokens resolve; no banned aliases; no brand tokens.
 3. **AC-003** (REQ-005) `folder == name` (§6); skill folder layout closed set, `SKILL.md` present, no nested skills (§6.1); reference index complete and dangling-free (§6.2).
-4. **AC-004** (REQ-007) Frontmatter schema (§8): required fields present; no fields outside the schema; decided kind (parse + directory) matches declared kind.
-5. **AC-005** (REQ-006) Relations (§7): every endpoint exists; `performs` equals name minus `-agent`; `wraps` targets a model-invocable skill; compiled `requires` graph is acyclic.
-6. **AC-006** (REQ-007) Invocation policy (§8.3): `mutates: true ⇒ confirm: required` (allowlist excepted); agents fail closed to `autonomous_write: false`; policy/capability coherence — tool grants match declared policy, `Bash` grants are scoped patterns.
-7. **AC-007** (REQ-007) Provenance (§8.4): `author` ∈ AuthorRegistry; `last_updated` does not postdate last git touch; staleness beyond review window → warning tier.
+4. **AC-004** (REQ-007) Frontmatter schema (§8): required fields present per kind (agents:
+   `name`/`description`; commands/skills also declare `kind`, checked against decided kind);
+   no fields outside the schema (ADR-0025: the agent schema no longer lists `kind`/`performs`/
+   `autonomous_write`/`context`/`author`/`created`/`last_updated`/`review_after`, so none of
+   those count as "outside the schema" on an agent — they simply aren't read).
+5. **AC-005** (REQ-006) Relations (§7): every endpoint exists; `performs` equals name minus `-agent`
+   (checked structurally off the name itself, §5 — never off a frontmatter field, ADR-0025 D2);
+   `wraps` targets a model-invocable skill; compiled `requires`/`skills` graph is acyclic.
+6. **AC-006** (REQ-007) Invocation policy (§8.3): `mutates: true ⇒ confirm: required` (allowlist
+   excepted, commands); agent policy is read from its `tools` grant directly — no
+   `autonomous_write` field to fail closed on (ADR-0025 D2); `Bash` grants are scoped patterns.
+7. **AC-007** (REQ-007) Provenance (§8.4): applies to commands and skills as before; dropped for
+   agents (ADR-0025 D3) — `author`/`created`/`last_updated`/`review_after` are not checked
+   against an agent's frontmatter.
 8. **AC-008** (REQ-003) ObjectVocab registration gate (on manifest change): new entries create no parse ambiguity; disjointness of VerbLex/ProcessLex holds; disjointness of RoleLex against ObjectVocab ∪ ProcessLex holds (ADR-0015 D3).
 
 Grammar and relation failures block the mint/merge; staleness warns.
@@ -924,3 +961,47 @@ staying outside `references/` means it never needs an index row, by design.
 section ratifies (verified against `authorkit/skills/naming-audit/scripts/validate.py` at the
 ratification tree, 2026-08-21). Re-running `naming-audit --scope grammar` estate-wide is a
 confirmation step, not a migration: zero new violations open, zero close.
+
+### 14.11 §8's agent frontmatter schema amended to the measured convention (2026-08-21, issue #863, ADR-0025)
+
+**Ruling authority:** ADR-0025 (`.claude/docs/adr/0025-agent-frontmatter-schema-matches-reality.md`),
+ratified 2026-08-21 by Kim (close-session leftovers round, `plan-2026-08-brand-design-bloat-overhaul`
+seed S5, Gate A approved 2026-08-21 — "amend the spec, don't backfill"). Supersedes ADR-0011's
+§8 agent frontmatter schema only — identity fields `name`/`description`, the grammar/directory
+rules (§§2–6), the composition-relations mechanism (§7), and the migration posture (§10) all
+stand unamended. ADR-0011 is not edited — accepted ADRs are append-only (T4); §8 above is
+edited in place per this file's own §3.1/§3.2/§6.1/§14.10 convention (prose amended inline,
+never only logged here).
+
+**Measured (2026-08-21, 40 agent files, `*/agents/*.md`):** 39/40 carry none of `kind`/
+`author`/`created`/`last_updated`/`performs`/`autonomous_write`/`context` — the one exception,
+`authorkit/agents/estate-audit-agent.md`, carries the full documented schema as a deliberate
+self-dogfood (`authorkit`'s own `schema_scope: "full"` convention, issue #226/#224 ruling b,
+already predates and is consistent with this amendment). Every one of the 40 carries `name`,
+`description`, `model`, `tools`; 37/40 carry `effort`; 24/40 carry `skills`; 12/40 carry
+`color`; 1/40 carries `disallowedTools`. A cross-plugin sample issue #863 named directly —
+harness's `skill-checker`, teamwork's `builder`, docs' `doc-checker` — carries none of the
+dropped fields either.
+
+**Ruling:** §8's agent schema drops `kind` (an agent's kind is decided by directory + name-parse,
+§5/§6 — never a declared field), `performs` (checked structurally off the name itself, §5 — §7's
+relation table and its structural check are unamended, only the frontmatter-declaration claim is
+dropped), `autonomous_write` and `context` (no agent declares either; the platform's own
+dispatch mechanics and the `tools` grant already carry the distinction), and the provenance
+block `author`/`created`/`last_updated`/`review_after` (zero adoption outside authorkit's own
+internal self-check). `name`/`description` stay required; `model`/`tools`/`effort`/`skills`/
+`color`/`disallowedTools` are documented as the measured, non-enforced convention. Commands and
+skills are untouched by this amendment — their own frontmatter schema (§8.1's `kind` field,
+§8.4's provenance block) stands exactly as written.
+
+**Non-goal:** this section does not touch §7's relation table or the structural `performs`
+check, command/skill frontmatter (§8.1/§8.3/§8.4 as they apply to those two kinds), the
+grammar/directory rules (§§2–6), `authorkit`'s own internal `schema_scope: "full"` convention on
+its own agents, or the migration posture (§10) — no exemption is created or retired by this
+amendment.
+
+**Validator change:** none owed — `naming.manifest.json`'s `schema_scope: "grammar"` already
+routes estate-wide agents around the dropped fields' enforcement (issue #226/#224, predating
+this ticket); this amendment ratifies the spec text to match validator behavior already
+shipped, not the reverse. Re-running `authorkit:naming-audit` against brand-design's 4 agents is
+a confirmation step, not a migration: zero frontmatter findings before and after this change.
