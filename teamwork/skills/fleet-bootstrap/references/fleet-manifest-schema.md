@@ -113,14 +113,15 @@ takeover record.
   (`"{repo}-marshal"`, `"agent"`). `#902` fixed `fleet-bootstrap`'s own Phase 1 `agent`-seat bind
   (fresh-join and takeover) to write this field rather than leave it `null`, since a `null` here on
   a still-live row is what stranded every peer trying to route a fleet-shaped ask back to this
-  repo's marshal (`fleet-rules` Section 7 resolves its routing target off this exact field). **Not
-  yet universal**: `team-scaffolding`'s own manual-join path (the sole bind for `reviewer`/
-  `planner`, and for a direct `/team-scaffolding agent` join) still writes `agent_name: null`
-  unconditionally — tracked separately, not closed by #902 — so a `null` on a `mode: "manual"` row
-  is not yet proof of staleness the way it would be if every writer honored this field; read it as
-  "this particular writer either predates #902 or is `team-scaffolding`'s own path" until that gap
-  closes too. A background/background-subprocess row's `agent_name` keeps its existing meaning (the
-  dispatched `Agent`-tool name, or the subprocess's log-path/PID pointer).
+  repo's marshal (`fleet-rules` Section 7 resolves its routing target off this exact field). **Now
+  universal (#903)**: `team-scaffolding`'s own manual-join path (Phase 2 — the sole bind for
+  `reviewer`/`planner`, and for a direct `/team-scaffolding agent` join) also resolves and writes
+  this field, mirroring `fleet-bootstrap` Phase 1 step 5's mechanic, closing the gap #902 itself
+  left open. A `null`/absent `agent_name` on a `mode: "manual"`, live (`action: "joined"`) row is
+  now reliably a legacy pre-fix entry, not an expected ongoing writer gap — `fleet-connect`'s
+  own Failure branches treat that case explicitly rather than folding it into "no live marshal." A
+  background/background-subprocess row's `agent_name` keeps its existing meaning (the dispatched
+  `Agent`-tool name, or the subprocess's log-path/PID pointer).
 - **`live_state.joined[].action`** — **this field's semantics are canonical here; `team-scaffolding`'s
   Phases 1/2/6 cite this entry rather than restating it.** `"joined"` (a seat bound this row,
   either a fresh bind or a takeover of a previously-released seat) or `"released"` (the seat

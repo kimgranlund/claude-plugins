@@ -1,0 +1,17 @@
+{
+  "skill": "fleet-connect",
+  "note": "Trigger-routing suite. expect=trigger: the skill should fire on the prompt in a fresh session; expect=no-trigger: a near-miss owned elsewhere (owner in comment). disable-model-invocation: true means this is a command-species skill — routing cases still document intent, but the model never auto-invokes it.",
+  "cases": [
+    { "id": "t01", "prompt": "/fleet-connect", "expect": "trigger" },
+    { "id": "t02", "prompt": "Wire this working session to the repo's live marshal so I can forward fleet-shaped asks.", "expect": "trigger" },
+    { "id": "t03", "prompt": "Connect me to the marshal that's already running for this repo.", "expect": "trigger" },
+    { "id": "t04", "prompt": "Introduce this session to {repo}-marshal and get its status ack plus the roster.", "expect": "trigger" },
+    { "id": "t05", "prompt": "I need to forward a mobilize decision to the fleet marshal from this terminal — hook me up first.", "expect": "trigger" },
+    { "id": "n01", "prompt": "Cold-start the whole fleet from this one terminal.", "expect": "no-trigger", "comment": "owner: teamwork:fleet-bootstrap — stands up/BECOMES the marshal, doesn't connect to an already-live one" },
+    { "id": "n02", "prompt": "/fleet-bootstrap reviewer,planner", "expect": "no-trigger", "comment": "owner: teamwork:fleet-bootstrap directly" },
+    { "id": "n03", "prompt": "Bootstrap this session as the fleet's agent seat.", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding — binds THIS session AS a seat, not connecting to an existing one" },
+    { "id": "n04", "prompt": "/team-scaffolding agent", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding directly" },
+    { "id": "n05", "prompt": "Should a fleet-shaped ask route to the marshal or be handled here — what's the standing triage rule?", "expect": "no-trigger", "comment": "owner: teamwork:fleet-rules Section 7 — the routing doctrine itself, not the one-time handshake that wires a session up to use it" },
+    { "id": "n06", "prompt": "Retire the reviewer seat, this session held it.", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding retire — releasing a seat, not connecting to the marshal" }
+  ]
+}
