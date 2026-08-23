@@ -11,8 +11,8 @@ default target is meaningful for a collector).
 
 Walks `<docs-root>/{adr,idr,rdd}/*.md`, parses doc_lint-compatible frontmatter,
 and emits per-type counts, status distributions, and the orphan-ADR (doc_lint's
-T6 WARN — no `intent-refs:` citation) count, plus ROADMAP.md presence/status at
-the repo root. Reuses docs/scripts/doc_lint.py's own TYPES/LEDGER_LOCK contract
+T6 WARN — no `intent-refs:` citation) count, plus roadmap presence/status —
+root `ROADMAP.md` first, else the typed `<docs-root>/roadmap/*.md` (#882). Reuses docs/scripts/doc_lint.py's own TYPES/LEDGER_LOCK contract
 (sources-flow-outward) rather than re-declaring the type/status enums here.
 
 `<docs-root>` resolves per doc-writing-rules' "Where documents live" ladder
@@ -83,19 +83,32 @@ def census_dir(docs_root, dtype, parse_frontmatter):
     return entry
 
 
-def roadmap_state(root, parse_frontmatter):
-    p = Path(root) / "ROADMAP.md"
-    if not p.is_file():
-        return {"present": False, "status": None}
-    fm = parse_frontmatter(p.read_text(errors="replace")) or {}
-    return {"present": True, "status": fm.get("status")}
+def roadmap_state(root, docs_root, parse_frontmatter):
+    """Root-level `ROADMAP.md` first (the portable convention), else the typed
+    `<docs-root>/roadmap/*.md` location doc-writing-rules' folder ladder names —
+    the only place a repo on the `.claude/docs/` override files one (#882).
+    Reports the resolved path so the reader can tell which rung matched."""
+    candidates = [Path(root) / "ROADMAP.md"]
+    typed_dir = Path(docs_root) / "roadmap"
+    if typed_dir.is_dir():
+        candidates.extend(sorted(typed_dir.glob("*.md")))
+    for p in candidates:
+        if not p.is_file():
+            continue
+        fm = parse_frontmatter(p.read_text(errors="replace")) or {}
+        if p.parent == typed_dir and fm.get("doc-type", "roadmap") != "roadmap":
+            continue
+        return {"present": True, "status": fm.get("status"),
+                "path": str(p.relative_to(root))}
+    return {"present": False, "status": None, "path": None}
 
 
 def collect(root):
     doc_lint = load_doc_lint()
     docs_root = resolve_docs_root(root)
     ledger = {t: census_dir(docs_root, t, doc_lint.parse_frontmatter) for t in LEDGER_TYPES}
-    return {"ledger": ledger, "roadmap": roadmap_state(root, doc_lint.parse_frontmatter),
+    return {"ledger": ledger,
+            "roadmap": roadmap_state(root, docs_root, doc_lint.parse_frontmatter),
             "types_known": sorted(doc_lint.TYPES), "ledger_lock": doc_lint.LEDGER_LOCK}
 
 
@@ -147,6 +160,21 @@ def selftest():
         if legacy_result["ledger"]["adr"]["count"] != 1:
             fails.append("host-override ladder: .claude/docs/ fallback not read when "
                          f"docs/ops/ absent (got {legacy_result['ledger']['adr']['count']}, want 1)")
+
+        # #882: the typed roadmap location under the override root, with no root ROADMAP.md.
+        # A non-roadmap .md in that folder must NOT count (doc-type gate); a real one must.
+        typed_dir = legacy_root / ".claude" / "docs" / "roadmap"
+        typed_dir.mkdir(parents=True)
+        (typed_dir / "README.md").write_text("---\ndoc-type: plan\nid: p1\nstatus: active\n---\n")
+        decoy = collect(legacy_root)["roadmap"]
+        if decoy["present"]:
+            fails.append(f"#882 reverse control: non-roadmap file in roadmap/ counted ({decoy})")
+        (typed_dir / "roadmap-x.md").write_text(
+            "---\ndoc-type: roadmap\nid: roadmap-x\nstatus: active\n---\n## Now\n")
+        typed = collect(legacy_root)["roadmap"]
+        if not (typed["present"] and typed["status"] == "active"
+                and typed["path"] == ".claude/docs/roadmap/roadmap-x.md"):
+            fails.append(f"#882 negative control: typed roadmap under .claude/docs/ not read ({typed})")
 
         # Precedence: when BOTH roots exist, docs/ops/ must win (catches a swapped if-order).
         both_ops = legacy_root / "docs" / "ops" / "adr"
