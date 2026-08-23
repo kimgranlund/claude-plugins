@@ -14,6 +14,14 @@ cwd-first: the nearest `.claude/ops/fleet.json` walking from the current working
 upward to the repo root, first hit wins; once a nearer file resolves, a farther one is never
 consulted, whatever either contains. Readers report which path they resolved.
 
+**The same ladder governs a virgin SEED, not only a read (#909).** `/fleet-bootstrap` Phase 0
+runs this identical cwd-to-root walk before deciding there is nothing to read. Nothing found at
+any rung → this is a fresh seed, and the seed root is the INVOKING cwd's own `.claude/ops/` when
+cwd is not the repo root (the app-scoped case this section already rules a reality above), or the
+repo root's `.claude/ops/` when cwd IS the repo root — never a hardcoded repo-root default
+regardless of where the command was invoked from. The resolved seed root is named in the Phase 6
+report so a later reader knows where to look without re-walking.
+
 ## Shape
 
 The `cross_repo_coordination` array below is illustrative, shown populated with this repo's own
