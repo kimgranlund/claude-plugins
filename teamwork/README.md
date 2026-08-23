@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.39 · 2026-08-23 · fixes #899: `harness_emit.py`'s Hermes `__init__.py` template emitted plain-str `os.path.join(...)` skill paths; Hermes's `register_skill` (`hermes_cli/plugins.py:3355`) calls `path.exists()` on that argument, so the first registration raised `AttributeError` and zero skills registered. Fixed upstream in harness (`Path`-joined paths + `description=` passthrough on every `register_skill()` call, sourced from each skill's own frontmatter); this plugin's `__init__.py` and `HARNESS-NOTES.md` regenerated to match. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v2.28.38 · 2026-08-23 · closes #896: marshal feed-noise diet — `fleet-bootstrap` Phase 1 gains
 explicit guidance to run the marshal seat in a dedicated terminal, not the user's working
 session, with the rejected background/subagent-marshal alternative named (no `AskUserQuestion`
