@@ -4,11 +4,11 @@ description: >-
   Fleet protocol AND how skills/subagents/teams compose: coordination, claim-guard, comms,
   version-slot, session-death, pin-race, incoming triage, sealed dispatch, preload-vs-discovery.
   A live {repo}-marshal gets fleet-shaped asks forwarded via SendMessage, not run here. Use for
-  "which peers can this orchestrator talk to", "cwd pin stuck", "subagent or team". NOT isolation/collision
+  "which peers can this orchestrator talk to", "subagent or team". NOT isolation/collision
   (parallel-work-rules); NOT next-turn timing (loop-rules); NOT mobilizability (mobilize-chores);
   NOT stacked-PR (big-change-git-rules); NOT corpus audits (check-all-agents/-skills); NOT one
-  agent — its preloads, frontmatter, or return block (agent-writing-rules/write-handoff); NOT decomposition
-  (break-down-problem).
+  agent's preloads/return (agent-writing-rules/write-handoff); NOT decomposition
+  (break-down-problem); NOT a live wiring failure (wiring-checker).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -104,7 +104,7 @@ record.**
   session" doctrine, Part B).
 - A dispatched seat reports (Findings write-back, or its typed return) **before** going idle. A
   report supersedes any nudge sent after it (#373: ~15 stale idle pings post-report). **No-op-
-  silence rule:** same for the user-facing feed — milestone-only (gate/PR/merge/block/needs-input); routine wakes stay record-only. `#896`.
+  silence rule:** same for the user-facing feed — milestone-only (gate/PR/merge/block/needs-input); routine wakes stay record-only. `#896`. The needs-input arm is this section's own batching channel below (`held-items.md`/idr-0011), never a piecemeal interrupt.
 - Seats never escalate straight to the human — the coordinator relays outcomes, unless the
   coordinator is confirmed gone (no live entry in `fleet.json`'s `live_state.joined` for the
   orchestrator role), in which case the durable record (a PR/Issue comment) is the fallback

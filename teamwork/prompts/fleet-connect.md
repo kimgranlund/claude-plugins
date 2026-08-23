@@ -27,13 +27,15 @@ rather than applying this section itself").
    absent counts as live, `"released"` does not (the canonical rule, `fleet-bootstrap`'s
    `references/fleet-manifest-schema.md`, cited not restated). **No file at any rung of the walk,
    absent `agent` role entries, or the latest row's `action` is `"released"`** (all judged against
-   the ONE resolved file, never a farther fallback) → report "no live marshal — run
+   the ONE resolved file, never a farther fallback) → report "no live marshal (checked
+   `<resolved path>`, or: no fleet.json found between `<cwd>` and the repo root) — run
    /fleet-bootstrap in a dedicated terminal" and stop. Do not proceed to step 2.
 
    **Live row but `agent_name` is `null`/absent** (a legacy pre-fix entry — team-scaffolding's
    manual-join path wrote `agent_name: null` unconditionally before this same change closed that
    gap) → this is a DISTINCT failure branch, never folded into "no live marshal": report "a live
-   marshal is recorded but its address never resolved (legacy entry, dated `<date>`) — cannot
+   marshal is recorded in `<resolved path>` but its address never resolved (legacy entry, dated
+   `<date>`) — cannot
    SendMessage it; a human should confirm it's still running and re-bind via /team-scaffolding
    agent to record a resolved address, or take over via /fleet-bootstrap only once confirmed
    gone." Never auto-suggest a takeover on an unresolved-but-possibly-live row — that risks a
@@ -80,7 +82,8 @@ rather than applying this section itself").
 - **No `fleet.json` at any rung of the cwd-to-root walk, or the resolved file has no live
   `agent` row (latest row's `action` is `"released"` or absent entirely)** (step 1) → not a fleet
   repo, or no live marshal yet. Report: "no live marshal — run /fleet-bootstrap in a dedicated
-  terminal." Stop — never fall through to a handshake against nothing, and never re-try the
+  terminal", naming the resolved path checked (or that no fleet.json exists between cwd and the
+  repo root). Stop — never fall through to a handshake against nothing, and never re-try the
   verdict against a farther fleet.json once a nearer one resolved.
 - **Live `agent` row but `agent_name` is `null`/absent** (step 1, a legacy pre-fix entry) →
   report the row as recorded-but-unresolvable and stop; never treat this the same as "no live
