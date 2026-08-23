@@ -110,6 +110,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.40 · 2026-08-23 · fixes #902: `fleet-bootstrap` Phase 1 step 5 now resolves this session's real `SendMessage` address (via `ListAgents`, self-lookup only) and writes it as `agent_name` on both the fresh-join and takeover paths, instead of leaving it null; `fleet-manifest-schema.md` documents the field and the takeover's joined-atop-joined row shape. `fleet-rules` Section 7 resolves its marshal-forwarding target off `fleet.json`'s `agent_name` field, never the printed `{repo}-marshal` label, reporting unresolvable rather than sending blind. Two bullets in Section 4 moved to `references/best-practices.md` to clear the F6 body-length cap; body content unchanged.
 v2.28.39 · 2026-08-23 · fixes #899: `harness_emit.py`'s Hermes `__init__.py` template emitted plain-str `os.path.join(...)` skill paths; Hermes's `register_skill` (`hermes_cli/plugins.py:3355`) calls `path.exists()` on that argument, so the first registration raised `AttributeError` and zero skills registered. Fixed upstream in harness (`Path`-joined paths + `description=` passthrough on every `register_skill()` call, sourced from each skill's own frontmatter); this plugin's `__init__.py` and `HARNESS-NOTES.md` regenerated to match. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v2.28.38 · 2026-08-23 · closes #896: marshal feed-noise diet — `fleet-bootstrap` Phase 1 gains
 explicit guidance to run the marshal seat in a dedicated terminal, not the user's working

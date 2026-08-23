@@ -193,39 +193,29 @@ record.**
   2026-08-17 · [incident]
 - **Merge-on-green verifies each check's CONCLUSION individually — never the watch command's exit
   code alone** (#551: `--watch --fail-fast` exits 0 on non-terminal/failed states; bit #530, #546,
-  #549). The watch's exit 0 is advisory only;
-  `dispatch-ticket`'s step 1b mechanizes the real pass condition (a `check-runs` API query
-  against the head SHA); cited, not reproduced here.
+  #549). The watch's exit 0 is advisory only; `dispatch-ticket`'s step 1b mechanizes the real pass
+  condition (a `check-runs` API query against the head SHA); cited, not reproduced here.
 - **Serialize vs. parallelize**: tickets touching the same file serialize; disjoint named targets
   parallelize — Part B Design step 5's own disjoint-fan-out default, restated here only as the
   one-line rule this area needs, its mechanics staying there.
 - **A hot shared file doesn't force strict serialization.** Merge-then-rebase-next (each writer
-  fetches and rebases immediately before its own PR-open; ≥1 rebase pass is normal, not a defect) is the
-  steady state under heavy concurrent write pressure. Refines the same-file-serializes rule
-  above: serialize the DECISION to start
-  touching the file if you can, but once several legitimately already are, rebase-next absorbs the
-  overlap instead of forcing a queue. · agent-ui#1115 lesson 6 · 2026-08-17 · [incident]
-- **A repo that commits derived/generated artifacts degrades multi-PR throughput to a
-  human-attended serial merge marshal** the moment two PRs touch the same generated file — resolve
-  by re-running the generator on the merged source, never by picking a side or hand-merging the
-  diff (a rider file like a CHANGELOG is the one keep-both exception). The durable cure is a class
-  split at the artifact level: regen-on-main for anything reproducible from source (a freshness
-  gate leaves PR CI, one bot PR per drift event), stays-committed-and-PR-blocking for anything
-  whose bytes ARE the contract (e.g. a published bundle) — this workspace's own `dist/`
-  (`.claude/rules/dist-output.md`) is already the latter class by the same reasoning. A merge queue
-  is not a substitute for either: it validates a synthetic commit read-only, and regen output has
-  nowhere to land inside it. · gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661,
-  lessons 1–3, 5; ADR-0069) · 2026-08-17 · [verified]
-- **Credentialed steps don't run inside a seat's own worktree.** A regen or build step needing a
-  secret absent from seat contexts either no-ops or writes an empty/red stub there — the pattern is
-  an admin merge first, then the host or CI (which holds the credential) regenerates. Never read a
-  seat-context red on a credentialed step as a real regression. · gen-ui-kit fleet-ops harvest
-  (agent-ui#1115, comment 5317746661, lesson 19) · 2026-08-17 · [verified]
-- **A worktree's own installer shapes its build bytes** — a locally-bootstrapped worktree can
-  produce meaningfully different bundle bytes than CI's own install path, so a freshness/parity
-  gate comparing the two needs the SAME install path on both sides, not just the same source;
-  `harness:big-change-git-rules`' worktree-mechanics reference is the canonical home for
-  worktree bootstrap mechanics generally — cited rather than re-derived here. · agent-ui#1115 lesson 18 · 2026-08-17 · [verified]
+  fetches and rebases immediately before its own PR-open; ≥1 rebase pass is normal, not a defect)
+  is the steady state under heavy write pressure — serialize the DECISION to start touching the
+  file if you can, but once several legitimately already are, rebase-next absorbs the overlap
+  instead of forcing a queue. · agent-ui#1115 lesson 6 · 2026-08-17 · [incident]
+- **Committed derived/generated artifacts degrade multi-PR throughput to a human-attended serial
+  merge marshal** the moment two PRs touch the same generated file — the regen-vs-stays-committed
+  class split and the fix (re-run the generator on the merged source, never hand-merge). Full
+  writeup: `references/best-practices.md` "Generated artifacts and merge throughput" — cited, not
+  restated (gen-ui-kit fleet-ops harvest, agent-ui#1115, ADR-0069, 2026-08-17).
+- **Credentialed steps don't run inside a seat's own worktree** — a regen/build step needing a
+  secret absent from seat contexts no-ops or stubs there; never read that as a real regression.
+  Full writeup: `references/best-practices.md` "Credentialed steps and seat contexts" — cited, not
+  restated (gen-ui-kit fleet-ops harvest, agent-ui#1115 lesson 19, 2026-08-17).
+- **A worktree's own installer shapes its build bytes** — a freshness/parity gate needs the SAME
+  install path on both sides, not just the same source; `harness:big-change-git-rules`'
+  worktree-mechanics reference is canonical, cited not re-derived. · agent-ui#1115 lesson 18 ·
+  2026-08-17 · [verified]
 
 ### 5. Session-death resilience
 
@@ -290,7 +280,17 @@ only the missing UNBLOCK step, not a restatement of the detection mechanics:
 
 ### 7. Route-anything-incoming protocol
 
-**A non-marshal session with a live `{repo}-marshal` forwards a fleet-shaped ask via `SendMessage` rather than applying this section itself (#896); the triage below is the marshal's own.** Minted from #577 (2026-08-17): the orchestrator seat's standing triage discipline. Binds both
+**A non-marshal session with a live `{repo}-marshal` forwards a fleet-shaped ask via `SendMessage`
+rather than applying this section itself (#896); the triage below is the marshal's own.** Resolve
+the actual send target from `fleet.json`'s `live_state.joined` latest row for role `agent` — its
+`agent_name` field (liveness/staleness semantics canonical in `fleet-bootstrap`'s own
+`references/fleet-manifest-schema.md`, cited not restated) — never the printed `{repo}-marshal`
+label, which is a display convention, not a session identity `SendMessage` can reach (#902: routing
+on the label alone sent messages nowhere, since no session is ever registered under it).
+**Unresolvable** → report that the marshal has no addressable send target and do the work locally
+per this section's own triage instead — never `SendMessage` a seat label on the hope it resolves to
+something live. Minted from #577 (2026-08-17): the orchestrator seat's standing triage discipline.
+Binds both
 doors of the seat identically (Part B "Seat-access doors" — the dispatched
 `agents/fleet-marshal.md` form and the host-adopted `/bind-team` form): same discipline, cited
 from each, never re-derived per door.
