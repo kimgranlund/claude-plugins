@@ -23,6 +23,12 @@ audience: human, product-seat
 > unattended dispatch can run; this record stays `status: proposed` until the marshal (or Kim
 > directly) runs that round. Not yet append-only — editable until `status: accepted` lands.
 
+> **Correction, appended 2026-08-22 (marshal; chore-planner queue entry carried five firings).**
+> The blockquote above is the record's own PROPOSED-era header and is now stale: this ADR was
+> ratified `accepted` on 2026-08-18 and has been append-only since. The blockquote is retained
+> verbatim per the accepted-ADR append-only rule (`.claude/rules/docs-mutability.md`, doc_lint T4)
+> — superseded by this note, never edited in place.
+
 ## Context
 
 The estate's fleet (`teamwork:fleet-rules`, `fleet.json`/`fleet-roster.md`, ADR-0005's claim

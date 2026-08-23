@@ -57,7 +57,7 @@ pass over this section is the digest; Kim clears an entry by editing its Status 
 - Source: issue #866 (fleet-bootstrap cross-repo coordination channel in fleet.json), filed by kimgranlund
 - Kind: ambiguous-claim
 - Why it's queued here rather than resolved unattended: #866's own body discloses the ask arrived secondhand — relayed by gen-ui-kit's marshal via a cross-session SendMessage citing what it says was Kim's own instruction to file this against plugins. GitHub authorship reads as kimgranlund (matches friendlies.json's confirmed_by, so issue-sorter's own login-comparison provenance check finds no mismatch and applies no user-signal tag) — but the underlying INSTRUCTION's provenance is unconfirmed at the source, a distinct question the login-comparison mechanism doesn't cover. The filing itself asks for a quick confirm before being treated as prioritized.
-- Status: queued
+- Status: resolved 2026-08-22 — Kim confirmed the request as genuinely their own, live, in the same day's mobilize-chores interactive round ("Confirmed + build now"); built and merged as PR #871 (closes #866). Ledger line cleared by the marshal per chore-planner's 2026-08-22T23:49:26Z queue entry 4.
 
 <!--
 Entry template (one per queued ruling/merge item):
