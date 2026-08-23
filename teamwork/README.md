@@ -110,6 +110,21 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.38 · 2026-08-23 · closes #896: marshal feed-noise diet — `fleet-bootstrap` Phase 1 gains
+explicit guidance to run the marshal seat in a dedicated terminal, not the user's working
+session, with the rejected background/subagent-marshal alternative named (no `AskUserQuestion`
+channel per #541, not interactively steerable, relay layer re-adds #265's hop tax);
+`fleet-rules` Section 3 gains a no-op-silence rule — a wake that changes nothing gets no
+user-facing line, reporting is milestone-only (gate/PR/merge/block/needs-input);
+`fleet-manifest-schema.md` gains a stretch note naming a future `report_milestones` config field
+(not yet wired). `fleet-rules`' own frontmatter description gains a routing sentence (Kim's live
+ruling): a non-marshal session with a live `{repo}-marshal` forwards a fleet-shaped ask via
+`SendMessage` rather than applying the skill itself, mirrored into Section 7's body; `evals.json`
+gains t26 covering it. Scoped blind-judge re-run of fleet-rules' full 46-case suite against the
+teamwork menu: zero regressions from the description trim (all three cut quoted phrases still
+routed correctly); 3 pre-existing dead cases unrelated to this change (t17/t18 already documented
+noise, t22 newly contested and left unresolved rather than chased). PATCH: prompt-body + routing
+description wording only, no schema/field change shipped.
 v2.28.37 · 2026-08-23 · closes #891 (LLD-0025 W3): new plugin bytes — `harness_emit.py` (harness) now also derives a Pi overlay (`package.json` with `"pi": {"skills": ["./skills"]}`, plus `"prompts": ["./prompts"]` and one `prompts/<name>.md` template per command-only skill — R-5 amendment, #888: the human-only guard is preserved natively, a Pi prompt template expands only from a human keystroke) from this plugin's own manifest/SKILL.md frontmatter, alongside the Codex and Hermes overlays; `HARNESS-NOTES.md` gains a real Pi section, gated fresh by release_gate.py's widened G15 (`codex,hermes,pi`) — a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v2.28.36 · 2026-08-23 · closes #890 (LLD-0025 W2): new plugin bytes — `harness_emit.py` (harness) now also derives a Hermes overlay (`plugin.yaml`, `__init__.py`'s `register(ctx)` — one `ctx.register_skill()` line per skill, nothing else registered this wave, `hermes-mcp.yaml` where `.mcp.json` exists) from this plugin's own manifest/SKILL.md frontmatter, alongside the Codex overlay; `HARNESS-NOTES.md` gains a real Hermes section, gated fresh by release_gate.py's widened G15 (`codex,hermes`) — a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v2.28.35 · 2026-08-23 · closes #886 (LLD-0025 W1): new plugin bytes — `harness_emit.py` (harness) derives a Codex overlay (`.codex-plugin/plugin.json`, per-skill `agents/openai.yaml`, `HARNESS-NOTES.md`) from this plugin's own manifest/SKILL.md frontmatter, gated fresh by release_gate.py's new G15; a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.

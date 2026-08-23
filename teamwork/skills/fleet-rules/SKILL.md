@@ -3,8 +3,8 @@ name: fleet-rules
 description: >-
   Fleet protocol AND how skills/subagents/teams compose: coordination, claim-guard, comms,
   version-slot, session-death, pin-race, incoming triage, sealed dispatch, preload-vs-discovery.
-  Use for "which peers can this orchestrator talk to", "orchestrator died mid-build", "cwd pin stuck", "subagent or team",
-  "review my wiring", "where does this bug report go". NOT isolation/collisions
+  A live {repo}-marshal gets fleet-shaped asks forwarded via SendMessage, not run here. Use for
+  "which peers can this orchestrator talk to", "cwd pin stuck", "subagent or team". NOT isolation/collision
   (parallel-work-rules); NOT next-turn timing (loop-rules); NOT mobilizability (mobilize-chores);
   NOT stacked-PR (big-change-git-rules); NOT corpus audits (check-all-agents/-skills); NOT one
   agent — its preloads, frontmatter, or return block (agent-writing-rules/write-handoff); NOT decomposition
@@ -103,8 +103,8 @@ record.**
   notification, which dies with the session that saw it ("the return channel doesn't survive the
   session" doctrine, Part B).
 - A dispatched seat reports (Findings write-back, or its typed return) **before** going idle. A
-  report supersedes any nudge sent after it — an idle ping arriving post-report is a no-op, not a
-  second request (#373: ~15 stale idle pings arrived after their own reports).
+  report supersedes any nudge sent after it (#373: ~15 stale idle pings post-report). **No-op-
+  silence rule:** same for the user-facing feed — milestone-only (gate/PR/merge/block/needs-input); routine wakes stay record-only. `#896`.
 - Seats never escalate straight to the human — the coordinator relays outcomes, unless the
   coordinator is confirmed gone (no live entry in `fleet.json`'s `live_state.joined` for the
   orchestrator role), in which case the durable record (a PR/Issue comment) is the fallback
@@ -290,7 +290,7 @@ only the missing UNBLOCK step, not a restatement of the detection mechanics:
 
 ### 7. Route-anything-incoming protocol
 
-Minted from #577 (2026-08-17): the orchestrator seat's standing triage discipline. Binds both
+**A non-marshal session with a live `{repo}-marshal` forwards a fleet-shaped ask via `SendMessage` rather than applying this section itself (#896); the triage below is the marshal's own.** Minted from #577 (2026-08-17): the orchestrator seat's standing triage discipline. Binds both
 doors of the seat identically (Part B "Seat-access doors" — the dispatched
 `agents/fleet-marshal.md` form and the host-adopted `/bind-team` form): same discipline, cited
 from each, never re-derived per door.

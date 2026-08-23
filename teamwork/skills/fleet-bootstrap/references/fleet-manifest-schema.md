@@ -256,6 +256,16 @@ a future ladder retier updates this one line in the same change. Note `justifica
 also written on CANONICAL rows at seed/update time (the example above dates every seat), so its
 mere presence never implies a deviation — only a tier MISMATCH starts this classification at all.
 
+## Milestone-report threshold (stretch, gh#896 — not yet wired)
+
+`fleet-rules` Section 3's no-op-silence rule fixes user-facing reporting at "milestone-only"
+(gate reached, PR opened, merged, blocked, needs-input) but leaves what counts as a milestone to
+per-turn judgment. A future `fleet.json` field — e.g. `report_milestones: [...]` naming the
+event set a given repo's marshal narrates to the user — would make that bar config instead,
+letting a repo widen or narrow it without re-deriving the judgment call each session. Not wired
+here: no field is read or written by this schema today: name it explicitly if a future change
+adds one, so a bare mention here doesn't get mistaken for an already-live default.
+
 ## Doctrine-audit hook
 
 A future `authorkit:doctrine-audit` edge can point at this schema directly: read every

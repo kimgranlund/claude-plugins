@@ -52,6 +52,18 @@ requires; there is no second human turn to wait on (same defect class as #421/#4
 own Phase 5 fix — a skill claiming a Skill-tool hand-off against a `disable-model-invocation`
 target).
 
+**Run this in a dedicated terminal, not the user's working session (#896).** The marshal's own
+tool-use stream (seat wakes, gate holds, routing decisions) runs continuously in that terminal —
+`fleet-rules` Section 3's no-op-silence rule caps what of that becomes an explicit user-facing
+status line (milestone-only), not the terminal's live activity itself — so a separate terminal
+keeps even the capped subset out of the user's working-session feed. The user drops into the
+marshal terminal at gates (accept markers, blocked reports, needs-input). **A background/subagent
+marshal was considered and REJECTED**: a subagent has no `AskUserQuestion` channel (#541 — a fork
+or `Agent`-tool dispatch cannot reach it at all), so it could never hold a live gate or ask a
+clarifying question; it also can't be interactively steered mid-run the way a live terminal can;
+and relaying its output back through the working session re-adds the hop tax #265 measured for
+that same shape.
+
 1. Bind role `agent`. Validate against `.claude/ops/fleet.json`. A still-live `agent` entry here
    is a **takeover, not a collision** (not a Failure branch — proceed straight to steps 2 and 5's
    takeover path). This is narrower than `team-scaffolding`'s own role-token collision rule, and

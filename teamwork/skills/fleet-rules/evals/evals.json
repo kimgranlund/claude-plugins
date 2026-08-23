@@ -131,6 +131,12 @@
    "expect": "trigger"
   },
   {
+   "id": "t26",
+   "prompt": "this repo has a live marshal registered, should I just merge this myself or hand it off",
+   "expect": "trigger",
+   "comment": "gh#896: the live-marshal-forwards-fleet-shaped-asks routing sentence added to the description"
+  },
+  {
    "id": "n01",
    "prompt": "should I work in a worktree for this, or is the shared tree fine",
    "expect": "no-trigger",
