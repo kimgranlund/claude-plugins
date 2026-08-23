@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bind Planning"
+  short_description: "Makes this session a dedicated planning seat, running the planner agent's own contract for one named charter: decompose across both planes, then author only the PRD/SPEC/LLD/ADR the charter earns, each doc riding to docs:doc-checker fresh-context before it counts gated."

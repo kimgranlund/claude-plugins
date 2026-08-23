@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Runtime Resilience Facts"
+  short_description: "How a deployed chat runtime's producer loop stays honest across turns and failures."

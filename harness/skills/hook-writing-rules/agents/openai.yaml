@@ -1,0 +1,3 @@
+interface:
+  display_name: "Hook Writing Rules"
+  short_description: "Standards for writing Claude Code hooks — the enforced, zero-token tier."

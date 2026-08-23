@@ -1,0 +1,3 @@
+interface:
+  display_name: "Material Shape Facts"
+  short_description: "Use for SIZING/SPACING UI using Material `--md-sys-{size,radius,space,border,focus-ring}-*` tokens — control height/padding/radius, card inset, gaps, icon size, border/focus-ring width (\"what size/spacing token\", \"the md-sys border width token\", \"the md-sys focus ring token\", \"how tall should this control be\", \"make the layout denser\")."

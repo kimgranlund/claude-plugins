@@ -1,0 +1,3 @@
+interface:
+  display_name: "Research Methods"
+  short_description: "Use for a measured investigation of a scorable system — six methods: autoresearch, hill-climb, ablation, sweep, bisect, adversarial."

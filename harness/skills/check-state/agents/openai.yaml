@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check State"
+  short_description: "Read-only project work-state report: bundled collectors sweep git (branches, worktrees, stashes), tickets/PRs, and ROADMAP/PLAN/TICKET docs, cross-reference the layers, and report verdict-first — Blocked-on-you, Ready-to-close, Drift, Delta since last run — every finding naming its owning command."

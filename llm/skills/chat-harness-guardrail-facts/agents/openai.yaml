@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Guardrail Facts"
+  short_description: "The instruction, safety, and config layer of a portable chat-agent harness."

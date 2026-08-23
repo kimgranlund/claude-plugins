@@ -1,0 +1,3 @@
+interface:
+  display_name: "What Shipped"
+  short_description: "Summarizes what shipped in a date window — PRs merged and opened, GitHub issues, and ticket-backend records (local ticket files, GitHub Issues, or a connected adapter such as Linear) — defaulting to today, with release-bot noise counted but excluded and real work grouped by workstream."

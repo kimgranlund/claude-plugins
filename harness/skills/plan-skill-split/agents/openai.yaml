@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Skill Split"
+  short_description: "Decide whether a sprawling knowledge corpus splits into a family of knowledge skills, and into which ones; the merge direction is plan-skill-merge."

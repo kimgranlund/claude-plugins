@@ -1,0 +1,3 @@
+interface:
+  display_name: "Clean Repo"
+  short_description: "Run a structured alignment campaign on a repo whose agent harness and context records have drifted — duplicated instruction trees, bloated entry files, dead automation, orphaned files, unwritten conventions, and a stale living design-doc corpus (ADRs, PRDs, SPECs, LLDs, RFCs)."

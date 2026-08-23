@@ -1,0 +1,3 @@
+interface:
+  display_name: "Blocked By Rules"
+  short_description: "How chore-planner reads a ticket's `Blocked-by: #NN` line and orders .claude/ops/plan.md so a blocked action queues behind its blocker, or names the dependency when the blocker isn't itself queued (issue #193)."

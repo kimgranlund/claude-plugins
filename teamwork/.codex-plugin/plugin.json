@@ -1,0 +1,14 @@
+{
+  "name": "teamwork",
+  "version": "2.28.35",
+  "description": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end.",
+  "author": {
+    "name": "Kim G / NONOUN"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Teamwork",
+    "shortDescription": "Derive decisions, design composition/continuation patterns, and run a multi-agent feature-delivery team end to end."
+  }
+}

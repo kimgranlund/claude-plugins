@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Skill"
+  short_description: "Audits a SKILL.md against skill-writing-rules and returns a findings report."

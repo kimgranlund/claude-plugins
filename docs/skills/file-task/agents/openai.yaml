@@ -1,0 +1,3 @@
+interface:
+  display_name: "File Task"
+  short_description: "Capture a work item that's neither bug- nor feature-shaped — a chore, follow-up, or debt — as a durable record, then resume by id, fold new detail, append dated Findings, or advance status."

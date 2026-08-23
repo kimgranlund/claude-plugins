@@ -1,0 +1,3 @@
+interface:
+  display_name: "File Feature"
+  short_description: "Capture a feature idea as a durable record: a ticket, design docs — or, when it's a feature request that turns out to be \"document/capture X as a reference corpus,\" it routes HERE FIRST: intake classifies, then hands to make-reference."

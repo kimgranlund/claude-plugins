@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Tool Facts"
+  short_description: "How a chat-agent harness reaches outside its context window."

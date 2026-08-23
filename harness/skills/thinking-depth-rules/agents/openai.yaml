@@ -1,0 +1,3 @@
+interface:
+  display_name: "Thinking Depth Rules"
+  short_description: "The n-order reasoning spectrum for matching judgment depth to a decision, and for naming when a rule itself — not just the latest attempt — is wrong."

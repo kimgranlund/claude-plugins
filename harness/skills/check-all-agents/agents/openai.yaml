@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check All Agents"
+  short_description: "Audit a whole agents/ team as ONE system — naming coherence, delegation front-matter, skill leverage: \"review all my agents\", \"audit the agent team\", \"which agents are duplicates\"."

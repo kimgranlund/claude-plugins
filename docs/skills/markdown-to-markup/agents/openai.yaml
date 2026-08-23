@@ -1,0 +1,3 @@
+interface:
+  display_name: "Markdown To Markup"
+  short_description: "Render markdown source into safe DOM markup, or extend the renderer with a new inline/block form."

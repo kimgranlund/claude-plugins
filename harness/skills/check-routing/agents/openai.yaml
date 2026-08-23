@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Routing"
+  short_description: "Run a plugin's trigger-eval suites, or a project ESTATE's (no plugin manifest — a bare `.claude/skills/*/evals/` tree, auto-detected), as a blind routing simulation: a no-tools judge picks from the description menu, then a routing matrix with tuning targets (stolen/leaked/dead)."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Stitch Kit"
+  short_description: "Author, evaluate, or regenerate a Google Stitch DESIGN.md — YAML frontmatter tokens + 8 canonical sections."

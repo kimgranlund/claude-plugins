@@ -1,0 +1,3 @@
+interface:
+  display_name: "A2ui Training Facts"
+  short_description: "The A2UI training-corpus subsystem in @agent-ui/a2ui — the curated store conditioning and measuring generation."

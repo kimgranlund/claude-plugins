@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Council"
+  short_description: "Stand up a NEW council instance for a domain with none yet: domain intake, roster home + its role→agent mapping, sub-council groupings, chair wiring (reuse `council-chair-agent`; a critic shell off `brand-judge`; one role agent per sub-council off `strategy-convener`), a calibration seed, both run modes."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Vision Memo"
+  short_description: "Use when the user asks to author or improve a vision memo — argues how to think about a problem, not what to build."

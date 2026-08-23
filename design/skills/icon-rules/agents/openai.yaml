@@ -1,0 +1,3 @@
+interface:
+  display_name: "Icon Rules"
+  short_description: "Use for icon-system questions from a cited corpus — construction, sizing, style, metaphor, accessibility, RTL: \"what size/stroke weight\", \"filled vs outlined\", \"should this mirror in RTL\", \"is an icon-only button okay\", \"is this icon big enough to tap\", \"fill the Iconography section of a DESIGN.md\"."

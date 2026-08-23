@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Critic"
+  short_description: "Mint a NEW critic persona for a council: draft the persona file, apply the `.name-map.md` attribution discipline, register it in the roster + sub-councils, seed a calibration fixture, checker-pass it."

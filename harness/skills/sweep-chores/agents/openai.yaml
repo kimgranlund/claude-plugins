@@ -1,0 +1,3 @@
+interface:
+  display_name: "Sweep Chores"
+  short_description: "Run one ops-family sweep on demand against this repo — fans out decision-watcher + issue-sorter + repo-cleaner in parallel and returns chore-planner's single prioritized queue (.claude/ops/plan.md)."

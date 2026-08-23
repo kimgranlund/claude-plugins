@@ -1,0 +1,3 @@
+interface:
+  display_name: "Pattern Sweeping"
+  short_description: "Runs a repo- or corpus-wide sweep for a code/DOM pattern or criterion safely: census → sanity-check → classify → report or transform → verify → ratchet."

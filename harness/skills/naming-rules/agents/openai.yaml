@@ -1,0 +1,3 @@
+interface:
+  display_name: "Naming Rules"
+  short_description: "Simple naming paradigm for plugins, skills, commands, agents."

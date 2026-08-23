@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Harness Rules"
+  short_description: "Standards for designing agent-native verification — HOW an agent tests a system it just built, not a human eyeballing a screenshot."

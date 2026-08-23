@@ -1,0 +1,3 @@
+interface:
+  display_name: "Font Token Rules"
+  short_description: "Use for UI TYPE on the default `--type-*` grammar (not Material's `--md-sys-typescale-*`) — font/size/weight/leading/tracking for heading, body, label, button, caption, kicker (\"what type token for this\", \"which voice/step for this text\", \"size this heading\")."

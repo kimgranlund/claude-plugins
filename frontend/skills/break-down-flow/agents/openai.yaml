@@ -1,0 +1,3 @@
+interface:
+  display_name: "Break Down Flow"
+  short_description: "Decompose, evaluate, and design ONE cross-screen user flow — a journey declared as a state machine."

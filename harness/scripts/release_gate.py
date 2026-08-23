@@ -48,6 +48,11 @@ Gate order (plugin-writing-rules §Release discipline):
       origin/main's, and the README ledger's newest line must name that version
       (version_monotonic_check.py; complements version_claim_check.py's cross-open-PR tier);
       no origin/main, untouched, or a brand-new plugin -> not applicable
+  G15 harness overlay freshness (LLD-0025, gh#885/#886, 2026-08-23): runs
+      `harness_emit.py <root> --verify --harness <DEFAULT_HARNESSES>` as a subprocess (the gate
+      never imports the emitter — same exit-code-contract relationship G4 has to a bundled
+      selftest); exit 1 -> FAIL listing each stale/unexpected/marketplace-mismatch path; exit 2
+      -> FAIL "emitter setup error"; no harness_emit.py on this checkout -> not applicable
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -64,6 +69,11 @@ import eval_check
 import corpus_check
 import docs_check
 import version_monotonic_check
+
+# G15 harness set — a one-line constant each wave widens (LLD-0025 Resolution 5): W1 codex,
+# W2 +hermes, W3 +pi. Kept local (not imported from harness_emit) so the gate never imports
+# the emitter — subprocess only, same as G4's relationship to a bundled selftest.
+G15_HARNESSES = "codex"
 
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
 KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -829,6 +839,27 @@ def gate(root: Path, package: bool = False):
                     if not ledger_ok:
                         fail("G14", ledger_msg)
 
+    # G15 harness overlay freshness (LLD-0025, gh#885/#886) — verify-only; the writer runs in
+    # /ship-plugin's own preflight, never here (a gate that rewrites committed source hides a
+    # write inside a read — Resolution 5). Subprocess only: the gate never imports the emitter,
+    # same relationship G4 has to a bundled selftest.
+    emit_script = Path(__file__).resolve().parent / "harness_emit.py"
+    if not emit_script.is_file():
+        warn("G15", "harness_emit.py not present on this checkout -> overlay freshness not applicable")
+    else:
+        r = subprocess.run(
+            [sys.executable, str(emit_script), str(root), "--verify", "--harness", G15_HARNESSES],
+            capture_output=True, text=True,
+        )
+        if r.returncode == 0:
+            ok(f"G15 harness overlay freshness: clean ({G15_HARNESSES})")
+        elif r.returncode == 1:
+            findings = [ln for ln in r.stdout.splitlines() if ln.strip().startswith(("stale:", "unexpected:", "marketplace-mismatch:"))]
+            detail = "; ".join(findings[:5]) if findings else r.stdout.strip()[-300:]
+            fail("G15", f"{len(findings) or 1} stale/unexpected overlay finding(s) -> {detail}")
+        else:
+            fail("G15", f"emitter setup error -> {(r.stdout + r.stderr).strip()[-300:]}")
+
     # G6 package
     artifact = None
     if package and name and version and not fails:
@@ -859,10 +890,18 @@ def selftest():
     with tempfile.TemporaryDirectory() as td:
         r = Path(td) / "demo-plugin"
         (r / ".claude-plugin").mkdir(parents=True)
-        (r / ".claude-plugin" / "plugin.json").write_text('{"name": "demo-plugin", "version": "0.1.0"}')
+        (r / ".claude-plugin" / "plugin.json").write_text(
+            '{"name": "demo-plugin", "version": "0.1.0", "description": "A demo plugin."}')
         (r / "skills" / "demo-review").mkdir(parents=True)
         (r / "skills" / "demo-review" / "SKILL.md").write_text(skill_lint.GOOD_FIXTURE)
         (r / "README.md").write_text("demo-plugin map: demo-review\n\nv0.1.0 · initial\n")
+        emit_script = Path(__file__).resolve().parent / "harness_emit.py"
+        def w(root=r):
+            # best-effort overlay write, ignoring failures (a deliberately-broken fixture
+            # manifest can't emit — those legs already expect code==1 from another gate,
+            # so a stale/unwritten G15 riding along changes nothing they assert)
+            subprocess.run([sys.executable, str(emit_script), str(root)], capture_output=True)
+        w()
         code, _ = gate(r)
         assert code == 0, "clean fixture plugin must pass"
         body = (r / "skills" / "demo-review" / "SKILL.md")
@@ -881,6 +920,7 @@ def selftest():
         agents_dir.mkdir()
         (agents_dir / "demo-auditor.md").write_text(skill_lint.GOOD_AGENT_FIXTURE)
         body.write_text(body.read_text() + "\nsee demo-auditor for the dispatched review seat\n")
+        w()  # a new agent changes HARNESS-NOTES.md's dropped-agents ledger; resync before G15 checks it
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             code, _ = gate(r)
@@ -889,6 +929,7 @@ def selftest():
         body.write_text(body.read_text().replace("\nsee demo-auditor for the dispatched review seat\n", ""))
         (agents_dir / "demo-auditor.md").unlink()
         agents_dir.rmdir()
+        w()  # the agent is gone again; resync the ledger before the next code==0 assertion
         # G8 verbatim file-citation class (issue #814, select-menu-name-bug/url-state-sync):
         # a token glued to a literal ".md" must go quiet with no allowlist entry — the
         # false-positive class this ticket fixes. Same "ancient-review" token the plain
@@ -1042,12 +1083,30 @@ def selftest():
         code, _ = gate(r)
         assert code == 1, "plugin absent from root marketplace.json must FAIL G13"
         mkt.write_text('{"name": "demo-market", "plugins": [{"name": "other-plugin"}, {"name": "demo-plugin"}]}')
+        w()  # a root marketplace.json now exists; resync the estate .agents/plugins mirror G15 also checks
         code, _ = gate(r)
         assert code == 0, "plugin listed in root marketplace.json must pass G13"
         mkt.unlink()
         mkt_dir.rmdir()
         code, _ = gate(r)
         assert code == 0, "no root marketplace.json -> G13 not applicable, gate stays clean"
+        # G15 harness overlay freshness leg (LLD-0025, gh#885/#886, 2026-08-23): a stale overlay
+        # must fail G15, a fresh one must pass — the same bite-proof pattern G4's .mjs leg uses.
+        w()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "ok    G15" in buf.getvalue(), "a freshly-written overlay must pass G15"
+        (r / ".codex-plugin" / "plugin.json").write_text('{"drifted": true}')
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 1 and "FAIL  G15" in buf.getvalue(), "a hand-edited overlay must FAIL G15"
+        w()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "ok    G15" in buf.getvalue(), "rewriting the overlay must restore a clean G15"
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)

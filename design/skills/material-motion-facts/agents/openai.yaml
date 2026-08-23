@@ -1,0 +1,3 @@
+interface:
+  display_name: "Material Motion Facts"
+  short_description: "Use when ANIMATING any UI whose motion tokens use the Material `--md-sys-motion-*` naming, or when the M3 motion token table is the question (\"what easing/duration token for this dialog\", \"which spring token — fast or slow, spatial or effects\", \"emphasized or standard easing here\")."

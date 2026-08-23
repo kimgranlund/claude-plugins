@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plugin Writing Rules"
+  short_description: "Standards for authoring and releasing Claude Code plugins."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Doc Writing Rules"
+  short_description: "Standards for authoring functional documents — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, BRIEF, TICKET, TASK, IDR, RDD."

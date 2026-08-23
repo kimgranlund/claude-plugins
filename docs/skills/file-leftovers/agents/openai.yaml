@@ -1,0 +1,3 @@
+interface:
+  display_name: "File Leftovers"
+  short_description: "Sweep the current chat session for work mentioned but not advanced — bugs, feature ideas, feedback, chores, unanswered questions — and roll it into workable tickets: a candidate table, one clarification round, then each item minted through its owning intake skill."

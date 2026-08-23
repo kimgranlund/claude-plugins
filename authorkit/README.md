@@ -97,6 +97,7 @@ was never one of the ten wrappers this ticket converts).
 
 ## Version ledger
 
+v0.26.5 · 2026-08-23 · closes #886 (LLD-0025 W1): new plugin bytes — `harness_emit.py` (harness) derives a Codex overlay (`.codex-plugin/plugin.json`, per-skill `agents/openai.yaml`, `HARNESS-NOTES.md`) from this plugin's own manifest/SKILL.md frontmatter, gated fresh by release_gate.py's new G15; a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v0.26.4 · 2026-08-22 · save-lessons harvest (Kim-confirmed 2026-08-22): LAYOUT.md's skill-folder
 closed set extended four->six entries (`evals/`, `intent.md`, citing ADR-0024); FRONTMATTER.md's
 agent schema caveated to name/description (required) + model/tools/effort/skills/color/

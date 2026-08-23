@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Hook"
+  short_description: "Forge a Claude Code hook through five gated phases: check-vs-judgment route, event/matcher interview, script + registration draft, repair-message language pass, simulated-event validation with a shipped selftest."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plugin Install Facts"
+  short_description: "Verified per-channel install instructions for Claude Code plugins — /plugin marketplace add + /plugin install (github shorthand, git https/SSH URLs, local paths), npm-sourced plugins, dev checkouts, CI forms, trust/scope/update facts."

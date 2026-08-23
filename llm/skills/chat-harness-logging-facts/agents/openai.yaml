@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Logging Facts"
+  short_description: "How a chat-agent harness makes its own behavior legible."

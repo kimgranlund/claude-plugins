@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Rubric"
+  short_description: "Author, evaluate, improve, or update a rubric for consistent judgments."

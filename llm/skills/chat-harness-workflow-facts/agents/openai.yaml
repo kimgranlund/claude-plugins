@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Workflow Facts"
+  short_description: "How a chat-agent harness composes MULTIPLE agents for work too large for one context — project-agnostic."

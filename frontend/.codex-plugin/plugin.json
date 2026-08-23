@@ -1,0 +1,14 @@
+{
+  "name": "frontend",
+  "version": "2.6.4",
+  "description": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-rules), verify it all against non-functional bars (focus, i18n, perf, safety), and capture per-shape UI-feature ticket intake schemas (feature-intake-rules) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract.",
+  "author": {
+    "name": "Kim G / NONOUN"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Frontend",
+    "shortDescription": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-rules), verify it all against non-functional bars (focus, i18n, perf, safety), and capture per-shape UI-feature ticket intake schemas (feature-intake-rules) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract."
+  }
+}

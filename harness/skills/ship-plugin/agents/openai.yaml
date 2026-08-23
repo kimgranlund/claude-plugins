@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ship Plugin"
+  short_description: "Release a Claude Code plugin through the full gate: preflight (version bump, changelog), release_gate.py (structure, manifest, full lint, bundled selftests, phantom sweep), evals check, package to dist/."

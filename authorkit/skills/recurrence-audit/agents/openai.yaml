@@ -1,0 +1,3 @@
+interface:
+  display_name: "Recurrence Audit"
+  short_description: "Instrument IDR-0006's estate success measures — incident-recurrence rate (primary) and the /check-routing pass-rate trend (secondary)."

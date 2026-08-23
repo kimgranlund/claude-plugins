@@ -1,0 +1,3 @@
+interface:
+  display_name: "Big Change Git Rules"
+  short_description: "This workspace's git campaign safety rules."

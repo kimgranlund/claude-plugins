@@ -1,0 +1,3 @@
+interface:
+  display_name: "Find Intent"
+  short_description: "Extract the ROOT intent behind a task or brief before acting — including a bare goal with no stated scope or success criterion and no meta-language (\"make our plugins easier to get started\"), not only requests naming intent-extraction outright."

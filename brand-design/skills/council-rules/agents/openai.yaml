@@ -1,0 +1,3 @@
+interface:
+  display_name: "Council Rules"
+  short_description: "What a council IS and how it operates, domain-neutral: roster/persona contract, sub-councils, blind fan-out, severity taxonomy + 2-of-3 voting, five synthesis shapes, calibration discipline, the two-phase model (blind, then chair-moderated deliberation), and the role-agent contract (one addressable agent per role, its scoped convene semantics, the reserved-name rule)."

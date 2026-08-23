@@ -1,0 +1,3 @@
+interface:
+  display_name: "Sort Issues"
+  short_description: "Runs the standing issue-sorter agent on demand against this repo — a plain intake sweep, or a specific instruction (approve/deny a held item, answer the first-run roster or GitHub-MCP-offer interview)."

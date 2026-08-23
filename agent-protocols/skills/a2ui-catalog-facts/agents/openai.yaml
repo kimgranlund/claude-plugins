@@ -1,0 +1,3 @@
+interface:
+  display_name: "A2ui Catalog Facts"
+  short_description: "How an A2UI catalog is designed and extended in @agent-ui/a2ui — the row contract, factory/resolution, naming law, two-tier extensibility, security allowlist + conformance, coverage policy."

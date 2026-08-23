@@ -1,0 +1,3 @@
+interface:
+  display_name: "Motion Rules"
+  short_description: "Answers UI motion questions from a cited corpus — durations, easing and springs, choreography, reduced-motion policy."

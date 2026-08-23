@@ -1,0 +1,3 @@
+interface:
+  display_name: "Write Handoff"
+  short_description: "Compose or review the standard handoff block a team agent returns when it hands work back to its coordinator or the host — Status · Summary · Files changed · Tests/checks run · Evidence · Risks · Open questions · Recommended next action."

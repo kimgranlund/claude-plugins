@@ -1,0 +1,3 @@
+interface:
+  display_name: "Team Scaffolding"
+  short_description: "Bootstraps this session as one seat of the standing 4-session fleet (`{repo}-marshal` / `{repo}-reviewer` / `{repo}-planner` / `{repo}-product`): names the session, writes or verifies the seat's permission profile, prints the comms charter (peer roster + SendMessage-is-a-nudge doctrine + durable-channel fallback), then names the matching bind-* skill for the human to run next."

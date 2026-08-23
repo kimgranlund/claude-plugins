@@ -1,0 +1,3 @@
+interface:
+  display_name: "Fleet Bootstrap"
+  short_description: "Full one-terminal fleet cold-start (#410 addendum 3, level 2 — composes team-scaffolding + the roster): adopts the orchestrator seat, dispatches the product seat to draft the intent layer, then HARD-GATES on human ratification of that draft (AskUserQuestion where reachable; no live user stops and names the pending gate)."

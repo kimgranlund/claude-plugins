@@ -1,0 +1,3 @@
+interface:
+  display_name: "Prompt Wording Rules"
+  short_description: "Sharpen the language of a prompt-carrying artifact so it *instantiates* target behavior, not merely describes it — a skill, agent, or tool prompt: the model ignores an instruction, a prompt isn't effective, harden a description, rewrite so it works."

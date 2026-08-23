@@ -1,0 +1,3 @@
+interface:
+  display_name: "Skill Writing Rules"
+  short_description: "Standards for writing Claude Code skills that change behavior instead of documenting it."

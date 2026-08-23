@@ -1,0 +1,3 @@
+interface:
+  display_name: "Break Down Layout"
+  short_description: "Decompose/evaluate/design any UI layout — four archetypes on two crossing axes (space × behavior)."

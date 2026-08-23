@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Memory Facts"
+  short_description: "How a chat-agent harness gets durable, citable knowledge and persists facts across sessions, not task state — project-agnostic."

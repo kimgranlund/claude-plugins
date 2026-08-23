@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Brand Orientation"
+  short_description: "Gets your bearings in a brand before doing any work — inventories the corpus, reads it against the methodology as working / drifting / missing, and proposes next steps by pipeline stage."

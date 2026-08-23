@@ -1,0 +1,3 @@
+interface:
+  display_name: "Parallel Work Rules"
+  short_description: "Decide whether concurrent sessions/subagents need git-tree isolation, and what to do on collision."

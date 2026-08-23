@@ -1,0 +1,3 @@
+interface:
+  display_name: "Persistence Facts"
+  short_description: "Answers client-persistence FACTS from a cited field-report corpus — storage discipline tiers (schemaVersion/rename-map vs ad-hoc JSON.parse vs cache-buster keys; the rename-without-migration data-loss class), when a sync store next to an async storage seam is legitimate design vs."

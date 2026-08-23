@@ -1,0 +1,3 @@
+interface:
+  display_name: "Web Component Facts"
+  short_description: "Answers Web Components platform facts — light-DOM lifecycle (upgrade races, SSR shim scars, NOOP_INTERNALS), stamping strategies + keyed reconcile (adopt-or-stamp, logicalChildren, the display:contents trap), traits as a host-agnostic primitive vs."

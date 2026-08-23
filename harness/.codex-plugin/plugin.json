@@ -1,0 +1,21 @@
+{
+  "name": "harness",
+  "version": "3.18.0",
+  "description": "The foundational authoring plugin, self-contained: maker/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (prompt-wording-rules), intent extraction, and two-plane decomposition; /check-everything as the recurring outer loop.",
+  "author": {
+    "name": "Kim G / NONOUN"
+  },
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "authoring",
+    "lint",
+    "review",
+    "evals"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Harness",
+    "shortDescription": "The foundational authoring plugin, self-contained: maker/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (prompt-wording-rules), intent extraction, and two-plane decomposition; /check-everything as the recurring outer loop."
+  }
+}

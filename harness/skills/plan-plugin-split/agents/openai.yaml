@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Plugin Split"
+  short_description: "Analyze an existing harness surface — skills/agents/hooks/scripts, one oversized plugin, or scattered ones."

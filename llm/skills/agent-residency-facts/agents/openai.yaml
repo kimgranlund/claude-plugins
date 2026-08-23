@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Residency Facts"
+  short_description: "Classifies an agent as a Resident Agent (CLI harness, e.g."

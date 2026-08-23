@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Stage"
+  short_description: "Read-only lifecycle-position report: which of the three nested loops (North star/Foundation/ Releases) a repo is currently emphasizing, the build turn's current stage (of seven), and the version triple — derived from a typed-record census (ADR/IDR/RDD counts, status distributions, orphan-ADR density, ROADMAP presence) plus narrated judgment calls, each labeled mechanized or judgment (never a bare verdict)."

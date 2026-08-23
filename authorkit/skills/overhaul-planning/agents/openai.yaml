@@ -1,0 +1,3 @@
+interface:
+  display_name: "Overhaul Planning"
+  short_description: "Generate a phased estate-overhaul plan for a target (estate, plugin set, member list): measure first, a per-member kill-switch design doc, merge/split nominations, procedure-vs-knowledge tiers, then waved ticket seeds with Blocked-by edges (can return \"no move\")."

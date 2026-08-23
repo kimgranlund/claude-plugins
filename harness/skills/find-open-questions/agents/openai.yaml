@@ -1,0 +1,3 @@
+interface:
+  display_name: "Find Open Questions"
+  short_description: "Clears a session's backlog of unresolved items — an open question, unconfirmed assumption, or undecided idea — into one batched AskUserQuestion round."

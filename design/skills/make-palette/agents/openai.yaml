@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Palette"
+  short_description: "Design OKLCH color ramps and semantic role mappings from brand anchors."

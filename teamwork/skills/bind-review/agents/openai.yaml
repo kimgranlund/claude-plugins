@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bind Review"
+  short_description: "Makes this session a standing review seat: every target sent here — a PR, diff, doc, skill, agent, hook, plugin, or wiring arrangement — is dispatched to its owning fresh-context checker, verdict relayed, never reviewed inline; self-authored targets get a neutral dispatch, authorship disclosed."

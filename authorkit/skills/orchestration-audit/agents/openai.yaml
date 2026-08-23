@@ -1,0 +1,3 @@
+interface:
+  display_name: "Orchestration Audit"
+  short_description: "Sweep an estate for orchestration-archetype drift against fleet-rules' eight per-archetype rubrics (A1..A8) — the mechanizable slice only: A3's durable-channel evidence reader, A7's workflows/*.js syntax lint tier, review-coverage existence, grant-literal and resume-path presence; every judgment criterion reports \"queued, not built\"."
