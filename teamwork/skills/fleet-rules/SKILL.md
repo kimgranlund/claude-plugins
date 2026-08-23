@@ -103,8 +103,8 @@ record.**
   notification, which dies with the session that saw it ("the return channel doesn't survive the
   session" doctrine, Part B).
 - A dispatched seat reports (Findings write-back, or its typed return) **before** going idle. A
-  report supersedes any nudge sent after it — an idle ping arriving post-report is a no-op, not a
-  second request (#373: ~15 stale idle pings arrived after their own reports).
+  report supersedes any nudge sent after it (#373: ~15 stale idle pings post-report). **No-op-
+  silence rule:** same for the user-facing feed — milestone-only (gate/PR/merge/block/needs-input); routine wakes stay record-only. `#896`.
 - Seats never escalate straight to the human — the coordinator relays outcomes, unless the
   coordinator is confirmed gone (no live entry in `fleet.json`'s `live_state.joined` for the
   orchestrator role), in which case the durable record (a PR/Issue comment) is the fallback
