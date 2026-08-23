@@ -36,10 +36,14 @@ authorizer, never copies this one's values.
   },
   "cross_repo_coordination": [
     {
-      "repos": ["gen-ui-kit", "signup", "plugins", "adiav2"],
-      "marshal_roles": ["gen-ui-kit-marshal", "signup-marshal", "plugins-marshal", "adiav2-marshal"],
+      "participants": [
+        { "repo": "gen-ui-kit", "role": "gen-ui-kit-marshal" },
+        { "repo": "plugins", "role": "plugins-marshal" },
+        { "repo": "adiav2", "role": "adiav2-marshal" },
+        { "repo": "adiav2", "app": "frontend/apps/signup", "role": "signup-marshal" }
+      ],
       "established": "2026-08-22",
-      "authorized_by": "Kim, confirmed live in the plugins mobilize-chores session (issue #866)"
+      "authorized_by": "Kim, confirmed live in the plugins mobilize-chores session (issue #866); motivating example gen-ui-kit gh#1836/#1839; participant-object shape ruled 2026-08-22, issue #878"
     }
   ]
 }
@@ -170,11 +174,16 @@ takeover record.
 - **`cross_repo_coordination`** (optional, defaults absent/empty — most repos never carry a
   standing cross-repo channel) — an array of standing coordination channels this repo's fleet
   participates in, alongside other repos' own fleets. Each entry:
-  - `repos` — the participating repo names (e.g. `"gen-ui-kit"`, `"signup"`, `"plugins"`,
-    `"adiav2"`).
-  - `marshal_roles` — the `{repo}-marshal` session names authorized to relay across this channel,
-    one per participating repo (mirrors the printed orchestrator session name, not the schema's
-    `agent` role key — see the "Schema key vs. printed session name" field above).
+  - `participants` — an array of participant objects, one per authorized relay, each
+    `{ "repo": <repo name>, "app"?: <sub-app path>, "role": <session name> }`:
+    - `repo` — the participating repo name (e.g. `"gen-ui-kit"`, `"plugins"`, `"adiav2"`).
+    - `app` — **optional.** Present only when this participant's authority is scoped to a
+      sub-app inside `repo` rather than the whole repo — a path relative to the repo root (e.g.
+      `"frontend/apps/signup"`). Absent means the participant speaks for the whole repo.
+    - `role` — the session name authorized to relay for this participant (mirrors the printed
+      orchestrator session name, not the schema's `agent` role key — see the "Schema key vs.
+      printed session name" field above; an app-scoped participant's `role` is its own distinct
+      session name, e.g. `"signup-marshal"`, not `"{repo}-marshal"`).
   - `established` — the date the channel was stood up.
   - `authorized_by` — free text naming who/what ratified standing the channel up (a human's own
     words, a ticket id, or both).
@@ -184,6 +193,33 @@ takeover record.
   cross-repo store. A shared/synced surface across repos is a bigger design question, deliberately
   out of scope here (issue #866's own Scope/Open). Append-only, same discipline as `live_state.joined` —
   a channel that lapses gets a new entry noting it, never a silent deletion of the old one.
+
+  **Ruling: participant objects, not parallel arrays (Kim, live, 2026-08-22, issue #878).** The
+  shape landed at #871/#866 — a flat `repos[]` + `marshal_roles[]` pair — could not express the
+  real four-marshal channel: "signup" is not a fifth repo, it is `frontend/apps/signup` inside
+  `adiav2`, and session `signup-66` (printed role `signup-marshal`) holds adiav2's `agent` seat
+  scoped to that app rather than a seat of its own. Carrying "signup" as a pseudo-repo in the old
+  arrays was a workaround, not a model. The `participants[]` shape above is the fix: each entry
+  names its own `repo`, an optional `app` when the authority is sub-app-scoped, and its own
+  `role`. The old `repos[]`/`marshal_roles[]` pair is **retired, not kept as an alias** — every
+  existing copy migrates to `participants[]` in the same wave (this repo's own `fleet.json`,
+  below; adiav2's; gen-ui-kit's once its entry is recorded), never a mixed fleet where some
+  copies read the old shape and some the new.
+
+  **Two-holder liveness rule for `participants[]` (issue #878).** This is a rule about the
+  `cross_repo_coordination` bookkeeping itself, distinct from — and never to be confused with —
+  `live_state.joined`'s own collision check above, which governs THIS repo's four canonical local
+  seats (`agent`/`reviewer`/`planner`/`product`) and carries no `app` field at all; a
+  cross-repo-participant collision is never read off `live_state.joined`, and `live_state.joined`
+  is never extended to cover it. Within one `cross_repo_coordination` entry's `participants[]`
+  array, a given `repo` may appear **once with no `app`** (its repo-scoped holder) **plus any
+  number of times with a distinct `app` each** (its app-scoped holders) — these are different
+  participants, not contenders for one slot. Two participant objects collide only when their
+  `(repo, app)` pair matches exactly (both absent counts as matching — two repo-scoped entries for
+  the same `repo` do collide); a channel author appending a new participant checks the existing
+  array for this before adding one. Under this rule, `{repo: "adiav2", role: "adiav2-marshal"}`
+  (repo-scoped, no `app`) and `{repo: "adiav2", app: "frontend/apps/signup", role:
+  "signup-marshal"}` do **not** collide — their `(repo, app)` pairs differ.
 
 ## Why there is no `builder` seat here (Kim's ruling, 2026-08-21 session)
 

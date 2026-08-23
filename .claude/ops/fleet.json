@@ -70,20 +70,14 @@
   },
   "cross_repo_coordination": [
     {
-      "repos": [
-        "gen-ui-kit",
-        "signup",
-        "plugins",
-        "adiav2"
-      ],
-      "marshal_roles": [
-        "gen-ui-kit-marshal",
-        "signup-marshal",
-        "plugins-marshal",
-        "adiav2-marshal"
+      "participants": [
+        { "repo": "gen-ui-kit", "role": "gen-ui-kit-marshal" },
+        { "repo": "plugins", "role": "plugins-marshal" },
+        { "repo": "adiav2", "role": "adiav2-marshal" },
+        { "repo": "adiav2", "app": "frontend/apps/signup", "role": "signup-marshal" }
       ],
       "established": "2026-08-22",
-      "authorized_by": "Kim, confirmed live in the plugins mobilize-chores session (issue #866); motivating example gen-ui-kit gh#1836/#1839"
+      "authorized_by": "Kim, confirmed live in the plugins mobilize-chores session (issue #866); motivating example gen-ui-kit gh#1836/#1839; participant-object shape ruled 2026-08-22, issue #878"
     }
   ]
 }
