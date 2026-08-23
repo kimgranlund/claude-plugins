@@ -1,4 +1,4 @@
 name: "harness"
-version: "3.18.3"
+version: "3.18.4"
 description: "The foundational authoring plugin, self-contained: maker/standards/lint families for skills, agents, hooks, and entry files; the absorbed language layer (prompt-wording-rules), intent extraction, and two-plane decomposition; /check-everything as the recurring outer loop."
 manifest_version: 1
