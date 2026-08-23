@@ -2,7 +2,7 @@
 """harness_emit — derive per-harness plugin overlays (Codex/Hermes/Pi) from each
 plugin's Claude Code source of truth.
 
-WHY THIS EXISTS (LLD-0025, gh#885/#886)
+WHY THIS EXISTS (LLD-0025, gh#885/#886/#890)
 
 Each plugin here is authored once, for Claude Code. Other agent harnesses (OpenAI Codex,
 Hermes, Pi) read a DIFFERENT manifest shape. Rather than hand-author and hand-sync a second
@@ -13,9 +13,9 @@ and the root `.claude-plugin/marketplace.json`. The overlay is committed in-tree
 `dist/` — `.claude/rules/dist-output.md`) and a freshness check (release_gate.py's G15) fails
 the gate the moment a hand-edit or a stale overlay diverges from the recomputation.
 
-This wave (W1, gh#886) ships ONLY the Codex backend. Hermes and Pi backends are stubbed to
-raise NotImplementedError naming their own wave tickets (T-5, T-6) — selecting them via
---harness is a setup error (exit 2), not a silent no-op.
+This wave (W2, gh#890) adds the Hermes backend. Pi is still stubbed to raise
+NotImplementedError naming its own wave ticket (T-6) — selecting it via --harness is a
+setup error (exit 2), not a silent no-op.
 
 WHAT IT DERIVES (Codex)
   <plugin>/.codex-plugin/plugin.json
@@ -32,6 +32,22 @@ WHAT IT DERIVES (Codex)
     interface.display_name      <- title-cased skill `name` frontmatter
     interface.short_description <- skill `description`, first sentence only
     interface.default_prompt    <- optional skill frontmatter key codex_default_prompt
+
+WHAT IT DERIVES (Hermes)
+  <plugin>/plugin.yaml
+    name/version/description <- .claude-plugin/plugin.json; manifest_version: 1
+  <plugin>/__init__.py
+    register(ctx) — fixed template; one ctx.register_skill(<name>, <SKILL.md path>) line per
+    skill directory, nothing else registered this wave (no hooks, no commands — R-5's Hermes
+    verdict on #888 is terminal: ctx.register_command carries no invocation-source metadata,
+    so a command-only skill degrades to a plain register_skill() line, same as Codex)
+  <plugin>/hermes-mcp.yaml   (IFF the plugin ships .mcp.json)
+    a config.yaml mcp_servers: fragment, mcpServers.<n> -> mcp_servers.<n>, command/args/env
+    or url/headers copied 1:1; ${CLAUDE_PLUGIN_ROOT}/${user_config.*} values flagged
+    [needs-substitution] (the user merges this fragment into ~/.hermes/config.yaml by hand —
+    Hermes has no marketplace file, so install + config merge are both documented in
+    HARNESS-NOTES.md rather than automated)
+
   <plugin>/HARNESS-NOTES.md   (one per plugin; every harness's degradation ledger)
   <workspace>/.agents/plugins/marketplace.json   (Codex only, estate-level; derived from the
     root .claude-plugin/marketplace.json 1:1)
@@ -46,6 +62,13 @@ WRITE / VERIFY / PROBE
   harness_emit.py <plugin-root> --probe [--harness codex,hermes,pi]      # tri-state harness load
   harness_emit.py selftest                                               # prove the gate bites
 
+PROBE, established per CLI (Resolution 6 tier 2): Codex has no verified validator
+subcommand -> SKIP always, tier-3-only. Hermes: `hermes plugins doctor` is NOT a real
+subcommand on this CLI (checked via --help) -> the fallback is a temp-HOME copy into
+~/.hermes/plugins/<name>/ (hermes_cli/plugins.py's own documented user-plugin path) plus
+`hermes plugins list --json`; this proves plugin.yaml parses and the plugin is discoverable,
+but does NOT execute register(ctx) — a partial tier-2 close, not a full load assert.
+
 No args (or a bare path with neither --verify/--probe and no write intent unclear) -> this
 docstring, exit 2.
 
@@ -56,8 +79,10 @@ Exit: 0 clean/written · 1 drift found (--verify) · 2 setup error (unreadable m
 unimplemented harness named explicitly via --harness).
 """
 import json
+import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -65,7 +90,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import skill_lint  # parse_frontmatter — the only frontmatter reader this script trusts (R-2)
 
-DEFAULT_HARNESSES = ["codex"]  # widened per wave: W1 codex, W2 +hermes, W3 +pi
+DEFAULT_HARNESSES = ["codex", "hermes"]  # widened per wave: W1 codex, W2 +hermes, W3 +pi
 ALL_HARNESSES = ["codex", "hermes", "pi"]
 
 
@@ -189,6 +214,15 @@ def yaml_scalar(v) -> str:
     return '"' + str(v).replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
+def py_str_literal(v) -> str:
+    """A safely-quoted Python string literal for names embedded in generated .py source
+    (the Hermes __init__.py) — repr() handles quoting/escaping generically rather than
+    trusting names to stay free of quotes/backslashes (harness_emit.py's only generated-code
+    surface; every other emitted artifact is JSON/YAML, already escaped via json.dumps/
+    yaml_scalar)."""
+    return repr(str(v))
+
+
 def mcp_needs_substitution(mcp: dict):
     """[(server_name, field_path), ...] for any MCP value carrying a Claude-runtime
     substitution token neither Codex nor Hermes knows how to resolve."""
@@ -219,8 +253,9 @@ def mcp_needs_substitution(mcp: dict):
 # ---------------------------------------------------------------------------
 
 class Ledger:
-    def __init__(self, source):
+    def __init__(self, source, built=("codex",)):
         self.source = source
+        self.built = set(built)
         self.dropped_agents = list(source["agents"])
         self.dropped_hooks = list(source["hooks"])
         self.command_skills = [s["name"] for s in source["skills"] if s["command"]]
@@ -262,16 +297,67 @@ class Ledger:
             lines.append("- MCP: none shipped.")
         lines.append("")
 
-        for harness_name, ticket in (("Hermes", "T-5"), ("Pi", "T-6")):
+        if "hermes" in self.built:
             lines += [
-                f"## {harness_name}",
-                f"- This backend isn't built yet (tracked as {ticket}; no install path exists for "
-                f"{harness_name} from this repo today) — no action needed here. What WOULD drop "
-                f"under this plugin's current Claude Code source, computed the same way Codex's "
-                f"row above is (kept for a preview, not yet verified against {harness_name}'s own "
-                f"contract): agents — {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
+                "## Hermes",
+                "- Loads from a plugin directory carrying `plugin.yaml` + `__init__.py`. Two "
+                f'verified paths (hermes_cli/plugins.py): local dev — copy this directory to '
+                f'`~/.hermes/plugins/{s["name"]}/` (user plugin) or `./.hermes/plugins/'
+                f'{s["name"]}/` with `HERMES_ENABLE_PROJECT_PLUGINS=1` (project plugin, opt-in) '
+                f'— then `hermes plugins list` should show it; from a Git host — '
+                f'`hermes plugins install owner/repo`, then `hermes plugins enable {s["name"]}` '
+                '(or pass `--enable` to `install`) to activate it — install alone does not '
+                "enable a plugin. Hermes has no marketplace file, so there is no registry "
+                "listing step beyond the two paths above.",
+            ]
+            if self.mcp_flags:
+                flags = ", ".join(f"`{n}.{f}`" for n, f in self.mcp_flags)
+                lines.append(
+                    f"- MCP `[needs-substitution]`: {flags} use Claude-runtime tokens that "
+                    "Hermes cannot resolve — replace each with a literal value before merging "
+                    "`hermes-mcp.yaml` into your config."
+                )
+            if s["mcp"] is not None:
+                lines.append(
+                    "- MCP: `hermes-mcp.yaml` generated from `.mcp.json` — first check whether "
+                    "`~/.hermes/config.yaml` already has a top-level `mcp_servers:` key; if it "
+                    "does NOT, `cat hermes-mcp.yaml >> ~/.hermes/config.yaml` is safe; if it "
+                    "DOES, merge the two `mcp_servers:` blocks by hand instead — a blind append "
+                    "onto an existing `mcp_servers:` key produces a duplicate top-level YAML "
+                    "key, and most parsers silently keep only the last one, dropping your "
+                    "existing servers with no error."
+                )
+            else:
+                lines.append("- MCP: none shipped.")
+            lines += [
+                f"- Dropped — agents: {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
+                f"- Command-only skills now model-routable: {_list(self.command_skills)} "
+                "(R-5, #888: `ctx.register_command` carries no invocation-source metadata on "
+                "Hermes — the plain-skill degradation is the CORRECT terminal fallback here, "
+                "not a temporary gap).",
+                f"- Fork skills (their `context` field drops; body runs inline): {_list(self.fork_skills)}.",
                 "",
             ]
+        else:
+            lines += [
+                "## Hermes",
+                "- This backend isn't built yet (tracked as T-5; no install path exists for "
+                "Hermes from this repo today) — no action needed here. What WOULD drop under "
+                "this plugin's current Claude Code source, computed the same way Codex's row "
+                "above is (kept for a preview, not yet verified against Hermes's own contract): "
+                f"agents — {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
+                "",
+            ]
+
+        lines += [
+            "## Pi",
+            "- This backend isn't built yet (tracked as T-6; no install path exists for "
+            "Pi from this repo today) — no action needed here. What WOULD drop under "
+            "this plugin's current Claude Code source, computed the same way Codex's row "
+            "above is (kept for a preview, not yet verified against Pi's own contract): "
+            f"agents — {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
+            "",
+        ]
         return "\n".join(lines)
 
 
@@ -330,16 +416,83 @@ class CodexBackend:
         return "codex", ["--help"]
 
 
+HERMES_INIT_HEADER = (
+    '"""{name} — generated by harness_emit.py from .claude-plugin/plugin.json. '
+    'Do not edit."""\n'
+    "import os\n"
+    "\n"
+    "_HERE = os.path.dirname(os.path.abspath(__file__))\n"
+    "\n"
+    "def register(ctx):\n"
+)
+
+
 class HermesBackend:
     name = "hermes"
 
     def targets(self, source, root: Path):
-        raise NotImplementedError(
-            "Hermes backend ships in W2 (ticket T-5, LLD-0025 Resolution 7) — not built this wave"
-        )
+        out = []
+
+        # plugin.yaml — manifest_version: 1; v2 fields (config_schema) are unverified,
+        # never emitted (LLD-0025 Resolution 4).
+        yaml_lines = [
+            f"name: {yaml_scalar(source['name'])}",
+            f"version: {yaml_scalar(source['version'])}",
+            f"description: {yaml_scalar(source['description'])}",
+            "manifest_version: 1",
+        ]
+        content = "\n".join(yaml_lines) + "\n"
+        out.append((root / "plugin.yaml", content.encode("utf-8")))
+
+        # __init__.py — fixed template; one ctx.register_skill() line per skill, nothing
+        # else registered this wave (Resolution 3: no hooks, no commands — R-5's Hermes
+        # verdict on #888 is terminal).
+        body = HERMES_INIT_HEADER.format(name=source["name"])
+        if source["skills"]:
+            reg_lines = []
+            for s in source["skills"]:
+                skill_lit = py_str_literal(s["name"])
+                skill_path = f'os.path.join(_HERE, "skills", {skill_lit}, "SKILL.md")'
+                reg_lines.append(
+                    f'    ctx.register_skill({skill_lit}, {skill_path})  # one per skill'
+                )
+            body += "\n".join(reg_lines) + "\n"
+        else:
+            body += "    pass  # no skills to register\n"
+        out.append((root / "__init__.py", body.encode("utf-8")))
+
+        # hermes-mcp.yaml — IFF the plugin ships .mcp.json. A config.yaml mcp_servers:
+        # fragment; ${CLAUDE_PLUGIN_ROOT}/${user_config.*} values are copied verbatim and
+        # flagged [needs-substitution] in HARNESS-NOTES.md, not rewritten here.
+        if source["mcp"] is not None:
+            frag_lines = ["mcp_servers:"]
+            for server_name, cfg in sorted(source["mcp"].items()):
+                if not isinstance(cfg, dict):
+                    continue
+                frag_lines.append(f"  {server_name}:")
+                if "command" in cfg:
+                    frag_lines.append(f"    command: {yaml_scalar(cfg['command'])}")
+                if "args" in cfg and cfg["args"]:
+                    frag_lines.append("    args:")
+                    for a in cfg["args"]:
+                        frag_lines.append(f"      - {yaml_scalar(a)}")
+                if "url" in cfg:
+                    frag_lines.append(f"    url: {yaml_scalar(cfg['url'])}")
+                if "headers" in cfg and cfg["headers"]:
+                    frag_lines.append("    headers:")
+                    for k, v in cfg["headers"].items():
+                        frag_lines.append(f"      {k}: {yaml_scalar(v)}")
+                if "env" in cfg and cfg["env"]:
+                    frag_lines.append("    env:")
+                    for k, v in cfg["env"].items():
+                        frag_lines.append(f"      {k}: {yaml_scalar(v)}")
+            mcp_content = "\n".join(frag_lines) + "\n"
+            out.append((root / "hermes-mcp.yaml", mcp_content.encode("utf-8")))
+
+        return out
 
     def probe_hint(self):
-        return "hermes", ["--help"]
+        return "hermes", ["plugins", "doctor"]
 
 
 class PiBackend:
@@ -361,8 +514,8 @@ BACKENDS = {"codex": CodexBackend, "hermes": HermesBackend, "pi": PiBackend}
 # HARNESS-NOTES.md and estate marketplace are cross-backend, computed once
 # ---------------------------------------------------------------------------
 
-def notes_target(source, root: Path):
-    ledger = Ledger(source)
+def notes_target(source, root: Path, harnesses=("codex",)):
+    ledger = Ledger(source, built=harnesses)
     return root / "HARNESS-NOTES.md", ledger.render().encode("utf-8")
 
 
@@ -400,7 +553,7 @@ def compute_targets(root: Path, harnesses):
     for h in harnesses:
         backend = BACKENDS[h]()
         targets += backend.targets(source, root)
-    targets.append(notes_target(source, root))
+    targets.append(notes_target(source, root, harnesses=harnesses))
     return targets, source
 
 
@@ -416,6 +569,10 @@ def _find_orphans(root: Path, harnesses, live_targets):
             for f in skills_dir.glob("*/agents/openai.yaml"):
                 if f not in live_paths:
                     orphans.append(f)
+    if "hermes" in harnesses:
+        mcp_yaml = root / "hermes-mcp.yaml"
+        if mcp_yaml.is_file() and mcp_yaml not in live_paths:
+            orphans.append(mcp_yaml)
     return orphans
 
 
@@ -488,6 +645,48 @@ def _infer_workspace_root(plugin_root: Path):
 # --probe (Resolution 6, tier 2)
 # ---------------------------------------------------------------------------
 
+def _probe_hermes(exe: str, root: Path):
+    """Copies root/plugin.yaml + root/__init__.py into a throwaway HOME's
+    ~/.hermes/plugins/<name>/ and runs `hermes plugins list --json --no-bundled` against it.
+    0 the plugin is discoverable and its manifest fields parse; 1 the CLI rejected it or the
+    name is missing from the listing; 2 SKIP (setup problem, e.g. no plugin.yaml written yet).
+    Partial tier-2 close only — this does not execute register(ctx), so it never proves the
+    skill-registration calls themselves load; that needs a real session (tier 3)."""
+    plugin_yaml = root / "plugin.yaml"
+    init_py = root / "__init__.py"
+    if not plugin_yaml.is_file() or not init_py.is_file():
+        return 2, "SKIP — plugin.yaml/__init__.py not written yet; run the writer first"
+    with tempfile.TemporaryDirectory() as td:
+        fake_home = Path(td)
+        try:
+            name = re.search(r'^name:\s*"?([^"\n]+)"?', plugin_yaml.read_text()).group(1)
+        except AttributeError:
+            return 2, "SKIP — plugin.yaml has no parseable name: field"
+        plugin_dir = fake_home / ".hermes" / "plugins" / name
+        plugin_dir.mkdir(parents=True)
+        shutil.copy2(plugin_yaml, plugin_dir / "plugin.yaml")
+        shutil.copy2(init_py, plugin_dir / "__init__.py")
+        try:
+            r = subprocess.run(
+                [exe, "plugins", "list", "--json", "--no-bundled"],
+                capture_output=True, text=True, timeout=30,
+                env={"HOME": str(fake_home), "PATH": os.environ.get("PATH", "")},
+            )
+        except (OSError, subprocess.SubprocessError) as e:
+            return 2, f"SKIP — `hermes plugins list` failed to run: {e}"
+        if r.returncode != 0:
+            return 1, f"REJECTED — `hermes plugins list` exit {r.returncode}: {(r.stdout + r.stderr).strip()[-300:]}"
+        try:
+            listed = json.loads(r.stdout)
+        except json.JSONDecodeError:
+            return 1, f"REJECTED — `hermes plugins list --json` produced unparseable output: {r.stdout[-300:]}"
+        names = [p.get("name") for p in listed] if isinstance(listed, list) else []
+        if name not in names:
+            return 1, f"REJECTED — plugin '{name}' not discovered by hermes (listed: {names})"
+        return (0, f"loaded — hermes discovers '{name}' via ~/.hermes/plugins/ (list: {listed}); "
+                   "partial tier-2 only, register(ctx) not executed (needs a real session, tier 3)")
+
+
 def probe(root: Path, harnesses=None):
     """Tri-state per harness: 0 loaded/binary present and ran clean, 1 the harness rejected
     the overlay, 2 SKIP (binary absent). The exact validator subcommand is established from
@@ -510,6 +709,17 @@ def probe(root: Path, harnesses=None):
             results[h] = (2, "SKIP — no verified Codex validator subcommand "
                              "(Resolution 6 tier 2 unproven for codex; use tier 3, the "
                              "human load assert)")
+        elif h == "hermes":
+            # `hermes plugins doctor` does NOT exist on this host's hermes CLI (checked via
+            # --help at build time, per Resolution 6 tier 2's own instruction) — no dedicated
+            # load-validating subcommand exists. The established fallback: copy this plugin's
+            # generated overlay into a temp HOME's ~/.hermes/plugins/<name>/ (hermes's own
+            # documented user-plugin discovery path, hermes_cli/plugins.py) and run
+            # `hermes plugins list --json` against that isolated HOME — proves plugin.yaml
+            # parses and the plugin is discoverable. This does NOT execute register(ctx) (no
+            # session bootstrap), so it is a partial tier-2 close, named as such rather than
+            # silently upgraded to a full load assert.
+            results[h] = _probe_hermes(exe, root)
         else:
             results[h] = (2, f"SKIP — {h} backend not built this wave")
     return results
@@ -605,30 +815,100 @@ def selftest():
         assert 'display_name: "Foo Bar"' in yaml_a, "display_name must be title-cased"
         assert 'short_description: "Does the thing."' in yaml_a, "short_description must be first sentence only"
 
+        # Hermes content predicates (W2, #890)
+        plugin_yaml = (plugin / "plugin.yaml").read_text()
+        assert 'name: "demo-plugin"' in plugin_yaml, "plugin.yaml name must mirror plugin.json"
+        assert 'version: "0.1.0"' in plugin_yaml, "plugin.yaml version must mirror plugin.json, unreformatted"
+        assert "manifest_version: 1" in plugin_yaml, "plugin.yaml must declare manifest_version: 1"
+
+        init_py = (plugin / "__init__.py").read_text()
+        assert "def register(ctx):" in init_py, "__init__.py must define register(ctx) per the fixed template"
+        assert init_py.count("ctx.register_skill(") == 2, \
+            "__init__.py must register exactly one line per skill directory (2 fixture skills)"
+        assert "ctx.register_skill('foo-bar'," in init_py, \
+            "a command-only skill still gets a plain register_skill line on Hermes (R-5 terminal)"
+        assert "ctx.register_skill('baz'," in init_py, "fork skill also gets a plain register_skill line"
+        assert "ctx.register_hook" not in init_py and "ctx.register_command" not in init_py, \
+            "nothing but register_skill is registered this wave (Resolution 3)"
+
+        hermes_mcp = (plugin / "hermes-mcp.yaml").read_text()
+        assert "mcp_servers:" in hermes_mcp, "hermes-mcp.yaml must carry an mcp_servers: fragment"
+        assert "demo:" in hermes_mcp and 'command: "node"' in hermes_mcp, \
+            "hermes-mcp.yaml must carry the .mcp.json server 1:1"
+
         notes = (plugin / "HARNESS-NOTES.md").read_text()
         assert "`foo-bar`" in notes and "Command-only skills" in notes, \
             "command-only skill must be named in HARNESS-NOTES.md"
         assert "`baz`" in notes and "Fork skills" in notes, "fork skill must be named in HARNESS-NOTES.md"
         assert "`helper`" in notes, "dropped agent must be named in HARNESS-NOTES.md"
         assert "needs-substitution" in notes, "MCP substitution tokens must be flagged in the note"
+        assert "## Hermes" in notes and "hermes-mcp.yaml" in notes, \
+            "a built Hermes overlay must render a real Hermes section, not the not-built-yet stub"
+        assert "## Pi" in notes and "isn't built yet" in notes.split("## Pi")[1], \
+            "Pi stays the not-built-yet stub this wave"
 
         mkt = json.loads((scratch / ".agents" / "plugins" / "marketplace.json").read_text())
         assert mkt["plugins"][0]["name"] == "demo-plugin", "estate marketplace must mirror the root one"
 
-        # negative control: hand-edit -> verify must bite
+        # negative control: hand-edit (Codex) -> verify must bite
         (plugin / ".codex-plugin" / "plugin.json").write_text('{"name": "drifted"}')
         code, findings, _ = run(plugin, verify=True, workspace_root=scratch)
         assert code == 1, "hand-edited overlay must fail verify"
         assert any("plugin.json" in f for f in findings), "hand-edit finding must name the drifted file"
+        run(plugin, workspace_root=scratch)  # restore
+
+        # negative control: hand-edit (Hermes __init__.py) -> verify must bite
+        (plugin / "__init__.py").write_text("# hand-edited\n")
+        code, findings, _ = run(plugin, verify=True, workspace_root=scratch)
+        assert code == 1, "a hand-edited __init__.py must fail verify"
+        assert any("__init__.py" in f for f in findings), "hand-edit finding must name __init__.py"
+        run(plugin, workspace_root=scratch)  # restore
 
         # restore, then negative control: a skill removed but its overlay left behind
         # (a partial delete — SKILL.md gone, agents/openai.yaml orphaned) -> unexpected
-        run(plugin, workspace_root=scratch)
         (plugin / "skills" / "baz" / "SKILL.md").unlink()
         code, findings, _ = run(plugin, verify=True, workspace_root=scratch)
         assert code == 1, "a deleted skill's orphaned overlay must fail verify"
         assert any("unexpected:" in f and "baz" in f for f in findings), \
             "deleted-skill finding must be tagged unexpected and name the orphaned file"
+
+        # restore baz, then negative control: MCP dropped -> hermes-mcp.yaml orphaned -> unexpected
+        (plugin / "skills" / "baz" / "SKILL.md").write_text(FIXTURE_SKILL_B)
+        run(plugin, workspace_root=scratch)
+        (plugin / ".mcp.json").unlink()
+        code, findings, _ = run(plugin, verify=True, workspace_root=scratch)
+        assert code == 1, "a dropped .mcp.json must orphan hermes-mcp.yaml"
+        assert any("unexpected:" in f and "hermes-mcp.yaml" in f for f in findings), \
+            "the orphaned hermes-mcp.yaml finding must be tagged unexpected"
+        (plugin / ".mcp.json").write_text(json.dumps({
+            "mcpServers": {
+                "demo": {
+                    "command": "node",
+                    "args": ["${CLAUDE_PLUGIN_ROOT}/server.js"],
+                    "env": {"TOKEN": "${user_config.token}"},
+                }
+            }
+        }))
+        run(plugin, workspace_root=scratch)
+
+        # edge case: a plugin with zero skills -> __init__.py's fallback branch (Resolution 3:
+        # nothing to register is still a valid register(ctx))
+        no_skills = scratch / "no-skills-plugin"
+        (no_skills / ".claude-plugin").mkdir(parents=True)
+        (no_skills / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+            "name": "no-skills-plugin",
+            "version": "0.1.0",
+            "description": "A fixture plugin with zero skills.",
+        }))
+        code, findings, targets = run(no_skills, workspace_root=scratch)
+        assert code == 0, f"a zero-skill plugin must still write cleanly, got: {findings}"
+        init_no_skills = (no_skills / "__init__.py").read_text()
+        assert "pass  # no skills to register" in init_no_skills, \
+            "zero-skill __init__.py must fall back to a bare pass, not an empty register(ctx)"
+        assert init_no_skills.count("ctx.register_skill(") == 0, \
+            "zero-skill __init__.py must register nothing"
+        code, findings, _ = run(no_skills, verify=True, workspace_root=scratch)
+        assert code == 0, f"a written zero-skill overlay must verify clean, got: {findings}"
 
         # setup errors: missing manifest -> exit 2; unimplemented harness named explicitly -> exit 2
         empty = scratch / "no-manifest-plugin"
@@ -636,12 +916,13 @@ def selftest():
         code, findings, _ = run(empty, verify=True)
         assert code == 2, "a plugin with no manifest must be a setup error, not a drift finding"
 
-        code, findings, _ = run(plugin, harnesses=["hermes"], verify=True, workspace_root=scratch)
+        code, findings, _ = run(plugin, harnesses=["pi"], verify=True, workspace_root=scratch)
         assert code == 2, "an explicitly named unbuilt backend must be a setup error, not silently skipped"
-        assert "T-5" in findings[0], "the setup-error finding must name the wave ticket"
+        assert "T-6" in findings[0], "the setup-error finding must name the wave ticket"
 
-    print("harness_emit selftest · PASS · write/verify roundtrip, hand-edit bite, "
-          "orphan detection, MCP substitution flagging, marketplace mirror, setup-error controls")
+    print("harness_emit selftest · PASS · write/verify roundtrip (codex+hermes), hand-edit bite "
+          "(both backends), orphan detection (openai.yaml + hermes-mcp.yaml), MCP substitution "
+          "flagging, __init__.py register_skill template, marketplace mirror, setup-error controls")
     return 0
 
 

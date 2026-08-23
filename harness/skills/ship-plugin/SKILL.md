@@ -23,7 +23,7 @@ Invoke `plugin-writing-rules` now — the gate order and every rule below are it
 3. Propose the bump (patch = fixes; minor = new skills/rules; major = breaking renames or contract changes) and the footer ledger line. **Apply both only on the user's approval** — the manifest is the release; editing it is the side effect this command exists to time.
 4. Evals check: now scripted — the gate's G7 validates every suite via `eval_check.py` and warns per coverage gap (new skills forged via `/make-skill` carry theirs from Phase 2). Deep routing validation is `/check-routing`, recommended before a minor/major bump, not enforced here.
 5. Once the manifest/version bump above lands, regenerate this plugin's harness overlays:
-   `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/harness_emit.py" <root>` — writes `.codex-plugin/`, per-skill `agents/openai.yaml`, and `HARNESS-NOTES.md` in-tree (LLD-0025). Skip this step only if step 3's bump was declined; any other edit to `plugin.json` or a skill's frontmatter needs it too, since Phase 2's G15 fails a stale or hand-edited overlay against whatever's on disk.
+   `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/harness_emit.py" <root>` — writes `.codex-plugin/`, per-skill `agents/openai.yaml`, `plugin.yaml`, `__init__.py`, `hermes-mcp.yaml` (where `.mcp.json` exists), and `HARNESS-NOTES.md` in-tree (LLD-0025). Skip this step only if step 3's bump was declined; any other edit to `plugin.json` or a skill's frontmatter needs it too, since Phase 2's G15 fails a stale or hand-edited overlay against whatever's on disk.
 
 ## Phase 2 — The gate
 

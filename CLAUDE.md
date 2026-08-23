@@ -40,11 +40,12 @@ No installed harness required; every check is a plain script. Run from the works
   `<plugin>/dist/<name>-<version>.plugin`.
 - **Lint one file by hand** (hooks retired, #466 — nothing runs this automatically):
   `python3 harness/scripts/skill_lint.py <path>`.
-- **Regenerate a plugin's harness overlays** (Codex this wave; Hermes/Pi land W2/W3):
-  `python3 harness/scripts/harness_emit.py <plugin> [--harness codex] [--verify | --probe]` —
-  writes `.codex-plugin/plugin.json`, per-skill `agents/openai.yaml`, and `HARNESS-NOTES.md`
-  in-tree (committed, never `dist/`); `release_gate.py`'s G15 verifies freshness, the writer
-  runs in `/ship-plugin`'s own preflight (LLD-0025).
+- **Regenerate a plugin's harness overlays** (Codex + Hermes land; Pi lands W3):
+  `python3 harness/scripts/harness_emit.py <plugin> [--harness codex,hermes] [--verify | --probe]` —
+  writes `.codex-plugin/plugin.json`, per-skill `agents/openai.yaml`, `plugin.yaml`,
+  `__init__.py`, `hermes-mcp.yaml` (where `.mcp.json` exists), and `HARNESS-NOTES.md` in-tree
+  (committed, never `dist/`); `release_gate.py`'s G15 verifies freshness (`codex,hermes`), the
+  writer runs in `/ship-plugin`'s own preflight (LLD-0025).
 - Once a plugin is installed, prefer its slash commands over raw script calls in a session.
 
 ## Invariants (all plugins, no exceptions)
