@@ -113,7 +113,8 @@
   {
    "id": "t22",
    "prompt": "my subagent never gets selected - is the wiring between capabilities wrong",
-   "expect": "trigger"
+   "expect": "no-trigger",
+   "comment": "Flipped trigger -> no-trigger (#901, re-judged against current descriptions per #902/#904 drift). wiring-checker's own description now explicitly owns this phrasing ('why won't this route', 'my subagent never gets selected' -> wiring-checker judges the built thing that already exists). fleet-rules answers only the forward design-time question (Section 8-10); a live arrangement already built and failing to route is wiring-checker's diagnostic territory, not this skill's. New reciprocal NOT-clause added to fleet-rules' description to close the fence both ways."
   },
   {
    "id": "t23",
