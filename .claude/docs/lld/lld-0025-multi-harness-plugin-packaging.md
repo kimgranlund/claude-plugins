@@ -379,8 +379,16 @@ only.
   commands → prompt templates → only then agent processing), so a `/name` template is reachable
   by human keystrokes only; the model has no channel to self-invoke it. W3 (T-6, #891) emits
   command-only skills as `prompts/<name>.md` instead of plain skills — the Pi Command row
-  upgrades from drop-with-note to generate-glue. Prompt-file frontmatter schema is still
-  unresolved from primary docs (follow-up read of an example package before W3 builds).
+  upgrades from drop-with-note to generate-glue. **Prompt-file schema, resolved 2026-08-23 from
+  primary docs (`docs/prompt-templates.md`, #888):** the command name comes from the FILENAME
+  (`review.md` → `/review`) — there is no `name` frontmatter key; frontmatter carries only
+  optional `description` (falls back to the body's first non-empty line) and optional
+  `argument-hint` (`<required>` / `[optional]` convention); body substitution uses `$1`, `$2`,
+  `$@`, `$ARGUMENTS`, `${1:-default}`, `${@:N}`, `${@:N:L}`; discovery is NON-recursive, so
+  files sit flat under `prompts/`, declared via `"prompts": ["./prompts"]` in the `"pi"` key.
+  W3's emitter: `prompts/<skill-name>.md`, frontmatter = `description` (+ `argument-hint` from
+  the skill's own `argument-hint` if present), body = the SKILL.md body with `$ARGUMENTS` kept
+  as-is (same token Claude uses), no subdirectories.
   **Hermes: NOT expressible** — `ctx.register_command` carries no invocation-source metadata
   and the docs draw no human-vs-model distinction, so W2 (T-5, #890) keeps the plain-skill
   degradation as the CORRECT terminal fallback, not a temporary gap. **Codex: unchanged**
