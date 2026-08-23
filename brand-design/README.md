@@ -81,6 +81,7 @@ hand off to.
 
 ---
 
+v0.11.4 · 2026-08-23 · closes #890 (LLD-0025 W2): new plugin bytes — `harness_emit.py` (harness) now also derives a Hermes overlay (`plugin.yaml`, `__init__.py`'s `register(ctx)` — one `ctx.register_skill()` line per skill, nothing else registered this wave, `hermes-mcp.yaml` where `.mcp.json` exists) from this plugin's own manifest/SKILL.md frontmatter, alongside the Codex overlay; `HARNESS-NOTES.md` gains a real Hermes section, gated fresh by release_gate.py's widened G15 (`codex,hermes`) — a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v0.11.3 · 2026-08-23 · closes #886 (LLD-0025 W1): new plugin bytes — `harness_emit.py` (harness) derives a Codex overlay (`.codex-plugin/plugin.json`, per-skill `agents/openai.yaml`, `HARNESS-NOTES.md`) from this plugin's own manifest/SKILL.md frontmatter, gated fresh by release_gate.py's new G15; a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v0.11.2 · 2026-08-22 · creative sub-council SEATING phase (`#849`): Kim's 2026-08-21 vacancy
 ruling lifted for two seats — `george-l` (voice→creative) and `nick-l` (strategy→creative)
