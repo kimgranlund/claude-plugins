@@ -107,6 +107,20 @@ takeover record.
   joined, in what mode, when, and (for background seats) under what agent name. Append-only —
   never rewritten in place; a seat rejoining after a restart appends a new row rather than editing
   its old one, so the history of who has held a seat stays intact.
+- **`live_state.joined[].agent_name`** — **the `SendMessage` address for this row's holder.**
+  Read from `ListAgents` at bind time — the harness-assigned session name the holder is actually
+  reachable at (e.g. `"plugins-75"`) — never the printed/aspirational role label
+  (`"{repo}-marshal"`, `"agent"`). `#902` fixed `fleet-bootstrap`'s own Phase 1 `agent`-seat bind
+  (fresh-join and takeover) to write this field rather than leave it `null`, since a `null` here on
+  a still-live row is what stranded every peer trying to route a fleet-shaped ask back to this
+  repo's marshal (`fleet-rules` Section 7 resolves its routing target off this exact field). **Not
+  yet universal**: `team-scaffolding`'s own manual-join path (the sole bind for `reviewer`/
+  `planner`, and for a direct `/team-scaffolding agent` join) still writes `agent_name: null`
+  unconditionally — tracked separately, not closed by #902 — so a `null` on a `mode: "manual"` row
+  is not yet proof of staleness the way it would be if every writer honored this field; read it as
+  "this particular writer either predates #902 or is `team-scaffolding`'s own path" until that gap
+  closes too. A background/background-subprocess row's `agent_name` keeps its existing meaning (the
+  dispatched `Agent`-tool name, or the subprocess's log-path/PID pointer).
 - **`live_state.joined[].action`** — **this field's semantics are canonical here; `team-scaffolding`'s
   Phases 1/2/6 cite this entry rather than restating it.** `"joined"` (a seat bound this row,
   either a fresh bind or a takeover of a previously-released seat) or `"released"` (the seat
@@ -117,7 +131,15 @@ takeover record.
   `/team-scaffolding <role>` binds without collision); a role whose latest row is `"joined"` (or
   has no `action` field) is live and collides. There is no separate "takeover" action — an
   ordinary `joined` append made after a role's latest row was `"released"` IS the takeover record;
-  the two rows read together tell the whole story.
+  the two rows read together tell the whole story. **A second, narrower `joined`-atop-`joined`
+  shape exists for the `agent` role only** (`fleet-bootstrap` Phase 1 step 1's own takeover path,
+  cited there): a still-live (never-`released`) `agent` row found at bind time is a takeover of
+  THIS session's own seat, never a second session double-booking it (Phase 1 step 1's accepted-risk
+  framing), so the binding session appends a fresh `joined` row directly atop the prior one — with
+  no `released` row between — to record its own resolved `agent_name`. Liveness still reads as the
+  LATEST row per role, so this never produces two rows read as distinct live holders; it only means
+  a raw scan for a `released` row between two `agent`-role `joined` rows is not a reliable way to
+  detect this particular takeover shape.
 - **`live_state.joined[].reason`** — optional, present only on a `"released"` row: the free-text
   reason argument passed to `/team-scaffolding retire <role> [reason]`, or `null` if none was
   given.

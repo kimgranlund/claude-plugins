@@ -165,3 +165,25 @@ Critical or Warning, say so in one line and stop.
 ```
 
 The description routes it, the tools box its blast radius, the model fits the task, and `skills:` gives it standing expertise without discovery.
+
+## Generated artifacts and merge throughput
+
+A repo that commits derived/generated artifacts degrades multi-PR throughput to a human-attended
+serial merge marshal the moment two PRs touch the same generated file — resolve by re-running the
+generator on the merged source, never by picking a side or hand-merging the diff (a rider file
+like a CHANGELOG is the one keep-both exception). The durable cure is a class split at the
+artifact level: regen-on-main for anything reproducible from source (a freshness gate lives on PR
+CI, one bot PR per drift event), stays-committed-and-PR-blocking for anything whose bytes ARE the
+contract (e.g. a published bundle) — this workspace's own `dist/` (`.claude/rules/dist-output.md`)
+is already the latter class by the same reasoning. A merge queue is not a substitute for either:
+it validates a synthetic commit read-only, and regen output has nowhere to land inside it. ·
+gen-ui-kit fleet-ops harvest (agent-ui#1115, comment 5317746661, lessons 1–3, 5; ADR-0069) ·
+2026-08-17 · [verified]
+
+## Credentialed steps and seat contexts
+
+Credentialed steps don't run inside a seat's own worktree. A regen or build step needing a secret
+absent from seat contexts either no-ops or writes an empty/red stub there — the pattern is an
+admin merge first, then the host or CI (which holds the credential) regenerates. Never read a
+seat-context red on a credentialed step as a real regression. · gen-ui-kit fleet-ops harvest
+(agent-ui#1115, comment 5317746661, lesson 19) · 2026-08-17 · [verified]

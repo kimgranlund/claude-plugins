@@ -90,10 +90,23 @@ that same shape.
    the canonical orchestration row since the 2026-08-22 ladder retier — which also keeps this
    seat's unpinnable `context: fork` dispatches at sonnet price, #313), the
    SendMessage-is-a-nudge doctrine, and the peer roster read from `fleet-roster.md`.
-5. **Fresh join only** (no live entry found in step 1): append `live_state.joined`
-   (`role: agent`, `mode: manual`, today's date) in `fleet.json`, per Phase 0. **Takeover**: leave
-   the existing `live_state.joined` entry as-is — the roster row is the takeover's own durable
-   record; `fleet.json` never carries two `agent` entries for one still-live role.
+5. **Resolve this session's real SendMessage address before writing anything**: read it from
+   `ListAgents`, matched to THIS session's own transcript/session id (a narrower, deliberate
+   exception to the peer-discovery ban in `fleet-rules` Section 1 — that ban is about never using
+   `ListAgents` to go find some OTHER session; resolving this session's own already-known identity
+   is not a discovery act) — the harness-assigned session name this running session is actually
+   reachable at (e.g. `plugins-75`), never the aspirational `{repo}-marshal` label and never left
+   null (#902 — the prior omission stranded every peer trying to route back to a live marshal).
+   **Fresh join** (no live entry found in step 1): append `live_state.joined` (`role: agent`,
+   `mode: manual`, `action: "joined"`, today's date, `agent_name`: the resolved address) in
+   `fleet.json`, per Phase 0. **Takeover**: append a fresh `live_state.joined` row too (`role:
+   agent`, `mode: manual`, `action: "joined"`, today's date, `agent_name`: the resolved address)
+   rather than leaving the prior entry as the only record — the takeover session's own address is
+   new information the roster row alone doesn't carry. This produces a `joined` row appended
+   directly atop a still-`joined` (never-released) prior row for `agent` — a second, narrower shape
+   alongside `references/fleet-manifest-schema.md`'s release-then-rejoin takeover cycle, documented
+   there as this step's own citation (never re-derived here); `fleet.json` still never carries two
+   rows *read* as distinct live holders, since liveness is always the LATEST row per role.
 6. **Adopt `teamwork:bind-team`'s contract inline, by default, as this Phase's own last step** —
    the same inlining mechanic Phase 5 uses for `planner`'s `/bind-planning` contract (read the
    target skill's own body directly, follow its procedure, never a Skill-tool hand-off against a
