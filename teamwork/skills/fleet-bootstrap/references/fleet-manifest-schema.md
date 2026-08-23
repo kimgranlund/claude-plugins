@@ -5,6 +5,15 @@ Per-repo variation in how the standing fleet is run is DATA, not a duplicated co
 this file is the only thing that varies per repo). `/team-scaffolding <role>` seeds/updates it on
 first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a full cold start.
 
+**Location and resolution (ladder, #906).** The canonical home is `.claude/ops/fleet.json`, but
+that prefix may sit at the repo root OR at a nested app scope — the app-scoped bootstrap
+re-homing ruling (Kim 2026-08-23) deliberately homes a fleet's record at an app subdirectory
+(e.g. `frontend/apps/<app>/.claude/ops/fleet.json`), so an app-scoped record is a ruled reality,
+not a drift case, and a legacy repo-root copy may coexist beside it. Every reader resolves
+cwd-first: the nearest `.claude/ops/fleet.json` walking from the current working directory
+upward to the repo root, first hit wins; once a nearer file resolves, a farther one is never
+consulted, whatever either contains. Readers report which path they resolved.
+
 ## Shape
 
 The `cross_repo_coordination` array below is illustrative, shown populated with this repo's own

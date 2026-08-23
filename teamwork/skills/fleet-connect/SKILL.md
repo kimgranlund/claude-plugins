@@ -27,17 +27,27 @@ rather than applying this section itself").
 
 ## Procedure
 
-1. **Read `.claude/ops/fleet.json`.** Take `live_state.joined`'s entries for `role: "agent"` and
+1. **Resolve `fleet.json` cwd-first, then read it.** The record is the NEAREST
+   `.claude/ops/fleet.json` walking from the current working directory upward to the repo root —
+   first hit wins, and once a nearer file exists the farther one is never consulted, whatever
+   either contains (#906: a stale repo-root copy shadowing a live app-scoped record produced a
+   false "recorded-but-unresolvable marshal"). App-scoped records are a ruled reality, not drift
+   — the app-scoped bootstrap re-homing ruling (Kim 2026-08-23) deliberately homes a fleet.json
+   at an app subdirectory; a legacy repo-root copy may coexist. Report which path was used in
+   step 5's report regardless of outcome. Take `live_state.joined`'s entries for `role: "agent"` and
    select the LATEST one by array order. **Liveness is that row's `action` field** — `"joined"` or
    absent counts as live, `"released"` does not (the canonical rule, `fleet-bootstrap`'s
-   `references/fleet-manifest-schema.md`, cited not restated). **Absent file, absent `agent` role
-   entries, or the latest row's `action` is `"released"`** → report "no live marshal — run
+   `references/fleet-manifest-schema.md`, cited not restated). **No file at any rung of the walk,
+   absent `agent` role entries, or the latest row's `action` is `"released"`** (all judged against
+   the ONE resolved file, never a farther fallback) → report "no live marshal (checked
+   `<resolved path>`, or: no fleet.json found between `<cwd>` and the repo root) — run
    /fleet-bootstrap in a dedicated terminal" and stop. Do not proceed to step 2.
 
    **Live row but `agent_name` is `null`/absent** (a legacy pre-fix entry — team-scaffolding's
    manual-join path wrote `agent_name: null` unconditionally before this same change closed that
    gap) → this is a DISTINCT failure branch, never folded into "no live marshal": report "a live
-   marshal is recorded but its address never resolved (legacy entry, dated `<date>`) — cannot
+   marshal is recorded in `<resolved path>` but its address never resolved (legacy entry, dated
+   `<date>`) — cannot
    SendMessage it; a human should confirm it's still running and re-bind via /team-scaffolding
    agent to record a resolved address, or take over via /fleet-bootstrap only once confirmed
    gone." Never auto-suggest a takeover on an unresolved-but-possibly-live row — that risks a
@@ -75,15 +85,18 @@ rather than applying this section itself").
      work. Re-running this command in an already-connected session simply re-confirms and re-states
      the posture — harmless, never an error.
 
-5. **Report**: the marshal's resolved name, the ack line (or "sent, unacknowledged" per the
+5. **Report**: the marshal's resolved name, the `fleet.json` path step 1 resolved (so a
+   shadowed sibling copy is auditable), the ack line (or "sent, unacknowledged" per the
    failure branch), and the roster it returned (or "not received" if the ack never landed).
 
 ## Failure branches
 
-- **No `fleet.json`, no live `agent` row (latest row's `action` is `"released"` or absent
-  entirely)** (step 1) → not a fleet repo, or no live marshal yet. Report: "no live marshal — run
-  /fleet-bootstrap in a dedicated terminal." Stop — never fall through to a handshake against
-  nothing.
+- **No `fleet.json` at any rung of the cwd-to-root walk, or the resolved file has no live
+  `agent` row (latest row's `action` is `"released"` or absent entirely)** (step 1) → not a fleet
+  repo, or no live marshal yet. Report: "no live marshal — run /fleet-bootstrap in a dedicated
+  terminal", naming the resolved path checked (or that no fleet.json exists between cwd and the
+  repo root). Stop — never fall through to a handshake against nothing, and never re-try the
+  verdict against a farther fleet.json once a nearer one resolved.
 - **Live `agent` row but `agent_name` is `null`/absent** (step 1, a legacy pre-fix entry) →
   report the row as recorded-but-unresolvable and stop; never treat this the same as "no live
   marshal" and never auto-suggest a takeover — the seat may genuinely still be live.
