@@ -184,6 +184,30 @@ primitive" branch for `agents/` and `hooks/`, not three separate ones.
    to settle which is canonical vs. which are read-fallbacks. Search run: `WebSearch` for
    `pi.dev docs mcp.json mcpServers pi coding agent configuration file`, 2026-08-23 — returned only
    secondary sources; a follow-up should `WebFetch` `pi.dev/docs/latest/mcp` (or equivalent) directly.
+
+   > **Amendment (2026-08-23, T-2 of LLD-0025, #887 primary-source pass):** RESOLVED as "no
+   > canonical path exists — because Pi core has no built-in MCP support." Directly WebFetched (not
+   > WebSearched) `packages/coding-agent/docs/extensions.md` and `docs/settings.md` from
+   > `raw.githubusercontent.com/earendil-works/pi/main/...` — neither mentions MCP, `mcp.json`, or
+   > `mcpServers` anywhere; the full `docs/` directory listing has no `mcp.md`. The only working MCP
+   > implementation is a **third-party, opt-in npm package**, `pi-mcp-adapter` (author
+   > "nicopreme"/nicobailon, not Earendil Inc.), installed via `pi install npm:pi-mcp-adapter`.
+   > Its README (WebFetched from `raw.githubusercontent.com/nicobailon/pi-mcp-adapter/main/README.md`)
+   > gives the actual shape: precedence `.pi/mcp.json` (project, Pi override) → `.mcp.json` (project,
+   > shared — same filename as Claude Code's) → `<Pi agent dir>/mcp.json` (global Pi) →
+   > `~/.config/mcp/mcp.json` → `~/.agents/mcp.json` → `~/.agents/mcp/mcp.json`; `mcpServers` map with
+   > per-server `command`/`args`/`env`/`cwd` (stdio) or `url`/`headers` (HTTP) or `socket` (rmcp-mux),
+   > plus `auth`/`bearerToken`/`lifecycle`/`idleTimeout`/`requestTimeoutMs`; substitution syntax
+   > `${VAR}` / `$env:VAR` / leading `!command` (executed at connection time, `!!` escapes a literal
+   > `!`), valid in `env`/`cwd`/`url`/`headers`/`bearerToken`/`oauth.clientSecret`. A closed core-repo
+   > issue, `github.com/earendil-works/pi/issues/563` (filed by badlogic, the earendil-works
+   > founder), specs this exact adapter shape as an *extension example* — read as endorsement of the
+   > pattern, not evidence it shipped as first-party core. **Verdict for W4: target the
+   > `pi-mcp-adapter` project-local `.mcp.json` shape, but flag any Pi emitter as depending on an
+   > unofficial third-party package, not a guaranteed-stable Pi core contract.** Confidence:
+   > medium-high on "no core support"; low on long-term stability of the adapter's own contract.
+   > Full findings posted: `gh issue comment 887` on 2026-08-23
+   > (github.com/kimgranlund/claude-plugins/issues/887#issuecomment-5386966486).
 2. **Pi's `-l` install flag target.** Reported to write to `.pi/settings.json` for project-scope
    installs, sourced from a single WebFetch summary, not independently re-confirmed.
 3. **Hermes `optional-mcps/<name>/manifest.yaml` exact field list.** `name`/`version`/
