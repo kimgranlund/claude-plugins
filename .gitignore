@@ -13,3 +13,6 @@ harness-audit-*/
 # brand-design council instances' private critic attribution map — the real practitioner a
 # persona is distilled from; never committed (make-critic's `.name-map.md` convention, S6 #829)
 .name-map.md
+
+# Python bytecode from in-tree harness overlays (__init__.py, #885)
+__pycache__/
