@@ -7,6 +7,7 @@
     { "id": "t03", "prompt": "Cold-start the whole fleet from this one terminal.", "expect": "trigger" },
     { "id": "t04", "prompt": "Bootstrap the full fleet — orchestrator, product seat, and background reviewer/planner — in one go.", "expect": "trigger" },
     { "id": "t05", "prompt": "One terminal, stand up the entire fleet and gate on ratifying the intent layer before spawning anyone else.", "expect": "trigger" },
+    { "id": "t06", "prompt": "/fleet-bootstrap, run from a nested monorepo app directory with no fleet.json anywhere above it", "expect": "trigger" },
     { "id": "n01", "prompt": "Bootstrap this session as the fleet's planner seat.", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding — one seat's own bootstrap, not the full cold start" },
     { "id": "n02", "prompt": "/team-scaffolding reviewer review the fleet bootstrap PR", "expect": "no-trigger", "comment": "owner: teamwork:team-scaffolding directly" },
     { "id": "n03", "prompt": "Should this be a subagent or a team for this task?", "expect": "no-trigger", "comment": "owner: teamwork:fleet-rules" },

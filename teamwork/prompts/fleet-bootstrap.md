@@ -14,13 +14,28 @@ optional comma-separated spawn-list, default empty (see Phase 4).
 
 ## Phase 0 — Seed or read the fleet manifest
 
-Read `.claude/ops/fleet.json`. Absent → this is a virgin repo; seed it now with the schema in
-`references/fleet-manifest-schema.md` (seat roster, canonical tier ladder with today's date as
-`justification_date` for every seat still at its canonical tier, `mode: "manual"` for every seat,
-empty `live_state.joined`) — no interview, matching `team-scaffolding`'s own rule that an explicit
-command invocation with no role question asked is itself the human's act of declining one; running
-`/fleet-bootstrap` at all is that same explicit act. Present → read it as the record of who has
-already joined and at what tier/mode; do not overwrite existing `live_state` entries, only append.
+**Resolve the ops root cwd-first, symmetric with `fleet-connect` step 1's own ladder
+(`references/fleet-manifest-schema.md`'s "Location and resolution" section, canonical there,
+never re-derived here).** Walk from the current working directory upward to the repo root looking
+for `.claude/ops/fleet.json`; first hit wins. **Present at some rung** → that resolved path is THE
+`fleet.json` for the rest of this run — every subsequent Phase's read or write targets this same
+resolved path, never a bare `.claude/ops/fleet.json` re-derived from cwd or the repo root
+(`references/fleet-manifest-schema.md:8-15`: a legacy repo-root copy can coexist beside a
+resolved app-scoped one, so a re-derived path can silently target the wrong file). Read it now as
+the record of who has already joined and at what tier/mode, do not overwrite existing
+`live_state` entries, only append.
+**Absent at every rung** → this is a virgin SEED, not a virgin repo: default the seed root to the
+INVOKING cwd's own `.claude/ops/` when cwd is not the repo root (the app-scoped bootstrap
+re-homing ruling, Kim 2026-08-23 — never assume repo-root just because that's where most repos
+seed), or the repo root's `.claude/ops/` when cwd IS the repo root. Seed `fleet.json` there now
+with the schema in `references/fleet-manifest-schema.md` (seat roster, canonical tier ladder with
+today's date as `justification_date` for every seat still at its canonical tier, `mode: "manual"`
+for every seat, empty `live_state.joined`) — no interview, matching `team-scaffolding`'s own rule
+that an explicit command invocation with no role question asked is itself the human's act of
+declining one; running `/fleet-bootstrap` at all is that same explicit act. **Name the resolved
+root and which branch (existing-read vs. fresh-seed, and for a seed, app-scoped vs. repo-root) in
+Phase 6's report** — every other ops record this skill writes (`fleet-roster.md` and the rest)
+follows this same resolved root for the remainder of the run, never a separately re-derived path.
 **Then run the tier reconcile** (`references/fleet-manifest-schema.md` §"Tier reconcile on every
 bind" — canonical there, never re-derived here): diff every `seats.<role>.tier` against the
 current canonical ladder; a stale-or-unjustified mismatch is flagged to the human with an
@@ -64,7 +79,8 @@ clarifying question; it also can't be interactively steered mid-run the way a li
 and relaying its output back through the working session re-adds the hop tax #265 measured for
 that same shape.
 
-1. Bind role `agent`. Validate against `.claude/ops/fleet.json`. A still-live `agent` entry here
+1. Bind role `agent`. Validate against the `fleet.json` Phase 0 resolved (never a bare
+   `.claude/ops/fleet.json` re-derived here). A still-live `agent` entry here
    is a **takeover, not a collision** (not a Failure branch — proceed straight to steps 2 and 5's
    takeover path). This is narrower than `team-scaffolding`'s own role-token collision rule, and
    the distinguishing fact is which caller is at the call site, not how explicitly either command
@@ -81,7 +97,8 @@ that same shape.
    `/fleet-bootstrap` on the same repo and getting treated as a takeover too — same accepted risk
    the hybrid-swap rule already carries for background seats, not a new one.
 2. Print `Seat: {repo}-marshal — takeover` when step 1 found a live entry, `Seat: {repo}-marshal`
-   otherwise, and append the roster row to `.claude/ops/fleet-roster.md` under that same
+   otherwise, and append the roster row to `fleet-roster.md` alongside the `fleet.json` Phase 0
+   resolved — same directory, never a separately re-derived path — under that same
    `{repo}-marshal` session name (role key `agent`) — suffixed `(takeover)`
    in the former case (`team-scaffolding` Phase 2).
 3. `agent` carries no permission-profile deviation (`team-scaffolding` Phase 3) — state that
@@ -184,7 +201,8 @@ seats Kim drives manually in a terminal — a background agent cannot be interac
 way a live terminal seat can, so defaulting to spawning them would fight the human's own stated
 operating mode.
 
-**Read live seat state before offering anything to spawn.** Read `.claude/ops/fleet.json`'s
+**Read live seat state before offering anything to spawn.** Read the `fleet.json` Phase 0
+resolved (never a bare `.claude/ops/fleet.json` re-derived here) for its
 `live_state.joined` for `reviewer` and `planner` and take each role's LATEST row's `action`
 (absent read as `"joined"` — the schema's own liveness rule, canonical in
 `references/fleet-manifest-schema.md`, never re-derived here). A role whose latest row is
@@ -361,9 +379,10 @@ not starting fresh.
 One summary: which seats are live and how (manual/background/background-subprocess), the gate's
 outcome, the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
 confirmed", "none — reviewer and planner already held", or "confirm skipped — no live user,
-nothing spawned"), the `fleet.json` path as the durable record a later session reads
-to resume orientation, and confirm the `bind-team` contract Phase 1 step 6 already adopted is
-holding — this session runs under `agents/fleet-marshal.md`'s Priorities 1–8 for the fleet's
+nothing spawned"), the `fleet.json` path Phase 0 resolved — including which branch it took
+(existing record read at that path, or a fresh seed, and for a seed, app-scoped-cwd vs. repo-root)
+— as the durable record a later session reads to resume orientation, and confirm the `bind-team`
+contract Phase 1 step 6 already adopted is holding — this session runs under `agents/fleet-marshal.md`'s Priorities 1–8 for the fleet's
 duration until explicitly stood down; never re-invoke `/bind-team` to start it, it is already
 live. **For any spawned
 `reviewer` seat, read its `wall_applied` (and, when present, `wall_verified_via`) field back from
