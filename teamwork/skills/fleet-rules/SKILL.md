@@ -3,8 +3,8 @@ name: fleet-rules
 description: >-
   Fleet protocol AND how skills/subagents/teams compose: coordination, claim-guard, comms,
   version-slot, session-death, pin-race, incoming triage, sealed dispatch, preload-vs-discovery.
-  Use for "which peers can this orchestrator talk to", "orchestrator died mid-build", "cwd pin stuck", "subagent or team",
-  "review my wiring", "where does this bug report go". NOT isolation/collisions
+  A live {repo}-marshal gets fleet-shaped asks forwarded via SendMessage, not run here. Use for
+  "which peers can this orchestrator talk to", "cwd pin stuck", "subagent or team". NOT isolation/collision
   (parallel-work-rules); NOT next-turn timing (loop-rules); NOT mobilizability (mobilize-chores);
   NOT stacked-PR (big-change-git-rules); NOT corpus audits (check-all-agents/-skills); NOT one
   agent — its preloads, frontmatter, or return block (agent-writing-rules/write-handoff); NOT decomposition
@@ -290,7 +290,7 @@ only the missing UNBLOCK step, not a restatement of the detection mechanics:
 
 ### 7. Route-anything-incoming protocol
 
-Minted from #577 (2026-08-17): the orchestrator seat's standing triage discipline. Binds both
+**A non-marshal session with a live `{repo}-marshal` forwards a fleet-shaped ask via `SendMessage` rather than applying this section itself (#896); the triage below is the marshal's own.** Minted from #577 (2026-08-17): the orchestrator seat's standing triage discipline. Binds both
 doors of the seat identically (Part B "Seat-access doors" — the dispatched
 `agents/fleet-marshal.md` form and the host-adopted `/bind-team` form): same discipline, cited
 from each, never re-derived per door.
