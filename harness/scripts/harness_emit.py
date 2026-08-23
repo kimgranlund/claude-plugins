@@ -14,6 +14,10 @@ and the root `.claude-plugin/marketplace.json`. The overlay is committed in-tree
 the gate the moment a hand-edit or a stale overlay diverges from the recomputation.
 
 This wave (W3, T-6, gh#891) adds the Pi backend, activating all three harnesses by default.
+W4 (T-2, gh#887/#895) adds the Pi MCP passthrough note: Pi core has no MCP field, but the
+third-party `pi-mcp-adapter` reads a project-local `.mcp.json` in the same shape Claude Code
+uses, so a plugin's own `.mcp.json` already works with that adapter as-is once installed —
+no glue is generated, only documented.
 
 WHAT IT DERIVES (Codex)
   <plugin>/.codex-plugin/plugin.json
@@ -60,6 +64,11 @@ WHAT IT DERIVES (Pi)
     No `name` key — Pi derives the command name from the FILENAME. Body <- the SKILL.md
     body verbatim, $ARGUMENTS kept as-is (R-5 amendment, #888: this is how the human-only
     guard survives natively on Pi — a prompt template expands only from a human keystroke).
+  MCP — passthrough, not derived (W4, T-2, #887/#895): `.mcp.json` (IFF the plugin ships one)
+    is left exactly where it already is; nothing is written or copied for Pi. The plugin's
+    HARNESS-NOTES.md documents the third-party `pi-mcp-adapter` caveat (install separately,
+    not part of Pi core) and flags any `${CLAUDE_PLUGIN_ROOT}`/`${user_config.*}` value
+    `[needs-substitution]`, same as the Codex/Hermes rows.
 
   <plugin>/HARNESS-NOTES.md   (one per plugin; every harness's degradation ledger)
   <workspace>/.agents/plugins/marketplace.json   (Codex only, estate-level; derived from the
@@ -68,8 +77,14 @@ WHAT IT DERIVES (Pi)
 NOT DERIVED this wave: a plugin's own agents/*.md, hooks/hooks.json, and (on Codex/Hermes)
 the disable-model-invocation/context flags on a skill have no manifest key there — they are
 dropped with a note (Resolution 3, the degradation table) rather than guessed at. Pi's MCP
-cell stays drop-with-note too (T-2, #887 amendment: the third-party pi-mcp-adapter reads the
-existing .mcp.json as-is — W4 passthrough, not built here).
+cell is PASSTHROUGH, not generate-glue (T-2, #887 amendment, W4/#895): the third-party
+pi-mcp-adapter reads a project-local `.mcp.json` in the same `mcpServers` shape Claude Code
+uses, and that file already sits at the plugin root where a Pi install places it — nothing
+for this backend to write or copy. The Pi HARNESS-NOTES.md section documents the adapter's
+shape, the third-party-install caveat, and flags any `${...}` substitution token exactly as
+Codex/Hermes already do; verified once against the third-party adapter's own documented
+config contract (same filename, same `mcpServers` key, same `${VAR}` interpolation) — no
+adapter source lives in this repo to check further than that.
 
 WRITE / VERIFY / PROBE
   harness_emit.py <plugin-root> [--harness codex,hermes,pi]              # write
@@ -409,16 +424,28 @@ class Ledger:
                 )
             else:
                 lines.append("- Command-only skills: none.")
-            lines += [
-                f"- Fork skills (their `context` field drops; body runs inline): {_list(self.fork_skills)}.",
-                "- MCP: drop-with-note this wave (T-2, #887 amendment) — Pi core has no MCP field; "
-                "the third-party `pi-mcp-adapter` reads a project-local `.mcp.json` in the same "
-                "shape Claude Code uses, so this plugin's `.mcp.json` (where present) already "
-                "works with that adapter as-is; W4 is a passthrough wave, not built here."
-                if self.source["mcp"] is not None else
-                "- MCP: none shipped.",
-                "",
-            ]
+            lines.append(
+                f"- Fork skills (their `context` field drops; body runs inline): {_list(self.fork_skills)}."
+            )
+            if self.source["mcp"] is not None:
+                lines.append(
+                    "- MCP: `./.mcp.json` passthrough (W4, T-2, #887/#895) — Pi core has no MCP "
+                    "field; install the third-party `pi-mcp-adapter` separately (it is NOT part "
+                    "of Pi core) and it reads this plugin's existing `.mcp.json` as-is, same "
+                    "filename and `mcpServers` shape Claude Code uses. Nothing is generated for "
+                    "Pi — the file already sits at the plugin root, where a `pi install` places "
+                    "it."
+                )
+                if self.mcp_flags:
+                    flags = ", ".join(f"`{n}.{f}`" for n, f in self.mcp_flags)
+                    lines.append(
+                        f"- MCP `[needs-substitution]`: {flags} use Claude-runtime tokens that "
+                        "the pi-mcp-adapter cannot resolve — replace each with a literal value "
+                        "in `.mcp.json` before installing this plugin's MCP server under Pi."
+                    )
+            else:
+                lines.append("- MCP: none shipped.")
+            lines.append("")
         else:
             lines += [
                 "## Pi",
@@ -1028,6 +1055,19 @@ def selftest():
             "a built Hermes overlay must render a real Hermes section, not the not-built-yet stub"
         assert "## Pi" in notes and "package.json" in notes.split("## Pi")[1], \
             "a built Pi overlay must render a real Pi section, not the not-built-yet stub"
+
+        # W4 (T-2, #887/#895): Pi's MCP row must read PASSTHROUGH, never drop-with-note, and
+        # must carry the third-party-adapter caveat plus its own needs-substitution flag —
+        # the fixture's .mcp.json carries both a ${CLAUDE_PLUGIN_ROOT} and a ${user_config.*}
+        # token (see _build_fixture above), so the Pi section must flag them independently
+        # of Codex/Hermes's own flags earlier in the same file.
+        pi_section = notes.split("## Pi")[1]
+        assert "passthrough" in pi_section.lower(), \
+            "Pi's MCP row must read passthrough (W4), not drop-with-note"
+        assert "pi-mcp-adapter" in pi_section and "NOT part of Pi core" in pi_section, \
+            "Pi's MCP row must name the third-party pi-mcp-adapter and the not-core caveat"
+        assert "needs-substitution" in pi_section, \
+            "Pi's MCP row must flag its own needs-substitution tokens, not just cross-reference Codex/Hermes"
 
         mkt = json.loads((scratch / ".agents" / "plugins" / "marketplace.json").read_text())
         assert mkt["plugins"][0]["name"] == "demo-plugin", "estate marketplace must mirror the root one"
