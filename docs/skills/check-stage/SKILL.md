@@ -30,7 +30,8 @@ reading, not the doctrine itself.
 1. **Collect.** Run the bundled census against the repo root (default `.`):
    `python3 ${CLAUDE_PLUGIN_ROOT}/skills/check-stage/scripts/lifecycle_census.py <root>`
    — emits per-type (`adr`/`idr`/`rdd`) counts and status distributions, the orphan-ADR count,
-   and ROADMAP.md presence/status. A script failure (non-zero exit) is reported verbatim; the report
+   and roadmap presence/status (root `ROADMAP.md`, else the typed `<docs-root>/roadmap/*.md` —
+   honors the `.claude/docs/` override, #882). A script failure (non-zero exit) is reported verbatim; the report
    still renders judgment-tier signals from what's readable directly.
 2. **Consume check-state's own JSON as an input, never re-derive it.** Where available, run or
    reuse a recent `harness:check-state` collector output (ticket status counts via its
