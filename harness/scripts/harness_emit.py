@@ -13,9 +13,7 @@ and the root `.claude-plugin/marketplace.json`. The overlay is committed in-tree
 `dist/` — `.claude/rules/dist-output.md`) and a freshness check (release_gate.py's G15) fails
 the gate the moment a hand-edit or a stale overlay diverges from the recomputation.
 
-This wave (W2, gh#890) adds the Hermes backend. Pi is still stubbed to raise
-NotImplementedError naming its own wave ticket (T-6) — selecting it via --harness is a
-setup error (exit 2), not a silent no-op.
+This wave (W3, T-6, gh#891) adds the Pi backend, activating all three harnesses by default.
 
 WHAT IT DERIVES (Codex)
   <plugin>/.codex-plugin/plugin.json
@@ -48,13 +46,30 @@ WHAT IT DERIVES (Hermes)
     Hermes has no marketplace file, so install + config merge are both documented in
     HARNESS-NOTES.md rather than automated)
 
+WHAT IT DERIVES (Pi)
+  <plugin>/package.json
+    name <- "@nonoun/<plugin>" (Resolution 4a scope); version verbatim; description;
+    keywords <- ["pi-package", ...plugin.json keywords] ("pi-package" IS Pi's registry
+    contract — the pi.dev gallery scrapes it, no separate marketplace file); pi.skills <-
+    ["./skills"]; pi.prompts <- ["./prompts"] IFF the plugin has a command-only skill.
+    A pre-existing package.json is merge-only: only the pi key + keywords entry are
+    touched, every other key is left alone (Resolution 4, R-3).
+  <plugin>/prompts/<skill-name>.md   (one per command-only skill; flat, non-recursive)
+    frontmatter: description <- the skill's own description (or the body's first
+    non-empty line); argument-hint <- the skill's own argument-hint frontmatter, if any.
+    No `name` key — Pi derives the command name from the FILENAME. Body <- the SKILL.md
+    body verbatim, $ARGUMENTS kept as-is (R-5 amendment, #888: this is how the human-only
+    guard survives natively on Pi — a prompt template expands only from a human keystroke).
+
   <plugin>/HARNESS-NOTES.md   (one per plugin; every harness's degradation ledger)
   <workspace>/.agents/plugins/marketplace.json   (Codex only, estate-level; derived from the
     root .claude-plugin/marketplace.json 1:1)
 
-NOT DERIVED this wave: a plugin's own agents/*.md, hooks/hooks.json, and the
-disable-model-invocation/context flags on a skill have no Codex/Hermes/Pi manifest key —
-they are dropped with a note (Resolution 3, the degradation table) rather than guessed at.
+NOT DERIVED this wave: a plugin's own agents/*.md, hooks/hooks.json, and (on Codex/Hermes)
+the disable-model-invocation/context flags on a skill have no manifest key there — they are
+dropped with a note (Resolution 3, the degradation table) rather than guessed at. Pi's MCP
+cell stays drop-with-note too (T-2, #887 amendment: the third-party pi-mcp-adapter reads the
+existing .mcp.json as-is — W4 passthrough, not built here).
 
 WRITE / VERIFY / PROBE
   harness_emit.py <plugin-root> [--harness codex,hermes,pi]              # write
@@ -67,7 +82,12 @@ subcommand -> SKIP always, tier-3-only. Hermes: `hermes plugins doctor` is NOT a
 subcommand on this CLI (checked via --help) -> the fallback is a temp-HOME copy into
 ~/.hermes/plugins/<name>/ (hermes_cli/plugins.py's own documented user-plugin path) plus
 `hermes plugins list --json`; this proves plugin.yaml parses and the plugin is discoverable,
-but does NOT execute register(ctx) — a partial tier-2 close, not a full load assert.
+but does NOT execute register(ctx) — a partial tier-2 close, not a full load assert. Pi: no
+`pi doctor`/`pi check` subcommand either (checked via `pi --help`) -> the fallback is `pi
+install <plugin-root> -l` (project-local, cwd'd into a throwaway scratch dir — never the
+plugin root itself) then `pi list`; verified LIVE that a local install is listed by its
+resolved install PATH under a `Project packages:` heading, not by the package.json `name`
+field (a local install carries no registry identity) -> the check matches the path.
 
 No args (or a bare path with neither --verify/--probe and no write intent unclear) -> this
 docstring, exit 2.
@@ -90,7 +110,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import skill_lint  # parse_frontmatter — the only frontmatter reader this script trusts (R-2)
 
-DEFAULT_HARNESSES = ["codex", "hermes"]  # widened per wave: W1 codex, W2 +hermes, W3 +pi
+DEFAULT_HARNESSES = ["codex", "hermes", "pi"]  # W1 codex, W2 +hermes, W3 (T-6, #891) +pi
 ALL_HARNESSES = ["codex", "hermes", "pi"]
 
 
@@ -133,7 +153,7 @@ def read_plugin(root: Path):
             if not sm.is_file():
                 continue
             lines = sm.read_text(encoding="utf-8").splitlines()
-            fields, _ = skill_lint.parse_frontmatter(lines)
+            fields, fm_span = skill_lint.parse_frontmatter(lines)
             if "name" not in fields or "description" not in fields:
                 raise SourceError(f"{sm}: missing name/description in frontmatter")
             s_name = fields["name"][0]
@@ -141,6 +161,10 @@ def read_plugin(root: Path):
             command = fields.get("disable-model-invocation", ("false", 0))[0].strip().lower() == "true"
             fork = fields.get("context", ("", 0))[0].strip().lower() == "fork"
             codex_default_prompt = fields.get("codex_default_prompt", (None, 0))[0]
+            argument_hint = fields.get("argument-hint", (None, 0))[0]
+            # fm_span is guaranteed here — the fields check above already raised SourceError
+            # for any SKILL.md whose frontmatter didn't parse (fm_span is None only then).
+            body = "\n".join(lines[fm_span[1] + 1:]).strip("\n")
             skills.append({
                 "name": s_name,
                 "description": s_desc,
@@ -148,6 +172,8 @@ def read_plugin(root: Path):
                 "fork": fork,
                 "dir": d,
                 "codex_default_prompt": codex_default_prompt,
+                "argument_hint": argument_hint,
+                "body": body,
             })
 
     agents = []
@@ -176,6 +202,18 @@ def read_plugin(root: Path):
     if iface_file.is_file():
         codex_interface = _read_json(iface_file)
 
+    # A pre-existing package.json (Pi backend, Resolution 4: merge-only — the emitter never
+    # clobbers a hand-authored key beyond its own "pi" + "keywords"). Read here, not by the
+    # backend, so every backend stays filesystem-free per the Interfaces contract ("none
+    # touches the filesystem directly"). Unparseable -> SourceError, same discipline as every
+    # other source read in this file; the emitter never silently discards a file it can't read.
+    existing_package_json = None
+    pkg_file = root / "package.json"
+    if pkg_file.is_file():
+        existing_package_json = _read_json(pkg_file)
+        if not isinstance(existing_package_json, dict):
+            raise SourceError(f"{pkg_file}: not a JSON object -> the emitter never clobbers a package.json it can't merge into")
+
     return {
         "name": name,
         "version": version,
@@ -189,6 +227,7 @@ def read_plugin(root: Path):
         "skills": skills,
         "agents": agents,
         "hooks": hooks,
+        "existing_package_json": existing_package_json,
         "mcp": mcp,
         "codex_interface": codex_interface,
     }
@@ -349,15 +388,48 @@ class Ledger:
                 "",
             ]
 
-        lines += [
-            "## Pi",
-            "- This backend isn't built yet (tracked as T-6; no install path exists for "
-            "Pi from this repo today) — no action needed here. What WOULD drop under "
-            "this plugin's current Claude Code source, computed the same way Codex's row "
-            "above is (kept for a preview, not yet verified against Pi's own contract): "
-            f"agents — {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
-            "",
-        ]
+        if "pi" in self.built:
+            lines += [
+                "## Pi",
+                f'- Loads via `package.json`\'s `"pi"` key (`"skills": ["./skills"]`); install '
+                f'with `pi install <path-to-{s["name"]}> -l` from a checkout — confirm with '
+                f'`pi list`, which shows the install path under `Project packages:`. The '
+                f'`"pi-package"` keyword is added automatically (no extra step); once this '
+                f'package is published, that keyword is what the pi.dev gallery scrapes to '
+                f'list it — there is no separate marketplace file to maintain.',
+                f"- Dropped — agents: {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
+            ]
+            if self.command_skills:
+                lines.append(
+                    f"- Command-only skills emitted as `prompts/{{name}}.md` templates "
+                    f"(R-5 amendment, #888): {_list(self.command_skills)} — the human-only guard "
+                    "is preserved natively (a prompt template expands only from a human keystroke; "
+                    "the model has no channel to self-invoke it), unlike Codex/Hermes where these "
+                    "become plain, model-routable skills."
+                )
+            else:
+                lines.append("- Command-only skills: none.")
+            lines += [
+                f"- Fork skills (their `context` field drops; body runs inline): {_list(self.fork_skills)}.",
+                "- MCP: drop-with-note this wave (T-2, #887 amendment) — Pi core has no MCP field; "
+                "the third-party `pi-mcp-adapter` reads a project-local `.mcp.json` in the same "
+                "shape Claude Code uses, so this plugin's `.mcp.json` (where present) already "
+                "works with that adapter as-is; W4 is a passthrough wave, not built here."
+                if self.source["mcp"] is not None else
+                "- MCP: none shipped.",
+                "",
+            ]
+        else:
+            lines += [
+                "## Pi",
+                "- Excluded from this run (`--harness` didn't include `pi`) — the Pi backend "
+                "IS built (LLD-0025 W3, #891); rerun with `pi` in the `--harness` set, or omit "
+                "`--harness` entirely (its default already includes `pi`), to render this "
+                "section for real. What WOULD drop under this plugin's current Claude Code "
+                "source, computed the same way Codex's row above is: "
+                f"agents — {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
+                "",
+            ]
         return "\n".join(lines)
 
 
@@ -495,13 +567,72 @@ class HermesBackend:
         return "hermes", ["plugins", "doctor"]
 
 
+PI_SCOPE = "@nonoun"  # Resolution 4a — reuses the marketplace's own nonoun-plugins identity
+
+
+def _prompt_first_line(body: str) -> str:
+    for line in body.splitlines():
+        stripped = line.strip().lstrip("#").strip()
+        if stripped:
+            return stripped
+    return ""
+
+
 class PiBackend:
     name = "pi"
 
     def targets(self, source, root: Path):
-        raise NotImplementedError(
-            "Pi backend ships in W3 (ticket T-6, LLD-0025 Resolution 7) — not built this wave"
-        )
+        out = []
+        command_skills = [s for s in source["skills"] if s["command"]]
+
+        # package.json — merge-only when one already exists (Resolution 4: no plugin here
+        # has one today, R-3): on a pre-existing file, ONLY the "pi" key and the "keywords"
+        # entry are touched — name/version/description/every other key are left exactly as
+        # a human wrote them. A fresh file gets the full derived identity block. Reading the
+        # existing file happens in read_plugin() (Source), never here — this backend stays
+        # filesystem-free like every other one (Interfaces: "none touches the filesystem
+        # directly").
+        existing = source["existing_package_json"]
+        keywords = list(dict.fromkeys(["pi-package", *source["keywords"]]))
+        pi_section = {"skills": ["./skills"]}
+        if command_skills:
+            pi_section["prompts"] = ["./prompts"]
+        if existing is not None:
+            pkg = dict(existing)
+            pkg["keywords"] = keywords
+            pkg["pi"] = pi_section
+        else:
+            pkg = {
+                "name": f"{PI_SCOPE}/{source['name']}",
+                "version": source["version"],
+                "description": source["description"],
+                "private": True,
+                "keywords": keywords,
+                "pi": pi_section,
+            }
+        content = json.dumps(pkg, indent=2) + "\n"
+        out.append((root / "package.json", content.encode("utf-8")))
+
+        # prompts/<skill-name>.md — command-only skills, flat dir, non-recursive discovery
+        # (R-5 amendment, #888: the human-only guard is preservable natively on Pi — a
+        # prompts/ template loads only via a human keystroke, never model-invoked). No
+        # `name:` frontmatter key emitted — Pi resolves the command name from the file's own
+        # basename, not frontmatter (docs/prompt-templates.md).
+        for s in command_skills:
+            fm_lines = []
+            description = s["description"] or _prompt_first_line(s["body"])
+            if description:
+                fm_lines.append(f"description: {yaml_scalar(description)}")
+            if s["argument_hint"]:
+                fm_lines.append(f"argument-hint: {yaml_scalar(s['argument_hint'])}")
+            body_text = s["body"].rstrip("\n") + "\n"
+            if fm_lines:
+                content = "---\n" + "\n".join(fm_lines) + "\n---\n\n" + body_text
+            else:
+                content = body_text
+            out.append((root / "prompts" / f"{s['name']}.md", content.encode("utf-8")))
+
+        return out
 
     def probe_hint(self):
         return "pi", ["--help"]
@@ -573,6 +704,12 @@ def _find_orphans(root: Path, harnesses, live_targets):
         mcp_yaml = root / "hermes-mcp.yaml"
         if mcp_yaml.is_file() and mcp_yaml not in live_paths:
             orphans.append(mcp_yaml)
+    if "pi" in harnesses:
+        prompts_dir = root / "prompts"
+        if prompts_dir.is_dir():
+            for f in prompts_dir.glob("*.md"):
+                if f not in live_paths:
+                    orphans.append(f)
     return orphans
 
 
@@ -687,6 +824,48 @@ def _probe_hermes(exe: str, root: Path):
                    "partial tier-2 only, register(ctx) not executed (needs a real session, tier 3)")
 
 
+def _probe_pi(exe: str, root: Path):
+    """Established per `pi --help`/`pi install --help`/a live `pi list` run (Resolution 6 tier
+    2, 2026-08-23): pi core has no dedicated manifest-validator subcommand (no `pi doctor`/`pi
+    check`), so the fallback is `pi`'s own real discovery path — `pi install <path> -l`
+    (project-local install, writes `.pi/settings.json` in a throwaway cwd, never the plugin
+    root) then `pi list`. Verified live: `pi list` names a locally-installed "Project package"
+    by its resolved install PATH under a `Project packages:` heading, NOT by the package.json
+    `name` field (a local install carries no registry identity) — so the check matches the
+    resolved root path, not the name, the same "found the real contract by running the CLI"
+    class W2 hit with `hermes plugins doctor` not existing. 0 discovered; 1 the CLI rejected
+    the package or the path is missing from the listing; 2 SKIP (setup problem, e.g. no
+    package.json written yet)."""
+    pkg_path = root / "package.json"
+    if not pkg_path.is_file():
+        return 2, "SKIP — package.json not written yet; run the writer first"
+    resolved_root = str(root.resolve())
+    with tempfile.TemporaryDirectory() as td:
+        scratch = Path(td)
+        try:
+            r_install = subprocess.run(
+                [exe, "install", resolved_root, "-l"],
+                cwd=str(scratch), capture_output=True, text=True, timeout=60,
+            )
+        except (OSError, subprocess.SubprocessError) as e:
+            return 2, f"SKIP — `pi install` failed to run: {e}"
+        if r_install.returncode != 0:
+            return 1, (f"REJECTED — `pi install {resolved_root} -l` exit {r_install.returncode}: "
+                        f"{(r_install.stdout + r_install.stderr).strip()[-300:]}")
+        try:
+            r_list = subprocess.run(
+                [exe, "list"], cwd=str(scratch), capture_output=True, text=True, timeout=30,
+            )
+        except (OSError, subprocess.SubprocessError) as e:
+            return 2, f"SKIP — `pi list` failed to run: {e}"
+        if r_list.returncode != 0:
+            return 1, f"REJECTED — `pi list` exit {r_list.returncode}: {(r_list.stdout + r_list.stderr).strip()[-300:]}"
+        listing = r_list.stdout
+        if "Project packages:" not in listing or resolved_root not in listing:
+            return 1, f"REJECTED — '{resolved_root}' not found under Project packages: in `pi list`: {listing[-300:]}"
+        return 0, f"loaded — `pi install {resolved_root} -l` then `pi list` shows it under Project packages:"
+
+
 def probe(root: Path, harnesses=None):
     """Tri-state per harness: 0 loaded/binary present and ran clean, 1 the harness rejected
     the overlay, 2 SKIP (binary absent). The exact validator subcommand is established from
@@ -720,6 +899,8 @@ def probe(root: Path, harnesses=None):
             # session bootstrap), so it is a partial tier-2 close, named as such rather than
             # silently upgraded to a full load assert.
             results[h] = _probe_hermes(exe, root)
+        elif h == "pi":
+            results[h] = _probe_pi(exe, root)
         else:
             results[h] = (2, f"SKIP — {h} backend not built this wave")
     return results
@@ -735,6 +916,7 @@ description: >-
   Does the thing. Also does another thing.
 disable-model-invocation: true
 user-invocable: false
+argument-hint: "[target] [--flag]"
 ---
 
 # foo-bar
@@ -844,8 +1026,8 @@ def selftest():
         assert "needs-substitution" in notes, "MCP substitution tokens must be flagged in the note"
         assert "## Hermes" in notes and "hermes-mcp.yaml" in notes, \
             "a built Hermes overlay must render a real Hermes section, not the not-built-yet stub"
-        assert "## Pi" in notes and "isn't built yet" in notes.split("## Pi")[1], \
-            "Pi stays the not-built-yet stub this wave"
+        assert "## Pi" in notes and "package.json" in notes.split("## Pi")[1], \
+            "a built Pi overlay must render a real Pi section, not the not-built-yet stub"
 
         mkt = json.loads((scratch / ".agents" / "plugins" / "marketplace.json").read_text())
         assert mkt["plugins"][0]["name"] == "demo-plugin", "estate marketplace must mirror the root one"
@@ -916,13 +1098,84 @@ def selftest():
         code, findings, _ = run(empty, verify=True)
         assert code == 2, "a plugin with no manifest must be a setup error, not a drift finding"
 
-        code, findings, _ = run(plugin, harnesses=["pi"], verify=True, workspace_root=scratch)
-        assert code == 2, "an explicitly named unbuilt backend must be a setup error, not silently skipped"
-        assert "T-6" in findings[0], "the setup-error finding must name the wave ticket"
+        code, findings, _ = run(plugin, harnesses=["zzz-not-a-harness"], verify=True, workspace_root=scratch)
+        assert code == 2, "an explicitly named unknown harness must be a setup error, not silently skipped"
 
-    print("harness_emit selftest · PASS · write/verify roundtrip (codex+hermes), hand-edit bite "
-          "(both backends), orphan detection (openai.yaml + hermes-mcp.yaml), MCP substitution "
-          "flagging, __init__.py register_skill template, marketplace mirror, setup-error controls")
+        # Pi content predicates (W3, #891)
+        pkg = json.loads((plugin / "package.json").read_text())
+        assert pkg["name"] == "@nonoun/demo-plugin", "package.json name must be scoped @nonoun/<plugin>"
+        assert pkg["version"] == "0.1.0", "package.json version must mirror plugin.json verbatim"
+        assert "pi-package" in pkg["keywords"], "the pi-package keyword IS Pi's registry contract"
+        assert pkg["pi"]["skills"] == ["./skills"], "pi.skills must declare the skills dir"
+        assert pkg["pi"]["prompts"] == ["./prompts"], "pi.prompts must declare the prompts dir when a command skill exists"
+
+        prompt = (plugin / "prompts" / "foo-bar.md").read_text()
+        assert prompt.startswith("---\n"), "a command skill's prompt file must carry frontmatter"
+        assert 'argument-hint: "[target] [--flag]"' in prompt, \
+            "a command skill's own argument-hint must be emitted verbatim in the prompt frontmatter"
+        assert "Does the thing." in prompt, "prompt description must come from the skill's own description"
+        assert "# foo-bar\nbody" in prompt, "prompt body must be the SKILL.md body verbatim"
+        assert not (plugin / "prompts" / "baz.md").is_file(), \
+            "a non-command skill (baz) must not get a prompts/ file"
+
+        notes = (plugin / "HARNESS-NOTES.md").read_text()
+        pi_section = notes.split("## Pi")[1]
+        assert "`foo-bar`" in pi_section and "prompts/{name}.md" in pi_section, \
+            "a built Pi overlay must name the command skill's prompt file in the note"
+
+        # negative control: hand-edit (Pi package.json) -> verify must bite
+        (plugin / "package.json").write_text('{"name": "drifted"}')
+        code, findings, _ = run(plugin, verify=True, workspace_root=scratch)
+        assert code == 1, "a hand-edited package.json must fail verify"
+        assert any("package.json" in f for f in findings), "hand-edit finding must name package.json"
+        run(plugin, workspace_root=scratch)  # restore
+
+        # negative control: a command skill removed -> its prompts/<name>.md orphaned -> unexpected
+        (plugin / "skills" / "foo-bar" / "SKILL.md").unlink()
+        code, findings, _ = run(plugin, verify=True, workspace_root=scratch)
+        assert code == 1, "a deleted command skill's orphaned prompt file must fail verify"
+        assert any("unexpected:" in f and "foo-bar.md" in f for f in findings), \
+            "deleted-command-skill finding must be tagged unexpected and name the orphaned prompt file"
+        (plugin / "skills" / "foo-bar" / "SKILL.md").write_text(FIXTURE_SKILL_A)
+        run(plugin, workspace_root=scratch)
+
+        # merge-only: an existing package.json keeps its other keys untouched
+        merge_plugin = scratch / "merge-plugin"
+        (merge_plugin / ".claude-plugin").mkdir(parents=True)
+        (merge_plugin / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+            "name": "merge-plugin", "version": "0.1.0", "description": "Has its own package.json.",
+        }))
+        merge_plugin.joinpath("package.json").write_text(json.dumps({
+            "name": "@nonoun/merge-plugin", "version": "0.0.1", "description": "old",
+            "scripts": {"build": "tsc"},
+        }))
+        run(merge_plugin, harnesses=["pi"], workspace_root=scratch)
+        merged = json.loads((merge_plugin / "package.json").read_text())
+        assert merged["scripts"] == {"build": "tsc"}, \
+            "the writer must merge only the pi key + keywords, leaving other package.json keys alone"
+        assert merged["version"] == "0.0.1", \
+            "merge-only means version too -> the ORIGINAL package.json version must survive untouched"
+        assert merged["description"] == "old", \
+            "merge-only means description too -> the ORIGINAL package.json description must survive untouched"
+        assert merged["name"] == "@nonoun/merge-plugin", "merge-only leaves the original name untouched too"
+        assert "pi-package" in merged["keywords"], "the writer still adds the pi-package keyword on merge"
+        assert merged["pi"]["skills"] == ["./skills"], "the writer still adds its own pi key on merge"
+
+        # negative control: an unparseable pre-existing package.json is a setup error, not a
+        # silent clobber (the emitter never invents content for a file it can't read)
+        bad_pkg_plugin = scratch / "bad-pkg-plugin"
+        (bad_pkg_plugin / ".claude-plugin").mkdir(parents=True)
+        (bad_pkg_plugin / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+            "name": "bad-pkg-plugin", "version": "0.1.0", "description": "Has a broken package.json.",
+        }))
+        bad_pkg_plugin.joinpath("package.json").write_text("not json")
+        code, findings, _ = run(bad_pkg_plugin, harnesses=["pi"], verify=True, workspace_root=scratch)
+        assert code == 2, "an unparseable pre-existing package.json must be a setup error, not silently discarded"
+
+    print("harness_emit selftest · PASS · write/verify roundtrip (codex+hermes+pi), hand-edit bite "
+          "(all three backends), orphan detection (openai.yaml + hermes-mcp.yaml + prompts/*.md), "
+          "MCP substitution flagging, __init__.py register_skill template, package.json merge-only, "
+          "marketplace mirror, setup-error controls")
     return 0
 
 

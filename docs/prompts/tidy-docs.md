@@ -1,0 +1,101 @@
+---
+description: "Align an existing repo's scattered documents (rfcs/, NOTES.md, near-miss dirs) to the canonical docs/ layout: inventory, classify, propose one migration plan, execute on approval with git mv (history preserved), frontmatter, and link repair. Run /tidy-docs [optional subtree]. One approval gate; migration only — content is never rewritten. NOT authoring a document (make-doc); NOT reviewing content quality (check-doc); NOT whole-harness drift (clean-repo)."
+argument-hint: "[optional subtree to scope the sweep]"
+---
+
+# tidy-docs — migrate the corpus, never the content
+
+Turns a repo's scattered document reality into the canonical layout the tooling and the
+project-docs index assume — `doc-writing-rules`' directory-per-type map is the single
+target; this command owns getting an EXISTING corpus there. Migration only: files move and gain
+frontmatter; **prose is never rewritten** — a document's content quality is check-doc's
+question, on a later day. Seed: `$ARGUMENTS` (a subtree scopes the sweep; empty = whole repo).
+
+**Resolve `<root>` first, per doc-writing-rules' "Where documents live" ladder (issue #514):**
+the target repo's own CLAUDE.md override wins if stated (this workspace's own CLAUDE.md states
+one — everything under `.claude/docs/`, per ADR-0019); else the portable default `docs/ops/` for
+repo/project-level records, with `.claude/docs/` reserved for agent-specific docs. Never
+hardcode `docs/` as the destination without checking for a host override first.
+
+## Phase 1 — Inventory: what document reality exists
+
+Sweep three surfaces and classify every hit by the question it answers (the standards' type
+test: why→PRD · what exactly→SPEC · how internally→LLD · ratified fork→ADR · sequence→PLAN ·
+horizons→ROADMAP · work item→TICKET/TASK):
+
+1. **Canonical dirs** — already-right content stays put; note records missing frontmatter.
+2. **Near-miss locations** — `docs/specs/`-style misnames, `rfcs/`, `design/`, `design-docs/`,
+   `adrs/`, `doc/`, `notes/`.
+3. **Loose files** — `NOTES.md`, `TODO.md`, `DECISIONS.md`, `ARCHITECTURE.md` (whole-file
+   moves), and doc-shaped README sections — the one EXTRACTION case: offered, and marked in the
+   plan as creating a new file rather than moving one.
+
+Alongside the three surfaces, inventory the **git-visibility of every hit**: `git check-ignore`
+each source location and `git ls-files` its contents (harness clean-repo's razor — tracked
+does not imply not-ignored). A gitignored source (the classic: a repo that ignores `.claude/`
+wholesale, so a `.claude/docs/` corpus was never tracked at all) changes the move mechanics —
+`git mv` fails on untracked files — and means the migration is also the corpus's FIRST commit;
+both facts belong in the plan, not discovered mid-execute.
+
+Nothing found → report the repo is already clean (or empty), offer only the index bootstrap,
+stop. The inventory is a deliverable in itself: a rejected plan still leaves the user knowing
+what they have and where.
+
+## Phase 2 — Plan: one table, one gate
+
+Build the migration manifest — per artifact: source → canonical destination
+(`<root>/<type>/<type>-<number-or-date>-<slug>.md` per the standards, `<root>` resolved above;
+ticket exception: `<root>/tickets/tkt-…`) · frontmatter to add (`doc-type`, `id` — derived from the minted
+filename — and `status`; nothing more: doc_lint's T1 requires exactly these three) · links that
+will need repair. The manifest also carries a **.gitignore row** whenever Phase 1's
+git-visibility pass found anything: ignore rules to retire (a rule matching the migrated source
+tree is stale the moment the move lands), rules that would swallow a destination (`docs/` or a
+subpath matched by an existing pattern — the migration must not move records from one shadow
+into another), and untracked-source moves flagged as plain `mv` + `git add` (history cannot be
+preserved for a file git never saw — disclosed, not silently downgraded). Classification genuinely
+ambiguous → ONE batched AskUserQuestion round (≤4 questions, concrete options); ambiguity beyond
+that round lands in an **unresolved bucket — left in place and listed**, never force-classified.
+The plan's last line is always "install/update the project-docs index skill."
+
+Present the whole table for ONE approval (the working tree's state stated on it — pre-existing
+uncommitted changes are flagged so the migration's diff stays separable). Approved → Phase 3.
+Rejected → write nothing; the inventory is the report.
+
+## Phase 3 — Execute (approved plan only, nothing beyond it)
+
+1. `git mv` every approved move — history preserved; extractions (README sections) create the
+   new file and replace the section with a one-line pointer to it; untracked sources move per
+   their plan flag (`mv` + `git add`). Apply the plan's .gitignore row in the same pass, then
+   prove it: `git check-ignore` every destination (must hit nothing) and `git status` the moved
+   set (every record visible). A destination still ignored, or a rule still matching the emptied
+   source tree, is an execute failure — fix before proceeding.
+2. Add the minimal frontmatter where records lack it. **Exception: an accepted ADR is
+   append-only — move it untouched; needed frontmatter is noted in the report, not added.**
+3. Repair inbound links: grep by BASENAME first (relative links — `../rfcs/foo.md`, bare
+   `foo.md` — never match a full-path sweep), then the full old path as the confirming pass;
+   rewrite references; a reference too ambiguous to rewrite mechanically is listed, not guessed.
+4. `doc_lint.py` on every migrated record — repairs limited to frontmatter. A NAMING failure
+   means the Phase 2 manifest was wrong — report it, never rename past the approval gate; a
+   record whose CONTENT fails lint is recorded as a check-doc candidate, not rewritten here.
+5. Install or update `.claude/skills/project-docs/SKILL.md` from /file-feature's template (its
+   consult table now true of this repo).
+6. Report: moves made · extractions (new files — git history does not follow a section out of
+   a README) · frontmatter added · links repaired · the unresolved bucket · lint results ·
+   check-doc candidates. **Committing is the user's** — the changes sit staged-ready
+   in the working tree with a suggested message; this command never commits.
+
+## Failure branches
+
+- Plan rejected → inventory report only; zero writes.
+- A basename or old-path grep still hits after repair → fix before reporting; a false "links
+  repaired" is the command's own failure mode.
+- Accepted ADR needing more than a move → note and skip (the append-only class outranks tidiness).
+- `doc_lint` content failures → check-doc candidates list, never in-place rewrites.
+- The ask was really "write me a doc" or "review this doc" → make-doc / check-doc.
+
+Done when every approved move landed via `git mv` (or the disclosed `mv` + `git add` for
+untracked sources), no repo reference to an old path survives, `git check-ignore` hits no
+destination and no ignore rule still names the migrated source tree, migrated frontmatter lints
+clean, the index skill matches the new layout, and the unresolved bucket + check-doc candidates
+are reported. NOT done if any file moved without plan approval,
+any prose was rewritten, or the report claims a repair a grep would refute.

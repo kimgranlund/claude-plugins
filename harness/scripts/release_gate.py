@@ -48,12 +48,12 @@ Gate order (plugin-writing-rules §Release discipline):
       origin/main's, and the README ledger's newest line must name that version
       (version_monotonic_check.py; complements version_claim_check.py's cross-open-PR tier);
       no origin/main, untouched, or a brand-new plugin -> not applicable
-  G15 harness overlay freshness (LLD-0025, gh#885/#886/#890, 2026-08-23): runs
+  G15 harness overlay freshness (LLD-0025, gh#885/#886/#890/#891, 2026-08-23): runs
       `harness_emit.py <root> --verify --harness <G15_HARNESSES>` as a subprocess (the gate
       never imports the emitter — same exit-code-contract relationship G4 has to a bundled
       selftest); exit 1 -> FAIL listing each stale/unexpected/marketplace-mismatch path; exit 2
       -> FAIL "emitter setup error"; no harness_emit.py on this checkout -> not applicable.
-      G15_HARNESSES = codex,hermes as of W2 (gh#890); widens to +pi in W3.
+      G15_HARNESSES = codex,hermes,pi as of W3 (gh#891).
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -72,9 +72,9 @@ import docs_check
 import version_monotonic_check
 
 # G15 harness set — a one-line constant each wave widens (LLD-0025 Resolution 5): W1 codex,
-# W2 +hermes, W3 +pi. Kept local (not imported from harness_emit) so the gate never imports
+# W2 +hermes, W3 (T-6, gh#891) +pi. Kept local (not imported from harness_emit) so the gate never imports
 # the emitter — subprocess only, same as G4's relationship to a bundled selftest.
-G15_HARNESSES = "codex,hermes"
+G15_HARNESSES = "codex,hermes,pi"
 
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
 KEBAB_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -1128,6 +1128,18 @@ def selftest():
         with contextlib.redirect_stdout(buf):
             code, _ = gate(r)
         assert code == 0 and "ok    G15" in buf.getvalue(), "rewriting the Hermes overlay must restore a clean G15"
+        # G15 Pi leg (W3, gh#891): a hand-edited Pi overlay file must FAIL G15 too —
+        # G15_HARNESSES now covers codex,hermes,pi.
+        (r / "package.json").write_text('{"drifted": true}')
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 1 and "FAIL  G15" in buf.getvalue(), "a hand-edited Pi package.json must FAIL G15"
+        w()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "ok    G15" in buf.getvalue(), "rewriting the Pi overlay must restore a clean G15"
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)
