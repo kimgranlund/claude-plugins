@@ -373,6 +373,18 @@ only.
   are NOT safe routing surfaces. In Codex/Pi/Hermes they become routable. Detection: the note
   lists them per plugin; fallback: T-3 upgrades the Command row; until then this is a
   disclosed degradation (disclose-not-enforce, the estate's standing ruling), not a silent one.
+  **Amendment 2026-08-23 (T-3 resolved, #888):** R-5 splits by harness. **Pi: the guard IS
+  preservable natively** — a package's `"pi": {"prompts": [...]}` loads `prompts/*.md`
+  templates that expand at the INPUT layer (extension commands → `input` event → skill
+  commands → prompt templates → only then agent processing), so a `/name` template is reachable
+  by human keystrokes only; the model has no channel to self-invoke it. W3 (T-6, #891) emits
+  command-only skills as `prompts/<name>.md` instead of plain skills — the Pi Command row
+  upgrades from drop-with-note to generate-glue. Prompt-file frontmatter schema is still
+  unresolved from primary docs (follow-up read of an example package before W3 builds).
+  **Hermes: NOT expressible** — `ctx.register_command` carries no invocation-source metadata
+  and the docs draw no human-vs-model distinction, so W2 (T-5, #890) keeps the plain-skill
+  degradation as the CORRECT terminal fallback, not a temporary gap. **Codex: unchanged**
+  (no command surface at all). Confidence: Pi high, Hermes medium-high (#888 Findings).
 - **R-6 (overlay regen PRs collide with in-flight version bumps).** Resolution 4 prices this:
   the conflict surface is a subset of the source's. Fallback: re-run the emitter on the merged
   source; never hand-merge (fleet-rules §4).
