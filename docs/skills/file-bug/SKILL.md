@@ -48,6 +48,15 @@ Then branch by the record's own state, never re-dispatch blindly:
 - Status is `done` or `wontfix` → report the closed state and stop; reopening is the user's call.
 - Otherwise (open/doing, no findings yet) → continue directly to Phase 5.
 
+Every branch above names a route, not a stop: this invocation is not done at the branch decision
+itself, and it ends only once the routed phase's own body has run to ITS OWN completion (Phase
+6's close-out, Phase 5's dispatch, or — on the closed-state branch, which routes to no later
+phase — the report below) AND, as the last thing that phase does, emits a typed status line —
+`Resumed: <id> · route:<phase6|phase5|closed-stop> · status:<value read from the record's own
+state field, not inferred from comment text>` — never a bare id, and never emitted in place of
+running the routed phase's body. Reaching a phase number, or naming a route, is not itself the
+report.
+
 An id that does not resolve (no such file; `gh issue view` errors; Option C's `read` returns
 not-found, AC-010) is not a resume: treat it as a fresh report, continue to Phase 2, and say so —
 never proceed as if an unresolved id already had a record behind it.
@@ -231,8 +240,10 @@ silently — name in the close-out exactly what went unverified.
 
 ## Phase 6 — Close the loop
 
-Read the record back on return (`gh issue view --comments` on the git-native backend; the resolved
-adapter's own read operation under Option C). Findings gained an entry → advance status — file
+Read the record back — whether arriving here after this turn's own Phase 5 dispatch returned, or
+directly from Phase 1 on resume — before anything else in this phase; a resume that skips this
+read is incomplete regardless of what the record already shows (`gh issue view --comments` on the
+git-native backend; the resolved adapter's own read operation under Option C). Findings gained an entry → advance status — file
 backend: frontmatter `open` → `doing`, `done` once shipped, or `wontfix`; git-native: `doing` is a
 label, `done` closes the issue, `wontfix` closes with a `wontfix` label; Option C: the resolved
 adapter's own status representation (Linear: a state of the mapped type — `doing`/`done`/`wontfix`
@@ -274,3 +285,9 @@ section or issue comment) — OR the seed was redirected to `file-feature`/`file
 (first classification only) and the sibling invocation was reported; no bug record is owed on a
 redirected seed, and no build is dispatched BY THIS SKILL either way — a sibling reached by
 redirect runs its own contract, including its own build/no-build rule.
+
+On a RESUME (any entry through Phase 1's id-resolves branch), this Done-when is never satisfied
+by the record's pre-existing state alone, however complete — it additionally requires Phase 1's
+own typed status line to have been emitted this invocation, per that phase's own rule above; a
+pre-populated Findings entry or an already-`done` status found at entry does not pre-satisfy this
+condition.
