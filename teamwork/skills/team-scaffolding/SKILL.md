@@ -115,9 +115,15 @@ date · repo) — this is the roster peers read for discovery (Phase 3).
 already seeded by now — either Phase 1's bare-invocation branch seeded it via the batched
 interview before any role bound, or its role-token branch seeded it with canonical defaults
 directly (the explicit token stood in for the interview). Either way seeding never runs twice: an
-absent manifest at this point is a Phase 1 defect, not something Phase 2 re-derives. Append this
-role's `live_state.joined` entry (role, mode, date, `action: "joined"`, `agent_name: null` for a
-manual seat) — field semantics: `fleet-manifest-schema.md`. Every other role's existing entry and
+absent manifest at this point is a Phase 1 defect, not something Phase 2 re-derives. **Resolve
+this session's real `SendMessage` address before appending** — the same mechanic
+`fleet-bootstrap` Phase 1 step 5 uses for the `agent` seat, extended here to every role this
+command binds: read it from `ListAgents`, matched to THIS session's own transcript/session id (the
+narrow self-identity exception to the peer-discovery ban in `fleet-rules` Section 1 — resolving
+this session's own already-known identity is not a discovery act), never the printed/aspirational
+role label. Append this role's `live_state.joined` entry (role, mode, date, `action: "joined"`,
+`agent_name`: the resolved address — never `null` for a manual seat) — field semantics:
+`fleet-bootstrap`'s `references/fleet-manifest-schema.md`. Every other role's existing entry and
 the seat-tier table are read-only from here.
 
 ## Phase 3 — Write or verify the permission profile
