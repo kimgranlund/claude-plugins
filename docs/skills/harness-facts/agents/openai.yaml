@@ -1,0 +1,3 @@
+interface:
+  display_name: "Harness Facts"
+  short_description: "Harvest a project's context for a CODING AGENT'S OWN HARNESS."

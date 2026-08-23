@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bloat Audit"
+  short_description: "Run the busy-work / over-specification audit over a skill, agent, command, or any corpus of instruction-carrying markdown — ceremony disproportionate to task size, prose that spends words without buying instruction- following value, and content restated across files instead of cited once."

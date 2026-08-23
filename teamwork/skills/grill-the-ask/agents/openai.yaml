@@ -1,0 +1,3 @@
+interface:
+  display_name: "Grill The Ask"
+  short_description: "DERIVE the load-bearing design decisions for a greenfield system, component family, or feature whose decision space is mostly unmade."

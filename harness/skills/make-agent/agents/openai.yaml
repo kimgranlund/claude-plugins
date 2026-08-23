@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Agent"
+  short_description: "Forge a Claude Code subagent through five gated phases: fork-vs-agent route check, dispatch interview, thin-shell draft, cold-start language pass, lint + spawn smoke test."

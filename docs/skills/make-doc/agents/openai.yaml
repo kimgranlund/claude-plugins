@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Doc"
+  short_description: "Author a functional document — ADR, PRD, SPEC, LLD, PLAN, ROADMAP, TICKET, TASK, IDR, or RDD — through gated phases: route, capture intent, draft, validate."

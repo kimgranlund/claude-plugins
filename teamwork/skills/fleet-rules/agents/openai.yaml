@@ -1,0 +1,3 @@
+interface:
+  display_name: "Fleet Rules"
+  short_description: "Fleet protocol AND how skills/subagents/teams compose: coordination, claim-guard, comms, version-slot, session-death, pin-race, incoming triage, sealed dispatch, preload-vs-discovery."

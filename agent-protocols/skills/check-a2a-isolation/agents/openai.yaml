@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check A2a Isolation"
+  short_description: "Prove that two (or more) agents interact ONLY over the declared wire — no shared context, no prompt leakage, no side-channel."

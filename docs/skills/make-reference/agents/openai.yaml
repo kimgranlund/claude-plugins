@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Reference"
+  short_description: "Author or review a referential knowledge document (a skill references/ file, an @-imported or Project Knowledge doc) against the bundled rubric."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Project Facts"
+  short_description: "Harvest a project's DOMAIN KNOWLEDGE — business logic, architectures, unique-IP structures for a human/business reader."

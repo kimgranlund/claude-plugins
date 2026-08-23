@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Figma Make Kit"
+  short_description: "Author, evaluate, or regenerate a Figma Make design-system guidelines/ folder for any theme or brand."

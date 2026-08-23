@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bind Build"
+  short_description: "Makes this session a dedicated build seat: it adopts the build-leader agent's own contract directly — every ticket id or build ask sent here is driven through dispatch-ticket's full record-first procedure, with the interactive branches alive (the live clarify question the unattended agent cannot ask) — and holds that discipline until the session ends."

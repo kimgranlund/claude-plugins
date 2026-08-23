@@ -1,0 +1,3 @@
+interface:
+  display_name: "Llm Gateway Facts"
+  short_description: "The swappable multi-LLM-provider gateway pattern — project-agnostic."

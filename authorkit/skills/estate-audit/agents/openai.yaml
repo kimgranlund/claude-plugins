@@ -1,0 +1,3 @@
+interface:
+  display_name: "Estate Audit"
+  short_description: "The estate-audit family index — naming-audit, bloat-audit, attention-audit, pattern-audit, doctrine-audit, and orchestration-audit are six read-only diagnostic instruments sharing one batch-sweep mechanic, consolidated behind one parameterized agent (estate-audit-agent, issue #293/#272)."

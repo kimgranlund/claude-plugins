@@ -1,0 +1,3 @@
+interface:
+  display_name: "Rename Planning"
+  short_description: "Plan a single artifact rename: propose the conforming target name and enumerate the full blast radius — every invocation string, relation edge, wrapper, hook, and workflow config the rename touches."

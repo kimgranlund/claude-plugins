@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make A2a Agent"
+  short_description: "Design and build an A2A-conformant agent — server or client side."

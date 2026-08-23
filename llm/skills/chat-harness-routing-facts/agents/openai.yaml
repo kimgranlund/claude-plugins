@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chat Harness Routing Facts"
+  short_description: "How a chat-agent harness exposes capabilities as load-on-demand skills vs."

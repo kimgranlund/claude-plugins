@@ -1,0 +1,3 @@
+interface:
+  display_name: "Watch Tickets"
+  short_description: "The issue-sorter agent's own per-firing procedure — discover items since the last checkpoint, classify each one's shape, trust-check the filing author against the friendlies allow-list, mint or hold, and run the first-firing REQ-011 roster and REQ-013 GitHub-MCP-offer interviews."

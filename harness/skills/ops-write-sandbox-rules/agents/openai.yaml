@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ops Write Sandbox Rules"
+  short_description: "The .claude/ops/ write-sandbox contract (issue #125): why decision-watcher, issue-sorter, repo-cleaner, and chore-planner carry no Write tool, what a fenced target-pathed payload block is, and how chore-lead applies their computed state instead."

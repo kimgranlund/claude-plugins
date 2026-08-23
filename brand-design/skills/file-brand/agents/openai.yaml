@@ -1,0 +1,3 @@
+interface:
+  display_name: "File Brand"
+  short_description: "Stamps a finished (or partial) brand corpus into a distributable — an installable plugin, a Claude-chat cloud skill, a standalone MCP, or the corpus repo itself made into its own Claude-ready seat — and runs the brand-lint structural check before ratifying."

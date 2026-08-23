@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Everything"
+  short_description: "Audit the whole harness surface — skills, agents, hooks, entry files, plugins — in one sweep: deterministic lint pass, then fan-out fresh-context reviews against the matching standards, then a triage table routing every finding to a fix, a decision, or permanent infrastructure."

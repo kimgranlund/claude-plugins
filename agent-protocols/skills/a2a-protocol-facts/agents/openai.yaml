@@ -1,0 +1,3 @@
+interface:
+  display_name: "A2a Protocol Facts"
+  short_description: "Explains the A2A (Agent2Agent) wire protocol + this estate's zero-dep implementation (@agent-ui/a2a, spec v0.3.0)."

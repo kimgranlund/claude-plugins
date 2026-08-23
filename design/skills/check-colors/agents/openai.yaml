@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Colors"
+  short_description: "Use for a palette/mapping — contrast, hue, evenness, CVD-safety — emits a ColorProof: a full WCAG/APCA sweep, or one pair VERDICT — \"check the contrast ratio of this text on this background\", \"does it meet the accessibility contrast floor\", \"does this clear 3:1 once composited\"."

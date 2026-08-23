@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Script"
+  short_description: "AUTHOR a bundled scripts/taskname.py|mjs end to end, right now — qualify, plan, confirm, then BUILD it (selftest green, negative control bites, wired to its caller and the gate)."

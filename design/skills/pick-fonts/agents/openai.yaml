@@ -1,0 +1,3 @@
+interface:
+  display_name: "Pick Fonts"
+  short_description: "Design an opinionated 15-voice typography system from a brand brief: pick a font pairing (\"pick a body and display pairing\"), verify a chosen pairing's craft (\"is this pairing metric-compatible\"), decide which typeface fills each voice, or turn \"modern and clean\" into a specific point in design space — territory, rationale, coherence, craft verification; font-token-rules realizes it."

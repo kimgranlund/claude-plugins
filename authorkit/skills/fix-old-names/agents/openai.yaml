@@ -1,0 +1,3 @@
+interface:
+  display_name: "Fix Old Names"
+  short_description: "Sweep a repo for references to RETIRED plugin, skill, agent, or command names from a rename wave and rewrite the live ones."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Adopt Plugin"
+  short_description: "Declares an external Claude Code plugin or marketplace in a repo's settings.json so contributors who trust the repo can install it."

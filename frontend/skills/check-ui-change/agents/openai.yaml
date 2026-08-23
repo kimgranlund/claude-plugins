@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Ui Change"
+  short_description: "Verify a UI change end-to-end against the running artifact before declaring it done — start the app, interact with the change directly, screenshot before/after, check the console, audit performance."

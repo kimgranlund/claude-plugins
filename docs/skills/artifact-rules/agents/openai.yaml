@@ -1,0 +1,3 @@
+interface:
+  display_name: "Artifact Rules"
+  short_description: "Procedure-side standards for artifact/report-page authoring: classifying a content source (report/retro vs handbook vs both), composing content from a project's own records tree (Intent/User-Story/Concept/System layers to chapters), the `css_build.py` script interface, and the provenance-footer/refresh procedure."

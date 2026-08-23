@@ -1,0 +1,3 @@
+interface:
+  display_name: "Close Session"
+  short_description: "Wraps up a session at the moment it's ending: captures a real finding, verifies writes landed, states one verdict on THIS session's own worktree."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Repo Sync"
+  short_description: "Safe fast-forward-only main sync, feature-branch rebase, PR-merge verification, and post-pull dev-freshness (build-tool cache / restart) for a shared git checkout."

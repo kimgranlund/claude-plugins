@@ -1,0 +1,3 @@
+interface:
+  display_name: "Material Token Facts"
+  short_description: "Use for what a `--md-sys-{color,typescale,size,radius,space,inset,gap,border,focus-ring}-*` token MEANS — glossary across color/typography/geometry: \"surface-lowest vs surface-lower\", \"-dim vs -low\", \"what's the kicker voice for\", \"difference between the scrim strengths\" or between two token families."

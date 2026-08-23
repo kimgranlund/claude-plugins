@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Focus"
+  short_description: "Verify focus-ring recipes, hit-target minimums, focus order, and keyboard affordances — and prescribe compliant values where missing."

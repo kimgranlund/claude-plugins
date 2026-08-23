@@ -1,0 +1,3 @@
+interface:
+  display_name: "Doctrine Audit"
+  short_description: "Sweep an estate for doctrine drift: a canon rule a dependent violates, omits, or paraphrases away from."

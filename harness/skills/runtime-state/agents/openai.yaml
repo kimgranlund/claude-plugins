@@ -1,0 +1,3 @@
+interface:
+  display_name: "Runtime State"
+  short_description: "Locate — never export — session .jsonl transcripts: the CURRENT session's own transcript path plus its recent subagent transcripts (agent-*.jsonl, project/worktree-scoped dir), or a PAST session's by repo path or slug."

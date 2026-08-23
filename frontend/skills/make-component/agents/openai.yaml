@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Component"
+  short_description: "Author a zero-dependency web component."

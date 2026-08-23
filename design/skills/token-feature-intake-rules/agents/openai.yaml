@@ -1,0 +1,3 @@
+interface:
+  display_name: "Token Feature Intake Rules"
+  short_description: "Intake schema for a token/palette/typography feature ticket — which roles/ramps, both-theme reach, and consumers on one plane; specific token values, contrast gates, and the interaction-state ladder on the other."

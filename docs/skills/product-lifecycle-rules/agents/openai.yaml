@@ -1,0 +1,3 @@
+interface:
+  display_name: "Product Lifecycle Rules"
+  short_description: "General doctrine for how products get built: three nested loops (North star -> Foundation -> Releases), the seven-stage build loop (Kickoff..Spec lock..Verify..Retro; Spec lock the only hard gate), the IDR/ADR/RDD alignment doc grammar, knowledge-base maturation, habits, named anti-patterns."

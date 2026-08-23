@@ -1,0 +1,3 @@
+interface:
+  display_name: "Manifest Authoring"
+  short_description: "Seed or edit a target estate's naming.manifest.json — lexicon membership proposals, ObjectVocab registrations with the anti-ambiguity gate, AuthorRegistry, and exemptions enumeration."

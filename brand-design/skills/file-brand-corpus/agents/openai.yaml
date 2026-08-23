@@ -1,0 +1,3 @@
+interface:
+  display_name: "File Brand Corpus"
+  short_description: "Exports a brand engagement's deliverables as a navigable Markdown corpus plus a self-contained site/ viewer (sticky nav, per-page ToC, GFM tables, mermaid, DOMPurify-sanitized)."

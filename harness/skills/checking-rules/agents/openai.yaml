@@ -1,0 +1,3 @@
+interface:
+  display_name: "Checking Rules"
+  short_description: "Discipline for how a review runs: evidentiary rigor for dismissals, runtime checks over claims not a changelog, and steelmanning before filing."

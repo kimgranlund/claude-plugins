@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Artifact"
+  short_description: "Build/rebuild a rendered Artifact/report page — consume a design system (DESIGN.md/tokens.json), or synthesize one via design if absent, plus a report, handbook, or records tree (composed into chapters) into one page: light/dark CSS, house shell, themed mermaid, provenance footer."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Brand Guidelines"
+  short_description: "Builds a brand-guidelines section by guided 2x2 choice — presents four concrete options for a domain (mark, voice, color, type, expression, governance), the designer picks a quadrant + comments, and the choice accumulates into a provenance-traced corpus."

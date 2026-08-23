@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Brand Rubric"
+  short_description: "Adversarially scores existing brand work against the rubric library — positioning, the Foundation Canon, an expression system, voice/tone, a brief, a full identity."

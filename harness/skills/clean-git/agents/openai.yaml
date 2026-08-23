@@ -1,0 +1,3 @@
+interface:
+  display_name: "Clean Git"
+  short_description: "The repo-cleaner agent's own per-firing procedure — inventory worktrees/branches/PRs/claimed tickets, classify each finding, and execute ONLY the three narrow actions already gated (campaign_close.py on a verified-merged PR, sync_main.py on an interactive dirty-main, a host repo's own gated branch-reap script), everything else proposed only."

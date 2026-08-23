@@ -1,0 +1,3 @@
+interface:
+  display_name: "A2ui Protocol Facts"
+  short_description: "The A2UI wire protocol + this repo's zero-dep renderer (@agent-ui/a2ui)."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bind Intake"
+  short_description: "Makes this session a dedicated intake seat: it adopts the intake-leader agent's own contract directly — every raw report, idea, or chore sent here becomes a durable record via the file-bug/file-feature/file-task/file-leftovers procedures, applied inline with a live clarifying round — and holds that discipline until the session ends."

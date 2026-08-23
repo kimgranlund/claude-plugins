@@ -1,0 +1,3 @@
+interface:
+  display_name: "Check Reconstructibility"
+  short_description: "ADR-0022's own instrument (\"the repo is the backup\"): a read-only sweep reporting what a fresh machine + clone of `origin/main` could NOT recover today, classified committed / enrolled-with-mitigation / defect / open (the four named exceptions: memory dir, plugin cache, credentials, user-scoped state)."

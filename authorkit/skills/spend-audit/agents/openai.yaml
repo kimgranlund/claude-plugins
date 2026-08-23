@@ -1,0 +1,3 @@
+interface:
+  display_name: "Spend Audit"
+  short_description: "Instrument idr-0010's estate economy claim — a per-firing, per-archetype token-spend ledger at `.claude/ops/spend-ledger.csv` (attention-trend.csv-shaped, append-only), plus a merged-PR label-cohort split (`--label`) for lane-vs-rest comparison."

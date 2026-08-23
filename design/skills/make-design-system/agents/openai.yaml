@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Design System"
+  short_description: "The cross-platform hub for design-system files LLM agents consume."

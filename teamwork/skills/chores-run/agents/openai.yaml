@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chores Run"
+  short_description: "Arms the recurring \"drain the queue and ship PRs\" loop the operator otherwise re-types by hand each session: writes/refreshes a durable punch list (.claude/ops/punch-list.md), then prints a ready-to-paste /goal block whose own turns compose mobilize-chores' procedure (sweep + per-ticket build-leader dispatch, one worktree per ticket) — with the ADR-0012 carve-out only when passed — until every open ticket reaches a terminal punch-list state, or the wave cap is hit."

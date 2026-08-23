@@ -1,0 +1,3 @@
+interface:
+  display_name: "A2ui Chat Agent Facts"
+  short_description: "The A2UI LIVE-AGENT in @agent-ui/a2ui — a real LLM emitting A2UI."

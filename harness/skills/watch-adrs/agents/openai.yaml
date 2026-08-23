@@ -1,0 +1,3 @@
+interface:
+  display_name: "Watch Adrs"
+  short_description: "decision-watcher's per-firing procedure — classify the ADR corpus vs a content-hash checkpoint, judge new/amended/superseded Decisions, queue candidates, advance the checkpoint; plus its Revalidation mode — sampled round-robin RE-TEST of accepted-ADR / locked-IDR / locked-RDD claims into a confirmed/falsified/untestable verdict (idr-0009)."

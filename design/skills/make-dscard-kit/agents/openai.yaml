@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Dscard Kit"
+  short_description: "Author, evaluate, or regenerate a Claude Design / Claude Code export bundle — DESIGN.md + tokens.json + @dsCard previews — from a corpus (css, tokens, code, brand decks)."

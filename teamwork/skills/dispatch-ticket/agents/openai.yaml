@@ -1,0 +1,3 @@
+interface:
+  display_name: "Dispatch Ticket"
+  short_description: "Use when invoked by name from /build-feature's body, the build-leader agent, or a /bind-build session driving its targets — never model-routed from a raw ask."

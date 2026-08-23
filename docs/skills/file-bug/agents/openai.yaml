@@ -1,0 +1,3 @@
+interface:
+  display_name: "File Bug"
+  short_description: "Capture a user-reported bug as a durable record, then dispatch the investigation."

@@ -80,6 +80,7 @@ Old handles remain greppable only in ledgers, CHANGELOGs, ADRs, and attics.
 | `llm-jsonl-streaming` | `llm-streaming-facts` |
 | `llm-provider-gateway` | `llm-gateway-facts` |
 
+v1.0.18 · 2026-08-23 · closes #886 (LLD-0025 W1): new plugin bytes — `harness_emit.py` (harness) derives a Codex overlay (`.codex-plugin/plugin.json`, per-skill `agents/openai.yaml`, `HARNESS-NOTES.md`) from this plugin's own manifest/SKILL.md frontmatter, gated fresh by release_gate.py's new G15; a cached install must refresh to receive the overlay. PATCH: overlay bytes only, no behavior change to this plugin's own skills.
 v1.0.17 · assembled 2026-08-19 · #743 (PR #742's checker verdict 1/4 — routing debt): the 1.0.16
 upsert wave landed `llm-gateway-facts`' 7th axis (`live-ops-diagnostics-and-model-tiering.md`)
 with ZERO description edits by directive, leaving axes 5-7 (single-flight 401 refresh, retry

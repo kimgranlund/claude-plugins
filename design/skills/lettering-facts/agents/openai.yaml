@@ -1,0 +1,3 @@
+interface:
+  display_name: "Lettering Facts"
+  short_description: "Use for typography/lettering questions — comparing, explaining, classifying, specifying type: \"my headings jump when the webfont swaps in\", \"does OpenDyslexic actually help\", \"why does this font look boring/generic\", \"why does text-wrap: balance not work in my browser\", CSS `text-wrap: balance`/`pretty` support — covers type anatomy, classification (Vox-ATypI, humanist/geometric/grotesque), metric-compatible fallback stacks, font personality, world scripts, OpenType features, variable-font axes, text accessibility."

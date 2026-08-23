@@ -1,0 +1,3 @@
+interface:
+  display_name: "Save Lessons"
+  short_description: "Detects when a fact crosses the bar for durable project knowledge — a correction restated a third time, a ratified decision, a convention worth keeping — into a knowledge-pack entry."

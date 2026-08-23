@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Writing Rules"
+  short_description: "Standards for writing Claude Code subagent files that stay thin and enforce structurally."

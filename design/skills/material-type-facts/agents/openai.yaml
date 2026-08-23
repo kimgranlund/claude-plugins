@@ -1,0 +1,3 @@
+interface:
+  display_name: "Material Type Facts"
+  short_description: "Use for Material `--md-sys-typescale-*`/`--font-*` tokens — font/size/weight/leading/tracking for heading, body, label, menu item, table cell, button (\"which voice/level\", \"why is this text the wrong size/weight\") — on the fifteen-voice scale extending M3: pick VOICE (READ prose vs OPERATE chrome) and LEVEL — never hardcode px/line-height/tracking/family."

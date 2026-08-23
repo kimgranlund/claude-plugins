@@ -1,0 +1,3 @@
+interface:
+  display_name: "Artifact Styling Rules"
+  short_description: "Standards for styling/authoring Claude Artifacts: runtime constraints (CSP inlining, 16MB cap, theme tri-state, body-ground, native mermaid); the token role-alias method (light-dark() build-time CSS, never a re-ramp); type/layout doctrine (system-ui body, mono interactive, width/spacing/radius scales); mermaid authoring + re-theming; shell/genre doctrine (narrative vs tabbed, hero-as-thesis)."

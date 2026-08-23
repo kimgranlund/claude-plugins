@@ -1,0 +1,3 @@
+interface:
+  display_name: "Material Color Facts"
+  short_description: "Use when choosing the COLOR of any UI element — which color/role a button, text, card, border, or state should take (\"which color should this button use\", \"what color for a disabled input border\", \"what token for this text background\", \"why is this the wrong color\", \"wire the theme colors\", \"add hover/disabled colors\", \"make it work in dark mode\")."

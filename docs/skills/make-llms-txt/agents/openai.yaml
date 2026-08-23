@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Llms Txt"
+  short_description: "Author or review an llms.txt (and llms-full.txt) — the agent-facing map of a documentation corpus — to the standard shape, scoring it against the bundled rubric."

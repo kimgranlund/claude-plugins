@@ -1,0 +1,3 @@
+interface:
+  display_name: "Pattern Audit"
+  short_description: "Sweep a repo/corpus for a caller-supplied pattern or natural-language instruction and emit a structured match dataset (id/file/line/col/match/context/kind; kinds instruction-labeled) for a downstream step: review, bulk edit, migration, or an audit's own Phase 0."

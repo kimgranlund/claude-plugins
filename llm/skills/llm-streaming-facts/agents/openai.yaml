@@ -1,0 +1,3 @@
+interface:
+  display_name: "Llm Streaming Facts"
+  short_description: "Streaming structured output from an LLM — project-agnostic."

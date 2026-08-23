@@ -1,0 +1,3 @@
+interface:
+  display_name: "Exemption Retire"
+  short_description: "Retire one exemption opportunistically — verify it via naming-audit, chain rename-planning for the plan, then rename-execute (whose own confirmation gate and atomic apply include the manifest exemption shrink) — for an artifact that is already being touched anyway."

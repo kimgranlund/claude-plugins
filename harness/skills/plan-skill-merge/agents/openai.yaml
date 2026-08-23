@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Skill Merge"
+  short_description: "Decide whether several thin, overlapping, or porous knowledge skills should merge into one context-efficient pack — packs that step on each other's routing, or scattered siblings with gaps."

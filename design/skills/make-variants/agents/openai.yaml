@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Variants"
+  short_description: "Publish an Artifact of N variants along declared axes, grounded in the project's design system when one exists, each card voted up/down with a note, serializing a live variant-feedback/v1 JSON block pasted back to resume at the same URL."

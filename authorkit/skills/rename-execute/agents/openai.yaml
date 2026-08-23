@@ -1,0 +1,3 @@
+interface:
+  display_name: "Rename Execute"
+  short_description: "Atomically apply one rename plan produced by rename-planning — folder, frontmatter, every enumerated invocation string, relation edges, exemption retirement — then verify via the validator, reverting the whole rename on any new error."

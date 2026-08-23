@@ -1,0 +1,3 @@
+interface:
+  display_name: "Script Writing Rules"
+  short_description: "Standards for bundled scripts — code instead of prose, shipped as scripts/taskname.py|mjs with a selftest that proves it."

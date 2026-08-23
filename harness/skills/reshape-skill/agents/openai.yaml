@@ -1,0 +1,3 @@
+interface:
+  display_name: "Reshape Skill"
+  short_description: "Execute an already-decided skill-corpus split, merge, or rename from its validated manifest."

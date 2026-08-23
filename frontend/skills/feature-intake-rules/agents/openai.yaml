@@ -1,0 +1,3 @@
+interface:
+  display_name: "Feature Intake Rules"
+  short_description: "Per-shape intake schemas for a UI feature ticket — component/module, layout/shell, UX flow, cross-cutting UX — fields lifted from the owning build skill's own two-plane axes, each naming its build owner and DoD checker."
