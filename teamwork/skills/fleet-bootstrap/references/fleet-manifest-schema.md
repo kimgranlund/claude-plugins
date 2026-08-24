@@ -5,22 +5,31 @@ Per-repo variation in how the standing fleet is run is DATA, not a duplicated co
 this file is the only thing that varies per repo). `/team-scaffolding <role>` seeds/updates it on
 first use in a virgin repo; `/fleet-bootstrap` reads and extends it across a full cold start.
 
-**Location and resolution (ladder, #906).** The canonical home is `.claude/ops/fleet.json`, but
-that prefix may sit at the repo root OR at a nested app scope — the app-scoped bootstrap
-re-homing ruling (Kim 2026-08-23) deliberately homes a fleet's record at an app subdirectory
-(e.g. `frontend/apps/<app>/.claude/ops/fleet.json`), so an app-scoped record is a ruled reality,
-not a drift case, and a legacy repo-root copy may coexist beside it. Every reader resolves
-cwd-first: the nearest `.claude/ops/fleet.json` walking from the current working directory
-upward to the repo root, first hit wins; once a nearer file resolves, a farther one is never
-consulted, whatever either contains. Readers report which path they resolved.
+**Location and resolution (scope root, #911 — supersedes the #906/#909 nearest-`fleet.json`
+ladder).** The fleet SCOPE ROOT is the nearest ancestor directory, walking from the current
+working directory upward and BOUNDED at the repo root (`git rev-parse --show-toplevel`, or the
+current worktree's own root — the walk never crosses that boundary in either direction), that
+contains a `.claude` directory AT ALL — never the nearest directory that happens to already hold
+a `fleet.json`. cwd itself counts as a candidate; the walk does not require a strict parent. The
+canonical path is always `<scope root>/.claude/ops/fleet.json`. This fixes the shadowing bug
+#909's own ladder produced: an app with its own `.claude/` (e.g. `frontend/apps/<app>/.claude/`)
+is its own scope root the moment that directory exists, whether or not `fleet.json` has been
+seeded under it yet — an ancestor's `fleet.json` (e.g. the repo root's) sitting ABOVE that scope
+root is out of scope, never consulted and never written, however populated it is. A legacy
+repo-root copy may still coexist beside an app-scoped one; the two are unrelated records, never
+merged or compared. **No `.claude` directory found anywhere between cwd and the repo root
+(inclusive)** → there is no scope root to resolve at all; a reader stops and reports that
+explicitly rather than falling back to the repo root by silent default or continuing to walk past
+it (a repo with genuinely no `.claude/` anywhere is not itself a fleet-shaped case). Readers
+report the resolved scope root (its basename) and the `fleet.json` path under it.
 
-**The same ladder governs a virgin SEED, not only a read (#909).** `/fleet-bootstrap` Phase 0
-runs this identical cwd-to-root walk before deciding there is nothing to read. Nothing found at
-any rung → this is a fresh seed, and the seed root is the INVOKING cwd's own `.claude/ops/` when
-cwd is not the repo root (the app-scoped case this section already rules a reality above), or the
-repo root's `.claude/ops/` when cwd IS the repo root — never a hardcoded repo-root default
-regardless of where the command was invoked from. The resolved seed root is named in the Phase 6
-report so a later reader knows where to look without re-walking.
+**The same rule governs a virgin SEED, not only a read (#909, refined #911).** `/fleet-bootstrap`
+Phase 0 resolves the scope root by this identical `.claude`-directory walk before deciding
+whether there is anything to read. `<scope root>/.claude/ops/fleet.json` absent → this is a fresh
+seed AT THAT SCOPE ROOT — never fall through to an ancestor's existing `fleet.json` just because
+one exists farther up, and never default to the repo root when a nearer `.claude` directory was
+found. The resolved seed root is named in the Phase 6 report so a later reader knows where to
+look without re-walking.
 
 ## Shape
 
@@ -76,12 +85,16 @@ takeover record.
 
 - **Schema key vs. printed session name (`agent` role only).** `fleet.json`'s role key stays
   `agent` everywhere in this schema — `seats.agent`, `live_state.joined[].role: "agent"` — and a
-  builder never renames it. The PRINTED/roster session name for that role is `{repo}-marshal`,
-  not `{repo}-agent` (`team-scaffolding` Phase 1/2, `fleet-bootstrap` Phase 1): the seat's session
-  identity matches the `teamwork:bind-team` contract it adopts (ADR-0020's marshal vocabulary —
-  `{repo}-team-lead` was this same split's prior value, superseded 2026-08-17, issue #586), while
-  the schema key stays the generic role bucket. Every other role's session name is its role token
-  verbatim (`{repo}-reviewer`, `{repo}-planner`, `{repo}-product`) — only `agent` has this split.
+  builder never renames it. The PRINTED/roster session name for that role is `{scope}-marshal`,
+  not `{scope}-agent` (`team-scaffolding` Phase 1/2, `fleet-bootstrap` Phase 1), where `{scope}`
+  is the resolved fleet SCOPE ROOT's own directory basename (#911 — `signup-marshal` for a fleet
+  scoped to `frontend/apps/signup`, plain `{repo}-marshal` when the scope root IS the repo root,
+  the common case and the one most of this schema's prose still writes out for brevity): the
+  seat's session identity matches the `teamwork:bind-team` contract it adopts (ADR-0020's marshal
+  vocabulary — `{repo}-team-lead` was this same split's prior value, superseded 2026-08-17, issue
+  #586), while the schema key stays the generic role bucket. Every other role's session name is
+  its role token verbatim relative to the same scope (`{scope}-reviewer`, `{scope}-planner`,
+  `{scope}-product`) — only `agent` has the `-marshal` split.
   **Role-key migration considered and declined this wave (issue #586, 2026-08-17).** #586's
   acceptance criteria left the schema key's migration to the builder's own cheap/not-cheap call.
   Not cheap here: the key is a live data field read by every existing `.claude/ops/fleet.json`
@@ -90,7 +103,7 @@ takeover record.
   potentially by other repos' own copies of this convention with no shared migration path: a
   rename would need a cross-repo sweep this ticket's blast radius never enumerated, not just a
   same-file text edit. The split stays as designed — schema key `agent`, printed name now
-  `{repo}-marshal` — confirmed schema-stable, not migrated.
+  `{scope}-marshal` — confirmed schema-stable, not migrated.
 - **`seats.<role>.tier`** — the model/effort tier this seat runs at in THIS repo. Starts equal to
   the canonical seat ladder (`team-scaffolding`'s Phase 4 point 1; retiered 2026-08-22, Kim's
   ruling: agent sonnet+high, reviewer sonnet+high, planner fable+medium, product sonnet+xhigh —
@@ -127,7 +140,7 @@ takeover record.
 - **`live_state.joined[].agent_name`** — **the `SendMessage` address for this row's holder.**
   Read from `ListAgents` at bind time — the harness-assigned session name the holder is actually
   reachable at (e.g. `"plugins-75"`) — never the printed/aspirational role label
-  (`"{repo}-marshal"`, `"agent"`). `#902` fixed `fleet-bootstrap`'s own Phase 1 `agent`-seat bind
+  (`"{scope}-marshal"`, `"agent"`). `#902` fixed `fleet-bootstrap`'s own Phase 1 `agent`-seat bind
   (fresh-join and takeover) to write this field rather than leave it `null`, since a `null` here on
   a still-live row is what stranded every peer trying to route a fleet-shaped ask back to this
   repo's marshal (`fleet-rules` Section 7 resolves its routing target off this exact field). **Now

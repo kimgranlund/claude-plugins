@@ -15,21 +15,30 @@ rather than applying this section itself").
 
 ## Procedure
 
-1. **Resolve `fleet.json` cwd-first, then read it.** The record is the NEAREST
-   `.claude/ops/fleet.json` walking from the current working directory upward to the repo root —
-   first hit wins, and once a nearer file exists the farther one is never consulted, whatever
-   either contains (#906: a stale repo-root copy shadowing a live app-scoped record produced a
-   false "recorded-but-unresolvable marshal"). App-scoped records are a ruled reality, not drift
-   — the app-scoped bootstrap re-homing ruling (Kim 2026-08-23) deliberately homes a fleet.json
-   at an app subdirectory; a legacy repo-root copy may coexist. Report which path was used in
-   step 5's report regardless of outcome. Take `live_state.joined`'s entries for `role: "agent"` and
-   select the LATEST one by array order. **Liveness is that row's `action` field** — `"joined"` or
-   absent counts as live, `"released"` does not (the canonical rule, `fleet-bootstrap`'s
-   `references/fleet-manifest-schema.md`, cited not restated). **No file at any rung of the walk,
-   absent `agent` role entries, or the latest row's `action` is `"released"`** (all judged against
-   the ONE resolved file, never a farther fallback) → report "no live marshal (checked
-   `<resolved path>`, or: no fleet.json found between `<cwd>` and the repo root) — run
-   /fleet-bootstrap in a dedicated terminal" and stop. Do not proceed to step 2.
+1. **Resolve the fleet SCOPE ROOT, then read `fleet.json` under it.** (#911 — supersedes the
+   #906/#909 nearest-`fleet.json` ladder.) The scope root is the nearest ancestor directory,
+   walking from the current working directory upward and BOUNDED at the repo root (cwd itself
+   counts as a candidate; the walk never crosses the repo-root boundary — full definition in
+   `fleet-bootstrap`'s `references/fleet-manifest-schema.md`, canonical there, cited not
+   restated), that contains a `.claude` directory AT ALL — never the nearest directory that merely
+   happens to already hold a `fleet.json`. The target path is always
+   `<scope root>/.claude/ops/fleet.json`; an ancestor's `fleet.json` sitting ABOVE the resolved
+   scope root is out of scope and never consulted, whatever it contains (the #909 bug: a
+   repo-root copy shadowing an app's own scope produced a false "recorded-but-unresolvable
+   marshal" — the #911 fix is that an app with its own `.claude/` is always its own scope,
+   regardless of whether an ancestor `fleet.json` exists). App-scoped records are a ruled reality,
+   not drift — the app-scoped bootstrap re-homing ruling (Kim 2026-08-23) deliberately homes a
+   `fleet.json` at an app subdirectory; a legacy repo-root copy may coexist, unrelated. Report the
+   resolved scope root and which path was used in step 5's report regardless of outcome. Take
+   `live_state.joined`'s entries for `role: "agent"` and select the LATEST one by array order.
+   **Liveness is that row's `action` field** — `"joined"` or absent counts as live, `"released"`
+   does not (the canonical rule, `fleet-bootstrap`'s `references/fleet-manifest-schema.md`, cited
+   not restated). **No `.claude` directory found anywhere between cwd and the repo root
+   (inclusive), no `fleet.json` under the resolved scope root, absent `agent` role entries, or
+   the latest row's `action` is `"released"`** (all judged against the ONE resolved scope root,
+   never a farther ancestor's file) → report "no live marshal (checked `<resolved path>`, or: no
+   `.claude` directory found between `<cwd>` and the repo root) — run /fleet-bootstrap in a
+   dedicated terminal" and stop. Do not proceed to step 2.
 
    **Live row but `agent_name` is `null`/absent** (a legacy pre-fix entry — team-scaffolding's
    manual-join path wrote `agent_name: null` unconditionally before this same change closed that
@@ -79,12 +88,14 @@ rather than applying this section itself").
 
 ## Failure branches
 
-- **No `fleet.json` at any rung of the cwd-to-root walk, or the resolved file has no live
-  `agent` row (latest row's `action` is `"released"` or absent entirely)** (step 1) → not a fleet
-  repo, or no live marshal yet. Report: "no live marshal — run /fleet-bootstrap in a dedicated
-  terminal", naming the resolved path checked (or that no fleet.json exists between cwd and the
-  repo root). Stop — never fall through to a handshake against nothing, and never re-try the
-  verdict against a farther fleet.json once a nearer one resolved.
+- **No `.claude` directory found anywhere between cwd and the repo root, no `fleet.json` under
+  the resolved scope root, or the resolved file has absent `agent` role entries or the latest
+  row's `action` is `"released"`** (step 1) → not a fleet repo/scope, or no live marshal yet.
+  Report: "no live marshal — run /fleet-bootstrap in a dedicated terminal", naming the resolved
+  scope root and path checked (or that no `.claude` directory exists between cwd and the repo
+  root). Stop — never fall through to a handshake against nothing, and never re-try the verdict
+  against an ancestor's `fleet.json` once a nearer scope root resolved (with or without a
+  `fleet.json` of its own).
 - **Live `agent` row but `agent_name` is `null`/absent** (step 1, a legacy pre-fix entry) →
   report the row as recorded-but-unresolvable and stop; never treat this the same as "no live
   marshal" and never auto-suggest a takeover — the seat may genuinely still be live.

@@ -5,8 +5,8 @@ argument-hint: "[spawn-list - comma-separated subset of reviewer,planner; defaul
 
 # fleet-bootstrap — one terminal, cold-start the whole fleet
 
-The standing fleet is four seats (`{repo}-marshal` / `{repo}-reviewer` / `{repo}-planner` /
-`{repo}-product`), each already reachable one at a time via `/team-scaffolding <role>` (level 1).
+The standing fleet is four seats (`{scope}-marshal` / `{scope}-reviewer` / `{scope}-planner` /
+`{scope}-product`), each already reachable one at a time via `/team-scaffolding <role>` (level 1).
 This command is level 2: a single terminal drives the whole cold start — adopt orchestrator,
 stand up the product seat, gate on human ratification of the intent layer that seat produces, then
 spawn whichever remaining seats the human wants running in the background. `$ARGUMENTS`: an
@@ -14,28 +14,36 @@ optional comma-separated spawn-list, default empty (see Phase 4).
 
 ## Phase 0 — Seed or read the fleet manifest
 
-**Resolve the ops root cwd-first, symmetric with `fleet-connect` step 1's own ladder
+**Resolve the fleet SCOPE ROOT, symmetric with `fleet-connect` step 1's own rule
 (`references/fleet-manifest-schema.md`'s "Location and resolution" section, canonical there,
-never re-derived here).** Walk from the current working directory upward to the repo root looking
-for `.claude/ops/fleet.json`; first hit wins. **Present at some rung** → that resolved path is THE
-`fleet.json` for the rest of this run — every subsequent Phase's read or write targets this same
-resolved path, never a bare `.claude/ops/fleet.json` re-derived from cwd or the repo root
-(`references/fleet-manifest-schema.md:8-15`: a legacy repo-root copy can coexist beside a
-resolved app-scoped one, so a re-derived path can silently target the wrong file). Read it now as
-the record of who has already joined and at what tier/mode, do not overwrite existing
-`live_state` entries, only append.
-**Absent at every rung** → this is a virgin SEED, not a virgin repo: default the seed root to the
-INVOKING cwd's own `.claude/ops/` when cwd is not the repo root (the app-scoped bootstrap
-re-homing ruling, Kim 2026-08-23 — never assume repo-root just because that's where most repos
-seed), or the repo root's `.claude/ops/` when cwd IS the repo root. Seed `fleet.json` there now
-with the schema in `references/fleet-manifest-schema.md` (seat roster, canonical tier ladder with
-today's date as `justification_date` for every seat still at its canonical tier, `mode: "manual"`
-for every seat, empty `live_state.joined`) — no interview, matching `team-scaffolding`'s own rule
-that an explicit command invocation with no role question asked is itself the human's act of
-declining one; running `/fleet-bootstrap` at all is that same explicit act. **Name the resolved
-root and which branch (existing-read vs. fresh-seed, and for a seed, app-scoped vs. repo-root) in
-Phase 6's report** — every other ops record this skill writes (`fleet-roster.md` and the rest)
-follows this same resolved root for the remainder of the run, never a separately re-derived path.
+never re-derived here — #911, supersedes the #906/#909 nearest-`fleet.json` ladder).** Walk from
+the current working directory upward looking for the nearest ancestor directory that contains a
+`.claude` directory AT ALL — not the nearest one that happens to already hold a `fleet.json`.
+That directory is the scope root; the target path is always `<scope root>/.claude/ops/fleet.json`.
+An ancestor's `fleet.json` sitting ABOVE the resolved scope root is out of scope for this run —
+never consulted, never written, whatever it contains; a nested app with its own `.claude/`
+directory always gets its own fleet, even when an ancestor repo-root `fleet.json` already exists.
+**`fleet.json` present under the resolved scope root** → that path is THE `fleet.json` for the
+rest of this run — every subsequent Phase's read or write targets this same resolved path, never
+a bare `.claude/ops/fleet.json` re-derived from cwd or the repo root. Read it now as the record of
+who has already joined and at what tier/mode, do not overwrite existing `live_state` entries,
+only append.
+**Absent under the resolved scope root** → this is a virgin SEED at THAT scope root, full stop —
+never fall through to an ancestor's `fleet.json` just because one exists farther up the walk, and
+never default to the repo root when a nearer `.claude` directory was found. Seed `fleet.json`
+there now with the schema in `references/fleet-manifest-schema.md` (seat roster, canonical tier
+ladder with today's date as `justification_date` for every seat still at its canonical tier,
+`mode: "manual"` for every seat, empty `live_state.joined`) — no interview, matching
+`team-scaffolding`'s own rule that an explicit command invocation with no role question asked is
+itself the human's act of declining one; running `/fleet-bootstrap` at all is that same explicit
+act. **Name the resolved scope root (its basename) and which branch (existing-read vs.
+fresh-seed, and for a seed, app-scoped vs. repo-root) in Phase 6's report** — every other ops
+record this skill writes (`fleet-roster.md` and the rest) follows this same resolved scope root
+for the remainder of the run, never a separately re-derived path. **`{scope}` for the rest of this
+run's seat naming (Phase 1's `{scope}-marshal` and every roster row) is the resolved scope root's
+own directory basename** — the repo basename when the scope root IS the repo root (the common
+case), or the app directory's own basename (e.g. `signup` for `frontend/apps/signup`) when it
+isn't; never the repo's basename regardless of where the scope root actually resolved.
 **Then run the tier reconcile** (`references/fleet-manifest-schema.md` §"Tier reconcile on every
 bind" — canonical there, never re-derived here): diff every `seats.<role>.tier` against the
 current canonical ladder; a stale-or-unjustified mismatch is flagged to the human with an
@@ -57,7 +65,7 @@ its own entry for the same channel independently.
 
 ## Phase 1 — Register this session as the orchestrator seat
 
-This session registers itself as `{repo}-marshal` (role key `agent`) by performing `team-scaffolding`'s own Phase 1–4
+This session registers itself as `{scope}-marshal` (role key `agent`) by performing `team-scaffolding`'s own Phase 1–4
 mechanics inline — role `agent`, canonical tier, no permission-profile deviation — rather than
 running `/team-scaffolding agent` through the Skill tool. That path is structurally blocked:
 `team-scaffolding` carries `disable-model-invocation: true` (command-only adoption is deliberate
@@ -96,10 +104,10 @@ that same shape.
    session-identity signal to structurally rule out a genuinely different human re-running
    `/fleet-bootstrap` on the same repo and getting treated as a takeover too — same accepted risk
    the hybrid-swap rule already carries for background seats, not a new one.
-2. Print `Seat: {repo}-marshal — takeover` when step 1 found a live entry, `Seat: {repo}-marshal`
+2. Print `Seat: {scope}-marshal — takeover` when step 1 found a live entry, `Seat: {scope}-marshal`
    otherwise, and append the roster row to `fleet-roster.md` alongside the `fleet.json` Phase 0
    resolved — same directory, never a separately re-derived path — under that same
-   `{repo}-marshal` session name (role key `agent`) — suffixed `(takeover)`
+   `{scope}-marshal` session name (role key `agent`) — suffixed `(takeover)`
    in the former case (`team-scaffolding` Phase 2).
 3. `agent` carries no permission-profile deviation (`team-scaffolding` Phase 3) — state that
    explicitly: `No permission-profile deviation for this role — full write access retained`.
@@ -112,7 +120,7 @@ that same shape.
    exception to the peer-discovery ban in `fleet-rules` Section 1 — that ban is about never using
    `ListAgents` to go find some OTHER session; resolving this session's own already-known identity
    is not a discovery act) — the harness-assigned session name this running session is actually
-   reachable at (e.g. `plugins-75`), never the aspirational `{repo}-marshal` label and never left
+   reachable at (e.g. `plugins-75`), never the aspirational `{scope}-marshal` label and never left
    null (#902 — the prior omission stranded every peer trying to route back to a live marshal).
    **Fresh join** (no live entry found in step 1): append `live_state.joined` (`role: agent`,
    `mode: manual`, `action: "joined"`, today's date, `agent_name`: the resolved address) in
@@ -242,13 +250,13 @@ role below.**
 
 ### `planner` — in-process `Agent`-tool dispatch, unchanged
 
-1. Dispatch via the `Agent` tool, `name: "{repo}-planner"`, prompt instructing it to perform
+1. Dispatch via the `Agent` tool, `name: "{scope}-planner"`, prompt instructing it to perform
    `team-scaffolding`'s own Phase 1, 2, and 4 mechanics directly, itself, via ordinary
    `Read`/`Write`/`Edit`/`Bash` tool calls — **never** by invoking `/team-scaffolding planner`
    through the Skill tool, which is structurally blocked for a dispatched agent with no live
    terminal, the same reason Phase 1 above inlines those mechanics for the orchestrator seat rather
    than claiming that hand-off (the #421/#423/#850 class). Quote the role's own steps into the
-   dispatch prompt: the naming line (`Seat: {repo}-planner`), the comms charter (Phase 4, including
+   dispatch prompt: the naming line (`Seat: {scope}-planner`), the comms charter (Phase 4, including
    point 5's intent-layer self-check), and "no permission-profile deviation for this role" (Phase 3
    never applies to `planner`). Then hold its adopted `/bind-planning` contract for the fleet's
    duration by reading that skill's own body directly and following its procedure (never invoking
@@ -299,7 +307,7 @@ that tested shape:
    the child's wall never touches it (the exact mechanism this issue's own live round-trip test
    verified: the spawning session's redirect landed cleanly while the child's own in-process
    `Write`/denied-`Bash` attempts were both denied). The child's prompt carries: the naming line
-   (`Seat: {repo}-reviewer`), the reviewer's charter (`team-scaffolding` Phase 4 points 1, 4, 6 —
+   (`Seat: {scope}-reviewer`), the reviewer's charter (`team-scaffolding` Phase 4 points 1, 4, 6 —
    tier, review-instrument roster, locked-spec self-check — quoted verbatim, no Skill-tool
    hand-off, same reasoning as `planner`'s dispatch above), and one MANDATORY first act before any
    review work: run `lld-0006` I2's own three-probe sequence (a denied `Write`, a denied-pattern
@@ -401,10 +409,10 @@ never assumed applied by default.
 exact shape, so a human knows who can be messaged by name right now:**
 
 ```
-- `@{repo}-marshal` — the main repo agent (this session; orchestrator, fleet.json role `agent`)
-- `@{repo}-planner` — the main repo planner agent
-- `@{repo}-reviewer` — the main repo review agent
-- `@{repo}-product` — the main repo product agent
+- `@{scope}-marshal` — this fleet's orchestrator agent (this session; fleet.json role `agent`)
+- `@{scope}-planner` — this fleet's planner agent
+- `@{scope}-reviewer` — this fleet's review agent
+- `@{scope}-product` — this fleet's product agent
 ```
 
 Each line carries its live addressability, classified from `fleet.json`'s LATEST row for that
@@ -414,7 +422,7 @@ silently drops messages is worse than no name. Four classes, exactly one per sea
 - **addressable** — a live named `Agent`-tool dispatch (`mode: "background"`, latest action
   `joined`: `planner` spawned this run, or a prior run's still-live one — confirm a prior-run
   seat's liveness via `ListAgents`, the one sanctioned liveness-confirm use), or a live human
-  terminal (`mode: "manual"`, latest action `joined`). `{repo}-marshal` is always this session
+  terminal (`mode: "manual"`, latest action `joined`). `{scope}-marshal` is always this session
   and always addressable.
 - **not live — returned dispatch** — `mode: "dispatched"` (the `product` seat's Phase 2 call: a
   synchronous, unnamed `Agent` call that has already returned by now; nothing to message).
@@ -430,6 +438,11 @@ the gap, not omitted.
 
 ## Failure branches
 
+- **No `.claude` directory found anywhere between cwd and the repo root (inclusive), Phase 0**
+  (#911) → there is no scope root to resolve at all; stop and report this explicitly rather than
+  silently seeding at the repo root or cwd by default — a repo genuinely carrying no `.claude/`
+  anywhere is not itself a fleet-shaped case; name `.claude` directory creation (or running from a
+  directory that already has one) as the fix.
 - **No live user at Phase 3** → stop there per Phase 3; nothing after it runs.
 - **`fleet.json` malformed or unwritable** → stop at Phase 0, report the failure; do not proceed
   believing seat state is being tracked when it silently isn't (mirrors `lld-0006`'s C3 verification
