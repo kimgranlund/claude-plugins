@@ -335,9 +335,14 @@ def _do_clone(remote_url, dest, branch):
     and checkout); any other occupant is left untouched and a fresh unique sibling is cut via
     `tempfile.mkdtemp` (never a delete — host permission walls can prevent even the caller
     cleaning these paths). Proven in selftest against a real local repo used as the remote (a
-    file:// absolute path), so this function itself needs no network to verify."""
+    file:// absolute path), so this function itself needs no network to verify.
+    Ticket #927: `--depth 1` implies `--single-branch`, whose narrow fetch refspec
+    (`+refs/heads/main:...`) makes a bare `gh pr create` in the clone fail with "you must
+    first push" even after the branch IS pushed — so the refspec is widened right after the
+    clone (and on reuse of a prior run's clone, which shares the defect)."""
     if os.path.exists(dest):
         if _reusable_clone(dest, remote_url, branch):
+            _widen_fetch_refspec(dest)
             current = _run(["git", "branch", "--show-current"], cwd=dest).stdout.strip()
             if current != branch:
                 _run(["git", "checkout", "-b", branch], cwd=dest)
@@ -345,8 +350,16 @@ def _do_clone(remote_url, dest, branch):
         parent = os.path.dirname(dest) or tempfile.gettempdir()
         dest = tempfile.mkdtemp(prefix=os.path.basename(dest) + "-", dir=parent)
     _run(["git", "clone", "--depth", "1", remote_url, dest])
+    _widen_fetch_refspec(dest)
     _run(["git", "checkout", "-b", branch], cwd=dest)
     return dest
+
+
+def _widen_fetch_refspec(dest):
+    """Ticket #927: replace the single-branch fetch refspec a `--depth 1` clone gets with the
+    full-remote form, so pushed branches are visible to `gh pr create` without --head/--base."""
+    _run(["git", "config", "remote.origin.fetch",
+          "+refs/heads/*:refs/remotes/origin/*"], cwd=dest)
 
 
 def _pin_check(branch, cwd):
@@ -574,6 +587,15 @@ def selftest():
                 fails += 1
             else:
                 print("ok    _do_clone (real local clone, branch cut off main)")
+            # ticket #927: the --depth-1 clone's narrow single-branch refspec must have been
+            # widened, else a bare `gh pr create` in the clone can't see pushed branches
+            r = _run(["git", "config", "remote.origin.fetch"], cwd=dest, check=False)
+            if r.stdout.strip() != "+refs/heads/*:refs/remotes/origin/*":
+                print(f"FAIL _do_clone/refspec (narrow fetch refspec survived — the #927 "
+                      f"gh-pr-create failure: {r.stdout.strip()!r})")
+                fails += 1
+            else:
+                print("ok    _do_clone/refspec (single-branch refspec widened, #927)")
         except RuntimeError as e:
             print(f"FAIL _do_clone (raised: {e})"); fails += 1
 
