@@ -19,7 +19,9 @@
  *
  * `chore_sweep_apply.mjs selftest` proves the two extraction/detection functions on inline
  * fixtures: a real block applies; a narrated-but-absent claim bites; a bare path mention with no
- * write verb does NOT false-positive; an out-of-sandbox target path is refused, never written; the
+ * write verb does NOT false-positive; a declarative report-path claim ("Report target: <path>",
+ * issue #924) with no matching fenced block also bites, while the same phrase backed by a real
+ * block does NOT false-positive; an out-of-sandbox target path is refused, never written; the
  * entry guard fires when the script lives under a path containing a space (the real plugin
  * install path) — the negative control for the silent-no-op guard bug fixed 2026-08-16; and (issue
  * #738) a stale payload — one whose `--firing` stamp predates the target file's own last commit —
@@ -34,6 +36,11 @@ import { execFileSync } from 'node:child_process'
 
 const SANDBOX_PREFIX = '.claude/ops/'
 const WRITE_VERBS = ['wrote', 'emitted', 'produced', 'saved']
+// Declarative report-path phrases (issue #924): a seat can name where a report landed without
+// using any WRITE_VERBS word at all — "Report target: <path>" is the exact shape #922 fixed at
+// the issue-sorter skill level, but nothing here caught it generically. Multi-word, so matched
+// separately from the single-word WRITE_VERBS below rather than folded into that list.
+const REPORT_PHRASES = ['report target', 'report destination']
 
 // A fence line is exactly three backticks immediately followed by the target path (no language
 // tag) — the ops-write-sandbox-rules shape: ```.claude/ops/adr-queue.json ... ```
@@ -53,16 +60,18 @@ export function extractBlocks(reportText) {
 }
 
 /**
- * Detect narrated-but-absent write claims: a WRITE_VERBS word sharing a line with a
- * `.claude/ops/...`-shaped token that has no matching fenced block. A bare path mention with no
- * write verb on the same line is never flagged (reverse control) — this mirrors
- * ops-write-sandbox-rules' own definition verbatim (verbs paired with a path, not any mention).
+ * Detect narrated-but-absent write claims: a WRITE_VERBS word, or a REPORT_PHRASES declarative
+ * report-path phrase (issue #924 — "Report target:"/"Report destination:" carries no write verb
+ * at all), sharing a line with a `.claude/ops/...`-shaped token that has no matching fenced
+ * block. A bare path mention with neither a write verb nor a report phrase on the same line is
+ * never flagged (reverse control) — this mirrors ops-write-sandbox-rules' own definition verbatim
+ * (a claiming word/phrase paired with a path, not any mention).
  */
 export function detectNarratedButAbsent(reportText, sandboxedBlocks) {
   // Strip fenced-block bodies first so a verb *inside* a payload's own content never counts.
   const withoutFences = reportText.replace(FENCE_RE, '')
   const backedPaths = new Set(sandboxedBlocks.map((b) => b.path))
-  const verbRe = new RegExp(`\\b(${WRITE_VERBS.join('|')})\\b`, 'i')
+  const verbRe = new RegExp(`\\b(${WRITE_VERBS.join('|')})\\b|(${REPORT_PHRASES.join('|')})`, 'i')
   const pathRe = /\.claude\/ops\/\S+/g
   const findings = []
   for (const rawLine of withoutFences.split(/\r?\n/)) {
@@ -227,6 +236,24 @@ function selftest() {
     const bareCode = main([bareFile, '--root', dir, '--dry-run'])
     assert(bareCode === 0, 'a bare path mention with no write verb must not be flagged narrated-but-absent')
 
+    // 3a. Positive (issue #924): a declarative report-path claim with no write verb at all —
+    //     "Report target: <path>" — must still bite (exit 1), and must NOT write.
+    const reportedNoVerb = 'Report target: .claude/ops/adr-queue.json\n'
+    const reportedNoVerbFile = join(dir, 'reported-no-verb.md')
+    writeFileSync(reportedNoVerbFile, reportedNoVerb)
+    const reportedNoVerbCode = main([reportedNoVerbFile, '--root', dir])
+    assert(reportedNoVerbCode === 1, 'a "Report target:" claim with no fenced block must exit 1, even with no write verb present')
+    assert(!existsSync(join(dir, '.claude/ops/adr-queue.json')), 'a "Report target:" claim with no fenced block must never write a file')
+
+    // 3b. Negative/reverse control (issue #924): the same declarative phrase, backed by a real
+    //     fenced block, must NOT false-positive.
+    const reportedBacked = 'Report destination: .claude/ops/plan-b.md\n```.claude/ops/plan-b.md\n{"queue":[]}\n```\n'
+    const reportedBackedFile = join(dir, 'reported-backed.md')
+    writeFileSync(reportedBackedFile, reportedBacked)
+    const reportedBackedCode = main([reportedBackedFile, '--root', dir])
+    assert(reportedBackedCode === 0, 'a "Report destination:" claim backed by a real fenced block must not be flagged narrated-but-absent')
+    assert(existsSync(join(dir, '.claude/ops/plan-b.md')), 'the backing fenced block must still be written')
+
     // 4. Safety: a fenced block outside the .claude/ops/ sandbox is refused, never written.
     const outOfSandbox = '```harness/agents/decision-watcher.md\nmalicious content\n```\n'
     const oosFile = join(dir, 'oos.md')
@@ -338,7 +365,7 @@ function selftest() {
     return 1
   }
   console.log(
-    'chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/sandbox-refusal/usage/spaced-path-entry-guard/staleness-guard all correct',
+    'chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/report-phrase-narrated/report-phrase-backed/sandbox-refusal/usage/spaced-path-entry-guard/staleness-guard all correct',
   )
   return 0
 }
