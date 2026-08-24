@@ -23,6 +23,24 @@ explicitly rather than falling back to the repo root by silent default or contin
 it (a repo with genuinely no `.claude/` anywhere is not itself a fleet-shaped case). Readers
 report the resolved scope root (its basename) and the `fleet.json` path under it.
 
+**Scope-pointer redirect (#915, Kim's ruling 2026-08-23 — opt-in, one hop).** The nearest-`.claude`
+rule above rests on the assumption that a `.claude/` directory implies fleet intent; #915 falsified
+that in monorepos where an app dir's `.claude/` exists only for path-scoped skills. The opt-in fix
+is a pointer file at `<scope root>/.claude/ops/fleet-scope.json`, shape
+`{"scope_root": "<path relative to the repo root, \".\" for the repo root itself>"}`. Resolution
+order at the walk's resolved scope root: (1) `ops/fleet.json` PRESENT there → it wins; the pointer,
+even if also present, is never consulted — a scope that has its own manifest is its own scope.
+(2) `ops/fleet.json` ABSENT and `ops/fleet-scope.json` present → re-resolve the scope root to the
+pointed directory (which must itself contain a `.claude/` directory and sit within the repo-root
+boundary; a pointer naming a dir outside the boundary or without `.claude/` is a reported error,
+never a silent fallback) and proceed against `<pointed root>/.claude/ops/fleet.json` — ONE hop
+only: a pointer found at the pointed root is never followed (no chains). Readers report both roots:
+the walk's own resolved root and the pointer target actually used. (3) BOTH absent → current
+behavior stands unchanged: no walk-up, no ancestor consultation — this preserves the #909/#911
+anti-shadowing guarantee for genuinely-fresh app-scope seeds. Each participating app dir needs its
+pointer seeded deliberately (by a human or an explicitly instructed session); nothing seeds
+pointers automatically.
+
 **The same rule governs a virgin SEED, not only a read (#909, refined #911).** `/fleet-bootstrap`
 Phase 0 resolves the scope root by this identical `.claude`-directory walk before deciding
 whether there is anything to read. `<scope root>/.claude/ops/fleet.json` absent → this is a fresh

@@ -40,8 +40,15 @@ rather than applying this section itself").
    marshal" — the #911 fix is that an app with its own `.claude/` is always its own scope,
    regardless of whether an ancestor `fleet.json` exists). App-scoped records are a ruled reality,
    not drift — the app-scoped bootstrap re-homing ruling (Kim 2026-08-23) deliberately homes a
-   `fleet.json` at an app subdirectory; a legacy repo-root copy may coexist, unrelated. Report the
-   resolved scope root and which path was used in step 5's report regardless of outcome. Take
+   `fleet.json` at an app subdirectory; a legacy repo-root copy may coexist, unrelated.
+   **Scope-pointer redirect (#915):** `fleet.json` absent at the resolved scope root but
+   `<scope root>/.claude/ops/fleet-scope.json` present → re-resolve to the pointed directory and
+   read ITS `ops/fleet.json` instead — one hop only, validity rules canonical in
+   `references/fleet-manifest-schema.md` §Location and resolution (cited, not restated); a local
+   `fleet.json` always wins over a pointer, and with neither present current behavior stands (no
+   walk-up). Report the
+   resolved scope root (both roots when a pointer redirected) and which path was used in step 5's
+   report regardless of outcome. Take
    `live_state.joined`'s entries for `role: "agent"` and select the LATEST one by array order.
    **Liveness is that row's `action` field** — `"joined"` or absent counts as live, `"released"`
    does not (the canonical rule, `fleet-bootstrap`'s `references/fleet-manifest-schema.md`, cited
@@ -94,7 +101,8 @@ rather than applying this section itself").
      work. Re-running this command in an already-connected session simply re-confirms and re-states
      the posture — harmless, never an error.
 
-5. **Report**: the marshal's resolved name, the `fleet.json` path step 1 resolved (so a
+5. **Report**: the marshal's resolved name, the `fleet.json` path step 1 resolved — both scope
+   roots when a `fleet-scope.json` pointer redirected (#915) — (so a
    shadowed sibling copy is auditable), the ack line (or "sent, unacknowledged" per the
    failure branch), and the roster it returned (or "not received" if the ack never landed).
 
@@ -107,7 +115,12 @@ rather than applying this section itself").
   scope root and path checked (or that no `.claude` directory exists between cwd and the repo
   root). Stop — never fall through to a handshake against nothing, and never re-try the verdict
   against an ancestor's `fleet.json` once a nearer scope root resolved (with or without a
-  `fleet.json` of its own).
+  `fleet.json` of its own); a `fleet-scope.json` pointer at that scope root (#915, step 1) is
+  the one sanctioned redirect, and its absence means the verdict stands.
+- **Pointer present but invalid** (step 1, #915 — the target sits outside the repo-root boundary
+  or lacks a `.claude/` directory, per the canonical validity rules) → report "pointer at
+  `<pointer path>` names an invalid target (`<reason>`) — cannot resolve; fix or remove the
+  pointer" and stop; never fall back silently to the pointerless verdict.
 - **Live `agent` row but `agent_name` is `null`/absent** (step 1, a legacy pre-fix entry) →
   report the row as recorded-but-unresolvable and stop; never treat this the same as "no live
   marshal" and never auto-suggest a takeover — the seat may genuinely still be live.
