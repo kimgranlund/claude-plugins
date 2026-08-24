@@ -347,8 +347,6 @@ exception as Phase 1/2) — and stop; retiring never hands off to a `/bind-*` co
 - **Restart chosen at Phase 3 step 4's contract (issue #853)** → not a failure: this session's own
   bootstrap is deliberately paused pending the human's restart-and-`/bind-review` follow-up (Done,
   below), Phase 4/5 never run in this session, and there is nothing further for this session to do.
-- **`docs` not installed and role is `product`** → name the gap plainly (Phases 1–4 still ran; only
-  Phase 5's command names an uninstalled plugin) and point at installing `docs`.
 - **Re-invoked in a session that already bootstrapped a different role** → name the existing role
   and require an explicit close-or-switch decision from the human before re-running; never silently
   layer a second role's profile over the first.
