@@ -105,7 +105,7 @@ is empty (`candidates: []`). No `needs-ruling`-labeled issue in evidence.
 
 **Class 4 — hygiene debt:**
 
-### 3. Review the 4 stale-matching `.gitignore` rules — grew 3→4 this firing, propose-only from repo-cleaner
+### 3. Review the 4 stale-matching `.gitignore` rules — RESOLVED 2026-08-24: Kim ruled keep all (dist/ and __pycache__/ guard future build output; zero cost to keep). No edit made.
 - **Action:** `gitignore_check.py` now reports 4 WARN (up from 3): `dist/`, `harness-audit-*/`,
   `.name-map.md`, and newly `__pycache__/` (added via commit `696f120`, now matches nothing
   tracked — no `__pycache__` dirs exist anywhere in the tree). All are G1
