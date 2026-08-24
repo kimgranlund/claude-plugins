@@ -37,7 +37,13 @@ A DIRECTORY's files are parsed in either of three dialects, tried per file in th
    as a change. A forward supersession is read ONLY from the active-voice `supersedes ADR-NNNN`;
    `Extends` / `Relates` / `Amended by` / `Superseded by` name relationships this script must
    never misread as a supersession — the row's own `**Supersedes / Superseded by**` label
-   included.
+   included. **Amendment ratification marker (issue #929):** each `## Amendment` heading's own
+   line — the one carrying its `**proposed** — Kim ratifies` -> `**ratified** — <owner>,
+   [utterance](...), verified <date>` flip — is also hashed as its own dedicated signal
+   (`amendment_ratification_markers`), independent of the Decision/Amendment section scan above.
+   Ratifying an already-drafted amendment on an already-accepted ADR never flips the Status cell
+   (accepted already) and, without this signal, would rely entirely on that section scan to catch
+   the marker's own text moving — this makes it a structural guarantee instead.
 3. **H1 + bold metadata block** — an `# ADR-NNN: Title` (or `— Title`) heading followed by plain
    `**Status:** <value>` / `**Supersedes:** <value>` lines (no blockquote table at all —
    adiav2's `docs/adr/` dialect). Status is the first bare keyword after the label, same
@@ -142,6 +148,15 @@ TABLE_SUPERSEDES_RE = re.compile(
 )
 # The sections whose content IS the decision — everything else in a table-dialect ADR is context.
 HASH_SECTION_PREFIXES = ("decision", "amendment", "supersession")
+
+# issue #929: an amendment's own ratification-state marker — the ONE line its `## Amendment`
+# heading carries the `**proposed** — Kim ratifies` -> `**ratified** — <owner>, [utterance](...),
+# verified <date>` flip on (agent-ui's live convention; see ADR-0040/0160/0190's real amendments).
+# Matched independently of decision_content's own heading-boundary scan below, so this specific
+# signal is a structural, unit-tested guarantee rather than an incidental byproduct of that scan's
+# scope — a future narrowing of decision_content (e.g. trimming an amendment down to a booked-
+# repairs sub-list) must never silently stop seeing a ratify-only edit.
+AMENDMENT_HEADING_LINE_RE = re.compile(r"^## Amendment\b.*$", re.MULTILINE | re.IGNORECASE)
 
 # Dialect 3 — H1 + bold `**Field:**` metadata lines, no blockquote table (adiav2's docs/adr/).
 # The trailing `:?` before AND after the closing `**` tolerates either colon placement
@@ -284,6 +299,14 @@ def parse_bold_metadata(text):
     return {"id": id_match.group(1).lower(), "status": keyword.group(0).lower(), "supersedes": supersedes}
 
 
+def amendment_ratification_markers(text):
+    """issue #929: every `## Amendment` heading LINE in an ADR body, one per amendment section —
+    the single line carrying that amendment's ratification-state marker. Pure — no I/O. Returns
+    [] for a body with no Amendment section (never spuriously matches the word "amendment" inside
+    ordinary prose, since only an actual `##`-level heading line qualifies)."""
+    return [m.group(0) for m in AMENDMENT_HEADING_LINE_RE.finditer(text)]
+
+
 def decision_content(text):
     """The hash basis for a table-dialect ADR: its `## Decision` / `## Amendment*` /
     `## Supersession*` sections, concatenated, so Context/Consequences copy-edits never read as an
@@ -332,9 +355,13 @@ def parse_adr_file(text):
     if table:
         # Status is folded into the basis: ratification and supersession flip ONLY that one cell,
         # and a status flip that left the hash untouched would never surface as a delta at all.
+        # An amendment's own ratification marker(s) are folded in explicitly too (issue #929) —
+        # see amendment_ratification_markers's docstring for why this is a dedicated signal rather
+        # than relying solely on decision_content's section inclusion.
+        markers = "\n".join(amendment_ratification_markers(text))
         return {
             "id": table["id"],
-            "hash": hash_adr(table["status"] + "\n" + decision_content(text)),
+            "hash": hash_adr(table["status"] + "\n" + markers + "\n" + decision_content(text)),
             "status": table["status"],
             "supersedes": table["supersedes"],
         }
@@ -896,6 +923,61 @@ def selftest():
     assert parse_adr_file(bare_a)["hash"] != parse_adr_file(bare_b)["hash"], \
         "section-less ADRs must not hash alike"
 
+    # ---- issue #929: amendment ratification-marker hashing --------------------------------------
+    # amendment_ratification_markers — positive: each `## Amendment` heading line is extracted
+    # verbatim, one per amendment, real agent-ui marker shape (`**proposed** — Kim ratifies`)
+    draft_amendment_adr = table_adr + (
+        "\n## Amendment (2026-08-20, **proposed** — Kim ratifies) — a second, unrelated amendment\n\n"
+        "> Some amendment prose that never changes on ratification.\n"
+    )
+    markers_before = amendment_ratification_markers(draft_amendment_adr)
+    assert markers_before == [
+        "## Amendment (2026-08-20, **proposed** — Kim ratifies) — a second, unrelated amendment"
+    ], markers_before
+
+    # negative control: an ADR with no `## Amendment` heading at all extracts nothing
+    assert amendment_ratification_markers(table_adr) == [], \
+        "an ADR with no Amendment section must extract no ratification markers"
+
+    # negative control: the word "amendment" inside ordinary body prose (never a `##` heading)
+    # must never be mistaken for a marker line
+    prose_only = table_adr.replace(
+        "Every dispatch is validated against the declared schema.",
+        "Every dispatch is validated against the declared schema; a future amendment may revisit "
+        "this.",
+    )
+    assert amendment_ratification_markers(prose_only) == [], \
+        "the word 'amendment' inside ordinary prose must never be read as a marker line"
+
+    # end-to-end, the real-world case this issue exists for (agent-ui ADR-0040/ADR-0160/ADR-0190,
+    # GH #1009/#1032/#1030): a ratify-only flip — the marker text changes, the amendment's own
+    # prose and every other section stay byte-identical, and the ADR's Status cell stays
+    # `accepted` throughout (it already was) — must still move the hash.
+    ratified_amendment_adr = draft_amendment_adr.replace(
+        "## Amendment (2026-08-20, **proposed** — Kim ratifies) — a second, unrelated amendment",
+        "## Amendment (2026-08-20, **ratified** — kimgranlund, "
+        "[utterance](https://github.com/kimgranlund/agent-ui/pull/1#issuecomment-1), "
+        "verified 2026-08-21) — a second, unrelated amendment",
+    )
+    markers_after = amendment_ratification_markers(ratified_amendment_adr)
+    assert markers_before != markers_after, "the marker line itself must change text on ratify"
+
+    draft_rec = parse_adr_file(draft_amendment_adr)
+    ratified_rec = parse_adr_file(ratified_amendment_adr)
+    assert draft_rec["status"] == ratified_rec["status"] == "accepted", (draft_rec, ratified_rec)
+    assert draft_rec["hash"] != ratified_rec["hash"], (
+        "a ratify-only marker flip (issue #929) must move the hash even though the amendment's "
+        "own prose, the Decision section, and the Status cell are all byte-identical"
+    )
+    # reverse control: strip the two heading lines from both texts before diffing — everything
+    # ELSE (Context, Decision, Consequences, and the amendment's own prose below its heading) is
+    # provably byte-identical, isolating the marker line as the only thing that moved the hash
+    without_marker_line = lambda adr_text: "\n".join(
+        line for line in adr_text.splitlines() if not line.startswith("## Amendment")
+    )
+    assert without_marker_line(draft_amendment_adr) == without_marker_line(ratified_amendment_adr), \
+        "only the Amendment heading's own marker line may differ between the draft and ratified texts"
+
     # non-ADR neighbours in a real ADR directory are skipped by shape alone, no name special-case:
     # the template's H1 is a literal `ADR-NNNN` (no digits) and the log README has no ADR H1
     assert parse_status_table("# ADR-NNNN — <short decision title>\n\n> | **Status** | proposed |\n") \
@@ -1002,7 +1084,10 @@ def selftest():
           "section-less fallback, template/README skipped by shape), the H1+bold-metadata "
           "dialect (either colon placement, non-numeric supersedes ids resolving to nothing, "
           "whole-file hash basis, no cross-match with the table dialect), a three-dialect mixed "
-          "directory, and the loud 0-parsed unsupported-shape failure vs an empty corpus)")
+          "directory, the loud 0-parsed unsupported-shape failure vs an empty corpus, and the "
+          "issue #929 amendment ratification-marker signal (heading-line extraction, no-Amendment "
+          "and prose-mention negative controls, a ratify-only marker flip moving the hash with "
+          "every other byte provably unchanged))")
     return 0
 
 
