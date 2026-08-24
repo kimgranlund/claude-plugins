@@ -122,7 +122,11 @@ that same shape.
 4. Print the comms charter (`team-scaffolding` Phase 4): the `agent` seat tier (sonnet+high,
    the canonical orchestration row since the 2026-08-22 ladder retier — which also keeps this
    seat's unpinnable `context: fork` dispatches at sonnet price, #313), the
-   SendMessage-is-a-nudge doctrine, and the peer roster read from `fleet-roster.md`.
+   SendMessage-is-a-nudge doctrine, and the peer roster read from `fleet-roster.md`. **Run the
+   reality check** (`references/fleet-manifest-schema.md` §"Tier reconcile on every bind" —
+   "Reality check" subsection, canonical there, mechanics not restated here): state this session's
+   own resolved model and diff it against `seats.agent.tier` just printed, naming any mismatch
+   (issue #919).
 5. **Resolve this session's real SendMessage address before writing anything**: read it from
    `ListAgents`, matched to THIS session's own transcript/session id (a narrower, deliberate
    exception to the peer-discovery ban in `fleet-rules` Section 1 — that ban is about never using
@@ -180,16 +184,20 @@ peer message — already adopted by step 6's own Phase-2 read, cited here, never
 
 ## Phase 2 — Dispatch the product seat
 
-Dispatch a synchronous `Agent` call, `subagent_type: docs:product-leader-agent` (the standing
-product-leader seat — owns the intent-layer record types and the spec-lock gate) for one charter:
-"produce or update the intent layer — product brief / PRD / IDRs — for this repo, then report a
-summary of what it proposes, ready for human ratification. Do not treat silence as approval; you
-are drafting for someone else's sign-off." **`docs` not installed in this workspace**:
-`docs:product-leader-agent` isn't reachable either, so there is no working fallback subagent for
-this dispatch — report the product seat as undispatchable for that reason and proceed to Phase 3
-with nothing to gate on (same shape as Phase 5's `product` handoff row: a soft cross-plugin
-mention that degrades to "install docs" rather than pretending an equivalent exists). Record
-`live_state.joined`
+Dispatch a synchronous `Agent` call, `subagent_type: teamwork:product-leader` (same-plugin since
+issue #433 moved it from `docs/agents/product-leader-agent.md`, dropping the `-agent` suffix — the
+prior `docs:product-leader-agent` reference here named no real agent file and was issue #919's own
+found defect, degrading this dispatch to an unpinned, session-model-inheriting shape; the "`docs`
+not installed" fallback branch that once covered it is retired along with the stale name — this
+target is now always reachable whenever `fleet-bootstrap` itself runs) for one charter: "produce
+or update the intent layer — product brief / PRD / IDRs — for this repo, then report a summary of
+what it proposes, ready for human ratification. Do not treat silence as approval; you are drafting
+for someone else's sign-off." **State `model` explicitly on this call, read from `fleet.json`'s
+`seats.product.tier`** (canonically sonnet; read from the manifest, not assumed off frontmatter,
+since a repo-local model deviation lives only there — issue #919). A plain `Agent` dispatch
+cannot vary `effort` per-call — frontmatter is what it always gets (`agent-writing-rules` §Model
+tiering) — so a recorded `effort` deviation goes through a Workflow dispatch or a frontmatter
+edit instead, never claimed as a param here. Record `live_state.joined`
 (`role: product`, `mode: dispatched` — a synchronous `Agent` call, not a live terminal or a
 long-lived background seat) once it reports back.
 
@@ -258,7 +266,13 @@ role below.**
 
 ### `planner` — in-process `Agent`-tool dispatch, unchanged
 
-1. Dispatch via the `Agent` tool, `name: "{scope}-planner"`, prompt instructing it to perform
+1. Dispatch via the `Agent` tool, `name: "{scope}-planner"`, **`model` set explicitly from
+   `fleet.json`'s `seats.planner.tier`'s model half** (canonically fable) — this call names no
+   `subagent_type` agent file (it inlines bootstrap mechanics instead, below), so it is exactly the
+   ad-hoc/no-frontmatter shape that silently rides the session's own model when `model` is left
+   unstated (`agent-writing-rules` §Model tiering, issue #313/#919 — a live gap here). A plain
+   `Agent` dispatch cannot vary `effort` per-call (same citation) — this call carries no
+   `effort` param for that reason, never a claimed one it cannot honor. Prompt instructing it to perform
    `team-scaffolding`'s own Phase 1, 2, and 4 mechanics directly, itself, via ordinary
    `Read`/`Write`/`Edit`/`Bash` tool calls — **never** by invoking `/team-scaffolding planner`
    through the Skill tool, which is structurally blocked for a dispatched agent with no live
@@ -309,7 +323,13 @@ that tested shape:
    before the child process starts (issue #853's Q1: a wall written before process start enforces;
    a wall a session writes about itself never does, issue #852). Verification fails → stop, report
    the failure (Failure branches), no spawn attempted.
-3. **Spawn exactly ONE `claude -p` child**, background `Bash` (`run_in_background: true`), cwd =
+3. **Spawn exactly ONE `claude -p` child**, `--model <seats.reviewer.tier's model> --effort
+   <its effort>` (canonically `--model sonnet --effort high`, read from `fleet.json` rather than
+   hardcoded) **passed explicitly on the spawn command line** — a separate OS process has no
+   dispatching-session frontmatter to inherit; absent these flags its model is just the CLI's own
+   configured default, which may have nothing to do with this repo's tier ladder (issue #919, a
+   live gap here). Background `Bash` (`run_in_background:
+   true`), cwd =
    the pre-walled worktree, stdout+stderr redirected to a log file by THIS SESSION'S OWN shell
    redirect — that redirect is this session's operation, not a tool call the child itself makes, so
    the child's wall never touches it (the exact mechanism this issue's own live round-trip test

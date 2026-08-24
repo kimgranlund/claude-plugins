@@ -327,6 +327,37 @@ a future ladder retier updates this one line in the same change. Note `justifica
 also written on CANONICAL rows at seed/update time (the example above dates every seat), so its
 mere presence never implies a deviation — only a tier MISMATCH starts this classification at all.
 
+**Reality check — the live BINDING session's own resolved model vs. its seat's `tier` (issue
+#919, closes the gap this section left open: the diff above only ever compared the manifest
+against the ladder, never against what actually ran).** The manifest-vs-ladder diff above proves
+`fleet.json` carries the *right recorded intent*; it proves nothing about whether the session
+actually binding a role right now is running AS that intent — a `fleet.json` seeded correctly at
+sonnet+high says nothing about a marshal terminal someone happened to launch on Fable. Whenever
+this reconcile step runs at an actual bind (`team-scaffolding` Phase 1 for any role;
+`fleet-bootstrap` Phase 1 for `agent` specifically — the only role a fleet-bootstrap run itself
+binds as a live terminal), the binding session also states its OWN resolved model — a session
+already knows this about itself (its own system context states the model it's running as; no
+external introspection tool is needed) — and diffs that stated value against `seats.<role>.tier`
+for the role being bound. **Match** → nothing printed, same as the manifest-vs-ladder case.
+**Mismatch** → flag it plainly as a **deviation-in-fact**, distinct from the manifest-vs-ladder
+mismatch above (a manifest can read correctly while the live session running it still doesn't
+match): `Session runs <resolved model> — seat tier is <seats.<role>.tier> — deviation-in-fact,
+<justified/unjustified>`. Never silently accepted and never blocked — this reconcile step has no
+enforcement power over which model a human happened to launch their terminal on — but it is the
+one place this fact gets a durable, discoverable record instead of surfacing only when a
+downstream spend audit stumbles onto it after the fact (the #919 incident's own origin: an
+adia-pay session's roster had to hand-log "session runs Fable, deviation-in-fact" with no
+skill-level check ever prompting it). **This is a distinct failure mode from an unpinned
+DOWNSTREAM dispatch** (`references/best-practices.md`'s own "sealed contract" bullet, and
+`fleet-bootstrap`/`team-scaffolding`'s own dispatch sites) — a live terminal running the wrong
+model for ITS OWN seat is a human-launch fact this step can only surface, never fix; a dispatch
+that fails to pass `model` explicitly from `seats.<role>.tier` (and `effort` too, on a mechanism
+that actually takes it per-dispatch — `Workflow`'s `agent()`, a `claude -p` subprocess spawn;
+`effort` rides frontmatter unconditionally on a plain `Agent` dispatch) is a skill-authoring gap
+that step fixes directly. Both matter: the marshal terminal itself running Fable IS every
+unpinned fork's price (issue #313), so this reality check is also the earliest point that class
+of downstream leak becomes visible.
+
 ## Milestone-report threshold (stretch, gh#896 — not yet wired)
 
 `fleet-rules` Section 3's no-op-silence rule fixes user-facing reporting at "milestone-only"
