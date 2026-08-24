@@ -200,6 +200,17 @@ State, as one standing block before any real work:
      No deviation.
    - `product` — sonnet+xhigh (the planning-adjacent-synthesis row, matching `product-leader`'s
      own frontmatter — deep effort on a cheaper model).
+
+   **Run the reality check right after stating the tier** (`fleet-bootstrap`'s
+   `references/fleet-manifest-schema.md` §"Tier reconcile on every bind" — "Reality check"
+   subsection, canonical there, never re-derived here): state this session's own resolved model
+   (already known from its own system context) and diff it against the tier just printed for the
+   role being bound; a mismatch is a deviation-in-fact, named plainly rather than left for a human
+   to notice and hand-log later (issue #919). This is a LIVE-terminal-only check — it never applies
+   to `reviewer`'s `background-subprocess` mode or `planner`'s `background` mode, since those are
+   `fleet-bootstrap`'s own dispatches, covered by that command's own explicit `model` (`planner`)
+   or `--model`/`--effort` (`reviewer`'s `claude -p` spawn) params instead, not by a live session
+   stating its own resolved model.
 2. **SendMessage is the liveness nudge; records are the durable truth channel** (parallel-work-rules).
    A relayed claim from a peer is never trusted over the record it claims to describe — re-read
    the record.

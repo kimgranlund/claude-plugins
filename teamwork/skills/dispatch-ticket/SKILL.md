@@ -96,7 +96,17 @@ report that routing and stop; docs' seats own it.
   3 (claim, then isolate) first, then Phase 3.5, then dispatch via the `Agent` tool — `subagent_type:
   general-purpose` by default (`fleet-rules`' solo-first/null-unit reasoning: a generic
   task needs no tool restriction, parallelism, or multi-skill preload); a named `subagent_type`
-  only when the clarified brief genuinely needs one of those three. Never a NAMED (teammate-mode,
+  only when the clarified brief genuinely needs one of those three. **State `model: sonnet`
+  explicitly on the `general-purpose` call** (`agent-writing-rules` §Model tiering's ad-hoc-dispatch
+  doctrine, issue #313; `sub-agent`'s own 2026-08-22 ruling realizes the identical pin for its
+  own unnamed skill-wrap dispatch) — `general-purpose` carries no frontmatter of its own, so an
+  unstated `model` here silently rides whichever session dispatched this ticket (this skill's own
+  caller: a live `/build-feature` fork, a `build-leader` Agent-tool seat, or a `/bind-build`
+  terminal — any of which may itself be running at a non-default tier), never the task's own
+  tier (issue #919: the exact silent-inherit class this ticket's own fix closes elsewhere for the
+  fleet's four registered seats, present here too since a task dispatch carries no seat of its
+  own to read a tier from). The clarified brief naming a model explicitly overrides this default,
+  same as `sub-agent`'s own override rule. Never a NAMED (teammate-mode,
   the Agent tool's `name:` field) dispatch here regardless of `subagent_type` choice: the caller
   only needs this seat's one final report, so a `name:` buys mailbox routing with nothing to
   address it to (`agent-writing-rules`' fanned-out-naming rule) — and when the caller is itself
