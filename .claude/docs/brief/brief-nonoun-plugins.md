@@ -60,9 +60,13 @@ estate is the working test of that bet.
   oversight.
 - 2026-08-18 (Kim, resolved via find-intent, gh#611): the HOMES half of the line above is lifted —
   the `roadmap` index is minted at `.claude/docs/roadmap/roadmap-nonoun-plugins.md` and the
-  RDD↔Issue binding rule is recorded in docs' `doc-writing-rules` (RDD section). The question
-  itself stays open in its remaining half: no release-grain commitment is locked yet — the first
-  `locked` RDD (which lands in the roadmap's Now) closes this bullet whole.
+  RDD↔Issue binding rule is recorded in docs' `doc-writing-rules` (RDD section).
+- CLOSED 2026-08-23 (Kim, fleet-bootstrap gate ruling): the remaining half is lifted too — the
+  first `locked` RDD landed retroactively for the shipped multi-harness packaging campaign,
+  `rdd-0001` (`.claude/docs/rdd/rdd-0001-multi-harness-plugin-packaging.md`, cites `idr-0001`,
+  DRI kim.granlund, tracked at kimgranlund/claude-plugins#885), and sits in the roadmap's Now.
+  This bullet's whole question is answered; the roadmap is the living tracker for what comes
+  next.
 - CLOSED 2026-08-21 (verified against repo state): all six 2026-08-18 gap-review instruments have
   landed — gh#622–#627 are all CLOSED and each named instrument exists — feedback-intake door
   (`lld-0017-feedback-intake-door.md`), decision-watcher's re-validation mode (idr-0009, wired in

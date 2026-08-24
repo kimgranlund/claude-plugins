@@ -15,8 +15,9 @@ review-cadence: monthly
 
 ## Now
 <!-- Committed, in flight; each item links its PLAN or TICKET. -->
-- (empty — no release-grain commitment is locked yet, per the brief's own former deferral; the
-  first locked RDD lands here as `rdd-0001 — <commitment>` with its roadmap-labeled issue ids.)
+- `rdd-0001` — every plugin ships Codex, Hermes, and Pi overlays alongside Claude Code, generated
+  by `harness_emit.py` and verified fresh by G15. Shipped and archived (locked, DRI kim.granlund,
+  cites `idr-0001`); tracked at kimgranlund/claude-plugins#885.
 
 ## Next
 <!-- Decided direction, undated by design. -->
