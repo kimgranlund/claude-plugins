@@ -28,7 +28,15 @@ rest of this run — every subsequent Phase's read or write targets this same re
 a bare `.claude/ops/fleet.json` re-derived from cwd or the repo root. Read it now as the record of
 who has already joined and at what tier/mode, do not overwrite existing `live_state` entries,
 only append.
-**Absent under the resolved scope root** → this is a virgin SEED at THAT scope root, full stop —
+**Absent under the resolved scope root, but `<scope root>/.claude/ops/fleet-scope.json` present**
+(#915's opt-in scope-pointer, canonical rules in `references/fleet-manifest-schema.md` §Location
+and resolution — one hop, validity checks there, never re-derived here) → re-resolve the scope
+root to the pointed directory first; the present/absent(no-pointer) branches below then run only
+against THAT root's `ops/fleet.json` — never re-check the pointed root for a further pointer (one
+hop, no chains) — and Phase 6's report names both roots. Unlike #911's forbidden automatic
+fallback, this redirect fires only on a deliberately human-seeded pointer file, never on an
+ancestor `fleet.json`'s mere existence.
+**Absent under the resolved scope root (no pointer)** → this is a virgin SEED at THAT scope root, full stop —
 never fall through to an ancestor's `fleet.json` just because one exists farther up the walk, and
 never default to the repo root when a nearer `.claude` directory was found. Seed `fleet.json`
 there now with the schema in `references/fleet-manifest-schema.md` (seat roster, canonical tier
@@ -388,7 +396,8 @@ One summary: which seats are live and how (manual/background/background-subproce
 outcome, the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
 confirmed", "none — reviewer and planner already held", or "confirm skipped — no live user,
 nothing spawned"), the `fleet.json` path Phase 0 resolved — including which branch it took
-(existing record read at that path, or a fresh seed, and for a seed, app-scoped-cwd vs. repo-root)
+(existing record read at that path, a fresh seed — and for a seed, app-scoped-cwd vs. repo-root —
+or a pointer-redirected read, reporting both the walk's resolved root and the pointer target, #915)
 — as the durable record a later session reads to resume orientation, and confirm the `bind-team`
 contract Phase 1 step 6 already adopted is holding — this session runs under `agents/fleet-marshal.md`'s Priorities 1–8 for the fleet's
 duration until explicitly stood down; never re-invoke `/bind-team` to start it, it is already
@@ -444,6 +453,10 @@ the gap, not omitted.
   anywhere is not itself a fleet-shaped case; name `.claude` directory creation (or running from a
   directory that already has one) as the fix.
 - **No live user at Phase 3** → stop there per Phase 3; nothing after it runs.
+- **`fleet-scope.json` pointer names a dir outside the repo-root boundary or lacking its own
+  `.claude/`** (#915) → stop at Phase 0 and report the invalid pointer explicitly
+  (`references/fleet-manifest-schema.md` §Location and resolution); never fall back silently to
+  the walk-resolved root.
 - **`fleet.json` malformed or unwritable** → stop at Phase 0, report the failure; do not proceed
   believing seat state is being tracked when it silently isn't (mirrors `lld-0006`'s C3 verification
   discipline for the reviewer wall).

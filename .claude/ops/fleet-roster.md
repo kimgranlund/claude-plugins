@@ -18,3 +18,4 @@ read `plugins-agent` — stale even under the prior `{repo}-team-lead` conventio
 printed session name for role `agent` was never the bare role token. Corrected in place to
 `plugins-marshal`, the current convention's printed name for this role.
 | agent | plugins-marshal (takeover) | 2026-08-22 | plugins |
+| agent | plugins-marshal (takeover) | 2026-08-23 | plugins |
