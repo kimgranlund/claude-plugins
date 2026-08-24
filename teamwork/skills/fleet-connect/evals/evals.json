@@ -68,6 +68,12 @@
    "prompt": "Wire me to the live marshal \u2014 heads up, we're working in frontend/apps/adia-pay, the fleet.json is app-scoped at frontend/apps/adia-pay/.claude/ops/fleet.json, and a stale legacy copy still sits at the repo root.",
    "expect": "trigger",
    "comment": "#906 nested-fleet.json scenario: step 1's cwd-first ladder must resolve the app-scoped file and never consult the stale repo-root copy"
+  },
+  {
+   "id": "t07",
+   "prompt": "Wire me to the live marshal — we're in frontend/apps/signup, which has its own .claude/ directory but no fleet.json seeded there yet, even though the adiav2 repo root already has one.",
+   "expect": "trigger",
+   "comment": "#911 scope-root fix: signup is its own scope root because it has a .claude/ directory, so no live marshal is found there — the repo-root fleet.json is out of scope and never consulted, even though it exists"
   }
  ]
 }
