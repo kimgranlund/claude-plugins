@@ -349,6 +349,11 @@ discover and repair branch/worktree residue by hand):
    Phase 3's version-collision re-checks — both of them: re-run `version_claim_check.py` (the
    CLAIM race) AND fetch + re-read every touched plugin's version off `origin/main` and bump from
    THAT value (the VALUE race, #445) — see Phase 3 for why one check doesn't catch the other.
+   **Closes-keyword gate — mechanical, on the composed body, before PR-open (gh#930).**
+   Regex-check the composed body against `\b(Closes|Fixes|Resolves)\s+#\d+\b` (case-insensitive)
+   for every id this dispatch closes; a miss fails loud — report the body and the missing bare
+   `#<id>`, BLOCK PR-open — never ship a `gh#`-prefixed or prose-verb reference GitHub's parser
+   won't match. Rationale + repro: `references/closes-keyword-gate.md` (F6 split).
    Open exactly one PR against `main` carrying `Closes #<id>` (every id this
    dispatch closes, on a folded campaign), a plain what/why, the gate output for every touched
    plugin, an integration-notes line naming any known overlap with other open PRs (adopt
