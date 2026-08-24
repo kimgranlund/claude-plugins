@@ -184,7 +184,16 @@ skills as everywhere else, and it never writes the `.mcp.json` file itself eithe
   repo-cleaner, the 2026-08-19T21:56:06Z agent-ui firing). A firing where this is the only seat in
   scope (dispatched standalone, or the sole seat a sweep resolved to) keeps the bare path — read
   from the dispatch's own resolved-scope field, never guessed; no new field needed since the
-  dispatch prompt already states the full scope.
+  dispatch prompt already states the full scope. **Naming a report target path obligates emitting
+  the block in the same message, never a bare mention (#922, the narrated-but-absent recurrence
+  `chore_sweep_apply.mjs`/`chore-planner` flagged twice running):** state "Report target: <path>"
+  only immediately followed by a fenced block headed with that exact path, carrying this firing's
+  own narrative report text as its content — the same target-pathed-payload convention
+  `clean-git`'s own Done-when clause already binds `repo-cleaner` to, never a state-file payload
+  standing in for it. Nothing discovered and no state file touched this firing → the report text
+  says so plainly and still
+  ships as that fenced block (a short firing is not an empty one); there is never a firing where
+  the path is named with nothing behind it.
 - Resolved backend is Option C, or `github_mcp_offer` is already recorded → step 8 is skipped
   silently (not a failure — this is the normal, expected shape after the first firing, or on any
   non-GitHub backend), never re-evaluated as if unresolved.
@@ -198,13 +207,15 @@ skills as everywhere else, and it never writes the `.mcp.json` file itself eithe
 
 Done when every item discovered this firing is classified, trust-checked, and either
 minted/resumed (a direct `gh` call, per the Scope section's carve-out) or logged to the scratch
-`held-items.md`; every reachable source's scratch checkpoint entry has advanced; and the report
-exists carrying every touched state file's full content as target-pathed payload
-(`watch-checkpoint.json`, `friendlies.json`, `held-items.md`, and the `.mcp.json` entry when step
-8 wrote one) for the dispatching session to apply — naming step 8's outcome whenever step 8's gate
-is met: offered-and-accepted, offered-and-declined, offered-and-pending-a-carrying-dispatch, or
+`held-items.md`; every reachable source's scratch checkpoint entry has advanced; the per-firing
+report itself ships as a fenced block headed with the exact path named in the "Report target:"
+line (the Failure branches' own obligation above — never named without it); and every touched
+state file's full content also lands as its own target-pathed payload (`watch-checkpoint.json`,
+`friendlies.json`, `held-items.md`, and the `.mcp.json` entry when step 8 wrote one) for the
+dispatching session to apply — naming step 8's outcome whenever step 8's gate is met:
+offered-and-accepted, offered-and-declined, offered-and-pending-a-carrying-dispatch, or
 not-applicable-this-firing (Option C, or a decision already recorded). NOT done while an item is
 silently dropped, an unknown author's item is auto-created or self-approved, an unreachable
 source's checkpoint advances anyway, a source's unreachability goes unreported, step 8 ran and its
-outcome goes unnamed in the report, or this agent writes any state path itself instead of
-returning it as payload.
+outcome goes unnamed in the report, a report target path is named with no matching fenced block
+behind it, or this agent writes any state path itself instead of returning it as payload.
