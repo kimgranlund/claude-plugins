@@ -48,7 +48,9 @@ rather than applying this section itself").
    `fleet.json` always wins over a pointer, and with neither present current behavior stands (no
    walk-up). Report the
    resolved scope root (both roots when a pointer redirected) and which path was used in step 5's
-   report regardless of outcome. Take
+   report regardless of outcome. **Also read the top-level `expected_branch` field** (absent reads
+   `"main"`, `references/fleet-manifest-schema.md`'s own default — canonical there, issue #932):
+   step 3's branch reconcile diffs against this resolved value. Take
    `live_state.joined`'s entries for `role: "agent"` and select the LATEST one by array order.
    **Liveness is that row's `action` field** — `"joined"` or absent counts as live, `"released"`
    does not (the canonical rule, `fleet-bootstrap`'s `references/fleet-manifest-schema.md`, cited
@@ -79,7 +81,17 @@ rather than applying this section itself").
    - **Not listed** (joined but no matching live session) → this is the stale-seat failure branch
      below, not step 3.
 
-3. **Handshake.** `SendMessage` the resolved `agent_name`, introducing THIS session by its own
+3. **Branch reconcile, before the handshake goes out** (`references/fleet-manifest-schema.md`
+   §"Branch reconcile on every bind", canonical there, issue #932). Capture THIS session's own
+   `git rev-parse --abbrev-ref HEAD` (and, where cwd is a linked worktree rather than the primary
+   checkout — `git rev-parse --git-common-dir` vs. `--git-dir` differ only inside one — this
+   session's own worktree path), and diff against step 1's resolved `expected_branch`. **Match** →
+   nothing printed here, folded silently into step 5's report. **Mismatch** → flag it plainly,
+   held for step 5's report (`Session branch <actual> — fleet expects <expected_branch> —
+   mismatch`) — never a hard stop: this command has no write path to `fleet.json` at all (never a
+   `live_state.joined` row — a connecting working session is not itself a seat bind) and no
+   standing to block a handshake over it, only to surface the drift for the human at this terminal
+   to act on. **Handshake.** `SendMessage` the resolved `agent_name`, introducing THIS session by its own
    real name (never a role label), and requesting a one-line status ack plus the `@`-address
    roster (`fleet-bootstrap` Phase 6's own roster shape — every seat, one line, live/dead
    classified). This is a request-response handshake, unlike `team-scaffolding` Phase 4 point 7's
@@ -104,7 +116,9 @@ rather than applying this section itself").
 5. **Report**: the marshal's resolved name, the `fleet.json` path step 1 resolved — both scope
    roots when a `fleet-scope.json` pointer redirected (#915) — (so a
    shadowed sibling copy is auditable), the ack line (or "sent, unacknowledged" per the
-   failure branch), and the roster it returned (or "not received" if the ack never landed).
+   failure branch), the roster it returned (or "not received" if the ack never landed), and step
+   3's branch reconcile outcome (match, or the named mismatch — never omitted, stated even on a
+   match so a reader never has to infer "checked" from silence).
 
 ## Failure branches
 
