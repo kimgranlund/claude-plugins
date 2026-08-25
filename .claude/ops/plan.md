@@ -1,163 +1,192 @@
 # Ops plan — kimgranlund/claude-plugins
 
-Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-24T03:51:50Z**. Evidence:
-all three seat reports attached and complete — **no seat UNMEASURED this firing** (dispatch-named
-UNMEASURED list: `[]`). Per this dispatch's own instruction, evidence is exactly the three
-attached reports — **no supplementary live `gh` cross-check performed** this firing (a deliberate
-difference from the 2026-08-22T23:49:26Z firing's plan, which layered one on top); carry-forward
-status of the *prior plan's own* queue entries was confirmed via local `git log`/`git status`/file
-reads only (durable state, not a refetch of gh issue/PR evidence).
+Rewritten whole by `chore-planner`, SWEEP dispatch, firing **2026-08-25T17:19:54Z**. Evidence: all
+three seat reports attached and complete — **no seat UNMEASURED this firing** (dispatch-named
+UNMEASURED list: `[]`). Per this dispatch's own instruction, evidence is exactly the three attached
+reports — no supplementary live `gh`/`git` fetch was used to *drive* queue decisions; the handful
+of corroborating checks below (branch/behind-count, #611 park-label, prior-entry closure) verify
+claims already made in the reports or the prior plan's own carried state, the same durable/live
+cross-check latitude the prior firing's plan used.
 
-decision-watcher: 25/25 ADRs scanned; one delta — adr-0023's stored checkpoint hash was stale
-relative to the file's actual current content (the correction note appended 2026-08-22 landed via
-a direct commit, `b176b1d`, outside decision-watcher's own harvest flow, so its checkpoint never
-advanced at the time). This firing recomputes and syncs it; the amendment itself is a stale-header
-correction only, judged against save-lessons' Phase 1/2 bar as already fully covered by
-`teamwork/skills/fleet-rules/references/substrate-choice.md` — reject as duplicate, no ADR-queue
-candidate. One payload (`adr-checkpoint.json`). issue-sorter: window since 2026-08-22T23:49:48Z, 21
-new issues + 17 PRs from a dense self-driven build campaign, every one already correctly filed by
-`kimgranlund` (trusted author) with correct kind label and full record shape — 0 mints, 0 repairs,
-0 held, none ruling-shaped; one payload (`watch-checkpoint.json`, checkpoint → 03:52:28Z).
-repo-cleaner: `git fetch --prune` (17 stale refs pruned, all behind merged PRs); primary clean, up
-to date, zero open PRs; classification set changed from prior firing (gitignore WARNs 3→4,
-open-issue set turned over) so a full report is owed, not abbreviated; one payload (its own
-report).
+decision-watcher: 26/26 ADRs scanned; one new ADR (adr-0026, ratified 2026-08-23) narrows IDR-0005's
+zero-further-investment clause to audience-facing surface only, leaving cross-harness/agent-runtime
+work under IDR-0001 instead — passes the impact bar (no `skills/*/references/*.md` anywhere cites
+either IDR, checked against `origin/main`), queued as a harvest candidate. No amended/superseded
+ADRs this firing. issue-sorter: window since 2026-08-24T03:52:28Z, 8 new issues (#919, #921, #922,
+#924, #927, #929, #930, #932) + 8 PRs, all `kimgranlund`-authored and already correctly filed —
+0 mints, 0 repairs, 0 held, 0 ruling-shaped; one cosmetic note (closed #929 missing a severity
+label) explicitly left unactioned by issue-sorter itself. repo-cleaner: `git fetch --prune` (1 stale
+ref pruned, matching merged PR #928); primary clean/PASS; classification set changed from prior
+firing (new orphaned local branch, `main` now behind origin by 1, gitignore WARNs 4→3, issue churn)
+— full report owed, not abbreviated; nothing executed beyond the standing `fetch --prune` exception.
 
-**Narrated-but-absent audit (ops-write-sandbox-rules):**
-- **decision-watcher:** clean — its `adr-checkpoint.json` fenced block is present and matches its
-  own claim; explicitly states `adr-queue.json` is unchanged and carries no block (correct — not a
-  violation).
-- **issue-sorter:** **NOT clean, and recurring.** Its report names a per-firing report target path
-  in prose — "Report target (standalone firing, sole seat in scope):
-  `.claude/ops/reports/2026-08-24T03:52:28Z.md`" — but never emits a matching fenced block; only
-  `watch-checkpoint.json`'s block is present. This is the *same* narrated-but-absent shape the
-  prior plan (2026-08-22T23:49:26Z firing) already named for issue-sorter's prior-firing report
-  path — it recurred rather than closing. Per that rule, named explicitly rather than silently
-  absorbed; entry 1 below applies only the block actually emitted. Given it recurred despite being
-  named last time, this is escalated from feedback-only to a queued hygiene item this firing
-  (entry 4).
-- **repo-cleaner:** clean — its per-firing report is present as a fenced, target-pathed block
-  matching its own stated path exactly (`.claude/ops/reports/2026-08-24T03-52-33Z-repo-cleaner.md`);
-  "executed: nothing" matches its own stated actions (fetch --prune only).
+**Payload audit (ops-write-sandbox-rules):**
+- **decision-watcher — a real deviation, not a violation of "absent," but of "verbatim."** Its
+  `adr-checkpoint.json` fence is explicitly disclosed as truncated (3 of 26 entries, "truncated for
+  readability only") and its `adr-queue.json` fence — NOT disclosed as truncated — uses a different
+  field shape (`adr`, no `plan`/`queued_at`, no `_comment`) than its own scratch file (`adr_id`,
+  `plan`, `queued_at`, and the `_comment` preserving prior-harvest history). Both deviations are
+  resolved by decision-watcher's own closing line naming both scratch paths as "full, exact content
+  to apply." This firing's shared scratchpad made independent verification possible: both scratch
+  files (`/private/tmp/claude-501/-Users-kimba-Projects-nonoun-plugins/7bec92f9-2a20-447a-8c98-585db0f5e3fa/scratchpad/adr-checkpoint.json`,
+  `.../scratchpad/adr-queue.json`) read complete and self-consistent — 26 ADR entries; 1 queue
+  candidate (adr-0026) matching the report's own evidence prose. Entry 1 below sources from those
+  two scratch paths, not the fenced text shown in decision-watcher's report — applying that fenced
+  text verbatim would have written a 3-entry checkpoint and a wrong-shaped queue file. Flagged as a
+  new (first-occurrence, disclosed, not escalated) hygiene item, entry 5.
+- **issue-sorter:** clean, and the prior firing's recurring gap is closed — both blocks (its own
+  per-firing report, `watch-checkpoint.json`) are present, self-contained, and match its own stated
+  paths/claims exactly (no external pointer, no hedge language).
+- **repo-cleaner:** clean — its one block (`2026-08-25T17-21-55Z-repo-cleaner.md`) is present,
+  self-contained, and matches its own stated path and "executed: nothing" claim.
 
-**Prior plan (2026-08-22T23:49:26Z firing) reconciliation:** all four entries — **DONE, persisted**.
-Entry 1 (apply payloads) + entry 2 (commit+push) — commit `c9f74bd` ("ops: persist
-2026-08-22T23:49:26Z sweep state..."), `main` clean and up to date with `origin/main`. Entry 3
-(adr-0023 stale-blockquote repair) — DONE: commit `b176b1d` appended the dated correction note over
-the retained PROPOSED-era blockquote (`.claude/docs/adr/0023-fleet-canon-vs-native-agent-teams.md`,
-verified by direct read this firing — the correction is live). Entry 4 (clear stale #866
-held-item line) — DONE: same commit `b176b1d`; `held-items.md` now reads `Status: resolved
-2026-08-22 — Kim confirmed... built and merged as PR #871`. Nothing carries forward from the prior
-queue — this firing's queue is built fresh from this firing's own three reports.
+**Prior plan (2026-08-24T03:51:50Z firing) reconciliation:** all four entries — **DONE**.
+Entry 1 (apply payloads) — done, per-firing. Entry 2 (commit+push) — DONE: commits `0d60e08`
+("persist 2026-08-24T03:51:50Z sweep state") and `a871ea9` ("record gitignore keep-all ruling on
+plan entry 3"); confirmed via `git log -- .claude/ops/`. Entry 3 (gitignore review) — DONE, closed
+within that same firing (Kim ruled keep all, commit `a871ea9`); the 3 WARNs repo-cleaner reports
+this firing are the *same three* already ruled, `__pycache__` resolved itself off the list. Entry 4
+(issue-sorter's recurring narrated-but-absent report gap) — DONE, two ways: infrastructure defense
+landed (`#924` fix via PR #926, commit `7cad197` — `chore_sweep_apply.mjs`'s `WRITE_VERBS`
+detection now catches "report target"-shaped phrasing with no write-verb, so a future regression
+gets caught mechanically) **and** this firing's issue-sorter report itself complies (block emitted,
+matches its own claimed path exactly) — no recurrence. Nothing else carries forward; this firing's
+queue is built fresh from this firing's own three reports.
 
-**Parked-issue check (#611):** #617 stays **dropped: parked #617** — carried forward from the
-prior firing's own confirmed `backlog`-labeled read (2026-08-22); it was never a numbered queue
-entry, only named informationally, so there is no entry to re-drop. No focus instruction in this
-dispatch names #617, so it is not un-parked. No other id in this firing's evidence (the two new
-issues #914/#913, or #609/#490) is reported carrying `backlog`/`roadmap`.
+**Parked-issue check (#611):** #617 stays **dropped: parked #617** — live-checked this firing
+(`gh issue view 617`) and confirmed still `backlog`-labeled; carried informationally only, never a
+numbered entry. No focus instruction in this dispatch names #617, so it is not un-parked.
 
-**Blocked-by (#193):** no `Blocked-by:` line surfaced in any of this firing's three attached
-reports (none quote issue-body text containing one) — nothing reordered by the convention this
-firing.
+**Blocked-by (#193):** no `Blocked-by:` line in any of this firing's three attached reports or in
+the issue bodies touched while corroborating them (#609, #932) — nothing reordered this firing.
 
-**needs-ruling lane:** empty — issue-sorter's report explicitly states no item this firing read as
-ruling-shaped, and no seat names a `needs-ruling`-labeled issue.
+**needs-ruling lane:** empty — issue-sorter's report states 0 ruling-shaped items this firing, and
+no seat names a `needs-ruling`-labeled issue.
 
 **Lock-file note:** `.claude/ops/sweep-in-flight.json` at the primary names session `plugins-28`
-(pid 36713, startedAt `2026-08-24T03:51:44.364Z` — 6 seconds ahead of this firing's own key,
-same-session match) — this sweep's own dispatching session's coordination lock. Never quarantine
-it via `sync_main.py`, never stage it in entry 2; it clears itself when the sweep exits. Apply all
-fenced payloads at the shared checkout `/Users/kimba/Projects/nonoun/plugins/.claude/ops/...`.
+(pid 73478, startedAt `2026-08-25T17:19:52.753Z` — ~2s ahead of this firing's own key, same-session
+match; `ps -p 73478` finds no matching process, consistent with a just-started sweep, not a stale
+lock). Never quarantine it via `sync_main.py`, never stage it in entry 3; it clears itself when the
+sweep exits. Apply all fenced payloads at the shared checkout
+`/Users/kimba/Projects/nonoun/plugins/.claude/ops/...`.
 
 ## Queue
 
 **Class 1 — gated mutations verified safe:**
 
 ### 1. Apply this firing's payload blocks to their target paths (shared checkout)
-- **Action:** write the fenced payloads verbatim: `.claude/ops/adr-checkpoint.json`
-  (decision-watcher — adr-0023 hash resynced to its current post-amendment content, all other 24
-  hashes unchanged), `.claude/ops/watch-checkpoint.json` (issue-sorter — github source advanced to
-  2026-08-24T03:52:28Z), plus `.claude/ops/reports/2026-08-24T03-52-33Z-repo-cleaner.md`
-  (repo-cleaner's own report), plus this rewritten `.claude/ops/plan.md`. No `adr-queue.json`
-  block (unchanged, still `candidates: []`), no `held-items.md`/`friendlies.json` blocks
-  (issue-sorter: explicitly unchanged), no issue-sorter per-firing report block (narrated but
-  never emitted — see audit above; nothing to apply, tracked instead as entry 4).
+- **Action:** write the fenced payloads verbatim, with one correction: for
+  `.claude/ops/adr-checkpoint.json` and `.claude/ops/adr-queue.json`, source content from
+  decision-watcher's two named scratch files (paths above under Payload audit), **not** the fenced
+  text shown in its report — those two files are complete/verified, the report's own fences are
+  truncated/mismatched. Also apply `.claude/ops/watch-checkpoint.json` (issue-sorter — github
+  source advanced to 2026-08-25T17:20:49Z), `.claude/ops/reports/2026-08-25T17:20:49Z.md`
+  (issue-sorter's own report), `.claude/ops/reports/2026-08-25T17-21-55Z-repo-cleaner.md`
+  (repo-cleaner's own report), plus this rewritten `.claude/ops/plan.md`. No `friendlies.json`/
+  `held-items.md` blocks (issue-sorter: explicitly unchanged).
 - **Owner:** the dispatching session (apply step, per ops-write-sandbox-rules).
-- **Evidence:** three fenced seat blocks + this plan, all present; narrated-but-absent audit above
-  names the one gap and excludes it rather than fabricating content for it.
+- **Evidence:** three seat reports' fenced blocks + verified scratch files + this plan; Payload
+  audit section above names the one correction rather than applying corrupted content silently.
+- **Size:** ~2 min.
+
+### 2. Delete the orphaned local branch `927-dispatch-envelope-refspec`
+- **Action:** `git branch -d 927-dispatch-envelope-refspec` — fully merged via PR #928, remote
+  already deleted (confirmed: `git branch -vv` shows `[origin/927-dispatch-envelope-refspec: gone]`;
+  `git fetch --prune` already pruned the matching remote-tracking ref this firing). No host-repo
+  reap script exists, so repo-cleaner proposed only per its own local-branch rule.
+- **Owner:** Kim.
+- **Evidence:** repo-cleaner's 2026-08-25T17:21:55Z report; `git branch -vv` output cross-checked
+  this firing.
 - **Size:** ~1 min.
 
 **Class 2 — blocking other work:**
 
-### 2. Commit + push the applied ops state from the primary — the next scheduled firing starts blind until it lands (recurring)
-- **Action:** from `/Users/kimba/Projects/nonoun/plugins` on `main`: stage exactly the three
-  ops-state paths entry 1 applied — never `git add -A`. **Exclude `sweep-in-flight.json`** (the
-  live lock, per the lock-file note). Read the status output, commit as a separate step, push.
+### 3. Pull `main` up to date, then commit + push this firing's applied ops state (recurring)
+- **Action:** `main` is behind `origin/main` by exactly 1 commit (`0dcd3e3` — the #929 fix, merged
+  as PR #931; confirmed via `git rev-list --count HEAD..origin/main` = 1; that commit touches only
+  `harness/` files, not `.claude/ops/`, so no conflict risk with entry 1's writes). Once
+  `sweep-in-flight.json` is confirmed cleared (this sweep's own marker, expected gone on exit):
+  `git pull --ff-only`, then from `/Users/kimba/Projects/nonoun/plugins` on `main` stage exactly
+  the ops-state paths entry 1 applied — never `git add -A`, never `sweep-in-flight.json` — read the
+  status output, commit as a separate step, push.
 - **Owner:** Kim.
-- **Evidence:** ops-write-sandbox-rules (state persists through the repo or the next firing starts
-  blind); repo-cleaner — primary clean, up to date, prior firing's persist already landed
-  (`c9f74bd`, `b176b1d`).
-- **Size:** ~2 min.
+- **Evidence:** repo-cleaner's report + `git status --branch`/`git rev-list` cross-check this
+  firing; ops-write-sandbox-rules (state persists through the repo or the next firing starts
+  blind).
+- **Size:** ~3 min.
 
-**Class 3 — human decisions:** none pending this firing. `held-items.md`'s ruling queue carries no
-open entry (the one prior entry, #866, is fully resolved and cleared). The ADR-queue confirm round
-is empty (`candidates: []`). No `needs-ruling`-labeled issue in evidence.
+**Class 3 — human decisions:**
+
+### 4. Confirm decision-watcher's one pending ADR-queue candidate (adr-0026, harvest)
+- **Action:** one batched `AskUserQuestion` round covering the single pending candidate in
+  `adr-queue.json` (adr-0026 — narrows IDR-0005's scope-narrowing clause to audience-facing surface
+  only; no existing skill/references file cites either IDR, so this is genuinely new routing
+  knowledge, not a duplicate). On confirm, the concrete next step is `/make-pack` or `/make-skill`
+  placement (docs' `save-lessons` Phase 2) — likely a new reference file, since none currently owns
+  IDR/ADR routing citations.
+- **Owner:** Kim.
+- **Evidence:** decision-watcher's 2026-08-25T17:19:54Z report; `adr-queue.json` (post entry-1
+  apply) carries the one candidate.
+- **Size:** ~5 min.
 
 **Class 4 — hygiene debt:**
 
-### 3. Review the 4 stale-matching `.gitignore` rules — RESOLVED 2026-08-24: Kim ruled keep all (dist/ and __pycache__/ guard future build output; zero cost to keep). No edit made.
-- **Action:** `gitignore_check.py` now reports 4 WARN (up from 3): `dist/`, `harness-audit-*/`,
-  `.name-map.md`, and newly `__pycache__/` (added via commit `696f120`, now matches nothing
-  tracked — no `__pycache__` dirs exist anywhere in the tree). All are G1
-  stale-rule-matches-nothing shapes, no FAIL. Review each and decide keep-vs-prune; per
-  `.claude/rules/gitignore-repair.md` no ops-family seat hand-edits `.gitignore` itself.
-- **Owner:** Kim.
-- **Evidence:** repo-cleaner's 2026-08-24T03:52:33Z report (`.claude/ops/reports/
-  2026-08-24T03-52-33Z-repo-cleaner.md`), `gitignore_check.py` output cited there.
-- **Size:** ~5 min.
-
-### 4. Fix issue-sorter's recurring narrated-but-absent per-firing report gap (NEW — 2nd consecutive firing)
-- **Action:** issue-sorter has now named a per-firing report target path in prose without emitting
-  the matching fenced block on two consecutive firings (2026-08-22T23:49:26Z and this firing,
-  2026-08-24T03:51:50Z) — see the narrated-but-absent audit above. Naming it as procedural feedback
-  alone didn't close it last time; this firing escalates it to a queued item. Whoever next revises
-  issue-sorter's own procedure skill should either make it actually emit the block it claims, or
-  drop the claim when the bare-report-path convention doesn't apply this run.
-- **Owner:** Kim (or whoever next touches issue-sorter's procedure skill).
-- **Evidence:** this firing's audit above; prior plan's 2026-08-22T23:49:26Z firing's own
-  identical finding (`.claude/ops/reports/` — no `2026-08-22T23-49-48Z.md` or
-  `2026-08-24T03:52:28Z.md` exists at either claimed path).
+### 5. decision-watcher: emit complete, accurately-shaped fenced payload blocks directly (NEW — first occurrence, disclosed)
+- **Action:** decision-watcher's report this firing shipped a truncated `adr-checkpoint.json` fence
+  and an undisclosed field-shape mismatch in its `adr-queue.json` fence versus its own scratch
+  source (see Payload audit above) — resolved only by a closing note redirecting to scratch paths.
+  This is a softer variant of the narrated-but-absent class the prior plan escalated for
+  issue-sorter (entry 4, now closed): the fence itself should be the complete, accurate write per
+  ops-write-sandbox-rules ("the fenced block IS the write"), not a pointer requiring an out-of-band
+  read this sweep's shared scratchpad happened to make possible but which the contract does not
+  document as guaranteed. Whoever next revises decision-watcher's own procedure skill should make
+  it emit the full, correctly-shaped content in-fence (or split across multiple correctly-headed
+  fences) rather than truncating or drifting from its own scratch state.
+- **Owner:** Kim (or whoever next touches decision-watcher's procedure skill).
+- **Evidence:** this firing's Payload audit above; direct read of both scratch files versus both
+  fenced blocks in decision-watcher's own report.
 - **Size:** ~10 min.
 
 ## Not queued (checked, found clean, parked, or deliberately left)
 
-- **`sweep-in-flight.json`** — this sweep's own lock (startedAt ~6s before the firing key, session
-  `plugins-28`); flagged in the lock-file note and entry 2's exclusion; never queued as cleanup.
-- **dropped: parked #617** — carried forward from the prior firing's confirmed `backlog` label;
-  never a numbered queue entry; not un-parked (no focus instruction named it this dispatch).
-- **#914, #913 (NEW)** — `task`, `size:small`, zero assignees, no comments — buildable/tracked
-  backlog, outside this queue (same treatment as #878/#609/#490 in the prior firing's plan).
-- **#609, #490** — open bugs, zero assignees, unchanged this firing — buildable/tracked backlog,
-  outside this queue.
-- **No open PRs this firing** (`gh pr list --state open` returned empty per repo-cleaner) —
-  nothing in-flight to note, unlike the prior firing's PR #879 (now merged).
-- **17 pruned remote refs** (behind merged PRs through #916) — remote branches already gone,
-  locals never existed at the primary; no reap items created.
-- **Stale-claim check** — clean: all 5 open issues (#914, #913, #617, #609, #490) carry zero
-  assignees.
-- **adr-0023 amendment content** — duplicate of already-harvested material
-  (`teamwork/skills/fleet-rules/references/substrate-choice.md`, ADR-0023 harvest); no ADR-queue
-  candidate.
+- **`sweep-in-flight.json`** — this sweep's own lock (startedAt ~2s before the firing key, session
+  `plugins-28`); flagged in the lock-file note and entry 3's exclusion; never queued as cleanup.
+- **dropped: parked #617** — confirmed still `backlog`-labeled this firing; never a numbered queue
+  entry; not un-parked (no focus instruction named it this dispatch).
+- **#932 (NEW)** — `task`, `size:big`, zero assignees — buildable/tracked backlog, outside this
+  queue (same treatment as prior firings' #914/#913/#609).
+- **#609** — open bug/major, zero assignees, unchanged this firing — buildable/tracked backlog,
+  outside this queue; `doing` label not treated as a claim absent a ruling naming it as one (same
+  precedent as the prior two firings).
+- **#490 — now CLOSED** (was tracked as open in the two prior plans; repo-cleaner's current
+  open-issue count of exactly 3 — #932, #617, #609 — confirms it dropped off); no longer needs a
+  "not queued" mention.
+- **#914, #913 — now CLOSED** (open two firings ago; repo-cleaner confirms closed this firing).
+- **issue-sorter's #929 label-completeness note** — closed issue #929 (already fixed/merged via PR
+  #931) carries `bug` with no severity label; issue-sorter itself left this unactioned ("no triage
+  decision pending" on resolved history) — noted here for visibility, not queued, respecting that
+  judgment.
+- **8 PRs merged this window** (#917, #918, #920, #923, #925, #926, #928, #931) — context only, all
+  `kimgranlund`, all already reflected in the "Resolved since prior plan" section below.
+- **1 pruned remote ref** (`origin/927-dispatch-envelope-refspec`, behind merged PR #928) — already
+  gone; entry 2 covers the leftover local copy.
+- **Gitignore 3 WARN** (`dist/`, `harness-audit-*/`, `.name-map.md`) — already RULED keep-all by Kim
+  2026-08-24 (commit `a871ea9`); no new action, no re-review owed.
+- **Stale-claim check** — clean: all 3 open issues (#932, #617, #609) carry zero assignees.
+- **Off-main-primary** — none; `primary_checkout_check.py` reads PASS.
 
-## Resolved since the prior plan (2026-08-22T23:49:26Z firing)
+## Resolved since the prior plan (2026-08-24T03:51:50Z firing)
 
-- Prior entries 1+2 (apply + persist) — DONE, commit `c9f74bd`; `main` clean, up to date with
-  `origin/main`.
-- Prior entry 3 (adr-0023 stale-blockquote repair) — DONE, commit `b176b1d`; correction note
-  confirmed live by direct file read this firing.
-- Prior entry 4 (clear stale #866 held-item line) — DONE, same commit `b176b1d`; `held-items.md`
-  now reads `Status: resolved 2026-08-22`.
-- 21 new issues + 17 PRs processed this window by issue-sorter, all correctly self-filed, 0 new
-  ops action.
+- Prior entry 2 (commit+push) — DONE, commits `0d60e08` + `a871ea9`; confirmed via `git log`.
+- Prior entry 3 (gitignore review) — DONE, Kim ruled keep-all 2026-08-24 (commit `a871ea9`).
+- Prior entry 4 (issue-sorter narrated-but-absent gap) — DONE: `#924` fix landed (PR #926, commit
+  `7cad197`, widens `chore_sweep_apply.mjs`'s detection to catch report-target phrasing without a
+  write-verb) and this firing's issue-sorter report complies directly — no recurrence, entry
+  retired (not carried forward as a 3rd-consecutive escalation).
+- `#929` (adr_checkpoint.py: hash the amendment ratification marker) — merged via PR #931 (commit
+  `0dcd3e3`); this is the one commit `main` is currently behind `origin/main` by (entry 3).
+- 8 new issues + 8 PRs processed this window by issue-sorter, all correctly self-filed, 0 new ops
+  action.
+- #914, #913, #490 — all closed since the prior plan; dropped from "Not queued" tracking.
 
-Dispatch: 2026-08-24T03:51:50Z
+Dispatch: 2026-08-25T17:19:54Z

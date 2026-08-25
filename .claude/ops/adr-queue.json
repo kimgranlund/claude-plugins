@@ -1,4 +1,11 @@
 {
-  "_comment": "adr-0024, adr-0025, and adr-0011 (stale-citation) harvested 2026-08-22 into authorkit/skills/naming-conventions/references/LAYOUT.md + FRONTMATTER.md — PR TBD (adr-0024-0025-harvest branch). See that plugin's README v0.26.4 ledger line.",
-  "candidates": []
+  "candidates": [
+    {
+      "adr_id": "adr-0026",
+      "evidence": "adr-0026 (.claude/docs/adr/0026-idr-0005-scope-narrowed-to-audience-facing-surface.md) ratified 2026-08-23: narrows IDR-0005's zero-further-investment clause to audience-facing surface only (README/marketplace framing, LICENSE, plugin-boundary hygiene, issue-sorter friendlies allow-list) -- cross-harness/agent-runtime interop work (gh#885 harness_emit.py and similar) cites IDR-0001 instead and is NOT gated on IDR-0005's adoption-signal proof/falsify condition. No skill/references/*.md anywhere currently cites idr-0005 or idr-0001 (checked against origin/main) -- a future campaign deciding which IDR governs new cross-harness vs audience-facing work has no routing citation to consult and would misroute without one.",
+      "kind": "harvest",
+      "plan": "",
+      "queued_at": "2026-08-25T17:20:56Z"
+    }
+  ]
 }
