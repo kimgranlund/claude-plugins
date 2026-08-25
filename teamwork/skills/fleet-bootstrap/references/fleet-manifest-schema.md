@@ -59,6 +59,7 @@ authorizer, never copies this one's values.
 ```json
 {
   "version": 1,
+  "expected_branch": "main",
   "seats": {
     "agent":    { "tier": "sonnet+high",  "justification_date": "2026-08-22", "mode": "manual" },
     "reviewer": { "tier": "sonnet+high",  "justification_date": "2026-08-22", "mode": "manual" },
@@ -101,6 +102,15 @@ takeover record.
 
 ## Fields
 
+- **`expected_branch`** — the fleet's own expected branch, top-level (sibling to `seats`/
+  `live_state`), read/diffed at every bind this schema's "Branch reconcile on every bind" section
+  below governs. **Absent reads as `"main"`** — the canonical default per `fleet-rules`'s own
+  "shared primary checkout stays on `main`, always" doctrine (cited, not restated): an ordinary
+  fleet cold-started in the primary checkout expects every seat on `main`. A fleet cold-started
+  inside an already-checked-out campaign worktree seeds this explicitly with that branch name
+  instead (`fleet-bootstrap` Phase 0). Never inferred after the fact from a majority vote across
+  already-joined seats' own branches — it is seeded once at cold-start and stays authoritative
+  until a human deliberately changes it.
 - **Schema key vs. printed session name (`agent` role only).** `fleet.json`'s role key stays
   `agent` everywhere in this schema — `seats.agent`, `live_state.joined[].role: "agent"` — and a
   builder never renames it. The PRINTED/roster session name for that role is `{scope}-marshal`,
@@ -170,6 +180,22 @@ takeover record.
   own Failure branches treat that case explicitly rather than folding it into "no live marshal." A
   background/background-subprocess row's `agent_name` keeps its existing meaning (the dispatched
   `Agent`-tool name, or the subprocess's log-path/PID pointer).
+- **`live_state.joined[].branch`** — the binding session's own `git rev-parse --abbrev-ref HEAD`
+  at bind time (issue #932). Written today only by `fleet-bootstrap` Phase 1's `agent`/marshal
+  bind — the only role a `fleet-bootstrap` run itself binds as a live terminal inheriting a
+  human's own cwd; a dispatched/spawned seat (`planner`, `reviewer`, `product`) means something
+  different by "which branch" and is out of scope here, left for a future ticket rather than
+  guessed at. See "Branch reconcile on every bind" below for the diff this field feeds.
+- **`live_state.joined[].worktree_path`** — optional, present only when the binding session's cwd
+  is a linked worktree rather than the primary checkout (`git rev-parse --git-common-dir` vs.
+  `--git-dir` — differ only inside a linked worktree, the same test `fleet-bootstrap` Phase 5's
+  reviewer precondition already runs) — the worktree's absolute path. Absent means the primary
+  checkout.
+- **`live_state.joined[].branch_mismatch`** — optional, present only when "Branch reconcile on
+  every bind" (below) found `branch` diverging from the resolved `expected_branch` at bind time:
+  the resolved `expected_branch` value itself, so a later reader isn't left re-deriving what
+  "expected" meant at that moment — `expected_branch` can change after the fact. Absent means no
+  mismatch was found (or this row predates issue #932 and was never checked).
 - **`live_state.joined[].action`** — **this field's semantics are canonical here; `team-scaffolding`'s
   Phases 1/2/6 cite this entry rather than restating it.** `"joined"` (a seat bound this row,
   either a fresh bind or a takeover of a previously-released seat) or `"released"` (the seat
@@ -357,6 +383,48 @@ that actually takes it per-dispatch — `Workflow`'s `agent()`, a `claude -p` su
 that step fixes directly. Both matter: the marshal terminal itself running Fable IS every
 unpinned fork's price (issue #313), so this reality check is also the earliest point that class
 of downstream leak becomes visible.
+
+## Branch reconcile on every bind (issue #932)
+
+The root cause this closes: `fleet.json` tracks WHO has joined and at what tier, but never
+WHERE — a seat can bind on the wrong branch or a stale worktree entirely and nothing catches it
+until a downstream merge conflict or wrong-base PR surfaces the drift, sometimes days later.
+
+**Capture, at every bind this section governs**: `git rev-parse --abbrev-ref HEAD` (the branch)
+and, where the binding session's cwd is a linked worktree rather than the primary checkout (the
+`--git-common-dir` vs. `--git-dir` test, cited above), that worktree's absolute path. Write both
+to the bind's own `live_state.joined` row (`branch` always, `worktree_path` only when linked).
+
+**Diff `branch` against `expected_branch`** (top-level field, above; absent reads as `"main"`):
+
+- **Match** → nothing printed; correct is quiet, same posture as the tier reconcile's own
+  manifest-vs-ladder comparison.
+- **Mismatch** → flag it plainly — `Session branch <actual> — fleet expects <expected_branch> —
+  mismatch` — and write `branch_mismatch: "<expected_branch>"` on that same `live_state.joined`
+  row. **This is a flag, never a hard stop**, the identical never-silent/never-blocked posture the
+  tier reconcile's own "Reality check" subsection already takes for a model-tier deviation-in-fact:
+  a real branch mismatch is exactly the kind of drift a human notices and corrects, or
+  deliberately accepts (a seat intentionally working a sub-branch for one slice), not a condition
+  severe enough to block a bind the way Phase 3's intent-layer gate does. `fleet-rules` Section
+  7's routing/escalation discipline, not this schema, decides what happens next once the flag is
+  visible.
+
+**Today's writers.** `fleet-bootstrap` Phase 1 (the `agent`/marshal bind) runs the capture-and-diff
+above and writes both new `live_state.joined` fields. `fleet-connect` reads `expected_branch` and
+runs the identical comparison against the CONNECTING working session's own branch, but never
+writes to `fleet.json` at all — it has no write path today, full stop — so its outcome surfaces
+only in that command's own report, never as a `live_state.joined` row (a connecting working
+session is not itself a seat bind). Extending this to `planner`/`reviewer`/`product` binds is
+deliberately out of scope here — each is a dispatched or spawned process rather than a live
+terminal inheriting a human's own cwd, so "which branch is this session on" means something
+different there — left for a future ticket rather than guessed at.
+
+**No `version` bump for this addition.** Both new fields are additive and optional with a sensible
+default when absent (`expected_branch` absent reads as `"main"`; `branch`/`worktree_path`/
+`branch_mismatch` absent on a `live_state.joined` row simply means "not checked" — the same
+posture `cross_repo_coordination` already established for an earlier additive field), so an
+existing `fleet.json` written before this change keeps reading correctly with no migration step;
+a `version` bump is reserved for a change that breaks an existing reader, which this isn't.
 
 ## Milestone-report threshold (stretch, gh#896 — not yet wired)
 
