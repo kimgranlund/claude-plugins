@@ -39,27 +39,34 @@ loop (`SYSTEM_PROMPT_TRIAGE.md`; `cmd-build.ts`'s gateBefore byte-diff + `VALIDA
 `READONLY_TOOLS` flip):
 
 1. **Triage diagnostician.** On the SAME check's second consecutive failure, dispatch a
-   fresh-context, READ-ONLY checker-class seat (sonnet — a diagnosis is judgment, not building) to
-   inspect the real project state directly, never the builder's claims about it, and compare what
-   the gate demands against what was actually produced. It returns one bounded brief: **Diagnosis**
-   (root cause) / **Do-exactly-this** (ordered steps) / **Do-NOT** (what the builder keeps doing
-   wrong). The brief is advisory context handed back to the builder for its next try — the gate's
-   own output stays the source of truth, never the diagnostician's opinion.
+   fresh-context checker-class seat (sonnet — a diagnosis is judgment, not building), starting
+   READ-ONLY, to inspect the real project state directly, never the builder's claims about it, and
+   compare what the gate demands against what was actually produced. It returns one bounded brief:
+   **Diagnosis** (root cause) / **Do-exactly-this** (ordered steps) / **Do-NOT** (what the builder
+   keeps doing wrong). The brief is advisory context handed back to the builder for its next try —
+   the gate's own output stays the source of truth, never the diagnostician's opinion.
 2. **Gate-repair privilege — exactly once per run, and only for a defective gate.** If and only if
    the diagnosis is that the gate itself is broken (impossible to satisfy as written, or demands
-   something the original request never asked for), the diagnostician may repair the gate. Spend
-   the privilege deliberately: byte-diff the gate file before/after to detect that a repair was
-   made, preserve the pre-repair version as an audit copy, drop the seat's tool allowlist from
-   write-capable to read-only the moment the one repair lands (mirroring fusion-harness's
-   `VALIDATOR_TOOLS`→`READONLY_TOOLS` flip), and re-run the repaired gate immediately without
-   charging the builder one of its capped tries. **Never-weaken rule:** every check that maps to a
-   real requirement stays at full strength — this privilege fixes the gate's own bug, it never
-   moves the goalposts to make a correct gate easier to pass. This is a prompt-level discipline in
-   fusion-harness (no separate mechanical enforcement there beyond the byte-diff), and the canon
-   states that honestly rather than implying a tool-level guarantee this stack doesn't yet have.
+   something the original request never asked for), the diagnostician's tool allowlist is widened
+   from read-only to write access scoped to the gate file alone (mirroring fusion-harness's
+   `VALIDATOR_TOOLS` grant), and it may repair the gate. Spend the privilege deliberately:
+   byte-diff the gate file before/after to detect that a repair was made, preserve the pre-repair
+   version as an audit copy, then drop the seat's tool allowlist straight back to read-only the
+   moment the one repair lands (mirroring fusion-harness's `VALIDATOR_TOOLS`→`READONLY_TOOLS`
+   flip) — the widened grant never survives past that single write. Re-run the repaired gate
+   immediately without charging the builder one of its capped tries. **Never-weaken rule:** every
+   check that maps to a real requirement stays at full strength — this privilege fixes the gate's
+   own bug, it never moves the goalposts to make a correct gate easier to pass. This is a
+   prompt-level discipline in fusion-harness (no separate mechanical enforcement there beyond the
+   byte-diff), and the canon states that honestly rather than implying a tool-level guarantee this
+   stack doesn't yet have.
 
 A second identical failure AFTER the diagnosis (same check, same root cause) escalates per the
-existing rule — stop and report, not a second triage pass.
+existing rule — stop and report, not a second triage pass. This is the concrete `diagnose →
+route the fix` mechanism for a single-check failure; `references/self-orchestrated-looping-agentic-systems.md`'s
+credit-assignment model (execution/spec/plan routing) covers the broader multi-seat case where
+the fix isn't a same-gate repair — read that reference when the diagnosis points past the gate
+itself.
 
 ## Review
 1. Run the mechanical gates on the goal string: `python scripts/harness_checks.py goal "<goal text>"`.
