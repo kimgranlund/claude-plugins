@@ -185,6 +185,11 @@ living-index type landed as **BRIEF** (issue #404, 2026-08-16; row above, `docs/
 instance per product/repo — `<scope>` names the product, never a second copy. Full scoping:
 `prd-idr-framework.md`; concept authority: `product-lifecycle-bible.md` Part 4.
 
+**Which locked IDR governs a given piece of work, when more than one plausibly applies:**
+`references/idr-scope-routing.md` (idr-0005 vs idr-0001, per ADR-0026's audience-facing-surface
+vs cross-harness/agent-runtime interop split) — check it before assuming either governs new work,
+never re-derive the split from the IDRs' own Claim text alone.
+
 **RDD — Roadmap Decision Record.** Sits downstream of both ADR and IDR on the ID spine — a locked
 release commitment (scope, IDR-grammar acceptance criteria, sequencing, DRI) that **cites** `≥1`
 ADR/IDR via its own `decision-refs:` frontmatter field, never the reverse.
