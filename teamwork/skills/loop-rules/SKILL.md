@@ -28,8 +28,38 @@ user-invocable: false
 
 ## Design
 1. Pick the pattern: finish-line the agent can prove → `/goal`; recurring external check → `/loop`; enforced "until clean" → Stop hook + check; collaboration → team.
-2. Write the `/goal` as a measurable end-state with the proof method named; make the proof land in the transcript; add a turn/time cap, a scope guard, and an escalation clause (the same check failing twice → stop and report, not retry).
+2. Write the `/goal` as a measurable end-state with the proof method named; make the proof land in the transcript; add a turn/time cap, a scope guard, and an escalation clause (the same check failing twice → triage, below — not a flat retry).
 3. Self-score (below); fix until every gate dimension (C1, C3) ≥ 3.
+
+## Escalation: triage-diagnostician + gate-repair privilege
+
+The escalation clause (Design step 2) doesn't just stop at N=2 identical failures — it inserts one
+structured diagnosis before the run halts, adapted from disler/fusion-harness's auto-validation
+loop (`SYSTEM_PROMPT_TRIAGE.md`; `cmd-build.ts`'s gateBefore byte-diff + `VALIDATOR_TOOLS` →
+`READONLY_TOOLS` flip):
+
+1. **Triage diagnostician.** On the SAME check's second consecutive failure, dispatch a
+   fresh-context, READ-ONLY checker-class seat (sonnet — a diagnosis is judgment, not building) to
+   inspect the real project state directly, never the builder's claims about it, and compare what
+   the gate demands against what was actually produced. It returns one bounded brief: **Diagnosis**
+   (root cause) / **Do-exactly-this** (ordered steps) / **Do-NOT** (what the builder keeps doing
+   wrong). The brief is advisory context handed back to the builder for its next try — the gate's
+   own output stays the source of truth, never the diagnostician's opinion.
+2. **Gate-repair privilege — exactly once per run, and only for a defective gate.** If and only if
+   the diagnosis is that the gate itself is broken (impossible to satisfy as written, or demands
+   something the original request never asked for), the diagnostician may repair the gate. Spend
+   the privilege deliberately: byte-diff the gate file before/after to detect that a repair was
+   made, preserve the pre-repair version as an audit copy, drop the seat's tool allowlist from
+   write-capable to read-only the moment the one repair lands (mirroring fusion-harness's
+   `VALIDATOR_TOOLS`→`READONLY_TOOLS` flip), and re-run the repaired gate immediately without
+   charging the builder one of its capped tries. **Never-weaken rule:** every check that maps to a
+   real requirement stays at full strength — this privilege fixes the gate's own bug, it never
+   moves the goalposts to make a correct gate easier to pass. This is a prompt-level discipline in
+   fusion-harness (no separate mechanical enforcement there beyond the byte-diff), and the canon
+   states that honestly rather than implying a tool-level guarantee this stack doesn't yet have.
+
+A second identical failure AFTER the diagnosis (same check, same root cause) escalates per the
+existing rule — stop and report, not a second triage pass.
 
 ## Review
 1. Run the mechanical gates on the goal string: `python scripts/harness_checks.py goal "<goal text>"`.
@@ -77,7 +107,8 @@ condition, whenever the work already has one:
 | a feature-shaped TICKET's `## Findings` section | gains a dated entry (the `/build-feature` dispatch contract) | 5 tries per build |
 
 A cap that repeats the identical fix is thrashing, not iterating — the escalation clause (Design
-step 2) fires on the *same* check failing twice, not merely on failing twice.
+step 2) fires on the *same* check failing twice, not merely on failing twice, and that firing is
+the triage-diagnostician's cue (above), not an immediate halt.
 
 ## Worked example: proactive bug intake
 
