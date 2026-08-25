@@ -64,3 +64,9 @@ discovered design fork, an unresolved gate failure) carries Phase 3's claim-rele
 plus whatever the worktree's actual state honestly is at that point — never assumed clean just
 because the claim was released. A report missing any of these lines is `dispatch-ticket`'s own
 contract gap to name, not yours to fabricate or paper over.
+
+The `gate-first: authorized` line (LLD-0026, gh#939) travels in your sealed dispatch prompt like
+the other two grants (`accept-grant`, `auto-merge`) — you relay it into `dispatch-ticket`'s Phase
+4 unchanged, never act on it yourself. When it fired, the handoff's `gate-rounds`, `gate-final`,
+and `gate-comment` fields (`dispatch-ticket`'s Phase 5 stage 4) relay verbatim like everything
+else; a missing one on an armed dispatch is the same named contract gap as any other.

@@ -302,6 +302,7 @@ caller's side:
   deliberately: the fork isolates the CALLER's session, the coordinator isolates the multi-seat
   chain — two different things, not one dispatch nested for no reason. Same shape on a
   `build-leader` dispatch, with the agent context taking the fork's place.
+- **Gate-first mode (gh#939)** — opt-in via `gate-first: authorized`; absent → this bullet does not exist; present → dispatch one validator to author an executable gate from Acceptance, or `gate-infeasible`: `references/gate-first-mode.md`.
 
 ## Phase 5 — Dispatch under contract: the four lifecycle stages
 
@@ -315,7 +316,7 @@ discover and repair branch/worktree residue by hand):
    PR-open contract, now gated per ADR-0023 decision (c) — `lld-0022-fleet-native-write-gate.md`).
    Commit meaningfully as work lands and push the claimed branch; the pushed-but-not-yet-open
    state is stage 2a's own HOLD point, immediately below — a draft PR already counts as PR-open
-   here (ADR-0023's own "visible/mergeable outside" test).
+   here (ADR-0023's own "visible/mergeable outside" test). **Gate-first armed (gh#939)**: this hold doesn't open until the gate reads green (`references/gate-first-mode.md`); not armed, skip.
 
    **2a. Plan-approval write-gate (ADR-0023 (c)) — hold, then accept, then PR-open.** Unconditional
    on every dispatch, never gated by ADR-0012's grant (2b composes on top, never bypasses).
@@ -403,8 +404,7 @@ discover and repair branch/worktree residue by hand):
    conjunct and states the fallback plainly — PR opened, awaiting a human merge, today's behavior
    unchanged. When no grant was present, the handoff says nothing about auto-merge at all. When
    stage 2a never released (`write-gate-blocked`), no PR/accept-marker URL exists — name the
-   blocker instead (Failure branches). `build-leader`'s own return contract carries these lines
-   verbatim to whatever dispatched it.
+   blocker instead (Failure branches). Gate-first armed → handoff also carries `gate-rounds`/`gate-final`/`gate-comment` (`references/gate-first-mode.md`); not armed, the handoff says nothing about gate-first at all. `build-leader`'s own return contract carries these lines verbatim to whatever dispatched it.
 
 Every dispatch is also sealed under the write-back contract already in force: the ticket path +
 enumerated inputs + budget + the typed return + stage 2a's **accept-marker requirement
@@ -487,8 +487,7 @@ conversational summary never substitutes for the entry the record was owed.
   skipped task is a reported outcome, not a failure.
 - Build blocked mid-flight by a discovered design fork → escalate to the record (a dated Findings
   entry naming the fork) and, for big work, back to planner — never silently edit the contract.
-- Gates fail at the wave boundary → the failure routes to the seat that caused it; the ticket
-  stays `doing` with the failure recorded.
+- Gates fail at the wave boundary → the failure routes to the seat that caused it; the ticket stays `doing` with the failure recorded. Gate-first (gh#939, only when armed — not armed, none of this applies): round-cap/repeat-fail/tamper is `gate-rounds-exhausted`/`gate-tampered` here too; unmechanizable Acceptance is `gate-infeasible` — `references/gate-first-mode.md`.
 - Stage 2b's predicate misses, or its merge sequence fails part-way (`auto-merge-denied` on a
   blocked `gh pr merge`, `auto-merge-unverified` on a merge whose SHA never confirmed) → **not a
   build failure**: the PR is open and linked, which is this dispatch's ordinary successful end
