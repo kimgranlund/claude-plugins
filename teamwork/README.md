@@ -110,6 +110,12 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.28.54 · 2026-08-25 · closes #936: `chores-run`'s step 2 (the one skill body in this estate with
+an actual direct-to-main commit+push pattern) now cites `harness:ops-write-sandbox-rules`' new
+push-verification convention — `git ls-remote origin main` compared against the just-made commit
+before its report names a SHA as landed — instead of trusting the local commit or a bare
+`--ff-only` "Already up to date" pull. Same citation added to the printed `/goal` block's own
+turn-2 commit+push step. PATCH: cites a new shared convention, no new mechanics of its own.
 v2.28.53 · 2026-08-25 · closes #938: adds the TRIAGE-DIAGNOSTICIAN pattern and the exactly-once
 gate-repair privilege to `loop-rules`' failure-mode canon, adapted from disler/fusion-harness's
 auto-validation loop (`SYSTEM_PROMPT_TRIAGE.md`; `cmd-build.ts`'s gateBefore byte-diff +
