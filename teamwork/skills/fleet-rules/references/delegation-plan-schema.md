@@ -2,9 +2,11 @@
 
 > `fleet-rules` domain reference (Part B, Design step 5). Adapted from disler/fusion-harness's
 > collaboration mode (`USER_PROMPT_COLLAB_DELEGATE.md`, `USER_PROMPT_COLLAB_PROPOSE.md`),
-> 2026-08-25. This formalizes what Design step 5 and `[[parallel-work-rules]]` already say in
-> prose — disjoint fan-out, host owns git, serial default on unconfirmed disjointness. The
-> capture is the SCHEMA as a reusable, checkable artifact, not new doctrine.
+> 2026-08-25. The task-graph fields (`id`/`depends_on[]`/`outputs[]`/`mode`) formalize what
+> Design step 5 and `[[parallel-work-rules]]` already say in prose — disjoint fan-out, host owns
+> git, serial default on unconfirmed disjointness. The propose→merge→delegate→execute flow below
+> is a new pattern this skill didn't carry before; it's captured here because it's the concrete
+> procedure that produces a graph in this shape, not restated doctrine elsewhere.
 
 ## The shape
 
@@ -24,7 +26,7 @@ A delegation plan is a JSON task graph. Each task carries:
 - **`id`** — dependency-grouped: `1.a`/`1.b` run in the same wave, `2.a` waits on wave 1. The
   number is the wave, the letter distinguishes concurrent tasks within it.
 - **`assignee`** — an exact seat id drawn from a STATED roster (`fleet.json`/`fleet-roster.md`,
-  Section 3's own record) — never an invented or implied name.
+  Section 3's own record).
 - **`description`** — the charter, same discipline as any sealed dispatch (`references/
   best-practices.md` "The dispatch is a sealed contract").
 - **`depends_on[]`** — authoritative and acyclic. Two tasks with no dependency edge between them
@@ -34,17 +36,17 @@ A delegation plan is a JSON task graph. Each task carries:
   challenge an edge that doesn't correspond to a real data dependency).
 - **`outputs[]`** — paths or evidence the task produces; this is what a downstream task's
   `depends_on` is actually waiting on, and what a reviewer checks landed.
-- **`mode`** — `read` or `write`. Read tasks may overlap anything, including each other and any
-  write task, and never serialize against the tree. Write tasks serialize against a shared tree:
+- **`mode`** — `read` or `write`. Read tasks overlap anything, including each other and any write
+  task, and stay unserialized against the tree. Write tasks serialize against a shared tree:
   two write-mode tasks in the same wave with no dependency edge is a graph defect, not a
-  schedulable pair — Design step 5's own same-tree-write precondition (`SKILL.md` line 453,
-  "the HOST owns git; workers only edit files") applies per-task here, not just per-wave.
+  schedulable pair — Design step 5's own same-tree-write precondition ("the HOST owns git;
+  workers only edit files") applies per-task here, not just per-wave.
 
 ## Ownership and handoffs
 
 Ownership is stated concretely per task, not implied by proximity in the graph — the `outputs[]`
-field IS the handoff: a task consumes another's declared outputs, never its sibling's undeclared
-side effects. A task that needs something not in any upstream `outputs[]` is missing a
+field IS the handoff: a task consumes another's declared outputs, staying clear of its sibling's
+undeclared side effects. A task that needs something not in any upstream `outputs[]` is missing a
 `depends_on` edge or the plan is wrong; fix the plan, don't paper over it with leaked context
 (the same discipline `best-practices.md`'s sealed-contract section already states for any
 dispatch: "when a worker can't succeed from its enumerated inputs alone, the fix is a better
