@@ -3,11 +3,12 @@ name: ops-write-sandbox-rules
 description: >-
   The .claude/ops/ write-sandbox contract (issue #125): why decision-watcher, issue-sorter,
   repo-cleaner, and chore-planner carry no Write tool, what a fenced target-pathed payload block
-  is, and how chore-lead applies their computed state instead. Use when asked why an ops-family
-  seat can't write its own state file, how a new ops seat should hand its output back, what
-  "narrated-but-absent" means, or why a scheduled ops firing commits only its state files. NOT
-  for one seat's own per-firing procedure (watch-adrs, watch-tickets, clean-git); NOT for
-  bare-name dispatch or named-teammate misaddress (agent-writing-rules).
+  is, how chore-lead applies their computed state instead, and the push-verification convention
+  (issue #936) for a skill that commits directly to main. Use when asked why an ops-family seat
+  can't write its own state file, what "narrated-but-absent" means, or how a direct-to-main
+  commit should confirm the push landed. NOT for one seat's own per-firing procedure (watch-adrs,
+  watch-tickets, clean-git); NOT bare-name dispatch (agent-writing-rules); NOT the PR-branch push
+  path (`campaign_close.py`).
 disable-model-invocation: false
 user-invocable: false
 ---
@@ -75,6 +76,42 @@ seat-specific and live in that seat's own preloaded procedure skill (`watch-adrs
 file's shape. A seat minting a real record via a platform API (e.g. `issue-sorter`'s `gh issue
 create`) is not a local filesystem write and is outside this sandbox's scope entirely — the
 sandbox problem is `.claude/ops/...` file writes, not API calls.
+
+## Push-verification for a direct-to-main commit (issue #936)
+
+A third case sits outside both roles above: a **live invoking session** (never a dispatched
+compute-only seat — those never touch a real path at all, per the scratch/fenced-payload contract
+above) that writes AND commits a small, source-free `.claude/ops/...` state file directly to
+`main` in a shared primary checkout, rather than through a PR. `teamwork:chores-run` step 2 is the
+one skill body in this estate that does this today — cited here rather than re-derived.
+
+The failure mode this closes: a `git push` can fail, or never run at all, while the local commit
+still landed — the seat's own completion report then claims "committed to main" as if that meant
+landed, when it only landed locally. A subsequent `git pull --ff-only` reporting "Already up to
+date" does not disprove this — that message is about origin having nothing NEW to offer, not about
+local being in sync WITH origin. Nothing forces a re-check on this path the way
+`campaign_close.py` already re-queries `git ls-remote --heads origin <branch>` after a PR merges
+and verifies the branch is gone (`harness/scripts/campaign_close.py`, cited as the existing
+pattern this convention ports to the direct-to-main path — read, never re-derived).
+
+**The convention:** after `git push`, before reporting the commit as landed, re-read origin's
+truth and compare it against the local commit that was just pushed:
+
+```
+git push origin main
+git ls-remote origin refs/heads/main   # or: git fetch origin main && git rev-parse origin/main
+```
+
+(fully qualify as `refs/heads/main`, not a bare `main` — an unqualified ref name matches any
+branch whose path ends in `main`, e.g. `release/main`, and can return more than one line.)
+
+Compare the SHA `ls-remote`/`fetch` returns against `git rev-parse HEAD` (the commit just made).
+Match → report the commit as landed, citing the confirmed SHA. Mismatch, or the push exits
+non-zero → the commit is NOT landed; report it as a pushed-but-unconfirmed (or failed) state
+exactly the way `dispatch-ticket`'s own stage 2a names a hold rather than guessing — never narrate
+"committed to main" past this point. This is a cheap, mechanical re-read (one `ls-remote` call),
+not a new gate or script — every skill that commits directly to `main` cites this section by name
+instead of re-deriving the check inline.
 
 ## The shared description template — owned here, not restated
 

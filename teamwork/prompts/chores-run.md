@@ -77,7 +77,10 @@ own frontmatter mirrors that grant list plus the git commit/push scope its own s
    restricted ops-family subagent, so `harness:ops-write-sandbox-rules`' scratch-copy/
    fenced-payload contract does not bind it (that contract is scoped to the four *compute-only*
    dispatched seats named there, none of which this command is or dispatches). Without the commit,
-   a fresh session in a different worktree cannot read it cold at all.
+   a fresh session in a different worktree cannot read it cold at all. **On the `main` push, verify
+   it actually landed** per `harness:ops-write-sandbox-rules`' own push-verification convention
+   (issue #936, cited not restated) — `git ls-remote origin refs/heads/main` (or an equivalent re-fetch) after
+   the push, compared against the commit just made, before step 5's report names a SHA as landed.
 3. **Compose and print the armed `/goal` block** — never started programmatically (`/goal` is
    itself a platform command with no Skill-tool-reachable path from a skill body, the same
    #134/#135 class). The end-state, cap, and escalation clause are fixed by this skill (the
@@ -96,7 +99,9 @@ own frontmatter mirrors that grant list plus the git commit/push scope its own s
         `gh issue list --state open --label feature --json number,title,labels,assignees`
         (repeat for --label bug, --label task), cross-checked against mobilize-chores' own
         open-PR GraphQL check; rewrite .claude/ops/punch-list.md's rows (header:
-        `| id | seat | worktree/branch | PR | state |`) and commit + push it.
+        `| id | seat | worktree/branch | PR | state |`), commit + push it, then verify the push
+        landed (`git ls-remote origin refs/heads/main` vs the commit just made — ops-write-sandbox-rules'
+        push-verification convention) before continuing.
      3. Re-check the end-state above.
    Stop after 10 waves, or immediately once the end-state holds. Escalate — stop and report,
    never retry a third time — if the SAME check fails twice in a row (loop-rules' own escalation

@@ -1,6 +1,6 @@
 {
   "skill": "ops-write-sandbox-rules",
-  "note": "New 2026-08-13 (issue #205) — extracted from the ~90-110 word explanation duplicated inline across decision-watcher/repo-cleaner/issue-sorter/chore-planner. Negatives: a seat's own per-firing procedure (watch-adrs/watch-tickets/clean-git own that), and dispatch-mechanics failures (agent-writing-rules owns bare-name-dispatch/named-teammate misaddress). 2026-08-15 (issue #280): this skill now also states the shared 'own per-firing procedure' description template (the short NOT-clause each sibling fences back with) as its own canonical statement — watch-adrs/watch-tickets/clean-git trimmed their own descriptions to reference it by name instead of restating why they can't write state directly; trigger surface unchanged.",
+  "note": "New 2026-08-13 (issue #205) — extracted from the ~90-110 word explanation duplicated inline across decision-watcher/repo-cleaner/issue-sorter/chore-planner. Negatives: a seat's own per-firing procedure (watch-adrs/watch-tickets/clean-git own that), and dispatch-mechanics failures (agent-writing-rules owns bare-name-dispatch/named-teammate misaddress). 2026-08-15 (issue #280): this skill now also states the shared 'own per-firing procedure' description template (the short NOT-clause each sibling fences back with) as its own canonical statement — watch-adrs/watch-tickets/clean-git trimmed their own descriptions to reference it by name instead of restating why they can't write state directly; trigger surface unchanged. 2026-08-25 (issue #936): added the push-verification convention for a skill that commits directly to main (the silent unpushed-commit trap) — a third case alongside the two roles above, cited by name from teamwork:chores-run rather than re-derived there.",
   "cases": [
     { "id": "t01", "prompt": "why can't decision-watcher just write its own checkpoint file", "expect": "trigger" },
     { "id": "t02", "prompt": "why does issue-sorter carry no Write tool", "expect": "trigger" },
@@ -9,10 +9,12 @@
     { "id": "t05", "prompt": "what does narrated-but-absent mean for a seat's write claim", "expect": "trigger" },
     { "id": "t06", "prompt": "why does a scheduled ops firing only commit its state files and never touch source", "expect": "trigger" },
     { "id": "t07", "prompt": "explain the .claude/ops write-sandbox split from issue #125", "expect": "trigger" },
+    { "id": "t08", "prompt": "my skill commits straight to main — how do I confirm the push actually landed instead of trusting a bare 'Already up to date' pull", "expect": "trigger" },
     { "id": "n01", "prompt": "walk me through decision-watcher's per-firing ADR classification steps", "expect": "no-trigger", "comment": "owner: watch-adrs" },
     { "id": "n02", "prompt": "what does issue-sorter do when a filing author isn't on the friendlies list", "expect": "no-trigger", "comment": "owner: watch-tickets" },
     { "id": "n03", "prompt": "which of repo-cleaner's three scripts is gated to run directly", "expect": "no-trigger", "comment": "owner: clean-git" },
     { "id": "n04", "prompt": "why did chore-lead's dispatch to a sibling seat get duplicated mid-sweep", "expect": "no-trigger", "comment": "owner: agent-writing-rules (bare-name dispatch, gh#154)" },
-    { "id": "n05", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: /sweep-chores" }
+    { "id": "n05", "prompt": "run the ops-family sweep now", "expect": "no-trigger", "comment": "owner: /sweep-chores" },
+    { "id": "n06", "prompt": "verify this PR branch actually pushed before merging", "expect": "no-trigger", "comment": "owner: campaign_close.py (PR-branch push path, already verified there)" }
   ]
 }
