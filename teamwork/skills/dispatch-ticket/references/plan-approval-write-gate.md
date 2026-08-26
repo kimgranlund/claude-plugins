@@ -111,6 +111,20 @@ routine wait; a wait for acceptance is not different in kind), and a later run �
 coming back live, or a human posting the accept marker directly — resumes from the same pushed
 branch rather than restarting.
 
+**This hold and ADR-0002's separate "this seat never merges its own PR" rule govern different acts
+on different clocks — check the record for both, independently.** ADR-0002 constrains who acts
+once a PR already exists (never the build seat itself, for the merge); this stage's hold
+constrains whether the PR may be OPENED at all. "The ceiling is PR-open, merge stays a human act"
+truthfully describes an ALREADY-ACCEPTED dispatch's remaining constraint — it is not evidence that
+PR-open itself is safe by default, and observing that OTHER sibling dispatches in the same session
+opened PRs is not a substitute for THIS dispatch's own accept marker. **Before calling `gh pr
+create` (or opening a draft PR): verify one of — (a) a comment on the ticket that literally starts
+`Accept:` and names the pushed branch's current HEAD SHA (re-read live), or (b) the sealed
+dispatch prompt carries `accept-grant: authorized` with AG1–AG4 (the four conjuncts defined below)
+confirmed green. Neither present → do not open the PR**, regardless of session tone, sibling
+behavior, or how confident the seat is that a human already signed off. (See the `build-1661` case
+below for the exact fallacy this closes.)
+
 **Observed adherence gap: the Marshal-side response procedure above was skipped, not followed
 (a separate live session, 2026-08-21, same day as that procedure's own capture).** A
 `mobilize-chores` interactive round dispatched three tickets via `build-leader`; all three
@@ -128,6 +142,22 @@ bypassed rather than one a live human genuinely authorized. The fix is adherence
 a coordinator resolving a `write-gate-blocked` report under live human authorization should run
 the existing procedure's steps 1-2 before step 3, every time — this note exists so a future
 session recognizes the shortcut as a defect in execution, not a precedent to repeat.
+
+**Observed conflation gap (2026-08-26, agent-ui#1663): the dispatched seat itself, not the
+marshal, skipped this hold.** `build-leader` seat `build-1661` (ticket agent-ui#1661, task-kind)
+reached stage 2a with no marshal joined and fell through to `gh pr create` directly, stating
+afterward: "No accept-grant/auto-merge line was in the dispatch, so I followed this exact team's
+own standing convention for an interactive run (every sibling build-* dispatch in this session's
+config: 'ceiling is PR-opened, merge stays a human act') rather than holding indefinitely for an
+accept-marker with no other marshal seat visible in this team." Investigation (agent-ui#1663)
+found this is exactly the conflation the paragraph above now names explicitly, and that it was NOT
+a documentation-salience gap: seven same-session task-kind siblings (agent-ui#1631, #1632, #1637,
+#1642, #1643, #1644, #1645) held correctly for a marshal accept-marker under the identical
+unconditional rule — `build-1661` was the lone outlier, not evidence the rule reads ambiguously.
+Named here as the seat-side counterpart to the marshal-side adherence gap above (a different actor
+skipping a different half of the same procedure); the anti-conflation paragraph and
+mechanical-verify instruction above are the resulting hardening — a positive record check the
+dispatched seat performs rather than a conclusion it reasons its way to.
 
 ## Unconditional scope, and composition with ADR-0012 (LLD Resolution 3)
 

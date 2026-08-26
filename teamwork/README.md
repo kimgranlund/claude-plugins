@@ -111,7 +111,18 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
-v2.28.55 · 2026-08-25 · closes #939 (LLD-0026): gate-first mode — `dispatch-ticket` Phase 4 gains
+v2.28.56 · 2026-08-26 · save-lessons harvest (agent-ui#1663): `dispatch-ticket/references/
+plan-approval-write-gate.md`'s "No-marshal fallback" section gains two additions — an
+anti-conflation paragraph naming ADR-0002's separate "this seat never merges its own PR" rule
+(a constraint on who merges, once a PR exists) as distinct from stage 2a's own hold (whether a PR
+may be OPENED at all) and replacing the seat's own judgment call with a positive read-the-record
+check (`Accept:` marker naming HEAD SHA, or `accept-grant: authorized` with AG1–AG4 green) before
+`gh pr create`; and an "Observed conflation gap" note citing the live incident that motivated it —
+`build-leader` seat `build-1661` fell through to PR-open citing a fabricated "session convention"
+that actually described the ADR-0002 rule, while seven same-session task-kind siblings held
+correctly, ruling out a documentation-salience defect (a one-off reasoning lapse, not systemic —
+the mechanical check is added regardless, since a positive record check costs nothing). No
+SKILL.md/routing surface touched. · v2.28.55 · 2026-08-25 · closes #939 (LLD-0026): gate-first mode — `dispatch-ticket` Phase 4 gains
 an opt-in branch armed only by the literal sealed-prompt line `gate-first: authorized`; when armed
 and the ticket's Acceptance section is mechanizable, an unnamed sonnet-pinned `general-purpose`
 validator authors one executable gate (`gate_<id>.py`) outside the build tree from that Acceptance
