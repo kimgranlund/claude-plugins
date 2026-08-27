@@ -314,7 +314,7 @@ reworks and re-dispatches — not the prep), and the ten-second collision look �
 before pushing — plus a claim scan (open assignees/`claimed-by` on records naming the same
 files, #184's claimed-no-PR window) and Section 4's two slot checks; skipping the claim is
 licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (non-marshal live sessions — a marshal-held session uses the
-up-front shape read above instead; the executor never self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
+up-front shape read below instead; the executor never self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
 line, evals sync) don't count — or a second plugin → one confirm before merge; CI red after
 push → a mechanical fix (version bump, lint trim) rides the original authorization, a semantic
 rework does not — re-confirm before re-push. Escalate OUT — mint the record, take the full flow
