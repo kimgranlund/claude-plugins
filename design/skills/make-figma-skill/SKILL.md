@@ -1,17 +1,17 @@
 ---
 name: make-figma-skill
 description: >-
-  Author, convert, check, or regenerate a single-file Figma custom skill — the kind the Figma
-  agent and Figma Make load from one .md. Use for "create a Figma skill from our X skill",
-  "convert this skill into a Figma custom skill", "export our Factory skills as Figma skills",
-  "the Figma skill lost the contrast thresholds — regenerate it", "check this figma skill
-  before I publish". Converts an estate reference skill without losing resolution: references
-  inlined whole, scripts transposed to checklists, thresholds verbatim, a checker gate. NOT a
-  Figma Make guidelines/ folder (make-figma-make-kit); NOT the Plugin API
-  (figma-plugin-facts); NOT a Claude Code skill (harness:make-skill).
+  Author, convert, check, or regenerate a single-file Figma custom skill — the one .md the
+  Figma agent and Figma Make load. Use for "create a Figma skill from our X skill", "convert
+  this skill / agent / command into a Figma custom skill", "export our Factory skills as
+  Figma skills", "the Figma skill lost the contrast thresholds — regenerate it", "check this
+  figma skill before I publish". Converts a skill, command, or agent without losing
+  resolution: references and preloads inlined whole, scripts transposed, thresholds verbatim,
+  checker gate. NOT a Figma Make guidelines/ folder (make-figma-make-kit); NOT the Plugin
+  API (figma-plugin-facts); NOT a Claude Code skill (harness:make-skill).
 disable-model-invocation: false
 user-invocable: true
-argument-hint: "[new charter | convert skill-dir] [--check file.md]"
+argument-hint: "[new charter | convert skill-dir-or-agent.md] [--check file.md]"
 ---
 
 # make-figma-skill
@@ -31,12 +31,17 @@ a `## Contents` routing table at the head of the one file.
 
 ## Procedure
 
-1. **Resolve the mode and the destination.** `new <charter>` or `convert <skill-dir>` (a
-   directory holding a `SKILL.md`; an installed plugin's cache path counts). The destination
+1. **Resolve the mode and the destination.** `new <charter>` or `convert <source>` — a
+   skill directory holding `SKILL.md` (procedural, knowledge, or command species), or one
+   `agents/<name>.md` file; an installed plugin's cache path counts. The source's kind
+   selects the extra transposition rows in `references/conversion-rules.md` §Source shapes
+   (an agent's `skills:` preloads inline whole; a command's `$ARGUMENTS`, fork, and
+   tree-state preconditions transpose or Drop). The destination
    path is the user's answer to a question asked in chat before anything is written — NEVER
    a default this skill picks. An unreadable source dir → report the path and stop.
 2. **Inventory (convert) / frame (new).** Convert: list every `##`/`###` heading in the
-   source SKILL.md and in each `references/*.md` it cites, every bundled script with the
+   source body (SKILL.md, or the agent file plus each preloaded skill's SKILL.md) and in each
+   `references/*.md` it cites, every bundled script with the
    gates its docstring names, every `[[handle]]`/`plugin:skill` mention, every numeric
    anchor, and the source `evals/evals.json` `t*`/`n*` prompts. New: the charter's rules,
    thresholds, output shape, and the phrasings the user would type. This list is the
@@ -98,8 +103,9 @@ next: <regenerate when source hash ≠ provenance hash | publish to team | fix l
 
 ## Failure branches
 
-- Source dir has no `SKILL.md`, or a cited reference file is missing → name the path;
-  stop before writing — a conversion from a partial source is a silent resolution loss.
+- Source dir has no `SKILL.md`, a cited reference file is missing, or an agent's `skills:`
+  preload resolves to no skill directory → name the path; stop before writing — a
+  conversion from a partial source is a silent resolution loss.
 - F6 fails on a heading the export genuinely should not carry → it goes to `## Dropped`
   with a closed-set reason, as an entry — not a deletion from the manifest, not a summary.
 - A script's check is not performable on the canvas (byte diff, HTTP) → `## Dropped` as

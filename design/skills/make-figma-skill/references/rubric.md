@@ -16,7 +16,7 @@ R1, R2 ≥ 3.
 | F5 provenance | `## Provenance` with `source:` and `date:` (required for conversions); WARN without `hash:`/`inventory:` |
 | F6 resolution | With `--source`: every source heading carried or Dropped; every `## Dropped` bullet carries a closed-set reason; every numeric anchor verbatim. UNMEASURED without `--source` — reported, never laundered into a pass |
 | F7 head-first | > 300 lines ⇒ routing table/TOC in the first 60 lines |
-| F8 trigger vocab | WARN: with `--source`, each source `expect: trigger` prompt sharing no content word with the description is named |
+| F8 trigger vocab | WARN: with `--source`, each source `expect: trigger` prompt sharing no content word with the description is named; NOTE-only for an agent source (no evals) or a command-derived description |
 
 ## Judgment
 
@@ -24,7 +24,7 @@ R1, R2 ≥ 3.
 |---|---|---|---|
 | **R1 Fidelity** | Rules paraphrased; thresholds rounded; failure branches gone | Every rule survives in meaning; every threshold verbatim; `## Dropped` explains each omission from the closed reason set | Byte-faithful where the source was normative; good/bad pairs intact with labels; a reader could reconstruct the source's contract from the export alone |
 | **R2 Figma-native tooling** | Verbs still say "read the repo", "run the script", "dispatch the checker" | Every verb maps to a canvas/Make action per the tool map; transposed checks state an observable pass condition | Transposed checks name WHERE in Figma to look (variables panel, layer tree, code preview); self-review carries the rubric inline |
-| **R3 Trigger quality** | Generic name; description is a label | Specific name; active "Use when" with ≥ 3 verbatim source `t*` phrasings; "Not for" names the `n*` neighbors | Description front-loads the highest-frequency phrasings; no phrase also appears in a sibling Figma skill's description |
+| **R3 Trigger quality** | Generic name; description is a label | Specific name; active "Use when" with ≥ 3 verbatim source `t*` phrasings (an agent source has no evals — its own description's quoted phrasings stand in; a command source carries "Invoke with `/name`" instead); "Not for" names the `n*` families | Description front-loads the highest-frequency phrasings; no phrase also appears in a sibling Figma skill's description |
 | **R4 Navigability** | One wall of text | `## Contents` routes by question; hard rules + output contract in the head | Routing table entries name the exact heading; examples in the tail; nothing load-bearing past the fold |
 | **R5 Regenerability** | No provenance | `## Provenance` names source path, version, date | Adds a content hash of the source tree and the inventory counts, so a later run can diff instead of re-reading |
 

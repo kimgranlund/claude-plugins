@@ -44,5 +44,18 @@ P3 draft:      PASS 2026-08-27 — SKILL.md 139 lines; references/{figma-spec,co
 P4 language:   PASS 2026-08-27 — potency_lint: first pass 8 NEVERs (budget 3) + lint F3 (`<` in argument-hint) + W8 716; rewritten to exactly 3 hard gates (never summarize a source section / never default the destination / never hand-patch an export), argument-hint de-bracketed, description dieted. Re-run all within budget.
 P5 validate:   PASS 2026-08-27 — skill_lint clean. UNNAMED synchronous skill-checker: GO, 0 blocking (1 major, 2 minor, 1 nit) — all fixed: F6 now rejects `## Dropped` bullets without a closed-set reason (bite + reverse-control fixtures), F5 WARNs on missing hash:/inventory:, SKILL.md cites the closed set instead of restating it, reciprocal negatives were already in make-figma-make-kit n14/n15 + figma-plugin-facts n08 (the nit predates its own read). Behavior check (fresh-context agent following SKILL.md, converting make-figma-make-kit): export 1004 lines/45 headings, checker exit 0 on round 3, F6 measured, R1–R5 = 4/4/4/4/5, in-Figma check UNMEASURED (no Figma seat) — scratchpad export kept out of the tree. The run's 10 friction findings fed back into the rules in this same change: F3 exemptions for `(transposed from …)` and the Dropped/Provenance sections; wrapped Dropped bullets joined; `node`/`python3` patterns narrowed to real invocations; in-reference path citations → `## <heading>` pointers + `rewrites:` count; head-once-plus-pointer rule for contract sections; first-citation order; n* FAMILIES not cases; hash method specified + `--hash` subcommand. Baseline: evals/baseline.md (documented-delta). Fence closure: n14/n15/n08 above.
 
+## extension 2026-08-27 (Kim's live ask: "extend it so it also converts commands and agents")
+`convert` gains two source shapes: a command-species skill dir and one `agents/<name>.md` file
+(preloads inlined whole). Same-day loop: UNNAMED skill-checker re-audit (evals/audit-report-2.md)
+returned FAIL with 2 blocking — `load_source()` discarded the `plugin:` prefix (false F6 PASS
+on a same-named local skill) and `--hash` rejected an agent file — both already surfaced by a
+fresh-context behavior check converting `agents/design-system-checker.md` (621-line export,
+F6 measured over 6 files, exit 0 first try) and fixed with fixtures before the report landed:
+`resolve_preload()` resolves `plugin:name` ONLY at `<workspace>/<plugin>/skills/<name>` (no
+local fallback), `source_hash()` on a file = own bytes + each preload dir's hash, F8 NOTE-only
+for agent/command sources, new Dropped reason `sibling job, fenced`, rules for at-dispatch
+sibling rubrics and non-bundled gate scripts, tools-wall wording widened past read-only.
+Selftest 33 → 40. Routing re-judged on this suite (26 cases) at PR-open.
+
 ## rulings (audit)
 - Description-side reciprocal NOT-clause on make-figma-make-kit / figma-plugin-facts NOT added: both descriptions sit at the 700-char W8 ceiling and the auditor found no vocabulary collision in the corpus; the evals-side negatives carry the fence. Re-open if /check-routing shows a stolen case.
