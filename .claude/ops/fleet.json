@@ -38,7 +38,7 @@
         "mode": "manual",
         "date": "2026-08-16",
         "agent_name": "plugins-75",
-        "note": " | agent_name set 2026-08-23: SendMessage address is the harness session name (plugins-75), not the seat label \u2014 gh#pending (agent-name bug)."
+        "note": " | agent_name set 2026-08-23: SendMessage address is the harness session name (plugins-75), not the seat label — gh#pending (agent-name bug)."
       },
       {
         "role": "product",
@@ -97,6 +97,22 @@
         "action": "joined",
         "agent_name": "plugins-product",
         "note": "fleet-bootstrap Phase 2 delta pass; returned. Verdict: no material change since the 2026-08-23 ratification, all three rulings from that gate verified closed on disk (rdd-0001, idr-0005 scoping citation via ADR-0026 + gh#933/#934, spend-ledger monthly-cadence unchanged). No new intent-layer content proposed."
+      },
+      {
+        "role": "reviewer",
+        "mode": "manual",
+        "date": "2026-08-27",
+        "action": "released",
+        "agent_name": null,
+        "reason": "legacy 2026-08-16 row with null agent_name (pre-#903) read as held; retired by plugins-marshal (plugins-62) on Kim's ruling, find-open-questions round, so the seat reads open for the next bootstrap/spawn"
+      },
+      {
+        "role": "planner",
+        "mode": "manual",
+        "date": "2026-08-27",
+        "action": "released",
+        "agent_name": null,
+        "reason": "legacy 2026-08-16 row with null agent_name (pre-#903) read as held; retired by plugins-marshal (plugins-62) on Kim's ruling, find-open-questions round, so the seat reads open for the next bootstrap/spawn"
       }
     ],
     "loop_position": null,
