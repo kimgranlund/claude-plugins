@@ -111,7 +111,24 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
-v2.28.56 · 2026-08-26 · save-lessons harvest (agent-ui#1663): `dispatch-ticket/references/
+v2.29.0 · 2026-08-27 · closes #949: a `bind-team`-held marshal (or the dispatched
+`fleet-marshal`) was executing multi-file live-lane work inline instead of dispatching a build
+seat — two consecutive `make-skill` forges ran solo in the marshal terminal for ~2h, blocking the
+fleet's flow, because `fleet-rules` §7's live lane named the HOST as executor with no carve-out
+for a host also holding the router seat, and its tripwires only sized work post-hoc at merge, not
+before execution starts. Adds a marshal carve-out to `fleet-rules` §7: a session holding the
+marshal seat keeps ONE-FILE MECHANICAL latitude only (a version renumber, a ledger line, a
+one-line stale citation); anything semantic or multi-file is a named `build-<slug>` build-leader
+dispatch with the live prompt passed in as its authorization, and an up-front shape-based tripwire
+(new skill/agent/plugin, "plan + checklist + evals", any make-* forge) fires at dispatch time,
+marshal-only — non-marshal live sessions keep today's post-hoc merge-time tripwire unchanged.
+`agents/fleet-marshal.md`'s "binds only a LIVE-human host" sentence and `skills/bind-team/
+SKILL.md`'s inline live-lane grant both rewritten to cite the carve-out instead of restating (or
+contradicting) it; workspace `CLAUDE.md`'s "Live lane first" row gains a one-clause pointer to the
+same rule. Kim's two rulings (posted on #949): latitude is one-file-mechanical only, and the
+up-front sizing read binds the marshal alone. MINOR: new doctrine carve-out, no removed
+behavior. Fresh-context `harness:wiring-checker` FLOOR pass owed per `plugin-authoring.md`'s
+semantic-edit invariant. · v2.28.56 · 2026-08-26 · save-lessons harvest (agent-ui#1663): `dispatch-ticket/references/
 plan-approval-write-gate.md`'s "No-marshal fallback" section gains two additions — an
 anti-conflation paragraph naming ADR-0002's separate "this seat never merges its own PR" rule
 (a constraint on who merges, once a PR exists) as distinct from stage 2a's own hold (whether a PR
