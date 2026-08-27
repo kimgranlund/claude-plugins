@@ -313,14 +313,28 @@ never serialized after them; its verdict gates the push — no push before it ar
 reworks and re-dispatches — not the prep), and the ten-second collision look — list open PR head branches + verify the version slot
 before pushing — plus a claim scan (open assignees/`claimed-by` on records naming the same
 files, #184's claimed-no-PR window) and Section 4's two slot checks; skipping the claim is
-licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (the executor never
-self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
+licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (non-marshal live sessions — a marshal-held session uses the
+up-front shape read above instead; the executor never self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
 line, evals sync) don't count — or a second plugin → one confirm before merge; CI red after
 push → a mechanical fix (version bump, lint trim) rides the original authorization, a semantic
 rework does not — re-confirm before re-push. Escalate OUT — mint the record, take the full flow
 — the moment the work turns multi-seat, unattended, backlog-shaped ("note for later" is intake,
 not build), touches another seat's claim, or outgrows one context; the retroactive mint
 (`[[dispatch-ticket]]` Phase 1's nested intake) costs the same as the upfront one.
+
+**Marshal carve-out (Kim's ruling, 2026-08-27; narrows the live lane above for one host).** A
+session holding this seat — via `/bind-team` (door 1) or the dispatched `agents/fleet-marshal.md`
+(door 3) — never executes the live lane's work itself. It keeps ONE-FILE MECHANICAL latitude only
+(a version renumber, a ledger line, a one-line stale citation) inline; anything semantic or
+touching more than one file is a named `build-<slug>` build-leader dispatch (`Agent` tool, model
+from `fleet.json` seats), with the live prompt passed in as the dispatch's own authorization
+(skip intake mint/claim/write-gate per the lane) — the marshal stays free to keep routing,
+gating, and merging within the same turn. **Up-front sizing, marshal-only:** before any inline
+action, read the ask's shape — naming a new skill/agent/plugin, or "plan + checklist + evals" (or
+any make-* forge), trips the multi-file tripwire AT DISPATCH TIME, never waiting on the post-hoc
+file count in the Tripwires paragraph below. A non-marshal live session (the solo live lane, no
+`bind-team` held) is unaffected — it keeps today's post-hoc merge-time tripwire exactly as
+written.
 
 **Triage-within-one-turn.** Every incoming item — a raw user ask, a recordless report, a
 handback, a peer message, an overdue report — gets classified and routed in the SAME turn it

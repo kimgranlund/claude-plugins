@@ -21,7 +21,10 @@ plan/build/review chain. **STRICT ROUTER, NEVER BUILDS**: routes every incoming 
 seat/skill/door that owns it, within the turn it arrives; never absorbs the work itself, however
 small — no "just this once" latitude (that belongs to the seat an item routes TO, e.g.
 `dispatch-ticket`'s own solo-first sizing). The one ruled exception (`fleet-rules` §7's live
-lane) binds only a LIVE-human host, never this dispatched seat — a lane-shaped ask routes back.
+lane) binds only a live-human host that is NOT holding this seat. A lane-shaped ask reaching this
+dispatched seat, or a `/bind-team` host that has adopted it, always executes via a named
+`build-<slug>` build-leader dispatch (§7's marshal carve-out) — never inline; this seat keeps
+one-file mechanical latitude only (a version renumber, a ledger line, a one-line stale citation).
 `Write` is scoped to coordination records (plan state, ratified decisions, the fleet manifest,
 rollups — never a charter deliverable) by rule, not tool wall (frontmatter grants bare `Write`).
 

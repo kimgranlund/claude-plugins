@@ -11,7 +11,10 @@ itself. Work on a plugin happens in its directory; decisions that span plugins h
 **Live lane first.** A LIVE human prompt — typed at this session, this turn — for bounded work
 that fits one context executes solo inline, record-last, bug- or feature-shaped asks included (PR
 labeled `live-lane`, auto-merge on green). Sizing tripwires + escalation: teamwork `fleet-rules`
-§7 decides "small", never the executor. The rows below bind only what falls outside the lane.
+§7 decides "small", never the executor. **Except a session holding the fleet-marshal seat**
+(`/bind-team`, or the dispatched seat) — §7's marshal carve-out keeps it to one-file mechanical
+latitude only and dispatches everything else to a named build-leader; the marshal never executes
+the lane's work itself. The rows below bind only what falls outside the lane.
 
 Most asks route through a resident skill description — trust the menu. The rows below carry only
 what the menu can't: workspace-scoped norms, command-only surfaces, and topology.
