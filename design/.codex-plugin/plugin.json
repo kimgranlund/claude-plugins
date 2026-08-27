@@ -1,6 +1,6 @@
 {
   "name": "design",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "description": "The design plugin \u2014 color science and palettes, typography systems, and design-system exports in one install: OKLCH ramps and verification, the 15-voice type system, Material Design token grammar, the DESIGN.md/Figma Make/Google Stitch export bundles a generative design agent consumes, artifact-styling-rules (theme/token/type/mermaid/shell doctrine for Claude Artifacts), and token-feature-intake-rules (visual/token feature-ticket intake schema).",
   "author": {
     "name": "Kim G / NONOUN"

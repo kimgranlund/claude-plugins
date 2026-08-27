@@ -1,6 +1,6 @@
 {
   "skill": "make-figma-make-kit",
-  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Routing corpus of record for this skill's description. Positives cover the invocation families (imperative create / file-first / evaluate / regenerate / symptom). Negatives are drawn adversarially from the platform-sibling family (make-dscard-kit, make-stitch-kit, the make-design-system hub) plus near-miss peers (make-palette, check-colors, make-component, token-builder, check-whole-ui, design-system-checker). Re-derive when the sibling family changes. routing_eval measures lexical overlap only \u2014 paraphrase misses are a proxy limit, not a defect; the pass condition is a human read of named misses/grabs.",
+  "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema. Routing corpus of record for this skill's description. Positives cover the invocation families (imperative create / file-first / evaluate / regenerate / symptom). Negatives are drawn adversarially from the platform-sibling family (make-dscard-kit, make-stitch-kit, the make-design-system hub) plus near-miss peers (make-palette, check-colors, make-component, token-builder, check-whole-ui, design-system-checker). Re-derive when the sibling family changes. routing_eval measures lexical overlap only — paraphrase misses are a proxy limit, not a defect; the pass condition is a human read of named misses/grabs. Reciprocal fence added 2026-08-27: make-figma-skill (single-file Figma custom skill authoring) minted; its flagship phrasings carried here as no-trigger cases.",
   "cases": [
     {
       "id": "t01",
@@ -127,6 +127,18 @@
       "prompt": "how do I alias a raw variable to a semantic variable in my figma plugin",
       "expect": "no-trigger",
       "note": "#760 pair 5 — figma-plugin-facts' Plugin-API territory, not this guidelines authoring workflow"
+    },
+    {
+      "id": "n14",
+      "prompt": "convert this skill into a Figma custom skill",
+      "expect": "no-trigger",
+      "note": "make-figma-skill (2026-08-27) — a single-file custom skill for the Figma agent, not a Make guidelines/ folder"
+    },
+    {
+      "id": "n15",
+      "prompt": "export our Factory skills as Figma skills",
+      "expect": "no-trigger",
+      "note": "make-figma-skill"
     }
   ]
 }
