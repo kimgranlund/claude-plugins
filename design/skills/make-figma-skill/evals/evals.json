@@ -1,0 +1,28 @@
+{
+  "skill": "make-figma-skill",
+  "note": "Minted 2026-08-27 (forge session, Kim's live ask: 'create a secondary export of our Factory skills as optimized Figma Skills'). Positives cover the two modes (net-new / convert a reference skill), the platform names (Figma agent, Figma Make custom skill), the lifecycle verbs (export, convert, port, regenerate, check), and the resolution-loss symptom. Negatives fence the same-plugin Figma siblings (make-figma-make-kit = a Make guidelines/ FOLDER, figma-plugin-facts = the Plugin API), harness:make-skill (a Claude Code skill), the Figma MCP skills family (figma-use etc., installed by a coding agent), the DESIGN.md format, and the canvas design tool. Re-derive when a sibling Figma-named skill lands.",
+  "cases": [
+    {"id": "t01", "prompt": "create a Figma skill from our button rules skill", "expect": "trigger"},
+    {"id": "t02", "prompt": "convert this skill into a Figma custom skill", "expect": "trigger"},
+    {"id": "t03", "prompt": "export our Factory skills as Figma skills", "expect": "trigger"},
+    {"id": "t04", "prompt": "make a custom skill for the Figma agent that enforces our token grammar", "expect": "trigger"},
+    {"id": "t05", "prompt": "write a Figma Make custom skill for our design system", "expect": "trigger"},
+    {"id": "t06", "prompt": "port adia-tokens to a single-file figma skill", "expect": "trigger"},
+    {"id": "t07", "prompt": "the Figma skill we exported lost the contrast thresholds, regenerate it from the source", "expect": "trigger"},
+    {"id": "t08", "prompt": "check this figma skill file before I publish it to the team", "expect": "trigger"},
+    {"id": "t09", "prompt": "turn our component checker into a skill the Figma agent can run", "expect": "trigger"},
+    {"id": "t10", "prompt": "regenerate the figma skills after the source skill changed", "expect": "trigger"},
+    {"id": "t11", "prompt": "author a net-new figma skill that makes Make follow our spacing scale", "expect": "trigger"},
+    {"id": "t12", "prompt": "how do I flatten a skill with references/ into one .md for Figma", "expect": "trigger"},
+    {"id": "n01", "prompt": "create Figma Make design system guidelines for our brand", "expect": "no-trigger", "note": "make-figma-make-kit — a guidelines/ folder, not a skill file"},
+    {"id": "n02", "prompt": "write Guidelines.md for Figma Make", "expect": "no-trigger", "note": "make-figma-make-kit"},
+    {"id": "n03", "prompt": "setBoundVariableForPaint throws when I alias a variable", "expect": "no-trigger", "note": "figma-plugin-facts — Plugin API"},
+    {"id": "n04", "prompt": "what token JSON shape does the Figma UI3 import want", "expect": "no-trigger", "note": "figma-plugin-facts"},
+    {"id": "n05", "prompt": "make a new skill for reviewing pull requests", "expect": "no-trigger", "note": "harness:make-skill — a Claude Code skill, no Figma"},
+    {"id": "n06", "prompt": "install the figma-use skill so Claude Code can drive the Figma MCP", "expect": "no-trigger", "note": "Figma skills for MCP — installed, not authored"},
+    {"id": "n07", "prompt": "write the DESIGN.md for our design system", "expect": "no-trigger", "note": "design-md-rules"},
+    {"id": "n08", "prompt": "design a landing page mockup I can tweak in a canvas", "expect": "no-trigger", "note": "the design canvas tool"},
+    {"id": "n09", "prompt": "audit this SKILL.md against the skill-writing standards", "expect": "no-trigger", "note": "harness:check-skill"},
+    {"id": "n10", "prompt": "generate a screen in Figma from our design system", "expect": "no-trigger", "note": "a Figma MCP job (figma-generate-design), not authoring a skill"}
+  ]
+}

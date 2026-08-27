@@ -1,0 +1,3 @@
+interface:
+  display_name: "Make Figma Skill"
+  short_description: "Author, convert, check, or regenerate a single-file Figma custom skill — the kind the Figma agent and Figma Make load from one .md."

@@ -1,6 +1,6 @@
 {
   "skill": "figma-plugin-facts",
-  "note": "Minted 2026-07-09. Positives span all five axes; negatives fence the same-plugin siblings (design-md-rules, material-color-facts), the repo-local procedure skill, the Figma MCP, and the uncovered scene graph. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase \u2014 clean after heal.",
+  "note": "Minted 2026-07-09. Positives span all five axes; negatives fence the same-plugin siblings (design-md-rules, material-color-facts), the repo-local procedure skill, the Figma MCP, and the uncovered scene graph. #263 diet wave (2026-08-15): description trimmed to the W8 <=700-char budget, blind re-judged via /check-routing design, one heal round applied where trimming cut a load-bearing trigger phrase — clean after heal. Reciprocal fence added 2026-08-27: make-figma-skill (single-file Figma custom skill authoring) minted; its flagship phrasings carried here as no-trigger cases.",
   "cases": [
     {
       "id": "t01",
@@ -14,7 +14,7 @@
     },
     {
       "id": "t03",
-      "prompt": "figma threw when I tried to remove a variable collection mode \u2014 why?",
+      "prompt": "figma threw when I tried to remove a variable collection mode — why?",
       "expect": "trigger"
     },
     {
@@ -29,7 +29,7 @@
     },
     {
       "id": "t06",
-      "prompt": "loadFontAsync keeps throwing \u2014 how do I find which face names a family actually has?",
+      "prompt": "loadFontAsync keeps throwing — how do I find which face names a family actually has?",
       "expect": "trigger"
     },
     {
@@ -79,7 +79,7 @@
     },
     {
       "id": "n03",
-      "prompt": "the nonoun binder skipped roles when applying to figma \u2014 fix the cascade",
+      "prompt": "the nonoun binder skipped roles when applying to figma — fix the cascade",
       "expect": "no-trigger"
     },
     {
@@ -102,6 +102,12 @@
       "prompt": "create the Figma Make design system guidelines for our brand",
       "expect": "no-trigger",
       "note": "#760 pair 5 — make-figma-make-kit's own authoring workflow, not the Plugin API"
+    },
+    {
+      "id": "n08",
+      "prompt": "create a Figma skill from our button rules skill",
+      "expect": "no-trigger",
+      "note": "make-figma-skill (2026-08-27) — authoring a Figma custom skill file, not the Plugin API"
     }
   ]
 }
