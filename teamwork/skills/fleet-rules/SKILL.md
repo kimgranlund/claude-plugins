@@ -300,41 +300,7 @@ The orchestrator routes every incoming item to an owning seat/skill/door within 
 never absorbs the work itself, however small — small-fix latitude belongs to the seat the item
 routes TO (e.g. `[[dispatch-ticket]]`'s own solo-first sizing), never to the router. **Except:**
 
-**The live lane (Kim's ruling, 2026-08-19; hardened same day).** A LIVE human prompt for small,
-bounded work — the human typed the ask directly at this session and the work fits one context —
-executes solo inline, record-LAST: no intake mint, no ADR-0005 claim, no write-gate hold, no
-build-seat dispatch. The PR (or permitted direct commit) IS the record — labeled `live-lane`
-where the backend has labels, so revert/defect rates stay measurable against full-flow PRs. The
-live prompt IS the authorization the write-gate substitutes for, and it pre-authorizes auto-merge
-on green. Never skipped: the repo's quality floor (lint, gates, CI, version discipline), the
-semantic-edit critic invariant (one unnamed checker; `checking-rules` calibrates the unit —
-dispatched the moment the semantic edit lands and OVERLAPPED with the bump/gate/routing prep,
-never serialized after them; its verdict gates the push — no push before it arrives, a FAIL
-reworks and re-dispatches — not the prep), and the ten-second collision look — list open PR head branches + verify the version slot
-before pushing — plus a claim scan (open assignees/`claimed-by` on records naming the same
-files, #184's claimed-no-PR window) and Section 4's two slot checks; skipping the claim is
-licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (non-marshal live sessions — a marshal-held session uses the
-up-front shape read below instead; the executor never self-certifies "small"): >3 substantive files — floor-mandated riders (version bump, ledger
-line, evals sync) don't count — or a second plugin → one confirm before merge; CI red after
-push → a mechanical fix (version bump, lint trim) rides the original authorization, a semantic
-rework does not — re-confirm before re-push. Escalate OUT — mint the record, take the full flow
-— the moment the work turns multi-seat, unattended, backlog-shaped ("note for later" is intake,
-not build), touches another seat's claim, or outgrows one context; the retroactive mint
-(`[[dispatch-ticket]]` Phase 1's nested intake) costs the same as the upfront one.
-
-**Marshal carve-out (Kim's ruling, 2026-08-27; narrows the live lane above for one host).** A
-session holding this seat — via `/bind-team` (door 1) or the dispatched `agents/fleet-marshal.md`
-(door 3) — never executes the live lane's work itself. It keeps ONE-FILE MECHANICAL latitude only
-(a version renumber, a ledger line, a one-line stale citation) inline; anything semantic or
-touching more than one file is a named `build-<slug>` build-leader dispatch (`Agent` tool, model
-from `fleet.json` seats), with the live prompt passed in as the dispatch's own authorization
-(skip intake mint/claim/write-gate per the lane) — the marshal stays free to keep routing,
-gating, and merging within the same turn. **Up-front sizing, marshal-only:** before any inline
-action, read the ask's shape — naming a new skill/agent/plugin, or "plan + checklist + evals" (or
-any make-* forge), trips the multi-file tripwire AT DISPATCH TIME, never waiting on the post-hoc
-file count in the Tripwires paragraph below. A non-marshal live session (the solo live lane, no
-`bind-team` held) is unaffected — it keeps today's post-hoc merge-time tripwire exactly as
-written.
+**The live lane (Kim's ruling, 2026-08-19; hardened same day).** A LIVE human prompt for small, bounded work — the human typed the ask directly at this session and the work fits one context — executes solo inline, record-LAST: no intake mint, no ADR-0005 claim, no write-gate hold, no build-seat dispatch. The PR (or permitted direct commit) IS the record — labeled `live-lane` where the backend has labels, so revert/defect rates stay measurable against full-flow PRs. The live prompt IS the authorization the write-gate substitutes for, and it pre-authorizes auto-merge on green. Never skipped: the repo's quality floor (lint, gates, CI, version discipline), the semantic-edit critic invariant (one unnamed checker, dispatched the moment the semantic edit lands and OVERLAPPED with the bump/gate/routing prep — its verdict gates the push, a FAIL reworks; `checking-rules` calibrates the unit), and the ten-second collision look — head branches + version slot + a claim scan (#184's window) + Section 4's two slot checks; skipping the claim is licensed, skipping the LOOK is not. **Tripwires, mechanical not judged** (non-marshal sessions — a marshal-held one uses `references/marshal-carve-out.md`'s shape read instead; never self-certified "small"): >3 substantive files — floor-mandated riders (version bump, ledger line, evals sync) don't count — or a second plugin → one confirm before merge; CI red after push → a mechanical fix rides the original authorization, a semantic rework does not — re-confirm before re-push. Escalate OUT — mint the record, take the full flow — the moment the work turns multi-seat, unattended, backlog-shaped, touches another seat's claim, or outgrows one context; the retroactive mint (`[[dispatch-ticket]]` Phase 1's nested intake) costs the same as the upfront one. **Marshal carve-out (Kim's ruling, 2026-08-27)** narrows the live lane for one host — a session holding this seat keeps one-file mechanical latitude only, dispatching everything else: full rule in `references/marshal-carve-out.md` (F6 split; also cited from `agents/fleet-marshal.md`, `skills/bind-team/SKILL.md`, workspace `CLAUDE.md`).
 
 **Triage-within-one-turn.** Every incoming item — a raw user ask, a recordless report, a
 handback, a peer message, an overdue report — gets classified and routed in the SAME turn it
