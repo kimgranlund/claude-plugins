@@ -89,7 +89,7 @@ Strategy and core decisions → score against `references/rubric.md` (gate: H1 r
 | `references/shared-doctrines.md` | Enforcing or teaching a doctrine: prose doctrine, naming grammar, encoding, reduction R1–R5, gates + receipts, standing rules |
 | `references/context-potency.md` | Making generation context potent: technique-by-surface mapping, the generic-output clinic, the altitude rule |
 | `references/rubric.md` | Scoring a hub engagement (strategy + core + context) — H1–H7 |
-| `scripts/routing-corpus.json` | The routing eval corpus for this description (harness's `routing_eval.py`, where installed) |
+| `evals/evals.json` | The routing corpus of record for this description (`/check-routing`, `eval_check.py`) |
 | [[make-dscard-kit]] · [[make-stitch-kit]] · [[make-figma-make-kit]] | Platform execution — each owns its format ground truth, gates, and rubric |
 | **design-system-checker** (agent) | Independent grading of any export |
 | [[prompt-wording-rules]] · **wording-checker** | The wording layer this hub applies and teaches; its independent audit |
