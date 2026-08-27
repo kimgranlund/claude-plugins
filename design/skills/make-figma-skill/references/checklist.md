@@ -5,7 +5,9 @@ dimension that mechanizes the line; unlabeled lines are judgment (rubric R1–R5
 
 ## Before writing
 
-- [ ] Mode chosen: **new** (charter in hand) or **convert** (source skill dir resolved and readable).
+- [ ] Mode chosen: **new** (charter in hand) or **convert** (source resolved and readable: a skill dir, a command-species skill dir, or an `agents/<name>.md` file).
+- [ ] Agent source: every `skills:` preload resolved to a real `skills/<name>/SKILL.md` (same plugin, or that plugin's checkout for `plugin:name`); none silently missing [F6].
+- [ ] Command source: `$ARGUMENTS`, `context: fork`, `allowed-tools`, repo-state preconditions transposed or Dropped per conversion-rules §Source shapes [F2, F3].
 - [ ] Destination path confirmed with the user in chat (this skill never assumes one).
 - [ ] Convert: inventory written — headings (SKILL.md + every cited reference), scripts + their gates, handles/plugin mentions, numeric anchors, evals `t*`/`n*` cases.
 - [ ] Convert: the source's own `evals/evals.json` opened — its `t*` prompts are the trigger vocabulary, its `n*` prompts the "Not for" list.

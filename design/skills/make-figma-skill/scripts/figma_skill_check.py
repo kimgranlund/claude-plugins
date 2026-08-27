@@ -8,9 +8,14 @@ mechanical slice, R2 tool mapping quality, R3 trigger quality) stay with
 references/rubric.md.
 
 Usage:
-    python3 figma_skill_check.py <skill.md> [--source <source-skill-dir>] [--json]
+    python3 figma_skill_check.py <skill.md> [--source <skill-dir | agents/<name>.md>] [--json]
     python3 figma_skill_check.py --hash <source-skill-dir>     # the provenance hash
     python3 figma_skill_check.py selftest
+
+--source accepts three shapes: a skill directory (kind `skill`, or `command` when its
+frontmatter says disable-model-invocation: true), or a single agents/<name>.md file (kind
+`agent` — its `skills:` preloads are resolved at <plugin-root>/skills/<name>/ and their
+SKILL.md + cited references join the F6 corpus; an unresolvable preload is an F6 FAIL).
 
 F3 scans the body MINUS the `## Dropped` / `## Provenance` sections and minus any
 `(transposed from …)` parenthetical — those legitimately name sidecar paths.
@@ -69,6 +74,7 @@ CLAUDE_ONLY_KEYS = {
     "disable-model-invocation", "user-invocable", "allowed-tools", "disallowed-tools",
     "context", "agent", "model", "effort", "paths", "hooks", "shell", "argument-hint",
     "when_to_use", "arguments",
+    "tools", "skills", "color", "background",        # agent-definition keys
 }
 SIDECAR_PATTERNS = [
     (r"\breferences/", "references/ path"),
@@ -80,8 +86,11 @@ SIDECAR_PATTERNS = [
     (r"\bnode\s+\S+\.(?:m?js|cjs)\b", "node invocation"),
     (r"\bAskUserQuestion\b", "AskUserQuestion tool"),
     (r"\bBash\(", "Bash( tool grant"),
+    (r"\$ARGUMENTS\b", "$ARGUMENTS (command-skill placeholder)"),
+    (r"\bSendMessage\b", "SendMessage (agent mailbox)"),
+    (r"\b(?:Agent|Skill) tool\b", "Agent/Skill tool dispatch"),
 ]
-ACTIVE_TRIGGER_RE = re.compile(r"\b(use when|use for|trigger when|invoke when|use this when|use it when)\b", re.I)
+ACTIVE_TRIGGER_RE = re.compile(r"\b(use when|use for|trigger when|invoke when|use this when|use it when|invoke with)\b", re.I)
 SOFT_TRIGGER_RE = re.compile(r"\b(only when|only if|use only)\b", re.I)
 NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DROPPED_REASONS = (
@@ -89,6 +98,7 @@ DROPPED_REASONS = (
     "not performable in figma",
     "claude code runtime only",
     "superseded by inlined sibling slice",
+    "sibling job, fenced",
     "user ruling:",
 )
 NUMERIC_ANCHOR_RE = re.compile(
@@ -176,8 +186,18 @@ HASH_EXCLUDE_FILES = {"intent.md"}
 def source_hash(source_dir: Path) -> str:
     """The provenance hash: sha256 over sorted `<relpath> <sha256(bytes)>` lines for every
     file under the source dir, excluding agents/ evals/ __pycache__/ dist/ and intent.md
-    (harness overlays and forge state, not skill content). First 12 hex chars."""
+    (harness overlays and forge state, not skill content). First 12 hex chars.
+    An agent FILE hashes the file's own bytes plus each resolved `skills:` preload dir's
+    hash (sorted), so an edit to the agent or to any preload changes it — a sibling agent's
+    edit does not."""
     import hashlib
+    if source_dir.is_file():
+        meta, _, _ = split_frontmatter(source_dir.read_text(encoding="utf-8", errors="replace"))
+        parts = [f"{source_dir.name} {hashlib.sha256(source_dir.read_bytes()).hexdigest()}"]
+        for p in re.findall(r"[A-Za-z0-9_:-]+", (meta or {}).get("skills", "")):
+            sd = resolve_preload(source_dir, p)
+            parts.append(f"preload {p} {source_hash(sd) if sd else 'UNRESOLVED'}")
+        return hashlib.sha256("\n".join(sorted(parts)).encode("utf-8")).hexdigest()[:12]
     lines = []
     for p in sorted(source_dir.rglob("*")):
         if not p.is_file():
@@ -187,6 +207,70 @@ def source_hash(source_dir: Path) -> str:
             continue
         lines.append(f"{rel.as_posix()} {hashlib.sha256(p.read_bytes()).hexdigest()}")
     return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()[:12]
+
+
+def _skill_corpus(skill_dir: Path, label_prefix: str) -> tuple[str, list[tuple[str, str]], list[str]]:
+    """(kind, corpus, errors) for a skill directory: SKILL.md + every cited reference."""
+    src_skill = skill_dir / "SKILL.md"
+    if not src_skill.is_file():
+        return "skill", [], [f"no SKILL.md under {skill_dir}"]
+    meta, src_body, _ = split_frontmatter(src_skill.read_text(encoding="utf-8", errors="replace"))
+    kind = "command" if (meta or {}).get("disable-model-invocation", "").lower() == "true" else "skill"
+    corpus = [(f"{label_prefix}SKILL.md", src_body)]
+    for rf in cited_reference_files(skill_dir, src_body):
+        corpus.append((f"{label_prefix}references/{rf.relative_to(skill_dir / 'references')}",
+                       rf.read_text(encoding="utf-8", errors="replace")))
+    return kind, corpus, []
+
+
+def resolve_preload(agent_file: Path, handle: str) -> Path | None:
+    """`name` → <plugin-root>/skills/name; `plugin:name` → <plugin-root>/../plugin/skills/name
+    (the workspace layout, one plugin dir per sibling). None when neither holds a SKILL.md."""
+    plugin_root = agent_file.parent.parent
+    if ":" in handle:
+        plug, local = handle.split(":", 1)
+        # A prefixed handle resolves ONLY in the named sibling plugin — a same-named local
+        # skill would be the wrong content and a false F6 PASS.
+        cands = [plugin_root.parent / plug / "skills" / local]
+    else:
+        cands = [plugin_root / "skills" / handle]
+    for c in cands:
+        if (c / "SKILL.md").is_file():
+            return c
+    return None
+
+
+def load_source(source: Path) -> tuple[str, list[tuple[str, str]], list[str]]:
+    """Resolve a --source into (kind, corpus, errors).
+
+    kind ∈ skill | command | agent.
+      * a directory holding SKILL.md → skill (command when disable-model-invocation: true);
+        corpus = SKILL.md + cited references/*.md
+      * a single agents/<name>.md file → agent; corpus = the agent body + for every entry in
+        its `skills:` preload list, that skill's SKILL.md and cited references, resolved at
+        <plugin-root>/skills/<name>/ where plugin-root = the agents/ dir's parent. An
+        unresolvable preload is an F6 error (its content would silently vanish otherwise).
+    """
+    if source.is_dir():
+        return _skill_corpus(source, "")
+    if source.is_file() and source.suffix == ".md":
+        meta, agent_body, err = split_frontmatter(source.read_text(encoding="utf-8", errors="replace"))
+        if err:
+            return "agent", [], [f"agent frontmatter: {err}"]
+        corpus = [(source.name, agent_body)]
+        errors = []
+        preloads = re.findall(r"[A-Za-z0-9_:-]+", (meta or {}).get("skills", ""))
+        for p in preloads:
+            sd = resolve_preload(source, p)
+            if sd is None:
+                errors.append(f"preload `{p}` not found (same plugin, or a sibling plugin dir `<workspace>/<plugin>/skills/<name>`) — inline from that plugin's checkout or Drop with `sibling job, fenced`")
+                continue
+            local = sd.name
+            _, sub, sub_err = _skill_corpus(sd, f"preload {local}/")
+            corpus.extend(sub)
+            errors.extend(sub_err)
+        return "agent", corpus, errors
+    return "skill", [], [f"--source is neither a skill directory nor an agent .md file: {source}"]
 
 
 def dropped_section(body: str) -> str:
@@ -247,15 +331,11 @@ def check(text: str, source_dir: Path | None) -> list[tuple[str, str, str]]:
     if source_dir is None:
         f.append(("UNMEASURED", "F6", "resolution coverage not measured (no --source)"))
     else:
-        src_skill = source_dir / "SKILL.md"
-        if not src_skill.is_file():
-            f.append(("FAIL", "F6", f"--source has no SKILL.md: {source_dir}"))
-        else:
-            src_text = src_skill.read_text(encoding="utf-8", errors="replace")
-            _, src_body, _ = split_frontmatter(src_text)
-            corpus = [("SKILL.md", src_body)]
-            for rf in cited_reference_files(source_dir, src_body):
-                corpus.append((f"references/{rf.relative_to(source_dir / 'references')}", rf.read_text(encoding="utf-8", errors="replace")))
+        kind, corpus, load_errors = load_source(source_dir)
+        for e in load_errors:
+            f.append(("FAIL", "F6", e))
+        if corpus:
+            f.append(("NOTE", "F6", f"source kind: {kind}"))
             out_heads = set(headings(body))
             out_norm = norm_heading(body)
             dropped = norm_heading(dropped_section(body))
@@ -290,8 +370,12 @@ def check(text: str, source_dir: Path | None) -> list[tuple[str, str, str]]:
 
     # F8
     if source_dir is not None:
-        ev = source_dir / "evals" / "evals.json"
-        if ev.is_file():
+        ev = source_dir / "evals" / "evals.json" if source_dir.is_dir() else None
+        if ev is None:
+            f.append(("NOTE", "F8", "agent source: no evals corpus — R3's trigger phrasings come from the agent description's own quoted phrases"))
+        elif re.search(r"\binvoke with\b", desc, re.I):
+            f.append(("NOTE", "F8", "command-derived description (Invoke with /name) — trigger-vocabulary check skipped by design"))
+        elif ev.is_file():
             try:
                 cases = json.loads(ev.read_text(encoding="utf-8")).get("cases", [])
             except json.JSONDecodeError:
@@ -403,6 +487,50 @@ date: 2026-08-27
 """
 
 
+AGENT_SRC = """---
+name: demo-checker
+description: Grades one demo. Use PROACTIVELY after a demo is built.
+tools: Read, Grep
+model: sonnet
+skills: [demo-source]
+---
+The checker seat. Never edits.
+
+## Priorities
+1. Read the artifact. 2. Score it.
+
+## Report shape
+Verdict first; findings by severity, 3 tries max.
+"""
+AGENT_OUT = """---
+name: demo-checker
+description: Grades one demo. Use when a demo is built.
+---
+# demo-checker
+
+## Hard rules
+This skill reads and reports; it changes nothing on the canvas.
+
+## Priorities
+1. Read the artifact. 2. Score it.
+
+## Report shape
+Verdict first; findings by severity, 3 tries max.
+
+## demo-source (preloaded)
+
+## Variants
+Three variants.
+
+## Contrast gate
+Every pair >= 4.5:1; body text 16px minimum.
+
+## Provenance
+source: agents/demo-checker.md
+date: 2026-08-27
+"""
+
+
 def selftest() -> int:
     ok = True
 
@@ -452,6 +580,41 @@ def selftest() -> int:
         node_prose = check(GOOD.replace("Primary, secondary", "Read the selected node then Primary, secondary"), None)
         expect(not any(gate == "F3" for lvl, gate, _ in node_prose if lvl == "FAIL"), "'the selected node' prose does not trip the node-invocation pattern")
         expect(any(gate == "F3" for lvl, gate, _ in check(GOOD.replace("Primary", "run node build.mjs then Primary"), None) if lvl == "FAIL"), "'node build.mjs' still trips F3")
+        # agent source: preload inlined vs. missing
+        plugin = Path(td) / "plug"
+        (plugin / "agents").mkdir(parents=True)
+        (plugin / "skills" / "demo-source").mkdir(parents=True)
+        (plugin / "skills" / "demo-source" / "SKILL.md").write_text(SRC_SKILL, encoding="utf-8")
+        agent_md = plugin / "agents" / "demo-checker.md"
+        agent_md.write_text(AGENT_SRC, encoding="utf-8")
+        a_miss = check(OUT_HIT, agent_md)
+        expect(any(gate == "F6" and lvl == "FAIL" and "priorities" in m.lower() for lvl, gate, m in a_miss), "agent source: F6 bites on the agent's own dropped heading (Priorities)")
+        a_hit = check(AGENT_OUT, agent_md)
+        expect(not any(gate == "F6" and lvl == "FAIL" for lvl, gate, _ in a_hit), "agent source: F6 passes when agent body + preloaded skill headings carried")
+        expect(any(gate == "F6" and "agent" in m for lvl, gate, m in a_hit if lvl == "NOTE"), "agent source: kind reported as agent")
+        ah1 = source_hash(agent_md)
+        sib = Path(td) / "plug" / "agents" / "other.md"
+        sib.write_text(AGENT_SRC.replace("demo-checker", "other"), encoding="utf-8")
+        expect(source_hash(agent_md) == ah1 and len(ah1) == 12, "agent --hash: unaffected by a sibling agent file")
+        (plugin / "skills" / "demo-source" / "SKILL.md").write_text(SRC_SKILL + "\nx\n", encoding="utf-8")
+        expect(source_hash(agent_md) != ah1, "agent --hash: changes when a preload changes")
+        (plugin / "skills" / "demo-source" / "SKILL.md").write_text(SRC_SKILL, encoding="utf-8")
+        # cross-plugin preload resolved via the workspace sibling layout
+        (Path(td) / "otherplug" / "skills" / "xskill").mkdir(parents=True)
+        (Path(td) / "otherplug" / "skills" / "xskill" / "SKILL.md").write_text(SRC_SKILL.replace("demo-source", "xskill"), encoding="utf-8")
+        agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills: [demo-source, otherplug:xskill]"), encoding="utf-8")
+        expect(not any(gate == "F6" and lvl == "FAIL" and "xskill" in m for lvl, gate, m in check(AGENT_OUT, agent_md)), "cross-plugin preload resolves via <workspace>/<plugin>/skills/<name>")
+        (plugin / "skills" / "xskill").mkdir()
+        (plugin / "skills" / "xskill" / "SKILL.md").write_text(SRC_SKILL, encoding="utf-8")
+        agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills: [demo-source, ghostplug:xskill]"), encoding="utf-8")
+        expect(any(gate == "F6" and lvl == "FAIL" and "ghostplug:xskill" in m for lvl, gate, m in check(AGENT_OUT, agent_md)), "prefixed handle never falls back to a same-named LOCAL skill (false-PASS guard)")
+        agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills: [demo-source, ghost-skill]"), encoding="utf-8")
+        expect(any(gate == "F6" and lvl == "FAIL" and "ghost-skill" in m for lvl, gate, m in check(AGENT_OUT, agent_md)), "agent source: unresolvable preload is an F6 FAIL")
+        expect(any(gate == "F8" and "agent source" in m for lvl, gate, m in check(AGENT_OUT, agent_md) if lvl == "NOTE"), "agent source: F8 reports no-evals NOTE instead of silence")
+        cmd_leak = check(AGENT_OUT.replace("## Priorities", "Seed: $ARGUMENTS\n\n## Priorities"), agent_md)
+        expect(any(gate == "F3" and "ARGUMENTS" in m for lvl, gate, m in cmd_leak if lvl == "FAIL"), "$ARGUMENTS leaking into an export trips F3")
+        expect(any(gate == "F2" for lvl, gate, _ in check(GOOD.replace("---\n# ds", "tools: Read, Grep\nskills: [x]\n---\n# ds"), None) if lvl == "FAIL"), "agent keys tools:/skills: trip F2")
+        expect(not any(gate == "F4" for lvl, gate, _ in check(GOOD.replace("Use when the", "Invoke with `/ds-button-rules` when the"), None) if lvl == "FAIL"), "'Invoke with /name' counts as an active trigger (command-derived)")
         h1, h2 = source_hash(src), source_hash(src)
         expect(h1 == h2 and len(h1) == 12, "source_hash is deterministic, 12 hex")
         (src / "SKILL.md").write_text(SRC_SKILL + "\nchanged\n", encoding="utf-8")
@@ -478,8 +641,8 @@ def main(argv: list[str]) -> int:
     if argv[:1] == ["selftest"]:
         return selftest()
     if argv[:1] == ["--hash"]:
-        if len(argv) != 2 or not Path(argv[1]).is_dir():
-            print("usage: --hash <source-skill-dir>", file=sys.stderr)
+        if len(argv) != 2 or not (Path(argv[1]).is_dir() or Path(argv[1]).is_file()):
+            print("usage: --hash <source-skill-dir | agents/<name>.md>", file=sys.stderr)
             return 2
         print(source_hash(Path(argv[1])))
         return 0
@@ -493,8 +656,8 @@ def main(argv: list[str]) -> int:
         print(f"usage error: not a file: {p}", file=sys.stderr)
         return 2
     src = Path(a.source) if a.source else None
-    if src is not None and not src.is_dir():
-        print(f"usage error: --source is not a directory: {src}", file=sys.stderr)
+    if src is not None and not (src.is_dir() or src.is_file()):
+        print(f"usage error: --source does not exist: {src}", file=sys.stderr)
         return 2
     findings = check(p.read_text(encoding="utf-8", errors="replace"), src)
     if a.json:

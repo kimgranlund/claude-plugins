@@ -1,4 +1,4 @@
-# Conversion rules — estate reference skill → Figma custom skill
+# Conversion rules — estate skill / command / agent → Figma custom skill
 
 The governing invariant: **resolution is never lost.** Every rule, threshold, contrast
 pair, failure branch, and worked example in the source survives into the single file,
@@ -27,6 +27,39 @@ gate fails on any left-column form leaking through.
 | A transposed check's heading | `## <name> (transposed from scripts/x.py)` — the parenthetical is F3-exempt by design | Name the source script here and nowhere else in the running prose |
 | Worked examples, good/bad pairs | Verbatim, in the tail, bad side still labeled | |
 
+## Source shapes: skill, command, agent
+
+`--source` resolves three shapes; each adds rows to the table above.
+
+### Command-species skill (`disable-model-invocation: true`)
+
+| Source construct | Figma-file construct |
+|---|---|
+| `$ARGUMENTS` / `argument-hint` | "the text after `/name` in chat"; the hint becomes the first sentence of the body ("Invoke as `/name <what to build>`") |
+| Preconditions on repo/tree/credential state (`git status`, a token present) | The Figma-native precondition when one exists (a selection present, edit access to the file, a linked library reachable); otherwise `## Dropped` as `Claude Code runtime only` |
+| `context: fork` / `agent:` / `background:` | Stripped — a Figma skill runs inline in the chat that invoked it |
+| `allowed-tools` grants | Stripped (F2) |
+| Side-effect confirmation points ("show the diff; proceed only on approval") | Kept verbatim as "show the change in chat; proceed only on the user's yes" — these are the command's safety contract |
+| Description | "Invoke with `/name` …" — the human-timed contract survives as the trigger clause (F4 accepts it); no auto-trigger phrasings added |
+
+### Agent definition (`agents/<name>.md`)
+
+| Source construct | Figma-file construct |
+|---|---|
+| The role identity paragraph | The skill's identity line, verbatim |
+| `tools:` wall (a checker's `Read, Grep, Glob`, with or without `Bash` for gate runs) | Figma has no tool wall; a no-edit wall becomes a `## Hard rules` line — "this skill reads and reports; it changes nothing on the canvas" — spending one of the ≤ 3 hard gates. The agent's other NEVER-class gates ride verbatim in their own sections; the head keeps at most three |
+| `model:` / `effort:` / `color:` | Stripped (F2) |
+| `skills: [a, b]` preloads | Each preloaded skill inlined WHOLE under `## <name> (preloaded)` — its SKILL.md body and its cited references — in list order. A cross-plugin preload (`docs:x`) resolves ONLY at `<workspace>/docs/skills/x/` (the checker never falls back to a same-named local skill); absent there it is an F6 FAIL to resolve, never a silent omission — inline it from that plugin's checkout, or Drop it as `sibling job, fenced` when the human rules the job out of scope |
+| Sibling artifacts the agent reads AT DISPATCH TIME but does not preload (an owning sibling's `references/rubric.md`, a sibling's gate script) | Fenced, not inlined: "ask the user to paste <the rubric / the gate output>; else that dimension is UNMEASURED" — one `## Dropped` bullet per sibling, reason `sibling job, fenced`. Inlining would pull content the source deliberately refuses as a standing preload |
+| A gate script the agent RUNS that is not bundled with the source (a sibling skill's `scripts/x.py`) | Not transposed (its docstring is outside the corpus); the run becomes "ask the user to paste the output, else UNMEASURED", Dropped as `not performable in Figma` |
+| Priorities / numbered discipline list | Verbatim, in the head — it IS the contract |
+| "deliver via `SendMessage`", `write-handoff` return block | "Reply in chat with this report shape:" + the handoff fields as a template |
+| Dispatching sub-agents (`Agent` tool) | Self-review with the sub-agent's rubric inlined (the checker row above) |
+| Description ("Use PROACTIVELY when …") | Reworded to "Use when …"; the NOT-clauses survive as "Not for: …" |
+
+The F6 corpus for an agent = the agent body + every resolved preload's SKILL.md + those
+skills' cited references. An agent with no preloads converts like a short skill.
+
 ## Tool map — Claude Code verb → Figma agent verb
 
 | Claude Code | Figma agent / Make |
@@ -54,8 +87,8 @@ gate fails on any left-column form leaking through.
    form `- <source heading or item> — <reason>`, the reason from this CLOSED set (the
    checker's F6 fails any bullet carrying none of them): `uncited by source body` · `not
    performable in Figma` · `Claude Code runtime only` · `superseded by inlined sibling
-   slice` · `user ruling: <quote>`. An empty `## Dropped` section is legal and means
-   "everything carried".
+   slice` · `sibling job, fenced` · `user ruling: <quote>`. An empty `## Dropped` section is
+   legal and means "everything carried".
 
 ## Head-first ordering (what the checker's F7 gate looks for)
 
@@ -80,9 +113,11 @@ gate fails on any left-column form leaking through.
 ## Provenance
 source: <path relative to the repo/plugin root> @ <plugin version>
 date: <YYYY-MM-DD>
-hash: <12 hex>      ← `python3 scripts/figma_skill_check.py --hash <source-dir>`: sha256 over
-                      sorted `<relpath> <sha256(bytes)>` lines, excluding agents/ evals/
-                      __pycache__/ dist/ and intent.md
+hash: <12 hex>      ← `python3 scripts/figma_skill_check.py --hash <source-dir | agents/x.md>`:
+                      a skill dir → sha256 over sorted `<relpath> <sha256(bytes)>` lines,
+                      excluding agents/ evals/ __pycache__/ dist/ and intent.md; an agent
+                      file → its own bytes + each resolved preload dir's hash (a sibling
+                      agent's edit does not move it; a preload edit does)
 inventory: headings <n> · references <n> · scripts <n> · anchors <n> · rewrites <n> · dropped <n>
 ```
 
