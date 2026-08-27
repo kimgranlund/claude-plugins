@@ -80,6 +80,23 @@
         "action": "joined",
         "agent_name": "plugins-product",
         "note": "fleet-bootstrap Phase 2 delta pass; returned. Gate re-ratified 2026-08-23 with rulings: retro rdd-0001 for gh#885; idr-0005 ruled OUTSIDE gh#885's cross-harness work, scoping citation owed; spend-ledger gap rides monthly review."
+      },
+      {
+        "role": "agent",
+        "mode": "manual",
+        "date": "2026-08-26",
+        "action": "joined",
+        "agent_name": "plugins-62",
+        "branch": "main",
+        "note": "takeover via /fleet-bootstrap; prior agent row (plugins-28, 2026-08-23) never released"
+      },
+      {
+        "role": "product",
+        "mode": "dispatched",
+        "date": "2026-08-26",
+        "action": "joined",
+        "agent_name": "plugins-product",
+        "note": "fleet-bootstrap Phase 2 delta pass; returned. Verdict: no material change since the 2026-08-23 ratification, all three rulings from that gate verified closed on disk (rdd-0001, idr-0005 scoping citation via ADR-0026 + gh#933/#934, spend-ledger monthly-cadence unchanged). No new intent-layer content proposed."
       }
     ],
     "loop_position": null,

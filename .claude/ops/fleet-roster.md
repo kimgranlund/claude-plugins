@@ -19,3 +19,4 @@ printed session name for role `agent` was never the bare role token. Corrected i
 `plugins-marshal`, the current convention's printed name for this role.
 | agent | plugins-marshal (takeover) | 2026-08-22 | plugins |
 | agent | plugins-marshal (takeover) | 2026-08-23 | plugins |
+| agent | plugins-marshal (takeover) | 2026-08-26 | plugins |
