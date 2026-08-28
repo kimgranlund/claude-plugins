@@ -1,4 +1,4 @@
 name: "design"
-version: "1.6.1"
+version: "1.6.2"
 description: "The design plugin — color science and palettes, typography systems, and design-system exports in one install: OKLCH ramps and verification, the 15-voice type system, Material Design token grammar, the DESIGN.md/Figma Make/Google Stitch export bundles a generative design agent consumes, artifact-styling-rules (theme/token/type/mermaid/shell doctrine for Claude Artifacts), and token-feature-intake-rules (visual/token feature-ticket intake schema)."
 manifest_version: 1
