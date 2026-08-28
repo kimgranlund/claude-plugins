@@ -3,8 +3,14 @@
 Session-identity records for the standing fleet (see `teamwork:team-scaffolding` Phase 2;
 naming is convention, not platform-enforced — lld-0006 D1).
 
-| Role | Session name | Date | Repo |
-|---|---|---|---|
+Schema bumped 2026-08-28 (issue #980): rows now carry an `Agent name` column — the real
+`SendMessage` address, never the printed `Session name` label alone (that label routes nowhere by
+itself, `fleet-rules` Section 7). Every row above this note predates the bump and has no fifth
+cell; treat a missing `Agent name` cell on those rows as unknown, not as license to `SendMessage`
+the session-name label directly.
+
+| Role | Session name | Agent name | Date | Repo |
+|---|---|---|---|---|
 | reviewer | plugins-reviewer | 2026-08-16 | plugins |
 | agent | plugins-marshal | 2026-08-16 | plugins |
 | reviewer | plugins-review (takeover) | 2026-08-16 | plugins |

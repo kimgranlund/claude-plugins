@@ -91,9 +91,7 @@ Print `{repo}-<role>` as the session's expected identity — except role `agent`
 `{repo}-marshal` (never `{repo}-agent`); every other role prints its role token verbatim. There
 is no platform hook to rename a live session, so this is a printed instruction plus a durable
 record, not an enforced rename (reasoning: `.claude/docs/lld/lld-0006-fleet-permission-profile.md`
-D1). Append one dated line to
-`.claude/ops/fleet-roster.md` (create it if absent, one Markdown table row: role · session-name ·
-date · repo) — this is the roster peers read for discovery (Phase 3).
+D1).
 
 `.claude/ops/fleet.json` (the structured fleet manifest — schema and rationale in
 `teamwork:fleet-bootstrap`'s `references/fleet-manifest-schema.md`, shared by both commands) is
@@ -101,15 +99,22 @@ already seeded by now — either Phase 1's bare-invocation branch seeded it via 
 interview before any role bound, or its role-token branch seeded it with canonical defaults
 directly (the explicit token stood in for the interview). Either way seeding never runs twice: an
 absent manifest at this point is a Phase 1 defect, not something Phase 2 re-derives. **Resolve
-this session's real `SendMessage` address before appending** — the same mechanic
-`fleet-bootstrap` Phase 1 step 5 uses for the `agent` seat, extended here to every role this
-command binds: read it from `ListAgents`, matched to THIS session's own transcript/session id (the
-narrow self-identity exception to the peer-discovery ban in `fleet-rules` Section 1 — resolving
-this session's own already-known identity is not a discovery act), never the printed/aspirational
-role label. Append this role's `live_state.joined` entry (role, mode, date, `action: "joined"`,
-`agent_name`: the resolved address — never `null` for a manual seat) — field semantics:
-`fleet-bootstrap`'s `references/fleet-manifest-schema.md`. Every other role's existing entry and
-the seat-tier table are read-only from here.
+this session's real `SendMessage` address first** — the same mechanic `fleet-bootstrap` Phase 1
+step 5 uses for the `agent` seat, extended here to every role this command binds: read it from
+`ListAgents`, matched to THIS session's own transcript/session id (the narrow self-identity
+exception to the peer-discovery ban in `fleet-rules` Section 1 — resolving this session's own
+already-known identity is not a discovery act), never the printed/aspirational role label.
+
+Append one dated line to `.claude/ops/fleet-roster.md` (create it if absent, one Markdown table
+row: role · session-name · agent-name · date · repo, where `agent-name` is the address just
+resolved above — never left blank, never a repeat of the printed session-name column) — this is
+the roster peers read for discovery (Phase 3), and now the only surface a caller needs to find
+the real `SendMessage` address without opening `fleet.json` by hand (#980: the printed
+session-name label alone is never itself a reachable address, `fleet-rules` Section 7). Append
+this role's `live_state.joined` entry (role, mode, date, `action: "joined"`, `agent_name`: the
+same resolved address — never `null` for a manual seat) — field semantics: `fleet-bootstrap`'s
+`references/fleet-manifest-schema.md`. Every other role's existing entry and the seat-tier table
+are read-only from here.
 
 ## Phase 3 — Write or verify the permission profile
 
@@ -323,8 +328,10 @@ branches) rather than silently skipped:
    `live_state.joined` write (field semantics: `fleet-manifest-schema.md`'s `action`/`reason`
    entries, the canonical home for this rule).
 3. **Sync the roster.** Append one dated row to `.claude/ops/fleet-roster.md` recording the
-   release (role · `RETIRED` · date · repo) — this is what keeps the roster (Phase 2's discovery
-   file) and `fleet.json` (Phase 1's collision check) agreeing on who currently holds the seat,
+   release (role · `RETIRED` · `n/a` · date · repo — the `agent-name` column reads `n/a` since
+   the release record above just wrote `agent_name: null`, matching Phase 2's row shape) — this is
+   what keeps the roster (Phase 2's discovery file) and `fleet.json` (Phase 1's collision check)
+   agreeing on who currently holds the seat,
    closing the exact drift issue #426 found (a hand-edited roster row with no matching manifest
    record). Never hand-edit an existing roster row in place — append, matching the file's own
    append-only convention.
