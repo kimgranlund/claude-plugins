@@ -111,6 +111,21 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.29.5 · 2026-08-28 · closes #963: `close-session` gains a fifth "clean" axis — session-spawned
+runtime residue (background shells, named agents, dev-server ports) — alongside step 1's existing
+branch/worktree axis; each item is closed out (`TaskStop`/a closing `SendMessage`) or named,
+never folded silently into "clean." The dev-server check cites `flaky-gates`' `port-zombie-sweep`
+as the intended PORT-squatter owner, but that skill is confirmed NOT installed in this estate as
+of this change, so the axis falls back to a scoped `lsof -i -P` until it exists. Step 4 now also
+resolves merge logistics instead of only reporting them: an open PR reads as merged-with-SHA or
+left-open-with-a-named-reason, the worktree branch's own merge state is stated, and an explicit
+ExitWorktree-ready call closes the verdict — this skill still never performs the merge itself
+(ADR-0002's human-gated merge, same discipline `dispatch-ticket`'s build-seat contract runs
+under), disclosed as a deliberate limitation, not an oversight. Enumeration mechanism for shells/
+agents stays session-bookkeeping-only (no platform-wide listing surface exists); an UNMEASURED
+failure row covers a resumed/compacted session with no such bookkeeping to read. No description
+change, so no eval-run obligation follows.
+
 v2.29.4 · 2026-08-28 · closes #960: a build-leader seat's scratch clone lived under
 `$TMPDIR`/`tempfile.gettempdir()`, where the sandbox denies `rm -rf` at retire time, leaving
 residue every dispatch. `dispatch_envelope.py`'s `resolve_dest_root` now defaults (Kim's shape-b
