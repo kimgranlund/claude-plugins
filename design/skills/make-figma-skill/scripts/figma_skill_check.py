@@ -127,11 +127,16 @@ def split_frontmatter(text: str):
     folded: list[str] = []
     for line in head.splitlines():
         if line.startswith((" ", "\t")) and cur_key is not None:
-            folded.append(line.strip())
+            item = line.strip()
+            if item.startswith("- "):
+                item = item[2:].strip()
+            folded.append(item)
             continue
         if cur_key is not None and folded:
             meta[cur_key] = " ".join(folded).strip()
             folded = []
+        if line.strip().startswith("#"):
+            continue
         m = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)$", line)
         if not m:
             if line.strip():
@@ -611,6 +616,23 @@ def selftest() -> int:
         agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills: [demo-source, ghost-skill]"), encoding="utf-8")
         expect(any(gate == "F6" and lvl == "FAIL" and "ghost-skill" in m for lvl, gate, m in check(AGENT_OUT, agent_md)), "agent source: unresolvable preload is an F6 FAIL")
         expect(any(gate == "F8" and "agent source" in m for lvl, gate, m in check(AGENT_OUT, agent_md) if lvl == "NOTE"), "agent source: F8 reports no-evals NOTE instead of silence")
+        # gh#952: a top-level `#` comment line in agent frontmatter must not be treated as
+        # unparseable, and a block-list `skills:` (`  - name` lines) must resolve identically
+        # to the inline `[a, b]` form.
+        agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills: [demo-source]\n# gh#952: a load-bearing comment, valid YAML"), encoding="utf-8")
+        commented, _, err = split_frontmatter(agent_md.read_text(encoding="utf-8"))
+        expect(err is None, "gh#952: a top-level # comment line in frontmatter still parses")
+        a_comment = check(AGENT_OUT, agent_md)
+        expect(not any(gate == "F6" and lvl == "FAIL" for lvl, gate, _ in a_comment), "gh#952: F6 still passes with a comment line in source frontmatter")
+        agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills:\n  - demo-source"), encoding="utf-8")
+        block_list, _, err = split_frontmatter(agent_md.read_text(encoding="utf-8"))
+        expect(err is None and block_list.get("skills", "").strip() == "demo-source", "gh#952: block-list `skills:` parses to the same handle as `[demo-source]`")
+        a_block = check(AGENT_OUT, agent_md)
+        expect(not any(gate == "F6" and lvl == "FAIL" for lvl, gate, _ in a_block), "gh#952: F6 passes on a block-list skills: preload, same as the inline form")
+        # an actually malformed (non-comment, non key:value) line still fails
+        agent_md.write_text(AGENT_SRC.replace("skills: [demo-source]", "skills: [demo-source]\nnot a valid frontmatter line"), encoding="utf-8")
+        _, _, malformed_err = split_frontmatter(agent_md.read_text(encoding="utf-8"))
+        expect(malformed_err is not None and "unparseable" in malformed_err, "a genuinely malformed frontmatter line still fails")
         cmd_leak = check(AGENT_OUT.replace("## Priorities", "Seed: $ARGUMENTS\n\n## Priorities"), agent_md)
         expect(any(gate == "F3" and "ARGUMENTS" in m for lvl, gate, m in cmd_leak if lvl == "FAIL"), "$ARGUMENTS leaking into an export trips F3")
         expect(any(gate == "F2" for lvl, gate, _ in check(GOOD.replace("---\n# ds", "tools: Read, Grep\nskills: [x]\n---\n# ds"), None) if lvl == "FAIL"), "agent keys tools:/skills: trip F2")
