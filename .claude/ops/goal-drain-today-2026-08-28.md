@@ -33,7 +33,7 @@ outcome, not forced into the single-PR shape).
 | 977 | teamwork | build-977 | turn 2 | MERGED via PR #984 (teamwork 2.29.8) | #984 | yes |
 | 978 | cross-cutting | build-978 | turn 2 | BLOCKED (0/22 resolved, T4 conflict confirmed structural) — dated Findings entry posted; ADR-0027 proposed, queued for Kim's ratification, deliberately NOT merged by this run | — | n/a (valid terminal state) |
 | 979 | teamwork | build-979 | turn 3 | MERGED via PR #985 (teamwork 2.29.9) | #985 | yes |
-| 980 | teamwork | build-980 | turn 3 | dispatched, slot 2.29.10 (last ticket) | — | — |
+| 980 | teamwork | build-980 | turn 3 | held at write-gate, accept-marker posted, opening PR (last ticket) | — | — |
 
 ## Findings this run
 
