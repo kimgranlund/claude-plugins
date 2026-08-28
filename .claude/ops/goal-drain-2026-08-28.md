@@ -33,7 +33,7 @@ marshal to run the real accept-marker round each time.
 | 960 | teamwork | build-960 | turn 2 | MERGED via PR #970 (teamwork 2.29.4) | #970 | yes |
 | 961 | docs | build-961 | turn 1 | MERGED via PR #969 (docs 1.21.15) | #969 | yes |
 | 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR, still open) | — | — |
-| 963 | teamwork | build-963 | turn 3 | dispatched, slot 2.29.5 | — | — |
+| 963 | teamwork | build-963 | turn 3 | held at write-gate, accept-marker posted, opening PR (real fix, not skipped) | — | — |
 
 - 2026-08-28 turn 2: PR #966 (opened directly by kimgranlund, live-lane, NOT a build-seat
   dispatch — outside the standing merge grant, never touched by this run) fixes harness_checks.py
