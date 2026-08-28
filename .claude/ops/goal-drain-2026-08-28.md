@@ -26,14 +26,26 @@ marshal to run the real accept-marker round each time.
 
 | Ticket | Plugin | Build seat | Dispatched | Status | PR | Merged |
 |---|---|---|---|---|---|---|
-| 956 | harness | build-956 | turn 1 | PR #967 open, accept-marker posted, awaiting claude-review | #967 | no |
-| 957 | harness | build-957 | — | queued (wave 2) | — | — |
+| 956 | harness | build-956 | turn 1 | MERGED via PR #967 | #967 | yes |
+| 957 | harness | build-957 | turn 2 | dispatched, slot 3.18.11 | — | — |
 | 958 | harness | build-958 | — | queued (wave 3) | — | — |
 | 959 | harness | build-959 | — | queued (wave 4) | — | — |
-| 960 | teamwork | build-960 | — | queued (wave 2) | — | — |
-| 961 | docs | build-961 | turn 1 | in progress | — | — |
-| 962 | teamwork | build-962 | — | queued (wave 3) | — | — |
+| 960 | teamwork | build-960 | turn 2 | dispatched, slot 2.29.4 | — | — |
+| 961 | docs | build-961 | turn 1 | held at write-gate, accept-marker posted, opening PR | — | — |
+| 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR) | — | — |
 | 963 | teamwork | build-963 | — | queued (wave 4) | — | — |
+
+- 2026-08-28 turn 2: PR #966 (opened directly by kimgranlund, live-lane, NOT a build-seat
+  dispatch — outside the standing merge grant, never touched by this run) fixes harness_checks.py
+  across docs/harness/teamwork for issue #965, which is a byte-for-byte duplicate of #962 (same
+  repro, same root cause: OSError File name too long on a long inline goal arg). #966 is now
+  STALE on harness (3.18.9->3.18.10, but main is already at 3.18.10 via #967) and teamwork
+  (2.29.2->2.29.3, main already at 2.29.3 via gh#968) — the human's own PR to rebase when they
+  merge it, not mine to touch. Decision: #962 dropped from this run's dispatch queue as a
+  duplicate; will close it citing #965/#966 once #966 merges (or note it now if #966 stalls).
+  957/960 dispatched anyway with FRESH hand-assigned slots off current main (harness 3.18.11,
+  teamwork 2.29.4) per fleet-rules' hot-shared-file/rebase-next doctrine — not blocking on
+  another actor's PR.
 
 ## Findings this run
 
