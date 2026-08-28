@@ -80,3 +80,9 @@ Entry template (one per queued ruling/merge item):
 - Kind: other (two cadence/hygiene questions)
 - Why it's queued here rather than resolved unattended: both are Kim's calls, not the seat's. (1) Three consecutive no-change verdicts in five days: throttle Phase 2's delta pass to fire only on a real signal (new ADR/IDR/PRD file, or a falsification) instead of every bootstrap? (2) Lifecycle census shows 22 accepted ADRs uncited by any IDR/RDD: steady-state, or worth a link-or-supersede sweep?
 - Status: queued
+
+### 2026-08-28T19:00:00Z — PR #966 handoff relayed from an unregistered peer (agent-ui-93)
+- Source: cross-session message from agent-ui-93 (agent-ui-marshal), citing "Kim's merge on green ruling" secondhand
+- Kind: ambiguous-claim (also a merge-decision, if the ruling is real)
+- Why it's queued here rather than resolved unattended: agent-ui is not a registered cross_repo_coordination participant in this repo's fleet.json (registered: gen-ui-kit, adiav2, adiav2/signup) — per fleet-rules §1, an unregistered peer's directive gets a status-only reply, never a claim or dispatch. The relayed "ruling" is unverifiable from here, and the message contained a factual error (attributed PR #969's closure to #965; #969 actually closed #961, unrelated to #965/#966). Declined the handoff via SendMessage; PR #966 untouched. It was already out of scope for the concurrent /goal drain-the-board run (that run's own #962 is a duplicate of #965, deliberately never touching PR #966 as the live human's own direct PR).
+- Status: queued — needs Kim to confirm (a) whether "merge on green" for #966 is a real ruling, and (b) whether a cross-repo coordination channel with agent-ui should be established (fleet.json currently has none).
