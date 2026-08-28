@@ -35,8 +35,16 @@ VAGUE = ("clean", "elegant", "good", "nice", "properly", "robust", "well")
 
 
 def read(arg: str) -> str:
+    """<file|string>: read the file when `arg` names one, else treat `arg` itself as the text.
+    The path probe must never crash the string fallback: `Path.is_file()`/`exists()` raise
+    OSError (ENAMETOOLONG on an inline goal longer than the filesystem's name limit, #965) or
+    ValueError (embedded NUL) instead of returning False, so any probe error means "not a path"."""
     p = Path(arg)
-    return p.read_text(encoding="utf-8") if p.exists() else arg
+    try:
+        is_file = p.is_file()
+    except (OSError, ValueError):
+        return arg
+    return p.read_text(encoding="utf-8") if is_file else arg
 
 
 def frontmatter(text: str) -> str:
@@ -715,6 +723,27 @@ def _selftest_modes(errs):
     c = _run_mode("goal", _FIX_GOAL_CLEANUP)
     if not c.get("C1 no vague success terms", False):
         errs.append("goal cleanup-trap: 'clean' inside 'cleanup' wrongly tripped the vague-term check")
+
+    # read() <file|string> lock (#965) — an inline argument longer than a filesystem name
+    # (Path.is_file() raises ENAMETOOLONG) or carrying a NUL (ValueError) must fall back to the
+    # string itself, never crash; a short non-path stays a string; a real file still reads.
+    long_goal = "x" * 1100
+    try:
+        if read(long_goal) != long_goal:
+            errs.append("read: over-long inline string did not fall back to the string itself")
+        if read("Run pytest until it exits 0; stop after 3 turns.") != \
+                "Run pytest until it exits 0; stop after 3 turns.":
+            errs.append("read: short non-path string did not fall back to the string itself")
+        if read("goal\x00text") != "goal\x00text":
+            errs.append("read: NUL-bearing string did not fall back to the string itself")
+    except (OSError, ValueError) as e:
+        errs.append("read: path probe crashed on a non-path argument: %r" % (e,))
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as td:
+        fp = Path(td) / "goal.txt"
+        fp.write_text(_FIX_GOAL_PASS, encoding="utf-8")
+        if read(str(fp)) != _FIX_GOAL_PASS:
+            errs.append("read: an existing file path no longer reads the file")
 
 
 def selftest():
