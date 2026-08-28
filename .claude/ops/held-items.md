@@ -59,6 +59,12 @@ pass over this section is the digest; Kim clears an entry by editing its Status 
 - Why it's queued here rather than resolved unattended: #866's own body discloses the ask arrived secondhand — relayed by gen-ui-kit's marshal via a cross-session SendMessage citing what it says was Kim's own instruction to file this against plugins. GitHub authorship reads as kimgranlund (matches friendlies.json's confirmed_by, so issue-sorter's own login-comparison provenance check finds no mismatch and applies no user-signal tag) — but the underlying INSTRUCTION's provenance is unconfirmed at the source, a distinct question the login-comparison mechanism doesn't cover. The filing itself asks for a quick confirm before being treated as prioritized.
 - Status: resolved 2026-08-22 — Kim confirmed the request as genuinely their own, live, in the same day's mobilize-chores interactive round ("Confirmed + build now"); built and merged as PR #871 (closes #866). Ledger line cleared by the marshal per chore-planner's 2026-08-22T23:49:26Z queue entry 4.
 
+### 2026-08-28T01:32:35Z — standing auto-merge grant for write-gate-accepted build-seat PRs
+- Source: Kim, live, plugins-marshal session (plugins-62), asked at PR #951's merge confirm after three identical per-PR yeses the same night (#947, #950, #951)
+- Kind: merge-decision (standing)
+- Why it's queued here rather than resolved unattended: it is the ruling itself, recorded so a later marshal cites it instead of re-asking (fleet-rules §3: a ruling is scoped to the utterance that made it)
+- Status: resolved 2026-08-28 — RULING: a PR opened by a named build-seat dispatch (`build-<n>`/`build-<ticket>`) that this repo's marshal has write-gate ACCEPTED by SHA on the ticket, with the release gate and CI green, auto-merges (squash, delete branch) without a per-PR AskUserQuestion; the marshal reports each merge as a milestone line. Scope: build-seat PRs only — a live-lane PR the marshal itself would author is outside this grant (the marshal no longer authors those, #949), and any PR whose sizing tripwire fires (>3 substantive files outside floor riders, or a second plugin) still gets one confirm. Supersedable only by a later ruling naming this one.
+
 <!--
 Entry template (one per queued ruling/merge item):
 
