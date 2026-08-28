@@ -111,6 +111,8 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.29.2 · 2026-08-28 · harvest (save-lessons, agent-ui marshal session 2026-08-26..28): `dispatch-ticket`'s `plan-approval-write-gate.md` gains "What step 2's re-read actually verifies" — the four-read pre-accept-marker sequence (fetch/rev-parse, diff-stat vs seat claim, local trial merge + abort, read the diff), with the two false-collision incidents (agent-ui #1681, #1686) it resolved. Reference-only; no procedure step changed.
+
 v2.29.1 · 2026-08-27 · closes #954: a build-leader seat held at dispatch-ticket's stage-2a
 write-gate answered the marshal's post-accept "open the PR" message by re-sending its earlier
 "held" report and idling; a second identical message opened the PR (3 of 3 dispatches in one

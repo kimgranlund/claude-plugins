@@ -138,6 +138,38 @@ Two dispatches sharing one plugin's version slot run this whole loop SERIALLY �
 minted before the first's version bump lands collides at `version_claim_check.py`. Two dispatches
 on disjoint plugins may run steps 1–5 concurrently.
 
+### What step 2's re-read actually verifies (live-observed, agent-ui, 2026-08-26 to 2026-08-28)
+
+Step 2 says the marshal re-reads the branch's HEAD before naming it; on its own that catches a
+stale SHA and nothing else. The sequence that held across every accept marker in one three-day
+agent-ui marshal session (agent-ui `#1680`, `#1681`, `#1682`, `#1686`, `#1687`, `#1690`,
+`#1692`), and is what actually resolved two apparent collisions, is four reads against `origin`,
+never against the seat's report:
+
+1. `git fetch origin <branch>` then `git rev-parse origin/<branch>` — the SHA the marker names.
+2. `git diff main origin/<branch> --stat` — the touched-file set, compared against what the seat
+   claimed; a file the seat did not mention is a scope question before it is an accept.
+3. A local trial merge: `git checkout -b tmp-verify-<id> main && git merge origin/<branch>
+   --no-commit --no-ff`, inspect `git status --porcelain`, then `git merge --abort && git checkout
+   main && git branch -D tmp-verify-<id>`. Nothing is committed; this only proves the branch lands
+   on the CURRENT `main`, which the seat's own "gates green" run (against the `main` it branched
+   from) cannot prove.
+4. Read the diff itself when the change is small enough to read; a docs-only amendment is
+   accepted on its content, not its line count.
+
+Why the trial merge earns its cost: two holds in that session looked like collisions and were
+not. agent-ui `#1681` (a 23-file ADR rename sweep, PR `#1685`) was cut concurrently with
+`#1680`'s branch, and `#1686`'s branch was cut before an unrelated doc-standards fold-in
+(adr-0040/adr-0049) landed on `main` during its hold; in both cases step 3's clean trial merge
+against the CURRENT `main` was the evidence the accept-marker comment cites, and what let the
+marker post without a re-dispatch. The seat's own self-report was correct both times, but it was
+not what the decision rested on. `[incident]`
+
+This does not duplicate stage 2b's QB2/QB3 diff inspection (Resolution 3 below): 2b inspects an
+OPEN PR to decide whether it may auto-merge; this check runs before any PR exists, to decide
+whether the branch is even the right thing to name in the marker. A branch that fails step 3 is
+`write-gate-blocked` again, never a PR for 2b to inspect.
+
 ## No-marshal fallback: FAIL-CLOSED (LLD Resolution 2)
 
 No live marshal entry (`fleet.json`'s `live_state.joined` carries no orchestrator role, or the
