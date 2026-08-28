@@ -58,7 +58,10 @@ earlier one succeeded.
    one confirmed ticket per dispatch, so there is no idle BUILD sibling to spawn — build
    capacity IS this session dispatching `Agent(teamwork:build-leader)` per confirmed ticket as
    work arrives, serially (mobilize-chores' mutating-dispatches rule), each relayed
-   verdict-first with its Findings evidence. The asymmetry is the seats' own contracts, not
+   verdict-first with its Findings evidence. **State `model` explicitly on every such call, read
+   from `fleet.json`'s `seats.agent.tier`** (canonically `sonnet` — mobilize-chores' step 5 states
+   the full rule; cited here, never restated, since this step dispatches the identical seat —
+   gh#968). The asymmetry is the seats' own contracts, not
    an omission.
 6. **The armed report.** One closing block: each step's outcome; how to feed each seat (raw
    intake → relayed to INTAKE; a confirmed ticket → a build-leader dispatch; a review target →

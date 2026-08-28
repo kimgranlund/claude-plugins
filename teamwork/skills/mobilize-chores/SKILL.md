@@ -229,7 +229,12 @@ sweep surfaced that's actually buildable.
    clarify round runs unattended either way), never silently dispatched on a guess.
 5. **Dispatch every confirmed ticket, uniformly — NAMED, always.** Each confirmed ticket, regardless
    of kind → `Agent(subagent_type: "teamwork:build-leader", name: "build-<ticket-id>")` carrying the
-   confirmed ticket id. The dispatch prompt states the concrete return address (this session, or
+   confirmed ticket id. **State `model` explicitly on this call, read from `fleet.json`'s
+   `seats.agent.tier`** (canonically `sonnet`; read from the manifest, not assumed off
+   `build-leader`'s own frontmatter pin, since a repo-local model deviation lives only there —
+   gh#968, the silent-inherit gap this line closes for the build path; `fleet-bootstrap`'s
+   Phase 2 already applies the identical rule for the `product` seat, cited there — issue #919). The
+   dispatch prompt states the concrete return address (this session, or
    the marshal seat relaying for it) per `agent-writing-rules`' never-name-without-an-address rule.
    The name is not optional and not cosmetic: `dispatch-ticket`'s Phase 5 stage 2a write-gate
    (ADR-0023(c), `references/plan-approval-write-gate.md`) holds every build at "pushed, not

@@ -111,6 +111,14 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.29.3 · 2026-08-28 · closes gh#968: `mobilize-chores` step 5 and `init-repo` step 5's
+`Agent(teamwork:build-leader)` dispatches omitted an explicit `model` param, tripping the
+tier-enforced dispatch gate (issue #919 closed the same gap for `product`/`agent` seat dispatches
+but missed the build path). Both now state `model` explicitly from `fleet.json`'s
+`seats.agent.tier` (canonically `sonnet`). Marshal one-file-mechanical fixes, each fresh-context
+skill-checker'd (init-repo: PASS; mobilize-chores: one FAIL — a #919/gh#968 citation-number swap
+— fixed and not re-checked, a bare digit correction to an already-verified sentence).
+
 v2.29.2 · 2026-08-28 · harvest (save-lessons, agent-ui marshal session 2026-08-26..28): `dispatch-ticket`'s `plan-approval-write-gate.md` gains "What step 2's re-read actually verifies" — the four-read pre-accept-marker sequence (fetch/rev-parse, diff-stat vs seat claim, local trial merge + abort, read the diff), with the two false-collision incidents (agent-ui #1681, #1686) it resolved. Reference-only; no procedure step changed.
 
 v2.29.1 · 2026-08-27 · closes #954: a build-leader seat held at dispatch-ticket's stage-2a
