@@ -33,7 +33,7 @@ marshal to run the real accept-marker round each time.
 | 960 | teamwork | build-960 | turn 2 | MERGED via PR #970 (teamwork 2.29.4) | #970 | yes |
 | 961 | docs | build-961 | turn 1 | MERGED via PR #969 (docs 1.21.15) | #969 | yes |
 | 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR, still open) | — | — |
-| 963 | teamwork | build-963 | turn 3 | held at write-gate, accept-marker posted, opening PR (real fix, not skipped) | — | — |
+| 963 | teamwork | build-963 | turn 3 | MERGED via PR #972 (teamwork 2.29.5) | #972 | yes |
 
 - 2026-08-28 turn 2: PR #966 (opened directly by kimgranlund, live-lane, NOT a build-seat
   dispatch — outside the standing merge grant, never touched by this run) fixes harness_checks.py
@@ -66,6 +66,20 @@ marshal to run the real accept-marker round each time.
   §4/§5) — my own trial-merge git gymnastics run in this same shared directory. Paused further
   primary-checkout branch operations until build-957 confirms/relocates. #960's own verification
   was unaffected (already complete, safe) before this was found.
+
+- 2026-08-28 turn 4: build-963 flagged a real, out-of-scope finding — stage 2b's QB3 auto-merge
+  conjunct (allow-list R = {plugin.json, README.md}) predates this workspace's now-routine
+  harness-overlay regen convention (G15), so any normal single-skill edit trips 4 changed files
+  (plugin.json/.codex-plugin/plugin.json/HARNESS-NOTES.md/plugin.yaml) and QB3 always fails —
+  every PR this run needed a human/marshal merge for exactly this reason. Worth a follow-up
+  ticket updating QB3's allow-list; not filed here (out of scope, would be scope creep on this
+  run) but noted for a later sweep.
+- 2026-08-28 turn 4: build-963 independently observed the primary checkout in a transient
+  detached-HEAD state while checking host-checkout cleanliness — correctly identified as the
+  marshal's own trial-merge verification dance (tmp-verify-963/963b), already resolved by its next
+  check. Confirms the trial-merge pattern is safe under concurrent build activity as long as no
+  seat writes into the primary checkout directly (the one real violation this run, #957, is
+  already fixed/documented above).
 
 ## Findings this run
 
