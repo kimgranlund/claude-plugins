@@ -190,6 +190,26 @@ always proceed — rejected because it would erase dedup entirely for every disp
 bug, including the genuine third-party case the acceptance criteria explicitly preserve; the fix
 has to distinguish, not disable, the check.
 
+**Marshal-seat check, before taking the fix-inline branch (issue #961, propagating #949's
+carve-out).** A fork invoked from inside a marshal-held session inherits that session's own
+identity — the fork never becomes a distinct addressable seat of its own — so a fix-inline built
+from such a fork is the marshal building inline exactly as if it had never dispatched at all.
+Read the resolved scope root's `fleet.json` (`teamwork:fleet-bootstrap`'s
+`references/fleet-manifest-schema.md`), take `live_state.joined`'s LATEST row carrying `role:
+"agent"` (the schema's own marshal-seat key — printed `{scope}-marshal`, never `-agent`), and
+compare that row's `agent_name` to this invoking session's own name. No `fleet.json` at the
+resolved scope root, or `live_state.joined` carries no `agent` row → no live marshal to carve out
+for; proceed to fix-inline below unmodified. **A match** → this fix-inline call is the
+fleet-marshal seat, however many forks removed. `teamwork:fleet-rules`'
+`references/marshal-carve-out.md` binds: one-file mechanical latitude only (a version renumber, a
+ledger line, a one-line stale citation) may still land inline; anything semantic or touching more
+than one file skips the fix-inline branch below entirely — record the root cause and the fix's
+shape in a dated `## Findings` entry exactly as the inline path would, then dispatch a named
+`build-<slug>` build-leader (`Agent` tool) with that Findings entry as its sealed brief, rather
+than fixing it here. **No match** → the invoking session is not the marshal seat; proceed to
+fix-inline below exactly as written. No new marker is defined for this test (Kim's ruling, issue
+#961) — `agent_name` is the only signal read.
+
 Root cause already evident from Phase 2/3 → fix inline; file-bug itself appends the dated
 `## Findings` entry naming the fix's location before closing. No investigation to dispatch, but
 the ticket-first ordering is unchanged — only the dispatch step is skipped. **An inline fix that
