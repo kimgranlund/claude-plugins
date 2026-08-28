@@ -115,6 +115,17 @@ hand-read corpus silently stops being cheap the next firing. This guard exists b
 version returned a clean empty delta on an unparseable corpus, so this seat reported "nothing new"
 against 167 unread ADRs indefinitely (`gh issue view 42 --repo kimgranlund/nonoun-plugins`).
 
+**A `FORMULA MISMATCH` line is a distinct signal too, never a real `amended` flood.** Issue #945:
+a hash-basis change to `adr_checkpoint.py` (like #929's own widening) with no migration path would
+otherwise read an existing checkpoint's every stored hash as different from the current formula
+alone — a genuinely 100%-amended report with zero real content-change signal in it, exactly the
+"queue false amendment candidates for the entire corpus" failure this issue named. `classify` now
+detects the mismatch itself and prints `FORMULA MISMATCH` instead of a delta — treat that line the
+same way as the unsupported-shape guard above: report it, do NOT judge the (absent) `amended` list
+as real, and do NOT advance. Re-baseline per the script's own printed instruction (re-run
+`classify` under the OLD script version first if a true delta is owed, then `advance` under THIS
+version) before the next firing.
+
 ## Procedure, one firing
 
 1. **Classify the corpus, don't advance yet.** `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/
