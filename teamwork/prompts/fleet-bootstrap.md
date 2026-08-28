@@ -196,7 +196,54 @@ with it**: `fleet-rules`' Section 7 ("Route-anything-incoming protocol") is this
 triage discipline for whatever arrives next — a raw ask, a bug/feature/task report, a handback, a
 peer message — already adopted by step 6's own Phase-2 read, cited here, never restated.
 
-## Phase 2 — Dispatch the product seat
+## Phase 2 — Check for a real signal, then dispatch the product seat
+
+**Throttle (#977): dispatch only on a real signal since the last-ratification marker.** Three
+consecutive cold starts (2026-08-23, 2026-08-26, 2026-08-28) each dispatched the product seat only
+to have it report no material change — the unconditional dispatch below paid for a full agent run
+every time with nothing to ratify. Phase 3's own gate write is the checkpoint this throttle reads:
+on every outcome it records `live_state.gate` as an object — `{"outcome", "date", "since_commit"}`
+— where `since_commit` is `git rev-parse HEAD` taken at that gate. Before dispatching, read
+`live_state.gate` from the `fleet.json` Phase 0 resolved (never re-derived here) and branch:
+
+- **Absent, `null`, or a legacy bare string** (a record written before #977 — no `since_commit`
+  field to diff from) → no safe baseline exists; never guessed as "must be a signal" or "must be
+  none" — read as "no marker" and dispatch unconditionally, the behavior this throttle had before
+  it existed. Name the fallback explicitly in Phase 6's report ("no throttle marker — dispatched
+  unconditionally") rather than letting it read as an ordinary checked run.
+- **An object carrying `since_commit`** → run both checks below; either firing is a real signal,
+  neither firing skips the dispatch:
+  1. **Doc-edit signal.** `git diff --name-only <since_commit>..HEAD` — scoped with a trailing
+     `-- <scope root>` pathspec when the resolved scope root (Phase 0) isn't the repo root, the
+     same scope-root discipline this Phase 0 already holds elsewhere — piped to `grep -Ei
+     '(^|/)(adr|idr|prd)-[^/]+\.md$'`: any match on a filename, anywhere in the tree, not a fixed
+     directory. Filename is the one convention `docs:doc-writing-rules` holds constant across
+     repos; the directory is not (this workspace's own `.claude/docs/{adr,idr,prd}/`, per
+     `.claude/rules/docs-mutability.md`'s override, vs. another repo's `docs/adr/` or similar) —
+     scoping this check to a directory would silently break the moment it ran somewhere else.
+     **Named gap, not silently mis-covered**: a monolithic single-file ADR dialect (headings inside
+     one file, no per-file `adr-*.md` name — `adr_checkpoint.py`'s own dialects 2/3) produces no
+     match here; a repo running that dialect gets no doc-edit signal from this check and relies on
+     the falsification signal below, or a future widening — never assumed covered.
+  2. **Falsification signal** (`decision-watcher`'s Revalidation mode — a plain data-file read,
+     never a script or preload dependency, so this degrades cleanly wherever `harness` isn't
+     installed, per `.claude/rules/plugin-authoring.md`'s soft-mention rule). Read `<scope
+     root>/.claude/ops/revalidation-queue.json` if present (absent → no signal from this source,
+     not an error): any `candidates[]` row with `"kind": "falsified"` is a real signal. An
+     `"untestable"` row alone is not — it flags a clause needing a rewrite, not necessarily an
+     intent-layer change worth a product-seat pass.
+  Both absent → **skip the dispatch.** Report "no material change since `<gate.date>`" in place of
+  running the agent, then record the skip (below) — never silently do nothing. Either signal fires
+  → dispatch exactly as the rest of this Phase already reads.
+
+**Recording a skip.** Append a `live_state.joined` row for `role: "product"`, `mode: "skipped"` (a
+new value, product-role only, distinct from `"dispatched"` — documented in `references/
+fleet-manifest-schema.md`), today's date, `agent_name: null`, and a `note` naming the checked
+baseline (`since_commit`'s short SHA and `gate.date`) and that neither signal fired. This mirrors
+how a real dispatch's own outcome is already recorded in that same row shape (`mode: "dispatched"`,
+a `note` carrying the returned verdict) — so a later reader distinguishes "checked, nothing
+changed" (a `"skipped"` row exists for this run) from "never checked" (no row at all) without
+re-deriving anything.
 
 Dispatch a synchronous `Agent` call, `subagent_type: teamwork:product-leader` (same-plugin since
 issue #433 moved it from `docs/agents/product-leader-agent.md`, dropping the `-agent` suffix — the
@@ -227,8 +274,12 @@ it explicitly ("intent-layer ratification — human required"), and do not proce
 mirrors `authorkit:overhaul-execute`'s own no-live-user rule: a run with no reachable human at a
 hard gate reports SKIPPED/blocked.
 
-Record the gate's outcome (`ratified` / `revised-and-reratified` / `rejected-stopped-here`) as
-`live_state.gate` in `fleet.json` before continuing.
+Record the gate's outcome as `live_state.gate` in `fleet.json` before continuing — an object, not
+a bare string (#977 upgrades this field; full shape in `references/fleet-manifest-schema.md`):
+`{"outcome": "ratified"|"revised-and-reratified"|"rejected-stopped-here", "date": "<today>",
+"since_commit": "<git rev-parse HEAD, taken now>"}`. `since_commit` is Phase 2's own throttle
+baseline for the NEXT cold start — capture it at this moment, after whatever commits this gate's
+own review already reflects, never a value read earlier in this run.
 
 ## Phase 4 — Determine and confirm the spawn list
 
@@ -335,7 +386,9 @@ not starting fresh.
 ## Phase 6 — Report
 
 One summary: which seats are live and how (manual/background/background-subprocess), the gate's
-outcome, the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
+outcome, **Phase 2's own throttle outcome** (dispatched — signal named — or skipped — "no material
+change since `<date>`" — or "no throttle marker — dispatched unconditionally" on a legacy record,
+#977), the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
 confirmed", "none — reviewer and planner already held", or "confirm skipped — no live user,
 nothing spawned"), the `fleet.json` path Phase 0 resolved — including which branch it took
 (existing record read at that path, a fresh seed — and for a seed, app-scoped-cwd vs. repo-root —
@@ -395,6 +448,11 @@ the gap, not omitted.
   anywhere is not itself a fleet-shaped case; name `.claude` directory creation (or running from a
   directory that already has one) as the fix.
 - **No live user at Phase 3** → stop there per Phase 3; nothing after it runs.
+- **Phase 2's throttle finds a well-formed `live_state.gate` object whose `since_commit` no longer
+  resolves** (a rebase or force-push rewrote history since that gate) (#977) → `git diff` erroring
+  on an unknown revision is never read as "no changes"; treat it identically to the "no marker"
+  branch above (dispatch unconditionally) and name the stale SHA explicitly in Phase 6's report
+  rather than silently skipping on an unreadable baseline.
 - **`fleet-scope.json` pointer names a dir outside the repo-root boundary or lacking its own
   `.claude/`** (#915) → stop at Phase 0 and report the invalid pointer explicitly
   (`references/fleet-manifest-schema.md` §Location and resolution); never fall back silently to

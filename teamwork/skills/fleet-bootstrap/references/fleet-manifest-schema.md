@@ -165,6 +165,15 @@ takeover record.
   joined, in what mode, when, and (for background seats) under what agent name. Append-only —
   never rewritten in place; a seat rejoining after a restart appends a new row rather than editing
   its old one, so the history of who has held a seat stays intact.
+- **`live_state.joined[].mode: "skipped"`** — `product` role only (issue #977, `fleet-bootstrap`
+  Phase 2's throttle). Distinct from `"dispatched"`: no `Agent` call was made this run because the
+  throttle found no real signal since `live_state.gate.since_commit` (below). Same row shape as a
+  real dispatch — `agent_name: null`, a `note` naming the checked baseline and that neither signal
+  fired — so a later reader distinguishes "checked this run, nothing changed" (a `"skipped"` row
+  exists for the date) from "never checked" (no row at all) without re-deriving anything. Never a
+  `seats.product.mode` value — the seat's own configured mode stays `"dispatched"`, since that is
+  still what happens whenever the throttle does find a signal; `"skipped"` only ever appears on a
+  `live_state.joined` row.
 - **`live_state.joined[].agent_name`** — **the `SendMessage` address for this row's holder.**
   Read from `ListAgents` at bind time — the harness-assigned session name the holder is actually
   reachable at (e.g. `"plugins-75"`) — never the printed/aspirational role label
@@ -268,6 +277,30 @@ takeover record.
 - **`live_state.loop_position`** — optional pointer to which of north star / foundation / releases
   loop (per `docs:product-lifecycle-rules`) the product seat currently has authority over; `null`
   until the product seat records one.
+- **`live_state.gate`** — the intent-layer ratification record, written by `fleet-bootstrap` Phase
+  3 on every hard-gate outcome (`ratified` / `revised-and-reratified` / `rejected-stopped-here`).
+  **`null`** until Phase 3 has ever run. **A bare string** (e.g. `"ratified"`) is the pre-#977
+  shape — every record written before issue #977 — read as "no throttle baseline available", never
+  reinterpreted or migrated in place; Phase 3's next write upgrades it to the object shape below
+  the same way `expected_branch`/`branch_mismatch` migrate forward additively elsewhere in this
+  schema (no `version` bump, same posture as "No `version` bump for this addition" below).
+  **The object shape (#977):**
+  ```json
+  { "outcome": "ratified", "date": "2026-08-28", "since_commit": "8ed3f7f3a8417f87b46c362c0d11387c2e1b47ea" }
+  ```
+  - `outcome` — identical vocabulary to the pre-#977 bare string (`ratified` /
+    `revised-and-reratified` / `rejected-stopped-here`).
+  - `date` — the gate's own date, same value a bare-string-era row's surrounding context would have
+    carried only informally.
+  - `since_commit` — `git rev-parse HEAD` taken at THIS gate, after whatever commits its own review
+    already reflects. This is `fleet-bootstrap` Phase 2's own throttle baseline for the *next* cold
+    start: Phase 2 diffs `since_commit..HEAD` for ADR/IDR/PRD filename edits and checks
+    `revalidation-queue.json` for a queued falsification before deciding whether dispatching the
+    product seat again is worth it, skipping the dispatch (and recording the skip on a
+    `live_state.joined` row, `mode: "skipped"` — above) when neither signal fired. **Overwritten
+    only by REPLACING the whole `live_state.gate` value at the next Phase 3 run** — unlike
+    `live_state.joined`, this field is not append-only; there is exactly one current gate record at
+    any time, and its history lives in `live_state.joined`'s own dated `product`-role rows instead.
 - **`cross_repo_coordination`** (optional, defaults absent/empty — most repos never carry a
   standing cross-repo channel) — an array of standing coordination channels this repo's fleet
   participates in, alongside other repos' own fleets. Each entry:
