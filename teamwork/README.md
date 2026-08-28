@@ -111,6 +111,7 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.29.7 · 2026-08-28 · closes #973: `dispatch_envelope.py`'s envelope gains a `bootstrap` field — the host's `package.json` `ops:bootstrap-scratch-clone` npm script if present, else the literal `none, follow the host's seat-map recipe` — resolved once against the clone's own root. `dispatch-ticket`'s Phase 3 "Envelope present" bullet and `references/isolation-ladder.md`'s Rung 2 read that pointer directly instead of feature-detecting a bootstrap script blind. Selftest gains `bootstrap_pointer`/`_resolve_bootstrap` fixtures (present/absent/no-package.json/malformed).
 v2.29.6 · 2026-08-28 · fixes #965: `loop-rules/scripts/harness_checks.py` — `read()`'s `<file|string>` fallback crashed with `OSError: [Errno 63] File name too long` when the inline text (a `goal` string, or any mode's argument) exceeded the filesystem's name limit: `Path.exists()` raises instead of returning False, so the string fallback never ran. The path probe (`is_file()`) now catches OSError/ValueError and returns the argument as text; a real file path still reads. Selftest gains a `read()` lock (over-long string, NUL-bearing string, short non-path, real file). The five byte-identical copies across harness/teamwork/docs move together. PATCH: bug fix in an existing script, no new capability.
 v2.29.5 · 2026-08-28 · closes #963: `close-session` gains a fifth "clean" axis — session-spawned
 runtime residue (background shells, named agents, dev-server ports) — alongside step 1's existing

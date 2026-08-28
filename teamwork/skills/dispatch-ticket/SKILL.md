@@ -137,14 +137,14 @@ is what actually contains its inline-fix path.
 - **Envelope present — verify, never re-derive.** A sealed dispatch prompt carrying a
   `teamwork/scripts/dispatch_envelope.py`-emitted JSON envelope (ticket #758: run by the
   dispatcher — `mobilize-chores` step 5, `/build-feature`, a marshal — before the `Agent` call)
-  already carries the decided branch name, the version slot, and a pre-made shallow scratch clone
-  with that branch checked out. Below, Claim posts its comment naming the envelope's own branch
-  rather than deciding one — everything else in Claim (the race re-read, the `in-flight` label) is
-  unchanged. Isolate skips CREATING a new clone — instead ONE re-read against the envelope's own
-  `clone` path before the first write: `slot.claim_clean` still true, `branch` still absent from
-  `origin`'s open PR heads, and the clone dir's `git status` still clean on the envelope's own
-  branch — the bootstrap step of the isolate bullet still runs against that clone before any
-  gate/check, same as any other fresh isolation (gh#498's false-red class). Any of the three off →
+  already carries the decided branch name, the version slot, a `bootstrap` pointer (#973: the
+  host's `ops:bootstrap-scratch-clone` npm script, or the seat-map-recipe fallback), and a
+  pre-made shallow scratch clone with that branch checked out. Claim below posts the envelope's
+  own branch rather than deciding one — the race re-read and `in-flight` label are unchanged.
+  Isolate skips CREATING a clone — one re-read against the envelope's `clone` path first:
+  `slot.claim_clean` true, `branch` absent from `origin`'s open PR heads, `git status` clean on
+  the envelope's branch — then reads `bootstrap` directly (never re-derived) before any
+  gate/check, same as any fresh isolation (gh#498's false-red class). Any of the three off →
   the envelope is stale; fall through to today's path below as if it had never been carried, and
   name the now-abandoned envelope clone alongside Phase 5 stage 3's own environment-clean line.
   Absent envelope → this bullet does not exist, proceed exactly as the rest of this phase already
