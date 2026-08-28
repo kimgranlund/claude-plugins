@@ -182,6 +182,10 @@
           "repo": "adiav2",
           "app": "frontend/apps/signup",
           "role": "signup-marshal"
+        },
+        {
+          "repo": "agent-ui",
+          "role": "agent-ui-marshal"
         }
       ],
       "established": "2026-08-22",
