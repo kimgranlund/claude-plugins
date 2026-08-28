@@ -31,7 +31,7 @@ marshal to run the real accept-marker round each time.
 | 958 | harness | build-958 | — | queued (wave 3) | — | — |
 | 959 | harness | build-959 | — | queued (wave 4) | — | — |
 | 960 | teamwork | build-960 | turn 2 | dispatched, slot 2.29.4 | — | — |
-| 961 | docs | build-961 | turn 1 | rebumped to docs 1.21.15 (self-caught #966 collision), fresh accept posted, opening PR | — | — |
+| 961 | docs | build-961 | turn 1 | MERGED via PR #969 (docs 1.21.15) | #969 | yes |
 | 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR) | — | — |
 | 963 | teamwork | build-963 | — | queued (wave 4) | — | — |
 
