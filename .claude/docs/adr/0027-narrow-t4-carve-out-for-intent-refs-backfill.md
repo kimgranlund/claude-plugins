@@ -1,7 +1,8 @@
 ---
 doc-type: adr
 id: adr-0027
-status: proposed        # proposed | accepted | superseded
+status: accepted        # proposed | accepted | superseded
+ratified: by Kim
 date: 2026-08-28
 owner: kim.granlund
 supersedes: null
