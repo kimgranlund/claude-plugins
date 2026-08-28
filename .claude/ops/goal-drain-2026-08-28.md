@@ -29,7 +29,7 @@ marshal to run the real accept-marker round each time.
 | 956 | harness | build-956 | turn 1 | MERGED via PR #967 | #967 | yes |
 | 957 | harness | build-957 | turn 2 | MERGED via PR #971 (harness 3.18.11) | #971 | yes |
 | 958 | harness | build-958 | turn 4 | MERGED via PR #975 (harness 3.18.12) | #975 | yes |
-| 959 | harness | build-959 | turn 6 | dispatched, slot 3.18.14 (last ticket) | — | — |
+| 959 | harness | build-959 | turn 6 | held at write-gate, accept-marker posted, opening PR (last ticket) | — | — |
 | 960 | teamwork | build-960 | turn 2 | MERGED via PR #970 (teamwork 2.29.4) | #970 | yes |
 | 961 | docs | build-961 | turn 1 | MERGED via PR #969 (docs 1.21.15) | #969 | yes |
 | 962 | teamwork | (none) | — | CLOSED as duplicate of #965, citing PR #966 | — | n/a |
