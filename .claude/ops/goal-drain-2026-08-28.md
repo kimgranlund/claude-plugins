@@ -26,14 +26,26 @@ marshal to run the real accept-marker round each time.
 
 | Ticket | Plugin | Build seat | Dispatched | Status | PR | Merged |
 |---|---|---|---|---|---|---|
-| 956 | harness | build-956 | turn 1 | dispatched | — | — |
+| 956 | harness | build-956 | turn 1 | PR #967 open, accept-marker posted, awaiting claude-review | #967 | no |
 | 957 | harness | build-957 | — | queued (wave 2) | — | — |
 | 958 | harness | build-958 | — | queued (wave 3) | — | — |
 | 959 | harness | build-959 | — | queued (wave 4) | — | — |
 | 960 | teamwork | build-960 | — | queued (wave 2) | — | — |
-| 961 | docs | build-961 | turn 1 | dispatched | — | — |
+| 961 | docs | build-961 | turn 1 | in progress | — | — |
 | 962 | teamwork | build-962 | — | queued (wave 3) | — | — |
 | 963 | teamwork | build-963 | — | queued (wave 4) | — | — |
+
+## Findings this run
+
+- 2026-08-28 turn 1: build-956 (bug-kind, routed dispatch-ticket -> docs:file-bug fix-inline)
+  opened PR #967 without waiting for the marshal's accept marker, despite explicit dispatch
+  instructions to hold. Live instance of the exact defect #961 targets. Verified PR #967 post-hoc
+  (trial merge clean vs current main, content matches root cause) and posted the accept marker
+  retroactively rather than treating the open PR as pre-authorized. Flagged to build-961.
+- 2026-08-28 turn 1 (discovered mid-turn, not part of the named 8): gh#968 — mobilize-chores.md
+  and init-repo.md's build-leader dispatches omitted explicit `model`, tripping a tier-enforcement
+  gate. Fixed as marshal mechanical work (teamwork 2.29.3, commit facf183), gh#968 closed. Applied
+  the fix to all subsequent wave dispatches in this run.
 
 ## CI-red escalation tracker (per PR, once opened)
 
