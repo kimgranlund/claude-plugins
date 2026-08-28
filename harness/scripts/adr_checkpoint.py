@@ -93,7 +93,14 @@ won't see the same ADR twice. `newly_superseded_edges` carries the same informat
 one `"<announcer> -> <target>[ [<scope>]]"` string per edge — the frontmatter path's edges are
 always scope-less (a boolean field), the body-clause path's may name a scope.
 
-Checkpoint schema: {"adrs": {"<adr-id>": {"hash": "<sha256>", "status": "<accepted|superseded>"}}}
+Checkpoint schema: {"formula_version": <int>, "adrs": {"<adr-id>": {"hash": "<sha256>",
+"status": "<accepted|superseded>"}}}. `formula_version` names which HASH_ADR/decision_content
+formula computed the stored hashes (issue #945) — a checkpoint written before this field existed
+(pre-#929) reads as version 1. `classify` compares the stored version against
+CHECKPOINT_FORMULA_VERSION before diffing: a mismatch on a non-empty checkpoint is reported as its
+own named event, never silently diffed as a 100%-amended flood (every hash would differ from a
+formula change alone, not a real edit) — the fix for the false-flood issue #929's own hash-basis
+widening produced. Re-baseline (`advance` under the current script version) clears it forever.
 
 Exit codes: 0 clean · 1 unsupported shape (no ADR parsed from non-empty input) · 2 usage error.
 """
@@ -103,6 +110,13 @@ import re
 import sys
 import tempfile
 from pathlib import Path
+
+# issue #945: bump this whenever a change to hash_adr/decision_content/amendment_ratification_
+# markers changes what bytes a stored hash covers (#929's own widening should have bumped this
+# and shipped a migration path — it did neither, which is the bug this constant + the
+# formula_mismatch check below fix). A checkpoint with no "formula_version" key predates this
+# field entirely and reads as version 1 (the pre-#929 `status + decision_content` formula).
+CHECKPOINT_FORMULA_VERSION = 2
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)\s*$", re.MULTILINE)
@@ -473,16 +487,34 @@ def classify_delta(old_checkpoint, current):
 
 
 def load_checkpoint(path):
+    """Returns (adrs_dict, formula_version). No file yet -> ({}, CHECKPOINT_FORMULA_VERSION) —
+    nothing to migrate, so it never reads as a mismatch against a first-ever checkpoint. A file
+    with no "formula_version" key predates issue #945's own fix (pre-#929) and reads as version 1,
+    never as the current version by silent default — that silent default is exactly the bug."""
     p = Path(path)
     if not p.is_file():
-        return {}
-    return json.loads(p.read_text(encoding="utf-8")).get("adrs", {})
+        return {}, CHECKPOINT_FORMULA_VERSION
+    data = json.loads(p.read_text(encoding="utf-8"))
+    return data.get("adrs", {}), data.get("formula_version", 1)
 
 
 def save_checkpoint(path, current):
     Path(path).write_text(
-        json.dumps({"adrs": current}, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(
+            {"formula_version": CHECKPOINT_FORMULA_VERSION, "adrs": current},
+            indent=2, sort_keys=True,
+        ) + "\n",
+        encoding="utf-8",
     )
+
+
+def formula_mismatch(old_checkpoint, old_formula_version):
+    """issue #945: true when a NON-EMPTY existing checkpoint was written under a different hash
+    formula version than this script now computes — the signal that stops a hash-basis change
+    (like #929's) from reading as a silent 100%-amended flood. An empty checkpoint (first-ever
+    run, or a genuinely empty corpus) never mismatches — there is nothing stored to compare
+    against, so `new` is the correct and only verdict. Pure."""
+    return bool(old_checkpoint) and old_formula_version != CHECKPOINT_FORMULA_VERSION
 
 
 def unsupported_shape(source, skipped):
@@ -544,12 +576,33 @@ def scan_source(adr_source):
 def run_classify(adr_source, checkpoint_path):
     """Report the delta only — never writes the checkpoint. A caller that dies mid-judgment
     leaves the checkpoint untouched, so the unjudged delta reappears next firing instead of
-    silently reading as 'unchanged' forever."""
-    old = load_checkpoint(checkpoint_path)
+    silently reading as 'unchanged' forever.
+
+    issue #945: a formula-version mismatch on a non-empty checkpoint short-circuits BEFORE the
+    diff — every stored hash would differ from the current formula alone, so a normal delta here
+    would be a 100%-amended flood with zero real signal in it, not a smaller report worth
+    trusting partially. Reported as its own named event instead."""
+    old, old_formula_version = load_checkpoint(checkpoint_path)
     current = scan_source(adr_source)
-    delta = classify_delta(old, current)
 
     print(f"adr_checkpoint classify · {adr_source}")
+    if formula_mismatch(old, old_formula_version):
+        print(
+            f"  FORMULA MISMATCH: checkpoint was written under hash formula v{old_formula_version}, "
+            f"this script computes v{CHECKPOINT_FORMULA_VERSION} -> every hash in the checkpoint "
+            "differs from the current formula alone, so a diff here would be a false 100%-amended "
+            "flood, not a real event"
+        )
+        print(
+            "  this is NOT a report of what changed — re-baseline instead: re-run classify with "
+            "the OLD script version to isolate the true delta if one is owed, then `advance` "
+            "under THIS version to re-baseline the checkpoint in one clean move"
+        )
+        print("  checkpoint NOT advanced -> re-baseline via `advance` once ready")
+        return 0
+
+    delta = classify_delta(old, current)
+
     print(f"  {len(current)} ADR(s) scanned against checkpoint ({len(old)} previously known)")
     for kind in ("new", "amended", "newly_superseded"):
         if delta[kind]:
@@ -1071,6 +1124,98 @@ def selftest():
     with tempfile.TemporaryDirectory() as tmp:
         assert scan_dir(Path(tmp)) == {}, "an empty directory must not raise"
 
+    # ---- issue #945: checkpoint formula-version detection, the false-flood fix ------------------
+    # formula_mismatch, pure — the unit the end-to-end test below exercises through the CLI path
+    assert formula_mismatch({}, 1) is False, "an empty checkpoint (first-ever run) never mismatches"
+    assert formula_mismatch({"adr-0001": {"hash": "h", "status": "accepted"}}, 1) is True, \
+        "a non-empty checkpoint at v1 must mismatch against the current v{}".format(
+            CHECKPOINT_FORMULA_VERSION
+        )
+    assert formula_mismatch(
+        {"adr-0001": {"hash": "h", "status": "accepted"}}, CHECKPOINT_FORMULA_VERSION
+    ) is False, "a checkpoint already at the current formula version must never mismatch"
+
+    with tempfile.TemporaryDirectory() as tmp:
+        d = Path(tmp)
+        checkpoint_path = d / "adr-checkpoint.json"
+
+        # no checkpoint file at all -> ({}, CURRENT), never a mismatch (nothing to migrate)
+        assert load_checkpoint(checkpoint_path) == ({}, CHECKPOINT_FORMULA_VERSION)
+
+        # a checkpoint written with NO "formula_version" key (the real pre-#945 shape every
+        # checkpoint on disk today carries, since the field never existed before this fix) must
+        # read back as version 1, never silently default to the current version — a silent
+        # default to "current" is exactly the bug (every stored hash would then compare as if it
+        # were computed under today's formula, when it was not).
+        checkpoint_path.write_text(
+            json.dumps({"adrs": {"adr-0001": {"hash": "legacy-hash", "status": "accepted"}}}),
+            encoding="utf-8",
+        )
+        legacy_adrs, legacy_version = load_checkpoint(checkpoint_path)
+        assert legacy_version == 1, legacy_version
+        assert legacy_adrs == {"adr-0001": {"hash": "legacy-hash", "status": "accepted"}}
+
+        # save_checkpoint always stamps the CURRENT formula version — round-trips clean, no
+        # mismatch against itself
+        save_checkpoint(checkpoint_path, {"adr-0001": {"hash": "h1", "status": "accepted"}})
+        fresh_adrs, fresh_version = load_checkpoint(checkpoint_path)
+        assert fresh_version == CHECKPOINT_FORMULA_VERSION, fresh_version
+        assert formula_mismatch(fresh_adrs, fresh_version) is False
+
+        # end-to-end, via the actual CLI entry point: a legacy (no formula_version key) checkpoint
+        # against TRULY UNCHANGED content must report FORMULA MISMATCH, never a false 100%-amended
+        # flood — this is the exact issue #945 repro (#929's hash-basis widening against an old
+        # checkpoint), reproduced with a real table-dialect ADR so the widened hash basis
+        # (status + markers + decision_content) is actually the mechanism under test, not a stand-in.
+        adr_source_dir = d / "adrs"
+        adr_source_dir.mkdir()
+        unchanged_adr_text = (
+            "# ADR-0100 — Unrelated ratified decision\n\n"
+            "> | **Status** | accepted |\n\n"
+            "## Decision\n\nSome decision text, never edited between the two checkpoint runs.\n"
+        )
+        (adr_source_dir / "0100-unchanged.md").write_text(unchanged_adr_text, encoding="utf-8")
+        current_scan = scan_dir(adr_source_dir)
+        # the OLD (pre-#929) formula for this dialect: status + decision_content, no markers —
+        # deliberately NOT recomputed via today's hash_adr/decision_content composition, since the
+        # whole point is a checkpoint whose hash basis predates the current script
+        old_formula_hash = hash_adr(
+            current_scan["adr-0100"]["status"] + "\n" + decision_content(unchanged_adr_text)
+        )
+        legacy_checkpoint_path = d / "legacy-checkpoint.json"
+        legacy_checkpoint_path.write_text(
+            json.dumps({"adrs": {"adr-0100": {"hash": old_formula_hash, "status": "accepted"}}}),
+            encoding="utf-8",
+        )
+        import contextlib
+        import io
+
+        captured = io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            rc = run_classify(str(adr_source_dir), str(legacy_checkpoint_path))
+        out = captured.getvalue()
+        assert rc == 0, rc
+        assert "FORMULA MISMATCH" in out, out
+        assert "amended:" not in out, \
+            "a formula mismatch must never also print a (false) amended list: {}".format(out)
+        # NOT advanced — the file on disk is untouched (still the legacy, no-formula-version shape)
+        assert json.loads(legacy_checkpoint_path.read_text()).get("formula_version") is None
+
+        # negative control: a checkpoint already at the CURRENT formula, same unchanged content,
+        # must classify normally — no mismatch banner, no false amended entry either
+        current_checkpoint_path = d / "current-checkpoint.json"
+        save_checkpoint(current_checkpoint_path, {
+            "adr-0100": {"hash": current_scan["adr-0100"]["hash"], "status": "accepted"}
+        })
+        captured2 = io.StringIO()
+        with contextlib.redirect_stdout(captured2):
+            rc2 = run_classify(str(adr_source_dir), str(current_checkpoint_path))
+        out2 = captured2.getvalue()
+        assert rc2 == 0, rc2
+        assert "FORMULA MISMATCH" not in out2, out2
+        assert "amended:" not in out2, \
+            "unchanged content against a same-formula checkpoint must never read as amended: {}".format(out2)
+
     print("adr_checkpoint selftest · PASS · body-clause supersession signal (issue #221: ADR-0011's "
           "real body text as positive control, scope-carrying edges, accepted-with-no-clause and "
           "proposed-ADR negative controls, active-voice-only), frontmatter parse, hashing, all "
@@ -1087,7 +1232,12 @@ def selftest():
           "directory, the loud 0-parsed unsupported-shape failure vs an empty corpus, and the "
           "issue #929 amendment ratification-marker signal (heading-line extraction, no-Amendment "
           "and prose-mention negative controls, a ratify-only marker flip moving the hash with "
-          "every other byte provably unchanged))")
+          "every other byte provably unchanged), and the issue #945 checkpoint formula-version "
+          "signal (formula_mismatch's own empty/legacy/current-version cases, load_checkpoint's "
+          "no-file and no-formula_version-key defaults, save_checkpoint's stamp round-trip, and "
+          "end-to-end via run_classify: a legacy no-formula_version checkpoint against truly "
+          "unchanged content prints FORMULA MISMATCH with no false amended list and leaves the "
+          "checkpoint unadvanced, vs. a same-formula checkpoint classifying normally with neither))")
     return 0
 
 
