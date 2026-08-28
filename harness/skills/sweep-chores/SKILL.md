@@ -84,7 +84,7 @@ named it as a live routing target has been repointed to this skill in the same c
    ```
    Workflow({
      scriptPath: "harness/workflows/chore-sweep.js",
-     args: { scope: [<the resolved scope from step 4>] }
+     args: { scope: [<the resolved scope from step 4>], timestamp: <this firing's own UTC timestamp> }
    })
    ```
    returns `{ scope, seatReports: {seat: reportText}, unmeasured: [...], plannerReport }`. Skip to
