@@ -31,7 +31,7 @@ outcome, not forced into the single-PR shape).
 | 973 | teamwork | build-973 | turn 1 | MERGED via PR #982 (teamwork 2.29.7) | #982 | yes |
 | 974 | docs | build-974 | turn 2 | MERGED via PR #983 (docs 1.21.17) | #983 | yes |
 | 977 | teamwork | build-977 | turn 2 | dispatched, slot 2.29.8 | — | — |
-| 978 | cross-cutting | build-978 | turn 2 | dispatched (T4 ledger-lock conflict expected, partial/BLOCKED is a valid outcome) | — | — |
+| 978 | cross-cutting | build-978 | turn 2 | BLOCKED (0/22 resolved, T4 conflict confirmed structural) — dated Findings entry posted; ADR-0027 proposed, queued for Kim's ratification, deliberately NOT merged by this run | — | n/a (valid terminal state) |
 | 979 | teamwork | build-979 | — | queued (wave 3) | — | — |
 | 980 | teamwork | build-980 | — | queued (wave 4) | — | — |
 
