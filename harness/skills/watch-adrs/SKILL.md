@@ -292,6 +292,17 @@ file path; report that as an unsupported shape, never as a missing source).
    sampled>`.
 5. **Report — payload, not a write**, same fenced target-pathed contract as the forward mode's
    step 6 (`.claude/ops/revalidation-checkpoint.json`, `.claude/ops/revalidation-queue.json`).
+   **Any claim this report makes about the queue's PRE-EXISTING state — "unchanged", "empty", "already
+   cleared", a named row still present or already resolved — is backed by a fresh read of
+   `.claude/ops/revalidation-queue.json`'s REAL path directly (never step 3's scratch copy once
+   `queue-add` has mutated it — by step 5 that copy already carries THIS firing's own new/updated rows,
+   not what was already there before this firing ran) and quotes what it literally contains, never
+   carried forward from a prior firing's own report text (gh#956: a firing asserted the queue was empty
+   and a named row "already cleared in a prior cycle" while the committed file still carried that row
+   verbatim, unread).** A row whose underlying fix has already landed is retired through step 6's
+   `queue-clear` payload only once a human has confirmed it (per this step's own batched-confirm round,
+   below — Boundaries never lets this seat decide a queued finding is resolved on its own); until that
+   clearing call actually runs, the row stays queued and is never narrated as already resolved.
    **A tri-state TALLY alone is never the contract** — idr-0009's own Confirms condition
    (a machine-readable report of per-claim verdicts) requires every sampled claim listed by id,
    naming its verdict and a one-line reason, `confirmed` rows included: a `confirmed` verdict is
@@ -314,6 +325,11 @@ overlaps — an unreadable ADR/IDR source, a halt between sample and advance):
 
 - Any of the three named source directories doesn't exist → `SourceUnreadable`, reported 🔴 blocked, never a
   quiet "nothing to sample" (same discipline as the forward mode's loud unsupported-shape guard).
+- A report is about to state the queue's state (empty/unchanged/a row already cleared) with no fresh
+  read of `.claude/ops/revalidation-queue.json`'s REAL committed content taken this firing behind it →
+  that's the violation step 5 above names (gh#956); read the real path directly (never step 3's
+  scratch copy once it's been mutated), never narrate a state carried forward from a prior firing's
+  own report.
 - A sampled claim's extraction is empty → `untestable` immediately (step 2), never `confirmed` by
   default and never silently dropped from the report.
 - Dispatched unattended (no interactive user) → steps 1–4 and the report still run in full; step
