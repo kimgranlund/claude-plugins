@@ -29,7 +29,7 @@ outcome, not forced into the single-PR shape).
 |---|---|---|---|---|---|---|
 | 964 | harness | build-964 | turn 1 | MERGED via PR #981 (harness 3.18.15) | #981 | yes |
 | 973 | teamwork | build-973 | turn 1 | MERGED via PR #982 (teamwork 2.29.7) | #982 | yes |
-| 974 | docs | build-974 | turn 2 | held at write-gate, accept-marker posted, opening PR | — | — |
+| 974 | docs | build-974 | turn 2 | MERGED via PR #983 (docs 1.21.17) | #983 | yes |
 | 977 | teamwork | build-977 | turn 2 | dispatched, slot 2.29.8 | — | — |
 | 978 | cross-cutting | build-978 | — | queued (wave 3) | — | — |
 | 979 | teamwork | build-979 | — | queued (wave 3) | — | — |
