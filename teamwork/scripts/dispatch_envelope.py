@@ -42,11 +42,13 @@ title carries no prefix, `plugin` and `slot` both emit `null`, the plugin.json l
 entirely, and the run still exits 0 — the builder decides, never a guess (branch, clone,
 pin_check, and the collision look are all plugin-independent and still run).
 
-Scratch-clone location (ticket #766): `--scratch-dir <path>` wins when given; absent, the
-`CLAUDE_SCRATCHPAD` env var wins when set (this workspace's own session-scoped scratchpad,
-the directory `repo-cleaner` already knows to sweep); absent both, the clone lands in the
-current `$TMPDIR`/`tempfile.gettempdir()` default, unchanged from before this fix — so an
-un-configured caller sees no behavior change at all.
+Scratch-clone location (ticket #766, revised #960): `--scratch-dir <path>` wins when given;
+absent, the `CLAUDE_SCRATCHPAD` env var wins when set (this workspace's own session-scoped
+scratchpad, the directory `repo-cleaner` already knows to sweep); absent both, the clone lands
+under the invoking checkout's own gitignored `.claude/worktrees/` (ticket #960 — a build-leader
+seat's sandbox permissions deny `rm -rf` under `$TMPDIR`/`tempfile.gettempdir()` but already
+allow removal inside the repo's own tree, the same reason `EnterWorktree` worktrees live there);
+outside a git work tree (no toplevel resolvable) the `$TMPDIR` default still applies, unchanged.
 
 Scratch-clone occupancy (ticket #784): a pre-existing destination never fails the run. A prior
 aborted run's own clone — matching `origin` URL, clean working tree, the decided branch either
@@ -132,14 +134,18 @@ def parse_args(args):
     return ticket_id, plugin, scratch_dir
 
 
-def resolve_dest_root(scratch_dir_arg):
-    """Pure: --scratch-dir wins when given; else CLAUDE_SCRATCHPAD when set; else today's
-    $TMPDIR/tempfile.gettempdir() default, unchanged — ticket #766's clone-location fix."""
+def resolve_dest_root(scratch_dir_arg, repo_root=None):
+    """Pure: --scratch-dir wins when given; else CLAUDE_SCRATCHPAD when set; else the invoking
+    checkout's own gitignored `<repo_root>/.claude/worktrees` (ticket #960 — where seat
+    permissions already allow removal, unlike $TMPDIR); `repo_root` unresolvable (outside a git
+    work tree) falls back to today's $TMPDIR/tempfile.gettempdir() default, unchanged."""
     if scratch_dir_arg:
         return scratch_dir_arg
     env = os.environ.get("CLAUDE_SCRATCHPAD")
     if env:
         return env
+    if repo_root:
+        return os.path.join(repo_root, ".claude", "worktrees")
     return tempfile.gettempdir()
 
 
@@ -370,6 +376,7 @@ def _pin_check(branch, cwd):
 
 
 def run(ticket_id, plugin_arg=None, dest_root=None):
+    repo_root = _git_toplevel()
     repo = _resolve_repo()
     ticket = _gh_json(["issue", "view", ticket_id, "--json", "title,labels,number"], repo=repo)
     title = ticket.get("title", "")
@@ -377,7 +384,7 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
     label_names = {lbl.get("name") for lbl in ticket.get("labels", [])}
     kind = next((k for k in ("bug", "feature", "task") if k in label_names), None)
 
-    plugin = resolve_plugin(plugin_arg, title, repo_layout_is_plugin(_git_toplevel()))
+    plugin = resolve_plugin(plugin_arg, title, repo_layout_is_plugin(repo_root))
     branch = decide_branch_name(ticket_id, title)
 
     findings = []
@@ -415,7 +422,7 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
         _gh_json(["pr", "list", "--state", "open", "--json", "number,body"], repo=repo)
     claimed_no_pr = find_claimed_no_pr(open_issues, prs_with_body, exclude_number=number)
 
-    dest_root = dest_root or resolve_dest_root(None)
+    dest_root = dest_root or resolve_dest_root(None, repo_root)
     repo_name = repo.split("/")[-1]
     clone_dest = os.path.join(dest_root, f"{repo_name}-{ticket_id}")
     remote_url = _remote_url(repo)
@@ -599,6 +606,23 @@ def selftest():
         except RuntimeError as e:
             print(f"FAIL _do_clone (raised: {e})"); fails += 1
 
+        # _do_clone — ticket #960: the real-world .claude/worktrees/ target won't exist on a
+        # first-ever dispatch (no worktree cut there yet) — prove a clone into missing nested
+        # parent dirs still succeeds, same as `git clone` does on the bare command line
+        nested_dest = os.path.join(tmp, "nested", ".claude", "worktrees", "clone")
+        try:
+            got = _do_clone(remote, nested_dest, "758-dispatch-envelope")
+            if got != nested_dest or not os.path.isdir(nested_dest):
+                print(f"FAIL _do_clone/nested-parent (expected {nested_dest!r}, got {got!r})")
+                fails += 1
+            else:
+                print("ok    _do_clone/nested-parent (#960: clones fine into missing "
+                      ".claude/worktrees/-shaped parent dirs)")
+        except RuntimeError as e:
+            print(f"FAIL _do_clone/nested-parent (raised on a missing parent dir chain — "
+                  f"the #960 first-dispatch case: {e})")
+            fails += 1
+
         # _do_clone — ticket #784 regression 1: the SAME dest again (a retry after an aborted
         # dispatch) must reuse the prior run's own clean clone, never fail on its existence
         try:
@@ -721,33 +745,46 @@ def selftest():
         else:
             print("ok    parse_args/non_integer_ticket")
 
-    # resolve_dest_root — --scratch-dir wins, then CLAUDE_SCRATCHPAD, then today's default
-    if resolve_dest_root("/explicit/dir") != "/explicit/dir":
+    # resolve_dest_root — --scratch-dir wins, then CLAUDE_SCRATCHPAD, then the repo's own
+    # .claude/worktrees/ (ticket #960), then $TMPDIR only outside a git work tree
+    if resolve_dest_root("/explicit/dir", "/some/repo") != "/explicit/dir":
         print("FAIL resolve_dest_root/explicit"); fails += 1
     else:
-        print("ok    resolve_dest_root/explicit (--scratch-dir wins)")
+        print("ok    resolve_dest_root/explicit (--scratch-dir wins even with a repo_root)")
     old_env = os.environ.get("CLAUDE_SCRATCHPAD")
     try:
         with tempfile.TemporaryDirectory() as fake_scratchpad:
             os.environ["CLAUDE_SCRATCHPAD"] = fake_scratchpad
-            if resolve_dest_root(None) != fake_scratchpad:
-                print("FAIL resolve_dest_root/env (CLAUDE_SCRATCHPAD must win over the default)")
+            if resolve_dest_root(None, "/some/repo") != fake_scratchpad:
+                print("FAIL resolve_dest_root/env (CLAUDE_SCRATCHPAD must win over the "
+                      ".claude/worktrees default)")
                 fails += 1
             else:
-                print("ok    resolve_dest_root/env (honors CLAUDE_SCRATCHPAD, a real tmp dir "
-                      "standing in as the scratchpad)")
+                print("ok    resolve_dest_root/env (honors CLAUDE_SCRATCHPAD even with a "
+                      "repo_root, a real tmp dir standing in as the scratchpad)")
     finally:
         if old_env is None:
             os.environ.pop("CLAUDE_SCRATCHPAD", None)
         else:
             os.environ["CLAUDE_SCRATCHPAD"] = old_env
     os.environ.pop("CLAUDE_SCRATCHPAD", None)
-    if resolve_dest_root(None) != tempfile.gettempdir():
-        print("FAIL resolve_dest_root/default (neither flag nor env set must keep today's "
-              "$TMPDIR behavior)")
+    # ticket #960: neither flag nor env set, but a repo_root IS known -> the repo's own
+    # gitignored .claude/worktrees/, never $TMPDIR (the denied-rm class this ticket fixes)
+    want = os.path.join("/some/repo", ".claude", "worktrees")
+    if resolve_dest_root(None, "/some/repo") != want:
+        print(f"FAIL resolve_dest_root/repo-worktrees (expected {want!r}, the #960 default "
+              f"placement inside the repo's own tree)")
         fails += 1
     else:
-        print("ok    resolve_dest_root/default (unchanged $TMPDIR behavior when unset)")
+        print("ok    resolve_dest_root/repo-worktrees (#960: defaults under the repo's own "
+              "gitignored .claude/worktrees/, not $TMPDIR)")
+    # outside a git work tree (no repo_root resolvable) the old $TMPDIR behavior still applies
+    if resolve_dest_root(None, None) != tempfile.gettempdir():
+        print("FAIL resolve_dest_root/no-repo (no repo_root must fall back to $TMPDIR)")
+        fails += 1
+    else:
+        print("ok    resolve_dest_root/no-repo (unchanged $TMPDIR fallback outside a git "
+              "work tree)")
 
     # --help / -h — end-to-end against the real script file: must exit 0 with usage text,
     # checked BEFORE argument parsing so it can never reach a `gh` call (the original crash:
@@ -780,9 +817,10 @@ def selftest():
           "detection, title-prefix-in-a-non-plugin-repo resolves to None), the taken-slot "
           "negative control (claim_clean:false, next advanced past the claim), the "
           "claimed-no-PR scan, --help/non-integer-ticket-id guards, "
-          "CLAUDE_SCRATCHPAD/--scratch-dir resolution, and a REAL local clone + sibling "
-          "pin_check.py wiring — incl. the #784 occupancy pair (own-clone reuse on retry, "
-          "fresh unique sibling beside a foreign occupant) — all proved with no network")
+          "CLAUDE_SCRATCHPAD/--scratch-dir/#960 repo-worktrees resolution, and a REAL local "
+          "clone + sibling pin_check.py wiring — incl. the #784 occupancy pair (own-clone reuse "
+          "on retry, fresh unique sibling beside a foreign occupant) and the #960 missing-"
+          "parent-dir case — all proved with no network")
     return 0
 
 
@@ -805,7 +843,7 @@ if __name__ == "__main__":
         print(__doc__, file=sys.stderr)
         sys.exit(2)
     try:
-        sys.exit(run(ticket_id, plugin, dest_root=resolve_dest_root(scratch_dir_arg)))
+        sys.exit(run(ticket_id, plugin, dest_root=resolve_dest_root(scratch_dir_arg, _git_toplevel())))
     except RuntimeError as e:
         print(f"dispatch_envelope: {e}", file=sys.stderr)
         sys.exit(2)

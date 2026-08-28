@@ -111,6 +111,14 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.29.4 · 2026-08-28 · closes #960: a build-leader seat's scratch clone lived under
+`$TMPDIR`/`tempfile.gettempdir()`, where the sandbox denies `rm -rf` at retire time, leaving
+residue every dispatch. `dispatch_envelope.py`'s `resolve_dest_root` now defaults (Kim's shape-b
+ruling on #960) to the invoking checkout's own gitignored `.claude/worktrees/` — where seat
+permissions already allow removal — falling back to `$TMPDIR` only outside a git work tree;
+`--scratch-dir`/`CLAUDE_SCRATCHPAD` still win when set. No `dispatch-ticket` procedure change and
+no `repo-cleaner` touch needed under this shape.
+
 v2.29.3 · 2026-08-28 · closes gh#968: `mobilize-chores` step 5 and `init-repo` step 5's
 `Agent(teamwork:build-leader)` dispatches omitted an explicit `model` param, tripping the
 tier-enforced dispatch gate (issue #919 closed the same gap for `product`/`agent` seat dispatches
