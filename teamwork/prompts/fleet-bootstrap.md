@@ -216,22 +216,31 @@ on every outcome it records `live_state.gate` as an object — `{"outcome", "dat
   1. **Doc-edit signal.** `git diff --name-only <since_commit>..HEAD` — scoped with a trailing
      `-- <scope root>` pathspec when the resolved scope root (Phase 0) isn't the repo root, the
      same scope-root discipline this Phase 0 already holds elsewhere — piped to `grep -Ei
-     '(^|/)(adr|idr|prd)-[^/]+\.md$'`: any match on a filename, anywhere in the tree, not a fixed
-     directory. Filename is the one convention `docs:doc-writing-rules` holds constant across
-     repos; the directory is not (this workspace's own `.claude/docs/{adr,idr,prd}/`, per
-     `.claude/rules/docs-mutability.md`'s override, vs. another repo's `docs/adr/` or similar) —
-     scoping this check to a directory would silently break the moment it ran somewhere else.
-     **Named gap, not silently mis-covered**: a monolithic single-file ADR dialect (headings inside
-     one file, no per-file `adr-*.md` name — `adr_checkpoint.py`'s own dialects 2/3) produces no
-     match here; a repo running that dialect gets no doc-edit signal from this check and relies on
-     the falsification signal below, or a future widening — never assumed covered.
+     '(^|/)(adr|idr|prd)/[^/]+\.md$'`: any match on the type-named DIRECTORY basename (`adr/`,
+     `idr/`, `prd/`), not a filename prefix. Directory is the one convention `docs:doc-writing-rules`
+     holds constant across repos ("Location and naming are routing... the canonical directory per
+     type"); the filename prefix is not — ADR is a documented grandfathered exception, bare
+     `NNNN-slug.md` with no `adr-` prefix at all (this repo's own `.claude/docs/adr/0017-*.md`,
+     never `adr-0017-*.md`), while IDR/PRD do carry theirs. A filename-prefix match would silently
+     never see an ADR edit, in exactly the repo this skill runs in — matching the directory instead
+     catches all three uniformly regardless of numbering/prefix convention, and stays correct
+     wherever the doc root itself sits (this workspace's own `.claude/docs/`, per `.claude/rules/
+     docs-mutability.md`'s override, vs. another repo's `docs/ops/`), since only the last two path
+     segments (type-dir/filename) are ever tested. **Named gap, not silently mis-covered**: a
+     monolithic single-file ADR dialect (headings inside one file, no per-file `.md` per ADR at
+     all — `adr_checkpoint.py`'s own single-file branch, distinct from its two per-file dialects)
+     produces no match here; a repo running that dialect gets no doc-edit signal from this check and
+     relies on the falsification signal below, or a future widening — never assumed covered.
   2. **Falsification signal** (`decision-watcher`'s Revalidation mode — a plain data-file read,
      never a script or preload dependency, so this degrades cleanly wherever `harness` isn't
      installed, per `.claude/rules/plugin-authoring.md`'s soft-mention rule). Read `<scope
-     root>/.claude/ops/revalidation-queue.json` if present (absent → no signal from this source,
-     not an error): any `candidates[]` row with `"kind": "falsified"` is a real signal. An
-     `"untestable"` row alone is not — it flags a clause needing a rewrite, not necessarily an
-     intent-layer change worth a product-seat pass.
+     root>/.claude/ops/revalidation-queue.json` if present: absent → no signal from this source, not
+     an error; **malformed (invalid JSON, missing `candidates`)** → fails the same direction as
+     every other unreadable-baseline case in this Phase, toward dispatching, never toward a silent
+     skip — name the parse failure in Phase 6's report rather than treating it as "no falsification."
+     Any `candidates[]` row with `"kind": "falsified"` is a real signal. An `"untestable"` row alone
+     is not — it flags a clause needing a rewrite, not necessarily an intent-layer change worth a
+     product-seat pass.
   Both absent → **skip the dispatch.** Report "no material change since `<gate.date>`" in place of
   running the agent, then record the skip (below) — never silently do nothing. Either signal fires
   → dispatch exactly as the rest of this Phase already reads.
@@ -387,9 +396,11 @@ not starting fresh.
 
 One summary: which seats are live and how (manual/background/background-subprocess), the gate's
 outcome, **Phase 2's own throttle outcome** (dispatched — signal named — or skipped — "no material
-change since `<date>`" — or "no throttle marker — dispatched unconditionally" on a legacy record,
-#977), the spawn list honored (one of: "none — confirmed default", "reviewer/planner —
-confirmed", "none — reviewer and planner already held", or "confirm skipped — no live user,
+change since `<date>`" — or "no throttle marker — dispatched unconditionally" on a legacy record —
+or "throttle baseline unreadable (`<since_commit>` no longer resolves) — dispatched
+unconditionally" on the stale-SHA case, #977), the spawn list honored (one of: "none — confirmed
+default", "reviewer/planner — confirmed", "none — reviewer and planner already held", or "confirm
+skipped — no live user,
 nothing spawned"), the `fleet.json` path Phase 0 resolved — including which branch it took
 (existing record read at that path, a fresh seed — and for a seed, app-scoped-cwd vs. repo-root —
 or a pointer-redirected read, reporting both the walk's resolved root and the pointer target, #915)
