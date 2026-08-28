@@ -30,9 +30,9 @@ outcome, not forced into the single-PR shape).
 | 964 | harness | build-964 | turn 1 | MERGED via PR #981 (harness 3.18.15) | #981 | yes |
 | 973 | teamwork | build-973 | turn 1 | MERGED via PR #982 (teamwork 2.29.7) | #982 | yes |
 | 974 | docs | build-974 | turn 2 | MERGED via PR #983 (docs 1.21.17) | #983 | yes |
-| 977 | teamwork | build-977 | turn 2 | PR #984 open, SHA-staleness self-caught+corrected, awaiting claude-review | #984 | no |
+| 977 | teamwork | build-977 | turn 2 | MERGED via PR #984 (teamwork 2.29.8) | #984 | yes |
 | 978 | cross-cutting | build-978 | turn 2 | BLOCKED (0/22 resolved, T4 conflict confirmed structural) — dated Findings entry posted; ADR-0027 proposed, queued for Kim's ratification, deliberately NOT merged by this run | — | n/a (valid terminal state) |
-| 979 | teamwork | build-979 | — | queued (wave 3) | — | — |
+| 979 | teamwork | build-979 | turn 3 | dispatched, slot 2.29.9 (self-referential: fixes the QB3 predicate its own PR is evaluated against) | — | — |
 | 980 | teamwork | build-980 | — | queued (wave 4) | — | — |
 
 ## Findings this run
