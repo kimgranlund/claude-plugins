@@ -31,7 +31,7 @@ marshal to run the real accept-marker round each time.
 | 958 | harness | build-958 | — | queued (wave 3) | — | — |
 | 959 | harness | build-959 | — | queued (wave 4) | — | — |
 | 960 | teamwork | build-960 | turn 2 | dispatched, slot 2.29.4 | — | — |
-| 961 | docs | build-961 | turn 1 | held at write-gate, accept-marker posted, opening PR | — | — |
+| 961 | docs | build-961 | turn 1 | rebumped to docs 1.21.15 (self-caught #966 collision), fresh accept posted, opening PR | — | — |
 | 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR) | — | — |
 | 963 | teamwork | build-963 | — | queued (wave 4) | — | — |
 
@@ -46,6 +46,19 @@ marshal to run the real accept-marker round each time.
   957/960 dispatched anyway with FRESH hand-assigned slots off current main (harness 3.18.11,
   teamwork 2.29.4) per fleet-rules' hot-shared-file/rebase-next doctrine — not blocking on
   another actor's PR.
+
+- 2026-08-28 turn 2: build-956 flagged its own stranded-fork routing (its Skill-tool invocation of
+  docs:file-bug delivered its completion to the marshal instead of back to build-956 itself) as a
+  real instance of the no-nested-wait failure class dispatch-ticket already documents
+  (#257/#282/#269/#280) — and structurally the same shape as #959 (already queued, wave 4:
+  check-routing's judge-verdict stranding). Corroborating evidence, not a new ticket — noted here
+  for #959's build to pick up if useful; not filed separately (would be scope creep on this run).
+- 2026-08-28 turn 2: build-961 independently re-ran the mandatory version-collision check before
+  PR-open, caught the real docs 1.21.14 collision against PR #966 itself (predicted in this file's
+  turn-2 entry above), and self-corrected to 1.21.15 with a mechanical-only re-commit (no new
+  checker pass owed, content unchanged). Marshal verified the new SHA (trial merge clean) and
+  posted a fresh accept marker superseding the stale one. Textbook execution of the SHA-staleness
+  rule on both sides.
 
 ## Findings this run
 
