@@ -11,3 +11,5 @@ date,event_kind,seat,ref,tokens,tokens_source,outcome,verdict,archetype
 2026-08-28,merge,plugins-marshal,#971,absent,absent,merged,accepted,UNMEASURED
 2026-08-28,build,build-leader,#958,absent,absent,dispatched,undetermined,UNMEASURED
 2026-08-28,merge,plugins-marshal,#972,absent,absent,merged,accepted,UNMEASURED
+2026-08-28,merge,plugins-marshal,#975,absent,absent,merged,accepted,UNMEASURED
+2026-08-28,merge,plugins-marshal,#966,absent,absent,merged,accepted,UNMEASURED
