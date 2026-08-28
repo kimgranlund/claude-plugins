@@ -131,3 +131,10 @@ retry, then stop with a dated Findings entry — never a third flat retry)
 
 (see .claude/ops/spend-ledger.csv, event_kind=build for each dispatch, event_kind=merge for each
 close)
+
+## Run closed 2026-08-28 — end-state met, 7 turns, well under the 40-turn/4h cap
+
+Final verification: `gh issue list --state open` for feature/bug/task labels shows only #973/#974
+(new, created 18:50-51Z mid-run by unrelated concurrent activity, never part of this run's named
+scope) and the two explicitly-excluded #617 (backlog, untouched)/#609 (doing, untouched). Zero
+open PRs. All 8 named tickets CLOSED.
