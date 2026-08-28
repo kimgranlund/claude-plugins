@@ -35,11 +35,23 @@ call:
   top-level plugin directory. A repo-root path, anything under `.claude/docs/` or `.github/`,
   or a second plugin → out.
 - **QB3 one substantive file** — with R = {`<plugin>/.claude-plugin/plugin.json`,
-  `<plugin>/README.md`} (the mandatory version-bump + ledger ride-alongs), `changed \ R` has
-  exactly ONE member. Diff-check the ride-alongs too: the `plugin.json` diff's changed lines
-  all match `"version"`, and **every changed hunk in `README.md` starts at or below the
-  version-ledger heading** (`git diff -U0 … -- <plugin>/README.md`, hunk start line vs. that
-  heading's line number). A hunk above it, or no ledger heading found, is indeterminate → out.
+  `<plugin>/README.md`, `<plugin>/.codex-plugin/plugin.json`, `<plugin>/HARNESS-NOTES.md`,
+  `<plugin>/plugin.yaml`, `<plugin>/skills/*/agents/openai.yaml`, `<plugin>/prompts/*.md`},
+  `changed \ R` has exactly ONE member — R now also carries the G15-mandated harness-overlay
+  riders `harness_emit.py` regenerates alongside an ordinary skill edit (workspace `CLAUDE.md`'s
+  "Regenerate a plugin's harness overlays"; QB3 predated that convention, so an unwidened R made
+  `changed \ R` 4+ files on every such PR and no ordinary skill-edit PR could ever clear this
+  conjunct, gh#979). Diff-check the hand-edited ride-alongs too: the `plugin.json` diff's
+  changed lines all match `"version"`, and **every changed hunk in `README.md` starts at or
+  below the version-ledger heading** (`git diff -U0 … -- <plugin>/README.md`, hunk start line
+  vs. that heading's line number). A hunk above it, or no ledger heading found, is indeterminate
+  → out. The harness-overlay riders carry no such content check — they are `harness_emit.py`'s
+  deterministic output, never hand-edited, and QB6's own gate run (G15) already fails the build
+  if any of them are stale relative to the plugin's current content, so a second check here
+  would only re-prove what the gate already proves. Only these named riders are exempt —
+  `__init__.py`, `hermes-mcp.yaml`, and `package.json` are also G15 outputs but stay OUT of R
+  deliberately (unnamed here is exclusion by the same QB4 discipline, not an oversight):
+  widening R to every G15 output would loosen QB3 past what this fix's own scope covers.
 - **QB4 no contract change — an ALLOW-list, fail-closed BY CONSTRUCTION.** The substantive file
   must MATCH one of exactly three classes: (a) `<plugin>/skills/*/SKILL.md` with no changed hunk
   inside the frontmatter block (first line through the closing `---`) — a body-only edit;
