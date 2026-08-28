@@ -27,7 +27,7 @@ outcome, not forced into the single-PR shape).
 
 | Ticket | Plugin | Build seat | Dispatched | Status | PR | Merged |
 |---|---|---|---|---|---|---|
-| 964 | harness | build-964 | turn 1 | held at write-gate (via file-bug hand-off), accept-marker posted, opening PR | — | — |
+| 964 | harness | build-964 | turn 1 | PR #981 open, awaiting claude-review | #981 | no |
 | 973 | teamwork | build-973 | turn 1 | dispatched | — | — |
 | 974 | docs | build-974 | — | queued (wave 2) | — | — |
 | 977 | teamwork | build-977 | — | queued (wave 2) | — | — |
