@@ -200,8 +200,17 @@ def parse_args(args):
     Raises ValueError on any unrecognized token or a flag missing its value — silent argument
     swallowing is the defect class this parser rejects (issue #188: `--gate teamwork docs`
     dropped `docs`, skipped that plugin's gate, and still exited 0). Pure — the selftest
-    feeds it arg vectors directly, including the live-repro one as the negative control."""
+    feeds it arg vectors directly, including the live-repro one as the negative control.
+
+    The PR token must be all digits — issue #964: a non-numeric first token (`--help`, a typo)
+    used to pass through unchecked as the PR number, reaching `gh pr view --help --json ...`
+    downstream, which prints help text with exit 0 and tracebacks the JSON parse on it instead
+    of failing cleanly. `-h`/`--help` itself is intercepted in `__main__` before this function
+    ever runs, but the digit check still refuses any OTHER non-numeric token here, fail-closed."""
     pr_number = args[0]
+    if not pr_number.isdigit():
+        raise ValueError(f"PR number must be numeric, got {pr_number!r} "
+                         "(use -h/--help for usage)")
     repo = None
     gate_roots = []
     i = 1
@@ -382,12 +391,45 @@ def selftest():
         ("C5 must already refuse deleting PR #1479's branch while #1568 reuses it as an OPEN "
          "head (2026-08-17 ruling); if this fails, C5 needs strengthening, never weakening")
 
+    # parse_args must reject a non-numeric PR token (pure-function layer) — issue #964: `--help`
+    # used to pass through as pr_number unchecked, reaching `gh pr view --help --json ...`
+    # downstream (that call prints help text with exit 0, so `_gh_json`'s JSON parse then
+    # tracebacked on it instead of failing cleanly).
+    try:
+        parse_args(["--help"])
+        raise AssertionError("a non-numeric PR token (e.g. --help) must be rejected by "
+                             "parse_args, not passed through as the PR number")
+    except ValueError as e:
+        assert "numeric" in str(e), f"the rejection must name the numeric requirement: {e}"
+
+    # -h/--help, end-to-end against the real script file: issue #964's own repro
+    # (`campaign_close.py --help`) must print usage and exit 0, checked BEFORE parse_args so it
+    # can never reach a `gh` call — the same fix shape as dispatch_envelope.py's own #964-class
+    # incident.
+    script_path = str(Path(__file__).resolve())
+    for flag in ("-h", "--help"):
+        r = subprocess.run([sys.executable, script_path, flag],
+                            capture_output=True, text=True, timeout=10)
+        assert r.returncode == 0 and "campaign_close" in r.stdout, \
+            f"{flag} must print usage and exit 0, never reach a gh call: rc={r.returncode}"
+
+    # a non-numeric PR token OTHER than -h/--help, end-to-end: exit 2 naming the requirement,
+    # never a gh call — proves the fail-closed digit check bites through the real __main__ path,
+    # not only via the pure parse_args() call above.
+    r = subprocess.run([sys.executable, script_path, "--bogus"],
+                        capture_output=True, text=True, timeout=10)
+    assert r.returncode == 2 and "must be numeric" in r.stderr, \
+        (f"a non-numeric PR token must exit 2 naming the requirement, got rc={r.returncode} "
+         f"stderr={r.stderr!r}")
+
     print("campaign_close selftest · PASS · merge/delete/gate/stacked-children/reused-head checks "
           "bite, incl. the ten-branch silent-delete-failure negative control, the #102 "
           "async-propagation race (lag resolves ok and is disclosed; a stranded branch still "
           "fails after the window), the #188 parser controls (unknown token and dangling flag "
-          "rejected, never swallowed), the 2026-08-16 stacked-PR C4 warning (#437->#439), and the "
-          "gh#1483 reused-head C5 negative control (#1419 MERGED / #1449 OPEN, same head)")
+          "rejected, never swallowed), the 2026-08-16 stacked-PR C4 warning (#437->#439), the "
+          "gh#1483 reused-head C5 negative control (#1419 MERGED / #1449 OPEN, same head), and "
+          "the #964 -h/--help and non-numeric-PR controls (usage on exit 0, refused on exit 2, "
+          "neither ever reaching a gh call)")
     return 0
 
 
@@ -397,6 +439,8 @@ if __name__ == "__main__":
         print(__doc__); sys.exit(2)
     if args[0] == "selftest":
         sys.exit(selftest())
+    if args[0] in ("-h", "--help"):
+        print(__doc__); sys.exit(0)
     try:
         pr_number, repo, gate_roots = parse_args(args)
     except ValueError as e:
