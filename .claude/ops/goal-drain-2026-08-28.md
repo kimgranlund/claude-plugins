@@ -28,11 +28,11 @@ marshal to run the real accept-marker round each time.
 |---|---|---|---|---|---|---|
 | 956 | harness | build-956 | turn 1 | MERGED via PR #967 | #967 | yes |
 | 957 | harness | build-957 | turn 2 | MERGED via PR #971 (harness 3.18.11) | #971 | yes |
-| 958 | harness | build-958 | turn 4 | PR #975 open, awaiting claude-review | #975 | no |
-| 959 | harness | build-959 | — | queued (wave 4) | — | — |
+| 958 | harness | build-958 | turn 4 | MERGED via PR #975 (harness 3.18.12) | #975 | yes |
+| 959 | harness | build-959 | turn 6 | dispatched, slot 3.18.14 (last ticket) | — | — |
 | 960 | teamwork | build-960 | turn 2 | MERGED via PR #970 (teamwork 2.29.4) | #970 | yes |
 | 961 | docs | build-961 | turn 1 | MERGED via PR #969 (docs 1.21.15) | #969 | yes |
-| 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR, still open) | — | — |
+| 962 | teamwork | (none) | — | CLOSED as duplicate of #965, citing PR #966 | — | n/a |
 | 963 | teamwork | build-963 | turn 3 | MERGED via PR #972 (teamwork 2.29.5) | #972 | yes |
 
 - 2026-08-28 turn 2: PR #966 (opened directly by kimgranlund, live-lane, NOT a build-seat
@@ -80,6 +80,35 @@ marshal to run the real accept-marker round each time.
   check. Confirms the trial-merge pattern is safe under concurrent build activity as long as no
   seat writes into the primary checkout directly (the one real violation this run, #957, is
   already fixed/documented above).
+
+- 2026-08-28 turn 6: Kim gave a direct live ruling ("fold #966 into your loop") — genuine
+  first-hand authorization, distinct from the earlier declined unregistered-peer relay (see the
+  turn-3/turn-6 held-items entries above; that queued item is now resolved by this direct
+  instruction, though the specific "is agent-ui's relayed ruling real" question was never answered
+  and stays moot since Kim ruled directly here instead). Rebased PR #966 (Kim's own authored fix
+  for #965) onto current main in an isolated worktree (.claude/worktrees/pr966-fold, never the
+  primary checkout): resolved two README ledger conflicts, renumbered past two of my own
+  already-landed slots (harness 3.18.12 taken by #975 -> 3.18.13; teamwork 2.29.5 taken by #972 ->
+  2.29.6; docs 1.21.16 was already free, no change needed), fixed a self-introduced ledger-order
+  bug (newest-entry-on-top violated after the first conflict resolution, caught by G14/G10 FAIL,
+  fixed before push), regenerated overlays, verified all three plugins' release_gate.py clean, and
+  the harness_checks.py selftest passes. Force-pushed to Kim's own branch (a rebase of an
+  already-open PR, not a rewrite of shipped history). This crossed the sizing tripwire (3 plugins)
+  even under direct authorization to fold it in — asked one AskUserQuestion confirm before
+  merging, per this run's own NEVER list; confirmed, merged. #962 (already dropped as a
+  duplicate) closed citing #965/#966 once #966 actually landed.
+- 2026-08-28 turn 6: sync_main after the #966 merge surfaced one genuinely foreign-only dirty
+  file (a spend-ledger row for PR #975 I'd appended but never committed before the #966 detour
+  started) — quarantined to a stash automatically, verified as my own missed row (not a collision
+  with anyone else's work), popped and committed. No data lost; a reminder to commit tracking
+  rows before starting a multi-step detour, not after.
+- 2026-08-28 turn 6: declined a cross-session handoff of PR #966 from an unregistered peer
+  (agent-ui-93, agent-ui-marshal) relaying "Kim's ruling" secondhand — not a registered
+  cross_repo_coordination participant in this repo's fleet.json, and the relay contained a
+  factual error (misattributed PR #969's closure to #965). Queued in held-items.md for Kim to
+  confirm directly rather than acting on an unverified relay; Kim's own direct instruction later
+  in this same turn superseded the need for that confirmation on #966 itself specifically (the
+  broader question of whether to register agent-ui as a coordination peer stays queued).
 
 ## Findings this run
 
