@@ -74,3 +74,9 @@ Entry template (one per queued ruling/merge item):
 - Why it's queued here rather than resolved unattended: <reason>
 - Status: queued | resolved <date> — <what Kim decided>
 -->
+
+### 2026-08-28T12:00:00Z — product seat open questions from the fleet-bootstrap delta pass
+- Source: product-leader dispatch, fleet-bootstrap Phase 2 (plugins-c4 session), ratified no-change same round
+- Kind: other (two cadence/hygiene questions)
+- Why it's queued here rather than resolved unattended: both are Kim's calls, not the seat's. (1) Three consecutive no-change verdicts in five days: throttle Phase 2's delta pass to fire only on a real signal (new ADR/IDR/PRD file, or a falsification) instead of every bootstrap? (2) Lifecycle census shows 22 accepted ADRs uncited by any IDR/RDD: steady-state, or worth a link-or-supersede sweep?
+- Status: queued

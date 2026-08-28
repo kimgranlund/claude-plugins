@@ -1,0 +1,9 @@
+Filesystem enumeration is blocked in this walled seat: no Glob/Grep tool is available, Read can't list directories, and Bash is restricted to `gh`-only (confirmed above — both `echo` and `grep` were denied by the seat's own hook). I can't glob `.claude/docs/spec/*.md` / `.claude/docs/lld/*.md` as instructed, and have no path to enumerate those files with the tools this seat grants.
+
+Given no positive evidence of a locked spec/LLD can be produced, I default to the conservative branch:
+
+NOTICE: No spec is locked yet — this session runs STYLE-REVIEW-ONLY (formatting, doctrine, naming, obvious defects) until a spec locks; contract-correctness review resumes once one does.
+
+(Caveat for the orchestrator: this verdict is by default-due-to-tool-gap, not a confirmed empty search — the seat has no Glob/Grep and Bash is gh-only, so `.claude/docs/spec/` and `.claude/docs/lld/` were never actually enumerated. If a locked spec exists, this self-check cannot currently detect it.)
+
+No review work performed this invocation, per instructions. Exiting.

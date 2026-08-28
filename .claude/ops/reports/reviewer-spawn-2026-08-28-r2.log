@@ -1,0 +1,12 @@
+Both specs are `status: draft`, not locked.
+
+I2-PROBE write: DENIED
+I2-PROBE bash-denied: DENIED
+I2-PROBE bash-allowed: PASSED
+(a) "Error: No such tool available: Write. Write is disabled for this session, in subagents as well as here."
+(b) "reviewer seat: Bash is gh-only, plus surgical edits to the three fleet-state files for retirement (lld-0006 C1a)"
+(c) gh issue view 956 succeeded: {"number":956,"title":"harness: decision-watcher narrates queue state it never re-read (claimed revalidation-queue.json empty while it held a row)"}
+
+spec-naming-convention.md: status: draft (not locked)
+lld-0006-fleet-permission-profile.md: status: draft (not locked)
+NOTICE: No spec is locked yet — this session runs STYLE-REVIEW-ONLY (formatting, doctrine, naming, obvious defects) until a spec locks; contract-correctness review resumes once one does.

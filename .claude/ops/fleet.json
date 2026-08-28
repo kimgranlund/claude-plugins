@@ -38,7 +38,7 @@
         "mode": "manual",
         "date": "2026-08-16",
         "agent_name": "plugins-75",
-        "note": " | agent_name set 2026-08-23: SendMessage address is the harness session name (plugins-75), not the seat label — gh#pending (agent-name bug)."
+        "note": " | agent_name set 2026-08-23: SendMessage address is the harness session name (plugins-75), not the seat label \u2014 gh#pending (agent-name bug)."
       },
       {
         "role": "product",
@@ -122,6 +122,42 @@
         "agent_name": "plugins-62",
         "branch": "main",
         "reason": "session close on Kim's ruling (find-open-questions/close-session round); seat released cleanly so peers stop routing here; standing rulings live in held-items.md"
+      },
+      {
+        "role": "agent",
+        "mode": "manual",
+        "date": "2026-08-28",
+        "action": "joined",
+        "agent_name": "plugins-c4",
+        "branch": "main",
+        "note": "fresh join via /fleet-bootstrap (prior plugins-62 row released cleanly same day); session model claude-fable-5 vs seat tier sonnet+high: deviation-in-fact, unjustified (#919 reality check)"
+      },
+      {
+        "role": "product",
+        "mode": "dispatched",
+        "date": "2026-08-28",
+        "action": "joined",
+        "agent_name": "plugins-product",
+        "note": "fleet-bootstrap Phase 2 delta pass; returned. Verdict: no material change since 2026-08-26 (third consecutive no-change); 13 commits b5fb68d..878a3c2 all HOW-grade, issues #956-#964 bug/task grain, no ADR/IDR falsified. Open questions raised: throttle delta-pass cadence; 22 orphan ADRs uncited by IDR/RDD."
+      },
+      {
+        "role": "planner",
+        "mode": "background",
+        "date": "2026-08-28",
+        "action": "joined",
+        "agent_name": "plugins-planner",
+        "note": "spawned by /fleet-bootstrap Phase 5 (marshal plugins-c4); Agent-tool dispatch at fable"
+      },
+      {
+        "role": "reviewer",
+        "mode": "background-subprocess",
+        "date": "2026-08-28",
+        "action": "joined",
+        "agent_name": ".claude/ops/reports/reviewer-spawn-2026-08-28-r2.log",
+        "wall_applied": true,
+        "wall_verified_via": "subprocess-spawn",
+        "worktree_path": "/Users/kimba/Projects/nonoun/plugins/.claude/worktrees/plugins-reviewer",
+        "note": "spawned by /fleet-bootstrap Phase 5 (marshal plugins-c4): claude -p --model sonnet --effort high into pre-walled detached worktree. I2: Write DENIED ('No such tool available: Write'), Bash echo-redirect DENIED (lld-0006 C1a hook), gh issue view 956 PASSED. First spawn (reviewer-spawn-2026-08-28.log) exited without the fixed-format lines captured (claude -p prints only the final turn); r2 captured them. No locked spec: STYLE-REVIEW-ONLY until one locks."
       }
     ],
     "loop_position": null,

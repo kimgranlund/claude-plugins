@@ -23,3 +23,6 @@ printed session name for role `agent` was never the bare role token. Corrected i
 | reviewer | plugins-reviewer (released, legacy null-address row) | 2026-08-27 | plugins |
 | planner | plugins-planner (released, legacy null-address row) | 2026-08-27 | plugins |
 | agent | plugins-marshal (released, session close) | 2026-08-28 | plugins |
+| agent | plugins-marshal | 2026-08-28 | plugins |
+| planner | plugins-planner | 2026-08-28 | plugins |
+| reviewer | plugins-reviewer (background-subprocess, walled worktree) | 2026-08-28 | plugins |
