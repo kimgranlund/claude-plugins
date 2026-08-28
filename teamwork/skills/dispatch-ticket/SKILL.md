@@ -323,8 +323,9 @@ discover and repair branch/worktree residue by hand):
    **Accepting seat:** the marshal (`fleet-rules` §7 — never the live human by default, never the
    dispatching seat itself) releases the hold via an **accept marker**: a durable comment naming
    the pushed branch's HEAD SHA. **No live marshal → FAIL-CLOSED** — report `write-gate-blocked`
-   (Failure branches), branch stays pushed for a later run to resume. Full mechanics, SHA-staleness
-   rule, dry-run traces: `references/plan-approval-write-gate.md`, `references/
+   (Failure branches), branch stays pushed for a later run to resume. **Any wake while held is
+   answered per the seat-side wake rule (gh#954)**, never by re-sending the "held" report. Full
+   mechanics, SHA-staleness rule, wake rule, dry-run traces: `references/plan-approval-write-gate.md`, `references/
    write-gate-dry-run.md` (F6 split) — read before this stage's first live firing.
 
    **Pre-accept grant — a narrow, explicit skip of 2a's hold alone (gh#713, lld-0022 Resolution

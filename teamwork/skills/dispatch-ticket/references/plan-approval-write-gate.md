@@ -53,6 +53,39 @@ unnamed later SHA. At PR-open time, the accept marker's cited SHA is checked aga
 actual current HEAD; a mismatch is this stage's own precondition failing, reported as
 `write-gate-blocked` again rather than opened anyway (LLD Risk R-1).
 
+## Seat-side wake rule while held (gh#954, live-observed 2026-08-27)
+
+The hold above says what the seat WAITS for; this says what the seat DOES when anything wakes
+it. Observed 3 of 3 times in one session (#949/PR #950, #945/PR #951, #952): the marshal
+posted the accept marker and sent "open the PR" in one step, the seat woke, re-sent its prior
+"held at write-gate, SHA X" report, and idled with no PR opened; a second identical message
+produced the PR within a minute. The marker was already on the issue at the first wake, so the
+gap was never the accept act itself but the seat treating the wake as a status prompt rather
+than as the signal to re-check the record.
+
+**On ANY wake after the hold** (a SendMessage from the marshal, a peer message, a resumed
+session, a `/goal` retry) the seat, before composing any reply:
+
+1. **Re-reads the issue's latest comments live** (`gh issue view <id> --comments`, or the
+   adapter's `read`), scanning ALL comments, not only the newest, for a comment literally starting
+   `Accept:` that names the pushed branch's CURRENT HEAD SHA (re-read with `git rev-parse HEAD`
+   on the branch, never from memory). The marshal's message is the wake signal, not the
+   authorization: the comment is what authorizes, so it is read even when the message already
+   says "accepted".
+2. **Marker present and SHA matches → open the PR in this same turn.** The reply to the wake is
+   the PR URL plus the stage-4 handoff, never a restatement of the earlier "held" report. Never
+   idle between reading the marker and `gh pr create`.
+3. **Marker absent** (the message may have raced the comment post) → wait roughly 30 seconds,
+   re-read once more, then follow step 2 on a hit. Still absent, or the SHA in the marker does not
+   match HEAD → reply `write-gate-blocked` naming the branch, the current HEAD SHA, and what was
+   found (no marker / stale SHA), then idle. A marker naming a different SHA is not "close enough"
+   (the SHA-staleness rule above).
+
+A "held" report is sent ONCE, at the moment the hold begins. Re-sending it in answer to a wake is
+this defect's signature: the seat has answered a question nobody asked and has left the accepted
+branch un-opened. The seat also never asks the marshal to "confirm" acceptance in reply to a wake
+— the record is the confirmation, and step 1 already read it.
+
 ## Marshal-side response procedure (live-observed, 2026-08-21)
 
 The sections above specify the gate; this specifies what the accepting marshal actually DOES on
@@ -75,6 +108,15 @@ PR-open (step 3) and hands off, same as an ungranted stage-2b dispatch.
    first — that reading, not the seat's own report, is the load-bearing referent (Resolution 2);
    name THAT SHA in the marker. A mismatch between the two is this stage's own precondition
    failing, reported `write-gate-blocked` again, never papered over with the seat's stale value.
+   Then, when a named seat is holding the branch, wake it with ONE message that carries the
+   accept comment's URL and the SHA it names ("Accept posted: <comment-url>, SHA <sha>. Open the
+   PR."). Post the comment BEFORE sending the message, never in the same breath after it: the
+   seat's wake rule above re-reads the issue on wake, and a message that arrives ahead of the
+   comment is exactly the race that made the seat idle (gh#954). A held seat that answers with
+   its earlier "held" report instead of a PR URL is that defect recurring; resend once, citing
+   the wake rule, and file it if it repeats. Step 3 below is the marshal opening the PR itself
+   only when no seat is holding the branch (a `write-gate-blocked` return from a finished
+   dispatch).
 3. **Open the PR** from the pushed branch using the extracted body verbatim (title from the
    seat's proposal, or a short one the marshal composes if the seat didn't propose one). **A
    marshal with no live human's standing merge authorization for this run stops here** and hands

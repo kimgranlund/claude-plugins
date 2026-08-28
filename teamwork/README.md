@@ -111,6 +111,16 @@ Directories align with plugin names (ADR-0007).
 
 ## Version ledger
 
+v2.29.1 · 2026-08-27 · closes #954: a build-leader seat held at dispatch-ticket's stage-2a
+write-gate answered the marshal's post-accept "open the PR" message by re-sending its earlier
+"held" report and idling; a second identical message opened the PR (3 of 3 dispatches in one
+session: #949/#950, #945/#951, #952). Stage 2a said what to wait for, not what to do on a wake.
+Adds a seat-side wake rule to `references/plan-approval-write-gate.md` (on any wake: re-read the
+issue for an `Accept:` naming current HEAD, open the PR in the same turn; no marker → one
+delayed re-read, then `write-gate-blocked`; the "held" report is sent once, never as a wake
+reply), a one-line pointer in stage 2a, the marshal-side step-2 nudge shape (comment first, then
+one message carrying the comment URL + SHA), and a build-leader pointer.
+
 v2.29.0 · 2026-08-27 · closes #949: a `bind-team`-held marshal (or the dispatched
 `fleet-marshal`) was executing multi-file live-lane work inline instead of dispatching a build
 seat — two consecutive `make-skill` forges ran solo in the marshal terminal for ~2h, blocking the
