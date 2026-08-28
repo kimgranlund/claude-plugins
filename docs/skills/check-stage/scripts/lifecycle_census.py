@@ -12,8 +12,16 @@ default target is meaningful for a collector).
 Walks `<docs-root>/{adr,idr,rdd}/*.md`, parses doc_lint-compatible frontmatter,
 and emits per-type counts, status distributions, and the orphan-ADR (doc_lint's
 T6 WARN — no `intent-refs:` citation) count, plus roadmap presence/status —
-root `ROADMAP.md` first, else the typed `<docs-root>/roadmap/*.md` (#882). Reuses docs/scripts/doc_lint.py's own TYPES/LEDGER_LOCK contract
+root `ROADMAP.md` first, else `<docs-root>/roadmap.md`, else the typed
+`<docs-root>/roadmap/*.md` (#882, #974). Reuses docs/scripts/doc_lint.py's own TYPES/LEDGER_LOCK contract
 (sources-flow-outward) rather than re-declaring the type/status enums here.
+
+A ledger doc carrying no frontmatter `status` (or an empty one) falls back to a
+blockquote status table (`> | **Status** | accepted |` — the agent-ui dialect,
+#974): the row's value cell is read as the status word, lowercased; a
+`superseded by ADR-NNNN` cell reports status `superseded` and records the
+target id in that type's `superseded` list (`{"id": ..., "superseded_by":
+"ADR-NNNN"}`) rather than only the bare status word.
 
 `<docs-root>` resolves per doc-writing-rules' "Where documents live" ladder
 (issue #514): `docs/ops/` if it exists at the repo root, else `.claude/docs/`
@@ -32,10 +40,32 @@ Selftest: 0 proven · 1 a control failed.
 """
 import importlib.util
 import json
+import re
 import sys
 from pathlib import Path
 
 LEDGER_TYPES = ("adr", "idr", "rdd")
+
+BLOCKQUOTE_STATUS_RE = re.compile(
+    r"^>\s*\|\s*\*{0,2}status\*{0,2}\s*\|\s*(.+?)\s*\|\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
+SUPERSEDED_BY_RE = re.compile(r"superseded\b.*?(ADR-\d+)", re.IGNORECASE)
+
+
+def parse_blockquote_status(text):
+    """Fallback status reader for the blockquote status-table dialect
+    (`> | **Status** | accepted |`) — used only when frontmatter carries no
+    `status`. Returns `(status, superseded_by)`, `superseded_by` `None` unless
+    the cell reads `superseded by ADR-NNNN`; `(None, None)` if no such row."""
+    m = BLOCKQUOTE_STATUS_RE.search(text)
+    if not m:
+        return None, None
+    raw = re.sub(r"[*_`]", "", m.group(1)).strip()
+    sup = SUPERSEDED_BY_RE.search(raw)
+    if sup:
+        return "superseded", sup.group(1).upper()
+    return raw.lower(), None
 
 
 def load_doc_lint():
@@ -69,10 +99,19 @@ def census_dir(docs_root, dtype, parse_frontmatter):
     files = sorted(d.glob("*.md")) if d.is_dir() else []
     statuses = {}
     orphans = 0
+    superseded = []
     for p in files:
-        fm = parse_frontmatter(p.read_text(errors="replace")) or {}
-        status = fm.get("status", "unknown")
+        text = p.read_text(errors="replace")
+        fm = parse_frontmatter(text) or {}
+        status = (fm.get("status") or "").strip()
+        superseded_by = None
+        if not status:
+            status, superseded_by = parse_blockquote_status(text)
+        if not status:
+            status = "unknown"
         statuses[status] = statuses.get(status, 0) + 1
+        if superseded_by:
+            superseded.append({"id": fm.get("id", p.stem), "superseded_by": superseded_by})
         if dtype == "adr":
             intent_refs = fm.get("intent-refs", "").strip().lower()
             if intent_refs in ("", "null", "none", "[]"):
@@ -80,15 +119,18 @@ def census_dir(docs_root, dtype, parse_frontmatter):
     entry = {"count": len(files), "status_distribution": statuses}
     if dtype == "adr":
         entry["orphan_count"] = orphans
+    if superseded:
+        entry["superseded"] = superseded
     return entry
 
 
 def roadmap_state(root, docs_root, parse_frontmatter):
-    """Root-level `ROADMAP.md` first (the portable convention), else the typed
+    """Root-level `ROADMAP.md` first (the portable convention), else a
+    single `<docs-root>/roadmap.md` file (#974), else the typed
     `<docs-root>/roadmap/*.md` location doc-writing-rules' folder ladder names —
     the only place a repo on the `.claude/docs/` override files one (#882).
     Reports the resolved path so the reader can tell which rung matched."""
-    candidates = [Path(root) / "ROADMAP.md"]
+    candidates = [Path(root) / "ROADMAP.md", Path(docs_root) / "roadmap.md"]
     typed_dir = Path(docs_root) / "roadmap"
     if typed_dir.is_dir():
         candidates.extend(sorted(typed_dir.glob("*.md")))
@@ -176,6 +218,15 @@ def selftest():
                 and typed["path"] == ".claude/docs/roadmap/roadmap-x.md"):
             fails.append(f"#882 negative control: typed roadmap under .claude/docs/ not read ({typed})")
 
+        # #974: a single-file `<docs-root>/roadmap.md`, preferred over the typed roadmap/ dir.
+        (legacy_root / ".claude" / "docs" / "roadmap.md").write_text(
+            "---\ndoc-type: roadmap\nid: r-single\nstatus: retired\n---\n## Now\n")
+        single = collect(legacy_root)["roadmap"]
+        if not (single["present"] and single["status"] == "retired"
+                and single["path"] == ".claude/docs/roadmap.md"):
+            fails.append(f"#974 negative control: single-file roadmap.md under .claude/docs/ not "
+                         f"read, or not preferred over roadmap/*.md ({single})")
+
         # Precedence: when BOTH roots exist, docs/ops/ must win (catches a swapped if-order).
         both_ops = legacy_root / "docs" / "ops" / "adr"
         both_ops.mkdir(parents=True)
@@ -193,6 +244,41 @@ def selftest():
             empty_result = collect(Path(td3))
             if empty_result["ledger"]["adr"]["count"] != 0:
                 fails.append("host-override ladder: neither root present but reported nonzero")
+
+    # #974: the agent-ui blockquote status-table dialect — no frontmatter `status`,
+    # a `> | **Status** | ... |` row instead.
+    with tempfile.TemporaryDirectory() as td4:
+        bq_root = Path(td4)
+        bq_adr = bq_root / ".claude" / "docs" / "adr"
+        bq_adr.mkdir(parents=True)
+        (bq_adr / "0001-a.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0001\n---\n"
+            "> | Field | Value |\n> |---|---|\n> | **Status** | accepted |\n\n"
+            "## Context\n## Decision\n## Consequences\n")
+        (bq_adr / "0002-b.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0002\n---\n"
+            "> | **Status** | superseded by ADR-0001 |\n\n"
+            "## Context\n## Decision\n## Consequences\n")
+        (bq_adr / "0003-c.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0003\nintent-refs: IDR-0001\n---\n"
+            "> | **Date** | 2026-08-28 |\n\n"
+            "## Context\n## Decision\n## Consequences\n")
+        bq_result = collect(bq_root)
+        bq_adr_ledger = bq_result["ledger"]["adr"]
+        if bq_adr_ledger["status_distribution"] != {"accepted": 1, "superseded": 1, "unknown": 1}:
+            fails.append(f"#974 negative control: blockquote status table not read as fallback "
+                         f"({bq_adr_ledger['status_distribution']})")
+        if bq_adr_ledger.get("superseded") != [{"id": "ADR-0002", "superseded_by": "ADR-0001"}]:
+            fails.append(f"#974 negative control: superseded-by target id not preserved "
+                         f"({bq_adr_ledger.get('superseded')})")
+        # Reverse control: frontmatter status wins even when a blockquote table is also present.
+        (bq_adr / "0004-d.md").write_text(
+            "---\ndoc-type: adr\nid: ADR-0004\nstatus: proposed\n---\n"
+            "> | **Status** | accepted |\n\n## Context\n## Decision\n## Consequences\n")
+        fm_wins = collect(bq_root)["ledger"]["adr"]["status_distribution"]
+        if fm_wins.get("proposed", 0) != 1:
+            fails.append(f"#974 reverse control: frontmatter status did not win over a present "
+                         f"blockquote table ({fm_wins})")
 
     if fails:
         print(f"lifecycle_census · selftest FAIL · {len(fails)} fail / 0 warn")

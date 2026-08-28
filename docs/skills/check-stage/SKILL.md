@@ -30,9 +30,11 @@ reading, not the doctrine itself.
 1. **Collect.** Run the bundled census against the repo root (default `.`):
    `python3 ${CLAUDE_PLUGIN_ROOT}/skills/check-stage/scripts/lifecycle_census.py <root>`
    — emits per-type (`adr`/`idr`/`rdd`) counts and status distributions, the orphan-ADR count,
-   and roadmap presence/status (root `ROADMAP.md`, else the typed `<docs-root>/roadmap/*.md` —
-   honors the `.claude/docs/` override, #882). A script failure (non-zero exit) is reported verbatim; the report
-   still renders judgment-tier signals from what's readable directly.
+   and roadmap presence/status (root `ROADMAP.md`, else `<docs-root>/roadmap.md`, else the typed
+   `<docs-root>/roadmap/*.md` — honors the `.claude/docs/` override, #882). A ledger doc with no
+   frontmatter `status` falls back to a blockquote status table (`> | **Status** | accepted |`),
+   including a `superseded by ADR-NNNN` cell's target id (#974). A script failure (non-zero exit)
+   is reported verbatim; the report still renders judgment-tier signals from what's readable directly.
 2. **Consume check-state's own JSON as an input, never re-derive it.** Where available, run or
    reuse a recent `harness:check-state` collector output (ticket status counts via its
    `ticket_state.py`, PR/release cadence via `git_state.py`) for the Releases-loop turn-cadence
