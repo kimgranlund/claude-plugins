@@ -438,10 +438,10 @@ never assumed applied by default.
 exact shape, so a human knows who can be messaged by name right now:**
 
 ```
-- `@{scope}-marshal` — this fleet's orchestrator agent (this session; fleet.json role `agent`)
-- `@{scope}-planner` — this fleet's planner agent
-- `@{scope}-reviewer` — this fleet's review agent
-- `@{scope}-product` — this fleet's product agent
+- `@{scope}-marshal` — this fleet's orchestrator agent (this session; fleet.json role `agent`) — SendMessage: `<agent_name>`
+- `@{scope}-planner` — this fleet's planner agent — SendMessage: `<agent_name>`
+- `@{scope}-reviewer` — this fleet's review agent — SendMessage: `<agent_name>`
+- `@{scope}-product` — this fleet's product agent — SendMessage: `<agent_name>`
 ```
 
 Each line carries its live addressability, classified from `fleet.json`'s LATEST row for that
@@ -460,10 +460,15 @@ silently drops messages is worse than no name. Four classes, exactly one per sea
 - **not live — bind it with `/team-scaffolding <role>`** — no row at all, or latest action
   `released`.
 
-The `@` is a display sigil for the human's eye only; the actual `SendMessage` target is the bare
-session name (`plugins-marshal`, never `@plugins-marshal`) — the same bare form every roster row
-and `team-scaffolding` introduction uses. A seat with no live holder is listed so the human sees
-the gap, not omitted.
+The `@{scope}-<role>` label is a display sigil for the human's eye only — **it is never itself a
+reachable `SendMessage` target**, since no session is ever registered under that printed string
+(`fleet-rules` Section 7, #902: routing on the label alone sends a message nowhere). The real
+`SendMessage` target is each row's resolved `agent_name` field — the harness-assigned session
+name (e.g. `plugins-75`), read from `fleet.json`'s LATEST row for that role
+(`fleet-manifest-schema.md`'s own canonical field) — printed as the `SendMessage:` value above,
+never the label standing in for it. A row with no `agent_name` (a legacy pre-#902 entry, or one
+of the three non-addressable classes above) prints `SendMessage: none` rather than falling back
+to the label. A seat with no live holder is listed so the human sees the gap, not omitted.
 
 ## Failure branches
 
