@@ -60,6 +60,13 @@ marshal to run the real accept-marker round each time.
   posted a fresh accept marker superseding the stale one. Textbook execution of the SHA-staleness
   rule on both sides.
 
+- 2026-08-28 turn 3: found an uncommitted edit to harness/skills/check-routing/SKILL.md sitting
+  directly in the shared PRIMARY checkout (not build-957's isolated clone) while verifying
+  build-960's branch. Content matches #957 exactly. Real isolation violation risk (fleet-rules
+  §4/§5) — my own trial-merge git gymnastics run in this same shared directory. Paused further
+  primary-checkout branch operations until build-957 confirms/relocates. #960's own verification
+  was unaffected (already complete, safe) before this was found.
+
 ## Findings this run
 
 - 2026-08-28 turn 1: build-956 (bug-kind, routed dispatch-ticket -> docs:file-bug fix-inline)
