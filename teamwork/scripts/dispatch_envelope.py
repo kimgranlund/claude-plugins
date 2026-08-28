@@ -21,8 +21,19 @@ Emits (stdout, one JSON object):
               "claim_clean": <bool>, "checked_at": "<origin/main HEAD sha>"} | null,
     "branch": "<decided-branch-name>",
     "clone": "<abs path to a pre-made shallow scratch clone, branch already checked out>",
+    "bootstrap": "<npm run ops:bootstrap-scratch-clone, or 'none, follow the host's seat-map "
+                  "recipe'>",
     "pin_check": "pass" | "fail",
     "collision": {"open_pr_branches": [...], "claimed_no_pr": [...]} }
+
+Ticket #973: `bootstrap` names the host repo's own scratch-clone bootstrap convention, resolved
+once here against the clone's own `package.json` — a `scripts["ops:bootstrap-scratch-clone"]`
+entry, if present, becomes the npm command that runs it; absent (no `package.json`, no matching
+script, or a non-npm host) falls back to the literal `none, follow the host's seat-map recipe`.
+`dispatch-ticket`'s scratch-clone step (Phase 3's "Envelope present" bullet, and
+`references/isolation-ladder.md`'s Rung 2) reads this field directly rather than feature-detecting
+a bootstrap script blind — the gap agent-ui's own `ops:bootstrap-scratch-clone` (#1695/#1697)
+exposed: a seat previously had to already know to go read agent-ui's `seat-map` skill first.
 
 Deliberately self-contained rather than shelling out to `harness/scripts/version_claim_check.py`
 — a bundled script's own subprocess call hardcoding a path into a SIBLING plugin's scripts/ is
@@ -100,6 +111,8 @@ PLUGIN_PREFIX_RE = re.compile(r"^([a-z][a-z0-9-]*):\s*")
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _TICKET_ID_RE = re.compile(r"^\d+$")
 HELP_FLAGS = ("--help", "-h")
+BOOTSTRAP_SCRIPT_NAME = "ops:bootstrap-scratch-clone"
+BOOTSTRAP_NONE = "none, follow the host's seat-map recipe"
 
 
 def parse_args(args):
@@ -368,6 +381,32 @@ def _widen_fetch_refspec(dest):
           "+refs/heads/*:refs/remotes/origin/*"], cwd=dest)
 
 
+def bootstrap_pointer(pkg_scripts):
+    """Pure (ticket #973): pkg_scripts is a package.json 'scripts' dict, or None when no
+    package.json (or no readable one) exists in the clone. The host-repo convention this resolves
+    against: a script literally named `ops:bootstrap-scratch-clone` — present -> the npm command
+    that runs it; absent -> the literal fallback pointing the seat at the host's own seat-map
+    recipe instead of guessing a script path."""
+    if pkg_scripts and BOOTSTRAP_SCRIPT_NAME in pkg_scripts:
+        return f"npm run {BOOTSTRAP_SCRIPT_NAME}"
+    return BOOTSTRAP_NONE
+
+
+def _resolve_bootstrap(clone_dest):
+    """Impure, local-only: reads package.json off the clone's own root — the SEAT's tree, never
+    the dispatcher's own checkout — tolerating a missing file or malformed JSON as 'no script'
+    rather than raising (a non-npm host repo is an ordinary case, not an error)."""
+    pkg_path = os.path.join(clone_dest, "package.json")
+    if not os.path.isfile(pkg_path):
+        return bootstrap_pointer(None)
+    try:
+        with open(pkg_path) as f:
+            pkg = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return bootstrap_pointer(None)
+    return bootstrap_pointer(pkg.get("scripts"))
+
+
 def _pin_check(branch, cwd):
     script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pin_check.py")
     r = subprocess.run([sys.executable, script, branch, "--cwd", cwd],
@@ -434,6 +473,8 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
     if pin_result == "fail":
         findings.append("E2")
 
+    bootstrap = _resolve_bootstrap(clone_dest)
+
     envelope = {
         "ticket": number,
         "kind": kind,
@@ -441,6 +482,7 @@ def run(ticket_id, plugin_arg=None, dest_root=None):
         "slot": slot,
         "branch": branch,
         "clone": clone_dest,
+        "bootstrap": bootstrap,
         "pin_check": pin_result,
         "collision": {"open_pr_branches": open_pr_branches, "claimed_no_pr": claimed_no_pr},
     }
@@ -685,6 +727,57 @@ def selftest():
             print("FAIL _pin_check (sibling pin_check.py not found next to this script)")
             fails += 1
 
+    # bootstrap_pointer — ticket #973: a package.json `ops:bootstrap-scratch-clone` script
+    # present -> the npm command that runs it; absent (script missing, or no package.json at
+    # all) -> the literal seat-map-recipe fallback
+    got = bootstrap_pointer({"ops:bootstrap-scratch-clone": "node scripts/bootstrap-scratch-clone.mjs"})
+    if got != "npm run ops:bootstrap-scratch-clone":
+        print(f"FAIL bootstrap_pointer/present: {got!r}"); fails += 1
+    else:
+        print("ok    bootstrap_pointer/present")
+    if bootstrap_pointer({"test": "vitest"}) != BOOTSTRAP_NONE:
+        print("FAIL bootstrap_pointer/script_absent (scripts dict present, script missing)")
+        fails += 1
+    else:
+        print("ok    bootstrap_pointer/script_absent")
+    if bootstrap_pointer(None) != BOOTSTRAP_NONE:
+        print("FAIL bootstrap_pointer/no_package_json"); fails += 1
+    else:
+        print("ok    bootstrap_pointer/no_package_json")
+
+    # _resolve_bootstrap — real files on disk: both acceptance-named cases (script present /
+    # absent), plus the missing-file and malformed-JSON tolerance (never raises)
+    with tempfile.TemporaryDirectory() as tmp:
+        if _resolve_bootstrap(tmp) != BOOTSTRAP_NONE:
+            print("FAIL _resolve_bootstrap/missing_file (no package.json at all)"); fails += 1
+        else:
+            print("ok    _resolve_bootstrap/missing_file")
+
+        pkg_path = os.path.join(tmp, "package.json")
+        with open(pkg_path, "w") as f:
+            f.write('{"scripts": {"ops:bootstrap-scratch-clone": "node scripts/x.mjs"}}')
+        if _resolve_bootstrap(tmp) != "npm run ops:bootstrap-scratch-clone":
+            print("FAIL _resolve_bootstrap/present (real package.json on disk)"); fails += 1
+        else:
+            print("ok    _resolve_bootstrap/present (real package.json on disk)")
+
+        with open(pkg_path, "w") as f:
+            f.write('{"scripts": {"test": "vitest"}}')
+        if _resolve_bootstrap(tmp) != BOOTSTRAP_NONE:
+            print("FAIL _resolve_bootstrap/no_matching_script (package.json present, "
+                  "ops:bootstrap-scratch-clone absent)")
+            fails += 1
+        else:
+            print("ok    _resolve_bootstrap/no_matching_script")
+
+        with open(pkg_path, "w") as f:
+            f.write("not valid json")
+        if _resolve_bootstrap(tmp) != BOOTSTRAP_NONE:
+            print("FAIL _resolve_bootstrap/malformed (broken JSON must never raise)")
+            fails += 1
+        else:
+            print("ok    _resolve_bootstrap/malformed (broken JSON tolerated as no-script)")
+
     # parse_args — the #188-class negative control
     tid, plugin, scratch_dir = parse_args(["758", "--plugin", "teamwork"])
     if (tid, plugin, scratch_dir) != ("758", "teamwork", None):
@@ -820,7 +913,8 @@ def selftest():
           "CLAUDE_SCRATCHPAD/--scratch-dir/#960 repo-worktrees resolution, and a REAL local "
           "clone + sibling pin_check.py wiring — incl. the #784 occupancy pair (own-clone reuse "
           "on retry, fresh unique sibling beside a foreign occupant) and the #960 missing-"
-          "parent-dir case — all proved with no network")
+          "parent-dir case — plus the #973 bootstrap-pointer resolution (script present / "
+          "absent / no package.json / malformed JSON) — all proved with no network")
     return 0
 
 

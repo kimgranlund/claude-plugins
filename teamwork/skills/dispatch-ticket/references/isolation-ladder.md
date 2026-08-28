@@ -48,11 +48,18 @@ procedure:
    it cleanly — verified directly during this ladder's own authoring, 2026-08-18).
 2. `git -C <clone-path> checkout -b <decided-branch-name> origin/main` — cut the ticket's own
    decided branch name (Phase 3's claim bullet already picked it) off a fresh `origin/main`, never
-   off whatever the session's own pinned worktree happens to have checked out. **Disclosed gap:**
-   a fresh scratch clone is exactly as bare as a fresh worktree — the same bootstrap-before-run
-   rule Phase 3's isolate bullet mandates for a new worktree (gh#498) applies here too, and this
-   rung doesn't yet mechanize it; feature-detect and run the host repo's own bootstrap script (if
-   any) before step 4's first gate/check inside the clone, same as the worktree path does.
+   off whatever the session's own pinned worktree happens to have checked out. **Bootstrap-before-run
+   (gh#498, mechanized by ticket #973):** a fresh scratch clone is exactly as bare as a fresh
+   worktree — the same rule Phase 3's isolate bullet mandates for a new worktree applies here too.
+   Envelope present and not stale (the ordinary case since #758 — Phase 3's own staleness re-read
+   already passed) → the envelope already carries the resolved pointer at `envelope.bootstrap`
+   (`dispatch_envelope.py`'s own read of the clone's own `package.json`
+   `ops:bootstrap-scratch-clone` script, or the literal `none, follow the host's seat-map
+   recipe`) — read and run it directly before step 4's first gate/check, never re-derived. No
+   envelope, or a stale one Phase 3 already fell through on (either lands this rung's own
+   `git clone` at step 1) → still unmechanized: feature-detect and run the host repo's own
+   bootstrap script (if any) before step 4's first gate/check inside the clone, same as the
+   worktree path does.
 3. Run `teamwork/scripts/pin_check.py <decided-branch-name> --cwd <clone-path>` before the first
    real write — confirms the clone actually landed on the intended branch before any edit lands
    in it.
