@@ -41,3 +41,9 @@ outcome, not forced into the single-PR shape).
 
 (see .claude/ops/spend-ledger.csv, event_kind=build for each dispatch, event_kind=merge for each
 close)
+
+## Run closed 2026-08-28 — end-state met, 3 turns
+
+Final verification: 6/7 CLOSED via merged PR; #978 stays OPEN by design (BLOCKED, dated Findings
+entry, ADR-0027 proposed and queued separately for Kim). Zero open PRs. This satisfies the goal's
+own END-STATE condition exactly (CLOSED-by-merge OR Findings-entry-naming-why-it-stopped).
