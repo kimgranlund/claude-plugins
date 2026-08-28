@@ -27,10 +27,10 @@ marshal to run the real accept-marker round each time.
 | Ticket | Plugin | Build seat | Dispatched | Status | PR | Merged |
 |---|---|---|---|---|---|---|
 | 956 | harness | build-956 | turn 1 | MERGED via PR #967 | #967 | yes |
-| 957 | harness | build-957 | turn 2 | dispatched, slot 3.18.11 | — | — |
+| 957 | harness | build-957 | turn 2 | in progress (isolated, envelope re-cut fresh) | — | — |
 | 958 | harness | build-958 | — | queued (wave 3) | — | — |
 | 959 | harness | build-959 | — | queued (wave 4) | — | — |
-| 960 | teamwork | build-960 | turn 2 | dispatched, slot 2.29.4 | — | — |
+| 960 | teamwork | build-960 | turn 2 | PR #970 open, accept-marker posted, checks pending | #970 | no |
 | 961 | docs | build-961 | turn 1 | MERGED via PR #969 (docs 1.21.15) | #969 | yes |
 | 962 | teamwork | (none) | — | DROPPED — duplicate of #965/PR #966 (live human PR) | — | — |
 | 963 | teamwork | build-963 | — | queued (wave 4) | — | — |
