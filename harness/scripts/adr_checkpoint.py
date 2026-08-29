@@ -6,6 +6,12 @@ Usage:
   adr_checkpoint.py advance <adr-source> [--checkpoint <path>]   write the checkpoint to the
                                                                   current tree — run ONLY after
                                                                   classify's delta has been judged
+  adr_checkpoint.py validate <checkpoint-path>                   integrity check ONLY: every
+                                                                  stored hash is a well-formed
+                                                                  64-char sha256 digest, no ADR
+                                                                  source needed — for a write-relay
+                                                                  step to run right after landing
+                                                                  a checkpoint on disk (issue #987)
   adr_checkpoint.py selftest                                     prove the classifier on fixtures
 
 <adr-source> is either a DIRECTORY of one-ADR-per-file `*.md` or a single markdown FILE whose
@@ -102,7 +108,16 @@ own named event, never silently diffed as a 100%-amended flood (every hash would
 formula change alone, not a real edit) — the fix for the false-flood issue #929's own hash-basis
 widening produced. Re-baseline (`advance` under the current script version) clears it forever.
 
-Exit codes: 0 clean · 1 unsupported shape (no ADR parsed from non-empty input) · 2 usage error.
+issue #987: a stored "hash" that isn't a well-formed 64-char lowercase sha256 hex digest is
+CORRUPTED — this script's own hash_adr/save_checkpoint can never produce one (hashlib's hexdigest
+is unconditionally 64 chars; no code path here slices it). `classify` detects and loudly names any
+such entry, treating it as unrecorded for that diff rather than silently comparing against
+garbage; `advance` always overwrites every entry fresh regardless, so it self-heals once run.
+`validate` is a standalone integrity check on an already-written checkpoint file for a write-relay
+step to run right after landing one on disk.
+
+Exit codes: 0 clean · 1 unsupported shape (no ADR parsed from non-empty input) / validate found a
+malformed hash · 2 usage error.
 """
 import hashlib
 import json
@@ -121,6 +136,13 @@ CHECKPOINT_FORMULA_VERSION = 2
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)\s*$", re.MULTILINE)
 ADR_ID_RE = re.compile(r"adr-\d+")
+
+# issue #987: hash_adr's own hashlib.sha256().hexdigest() is unconditionally 64 lowercase hex
+# chars — no code path in this file can ever produce anything shorter. A stored "hash" that
+# doesn't match this shape was corrupted OUTSIDE this script (e.g. a lossy transcription in an
+# unattended agent's write-relay step, per ops-write-sandbox-rules) and must never be silently
+# trusted as a valid prior value.
+HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 
 # The second detection signal (issue #221): a forward supersession clause in an accepted ADR's
 # own BODY prose, read only when the frontmatter `supersedes:` field is null. Active voice only —
@@ -517,6 +539,16 @@ def formula_mismatch(old_checkpoint, old_formula_version):
     return bool(old_checkpoint) and old_formula_version != CHECKPOINT_FORMULA_VERSION
 
 
+def malformed_hash_entries(checkpoint):
+    """issue #987: adr ids whose stored "hash" isn't a well-formed 64-char lowercase sha256 hex
+    digest — corrupted data (e.g. a truncated transcription) that must never be diffed against as
+    if it were a real prior value. Pure."""
+    return sorted(
+        adr_id for adr_id, rec in checkpoint.items()
+        if not HASH_RE.match(rec.get("hash", ""))
+    )
+
+
 def unsupported_shape(source, skipped):
     """The loud failure: non-empty input, zero ADRs parsed. Names the dialects understood and
     samples the files that matched none, so an operator can tell an unsupported dialect apart from
@@ -586,6 +618,17 @@ def run_classify(adr_source, checkpoint_path):
     current = scan_source(adr_source)
 
     print(f"adr_checkpoint classify · {adr_source}")
+    malformed = malformed_hash_entries(old)
+    if malformed:
+        print(
+            "  CORRUPTED CHECKPOINT DATA: {} stored hash(es) aren't well-formed 64-char sha256 "
+            "digests -> {} (never introduced by this script's own write path — hash_adr's "
+            "hexdigest is unconditionally 64 chars; the corruption entered elsewhere, e.g. a "
+            "lossy transcription in an unattended write-relay step). Treated as unrecorded for "
+            "this diff; `advance` overwrites them with a fresh correct hash regardless.".format(
+                len(malformed), ", ".join(malformed)
+            )
+        )
     if formula_mismatch(old, old_formula_version):
         print(
             f"  FORMULA MISMATCH: checkpoint was written under hash formula v{old_formula_version}, "
@@ -601,7 +644,10 @@ def run_classify(adr_source, checkpoint_path):
         print("  checkpoint NOT advanced -> re-baseline via `advance` once ready")
         return 0
 
-    delta = classify_delta(old, current)
+    trustworthy_old = {
+        adr_id: rec for adr_id, rec in old.items() if adr_id not in malformed
+    }
+    delta = classify_delta(trustworthy_old, current)
 
     print(f"  {len(current)} ADR(s) scanned against checkpoint ({len(old)} previously known)")
     for kind in ("new", "amended", "newly_superseded"):
@@ -624,6 +670,26 @@ def run_advance(adr_source, checkpoint_path):
         for adr_id, rec in current.items()
     })
     print(f"adr_checkpoint advance · {len(current)} ADR(s) -> checkpoint written to {checkpoint_path}")
+    return 0
+
+
+def run_validate(checkpoint_path):
+    """issue #987: a standalone integrity check on an ALREADY-WRITTEN checkpoint file — no ADR
+    source needed, since it checks the stored shape only. Meant for a write-relay step (e.g. an
+    unattended agent's fenced-payload apply, per ops-write-sandbox-rules) to run immediately
+    after landing a checkpoint on disk, catching a corrupted transcription before it's trusted
+    rather than after it's silently persisted for cycles."""
+    old, _ = load_checkpoint(checkpoint_path)
+    malformed = malformed_hash_entries(old)
+    if malformed:
+        print(f"adr_checkpoint validate · {checkpoint_path}")
+        print(
+            "  FAIL: {} stored hash(es) aren't well-formed 64-char sha256 digests -> {}".format(
+                len(malformed), ", ".join(malformed)
+            )
+        )
+        return 1
+    print(f"adr_checkpoint validate · {checkpoint_path} · {len(old)} ADR(s) · all hashes well-formed")
     return 0
 
 
@@ -1216,6 +1282,66 @@ def selftest():
         assert "amended:" not in out2, \
             "unchanged content against a same-formula checkpoint must never read as amended: {}".format(out2)
 
+        # issue #987: malformed_hash_entries unit-level — a truncated 57-char hash (the exact
+        # repro shape) flags, a well-formed 64-char one never does
+        assert malformed_hash_entries({
+            "adr-0065": {"hash": "a" * 57, "status": "accepted"},
+            "adr-0001": {"hash": "b" * 64, "status": "accepted"},
+        }) == ["adr-0065"]
+        assert malformed_hash_entries({}) == []
+
+        # end-to-end via run_classify: a checkpoint carrying one corrupted (57-char) hash
+        # alongside one genuinely well-formed entry must name the corrupted id loudly, never
+        # silently diff it as a false "amended" — and must NOT block the real delta for the
+        # sibling well-formed entry
+        corrupt_checkpoint_path = d / "corrupt-checkpoint.json"
+        save_checkpoint(corrupt_checkpoint_path, {
+            "adr-0100": {"hash": "e" * 57, "status": "accepted"},
+        })
+        captured3 = io.StringIO()
+        with contextlib.redirect_stdout(captured3):
+            rc3 = run_classify(str(adr_source_dir), str(corrupt_checkpoint_path))
+        out3 = captured3.getvalue()
+        assert rc3 == 0, rc3
+        assert "CORRUPTED CHECKPOINT DATA" in out3, out3
+        assert "adr-0100" in out3, out3
+        assert "FORMULA MISMATCH" not in out3, \
+            "a malformed hash alone is not a formula mismatch: {}".format(out3)
+        # treated as unrecorded, not a false "amended" against garbage
+        assert "new: adr-0100" in out3, out3
+        assert "amended: adr-0100" not in out3, out3
+        # never advanced by classify — same untouched-on-classify contract as every other path
+        assert json.loads(corrupt_checkpoint_path.read_text())["adrs"]["adr-0100"]["hash"] == "e" * 57
+
+        # run_validate: FAIL + exit 1 on the same corrupted file, naming the bad id
+        captured4 = io.StringIO()
+        with contextlib.redirect_stdout(captured4):
+            rc4 = run_validate(str(corrupt_checkpoint_path))
+        out4 = captured4.getvalue()
+        assert rc4 == 1, rc4
+        assert "FAIL" in out4 and "adr-0100" in out4, out4
+
+        # run_validate: clean PASS + exit 0 on a well-formed checkpoint
+        clean_checkpoint_path = d / "clean-checkpoint.json"
+        save_checkpoint(clean_checkpoint_path, {
+            "adr-0100": {"hash": current_scan["adr-0100"]["hash"], "status": "accepted"}
+        })
+        captured5 = io.StringIO()
+        with contextlib.redirect_stdout(captured5):
+            rc5 = run_validate(str(clean_checkpoint_path))
+        out5 = captured5.getvalue()
+        assert rc5 == 0, rc5
+        assert "FAIL" not in out5, out5
+
+        # advance always self-heals a corrupted checkpoint — it recomputes every entry fresh
+        # from source, never merges the old (possibly corrupted) stored value
+        captured6 = io.StringIO()
+        with contextlib.redirect_stdout(captured6):
+            rc6 = run_advance(str(adr_source_dir), str(corrupt_checkpoint_path))
+        assert rc6 == 0, captured6.getvalue()
+        healed = json.loads(corrupt_checkpoint_path.read_text())["adrs"]["adr-0100"]["hash"]
+        assert HASH_RE.match(healed), healed
+
     print("adr_checkpoint selftest · PASS · body-clause supersession signal (issue #221: ADR-0011's "
           "real body text as positive control, scope-carrying edges, accepted-with-no-clause and "
           "proposed-ADR negative controls, active-voice-only), frontmatter parse, hashing, all "
@@ -1237,7 +1363,12 @@ def selftest():
           "no-file and no-formula_version-key defaults, save_checkpoint's stamp round-trip, and "
           "end-to-end via run_classify: a legacy no-formula_version checkpoint against truly "
           "unchanged content prints FORMULA MISMATCH with no false amended list and leaves the "
-          "checkpoint unadvanced, vs. a same-formula checkpoint classifying normally with neither))")
+          "checkpoint unadvanced, vs. a same-formula checkpoint classifying normally with neither)), "
+          "and the issue #987 corrupted-hash signal (malformed_hash_entries' 57-char-vs-64-char "
+          "unit cases, end-to-end via run_classify: a corrupted entry prints CORRUPTED CHECKPOINT "
+          "DATA and is treated as unrecorded [new, never a false amended] without blocking a "
+          "sibling well-formed entry's real delta, run_validate's FAIL/PASS cases on a corrupted "
+          "vs. clean checkpoint file, and advance's unconditional self-heal of a corrupted entry)")
     return 0
 
 
@@ -1245,6 +1376,8 @@ if __name__ == "__main__":
     argv = sys.argv[1:]
     if argv and argv[0] == "selftest":
         sys.exit(selftest())
+    if len(argv) == 2 and argv[0] == "validate":
+        sys.exit(run_validate(argv[1]))
     if len(argv) < 2 or argv[0] not in ("classify", "advance"):
         print(__doc__)
         sys.exit(2)
