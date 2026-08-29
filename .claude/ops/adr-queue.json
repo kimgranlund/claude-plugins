@@ -1,3 +1,11 @@
 {
-  "candidates": []
+  "candidates": [
+    {
+      "adr_id": "adr-0027",
+      "evidence": "ADR-0027 Decision: doc_lint.py's T4 ledger-lock guard gets one narrow, structurally-verified exception -- an accepted ADR may move intent-refs: from empty/null to a non-empty citation (single-field diff only, hook-mode ALLOWs it); no existing docs/doc-writing-rules reference (checked against origin/main) covers this carve-out -- fits the existing T4/ledger-lock axis in docs/skills/doc-writing-rules as an extend-reference candidate, not a new skill.",
+      "kind": "harvest",
+      "plan": "",
+      "queued_at": "2026-08-29T00:11:15Z"
+    }
+  ]
 }
