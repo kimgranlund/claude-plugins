@@ -188,7 +188,9 @@ version) before the next firing.
    duplicate row). The scratch copy accumulates every candidate this firing; nothing lands at the
    real `.claude/ops/adr-queue.json` path until the dispatching session applies step 6's payload.
 5. **Advance the checkpoint — against a scratch copy.** Copy `.claude/ops/adr-checkpoint.json` to
-   a scratch path, then `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/adr_checkpoint.py" advance
+   a scratch path first (`cp .claude/ops/adr-checkpoint.json /tmp/decision-watcher-adr-checkpoint.json`,
+   or equivalent — step 6 names this exact path again for its own recovery case), then `python3
+   "${CLAUDE_PLUGIN_ROOT}/scripts/adr_checkpoint.py" advance
    <adr-source> --checkpoint <scratch-path>` — only now, after every candidate from step 1's delta
    has actually been queued. This ordering is what step 1's non-mutation buys: a crash between
    steps 1 and 5 leaves the real checkpoint untouched regardless (this agent never wrote it in the
@@ -198,7 +200,22 @@ version) before the next firing.
    re-affirmed existing candidate isn't "new" this time) and the current total pending, then
    include the two scratch files' full contents as fenced blocks headed by their real target paths
    (`.claude/ops/adr-checkpoint.json`, `.claude/ops/adr-queue.json`) — this IS the write, deferred
-   to the dispatching session. If a human is present in the dispatching session (an on-demand or
+   to the dispatching session. **Verify the checkpoint payload landed intact (issue #987) — a long
+   fenced JSON blob reproduced through generated text can silently drop characters (the confirmed
+   cause of a recorded sha256 periodically truncating to fewer than 64 hex chars), the same
+   never-trust-a-write's-own-narration discipline `ops-write-sandbox-rules`' push-verification
+   section already applies to a direct-to-main commit.** Once the dispatching session applies the
+   `.claude/ops/adr-checkpoint.json` fenced block to its real path, it runs `python3
+   "${CLAUDE_PLUGIN_ROOT}/scripts/adr_checkpoint.py" validate .claude/ops/adr-checkpoint.json`
+   before treating the write as landed — a non-zero exit names the corrupted id(s). **Recover
+   mechanically, never by re-narrating the fenced block a second time** (that repeats the exact
+   free-text-reproduction step that caused the corruption): the dispatching session still has
+   step 5's own scratch copy on disk (`/tmp/decision-watcher-adr-checkpoint.json`, or whatever
+   path step 5 actually used) within the same firing, so `cp` that scratch file directly over
+   `.claude/ops/adr-checkpoint.json` and re-run `validate` to confirm — scratch-copy unavailable
+   at recovery time (a prior firing, a cleaned-up `/tmp`) means treat the whole checkpoint payload
+   as undeliverable this firing and report it as such, never a re-narrated re-emit. If a human is
+   present in the dispatching session (an on-demand or
    interactive dispatch, never an unattended scheduled one), offer the batched confirm now:
    `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/adr_queue.py" pending <scratch-path>` lists everything
    outstanding, then ONE `AskUserQuestion` round covers all of it — never one round per candidate,
