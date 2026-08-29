@@ -134,7 +134,12 @@ from pathlib import Path
 CHECKPOINT_FORMULA_VERSION = 2
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
-FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)\s*$", re.MULTILINE)
+# issue #991: a template placeholder inline-comment left on a frontmatter field
+# (`status: accepted        # proposed | accepted | superseded`, the un-stripped ADR-authoring
+# scaffold text) must never become part of the extracted value. The optional `(?:\s+#.*)?` group
+# eats a trailing ` # ...` comment before the end-of-line anchor; a field with no comment is
+# unaffected (the group simply matches empty).
+FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)(?:\s+#.*)?\s*$", re.MULTILINE)
 ADR_ID_RE = re.compile(r"adr-\d+")
 
 # issue #987: hash_adr's own hashlib.sha256().hexdigest() is unconditionally 64 lowercase hex
@@ -706,6 +711,26 @@ def selftest():
     assert fm2["supersedes"] == "adr-0002", fm2
 
     assert parse_frontmatter("no frontmatter here") is None
+
+    # issue #991: a template placeholder inline-comment left on the `status:` line (this
+    # workspace's own adr-0027, un-stripped ADR-authoring scaffold text) must never leak into the
+    # extracted value — positive control is the exact live corrupted shape.
+    fm3 = parse_frontmatter(
+        "---\ndoc-type: adr\nid: adr-0027\n"
+        "status: accepted        # proposed | accepted | superseded\n"
+        "supersedes: null\n---\n# body"
+    )
+    assert fm3["status"] == "accepted", fm3
+    # a comment on `id:`/`supersedes:` is stripped the same way — one regex, three fields
+    fm4 = parse_frontmatter(
+        "---\ndoc-type: adr\nid: adr-0028   # numbering scratchpad\n"
+        "status: accepted\nsupersedes: adr-0002   # the old one\n---\n# body"
+    )
+    assert fm4 == {"id": "adr-0028", "status": "accepted", "supersedes": "adr-0002"}, fm4
+    # negative control: a field with no comment at all is unaffected (no over-trimming)
+    assert parse_frontmatter(
+        "---\ndoc-type: adr\nid: adr-0029\nstatus: proposed\nsupersedes: null\n---\n# body"
+    )["status"] == "proposed"
 
     # body_supersedes_ids — the second detection signal (issue #221): ADR-0011's own REAL body
     # text (frontmatter `supersedes: null`, permanently frozen post-acceptance under the T4
@@ -1368,7 +1393,10 @@ def selftest():
           "unit cases, end-to-end via run_classify: a corrupted entry prints CORRUPTED CHECKPOINT "
           "DATA and is treated as unrecorded [new, never a false amended] without blocking a "
           "sibling well-formed entry's real delta, run_validate's FAIL/PASS cases on a corrupted "
-          "vs. clean checkpoint file, and advance's unconditional self-heal of a corrupted entry)")
+          "vs. clean checkpoint file, and advance's unconditional self-heal of a corrupted entry)), "
+          "and the issue #991 comment-unaware-FIELD_RE signal (a template placeholder inline-"
+          "comment on status: stripped to the bare value — adr-0027's own live shape as positive "
+          "control — the same strip on id:/supersedes:, and a no-comment field left untouched)")
     return 0
 
 
