@@ -5,6 +5,7 @@ status: accepted
 date: 2026-07-15
 ratified: 2026-07-15 (maintainer, in-session AskUserQuestion — three rulings, one session)
 owner: kim.granlund
+intent-refs: idr-0002    # the founding decision idr-0002's own Why section names directly (Issues/PRs/CI as the substrate)
 ---
 # ADR-0002 — Git-native execution: Issues as the work-item canon, PRs as the merge gate, CI + style lint
 

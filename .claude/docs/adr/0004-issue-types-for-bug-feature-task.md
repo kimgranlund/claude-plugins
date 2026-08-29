@@ -8,6 +8,7 @@ ratified: 2026-07-18 (maintainer, in-session AskUserQuestion — accepted as dra
   named a non-goal; implementation across the four consuming files follows as a separate change)
 owner: kim.granlund
 supersedes: null
+intent-refs: idr-0002    # part of the same explicit chain idr-0002 names (native issue types on the git substrate)
 ---
 # ADR-0004 — Adopt GitHub's native Issue Types alongside the existing kind: bug/feature/task labels
 

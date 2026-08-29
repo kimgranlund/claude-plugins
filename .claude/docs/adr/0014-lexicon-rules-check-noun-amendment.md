@@ -10,7 +10,7 @@ ratified: by Kim, 2026-08-16 (live AskUserQuestion round) — the execution foll
 date: 2026-08-16
 owner: kim.granlund
 supersedes: null
-intent-refs: null
+intent-refs: idr-0003    # the naming grammar amendment idr-0003's Why section names directly (ADR-0011, amended by ADR-0014)
 ---
 # ADR-0014 — Register a `-rules`/gerund object class and the `check-<noun>` tail in the naming-convention grammar
 

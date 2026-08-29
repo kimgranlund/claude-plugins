@@ -11,7 +11,7 @@ supersedes: adr-0011 (three clauses of D7 only — the orchestrator agent produc
   `-agent` tail; the orchestrator scope-resolution pool inside "the §5 parse"; and the lexicon
   disjointness set the §4 registration gate checks. D7's command/skill/primary-agent
   productions, D8's grandfather-and-ratchet posture, D9, and D10 all stand unamended)
-intent-refs: null
+intent-refs: idr-0003    # continues the same ratified naming-grammar chain idr-0003 credits (ADR-0011 D7, amended)
 ---
 # ADR-0015 — Orchestrator agents are named `{scope}-{role}`; the `-agent` tail becomes optional on the role production
 

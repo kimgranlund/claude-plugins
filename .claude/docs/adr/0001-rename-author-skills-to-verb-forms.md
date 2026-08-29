@@ -5,6 +5,7 @@ status: accepted
 date: 2026-07-09
 ratified: 2026-07-09 (maintainer, in-session)
 owner: kim.granlund
+intent-refs: idr-0003    # the naming grammar's first ratified rename, the routing-surface investment idr-0003 traces from
 ---
 # ADR-0001 — Rename the `-author` skills to verb forms
 

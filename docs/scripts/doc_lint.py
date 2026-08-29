@@ -22,6 +22,11 @@ Rules ("no validator, no type" — Vol 3 §3.1):
             `doc-type: adr, status: accepted`, `doc-type: idr, status: locked`, and
             `doc-type: rdd, status: locked` — the same two-phase mechanic, reused verbatim per
             LEDGER_LOCK below. git absent / not a repo / any doubt -> conservative block, as before.
+            Narrowly carved 2026-08-28 (ADR-0027, issue #978): a committed-accepted ADR may still
+            receive exactly one edit — `intent-refs:` moving from empty/`null` to a non-empty
+            citation, verified as the SOLE line-level delta against HEAD by `is_intent_refs_backfill()`
+            — everything else (a second intent-refs edit, any other field, Context/Decision/
+            Consequences) still FAILs. ADR-only; IDR/RDD carry no carve-out.
   T5 [WARN] plan steps without a done-when token; spec Requirements without REQ- IDs
   T6 [WARN] an ADR with no `intent-refs:` citation — an "orphan ADR" per the corpus's
             product-lifecycle-bible (Part 4): a HOW decision with no cited upstream IDR claim.
@@ -374,6 +379,86 @@ def head_is_locked_ledger(p: Path) -> bool:
         return True
 
 
+def is_intent_refs_backfill(p: Path, new_text: str) -> bool:
+    """ADR-0027's narrow T4 carve-out (2026-08-28): an already-committed, `status: accepted` ADR
+    may receive exactly one class of edit — `intent-refs:` moving from empty/`null`/absent to a
+    non-empty citation — verified structurally, not by trust. The BODY (everything after the
+    frontmatter's closing `---`, i.e. Context/Decision/Consequences and beyond) must be
+    byte-identical to HEAD. Within the frontmatter block, exactly one of two shapes is allowed:
+    (a) an existing `intent-refs:` line's value moves from empty/`null` to non-empty at the same
+    position (adr-0014..adr-0025's bucket: the field existed, shipped null); or (b) a brand-new
+    `intent-refs: <value>` line is inserted with every other frontmatter line unchanged and in
+    the same relative order (adr-0001..adr-0013's bucket: they predate the field's existence —
+    T6 already treats a missing key identically to an empty one via `fm.get("intent-refs", "")`,
+    so a first-time insertion is the same backfill, not a new class of edit). Any other delta —
+    a second edit to an already-populated `intent-refs:`, a body change, a reordered or altered
+    frontmatter line elsewhere — returns False (T4 still FAILs, exactly as before this carve-out
+    existed). ADR-scoped only: IDR/RDD ledger-lock entries don't carry `intent-refs:` and get no
+    carve-out here."""
+    import re
+    import subprocess
+    try:
+        r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
+                           text=True, cwd=p.parent, timeout=10)
+        if r.returncode != 0:
+            return False
+        top = Path(r.stdout.strip())
+        rel = p.resolve().relative_to(top.resolve())
+        r = subprocess.run(["git", "show", f"HEAD:{rel.as_posix()}"], capture_output=True,
+                           text=True, cwd=top, timeout=10)
+        if r.returncode != 0:
+            return False
+        head_text = r.stdout
+    except Exception:
+        return False
+    head_fm = parse_frontmatter(head_text)
+    if not head_fm or head_fm.get("doc-type") != "adr":
+        return False
+    head_parts = head_text.split("---", 2)
+    new_parts = new_text.split("---", 2)
+    if len(head_parts) < 3 or len(new_parts) < 3:
+        return False
+    if head_parts[0] != new_parts[0] or head_parts[2] != new_parts[2]:
+        return False  # anything outside the frontmatter block changed -> not this carve-out
+    head_fm_lines = head_parts[1].splitlines()
+    new_fm_lines = new_parts[1].splitlines()
+    key_re = re.compile(r"^intent-refs\s*:\s*(.*)$")
+
+    def strip_val(raw):
+        return raw.split("#", 1)[0].strip().strip('"\'')
+
+    if len(head_fm_lines) == len(new_fm_lines):
+        diffs = [i for i in range(len(head_fm_lines)) if head_fm_lines[i] != new_fm_lines[i]]
+        if len(diffs) != 1:
+            return False
+        old_m = key_re.match(head_fm_lines[diffs[0]])
+        if not old_m:
+            return False
+        old_val = strip_val(old_m.group(1)).lower()
+        new_line = new_fm_lines[diffs[0]]
+    elif len(new_fm_lines) == len(head_fm_lines) + 1:
+        n = len(head_fm_lines)
+        pre = 0
+        while pre < n and head_fm_lines[pre] == new_fm_lines[pre]:
+            pre += 1
+        suf = 0
+        while suf < n - pre and head_fm_lines[n - 1 - suf] == new_fm_lines[len(new_fm_lines) - 1 - suf]:
+            suf += 1
+        if pre + suf != n:
+            return False  # more than a single-line insertion happened
+        old_val = ""  # the key was absent in HEAD -> T6 already treats this as empty
+        new_line = new_fm_lines[pre]
+    else:
+        return False
+    new_m = key_re.match(new_line)
+    if not new_m:
+        return False
+    new_val = strip_val(new_m.group(1))
+    if old_val not in ("", "null", "none"):
+        return False
+    return bool(new_val) and new_val.lower() not in ("null", "none")
+
+
 def hook_mode():
     try:
         payload = json.load(sys.stdin)
@@ -390,7 +475,8 @@ def hook_mode():
     findings = lint_text(text, new_mint=is_new_mint(p)) or []
     dtype = fm.get("doc-type")
     locked_status = LEDGER_LOCK.get(dtype)
-    if locked_status and fm.get("status") == locked_status and head_is_locked_ledger(p):
+    if (locked_status and fm.get("status") == locked_status and head_is_locked_ledger(p)
+            and not is_intent_refs_backfill(p, text)):
         findings.append(("FAIL", "T4", f"this {dtype.upper()} is {locked_status} in committed history — the ledger is append-only; "
                                        f"revert this edit and write a new {dtype.upper()} with `supersedes: " + fm.get("id", f"{dtype}-????") + "`"))
     fails = [f for f in findings if f[0] == "FAIL"]
@@ -487,6 +573,47 @@ def selftest():
             f.write_text(adr.format(s="proposed"))
             env_git("add", "0001-x.md"); env_git("commit", "-qm", "as proposed")
             assert not head_is_locked_ledger(f), "HEAD-proposed ADR must allow the ratification flip — regression"
+            # --- ADR-0027 carve-out (#978): intent-refs backfill positive + negative controls ---
+            adr_ir = ("---\ndoc-type: adr\nid: adr-0002\nstatus: accepted\ndate: 2026-07-15\n"
+                      "intent-refs: null\n---\n# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
+            h = repo / "0002-x.md"
+            h.write_text(adr_ir)
+            env_git("add", "0002-x.md"); env_git("commit", "-qm", "adr with null intent-refs, accepted")
+            backfilled = adr_ir.replace("intent-refs: null", "intent-refs: idr-0002")
+            assert is_intent_refs_backfill(h, backfilled), \
+                "intent-refs null->cited, sole delta, must be ALLOWED past T4 (ADR-0027)"
+            other_field_touched = backfilled.replace("## Context\nc\n", "## Context\nc changed\n")
+            assert not is_intent_refs_backfill(h, other_field_touched), \
+                "intent-refs backfill PLUS any other line delta must still FAIL T4 (not byte-identical elsewhere)"
+            assert not is_intent_refs_backfill(h, adr_ir), \
+                "no delta at all is not a backfill -> False (nothing to carve an exception for)"
+            # commit the backfill (simulates the carve-out already exercised once) -> a SECOND
+            # edit to the now-populated intent-refs must still FAIL: the carve-out is one-time.
+            h.write_text(backfilled)
+            env_git("add", "0002-x.md"); env_git("commit", "-qm", "intent-refs backfilled")
+            second_edit = backfilled.replace("intent-refs: idr-0002", "intent-refs: idr-0003")
+            assert not is_intent_refs_backfill(h, second_edit), \
+                "editing an ALREADY-populated intent-refs is a second edit, not the one-time backfill -> still FAIL"
+            # --- ADR-0027 carve-out, bucket-A shape (#978): adr-0001..0013 predate the field
+            # entirely -> the backfill INSERTS a new intent-refs line rather than editing one.
+            adr_no_field = ("---\ndoc-type: adr\nid: adr-0001\nstatus: accepted\ndate: 2026-07-09\n"
+                            "---\n# A\n## Context\nc\n## Decision\nd\n## Consequences\nq\n")
+            k = repo / "0001-nofield.md"
+            k.write_text(adr_no_field)
+            env_git("add", "0001-nofield.md"); env_git("commit", "-qm", "adr, no intent-refs field at all")
+            inserted = adr_no_field.replace("date: 2026-07-09\n---",
+                                            "date: 2026-07-09\nintent-refs: idr-0003\n---")
+            assert is_intent_refs_backfill(k, inserted), \
+                "first-time intent-refs insertion (bucket-A ADRs, field never existed) must be ALLOWED"
+            inserted_plus_body_edit = inserted.replace("## Context\nc\n", "## Context\nc, and more\n")
+            assert not is_intent_refs_backfill(k, inserted_plus_body_edit), \
+                "an insertion PLUS a body change must still FAIL T4 (body must stay byte-identical)"
+            reordered = adr_no_field.replace(
+                "id: adr-0001\nstatus: accepted\n",
+                "status: accepted\nid: adr-0001\n") .replace("date: 2026-07-09\n---",
+                                                              "date: 2026-07-09\nintent-refs: idr-0003\n---")
+            assert not is_intent_refs_backfill(k, reordered), \
+                "an insertion alongside a REORDERED frontmatter line must still FAIL (not a clean single insertion)"
             # --- IDR positive: committed-locked IDR blocks edit ---
             g = repo / "idr-0001-x.md"
             g.write_text(idr.format(s="locked"))
@@ -617,6 +744,7 @@ def selftest():
             assert not fs, f"existing corpus doc {p.name} must pass T12/T13 clean (grandfather, #657), got {fs}"
     print("doc_lint selftest · PASS · all 11 templates self-consistent; type/status/sections/spine counters bite; "
           "T4 ledger-lock guards committed ADR(accepted)/IDR(locked)/RDD(locked) history only; "
+          "T4's ADR-0027 intent-refs backfill carve-out bites, second-edit and other-field negative controls hold (#978); "
           "T6 orphan-ADR warn bites; T7 RDD citation+DRI-presence FAIL bites; T8 IDR provenance FAIL bites; "
           "T9 SPEC agent-verification WARN bites; T10 spine id-collision FAIL bites (#633); "
           "T11 IDR scope FAIL bites, code-span mentions don't false-positive, this repo's own IDRs pass clean (#652); "

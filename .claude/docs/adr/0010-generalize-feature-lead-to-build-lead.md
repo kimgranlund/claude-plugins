@@ -5,6 +5,7 @@ status: accepted
 ratified: by Kim
 date: 2026-08-10
 owner: kim.granlund
+intent-refs: idr-0007    # the seat-collapse idr-0007's own Why section names directly (one uniform build seat over roster growth)
 ---
 # ADR-0010 — Generalize feature-lead to build-lead, dispatch-feature to dispatch-ticket
 

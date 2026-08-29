@@ -14,7 +14,7 @@ supersedes: adr-0015 (D1's role production insofar as RoleLex membership is clos
   D4's fence stands); adr-0017 (the RoleLex sizing posture only — its 10 execution-seat
   additions stand unamended); adr-0011 (D7's command production, already partially superseded
   by adr-0016, now superseded again by the three-head scheme in D3)
-intent-refs: null
+intent-refs: idr-0003    # same naming-grammar chain, the RoleLex/command-head reconciliation
 ---
 # ADR-0020 — The fleet vocabulary (`marshal`, `orchestration`) and the mechanism-revealing command heads `bind-` / `fork-` / `sub-`
 

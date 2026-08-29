@@ -8,6 +8,7 @@ date: 2026-08-16
 owner: kim.granlund
 supersedes: adr-0012 (the deployment-prerequisite Consequences bullet only — every other
   Decision and Consequences line of ADR-0012 stands unamended)
+intent-refs: idr-0004    # idr-0004's own proof-ref points here directly, the named partial-verification data point
 ---
 # ADR-0013 — ADR-0012's `autoMode.allow` rule: dispatch-tier block observed, merge-tier still unmeasured (partial verification)
 
