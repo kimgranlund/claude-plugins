@@ -6,6 +6,7 @@ ratified: by Kim, 2026-08-13 (in-session, session "PLUGINS")
 date: 2026-08-13
 owner: kim.granlund
 supersedes: null
+intent-refs: idr-0003    # the adopted naming grammar idr-0003's own Why section names directly
 ---
 # ADR-0011 — Adopt the harness naming-convention spec as estate-wide naming canon
 

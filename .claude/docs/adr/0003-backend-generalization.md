@@ -6,6 +6,7 @@ date: 2026-07-17
 ratified: 2026-07-17 (maintainer, in-session AskUserQuestion — two rulings, one session; a post-ratification doc-review pass then fixed wording/factual errors only — GraphQL vs. REST, a missing Alternative, a duplicated-phrasing bullet — no change to either ratified decision's substance)
 owner: kim.granlund
 supersedes: null
+intent-refs: idr-0002    # part of the ADR-0002/0003/0004/0005 chain idr-0002's own Why section names directly
 ---
 # ADR-0003 — Backend generalization: a three-way work-item backend (local / git-native / external) behind one resolver seam
 

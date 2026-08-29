@@ -6,6 +6,7 @@ ratified: by Kim
 date: 2026-07-30
 owner: kim.granlund
 supersedes: adr-0006 (the find-the-ask row of its member rename map only)
+intent-refs: idr-0003    # the follow-on rename idr-0003's own Why section names directly
 ---
 # ADR-0009 — Rename find-the-ask to find-intent
 

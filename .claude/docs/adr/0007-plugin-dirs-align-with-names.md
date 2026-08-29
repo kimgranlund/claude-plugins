@@ -6,6 +6,7 @@ ratified: by Kim
 date: 2026-07-21
 owner: kim.granlund
 supersedes: adr-0006 (the frozen-dir clause of its install-identity decision only)
+intent-refs: idr-0003    # install identity and the /plugin:skill invocation surface, idr-0003's routing-surface claim
 ---
 # ADR-0007 — Plugin directories align with plugin names
 

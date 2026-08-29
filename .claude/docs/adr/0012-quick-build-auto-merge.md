@@ -8,6 +8,7 @@ ratified: by Kim, 2026-08-14 (close-session ratification round — the mechanism
   note anticipated, given directly rather than inferred from the merge)
 date: 2026-08-14
 owner: kim.granlund
+intent-refs: idr-0004    # the predicate-merge mechanism idr-0004's own Why section and proof-ref name directly
 ---
 # ADR-0012 — Quick-build auto-merge: a dispatched seat may merge its own PR on a pre-authorized, all-green predicate
 

@@ -6,6 +6,7 @@ date: 2026-07-19
 ratified: 2026-07-19 (maintainer, in-session AskUserQuestion — three of four proposed items selected: add the claim operation, cross-reference concurrency-design, add ops-repo stale-claim detection; the fourth option, ADR-only with no implementation, was not chosen)
 owner: kim.granlund
 supersedes: null
+intent-refs: idr-0002    # part of the same explicit chain idr-0002 names (the claim protocol against duplicate agent work)
 ---
 # ADR-0005 — A `claim` backend operation: preventing duplicate work between independent agents before a git-tree collision exists
 

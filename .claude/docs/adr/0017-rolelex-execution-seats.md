@@ -8,7 +8,7 @@ owner: kim.granlund
 supersedes: adr-0011 (D7's "RoleLex ≤ 4 entries to start" sizing clause, as spec §4 adopted
   it) and adr-0015 (D1's coordinator-only framing of the {scope}-{role} production; D2's
   scope pool, D3's disjointness requirement, and D4's exemption posture all stand unamended)
-intent-refs: null
+intent-refs: idr-0003    # same naming-grammar chain, the {scope}-{role} production amendment
 ---
 # ADR-0017 — RoleLex grows by 10 members; the `{scope}-{role}` production covers execution seats, not only coordinators
 

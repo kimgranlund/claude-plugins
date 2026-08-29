@@ -9,7 +9,7 @@ supersedes: adr-0016 (D3's `intake` non-registration clause ONLY, per this ADR's
   the lead- head, D1/D2, D4's fence all stand unamended; amends spec §3.2 by the §14.2
   mechanism ADR-0014 established; ADR-0014 and ADR-0016 are not edited — accepted ADRs are
   append-only, supersession recorded here by citation alone)
-intent-refs: null
+intent-refs: idr-0003    # same naming-grammar chain, the reserved skill-head amendment
 ---
 # ADR-0018 — `make-` and `file-` join `check-`/`lead-` as reserved skill heads; ObjectVocab gains 10 registrations including `intake`
 

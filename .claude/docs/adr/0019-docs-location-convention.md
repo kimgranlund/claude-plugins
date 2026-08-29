@@ -6,7 +6,7 @@ ratified: Kim, 2026-08-17, quoted verbatim in issue #514's seed text
 date: 2026-08-17
 owner: kim.granlund
 supersedes: null
-intent-refs: null
+intent-refs: idr-0002    # where the cold-start memory idr-0002 claims actually lives on disk
 ---
 # ADR-0019 — Docs-location convention: `docs/ops/` for repo/project records, `.claude/docs/` for agent docs, this workspace overrides to `.claude/docs/`-only
 

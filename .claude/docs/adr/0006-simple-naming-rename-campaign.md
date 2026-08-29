@@ -6,6 +6,7 @@ ratified: by Kim
 date: 2026-07-20
 owner: kim.granlund
 supersedes: null
+intent-refs: idr-0003    # one of the three ratified naming investments idr-0003's own Why section names directly
 ---
 # ADR-0006 — Execute the simple-naming-paradigm rename campaign, estate-wide
 

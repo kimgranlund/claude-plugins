@@ -10,7 +10,7 @@ supersedes: adr-0011 (one clause of D7 only — the command production's require
   non-wrapper command name terminate in a VerbLex verb after an object phrase, as §3.1 adopted
   it. D7's skill/agent productions, D8's grandfather-and-ratchet posture, D9, and D10 all stand
   unamended; ADR-0014's §14.2 amendments and ADR-0015's §14.4 amendments stand unamended)
-intent-refs: null
+intent-refs: idr-0003    # same naming-grammar chain, the command production amendment
 ---
 # ADR-0016 — The command grammar gains a reserved verb-first head `lead-`; `lead-{scope}` conforms when scope resolves against the orchestrator scope pool
 
