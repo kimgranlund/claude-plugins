@@ -12,7 +12,7 @@ description: >-
 disable-model-invocation: false
 user-invocable: true
 argument-hint: "[blank for a full sweep | a scope instruction, e.g. 'repo hygiene only']"
-allowed-tools: ["Read", "Glob", "Write", "Agent", "Workflow", "Bash(node harness/scripts/chore_sweep_apply.mjs *)", "Bash(node harness/scripts/sweep_guard.mjs *)"]
+allowed-tools: ["Read", "Glob", "Write", "Agent", "Workflow", "Bash(node */scripts/chore_sweep_apply.mjs *)", "Bash(node */scripts/sweep_guard.mjs *)"]
 ---
 
 # sweep-chores
@@ -45,10 +45,21 @@ named it as a live routing target has been repointed to this skill in the same c
 1. **Concurrency guard, before anything else.** Two firings racing this repo's own
    `.claude/ops/` state have caused a full pre-emption of one firing's seats (the
    2026-08-17T18:45Z-vs-18:55Z duplicate firing — decision-watcher fully pre-empted — and a
-   `sync_main` quarantine near-miss the same day). Run:
+   `sync_main` quarantine near-miss the same day). Run, workspace-relative first:
    ```
    node harness/scripts/sweep_guard.mjs check --root .
    ```
+   `Cannot find module` (no vendored `harness/` — a consumer repo that only installed the
+   plugin) → retry the identical subcommand against the plugin-root form instead, never a third
+   path guess:
+   ```
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/sweep_guard.mjs check --root .
+   ```
+   Live-verified (#996): both forms of `check`/`start`/`end` below carry the same
+   workspace-relative-then-`${CLAUDE_PLUGIN_ROOT}` fallback, proven from a scratch repo with no
+   vendored `harness/` — the workspace-relative form throws `MODULE_NOT_FOUND` there and the
+   plugin-root form runs clean. Any other error (a real script failure, a bad flag) is not a
+   path problem — surface it as-is, don't retry.
    Exit 1 (a fresh marker, printed as JSON) → **decline this firing outright, do not fan out.**
    Report the in-flight marker's own `startedAt`/`session` verbatim and stop — never queue,
    retry, or silently wait; the other firing's own step 6 relays the real queue when it finishes.
@@ -57,16 +68,27 @@ named it as a live routing target has been repointed to this skill in the same c
    it is removed by `check` itself so this firing's own `start` never collides with it; name the
    override in this firing's eventual report, never swallow it silently.
 
-   Once clear, claim it immediately:
+   Once clear, claim it immediately, workspace-relative first:
    ```
    node harness/scripts/sweep_guard.mjs start --root . --session <this session's own id>
    ```
+   `Cannot find module` → retry against the plugin-root form, same as `check` above:
+   ```
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/sweep_guard.mjs start --root . --session <this session's own id>
+   ```
    And release it unconditionally at the very end of this procedure (step 8, success or failure
    alike — a sweep that errors out and never releases its own marker becomes the next firing's
-   false positive):
+   false positive), same fallback order once more:
    ```
    node harness/scripts/sweep_guard.mjs end --root .
    ```
+   `Cannot find module` → retry:
+   ```
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/sweep_guard.mjs end --root .
+   ```
+   If NEITHER form of `sweep_guard.mjs` resolves at any of the three subcommands, that is a real
+   script failure, not a path problem — report it and stop before fanning out, same as any other
+   script error (never fan out unguarded).
 2. **Banner check.** Whenever `.claude/ops/plan.md` does not exist — no ops
    queue has ever been produced here — show the banner (text below) now, before the sweep: the
    sweep itself is what creates that file, so a post-dispatch check destroys its own condition.
@@ -88,11 +110,16 @@ named it as a live routing target has been repointed to this skill in the same c
    })
    ```
    returns `{ scope, seatReports: {seat: reportText}, unmeasured: [...], plannerReport }`. Skip to
-   step 7 with that result. (Workspace-relative path, not `${CLAUDE_PLUGIN_ROOT}`, deliberately —
-   this skill is invoked cross-plugin by `mobilize-chores`, and `${CLAUDE_PLUGIN_ROOT}`'s
-   resolution across that boundary is unverified; this repo's own convention is already
-   workspace-root-relative for every documented script invocation, so this trades
-   install-elsewhere portability for behavior verified safe in THIS repo.) The Workflow path is
+   step 7 with that result. (Workspace-relative path first, deliberately — this repo's own
+   convention is already workspace-root-relative for every documented script invocation, and
+   it's what the live-proven firing below ran under. Unlike step 1 and step 7's scripts, this
+   `scriptPath` carries no verified plugin-root fallback: whether the Workflow tool resolves a
+   `${CLAUDE_PLUGIN_ROOT}`-style absolute `scriptPath` at all is unverified, and `chore-sweep.js`
+   itself can't be used to find out independently — it runs only inside the Workflow tool's own
+   injected wrapper (top-level `return`, `args`/`phase`/`log`/`agent`/`parallel` supplied
+   externally), so it isn't valid standalone JS a plain `node` invocation could probe. #996 rules
+   the not-found case below as the answer: skip straight to the Agent fallback, never a second
+   `scriptPath` guess.) The Workflow path is
    live-proven: the 2026-08-17T18:35Z all-three-seats firing ran it end-to-end clean — 4 agents
    returned, zero UNMEASURED, every payload block applied via step 7's script, plan verified on
    disk.
@@ -127,19 +154,26 @@ named it as a live routing target has been repointed to this skill in the same c
    also unnamed, the returned reports as context, naming every UNMEASURED seat. No seat returned
    at all → skip the planner dispatch; report the failed sweep, per-seat status and all.
 
-   **Script-not-found escape hatch.** This skill's paths (`harness/workflows/chore-sweep.js`,
-   `harness/scripts/chore_sweep_apply.mjs`) are workspace-relative, deliberately scoped to THIS
-   repo (see step 6's own path note above) — not proven portable to a differently-laid-out
-   install. The Workflow tool being available doesn't guarantee `scriptPath` resolves; if it
-   errors not-found, take the fallback branch immediately, same as "no Workflow tool" — never
-   retry the same path. If step 7's `chore_sweep_apply.mjs` call itself can't be resolved, apply
+   **Script-not-found escape hatch.** `harness/workflows/chore-sweep.js` (step 6's `scriptPath`)
+   is workspace-relative with no verified plugin-root fallback (see step 6's own path note above)
+   — not proven portable to a differently-laid-out install. The Workflow tool being available
+   doesn't guarantee `scriptPath` resolves; if it errors not-found, take the Agent fallback branch
+   immediately, same as "no Workflow tool" — never retry with a plugin-root `scriptPath` guess.
+   `harness/scripts/chore_sweep_apply.mjs` (step 7) is different: it carries its own
+   workspace-relative-then-`${CLAUDE_PLUGIN_ROOT}` fallback, same as step 1's `sweep_guard.mjs` —
+   try that fallback first. Only once BOTH forms of step 7's call fail to resolve, apply
    each seat's fenced, target-pathed blocks by hand per the contract stated there (`Write` each
    verbatim to its named path) and name the degradation in the sweep report — never skip payload
    application because the script that mechanizes it went missing.
 7. **Apply every returned payload.** For each seat's raw report text (Workflow or fallback path
-   alike), write it to a scratch file and run:
+   alike), write it to a scratch file and run, workspace-relative first:
    ```
    node harness/scripts/chore_sweep_apply.mjs SCRATCH_FILE --root .
+   ```
+   `Cannot find module` (no vendored `harness/`) → retry against the plugin-root form, same
+   fallback order as step 1's `sweep_guard.mjs`, live-verified the same way (#996):
+   ```
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/chore_sweep_apply.mjs SCRATCH_FILE --root .
    ```
    This is `chore-lead`'s own former step 3, mechanized: it extracts every fenced, target-pathed
    payload block and writes it to its named `.claude/ops/...` path verbatim — never edited or
@@ -155,7 +189,8 @@ named it as a live routing target has been repointed to this skill in the same c
    swept and any seats it excluded by name, per-seat status (returned · UNMEASURED · refused —
    read off each `chore_sweep_apply.mjs` run's own findings), any narrated-but-absent claims named
    explicitly, and the planner's queue unmodified. Then run
-   `node harness/scripts/sweep_guard.mjs end --root .` to release step 1's marker — this is the
+   `node harness/scripts/sweep_guard.mjs end --root .` (step 1's own workspace-relative-then-
+   `${CLAUDE_PLUGIN_ROOT}` fallback applies here too) to release step 1's marker — this is the
    very last action of the procedure, run on every exit path (a normal finish, a zero-return
    sweep, or an earlier failure branch below), never skipped.
 
