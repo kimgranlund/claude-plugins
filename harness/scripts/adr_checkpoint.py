@@ -8,10 +8,12 @@ Usage:
                                                                   classify's delta has been judged
   adr_checkpoint.py validate <checkpoint-path>                   integrity check ONLY: every
                                                                   stored hash is a well-formed
-                                                                  64-char sha256 digest, no ADR
-                                                                  source needed — for a write-relay
-                                                                  step to run right after landing
-                                                                  a checkpoint on disk (issue #987)
+                                                                  64-char sha256 digest AND every
+                                                                  stored status is a known value
+                                                                  (issue #1001), no ADR source
+                                                                  needed — for a write-relay step
+                                                                  to run right after landing a
+                                                                  checkpoint on disk (issue #987)
   adr_checkpoint.py selftest                                     prove the classifier on fixtures
 
 <adr-source> is either a DIRECTORY of one-ADR-per-file `*.md` or a single markdown FILE whose
@@ -116,8 +118,18 @@ garbage; `advance` always overwrites every entry fresh regardless, so it self-he
 `validate` is a standalone integrity check on an already-written checkpoint file for a write-relay
 step to run right after landing one on disk.
 
+issue #1001: `validate` also asserts every stored "status" is one of `{"accepted", "superseded"}`
+— the only two values this script's own `advance` ever writes (a proposed ADR is never
+checkpointed; see the checkpoint schema note above). A status outside that set is corrupted data,
+the same class of defect #987 already catches for hashes — most concretely, the un-stripped
+#991-shaped template comment (`accepted        # proposed | accepted | superseded`) landing IN
+the stored value because the frontmatter capture that produced it truncated at a continuation
+line instead of raising loudly. `validate` FAILs (exit 1) and names every offending id, rather
+than silently trusting a stored status a later `classify` run would compare against as if it were
+real.
+
 Exit codes: 0 clean · 1 unsupported shape (no ADR parsed from non-empty input) / validate found a
-malformed hash · 2 usage error.
+malformed hash or an unknown status · 2 usage error.
 """
 import hashlib
 import json
@@ -134,12 +146,20 @@ from pathlib import Path
 CHECKPOINT_FORMULA_VERSION = 2
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
+# issue #1001: a top-level YAML field line — no leading whitespace, `<name>:` then the first
+# line's worth of value. Matched per physical line (never re.MULTILINE across the whole block),
+# since the continuation rule below depends on testing EACH line's own leading whitespace.
+FIELD_START_RE = re.compile(r"^(\S+):\s?(.*)$")
+# The three fields this script ever reads out of frontmatter. Captured together by one helper
+# (parse_frontmatter_fields) rather than three separate regexes, so `id`/`status` can never drift
+# from `supersedes`'s own continuation-aware handling.
+FRONTMATTER_FIELD_NAMES = ("id", "status", "supersedes")
 # issue #991: a template placeholder inline-comment left on a frontmatter field
 # (`status: accepted        # proposed | accepted | superseded`, the un-stripped ADR-authoring
-# scaffold text) must never become part of the extracted value. The optional `(?:\s+#.*)?` group
-# eats a trailing ` # ...` comment before the end-of-line anchor; a field with no comment is
-# unaffected (the group simply matches empty).
-FIELD_RE = re.compile(r"^(id|status|supersedes)\s*:\s*(.+?)(?:\s+#.*)?\s*$", re.MULTILINE)
+# scaffold text) must never become part of the extracted value. Applied AFTER a field's
+# continuation lines (issue #1001) are joined, so a comment trailing the LAST line of a
+# multi-line value is stripped the same way a single-line value's comment always was.
+TRAILING_COMMENT_RE = re.compile(r"\s+#.*$")
 ADR_ID_RE = re.compile(r"adr-\d+")
 
 # issue #987: hash_adr's own hashlib.sha256().hexdigest() is unconditionally 64 lowercase hex
@@ -148,6 +168,11 @@ ADR_ID_RE = re.compile(r"adr-\d+")
 # unattended agent's write-relay step, per ops-write-sandbox-rules) and must never be silently
 # trusted as a valid prior value.
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
+
+# issue #1001: the only two values `advance` ever writes into a checkpoint's "status" field (see
+# the checkpoint schema note above) — a proposed ADR is never checkpointed at all. A stored status
+# outside this set is corrupted data, the same class of defect #987 already catches for hashes.
+KNOWN_STATUSES = {"accepted", "superseded"}
 
 # The second detection signal (issue #221): a forward supersession clause in an accepted ADR's
 # own BODY prose, read only when the frontmatter `supersedes:` field is null. Active voice only —
@@ -239,12 +264,56 @@ def body_supersedes_ids(text):
     return edges
 
 
+def parse_frontmatter_fields(block):
+    """issue #1001: continuation-aware capture of id/status/supersedes out of a raw YAML
+    frontmatter block (the text between the `---` fences). Pure — no I/O.
+
+    A YAML plain-scalar value may continue onto following lines that are indented (this
+    workspace's own ADR-0020 `supersedes:` field spans six lines this way) — the OLD single-line
+    `FIELD_RE` (anchored `^...$` with a non-newline-crossing `(.+?)`) silently truncated at the
+    first line break, so only the first target of a multi-target `supersedes:` was ever read.
+
+    The rule mirrors YAML's own plain-scalar folding: a line with NO leading whitespace starts a
+    fresh top-level field (whatever comes before its first `:` is the field name — tracked even
+    for fields this script doesn't care about, like `ratified:` or `date:`, so an indented
+    continuation line under THOSE fields is never mistaken for a value belonging to the
+    previously-open id/status/supersedes field). Every following line that DOES start with
+    whitespace is a continuation of whichever field is currently open, joined with a single space
+    — this is also why a continuation line containing its own `:` (ADR-0020's `ratified:` field
+    has one: "...same day: ratify stands...") is never misread as a new field: the leading-
+    whitespace check runs before the field-line pattern is ever tried.
+
+    Only once a field's lines are fully joined does the #991 trailing-comment strip run — so a
+    comment trailing the LAST line of a multi-line value is stripped exactly like a single-line
+    value's comment always was."""
+    fields = {}
+    current_name, current_parts = None, []
+
+    def flush():
+        if current_name in FRONTMATTER_FIELD_NAMES:
+            value = " ".join(part for part in current_parts if part).strip()
+            fields[current_name] = TRAILING_COMMENT_RE.sub("", value).strip()
+
+    for line in block.splitlines():
+        if line and not line[0].isspace():
+            flush()
+            m = FIELD_START_RE.match(line)
+            if m:
+                current_name, current_parts = m.group(1).strip().lower(), [m.group(2)]
+            else:
+                current_name, current_parts = None, []
+        elif current_name is not None:
+            current_parts.append(line.strip())
+    flush()
+    return fields
+
+
 def parse_frontmatter(text):
     """Extract id/status/supersedes from an ADR's frontmatter block. Pure — no I/O."""
     m = FRONTMATTER_RE.match(text)
     if not m:
         return None
-    fields = dict(FIELD_RE.findall(m.group(1)))
+    fields = parse_frontmatter_fields(m.group(1))
     supersedes = fields.get("supersedes", "null").strip()
     return {
         "id": fields.get("id", "").strip(),
@@ -554,6 +623,17 @@ def malformed_hash_entries(checkpoint):
     )
 
 
+def bad_status_entries(checkpoint):
+    """issue #1001: adr ids whose stored "status" isn't one of KNOWN_STATUSES — corrupted data
+    (e.g. the #991-shaped un-stripped template comment landing IN the value because a truncated
+    frontmatter capture fed `superseded_ids` and friends only a partial line) that must never be
+    trusted by a later `classify` as if it were a real prior status. Pure."""
+    return sorted(
+        adr_id for adr_id, rec in checkpoint.items()
+        if rec.get("status") not in KNOWN_STATUSES
+    )
+
+
 def unsupported_shape(source, skipped):
     """The loud failure: non-empty input, zero ADRs parsed. Names the dialects understood and
     samples the files that matched none, so an operator can tell an unsupported dialect apart from
@@ -679,22 +759,35 @@ def run_advance(adr_source, checkpoint_path):
 
 
 def run_validate(checkpoint_path):
-    """issue #987: a standalone integrity check on an ALREADY-WRITTEN checkpoint file — no ADR
-    source needed, since it checks the stored shape only. Meant for a write-relay step (e.g. an
-    unattended agent's fenced-payload apply, per ops-write-sandbox-rules) to run immediately
-    after landing a checkpoint on disk, catching a corrupted transcription before it's trusted
-    rather than after it's silently persisted for cycles."""
+    """issue #987 / #1001: a standalone integrity check on an ALREADY-WRITTEN checkpoint file —
+    no ADR source needed, since it checks the stored shape only. Meant for a write-relay step
+    (e.g. an unattended agent's fenced-payload apply, per ops-write-sandbox-rules) to run
+    immediately after landing a checkpoint on disk, catching a corrupted transcription before
+    it's trusted rather than after it's silently persisted for cycles. Two independent checks —
+    a malformed hash and an unknown status are different corruption shapes, and both are named
+    when both fire, not just the first one found."""
     old, _ = load_checkpoint(checkpoint_path)
     malformed = malformed_hash_entries(old)
-    if malformed:
+    bad_status = bad_status_entries(old)
+    if malformed or bad_status:
         print(f"adr_checkpoint validate · {checkpoint_path}")
-        print(
-            "  FAIL: {} stored hash(es) aren't well-formed 64-char sha256 digests -> {}".format(
-                len(malformed), ", ".join(malformed)
+        if malformed:
+            print(
+                "  FAIL: {} stored hash(es) aren't well-formed 64-char sha256 digests -> {}".format(
+                    len(malformed), ", ".join(malformed)
+                )
             )
-        )
+        if bad_status:
+            print(
+                "  FAIL: {} stored status value(s) aren't one of {} -> {}".format(
+                    len(bad_status), sorted(KNOWN_STATUSES), ", ".join(bad_status)
+                )
+            )
         return 1
-    print(f"adr_checkpoint validate · {checkpoint_path} · {len(old)} ADR(s) · all hashes well-formed")
+    print(
+        f"adr_checkpoint validate · {checkpoint_path} · {len(old)} ADR(s) · "
+        "all hashes well-formed, all statuses known"
+    )
     return 0
 
 
@@ -731,6 +824,59 @@ def selftest():
     assert parse_frontmatter(
         "---\ndoc-type: adr\nid: adr-0029\nstatus: proposed\nsupersedes: null\n---\n# body"
     )["status"] == "proposed"
+
+    # negative control: a single-line value (no continuation) parses identically to before the
+    # issue #1001 fix — proves continuation-awareness didn't touch the already-working common case
+    assert parse_frontmatter(
+        "---\ndoc-type: adr\nid: adr-0030\nstatus: accepted\nsupersedes: adr-0004\n---\n# body"
+    ) == {"id": "adr-0030", "status": "accepted", "supersedes": "adr-0004"}
+
+    # issue #1001: continuation-aware frontmatter field capture — ADR-0020's own REAL frontmatter
+    # (`.claude/docs/adr/0020-fleet-vocabulary-and-binding-heads.md`) as the MANDATORY positive
+    # control. Its `ratified:` field continues across four lines and its own continuation text
+    # contains a colon ("...tie-break by Kim same day: ratify stands...") that must never be
+    # misread as a new field start; its `supersedes:` field continues across six lines and names
+    # FOUR superseded ids (adr-0015, adr-0016, adr-0017, adr-0011) — the OLD FIELD_RE truncated
+    # this to just adr-0015, the exact bug this fix closes. `id`/`status` must come through
+    # unaffected by the continuation lines above and below them.
+    adr_0020_frontmatter_block = (
+        "doc-type: adr\n"
+        "id: adr-0020\n"
+        "status: accepted\n"
+        "ratified: rejected 2026-08-17T16:03Z (live, drain session) / ratified 16:04Z (live\n"
+        "  AskUserQuestion) / tie-break by Kim same day: ratify stands — see #518. Drafted 2026-08-17\n"
+        "  from Kim's live AskUserQuestion answers in a Cowork session; D5 ruled by Kim in a second\n"
+        "  AskUserQuestion round the same day (merge).\n"
+        "date: 2026-08-17\n"
+        "owner: kim.granlund\n"
+        "supersedes: adr-0015 (D1's role production insofar as RoleLex membership is closed to the\n"
+        "  coordinative three — the {scope}-{role} production itself stands unamended); adr-0016\n"
+        "  (D1 and D2 in full — the reserved `lead-` command head and its scope-resolution clause;\n"
+        "  D4's fence stands); adr-0017 (the RoleLex sizing posture only — its 10 execution-seat\n"
+        "  additions stand unamended); adr-0011 (D7's command production, already partially superseded\n"
+        "  by adr-0016, now superseded again by the three-head scheme in D3)\n"
+        "intent-refs: idr-0003    # same naming-grammar chain, the RoleLex/command-head reconciliation"
+    )
+    fm_0020 = parse_frontmatter("---\n" + adr_0020_frontmatter_block + "\n---\n# body")
+    assert fm_0020["id"] == "adr-0020", fm_0020
+    assert fm_0020["status"] == "accepted", fm_0020
+    assert superseded_ids(fm_0020["supersedes"]) == \
+        ["adr-0015", "adr-0016", "adr-0017", "adr-0011", "adr-0016"], fm_0020["supersedes"]
+    assert set(superseded_ids(fm_0020["supersedes"])) == \
+        {"adr-0015", "adr-0016", "adr-0017", "adr-0011"}, fm_0020["supersedes"]
+
+    # a continuation line that ALSO ends in a `# comment` — both behaviors (issue #1001's
+    # multi-line join and #991's trailing-comment strip) must compose, not just each work alone
+    fm_continuation_and_comment = parse_frontmatter(
+        "---\ndoc-type: adr\nid: adr-0031\nstatus: accepted\n"
+        "supersedes: adr-0002 (first target continues here\n"
+        "  onto a second line) and adr-0003   # trailing scratch note\n"
+        "---\n# body"
+    )
+    assert fm_continuation_and_comment["supersedes"] == \
+        "adr-0002 (first target continues here onto a second line) and adr-0003", \
+        fm_continuation_and_comment
+    assert superseded_ids(fm_continuation_and_comment["supersedes"]) == ["adr-0002", "adr-0003"]
 
     # body_supersedes_ids — the second detection signal (issue #221): ADR-0011's own REAL body
     # text (frontmatter `supersedes: null`, permanently frozen post-acceptance under the T4
@@ -1367,6 +1513,53 @@ def selftest():
         healed = json.loads(corrupt_checkpoint_path.read_text())["adrs"]["adr-0100"]["hash"]
         assert HASH_RE.match(healed), healed
 
+        # issue #1001: bad_status_entries unit-level — the #991-shaped un-stripped template
+        # comment landing IN the stored status (the exact corruption the old truncating FIELD_RE
+        # could produce) flags; both known values never do
+        assert bad_status_entries({
+            "adr-0001": {"status": "accepted"},
+            "adr-0002": {"status": "superseded"},
+            "adr-0003": {"status": "proposed"},
+            "adr-0004": {"status": "accepted        # proposed | accepted | superseded"},
+        }) == ["adr-0003", "adr-0004"]
+        assert bad_status_entries({}) == []
+
+        # end-to-end via run_validate: a checkpoint carrying one corrupted status must FAIL loudly
+        # (exit 1), naming the offending id — never silently pass a value a later `classify` run
+        # would then trust as a real prior status
+        bad_status_checkpoint_path = d / "bad-status-checkpoint.json"
+        bad_status_checkpoint_path.write_text(
+            json.dumps({
+                "formula_version": CHECKPOINT_FORMULA_VERSION,
+                "adrs": {
+                    "adr-0027": {
+                        "hash": "a" * 64,
+                        "status": "accepted        # proposed | accepted | superseded",
+                    },
+                },
+            }),
+            encoding="utf-8",
+        )
+        captured7 = io.StringIO()
+        with contextlib.redirect_stdout(captured7):
+            rc7 = run_validate(str(bad_status_checkpoint_path))
+        out7 = captured7.getvalue()
+        assert rc7 == 1, rc7
+        assert "FAIL" in out7 and "adr-0027" in out7, out7
+
+        # negative control: a checkpoint with only known statuses passes clean (exit 0, no FAIL)
+        good_status_checkpoint_path = d / "good-status-checkpoint.json"
+        save_checkpoint(good_status_checkpoint_path, {
+            "adr-0001": {"hash": "b" * 64, "status": "accepted"},
+            "adr-0002": {"hash": "c" * 64, "status": "superseded"},
+        })
+        captured8 = io.StringIO()
+        with contextlib.redirect_stdout(captured8):
+            rc8 = run_validate(str(good_status_checkpoint_path))
+        out8 = captured8.getvalue()
+        assert rc8 == 0, rc8
+        assert "FAIL" not in out8, out8
+
     print("adr_checkpoint selftest · PASS · body-clause supersession signal (issue #221: ADR-0011's "
           "real body text as positive control, scope-carrying edges, accepted-with-no-clause and "
           "proposed-ADR negative controls, active-voice-only), frontmatter parse, hashing, all "
@@ -1396,7 +1589,13 @@ def selftest():
           "vs. clean checkpoint file, and advance's unconditional self-heal of a corrupted entry)), "
           "and the issue #991 comment-unaware-FIELD_RE signal (a template placeholder inline-"
           "comment on status: stripped to the bare value — adr-0027's own live shape as positive "
-          "control — the same strip on id:/supersedes:, and a no-comment field left untouched)")
+          "control — the same strip on id:/supersedes:, and a no-comment field left untouched), "
+          "and the issue #1001 signals (continuation-aware frontmatter capture: ADR-0020's own "
+          "real multi-line ratified:/supersedes: shape extracting all four superseded ids with "
+          "id:/status: unaffected, a mid-continuation colon never misread as a new field, a "
+          "continuation line that also ends in a #991 trailing comment, and a single-line value "
+          "unchanged; plus bad_status_entries' unit cases and run_validate's FAIL/PASS on a "
+          "corrupted-vs-known status checkpoint)")
     return 0
 
 
