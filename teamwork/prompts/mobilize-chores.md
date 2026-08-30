@@ -214,8 +214,15 @@ sweep surfaced that's actually buildable.
    `build-leader`'s own frontmatter pin, since a repo-local model deviation lives only there —
    gh#968, the silent-inherit gap this line closes for the build path; `fleet-bootstrap`'s
    Phase 2 already applies the identical rule for the `product` seat, cited there — issue #919). The
-   dispatch prompt states the concrete return address (this session, or
-   the marshal seat relaying for it) per `agent-writing-rules`' never-name-without-an-address rule.
+   dispatch prompt states the concrete return address per `agent-writing-rules`' never-name-
+   without-an-address rule — **the address is `main`, never this session's own harness/fleet
+   name (issue #993):** an `Agent`-tool dispatch is in-process, so the dispatched seat's own
+   `SendMessage` reaches this session only at its in-process address `main`; the harness session
+   name (e.g. `plugins-62`) is a cross-session address a genuinely separate session's `agent_name`
+   field resolves to (`fleet-manifest-schema.md`), and a dispatched seat that tries that name
+   instead finds no such peer reachable. State the literal line in the sealed prompt, e.g. `Return
+   address: SendMessage to "main" (this dispatching session).` When a marshal is relaying on this
+   session's behalf, name that marshal's own resolved `agent_name` instead — never mix the two.
    The name is not optional and not cosmetic: `dispatch-ticket`'s Phase 5 stage 2a write-gate
    (ADR-0023(c), `references/plan-approval-write-gate.md`) holds every build at "pushed, not
    PR-opened" until the marshal posts an accept marker read off the build-leader seat's own
