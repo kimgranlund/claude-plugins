@@ -188,7 +188,13 @@ takeover record.
   now reliably a legacy pre-fix entry, not an expected ongoing writer gap — `fleet-connect`'s
   own Failure branches treat that case explicitly rather than folding it into "no live marshal." A
   background/background-subprocess row's `agent_name` keeps its existing meaning (the dispatched
-  `Agent`-tool name, or the subprocess's log-path/PID pointer).
+  `Agent`-tool name, or the subprocess's log-path/PID pointer). **This field is a cross-session
+  address only (issue #993).** It resolves the harness/fleet name a genuinely SEPARATE session is
+  reachable at from any other session that reads this file. A seat dispatched in-process via the
+  `Agent` tool (no separate session — e.g. a `build-<ticket-id>` build seat, or `planner`'s own
+  `fleet-bootstrap` Phase 5 dispatch) never reaches its own dispatcher through this field: it
+  addresses back via `SendMessage` to `main`, the in-process return address, stated explicitly in
+  its sealed dispatch prompt — reading this field instead finds no such peer reachable.
 - **`live_state.joined[].branch`** — the binding session's own `git rev-parse --abbrev-ref HEAD`
   at bind time (issue #932). Written today only by `fleet-bootstrap` Phase 1's `agent`/marshal
   bind — the only role a `fleet-bootstrap` run itself binds as a live terminal inheriting a
