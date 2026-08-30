@@ -206,7 +206,16 @@ ledger line, a one-line stale citation) may still land inline; anything semantic
 than one file skips the fix-inline branch below entirely — record the root cause and the fix's
 shape in a dated `## Findings` entry exactly as the inline path would, then dispatch a named
 `build-<slug>` build-leader (`Agent` tool) with that Findings entry as its sealed brief, rather
-than fixing it here. **No match** → the invoking session is not the marshal seat; proceed to
+than fixing it here. That sealed dispatch prompt also seals, verbatim: the return address line
+(`Return address: SendMessage to "main" (this dispatching session).` — an in-process Agent-tool
+seat reaches its parent only at `main`; the fleet `agent_name` is a cross-session address, #993);
+that no `accept-grant: authorized` is placed; and that the seat pushes, then holds at stage 2a
+reporting branch + HEAD SHA to the return address, never opening the PR itself — the full
+mechanics live in `teamwork:dispatch-ticket`'s `references/plan-approval-write-gate.md`, cited
+here rather than restated. The brief also seals that the build-leader isolates via
+`teamwork/scripts/dispatch_envelope.py`'s scratch clone, never `EnterWorktree` — a fork shares
+the host session's identity, so a fork's `EnterWorktree` pin is the host's own pin (issue #609,
+2026-08-30 comment). **No match** → the invoking session is not the marshal seat; proceed to
 fix-inline below exactly as written. No new marker is defined for this test (Kim's ruling, issue
 #961) — `agent_name` is the only signal read.
 
