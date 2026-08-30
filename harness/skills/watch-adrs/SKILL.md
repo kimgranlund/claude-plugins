@@ -200,7 +200,21 @@ version) before the next firing.
    re-affirmed existing candidate isn't "new" this time) and the current total pending, then
    include the two scratch files' full contents as fenced blocks headed by their real target paths
    (`.claude/ops/adr-checkpoint.json`, `.claude/ops/adr-queue.json`) — this IS the write, deferred
-   to the dispatching session. **Verify the checkpoint payload landed intact (issue #987) — a long
+   to the dispatching session. **The firing's own narrative report also ships as its own
+   target-pathed payload — never state-file payloads alone (issue #995).** Whenever this firing
+   found anything (any `new`/`amended`/`newly_superseded` id, any queued candidate) — i.e.
+   whenever this is not the no-op case named below — state "Report target:
+   `.claude/ops/reports/<UTC-timestamp>-decision-watcher.md`" (this seat's own name suffixing the
+   timestamp whenever the resolved scope names more than one seat, per the canonical convention
+   `watch-tickets`' own Failure branches state and this seat's Failure branches already cite; the
+   bare `.claude/ops/reports/<UTC-timestamp>.md` when decision-watcher is the sole seat in scope)
+   immediately followed by a fenced block headed with that exact path, carrying: the forward-mode
+   delta (every `new`/`amended`/`newly_superseded` id from step 1, plus `newly_superseded_edges`),
+   this firing's own judgment per candidate (step 2/3's reasoning, not just the id), the current
+   total pending, and any structural findings (an unsupported-shape halt, a `FORMULA MISMATCH`, an
+   unreachable `origin/main` coverage check) named plainly. Same discipline as `watch-tickets`'
+   own obligation: naming the report target path obligates emitting the fenced block in the same
+   message, never a bare mention. **Verify the checkpoint payload landed intact (issue #987) — a long
    fenced JSON blob reproduced through generated text can silently drop characters (the confirmed
    cause of a recorded sha256 periodically truncating to fewer than 64 hex chars), the same
    never-trust-a-write's-own-narration discipline `ops-write-sandbox-rules`' push-verification
@@ -221,7 +235,9 @@ version) before the next firing.
    outstanding, then ONE `AskUserQuestion` round covers all of it — never one round per candidate,
    regardless of how many firings contributed.
    **A clean no-op firing (nothing new/amended/newly-superseded this round) states that fact
-   directly — "nothing new this firing" — and omits every report-path mention entirely, per
+   directly — "nothing new this firing" — and omits every report-path mention entirely (#585),
+   including the `.claude/ops/reports/<ts>-decision-watcher.md` fence named above — that
+   obligation applies only to a firing that found something, per
    `ops-write-sandbox-rules`' payload-fence rule.** Never narrate a hypothetical per-firing report
    path conditionally ("this firing's own record would land at `.claude/ops/reports/<ts>.md` ...
    nothing new to persist") — that hedge is the same violation that rule already names (a path
@@ -309,7 +325,15 @@ file path; report that as an unsupported shape, never as a missing source).
    sampled>`.
 5. **Report — payload, not a write**, same fenced target-pathed contract as the forward mode's
    step 6 (`.claude/ops/revalidation-checkpoint.json`, `.claude/ops/revalidation-queue.json`).
-   **Any claim this report makes about the queue's PRE-EXISTING state — "unchanged", "empty", "already
+   **Also emits its own `.claude/ops/reports/<UTC-timestamp>[-decision-watcher].md` fenced
+   payload whenever at least one claim was sampled this firing (issue #995) — the same
+   "Report target: `<path>`, immediately followed by its own fenced block" obligation the forward
+   mode's step 6 states, never a bare mention.** The block carries the per-claim verdict table
+   (id · kind · verdict · one-line reason, `confirmed` rows included per this step's own tally
+   requirement below) plus any structural findings (`SourceUnreadable`, an empty extraction) named
+   plainly — the confirmed revalidation claim ids this mode resolves on its own are exactly the
+   evidence `chore-planner` needs cited without re-deriving it from `revalidation-queue.json`
+   alone (#995's own gap). **Any claim this report makes about the queue's PRE-EXISTING state — "unchanged", "empty", "already
    cleared", a named row still present or already resolved — is backed by a fresh read of
    `.claude/ops/revalidation-queue.json`'s REAL path directly (never step 3's scratch copy once
    `queue-add` has mutated it — by step 5 that copy already carries THIS firing's own new/updated rows,
@@ -400,21 +424,29 @@ that isn't from a ratified ADR routes to `save-lessons`'s own standing detectors
 
 Done when every `new`/`amended`/`newly_superseded` ADR this firing has been judged, every crossing
 candidate is queued (new or updated) on the scratch copy, the scratch checkpoint has been advanced
-(step 5, only after queueing succeeded), and the report exists carrying both files' full content
-as target-pathed payload for the dispatching session to apply — naming a batched confirm if a
-human is present, or deferring it plainly if not — **or, on a clean no-op firing with nothing new
-to persist, the report states that plainly and carries neither file-payload fence nor any
-report-path mention at all (step 6's no-op clause)**. NOT done while an ADR's delta goes unjudged,
-a candidate is queued twice, a stale citation is found but not named, the checkpoint advances
-before its delta was queued, this agent writes any knowledge-pack or state path itself instead of
-returning it as payload, or a no-op firing's report narrates a report path it never fences.
+(step 5, only after queueing succeeded), the report exists carrying both files' full content
+as target-pathed payload for the dispatching session to apply, and — on any firing that found
+something — the report ALSO ships as its own `.claude/ops/reports/<ts>[-decision-watcher].md`
+fenced payload matching `issue-sorter`/`repo-cleaner`'s own shape (issue #995) — naming a batched
+confirm if a human is present, or deferring it plainly if not — **or, on a clean no-op firing with
+nothing new to persist, the report states that plainly and carries neither file-payload fence nor
+any report-path mention at all, the `.claude/ops/reports/...` fence included (step 6's no-op
+clause, #585)**. NOT done while an ADR's delta goes unjudged, a candidate is queued twice, a stale
+citation is found but not named, the checkpoint advances before its delta was queued, this agent
+writes any knowledge-pack or state path itself instead of returning it as payload, a firing with
+findings never ships its own `.claude/ops/reports/...-decision-watcher.md` fenced block, or a
+no-op firing's report narrates a report path it never fences.
 
 **Revalidation mode is done** when every sampled claim carries a tri-state verdict, every
 `falsified`/`untestable` verdict is queued (new or updated, with a named owner) on the scratch
-copy, the scratch cursor has advanced only after that queueing succeeded, and the report carries a
+copy, the scratch cursor has advanced only after that queueing succeeded, the report carries a
 per-claim verdict table (id · kind · verdict · one-line reason, `confirmed` rows included) plus
-both revalidation files' full content as target-pathed payload — naming the next `file-bug`/
-`file-task` command per queued candidate, never run by this agent. NOT done while a sampled claim
-goes unjudged, a claim text extracted empty gets defaulted to `confirmed` instead of `untestable`,
-a falsified/untestable row queues with no owner, a `confirmed` verdict is folded into a bare tally
-with no per-claim row, or the cursor advances before every sampled claim was judged and queued.
+both revalidation files' full content as target-pathed payload, and — whenever at least one claim
+was sampled — that same verdict table also ships as its own
+`.claude/ops/reports/<ts>[-decision-watcher].md` fenced payload (issue #995) — naming the next
+`file-bug`/`file-task` command per queued candidate, never run by this agent. NOT done while a
+sampled claim goes unjudged, a claim text extracted empty gets defaulted to `confirmed` instead of
+`untestable`, a falsified/untestable row queues with no owner, a `confirmed` verdict is folded
+into a bare tally with no per-claim row, the cursor advances before every sampled claim was judged
+and queued, or a firing that sampled at least one claim never ships its own
+`.claude/ops/reports/...-decision-watcher.md` fenced block.

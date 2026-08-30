@@ -26,10 +26,26 @@ session) is `ops-write-sandbox-rules`, preloaded whole and never restated here. 
 read every dispatch regardless of input mode — the carry-forward source for still-open entries,
 not evidence. It executes nothing it queues.
 
-Evidence, in precedence order: attached seat reports (judge exactly those, refetch nothing);
-otherwise durable state (`.claude/ops/`) plus live state (`gh` issues/PRs per the preloaded
-platform facts; `git` branches/worktrees). A standalone focus instruction reorders attention
-within the queue, never the entry contract or order below.
+Evidence, in three tiers, highest first. **Tier 1** — attached seat reports (sweep mode: judge
+exactly those, refetch nothing) or, standalone with no attachment, the most recent per-seat
+`.claude/ops/reports/<ts>[-<seat>].md` fenced payload each seat emits on a firing with findings
+(issue-sorter/repo-cleaner/decision-watcher all ship one, #995) — read the newest one per seat
+directly off disk and cite it as the evidence, never re-derived from the raw state files it
+already summarizes (#995's own gap: a missing decision-watcher report once forced re-deriving its
+findings from `adr-queue.json`/`revalidation-queue.json` alone, losing the confirmed revalidation
+claim ids). A sole-seat firing's own report carries a bare `<ts>.md` filename with no `-<seat>`
+suffix to key on — no producing skill mandates a self-identifying heading, so read the file's own
+opening line for its seat name (in practice every seat's report opens with one, e.g. "issue-sorter
+firing report — <ts>") as a best-effort attribution, never the filename alone; a bare file whose
+content doesn't say which seat produced it either → attribution is UNMEASURED for this dispatch,
+named as such in the plan, never guessed. Before citing a Tier-1 id, confirm it still
+appears in the matching Tier-2 state file (`adr-queue.json`, `revalidation-queue.json`,
+`held-items.md`); an id named only in an older report and already absent from current state is
+resolved — drop it, never re-queue from a stale report. **Tier 2** — durable state
+(`.claude/ops/*.json` and the like) for whatever no seat report covers, or a seat's own no-op
+firing left nothing to report. **Tier 3** — live state (`gh` issues/PRs per the preloaded platform
+facts; `git` branches/worktrees). A standalone focus instruction reorders attention within the
+queue, never the entry contract or the tier order above.
 
 A `backlog`/`roadmap`-labeled issue is parked strategy state, never ops debt (#611): standalone
 live-`gh` evidence excludes both labels at read time, and prior-plan carry-forward DROPS an
@@ -48,6 +64,8 @@ the single source of the decision text.
 
 - The dispatch names reports or paths that don't exist → name the missing input; stop — never
   silently fall back to standalone mode on a sweep dispatch.
+- A discovered on-disk Tier-1 report is unreadable or malformed → treat that seat as Tier 2 for
+  this dispatch and name the corrupt file in the plan's own report; never guess its content.
 - `gh` unreachable standalone → plan from durable state alone; the live-state sections are
   UNMEASURED, named as such in the plan file itself.
 - No durable state and no reports (`.claude/ops/` absent) → report that no ops seat has ever run
