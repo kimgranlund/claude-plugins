@@ -17,19 +17,27 @@ body, not any other frontmatter field, and not a *second* edit to an `intent-ref
 carries a value.
 
 **Why this exists.** `intent-refs:` cites the upstream IDR an ADR's decision served — the field
-`doc_lint.py`'s T6 checks to WARN an "orphan ADR" (no citation at all). ADRs 0001–0013 predate the
-field's existence (added 2026-08-16, #316) and could never have carried it; ADRs 0014–0025 postdate
-it but shipped with `intent-refs: null` and were never revisited. Both groups are locked under T4
-the moment they reach `accepted`, so neither group had any structurally safe way to receive the
+`doc_lint.py`'s T6 checks to WARN an "orphan ADR" (no citation at all). At ADR-0027's own
+ratification (2026-08-28), 22 ADRs were orphaned this way: ADRs 0001–0013 predate the field's
+existence (added 2026-08-16, #316) and could never have carried it; ADRs 0014–0025 postdate it but
+shipped with `intent-refs: null` and were never revisited. Both groups were locked under T4 the
+moment they reached `accepted`, so neither group had any structurally safe way to receive the
 citation later — full re-supersession was rejected as disproportionate (22 near-duplicate ADRs
 whose only substantive delta is one frontmatter line; see ADR-0027's Alternatives). The gap this
 closes is idr-0002's own claim — the repo's git history is durable cold-start memory, and a fresh
-session should be able to recover *why a decision mattered* from the repo alone. An orphan ADR is
-a standing decision a cold session cannot trace back to its founding claim; leaving the 22 orphans
-permanently un-retrofitted would make idr-0002's guarantee false for all of them at once.
+session should be able to recover *why a decision mattered* from the repo alone. An orphan ADR is a
+standing decision a cold session cannot trace back to its founding claim; leaving the 22 orphans
+permanently un-retrofitted would have made idr-0002's guarantee false for all of them at once.
 
 **Full ruling:** `.claude/docs/adr/0027-narrow-t4-carve-out-for-intent-refs-backfill.md`
 (status: accepted, ratified by Kim, 2026-08-28, `intent-refs: idr-0002`).
+
+**Current state (as of this file's own writing, 2026-08-30):** PR #989 already used this carve-out
+to retrofit 19 of the 22 — only `adr-0008`, `adr-0024`, and `adr-0025` still WARN T6 today (no
+covering IDR was found for those three at retrofit time; see #989's own summary). The "22" figure
+above describes the situation ADR-0027 was ratified to address, not the live count — re-run
+`python3 docs/scripts/doc_lint.py .claude/docs/adr/*.md` for the current orphan set rather than
+trusting either number as it ages.
 
 ## What still FAILs
 
@@ -78,9 +86,11 @@ PR #989, docs 1.22.0 (README footer ledger, same version).
 
 ## Using this to retrofit an orphan ADR
 
-Populating `intent-refs:` on one of the 22 orphan ADRs is still a judgment call, never a mechanical
-one — which IDR (if any) the ADR's decision actually served needs an honest read of that ADR's own
-Decision text against the corpus's locked IDRs; not every orphan necessarily has one, and a
-citation should never be invented just to clear T6's WARN. The carve-out only removes the
+Populating `intent-refs:` on a still-orphaned ADR (`adr-0008`, `adr-0024`, `adr-0025` as of this
+writing — re-check with the `doc_lint.py` command above rather than trusting this list) is still a
+judgment call, never a mechanical one — which IDR (if any) the ADR's decision actually served needs
+an honest read of that ADR's own Decision text against the corpus's locked IDRs; not every orphan
+necessarily has one, and a citation should never be invented just to clear T6's WARN — PR #989 left
+these three uncited for exactly that reason, not as an oversight. The carve-out only removes the
 structural block on writing the field once that judgment is made — it says nothing about which
 value is correct.
