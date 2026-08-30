@@ -102,14 +102,26 @@ named it as a live routing target has been repointed to this skill in the same c
    `harness:issue-sorter` / `harness:repo-cleaner`), never the bare seat name, and WITHOUT a
    `name` (`agent-writing-rules`' Failure catalog: a bare `subagent_type` resolves ambiguously,
    and a named dispatch switches into teammate/mailbox mode and strands the report — gh#154 /
-   gh#157). Each dispatch's own prompt states three things explicitly, never left implicit: the
+   gh#157). Each dispatch's own prompt states four things explicitly, never left implicit: the
    resolved scope this sweep is running under, any seat step 4 excluded from it by name (so a
-   seat's own report carries the context of what else did-or-didn't run alongside it), and this
+   seat's own report carries the context of what else did-or-didn't run alongside it), this
    firing's own UTC timestamp — the sequence key this sweep and everything downstream of it
    (chore-planner's plan header, the eventual report filename) key on, never an incrementing sweep
    count (a count is only ever a program's OWN local tally, drifts the moment two sessions sweep
    concurrently, and this estate has already seen that drift surface as an informal "sweep #N"
-   label in unrelated changelog prose — never repeat that pattern here). A seat's dispatch failing
+   label in unrelated changelog prose — never repeat that pattern here) — and that seat's own
+   report target path, computed from the SAME timestamp named above, never re-derived by the
+   dispatched seat itself: `.claude/ops/reports/<the timestamp>-<seat-name>.md` (issue-sorter /
+   repo-cleaner / decision-watcher, whichever seat this dispatch is) whenever step 4's resolved
+   scope names more than one seat this firing, or the bare `.claude/ops/reports/<the
+   timestamp>.md` when this dispatch is the sole seat step 4 resolved to (a scoped single-seat
+   sweep, e.g. "repo hygiene sweep only") — the same canonical convention each seat's own
+   preloaded skill already states in its Failure branches (cited there, not restated here), never
+   re-decided per dispatch. Naming this path is what lets every seat's own fenced report block
+   (each seat's own preloaded skill states the "Report target: `<path>`, immediately followed by
+   its own fenced block" obligation; #995 closed the gap where `decision-watcher` alone skipped
+   it) land on a path the others agree with instead of silently colliding on the bare, unsuffixed
+   one (#774). A seat's dispatch failing
    to return → UNMEASURED for this sweep, others proceed. At least one seat returned → hand the
    bundle to `chore-planner` — one more `Agent` call, `subagent_type: "harness:chore-planner"`,
    also unnamed, the returned reports as context, naming every UNMEASURED seat. No seat returned
