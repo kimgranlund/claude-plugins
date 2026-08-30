@@ -32,6 +32,10 @@ authoring contracts, `doc_lint.py` the enforcement. No validator, no type.
 
 The class lives in frontmatter and is enforced mechanically, not requested politely.
 
+**One narrow, structurally-verified exception to Ledger's append-only rule exists** — an
+already-committed, accepted ADR may backfill its `intent-refs:` citation from empty/`null` to
+non-empty, and nothing else: `references/ledger-lock-carve-outs.md` (ADR-0027).
+
 ## Universal practices (every type)
 
 1. **Frontmatter is the type; prose is the payload.** Anything code must read — `doc-type`,
