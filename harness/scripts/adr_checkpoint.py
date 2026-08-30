@@ -102,7 +102,10 @@ one `"<announcer> -> <target>[ [<scope>]]"` string per edge — the frontmatter 
 always scope-less (a boolean field), the body-clause path's may name a scope.
 
 Checkpoint schema: {"formula_version": <int>, "adrs": {"<adr-id>": {"hash": "<sha256>",
-"status": "<accepted|superseded>"}}}. `formula_version` names which HASH_ADR/decision_content
+"status": "<proposed|accepted|superseded>"}}}. A proposed (not-yet-ratified) ADR IS checkpointed
+like any other — its own frontmatter's `status:` field is read verbatim, same as an accepted or
+superseded one; nothing in `scan_dir`/`scan_single_file` special-cases it out. `formula_version`
+names which HASH_ADR/decision_content
 formula computed the stored hashes (issue #945) — a checkpoint written before this field existed
 (pre-#929) reads as version 1. `classify` compares the stored version against
 CHECKPOINT_FORMULA_VERSION before diffing: a mismatch on a non-empty checkpoint is reported as its
@@ -118,15 +121,16 @@ garbage; `advance` always overwrites every entry fresh regardless, so it self-he
 `validate` is a standalone integrity check on an already-written checkpoint file for a write-relay
 step to run right after landing one on disk.
 
-issue #1001: `validate` also asserts every stored "status" is one of `{"accepted", "superseded"}`
-— the only two values this script's own `advance` ever writes (a proposed ADR is never
-checkpointed; see the checkpoint schema note above). A status outside that set is corrupted data,
-the same class of defect #987 already catches for hashes — most concretely, the un-stripped
-#991-shaped template comment (`accepted        # proposed | accepted | superseded`) landing IN
-the stored value because the frontmatter capture that produced it truncated at a continuation
-line instead of raising loudly. `validate` FAILs (exit 1) and names every offending id, rather
-than silently trusting a stored status a later `classify` run would compare against as if it were
-real.
+issue #1001: `validate` also asserts every stored "status" is one of `{"proposed", "accepted",
+"superseded"}` — the exact three-value enum the ADR template's own frontmatter comment states
+(`status: proposed        # proposed | accepted | superseded`) and this repo's own ADR-0027 lived
+through during its pre-ratification interval; a proposed ADR is checkpointed like any other (see
+the checkpoint schema note above). A status outside that set is corrupted data, the same class of
+defect #987 already catches for hashes — most concretely, the un-stripped #991-shaped template
+comment (`accepted        # proposed | accepted | superseded`) landing IN the stored value because
+the frontmatter capture that produced it truncated at a continuation line instead of raising
+loudly. `validate` FAILs (exit 1) and names every offending id, rather than silently trusting a
+stored status a later `classify` run would compare against as if it were real.
 
 Exit codes: 0 clean · 1 unsupported shape (no ADR parsed from non-empty input) / validate found a
 malformed hash or an unknown status · 2 usage error.
@@ -169,10 +173,13 @@ ADR_ID_RE = re.compile(r"adr-\d+")
 # trusted as a valid prior value.
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 
-# issue #1001: the only two values `advance` ever writes into a checkpoint's "status" field (see
-# the checkpoint schema note above) — a proposed ADR is never checkpointed at all. A stored status
-# outside this set is corrupted data, the same class of defect #987 already catches for hashes.
-KNOWN_STATUSES = {"accepted", "superseded"}
+# issue #1001: the exact three-value status enum the ADR template's own frontmatter comment
+# states (`status: proposed        # proposed | accepted | superseded`,
+# docs/skills/doc-writing-rules/references/templates/adr.md) — a proposed (not-yet-ratified) ADR
+# IS checkpointed like any other (see the checkpoint schema note above; this repo's own ADR-0027
+# carried "proposed" during its real pre-ratification interval). A stored status outside this set
+# is corrupted data, the same class of defect #987 already catches for hashes.
+KNOWN_STATUSES = {"proposed", "accepted", "superseded"}
 
 # The second detection signal (issue #221): a forward supersession clause in an accepted ADR's
 # own BODY prose, read only when the frontmatter `supersedes:` field is null. Active voice only —
@@ -1515,13 +1522,16 @@ def selftest():
 
         # issue #1001: bad_status_entries unit-level — the #991-shaped un-stripped template
         # comment landing IN the stored status (the exact corruption the old truncating FIELD_RE
-        # could produce) flags; both known values never do
+        # could produce) flags; all three known values (including "proposed" — a not-yet-ratified
+        # ADR is checkpointed like any other, per the ADR template's own three-value enum and
+        # ADR-0027's real pre-ratification interval) never do
         assert bad_status_entries({
             "adr-0001": {"status": "accepted"},
             "adr-0002": {"status": "superseded"},
             "adr-0003": {"status": "proposed"},
             "adr-0004": {"status": "accepted        # proposed | accepted | superseded"},
-        }) == ["adr-0003", "adr-0004"]
+            "adr-0005": {"status": "rejected"},
+        }) == ["adr-0004", "adr-0005"]
         assert bad_status_entries({}) == []
 
         # end-to-end via run_validate: a checkpoint carrying one corrupted status must FAIL loudly
@@ -1547,11 +1557,13 @@ def selftest():
         assert rc7 == 1, rc7
         assert "FAIL" in out7 and "adr-0027" in out7, out7
 
-        # negative control: a checkpoint with only known statuses passes clean (exit 0, no FAIL)
+        # negative control: a checkpoint with only known statuses passes clean (exit 0, no FAIL) —
+        # "proposed" included, since a not-yet-ratified ADR is a legitimately checkpointed status
         good_status_checkpoint_path = d / "good-status-checkpoint.json"
         save_checkpoint(good_status_checkpoint_path, {
             "adr-0001": {"hash": "b" * 64, "status": "accepted"},
             "adr-0002": {"hash": "c" * 64, "status": "superseded"},
+            "adr-0003": {"hash": "d" * 64, "status": "proposed"},
         })
         captured8 = io.StringIO()
         with contextlib.redirect_stdout(captured8):
