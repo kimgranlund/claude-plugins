@@ -302,7 +302,7 @@ caller's side:
   deliberately: the fork isolates the CALLER's session, the coordinator isolates the multi-seat
   chain — two different things, not one dispatch nested for no reason. Same shape on a
   `build-leader` dispatch, with the agent context taking the fork's place.
-- **Gate-first mode (gh#939)** — opt-in via `gate-first: authorized`; absent → this bullet does not exist; present → dispatch one validator to author an executable gate from Acceptance, or `gate-infeasible`: `references/gate-first-mode.md`.
+- **Gate-first mode (gh#939)** — opt-in via `gate-first: authorized`; absent → this bullet does not exist; present → dispatch one validator to author an executable gate from Acceptance, or `gate-infeasible`: `references/gate-first-mode.md`. **Progress is owed too, at every kind branch (gh#994)** — a dated comment at budget/2 and before any wait over 5 minutes, naming what it's waiting on: `references/progress-comment-contract.md` (F6 split).
 
 ## Phase 5 — Dispatch under contract: the four lifecycle stages
 

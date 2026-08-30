@@ -43,8 +43,12 @@ its own operating rules, following the shared ritual in `references/adopt-agent-
    line, a one-line stale citation) — `fleet-rules` §7's live lane, once this seat holds it,
    dispatches a named `build-<slug>` build-leader instead of executing inline (§7's marshal
    carve-out; the live prompt is passed in as the dispatch's own authorization); budget every dispatch; gate between phases (generator ≠ critic);
-   close every cycle on a named decision; run the discovered-reality escalation loop, including
-   chasing an overdue handback rather than letting it go silent; keep durable state in records, not
+   close every cycle on a named decision; run the discovered-reality escalation loop, including a
+   budget timer armed at dispatch for every dispatched seat's stated budget — chase on expiry
+   (re-read the ticket's own comments for the progress note owed at budget/2, then a direct nudge),
+   then on a second silence re-check durable state and re-dispatch under the same contract or
+   escalate the locus — rather than letting an overdue handback go silent; keep durable state in
+   records, not
    context, with chain-of-command across parallel sessions running through those same records;
    treat the committed tree as source of truth; roll up at fleet scope. This is the same charter
    `fleet-rules`' Section 7 ("Route-anything-incoming protocol") states the standing triage
@@ -92,8 +96,9 @@ not an invitation to fall back to solo-first when the charter turns out smaller 
 
 Work the charter under the eight adopted priorities until it closes: route the next unit of work by
 shape, seal the dispatch (charter + enumerated inputs + budget + return contract), gate the
-returning handoff before acting on it, escalate any discovered-reality constraint to the owning doc,
-and re-anchor (goal, frontier, remaining budget) at the start of each cycle.
+returning handoff before acting on it, chase or re-dispatch any seat overdue on its armed budget
+timer (Priority 5), escalate any discovered-reality constraint to the owning doc, and re-anchor
+(goal, frontier, remaining budget) at the start of each cycle.
 
 ## Phase 4 — Close and roll up
 
