@@ -92,3 +92,9 @@ Entry template (one per queued ruling/merge item):
 - Kind: ratification (a new proposed ADR, not yet merged)
 - Why it's queued here rather than resolved unattended: landing a new governance decision record is a real ratification call, outside the scope of any standing build-seat auto-merge grant. Investigation confirmed the tension is real and structural (all 22 orphan ADRs are T4-locked with no safe reverse-citation or legitimate-supersession path); ADR-0027 proposes a narrow, structurally-verified one-field carve-out (intent-refs: empty->non-empty only, diff-checked) rather than reopening accepted ADRs generally.
 - Status: resolved 2026-08-28 — Kim: "accept it." Ratified (status: accepted, ratified: by Kim) and merged via PR #988. Follow-up per-ADR retrofit sweep not yet dispatched.
+
+### 2026-08-31T19:30:00Z — branch protection on main: `gate` is now a required status check
+- Source: #1013's investigation (G14 detection was correct; #1010/#1011 were merged manually over a red gate check — an enforcement gap, not a detection gap)
+- Kind: merge-decision (standing)
+- Why it's queued here rather than resolved unattended: it is the ruling itself, recorded so a later marshal cites it
+- Status: resolved 2026-08-31 — RULING (Kim, live, interactive round): classic branch protection applied to `main` requiring the `gate` context (strict=false, enforce_admins=false). Non-admin merges are blocked on red; admin over-red merges become an explicit UI bypass rather than silent; direct pushes by the admin identity (the marshal's ops commits included) keep working via the admin exemption. Applied and verified via `gh api` the same round.
