@@ -133,6 +133,7 @@ If a skill is vendored out of the plugin (losing `${CLAUDE_PLUGIN_ROOT}`), the l
 
 Directories align with plugin names (ADR-0007).
 
+v3.19.1 · 2026-08-31 · version-bump-only release for two already-merged unversioned script changes (both direct-authored by Kim from the adia-sdlc adapter-tree restructure, merged without a bump — restores the version-is-the-update-cache-key invariant so installs actually receive them): PR #1010 (`harness_emit.py` `read_plugin()` + `release_gate.py` G3 read Claude-only frontmatter from `adapters/claude/skills/<name>/SKILL.md` when that tree exists, shared-root fallback otherwise) and PR #1011 (G2 sanctions `agents/` skill subdirs; G8 trusts explicit `plugin:name` citations and gains a per-plugin `.release-gate-g8-allow.json`). No new behavior in this bump itself.
 v3.19.0 · 2026-08-31 · closes #1008: `harness_emit.py`/`ship-plugin`/`release_gate.py` adopt the
 cross-harness FIDELITY doctrine from the user-level `author-cross-harness-plugins` skill
 (`references/surface-matrix.md`'s invocation-policy mapping + rule 5's degradation contract),
