@@ -123,7 +123,10 @@ def gate(root: Path, package: bool = False):
         if strays:
             fail("G2", f"components inside .claude-plugin/ ({strays[:3]}) -> only the manifest lives there")
     skills_dir = root / "skills"
-    SANCTIONED_SUBDIRS = {"evals", "references", "scripts", "assets"}  # ruled 2026-07-15
+    # "agents" added 2026-08-31 (adiahealth/adia-harness#23): skills/<name>/agents/openai.yaml is
+    # harness_emit.py's OWN Codex-overlay output — the estate carries 200+ such dirs; warning on
+    # the sanctioned generator's output was a G2/G15 self-contradiction, not a rogue topical dir.
+    SANCTIONED_SUBDIRS = {"evals", "references", "scripts", "assets", "agents"}  # ruled 2026-07-15
     rogue_dirs = []
     if skills_dir.is_dir():
         for d in sorted(skills_dir.iterdir()):
@@ -296,6 +299,21 @@ def gate(root: Path, package: bool = False):
     # resolves directly, the same way a live skill name does, with no allowlist entry owed.
     inventory = {p.parent.name for p in root.glob("skills/*/SKILL.md")}
     inventory |= {p.stem for p in root.glob("agents/*.md")}
+    # per-plugin allow file (2026-08-31, adiahealth/adia-harness#25): a plugin's own domain
+    # vocabulary (its gate/hook/compound-term names that read skill-shaped but aren't skills)
+    # lives in ITS repo as <plugin-root>/.release-gate-g8-allow.json — a flat JSON array of
+    # kebab tokens — instead of growing this file's estate-wide allow set with another
+    # plugin's domain terms. Malformed file -> ignored with a warn, never a crash.
+    g8_allow_file = root / ".release-gate-g8-allow.json"
+    if g8_allow_file.is_file():
+        try:
+            plugin_allow = json.loads(g8_allow_file.read_text(encoding="utf-8"))
+            if isinstance(plugin_allow, list):
+                inventory |= {t for t in plugin_allow if isinstance(t, str)}
+            else:
+                warn("G8", f"{g8_allow_file.name} is not a JSON array -> ignored")
+        except (json.JSONDecodeError, OSError) as e:
+            warn("G8", f"{g8_allow_file.name} unreadable ({e}) -> ignored")
     for sib in root.parent.glob("*/.claude-plugin/plugin.json"):
         inventory |= {p.parent.name for p in sib.parent.parent.glob("skills/*/SKILL.md")}
         inventory |= {p.stem for p in sib.parent.parent.glob("agents/*.md")}
@@ -686,6 +704,14 @@ def gate(root: Path, package: bool = False):
             # token directly glued to `.md` is exempted.
             if re.search(re.escape(tok) + r"\.md\b", text):
                 continue
+            # namespaced-citation class (2026-08-31, adiahealth/adia-harness#25): a token the
+            # file cites as `<plugin>:<tok>` (e.g. `teamwork:loop-rules`) is an EXPLICIT
+            # cross-plugin reference — the author named the owning plugin, so the sibling
+            # lookup's physical-co-location requirement doesn't apply (the cited plugin may
+            # live in a different repo entirely, as adia-sdlc's do). A bare token with no
+            # namespace anywhere in the file still fires — this trusts only the namespaced form.
+            if re.search(r"[a-z0-9][a-z0-9-]*:" + re.escape(tok) + r"\b", text):
+                continue
             stale.setdefault(tok, []).append(sk.parent.name)
     if stale:
         detail = "; ".join(f"`{t_}` in {', '.join(v[:3])}" for t_, v in sorted(stale.items()))
@@ -993,6 +1019,35 @@ def selftest():
             "a token glued to a literal .md file citation must not warn G8, no allowlist needed"
         body.write_text(body.read_text().replace(
             "\nsee agent-ui's `ancient-review.md` for the incident\n", ""))
+        # G8 namespaced-citation class (adiahealth/adia-harness#25): a token cited as
+        # `<plugin>:<tok>` must go quiet with no allowlist entry — the author named the
+        # owning plugin, so co-location isn't required. Same "ancient-review" token proven
+        # to fire bare above; here it's namespaced, the only variable changed:
+        body.write_text(body.read_text() +
+                         "\nroute deep dives to otherplugin:ancient-review per doctrine\n")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "G8" not in buf.getvalue(), \
+            "a namespaced plugin:name citation must not warn G8, no allowlist needed"
+        body.write_text(body.read_text().replace(
+            "\nroute deep dives to otherplugin:ancient-review per doctrine\n", ""))
+        # G8 per-plugin allow file (adiahealth/adia-harness#25): a token in the plugin's own
+        # .release-gate-g8-allow.json must go quiet; removing the file makes it fire again.
+        body.write_text(body.read_text() + "\nsee ancient-review for history\n")
+        (r / ".release-gate-g8-allow.json").write_text('["ancient-review"]')
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert "G8" not in buf.getvalue() or "ancient-review" not in buf.getvalue(), \
+            "a token in the plugin's own g8 allow file must not warn G8"
+        (r / ".release-gate-g8-allow.json").unlink()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            gate(r)
+        assert "ancient-review" in buf.getvalue(), \
+            "removing the g8 allow file must make the token fire again (reverse control)"
+        body.write_text(body.read_text().replace("\nsee ancient-review for history\n", ""))
         # Negative control: a genuine phantom name inside a sources.md-shaped table row
         # (pipe-delimited, backticked, "primary"/provenance vocabulary) but with NO ".md"
         # glued to it must still fire — proves the fix targets the literal ".md" glue, not
