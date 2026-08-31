@@ -1,3 +1,5 @@
 interface:
   display_name: "Bind Product"
   short_description: "Makes this session a dedicated product seat: it adopts the product-leader agent's own contract directly — loop authority (north star/foundation/releases), reading whether spec-lock has been earned, IDR/RDD authoring, bug-vs-requirement-gap adjudication at Verify, the retro, and citation-driven escalation — operating from docs:product-lifecycle-rules."
+policy:
+  allow_implicit_invocation: false

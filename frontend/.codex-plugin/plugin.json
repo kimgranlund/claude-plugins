@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "2.6.7",
+  "version": "2.6.8",
   "description": "Design and critique UI structure (layouts, flows, components, patterns), answer motion questions from a cited corpus (motion-rules), verify it all against non-functional bars (focus, i18n, perf, safety), and capture per-shape UI-feature ticket intake schemas (feature-intake-rules) \u2014 plus check-ui-change, which drives the live artifact instead of reasoning about it in the abstract.",
   "author": {
     "name": "Kim G / NONOUN"

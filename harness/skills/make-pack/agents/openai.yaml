@@ -1,3 +1,5 @@
 interface:
   display_name: "Make Pack"
   short_description: "Mint or grow a knowledge pack's reference corpus via question-led research waves: charter an axis, write the question set, gather dated sources, distill ask-shaped files, then register and validate."
+policy:
+  allow_implicit_invocation: false

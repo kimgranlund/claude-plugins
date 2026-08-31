@@ -1,3 +1,5 @@
 interface:
   display_name: "Fork Agent"
   short_description: "Runs one named agent's own contract as a background fork off the caller's session — the fork runs the target agent's definition inline, in the forked context, and only its final typed result reaches the caller."
+policy:
+  allow_implicit_invocation: false

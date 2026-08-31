@@ -1,3 +1,5 @@
 interface:
   display_name: "Check Entry File"
   short_description: "Audit and slim CLAUDE.md (and .claude/rules/) by classifying every line against the residency test and migrating evictions to their proper tier — checks to hooks, procedures to skills, subtree truths to rules — with a landing artifact for every behavior removed."
+policy:
+  allow_implicit_invocation: false

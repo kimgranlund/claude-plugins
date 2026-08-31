@@ -1,7 +1,7 @@
 {
   "name": "agent-protocols",
   "displayName": "Agent Protocols",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "A2UI knowledge packs \u2014 wire protocol/renderer, catalog design, the live conversational agent, and the training corpus \u2014 answering how @agent-ui/a2ui works from a cited repo corpus; named agent-protocols (not a2ui) to leave room for future Agent2Agent (A2A) protocol material.",
   "license": "MIT",
   "author": {

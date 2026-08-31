@@ -1,3 +1,5 @@
 interface:
   display_name: "Mobilize Chores"
   short_description: "Sweeps this repo's ops queue via /sweep-chores (or, given a ticket-id list instead of a scope, skips the sweep and mobilizes exactly those ids), then handles whatever's genuinely mobilizable — open tickets on the resolved backend (GitHub issues, local docs/tickets/, or an Option-C adapter) labeled feature, bug, or task with no build in flight and no open `Blocked-by:` dependency (#193) — never a `backlog`/`roadmap`-parked ticket (#611; a ticket-id list naming one still mobilizes it) — a blocked ticket whose blocker is itself mobilizable gets the blocker dispatched dependency-first instead of a bare skip (#558) — after one batched confirm (a leading `auto` argument skips it, for /goal loops and scheduled runs)."
+policy:
+  allow_implicit_invocation: false

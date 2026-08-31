@@ -1,3 +1,5 @@
 interface:
   display_name: "Init Repo"
   short_description: "Arms this session as a repo's working session, in one command: runs the built-in /init when no CLAUDE.md exists, makes this session adopt the team-lead contract, spawns the standing INTAKE sibling (docs' intake-leader), and wires per-ticket build capacity (build-leader dispatches) — then reports the armed arrangement."
+policy:
+  allow_implicit_invocation: false

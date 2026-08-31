@@ -1,3 +1,5 @@
 interface:
   display_name: "Build Feature"
   short_description: "Builds a feature from its durable record, running the /file-feature intake first when none exists, then building."
+policy:
+  allow_implicit_invocation: false

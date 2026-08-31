@@ -1,3 +1,5 @@
 interface:
   display_name: "Check All Skills"
   short_description: "Audit a whole skills/ corpus as ONE system, not one skill."
+policy:
+  allow_implicit_invocation: false

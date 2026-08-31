@@ -1,3 +1,5 @@
 interface:
   display_name: "Fleet Connect"
   short_description: "The Terminal-A side handshake (#903): a user in a WORKING session runs /fleet-connect to wire this session to the repo's already-live marshal — read fleet.json's latest agent-role joined row, confirm liveness, SendMessage a handshake introducing this session, then adopt the working-session forwarding posture (fleet-shaped asks forward, milestone replies relay, everything else stays local) for the rest of the session."
+policy:
+  allow_implicit_invocation: false

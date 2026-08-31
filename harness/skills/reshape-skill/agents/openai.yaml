@@ -1,3 +1,5 @@
 interface:
   display_name: "Reshape Skill"
   short_description: "Execute an already-decided skill-corpus split, merge, or rename from its validated manifest."
+policy:
+  allow_implicit_invocation: false
