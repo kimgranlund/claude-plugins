@@ -372,14 +372,22 @@ class Grammar:
             residue = name[: -len("-agent")] if legacy else name
             if legacy and residue in skills:
                 return errs  # primary production: agent-of-skill (unchanged)
+            # vocab-stem production (2026-08-31, adiahealth/adia-harness): the residue may
+            # instead resolve wholly against ObjectVocab — a domain-scoped generalist agent
+            # (`sdlc-agent`, `build-agent`) whose stem names a registered domain token rather
+            # than one skill. Resolved against ObjectVocab ONLY (not ProcessLex/TopicLex), so
+            # a process word like `review` still needs the skill-stem or scope-role form —
+            # keeping the production narrow enough that an unregistered coinage still fails.
+            if legacy and self._resolve(residue.split("-"), self.objects)[0]:
+                return errs
             rtoks = residue.split("-")
             if len(rtoks) >= 2 and rtoks[-1] in self.role_lex:
                 ok, why = self.resolve_orchestrator_scope(rtoks[:-1])
                 return errs if ok else errs + [f"orchestrator scope: {why}"]
             if legacy:
                 return errs + [
-                    f"strip -agent -> {residue!r} is no extant skill and no "
-                    f"scope-role production (RoleLex: {sorted(self.role_lex)})"
+                    f"strip -agent -> {residue!r} is no extant skill, no ObjectVocab "
+                    f"term(s), and no scope-role production (RoleLex: {sorted(self.role_lex)})"
                 ]
             return errs + [
                 f"agent name {name!r} is no bare scope-role orchestrator name "
@@ -1136,6 +1144,27 @@ def selftest():
         result = run(r, orch_manifest)
         assert not result["grammar_errors"], \
             f"ProcessLex-scoped orchestrator name must parse clean: {result['grammar_errors']}"
+
+    # Positive: vocab-stem production (2026-08-31, adiahealth/adia-harness) — a
+    # {ObjectVocab-token}-agent name parses clean (a domain-scoped generalist agent).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "team-agent.md").write_text(agent_md("team-agent"))
+        result = run(r, orch_manifest)
+        assert not result["grammar_errors"], \
+            f"ObjectVocab-stem -agent name must parse clean: {result['grammar_errors']}"
+
+    # Negative: the vocab-stem production resolves against ObjectVocab ONLY — a
+    # ProcessLex word as the stem (`review-agent`) must still fail (skill-stem or
+    # scope-role remain the only doors for process words).
+    with tempfile.TemporaryDirectory() as td:
+        r = Path(td)
+        (r / "agents").mkdir(parents=True)
+        (r / "agents" / "review-agent.md").write_text(agent_md("review-agent"))
+        result = run(r, orch_manifest)
+        assert result["grammar_errors"], \
+            "a ProcessLex-stem -agent name must NOT parse via the vocab-stem production"
 
     # Regression: the legacy {scope}-{role}-agent spelling still parses (D1 keeps it
     # conformant by grammar, not by exemption).
