@@ -202,10 +202,24 @@ def read_plugin(root: Path):
                 raise SourceError(f"{sm}: missing name/description in frontmatter")
             s_name = fields["name"][0]
             s_desc = fields["description"][0]
-            command = fields.get("disable-model-invocation", ("false", 0))[0].strip().lower() == "true"
-            fork = fields.get("context", ("", 0))[0].strip().lower() == "fork"
+            # Cross-harness adapter-tree convention (author-cross-harness-plugins, gh adia-
+            # harness#35, #1008's own sibling gap): Claude-only invocation fields
+            # (disable-model-invocation, context: fork, argument-hint) may live on
+            # adapters/claude/skills/<name>/SKILL.md instead of this shared root file — the
+            # architecture doc requires the shared root to carry only the portable core.
+            # name/description/body stay root-sourced (the portable, shared content); read
+            # the invocation-control fields from the adapter when one exists, falling back to
+            # the root's own frontmatter for a skill with no adapter (unchanged behavior).
+            invocation_fields = fields
+            adapter_sm = root / "adapters" / "claude" / "skills" / d.name / "SKILL.md"
+            if adapter_sm.is_file():
+                adapter_lines = adapter_sm.read_text(encoding="utf-8").splitlines()
+                adapter_fields, _ = skill_lint.parse_frontmatter(adapter_lines)
+                invocation_fields = adapter_fields
+            command = invocation_fields.get("disable-model-invocation", ("false", 0))[0].strip().lower() == "true"
+            fork = invocation_fields.get("context", ("", 0))[0].strip().lower() == "fork"
             codex_default_prompt = fields.get("codex_default_prompt", (None, 0))[0]
-            argument_hint = fields.get("argument-hint", (None, 0))[0]
+            argument_hint = invocation_fields.get("argument-hint", (None, 0))[0]
             # fm_span is guaranteed here — the fields check above already raised SourceError
             # for any SKILL.md whose frontmatter didn't parse (fm_span is None only then).
             body = "\n".join(lines[fm_span[1] + 1:]).strip("\n")
