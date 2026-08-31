@@ -1,3 +1,5 @@
 interface:
   display_name: "Bind Team"
   short_description: "Makes this host session run under the fleet-marshal agent's own contract for one stated charter, never a separately dispatched agent — the host adopts routing/gating/budget/rollup discipline directly, dispatching every unit of real work while the charter stays open."
+policy:
+  allow_implicit_invocation: false

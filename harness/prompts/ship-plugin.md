@@ -28,9 +28,18 @@ Invoke `plugin-writing-rules` now — the gate order and every rule below are it
 
 ## Phase 4 — Report
 
+The `Cross-harness` line's `<d>` is Phase 2's own G15b WARN count (`0` when it stayed `ok`) —
+a count of skills whose bodies carry a Claude-only token
+(`${CLAUDE_PLUGIN_ROOT}`, `$ARGUMENTS`), each one already named in `HARNESS-NOTES.md`'s own
+degradation-inventory section (issue #1008). "Behavioral verification: none (structural only)"
+is a fixed, honest caveat, not a variable to fill in — G15/G15b prove the overlay FILES are
+fresh and every token degradation is recorded; neither one loads a skill inside a real Codex,
+Hermes, or Pi session (that's `--probe`'s job, run separately, never folded into this report).
+
 ```
 ship-plugin · <name> <old> → <new>
 Gate: clean (<n> files linted, <m> selftests green) · Evals: <present/missing per skill>
+Cross-harness: overlays fresh (codex,hermes,pi) · degradations: <d> (HARNESS-NOTES.md) · behavioral verification: none (structural only)
 Artifact: dist/<name>-<version>.plugin
 Delta: <the one-sentence delta>
 Reminders: consumers run /reload-plugins; SKILL.md edits hot-reload, nothing else does.

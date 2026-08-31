@@ -34,6 +34,10 @@ WHAT IT DERIVES (Codex)
     interface.display_name      <- title-cased skill `name` frontmatter
     interface.short_description <- skill `description`, first sentence only
     interface.default_prompt    <- optional skill frontmatter key codex_default_prompt
+    policy.allow_implicit_invocation <- false IFF the skill's own `disable-model-invocation:
+                                   true` (issue #1008, author-cross-harness-plugins'
+                                   surface-matrix.md invocation-policy mapping); omitted
+                                   entirely for an ordinary skill, never emitted as `true`
 
 WHAT IT DERIVES (Hermes)
   <plugin>/plugin.yaml
@@ -74,22 +78,46 @@ WHAT IT DERIVES (Pi)
   <workspace>/.agents/plugins/marketplace.json   (Codex only, estate-level; derived from the
     root .claude-plugin/marketplace.json 1:1)
 
-NOT DERIVED this wave: a plugin's own agents/*.md, hooks/hooks.json, and (on Codex/Hermes)
-the disable-model-invocation/context flags on a skill have no manifest key there — they are
-dropped with a note (Resolution 3, the degradation table) rather than guessed at. Pi's MCP
-cell is PASSTHROUGH, not generate-glue (T-2, #887 amendment, W4/#895): the third-party
-pi-mcp-adapter reads a project-local `.mcp.json` in the same `mcpServers` shape Claude Code
-uses, and that file already sits at the plugin root where a Pi install places it — nothing
-for this backend to write or copy. The Pi HARNESS-NOTES.md section documents the adapter's
-shape, the third-party-install caveat, and flags any `${...}` substitution token exactly as
-Codex/Hermes already do; verified once against the third-party adapter's own documented
-config contract (same filename, same `mcpServers` key, same `${VAR}` interpolation) — no
-adapter source lives in this repo to check further than that.
+NOT DERIVED this wave: a plugin's own agents/*.md and hooks/hooks.json have no manifest key
+on any backend, and (on Hermes only, as of #1008 — Codex's own invocation-policy mapping is
+now realized above) the disable-model-invocation flag, plus (on Codex/Hermes both) a skill's
+`context` flag, have no further manifest key — they are dropped with a note (Resolution 3, the
+degradation table) rather than guessed at. Pi's MCP cell is PASSTHROUGH, not generate-glue
+(T-2, #887 amendment, W4/#895): the third-party pi-mcp-adapter reads a project-local
+`.mcp.json` in the same `mcpServers` shape Claude Code uses, and that file already sits at the
+plugin root where a Pi install places it — nothing for this backend to write or copy. The Pi
+HARNESS-NOTES.md section documents the adapter's shape, the third-party-install caveat, and
+flags any `${...}` substitution token exactly as Codex/Hermes already do; verified once against
+the third-party adapter's own documented config contract (same filename, same `mcpServers`
+key, same `${VAR}` interpolation) — no adapter source lives in this repo to check further than
+that.
 
-WRITE / VERIFY / PROBE
+CROSS-HARNESS BODY-TOKEN INVENTORY (issue #1008, author-cross-harness-plugins'
+surface-matrix.md rule 5 — degradation is recorded, not guessed at). A skill's SKILL.md BODY
+(never its frontmatter — that's a harness's own manifest surface already handled above) can
+carry a Claude-only substitution token — `${CLAUDE_PLUGIN_ROOT}` or `$ARGUMENTS` — that a
+non-Claude harness reads verbatim as prose instead of expanding. `scan_claude_only_tokens()`
+finds every occurrence, per skill, and both HARNESS-NOTES.md's own degradation-inventory
+section and `release_gate.py`'s G15b WARN read off this SAME function — never two parallel
+implementations. One exception: `$ARGUMENTS` inside a COMMAND-ONLY skill's body is not a
+degradation on Pi specifically — Pi emits that skill as a native `prompts/<name>.md` prompt
+template where `$ARGUMENTS` is the real, working substitution mechanism (R-5 amendment, #888),
+not Claude-only prose. Every other combination (an ordinary skill's `$ARGUMENTS`, any skill's
+`${CLAUDE_PLUGIN_ROOT}`, or `$ARGUMENTS` on Codex/Hermes regardless of command status) degrades
+on every harness actually built this run.
+
+WRITE / VERIFY / PROBE / SCAN
   harness_emit.py <plugin-root> [--harness codex,hermes,pi]              # write
   harness_emit.py <plugin-root> --verify [--harness codex,hermes,pi]     # gate: exit 1 on drift
   harness_emit.py <plugin-root> --probe [--harness codex,hermes,pi]      # tri-state harness load
+  harness_emit.py <plugin-root> --scan-tokens [--harness codex,hermes,pi]  # info only, exit 0
+                                                                           # always: list skills
+                                                                           # whose bodies carry a
+                                                                           # Claude-only token
+                                                                           # (release_gate.py's
+                                                                           # G15b sources its WARN
+                                                                           # from this, never a
+                                                                           # second scan)
   harness_emit.py selftest                                               # prove the gate bites
 
 PROBE, established per CLI (Resolution 6 tier 2): Codex has no verified validator
@@ -111,7 +139,8 @@ Verdict line first: `harness_emit · <root> · CLEAN|STALE|ERROR · n target(s)`
 per finding.
 
 Exit: 0 clean/written · 1 drift found (--verify) · 2 setup error (unreadable manifest, or an
-unimplemented harness named explicitly via --harness).
+unimplemented harness named explicitly via --harness). --scan-tokens is informational only —
+0 (findings printed, if any) or 2 (setup error) — it never exits 1; it is not a freshness gate.
 """
 import json
 import os
@@ -302,6 +331,40 @@ def mcp_needs_substitution(mcp: dict):
     return flagged
 
 
+CLAUDE_ONLY_BODY_TOKEN_RE = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}|\$ARGUMENTS\b")
+
+
+def scan_claude_only_tokens(source, harnesses=DEFAULT_HARNESSES):
+    """[(skill_name, [(token, [affected_harness, ...]), ...]), ...] for every skill whose
+    SKILL.md BODY (never frontmatter — a frontmatter field is a harness's own manifest
+    surface, already handled by each backend above) carries a Claude-only substitution
+    token. Sorted by skill name, then token, so both HARNESS-NOTES.md's rendering and
+    release_gate.py's G15b get a deterministic order across reruns (G15's own freshness
+    diff depends on it).
+
+    One exception to "every built harness is affected": `$ARGUMENTS` inside a COMMAND-ONLY
+    skill's body is NOT a degradation on Pi — Pi emits that skill as a native
+    `prompts/<name>.md` prompt template where `$ARGUMENTS` is the real, working
+    substitution mechanism (R-5 amendment, #888), not Claude-only prose read verbatim.
+    Every other combination — `${CLAUDE_PLUGIN_ROOT}` on any skill, or `$ARGUMENTS` on an
+    ordinary (non-command) skill, or `$ARGUMENTS` on Codex/Hermes regardless of command
+    status — degrades on every harness this run actually builds; Codex/Hermes have no
+    argument- or path-substitution channel of their own."""
+    found = []
+    for s in sorted(source["skills"], key=lambda sk: sk["name"]):
+        tokens = sorted(set(CLAUDE_ONLY_BODY_TOKEN_RE.findall(s["body"])))
+        if not tokens:
+            continue
+        per_token = []
+        for tok in tokens:
+            affected = [h for h in harnesses]
+            if tok == "$ARGUMENTS" and s["command"] and "pi" in affected:
+                affected = [h for h in affected if h != "pi"]
+            per_token.append((tok, affected))
+        found.append((s["name"], per_token))
+    return found
+
+
 # ---------------------------------------------------------------------------
 # Ledger — the degradation record, rendered into HARNESS-NOTES.md
 # ---------------------------------------------------------------------------
@@ -315,6 +378,7 @@ class Ledger:
         self.command_skills = [s["name"] for s in source["skills"] if s["command"]]
         self.fork_skills = [s["name"] for s in source["skills"] if s["fork"]]
         self.mcp_flags = mcp_needs_substitution(source["mcp"]) if source["mcp"] else []
+        self.claude_only_tokens = scan_claude_only_tokens(source, harnesses=sorted(self.built))
 
     def render(self) -> str:
         s = self.source
@@ -323,6 +387,23 @@ class Ledger:
 
         def _list(items):
             return ", ".join(f"`{i}`" for i in items) if items else "none"
+
+        lines += ["## Cross-harness token degradations"]
+        if self.claude_only_tokens:
+            for skill_name, per_token in self.claude_only_tokens:
+                for tok, affected in per_token:
+                    kind = "path" if tok == "${CLAUDE_PLUGIN_ROOT}" else "argument"
+                    note = f"{kind} token is Claude-only; non-Claude harnesses read it verbatim."
+                    if tok == "$ARGUMENTS" and "pi" not in affected:
+                        note += (
+                            " (Pi excluded: its own `prompts/" + skill_name + ".md` "
+                            "substitutes this natively for this command-only skill.)"
+                        )
+                    affects = ", ".join(affected) if affected else "none this run"
+                    lines.append(f"- `{skill_name}` body — `{tok}`: affects {affects} — {note}")
+        else:
+            lines.append("- none.")
+        lines.append("")
 
         lines += [
             "## Codex",
@@ -340,7 +421,9 @@ class Ledger:
             )
         lines += [
             f"- Dropped — agents: {_list(self.dropped_agents)}; hooks: {_list(self.dropped_hooks)}.",
-            f"- Command-only skills now model-routable: {_list(self.command_skills)}.",
+            "- Command-only skills — human-only timing preserved via each skill's own "
+            f"`agents/openai.yaml` `policy.allow_implicit_invocation: false` (#1008): "
+            f"{_list(self.command_skills)}.",
             f"- Fork skills (their `context` field drops; body runs inline): {_list(self.fork_skills)}.",
         ]
         if self.mcp_flags:
@@ -511,6 +594,13 @@ class CodexBackend:
             ]
             if s["codex_default_prompt"]:
                 lines.append(f"  default_prompt: {yaml_scalar(s['codex_default_prompt'])}")
+            if s["command"]:
+                # Invocation-policy mapping (issue #1008, author-cross-harness-plugins'
+                # surface-matrix.md): Claude's disable-model-invocation: true has no direct
+                # Codex manifest key of its own short of this — policy.allow_implicit_invocation:
+                # false is the verified equivalent, so a command-only skill's human-only
+                # timing survives on Codex instead of silently degrading to model-routable.
+                lines += ["policy:", "  allow_implicit_invocation: false"]
             yaml_content = "\n".join(lines) + "\n"
             out.append((s["dir"] / "agents" / "openai.yaml", yaml_content.encode("utf-8")))
 
@@ -960,6 +1050,7 @@ argument-hint: "[target] [--flag]"
 
 # foo-bar
 body
+Uses ${CLAUDE_PLUGIN_ROOT}/scripts/x.mjs and $ARGUMENTS for its own invocation.
 """
 
 FIXTURE_SKILL_B = """---
@@ -1036,6 +1127,15 @@ def selftest():
         assert 'display_name: "Foo Bar"' in yaml_a, "display_name must be title-cased"
         assert 'short_description: "Does the thing."' in yaml_a, "short_description must be first sentence only"
 
+        # #1008 invocation-policy mapping (Codex): a command-only skill (foo-bar,
+        # disable-model-invocation: true) must emit the policy block; an ordinary skill
+        # (baz, disable-model-invocation: false) must NOT (negative control).
+        assert "policy:" in yaml_a and "allow_implicit_invocation: false" in yaml_a, \
+            "a command-only skill must emit policy.allow_implicit_invocation: false on Codex"
+        yaml_b = (plugin / "skills" / "baz" / "agents" / "openai.yaml").read_text()
+        assert "policy:" not in yaml_b, \
+            "an ordinary (non-command) skill must NOT emit a policy block (negative control)"
+
         # Hermes content predicates (W2, #890)
         plugin_yaml = (plugin / "plugin.yaml").read_text()
         assert 'name: "demo-plugin"' in plugin_yaml, "plugin.yaml name must mirror plugin.json"
@@ -1107,6 +1207,28 @@ def selftest():
             "a built Hermes overlay must render a real Hermes section, not the not-built-yet stub"
         assert "## Pi" in notes and "package.json" in notes.split("## Pi")[1], \
             "a built Pi overlay must render a real Pi section, not the not-built-yet stub"
+
+        # #1008 cross-harness body-token degradation inventory: foo-bar's body (see
+        # FIXTURE_SKILL_A) carries both ${CLAUDE_PLUGIN_ROOT} and $ARGUMENTS; baz's body
+        # carries neither (negative control, asserted below).
+        assert "## Cross-harness token degradations" in notes, \
+            "the degradation-inventory section must be rendered"
+        token_section = notes.split("## Cross-harness token degradations")[1].split("## Codex")[0]
+        assert "`foo-bar`" in token_section and "${CLAUDE_PLUGIN_ROOT}" in token_section, \
+            "foo-bar's ${CLAUDE_PLUGIN_ROOT} body token must be inventoried"
+        assert "$ARGUMENTS" in token_section, "foo-bar's $ARGUMENTS body token must be inventoried"
+        ts_lines = [ln for ln in token_section.splitlines() if ln.startswith("- `")]
+        args_line = next(ln for ln in ts_lines if "`$ARGUMENTS`" in ln)
+        path_line = next(ln for ln in ts_lines if "${CLAUDE_PLUGIN_ROOT}" in ln)
+        assert ", pi" not in args_line.split(":", 1)[1].split("—")[0], \
+            "foo-bar is command-only -> $ARGUMENTS's affected set must exclude pi " \
+            f"(Pi substitutes it natively via prompts/foo-bar.md); line was: {args_line!r}"
+        assert "Pi excluded" in args_line, \
+            "the pi-native-substitution fallback note must explain the exclusion, not just omit pi silently"
+        assert ", pi" in path_line.split(":", 1)[1].split("—")[0], \
+            f"${{CLAUDE_PLUGIN_ROOT}} has no Pi-native equivalent -> pi must stay in its affected set; line was: {path_line!r}"
+        assert "`baz`" not in token_section, \
+            "baz's body carries no Claude-only token -> it must not appear in the inventory"
 
         # W4 (T-2, #887/#895): Pi's MCP row must read PASSTHROUGH, never drop-with-note, and
         # must carry the third-party-adapter caveat plus its own needs-substitution flag —
@@ -1264,6 +1386,33 @@ def selftest():
         code, findings, _ = run(bad_pkg_plugin, harnesses=["pi"], verify=True, workspace_root=scratch)
         assert code == 2, "an unparseable pre-existing package.json must be a setup error, not silently discarded"
 
+        # #1008 --scan-tokens CLI leg: proves the actual subprocess path release_gate.py's
+        # G15b invokes, not just the pure scan_claude_only_tokens() function underneath it.
+        emit_script = Path(__file__).resolve()
+        r = subprocess.run(
+            [sys.executable, str(emit_script), str(plugin), "--scan-tokens", "--harness", "codex,hermes,pi"],
+            capture_output=True, text=True,
+        )
+        assert r.returncode == 0, f"--scan-tokens must exit 0 (informational, never a gate): {r.stderr}"
+        assert "token-degradation: foo-bar -> $ARGUMENTS, ${CLAUDE_PLUGIN_ROOT}" in r.stdout, \
+            f"--scan-tokens must print a token-degradation line naming foo-bar and both tokens, got: {r.stdout}"
+        assert "baz" not in r.stdout, "baz carries no Claude-only token -> must not appear in --scan-tokens output"
+
+        # negative control: a plugin whose skill bodies carry no Claude-only token -> CLEAN, no findings
+        r2 = subprocess.run(
+            [sys.executable, str(emit_script), str(no_skills), "--scan-tokens"],
+            capture_output=True, text=True,
+        )
+        assert r2.returncode == 0 and "CLEAN" in r2.stdout and "token-degradation:" not in r2.stdout, \
+            f"a zero-skill plugin must scan CLEAN with no findings, got: {r2.stdout}"
+
+        # negative control: an unreadable manifest is a setup error (exit 2), never a silent CLEAN
+        r3 = subprocess.run(
+            [sys.executable, str(emit_script), str(empty), "--scan-tokens"],
+            capture_output=True, text=True,
+        )
+        assert r3.returncode == 2, "--scan-tokens against an unreadable manifest must be a setup error, not CLEAN"
+
     print("harness_emit selftest · PASS · write/verify roundtrip (codex+hermes+pi), hand-edit bite "
           "(all three backends), orphan detection (openai.yaml + hermes-mcp.yaml + prompts/*.md), "
           "MCP substitution flagging, __init__.py register_skill template, package.json merge-only, "
@@ -1285,6 +1434,7 @@ def main(argv):
     root = Path(argv[0]).resolve()
     verify = "--verify" in argv[1:]
     do_probe = "--probe" in argv[1:]
+    do_scan_tokens = "--scan-tokens" in argv[1:]
     harnesses = DEFAULT_HARNESSES
     for a in argv[1:]:
         if a.startswith("--harness"):
@@ -1304,6 +1454,24 @@ def main(argv):
                 code = 1
         print("\n".join(lines))
         return code
+
+    if do_scan_tokens:
+        # Informational only — never a freshness gate on its own; exit 0 unless the plugin
+        # itself can't be read at all (a setup error, same discipline as every other mode).
+        # release_gate.py's G15b subprocess-calls exactly this mode and parses its
+        # `token-degradation:`-prefixed lines rather than re-implementing the scan.
+        try:
+            source = read_plugin(root)
+        except SourceError as e:
+            print(f"harness_emit scan-tokens · {root} · ERROR · {e}")
+            return 2
+        found = scan_claude_only_tokens(source, harnesses=harnesses)
+        verdict = "CLEAN" if not found else "FOUND"
+        print(f"harness_emit scan-tokens · {root} · {verdict} · {len(found)} skill(s)")
+        for skill_name, per_token in found:
+            toks = ", ".join(t for t, _ in per_token)
+            print(f"  token-degradation: {skill_name} -> {toks}")
+        return 0
 
     code, findings, targets = run(root, harnesses, verify=verify)
     verdict = {0: "CLEAN", 1: "STALE", 2: "ERROR"}[code]

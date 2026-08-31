@@ -1,3 +1,5 @@
 interface:
   display_name: "Make Plugin"
   short_description: "Forge a whole plugin from a domain intent — \"create a plugin with all the skills related to X\"."
+policy:
+  allow_implicit_invocation: false

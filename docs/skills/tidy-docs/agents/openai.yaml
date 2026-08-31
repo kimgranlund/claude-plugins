@@ -1,3 +1,5 @@
 interface:
   display_name: "Tidy Docs"
   short_description: "Align an existing repo's scattered documents (rfcs/, NOTES.md, near-miss dirs) to the canonical docs/ layout: inventory, classify, propose one migration plan, execute on approval with git mv (history preserved), frontmatter, and link repair."
+policy:
+  allow_implicit_invocation: false

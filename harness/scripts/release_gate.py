@@ -54,6 +54,15 @@ Gate order (plugin-writing-rules §Release discipline):
       selftest); exit 1 -> FAIL listing each stale/unexpected/marketplace-mismatch path; exit 2
       -> FAIL "emitter setup error"; no harness_emit.py on this checkout -> not applicable.
       G15_HARNESSES = codex,hermes,pi as of W3 (gh#891).
+  G15b Claude-only body-token inventory (issue #1008, author-cross-harness-plugins'
+      surface-matrix.md rule 5): WARN-only, NEVER FAIL — runs
+      `harness_emit.py <root> --scan-tokens --harness <G15_HARNESSES>` as a subprocess (same
+      never-import relationship G15 has to the emitter) and lists every skill whose SKILL.md
+      body carries a Claude-only substitution token (${CLAUDE_PLUGIN_ROOT}, $ARGUMENTS) that a
+      non-Claude harness reads verbatim; sourced from the SAME scan HARNESS-NOTES.md's own
+      degradation-inventory section renders, never a second implementation; a token-bearing
+      body is a known, recorded degradation, not a release blocker. No harness_emit.py on this
+      checkout -> not applicable.
 
 Exit 0 clean (warnings allowed), 1 on any FAIL.
 """
@@ -861,6 +870,28 @@ def gate(root: Path, package: bool = False):
         else:
             fail("G15", f"emitter setup error -> {(r.stdout + r.stderr).strip()[-300:]}")
 
+    # G15b Claude-only body-token inventory (issue #1008, author-cross-harness-plugins'
+    # surface-matrix.md rule 5) — WARN-only, never FAIL: a Claude-only token in a skill body
+    # is a known, recorded degradation (HARNESS-NOTES.md already names it), not a release
+    # blocker. Subprocess only, same as G15 — sources its finding list from the SAME scan
+    # `harness_emit.py --scan-tokens` runs for HARNESS-NOTES.md's own section, never a second
+    # implementation to drift apart from it.
+    if not emit_script.is_file():
+        warn("G15b", "harness_emit.py not present on this checkout -> token inventory not applicable")
+    else:
+        r15b = subprocess.run(
+            [sys.executable, str(emit_script), str(root), "--scan-tokens", "--harness", G15_HARNESSES],
+            capture_output=True, text=True,
+        )
+        if r15b.returncode != 0:
+            warn("G15b", f"scan setup error -> {(r15b.stdout + r15b.stderr).strip()[-300:]}")
+        else:
+            findings = [ln.strip() for ln in r15b.stdout.splitlines() if ln.strip().startswith("token-degradation:")]
+            if findings:
+                warn("G15b", f"{len(findings)} skill(s) carry Claude-only body tokens -> {'; '.join(findings)}")
+            else:
+                ok("G15b Claude-only body-token inventory: clean")
+
     # G6 package
     artifact = None
     if package and name and version and not fails:
@@ -1140,6 +1171,30 @@ def selftest():
         with contextlib.redirect_stdout(buf):
             code, _ = gate(r)
         assert code == 0 and "ok    G15" in buf.getvalue(), "rewriting the Pi overlay must restore a clean G15"
+        # G15b Claude-only body-token inventory (issue #1008): WARN, never FAIL — a
+        # token-free body stays quiet, a token-bearing body warns and names the carrying
+        # skill, and adding the token must never fail the gate outright the way a hand-edit
+        # fails G15.
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "ok    G15b" in buf.getvalue(), "a token-free body must stay quiet on G15b"
+        body.write_text(body.read_text() + "\nSee ${CLAUDE_PLUGIN_ROOT}/scripts/x.mjs for the script.\n")
+        w()  # HARNESS-NOTES.md's own degradation-inventory section derives from body content
+             # too (item 2) -> resync the overlay so this leg tests ONLY G15b, not a stale G15
+             # riding along as a side effect of the same body edit.
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0, "G15b is WARN-only -> a Claude-only body token must never FAIL the gate"
+        assert "warn  G15b" in buf.getvalue() and "demo-review" in buf.getvalue(), \
+            "a Claude-only body token must WARN G15b and name the carrying skill"
+        body.write_text(body.read_text().replace("\nSee ${CLAUDE_PLUGIN_ROOT}/scripts/x.mjs for the script.\n", ""))
+        w()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0 and "ok    G15b" in buf.getvalue(), "removing the token must restore a clean, quiet G15b"
         code, art = gate(r, package=True)
         assert code == 0 and art and art.exists(), "clean plugin must package"
         code, _ = gate(r, package=True)
