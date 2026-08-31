@@ -149,9 +149,25 @@ def gate(root: Path, package: bool = False):
         ok("structure: manifest isolated; every skill dir carries SKILL.md"
            + ("" if rogue_dirs else "; subfolders conform") + "; no broken symlinks")
 
-    # G3 full lint via skill_lint
-    targets = (sorted(root.glob("skills/*/SKILL.md")) + sorted(root.glob("agents/*.md"))
-               + sorted(root.glob("hooks/hooks.json")) + ([mf] if mf.is_file() else []))
+    # G3 full lint via skill_lint. Cross-harness adapter-tree convention (author-cross-harness-
+    # plugins, gh adia-harness#35): when a skill's Claude-only invocation dials
+    # (disable-model-invocation, user-invocable) live on adapters/claude/skills/<name>/SKILL.md
+    # instead of the shared root, the ADAPTER is what Claude actually reads — lint that instead
+    # of the root for such a skill (never both: the two bodies are required byte-identical by
+    # the adapter-fidelity rule, so linting the root too would just double-report the same body
+    # AND wrongly flag the root's own deliberately-absent invocation dials as missing). A skill
+    # with no adapter (no Claude-only fields needed) is unaffected -- root lints as before.
+    skill_targets = []
+    for skill_md in sorted(root.glob("skills/*/SKILL.md")):
+        adapter = root / "adapters" / "claude" / "skills" / skill_md.parent.name / "SKILL.md"
+        skill_targets.append(adapter if adapter.is_file() else skill_md)
+    # Same convention for hooks: adapters/claude/hooks.json is the Claude-facing file when the
+    # adapter tree is in use; hooks/hooks.json is the older pre-adapter-tree convention. Prefer
+    # the former, fall back to the latter, never both.
+    claude_hooks = root / "adapters" / "claude" / "hooks.json"
+    hooks_targets = [claude_hooks] if claude_hooks.is_file() else sorted(root.glob("hooks/hooks.json"))
+    targets = (skill_targets + sorted(root.glob("agents/*.md"))
+               + hooks_targets + ([mf] if mf.is_file() else []))
     lint_failed = []
     for t in targets:
         _, failed = skill_lint.lint_path(str(t))
