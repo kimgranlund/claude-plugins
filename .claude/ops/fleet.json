@@ -186,6 +186,10 @@
         {
           "repo": "agent-ui",
           "role": "agent-ui-marshal"
+        },
+        {
+          "repo": "adia-harness",
+          "role": "adia-sdlc"
         }
       ],
       "established": "2026-08-22",

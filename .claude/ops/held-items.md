@@ -98,3 +98,9 @@ Entry template (one per queued ruling/merge item):
 - Kind: merge-decision (standing)
 - Why it's queued here rather than resolved unattended: it is the ruling itself, recorded so a later marshal cites it
 - Status: resolved 2026-08-31 — RULING (Kim, live, interactive round): classic branch protection applied to `main` requiring the `gate` context (strict=false, enforce_admins=false). Non-admin merges are blocked on red; admin over-red merges become an explicit UI bypass rather than silent; direct pushes by the admin identity (the marshal's ops commits included) keep working via the admin exemption. Applied and verified via `gh api` the same round.
+
+### 2026-09-01T23:05:00Z — standing merge grant extended to adia-sdlc-relayed direct PRs
+- Source: Kim, live, plugins-marshal session (plugins-c4), asked at PR #1016's merge
+- Kind: merge-decision (standing)
+- Why it's queued here rather than resolved unattended: it is the ruling itself, recorded so a later marshal cites it
+- Status: resolved 2026-09-01 — RULING: a PR into this repo relayed by the adia-sdlc marshal session (adiahealth/adia-harness) merges on green CI + the marshal's own verification, the same flow as write-gate-accepted build-seat PRs (2026-08-28 grant). The sizing tripwire still applies (>3 substantive files outside floor riders, or a second plugin -> one confirm). Supersedable only by a later ruling naming this one. In the same round: adia-sdlc registered as a cross_repo_coordination participant in fleet.json (the grant presupposes the registered channel).
