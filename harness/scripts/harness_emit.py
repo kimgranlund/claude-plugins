@@ -384,9 +384,15 @@ def scan_claude_only_tokens(source, harnesses=DEFAULT_HARNESSES):
 # ---------------------------------------------------------------------------
 
 class Ledger:
-    def __init__(self, source, built=("codex",)):
+    def __init__(self, source, built=("codex",), marketplace_name=None):
         self.source = source
         self.built = set(built)
+        # The consuming repo's own registered marketplace name (root marketplace.json's
+        # `name` field — the same field estate_marketplace_target mirrors into the Codex
+        # marketplace file). None when this plugin has no estate marketplace.json to read
+        # (a standalone plugin outside the one-plugin-dir-per-workspace layout): the reader
+        # substitutes their own registered name, never this generator's own dev fixture name.
+        self.marketplace_name = marketplace_name or "<your-marketplace-name>"
         self.dropped_agents = list(source["agents"])
         self.dropped_hooks = list(source["hooks"])
         self.command_skills = [s["name"] for s in source["skills"] if s["command"]]
@@ -422,8 +428,8 @@ class Ledger:
         lines += [
             "## Codex",
             "- Loads via `.codex-plugin/plugin.json`; enable with the "
-            "`[marketplaces.nonoun-plugins]` + "
-            f'`[plugins."{s["name"]}@nonoun-plugins"]` entries in `~/.codex/config.toml`.',
+            f'`[marketplaces.{self.marketplace_name}]` + '
+            f'`[plugins."{s["name"]}@{self.marketplace_name}"]` entries in `~/.codex/config.toml`.',
         ]
         if self.mcp_flags:
             flags = ", ".join(f"`{n}.{f}`" for n, f in self.mcp_flags)
@@ -788,9 +794,42 @@ BACKENDS = {"codex": CodexBackend, "hermes": HermesBackend, "pi": PiBackend}
 # HARNESS-NOTES.md and estate marketplace are cross-backend, computed once
 # ---------------------------------------------------------------------------
 
-def notes_target(source, root: Path, harnesses=("codex",)):
-    ledger = Ledger(source, built=harnesses)
+def notes_target(source, root: Path, harnesses=("codex",), marketplace_name=None):
+    ledger = Ledger(source, built=harnesses, marketplace_name=marketplace_name)
     return root / "HARNESS-NOTES.md", ledger.render().encode("utf-8")
+
+
+def _marketplace_name(workspace_root):
+    """The consuming repo's own registered marketplace name — root marketplace.json's `name`
+    field, the same field estate_marketplace_target mirrors into the Codex marketplace file.
+    None when workspace_root is None or carries no marketplace.json (not applicable, not an
+    error) — the Ledger substitutes its own generic placeholder in that case, never a literal
+    borrowed from this generator's own dev fixture."""
+    if workspace_root is None:
+        return None
+    mf = workspace_root / ".claude-plugin" / "marketplace.json"
+    if not mf.is_file():
+        return None
+    return _read_json(mf).get("name")
+
+
+def _resolve_ledger_marketplace_name(root: Path, workspace_root):
+    """Marketplace name for the Ledger's Codex enable-instructions line ONLY. Tries
+    `workspace_root` first (the caller's own resolution, e.g. run()'s _infer_workspace_root —
+    "plugin directly under the workspace root"). When that finds nothing, also tries `root`'s
+    own grandparent when `root` sits under a `plugins/` directory (the layout adia-harness
+    itself uses — CLAUDE.md: "every plugin lives under `plugins/<name>/`" — and the same path
+    shape estate_marketplace_target emits). Scoped to naming only: this never widens what
+    triggers the estate-marketplace MIRROR FILE itself, which stays gated on
+    _infer_workspace_root's own stricter check, unchanged — avoids waking a separate, dormant
+    path-field mismatch in estate_marketplace_target's own plugin path synthesis."""
+    name = _marketplace_name(workspace_root)
+    if name is not None:
+        return name
+    resolved = root.resolve()
+    if resolved.parent.name == "plugins":
+        return _marketplace_name(resolved.parent.parent)
+    return None
 
 
 def estate_marketplace_target(workspace_root: Path):
@@ -819,7 +858,7 @@ def estate_marketplace_target(workspace_root: Path):
 # run / verify / write
 # ---------------------------------------------------------------------------
 
-def compute_targets(root: Path, harnesses):
+def compute_targets(root: Path, harnesses, workspace_root: Path = None):
     """Returns (targets: [(Path, bytes)], errors: [str]). A NotImplementedError from a
     backend named explicitly via --harness is a setup error, not a silent skip."""
     source = read_plugin(root)
@@ -827,7 +866,8 @@ def compute_targets(root: Path, harnesses):
     for h in harnesses:
         backend = BACKENDS[h]()
         targets += backend.targets(source, root)
-    targets.append(notes_target(source, root, harnesses=harnesses))
+    targets.append(notes_target(source, root, harnesses=harnesses,
+                                 marketplace_name=_resolve_ledger_marketplace_name(root, workspace_root)))
     return targets, source
 
 
@@ -863,8 +903,10 @@ def run(root: Path, harnesses=None, verify=False, workspace_root: Path = None):
     if unknown:
         return 2, [f"unknown harness(es): {', '.join(unknown)} -> {', '.join(BACKENDS)}"], []
 
+    ws = workspace_root or _infer_workspace_root(root)
+
     try:
-        targets, source = compute_targets(root, harnesses)
+        targets, source = compute_targets(root, harnesses, workspace_root=ws)
     except SourceError as e:
         return 2, [str(e)], []
     except NotImplementedError as e:
@@ -887,7 +929,6 @@ def run(root: Path, harnesses=None, verify=False, workspace_root: Path = None):
 
     # workspace-root marketplace check — Codex only, once per run
     if "codex" in harnesses:
-        ws = workspace_root or _infer_workspace_root(root)
         if ws is not None:
             mkt = estate_marketplace_target(ws)
             if mkt is not None:

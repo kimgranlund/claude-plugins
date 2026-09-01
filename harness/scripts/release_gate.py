@@ -1199,6 +1199,7 @@ def selftest():
         assert code == 0, "plugin listed in root marketplace.json must pass G13"
         mkt.unlink()
         mkt_dir.rmdir()
+        w()  # the marketplace name feeds HARNESS-NOTES (3.19.3); removing it changes the overlay too
         code, _ = gate(r)
         assert code == 0, "no root marketplace.json -> G13 not applicable, gate stays clean"
         # G15 harness overlay freshness leg (LLD-0025, gh#885/#886, 2026-08-23): a stale overlay
