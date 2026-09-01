@@ -44,16 +44,57 @@ const REPORT_PHRASES = ['report target', 'report destination']
 
 // A fence line is exactly three backticks immediately followed by the target path (no language
 // tag) — the ops-write-sandbox-rules shape: ```.claude/ops/adr-queue.json ... ```
-const FENCE_RE = /^```(\S+)\r?\n([\s\S]*?)\r?\n```$/gm
+//
+// Extraction is a nesting-aware line scanner, NOT a single lazy regex (issue #1014): the old
+// /^```(\S+)\r?\n([\s\S]*?)\r?\n```$/gm stopped a block's body at the FIRST bare closing-fence
+// line, so a payload that itself contained a nested ```-fenced code block was silently truncated
+// at that inner block's closer and written with exit 0. Inside an open block, an inner
+// `^```<token>$` line opens a nested fence (depth+1), a bare `^```$` line closes the innermost,
+// and only a depth-zero bare closer terminates the target-pathed block — matching the OUTERMOST
+// closing fence. An unterminated opener is not a block; its line falls through as plain text.
+const OPEN_FENCE_RE = /^```(\S+)$/
+const BARE_FENCE_RE = /^```$/
 
-/** Extract every fenced, target-pathed block. Returns { blocks: [{path, content}], sandboxed, outOfSandbox } */
-export function extractBlocks(reportText) {
+/**
+ * Scan the report line-by-line. Returns { blocks: [{path, content}], outsideText } where
+ * outsideText is every line outside a fenced block — what detectNarratedButAbsent scans, so a
+ * write verb inside a payload's own content never counts.
+ */
+function scanFences(reportText) {
+  const lines = reportText.split(/\r?\n/)
   const blocks = []
-  let m
-  FENCE_RE.lastIndex = 0
-  while ((m = FENCE_RE.exec(reportText)) !== null) {
-    blocks.push({ path: m[1], content: m[2] })
+  const outsideLines = []
+  let i = 0
+  while (i < lines.length) {
+    const open = OPEN_FENCE_RE.exec(lines[i])
+    if (open) {
+      let depth = 0
+      let closedAt = -1
+      for (let j = i + 1; j < lines.length; j++) {
+        if (OPEN_FENCE_RE.test(lines[j])) depth++
+        else if (BARE_FENCE_RE.test(lines[j])) {
+          if (depth > 0) depth--
+          else {
+            closedAt = j
+            break
+          }
+        }
+      }
+      if (closedAt !== -1) {
+        blocks.push({ path: open[1], content: lines.slice(i + 1, closedAt).join('\n') })
+        i = closedAt + 1
+        continue
+      }
+    }
+    outsideLines.push(lines[i])
+    i++
   }
+  return { blocks, outsideText: outsideLines.join('\n') }
+}
+
+/** Extract every fenced, target-pathed block. Returns { sandboxed, outOfSandbox } */
+export function extractBlocks(reportText) {
+  const { blocks } = scanFences(reportText)
   const sandboxed = blocks.filter((b) => b.path.startsWith(SANDBOX_PREFIX))
   const outOfSandbox = blocks.filter((b) => !b.path.startsWith(SANDBOX_PREFIX))
   return { sandboxed, outOfSandbox }
@@ -68,8 +109,9 @@ export function extractBlocks(reportText) {
  * (a claiming word/phrase paired with a path, not any mention).
  */
 export function detectNarratedButAbsent(reportText, sandboxedBlocks) {
-  // Strip fenced-block bodies first so a verb *inside* a payload's own content never counts.
-  const withoutFences = reportText.replace(FENCE_RE, '')
+  // Strip fenced-block bodies first so a verb *inside* a payload's own content never counts —
+  // via the same nesting-aware scanner extraction uses, so both views agree on block extents.
+  const withoutFences = scanFences(reportText).outsideText
   const backedPaths = new Set(sandboxedBlocks.map((b) => b.path))
   const verbRe = new RegExp(`\\b(${WRITE_VERBS.join('|')})\\b|(${REPORT_PHRASES.join('|')})`, 'i')
   const pathRe = /\.claude\/ops\/\S+/g
@@ -262,6 +304,59 @@ function selftest() {
     assert(oosCode === 1, 'an out-of-sandbox target path must exit 1 (refused)')
     assert(!existsSync(join(dir, 'harness/agents/decision-watcher.md')), 'an out-of-sandbox block must never be written')
 
+    // 4a. Nested-fence payload (issue #1014): a block whose content contains its own
+    //     ```-fenced code block must be written IN FULL to the outermost closing fence —
+    //     the old first-closer regex truncated it at the inner block's closer, exit 0.
+    const nested = [
+      '```.claude/ops/reports/nested.md',
+      'intro before the nested block',
+      '```txt',
+      'FORMULA MISMATCH console output',
+      '```',
+      'tail after the nested block — the part the old regex dropped',
+      '```',
+      'Prose after the payload; I also wrote .claude/ops/reports/nested.md this firing.',
+      '',
+    ].join('\n')
+    const nestedFile = join(dir, 'nested.md')
+    writeFileSync(nestedFile, nested)
+    const nestedCode = main([nestedFile, '--root', dir])
+    assert(nestedCode === 0, 'a nested-fence payload must apply cleanly (exit 0), its trailing write claim backed by the block')
+    const nestedWritten = existsSync(join(dir, '.claude/ops/reports/nested.md'))
+      ? readFileSync(join(dir, '.claude/ops/reports/nested.md'), 'utf8')
+      : ''
+    assert(nestedWritten.includes('tail after the nested block'), 'content after a nested fence must survive — the block ends at the OUTERMOST closing fence, not the first')
+    assert(nestedWritten.includes('```txt') && nestedWritten.includes('FORMULA MISMATCH'), 'the nested fence itself must be written verbatim inside the payload')
+
+    // 4b. Two sibling blocks around a nested one must still parse as separate blocks — the
+    //     outermost-closer rule must not swallow a later block into an earlier one.
+    const twoBlocks = [
+      '```.claude/ops/first.md',
+      'first payload',
+      '```md',
+      'inner',
+      '```',
+      'first tail',
+      '```',
+      'between the blocks',
+      '```.claude/ops/second.md',
+      'second payload',
+      '```',
+      '',
+    ].join('\n')
+    const twoBlocksFile = join(dir, 'two-blocks.md')
+    writeFileSync(twoBlocksFile, twoBlocks)
+    const twoBlocksCode = main([twoBlocksFile, '--root', dir])
+    assert(twoBlocksCode === 0, 'sibling blocks around a nested fence must both apply, exit 0')
+    assert(
+      existsSync(join(dir, '.claude/ops/first.md')) && readFileSync(join(dir, '.claude/ops/first.md'), 'utf8').includes('first tail'),
+      'the first block must carry its full content to its own outermost closer',
+    )
+    assert(
+      existsSync(join(dir, '.claude/ops/second.md')) && readFileSync(join(dir, '.claude/ops/second.md'), 'utf8').includes('second payload'),
+      'the second sibling block must still be extracted as its own block',
+    )
+
     // 5. Usage error: missing file → exit 2.
     const usageCode = main([join(dir, 'does-not-exist.md')])
     assert(usageCode === 2, 'a missing report file must exit 2 (usage error)')
@@ -365,7 +460,7 @@ function selftest() {
     return 1
   }
   console.log(
-    'chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/report-phrase-narrated/report-phrase-backed/sandbox-refusal/usage/spaced-path-entry-guard/staleness-guard all correct',
+    'chore_sweep_apply selftest · PASS · apply/narrated-but-absent/reverse-control/report-phrase-narrated/report-phrase-backed/sandbox-refusal/nested-fence/sibling-blocks/usage/spaced-path-entry-guard/staleness-guard all correct',
   )
   return 0
 }
