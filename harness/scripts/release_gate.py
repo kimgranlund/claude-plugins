@@ -883,8 +883,16 @@ def gate(root: Path, package: bool = False):
                     mono_ok, mono_msg = vmc.check_monotonic(version, main_version)
                     readme_text = (root / "README.md").read_text(encoding="utf-8", errors="replace") \
                         if (root / "README.md").is_file() else ""
-                    ledger_ok, ledger_msg = vmc.check_ledger(version, readme_text)
-                    if mono_ok and ledger_ok:
+                    # adiahealth/adia-harness#265: this used to call bare vmc.check_ledger, which
+                    # never composes the ticket-#249 Releases/tag fallback at all — a README with
+                    # NO ledger line (by design, once a plugin's ledger duty moves fully to
+                    # GitHub Releases) FAILed G14 permanently, with no way to pass. Composing
+                    # check_ledger_with_fallback here is the fix: same fallback source and
+                    # ahead-or-equal comparison semantics docs_check.py's own R3 already uses.
+                    ledger_ok, ledger_sev, ledger_msg = vmc.check_ledger_with_fallback(version, readme_text, git_root)
+                    if mono_ok and ledger_ok and ledger_sev == "WARN":
+                        warn("G14", f"version monotonicity: {mono_msg}; {ledger_msg}")
+                    elif mono_ok and ledger_ok:
                         ok(f"G14 version monotonicity: {mono_msg}; {ledger_msg}")
                     if not mono_ok:
                         fail("G14", mono_msg)
@@ -1280,6 +1288,59 @@ def selftest():
         code, _ = gate(r)
         assert code == 1, "bad manifest must fail G1"
     print("release_gate selftest · PASS · clean passes, packages once, refuses same-version, catches F8 and bad manifest")
+
+    # ---- adiahealth/adia-harness#265: G14 wiring to check_ledger_with_fallback, on real git
+    # plumbing (a real origin/main + a real git tag, not mocked run_fn) — proves the WIRING in
+    # release_gate.py itself, not just the underlying vmc function (already exhaustively
+    # unit-tested in version_monotonic_check.py's own selftest). ----
+    with tempfile.TemporaryDirectory() as td4:
+        repo_root = Path(td4)
+        subprocess.run(["git", "init", "-q", "-b", "main"], cwd=repo_root, check=True)
+        subprocess.run(["git", "config", "user.email", "t@t"], cwd=repo_root, check=True)
+        subprocess.run(["git", "config", "user.name", "t"], cwd=repo_root, check=True)
+        g14 = repo_root / "g14-demo"
+        (g14 / ".claude-plugin").mkdir(parents=True)
+        (g14 / ".claude-plugin" / "plugin.json").write_text(
+            '{"name": "g14-demo", "version": "1.0.0", "description": "d"}')
+        (g14 / "skills" / "demo-review").mkdir(parents=True)
+        (g14 / "skills" / "demo-review" / "SKILL.md").write_text(skill_lint.GOOD_FIXTURE)
+        (g14 / "README.md").write_text("g14-demo map: demo-review\n\nno ledger line at all\n")
+        w(g14)
+        subprocess.run(["git", "add", "-A"], cwd=repo_root, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "init"], cwd=repo_root, check=True)
+        main_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo_root, capture_output=True,
+                                   text=True, check=True).stdout.strip()
+        subprocess.run(["git", "update-ref", "refs/remotes/origin/main", main_sha], cwd=repo_root, check=True)
+
+        # Bump ahead of a real (plugin-prefixed) git tag -> G14 must WARN, not FAIL (#265's own
+        # regression case: before this fix, ahead-of-fallback FAILed permanently).
+        subprocess.run(["git", "tag", "g14-demo-v1.0.0"], cwd=repo_root, check=True)
+        (g14 / ".claude-plugin" / "plugin.json").write_text(
+            '{"name": "g14-demo", "version": "1.1.0", "description": "d"}')
+        subprocess.run(["git", "add", "-A"], cwd=repo_root, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "bump ahead of the tag, no ledger line ever added"], cwd=repo_root, check=True)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(g14)
+        out = buf.getvalue()
+        assert "FAIL  G14" not in out, f"G14 must not FAIL on a ledger-absent README ahead of the fallback tag: {out}"
+        assert "warn  G14" in out and "fallback" in out, f"G14 must WARN naming the fallback: {out}"
+
+        # Bump BEHIND a newer real tag -> G14 must FAIL for real (never a permanent, un-passable
+        # red, but also never a silent pass).
+        subprocess.run(["git", "tag", "g14-demo-v1.5.0"], cwd=repo_root, check=True)
+        (g14 / ".claude-plugin" / "plugin.json").write_text(
+            '{"name": "g14-demo", "version": "1.2.0", "description": "d"}')
+        subprocess.run(["git", "add", "-A"], cwd=repo_root, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "bump, but a newer tag already exists"], cwd=repo_root, check=True)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(g14)
+        out = buf.getvalue()
+        assert "FAIL  G14" in out and "BEHIND" in out, f"G14 must FAIL when plugin.json is behind the fallback: {out}"
+    print("release_gate selftest (adiahealth/adia-harness#265) · PASS · G14 composes "
+          "check_ledger_with_fallback on real git plumbing: ledger-absent + ahead-of-fallback "
+          "WARNs (the regression #265 reported), ledger-absent + behind-fallback FAILs for real")
     return 0
 
 

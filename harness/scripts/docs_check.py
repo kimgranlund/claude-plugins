@@ -10,8 +10,10 @@ Rules (the checkable slice; description *accuracy* stays with /ship-plugin and /
             README's own generated inventory block (the `<!-- inventory:begin` fence), when this
             plugin sits under one and that root README carries it
   R2 [FAIL] every skills/<name> appears in MANUAL.md (skipped if no MANUAL.md)
-  R3 [FAIL] README footer's version equals .claude-plugin/plugin.json version — OR (ticket #249)
-            the newest GitHub Release / git tag when the README carries no ledger line at all
+  R3 [FAIL] README footer's version equals .claude-plugin/plugin.json version — OR (ticket #249,
+            comparison semantics fixed by adiahealth/adia-harness#265) plugin.json's version is
+            AHEAD OF OR EQUAL TO the newest GitHub Release / git tag when the README carries no
+            ledger line at all (WARN, naming the fallback source); BEHIND is a real FAIL
   R4 [WARN] CLAUDE.md's stated skill count matches the tree (skipped if no CLAUDE.md — it
             doesn't ship in the artifact)
   R5 [WARN] every scripts/*.py is mentioned in README.md — same root-README fallback as R1
@@ -60,6 +62,13 @@ def _extract_version(tag):
     docstring for why this is a deliberate duplicate, not a shared import."""
     m = _TAG_VERSION_RE.search(tag)
     return m.group(1) if m else None
+
+
+def _vtuple(v: str):
+    """Pure. `"0.6.80"` -> `(0, 6, 80)`, integer comparison rather than string equality —
+    adiahealth/adia-harness#265: string `"0.6.9" == "0.6.9"` would misorder against `"0.6.10"`.
+    Same duplication rationale as `_extract_version`'s own docstring."""
+    return tuple(int(p) for p in v.split("."))
 
 
 def _newest_release_or_tag(root: Path, run_fn=None):
@@ -248,12 +257,20 @@ def check(root: Path, release_run_fn=None):
         # fallback on a match, never a silent PASS. A README that DOES carry a line but it's
         # wrong (the `elif` branch below) is unaffected — still a straight FAIL.
         source, fallback_version = _newest_release_or_tag(root, run_fn=release_run_fn)
-        if fallback_version is not None and version and fallback_version == version:
+        # adiahealth/adia-harness#265: version_tuple compare, not string equality — a branch
+        # STRICTLY AHEAD of the newest Release/tag (the normal pre-merge state of every open PR
+        # that bumped its version) is ok, EQUAL (the normal post-ship state of `main` once the
+        # matching Release is cut) is also ok; only BEHIND is a real FAIL. Both ok cases WARN
+        # naming the fallback source — a fallback determination, never a silent PASS.
+        if fallback_version is not None and version and _vtuple(version) >= _vtuple(fallback_version):
+            relation = "matches" if fallback_version == version else "is ahead of"
             findings.append(("WARN", "R3", f"README carries no ledger line; verified via fallback "
-                                            f"({source}): {fallback_version} matches plugin.json's {version}"))
+                                            f"({source}): plugin.json's {version} {relation} the newest "
+                                            f"{fallback_version}"))
         elif fallback_version is not None:
             findings.append(("FAIL", "R3", f"README carries no ledger line; fallback ({source}) "
-                                            f"newest is {fallback_version}, plugin.json says {version} -> mismatch"))
+                                            f"newest is {fallback_version}, plugin.json says {version} -> "
+                                            "plugin.json is BEHIND the newest Release/tag"))
         else:
             findings.append(("FAIL", "R3", "README carries no `vX.Y.Z` footer ledger line, and no "
                                             "GitHub Release or git tag resolves as a fallback either"))
@@ -385,14 +402,30 @@ def selftest():
         assert any(f[0] == "WARN" and f[1] == "R3" for f in findings_match), \
             f"positive control: a matching fallback must WARN by name (never a silent PASS): {findings_match}"
 
-        def _fallback_mismatch(*args):
+        # adiahealth/adia-harness#265: plugin.json (2.5.0) STRICTLY AHEAD of the fallback tag
+        # (2.4.0) — the normal pre-merge-PR shape — must still WARN, never FAIL. Before this fix
+        # this was a FAIL: the actual bug #265 reported.
+        def _fallback_ahead(*args):
             if args[:2] == ("gh", "release"):
                 return '[{"tagName": "v2.4.0"}]'
             raise AssertionError(f"unexpected call: {args}")
 
-        findings_mismatch = check(r3, release_run_fn=_fallback_mismatch)
-        assert any(f[0] == "FAIL" and f[1] == "R3" and "mismatch" in f[2] for f in findings_mismatch), \
-            f"negative control: a non-matching fallback must still FAIL R3: {findings_mismatch}"
+        findings_ahead = check(r3, release_run_fn=_fallback_ahead)
+        assert not any(f[0] == "FAIL" and f[1] == "R3" for f in findings_ahead), \
+            f"positive control (adiahealth/adia-harness#265): plugin.json ahead of the fallback must WARN, not FAIL R3: {findings_ahead}"
+        assert any(f[0] == "WARN" and f[1] == "R3" for f in findings_ahead), \
+            f"positive control: an ahead-of-fallback match must WARN by name: {findings_ahead}"
+
+        # Negative control: plugin.json (2.5.0) BEHIND the fallback tag (2.6.0) -> a real FAIL,
+        # never silently passed just because Releases/tags exist at all.
+        def _fallback_behind(*args):
+            if args[:2] == ("gh", "release"):
+                return '[{"tagName": "v2.6.0"}]'
+            raise AssertionError(f"unexpected call: {args}")
+
+        findings_behind = check(r3, release_run_fn=_fallback_behind)
+        assert any(f[0] == "FAIL" and f[1] == "R3" and "BEHIND" in f[2] for f in findings_behind), \
+            f"negative control: plugin.json behind the fallback must still FAIL R3: {findings_behind}"
 
         def _fallback_nothing(*args):
             raise RuntimeError("nothing resolves")
@@ -417,8 +450,10 @@ def selftest():
         assert any(f[0] == "WARN" and f[1] == "R3" for f in findings_prefixed), \
             f"positive control (live fixture shape): a plugin-prefixed GitHub Release tag must satisfy the R3 fallback: {findings_prefixed}"
 
-    print("docs_check selftest (ticket #249) · PASS · R3 Release/tag fallback WARNs on a match, "
-          "FAILs on a mismatch, FAILs when nothing resolves — never a silent PASS")
+    print("docs_check selftest (ticket #249, comparison semantics fixed by "
+          "adiahealth/adia-harness#265) · PASS · R3 Release/tag fallback WARNs when plugin.json "
+          "is ahead of or equal to the fallback (matched, ahead), FAILs when it's behind or "
+          "nothing resolves — never a silent PASS")
 
     # ---- Ticket #249 (adiahealth/adia-harness): R1/R5's marketplace-root-README fallback ----
     with tempfile.TemporaryDirectory() as td4:
