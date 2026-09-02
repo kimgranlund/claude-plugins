@@ -27,10 +27,15 @@ Checks:
             branch's own plugin.json version. Ticket #249 (adiahealth/adia-harness): a plugin
             README carrying no `vX.Y.Z` ledger line at all (rather than a stale/mismatched one)
             falls back to the newest GitHub Release or, when Releases are unreachable, the
-            newest `git describe --tags` tag — a match downgrades M3 to a [WARN] naming the
-            fallback source used, never a silent PASS and never blocking; no fallback match
-            either (or a README that DOES carry a ledger line but it's wrong) stays a [FAIL],
-            byte-identical to pre-#249 behavior for every plugin still carrying a README ledger.
+            newest `git describe --tags` tag — the branch version AHEAD OF OR EQUAL TO that
+            fallback (adiahealth/adia-harness#265: `version_tuple` compare, not string equality
+            — the normal pre-merge-PR and post-ship-main states respectively) downgrades M3 to a
+            [WARN] naming the fallback source used, never a silent PASS and never blocking; the
+            branch version BEHIND the fallback, no fallback resolving at all, or a README that
+            DOES carry a ledger line but it's wrong, all stay a [FAIL]. `release_gate.py`'s own
+            G14 block composes this exact function (`check_ledger_with_fallback`) rather than
+            calling bare `check_ledger` — adiahealth/adia-harness#265's root cause was G14
+            bypassing the fallback entirely.
 
 Exit 0 clean, SKIP, or WARN-only (all non-blocking), 1 on any FAIL, 2 on a usage error.
 
@@ -140,6 +145,43 @@ def resolve_release_ledger_fallback(git_root, run_fn=None):
     return None, None
 
 
+def check_ledger_with_fallback(branch_version: str, readme_text: str, git_root, run_fn=None):
+    """Composes `check_ledger` with the ticket-#249 fallback (`resolve_release_ledger_fallback`)
+    — the ONE place this composition lives; `run()` below and `release_gate.py`'s own G14 block
+    both call this rather than each re-deriving the fallback-triggering condition or its
+    comparison semantics. Returns `(ok: bool, severity: 'FAIL'|'WARN'|'ok', msg: str)`.
+
+    A README carrying a ledger line at all (even a stale/wrong one) never triggers the fallback —
+    that stays a straight FAIL, byte-identical to pre-#249 behavior. Only the "no ledger line at
+    all" case falls back to the newest GitHub Release or git tag.
+
+    Comparison semantics (this fix, adiahealth/adia-harness#265): the branch's `plugin.json`
+    version is compared against the fallback version with `version_tuple`, not string equality —
+    a branch STRICTLY AHEAD of the newest Release/tag (the normal pre-merge state of every open
+    PR that bumped its version) is ok; EQUAL (the normal post-ship state of `main` itself, once
+    the Release matching that version has been cut) is also ok; BEHIND is a real FAIL, never a
+    transient one. Both ahead and equal WARN naming the fallback source — this is a fallback
+    determination, never a silent PASS. No fallback resolving at all (no Release, no tag) stays a
+    FAIL naming that gap."""
+    ok_ledger, msg_ledger = check_ledger(branch_version, readme_text)
+    if ok_ledger:
+        return True, "ok", msg_ledger
+    if parse_ledger_version(readme_text) is not None:
+        return False, "FAIL", msg_ledger  # a ledger line exists but is wrong -> straight FAIL
+
+    source, fallback_version = resolve_release_ledger_fallback(git_root, run_fn=run_fn)
+    if fallback_version is None:
+        return False, "FAIL", (msg_ledger + "; fallback also unresolvable (no GitHub Release and "
+                                             "no local git tag)")
+    if version_tuple(branch_version) >= version_tuple(fallback_version):
+        relation = "matches" if fallback_version == branch_version else "is ahead of"
+        return True, "WARN", (f"README carries no ledger line; verified via fallback ({source}): "
+                               f"branch {branch_version} {relation} the newest {fallback_version}")
+    return False, "FAIL", (f"README carries no ledger line; fallback ({source}) newest is "
+                            f"{fallback_version}, plugin.json says {branch_version} -> plugin.json "
+                            "is BEHIND the newest Release/tag")
+
+
 def _git(args, cwd):
     return subprocess.run(["git", *args], capture_output=True, text=True, cwd=cwd)
 
@@ -197,25 +239,7 @@ def run(plugin_root: Path):
     readme_text = readme_path.read_text(encoding="utf-8", errors="replace") if readme_path.is_file() else ""
 
     ok_mono, msg_mono = check_monotonic(branch_version, main_version)
-    ok_ledger, msg_ledger = check_ledger(branch_version, readme_text)
-    ledger_sev = "FAIL"
-
-    # Ticket #249 (adiahealth/adia-harness): a README with NO ledger line at all (never a
-    # stale/mismatched one — that stays a straight FAIL, unchanged) falls back to the newest
-    # GitHub Release or git tag before failing outright.
-    if not ok_ledger and parse_ledger_version(readme_text) is None:
-        source, fallback_version = resolve_release_ledger_fallback(git_root)
-        if fallback_version is not None and fallback_version == branch_version:
-            ok_ledger = True
-            ledger_sev = "WARN"
-            msg_ledger = (f"README carries no ledger line; verified via fallback ({source}): "
-                          f"{fallback_version} matches plugin.json's {branch_version}")
-        elif fallback_version is not None:
-            msg_ledger = (f"README carries no ledger line; fallback ({source}) newest is "
-                          f"{fallback_version}, plugin.json says {branch_version} -> mismatch")
-        else:
-            msg_ledger = (msg_ledger + "; fallback also unresolvable (no GitHub Release and no "
-                           "local git tag)")
+    ok_ledger, ledger_sev, msg_ledger = check_ledger_with_fallback(branch_version, readme_text, git_root)
 
     ok = ok_mono and ok_ledger
     print(f"version_monotonic_check · {'clean' if ok else 'FAIL'}")
@@ -415,18 +439,64 @@ def selftest():
         code_warn = run(plugin2)
         assert code_warn == 0, "a ledger-absent README whose fallback (a real, plugin-prefixed git tag here) matches plugin.json must WARN, not FAIL — exit must stay 0"
 
-        # Negative control: the fallback tag does NOT match plugin.json's version -> still FAIL,
-        # never a silent pass just because Releases/tags exist at all.
+        # adiahealth/adia-harness#265 positive control: plugin.json is STRICTLY AHEAD of the
+        # fallback tag (the normal pre-merge-PR shape) -> still WARN/ok, exit stays 0. Before
+        # this fix, this was a FAIL — the actual bug #265 reported (0.6.80 vs newest 0.6.79).
         (plugin2 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo2", "version": "3.2.0"}')
         subprocess.run(["git", "add", "-A"], cwd=root2, check=True)
-        subprocess.run(["git", "commit", "-q", "-m", "bump again, tag never moved"], cwd=root2, check=True)
-        code_fail = run(plugin2)
-        assert code_fail == 1, "a ledger-absent README whose fallback tag does NOT match plugin.json must still FAIL"
+        subprocess.run(["git", "commit", "-q", "-m", "bump ahead of the fallback tag"], cwd=root2, check=True)
+        code_ahead = run(plugin2)
+        assert code_ahead == 0, "a ledger-absent README whose fallback tag is BEHIND plugin.json must WARN, not FAIL (adiahealth/adia-harness#265)"
 
-    print("version_monotonic_check selftest (ticket #249) · PASS · GitHub-Releases-preferred "
-          "fallback, git-tag fallback on Releases-unreachable, neither-resolves degrades to "
-          "(None, None) never raises, and run()'s end-to-end WARN-on-match / FAIL-on-mismatch "
-          "for a README with no ledger line at all, on real git plumbing")
+        # Negative control: plugin.json is BEHIND the fallback tag -> real FAIL, never silently
+        # passed just because Releases/tags exist at all.
+        subprocess.run(["git", "tag", "demo2-v3.5.0"], cwd=root2, check=True)
+        (plugin2 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo2", "version": "3.3.0"}')
+        subprocess.run(["git", "add", "-A"], cwd=root2, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "bump, but a newer tag already exists"], cwd=root2, check=True)
+        code_behind = run(plugin2)
+        assert code_behind == 1, "a ledger-absent README whose fallback tag is AHEAD of plugin.json must FAIL"
+
+    # check_ledger_with_fallback unit controls (adiahealth/adia-harness#265) — the composed
+    # function release_gate.py's own G14 block now calls directly, on injected git_root/run_fn
+    # so this never touches real git or the network.
+    class _FakeRoot:
+        """Stand-in for git_root — resolve_release_ledger_fallback only uses it as a subprocess
+        cwd when run_fn is None; run_fn is always supplied below, so it's never dereferenced."""
+
+    def _fallback_ahead(*args):
+        if args[:2] == ("gh", "release"):
+            return '[{"tagName": "v1.0.0"}]'
+        raise AssertionError(f"unexpected call: {args}")
+
+    ok_ahead, sev_ahead, msg_ahead = check_ledger_with_fallback("1.1.0", "no ledger here\n", _FakeRoot(), run_fn=_fallback_ahead)
+    assert ok_ahead and sev_ahead == "WARN", f"branch strictly ahead of the fallback must be ok/WARN: {(ok_ahead, sev_ahead, msg_ahead)}"
+
+    ok_equal, sev_equal, msg_equal = check_ledger_with_fallback("1.0.0", "no ledger here\n", _FakeRoot(), run_fn=_fallback_ahead)
+    assert ok_equal and sev_equal == "WARN", f"branch equal to the fallback (post-ship main) must be ok/WARN: {(ok_equal, sev_equal, msg_equal)}"
+
+    ok_behind, sev_behind, msg_behind = check_ledger_with_fallback("0.9.0", "no ledger here\n", _FakeRoot(), run_fn=_fallback_ahead)
+    assert not ok_behind and sev_behind == "FAIL" and "BEHIND" in msg_behind, \
+        f"branch behind the fallback must be a real FAIL, never transient: {(ok_behind, sev_behind, msg_behind)}"
+
+    def _fallback_nothing(*args):
+        raise RuntimeError("nothing resolves")
+
+    ok_none, sev_none, msg_none = check_ledger_with_fallback("1.0.0", "no ledger here\n", _FakeRoot(), run_fn=_fallback_nothing)
+    assert not ok_none and sev_none == "FAIL", f"no fallback resolving at all must FAIL, never silently pass: {(ok_none, sev_none, msg_none)}"
+
+    ok_line, sev_line, msg_line = check_ledger_with_fallback(
+        "1.1.0", "map: x\n\nv1.1.0 · 2026-08-16 · did a thing\n", _FakeRoot(), run_fn=_fallback_ahead)
+    assert ok_line and sev_line == "ok", \
+        f"a README that still carries a matching ledger line must skip the fallback entirely: {(ok_line, sev_line, msg_line)}"
+
+    print("version_monotonic_check selftest (ticket #249, comparison semantics fixed by "
+          "adiahealth/adia-harness#265) · PASS · GitHub-Releases-preferred fallback, git-tag "
+          "fallback on Releases-unreachable, neither-resolves degrades to (None, None) never "
+          "raises; run()'s end-to-end WARN for a ledger-absent README whose fallback is matched, "
+          "AHEAD, or BEHIND plugin.json (only BEHIND FAILs — #265's own regression case); "
+          "check_ledger_with_fallback's own ahead/equal/behind/unresolvable/still-has-a-line "
+          "unit controls, on injected git_root/run_fn")
     return 0
 
 
