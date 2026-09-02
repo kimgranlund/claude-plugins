@@ -6,12 +6,15 @@ Usage:
   docs_check.py selftest          prove the counters bite
 
 Rules (the checkable slice; description *accuracy* stays with /ship-plugin and /check-everything):
-  R1 [FAIL] every skills/<name> appears in README.md
+  R1 [FAIL] every skills/<name> appears in README.md — OR (ticket #249) in the marketplace root
+            README's own generated inventory block (the `<!-- inventory:begin` fence), when this
+            plugin sits under one and that root README carries it
   R2 [FAIL] every skills/<name> appears in MANUAL.md (skipped if no MANUAL.md)
-  R3 [FAIL] README footer's version equals .claude-plugin/plugin.json version
+  R3 [FAIL] README footer's version equals .claude-plugin/plugin.json version — OR (ticket #249)
+            the newest GitHub Release / git tag when the README carries no ledger line at all
   R4 [WARN] CLAUDE.md's stated skill count matches the tree (skipped if no CLAUDE.md — it
             doesn't ship in the artifact)
-  R5 [WARN] every scripts/*.py is mentioned in README.md
+  R5 [WARN] every scripts/*.py is mentioned in README.md — same root-README fallback as R1
   R6 [WARN] footer ledger entries stay one physical line each (plugin-writing-rules' cap,
             issue #203: no more than one `vX.Y.Z · date ·` marker per line, no line past
             600 chars — the unbounded-paragraph-append shape caught once at 157 KB)
@@ -33,6 +36,7 @@ Exit 0 clean/warnings, 1 on any FAIL.
 """
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -42,6 +46,67 @@ from pathlib import Path
 # R7's docstring above for why this is a duplicate, not a shared import).
 _SPINE_FAMILIES = {"adr", "idr", "lld", "rdd"}
 _SPINE_ID_RE = re.compile(r"^(adr|idr|lld|rdd)-(\d+)\b")
+
+
+_TAG_VERSION_RE = re.compile(r"(?:^|[-_/])v?(\d+\.\d+\.\d+)$")
+
+
+def _extract_version(tag):
+    """Pure. Extracts an `X.Y.Z` version from a tag that may carry a plugin-name prefix (this
+    repo's own real shape is `adia-sdlc-v0.6.76`, not a bare `v0.6.76`) — matches a trailing
+    `-`/`_`/`/`-delimited (or bare, unprefixed) `vX.Y.Z`/`X.Y.Z` at the END of the string. Returns
+    None on no match, never a raise or a garbage partial string. Same regex/shape as
+    `version_monotonic_check.py`'s own `_extract_version` — see `_newest_release_or_tag`'s own
+    docstring for why this is a deliberate duplicate, not a shared import."""
+    m = _TAG_VERSION_RE.search(tag)
+    return m.group(1) if m else None
+
+
+def _newest_release_or_tag(root: Path, run_fn=None):
+    """Ticket #249 (adiahealth/adia-harness). A deliberate, self-contained DUPLICATE of
+    `version_monotonic_check.py`'s own `resolve_release_ledger_fallback` — same reasoning as R7's
+    own duplication above (this is harness's plugin-agnostic gate machinery; a cross-script
+    import would be a needless coupling for six lines of subprocess plumbing). Tries the newest
+    GitHub Release first, falls back to the newest local git tag on ANY failure OR an unparseable
+    tag name. `run_fn` is test-injectable (a callable taking `(*args)`, returning stdout or
+    raising) so `selftest` never touches the network or `gh`. Returns
+    `(source: str|None, version: str|None)`."""
+    if run_fn is not None:
+        try:
+            out = run_fn("gh", "release", "list", "--limit", "1", "--json", "tagName")
+            data = json.loads(out)
+            if data:
+                v = _extract_version(data[0]["tagName"])
+                if v is not None:
+                    return "GitHub Releases", v
+        except Exception:  # noqa: BLE001
+            pass
+        try:
+            out = run_fn("git", "describe", "--tags", "--abbrev=0")
+            tag = out.strip()
+            v = _extract_version(tag) if tag else None
+            return ("newest git tag", v) if v is not None else (None, None)
+        except Exception:  # noqa: BLE001
+            return None, None
+
+    gh = subprocess.run(["gh", "release", "list", "--limit", "1", "--json", "tagName"],
+                         capture_output=True, text=True, cwd=root)
+    if gh.returncode == 0 and gh.stdout.strip():
+        try:
+            data = json.loads(gh.stdout)
+            if data:
+                v = _extract_version(data[0]["tagName"])
+                if v is not None:
+                    return "GitHub Releases", v
+        except ValueError:
+            pass
+    tag = subprocess.run(["git", "describe", "--tags", "--abbrev=0"],
+                          capture_output=True, text=True, cwd=root)
+    if tag.returncode == 0 and tag.stdout.strip():
+        v = _extract_version(tag.stdout.strip())
+        if v is not None:
+            return "newest git tag", v
+    return None, None
 
 
 def _repo_docs_root(root: Path):
@@ -111,7 +176,39 @@ def _spine_duplicate_ids(root: Path):
     return findings
 
 
-def check(root: Path):
+_INVENTORY_FENCE = "<!-- inventory:begin"
+
+
+def _marketplace_root_readme_text(root: Path):
+    """Ticket #249 (adiahealth/adia-harness). A plugin living under a marketplace repo
+    (`<workspace>/plugins/<name>`, this repo's own layout, ADR-0007) may carry NO per-skill/
+    per-script prose of its own — its root README's own generated inventory block (the
+    `<!-- inventory:begin` fence `make_inventory.py`-shaped scripts write) already names every
+    skill and script mechanically, kept fresh by that generator's own freshness gate. Walks up
+    from `root` (mirrors `_repo_docs_root`'s own upward walk, six levels) looking for the
+    nearest ancestor README.md carrying that fence; returns its text, or None when no such
+    ancestor exists (an isolated plugin checkout, or a marketplace whose root README hasn't
+    adopted the generated-inventory convention) — R1/R5 fall back to FAILing/WARNing on the
+    plugin's own README alone in that case, unchanged pre-#249 behavior."""
+    cur = root.resolve()
+    for _ in range(6):
+        if cur.parent == cur:
+            break
+        cur = cur.parent
+        candidate = cur / "README.md"
+        if candidate.is_file():
+            try:
+                text = candidate.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            if _INVENTORY_FENCE in text:
+                return text
+    return None
+
+
+def check(root: Path, release_run_fn=None):
+    """`release_run_fn` is test-injectable (R3's Release/tag fallback, ticket #249) — None in
+    every pre-#249 call site, unchanged behavior (real `gh`/`git` subprocess calls)."""
     findings = []
     skills = sorted(p.parent.name for p in root.glob("skills/*/SKILL.md"))
     readme = root / "README.md"
@@ -119,9 +216,19 @@ def check(root: Path):
         return [("FAIL", "R1", "no README.md at plugin root -> the version ledger is mandatory")]
     rd = readme.read_text(encoding="utf-8", errors="replace")
 
+    # Ticket #249: R1 (skills) and R5 (scripts) below both accept a mention in the marketplace
+    # ROOT README's own generated inventory block as satisfying "mentioned in README.md" — a
+    # plugin whose own README carries no per-member prose (having moved that duty to the root
+    # README's mechanically-generated inventory, adia-sdlc's own shape post-#95/#245) is not
+    # penalized for it. `rd` itself (this plugin's own README) is unioned with `root_readme_text`
+    # so a plugin still naming members in its OWN README (the pre-#249 norm) is unaffected.
+    root_readme_text = _marketplace_root_readme_text(root)
+    mention_text = rd if root_readme_text is None else (rd + "\n" + root_readme_text)
+
     for s in skills:
-        if s not in rd:
-            findings.append(("FAIL", "R1", f"skills/{s} has no mention in README.md -> add its map row"))
+        if s not in mention_text:
+            findings.append(("FAIL", "R1", f"skills/{s} has no mention in README.md (or the "
+                                            "marketplace root README's inventory block) -> add its map row"))
 
     manual = root / "MANUAL.md"
     if manual.is_file():
@@ -136,7 +243,20 @@ def check(root: Path):
         version = ""
     m = re.search(r"^v(\d+\.\d+\.\d+)\b", rd, re.M)
     if not m:
-        findings.append(("FAIL", "R3", "README carries no `vX.Y.Z` footer ledger line"))
+        # Ticket #249 (adiahealth/adia-harness): a README with NO ledger line at all falls back
+        # to the newest GitHub Release or git tag before FAILing outright — a WARN naming the
+        # fallback on a match, never a silent PASS. A README that DOES carry a line but it's
+        # wrong (the `elif` branch below) is unaffected — still a straight FAIL.
+        source, fallback_version = _newest_release_or_tag(root, run_fn=release_run_fn)
+        if fallback_version is not None and version and fallback_version == version:
+            findings.append(("WARN", "R3", f"README carries no ledger line; verified via fallback "
+                                            f"({source}): {fallback_version} matches plugin.json's {version}"))
+        elif fallback_version is not None:
+            findings.append(("FAIL", "R3", f"README carries no ledger line; fallback ({source}) "
+                                            f"newest is {fallback_version}, plugin.json says {version} -> mismatch"))
+        else:
+            findings.append(("FAIL", "R3", "README carries no `vX.Y.Z` footer ledger line, and no "
+                                            "GitHub Release or git tag resolves as a fallback either"))
     elif version and m.group(1) != version:
         findings.append(("FAIL", "R3", f"README footer says v{m.group(1)} but plugin.json says {version} "
                                        "-> the ledger lies about the current release"))
@@ -149,8 +269,9 @@ def check(root: Path):
             findings.append(("WARN", "R4", f"CLAUDE.md states {c.group(1)} skills; tree has {len(skills)} -> stale count"))
 
     for sc in sorted(root.glob("scripts/*.py")):
-        if sc.name not in rd:
-            findings.append(("WARN", "R5", f"scripts/{sc.name} is not mentioned in README.md"))
+        if sc.name not in mention_text:
+            findings.append(("WARN", "R5", f"scripts/{sc.name} is not mentioned in README.md "
+                                            "(or the marketplace root README's inventory block)"))
 
     ledger_marker = re.compile(r"v\d+\.\d+\.\d+ · \d{4}-\d{2}-\d{2} · ")
     for line in rd.splitlines():
@@ -245,6 +366,108 @@ def selftest():
         assert _repo_docs_root(lonely) is None, "an isolated tempdir must have no reachable .claude/docs"
         assert _spine_duplicate_ids(lonely) == [], \
             "a plugin root with no reachable .claude/docs must return no R7 findings"
+    # ---- Ticket #249 (adiahealth/adia-harness): R3's Release/tag fallback when a README has NO
+    # ledger line at all ----
+    with tempfile.TemporaryDirectory() as td3:
+        r3 = Path(td3)
+        (r3 / ".claude-plugin").mkdir()
+        (r3 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo3", "version": "2.5.0"}')
+        (r3 / "README.md").write_text("this plugin README carries no ledger line at all\n")
+
+        def _fallback_match(*args):
+            if args[:2] == ("gh", "release"):
+                return '[{"tagName": "v2.5.0"}]'
+            raise AssertionError(f"unexpected call: {args}")
+
+        findings_match = check(r3, release_run_fn=_fallback_match)
+        assert not any(f[0] == "FAIL" and f[1] == "R3" for f in findings_match), \
+            f"positive control: a matching GitHub Release fallback must WARN, never FAIL R3: {findings_match}"
+        assert any(f[0] == "WARN" and f[1] == "R3" for f in findings_match), \
+            f"positive control: a matching fallback must WARN by name (never a silent PASS): {findings_match}"
+
+        def _fallback_mismatch(*args):
+            if args[:2] == ("gh", "release"):
+                return '[{"tagName": "v2.4.0"}]'
+            raise AssertionError(f"unexpected call: {args}")
+
+        findings_mismatch = check(r3, release_run_fn=_fallback_mismatch)
+        assert any(f[0] == "FAIL" and f[1] == "R3" and "mismatch" in f[2] for f in findings_mismatch), \
+            f"negative control: a non-matching fallback must still FAIL R3: {findings_mismatch}"
+
+        def _fallback_nothing(*args):
+            raise RuntimeError("nothing resolves")
+
+        findings_none = check(r3, release_run_fn=_fallback_nothing)
+        assert any(f[0] == "FAIL" and f[1] == "R3" for f in findings_none), \
+            f"reverse control: no ledger line AND no fallback resolving must still FAIL R3, never silently pass: {findings_none}"
+
+        # Live fixture control (adiahealth/adia-harness#249 review): this repo's own real tag
+        # shape is plugin-prefixed (`adia-sdlc-v2.5.0`), not a bare `v2.5.0`.
+        assert _extract_version("adia-sdlc-v2.5.0") == "2.5.0", \
+            f"positive control: a plugin-prefixed tag must extract its trailing version: {_extract_version('adia-sdlc-v2.5.0')!r}"
+        assert _extract_version("not-a-version") is None, \
+            "a tag with no trailing X.Y.Z must extract to None, never a garbage partial match"
+
+        def _fallback_prefixed_match(*args):
+            if args[:2] == ("gh", "release"):
+                return '[{"tagName": "demo3-v2.5.0"}]'
+            raise AssertionError(f"unexpected call: {args}")
+
+        findings_prefixed = check(r3, release_run_fn=_fallback_prefixed_match)
+        assert any(f[0] == "WARN" and f[1] == "R3" for f in findings_prefixed), \
+            f"positive control (live fixture shape): a plugin-prefixed GitHub Release tag must satisfy the R3 fallback: {findings_prefixed}"
+
+    print("docs_check selftest (ticket #249) · PASS · R3 Release/tag fallback WARNs on a match, "
+          "FAILs on a mismatch, FAILs when nothing resolves — never a silent PASS")
+
+    # ---- Ticket #249 (adiahealth/adia-harness): R1/R5's marketplace-root-README fallback ----
+    with tempfile.TemporaryDirectory() as td4:
+        workspace4 = Path(td4)
+        plugin4 = workspace4 / "plugins" / "demo4"
+        plugin4.mkdir(parents=True)
+        (plugin4 / ".claude-plugin").mkdir()
+        (plugin4 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo4", "version": "1.0.0"}')
+        (plugin4 / "skills" / "alpha-skill").mkdir(parents=True)
+        (plugin4 / "skills" / "alpha-skill" / "SKILL.md").write_text("x")
+        (plugin4 / "scripts").mkdir()
+        (plugin4 / "scripts" / "alpha_check.py").write_text("x")
+        # The plugin's OWN README carries only the ledger line — no skill/script prose at all
+        # (the shape #245/#249 moved to: identity + Compendium + Releases pointer).
+        (plugin4 / "README.md").write_text("v1.0.0 · 2026-09-02 · initial\n")
+
+        # No root README at all -> R1 FAILs and R5 WARNs, unchanged pre-#249 behavior.
+        findings_no_root = check(plugin4)
+        assert any(f[0] == "FAIL" and f[1] == "R1" for f in findings_no_root), \
+            f"reverse control: no marketplace root README at all must still FAIL R1 on the plugin's own README alone: {findings_no_root}"
+        assert any(f[1] == "R5" for f in findings_no_root), \
+            f"reverse control: no marketplace root README at all must still WARN R5: {findings_no_root}"
+
+        # A root README two levels up carrying the inventory fence AND naming the skill/script
+        # -> R1/R5 both clear, no padding needed in the plugin's own README.
+        (workspace4 / "README.md").write_text(
+            "# workspace\n\n<!-- inventory:begin generated by scripts/make_inventory.py -->\n"
+            "- alpha-skill — does a thing\n- alpha_check.py — checks a thing\n"
+            "<!-- inventory:end -->\n"
+        )
+        findings_with_root = check(plugin4)
+        assert not any(f[1] == "R1" for f in findings_with_root), \
+            f"positive control: a matching root-README inventory fence must satisfy R1 without any plugin-README padding: {findings_with_root}"
+        assert not any(f[1] == "R5" for f in findings_with_root), \
+            f"positive control: a matching root-README inventory fence must satisfy R5 too: {findings_with_root}"
+
+        # Negative control: a root README exists but does NOT carry the fence (a plain repo
+        # README with no generated inventory) -> R1/R5 fall back to FAILing/WARNing exactly as
+        # if no root README existed at all — the fence itself is the trust boundary, not mere
+        # ancestor-README presence.
+        (workspace4 / "README.md").write_text("# workspace\n\njust a plain README, no fence\n")
+        findings_no_fence = check(plugin4)
+        assert any(f[0] == "FAIL" and f[1] == "R1" for f in findings_no_fence), \
+            f"negative control: a root README with no inventory fence must NOT satisfy R1: {findings_no_fence}"
+
+    print("docs_check selftest (ticket #249) · PASS · R1/R5 accept the marketplace root README's "
+          "generated inventory block as an alternate mention source (fence-gated, never mere "
+          "ancestor-README presence), no plugin-README padding required")
+
     print("docs_check selftest · PASS · coverage both docs, version ledger, stale count, script mentions, "
           "ledger one-liner cap, spine id-collision FAIL bites (#633)")
     return 0

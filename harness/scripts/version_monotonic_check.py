@@ -24,9 +24,15 @@ Checks:
             two sibling PRs both bumped teamwork `2.16.2 -> 2.16.3`; whichever merged second
             would still carry a version already claimed by main once the first landed
   M3 [FAIL] the branch's README.md footer's newest `vX.Y.Z` ledger line doesn't name the
-            branch's own plugin.json version
+            branch's own plugin.json version. Ticket #249 (adiahealth/adia-harness): a plugin
+            README carrying no `vX.Y.Z` ledger line at all (rather than a stale/mismatched one)
+            falls back to the newest GitHub Release or, when Releases are unreachable, the
+            newest `git describe --tags` tag — a match downgrades M3 to a [WARN] naming the
+            fallback source used, never a silent PASS and never blocking; no fallback match
+            either (or a README that DOES carry a ledger line but it's wrong) stays a [FAIL],
+            byte-identical to pre-#249 behavior for every plugin still carrying a README ledger.
 
-Exit 0 clean or SKIP (both non-blocking), 1 on any FAIL, 2 on a usage error.
+Exit 0 clean, SKIP, or WARN-only (all non-blocking), 1 on any FAIL, 2 on a usage error.
 
 "Touched" is git-diff-against-origin/main scoped to the plugin root, not just manifest/README —
 any file under the plugin root counts (a plugin whose behavior changed but whose version wasn't
@@ -68,6 +74,70 @@ def check_ledger(branch_version: str, readme_text: str):
         return False, (f"README's newest ledger line says v{ledger_v} but plugin.json says "
                         f"{branch_version} -> the ledger lies about the current release")
     return True, f"ledger's newest line matches v{branch_version}"
+
+
+_TAG_VERSION_RE = re.compile(r"(?:^|[-_/])v?(\d+\.\d+\.\d+)$")
+
+
+def _extract_version(tag):
+    """Pure. Extracts an `X.Y.Z` version from a tag that may carry a plugin-name prefix (this
+    repo's own real shape is `adia-sdlc-v0.6.76`, not a bare `v0.6.76`) — matches a trailing
+    `-`/`_`/`/`-delimited (or bare, unprefixed) `vX.Y.Z`/`X.Y.Z` at the END of the string. Returns
+    None on no match, never a raise or a garbage partial string."""
+    m = _TAG_VERSION_RE.search(tag)
+    return m.group(1) if m else None
+
+
+def resolve_release_ledger_fallback(git_root, run_fn=None):
+    """Ticket #249 (adiahealth/adia-harness). Test-injectable via `run_fn` (a callable taking
+    `(*args)` and returning stdout, or raising on failure — mirrors this repo's own adapter
+    transport seams elsewhere) so `selftest` never touches the real network or `gh`. Tries the
+    newest GitHub Release first (`gh release list --limit 1 --json tagName`); on ANY failure
+    (no `gh`, no auth, offline, not a GitHub remote) OR an unparseable tag name falls back to the
+    newest local git tag (`git describe --tags --abbrev=0`). Both tag names are read through
+    `_extract_version` — a plugin-prefixed tag (`adia-sdlc-v0.6.76`, this repo's own real shape,
+    not a bare `v0.6.76`) resolves exactly like a bare one. Returns
+    `(source: str|None, version: str|None)` — both None when neither resolves (a brand-new repo
+    with no tags at all, or a tag whose shape doesn't carry a version at all), never a raise."""
+    if run_fn is not None:
+        try:
+            out = run_fn("gh", "release", "list", "--limit", "1", "--json", "tagName")
+            import json as _json
+            data = _json.loads(out)
+            if data:
+                v = _extract_version(data[0]["tagName"])
+                if v is not None:
+                    return "GitHub Releases", v
+        except Exception:  # noqa: BLE001 — any gh failure degrades to the git-tag fallback below
+            pass
+        try:
+            out = run_fn("git", "describe", "--tags", "--abbrev=0")
+            tag = out.strip()
+            v = _extract_version(tag) if tag else None
+            return ("newest git tag", v) if v is not None else (None, None)
+        except Exception:  # noqa: BLE001
+            return None, None
+
+    gh = subprocess.run(
+        ["gh", "release", "list", "--limit", "1", "--json", "tagName"],
+        capture_output=True, text=True, cwd=git_root,
+    )
+    if gh.returncode == 0 and gh.stdout.strip():
+        try:
+            import json as _json
+            data = _json.loads(gh.stdout)
+            if data:
+                v = _extract_version(data[0]["tagName"])
+                if v is not None:
+                    return "GitHub Releases", v
+        except ValueError:
+            pass
+    tag = _git(["describe", "--tags", "--abbrev=0"], git_root)
+    if tag.returncode == 0 and tag.stdout.strip():
+        v = _extract_version(tag.stdout.strip())
+        if v is not None:
+            return "newest git tag", v
+    return None, None
 
 
 def _git(args, cwd):
@@ -128,11 +198,30 @@ def run(plugin_root: Path):
 
     ok_mono, msg_mono = check_monotonic(branch_version, main_version)
     ok_ledger, msg_ledger = check_ledger(branch_version, readme_text)
-    findings = [("M2", ok_mono, msg_mono), ("M3", ok_ledger, msg_ledger)]
+    ledger_sev = "FAIL"
+
+    # Ticket #249 (adiahealth/adia-harness): a README with NO ledger line at all (never a
+    # stale/mismatched one — that stays a straight FAIL, unchanged) falls back to the newest
+    # GitHub Release or git tag before failing outright.
+    if not ok_ledger and parse_ledger_version(readme_text) is None:
+        source, fallback_version = resolve_release_ledger_fallback(git_root)
+        if fallback_version is not None and fallback_version == branch_version:
+            ok_ledger = True
+            ledger_sev = "WARN"
+            msg_ledger = (f"README carries no ledger line; verified via fallback ({source}): "
+                          f"{fallback_version} matches plugin.json's {branch_version}")
+        elif fallback_version is not None:
+            msg_ledger = (f"README carries no ledger line; fallback ({source}) newest is "
+                          f"{fallback_version}, plugin.json says {branch_version} -> mismatch")
+        else:
+            msg_ledger = (msg_ledger + "; fallback also unresolvable (no GitHub Release and no "
+                           "local git tag)")
+
     ok = ok_mono and ok_ledger
     print(f"version_monotonic_check · {'clean' if ok else 'FAIL'}")
-    for code, item_ok, msg in findings:
-        print(f"  {'ok  ' if item_ok else 'FAIL'} {code}  {msg}")
+    for code, item_ok, msg, sev in [("M2", ok_mono, msg_mono, "FAIL"), ("M3", ok_ledger, msg_ledger, ledger_sev)]:
+        label = "warn" if (item_ok and sev == "WARN") else ("ok  " if item_ok else "FAIL")
+        print(f"  {label} {code}  {msg}")
     return 0 if ok else 1
 
 
@@ -248,6 +337,96 @@ def selftest():
     print("version_monotonic_check selftest · PASS · strictly-greater PASS, equal-version FAIL "
           "(the #425/#430 2.16.3 negative control), lower-version FAIL, ledger-mismatch FAIL, "
           "and origin/main-missing/untouched/new-plugin all SKIP clean, on real git plumbing")
+
+    # ---- Ticket #249 (adiahealth/adia-harness): ledger-absent Release/tag fallback ----
+
+    def _run_fn_gh_ok(*args):
+        if args[:2] == ("gh", "release"):
+            return '[{"tagName": "v2.5.0"}]'
+        raise AssertionError(f"unexpected call in _run_fn_gh_ok: {args}")
+
+    source, version = resolve_release_ledger_fallback(Path("."), run_fn=_run_fn_gh_ok)
+    assert (source, version) == ("GitHub Releases", "2.5.0"), \
+        f"positive control: a resolvable GitHub Release must be preferred: {(source, version)}"
+
+    def _run_fn_gh_unreachable_git_ok(*args):
+        if args[:2] == ("gh", "release"):
+            raise RuntimeError("gh: authentication required")
+        if args[:2] == ("git", "describe"):
+            return "v2.4.0\n"
+        raise AssertionError(f"unexpected call: {args}")
+
+    source2, version2 = resolve_release_ledger_fallback(Path("."), run_fn=_run_fn_gh_unreachable_git_ok)
+    assert (source2, version2) == ("newest git tag", "2.4.0"), \
+        f"positive control: GitHub Releases unreachable must fall back to the newest git tag: {(source2, version2)}"
+
+    def _run_fn_nothing(*args):
+        raise RuntimeError("nothing resolves")
+
+    source3, version3 = resolve_release_ledger_fallback(Path("."), run_fn=_run_fn_nothing)
+    assert (source3, version3) == (None, None), \
+        f"negative control: neither Releases nor a git tag resolving must degrade to (None, None), never raise: {(source3, version3)}"
+
+    # Live fixture control (adiahealth/adia-harness#249 review): this repo's own real tag shape
+    # is plugin-prefixed (`adia-sdlc-v0.6.76`), not a bare `v0.6.76` — a naive strip-leading-"v"
+    # would have left "adia-sdlc-v0.6.76" un-parseable. Both the GitHub-Releases and git-tag tiers
+    # must extract the version out of a prefixed tag exactly like a bare one.
+    assert _extract_version("adia-sdlc-v0.6.76") == "0.6.76", \
+        f"positive control: a plugin-prefixed tag must extract its trailing version: {_extract_version('adia-sdlc-v0.6.76')!r}"
+    assert _extract_version("v0.6.76") == "0.6.76", "a bare v-prefixed tag must still extract"
+    assert _extract_version("0.6.76") == "0.6.76", "a bare unprefixed tag must still extract"
+    assert _extract_version("adia-sdlc-0.6.76") == "0.6.76", \
+        "a name-prefixed tag with no 'v' at all must still extract (underscore/hyphen-delimited)"
+    assert _extract_version("not-a-version") is None, \
+        "a tag with no trailing X.Y.Z must extract to None, never a garbage partial match"
+
+    def _run_fn_gh_prefixed_tag(*args):
+        if args[:2] == ("gh", "release"):
+            return '[{"tagName": "adia-sdlc-v0.6.76"}]'
+        raise AssertionError(f"unexpected call: {args}")
+
+    source4, version4 = resolve_release_ledger_fallback(Path("."), run_fn=_run_fn_gh_prefixed_tag)
+    assert (source4, version4) == ("GitHub Releases", "0.6.76"), \
+        f"positive control (live fixture shape): a plugin-prefixed GitHub Release tag must resolve to its bare version: {(source4, version4)}"
+
+    # End-to-end via run(): a README with NO ledger line at all downgrades M3 to a WARN when the
+    # (mocked) fallback names the SAME version as plugin.json — never a silent PASS, never a FAIL.
+    with tempfile.TemporaryDirectory() as td2:
+        root2 = Path(td2)
+        subprocess.run(["git", "init", "-q", "-b", "main"], cwd=root2, check=True)
+        subprocess.run(["git", "config", "user.email", "t@t"], cwd=root2, check=True)
+        subprocess.run(["git", "config", "user.name", "t"], cwd=root2, check=True)
+        plugin2 = root2 / "demo2"
+        (plugin2 / ".claude-plugin").mkdir(parents=True)
+        (plugin2 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo2", "version": "3.0.0"}')
+        (plugin2 / "README.md").write_text("no ledger table here — this plugin's README carries no line at all\n")
+        subprocess.run(["git", "add", "-A"], cwd=root2, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "init"], cwd=root2, check=True)
+        main_sha2 = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root2, capture_output=True,
+                                    text=True, check=True).stdout.strip()
+        subprocess.run(["git", "update-ref", "refs/remotes/origin/main", main_sha2], cwd=root2, check=True)
+        (plugin2 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo2", "version": "3.1.0"}')
+        subprocess.run(["git", "add", "-A"], cwd=root2, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "bump, no ledger line ever added"], cwd=root2, check=True)
+        # Plugin-prefixed shape (this repo's own real tag convention, e.g. `adia-sdlc-v0.6.76`),
+        # not a bare `vX.Y.Z` — proves the real `git describe --tags` end-to-end path extracts it.
+        subprocess.run(["git", "tag", "demo2-v3.1.0"], cwd=root2, check=True)
+
+        code_warn = run(plugin2)
+        assert code_warn == 0, "a ledger-absent README whose fallback (a real, plugin-prefixed git tag here) matches plugin.json must WARN, not FAIL — exit must stay 0"
+
+        # Negative control: the fallback tag does NOT match plugin.json's version -> still FAIL,
+        # never a silent pass just because Releases/tags exist at all.
+        (plugin2 / ".claude-plugin" / "plugin.json").write_text('{"name": "demo2", "version": "3.2.0"}')
+        subprocess.run(["git", "add", "-A"], cwd=root2, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "bump again, tag never moved"], cwd=root2, check=True)
+        code_fail = run(plugin2)
+        assert code_fail == 1, "a ledger-absent README whose fallback tag does NOT match plugin.json must still FAIL"
+
+    print("version_monotonic_check selftest (ticket #249) · PASS · GitHub-Releases-preferred "
+          "fallback, git-tag fallback on Releases-unreachable, neither-resolves degrades to "
+          "(None, None) never raises, and run()'s end-to-end WARN-on-match / FAIL-on-mismatch "
+          "for a README with no ledger line at all, on real git plumbing")
     return 0
 
 
