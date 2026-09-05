@@ -1,0 +1,81 @@
+{
+ "skill": "perf-loop",
+ "note": "Trigger-routing suite for the perf-* set (2026-09-05, PR feat/perf-skills). Positives across imperative / diagnostic / indirect phrasings; negatives drawn from the perf-* siblings, check-speed (perceived latency, budget cards), check-whole-ui, make-component and motion-rules. Fixture-level behavior (the two 2026-09-05 prod reports producing the expected family tags and top-3 fixes, lh-diff on the pair, the flipped-audit negative control) is locked in each script's selftest, run by release_gate G4.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "fix the failing Lighthouse audits and re-audit until green",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "work through the perf brief one family at a time",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "get the performance score up without breaking the passing audits",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "iterate on the perf findings and diff each run against the before-report",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "apply the render-blocking fix and check nothing regressed",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "the last perf fix broke a passing audit, what is the loop rule",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "compare before.json and after.json and tell me if anything regressed",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "keep fixing the report findings and re-run lighthouse after each change",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "run Lighthouse and save the report",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "which audit should we fix first",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "apply the same perf fixes to all the other pages",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "which routes share the cache-control failure",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "should this operation be optimistic or pending-then-commit",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "users can't cancel a long-running export",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "how long should the card expansion animation run",
+   "expect": "no-trigger"
+  }
+ ]
+}

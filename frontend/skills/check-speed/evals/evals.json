@@ -1,6 +1,6 @@
 {
  "skill": "check-speed",
- "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: M2 corpus of record (excellence campaign batch 3, 2026-07-03; sibling re-aimed 2026-07-06 for the color-*-facts split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-space-facts, not accessibility). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the -verify siblings (check-colors, check-focus, check-translations, check-safety), color-space-facts, make-component, check-whole-ui, plus the out-of-corpus fence (wire latency / bundle profiling). Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json Motion-design fence added 2026-07-09 (reciprocal to the new motion-rules pack): designed-motion feel asks route there; load-driven slowness stays here.",
+ "note": "Trigger-routing suite, converted from the pre-migration corpus's scripts/routing-corpus.json (positives/negatives) into harness's cases schema as part of the ui plugin migration (plan-plugin-split partition). Legacy note: M2 corpus of record (excellence campaign batch 3, 2026-07-03; sibling re-aimed 2026-07-06 for the color-*-facts split, corrected 2026-07-06 per host amendment A4 — the color-space/palette-math fence deflects color-space-facts, not accessibility). Positives across imperative / diagnostic / symptom / indirect phrasings; negatives drawn adversarially from the -verify siblings (check-colors, check-focus, check-translations, check-safety), color-space-facts, make-component, check-whole-ui, plus the out-of-corpus fence (wire latency / bundle profiling). Run: python3 ../../skill-author/scripts/routing_eval.py <description.txt> scripts/routing-corpus.json Motion-design fence added 2026-07-09 (reciprocal to the new motion-rules pack): designed-motion feel asks route there; load-driven slowness stays here. perf-* fence added 2026-09-05: Lighthouse runs, report triage, fix loops, playbook fan-out and route sweeps route to perf-audit/perf-triage/perf-loop/perf-playbook/perf-sweep; perceived-latency judgment and budget cards stay here.",
  "cases": [
   {
    "id": "t01",
@@ -131,6 +131,36 @@
    "id": "n14",
    "prompt": "how long should the card expansion animation run",
    "expect": "no-trigger"
+  },
+  {
+   "id": "n15",
+   "prompt": "run Lighthouse on the deployed URL and save the JSON report",
+   "expect": "no-trigger",
+   "note": "reciprocal fence, perf-* set (2026-09-05)"
+  },
+  {
+   "id": "n16",
+   "prompt": "what should I fix first in this Lighthouse report",
+   "expect": "no-trigger",
+   "note": "reciprocal fence, perf-* set (2026-09-05)"
+  },
+  {
+   "id": "n17",
+   "prompt": "fix the failing Lighthouse audits and re-audit until green",
+   "expect": "no-trigger",
+   "note": "reciprocal fence, perf-* set (2026-09-05)"
+  },
+  {
+   "id": "n18",
+   "prompt": "apply the perf fixes from the playbook to every other page",
+   "expect": "no-trigger",
+   "note": "reciprocal fence, perf-* set (2026-09-05)"
+  },
+  {
+   "id": "n19",
+   "prompt": "build a Lighthouse scoreboard and budgets for every route",
+   "expect": "no-trigger",
+   "note": "reciprocal fence, perf-* set (2026-09-05)"
   }
  ]
 }

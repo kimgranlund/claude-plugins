@@ -50,7 +50,9 @@
     "sweeping",
     "triage",
     "wiring",
-    "writing"
+    "writing",
+    "playbook",
+    "loop"
   ],
   "role_lex": [
     "leader",
@@ -782,6 +784,11 @@
     },
     {
       "canonical": "css",
+      "plural": null,
+      "banned_aliases": []
+    },
+    {
+      "canonical": "perf",
       "plural": null,
       "banned_aliases": []
     }

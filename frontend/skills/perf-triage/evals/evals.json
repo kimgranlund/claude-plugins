@@ -1,0 +1,81 @@
+{
+ "skill": "perf-triage",
+ "note": "Trigger-routing suite for the perf-* set (2026-09-05, PR feat/perf-skills). Positives across imperative / diagnostic / indirect phrasings; negatives drawn from the perf-* siblings, check-speed (perceived latency, budget cards), check-whole-ui, make-component and motion-rules. Fixture-level behavior (the two 2026-09-05 prod reports producing the expected family tags and top-3 fixes, lh-diff on the pair, the flipped-audit negative control) is locked in each script's selftest, run by release_gate G4.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "what do I fix first in this Lighthouse report",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "read report.json and tell me which audits matter",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "turn the Lighthouse JSON into a plan I can act on",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "prioritise the failing audits from these two reports",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "which of these findings are transport vs build vs accessibility",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "make a DO NOT BREAK list from the passing audits before we touch anything",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "here is my lighthouse report, summarise the performance issues it flagged",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "the report is 2 MB, strip it to what an agent needs",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "run Lighthouse on the deployed URL and save the JSON",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "fix the findings and re-audit the page",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "roll the fixes out to the other pages using the playbook",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "set performance budgets for every route from the baseline",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "verify the loading UX on the checkout page against our performance budget",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "a spinner flashes for a split second on every click",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "review this component's anatomy and API",
+   "expect": "no-trigger"
+  }
+ ]
+}
