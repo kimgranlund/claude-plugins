@@ -97,6 +97,8 @@ def gate(root: Path, package: bool = False):
         fails.append(code); lines.append(f"  FAIL  {code}  {m}")
     def warn(code, m):
         warns.append(code); lines.append(f"  warn  {code}  {m}")
+    def info(code, m):
+        lines.append(f"  info  {code}  {m}")
 
     # G1 manifest
     mf = root / ".claude-plugin" / "plugin.json"
@@ -285,7 +287,10 @@ def gate(root: Path, package: bool = False):
         fail("G10", f"{len(d_fail)} docs finding(s): " + "; ".join(f[2] for f in d_fail[:3]) + " -> run docs_check.py")
     else:
         for f in dfs:
-            warn("G10", f[2])
+            if f[0] == "INFO":
+                info("G10", f[2])
+            else:
+                warn("G10", f[2])
         if not dfs:
             ok("docs cover every artifact; ledger matches manifest")
 
@@ -889,9 +894,15 @@ def gate(root: Path, package: bool = False):
                     # GitHub Releases) FAILed G14 permanently, with no way to pass. Composing
                     # check_ledger_with_fallback here is the fix: same fallback source and
                     # ahead-or-equal comparison semantics docs_check.py's own R3 already uses.
-                    ledger_ok, ledger_sev, ledger_msg = vmc.check_ledger_with_fallback(version, readme_text, git_root)
+                    # adiahealth/adia-harness#431: the fallback is scoped to THIS plugin's own
+                    # `name` (from G1's manifest read above) — a marketplace repo's other
+                    # plugins' tags must never produce a false mismatch here.
+                    ledger_ok, ledger_sev, ledger_msg = vmc.check_ledger_with_fallback(
+                        version, readme_text, git_root, name)
                     if mono_ok and ledger_ok and ledger_sev == "WARN":
                         warn("G14", f"version monotonicity: {mono_msg}; {ledger_msg}")
+                    elif mono_ok and ledger_ok and ledger_sev == "INFO":
+                        info("G14", f"version monotonicity: {mono_msg}; {ledger_msg}")
                     elif mono_ok and ledger_ok:
                         ok(f"G14 version monotonicity: {mono_msg}; {ledger_msg}")
                     if not mono_ok:
@@ -1313,8 +1324,13 @@ def selftest():
         subprocess.run(["git", "update-ref", "refs/remotes/origin/main", main_sha], cwd=repo_root, check=True)
 
         # Bump ahead of a real (plugin-prefixed) git tag -> G14 must WARN, not FAIL (#265's own
-        # regression case: before this fix, ahead-of-fallback FAILed permanently).
+        # regression case: before this fix, ahead-of-fallback FAILed permanently). A SECOND
+        # plugin's own, numerically-much-larger tag sits in the SAME repo (adiahealth/
+        # adia-harness#431's own real-plumbing proof: g14-demo's own G14 check must never read
+        # it — the ticket's own false-mismatch class, wired through release_gate.py itself, not
+        # just the underlying vmc function).
         subprocess.run(["git", "tag", "g14-demo-v1.0.0"], cwd=repo_root, check=True)
+        subprocess.run(["git", "tag", "otherplugin-v9.9.9"], cwd=repo_root, check=True)
         (g14 / ".claude-plugin" / "plugin.json").write_text(
             '{"name": "g14-demo", "version": "1.1.0", "description": "d"}')
         subprocess.run(["git", "add", "-A"], cwd=repo_root, check=True)
@@ -1323,8 +1339,12 @@ def selftest():
         with contextlib.redirect_stdout(buf):
             code, _ = gate(g14)
         out = buf.getvalue()
-        assert "FAIL  G14" not in out, f"G14 must not FAIL on a ledger-absent README ahead of the fallback tag: {out}"
-        assert "warn  G14" in out and "fallback" in out, f"G14 must WARN naming the fallback: {out}"
+        assert "FAIL  G14" not in out, \
+            (f"G14 must not FAIL on a ledger-absent README ahead of its OWN fallback tag, and "
+             f"must never be corrupted by otherplugin's unrelated, numerically-larger tag "
+             f"(adiahealth/adia-harness#431): {out}")
+        assert "warn  G14" in out and "fallback" in out and "9.9.9" not in out, \
+            f"G14 must WARN naming ITS OWN fallback tag, never otherplugin's (#431): {out}"
 
         # Bump BEHIND a newer real tag -> G14 must FAIL for real (never a permanent, un-passable
         # red, but also never a silent pass).
@@ -1338,9 +1358,12 @@ def selftest():
             code, _ = gate(g14)
         out = buf.getvalue()
         assert "FAIL  G14" in out and "BEHIND" in out, f"G14 must FAIL when plugin.json is behind the fallback: {out}"
-    print("release_gate selftest (adiahealth/adia-harness#265) · PASS · G14 composes "
-          "check_ledger_with_fallback on real git plumbing: ledger-absent + ahead-of-fallback "
-          "WARNs (the regression #265 reported), ledger-absent + behind-fallback FAILs for real")
+    print("release_gate selftest (adiahealth/adia-harness#265, re-scoped per-plugin by "
+          "adiahealth/adia-harness#431) · PASS · G14 composes check_ledger_with_fallback on "
+          "real, multi-plugin git tag plumbing: ledger-absent + ahead-of-fallback WARNs (the "
+          "regression #265 reported), ledger-absent + behind-fallback FAILs for real, and a "
+          "sibling plugin's own numerically-larger tag in the SAME repo never corrupts either "
+          "outcome (#431)")
     return 0
 
 
