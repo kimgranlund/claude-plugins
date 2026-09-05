@@ -1,0 +1,81 @@
+{
+ "skill": "perf-playbook",
+ "note": "Trigger-routing suite for the perf-* set (2026-09-05, PR feat/perf-skills). Positives across imperative / diagnostic / indirect phrasings; negatives drawn from the perf-* siblings, check-speed (perceived latency, budget cards), check-whole-ui, make-component and motion-rules. Fixture-level behavior (the two 2026-09-05 prod reports producing the expected family tags and top-3 fixes, lh-diff on the pair, the flipped-audit negative control) is locked in each script's selftest, run by release_gate G4.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "apply the perf fixes to all pages now that the home page is green",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "roll this out across the site, same fixes on the other routes",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "write down what we changed so the other pages can repeat it",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "fan the Lighthouse fixes out to the remaining pages in parallel",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "use the playbook as a checklist for the other frontend pages",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "we fixed one page fully, how do we do the rest without new reports",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "record each perf fix with the files touched and how to verify it",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "split the remaining pages across subagents with disjoint files",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "run Lighthouse on the deployed URL",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "what do I fix first in this report",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "fix and re-audit this one page until it is green",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "enumerate every route and build a scoreboard with budgets",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "audit the whole app's UX before launch",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "check that every async surface shows the right loading indicator",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "build a skeleton-loader web component with a shimmer animation",
+   "expect": "no-trigger"
+  }
+ ]
+}

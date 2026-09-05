@@ -1,0 +1,81 @@
+{
+ "skill": "perf-sweep",
+ "note": "Trigger-routing suite for the perf-* set (2026-09-05, PR feat/perf-skills). Positives across imperative / diagnostic / indirect phrasings; negatives drawn from the perf-* siblings, check-speed (perceived latency, budget cards), check-whole-ui, make-component and motion-rules. Fixture-level behavior (the two 2026-09-05 prod reports producing the expected family tags and top-3 fixes, lh-diff on the pair, the flipped-audit negative control) is locked in each script's selftest, run by release_gate G4.",
+ "cases": [
+  {
+   "id": "t01",
+   "prompt": "audit the whole site with Lighthouse, every route",
+   "expect": "trigger"
+  },
+  {
+   "id": "t02",
+   "prompt": "build a perf scoreboard across all pages",
+   "expect": "trigger"
+  },
+  {
+   "id": "t03",
+   "prompt": "set performance budgets from the baseline so we never regress",
+   "expect": "trigger"
+  },
+  {
+   "id": "t04",
+   "prompt": "which pages share this cache-control failure",
+   "expect": "trigger"
+  },
+  {
+   "id": "t05",
+   "prompt": "enumerate the routes from the sitemap and lighthouse each one",
+   "expect": "trigger"
+  },
+  {
+   "id": "t06",
+   "prompt": "give me a canary set of routes for a fast perf gate and a nightly full sweep",
+   "expect": "trigger"
+  },
+  {
+   "id": "t07",
+   "prompt": "cluster the Lighthouse failures by cause across the site",
+   "expect": "trigger"
+  },
+  {
+   "id": "t08",
+   "prompt": "run lh-diff against the budgets for every route",
+   "expect": "trigger"
+  },
+  {
+   "id": "n01",
+   "prompt": "run Lighthouse on this one URL and save the JSON",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n02",
+   "prompt": "what should I fix first in this report",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n03",
+   "prompt": "fix the findings on this page and re-audit",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n04",
+   "prompt": "apply the playbook to the remaining pages",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n05",
+   "prompt": "run the performance budget card for /checkout and gate the CWV numbers",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n06",
+   "prompt": "the page feels slow even though the API is fast",
+   "expect": "no-trigger"
+  },
+  {
+   "id": "n07",
+   "prompt": "audit the whole app's UX before launch",
+   "expect": "no-trigger"
+  }
+ ]
+}

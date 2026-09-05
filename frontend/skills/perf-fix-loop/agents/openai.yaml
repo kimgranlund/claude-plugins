@@ -1,0 +1,3 @@
+interface:
+  display_name: "Perf Fix Loop"
+  short_description: "The loop contract for fixing against a perf brief: one cause family per iteration, evidence recorded before the fix, re-audit of the changed surfaces plus every previous finding, an lh-diff gate against the DO NOT BREAK list, revert on regression, stop after two failed attempts on one family."

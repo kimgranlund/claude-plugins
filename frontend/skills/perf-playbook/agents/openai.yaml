@@ -1,0 +1,3 @@
+interface:
+  display_name: "Perf Playbook"
+  short_description: "Fix one page fully, write the playbook, then fan the fixes out to every other page without fresh reports."

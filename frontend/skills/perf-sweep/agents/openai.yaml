@@ -1,0 +1,3 @@
+interface:
+  display_name: "Perf Sweep"
+  short_description: "System-wide performance sweep: route inventory, per-route scoreboard, preserve-not-regress budgets, cause-family clusters across routes, a canary set for a fast gate and a full nightly sweep."

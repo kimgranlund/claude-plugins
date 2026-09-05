@@ -1,0 +1,3 @@
+interface:
+  display_name: "Perf Triage"
+  short_description: "Turn one or more Lighthouse JSON reports into a prioritised, size-bounded brief the agent can act on."

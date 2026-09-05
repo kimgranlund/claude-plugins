@@ -1,0 +1,3463 @@
+{
+ "lighthouseVersion": "13.4.1",
+ "requestedUrl": "https://ui-kit.exe.xyz/site/playground/chat",
+ "finalDisplayedUrl": "https://ui-kit.exe.xyz/site/playground/chat",
+ "fetchTime": "2026-09-05T12:03:43.033Z",
+ "configSettings": {
+  "formFactor": "desktop",
+  "throttlingMethod": "simulate"
+ },
+ "categories": {
+  "performance": {
+   "score": 0.78,
+   "auditRefs": [
+    {
+     "id": "first-contentful-paint",
+     "weight": 10,
+     "group": "metrics"
+    },
+    {
+     "id": "largest-contentful-paint",
+     "weight": 25,
+     "group": "metrics"
+    },
+    {
+     "id": "total-blocking-time",
+     "weight": 30,
+     "group": "metrics"
+    },
+    {
+     "id": "cumulative-layout-shift",
+     "weight": 25,
+     "group": "metrics"
+    },
+    {
+     "id": "speed-index",
+     "weight": 10,
+     "group": "metrics"
+    },
+    {
+     "id": "cache-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "cls-culprits-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "document-latency-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "dom-size-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "duplicated-javascript-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "font-display-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "forced-reflow-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "image-delivery-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "inp-breakdown-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "lcp-breakdown-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "lcp-discovery-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "legacy-javascript-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "modern-http-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "network-dependency-tree-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "render-blocking-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "third-parties-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "viewport-insight",
+     "weight": 0,
+     "group": "insights"
+    },
+    {
+     "id": "interactive",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "max-potential-fid",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "unminified-css",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "unminified-javascript",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "unused-css-rules",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "unused-javascript",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "total-byte-weight",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "user-timings",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "bootup-time",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "mainthread-work-breakdown",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "long-tasks",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "non-composited-animations",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "unsized-images",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "bf-cache",
+     "weight": 0,
+     "group": "diagnostics"
+    },
+    {
+     "id": "network-requests",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "network-rtt",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "network-server-latency",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "main-thread-tasks",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "diagnostics",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "metrics",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "screenshot-thumbnails",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "final-screenshot",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "script-treemap-data",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "resource-summary",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "redirects",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "server-response-time",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "layout-shifts",
+     "weight": 0,
+     "group": "hidden"
+    }
+   ]
+  },
+  "accessibility": {
+   "score": 0.92,
+   "auditRefs": [
+    {
+     "id": "accesskeys",
+     "weight": 0,
+     "group": "a11y-navigation"
+    },
+    {
+     "id": "aria-allowed-attr",
+     "weight": 10,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-command-name",
+     "weight": 7,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-conditional-attr",
+     "weight": 7,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-deprecated-role",
+     "weight": 1,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-dialog-name",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-hidden-body",
+     "weight": 10,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-hidden-focus",
+     "weight": 7,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-input-field-name",
+     "weight": 7,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-meter-name",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-progressbar-name",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-prohibited-attr",
+     "weight": 7,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-required-attr",
+     "weight": 10,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-required-children",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-required-parent",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-roles",
+     "weight": 10,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-text",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-toggle-field-name",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-tooltip-name",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-treeitem-name",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-valid-attr-value",
+     "weight": 10,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "aria-valid-attr",
+     "weight": 10,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "button-name",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "bypass",
+     "weight": 0,
+     "group": "a11y-navigation"
+    },
+    {
+     "id": "color-contrast",
+     "weight": 7,
+     "group": "a11y-color-contrast"
+    },
+    {
+     "id": "definition-list",
+     "weight": 0,
+     "group": "a11y-tables-lists"
+    },
+    {
+     "id": "dlitem",
+     "weight": 0,
+     "group": "a11y-tables-lists"
+    },
+    {
+     "id": "document-title",
+     "weight": 7,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "duplicate-id-aria",
+     "weight": 0,
+     "group": "a11y-aria"
+    },
+    {
+     "id": "form-field-multiple-labels",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "frame-title",
+     "weight": 7,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "heading-order",
+     "weight": 0,
+     "group": "a11y-navigation"
+    },
+    {
+     "id": "html-has-lang",
+     "weight": 7,
+     "group": "a11y-language"
+    },
+    {
+     "id": "html-lang-valid",
+     "weight": 7,
+     "group": "a11y-language"
+    },
+    {
+     "id": "html-xml-lang-mismatch",
+     "weight": 0,
+     "group": "a11y-language"
+    },
+    {
+     "id": "image-alt",
+     "weight": 10,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "input-button-name",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "input-image-alt",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "label",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "link-in-text-block",
+     "weight": 0,
+     "group": "a11y-color-contrast"
+    },
+    {
+     "id": "link-name",
+     "weight": 7,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "list",
+     "weight": 0,
+     "group": "a11y-tables-lists"
+    },
+    {
+     "id": "listitem",
+     "weight": 0,
+     "group": "a11y-tables-lists"
+    },
+    {
+     "id": "meta-refresh",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "meta-viewport",
+     "weight": 10,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "object-alt",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "select-name",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "skip-link",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "tabindex",
+     "weight": 7,
+     "group": "a11y-navigation"
+    },
+    {
+     "id": "target-size",
+     "weight": 7,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "td-headers-attr",
+     "weight": 0,
+     "group": "a11y-tables-lists"
+    },
+    {
+     "id": "th-has-data-cells",
+     "weight": 0,
+     "group": "a11y-tables-lists"
+    },
+    {
+     "id": "valid-lang",
+     "weight": 0,
+     "group": "a11y-language"
+    },
+    {
+     "id": "video-caption",
+     "weight": 0,
+     "group": "a11y-audio-video"
+    },
+    {
+     "id": "landmark-one-main",
+     "weight": 3,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "autocomplete-valid",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "presentation-role-conflict",
+     "weight": 1,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "svg-img-alt",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "focusable-controls",
+     "weight": 0
+    },
+    {
+     "id": "interactive-element-affordance",
+     "weight": 0
+    },
+    {
+     "id": "logical-tab-order",
+     "weight": 0
+    },
+    {
+     "id": "visual-order-follows-dom",
+     "weight": 0
+    },
+    {
+     "id": "focus-traps",
+     "weight": 0
+    },
+    {
+     "id": "managed-focus",
+     "weight": 0
+    },
+    {
+     "id": "use-landmarks",
+     "weight": 0
+    },
+    {
+     "id": "offscreen-content-hidden",
+     "weight": 0
+    },
+    {
+     "id": "custom-controls-labels",
+     "weight": 0
+    },
+    {
+     "id": "custom-controls-roles",
+     "weight": 0
+    },
+    {
+     "id": "table-duplicate-name",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "empty-heading",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "aria-allowed-role",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "image-redundant-alt",
+     "weight": 0,
+     "group": "a11y-names-labels"
+    },
+    {
+     "id": "identical-links-same-purpose",
+     "weight": 0,
+     "group": "a11y-best-practices"
+    },
+    {
+     "id": "label-content-name-mismatch",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "table-fake-caption",
+     "weight": 0,
+     "group": "hidden"
+    },
+    {
+     "id": "td-has-header",
+     "weight": 0,
+     "group": "hidden"
+    }
+   ]
+  },
+  "best-practices": {
+   "score": 0.96,
+   "auditRefs": [
+    {
+     "id": "is-on-https",
+     "weight": 5,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "redirects-http",
+     "weight": 0,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "geolocation-on-start",
+     "weight": 1,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "notification-on-start",
+     "weight": 1,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "csp-xss",
+     "weight": 0,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "has-hsts",
+     "weight": 0,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "origin-isolation",
+     "weight": 0,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "clickjacking-mitigation",
+     "weight": 0,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "trusted-types-xss",
+     "weight": 0,
+     "group": "best-practices-trust-safety"
+    },
+    {
+     "id": "paste-preventing-inputs",
+     "weight": 3,
+     "group": "best-practices-ux"
+    },
+    {
+     "id": "image-aspect-ratio",
+     "weight": 1,
+     "group": "best-practices-ux"
+    },
+    {
+     "id": "image-size-responsive",
+     "weight": 1,
+     "group": "best-practices-ux"
+    },
+    {
+     "id": "doctype",
+     "weight": 1,
+     "group": "best-practices-browser-compat"
+    },
+    {
+     "id": "charset",
+     "weight": 1,
+     "group": "best-practices-browser-compat"
+    },
+    {
+     "id": "baseline",
+     "weight": 0,
+     "group": "best-practices-browser-compat"
+    },
+    {
+     "id": "js-libraries",
+     "weight": 0,
+     "group": "best-practices-general"
+    },
+    {
+     "id": "deprecations",
+     "weight": 5,
+     "group": "best-practices-general"
+    },
+    {
+     "id": "third-party-cookies",
+     "weight": 5,
+     "group": "best-practices-general"
+    },
+    {
+     "id": "errors-in-console",
+     "weight": 1,
+     "group": "best-practices-general"
+    },
+    {
+     "id": "valid-source-maps",
+     "weight": 0,
+     "group": "best-practices-general"
+    },
+    {
+     "id": "inspector-issues",
+     "weight": 1,
+     "group": "best-practices-general"
+    }
+   ]
+  },
+  "seo": {
+   "score": 0.91,
+   "auditRefs": [
+    {
+     "id": "is-crawlable",
+     "weight": 4.043478260869565,
+     "group": "seo-crawl"
+    },
+    {
+     "id": "document-title",
+     "weight": 1,
+     "group": "seo-content"
+    },
+    {
+     "id": "meta-description",
+     "weight": 1,
+     "group": "seo-content"
+    },
+    {
+     "id": "http-status-code",
+     "weight": 1,
+     "group": "seo-crawl"
+    },
+    {
+     "id": "link-text",
+     "weight": 1,
+     "group": "seo-content"
+    },
+    {
+     "id": "crawlable-anchors",
+     "weight": 1,
+     "group": "seo-crawl"
+    },
+    {
+     "id": "robots-txt",
+     "weight": 0,
+     "group": "seo-crawl"
+    },
+    {
+     "id": "image-alt",
+     "weight": 1,
+     "group": "seo-content"
+    },
+    {
+     "id": "hreflang",
+     "weight": 1,
+     "group": "seo-content"
+    },
+    {
+     "id": "canonical",
+     "weight": 0,
+     "group": "seo-content"
+    },
+    {
+     "id": "structured-data",
+     "weight": 0
+    }
+   ]
+  }
+ },
+ "audits": {
+  "is-on-https": {
+   "id": "is-on-https",
+   "title": "Uses HTTPS",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "redirects-http": {
+   "id": "redirects-http",
+   "title": "Redirects HTTP traffic to HTTPS",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "first-contentful-paint": {
+   "id": "first-contentful-paint",
+   "title": "First Contentful Paint",
+   "score": 0.87,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "1.0 s",
+   "numericValue": 988.9109000000003,
+   "numericUnit": "millisecond"
+  },
+  "largest-contentful-paint": {
+   "id": "largest-contentful-paint",
+   "title": "Largest Contentful Paint",
+   "score": 0.51,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "2.4 s",
+   "numericValue": 2367.631300000001,
+   "numericUnit": "millisecond"
+  },
+  "speed-index": {
+   "id": "speed-index",
+   "title": "Speed Index",
+   "score": 0.21,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "3.3 s",
+   "numericValue": 3272.4638719747763,
+   "numericUnit": "millisecond"
+  },
+  "screenshot-thumbnails": {
+   "id": "screenshot-thumbnails",
+   "title": "Screenshot Thumbnails",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "filmstrip",
+    "itemCount": 8,
+    "items": [
+     {},
+     {},
+     {},
+     {},
+     {},
+     {},
+     {},
+     {}
+    ]
+   }
+  },
+  "final-screenshot": {
+   "id": "final-screenshot",
+   "title": "Final Screenshot",
+   "score": 1,
+   "scoreDisplayMode": "informative"
+  },
+  "total-blocking-time": {
+   "id": "total-blocking-time",
+   "title": "Total Blocking Time",
+   "score": 0.98,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "90 ms",
+   "numericValue": 93.99999999999989,
+   "numericUnit": "millisecond"
+  },
+  "max-potential-fid": {
+   "id": "max-potential-fid",
+   "title": "Max Potential First Input Delay",
+   "score": 0.97,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "100 ms",
+   "numericValue": 98.00000000000011,
+   "numericUnit": "millisecond"
+  },
+  "cumulative-layout-shift": {
+   "id": "cumulative-layout-shift",
+   "title": "Cumulative Layout Shift",
+   "score": 1,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "0.022",
+   "numericValue": 0.02182346184686735,
+   "numericUnit": "unitless",
+   "details": {
+    "type": "debugdata",
+    "itemCount": 1,
+    "items": [
+     {}
+    ]
+   }
+  },
+  "errors-in-console": {
+   "id": "errors-in-console",
+   "title": "Browser errors were logged to the console",
+   "score": 0,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 2,
+    "items": [
+     {
+      "source": "exception",
+      "sourceLocation": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": 0,
+       "column": 0
+      },
+      "description": "Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received"
+     },
+     {
+      "source": "exception",
+      "sourceLocation": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/playgrounds/chat/app/chat.html",
+       "urlProvider": "network",
+       "line": 0,
+       "column": 0
+      },
+      "description": "Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received"
+     }
+    ]
+   }
+  },
+  "server-response-time": {
+   "id": "server-response-time",
+   "title": "Initial server response time was short",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Root document took 50 ms",
+   "numericValue": 53,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   },
+   "details": {
+    "type": "opportunity",
+    "itemCount": 1,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/site/playground/chat"
+     }
+    ]
+   }
+  },
+  "interactive": {
+   "id": "interactive",
+   "title": "Time to Interactive",
+   "score": 0.85,
+   "scoreDisplayMode": "numeric",
+   "displayValue": "2.7 s",
+   "numericValue": 2739.7883300000008,
+   "numericUnit": "millisecond"
+  },
+  "user-timings": {
+   "id": "user-timings",
+   "title": "User Timing marks and measures",
+   "score": null,
+   "scoreDisplayMode": "notApplicable",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "redirects": {
+   "id": "redirects",
+   "title": "Avoid multiple page redirects",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "",
+   "numericValue": 0,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "LCP": 0,
+    "FCP": 0
+   },
+   "details": {
+    "type": "opportunity",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "image-aspect-ratio": {
+   "id": "image-aspect-ratio",
+   "title": "Displays images with correct aspect ratio",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "image-size-responsive": {
+   "id": "image-size-responsive",
+   "title": "Serves images with appropriate resolution",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "deprecations": {
+   "id": "deprecations",
+   "title": "Avoids deprecated APIs",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "third-party-cookies": {
+   "id": "third-party-cookies",
+   "title": "Avoids third-party cookies",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "mainthread-work-breakdown": {
+   "id": "mainthread-work-breakdown",
+   "title": "Minimize main-thread work",
+   "score": 0,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "2.6 s",
+   "numericValue": 2596.4259999999076,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "TBT": 100
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 7,
+    "items": [
+     {
+      "groupLabel": "Other",
+      "duration": 1884.374999999907
+     },
+     {
+      "groupLabel": "Script Evaluation",
+      "duration": 262.98800000000176
+     },
+     {
+      "groupLabel": "Style & Layout",
+      "duration": 236.15199999999993
+     },
+     {
+      "groupLabel": "Parse HTML & CSS",
+      "duration": 135.44699999999872
+     },
+     {
+      "groupLabel": "Script Parsing & Compilation",
+      "duration": 48.813999999999965
+     },
+     {
+      "groupLabel": "Garbage Collection",
+      "duration": 15.321999999999989
+     },
+     {
+      "groupLabel": "Rendering",
+      "duration": 13.327999999999976
+     }
+    ]
+   }
+  },
+  "bootup-time": {
+   "id": "bootup-time",
+   "title": "JavaScript execution time",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "0.2 s",
+   "numericValue": 242.37100000000254,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "TBT": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 5,
+    "items": [
+     {
+      "url": "Unattributable"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/playground/chat"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/playgrounds/chat/app/chat.html"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/slider/slider.class.js"
+     }
+    ]
+   }
+  },
+  "diagnostics": {
+   "id": "diagnostics",
+   "title": "Diagnostics",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "debugdata",
+    "itemCount": 1,
+    "items": [
+     {
+      "numRequests": 1152,
+      "numScripts": 660,
+      "numStylesheets": 397,
+      "numFonts": 0,
+      "numTasks": 8263,
+      "numTasksOver10ms": 36,
+      "numTasksOver25ms": 22,
+      "numTasksOver50ms": 16,
+      "numTasksOver100ms": 1,
+      "numTasksOver500ms": 0,
+      "rtt": 0.042899999999999994,
+      "throughput": 13544102.676414883,
+      "maxRtt": 0.5934999999999999,
+      "maxServerLatency": 341.2025,
+      "totalByteWeight": 2130467,
+      "totalTaskTime": 2596.425999999933,
+      "mainDocumentTransferSize": 5896
+     }
+    ]
+   }
+  },
+  "network-requests": {
+   "id": "network-requests",
+   "title": "Network Requests",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 1152,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/site/playground/chat",
+      "transferSize": 5896,
+      "resourceSize": 18954,
+      "resourceType": "Document",
+      "mimeType": "text/html"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/host.css",
+      "transferSize": 999,
+      "resourceSize": 2086,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/index.css",
+      "transferSize": 483,
+      "resourceSize": 852,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/scale.css",
+      "transferSize": 8342,
+      "resourceSize": 47813,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-modules/index.css",
+      "transferSize": 840,
+      "resourceSize": 2182,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/site.css",
+      "transferSize": 11764,
+      "resourceSize": 35404,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/dev-chunks.js",
+      "transferSize": 1939,
+      "resourceSize": 4726,
+      "resourceType": "Script",
+      "mimeType": "text/javascript"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/site.js",
+      "transferSize": 15527,
+      "resourceSize": 42081,
+      "resourceType": "Script",
+      "mimeType": "text/javascript"
+     },
+     {
+      "url": "chrome-extension://jmekfmbnaedfebfnmakmokmlfpblbfdm/cs/ta/tag_assistant_api_bin.js",
+      "transferSize": 13301,
+      "resourceSize": 13301,
+      "resourceType": "Script",
+      "mimeType": "text/javascript"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/tokens.css",
+      "transferSize": 871,
+      "resourceSize": 1476,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/resets.css",
+      "transferSize": 2396,
+      "resourceSize": 4774,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/components.css",
+      "transferSize": 1386,
+      "resourceSize": 6488,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/colors/index.css",
+      "transferSize": 520,
+      "resourceSize": 811,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/typography.css",
+      "transferSize": 1971,
+      "resourceSize": 4117,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/foundation/index.css",
+      "transferSize": 463,
+      "resourceSize": 582,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/api/sizing.css",
+      "transferSize": 5420,
+      "resourceSize": 23241,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/api/sizing-fallback.css",
+      "transferSize": 1034,
+      "resourceSize": 1761,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/api/parametric-scope.css",
+      "transferSize": 1411,
+      "resourceSize": 4437,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/icon/icon.css",
+      "transferSize": 818,
+      "resourceSize": 1825,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/button/button.css",
+      "transferSize": 8548,
+      "resourceSize": 24762,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/link/link.css",
+      "transferSize": 1184,
+      "resourceSize": 2887,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/input/input.css",
+      "transferSize": 9009,
+      "resourceSize": 26604,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/textarea/textarea.css",
+      "transferSize": 2396,
+      "resourceSize": 6659,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/check/check.css",
+      "transferSize": 2006,
+      "resourceSize": 5746,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/radio/radio.css",
+      "transferSize": 1332,
+      "resourceSize": 3860,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/radio-group/radio-group.css",
+      "transferSize": 527,
+      "resourceSize": 988,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/option-card/option-card.css",
+      "transferSize": 3712,
+      "resourceSize": 10907,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/switch/switch.css",
+      "transferSize": 2109,
+      "resourceSize": 6123,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/slider/slider.css",
+      "transferSize": 4539,
+      "resourceSize": 14097,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/select/select.css",
+      "transferSize": 10138,
+      "resourceSize": 31409,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/segment/segment.css",
+      "transferSize": 2418,
+      "resourceSize": 5847,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/segmented/segmented.css",
+      "transferSize": 1472,
+      "resourceSize": 3622,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/range/range.css",
+      "transferSize": 1995,
+      "resourceSize": 6167,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/tree/tree.css",
+      "transferSize": 2158,
+      "resourceSize": 6625,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/drilldown/drilldown.css",
+      "transferSize": 3302,
+      "resourceSize": 11396,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/pane/pane.css",
+      "transferSize": 2484,
+      "resourceSize": 7238,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/page/page.css",
+      "transferSize": 10128,
+      "resourceSize": 30177,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chat-thread/chat-input.css",
+      "transferSize": 3892,
+      "resourceSize": 11988,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chat-thread/chat-thread.css",
+      "transferSize": 1532,
+      "resourceSize": 5811,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/drawer/drawer.css",
+      "transferSize": 3602,
+      "resourceSize": 14215,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/modal/modal.css",
+      "transferSize": 2388,
+      "resourceSize": 7395,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/feed/feed.css",
+      "transferSize": 2965,
+      "resourceSize": 8180,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/toast/toast.css",
+      "transferSize": 3389,
+      "resourceSize": 9646,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/anchor-bar/anchor-bar.css",
+      "transferSize": 2517,
+      "resourceSize": 6470,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/tabs/tabs.css",
+      "transferSize": 2546,
+      "resourceSize": 7093,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/tooltip/tooltip.css",
+      "transferSize": 2020,
+      "resourceSize": 5491,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/badge/badge.css",
+      "transferSize": 4902,
+      "resourceSize": 13302,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/breadcrumb/breadcrumb.css",
+      "transferSize": 1577,
+      "resourceSize": 3845,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/command/command.css",
+      "transferSize": 3163,
+      "resourceSize": 10304,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/color-area/color-area.css",
+      "transferSize": 1623,
+      "resourceSize": 5448,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/color-input/color-input.css",
+      "transferSize": 2005,
+      "resourceSize": 4709,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/noodles/noodles.css",
+      "transferSize": 1389,
+      "resourceSize": 4342,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table/table.css",
+      "transferSize": 8937,
+      "resourceSize": 29322,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table-toolbar/table-toolbar.css",
+      "transferSize": 13544,
+      "resourceSize": 40363,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table-footer/table-footer.css",
+      "transferSize": 765,
+      "resourceSize": 1729,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/timeline/timeline.css",
+      "transferSize": 5957,
+      "resourceSize": 21877,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/upload/upload.css",
+      "transferSize": 1413,
+      "resourceSize": 4431,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/card/card.css",
+      "transferSize": 9514,
+      "resourceSize": 29252,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/frame/frame.css",
+      "transferSize": 985,
+      "resourceSize": 1835,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/avatar/avatar.css",
+      "transferSize": 2405,
+      "resourceSize": 7563,
+      "resourceType": "Stylesheet",
+      "mimeType": "text/css"
+     }
+    ]
+   }
+  },
+  "network-rtt": {
+   "id": "network-rtt",
+   "title": "Network Round Trip Times",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "displayValue": "0 ms",
+   "numericValue": 0.5934999999999999,
+   "numericUnit": "millisecond",
+   "details": {
+    "type": "table",
+    "itemCount": 3,
+    "items": [
+     {},
+     {},
+     {}
+    ]
+   }
+  },
+  "network-server-latency": {
+   "id": "network-server-latency",
+   "title": "Server Backend Latencies",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "displayValue": "340 ms",
+   "numericValue": 341.2025,
+   "numericUnit": "millisecond",
+   "details": {
+    "type": "table",
+    "itemCount": 3,
+    "items": [
+     {},
+     {},
+     {}
+    ]
+   }
+  },
+  "main-thread-tasks": {
+   "id": "main-thread-tasks",
+   "title": "Tasks",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 52,
+    "items": [
+     {
+      "duration": 5.256
+     },
+     {
+      "duration": 15.239
+     },
+     {
+      "duration": 11.092
+     },
+     {
+      "duration": 11.294
+     },
+     {
+      "duration": 91.222
+     },
+     {
+      "duration": 31.3
+     },
+     {
+      "duration": 23.543
+     },
+     {
+      "duration": 13.856
+     }
+    ]
+   }
+  },
+  "metrics": {
+   "id": "metrics",
+   "title": "Metrics",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "numericValue": 2740,
+   "numericUnit": "millisecond",
+   "details": {
+    "type": "debugdata",
+    "itemCount": 2,
+    "items": [
+     {},
+     {}
+    ]
+   }
+  },
+  "resource-summary": {
+   "id": "resource-summary",
+   "title": "Resources Summary",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 9,
+    "items": [
+     {
+      "transferSize": 2088694,
+      "resourceType": "total",
+      "label": "Total"
+     },
+     {
+      "transferSize": 1476367,
+      "resourceType": "script",
+      "label": "Script"
+     },
+     {
+      "transferSize": 528992,
+      "resourceType": "stylesheet",
+      "label": "Stylesheet"
+     },
+     {
+      "transferSize": 74044,
+      "resourceType": "other",
+      "label": "Other"
+     },
+     {
+      "transferSize": 8050,
+      "resourceType": "document",
+      "label": "Document"
+     },
+     {
+      "transferSize": 1241,
+      "resourceType": "image",
+      "label": "Image"
+     },
+     {
+      "transferSize": 0,
+      "resourceType": "media",
+      "label": "Media"
+     },
+     {
+      "transferSize": 0,
+      "resourceType": "font",
+      "label": "Font"
+     }
+    ]
+   }
+  },
+  "layout-shifts": {
+   "id": "layout-shifts",
+   "title": "Avoid large layout shifts",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "displayValue": "2 layout shifts found",
+   "metricSavings": {
+    "CLS": 0.022
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 2,
+    "items": [
+     {
+      "node": {
+       "selector": "body > main#demo-root > chat-shell#chat > chat-composer",
+       "snippet": "<chat-composer>",
+       "nodeLabel": "Haiku 4.5"
+      }
+     },
+     {}
+    ]
+   }
+  },
+  "long-tasks": {
+   "id": "long-tasks",
+   "title": "Avoid long main-thread tasks",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "displayValue": "12 long tasks found",
+   "metricSavings": {
+    "TBT": 100
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 12,
+    "items": [
+     {
+      "url": "Unattributable",
+      "duration": 98.00000000000011
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/playgrounds/chat/app/chat.html",
+      "duration": 66
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/playground/chat",
+      "duration": 66
+     },
+     {
+      "url": "Unattributable",
+      "duration": 65
+     },
+     {
+      "url": "Unattributable",
+      "duration": 64.99999999999989
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/playground/chat",
+      "duration": 63
+     },
+     {
+      "url": "Unattributable",
+      "duration": 63
+     },
+     {
+      "url": "Unattributable",
+      "duration": 61
+     }
+    ]
+   }
+  },
+  "non-composited-animations": {
+   "id": "non-composited-animations",
+   "title": "Avoid non-composited animations",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "displayValue": "2 animated elements found",
+   "metricSavings": {
+    "CLS": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 2,
+    "items": [
+     {
+      "node": {
+       "selector": "section-ui > nav-ui#nav > nav-item-ui > span",
+       "snippet": "<span slot=\"icon\">",
+       "nodeLabel": "section-ui > nav-ui#nav > nav-item-ui > span"
+      }
+     },
+     {
+      "node": {
+       "selector": "admin-sidebar > section-ui > nav-ui#nav > nav-item-ui",
+       "snippet": "<nav-item-ui icon=\"chat-circle\" text=\"Chat\" value=\"/site/playground/chat\" data-section-leaf=\"Chat\" role=\"link\" tabindex=\"0\" selected=\"\" aria-current=\"page\">",
+       "nodeLabel": "Chat"
+      }
+     }
+    ]
+   }
+  },
+  "unsized-images": {
+   "id": "unsized-images",
+   "title": "Image elements have explicit `width` and `height`",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "CLS": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "valid-source-maps": {
+   "id": "valid-source-maps",
+   "title": "Missing source maps for large first-party JavaScript",
+   "score": 0,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 48,
+    "items": [
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/store.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/store.js.map"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/store.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/store.js.map"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona.js.map"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona.js.map"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona-file.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona-file.js.map"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona-file.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/persona-file.js.map"
+     },
+     {
+      "scriptUrl": "https://ui-kit.exe.xyz/packages/llm/persona/index.js",
+      "sourceMapUrl": "https://ui-kit.exe.xyz/packages/llm/persona/index.js.map"
+     }
+    ]
+   }
+  },
+  "csp-xss": {
+   "id": "csp-xss",
+   "title": "Ensure CSP is effective against XSS attacks",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 1,
+    "items": [
+     {
+      "description": "No CSP found in enforcement mode"
+     }
+    ]
+   }
+  },
+  "has-hsts": {
+   "id": "has-hsts",
+   "title": "Use a strong HSTS policy",
+   "score": null,
+   "scoreDisplayMode": "notApplicable",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "origin-isolation": {
+   "id": "origin-isolation",
+   "title": "Ensure proper origin isolation with COOP",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 1,
+    "items": [
+     {
+      "description": "No COOP header found"
+     }
+    ]
+   }
+  },
+  "clickjacking-mitigation": {
+   "id": "clickjacking-mitigation",
+   "title": "Mitigate clickjacking with XFO or CSP",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 1,
+    "items": [
+     {
+      "description": "No frame control policy found"
+     }
+    ]
+   }
+  },
+  "trusted-types-xss": {
+   "id": "trusted-types-xss",
+   "title": "Mitigate DOM-based XSS with Trusted Types",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 1,
+    "items": [
+     {
+      "description": "No `Content-Security-Policy` header with Trusted Types directive found"
+     }
+    ]
+   }
+  },
+  "script-treemap-data": {
+   "id": "script-treemap-data",
+   "title": "Script Treemap Data",
+   "score": 1,
+   "scoreDisplayMode": "informative"
+  },
+  "accesskeys": {
+   "id": "accesskeys",
+   "title": "`[accesskey]` values are unique",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-allowed-attr": {
+   "id": "aria-allowed-attr",
+   "title": "`[aria-*]` attributes match their roles",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-allowed-role": {
+   "id": "aria-allowed-role",
+   "title": "Uses ARIA roles only on compatible elements",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-command-name": {
+   "id": "aria-command-name",
+   "title": "`button`, `link`, and `menuitem` elements have accessible names",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-conditional-attr": {
+   "id": "aria-conditional-attr",
+   "title": "ARIA attributes are used as specified for the element's role",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-deprecated-role": {
+   "id": "aria-deprecated-role",
+   "title": "Deprecated ARIA roles were not used",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-dialog-name": {
+   "id": "aria-dialog-name",
+   "title": "Elements with `role=\"dialog\"` or `role=\"alertdialog\"` have accessible names.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-hidden-body": {
+   "id": "aria-hidden-body",
+   "title": "`[aria-hidden=\"true\"]` is not present on the document `<body>`",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-hidden-focus": {
+   "id": "aria-hidden-focus",
+   "title": "`[aria-hidden=\"true\"]` elements do not contain focusable descendents",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-input-field-name": {
+   "id": "aria-input-field-name",
+   "title": "ARIA input fields do not have accessible names",
+   "score": 0,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 2,
+    "items": [
+     {
+      "node": {
+       "selector": "admin-shell > admin-sidebar > admin-topbar > select-ui#workspace-select",
+       "snippet": "<select-ui id=\"workspace-select\" mark=\"\" value=\"adia-ui\" variant=\"ghost\" style=\"flex:1\" role=\"combobox\" tabindex=\"0\" aria-expanded=\"false\" placement=\"bottom-start\">",
+       "explanation": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+       "nodeLabel": "AdiaUI"
+      }
+     },
+     {
+      "node": {
+       "selector": "admin-shell > admin-sidebar > admin-statusbar > select-ui#user-select",
+       "snippet": "<select-ui id=\"user-select\" avatar=\"https://i.pravatar.cc/32?u=kimba\" value=\"kimba\" variant=\"ghost\" style=\"flex:1\" role=\"combobox\" tabindex=\"0\" aria-expanded=\"false\" placement=\"bottom-start\">",
+       "explanation": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+       "nodeLabel": "kimba"
+      }
+     }
+    ]
+   }
+  },
+  "aria-meter-name": {
+   "id": "aria-meter-name",
+   "title": "ARIA `meter` elements have accessible names",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-progressbar-name": {
+   "id": "aria-progressbar-name",
+   "title": "ARIA `progressbar` elements have accessible names",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-prohibited-attr": {
+   "id": "aria-prohibited-attr",
+   "title": "Elements use only permitted ARIA attributes",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-required-attr": {
+   "id": "aria-required-attr",
+   "title": "`[role]`s have all required `[aria-*]` attributes",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-required-children": {
+   "id": "aria-required-children",
+   "title": "Elements with an ARIA `[role]` that require children to contain a specific `[role]` have all required children.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-required-parent": {
+   "id": "aria-required-parent",
+   "title": "`[role]`s are contained by their required parent element",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-roles": {
+   "id": "aria-roles",
+   "title": "`[role]` values are valid",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-text": {
+   "id": "aria-text",
+   "title": "Elements with the `role=text` attribute do not have focusable descendents.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-toggle-field-name": {
+   "id": "aria-toggle-field-name",
+   "title": "ARIA toggle fields have accessible names",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-tooltip-name": {
+   "id": "aria-tooltip-name",
+   "title": "ARIA `tooltip` elements have accessible names",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-treeitem-name": {
+   "id": "aria-treeitem-name",
+   "title": "ARIA `treeitem` elements have accessible names",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "aria-valid-attr-value": {
+   "id": "aria-valid-attr-value",
+   "title": "`[aria-*]` attributes have valid values",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "aria-valid-attr": {
+   "id": "aria-valid-attr",
+   "title": "`[aria-*]` attributes are valid and not misspelled",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "button-name": {
+   "id": "button-name",
+   "title": "Buttons have an accessible name",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "bypass": {
+   "id": "bypass",
+   "title": "The page contains a heading, skip link, or landmark region",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "color-contrast": {
+   "id": "color-contrast",
+   "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+   "score": 0,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 1,
+    "items": [
+     {
+      "node": {
+       "selector": "admin-sidebar > section-ui > nav-ui#nav > div",
+       "snippet": "<div data-nav-label=\"\">",
+       "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.98 (foreground color: #566972, background color: #191c1e, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+       "nodeLabel": "COMPONENTS"
+      }
+     }
+    ]
+   }
+  },
+  "definition-list": {
+   "id": "definition-list",
+   "title": "`<dl>`'s contain only properly-ordered `<dt>` and `<dd>` groups, `<script>`, `<template>` or `<div>` elements.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "dlitem": {
+   "id": "dlitem",
+   "title": "Definition list items are wrapped in `<dl>` elements",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "document-title": {
+   "id": "document-title",
+   "title": "Document has a `<title>` element",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "duplicate-id-aria": {
+   "id": "duplicate-id-aria",
+   "title": "ARIA IDs are unique",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "empty-heading": {
+   "id": "empty-heading",
+   "title": "All heading elements contain content.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "form-field-multiple-labels": {
+   "id": "form-field-multiple-labels",
+   "title": "No form fields have multiple labels",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "frame-title": {
+   "id": "frame-title",
+   "title": "`<frame>` or `<iframe>` elements have a title",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "heading-order": {
+   "id": "heading-order",
+   "title": "Heading elements appear in a sequentially-descending order",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "html-has-lang": {
+   "id": "html-has-lang",
+   "title": "`<html>` element has a `[lang]` attribute",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "html-lang-valid": {
+   "id": "html-lang-valid",
+   "title": "`<html>` element has a valid value for its `[lang]` attribute",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "html-xml-lang-mismatch": {
+   "id": "html-xml-lang-mismatch",
+   "title": "`<html>` element has an `[xml:lang]` attribute with the same base language as the `[lang]` attribute.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "identical-links-same-purpose": {
+   "id": "identical-links-same-purpose",
+   "title": "Identical links have the same purpose.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "image-alt": {
+   "id": "image-alt",
+   "title": "Image elements have `[alt]` attributes",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "image-redundant-alt": {
+   "id": "image-redundant-alt",
+   "title": "Image elements do not have `[alt]` attributes that are redundant text.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "input-button-name": {
+   "id": "input-button-name",
+   "title": "Input buttons have discernible text.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "input-image-alt": {
+   "id": "input-image-alt",
+   "title": "`<input type=\"image\">` elements have `[alt]` text",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "label-content-name-mismatch": {
+   "id": "label-content-name-mismatch",
+   "title": "Elements with visible text labels have matching accessible names.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "label": {
+   "id": "label",
+   "title": "Form elements have associated labels",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "landmark-one-main": {
+   "id": "landmark-one-main",
+   "title": "Document has a main landmark.",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "link-name": {
+   "id": "link-name",
+   "title": "Links have a discernible name",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "link-in-text-block": {
+   "id": "link-in-text-block",
+   "title": "Links are distinguishable without relying on color.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "list": {
+   "id": "list",
+   "title": "Lists contain only `<li>` elements and script supporting elements (`<script>` and `<template>`).",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "listitem": {
+   "id": "listitem",
+   "title": "List items (`<li>`) are contained within `<ul>`, `<ol>` or `<menu>` parent elements",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "meta-refresh": {
+   "id": "meta-refresh",
+   "title": "The document does not use `<meta http-equiv=\"refresh\">`",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "meta-viewport": {
+   "id": "meta-viewport",
+   "title": "`[user-scalable=\"no\"]` is not used in the `<meta name=\"viewport\">` element and the `[maximum-scale]` attribute is not less than 5.",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "object-alt": {
+   "id": "object-alt",
+   "title": "`<object>` elements have alternate text",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "select-name": {
+   "id": "select-name",
+   "title": "Select elements have associated label elements.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "skip-link": {
+   "id": "skip-link",
+   "title": "Skip links are focusable.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "tabindex": {
+   "id": "tabindex",
+   "title": "No element has a `[tabindex]` value greater than 0",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "table-duplicate-name": {
+   "id": "table-duplicate-name",
+   "title": "Tables have different content in the summary attribute and `<caption>`.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "table-fake-caption": {
+   "id": "table-fake-caption",
+   "title": "Tables use `<caption>` instead of cells with the `[colspan]` attribute to indicate a caption.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "target-size": {
+   "id": "target-size",
+   "title": "Touch targets have sufficient size and spacing.",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "td-has-header": {
+   "id": "td-has-header",
+   "title": "`<td>` elements in a large `<table>` have one or more table headers.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "td-headers-attr": {
+   "id": "td-headers-attr",
+   "title": "Cells in a `<table>` element that use the `[headers]` attribute refer to table cells within the same table.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "th-has-data-cells": {
+   "id": "th-has-data-cells",
+   "title": "`<th>` elements and elements with `[role=\"columnheader\"/\"rowheader\"]` have data cells they describe.",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "valid-lang": {
+   "id": "valid-lang",
+   "title": "`[lang]` attributes have a valid value",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "video-caption": {
+   "id": "video-caption",
+   "title": "`<video>` elements contain a `<track>` element with `[kind=\"captions\"]`",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "custom-controls-labels": {
+   "id": "custom-controls-labels",
+   "title": "Custom controls have associated labels",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "custom-controls-roles": {
+   "id": "custom-controls-roles",
+   "title": "Custom controls have ARIA roles",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "focus-traps": {
+   "id": "focus-traps",
+   "title": "User focus is not accidentally trapped in a region",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "focusable-controls": {
+   "id": "focusable-controls",
+   "title": "Interactive controls are keyboard focusable",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "interactive-element-affordance": {
+   "id": "interactive-element-affordance",
+   "title": "Interactive elements indicate their purpose and state",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "logical-tab-order": {
+   "id": "logical-tab-order",
+   "title": "The page has a logical tab order",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "managed-focus": {
+   "id": "managed-focus",
+   "title": "The user's focus is directed to new content added to the page",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "offscreen-content-hidden": {
+   "id": "offscreen-content-hidden",
+   "title": "Offscreen content is hidden from assistive technology",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "use-landmarks": {
+   "id": "use-landmarks",
+   "title": "HTML5 landmark elements are used to improve navigation",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "visual-order-follows-dom": {
+   "id": "visual-order-follows-dom",
+   "title": "Visual order on the page follows DOM order",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "autocomplete-valid": {
+   "id": "autocomplete-valid",
+   "title": "`autocomplete` attributes are used correctly",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "presentation-role-conflict": {
+   "id": "presentation-role-conflict",
+   "title": "Elements with `role=\"none\"` or `role=\"presentation\"` do not have conflicts",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "svg-img-alt": {
+   "id": "svg-img-alt",
+   "title": "SVG elements with an `img` role have an accessible text alternative",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "total-byte-weight": {
+   "id": "total-byte-weight",
+   "title": "Avoids enormous network payloads",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Total size was 2,055 KiB",
+   "numericValue": 2103865,
+   "numericUnit": "byte",
+   "details": {
+    "type": "table",
+    "itemCount": 10,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+      "totalBytes": 244520
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chart/chart.class.js",
+      "totalBytes": 59015
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/sitemap.json",
+      "totalBytes": 33118
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table/table.class.js",
+      "totalBytes": 27234
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/dist/host.sheet.js",
+      "totalBytes": 22932
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/themes.css",
+      "totalBytes": 21310
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table-toolbar/table-toolbar.class.js",
+      "totalBytes": 20537
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/gen-ui/a2ui/renderer.js",
+      "totalBytes": 17515
+     }
+    ]
+   }
+  },
+  "unminified-css": {
+   "id": "unminified-css",
+   "title": "Minify CSS",
+   "score": 0,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Est savings of 146 KiB",
+   "numericValue": 120,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "FCP": 100,
+    "LCP": 100
+   },
+   "details": {
+    "type": "opportunity",
+    "itemCount": 39,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table-toolbar/table-toolbar.css",
+      "wastedBytes": 10658,
+      "totalBytes": 13544
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chart/chart.css",
+      "wastedBytes": 7879,
+      "totalBytes": 12997
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/page/page.css",
+      "wastedBytes": 7579,
+      "totalBytes": 10128
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/site.css",
+      "wastedBytes": 7174,
+      "totalBytes": 11764
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/input/input.css",
+      "wastedBytes": 6508,
+      "totalBytes": 9009
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/card/card.css",
+      "wastedBytes": 6099,
+      "totalBytes": 9514
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/tag/tag.css",
+      "wastedBytes": 5983,
+      "totalBytes": 7924
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/select/select.css",
+      "wastedBytes": 5968,
+      "totalBytes": 10138
+     }
+    ]
+   }
+  },
+  "unminified-javascript": {
+   "id": "unminified-javascript",
+   "title": "Minify JavaScript",
+   "score": 0,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Est savings of 194 KiB",
+   "numericValue": 120,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 100
+   },
+   "details": {
+    "type": "opportunity",
+    "itemCount": 33,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chart/chart.class.js",
+      "wastedBytes": 34407,
+      "totalBytes": 58985
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table/table.class.js",
+      "wastedBytes": 15929,
+      "totalBytes": 27199
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/core/icons-cdn.js",
+      "wastedBytes": 11958,
+      "totalBytes": 13416
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/site/site.js",
+      "wastedBytes": 9552,
+      "totalBytes": 15494
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/core/icons.js",
+      "wastedBytes": 8713,
+      "totalBytes": 12395
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/select/select.class.js",
+      "wastedBytes": 8702,
+      "totalBytes": 16528
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/preview/preview.class.js",
+      "wastedBytes": 8164,
+      "totalBytes": 12437
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/core/asset-loader.js",
+      "wastedBytes": 7777,
+      "totalBytes": 8995
+     }
+    ]
+   }
+  },
+  "unused-css-rules": {
+   "id": "unused-css-rules",
+   "title": "Reduce unused CSS",
+   "score": 0.5,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Est savings of 11 KiB",
+   "numericValue": 0,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   },
+   "details": {
+    "type": "opportunity",
+    "itemCount": 1,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/site/site.css",
+      "wastedBytes": 11426,
+      "totalBytes": 11731
+     }
+    ]
+   }
+  },
+  "unused-javascript": {
+   "id": "unused-javascript",
+   "title": "Reduce unused JavaScript",
+   "score": 0,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Est savings of 262 KiB",
+   "numericValue": 200,
+   "numericUnit": "millisecond",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 200
+   },
+   "details": {
+    "type": "opportunity",
+    "itemCount": 3,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+      "wastedBytes": 192062,
+      "totalBytes": 244464
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chart/chart.class.js",
+      "wastedBytes": 54804,
+      "totalBytes": 58053
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table/table.class.js",
+      "wastedBytes": 21449,
+      "totalBytes": 26314
+     }
+    ]
+   }
+  },
+  "doctype": {
+   "id": "doctype",
+   "title": "Page has the HTML doctype",
+   "score": 1,
+   "scoreDisplayMode": "binary"
+  },
+  "charset": {
+   "id": "charset",
+   "title": "Properly defines charset",
+   "score": 1,
+   "scoreDisplayMode": "binary"
+  },
+  "geolocation-on-start": {
+   "id": "geolocation-on-start",
+   "title": "Avoids requesting the geolocation permission on page load",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "inspector-issues": {
+   "id": "inspector-issues",
+   "title": "No issues in the `Issues` panel in Chrome Devtools",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "js-libraries": {
+   "id": "js-libraries",
+   "title": "Detected JavaScript libraries",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "notification-on-start": {
+   "id": "notification-on-start",
+   "title": "Avoids requesting the notification permission on page load",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "paste-preventing-inputs": {
+   "id": "paste-preventing-inputs",
+   "title": "Allows users to paste into input fields",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "baseline": {
+   "id": "baseline",
+   "title": "Baseline Features",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 62,
+    "items": [
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": 1,
+       "column": 18421
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": 1,
+       "column": 2509
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": 1,
+       "column": 17083
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": -2,
+       "column": -2
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": -2,
+       "column": -2
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": -2,
+       "column": -2
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/site/playground/chat",
+       "urlProvider": "network",
+       "line": 1,
+       "column": 5589
+      }
+     },
+     {
+      "source": {
+       "type": "source-location",
+       "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+       "urlProvider": "network",
+       "line": 94,
+       "column": 5643
+      }
+     }
+    ]
+   }
+  },
+  "meta-description": {
+   "id": "meta-description",
+   "title": "Document does not have a meta description",
+   "score": 0,
+   "scoreDisplayMode": "binary"
+  },
+  "http-status-code": {
+   "id": "http-status-code",
+   "title": "Page has successful HTTP status code",
+   "score": 1,
+   "scoreDisplayMode": "binary"
+  },
+  "link-text": {
+   "id": "link-text",
+   "title": "Links have descriptive text",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "crawlable-anchors": {
+   "id": "crawlable-anchors",
+   "title": "Links are crawlable",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "is-crawlable": {
+   "id": "is-crawlable",
+   "title": "Page isn’t blocked from indexing",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "robots-txt": {
+   "id": "robots-txt",
+   "title": "robots.txt is valid",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "hreflang": {
+   "id": "hreflang",
+   "title": "Document has a valid `hreflang`",
+   "score": 1,
+   "scoreDisplayMode": "binary",
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "canonical": {
+   "id": "canonical",
+   "title": "Document has a valid `rel=canonical`",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "structured-data": {
+   "id": "structured-data",
+   "title": "Structured data is valid",
+   "score": null,
+   "scoreDisplayMode": "manual"
+  },
+  "bf-cache": {
+   "id": "bf-cache",
+   "title": "Page didn't prevent back/forward cache restoration",
+   "score": 1,
+   "scoreDisplayMode": "binary"
+  },
+  "cache-insight": {
+   "id": "cache-insight",
+   "title": "Use efficient cache lifetimes",
+   "score": 0,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Est savings of 1,958 KiB",
+   "metricSavings": {
+    "FCP": 400,
+    "LCP": 1450
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 1055,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+      "wastedBytes": 244520,
+      "totalBytes": 244520,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/chart/chart.class.js",
+      "wastedBytes": 59015,
+      "totalBytes": 59015,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table/table.class.js",
+      "wastedBytes": 27234,
+      "totalBytes": 27234,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/dist/host.sheet.js",
+      "wastedBytes": 22932,
+      "totalBytes": 22932,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/themes.css",
+      "wastedBytes": 21310,
+      "totalBytes": 21310,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/table-toolbar/table-toolbar.class.js",
+      "wastedBytes": 20537,
+      "totalBytes": 20537,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/gen-ui/a2ui/renderer.js",
+      "wastedBytes": 17515,
+      "totalBytes": 17515,
+      "cacheLifetimeMs": 0
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/select/select.class.js",
+      "wastedBytes": 16559,
+      "totalBytes": 16559,
+      "cacheLifetimeMs": 0
+     }
+    ]
+   }
+  },
+  "cls-culprits-insight": {
+   "id": "cls-culprits-insight",
+   "title": "Layout shift culprits",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "metricSavings": {
+    "CLS": 0
+   },
+   "details": {
+    "type": "list",
+    "itemCount": 2,
+    "items": [
+     {
+      "type": "table",
+      "items": [
+       {
+        "node": {}
+       },
+       {}
+      ]
+     },
+     {
+      "type": "table",
+      "items": [
+       {
+        "node": {}
+       },
+       {
+        "node": {
+         "selector": "body > main#demo-root > chat-shell#chat > chat-composer",
+         "snippet": "<chat-composer>",
+         "nodeLabel": "Haiku 4.5"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "document-latency-insight": {
+   "id": "document-latency-insight",
+   "title": "Document request latency",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   }
+  },
+  "dom-size-insight": {
+   "id": "dom-size-insight",
+   "title": "Optimize DOM size",
+   "score": 1,
+   "scoreDisplayMode": "numeric",
+   "numericValue": 3490,
+   "numericUnit": "element",
+   "metricSavings": {
+    "INP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 3,
+    "items": [
+     {},
+     {},
+     {
+      "node": {
+       "selector": "dialog > command-ui#cmd > section#command-1-list > div",
+       "snippet": "<div data-group=\"\">",
+       "nodeLabel": "Primitives\n      \n      Overview\n      \n    \n      \n      A2UI Root\n      \n    …"
+      }
+     }
+    ]
+   }
+  },
+  "duplicated-javascript-insight": {
+   "id": "duplicated-javascript-insight",
+   "title": "Duplicated JavaScript",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "font-display-insight": {
+   "id": "font-display-insight",
+   "title": "Font display",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "INP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "forced-reflow-insight": {
+   "id": "forced-reflow-insight",
+   "title": "Forced reflow",
+   "score": 0,
+   "scoreDisplayMode": "numeric",
+   "details": {
+    "type": "list",
+    "itemCount": 1,
+    "items": [
+     {
+      "type": "table",
+      "items": [
+       {
+        "reflowTime": 30.181,
+        "source": {
+         "type": "source-location",
+         "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+         "urlProvider": "network",
+         "line": 229,
+         "column": 7447
+        }
+       },
+       {
+        "reflowTime": 1.554,
+        "source": {
+         "type": "source-location",
+         "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+         "urlProvider": "network",
+         "line": 131,
+         "column": 9134
+        }
+       },
+       {
+        "reflowTime": 0.088,
+        "source": {
+         "type": "source-location",
+         "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+         "urlProvider": "network",
+         "line": 420,
+         "column": 10748
+        }
+       },
+       {
+        "reflowTime": 1.406,
+        "source": {
+         "type": "source-location",
+         "url": "https://ui-kit.exe.xyz/packages/web-modules/dist/everything.min.js",
+         "urlProvider": "network",
+         "line": 423,
+         "column": 32537
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "image-delivery-insight": {
+   "id": "image-delivery-insight",
+   "title": "Improve image delivery",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "inp-breakdown-insight": {
+   "id": "inp-breakdown-insight",
+   "title": "INP breakdown",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "lcp-breakdown-insight": {
+   "id": "lcp-breakdown-insight",
+   "title": "LCP breakdown",
+   "score": 0,
+   "scoreDisplayMode": "numeric",
+   "metricSavings": {
+    "LCP": 0
+   },
+   "details": {
+    "type": "list",
+    "itemCount": 2,
+    "items": [
+     {
+      "type": "table",
+      "items": [
+       {
+        "duration": 65.82,
+        "subpart": "timeToFirstByte",
+        "label": "Time to first byte"
+       },
+       {
+        "duration": 4938.672,
+        "subpart": "elementRenderDelay",
+        "label": "Element render delay"
+       }
+      ]
+     },
+     {}
+    ]
+   }
+  },
+  "lcp-discovery-insight": {
+   "id": "lcp-discovery-insight",
+   "title": "LCP request discovery",
+   "score": null,
+   "scoreDisplayMode": "notApplicable"
+  },
+  "legacy-javascript-insight": {
+   "id": "legacy-javascript-insight",
+   "title": "Legacy JavaScript",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "modern-http-insight": {
+   "id": "modern-http-insight",
+   "title": "Modern HTTP",
+   "score": 1,
+   "scoreDisplayMode": "metricSavings",
+   "metricSavings": {
+    "FCP": 0,
+    "LCP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 0,
+    "items": []
+   }
+  },
+  "network-dependency-tree-insight": {
+   "id": "network-dependency-tree-insight",
+   "title": "Network dependency tree",
+   "score": 0,
+   "scoreDisplayMode": "numeric",
+   "metricSavings": {
+    "LCP": 0
+   },
+   "details": {
+    "type": "list",
+    "itemCount": 3,
+    "items": [
+     {},
+     {
+      "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to."
+     },
+     {
+      "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4."
+     }
+    ]
+   }
+  },
+  "render-blocking-insight": {
+   "id": "render-blocking-insight",
+   "title": "Render-blocking requests",
+   "score": 0,
+   "scoreDisplayMode": "metricSavings",
+   "displayValue": "Est savings of 350 ms",
+   "metricSavings": {
+    "FCP": 350,
+    "LCP": 350
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 221,
+    "items": [
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/choice-card/choice-card.css",
+      "totalBytes": 1783
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/theme-provider/theme-provider.css",
+      "totalBytes": 468
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/foundation/elevation.css",
+      "totalBytes": 634
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/shader-texture/shader-texture.css",
+      "totalBytes": 947
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/integration-card/integration-card.css",
+      "totalBytes": 1747
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/colors/material-static.css",
+      "totalBytes": 10680
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/components/stepper/stepper.css",
+      "totalBytes": 2963
+     },
+     {
+      "url": "https://ui-kit.exe.xyz/packages/web-components/styles/colors/surfaces.css",
+      "totalBytes": 1059
+     }
+    ]
+   }
+  },
+  "third-parties-insight": {
+   "id": "third-parties-insight",
+   "title": "3rd parties",
+   "score": 1,
+   "scoreDisplayMode": "informative",
+   "details": {
+    "type": "table",
+    "itemCount": 8,
+    "items": [
+     {
+      "transferSize": 0
+     },
+     {
+      "transferSize": 0
+     },
+     {
+      "transferSize": 0
+     },
+     {
+      "transferSize": 0
+     },
+     {
+      "transferSize": 0
+     },
+     {
+      "transferSize": 0
+     },
+     {
+      "transferSize": 1241
+     },
+     {
+      "transferSize": 32456
+     }
+    ]
+   }
+  },
+  "viewport-insight": {
+   "id": "viewport-insight",
+   "title": "Optimize viewport for mobile",
+   "score": 1,
+   "scoreDisplayMode": "numeric",
+   "metricSavings": {
+    "INP": 0
+   },
+   "details": {
+    "type": "table",
+    "itemCount": 1,
+    "items": [
+     {
+      "node": {
+       "selector": "head > meta",
+       "snippet": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+       "nodeLabel": "head > meta"
+      }
+     }
+    ]
+   }
+  }
+ },
+ "slimmed": true
+}
