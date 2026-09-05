@@ -13,7 +13,12 @@ Rules (the checkable slice; description *accuracy* stays with /ship-plugin and /
   R3 [FAIL] README footer's version equals .claude-plugin/plugin.json version — OR (ticket #249,
             comparison semantics fixed by adiahealth/adia-harness#265) plugin.json's version is
             AHEAD OF OR EQUAL TO the newest GitHub Release / git tag when the README carries no
-            ledger line at all (WARN, naming the fallback source); BEHIND is a real FAIL
+            ledger line at all (WARN, naming the fallback source); BEHIND is a real FAIL.
+            adiahealth/adia-harness#431: the Release/git-tag fallback is scoped to THIS plugin's
+            own tag prefix (`<plugin-name>-vX.Y.Z`), never the newest tag/release repo-wide — a
+            marketplace repo tags each plugin independently and another plugin's tag must never
+            produce a false mismatch here. No matching-prefix tag/release existing at all for
+            this plugin [INFO]s a "no release found yet" gap instead, never a FAIL.
   R4 [WARN] CLAUDE.md's stated skill count matches the tree (skipped if no CLAUDE.md — it
             doesn't ship in the artifact)
   R5 [WARN] every scripts/*.py is mentioned in README.md — same root-README fallback as R1
@@ -71,48 +76,69 @@ def _vtuple(v: str):
     return tuple(int(p) for p in v.split("."))
 
 
-def _newest_release_or_tag(root: Path, run_fn=None):
-    """Ticket #249 (adiahealth/adia-harness). A deliberate, self-contained DUPLICATE of
-    `version_monotonic_check.py`'s own `resolve_release_ledger_fallback` — same reasoning as R7's
-    own duplication above (this is harness's plugin-agnostic gate machinery; a cross-script
-    import would be a needless coupling for six lines of subprocess plumbing). Tries the newest
-    GitHub Release first, falls back to the newest local git tag on ANY failure OR an unparseable
-    tag name. `run_fn` is test-injectable (a callable taking `(*args)`, returning stdout or
-    raising) so `selftest` never touches the network or `gh`. Returns
-    `(source: str|None, version: str|None)`."""
+def _tag_belongs_to_plugin(tag: str, plugin_name: str) -> bool:
+    """Pure. adiahealth/adia-harness#431: a marketplace repo tags each plugin independently
+    (`sdlc-v0.7.159`, `research-v0.1.12`, `rsi-v0.2.8`) — a tag only belongs to THIS plugin when
+    its trailing version is delimited by exactly this plugin's own name (`-`/`_`/`/`-delimited).
+    A bare, unprefixed `vX.Y.Z` tag and another plugin's own prefix both never match. Same
+    duplication rationale as `_extract_version`'s own docstring."""
+    return re.match(rf"^{re.escape(plugin_name)}[-_/]v?\d+\.\d+\.\d+$", tag) is not None
+
+
+def _newest_matching_version(tags, plugin_name):
+    """Pure. The highest `X.Y.Z` among `tags` that belong to `plugin_name`
+    (`_tag_belongs_to_plugin`), compared with `_vtuple` rather than string order. None when no
+    tag among `tags` belongs to this plugin at all — never another plugin's tag leaking in as a
+    false newest."""
+    versions = [_extract_version(t) for t in tags if _tag_belongs_to_plugin(t, plugin_name)]
+    versions = [v for v in versions if v is not None]
+    return max(versions, key=_vtuple) if versions else None
+
+
+def _newest_release_or_tag(root: Path, plugin_name: str, run_fn=None):
+    """Ticket #249 (adiahealth/adia-harness), scoped per-plugin by adiahealth/adia-harness#431. A
+    deliberate, self-contained DUPLICATE of `version_monotonic_check.py`'s own
+    `resolve_release_ledger_fallback` — same reasoning as R7's own duplication above (this is
+    harness's plugin-agnostic gate machinery; a cross-script import would be a needless coupling
+    for a few lines of subprocess plumbing). Tries GitHub Releases first (listing many, not just
+    the newest), falls back to local git tags (listing every tag, not just the one nearest HEAD)
+    on ANY failure OR no release/tag belonging to this plugin. Both tiers filter to
+    `plugin_name`'s own tag prefix (`_tag_belongs_to_plugin`) and take the HIGHEST matching
+    version (`_newest_matching_version`) — a marketplace repo's other plugins' tags never leak
+    into this plugin's own fallback. `run_fn` is test-injectable (a callable taking `(*args)`,
+    returning stdout or raising) so `selftest` never touches the network or `gh`. Returns
+    `(source: str|None, version: str|None)` — both None when no release or tag belonging to this
+    plugin exists at all."""
     if run_fn is not None:
         try:
-            out = run_fn("gh", "release", "list", "--limit", "1", "--json", "tagName")
+            out = run_fn("gh", "release", "list", "--limit", "200", "--json", "tagName")
             data = json.loads(out)
-            if data:
-                v = _extract_version(data[0]["tagName"])
-                if v is not None:
-                    return "GitHub Releases", v
+            v = _newest_matching_version([d["tagName"] for d in data], plugin_name)
+            if v is not None:
+                return "GitHub Releases", v
         except Exception:  # noqa: BLE001
             pass
         try:
-            out = run_fn("git", "describe", "--tags", "--abbrev=0")
-            tag = out.strip()
-            v = _extract_version(tag) if tag else None
+            out = run_fn("git", "tag", "--list")
+            v = _newest_matching_version(out.splitlines(), plugin_name)
             return ("newest git tag", v) if v is not None else (None, None)
         except Exception:  # noqa: BLE001
             return None, None
 
-    gh = subprocess.run(["gh", "release", "list", "--limit", "1", "--json", "tagName"],
+    gh = subprocess.run(["gh", "release", "list", "--limit", "200", "--json", "tagName"],
                          capture_output=True, text=True, cwd=root)
     if gh.returncode == 0 and gh.stdout.strip():
         try:
             data = json.loads(gh.stdout)
-            if data:
-                v = _extract_version(data[0]["tagName"])
-                if v is not None:
-                    return "GitHub Releases", v
+            v = _newest_matching_version([d["tagName"] for d in data], plugin_name)
+            if v is not None:
+                return "GitHub Releases", v
         except ValueError:
             pass
-    tag = subprocess.run(["git", "describe", "--tags", "--abbrev=0"],
-                          capture_output=True, text=True, cwd=root)
-    if tag.returncode == 0 and tag.stdout.strip():
-        v = _extract_version(tag.stdout.strip())
+    tagl = subprocess.run(["git", "tag", "--list"],
+                           capture_output=True, text=True, cwd=root)
+    if tagl.returncode == 0 and tagl.stdout.strip():
+        v = _newest_matching_version(tagl.stdout.splitlines(), plugin_name)
         if v is not None:
             return "newest git tag", v
     return None, None
@@ -247,16 +273,19 @@ def check(root: Path, release_run_fn=None):
                 findings.append(("FAIL", "R2", f"skills/{s} is undocumented in MANUAL.md -> users can't discover it"))
 
     try:
-        version = json.loads((root / ".claude-plugin" / "plugin.json").read_text()).get("version", "")
+        manifest_json = json.loads((root / ".claude-plugin" / "plugin.json").read_text())
+        version = manifest_json.get("version", "")
+        plugin_name = manifest_json.get("name") or root.name
     except (OSError, ValueError):
         version = ""
+        plugin_name = root.name
     m = re.search(r"^v(\d+\.\d+\.\d+)\b", rd, re.M)
     if not m:
         # Ticket #249 (adiahealth/adia-harness): a README with NO ledger line at all falls back
         # to the newest GitHub Release or git tag before FAILing outright — a WARN naming the
         # fallback on a match, never a silent PASS. A README that DOES carry a line but it's
         # wrong (the `elif` branch below) is unaffected — still a straight FAIL.
-        source, fallback_version = _newest_release_or_tag(root, run_fn=release_run_fn)
+        source, fallback_version = _newest_release_or_tag(root, plugin_name, run_fn=release_run_fn)
         # adiahealth/adia-harness#265: version_tuple compare, not string equality — a branch
         # STRICTLY AHEAD of the newest Release/tag (the normal pre-merge state of every open PR
         # that bumped its version) is ok, EQUAL (the normal post-ship state of `main` once the
@@ -265,15 +294,18 @@ def check(root: Path, release_run_fn=None):
         if fallback_version is not None and version and _vtuple(version) >= _vtuple(fallback_version):
             relation = "matches" if fallback_version == version else "is ahead of"
             findings.append(("WARN", "R3", f"README carries no ledger line; verified via fallback "
-                                            f"({source}): plugin.json's {version} {relation} the newest "
-                                            f"{fallback_version}"))
+                                            f"({source}): plugin.json's {version} {relation} "
+                                            f"{plugin_name}'s own newest {fallback_version}"))
         elif fallback_version is not None:
             findings.append(("FAIL", "R3", f"README carries no ledger line; fallback ({source}) "
-                                            f"newest is {fallback_version}, plugin.json says {version} -> "
-                                            "plugin.json is BEHIND the newest Release/tag"))
+                                            f"{plugin_name}'s own newest is {fallback_version}, plugin.json "
+                                            f"says {version} -> plugin.json is BEHIND the newest Release/tag"))
         else:
-            findings.append(("FAIL", "R3", "README carries no `vX.Y.Z` footer ledger line, and no "
-                                            "GitHub Release or git tag resolves as a fallback either"))
+            # adiahealth/adia-harness#431: no release/tag belonging to THIS plugin at all (a
+            # plugin never yet released) is an INFO gap, never a FAIL and never blocking.
+            findings.append(("INFO", "R3", f"README carries no `vX.Y.Z` footer ledger line, and no "
+                                            f"release found for {plugin_name} yet -> skipping the "
+                                            "Release/tag fallback comparison"))
     elif version and m.group(1) != version:
         findings.append(("FAIL", "R3", f"README footer says v{m.group(1)} but plugin.json says {version} "
                                        "-> the ledger lies about the current release"))
@@ -393,7 +425,7 @@ def selftest():
 
         def _fallback_match(*args):
             if args[:2] == ("gh", "release"):
-                return '[{"tagName": "v2.5.0"}]'
+                return '[{"tagName": "demo3-v2.5.0"}]'
             raise AssertionError(f"unexpected call: {args}")
 
         findings_match = check(r3, release_run_fn=_fallback_match)
@@ -407,7 +439,7 @@ def selftest():
         # this was a FAIL: the actual bug #265 reported.
         def _fallback_ahead(*args):
             if args[:2] == ("gh", "release"):
-                return '[{"tagName": "v2.4.0"}]'
+                return '[{"tagName": "demo3-v2.4.0"}]'
             raise AssertionError(f"unexpected call: {args}")
 
         findings_ahead = check(r3, release_run_fn=_fallback_ahead)
@@ -420,19 +452,25 @@ def selftest():
         # never silently passed just because Releases/tags exist at all.
         def _fallback_behind(*args):
             if args[:2] == ("gh", "release"):
-                return '[{"tagName": "v2.6.0"}]'
+                return '[{"tagName": "demo3-v2.6.0"}]'
             raise AssertionError(f"unexpected call: {args}")
 
         findings_behind = check(r3, release_run_fn=_fallback_behind)
         assert any(f[0] == "FAIL" and f[1] == "R3" and "BEHIND" in f[2] for f in findings_behind), \
             f"negative control: plugin.json behind the fallback must still FAIL R3: {findings_behind}"
 
+        # adiahealth/adia-harness#431: no release/tag belonging to THIS plugin at all (a plugin
+        # never yet released, or Releases/git both unreachable) downgrades to an INFO gap, never
+        # a FAIL — the pre-#431 behavior (a straight, un-passable FAIL) blocked a plugin that
+        # simply hasn't cut a release yet.
         def _fallback_nothing(*args):
             raise RuntimeError("nothing resolves")
 
         findings_none = check(r3, release_run_fn=_fallback_nothing)
-        assert any(f[0] == "FAIL" and f[1] == "R3" for f in findings_none), \
-            f"reverse control: no ledger line AND no fallback resolving must still FAIL R3, never silently pass: {findings_none}"
+        assert not any(f[0] == "FAIL" and f[1] == "R3" for f in findings_none), \
+            f"adiahealth/adia-harness#431: no fallback resolving at all must INFO, never FAIL: {findings_none}"
+        assert any(f[0] == "INFO" and f[1] == "R3" for f in findings_none), \
+            f"adiahealth/adia-harness#431: the no-release-yet gap must be named as an INFO finding: {findings_none}"
 
         # Live fixture control (adiahealth/adia-harness#249 review): this repo's own real tag
         # shape is plugin-prefixed (`adia-sdlc-v2.5.0`), not a bare `v2.5.0`.
@@ -450,10 +488,45 @@ def selftest():
         assert any(f[0] == "WARN" and f[1] == "R3" for f in findings_prefixed), \
             f"positive control (live fixture shape): a plugin-prefixed GitHub Release tag must satisfy the R3 fallback: {findings_prefixed}"
 
-    print("docs_check selftest (ticket #249, comparison semantics fixed by "
-          "adiahealth/adia-harness#265) · PASS · R3 Release/tag fallback WARNs when plugin.json "
-          "is ahead of or equal to the fallback (matched, ahead), FAILs when it's behind or "
-          "nothing resolves — never a silent PASS")
+        # ---- adiahealth/adia-harness#431: multi-plugin scoping — a marketplace repo hosting
+        # several plugins' tags in the same release list must resolve THIS plugin's own fallback
+        # to ITS OWN newest matching tag, never a sibling plugin's, even one numerically larger.
+        def _fallback_multi_plugin(*args):
+            if args[:2] == ("gh", "release"):
+                return ('[{"tagName": "sdlc-v0.7.10"}, {"tagName": "research-v0.1.5"}, '
+                        '{"tagName": "unrelated-v9.9.9"}]')
+            raise AssertionError(f"unexpected call: {args}")
+
+        (r3 / ".claude-plugin" / "plugin.json").write_text('{"name": "sdlc", "version": "0.7.10"}')
+        findings_sdlc = check(r3, release_run_fn=_fallback_multi_plugin)
+        assert not any(f[0] == "FAIL" and f[1] == "R3" for f in findings_sdlc), \
+            (f"negative control (#431, the ticket's own false-mismatch class): sdlc's declared "
+             f"0.7.10 matches sdlc's OWN newest tag and must never FAIL against the unrelated "
+             f"plugin's numerically-larger 9.9.9: {findings_sdlc}")
+        assert any(f[0] == "WARN" and f[1] == "R3" and "sdlc" in f[2] and "9.9.9" not in f[2]
+                   for f in findings_sdlc), \
+            f"positive control (#431): sdlc's own WARN must name sdlc's own tag, never the unrelated plugin's: {findings_sdlc}"
+
+        (r3 / ".claude-plugin" / "plugin.json").write_text('{"name": "research", "version": "0.1.5"}')
+        findings_research = check(r3, release_run_fn=_fallback_multi_plugin)
+        assert any(f[0] == "WARN" and f[1] == "R3" and "0.1.5" in f[2] for f in findings_research), \
+            f"positive control (#431): research's own fallback must resolve to research's own tag (0.1.5), never sdlc's or the unrelated plugin's: {findings_research}"
+
+        # A plugin with NO matching-prefix tag anywhere in the same list -> INFO, never a FAIL,
+        # never a sibling plugin's tag borrowed as a stand-in.
+        (r3 / ".claude-plugin" / "plugin.json").write_text('{"name": "rsi", "version": "0.2.8"}')
+        findings_rsi = check(r3, release_run_fn=_fallback_multi_plugin)
+        assert not any(f[0] == "FAIL" and f[1] == "R3" for f in findings_rsi), \
+            f"negative control (#431): a plugin with no release of its own must INFO, never FAIL, never borrow a sibling's tag: {findings_rsi}"
+        assert any(f[0] == "INFO" and f[1] == "R3" for f in findings_rsi), \
+            f"negative control (#431): the no-release-yet gap must be named as an INFO finding: {findings_rsi}"
+
+    print("docs_check selftest (ticket #249/#265, re-scoped per-plugin by "
+          "adiahealth/adia-harness#431) · PASS · R3 Release/tag fallback WARNs when plugin.json "
+          "is ahead of or equal to the fallback (matched, ahead), FAILs when it's behind — never "
+          "a silent PASS; no release found for this plugin at all INFOs rather than FAILing "
+          "(#431); a multi-plugin tag list resolves each plugin to its OWN newest match, never a "
+          "sibling's, even one numerically larger (the ticket's own false-mismatch class)")
 
     # ---- Ticket #249 (adiahealth/adia-harness): R1/R5's marketplace-root-README fallback ----
     with tempfile.TemporaryDirectory() as td4:
