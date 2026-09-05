@@ -420,7 +420,7 @@ export function main(argv, log = console) {
   const out = [];
   for (const f of opts.files) {
     let r;
-    try { r = readReport(f); } catch (e) { log.error(`${f}: ${e.message}`); return 2; }
+    try { r = readReport(f); } catch (e) { log.error(e.message.includes(f) ? e.message : `${f}: ${e.message}`); return 2; }
     if (opts.slimDir) {
       fs.mkdirSync(opts.slimDir, { recursive: true });
       const target = path.join(opts.slimDir, path.basename(f).replace(/\.json$/, '') + '.slim.json');

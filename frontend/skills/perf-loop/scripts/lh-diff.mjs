@@ -52,7 +52,11 @@ export function diff(before, after) {
     const wasPass = b[id] != null && b[id] >= PASS_SCORE;
     const isPass = a[id] != null && a[id] >= PASS_SCORE;
     if (b[id] == null && a[id] != null && !isPass) { R.push(`audit ${id}: new failure (${a[id]}), not scored before`); continue; }
-    if (wasPass && a[id] == null) { R.push(`audit ${id}: passing (${b[id]}) -> missing from the after report (dropped, notApplicable, or a different config)`); continue; }
+    if (wasPass && a[id] == null) {
+      if (after.audits && after.audits[id]) U.push(`audit ${id}: passing (${b[id]}) -> not applicable in after (${after.audits[id].scoreDisplayMode || 'unscored'})`);
+      else R.push(`audit ${id}: passing (${b[id]}) -> missing from the after report (audit key absent: a different config or version)`);
+      continue;
+    }
     if (b[id] == null || a[id] == null) { U.push(`audit ${id}: only in ${b[id] == null ? 'after' : 'before'} (score ${b[id] ?? a[id]})`); continue; }
     if (wasPass && !isPass) R.push(`audit ${id}: passing (${b[id]}) -> failing (${a[id]})`);
     else if (!wasPass && isPass) I.push(`audit ${id}: failing (${b[id]}) -> passing (${a[id]})`);
@@ -71,7 +75,11 @@ export function diff(before, after) {
   }
   for (const cat of Object.keys(mb.scores)) {
     const x = mb.scores[cat], y = ma.scores[cat];
-    if (x != null && y == null) { R.push(`score ${cat}: ${x} -> missing from the after report`); continue; }
+    if (x != null && y == null) {
+      if (after.categories && after.categories[cat]) U.push(`score ${cat}: ${x} -> not scored in after`);
+      else R.push(`score ${cat}: ${x} -> missing from the after report (category absent)`);
+      continue;
+    }
     if (x == null || y == null) continue;
     if (y < x - 1) R.push(`score ${cat}: ${x} -> ${y}`);
     else if (y > x + 1) I.push(`score ${cat}: ${x} -> ${y}`);
@@ -104,7 +112,8 @@ export function diffBudget(report, cards) {
   if (budget.perf_score != null && m.scores.performance != null && m.scores.performance < budget.perf_score) R.push(`score performance: ${m.scores.performance} under budget ${budget.perf_score}`);
   for (const id of card.passing || []) {
     const audit = report.audits?.[id];
-    if (!isScored(audit)) R.push(`audit ${id}: budgeted passing, missing or unscored in this report`);
+    if (!audit) R.push(`audit ${id}: budgeted passing, missing from this report (audit key absent)`);
+    else if (!isScored(audit)) U.push(`audit ${id}: budgeted passing -> not applicable in this report (${audit.scoreDisplayMode || 'unscored'})`);
     else if (audit.score < PASS_SCORE) R.push(`audit ${id}: budgeted passing, now ${audit.score}`);
   }
   return { regressions: R, improvements: I, unchanged: U, page: m.page, formFactor: m.formFactor, skipped: false };
@@ -152,6 +161,13 @@ function selftest() {
   assert(drop.regressions.some((r) => r.startsWith('audit is-on-https: passing (1) -> missing')), 'a passing audit missing from after is a regression');
   assert(drop.regressions.some((r) => r.startsWith('score seo: 91 -> missing')), 'a missing category score is a regression');
   assert(drop.regressions.length === 2, `exactly two regressions from the drop, got ${JSON.stringify(drop.regressions)}`);
+  // Present but unscored is not a regression: the audit went notApplicable, listed under Unchanged.
+  const na = JSON.parse(JSON.stringify(chat));
+  na.audits['is-on-https'].score = null; na.audits['is-on-https'].scoreDisplayMode = 'notApplicable';
+  na.categories.seo.score = null;
+  const naDiff = diff(chat, na);
+  assert(naDiff.regressions.length === 0, `notApplicable after is not a regression, got ${JSON.stringify(naDiff.regressions)}`);
+  assert(naDiff.unchanged.some((u) => u.startsWith('audit is-on-https: passing (1) -> not applicable in after')) && naDiff.unchanged.some((u) => u.startsWith('score seo: 91 -> not scored')), 'the notApplicable split is named under Unchanged');
   // Plain mode names both urls and form factors and warns when they differ.
   assert(same.warnings.length === 0 && same.before.formFactor === 'desktop', 'identical reports carry no warning');
   const mobile = JSON.parse(JSON.stringify(chat));
@@ -179,6 +195,8 @@ function selftest() {
   assert(diffBudget(chat, [mobileCard, { ...card, preset: 'desktop' }]).skipped === false, 'the card with the matching preset is picked');
   const droppedBudget = diffBudget(dropped, [{ ...card, passing: ['is-on-https'] }]);
   assert(droppedBudget.regressions.some((r) => r.startsWith('audit is-on-https: budgeted passing, missing')), 'a budgeted passing audit missing from the report is a regression');
+  const naBudget = diffBudget(na, [{ ...card, passing: ['is-on-https'] }]);
+  assert(naBudget.regressions.length === 0 && naBudget.unchanged.some((u) => u.startsWith('audit is-on-https: budgeted passing -> not applicable')), 'budget mode lists a notApplicable budgeted audit under Unchanged');
   const text = render(d, 'chat -> admin');
   assert(text.includes('VERDICT: REGRESSION'), 'render names the verdict');
   console.log(`selftest ok: chat->admin ${d.regressions.length} regressions / ${d.improvements.length} improvements / ${d.unchanged.length} unchanged; negative control on ${victim} exits 1`);
