@@ -17,6 +17,7 @@
  * Exit: 0 written, 1 no readable report in the dir, 2 usage error.
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyze, readReport, tolerance, FIXTURES, FIXTURE_DIR } from '../../perf-triage/scripts/lh-brief.mjs';
@@ -107,12 +108,22 @@ function assert(cond, msg) { if (!cond) throw new Error(`selftest: ${msg}`); }
 
 function selftest() {
   const routes = [{ route: '/site/playground/chat', surface: 'playground', canary: true }, { route: '/site/examples/admin-dashboard', surface: 'examples' }];
-  const tmp = fs.mkdtempSync(path.join(path.dirname(FIXTURE_DIR), 'scoreboard-selftest-'));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'scoreboard-selftest-'));
   try {
-    fs.writeFileSync(path.join(tmp, 'ignored.runs.json'), '{}');
-    fs.writeFileSync(path.join(tmp, 'not-a-report.json'), '{"hello":1}');
-    const res = build(FIXTURE_DIR, { routes, out: path.join(tmp, 'scoreboard'), budgetsOut: path.join(tmp, 'budgets.json') });
+    // Reports dir = a tmp copy of the fixtures plus two decoys the reader must skip.
+    const reports = path.join(tmp, 'reports');
+    fs.mkdirSync(reports);
+    for (const f of FIXTURES) fs.copyFileSync(f, path.join(reports, path.basename(f)));
+    fs.writeFileSync(path.join(reports, 'chat.desktop.runs.json'), '{"runs":[]}');
+    fs.writeFileSync(path.join(reports, 'not-a-report.json'), '{"hello":1}');
+    const skipped = [];
+    const origError = console.error;
+    console.error = (m) => skipped.push(String(m));
+    let res;
+    try { res = build(reports, { routes, out: path.join(tmp, 'scoreboard'), budgetsOut: path.join(tmp, 'budgets.json') }); } finally { console.error = origError; }
     assert(res.rows.length === 2, `two rows from two fixtures, got ${res.rows.length}`);
+    assert(skipped.length === 1 && skipped[0].includes('not-a-report.json'), `the unreadable report is skipped and named, got ${JSON.stringify(skipped)}`);
+    assert(!res.rows.some((r) => r.file.endsWith('.runs.json')), 'the .runs.json sidecar is not read as a report');
     const chat = res.rows.find((r) => r.page === '/site/playground/chat');
     assert(chat && chat.canary && chat.surface === 'playground', 'routes.json tags surface and canary');
     assert(chat.scores.performance === 78 && chat.metrics.lcp_ms === 2368 && chat.requests === 1152, `chat row scores/metrics/requests, got ${JSON.stringify([chat.scores.performance, chat.metrics.lcp_ms, chat.requests])}`);
@@ -134,7 +145,7 @@ function selftest() {
     let threw = false;
     try { build(empty, { out: path.join(tmp, 'x') }); } catch { threw = true; }
     assert(threw, 'an empty dir is an error, not an empty scoreboard');
-    assert(FIXTURES.length === 2, 'fixture list intact');
+    assert(FIXTURES.length === 2 && FIXTURE_DIR.endsWith('fixtures'), 'fixture list intact');
     console.log(`selftest ok: ${res.rows.length} rows, ${res.clusters.length} families clustered, budgets seeded for ${budgets.length} routes`);
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });

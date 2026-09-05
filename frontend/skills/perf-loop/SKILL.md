@@ -55,6 +55,10 @@ every run (thread 1taw297's commenter), so the scope is fixed by the brief.
   iteration.
 - `metric lcp_ms: 2368 ms -> 2916 ms (tolerance +237 ms)`: revert; a metric drift inside the
   tolerance is listed under unchanged and is not a block.
+- `audit X: passing (1) -> missing from the after report` or `score seo: 91 -> missing`: the
+  after run did not measure what the before run did (a dropped category, a changed config, an
+  audit gone notApplicable); a regression until the run is repeated with the same config. The
+  gate also prints both urls and form factors and warns when they differ.
 - `score performance: 78 -> 44`: revert, and expect one of the lines above to name why.
 
 ## Done

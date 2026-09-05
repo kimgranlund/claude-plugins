@@ -12,7 +12,7 @@
  *   node lh-brief.mjs --slim <out-dir> <report.json...>   (write trimmed fixtures, no brief)
  *   node lh-brief.mjs selftest
  *
- * Exit: 0 brief written, 1 a report could not be parsed, 2 usage error.
+ * Exit: 0 brief written, 2 usage error or a file that is not a Lighthouse report (no audits/categories).
  *
  * The cause-family taxonomy is FIXED (perf-triage SKILL.md): transport, build, css-loading,
  * runtime, images-fonts, a11y-name, a11y-structure, a11y-contrast, seo-meta, third-party, with
@@ -20,6 +20,7 @@
  * import the taxonomy and the metric tolerances from here so the three scripts never drift.
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -156,10 +157,13 @@ export function detailItems(audit) {
 
 /** Derived transport facts the audit ids alone do not state: uncached vs uncompressed text assets. */
 export function transportSignals(audits) {
-  const reqs = detailItems(audits['network-requests']);
+  // Only http(s) requests count: a chrome-extension:// or data: entry from the audit profile is
+  // not the page's transport (lh-run.mjs passes --disable-extensions; a DevTools run may not).
+  const isHttp = (r) => typeof r?.url === 'string' && /^https?:\/\//.test(r.url);
+  const reqs = detailItems(audits['network-requests']).filter(isHttp);
   const text = reqs.filter((r) => /script|stylesheet|document|font|xhr|fetch/i.test(r.resourceType || '') && (r.resourceSize || 0) > 1024);
   const uncompressed = text.filter((r) => (r.transferSize || 0) >= (r.resourceSize || 0));
-  const cache = detailItems(audits['cache-insight']);
+  const cache = detailItems(audits['cache-insight']).filter(isHttp);
   const uncached = cache.filter((c) => !c.cacheLifetimeMs);
   return {
     requests: reqs.length,
@@ -382,40 +386,53 @@ function selftest() {
   // Taxonomy: every failing audit lands in a listed family.
   for (const f of [...A.failing, ...B.failing]) assert(FAMILY_ORDER.includes(f.family), `${f.id} family ${f.family} is in the taxonomy`);
   assert(tolerance('cls', 0.02) === 0.01 && tolerance('lcp_ms', 2400) === 240 && tolerance('tbt_ms', 90) === 100, 'tolerance rule');
-  // Negative control: a report with no audits is rejected.
-  let threw = false;
-  try { analyze({}); renderBrief(analyze({})); } catch { threw = true; }
-  assert(!threw, 'an empty report renders an empty brief rather than crashing');
+  // Negative control: a JSON file that is not a Lighthouse report is rejected (exit 2), and a
+  // report whose network-requests carry extension entries counts only http(s) transport.
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'lh-brief-selftest-'));
+  const bogus = path.join(tmp, 'bogus.json');
+  fs.writeFileSync(bogus, JSON.stringify({ hello: 1 }));
+  const silent = { error() {}, log() {} };
+  assert(main([bogus], silent) === 2, 'a non-Lighthouse JSON exits 2');
+  assert(main([path.join(tmp, 'missing.json')], silent) === 2, 'a missing file exits 2');
+  assert(main([], silent) === 2, 'no input is a usage error');
+  fs.rmSync(tmp, { recursive: true, force: true });
+  const ext = JSON.parse(JSON.stringify(chat));
+  ext.audits['network-requests'].details.items.push({ url: 'chrome-extension://abc/content.js', resourceType: 'Script', transferSize: 50000, resourceSize: 50000 });
+  ext.audits['cache-insight'].details.items.push({ url: 'chrome-extension://abc/content.js', cacheLifetimeMs: 0 });
+  ext.audits['cache-insight'].details.itemCount = undefined;
+  const extSignals = transportSignals(ext.audits);
+  assert(extSignals.uncompressed === A.transport.uncompressed && extSignals.requests === A.transport.requests, 'chrome-extension:// entries are ignored in transport signals');
+  assert(extSignals.uncached === detailItems(chat.audits['cache-insight']).filter((c) => !c.cacheLifetimeMs).length, 'extension entries do not count as uncached');
   // slim() keeps counts and the fields the brief relies on.
   const s = slim(chat, { items: 2 });
   assert(s.audits['cache-insight'].details.itemCount === 1055 && s.audits['cache-insight'].details.items.length === 2, 'slim keeps itemCount');
   console.log(`selftest ok: ${A.failing.length} failing / ${A.passing.length} passing on chat; ${B.failing.length} failing / ${B.passing.length} passing on admin-dashboard; families ${A.families.map((g) => g.family).join(',')}`);
 }
 
-function main(argv) {
+export function main(argv, log = console) {
   if (argv[0] === 'selftest') { selftest(); return 0; }
   let opts;
-  try { opts = parseArgs(argv); } catch (e) { console.error(e.message); return 2; }
+  try { opts = parseArgs(argv); } catch (e) { log.error(e.message); return 2; }
   if (!opts.files.length) {
-    console.error('usage: lh-brief.mjs <report.json...> [--out perf-brief.md] [--max-lines 400] [--items 5] | --slim <out-dir> <report.json...> | selftest');
+    log.error('usage: lh-brief.mjs <report.json...> [--out perf-brief.md] [--max-lines 400] [--items 5] | --slim <out-dir> <report.json...> | selftest');
     return 2;
   }
   const out = [];
   for (const f of opts.files) {
     let r;
-    try { r = readReport(f); } catch (e) { console.error(e.message); return 1; }
+    try { r = readReport(f); } catch (e) { log.error(`${f}: ${e.message}`); return 2; }
     if (opts.slimDir) {
       fs.mkdirSync(opts.slimDir, { recursive: true });
       const target = path.join(opts.slimDir, path.basename(f).replace(/\.json$/, '') + '.slim.json');
       fs.writeFileSync(target, JSON.stringify(slim(r), null, 1));
-      console.log(`slim: ${target}`);
+      log.log(`slim: ${target}`);
       continue;
     }
     out.push(...renderBrief(analyze(r), { maxLines: opts.maxLines, items: opts.items }), '');
   }
   if (opts.slimDir) return 0;
   const text = out.join('\n');
-  if (opts.out) { fs.writeFileSync(opts.out, text); console.log(`brief: ${opts.out} (${out.length} lines)`); }
+  if (opts.out) { fs.writeFileSync(opts.out, text); log.log(`brief: ${opts.out} (${out.length} lines)`); }
   else process.stdout.write(text);
   return 0;
 }

@@ -13,7 +13,8 @@
  *
  * Exit: 0 every preset wrote a report, 1 a Lighthouse run failed, 2 usage error or npx missing.
  *
- * Verified 2026-09-05 on ui-kit.exe.xyz with the host's Playwright Chromium:
+ * Verified 2026-09-05 on ui-kit.exe.xyz with the host's Playwright Chromium (this single command;
+ * the 3-run median and --disable-extensions are this script's additions, proven by selftest only):
  *   npx lighthouse@13 <url> --output=json --output-path=out.json --quiet --chrome-flags="--headless=new" --preset=desktop
  */
 import fs from 'node:fs';
@@ -23,6 +24,9 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 export const LIGHTHOUSE_SPEC = 'lighthouse@13';
+// --disable-extensions keeps a profile's extensions out of the run: their chrome-extension://
+// requests would otherwise land in network-requests and skew request counts and transport signals.
+export const DEFAULT_CHROME_FLAGS = '--headless=new --disable-extensions';
 
 export function slugOf(url) {
   const u = new URL(url);
@@ -57,7 +61,7 @@ function runOnce(url, preset, chromeFlags, tmp) {
   return JSON.parse(fs.readFileSync(outPath, 'utf8'));
 }
 
-export function audit(url, { preset = 'both', runs = 3, out = 'perf-reports', chromeFlags = '--headless=new', runner = runOnce } = {}) {
+export function audit(url, { preset = 'both', runs = 3, out = 'perf-reports', chromeFlags = DEFAULT_CHROME_FLAGS, runner = runOnce } = {}) {
   const presets = preset === 'both' ? ['desktop', 'mobile'] : [preset];
   fs.mkdirSync(out, { recursive: true });
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'lh-run-'));
@@ -93,9 +97,10 @@ function selftest() {
   console.log(`fixture ${path.basename(fixture)}: ${Object.entries(scores).map(([k, v]) => `${k} ${v}`).join(', ')}`);
   assert(slugOf('https://ui-kit.exe.xyz/site/playground/chat/') === 'ui-kit.exe.xyz-site-playground-chat', 'slug from host + path');
   assert(slugOf('https://example.com') === 'example.com', 'root slug is the host');
-  const a = lighthouseArgs('https://x.y', 'desktop', '/tmp/o.json', '--headless=new');
-  assert(a[0] === 'lighthouse@13' && a.includes('--preset=desktop') && a.includes('--chrome-flags=--headless=new'), 'desktop args pin the major and the preset');
-  assert(!lighthouseArgs('https://x.y', 'mobile', '/tmp/o.json', '--headless=new').includes('--preset=desktop'), 'mobile args carry no desktop preset');
+  const a = lighthouseArgs('https://x.y', 'desktop', '/tmp/o.json', DEFAULT_CHROME_FLAGS);
+  assert(a[0] === 'lighthouse@13' && a.includes('--preset=desktop') && a.includes(`--chrome-flags=${DEFAULT_CHROME_FLAGS}`), 'desktop args pin the major and the preset');
+  assert(DEFAULT_CHROME_FLAGS.includes('--headless=new') && DEFAULT_CHROME_FLAGS.includes('--disable-extensions'), 'default chrome flags are headless with extensions disabled');
+  assert(!lighthouseArgs('https://x.y', 'mobile', '/tmp/o.json', DEFAULT_CHROME_FLAGS).includes('--preset=desktop'), 'mobile args carry no desktop preset');
   const runs = [{ scores: { performance: 90 } }, { scores: { performance: 70 } }, { scores: { performance: 80 } }];
   assert(medianIndex(runs) === 2, 'median of 90/70/80 is the 80 run');
   assert(medianIndex(runs.slice(0, 2)) === 0, 'upper median on two runs');
@@ -120,7 +125,7 @@ function selftest() {
 
 function main(argv) {
   if (argv[0] === 'selftest') { selftest(); return 0; }
-  const opts = { preset: 'both', runs: 3, out: 'perf-reports', chromeFlags: '--headless=new' };
+  const opts = { preset: 'both', runs: 3, out: 'perf-reports', chromeFlags: DEFAULT_CHROME_FLAGS };
   let url = null;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -132,7 +137,7 @@ function main(argv) {
     else url = a;
   }
   if (!url || !['desktop', 'mobile', 'both'].includes(opts.preset) || !(opts.runs >= 1)) {
-    console.error('usage: lh-run.mjs <url> [--preset desktop|mobile|both] [--runs 3] [--out dir] [--chrome-flags "--headless=new"] | selftest');
+    console.error('usage: lh-run.mjs <url> [--preset desktop|mobile|both] [--runs 3] [--out dir] [--chrome-flags "--headless=new --disable-extensions"] | selftest');
     return 2;
   }
   if (/^https?:\/\/(localhost|127\.0\.0\.1)/.test(url)) console.error('note: auditing localhost; numbers from a dev server differ from the deployed origin (perf-audit SKILL.md), prefer the deployed URL');

@@ -54,7 +54,7 @@ already fixed." This skill is that procedure with the record made explicit.
   had touched 41 frontend files", and "Basically perfect Lighthouse numbers again." No commit
   log, trace, or per-page score set is attached; the counts are the author's claim. The
   procedure is adopted, the numbers are not a target.
-- The playbook's own content in that thread is not shown ("specific content and structure are
+- The playbook's own content in that thread is not shown ("specific content and structure… are
   not detailed"); the entry shape here comes from the author's description of what it
   recorded ("what the issue was, what caused it in my codebase, what files were touched, how to
   check it after") plus this repo's shared/page-local field.

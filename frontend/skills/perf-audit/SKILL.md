@@ -24,11 +24,14 @@ perf-* skill consumes this file; a run that cannot be repeated cannot be diffed.
    serve reports different scores from prod (gen-ui-kit, 2026-09-05). When only localhost
    exists, say so in the report name and the brief.
 2. **Run.** `node scripts/lh-run.mjs <url> [--preset desktop|mobile|both] [--runs 3] [--out dir]`.
-   The script pins `npx lighthouse@13`, passes `--chrome-flags="--headless=new"`, runs each
+   The script pins `npx lighthouse@13`, passes `--chrome-flags="--headless=new --disable-extensions"` (a profile extension's
+   `chrome-extension://` requests would otherwise skew request counts), runs each
    preset 3 times, keeps the run with the median performance score, and writes
    `<out>/<slug>.<preset>.json` plus `<slug>.<preset>.runs.json` (every run's category scores,
    so a noisy run stays visible). Desktop is `--preset=desktop`; mobile is Lighthouse's default.
-   Verified 2026-09-05 on ui-kit.exe.xyz with the host's Playwright Chromium:
+   Verified 2026-09-05 on ui-kit.exe.xyz with the host's Playwright Chromium, this single
+   command only; the 3-run median and the extension flag are proven by the selftest, not by a
+   prod run:
 
    ```
    npx lighthouse@13 <url> --output=json --output-path=out.json --quiet --chrome-flags="--headless=new" --preset=desktop
@@ -51,8 +54,8 @@ DevTools build carries, since it may not be 13.
 
 - Chrome DevTools MCP inside Claude Code (thread 1rn63fb): lets the model drive Lighthouse
   from the browser session. The thread names no package, version, or configuration, and a
-  later commenter's rerun of the same site scored 32/76/81/100, so treat it as a convenience,
-  not a source of record. This skill adds no MCP dependency.
+  later commenter's rerun of the same site reportedly scored 32/76/81/100 (unverified: no
+  report image in thread), so treat it as a convenience, not a source of record. This skill adds no MCP dependency.
 - uimax-mcp (thread 1s6fmjn): `claude mcp add uimax -- npx -y uimax-mcp@latest` bundles
   Puppeteer, Lighthouse and axe-core. Unpinned `@latest`, and the thread's own tool count
   disagrees with itself (12 tools in the post, 7 of 35 in a later comment). Pin before relying
@@ -79,5 +82,6 @@ a single unsaved DevTools run.
   explanation for the remaining gap.
 - 1s6fmjn (r/ClaudeCode): the uimax-mcp install line. Unverified: "109 code findings", "32
   keyboard accessibility issues", the C to A accessibility grade, the tool count.
-- Pinned version and the 3-run median are this repo's additions, verified on prod 2026-09-05,
-  not thread procedures.
+- Pinned version, the 3-run median, and `--disable-extensions` are this repo's additions, not
+  thread procedures. Only the single pinned command was verified on prod 2026-09-05; the median
+  selection is proven by the selftest with a fake runner.

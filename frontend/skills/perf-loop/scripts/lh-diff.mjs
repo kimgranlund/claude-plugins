@@ -34,7 +34,7 @@ export function metricsOf(report) {
   const a = analyze(report);
   const metrics = {};
   for (const m of a.metrics) if (m.value != null) metrics[m.key] = m.value;
-  return { url: a.header.url, page: pageOf(a.header.url), metrics, scores: a.header.scores };
+  return { url: a.header.url, page: pageOf(a.header.url), formFactor: a.header.preset, metrics, scores: a.header.scores };
 }
 
 function scoredAudits(report) {
@@ -52,6 +52,7 @@ export function diff(before, after) {
     const wasPass = b[id] != null && b[id] >= PASS_SCORE;
     const isPass = a[id] != null && a[id] >= PASS_SCORE;
     if (b[id] == null && a[id] != null && !isPass) { R.push(`audit ${id}: new failure (${a[id]}), not scored before`); continue; }
+    if (wasPass && a[id] == null) { R.push(`audit ${id}: passing (${b[id]}) -> missing from the after report (dropped, notApplicable, or a different config)`); continue; }
     if (b[id] == null || a[id] == null) { U.push(`audit ${id}: only in ${b[id] == null ? 'after' : 'before'} (score ${b[id] ?? a[id]})`); continue; }
     if (wasPass && !isPass) R.push(`audit ${id}: passing (${b[id]}) -> failing (${a[id]})`);
     else if (!wasPass && isPass) I.push(`audit ${id}: failing (${b[id]}) -> passing (${a[id]})`);
@@ -70,20 +71,28 @@ export function diff(before, after) {
   }
   for (const cat of Object.keys(mb.scores)) {
     const x = mb.scores[cat], y = ma.scores[cat];
+    if (x != null && y == null) { R.push(`score ${cat}: ${x} -> missing from the after report`); continue; }
     if (x == null || y == null) continue;
     if (y < x - 1) R.push(`score ${cat}: ${x} -> ${y}`);
     else if (y > x + 1) I.push(`score ${cat}: ${x} -> ${y}`);
     else U.push(`score ${cat}: ${x} -> ${y}`);
   }
-  return { regressions: R, improvements: I, unchanged: U, before: mb.url, after: ma.url };
+  const warnings = [];
+  if (mb.url !== ma.url) warnings.push(`urls differ: before ${mb.url}, after ${ma.url}`);
+  if (mb.formFactor !== ma.formFactor) warnings.push(`form factors differ: before ${mb.formFactor}, after ${ma.formFactor}; metric drift across presets is not a regression signal`);
+  return { regressions: R, improvements: I, unchanged: U, warnings, before: { url: mb.url, formFactor: mb.formFactor }, after: { url: ma.url, formFactor: ma.formFactor } };
 }
 
 /** One report against its budget card ({page, metrics, budget}); unmatched page is a skip. */
 export function diffBudget(report, cards) {
   const m = metricsOf(report);
-  const card = cards.find((c) => c.page === m.page) || cards.find((c) => c.page === m.url);
+  const samePage = cards.filter((c) => c.page === m.page || c.page === m.url);
+  const card = samePage.find((c) => !c.preset || c.preset === m.formFactor);
   const R = [], I = [], U = [];
-  if (!card) return { regressions: R, improvements: I, unchanged: [`no budget card for ${m.page}: SKIPPED (seed one with lh-scoreboard.mjs --budgets-out)`], page: m.page, skipped: true };
+  if (!card) {
+    const why = samePage.length ? `no budget card for ${m.page} with preset ${m.formFactor} (cards carry ${samePage.map((c) => c.preset).join(', ')})` : `no budget card for ${m.page}`;
+    return { regressions: R, improvements: I, unchanged: [`${why}: SKIPPED (seed one with lh-scoreboard.mjs --budgets-out)`], page: m.page, formFactor: m.formFactor, skipped: true };
+  }
   const budget = card.budget || {};
   for (const key of Object.keys(m.metrics)) {
     if (budget[key] == null) { U.push(`metric ${key}: no budget, skipped`); continue; }
@@ -94,14 +103,17 @@ export function diffBudget(report, cards) {
   }
   if (budget.perf_score != null && m.scores.performance != null && m.scores.performance < budget.perf_score) R.push(`score performance: ${m.scores.performance} under budget ${budget.perf_score}`);
   for (const id of card.passing || []) {
-    const s = report.audits?.[id]?.score;
-    if (s != null && s < PASS_SCORE) R.push(`audit ${id}: budgeted passing, now ${s}`);
+    const audit = report.audits?.[id];
+    if (!isScored(audit)) R.push(`audit ${id}: budgeted passing, missing or unscored in this report`);
+    else if (audit.score < PASS_SCORE) R.push(`audit ${id}: budgeted passing, now ${audit.score}`);
   }
-  return { regressions: R, improvements: I, unchanged: U, page: m.page, skipped: false };
+  return { regressions: R, improvements: I, unchanged: U, page: m.page, formFactor: m.formFactor, skipped: false };
 }
 
 export function render(d, label) {
   const L = [`# lh-diff ${label}`];
+  if (d.before && d.after) L.push(`before: ${d.before.url} (${d.before.formFactor})`, `after:  ${d.after.url} (${d.after.formFactor})`);
+  for (const w of d.warnings || []) L.push(`WARNING: ${w}`);
   for (const [title, rows] of [['Regressions', d.regressions], ['Improvements', d.improvements], ['Unchanged', d.unchanged]]) {
     L.push('', `## ${title} (${rows.length})`);
     for (const r of rows) L.push(`- ${r}`);
@@ -132,6 +144,22 @@ function selftest() {
   flipped.audits[victim].score = 0;
   const neg = diff(chat, flipped);
   assert(neg.regressions.length === 1 && neg.regressions[0].startsWith(`audit ${victim}: passing`), `flipping ${victim} yields exactly one regression, got ${JSON.stringify(neg.regressions)}`);
+  // Negative control 2: a passing audit and a whole category deleted from the after report.
+  const dropped = JSON.parse(JSON.stringify(chat));
+  delete dropped.audits['is-on-https'];
+  delete dropped.categories.seo;
+  const drop = diff(chat, dropped);
+  assert(drop.regressions.some((r) => r.startsWith('audit is-on-https: passing (1) -> missing')), 'a passing audit missing from after is a regression');
+  assert(drop.regressions.some((r) => r.startsWith('score seo: 91 -> missing')), 'a missing category score is a regression');
+  assert(drop.regressions.length === 2, `exactly two regressions from the drop, got ${JSON.stringify(drop.regressions)}`);
+  // Plain mode names both urls and form factors and warns when they differ.
+  assert(same.warnings.length === 0 && same.before.formFactor === 'desktop', 'identical reports carry no warning');
+  const mobile = JSON.parse(JSON.stringify(chat));
+  mobile.configSettings.formFactor = 'mobile';
+  const mixed = diff(chat, mobile);
+  assert(mixed.warnings.some((w) => w.startsWith('form factors differ')), 'preset mismatch warns');
+  assert(d.warnings.some((w) => w.startsWith('urls differ')), 'url mismatch warns');
+  assert(render(mixed, 'x').includes('WARNING: form factors differ') && render(mixed, 'x').includes('before: https://ui-kit.exe.xyz/site/playground/chat (desktop)'), 'render prints urls, form factors and warnings');
   // Metric drift inside tolerance is unchanged; outside is a regression.
   const drift = JSON.parse(JSON.stringify(chat));
   drift.audits['largest-contentful-paint'].numericValue += 50;
@@ -146,6 +174,11 @@ function selftest() {
   assert(diffBudget(chat, [tight]).regressions.some((r) => r.startsWith('metric lcp_ms')), 'a tightened budget bites');
   assert(diffBudget(admin, [card]).skipped === true, 'no card for the page is a skip, never a silent pass');
   assert(diffBudget(admin, [{ ...card, page: metricsOf(admin).page }]).regressions.some((r) => r.startsWith('audit aria-allowed-attr')), 'a budgeted passing audit that fails is a regression');
+  const mobileCard = { ...card, preset: 'mobile' };
+  assert(diffBudget(chat, [mobileCard]).skipped === true, 'a card for another preset does not match');
+  assert(diffBudget(chat, [mobileCard, { ...card, preset: 'desktop' }]).skipped === false, 'the card with the matching preset is picked');
+  const droppedBudget = diffBudget(dropped, [{ ...card, passing: ['is-on-https'] }]);
+  assert(droppedBudget.regressions.some((r) => r.startsWith('audit is-on-https: budgeted passing, missing')), 'a budgeted passing audit missing from the report is a regression');
   const text = render(d, 'chat -> admin');
   assert(text.includes('VERDICT: REGRESSION'), 'render names the verdict');
   console.log(`selftest ok: chat->admin ${d.regressions.length} regressions / ${d.improvements.length} improvements / ${d.unchanged.length} unchanged; negative control on ${victim} exits 1`);
