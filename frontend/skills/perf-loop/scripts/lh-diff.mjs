@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * lh-diff.mjs, the perf-fix-loop regression gate. Node 24, ESM, node built-ins only.
+ * lh-diff.mjs, the perf-loop regression gate. Node 24, ESM, node built-ins only.
  *
  * Compares two Lighthouse JSON reports (before, after) and prints three sections: regressions
  * (an audit that went passing to failing, a metric that drifted past its tolerance, a category

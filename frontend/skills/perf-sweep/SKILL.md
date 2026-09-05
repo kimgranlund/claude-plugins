@@ -6,7 +6,7 @@ description: >-
   sweep. Use when the user asks to "audit the whole site", "Lighthouse every route", "build a
   perf scoreboard", "set performance budgets from the baseline", "which pages share this
   failure". NOT for one page's audit (perf-audit), brief (perf-triage), or fix loop
-  (perf-fix-loop); NOT for a perceived-latency budget card on one surface (check-speed).
+  (perf-loop); NOT for a perceived-latency budget card on one surface (check-speed).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -36,12 +36,12 @@ every route that has it, and seeds budgets that hold the baseline.
    plus `lh-brief`'s tolerance, plus the performance score floor and the passing audit ids.
    Unknown keys are ignored by `budget-check.py`, so a card also runs through check-speed's
    own gate unchanged.
-5. **Gate per route.** `node ../perf-fix-loop/scripts/lh-diff.mjs --budgets budgets.json perf-reports/*.json`
+5. **Gate per route.** `node ../perf-loop/scripts/lh-diff.mjs --budgets budgets.json perf-reports/*.json`
    compares every report against its card by page path; a metric over budget, a score under
    its floor, or a budgeted passing audit now failing exits 1. A route with no card is a
    reported skip, never a silent pass.
 6. **Fix by cluster.** Take the largest cluster (a shared fix, usually transport or build),
-   run `perf-fix-loop` on its canary route, then re-run `lh-diff --budgets` over every route in
+   run `perf-loop` on its canary route, then re-run `lh-diff --budgets` over every route in
    the cluster before calling the fix done. Page-local clusters go to `perf-playbook`'s fan-out.
 7. **Ratchet.** After a fix lands across the set, re-seed budgets from the new baseline so the
    improvement is held; never loosen a card by hand.

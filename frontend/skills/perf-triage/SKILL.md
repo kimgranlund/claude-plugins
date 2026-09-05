@@ -7,7 +7,7 @@ description: >-
   BREAK list, failing audits ranked with a cause-family tag (transport, build, css-loading,
   runtime, images-fonts, a11y-name, a11y-structure, a11y-contrast, seo-meta, third-party), a fix
   order. NOT for running Lighthouse (perf-audit); NOT for applying fixes and re-auditing
-  (perf-fix-loop); NOT for a perceived-latency budget card (check-speed).
+  (perf-loop); NOT for a perceived-latency budget card (check-speed).
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -48,7 +48,7 @@ states what must not change. The brief is what a fix loop reads; the JSON stays 
    reproducible step is a research task, not a fix (thread 1taw297's commenter: "for each real
    finding, require a failing test, repro step, or screenshot before fixing"). Label it
    `research` in the brief and move on; do not invent a fix for it.
-4. **Hand off** the brief plus the report to `perf-fix-loop` (one family per iteration) or, for
+4. **Hand off** the brief plus the report to `perf-loop` (one family per iteration) or, for
    a multi-page campaign, to `perf-playbook`.
 
 ## The taxonomy (fixed)

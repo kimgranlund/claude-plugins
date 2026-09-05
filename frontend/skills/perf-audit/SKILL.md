@@ -38,7 +38,7 @@ perf-* skill consumes this file; a run that cannot be repeated cannot be diffed.
    The report is the evidence for every later claim; a fix loop without the before-report has
    nothing to diff against (thread 1s6fmjn's commenter: "I really wish I had saved the report
    out").
-4. **Hand off.** `perf-triage` turns the JSON into a brief; `perf-fix-loop` diffs a later run
+4. **Hand off.** `perf-triage` turns the JSON into a brief; `perf-loop` diffs a later run
    against it.
 
 ## Fallback without the CLI

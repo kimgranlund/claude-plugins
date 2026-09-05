@@ -8,7 +8,7 @@ description: >-
   feels slow even though the API is fast", "the layout jumps around while images load". NOT for
   a spinner/skeleton-loader component (make-component); NOT for animation duration/easing
   (motion-rules); NOT for running Lighthouse or working a report's failing audits
-  (perf-audit, perf-triage, perf-fix-loop, perf-playbook, perf-sweep).
+  (perf-audit, perf-triage, perf-loop, perf-playbook, perf-sweep).
 disable-model-invocation: false
 user-invocable: true
 ---

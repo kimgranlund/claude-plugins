@@ -1,7 +1,7 @@
 # Perf playbook: <campaign name>
 
 Baseline reports: `<dir>/<slug>.<preset>.json` (perf-audit, <date>). Brief: `perf-brief.md`.
-One entry per fix, appended by perf-fix-loop as each iteration lands. Phase 2 workers read this
+One entry per fix, appended by perf-loop as each iteration lands. Phase 2 workers read this
 as a checklist: apply page-local entries where the page has the same pattern, never redo a
 shared entry, add a new entry for anything new.
 

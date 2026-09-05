@@ -1,5 +1,5 @@
 {
- "skill": "perf-fix-loop",
+ "skill": "perf-loop",
  "note": "Trigger-routing suite for the perf-* set (2026-09-05, PR feat/perf-skills). Positives across imperative / diagnostic / indirect phrasings; negatives drawn from the perf-* siblings, check-speed (perceived latency, budget cards), check-whole-ui, make-component and motion-rules. Fixture-level behavior (the two 2026-09-05 prod reports producing the expected family tags and top-3 fixes, lh-diff on the pair, the flipped-audit negative control) is locked in each script's selftest, run by release_gate G4.",
  "cases": [
   {

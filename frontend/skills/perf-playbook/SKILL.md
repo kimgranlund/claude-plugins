@@ -6,7 +6,7 @@ description: >-
   across the site", "same fixes on the other routes", "write down what we changed so it can be
   repeated": one entry per fix (audit id, cause, files, verify command, shared vs page-local),
   remaining pages handled in parallel with disjoint files, each ending with lh-diff. NOT for
-  the first page's own fix loop (perf-fix-loop); NOT for the route inventory, scoreboard, or
+  the first page's own fix loop (perf-loop); NOT for the route inventory, scoreboard, or
   budgets (perf-sweep).
 disable-model-invocation: false
 user-invocable: true
@@ -24,7 +24,7 @@ already fixed." This skill is that procedure with the record made explicit.
 
 1. **Phase 1, one page.** Run `perf-audit` on the page with the most shared surface (the
    shell, the layout, the bundle every route loads), `perf-triage` for the brief, and
-   `perf-fix-loop` until it is green. Every iteration appends an entry to
+   `perf-loop` until it is green. Every iteration appends an entry to
    `perf-playbook.md` (template: `assets/perf-playbook.template.md`), one per fix:
    - issue: the audit id and the item the report named;
    - cause in this codebase: the file or config that produced it, in the source, not the

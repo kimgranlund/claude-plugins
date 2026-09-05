@@ -1,5 +1,5 @@
 ---
-name: perf-fix-loop
+name: perf-loop
 description: >-
   The loop contract for fixing against a perf brief: one cause family per iteration, evidence
   recorded before the fix, re-audit of the changed surfaces plus every previous finding, an
@@ -12,7 +12,7 @@ disable-model-invocation: false
 user-invocable: true
 ---
 
-# perf-fix-loop, fix one family, prove it, keep the rest
+# perf-loop, fix one family, prove it, keep the rest
 
 Input: a brief from `perf-triage` and the before-report it was built from. Output: a
 re-audited report with no regression against the DO NOT BREAK list, and a playbook entry per
