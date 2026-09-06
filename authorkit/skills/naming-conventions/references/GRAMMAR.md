@@ -17,6 +17,9 @@ skill     := object "-" process           skills-audit, rename-planning
           |  "file" "-" object-phrase     file-bug             (§14.7, ADR-0018 D1)
           |  nominal-phrase               naming-conventions  (all tokens resolve)
 agent     := skill-name "-" "agent"       estate-audit-agent  (primary)
+          |  vocab-stem "-" "agent"       sdlc-agent          (domain generalist — stem resolves
+                                          wholly in ObjectVocab, never ProcessLex/TopicLex;
+                                          2026-08-31, adiahealth/adia-harness)
           |  scope "-" role               team-leader         (orchestrators — canonical, ADR-0015 D1)
           |  scope "-" role "-" "agent"   product-leader-agent (orchestrators — legacy spelling, ADR-0015 D1)
 ```
