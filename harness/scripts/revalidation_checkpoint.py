@@ -72,10 +72,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from adr_checkpoint import (  # noqa: E402  (sibling script, same harness/scripts/ directory)
     FRONTMATTER_RE,
     HEADING_RE,
+    H1_LINE_RE,
+    STATUS_KEYWORD_RE,
     decision_content,
     parse_bold_metadata,
     parse_frontmatter,
     parse_status_table,
+    table_field_name,
+    table_row_cells,
 )
 
 DOC_FIELD_RE = re.compile(r"^(doc-type|id|status)\s*:\s*(.+?)\s*$", re.MULTILINE)
@@ -115,13 +119,64 @@ def parse_idr_frontmatter(text):
     return {"id": fields.get("id", "").strip(), "status": fields.get("status", "").strip()}
 
 
-def parse_idr_file(text):
-    """Parse one IDR file: id/status from frontmatter, claim text from the whole `## Proof` section
-    (Resolution 3 — never a narrower keyword extraction). Returns None for a non-IDR file. Pure."""
-    fm = parse_idr_frontmatter(text)
-    if not fm or not fm["id"]:
+IDR_FILENAME_ID_RE = re.compile(r"^(\d+)")
+# gh#1005: agent-ui's H1 + blockquote-table IDR dialect carries no frontmatter `id:` field at all —
+# the filename stem (`0005-agent-product-platform-identity`) is the only id source, normalized to
+# this script's own `idr-NNNN` shape.
+
+
+def parse_idr_status_table(text):
+    """Extract the status keyword from an H1 + blockquote-status-table IDR (agent-ui's dialect,
+    ruled at that repo's doc-standards `references/status-dialects.md` §1d — no frontmatter, no
+    `id:` field; the id is the caller's job, since this dialect carries none of its own). Returns
+    None when the text isn't this dialect (no H1, or no `**Status**` row) — same "skip naturally"
+    discipline as `adr_checkpoint.parse_status_table`, which this mirrors for IDR files. Pure."""
+    if not H1_LINE_RE.search(text):
         return None
-    return {"id": fm["id"], "status": fm["status"], "proof_text": extract_section(text, "proof") or ""}
+    for line in text.splitlines():
+        cells = table_row_cells(line)
+        if len(cells) < 2:
+            continue
+        if table_field_name(cells[0]) == "status":
+            keyword = STATUS_KEYWORD_RE.search(cells[1].strip("*`_ "))
+            return keyword.group(0).lower() if keyword else None
+    return None
+
+
+def parse_idr_file(text, path=None):
+    """Parse one IDR file, dispatching over both dialects (gh#1005) — YAML frontmatter first (this
+    script's original shape, unchanged for hosts that use it), falling back to the blockquote-table
+    dialect only when no frontmatter is present, never both at once. Claim text is the whole
+    `## Proof` section (Resolution 3 — never a narrower keyword extraction) for the frontmatter
+    dialect; the blockquote-table dialect has no `## Proof` heading at all, so its claim text is
+    `## Falsifiers` instead (that dialect's own Proof-equivalent) — `## Proof` is still tried first
+    so a future host using this same table dialect WITH a `## Proof` heading still works unchanged.
+    The table dialect's `accepted` status maps to this script's own `locked` (its terminal/lockable
+    value — the ADR/IDR vocabulary this repo uses has no `locked` state of its own, and asking a
+    host repo to add one outside its ruled vocabulary is not this script's call to make) so
+    `scan_idr_claims`'s existing `== "locked"` filter picks it up unchanged. `path` is required to
+    resolve an id under the table dialect (there is no frontmatter `id:` field to fall back to);
+    without it, a table-dialect file is skipped rather than guessed at. Returns None for a file
+    matching neither dialect. Pure — no I/O of its own (the caller already read `text`)."""
+    fm = parse_idr_frontmatter(text)
+    if fm and fm["id"]:
+        return {"id": fm["id"], "status": fm["status"], "proof_text": extract_section(text, "proof") or ""}
+    if FRONTMATTER_RE.match(text) is not None or path is None:
+        # Frontmatter present but not a (valid) IDR (an ADR file, or an IDR with no id) — never
+        # fall through to the table dialect, which is defined as "no frontmatter at all". No path
+        # given at all means the table dialect's id (filename-derived) can't be resolved either.
+        return None
+    status = parse_idr_status_table(text)
+    if not status:
+        return None
+    id_match = IDR_FILENAME_ID_RE.match(Path(path).stem)
+    if not id_match:
+        return None
+    return {
+        "id": f"idr-{id_match.group(1)}",
+        "status": "locked" if status == "accepted" else status,
+        "proof_text": extract_section(text, "proof") or extract_section(text, "falsifiers") or "",
+    }
 
 
 def parse_rdd_frontmatter(text):
@@ -184,7 +239,7 @@ def scan_idr_claims(idr_dir):
     claims = {}
     for f in sorted(Path(idr_dir).glob("*.md")):
         text = f.read_text(encoding="utf-8", errors="replace")
-        rec = parse_idr_file(text)
+        rec = parse_idr_file(text, f)
         if not rec or rec["status"] != "locked":
             continue
         claims[rec["id"]] = {
@@ -511,6 +566,59 @@ def selftest():
     rec_no_proof = parse_idr_file(idr_no_proof_text)
     assert rec_no_proof == {"id": "idr-0099", "status": "locked", "proof_text": ""}, rec_no_proof
 
+    # ---- parse_idr_status_table / parse_idr_file's table-dialect branch (gh#1005) — agent-ui's
+    # H1 + blockquote-table IDR dialect: no frontmatter, no `id:` field, `## Falsifiers` in place of
+    # `## Proof`, shaped exactly like agent-ui's real IDR-0005 --------------------------------------
+    idr_table_dialect_text = (
+        "# IDR-0005 — Agent product platform identity\n\n"
+        "> | Field | Value |\n"
+        "> |---|---|\n"
+        "> | **Status** | accepted |\n"
+        "> | **Date** | 2026-08-18 |\n\n"
+        "## Claim\n\nThe agent product has one platform identity.\n\n"
+        "## Falsifiers\n\nFalsified if two live products both claim the platform-identity role.\n\n"
+        "## Open questions\n\nNone.\n"
+    )
+    idr_table_path = "/host/.claude/docs/idr/0005-agent-product-platform-identity.md"
+    rec_table = parse_idr_file(idr_table_dialect_text, idr_table_path)
+    assert rec_table == {
+        "id": "idr-0005", "status": "locked",
+        "proof_text": (
+            "## Falsifiers\n\nFalsified if two live products both claim the platform-identity role.\n\n"
+        ),
+    }, rec_table
+    assert parse_idr_status_table(idr_table_dialect_text) == "accepted", \
+        "the dialect's own status keyword, pre-mapping, must read exactly what the table cell says"
+
+    # without a path, the table dialect's id can't be resolved — skipped, never guessed at
+    assert parse_idr_file(idr_table_dialect_text) is None, \
+        "the table dialect has no id source but the filename; no path means no result"
+
+    # a table-dialect file whose status isn't the terminal `accepted` (e.g. `proposed`) is parsed
+    # but never satisfies scan_idr_claims's `== \"locked\"` filter — same exclusion as a proposed
+    # frontmatter-dialect IDR above, reached through the other dialect this time
+    idr_table_proposed_text = idr_table_dialect_text.replace("**Status** | accepted", "**Status** | proposed")
+    rec_table_proposed = parse_idr_file(idr_table_proposed_text, idr_table_path)
+    assert rec_table_proposed["status"] == "proposed", rec_table_proposed
+
+    # dispatch order: frontmatter dialect still wins when both a path AND real frontmatter are
+    # present — passing `path` must never change the frontmatter dialect's own output
+    assert parse_idr_file(idr_0009_text, "/host/.claude/docs/idr/0009-x.md") == rec_0009, \
+        "passing a path must not perturb the frontmatter dialect's own result"
+    assert parse_idr_file(adr_frontmatter_text, "/host/.claude/docs/adr/0002-x.md") is None, \
+        "an ADR's frontmatter must never fall through to the table dialect just because a path was given"
+
+    # a `## Proof` heading in the table dialect is preferred over `## Falsifiers` when both exist —
+    # the compatibility path item 3 of the ticket asks for, never a second dialect for it
+    idr_table_with_proof_text = idr_table_dialect_text.replace(
+        "## Falsifiers\n\nFalsified if two live products both claim the platform-identity role.\n\n",
+        "## Proof\n\nProof section text.\n\n"
+        "## Falsifiers\n\nFalsifiers section text, never picked when Proof exists.\n\n",
+    )
+    rec_table_with_proof = parse_idr_file(idr_table_with_proof_text, idr_table_path)
+    assert rec_table_with_proof["proof_text"] == "## Proof\n\nProof section text.\n\n", \
+        rec_table_with_proof
+
     # ---- parse_rdd_frontmatter / parse_rdd_file — gated on doc-type: rdd, never an ADR/IDR (#656:
     # locked RDDs join the idr-0009 sampling rotation) -------------------------------------------
     assert parse_rdd_file(adr_frontmatter_text) is None, \
@@ -573,6 +681,12 @@ def selftest():
         )
         (idr_dir / "0009-x.md").write_text(idr_0009_text, encoding="utf-8")
         (idr_dir / "0099-proposed.md").write_text(idr_proposed_text, encoding="utf-8")
+        # gh#1005: agent-ui's IDR-0005 dialect, filed under the same directory — proves
+        # scan_idr_claims (never just parse_idr_file in isolation) actually picks it up end to end,
+        # the exact shape the ticket's own Acceptance criterion tests.
+        (idr_dir / "0005-agent-product-platform-identity.md").write_text(
+            idr_table_dialect_text, encoding="utf-8"
+        )
         (rdd_dir / "0001-x.md").write_text(rdd_0001_text, encoding="utf-8")
         (rdd_dir / "0099-draft.md").write_text(rdd_draft_text, encoding="utf-8")
 
@@ -583,9 +697,12 @@ def selftest():
         assert "Do the thing" in adr_claims["adr-0002"]["text"]
 
         idr_claims = scan_idr_claims(idr_dir)
-        assert set(idr_claims) == {"idr-0009"}, \
-            f"a proposed (not locked) IDR must be excluded from the claim corpus: {idr_claims}"
+        assert set(idr_claims) == {"idr-0009", "idr-0005"}, \
+            f"a proposed (not locked) IDR is excluded; an accepted table-dialect IDR must be " \
+            f"included (mapped to this script's own locked terminal state): {idr_claims}"
         assert idr_claims["idr-0009"]["kind"] == "idr-proof"
+        assert idr_claims["idr-0005"]["kind"] == "idr-proof"
+        assert "platform-identity role" in idr_claims["idr-0005"]["text"], idr_claims["idr-0005"]
 
         rdd_claims = scan_rdd_claims(rdd_dir)
         assert set(rdd_claims) == {"rdd-0001"}, \
@@ -593,7 +710,7 @@ def selftest():
         assert rdd_claims["rdd-0001"]["kind"] == "rdd-acceptance"
 
         combined = combined_claims(adr_dir, idr_dir, rdd_dir)
-        assert set(combined) == {"adr-0002", "idr-0009", "rdd-0001"}, combined
+        assert set(combined) == {"adr-0002", "idr-0009", "idr-0005", "rdd-0001"}, combined
 
     # ---- pick_sample — round-robin, no duplicates within one call, wraps correctly ------------
     ids = ["adr-0001", "adr-0002", "idr-0001", "idr-0002", "idr-0003"]
@@ -690,7 +807,10 @@ def selftest():
           "IDR-vs-ADR frontmatter gate, three real-corpus phrasing-variance fixtures "
           "(idr-0009 colon-anchored, idr-0006 mid-sentence no-boilerplate/EOF-bounded, idr-0001 "
           "passive-voice with no 'Falsifies' token at all), proposed-IDR and missing-Proof-heading "
-          "negative controls, RDD-vs-ADR/IDR frontmatter gate (#656: locked RDDs join the "
+          "negative controls, gh#1005's agent-ui table-dialect IDR (no frontmatter, filename-"
+          "derived id, accepted->locked mapping, Falsifiers-over-Proof fallback, Proof-preferred-"
+          "when-present, scan_idr_claims end-to-end pickup), RDD-vs-ADR/IDR frontmatter gate "
+          "(#656: locked RDDs join the "
           "revalidation rotation), a locked-RDD Acceptance-section fixture, draft-RDD and "
           "missing-Acceptance-heading negative controls, accepted/locked corpus filters (superseded "
           "ADR + proposed IDR + draft RDD excluded), round-robin sampling (no duplicates, wraps, "
