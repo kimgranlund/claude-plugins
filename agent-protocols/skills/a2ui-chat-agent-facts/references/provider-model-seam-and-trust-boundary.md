@@ -3,7 +3,7 @@
 > Axis: how a real model call sits behind an injected `AgentProvider`, how `providers.json` is the
 > single source of truth for both the switcher and the proxy allowlist, and how the dev-only Vite
 > proxy holds the key server-side and validates the `{provider,model}` PAIR before ever reading it.
-> Grounded in `packages/agent-ui/a2ui/tools/agent/agent-transport.ts`,
+> Grounded in `packages/agent-ui/a2ui/src/agent/agent-transport.ts`,
 > `packages/agent-ui/a2ui/tools/agent/providers.json`,
 > `packages/agent-ui/a2ui/tools/agent/providers-config.ts`,
 > `packages/agent-ui/a2ui/tools/agent/dev-proxy-plugin.ts`,
@@ -20,7 +20,7 @@ interface AgentProvider {
 
 (`agent-transport.ts:81-88`.) **Claim — one isolated module PER provider** implements this; each
 owns its endpoint, auth, and SSE-→-text framing (SPEC-N5). The `produce()` driver depends ONLY on
-this signature and never names a vendor (`produce.ts:119`; see produce-loop). **Claim — the key is
+this signature and never names a vendor (`produce.ts`; see produce-loop). **Claim, the key is
 passed IN via the factory, never read at module scope** (`agent-transport.ts:78-80`). **Claim —
 Anthropic is implemented this wave with plain `fetch`, no LLM SDK** (SPEC-N1: no `@anthropic-ai/sdk`
 anywhere); OpenAI/Gemini are config-present, adapter-pending. **Failure mode / caveat — defensive
@@ -68,7 +68,7 @@ past this check — an out-of-allowlist pair is rejected before any `env[…]` r
 
 **Claim — the allowlist-validated `model` is passed as the AUTHORITATIVE `opts.model`**
 (`dev-proxy-plugin.ts:140`), which `produce()` prefers over any client `input.model`
-(`produce.ts:113`) — so a crafted request body cannot escape the PAIR check (SPEC-R12; see
+(`produce.ts`), so a crafted request body cannot escape the PAIR check (SPEC-R12; see
 produce-loop). **Claim — the endpoint comes from the MATCHED registry row, not a client value**
 (`dev-proxy-plugin.ts:123-125`).
 

@@ -90,3 +90,16 @@ Lane mechanics for 1–2 (prompt composition, budgets, selection) live in [[a2ui
 this pack owns lane 4 end-to-end and this choice rubric as corpus doctrine — an exemplar is the
 EXPENSIVE lane (judged admission + standing re-validation forever), so it must earn its seat over
 a clause or a card, never be the reflex.
+
+## Expected gaps in a single-surface, valid-only exemplar corpus (2026-10-03)
+
+**Claim [generalization inferred, profile verified]:** exemplars that are all single-surface and
+all valid teach single-surface turns only. A retrieval-augmented producer shown only those has
+nothing to imitate for correction or surface lifecycle, so a trainer should ASSUME these gaps until
+a corpus profile shows otherwise: no broken-then-repaired pairs, no multi-turn or multi-surface
+records, `deleteSurface` rare. **Evidence:** a profile of agent-ui's exemplar shard
+(`corpus/exemplar/v1_0/agent-ui.jsonl`) on 2026-10-03 found 74 records with `deleteSurface` in 1.
+**Failure mode:** blaming the model for weak self-correction or scene-swap behavior that no
+retrieved exemplar ever demonstrated. Profile the corpus first; the fix is a judged exemplar of the
+missing shape (the lane-4 rubric above), not more of the same.
+

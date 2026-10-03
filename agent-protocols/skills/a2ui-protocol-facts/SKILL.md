@@ -53,7 +53,7 @@ Every default in the corpus carries its rationale, so a consumer knows when devi
 protocol splits into two layers (`references/sources.md`): **wire facts** (v1.0-mandated — the
 message envelopes, the two-code error contract, positional list matching, `@index` innermost-only,
 `callableFrom` default) admit **no** deviation without breaking conformance (Constraint C1); **repo
-mechanisms** (the 8-code internal taxonomy, per-path reactive waking, the bespoke positional
+mechanisms** (the 10-code internal taxonomy, per-path reactive waking, the bespoke positional
 reconcile, `setPointer` structural sharing) are design choices whose rationale is recorded in an
 ADR's Decision/Alternatives — a change there is an ADR-level decision, not a free edit. When a
 payload or renderer question turns on "must it be this way," answer on which layer the fact lives in.

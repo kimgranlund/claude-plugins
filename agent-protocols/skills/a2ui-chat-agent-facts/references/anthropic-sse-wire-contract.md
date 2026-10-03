@@ -5,7 +5,7 @@
 > wire a new provider" (provider-model-seam-and-trust-boundary) or "how does the loop consume a
 > fragment stream" (produce-loop): this is what breaks, and why, when Anthropic's OWN response
 > shape is the suspect. Grounded in
-> `packages/agent-ui/a2ui/tools/agent/providers/anthropic.ts`,
+> `packages/agent-ui/a2ui/src/agent/providers/anthropic.ts`,
 > `packages/agent-ui/a2ui/src/live-agent/anthropic-sse.test.ts` (the fixture suite — SPEC-R11 AC3).
 > Verified against source as of 2026-07-13.
 

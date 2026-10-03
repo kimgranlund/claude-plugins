@@ -98,3 +98,7 @@ axis (its own charter: "how a chat-agent harness proves what it actually did"), 
 extension surfaces, so the axis landed here; the fence against `routing-accuracy-evals.md` (many
 judged routing cases vs. one engineered end-to-end turn) is stated in both the new file and the
 consult table.
+
+## Provenance, 2026-10-03 agent-ui knowledge-harvest fold
+
+`live-turn-acceptance-and-replay-ci.md` gained "Capture once, replay deterministically" (single recorder, replay transport with zero I/O, versioned parse-checked capture; agent-ui `recordTurn`, `DevtoolsEvent`, devtools replay transport and capture format; harvest 2026-10-03). Two inferred, repo-structure lessons from the same export were skipped as failing the product-side litmus.

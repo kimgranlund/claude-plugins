@@ -13,31 +13,35 @@
 
 **Claim — every turn opens with a reserved, versionless meta-line carrying the model's own prose.**
 The GRAMMAR instructs "Note line (ALWAYS first)" — one JSON object
-`{"a2uiMeta":{"note":"…"}}` before any A2UI JSONL, on EVERY turn (`tools/agent/system-prompt.ts:62-68`).
-`readMetaLine` rejects any line carrying `version` (`tools/agent/meta-line.ts:85`) — the meta-line is
+`{"a2uiMeta":{"note":"…"}}` before any A2UI JSONL, on EVERY turn (`src/agent/system-prompt.ts:62-68`).
+`readMetaLine` rejects any line carrying `version` (`src/agent/meta-line.ts`, `readMetaLine`), the meta-line is
 provably NOT an `A2uiServerMessage`, a demo-transport framing convention, not protocol
-(`meta-line.ts:1-11`). The envelope is `{ note?, ask?, trace? }` (`meta-line.ts:62-68`).
-- `produce()` peels the FIRST non-empty line before heal/validate (`tools/agent/produce.ts:180-187`,
-  called at `:297`) — a blank-line-tolerant refinement over ADR-0088's literal "leading line" — and
-  yields the re-composed meta-line FIRST, then the validated A2UI lines (`produce.ts:336-340`).
-- *(Dated note 2026-08-19: the `{ note?, ask?, trace? }` shape above is the 2026-07-08 snapshot; the
-  envelope has since grown to SIX reserved model-authored arms — see the UPDATE section below. The
-  toolkit core also moved `tools/agent/` → `src/agent/` (ADR-0137 portable core), so this file's
-  older `tools/agent/*` cites read as `packages/agent-ui/a2ui/src/agent/*` today — grep the symbol,
+(`meta-line.ts:1-11`). The envelope carries the model-authored arms `note`, `ask`, `plan`, `personaPatch`, `flowEnd`, `team`
+and `target`, plus the runtime-only `trace` and `progress` (see the UPDATE section below for each
+arm's law). Each arm validates as a WHOLE and drops only itself when malformed, since a half-parsed
+roster or patch is the shape a host must never see; `target` with an empty `surfaceId` drops
+entirely; a note-only turn counts as success (`meta-line.ts` arm validators; ADR-0088, 0178, 0198,
+0204, 0206).
+- `produce()` peels the FIRST non-empty line before heal/validate (`src/agent/produce.ts`, the meta-line peel,
+  called once per turn), a blank-line-tolerant refinement over ADR-0088's literal "leading line", and
+  yields the re-composed meta-line FIRST, then the validated A2UI lines (`produce.ts`).
+- *(Dated note 2026-08-19: the envelope is `note` plus six reserved model-authored arms, listed in the UPDATE
+  section below. The toolkit core also moved `tools/agent/` to `src/agent/` (ADR-0137 portable core), so
+  older `tools/agent/*` cites read as `packages/agent-ui/a2ui/src/agent/*` today; grep the symbol,
   not the old path.)*
 - **A note-only turn is a clean success, not a halt** (empty ≠ invalid): zero remaining A2UI lines
-  returns after yielding the meta-line alone (`produce.ts:303-311`; ADR-0088 Consequences).
+  returns after yielding the meta-line alone (`produce.ts`; ADR-0088 Consequences).
 - The page filters the meta-line before `host.ingest`/`allLines`/the JSON tab
   (`site/pages/a2ui-live.ts:294-304`) and shows the model's prose verbatim —
   `addMessage('agent', note ?? summarize(turnLines))` (`a2ui-live.ts:367`); `summarize()` is only the
   fallback for note-less turns (the recorded backbone).
 - **The decision trace grounds "why".** `produce()` assembles a `TurnTrace` (`turnIndex`, retrieval
   query, `exemplarIds`, `rounds`, `healed`, `failureCodes`, `model` — `meta-line.ts:31-43`,
-  `produce.ts:270-280`) onto the same meta-line; the browser holds `traces[]` parallel to the session,
+  `produce.ts`) onto the same meta-line; the browser holds `traces[]` parallel to the session,
   and `traceDigest()` prepends the last 5 (plus retained notes) to the NEXT intent turn's `text`
   (`a2ui-live.ts:387-402`, `:420`) — shipped as a text-prepend on the existing `TurnInput.text`, not a
   new context block; the chat still shows the user's bare text. Caveat: `turnIndex` is a
-  Messages-array index advancing by 2, never a dense ordinal (`produce.ts:266-270`).
+  Messages-array index advancing by 2, never a dense ordinal (`produce.ts`).
 
 ## 2. The ASK grammar — clarify, negotiate the catalog wall, and feed-embedded asks
 
@@ -54,7 +58,7 @@ chat feed.
   "ask-1"}}}` (`system-prompt.ts:70-80`, `meta-line.ts:50-52`); the ask's UI is ordinary validated
   A2UI on the same stream. A malformed `ask` drops only itself, never the envelope
   (`meta-line.ts:94-101`).
-- **The 23-IN/13-OUT TOTAL partition** — `tools/agent/feed-catalog.ts`: `FEED_SURFACE_TYPES` (23,
+- **The 23-IN/13-OUT TOTAL partition**, `src/agent/feed-catalog.ts`: `FEED_SURFACE_TYPES` (23,
   `:29-53`) and `FEED_EXCLUDED` with a recorded reason per entry (13, `:71-112`) — including the
   chart-family entries `Sparkline` (`:94-97`) and `BarChart` (`:98-102`), added per ADR-0107 /
   ADR-0097's 2026-07-08 Amendment ("report content, not an ask affordance").
@@ -63,13 +67,18 @@ chat feed.
 - **Three enforcement points, one source** (`feed-catalog.ts:7-13`): (a) prompt-build — the GRAMMAR's
   feed-allowed list is composed from `FEED_SURFACE_TYPES` (`system-prompt.ts:80`); (b) producer — the
   `FEED_SCOPE` gate runs AFTER the shared validator, feeding a produce-layer-only `'FEED_SCOPE'`
-  failure back as a self-correct round, never a stream (`produce.ts:246-256`, `:322-327`); (c) page —
+  failure back as a self-correct round, never a stream (`produce.ts`); (c) page, 
   fail-closed: every type on the buffered ask lines must pass `isFeedSurfaceType` or the WHOLE ask
   drops to the note (`a2ui-live.ts:335-352`, `site/lib/ask-registry.ts:50-67`).
-- **Ask integrity is a silent degrade, not a retry**: an `ask` no payload line creates, or colliding
-  with a session-known surface, is dropped from the outgoing meta-line — the note stands
-  (`produce.ts:231-235`, `:331`). A note-less ask never ships at all — the meta-line is only yielded
-  when `note !== undefined` (`produce.ts:336-339`, post-ship review finding 4).
+- **Ask integrity is a silent degrade, not a retry, and the degrade is WHOLE** (corrected
+  2026-10-03; this bullet used to say "the note stands"): an `ask` no payload line creates, or
+  colliding with a session-known surface, is dropped, and every message naming its surface is
+  suppressed with it, so the turn reads as a prose-only ask. Messages for other surfaces ship
+  untouched; a net-no-op surface drags its ask down with it. **Why:** shipping the payload of a
+  dropped ask would repaint the already-answered card in place (the ask-integrity block of
+  `produce()`, `askIntegrityHolds` and the whole-degrade suppression filter; GH #1064, #1142).
+  The meta-line ships whenever it has a note or a surviving ask; a note-less ask is no longer
+  discarded (`produce.ts`, the meta yield near the end of `produceTurn`; GH #1064).
 - **Lifecycle**: one fresh renderer host per ask in its own bubble; `pending → frozen(answered |
   bypassed)` via bubble `inert` + `data-state`, never disposed — history stays visible
   (`ask-registry.ts:84-94`, `:124-131`). **Freeze fires on turn COMPLETION, not dispatch** — the
@@ -80,7 +89,7 @@ chat feed.
 
 ## 3. The mode axis — `specific` ↔ `blue-sky`; what scales and what never does
 
-`GenUiMode = 'default' | 'specific' | 'blue-sky'` (`tools/agent/gen-ui-mode.ts:20-25`); Structural is
+`GenUiMode = 'default' | 'specific' | 'blue-sky'` (`src/agent/gen-ui-mode.ts`); Structural is
 deliberately NOT a member — it is the shipped recorded transport, a different layer (Kim's resolved
 fork, ADR-0090 §3). `grammarFor` composes the invariant spine + the mode's scaled block; absent or
 `'default'` returns the literal `GRAMMAR` constant unchanged — byte-identity by construction
@@ -91,18 +100,21 @@ fork, ADR-0090 §3). `grammarFor` composes the invariant spine + the mode's scal
   examples, `:190-221`) — plus the feed-ask disposition (`:231-250`).
 - **What never scales**: the honesty floor — never invent a type/prop, never silently substitute —
   identical in every mode (`system-prompt.ts:170-173`; ADR-0090 §2); no mode widens SPEC-R9 or the
-  feed set. The mode threads `ProduceOptions.mode → buildSystemPrompt` (`produce.ts:73-75`, `:263`) —
+  feed set. The mode threads `ProduceOptions.mode → buildSystemPrompt` (`produce.ts`), 
   the proven `model` path; nothing else in the loop branches on it.
 
-## 4. The mini-skill registry — SIX modules, TF-IDF selection, cap 3, degrade-to-empty
+## 4. The mini-skill registry, a prompt-module shelf, TF-IDF selection, cap 3, degrade-to-empty
 
-`tools/agent/mini-skills.ts` hosts SIX `MiniSkill` modules (`{id, triggers, body}` — `:36-43`):
-`card-game-sheet` · `settings-screen` · `dashboard-kpi-grid` · `login-form` · `master-detail-split`
-(`:59-101`) plus `form-rhythm` (`:104-114`, the ADR-0103 cl.4 Lane-C module — FormProvider declares
-zero layout, so `FormProvider › Column gap='md' › Field per control` is taught, not defaulted).
+`src/agent/mini-skills.ts` hosts the `MiniSkill` modules (`{id, triggers, body}`), whose bodies live
+as prompt files under `src/agent/prompts/mini-skills/` (20 files on 2026-10-03; it was six when this
+section was written, **do not hard-code the count in prose**, pin it in a test: the registry's gate
+test lists the module files). Early examples: `card-game-sheet` · `settings-screen` ·
+`dashboard-kpi-grid` · `login-form` · `master-detail-split` plus `form-rhythm` (the ADR-0103 cl.4
+Lane-C module, FormProvider declares zero layout, so `FormProvider › Column gap='md' › Field per
+control` is taught, not defaulted).
 - **Selection**: `selectMiniSkills` ranks `triggers` against the turn's intent by TF-IDF cosine
   (`topKByCosine`, the same math `retrieve()` uses — `mini-skills.ts:127-129`), once per turn beside
-  `retrieve()` (`produce.ts:262`); it degrades to `[]` on zero vocabulary overlap and — unlike
+  `retrieve()` (`produce.ts`); it degrades to `[]` on zero vocabulary overlap and, unlike
   `retrieve()` — never pads with zero-score entries (`floor: 0`, `mini-skills.ts:122-126`).
 - **The anti-bloat budget**: `PER_MODULE_TOKEN_BUDGET = 200` (`:48`), `DEFAULT_MINI_SKILL_CAP = 3`
   (`:52`), both gated (`src/live-agent/mini-skills.test.ts:23-27`); `miniSkillsBlock` is a `fewShot`
@@ -113,14 +125,21 @@ zero layout, so `FormProvider › Column gap='md' › Field per control` is taug
   `calibrationExampleBullet` (`system-prompt.ts:200-206`, rendered at `:220-221`) — the registry is
   the single source — and `miniSkillsFor` filters those three ids out of a `'blue-sky'` selection so
   the same paragraph is never injected twice (`system-prompt.ts:317-322`); `specific`/`default` carry
-  no inline idioms, so selection injects all six normally there. A module-load marker guard hardens
+  no inline idioms, so selection injects its picks normally there. A module-load marker guard hardens
   the GRAMMAR slicing (`assertMarkersHold`, `system-prompt.ts:149-164`).
+
+**The typed-value rule lives in the grammar prompt, not in code** (2026-10-03). For ONE typed
+value the model is told to use a typed Field+TextField (number, currency, date, time), a Calendar
+for a date or range, or a Slider for a bounded numeric, with a label naming the value
+(`src/agent/prompts/grammar.md`, the typed-value sentence). **Failure mode:** expecting the validator
+to reject a free-text field standing in for a date; nothing in code checks it, so a regression is
+a prompt regression. [verified] 2026-10-03.
 
 ## 5. `wantResponse` click routing — AS SHIPPED
 
 **The routing predicate lives in the pure reducer layer, not the page** — a shipped refinement over
 ADR-0088 §3's "handleClientMessage routes" sketch: `shouldRunTurn(message)` in
-`tools/agent/session.ts:68-71` answers `action.wantResponse !== false` for the `action` arm and
+`src/agent/session.ts` (`shouldRunTurn`) answers `action.wantResponse !== false` for the `action` arm and
 `true` for `rendererFunctionResponse`/`error` (inherently agent-directed). The page calls it FIRST, so a
 `TurnInput` can never be constructed for a message that should stay silent (`session.ts:9-13`):
 `handleClientMessage` returns before any chat entry or `runTurn` on an explicit `false`
@@ -130,7 +149,7 @@ Open fork, resolved 2026-07-07): absent or `true` ⇒ today's full visible turn 
 the same flag is untouched — two documented, non-colliding layer-local meanings
 (`session.ts:59-66`; ADR-0088 Consequences).
 
-## UPDATE 2026-08-19 — the meta-line reserved vocabulary: SIX model-authored arms, four laws, one principle
+## UPDATE 2026-08-19, the meta-line reserved vocabulary: note plus six model-authored arms, four laws, one principle
 
 **[verified]** against the ADR texts fetched from `kimgranlund/agent-ui` 2026-08-19 (ADR-0097 /
 0174 / 0178 / 0198 incl. both ratified amendments / 0204 / 0206 — every one `accepted`) and the

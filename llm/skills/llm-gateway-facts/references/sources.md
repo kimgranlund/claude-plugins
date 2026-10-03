@@ -24,7 +24,7 @@ and this pack needs repair.
 ## The worked example — a real, shipped instance (cited for concrete grounding, not sole authority)
 
 **`@agent-ui/a2ui`'s live-agent system**, `/Users/kimba/Projects/nonoun/agent-ui`,
-`packages/agent-ui/a2ui/tools/agent/`:
+`packages/agent-ui/a2ui/src/agent/` (the node-first `./agent` export, ADR-0137; `agent-transport.ts`, `session.ts` and `providers/anthropic.ts` live here) and `packages/agent-ui/a2ui/tools/agent/` (`providers-config.ts`, `providers.json`, `dev-proxy-plugin.ts`):
 
 - `agent-transport.ts` — the `AgentProvider`/`AgentTransport` seam interfaces, the
   `Role`/`Turn`/`Session`/`TurnInput` conversation model.
@@ -81,3 +81,7 @@ with the client holding turn history) was diff-checked against agent-ui ADR-0073
 and found ALREADY fully covered by this pack's existing `registry-and-trust-boundary.md`,
 `dev-proxy-and-bundler-footguns.md`, and `stateless-session-and-turn-model.md` — no restatement was
 added; ADR-0073 stands as the ratified decision record BEHIND those files' worked instance.
+
+## Provenance, 2026-10-03 path repoint
+
+The worked-example cites in `provider-adapter-seam.md` and `stateless-session-and-turn-model.md` were repointed from `tools/agent/` to `src/agent/` after agent-ui's ADR-0137 portable-core move (`agent-transport.ts`, `session.ts`, `providers/anthropic.ts`; checked with `ls` 2026-10-03). The registry, config and dev-proxy files stayed under `tools/agent/`. No claim changed.

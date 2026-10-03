@@ -63,6 +63,10 @@ streamed, which correction rounds fired, what the final line carried), written i
 own record — not a bare "ran it, looked fine." One engineered turn with its trace attached is
 acceptance; ten generic turns without one are anecdotes.
 
+## Capture once, replay deterministically
+
+One recorder wraps any transport and is the single producer of an NDJSON event timeline. Every event round-trips through plain `JSON.parse` structurally equal, and replay order is a sequence number, never wall-clock. The replay transport implements the unchanged transport seam with zero I/O, zero timers and zero randomness (lines yield on the microtask queue only), so it is a CI backbone, and swapping replay for a live transport is a one-construction-site edit. The capture file is a versioned, parse-checked artifact with a typed parse error, so a stale or corrupt capture fails loudly instead of replaying wrong. · agent-ui `recordTurn` and `DevtoolsEvent` (`devtools/src/timeline/events.ts`), `devtools/src/transports/replay.ts`, `devtools/src/capture/format.ts` · 2026-10-03 · [verified]
+
 ## What this file does NOT cover
 
 Authoring or re-running description-routing eval suites — accuracy as a tracked number over many

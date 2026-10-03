@@ -1,8 +1,8 @@
 # Errors & versioning — the two-code wire contract + the version pin
 
-> Axis: the internal 8-code diagnostic taxonomy, its map to the v1.0 two-code wire contract, and
+> Axis: the internal 10-code diagnostic taxonomy, its map to the v1.0 two-code wire contract, and
 > protocol-version handling. Grounded in `packages/agent-ui/a2ui/src/protocol.ts:9-74`,
-> `src/renderer/validate.ts`, and **ADR-0031** (error-vocab reconciliation). SPEC-R11/R13, SPEC-N6.
+> `src/renderer/validate.ts` (symbols `ErrorCode`, `toWireError`; cite by symbol, line numbers drift), and **ADR-0031** (error-vocab reconciliation). SPEC-R11/R13, SPEC-N6.
 
 ## Two vocabularies: internal (rich) vs wire (two codes)
 
@@ -11,8 +11,10 @@ repo keeps a richer INTERNAL taxonomy** (ADR-0031 fact 1, verbatim from a2ui.org
 defines only WIRE-level error messages; INTERNAL validation is NOT part of the protocol
 specification"*). So the internal codes are legitimately the repo's own.
 
-- **Internal `ErrorCode`** (8 codes, `protocol.ts:16-24`): `PARSE`, `SCHEMA`, `CATALOG`,
-  `CATALOG_UNKNOWN`, `IDGRAPH`, `POINTER`, `VERSION_UNSUPPORTED`, `FUNCTION`. Used by the renderer,
+- **Internal `ErrorCode`** (10 codes, the `ErrorCode` union in `protocol.ts`): `PARSE`, `SCHEMA`, `CATALOG`,
+  `CATALOG_UNKNOWN`, `IDGRAPH`, `POINTER`, `VERSION_UNSUPPORTED`, `FUNCTION`, `DEPTH_EXCEEDED`,
+  `CONTAINMENT` (the last two were added after the original 8; a doc comment near `toWireError`
+  may still say "9 codes", trust the union). Used by the renderer,
   the validator's `Failure`, and corpus admission — a corpus record's admission distinguishes a
   `SCHEMA` from an `IDGRAPH` failure, so collapsing the codes would gut that diagnostic
   (`protocol.ts:12-14`).
@@ -29,7 +31,7 @@ v1.0 wire shape is exactly `{code, message, surfaceId ⊕ functionCallId}`.
 `renderer.ts #emit` chokepoint — the validator and corpus never see the map (`protocol.ts:58-59`,
 ADR-0031 clause 5).
 
-- **All 8 internal codes → `VALIDATION_FAILED` + `surfaceId` this wave** (`protocol.ts:70-73`,
+- **All 10 internal codes → `VALIDATION_FAILED` + `surfaceId` this wave** (`protocol.ts:70-73`,
   ADR-0031 clause 2). Including `FUNCTION`: a render-time binding-evaluation failure (`@index` misuse,
   an unknown/throwing catalog function *referenced in a binding*) is a **message-validation** failure,
   exactly parallel to `CATALOG` — **not** the spec's `INVALID_FUNCTION_CALL`, which is an
@@ -77,7 +79,7 @@ judge the same set → identical verdict.
 ## Versioning (SPEC-R13)
 
 **Claim — the supported set is pinned and SHARED.** `SUPPORTED_VERSIONS`
-(`protocol.ts:160` = `{'v1.0', 'v0.9.1'}`) is the single source imported by both the dispatch router
+(in `protocol.ts`, cite by symbol = `{'v1.0', 'v0.9.1'}`) is the single source imported by both the dispatch router
 (`dispatch.ts:76`) and the validator (`validate.ts:24`, `109`), so the two can't drift on which
 versions are routable (SPEC-N6). Every inbound message's `version` is gated against it.
 
@@ -91,13 +93,33 @@ versions are routable (SPEC-N6). Every inbound message's `version` is gated agai
   `surfaceProperties`; v0.9.x uses `theme`" — STALE against upstream. Upstream's v1.0-RC **removed
   `surfaceProperties` entirely** ("Decoupled Branding"), and the v0.9.1 machine schema
   (`specification/v0_9_1/json/common_types.json`, a2ui-project/a2ui@main, fetched 2026-08-04/05)
-  defines neither field. The worked instance (agent-ui `protocol.ts`) still tolerates
-  `surfaceProperties` inbound today, but the drop is ruled (agent-ui GH #477, Kim 2026-08-05) and
-  executes in that repo's M-E slice — this pack's field citations retire with it.
+  defines neither field. **Update 2026-10-03:** the worked instance has since DROPPED the field:
+  its `A2uiCreateSurface` type has no `surfaceProperties` and the renderer reads none (the drop
+  was ruled, agent-ui GH #477, 2026-08-06). Do not claim tolerant inbound handling; the code
+  does not show it. [verified] 2026-10-03.
 
-**Caveat — versioning here is a defect-shaped concern, not a full migration story.** The pack answers
+**Caveat, versioning here is a defect-shaped concern, not a full migration story.** The pack answers
 "which versions are accepted and what happens to an unsupported one," not "how do I migrate a v0.9
 payload to v1.0" — no transform layer exists; an out-of-set version is simply rejected.
+
+## Depth cap and containment are validate-time failures (2026-10-03)
+
+**Claim, render depth and region (Card anatomy) rules are structural checks the validator
+reports, not render-time surprises.** A render depth cap (`MAX_RENDER_DEPTH = 64`) yields
+`DEPTH_EXCEEDED`; Card region rules (`checkContainment` in `renderer/validate.ts`) yield
+`CONTAINMENT`. Both map to `VALIDATION_FAILED` at `toWireError` like every other internal code.
+**Failure mode:** a payload that nests past the cap or breaks the Card region contract is rejected
+whole at validate time, so a producer's self-correct loop can see and fix it before anything
+paints. [verified] agent-ui `protocol.ts` (`MAX_RENDER_DEPTH`), `renderer/validate.ts`, 2026-10-03.
+
+## Wire tolerances are a registry, not ad-hoc branches (2026-10-03)
+
+**Claim, every accepted-but-non-spec shape (a Postel-style leniency, a narrowing, a
+harness-only allowance) must be a registered row with an owner.** A renderer that grows
+tolerances as scattered `if` branches loses the answer to "what do we accept that the spec does not
+define, and who decided"; keep one registry (agent-ui: `references/wire-tolerances.md`, ADR-0169
+cl.10) so tolerance never grows unrecorded. **Failure mode:** an unregistered leniency becomes an
+accidental contract that a second renderer or a producer then depends on. [verified] 2026-10-03.
 
 ## What this file does NOT cover
 

@@ -32,6 +32,17 @@ rebuild). Project catalogs MAY extend OR wholly replace the default (SPEC-R6).
   default wholesale — that is the sanctioned "wholly replace" path, not a merge. There is no
   row-level merge; to extend, register under a NEW `catalogId` and point the surface at it.
 
+## Multi-catalog: the server picks, the producer stamps (2026-10-03)
+
+**Claim, the server-selected `catalogId` is authoritative and fail-closed.** A producer stamps it
+onto `createSurface` after healing and before validating, rather than trusting the model's literal
+(agent-ui `stampCreateSurfaceCatalogId`), so a model that guesses another catalog cannot mis-stamp
+a surface; retrieval is catalog-scoped for the same reason. A catalog picker is a single-select
+library entry kind (ADR-0170, amending ADR-0169 cl.6). `catalogId` is a short local id, with the
+canonical URI accepted inbound as an alias (ADR-0169 cl.13). **Failure mode:** trusting the model's
+`catalogId` lets one wrong guess validate against, and render with, the wrong catalog. [verified]
+agent-ui `produce.ts`, ADR-0169/0170; 2026-10-03.
+
 ## The registry IS the allowlist
 
 `registry.get(id)` returns `undefined` for an unregistered id (`registry.ts:64-66`). A

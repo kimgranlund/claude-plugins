@@ -3,7 +3,7 @@
 > Axis: how to stream structured output (JSONL — one record per line — or any other structured
 > format) from an LLM without ever handing a consumer a partial, malformed, or schema-invalid
 > record, even when the model itself gets it wrong. Grounded in a worked instance:
-> `packages/agent-ui/a2ui/tools/agent/produce.ts` in `@agent-ui/a2ui`.
+> `packages/agent-ui/a2ui/src/agent/produce.ts` in `@agent-ui/a2ui`.
 
 ## The core rule — validate the WHOLE output before streaming ANY of it
 
@@ -17,15 +17,14 @@ later turns out to be wrong; the cost is that nothing streams progressively WITH
 acceptable trade for correctness — see the caveat below on where progressive rendering can still
 happen safely).
 
-**Worked instance:** `produce.ts:286-295` (accumulate the full raw text from the provider's
-fragment stream before doing anything else with it — `raw += frag`), `:313,318` (`assembleFromRaw`
+**Worked instance:** `produce.ts` (accumulate the full raw text from the provider's
+fragment stream before doing anything else with it, `raw += frag`; `assembleFromRaw`
 then `validateA2ui` run over the COMPLETE accumulated output — precisely `rest`, the raw text
-minus a small A2UI-specific leading metadata line peeled off earlier in the round, `:297`; this
+minus a small A2UI-specific leading metadata line peeled off earlier in the round; this
 pack generalizes that as "the complete accumulated output" — and note, amended 2026-08-19: the
 peel step IS part of the portable pattern as the latency answer, taught in the leading-meta-line
-section below; this sentence previously scoped it out, superseded by that section), `:319-341`
-(only on a valid verdict does the loop `yield` anything at all — one line per structured record,
-`:340`). **Caveat — this
+section below; this sentence previously scoped it out, superseded by that section;
+only on a valid verdict does the loop `yield` anything at all, one line per structured record). **Caveat, this
 does not forbid progressive UI rendering entirely:** a consumer CAN render each already-validated
 line as it arrives (progressive paint), because by the time any line streams out, the WHOLE
 round's output has already passed validation — "progressive" here means "the consumer paints
@@ -48,7 +47,7 @@ no-early-token cost is felt as "a beat of silence, then an answer, then the UI,"
 then a wall." This does not bypass the validation ordering: nothing emits until the round
 validates; the meta-line only guarantees the first thing OUT of the pipe is the smallest, most
 immediately useful unit. The note-only round (last section of this file) is its degenerate case —
-a meta-line and zero records is a complete, clean answer. **Worked instance:** `produce.ts:297`
+a meta-line and zero records is a complete, clean answer. **Worked instance:** `produce.ts`
 (the peel) + `src/agent/meta-line.ts` (`readMetaLine`, the `A2uiMetaEnvelope` typed envelope) in
 `@agent-ui/a2ui`; the same repo treats the meta-line as a first-class wire citizen end to end —
 its debug timeline routes `meta` lines as their own event kind (ADR-0200 clause 4), and a later
@@ -62,8 +61,8 @@ output — strip an unwanted markdown code fence the model added despite instruc
 parse (when the format is one-record-per-line, parse and heal each line independently, since one
 malformed line elsewhere in a batch shouldn't be allowed to invalidate lines that parsed fine),
 and bail cleanly (a distinguishable PARSE failure, not a crash) if any line is fundamentally
-unparseable. **Worked instance:** `produce.ts:130-136` (`stripOuterFence` — a single wrapping code
-fence, if present), `:150-165` (`assembleFromRaw` — per-line heal + parse, returns `undefined` on
+unparseable. **Worked instance:** `produce.ts` (`stripOuterFence` (a single wrapping code
+fence, if present) and `assembleFromRaw`, per-line heal + parse, returns `undefined` on
 the first unparseable line, mapped by the caller to a PARSE failure). **Why heal at all, rather
 than just validate the raw text as-is:** a model asked to emit strict structured output will
 still, occasionally, wrap it in a code fence or leave a trailing comma — mechanical, narrow,
@@ -91,9 +90,9 @@ for round in 0..maxRounds:
 throw Halt(failures)             // maxRounds exhausted — a distinguishable, structured failure
 ```
 
-**Worked instance:** `produce.ts:284` (the bounded `for` loop), `:343` (`failures =
-verdict.failures`, fed back), the failure-feedback framing itself at `:110-128`
-(`messagesFor` — appends the prior invalid raw output AS an assistant turn, then a user turn
+**Worked instance:** `produce.ts` (the bounded `for` loop; `failures =
+verdict.failures`, fed back; the failure-feedback framing itself:
+`messagesFor`, appends the prior invalid raw output AS an assistant turn, then a user turn
 naming exactly which structured failure codes were seen, asking for a complete corrected
 re-emission). **Why feeding the ACTUAL prior output + the ACTUAL failures back, rather than just
 re-asking the same question:** a model correcting blind (no memory of what it got wrong) tends to
@@ -105,8 +104,8 @@ structured reason it was rejected gives it the information it needs to converge.
 **Pattern — when the round bound is exhausted without ever producing valid output, raise a
 distinguishable, typed failure carrying the LAST round's structured failures** — never an
 unbounded retry, never a silent empty response, never a raw unhandled exception. **Worked
-instance:** `produce.ts:91-99` (`ProduceHalt`, a named error class carrying `failures: 
-RoundFailure[]`), `:345` (thrown only after the bound is genuinely exhausted). A caller catches
+instance:** `produce.ts` (`ProduceHalt`, a named error class carrying `failures: 
+RoundFailure[]`, thrown only after the bound is genuinely exhausted). A caller catches
 this ONE distinguishable type and shows a clear "could not produce a valid result" state — never a
 broken partial render, never a generic crash.
 
@@ -117,8 +116,12 @@ prose-only or zero-record response (e.g. the model just wants to say something, 
 structured payload this turn), that is a SUCCESS with zero records streamed — not a failure, and
 not something the self-correct loop should retry against. Conflating "nothing to stream" with
 "invalid" wastes a retry round correcting something that was never wrong. **Worked instance:**
-`produce.ts:303-311` — a note-only round (zero structured lines, a leading meta-line present) is
+`produce.ts`, a note-only round (zero structured lines, a leading meta-line present) is
 treated as a clean success and returns immediately, never entering the self-correct path.
+
+## Update 2026-10-03: round order is peel, heal, stamp, validate, then stream
+
+The shipped round order is: peel the leading meta-line, peel any non-protocol side channel, heal, stamp server-authoritative ids (for example the catalog id the server chose, never the model), validate, then stream. Two consequences. Stamping goes after heal and before validate, so the validator judges the same bytes the consumer will receive and a model that omitted or guessed the id is not penalized for a field it does not own. The validator takes session seeds (state from earlier turns that makes a later turn valid) and an `atFinalize` mode for rules that only hold once the whole output is in (for example a required terminal marker); a rule that cannot be decided mid-stream is a finalize rule, not a per-line rule. · agent-ui `produce.ts` round order, `validateA2ui` seeds and `atFinalize` · 2026-10-03 · [verified]
 
 ## What this file does NOT cover
 

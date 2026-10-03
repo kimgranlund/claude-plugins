@@ -36,8 +36,9 @@ Worked example (from the shipped tests, `default/index.test.ts:252-261`): a `Mod
 
 - **Caveat — PRESENT-props only:** conformance verdicts the properties a node CARRIES, not
   required-presence (`default/index.test.ts:253-255`). A missing required prop is NOT a conformance
-  failure here; presence/validity of required fields is a renderer-side `checks` / control-validity
-  concern, not catalog conformance.
+  failure here by default; presence/validity of required fields is a renderer-side `checks` /
+  control-validity concern, not catalog conformance. **Amended 2026-10-03:** two OPT-IN PropDef
+  presence rules now exist, see "Opt-in presence and action-prop narrowing" below.
 
 ## `RESERVED` structural keys are never properties
 
@@ -68,11 +69,28 @@ schema keywords return `true` — "do not over-reject" (`conformance.ts:79-81`).
   `conformance.ts` fetched from `kimgranlund/agent-ui` origin/main 2026-08-19: `matchesSchemaType`
   now checks JSON-Schema `enum` membership FIRST — strict `===`, case-sensitive, no coercion,
   evaluated before the `type` dispatch as a narrower constraint layered on top of it
-  (`conformance.ts:119-124`); an out-of-enum literal fails `CATALOG`. Scope limits that DO still
+  (the enum branch of `matchesSchemaType`, cite by symbol; it sat at `conformance.ts:151-156` on 2026-10-03); an out-of-enum literal fails `CATALOG`. Scope limits that DO still
   hold: only primitive-member equality is evaluated (deep-equality object members are outside the
   declared minimal subset — no shipped catalog uses them), and a bindable prop's `{path}`/`{call}`
   arms still defer to render time as above. The renderer's `applies` gate remains as
   defense-in-depth at apply-time.
+
+## Opt-in presence and action-prop narrowing (2026-10-03)
+
+Three PropDef flags tighten conformance past type/enum, each OFF unless a catalog row opts in:
+
+- **`required`** (key presence) and **`requires`** (cross-prop presence: this prop needs that one)
+  report at the MISSING key's path. A `{path}` or `{call}` binding satisfies presence; values are
+  never checked, only that the key is there. **Failure mode:** expecting `required` to reject an
+  empty string or a bad value; it does not, presence only.
+- **`rejectFunctionCall`** narrows an action prop: an object value with an own `functionCall` key
+  fails `CATALOG` (the client-side-execution Action arm is not accepted on that prop). Only that one
+  key, and only when the PropDef opts in; there is no general object-shape descent. The
+  `FUNCTION` code stays render-time-only: this rejection emits `CATALOG`, not `FUNCTION`.
+  **Failure mode:** assuming conformance now validates action object shapes in general.
+
+[verified] agent-ui `catalog/conformance.ts` (required/requires loops, `rejectFunctionCall` branch),
+GH #1189, ADR-0226, ADR-0169 E7 row, GH #429 (closed 2026-08-05); 2026-10-03.
 
 ## Validator parity — ONE implementation, two callers
 
