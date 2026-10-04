@@ -9,7 +9,9 @@ Usage:
 Gate order (plugin-writing-rules §Release discipline):
   G1 manifest: .claude-plugin/plugin.json valid, kebab name, semver version
   G2 structure: only the manifest in .claude-plugin/; every skills/* dir has SKILL.md;
-     skill subfolders outside {evals,references,scripts,assets} -> WARN (ruled 2026-07-15)
+     skill subfolders outside {evals,references,scripts,assets} -> WARN (ruled 2026-07-15);
+     a top-level bin/ -> WARN (gh#1023: claude.ai-hosted validation rejects it; no hosted-
+     target marker exists, so it warns on every plugin instead of failing hosted ones)
   G3 full lint: every SKILL.md, agents/*.md, hooks.json, plugin.json via skill_lint (FAIL fails)
   G4 bundled selftests: every scripts/*.py|*.mjs|*.js, and every hooks/**/*.py|*.mjs|*.js
      (gh#1022), exposing a selftest mode must exit 0
@@ -142,6 +144,13 @@ def gate(root: Path, package: bool = False):
         warn("G2", f"{len(rogue_dirs)} skill subfolder(s) outside the sanctioned set "
                    f"(evals/references/scripts/assets): {', '.join(rogue_dirs[:4])} "
                    "-> topical data dirs live under assets/<topic>/ (ruled 2026-07-15)")
+    # Top-level bin/ (gh#1023): claude.ai-hosted plugin validation rejects a plugin-root bin/
+    # directory outright. No manifest or workspace field marks a plugin as claude.ai-hosted
+    # yet, so this is a WARN on every plugin rather than a FAIL scoped to hosted targets; a
+    # Claude Code-only plugin may keep bin/ and accept the warning.
+    if (root / "bin").is_dir():
+        warn("G2", "top-level bin/ present -> claude.ai-hosted plugin validation rejects it; "
+                   "move executables under scripts/ if this plugin targets claude.ai")
     # Broken symlinks FAIL: a rename sweep cannot see a symlink's target text, so a renamed
     # target dir silently strands the link — locally masked by macOS glob behavior, then a
     # FileNotFoundError crash on the Linux CI runner (bitten 2026-07-21, ADR-0006 harness merge:
@@ -1006,10 +1015,26 @@ def selftest():
         w()
         code, _ = gate(r)
         assert code == 0, "clean fixture plugin must pass"
-        body = (r / "skills" / "demo-review" / "SKILL.md")
-        body.write_text(body.read_text() + "\nsee ancient-review for history\n")
         import io
         import contextlib
+        # gh#1023: a top-level bin/ must WARN G2 (claude.ai-hosted validation rejects it) and
+        # must not FAIL; the clean fixture without bin/ is the negative control.
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            gate(r)
+        assert "bin/" not in buf.getvalue(), "no bin/ dir -> no bin/ warning (negative control)"
+        (r / "bin").mkdir()
+        (r / "bin" / "tool").write_text("#!/bin/sh\n")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code, _ = gate(r)
+        assert code == 0, "a top-level bin/ warns, never fails (no hosted-target marker exists)"
+        assert "warn  G2" in buf.getvalue() and "top-level bin/" in buf.getvalue(), \
+            "a top-level bin/ must warn G2 for claude.ai-hosted targets"
+        (r / "bin" / "tool").unlink()
+        (r / "bin").rmdir()
+        body = (r / "skills" / "demo-review" / "SKILL.md")
+        body.write_text(body.read_text() + "\nsee ancient-review for history\n")
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             gate(r)
