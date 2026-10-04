@@ -15,7 +15,11 @@ S1 [classify] every locally-dirty file against the files origin/main's new commi
     OVERLAP files are the danger zone (both sides changed the same file); FOREIGN-ONLY files are
     safe to quarantine untouched
 S2 [quarantine] if anything is dirty, stash it under one NAMED, greppable message before
-    touching HEAD — nothing of a parallel session's is ever staged into this run's own commit
+    touching HEAD — nothing of a parallel session's is ever staged into this run's own commit.
+    Primary checkout only (gh#1018): a LINKED worktree (`git rev-parse --git-common-dir` differs
+    from `--git-dir`) shares one stash store with the primary checkout, so one wrong pop lands the
+    owner's uncommitted work on a feature branch. A dirty linked worktree is refused with a named
+    reason (commit the dirt as WIP, or move it to a temp branch) before any fetch, stash, or pull
 S3 [pull] `--ff-only` — a non-fast-forward state FAILS loudly instead of silently creating a
     merge commit or (worse) silently doing nothing under a truncated pipe
 S4 [reverify] local HEAD == origin/main by SHA after the pull, read fresh — never trust the
@@ -27,6 +31,7 @@ foreign-only (safe to reapply blind) vs overlap (read both sides before choosing
 """
 import subprocess
 import sys
+from pathlib import Path
 
 
 def classify_overlap(dirty_files: set, incoming_files: set):
@@ -57,6 +62,25 @@ def verify_stash_created(before: list, after: list, label: str):
     return True, top.split(":")[0], f"quarantined dirty tree as {top.split(':')[0]}"
 
 
+def is_linked_worktree(git_dir: str, common_dir: str) -> bool:
+    """Pure. A linked worktree's private git dir (`.git/worktrees/<name>`) differs from the
+    repository-wide common dir; the primary checkout's two are the same directory. Callers pass
+    both already resolved to absolute paths (`git rev-parse` prints them relative to cwd)."""
+    return Path(git_dir) != Path(common_dir)
+
+
+def linked_worktree_refusal(linked: bool, dirty_files: set):
+    """Pure. gh#1018: S2 never quarantines inside a linked worktree, because `git stash` there
+    writes to the stash store the primary checkout shares. Returns (refuse, message); a CLEAN
+    linked worktree has nothing to stash and proceeds to the pull unchanged."""
+    if linked and dirty_files:
+        return True, (f"{len(dirty_files)} dirty file(s) in a LINKED worktree -> refusing to "
+                      "quarantine: its stash store is shared with the primary checkout, so a wrong "
+                      "pop moves the owner's uncommitted work onto this branch. Commit the dirt as "
+                      "a WIP commit, or move it to a temp branch, then rerun")
+    return False, None
+
+
 def verify_head_matches_origin(local_sha: str, origin_sha: str):
     if local_sha != origin_sha:
         return False, (f"local HEAD {local_sha[:9]} != origin/main {origin_sha[:9]} after pull "
@@ -81,6 +105,14 @@ def _dirty_files(root):
     return files
 
 
+def _git_dirs(root):
+    """(git_dir, common_dir), both absolute: `git rev-parse` may print either relative to cwd."""
+    base = Path(root).resolve()
+    git_dir = _run(["git", "rev-parse", "--git-dir"], cwd=root)
+    common_dir = _run(["git", "rev-parse", "--git-common-dir"], cwd=root)
+    return str((base / git_dir).resolve()), str((base / common_dir).resolve())
+
+
 def _incoming_files(root):
     _run(["git", "fetch"], cwd=root)
     out = _run(["git", "diff", "--name-only", "HEAD..origin/main"], cwd=root, check=False)
@@ -89,6 +121,11 @@ def _incoming_files(root):
 
 def run(root="."):
     dirty = _dirty_files(root)
+    refuse, why = linked_worktree_refusal(is_linked_worktree(*_git_dirs(root)), dirty)
+    if refuse:
+        print(f"sync_main · {root}")
+        print(f"  FAIL  {why}")
+        return 1
     incoming = _incoming_files(root)
     cls = classify_overlap(dirty, incoming)
 
@@ -184,6 +221,44 @@ def selftest():
                                          label="sync_main quarantine")
     assert ok and ref == "stash@{0}", "a genuine one-entry grow carrying our label must pass"
 
+    # S2b — gh#1018: a dirty LINKED worktree is refused, never stashed; the primary checkout and a
+    # clean linked worktree are unaffected. Pure controls first, then real `git worktree add`
+    # plumbing for the detection (the relative-path resolution is where a naive compare breaks).
+    assert not is_linked_worktree("/r/.git", "/r/.git"), "the primary checkout is not linked"
+    assert is_linked_worktree("/r/.git/worktrees/wt", "/r/.git"), "a linked worktree must be detected"
+    refuse, why = linked_worktree_refusal(True, {"a.py"})
+    assert refuse and "LINKED worktree" in why and "WIP" in why and "temp branch" in why, \
+        "a dirty linked worktree must refuse with the named alternatives"
+    assert linked_worktree_refusal(True, set()) == (False, None), \
+        "a clean linked worktree has nothing to stash and must proceed"
+    assert linked_worktree_refusal(False, {"a.py"}) == (False, None), \
+        "the primary checkout keeps today's quarantine behavior"
+
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        primary = Path(td) / "primary"
+        primary.mkdir()
+        for cmd in (["git", "init", "-q", "-b", "main"], ["git", "config", "user.email", "t@t"],
+                    ["git", "config", "user.name", "t"],
+                    ["git", "commit", "-q", "--allow-empty", "-m", "init"],
+                    ["git", "worktree", "add", "-q", "-b", "feat", str(Path(td) / "linked")]):
+            subprocess.run(cmd, cwd=primary, check=True, capture_output=True)
+        linked = Path(td) / "linked"
+        assert not is_linked_worktree(*_git_dirs(primary)), "real primary checkout misread as linked"
+        assert is_linked_worktree(*_git_dirs(linked)), "real linked worktree not detected"
+        # end to end: a dirty linked worktree exits 1 and the SHARED stash store stays empty
+        # (refused before the fetch, so no remote is needed). Sabotage check: dropping the
+        # refusal from run() reaches `git fetch`/`git stash push` and this assertion fails.
+        (linked / "dirt.txt").write_text("uncommitted\n")
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = run(str(linked))
+        stashes = subprocess.run(["git", "stash", "list"], cwd=primary, capture_output=True,
+                                 text=True, check=True).stdout
+        assert code == 1 and "LINKED worktree" in out.getvalue() and stashes == "", \
+            f"a dirty linked worktree must refuse and leave the shared stash untouched: {code} {stashes!r}"
+
     # S5 — #74 regression: the CLI contract rejects unknown tokens instead of
     # silently running the quarantine/pull sequence against cwd
     assert parse_cli([]) == "."
@@ -193,6 +268,7 @@ def selftest():
 
     print("sync_main selftest · PASS · overlap/foreign classification correct on all shapes, "
           "the HEAD-mismatch and foreign-stash negative controls both fire, "
+          "a dirty linked worktree is refused before any stash (gh#1018), "
           "unknown CLI tokens rejected before any git operation")
     return 0
 

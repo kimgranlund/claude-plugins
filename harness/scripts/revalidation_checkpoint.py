@@ -71,13 +71,18 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from adr_checkpoint import (  # noqa: E402  (sibling script, same harness/scripts/ directory)
     FRONTMATTER_RE,
+    H1_LINE_RE,
     HEADING_RE,
+    STATUS_KEYWORD_RE,
     decision_content,
     parse_bold_metadata,
     parse_frontmatter,
     parse_status_table,
+    table_field_name,
+    table_row_cells,
 )
 
+H1_IDR_ID_RE = re.compile(r"^(IDR-\d+)\b", re.IGNORECASE)
 DOC_FIELD_RE = re.compile(r"^(doc-type|id|status)\s*:\s*(.+?)\s*$", re.MULTILINE)
 # Reused by both parse_idr_frontmatter and parse_rdd_frontmatter below — the same three scalar
 # fields, gated per-caller on the doc-type value each expects (never a shared parse of both kinds).
@@ -115,13 +120,56 @@ def parse_idr_frontmatter(text):
     return {"id": fields.get("id", "").strip(), "status": fields.get("status", "").strip()}
 
 
+def parse_idr_status_table(text):
+    """gh#1005: the H1 + blockquote-status-table IDR dialect (agent-ui's `.claude/docs/idr/`, its
+    doc-standards status-dialects §1d): no frontmatter, a `# IDR-NNNN ...` title, and a
+    `> | **Status** | <kw> |` row with the `proposed · accepted · superseded · deprecated`
+    vocabulary. Gated on an `IDR-\d+` H1 (the mirror of adr_checkpoint's `ADR-\d+` gate), so an
+    ADR-table file is never read as an IDR. Returns {"id", "status"} or None. Pure."""
+    title = H1_LINE_RE.search(text)
+    if not title:
+        return None
+    id_match = H1_IDR_ID_RE.match(title.group(1).strip())
+    if not id_match:
+        return None
+    for line in text.splitlines():
+        cells = table_row_cells(line)
+        if len(cells) >= 2 and table_field_name(cells[0]) == "status":
+            keyword = STATUS_KEYWORD_RE.search(cells[1].strip("*`_ "))
+            if keyword:
+                return {"id": id_match.group(1).lower(), "status": keyword.group(0).lower()}
+    return None
+
+
 def parse_idr_file(text):
     """Parse one IDR file: id/status from frontmatter, claim text from the whole `## Proof` section
-    (Resolution 3 — never a narrower keyword extraction). Returns None for a non-IDR file. Pure."""
-    fm = parse_idr_frontmatter(text)
-    if not fm or not fm["id"]:
+    (Resolution 3 — never a narrower keyword extraction). Returns None for a non-IDR file. Pure.
+
+    gh#1005: a file with NO frontmatter falls back to the status-table dialect
+    (`parse_idr_status_table`); its record carries `"dialect": "status-table"` so
+    `scan_idr_claims` can treat that dialect's own terminal status (`accepted`) as locked without
+    asking a host repo to add a status outside its ruled vocabulary. Claim text there is `## Proof`
+    when present, else `## Falsifiers` (the dialect's Proof-equivalent, prefix-matched). The
+    frontmatter dialect's record shape is unchanged."""
+    if FRONTMATTER_RE.match(text):
+        fm = parse_idr_frontmatter(text)
+        if not fm or not fm["id"]:
+            return None
+        return {"id": fm["id"], "status": fm["status"], "proof_text": extract_section(text, "proof") or ""}
+    table = parse_idr_status_table(text)
+    if not table:
         return None
-    return {"id": fm["id"], "status": fm["status"], "proof_text": extract_section(text, "proof") or ""}
+    proof = extract_section(text, "proof") or extract_section(text, "falsifiers") or ""
+    return {"id": table["id"], "status": table["status"], "proof_text": proof,
+            "dialect": "status-table"}
+
+
+def idr_is_locked(rec):
+    """Pure. The terminal (sampled) IDR state per dialect: `locked` in the frontmatter dialect,
+    `accepted` in the status-table dialect (gh#1005), whose vocabulary has no `locked`."""
+    if rec.get("dialect") == "status-table":
+        return rec["status"] == "accepted"
+    return rec["status"] == "locked"
 
 
 def parse_rdd_frontmatter(text):
@@ -180,12 +228,14 @@ def scan_adr_claims(adr_dir):
 
 
 def scan_idr_claims(idr_dir):
-    """Every LOCKED IDR in idr_dir -> {idr_id: {"kind": "idr-proof", "text", "source"}}."""
+    """Every LOCKED IDR in idr_dir -> {idr_id: {"kind": "idr-proof", "text", "source"}}. Both
+    dialects (`parse_idr_file`); "locked" means `idr_is_locked`, i.e. `accepted` in the
+    status-table dialect (gh#1005)."""
     claims = {}
     for f in sorted(Path(idr_dir).glob("*.md")):
         text = f.read_text(encoding="utf-8", errors="replace")
         rec = parse_idr_file(text)
-        if not rec or rec["status"] != "locked":
+        if not rec or not idr_is_locked(rec):
             continue
         claims[rec["id"]] = {
             "kind": "idr-proof", "text": rec["proof_text"], "source": str(f),
@@ -511,6 +561,41 @@ def selftest():
     rec_no_proof = parse_idr_file(idr_no_proof_text)
     assert rec_no_proof == {"id": "idr-0099", "status": "locked", "proof_text": ""}, rec_no_proof
 
+    # ---- gh#1005: the H1 + blockquote-status-table IDR dialect (agent-ui's IDR-0005 shape: no
+    # frontmatter, `**Status** | accepted`, a `## Falsifiers` section with a trailing gloss in
+    # some headings). Sabotage check: removing the status-table fallback from parse_idr_file
+    # returns None here and the scan below drops idr-0005.
+    idr_table_text = (
+        "# IDR-0005 \u2014 agent-ui is an agent-product platform\n\n"
+        "> | | |\n> |---|---|\n> | **Status** | accepted |\n> | **Date** | 2026-08-18 |\n"
+        "> | **Supersedes / Superseded by** | \u2014 (the root of the platform IDR set) |\n\n"
+        "## Intent\n\nThe platform is the product.\n\n"
+        "## Decision\n\n1. The library is the foundation tier.\n\n"
+        "## Falsifiers\n\n- Users never build an agent in the browser.\n\n"
+        "## Ratification question\n\nShip it?\n"
+    )
+    rec_table = parse_idr_file(idr_table_text)
+    assert rec_table == {
+        "id": "idr-0005", "status": "accepted",
+        "proof_text": "## Falsifiers\n\n- Users never build an agent in the browser.\n\n",
+        "dialect": "status-table",
+    }, rec_table
+    assert idr_is_locked(rec_table), "an accepted status-table IDR is this script's terminal state"
+    idr_table_superseded = idr_table_text.replace("**Status** | accepted", "**Status** | superseded")
+    assert not idr_is_locked(parse_idr_file(idr_table_superseded)), \
+        "a superseded status-table IDR must stay out of the sampling pool"
+    # heading with a trailing gloss (agent-ui IDR-0001's `## Falsifiers (what would send ...)`)
+    rec_gloss = parse_idr_file(idr_table_text.replace("## Falsifiers\n", "## Falsifiers (what would send this back)\n"))
+    assert rec_gloss["proof_text"].startswith("## Falsifiers (what would send this back)"), rec_gloss
+    # `## Proof` wins when a status-table host does use that heading
+    rec_proof_first = parse_idr_file(idr_table_text.replace("## Ratification question", "## Proof\n\nP.\n\n## Z"))
+    assert rec_proof_first["proof_text"].startswith("## Proof"), rec_proof_first
+    # an ADR-table file is never read as an IDR (the IDR-\d+ H1 gate)
+    assert parse_idr_file(idr_table_text.replace("# IDR-0005", "# ADR-0005")) is None, \
+        "an ADR status-table file must never be misread as an IDR"
+    # frontmatter dialect: an `accepted` status there is NOT terminal (its vocabulary says locked)
+    assert not idr_is_locked(parse_idr_file(idr_0009_text.replace("status: locked", "status: accepted")))
+
     # ---- parse_rdd_frontmatter / parse_rdd_file — gated on doc-type: rdd, never an ADR/IDR (#656:
     # locked RDDs join the idr-0009 sampling rotation) -------------------------------------------
     assert parse_rdd_file(adr_frontmatter_text) is None, \
@@ -573,6 +658,9 @@ def selftest():
         )
         (idr_dir / "0009-x.md").write_text(idr_0009_text, encoding="utf-8")
         (idr_dir / "0099-proposed.md").write_text(idr_proposed_text, encoding="utf-8")
+        (idr_dir / "0005-table.md").write_text(idr_table_text, encoding="utf-8")
+        (idr_dir / "0004-table-superseded.md").write_text(
+            idr_table_superseded.replace("IDR-0005", "IDR-0004"), encoding="utf-8")
         (rdd_dir / "0001-x.md").write_text(rdd_0001_text, encoding="utf-8")
         (rdd_dir / "0099-draft.md").write_text(rdd_draft_text, encoding="utf-8")
 
@@ -583,8 +671,10 @@ def selftest():
         assert "Do the thing" in adr_claims["adr-0002"]["text"]
 
         idr_claims = scan_idr_claims(idr_dir)
-        assert set(idr_claims) == {"idr-0009"}, \
-            f"a proposed (not locked) IDR must be excluded from the claim corpus: {idr_claims}"
+        assert set(idr_claims) == {"idr-0009", "idr-0005"}, \
+            (f"a proposed (not locked) IDR and a superseded status-table IDR must be excluded, an "
+             f"accepted status-table IDR included (gh#1005): {idr_claims}")
+        assert "Users never build an agent" in idr_claims["idr-0005"]["text"]
         assert idr_claims["idr-0009"]["kind"] == "idr-proof"
 
         rdd_claims = scan_rdd_claims(rdd_dir)
@@ -593,7 +683,7 @@ def selftest():
         assert rdd_claims["rdd-0001"]["kind"] == "rdd-acceptance"
 
         combined = combined_claims(adr_dir, idr_dir, rdd_dir)
-        assert set(combined) == {"adr-0002", "idr-0009", "rdd-0001"}, combined
+        assert set(combined) == {"adr-0002", "idr-0009", "idr-0005", "rdd-0001"}, combined
 
     # ---- pick_sample — round-robin, no duplicates within one call, wraps correctly ------------
     ids = ["adr-0001", "adr-0002", "idr-0001", "idr-0002", "idr-0003"]
