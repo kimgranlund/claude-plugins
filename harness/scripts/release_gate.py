@@ -11,7 +11,8 @@ Gate order (plugin-writing-rules §Release discipline):
   G2 structure: only the manifest in .claude-plugin/; every skills/* dir has SKILL.md;
      skill subfolders outside {evals,references,scripts,assets} -> WARN (ruled 2026-07-15)
   G3 full lint: every SKILL.md, agents/*.md, hooks.json, plugin.json via skill_lint (FAIL fails)
-  G4 bundled selftests: every scripts/*.py|*.mjs|*.js exposing a selftest mode must exit 0
+  G4 bundled selftests: every scripts/*.py|*.mjs|*.js, and every hooks/**/*.py|*.mjs|*.js
+     (gh#1022), exposing a selftest mode must exit 0
      (py via this interpreter, js via node; js with node absent -> WARN, unproven;
       exit 2 = SKIP, runtime dependency absent -> disclosed in the ok line, not failed)
   G5 phantom sweep: [[handle]] refs in live .md (CHANGELOG excluded) — WARN, counted
@@ -187,8 +188,13 @@ def gate(root: Path, package: bool = False):
     # the original .py-only rglob left every .mjs selftest in the estate unrun at the gate)
     import shutil
     node = shutil.which("node")
-    scripts = sorted(p for pat in ("scripts/*.py", "scripts/*.mjs", "scripts/*.js")
-                     for p in root.rglob(pat) if "dist" not in p.parts)
+    # gh#1022: hook scripts carry selftests too (adia-harness's rsi hooks/*.py); globbing only
+    # scripts/ left every hook regression invisible to the gate. hooks/**/ covers nested hook
+    # dirs; the set dedupes a path matched by both trees.
+    g4_patterns = ("scripts/*.py", "scripts/*.mjs", "scripts/*.js",
+                   "hooks/**/*.py", "hooks/**/*.mjs", "hooks/**/*.js")
+    scripts = sorted({p for pat in g4_patterns
+                      for p in root.rglob(pat) if "dist" not in p.parts})
     tested, js_skipped, dep_skipped = 0, 0, []
     for s in scripts:
         if "selftest" not in s.read_text(encoding="utf-8", errors="replace"):
@@ -202,7 +208,10 @@ def gate(root: Path, package: bool = False):
         else:
             js_skipped += 1
             continue
-        r = subprocess.run([*runner, str(s), "selftest"], capture_output=True, text=True, timeout=120)
+        # stdin closed: a hook script reads its event from stdin, so an inherited terminal stdin
+        # would block until the timeout instead of failing fast.
+        r = subprocess.run([*runner, str(s), "selftest"], capture_output=True, text=True,
+                           timeout=120, stdin=subprocess.DEVNULL)
         if r.returncode == 2:
             # ratified tri-state (2026-07-14, pioneered by ui-probe.mjs): exit 2 = SKIP,
             # the selftest cannot prove itself here (runtime dependency absent) — disclosed, not failed
@@ -1130,6 +1139,28 @@ def selftest():
                 code, _ = gate(r)
             assert code == 0 and "demo-skip.mjs" in _buf.getvalue(), "exit-2 selftest must SKIP disclosed, not fail"
             (js / "demo-skip.mjs").unlink()
+        # G4 hooks leg (gh#1022): a hook script's selftest is swept like a scripts/ one. A
+        # failing hooks/*.py selftest must bite, a nested hooks/**/ one too; passing restores clean.
+        # Sabotage check: dropping the hooks/** patterns from g4_patterns turns the first
+        # assertion green-when-it-should-be-red.
+        hooks_dir = r / "hooks"
+        hooks_dir.mkdir()
+        (hooks_dir / "demo_hook.py").write_text(
+            "import sys\nif sys.argv[1:] == ['selftest']:\n    sys.exit(1)\n")
+        code, _ = gate(r)
+        assert code == 1, "gh#1022: a failing hooks/*.py selftest must fail G4"
+        (hooks_dir / "demo_hook.py").write_text(
+            "import sys\nif sys.argv[1:] == ['selftest']:\n    print('ok'); sys.exit(0)\n")
+        code, _ = gate(r)
+        assert code == 0, "gh#1022: a passing hooks/*.py selftest must keep the gate clean"
+        (hooks_dir / "nested").mkdir()
+        (hooks_dir / "nested" / "deep_hook.py").write_text(
+            "import sys\nif sys.argv[1:] == ['selftest']:\n    sys.exit(1)\n")
+        code, _ = gate(r)
+        assert code == 1, "gh#1022: a failing nested hooks/**/*.py selftest must fail G4"
+        _sh.rmtree(hooks_dir)
+        code, _ = gate(r)
+        assert code == 0, "removing the hook fixtures must restore a clean gate"
         # G11 ruff leg: a workspace-root ruff.toml + a defective .py must bite; fixing restores clean
         if _sh.which("ruff") or _sh.which("uvx"):
             ws_cfg = r.parent / "ruff.toml"

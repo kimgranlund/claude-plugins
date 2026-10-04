@@ -161,11 +161,16 @@ def resolve_release_ledger_fallback(git_root, plugin_name, run_fn=None):
         except Exception:  # noqa: BLE001
             return None, None
 
-    gh = subprocess.run(
-        ["gh", "release", "list", "--limit", "200", "--json", "tagName"],
-        capture_output=True, text=True, cwd=git_root,
-    )
-    if gh.returncode == 0 and gh.stdout.strip():
+    # gh#1030: a missing `gh` binary (FileNotFoundError) or any other launch failure degrades to
+    # the git-tag tier below, exactly like a `gh` that runs and exits non-zero; never a crash.
+    try:
+        gh = subprocess.run(
+            ["gh", "release", "list", "--limit", "200", "--json", "tagName"],
+            capture_output=True, text=True, cwd=git_root,
+        )
+    except (OSError, subprocess.SubprocessError):
+        gh = None
+    if gh is not None and gh.returncode == 0 and gh.stdout.strip():
         try:
             data = json.loads(gh.stdout)
             v = _newest_matching_version([d["tagName"] for d in data], plugin_name)
@@ -582,6 +587,26 @@ def selftest():
         assert code_never == 0, \
             "a plugin with no release/tag of its own at all must INFO and stay exit 0, never FAIL, never borrow another plugin's tag (#431)"
 
+        # gh#1030: the REAL (no run_fn) path with `gh` absent from PATH. `subprocess.run` is
+        # wrapped so only the `gh` launch raises FileNotFoundError (git still runs for real);
+        # the fallback must degrade to demo2's own newest git tag, never crash. Sabotage check:
+        # removing the try/except around the real `gh` call turns this into an uncaught
+        # FileNotFoundError, the issue's own traceback.
+        _real_run = subprocess.run
+
+        def _run_without_gh(cmd, *a, **kw):
+            if cmd and cmd[0] == "gh":
+                raise FileNotFoundError(2, "No such file or directory", "gh")
+            return _real_run(cmd, *a, **kw)
+
+        subprocess.run = _run_without_gh
+        try:
+            src_nogh, ver_nogh = resolve_release_ledger_fallback(root2, "demo2")
+        finally:
+            subprocess.run = _real_run
+        assert (src_nogh, ver_nogh) == ("newest git tag", "3.5.0"), \
+            f"gh#1030: a missing gh binary must degrade to the git-tag tier, never crash: {(src_nogh, ver_nogh)}"
+
     # check_ledger_with_fallback unit controls (adiahealth/adia-harness#265, re-scoped by #431) —
     # the composed function release_gate.py's own G14 block now calls directly, on injected
     # git_root/run_fn so this never touches real git or the network.
@@ -630,7 +655,8 @@ def selftest():
           "longer FAILs; no release/tag belonging to this plugin at all degrades to INFO, never "
           "FAIL, never blocking; run()'s end-to-end WARN/FAIL/INFO on real, multi-plugin git "
           "tag plumbing; check_ledger_with_fallback's own ahead/equal/behind/none/still-has-a-"
-          "line unit controls, on injected git_root/run_fn")
+          "line unit controls, on injected git_root/run_fn; a missing `gh` binary on the real "
+          "path degrades to the git-tag tier instead of crashing (gh#1030)")
     return 0
 
 

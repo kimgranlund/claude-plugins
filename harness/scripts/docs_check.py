@@ -125,9 +125,14 @@ def _newest_release_or_tag(root: Path, plugin_name: str, run_fn=None):
         except Exception:  # noqa: BLE001
             return None, None
 
-    gh = subprocess.run(["gh", "release", "list", "--limit", "200", "--json", "tagName"],
-                         capture_output=True, text=True, cwd=root)
-    if gh.returncode == 0 and gh.stdout.strip():
+    # gh#1030: a missing `gh` binary (FileNotFoundError) or any other launch failure degrades to
+    # the git-tag tier below, exactly like a `gh` that runs and exits non-zero; never a crash.
+    try:
+        gh = subprocess.run(["gh", "release", "list", "--limit", "200", "--json", "tagName"],
+                             capture_output=True, text=True, cwd=root)
+    except (OSError, subprocess.SubprocessError):
+        gh = None
+    if gh is not None and gh.returncode == 0 and gh.stdout.strip():
         try:
             data = json.loads(gh.stdout)
             v = _newest_matching_version([d["tagName"] for d in data], plugin_name)
@@ -520,6 +525,32 @@ def selftest():
             f"negative control (#431): a plugin with no release of its own must INFO, never FAIL, never borrow a sibling's tag: {findings_rsi}"
         assert any(f[0] == "INFO" and f[1] == "R3" for f in findings_rsi), \
             f"negative control (#431): the no-release-yet gap must be named as an INFO finding: {findings_rsi}"
+
+    # gh#1030: the REAL (no run_fn) path with `gh` absent from PATH. Only the `gh` launch raises
+    # FileNotFoundError (git still runs for real, on a throwaway repo carrying one prefixed tag);
+    # the fallback must degrade to the git-tag tier, never crash. Sabotage check: removing the
+    # try/except around the real `gh` call reproduces the issue's uncaught FileNotFoundError.
+    with tempfile.TemporaryDirectory() as td_nogh:
+        r_nogh = Path(td_nogh)
+        for cmd in (["git", "init", "-q", "-b", "main"], ["git", "config", "user.email", "t@t"],
+                    ["git", "config", "user.name", "t"],
+                    ["git", "commit", "-q", "--allow-empty", "-m", "init"],
+                    ["git", "tag", "demo-v1.2.3"], ["git", "tag", "other-v9.9.9"]):
+            subprocess.run(cmd, cwd=r_nogh, check=True, capture_output=True)
+        _real_run = subprocess.run
+
+        def _run_without_gh(cmd, *a, **kw):
+            if cmd and cmd[0] == "gh":
+                raise FileNotFoundError(2, "No such file or directory", "gh")
+            return _real_run(cmd, *a, **kw)
+
+        subprocess.run = _run_without_gh
+        try:
+            got = _newest_release_or_tag(r_nogh, "demo")
+        finally:
+            subprocess.run = _real_run
+        assert got == ("newest git tag", "1.2.3"), \
+            f"gh#1030: a missing gh binary must degrade to the git-tag tier, never crash: {got}"
 
     print("docs_check selftest (ticket #249/#265, re-scoped per-plugin by "
           "adiahealth/adia-harness#431) · PASS · R3 Release/tag fallback WARNs when plugin.json "
