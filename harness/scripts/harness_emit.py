@@ -1492,6 +1492,45 @@ def selftest():
         code, findings, _ = run(bad_pkg_plugin, harnesses=["pi"], verify=True, workspace_root=scratch)
         assert code == 2, "an unparseable pre-existing package.json must be a setup error, not silently discarded"
 
+        # gh#1023 skill-tree layouts, detected from the files present (no config key).
+        # (a) Claude-native: skills/ IS the Claude tree, Claude-only keys sit on the root
+        # SKILL.md, and no adapters/claude/skills twin exists. The base fixture is this layout;
+        # pin it so a future adapter-only read cannot silently drop the root's invocation dials.
+        assert not (plugin / "adapters").exists(), "base fixture must stay the Claude-native layout"
+        native = {s["name"]: s for s in read_plugin(plugin)["skills"]}
+        assert native["foo-bar"]["command"] and native["foo-bar"]["argument_hint"] == "[target] [--flag]", \
+            "Claude-native layout: invocation dials must come from the root SKILL.md"
+        assert native["baz"]["fork"] and not native["baz"]["command"], \
+            "Claude-native layout: context: fork must come from the root SKILL.md"
+        assert (plugin / "prompts" / "foo-bar.md").is_file(), \
+            "Claude-native layout: a root-declared command-only skill must emit its Pi prompt"
+        # (b) adapter layout (author-cross-harness-plugins): the root SKILL.md carries only the
+        # portable core and adapters/claude/skills/<name>/SKILL.md carries the Claude-only
+        # dials. The adapter's dials must still drive the overlays (unchanged behavior, #1010).
+        adapter_plugin = scratch / "adapter-plugin"
+        (adapter_plugin / ".claude-plugin").mkdir(parents=True)
+        (adapter_plugin / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+            "name": "adapter-plugin", "version": "0.1.0", "description": "Adapter layout fixture.",
+        }))
+        core = "---\nname: gated\ndescription: Gated skill. Second sentence.\n---\n\n# gated\nbody\n"
+        (adapter_plugin / "skills" / "gated").mkdir(parents=True)
+        (adapter_plugin / "skills" / "gated" / "SKILL.md").write_text(core)
+        twin = adapter_plugin / "adapters" / "claude" / "skills" / "gated"
+        twin.mkdir(parents=True)
+        (twin / "SKILL.md").write_text(core.replace(
+            "---\n\n", "disable-model-invocation: true\nuser-invocable: true\n"
+            "argument-hint: \"[x]\"\n---\n\n", 1))
+        code, findings, _ = run(adapter_plugin, workspace_root=scratch)
+        assert code == 0, f"adapter-layout write should succeed, got: {findings}"
+        gated_yaml = (adapter_plugin / "skills" / "gated" / "agents" / "openai.yaml").read_text()
+        assert "allow_implicit_invocation: false" in gated_yaml, \
+            "adapter layout: the twin's disable-model-invocation must drive the Codex policy block"
+        gated_prompt = adapter_plugin / "prompts" / "gated.md"
+        assert gated_prompt.is_file() and 'argument-hint: "[x]"' in gated_prompt.read_text(), \
+            "adapter layout: the twin's argument-hint must reach the Pi prompt"
+        code, findings, _ = run(adapter_plugin, verify=True, workspace_root=scratch)
+        assert code == 0, f"adapter-layout post-write verify should pass, got: {findings}"
+
         # #1008 --scan-tokens CLI leg: proves the actual subprocess path release_gate.py's
         # G15b invokes, not just the pure scan_claude_only_tokens() function underneath it.
         emit_script = Path(__file__).resolve()
@@ -1523,7 +1562,8 @@ def selftest():
           "(all three backends), orphan detection (openai.yaml + hermes-mcp.yaml + prompts/*.md), "
           "MCP substitution flagging, __init__.py register_skill template, package.json merge-only, "
           "marketplace mirror honoring each entry's declared source path (gh#1017), em-dash-free "
-          "HARNESS-NOTES.md template (gh#1021), setup-error controls")
+          "HARNESS-NOTES.md template (gh#1021), Claude-native and adapter skill-tree layouts (gh#1023), "
+          "setup-error controls")
     return 0
 
 
