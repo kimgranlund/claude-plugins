@@ -51,9 +51,10 @@ is sufficient, no scope chain — see dynamic-lists.
 
 A non-`@` name is looked up in the bound catalog's `functions` map (existence gate,
 `functions.ts:160-168`) **and** the pure impl in `catalogFunctions` (`functions.ts:173`). The default
-catalog ships exactly three — `required`, `email`, `regex` (pure validators; `functions.ts:23-26`).
+catalog ships five, `required`, `email`, `regex`, `ping`, `formatCurrency` (`functions` block of the
+default `catalog.json`; the first three are pure validators). It was three before 2026-10.
 
-**Caveat — a from-scratch payload will `FUNCTION`-error on functions the default catalog doesn't
+**Caveat, a from-scratch payload will `FUNCTION`-error on functions the default catalog doesn't
 ship.** `now`, `formatDate`, `and`/`or`/`not`, `formatString` are NOT in the default catalog — a
 project catalog may register them (the registry is open), but against the default they emit
 `FUNCTION` + `undefined`, conformantly (ADR-0026 Consequences; ADR-0029 §1). String composition is

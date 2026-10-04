@@ -15,7 +15,7 @@ mirrored in `validate.ts:42` (`MESSAGE_KINDS`):
 
 | envelope key | body | effect |
 |---|---|---|
-| `createSurface` | `{surfaceId, catalogId, surfaceProperties?, theme?, sendDataModel?}` — the two optional style fields are worked-instance tolerances only: upstream v1.0-RC removed `surfaceProperties` and the v0.9.1 machine schema defines neither (SPEC-R7 re-sync 2026-08-05; the drop is ruled, agent-ui GH #477) | stand up a surface |
+| `createSurface` | `{surfaceId, catalogId, theme?, sendDataModel?}`, `surfaceProperties` is NOT a field: upstream v1.0-RC removed it, the v0.9.1 machine schema never defined it, and the worked instance's type dropped it (GH #477, 2026-08-06; the renderer reads no such field, verified 2026-10-03) | stand up a surface |
 | `updateComponents` | `{surfaceId, components: A2uiComponent[]}` | buffer/patch the component tree |
 | `updateDataModel` | `{surfaceId, path?, value?}` | upsert the data model (see bindings-and-data-model) |
 | `deleteSurface` | `{surfaceId}` | release the surface |
@@ -143,6 +143,27 @@ doctrine (rubric dimension P9), not style advice:
   shape is `FormProvider > Card > (CardHeader · CardContent · CardFooter)`; PR #1326's wave
   converted the gated records to exactly this ("FormProvider-as-root/Card-non-root … gating
   verified preserved"), and the seed family is named after it (PR #1342).
+
+## One shared validator, session seeds, structural resend (2026-10-03)
+
+**Claim, ONE pure, total validator serves every consumer.** The renderer, a producer's
+self-correct loop and corpus admission all call the same function (agent-ui `validateA2ui`), so
+their verdicts are identical. It takes an `atFinalize` option: a turn-end-only judgment (ADR-0187)
+that is OFF mid-stream, so a half-streamed surface is never failed for being incomplete.
+**Failure mode:** a producer that validates with a private copy (or with `atFinalize` on every
+chunk) disagrees with the renderer and either ships a payload the renderer rejects or rejects one
+the renderer would paint.
+
+**Claim, a multi-turn producer must pass session seeds.** Prior turns' components are merged into
+the validator's judged graph, so an update that references an id minted in an earlier turn passes,
+matching the renderer's cross-turn guard (ADR-0128). **Failure mode:** with no seeds, a correct
+multi-turn update reads as a false orphan error and burns a correction round.
+
+**Claim, structural resend reconciles children by id.** When a container record is resent whole,
+the renderer reconciles its children by id (a create/wire split, per-node scope); reordering of
+surviving children was deferred. **Failure mode:** a renderer that only upserts by id leaves stale
+children behind when the resent container drops one. [verified] agent-ui `renderer/validate.ts`,
+`produce.ts`, `renderer/tree.ts`; ADR-0128, ADR-0187; 2026-10-03.
 
 ## What this file does NOT cover
 

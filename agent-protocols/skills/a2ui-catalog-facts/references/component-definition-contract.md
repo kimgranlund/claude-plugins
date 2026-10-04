@@ -37,7 +37,7 @@ Defined at `catalog.ts:29-33`; validated by `validatePropDef` (`catalog.ts:158-1
   `catalog.ts:11`). The conformance validator checks only the primitive `type` keyword against the
   JS runtime type (see `references/security-allowlist-and-conformance.md`). *(Amended 2026-08-19:
   since ADR-0098, `enum` membership is ALSO enforced — strict `===` before the `type` dispatch,
-  `conformance.ts:119-124`, [verified] against origin/main 2026-08-19. "Primitive-only" still holds
+  the enum branch of `matchesSchemaType` (cite by symbol; line numbers drift), [verified] against origin/main 2026-08-19. "Primitive-only" still holds
   for everything else: inner object keys are never descended into — see the schema-omission class
   in this file's 2026-08-19 UPDATE.)*
 - **`mapsTo`** (REQUIRED, a string — `catalog.ts:161`) — the control-side target the factory writes.

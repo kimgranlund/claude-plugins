@@ -1,6 +1,14 @@
 # Changelog — a2ui-catalog-design
 
-## 2026-08-19 — field-doctrine harvest (agent-ui ADR wave)
+## 2026-10-03, checker-verified knowledge fold (agent-ui harvest)
+
+- `security-allowlist-and-conformance.md`: opt-in `required`/`requires`/`rejectFunctionCall`
+  section; PRESENT-props-only caveat amended; enum line refs moved to a symbol cite.
+- `two-tier-extensibility.md`: server-authoritative `catalogId` + producer stamping (ADR-0169/0170).
+- `component-definition-contract.md`: enum line ref moved to a symbol cite. `sources.md` ledger
+  entry. No description or evals change.
+
+## 2026-08-19, field-doctrine harvest (agent-ui ADR wave)
 
 Two reference UPDATE sections, ADRs fetched verbatim from `kimgranlund/agent-ui` (all cited records
 `accepted`):

@@ -20,7 +20,7 @@ two kinds, and the reference files say which.
 ## The worked example — a real, shipped instance (cited for concrete grounding, not sole authority)
 
 **`@agent-ui/a2ui`'s live-agent system**, `/Users/kimba/Projects/nonoun/agent-ui`,
-`packages/agent-ui/a2ui/tools/agent/`:
+`packages/agent-ui/a2ui/src/agent/` (the node-first `./agent` export, ADR-0137; `anthropic.ts` lives here; only the gemini/openai providers, the dev-proxy plugin and the provider registry remain under `tools/agent/`):
 
 - `providers/anthropic.ts` — `parseAnthropicSSE`/`splitFrames` (the pure frame parser),
   `anthropicProvider().stream()` (the impure buffering + fetch loop), the
@@ -70,8 +70,12 @@ backbone, HTTP-only proxy for live, peer-over-protocol (ADR-0200 clause 3) — t
 request-body-fields rule (ADR-0200 Consequences), and the NDJSON splitter's own chunk-boundary
 contract (the existing one-splitter rule taught only the dedup law, not the split mechanic).
 `validate-then-stream-self-correct.md` gained the latency-cost/leading-meta-line section (worked
-instance: `produce.ts:297` + `src/agent/meta-line.ts`, post-ADR-0137 paths; the `flowEnd` addition
+instance: `produce.ts` + `src/agent/meta-line.ts`, post-ADR-0137 paths; the `flowEnd` addition
 riding the envelope per agent-ui #1101's closing comment, read 2026-08-17 evidence via the GitHub
 API 2026-08-19). Diff-checked before writing: validate-then-stream's core ordering, the bounded
 self-correct loop, the note-only-round success, and the one-NDJSON-splitter law were all already
 covered — extended around, never restated.
+
+## Provenance, 2026-10-03 agent-ui knowledge-harvest fold
+
+`validate-then-stream-self-correct.md`: header paths moved to `src/agent/`, `produce.ts:NNN` line cites converted to symbol cites, and an update section added for the peel, heal, stamp, validate round order with session seeds and `atFinalize` (agent-ui `produce.ts`, `validateA2ui`; harvest 2026-10-03). The `revealOrder` lesson (ADR-0194) was already in `streaming-render-reveal-and-anchors.md`; no change.

@@ -107,3 +107,32 @@ repaired AT SOURCE (actions into CardFooter; gated records to FormProvider-as-ro
 verified preserved), re-validated (`validate-payload 9/9 exit 0`), then re-admitted through the
 FULL judged pipeline via `--replace` — never hand-edited in the shard, never discarded. The shard
 diff + run report + git history stay the audit trail; `status` is recomputed honestly by admission.
+
+---
+
+## UPDATE 2026-10-03, unjudged-run guard, drop path, rubric-version consequences
+
+**[verified]** 2026-10-03 against agent-ui `tools/corpus/import-seeds.ts` and its test fixture
+`SHARD_LOADED_VERDICTS`, ADR-0165, ADR-0068, and the rubric frontmatter. Extends the sections above.
+
+- **An unjudged run cannot re-admit a dispositioned candidate.** With no `--verdicts`, the judge
+  seam must not silently admit into a judged-era corpus, and a candidate the verdict archive has
+  already dispositioned (refused or archived) is not re-admitted by a bare run either. The importer
+  fails closed and reports an `unjudgedCandidates` field in its run report (the GH #1346 halt
+  itself is described above; the report field and the archive-blocks-re-admit rule are the
+  additions). **Failure mode:** treating a green bare re-import as proof nothing drifted.
+- **Dropping a seed is a first-class admission outcome, not a delete** (ADR-0165 drop path). The
+  verdict archive records the disposition, so a rerun cannot resurrect the seed. Deleting the
+  source file instead leaves no record and the next import re-admits it. [verified via scratchpad,
+  2026-08-18; `import-seeds.ts` drop handling and its test.]
+- **A rubric change that moves an anchor must bump `version:` and re-judge.** The equality
+  `rubricVersion == the rubric's version marker` (above) has a consequence: older verdicts were
+  scored against a different test once an anchor moves, so they cannot be mixed into the new
+  standard. Worked: the payload rubric's v1.3 change (the P2 and P5 anchors). ADR-0068.
+- **A parent rubric that folds a child rubric must bump when the child's anchors move**, even if its
+  own dimension list is unchanged. The corpus rubric's D1 is the MIN over the payload rubric's
+  P1-P9; on 2026-10-03 the payload rubric is 1.3 and the corpus rubric is still 1.2 (frontmatter,
+  re-read that day). **Open question, not a ruling [inferred]:** whether verdicts stamped corpus 1.2
+  mix pre-1.3 and post-1.3 payload semantics. `rubricVersion` only equals one marker; it does not
+  say a child bump can leave the parent's number unchanged. Do not answer this one as settled.
+

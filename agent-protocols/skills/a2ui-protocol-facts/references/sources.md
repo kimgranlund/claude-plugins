@@ -66,7 +66,7 @@ scope pending a real research wave (`/make-pack`) grounded in the actual spec te
 
 **Where the spec-vs-repo line falls (worth stating once):** v1.0 governs **only the wire** — the
 message envelopes, the two-code error contract, positional list matching, `@index` semantics, the
-`callableFrom` default. The repo **chose** everything internal: the 8-code diagnostic taxonomy, the
+`callableFrom` default. The repo **chose** everything internal: the 10-code diagnostic taxonomy, the
 signals-based per-path reactive resolver, the bespoke positional reconcile (vehicle B2 over `repeat`),
 `setPointer`'s structural sharing, the single shared validator. A "does the protocol require this"
 question turns on that line — if it's a wire fact, it's in an ADR quoting a2ui.org; if it's a
@@ -97,3 +97,20 @@ head, ADR-0198's ratified amendments (fetched verbatim from `kimgranlund/agent-u
 contents API, 2026-08-19), and the field evidence PR #1326 / PR #1342 / GH #1262 (bodies read
 2026-08-19). [verified], that date. These are REPO-mechanism/conduct claims, not v1.0 wire
 mandates — the wire-facts vs repo-mechanisms split in this file's Deviation doctrine applies.
+
+## Harvest note, 2026-10-03 (checker-verified fold)
+
+Folded from agent-ui's `knowledge-harvest-2026-10-03/a2ui-protocol-jsonl-export.md`, every claim
+re-read against current code on 2026-10-03 [verified]. Fixed (UPDATE-stale): internal `ErrorCode`
+8 to 10 codes and the all-codes-to-`VALIDATION_FAILED` line (errors-and-versioning);
+`createSurface.surfaceProperties` removed from the field list (message-lifecycle, errors-and-versioning;
+GH #477, 2026-08-06); the default catalog's five functions (functions-and-checks). Added (NEW), each
+cited to agent-ui symbols: depth cap + `CONTAINMENT` as validate-time failures (`protocol.ts`
+`MAX_RENDER_DEPTH`, `checkContainment`) and the wire-tolerance registry (ADR-0169 cl.10;
+errors-and-versioning); one shared validator + `atFinalize` (ADR-0187), session seeds and structural
+resend (ADR-0128) (message-lifecycle). ALREADY, no change: six envelope kinds and the id-graph
+checks. Lesson numbers in the export: 2, 3, 4, 5, 6, 8, 12, 22 land here. Note the export's
+vocabulary: agent-ui's literal wire is `callFunction`/`functionResponse`/`clientOnly`/`remoteOnly`/
+`clientOrRemote`; this pack keeps the Candidate names.
+
+Skipped from the a2ui-protocol-jsonl export, 2026-10-03: `revealOrder` (already covered in the `llm` plugin's `streaming-render-reveal-and-anchors.md`, line 20) and `mutate` (the export itself cut it).

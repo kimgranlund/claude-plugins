@@ -2,7 +2,7 @@
 
 > Axis: how a server-side LLM gateway avoids becoming a stateful service, while still supporting
 > a genuine multi-turn conversation. Grounded in a worked instance:
-> `packages/agent-ui/a2ui/tools/agent/{agent-transport.ts,session.ts}` in `@agent-ui/a2ui`.
+> `packages/agent-ui/a2ui/src/agent/{agent-transport.ts,session.ts}` in `@agent-ui/a2ui`.
 
 ## The split — who holds what
 

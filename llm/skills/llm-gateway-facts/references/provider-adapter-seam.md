@@ -3,7 +3,7 @@
 > Axis: how to let application code call "an LLM" without naming a vendor, so adding or swapping
 > a provider never touches the caller. Grounded in the general adapter/strategy pattern (a
 > platform-agnostic design technique) + a worked instance:
-> `packages/agent-ui/a2ui/tools/agent/agent-transport.ts` and `providers/anthropic.ts` in
+> `packages/agent-ui/a2ui/src/agent/agent-transport.ts` and `providers/anthropic.ts` in
 > `@agent-ui/a2ui`.
 
 ## The seam shape

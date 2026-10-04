@@ -3,7 +3,7 @@
 > Axis: the general technique for turning a chunked byte stream into whole Server-Sent Events,
 > regardless of vendor. Grounded in the WHATWG/W3C Server-Sent Events spec (a platform fact) + the
 > Streams API (`ReadableStream`/`fetch`, also platform facts) + a worked instance:
-> `packages/agent-ui/a2ui/tools/agent/providers/anthropic.ts` in `@agent-ui/a2ui` (the full
+> `packages/agent-ui/a2ui/src/agent/providers/anthropic.ts` in `@agent-ui/a2ui` (the full
 > vendor-specific contract lives in anthropic-sse-worked-example — this file is the REUSABLE
 > technique, generalized).
 

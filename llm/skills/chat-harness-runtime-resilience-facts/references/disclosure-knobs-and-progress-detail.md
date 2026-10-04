@@ -15,7 +15,7 @@
 (bounded reasoning excerpts, capped ~200 chars) and `'source'` (raw payload lines behind
 validate/retry stages, capped 16 KB with an EXPLICIT truncation marker, never a silent cut) are
 separate opt-ins where one never implies the other.** A consumer needing both is a deliberate
-future member, not a ladder accident. · `produce.ts:139-207` (ADR-0146 F3, GH #240/ADR-0159) ·
+future member, not a ladder accident. · `produce.ts` (ADR-0146 F3, GH #240/ADR-0159) ·
 2026-08-17 · [verified]
 
 ## What this file does NOT cover

@@ -23,7 +23,7 @@ author, so a consumer never has to guess which side wrote a given line. ·
 temp 0.9) exhausts the self-correct budget and fails CLOSED with named failure codes, trading a
 possible bad render for a diagnosable error.** Never widen the bound to chase a misbehaving
 model; fix the feedback's teaching instead (see [[chat-harness-workflow-facts]]'s
-`self-correct-feedback-design.md`). · `produce.ts:306-314,381-397` (GH #404, `.claude/ops/
+`self-correct-feedback-design.md`). · `produce.ts` (GH #404, `.claude/ops/
 mb-live-proof/box2-quizmaster-FAIL.json`) · 2026-08-17 · [verified][incident]
 
 ## Error text shown to end users may contain only model-emitted ids, never raw upstream text
@@ -32,7 +32,7 @@ mb-live-proof/box2-quizmaster-FAIL.json`) · 2026-08-17 · [verified][incident]
 specifically because `path` is always a model-authored A2UI id, documented as a deliberate
 invariant where the message is built.** A halt message that instead echoed raw upstream
 provider text would risk leaking whatever that upstream text happened to contain. ·
-`produce.ts:294-314` (GH #307) · 2026-08-17 · [verified]
+`produce.ts` (GH #307) · 2026-08-17 · [verified]
 
 ## Additive opt-in flags must be byte-identical when absent
 
@@ -40,7 +40,7 @@ provider text would risk leaking whatever that upstream text happened to contain
 genuiSurface, a2uiEnabled…) documents that its ABSENCE reproduces the prior request/stream
 byte-for-byte.** This is what makes an evolving seam safe for existing consumers, and it is
 TESTABLE, not just asserted — byte-pinned equivalence gates enforce it. ·
-`produce.ts:99-189`; `prompt-equivalence.test.ts`, `prompt-drift.test.ts` (`src/live-agent/`) ·
+`produce.ts`; `prompt-equivalence.test.ts`, `prompt-drift.test.ts` (`src/live-agent/`) ·
 2026-08-17 · [verified]
 
 ## What this file does NOT cover

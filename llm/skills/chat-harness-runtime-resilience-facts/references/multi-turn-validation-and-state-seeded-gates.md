@@ -33,8 +33,8 @@ visible client-error round trip on every game move. The fix: an optional session
 shared validator (`SurfaceSeed`, `validate.ts:56`; `validateA2ui(…, sessionSeed?)`,
 `validate.ts:66` — absent means byte-identical behavior, so single-turn callers are untouched),
 built by replaying the session's prior turns
-(`packages/agent-ui/a2ui/src/agent/produce.ts:278` — `sessionSurfaceSeeds`, threaded into every
-round's validate at `produce.ts:328`). Seeded, the validator judges the MERGED graph the consumer
+(`packages/agent-ui/a2ui/src/agent/produce.ts`, `sessionSurfaceSeeds`, threaded into every
+round's validate at `produce.ts`). Seeded, the validator judges the MERGED graph the consumer
 will actually hold: incremental updates validate, and a cross-turn re-delivery fails inside the
 producer's own self-correct loop — pre-wire — instead of shipping and erroring client-side.
 

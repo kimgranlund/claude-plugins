@@ -96,3 +96,15 @@ all `accepted` at fetch time), `catalog/conformance.ts` + `site/lib/a2ui-catalog
 head `26742a9c`, and GH #1262/#1328/#1329/#1332 + PR #1326/#1342/#1404 bodies read the same day.
 [verified], that date — one trust rung above this pack's original 2026-07-07 working-tree reads for
 the cited claims.
+
+## Harvest note, 2026-10-03 (checker-verified fold)
+
+Folded from agent-ui's `knowledge-harvest-2026-10-03/a2ui-protocol-jsonl-export.md` (every claim
+re-read in code 2026-10-03, [verified]). Added: `PropDef.rejectFunctionCall` (lesson 10, ADR-0169
+E7 row, GH #429) and `PropDef.required`/`requires` (lesson 11, GH #1189, ADR-0226) in
+`security-allowlist-and-conformance.md`, which also amends the old PRESENT-props-only caveat; the
+multi-catalog authority and producer-stamp law (lesson 13, ADR-0169/0170) in
+`two-tier-extensibility.md`. Refreshed (ALREADY, lesson 9): the enum branch now cited by symbol,
+`conformance.ts:151-156` on 2026-10-03. Lesson 12 (five default functions) lives in
+a2ui-protocol-facts `functions-and-checks.md`.
+

@@ -4,7 +4,7 @@
 > concrete, fully worked application of the general chunk-buffering technique
 > (sse-chunk-parsing-technique). Grounded in Anthropic's own publicly documented Messages API
 > streaming format (a vendor fact — verify against Anthropic's current API docs if this pack is
-> old) and a worked instance: `packages/agent-ui/a2ui/tools/agent/providers/anthropic.ts` +
+> old) and a worked instance: `packages/agent-ui/a2ui/src/agent/providers/anthropic.ts` +
 > `packages/agent-ui/a2ui/src/live-agent/anthropic-sse.test.ts` (the fixture suite) in
 > `@agent-ui/a2ui`.
 

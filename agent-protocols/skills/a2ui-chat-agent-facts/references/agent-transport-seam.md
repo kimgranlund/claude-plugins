@@ -3,7 +3,7 @@
 > Axis: the ONE interface the live-agent page binds to, its two implementations (the
 > deterministic recorded backbone and the dev-only live overlay), and why swapping one for the
 > other is a single construction-site edit with a byte-identical browser ingest path. Grounded in
-> `packages/agent-ui/a2ui/tools/agent/agent-transport.ts`, `site/lib/agent-runtime.ts`,
+> `packages/agent-ui/a2ui/src/agent/agent-transport.ts`, `site/lib/agent-runtime.ts`,
 > `site/lib/live-proxy-transport.ts`, `site/pages/a2ui-live.ts`,
 > `.claude/docs/specs/specs/a2ui-live-agent.spec.md` (SPEC-R1/R2/R3/R5). ADR-0069 = the demo
 > shape + the transport-identical invariant. Verified against source as of 2026-07-07.
@@ -57,12 +57,18 @@ recorded backbone and the live overlay. **Why it matters:** validate-then-stream
 guarantees every emitted line already passed `validateA2ui`, so the page never renders an invalid
 partial surface regardless of which transport is live.
 
-## Placement — Node-scoped, no package export (SPEC-N1)
+## Placement, a node-first package subpath export, `./agent` (ADR-0137)
 
-The seam types + the backbone + the reducer + the transcript live under
-`packages/agent-ui/a2ui/tools/agent/*` (Node-scoped, the `tools/corpus` precedent). **The
-`@agent-ui/a2ui` package surface stays exactly `.`/`./examples`/`./corpus`** (SPEC-N1) — the seam
-is tools-internal, NOT a package export. The browser page reaches it through ONE thin re-export
+*(Corrected 2026-10-03: this section previously read "Node-scoped, no package export (SPEC-N1)",
+claiming the package surface stays `.`/`./examples`/`./corpus`. That is stale.)* The seam types +
+the backbone + the reducer + the producer toolkit live under `packages/agent-ui/a2ui/src/agent/*`
+and ship as a package subpath export: `./agent`, plus `./agent/meta-line`, `./agent/genui-line` and
+`./agent/agent-transport`. They are NOT on the root barrel. The toolkit is node-first:
+`system-prompt.ts` and `mini-skills.ts` `readFileSync` their prompt files at module load, so a
+browser bundle does not import the whole toolkit; the transport seam types and the session reducer
+are platform-neutral. The key-holding dev proxy and the provider registry stay site-internal
+(`tools/agent/*`, ADR-0073 trust boundary) and are not exported. [verified] agent-ui
+`a2ui/src/agent/index.ts` header (ADR-0137 cl.1 and cl.4), `a2ui/package.json` exports, 2026-10-03. The browser page reaches it through ONE thin re-export
 shim, `site/lib/agent-runtime.ts`, which re-exports only browser-safe, zero-dep material (the
 transport types, `createRecordedTransport`, the `session.ts` reducer helpers, the transcript). The
 **live overlay is a separate, dev-only import** — never in the shim (`agent-runtime.ts:1-7`).

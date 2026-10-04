@@ -9,7 +9,9 @@ generic tutorial. The pack documents `@agent-ui/a2ui`'s actual live-agent implem
 The code IS the contract; when a doc and the source disagree, the source wins and the doc is
 repaired.
 
-- **`packages/agent-ui/a2ui/tools/agent/`** — the Node-scoped live-agent harness:
+- **`packages/agent-ui/a2ui/src/agent/`** (the node-first producer toolkit, a package subpath
+  export `./agent`, ADR-0137; the dev proxy, `providers-config.ts`, `providers.json` and
+  `transcript.ts` stay in site-internal `tools/agent/`), the live-agent harness:
   `agent-transport.ts` (the seam + `Turn`/`Session`/`TurnInput`/`AgentProvider`),
   `session.ts` (the pure reducer + framing), `produce.ts` (the bounded loop),
   `system-prompt.ts` (the drift-gated derived prompt), `providers-config.ts` (`resolvePair` — the
@@ -87,3 +89,18 @@ grounded one rung ABOVE this pack's original working-tree reads: the ADR texts t
 `packages/agent-ui/a2ui/src/agent/meta-line.ts`'s per-arm header comments at head (`26742a9c`).
 [verified], that date. The ADR-0137 relocation (`tools/agent/` → `src/agent/`) post-dates this
 pack's older `tools/agent/*` cites — grep the symbol, not the old path.
+
+## Harvest note, 2026-10-03 (checker-verified fold)
+
+Folded from agent-ui's `knowledge-harvest-2026-10-03/a2ui-protocol-jsonl-export.md` (lessons 14, 18)
+and `harness-corpus-export.md` (L1 to L5, L7, L8, L11, L13), every claim re-read in code
+2026-10-03 [verified] unless a reference says [inferred]. Fixed (UPDATE-stale): the max-turns cap
+claim is gone (ADR-0072 cl.5 never built, ruled DROP 2026-08-30, GH #1713; turn-session-and-input-intent);
+the producer toolkit is the node-first `./agent` subpath export, old `tools/agent/` cites repointed to
+`src/agent/` (agent-transport-seam, this file, four reference headers); the mini-skill shelf is no
+longer a hard-coded six (20 prompt files); a dropped `ask` suppresses its whole surface (GH #1064,
+#1142); the meta-line envelope is the arm list, not `{note?, ask?, trace?}`; produce-loop gains the
+current round order. Added (NEW): NET_NOOP and FLOW_END_MISSING correction rounds, genui drop-not-correct
+and multiplicity, optional progress meta-lines, the typed-value grammar rule, ADR-0072 cl.1-4
+revalidation line. Line-number cites into `produce.ts` were dropped for symbols.
+

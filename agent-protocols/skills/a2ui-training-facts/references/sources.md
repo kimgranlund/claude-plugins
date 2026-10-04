@@ -66,3 +66,18 @@ GH #1262/#1279/#1346/#1355 + PR #1326/#1342 bodies read the same day. [verified]
 GH #1346 halt text and the archive mechanics are shipped behavior per those records; if a cited
 `import-seeds` flag or halt message is about to be acted on, re-grep the tool source first (the
 standing line-drift discipline).
+
+## Harvest note, 2026-10-03 (checker-verified fold)
+
+Folded from agent-ui's `knowledge-harvest-2026-10-03/harness-corpus-export.md` (L15, L17 to L21, L24;
+L25 ALREADY, unchanged), each re-read in code 2026-10-03 [verified] unless marked [inferred]. Added:
+unjudged-run guard with the `unjudgedCandidates` report field and archive-blocks-re-admit
+(`tools/corpus/import-seeds.ts`, fixture `SHARD_LOADED_VERDICTS`), the drop path (ADR-0165),
+bump-on-anchor-move (ADR-0068, payload v1.3), the parent-rubric bump rule with the open corpus 1.2 vs
+payload 1.3 question [inferred] (all in `judge-and-verdict-adapter.md`); the separate corpus-genui
+B3 harness (`floorMet`, `runReportLeg`, new `genui-pack-eval.md`, 2026-08-24); expected gaps in a
+single-surface valid-only corpus (`retrieval-and-repair-loop.md`, 74 records with `deleteSurface` in 1,
+generalization [inferred]). Refreshed (ALREADY, L15): the `admit.ts` leak-gate and eval-facet cites now
+point at symbols (`checkLeakGate`; the eval-facet fail-closed branch of `admit()`).
+
+Skipped from the harness-corpus export, 2026-10-03: L30 and L31 (both [inferred] and repo-structure, not protocol or corpus behavior; the a2a pack already pins spec v0.3.0).

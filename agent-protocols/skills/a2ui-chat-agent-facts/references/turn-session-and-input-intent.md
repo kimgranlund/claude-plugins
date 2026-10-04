@@ -3,10 +3,10 @@
 > Axis: the turn-history data model the browser holds, how the two `TurnInput` kinds ("intent"
 > text vs a "client" message reduced from a UI action/rendererFunctionResponse/error) frame the next turn,
 > and how "the agent continues." Grounded in
-> `packages/agent-ui/a2ui/tools/agent/agent-transport.ts`,
-> `packages/agent-ui/a2ui/tools/agent/session.ts`, `site/pages/a2ui-live.ts`,
+> `packages/agent-ui/a2ui/src/agent/agent-transport.ts`,
+> `packages/agent-ui/a2ui/src/agent/session.ts`, `site/pages/a2ui-live.ts`,
 > `.claude/docs/specs/specs/a2ui-live-agent.spec.md` (SPEC-R8). ADR-0072 = the multi-turn session
-> model. Verified against source as of 2026-07-07.
+> model. Verified against source as of 2026-07-07; max-turns and relocation corrected 2026-10-03.
 >
 > **Terminology note (2026-08-17, issue #482):** A2UI v1.0 Candidate renames the protocol's role
 > vocabulary — client → renderer, server → agent. This pack's OWN narrative (SKILL.md, sources.md)
@@ -36,8 +36,15 @@ both `TurnInput` arms and is threaded to the proxy by the live overlay only
 
 **Claim — the browser is the source of truth for the session; the proxy is stateless** (SPEC-R8,
 ADR-0072 clause 4). The running `Session` is held page-side (`a2ui-live.ts:156`,
-`let session: Session = { turns: [] }`) and passed IN on every `TurnInput`. A demo-level max-turns
-cap guards runaway (SPEC-R8). **Failure mode / caveat:** `Turn.content` is a plain string that the
+`let session: Session = { turns: [] }`) and passed IN on every `TurnInput`. There is NO cross-turn
+turn cap (corrected 2026-10-03: the old line "a demo-level max-turns cap guards runaway (SPEC-R8)"
+is falsified; ADR-0072 cl.5, a cross-turn cap plus a named session state machine, was never built
+and was ruled DROP 2026-08-30, GH #1713). The only runaway guards are the two per-generation
+caps, `maxRounds` (`ProduceOptions.maxRounds`, ending in `ProduceHalt`) and the GH #49 tool-loop
+round cap (`MAX_TOOL_ROUNDS` in `providers/anthropic.ts`), plus the page owning the
+session. ADR-0072 clauses 1-4 hold on revalidation 2026-08-30 (browser holds the session, proxy
+stateless, client-held reducer, action framing via `frameClientMessage`); the session reducer is
+the only cross-turn state. **Failure mode / caveat:** `Turn.content` is a plain string that the
 model consumes as its Messages-API history — anything written into `session.turns` becomes model
 context. This is exactly why the PROPOSED decision-trace is held *parallel* to `session.turns`, not
 inside it (see conversational-reasoning-and-click-routing-gap).
@@ -46,7 +53,7 @@ inside it (see conversational-reasoning-and-click-routing-gap).
 
 - **Turn 1 is an `intent`** — raw user free text (`a2ui-live.ts:236`,
   `runTurn({ kind: 'intent', text, session })`). Its user content is just the text
-  (`produce.ts:55-57`, `userContent`).
+  (`produce.ts`, `userContent`).
 - **Every later turn is a `client` message** — a UI-originated `A2uiClientMessage` the rendered
   surface emitted, reduced into the next turn.
 
@@ -55,9 +62,9 @@ inside it (see conversational-reasoning-and-click-routing-gap).
 `nextTurn(session, message)` is a **pure reducer** returning `{ kind: 'client', message, session }`
 (`session.ts:43-45`). The raw message rides along; `produce()` frames it via `frameClientMessage`
 when it assembles the model messages, so framing lives in ONE place
-(`session.ts:38-45`, `produce.ts:55-57`).
+(`session.ts:38-45`, `produce.ts`).
 
-**Claim — `frameClientMessage` frames each client-message arm DISTINCTLY** so the model knows what
+**Claim, `frameClientMessage` frames each client-message arm DISTINCTLY** so the model knows what
 happened and how to continue (`session.ts:20-36`, SPEC-R8 AC1):
 
 - **`action`** → `"The user triggered the "<name>" action (from component <id>)."` plus the

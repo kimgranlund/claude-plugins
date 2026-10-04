@@ -3,35 +3,34 @@
 > Axis: the runtime driver that turns one `TurnInput` into a validated A2UI JSONL stream —
 > retrieval conditioning, the catalog-derived prompt, the shared heal+validate gate, the
 > feed-failures-back self-correct rounds, validate-then-stream, and halt-and-report. Grounded in
-> `packages/agent-ui/a2ui/tools/agent/produce.ts`,
-> `packages/agent-ui/a2ui/tools/agent/system-prompt.ts`,
+> `packages/agent-ui/a2ui/src/agent/produce.ts`,
+> `packages/agent-ui/a2ui/src/agent/system-prompt.ts`,
 > `.claude/docs/specs/specs/a2ui-live-agent.spec.md` (SPEC-R4/R5/R6/R7/N3). ADR-0070 = the runtime
-> loop scope; ADR-0071 = the derived, drift-gated prompt. Verified against source as of 2026-07-07.
+> loop scope; ADR-0071 = the derived, drift-gated prompt. Verified against source as of 2026-07-07; round order and cites refreshed 2026-10-03 (see the UPDATE section).
 
 ## The loop, in order (SPEC-R4 / ADR-0070)
 
 `produce(input, deps, opts)` is an `async function*` yielding validated JSONL lines
-(`produce.ts:109`). Per turn:
+(`produce.ts`). Per turn:
 
 1. **Retrieve** top-k exemplars over the JUDGED shard — `deps.retrieve(queryOf(input, k))`,
-   `k` defaulting to 3 (`produce.ts:110-111`, `59-61`; SPEC-R7). The query intent is the turn's
+   `k` defaulting to 3 (`produce.ts`; SPEC-R7). The query intent is the turn's
    user content (`userContent` — the intent text, or the framed client message).
 2. **Build the catalog-derived prompt** — `buildSystemPrompt(deps.catalog, exemplars)`
-   (`produce.ts:112`; SPEC-R6).
+   (`produce.ts`; SPEC-R6).
 3. **Generate** — accumulate the injected provider's text fragments into `raw`
-   (`produce.ts:119-127`). `deps.provider` is the model seam (a stub in tests, a real adapter in
+   (`produce.ts`). `deps.provider` is the model seam (a stub in tests, a real adapter in
    the proxy), so the loop mechanics are gate-covered with no live model.
 4. **Assemble + heal** — `assembleFromRaw` strips a wrapping code fence, splits into lines, and
-   runs the shared healer PER LINE (`produce.ts:94-107`, `stripOuterFence` at `83-87`,
-   `heal(line, …)` at `102`). An unparseable line → `undefined` → a `PARSE` failure fed back
-   (`produce.ts:130-132`).
-5. **Validate** — `validateA2ui(output, deps.catalog)` (`produce.ts:134`).
+   runs the shared healer PER LINE (`produce.ts`, `stripOuterFence`, `heal(line, …)`). An unparseable line → `undefined` → a `PARSE` failure fed back
+   (`produce.ts`).
+5. **Validate**, `validateA2ui(output, deps.catalog)` (`produce.ts`).
 6. **On valid → validate-then-stream**; **on invalid → feed failures back and loop** (below).
 
 ## The shared gate — no fork (SPEC-N3)
 
 **Claim — `heal` and `validateA2ui` are the SAME surfaces the renderer and corpus admission use;
-the loop never forks them** (`produce.ts:15-16`, `134`; SPEC-N3). Validator parity is itself a
+the loop never forks them** (`produce.ts`; SPEC-N3). Validator parity is itself a
 standing test. **Why:** a payload that passes the runtime gate is admissible and renderable by the
 identical verdict — one correctness surface, not three.
 
@@ -42,14 +41,14 @@ means the runtime guarantees *validity*, not *quality* — a valid-but-mediocre 
 
 ## Self-correct: feed the failures back (SPEC-R4)
 
-On an invalid round, `failures = verdict.failures` and the loop repeats (`produce.ts:139`). The
+On an invalid round, `failures = verdict.failures` and the loop repeats (`produce.ts`). The
 next round's messages append the prior INVALID attempt plus a directive listing the failure codes:
 `"That output was INVALID (<codes>). Re-emit the COMPLETE corrected A2UI JSONL — nothing else."`
-(`messagesFor`, `produce.ts:68-79`). The model sees exactly what it emitted and what was wrong.
+(`messagesFor` in `produce.ts`; the directive wording is a static hint plus `expectedTypeNote`). The model sees exactly what it emitted and what was wrong.
 
 **Claim — the loop is bounded at `maxRounds` (the proxy passes 3) and ends in halt-and-report.**
 If no round produces a valid payload, `produce` throws `ProduceHalt` carrying the last round's
-failures (`produce.ts:117`, `141`, `46-53`). **Failure mode:** the page catches it and shows a
+failures (`produce.ts`). **Failure mode:** the page catches it and shows a
 "could not compose a valid surface" system message — NOT a broken render (SPEC-R5;
 `a2ui-live.ts:217-218`).
 
@@ -57,17 +56,16 @@ failures (`produce.ts:117`, `141`, `46-53`). **Failure mode:** the page catches 
 
 **Claim — a turn's payload is FULLY validated before ANY line reaches the browser.** Only after
 `verdict.valid` does the loop yield: `for (const msg of output) yield JSON.stringify(msg)`, then
-`return` (`produce.ts:135-137`). Nothing invalid is ever painted. It then streams line-by-line so
+`return` (`produce.ts`). Nothing invalid is ever painted. It then streams line-by-line so
 the surface still assembles progressively (root-early first paint), over the browser transport
 that is identical for recorded and live paths (SPEC-N4; see agent-transport-seam).
 
 ## The model precedence rule — the trust boundary's teeth (SPEC-R12)
 
 **Claim — `opts.model` wins over a client-supplied `input.model`:**
-`opts.model ?? input.model ?? DEFAULT_MODEL` (`produce.ts:113`, `DEFAULT_MODEL = 'claude-sonnet-5'`
-at `:23`). The proxy passes the allowlist-VALIDATED model as `opts.model`, so a crafted
+`opts.model ?? input.model ?? DEFAULT_MODEL` (`produce.ts`, `DEFAULT_MODEL = 'claude-sonnet-5'`). The proxy passes the allowlist-VALIDATED model as `opts.model`, so a crafted
 `input.model` in a request body can never escape the PAIR check and reach the API
-(`produce.ts:36-39`; see provider-model-seam-and-trust-boundary).
+(`produce.ts`; see provider-model-seam-and-trust-boundary).
 
 ## The prompt is catalog-derived and drift-gated (SPEC-R6 / ADR-0071)
 
@@ -106,6 +104,41 @@ own explicit check rather than riding the drift gate's coverage.
 rendering capabilities must be checked against every real consumer archetype the deployment actually
 has, not just the one it was originally written for. A shared GRAMMAR string is a claim about every
 caller that loads it, not just the first one.
+
+## UPDATE 2026-10-03, the current round order and the produce-layer corrections
+
+**[verified]** against `src/agent/produce.ts` and `corpus/heal.ts`, 2026-10-03. The numbered loop
+above is the 2026-07 shape; the per-round order is now: **peel the meta-line, peel the genui
+lines, heal per line, stamp the catalogId, validate (with session seeds and `atFinalize`), then
+stream only validated lines.** Rounds are bounded (`maxRounds`, ADR-0070); self-correct hints are
+static text plus an `expectedTypeNote`. The stamp step overwrites the model's `createSurface.catalogId`
+with the server-selected one (`stampCreateSurfaceCatalogId`; see a2ui-catalog-facts
+two-tier-extensibility). The validate call is `validateA2ui(output, catalog, sessionSeeds,
+{atFinalize: true})`: seeds let a later-turn update reference earlier-turn ids, and `atFinalize`
+is the turn-end-only judgment (see a2ui-protocol-facts message-lifecycle).
+
+**Two produce-layer correction rounds, both degrade-never-halt (ADR-0187).**
+- `NET_NOOP`: a turn whose `createSurface` is cancelled by a `deleteSurface` dodge is corrected
+  once; if the model repeats it the dodge is stripped and the turn degrades to prose (tally
+  `NET_NOOP_STRIPPED`).
+- `FLOW_END_MISSING`: fires only when the turn is closing-shaped (a note with no ask, no plan, no
+  genui line, zero A2UI lines, no `flowEnd`) AND the user's own message is an explicit close
+  (`isExplicitClose`). One round, only if a round remains; otherwise the turn ships unchanged with a
+  `FLOW_END_UNCORRECTED` tally.
+These codes, together with `FEED_SCOPE`, `GENUI_ENVELOPE`, `GENUI_SIZE` and `GENUI_MULTIPLICITY`, are
+produce-layer-only and never join the protocol `ErrorCode` union. A matcher miss degrades to no
+round, never to a wrong rewrite (`NET_NOOP_HINT`, `FLOW_END_HINT`, the closing-shape branch).
+
+**genui lines are dropped, not corrected, on the shipping round.** A structural failure of a genui line on the shipping
+round is dropped from the wire; at most one genui line ships per turn, and extras are dropped and
+counted (`multiplicity`), never fed back to the model. On a round that will retry, a genui failure
+rides the same retry feedback as any other failure; only the shipping round drops it.
+
+**Progress meta-lines are opt-in and byte-identical when absent.** The `progress` kind in
+`meta-line.ts` is runtime-composed; `progressDetail` modes (`stages`, `full`, `source`) are
+independent and capped, and `interleaveProgress` races progress against validated lines so the
+status can paint while the model is still generating. **Failure mode:** a consumer that treats
+progress as model-authored will wait for an arm the model never states.
 
 ## What this file does NOT cover
 

@@ -20,21 +20,21 @@ restated here to avoid two copies of one citation drifting apart):
 - `packages/agent-ui/a2ui/src/renderer/validate.ts:56,66,232-233` — the session-seeded validator
   (`SurfaceSeed`, `validateA2ui(…, sessionSeed?)`) and the two gates that deadlocked before it
   (`root-missing`, the cross-turn id-graph guard).
-- `packages/agent-ui/a2ui/src/agent/produce.ts:278,328` — `sessionSurfaceSeeds`, threaded into
+- `packages/agent-ui/a2ui/src/agent/produce.ts`, `sessionSurfaceSeeds`, threaded into
   every round's validate call.
 
 **Verified `file:line`, agent-ui#1115 "Scope-conformant revision v2" knowledge-harvest, 2026-08-17**
 (the same fold documented in [[chat-harness-guardrail-facts]]'s own `sources.md`; this pack's slice
 of it, moved out here 2026-08-17 by `plan-skill-split`, issue #552):
 
-- `produce.ts:139-207` (ADR-0146 F3, GH #240/ADR-0159) — the three independent, fail-closed
+- `produce.ts` (ADR-0146 F3, GH #240/ADR-0159), the three independent, fail-closed
   disclosure knobs (progress detail's stage/full/source ladder).
 - `meta-line.ts:143-157,306-316` (GH #144) — the reserved terminal `error` meta-line and the
   runtime-vs-model field-authorship partition.
-- `produce.ts:306-314,381-397` (GH #404, `.claude/ops/mb-live-proof/box2-quizmaster-FAIL.json`) —
+- `produce.ts` (GH #404, `.claude/ops/mb-live-proof/box2-quizmaster-FAIL.json`) , 
   the observed live retry-bound exhaustion incident (temp 0.9, `box2-quizmaster`).
-- `produce.ts:294-314` (GH #307) — `ProduceHalt`'s model-authored-id-only error rendering.
-- `produce.ts:99-189`; `prompt-equivalence.test.ts`, `prompt-drift.test.ts` (`src/live-agent/`) —
+- `produce.ts` (GH #307), `ProduceHalt`'s model-authored-id-only error rendering.
+- `produce.ts`; `prompt-equivalence.test.ts`, `prompt-drift.test.ts` (`src/live-agent/`) , 
   the additive-opt-in-flags byte-identity gates.
 
 ## Platform / vendor facts — verify against current docs if stale-sensitive

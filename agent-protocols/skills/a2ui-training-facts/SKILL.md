@@ -29,13 +29,14 @@ admits, judges, or edits pipeline source (see Boundaries).
 | Admission + healing — the 11-stage pipeline, tier-1 vs tier-2, error codes, the closed form-only healer | `references/admission-gate-and-healing.md` |
 | Judge / verdict adapter — critic-authored verdicts, qualityScore=min, fail-closed, quarantine, rescore, --replace | `references/judge-and-verdict-adapter.md` |
 | Retrieval / export / repair loop — top-k by intent, few-shot + fine-tune export, version-change coherence (+ what's designed-not-built) · "where does producer-grammar teaching land?" (the four teaching lanes; judged exemplars are this pack's own) | `references/retrieval-and-repair-loop.md` |
+| Pack-idiom eval, the separate corpus-genui harness, `floorMet`, `E_NO_GENUI` vs `E_CELL_OVERFLOW` | `references/genui-pack-eval.md` |
 | Provenance — where a claim comes from (file:line, ADR/SPEC clause, verified upstream) | `references/sources.md` |
 
 ## Load discipline (read before opening a reference)
 
 The references are **catalogs to consult, not books to read**. Classify the ask, open the ONE matching
 file, **Grep it for the term** (an error code, a function name, a SPEC-R#) and Read around the match —
-targeted, not a start-to-finish read. Seven files total (six axes + `sources.md`); each claim carries
+targeted, not a start-to-finish read. Eight files total (seven axes + `sources.md`); each claim carries
 its `file:line` or ADR/SPEC clause so an answer is checkable, not asserted.
 
 **An answer is complete when it carries all three:** the claim, its `file:line` / ADR/SPEC clause cite,
@@ -43,7 +44,7 @@ and the failure mode / caveat it triggers. Without the caveat it is half an answ
 
 ## Consult procedure
 
-1. Classify the ask against the seven rows above; load only the matching reference. If it spans two
+1. Classify the ask against the eight rows above; load only the matching reference. If it spans two
    (e.g. "why was this quarantined *and* can it come back" → judge + retrieval), load both.
 2. Answer with the **claim, its cited source, and the failure mode / caveat it carries** — a corpus
    answer without the caveat is half an answer. Worked shape:
